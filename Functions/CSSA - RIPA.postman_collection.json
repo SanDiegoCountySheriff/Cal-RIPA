@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "ce5ee8d1-ab84-42d6-876e-df34a67c58e4",
+		"name": "CSSA - RIPA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UserProfile",
+			"item": [
+				{
+					"name": "GetUser/{Id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/GetUser/4",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"GetUser",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/GetUsers",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"GetUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUser/{Id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/PutUser/4",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"PutUser",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser/{Id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7071/api/DeleteUser/23",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7071",
+							"path": [
+								"api",
+								"DeleteUser",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TableStorage",
+			"item": [
+				{
+					"name": "Cities",
+					"item": [
+						{
+							"name": "GetCities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{RIPA-Functions}}/api/GetCities",
+									"host": [
+										"{{RIPA-Functions}}"
+									],
+									"path": [
+										"api",
+										"GetCities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PostCity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"San Francisco\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}/api/PostCity",
+									"host": [
+										"{{RIPA-Functions}}"
+									],
+									"path": [
+										"api",
+										"PostCity"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Schools",
+					"item": [
+						{
+							"name": "GetSchools",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{RIPA-Functions}}/api/GetSchools",
+									"host": [
+										"{{RIPA-Functions}}"
+									],
+									"path": [
+										"api",
+										"GetSchools"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PostSchool",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Valley Highschool\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}/api/PostSchool",
+									"host": [
+										"{{RIPA-Functions}}"
+									],
+									"path": [
+										"api",
+										"PostSchool"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
