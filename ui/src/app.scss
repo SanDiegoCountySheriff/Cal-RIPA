@@ -1,0 +1,6 @@
+// Define variable defaults
+$body-bg: rgb(4, 153, 49);
+$body-color: rgb(13, 22, 100);
+
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "node_modules/bootstrap-vue/src/index.scss";
