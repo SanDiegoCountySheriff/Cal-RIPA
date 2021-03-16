@@ -1,13 +1,10 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
+using System.Threading.Tasks;
 
 namespace RIPA.Functions.UserProfile.Functions
 {
@@ -21,7 +18,7 @@ namespace RIPA.Functions.UserProfile.Functions
         }
 
         [FunctionName("GetUsers")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Users requested");
 
