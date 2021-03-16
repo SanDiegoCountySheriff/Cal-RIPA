@@ -1,16 +1,13 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace RIPA.Functions.Cities.Functions
+namespace RIPA.Functions.Cities.Functions.Schools
 {
     public class GetSchools
     {
@@ -22,9 +19,16 @@ namespace RIPA.Functions.Cities.Functions
         [FunctionName("GetSchools")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            [Table("Schools", Connection = "AzureWebJobsStorage")] IQueryable<School> schools, ILogger log)
+            [Table("Schools", Connection = "AzureWebJobsStorage")] CloudTable schools, ILogger log)
         {
-            return new OkObjectResult(schools);
+            List<School> response = new List<School>();
+
+            foreach (School entity in await schools.ExecuteQuerySegmentedAsync(new TableQuery<School>(), null))
+            {
+                response.Add(entity);
+            }
+
+            return new OkObjectResult(response);
         }
     }
 }
