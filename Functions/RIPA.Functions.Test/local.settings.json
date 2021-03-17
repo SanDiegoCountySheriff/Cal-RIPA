@@ -1,0 +1,3 @@
+{
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=storageripa;AccountKey=RKPr+ihKfPPGhr3Bpk7jEdsj6YwwlBABd6jhRvDQoh0eZXbI3YiU2dWeTVDTtMNOeFLMtpT79sDe9ERBmvfv5w==;EndpointSuffix=core.windows.net"
+}
