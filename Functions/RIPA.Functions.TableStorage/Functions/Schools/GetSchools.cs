@@ -7,7 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Cities.Functions.Schools
+namespace RIPA.Functions.TableStorage.Functions.Schools
 {
     public class GetSchools
     {

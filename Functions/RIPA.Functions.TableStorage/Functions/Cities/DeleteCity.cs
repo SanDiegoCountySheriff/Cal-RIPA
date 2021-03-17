@@ -1,3 +1,4 @@
+﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -9,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.TableStorage.Functions.Cities
 {
-    public class PutCity
+    public class DeleteCity
     {
-        [FunctionName("PutCity")]
-
+        [FunctionName("DeleteCity")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] HttpRequest req, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteCity/{Id}")] HttpRequest req, string Id,
             [Table("Cities", Connection = "AzureWebJobsStorage")] CloudTable cities, ILogger log)
         {
             try
             {
                 City city = new City { PartitionKey = "CA", RowKey = Id, Name = Id, ETag = "*" };
-                TableOperation createOperation = TableOperation.InsertOrReplace(city);
-                TableResult result = await cities.ExecuteAsync(createOperation);
+                TableOperation deleteOperation = TableOperation.Delete(city);
+                TableResult result = await cities.ExecuteAsync(deleteOperation);
 
                 return new OkObjectResult(result);
             }
             catch
             {
-                return new BadRequestObjectResult("City failed on insert or replace");
+                return new BadRequestObjectResult("City Id not found");
             }
+
         }
     }
 }

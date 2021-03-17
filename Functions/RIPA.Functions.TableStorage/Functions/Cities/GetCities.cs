@@ -8,7 +8,7 @@ using RIPA.Functions.TableStorage.Functions.Cities.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Cities.Functions.Cities
+namespace RIPA.Functions.TableStorage.Functions.Cities
 {
     public class GetCities
     {
