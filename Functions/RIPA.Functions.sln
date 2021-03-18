@@ -8,10 +8,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.TableStorage", "RIPA.Functions.TableStorage\RIPA.Functions.TableStorage.csproj", "{7964BCA5-61B7-4DBD-A333-793BD9844C5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Test", "RIPA.Functions.Test\RIPA.Functions.Test.csproj", "{F45D4CB0-126B-4F59-AC23-74876A855516}"
+<<<<<<< HEAD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Statute", "RIPA.Functions.Statute\RIPA.Functions.Statute.csproj", "{7C579F74-87C7-490C-8F3D-C4FF102617D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Templates", "RIPA.Functions.Templates\RIPA.Functions.Templates.csproj", "{2AC5612D-8180-406F-B406-2B4E7AB92B4D}"
+=======
+>>>>>>> dev
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

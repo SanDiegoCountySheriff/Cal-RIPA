@@ -50,6 +50,11 @@ namespace RIPA.Functions.Test
         [TestMethod]
         public async Task GetSchoolsTest()
         {
+<<<<<<< HEAD
+=======
+            var context = new DefaultHttpContext();
+            var request = context.Request;
+>>>>>>> dev
             var response = (OkObjectResult)await GetSchools.Run(TestFactory.CreateHttpRequest(), _schools, logger);
 
             Assert.IsTrue(response.StatusCode == 200);
@@ -58,6 +63,11 @@ namespace RIPA.Functions.Test
         [TestMethod]
         public async Task DeleteSchoolTest()
         {
+<<<<<<< HEAD
+=======
+            var context = new DefaultHttpContext();
+            var request = context.Request;
+>>>>>>> dev
             var response = (OkObjectResult)await DeleteSchool.Run(TestFactory.CreateHttpRequest(), school.Name, _schools, logger);
 
             Assert.IsTrue(response.StatusCode == 200);

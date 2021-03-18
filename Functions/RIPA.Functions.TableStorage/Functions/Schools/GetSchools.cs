@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
+using RIPA.Functions.TableStorage.Functions.Schools.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,10 +12,6 @@ namespace RIPA.Functions.TableStorage.Functions.Schools
 {
     public class GetSchools
     {
-        public class School : TableEntity
-        {
-            public string Name { get; set; }
-        }
 
         [FunctionName("GetSchools")]
         public static async Task<IActionResult> Run(
