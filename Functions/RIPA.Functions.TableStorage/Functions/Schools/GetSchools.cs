@@ -12,7 +12,6 @@ namespace RIPA.Functions.TableStorage.Functions.Schools
 {
     public class GetSchools
     {
-
         [FunctionName("GetSchools")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
