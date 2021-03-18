@@ -129,7 +129,7 @@
             "type": "String"
         },
         "svc_seq": {
-            "defaultValue": "003",
+            "defaultValue": "001",
             "type": "String"
         },
         "sa_seq": {
