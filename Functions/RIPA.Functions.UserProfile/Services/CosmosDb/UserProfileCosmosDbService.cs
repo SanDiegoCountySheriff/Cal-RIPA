@@ -1,16 +1,14 @@
 ﻿using Microsoft.Azure.Cosmos;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.UserProfile.Services.CosmosDb
 {
     public class UserProfileCosmosDbService : IUserProfileCosmosDbService
     {
-        private Container _container;
+        private readonly Container _container;
         public UserProfileCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
         {
             _container = dbClient.GetContainer(databaseName, containerName);
