@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Statute", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Templates", "RIPA.Functions.Templates\RIPA.Functions.Templates.csproj", "{2AC5612D-8180-406F-B406-2B4E7AB92B4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.TextAnalytics", "RIPA.Functions.TextAnalytics\RIPA.Functions.TextAnalytics.csproj", "{1A6E7E98-5EB2-4DFF-AC62-D97623069701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.TextAnalytics", "RIPA.Functions.TextAnalytics\RIPA.Functions.TextAnalytics.csproj", "{1A6E7E98-5EB2-4DFF-AC62-D97623069701}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Stop", "RIPA.Functions.Stop\RIPA.Functions.Stop.csproj", "{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Stop", "RIPA.Functions.Stop\RIPA.Functions.Stop.csproj", "{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
