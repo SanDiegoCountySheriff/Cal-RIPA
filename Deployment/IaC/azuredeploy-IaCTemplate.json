@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourcegr_name": {
-            "defaultValue": "ripa-dev-rg",
+            "defaultValue": "[resourceGroup().name]",
             "type": "string"
         },
         "deploy_rg": {
