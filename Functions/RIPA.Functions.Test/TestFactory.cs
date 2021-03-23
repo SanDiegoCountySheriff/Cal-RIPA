@@ -1,28 +1,21 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging.Abstractions.Internal;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using RIPA.Functions.UserProfile.Functions;
-using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace RIPA.Functions.UserProfile.Test
+namespace RIPA.Functions.Test
 {
-    [TestClass]
-    public class UserProfileTest
+    public class TestFactory
     {
-        private readonly Services.CosmosDb.Models.UserProfile testProfile = new Services.CosmosDb.Models.UserProfile
+        public static HttpRequest CreateHttpRequest()
         {
-            FirstName = "Test_First",
-            LastName = "Test_Last",
-            StartDate = new System.DateTime(year: 2021, month: 01, day: 01)
-        };
-
-        private readonly string testId = "Test_Id";
-        private readonly ILogger logger = CreateLogger();
+            var context = new DefaultHttpContext();
+            var request = context.Request;
+            return request;
+        }
 
         public static ILogger CreateLogger(LoggerTypes type = LoggerTypes.Null)
         {
@@ -67,19 +60,6 @@ namespace RIPA.Functions.UserProfile.Test
                 string message = formatter(state, exception);
                 this.Logs.Add(message);
             }
-        }
-
-        Mock<IUserProfileCosmosDbService> _userProfileCosmosDbService;
-
-
-
-
-
-        [TestMethod]
-        public void CreateUserProfile()
-        {
-            //var response = await PutUser.Run(testProfile, testId, logger);
-            //Assert.Fail();
         }
     }
 }

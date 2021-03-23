@@ -1,9 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.UserProfile.Services.CosmosDb
