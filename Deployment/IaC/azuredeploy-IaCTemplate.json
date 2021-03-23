@@ -22,10 +22,11 @@
             "type": "string",
             "allowedValues": [
                 "d",
-                "t"
+                "q",
+                "p"
             ],
             "metadata": {
-                "description": "d = development, t = test."
+                "description": "d = development, q = test, p = prod."
             }
         },
         "application": {
@@ -151,6 +152,10 @@
         "prv_dns_soa_name": {
             "defaultValue": "@",
             "type": "string"
+        },
+        "accounts_ripaTA_name": {
+            "defaultValue": "ta",
+            "type": "String"
         }
     },
     "variables": {
@@ -173,7 +178,8 @@
         "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('virtualNetworks_vnet_name'),'-', parameters('region'),'-',parameters('svc_seq'))]",
         "workspaces_ripa_laws_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('workspaces_laws_name'),'-', parameters('region'),'-',parameters('svc_seq'))]",
         "dns_link_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('prv_dns_link_name'), parameters('region'))]",
-        "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]"
+        "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
+        "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'),'-', parameters('region'),'-',parameters('svc_seq'))]"
 
     },
     "resources": [
@@ -1547,6 +1553,27 @@
                 "defaultEncryptionScope": "$account-encryption-key",
                 "denyEncryptionScopeOverride": false,
                 "publicAccess": "None"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2017-04-18",
+            "name": "[variables('TA_Name')]",
+            "location": "[parameters('region')]",
+            "sku": {
+                "name": "S"
+            },
+            "kind": "TextAnalytics",
+            "properties": {
+                "customSubDomainName": "[variables('TA_Name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "privateEndpointConnections": [],
+                "publicNetworkAccess": "Enabled"
             }
         }
     ],
