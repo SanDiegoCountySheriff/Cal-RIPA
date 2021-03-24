@@ -277,7 +277,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
+							"raw": "{\r\n    \"statuteText\": \"Test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -366,7 +366,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
+							"raw": "{\r\n    \"templateText\": \"Test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -401,6 +401,154 @@
 								"api",
 								"DeleteTemplate",
 								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stops",
+			"item": [
+				{
+					"name": "GetStop/{Id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/GetStop/4",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"GetStop",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetStop",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/GetStop",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"GetStop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutStop/{Id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"stopTex\": \"Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/PutStop/4",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"PutStop",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteStop/{Id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/DeleteStop/23",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"DeleteStop",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TextAnalytics",
+			"item": [
+				{
+					"name": "PostCheckPII",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-123-1234.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/PostCheckPII",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"PostCheckPII"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostCheckPIIBeta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-123-1234.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}/api/PostCheckStringForPII",
+							"host": [
+								"{{RIPA-Functions}}"
+							],
+							"path": [
+								"api",
+								"PostCheckStringForPII"
 							]
 						}
 					},
