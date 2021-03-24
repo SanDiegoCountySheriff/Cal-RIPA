@@ -1,11 +1,16 @@
+
 # ASP.NET Core (.NET Framework)
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- dev
-
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - Functions/*
 
 pool:
   vmImage: 'windows-latest'
@@ -22,7 +27,6 @@ stages:
       displayName: 'build .net core function api'
     
       steps:
-      
       - task: UseDotNet@2
         displayName: 'Use .NET Core sdk 3.1.404'
         inputs:
@@ -44,17 +48,20 @@ stages:
         displayName: Test
         inputs:
           command: test
-          projects: '$(projectToBuild)/*$(BackEndServc).csproj'
+          projects: '$(projectToBuild)/*$(BackEndServc)Test.csproj'
           testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
+        displayName: 'Archive files'
         inputs:
-          rootFolderOrFile: '$(Build.BinariesDirectory)'
-          includeRootFolder: true
+          rootFolderOrFile: 'publish_output/'
+          includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(BackEndSvc).zip'
           replaceExistingArchive: true
+     
       - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifacts'
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
           ArtifactName: 'drop'
