@@ -9,6 +9,7 @@ namespace RIPA.Functions.Statute.Functions
 {
     public class DeleteStatute
     {
+        
         private readonly IStatuteCosmosDbService _statuteCosmosDbService;
 
         public DeleteStatute(IStatuteCosmosDbService statuteCosmosDbService)
