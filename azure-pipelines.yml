@@ -26,7 +26,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      BackEndSvc: "BackendPack"
+      BackEndSvc: "UserProfile"
     
     jobs:
     - job: job_1
@@ -39,6 +39,7 @@ stages:
           version: 3.1.404
       - bash: echo "workingplace  $(System.DefaultWorkingDirectory)"
       - bash: echo "projectFolder  $(projectToBuild)"
+      - bash: echo "Service name $(BackEndSvc) "
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:
@@ -48,15 +49,15 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '**/*.csproj'
+          projects: '$(projectToBuild)*/*$(BackEndSvc).csproj'
           arguments: --output publish_output --configuration Release
 
-      - task: DotNetCoreCLI@2
-        displayName: Test
-        inputs:
-          command: test
-          projects: '**/*Test.csproj'
-          testRunTitle: SampleTest
+      # - task: DotNetCoreCLI@2
+      #   displayName: Test
+      #   inputs:
+      #     command: test
+      #     projects: '**/*Test.csproj'
+      #     testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
         displayName: 'Archive files'
