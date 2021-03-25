@@ -8,19 +8,21 @@ trigger:
   branches:
     include:
     - dev
+    - feature/build-pipelines
   paths:
     include:
     - Functions/*
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: Build
     displayName: 'Build'
     variables:
       buildConfiguration: 'Release'
-      projectToBuild: "$(System.DefaultWorkingDirectory)"
+      projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
+      # BackEndSvc: "UserProfile"
     
     jobs:
     - job: job_1
@@ -31,25 +33,25 @@ stages:
         displayName: 'Use .NET Core sdk 3.1.404'
         inputs:
           version: 3.1.404
-
+      
       - task: DotNetCoreCLI@2
+        displayName: 'dotnet restore'
         inputs:
-          command: 'restore'
-          projects: '$(projectToBuild)/*$(BackEndServc).csproj'
-          feedsToUse: 'select'
+          command: restore
+          projects: '**/*$(BackEndSvc).csproj '
           vstsFeed: 'e1fc634d-7bab-453f-a4a8-f3440249240f/294e5da2-a661-49bf-bf3f-3bab6aa42171'
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '$(projectToBuild)/*$(BackEndServc).csproj'
+          projects: '**/*$(BackEndSvc).csproj'
           arguments: --output publish_output --configuration Release
-
-      - task: DotNetCoreCLI@2
-        displayName: Test
-        inputs:
-          command: test
-          projects: '$(projectToBuild)/*$(BackEndServc)Test.csproj'
-          testRunTitle: SampleTest
+      
+      # - task: DotNetCoreCLI@2
+      #   displayName: Test
+      #   inputs:
+      #     command: test
+      #     projects: '**/*Test.csproj'
+      #     testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
         displayName: 'Archive files'
