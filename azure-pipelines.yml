@@ -49,9 +49,9 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '$(projectToBuild)*/*$(BackEndSvc).csproj'
+          projects: '**/*$(BackEndSvc).csproj'
           arguments: --output publish_output --configuration Release
-
+      - bash: echo "dotnet project folder $(projects)"
       # - task: DotNetCoreCLI@2
       #   displayName: Test
       #   inputs:
