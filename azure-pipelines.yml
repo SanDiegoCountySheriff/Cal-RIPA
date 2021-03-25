@@ -46,14 +46,14 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '$(projectToBuild)/*$(BackEndServc).csproj'
+          projects: '$(projectToBuild)/*.csproj'
           arguments: --output publish_output --configuration Release
 
       - task: DotNetCoreCLI@2
         displayName: Test
         inputs:
           command: test
-          projects: '$(projectToBuild)/*$(BackEndServc)Test.csproj'
+          projects: '$(projectToBuild)/*Test.csproj'
           testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
