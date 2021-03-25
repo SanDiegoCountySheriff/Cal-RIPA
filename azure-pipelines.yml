@@ -37,7 +37,8 @@ stages:
         displayName: 'Use .NET Core sdk 3.1.404'
         inputs:
           version: 3.1.404
-
+      - bash: echo "workingplace  $(System.DefaultWorkingDirectory)"
+      - bash: echo "projectFolder  $(projectToBuild)"
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:
@@ -47,14 +48,14 @@ stages:
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '$(projectToBuild)/*.csproj'
+          projects: '**/*.csproj'
           arguments: --output publish_output --configuration Release
 
       - task: DotNetCoreCLI@2
         displayName: Test
         inputs:
           command: test
-          projects: '$(projectToBuild)/*Test.csproj'
+          projects: '**/*Test.csproj'
           testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
