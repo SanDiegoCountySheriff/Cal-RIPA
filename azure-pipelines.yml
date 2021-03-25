@@ -25,7 +25,8 @@ stages:
     displayName: 'Build'
     variables:
       buildConfiguration: 'Release'
-      projectToBuild: "$(System.DefaultWorkingDirectory)"
+      projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
+      BackEndSvc: "BackendPack"
     
     jobs:
     - job: job_1
