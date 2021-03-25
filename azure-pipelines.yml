@@ -26,7 +26,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      BackEndSvc: "UserProfile"
+      # BackEndSvc: "UserProfile"
     
     jobs:
     - job: job_1
