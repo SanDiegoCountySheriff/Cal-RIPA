@@ -19,13 +19,21 @@ namespace RIPA.Functions.Statute.Functions
         [FunctionName("PutStatute")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStatute/{StatuteId}")] Services.CosmosDb.Models.Statute Statute, string StatuteId, ILogger log)
         {
+<<<<<<< HEAD
             log.LogInformation("POST - Create Statute requested");
+=======
+            log.LogInformation("PUT - Put Statute requested");
+>>>>>>> a6cfb94b61ce83075759238ce05ecf400069d700
 
             if (!string.IsNullOrEmpty(Statute.StatuteText))
             {
                 Statute.Id = StatuteId;
                 await _statuteCosmosDbService.UpdateStatuteAsync(StatuteId, Statute);
+<<<<<<< HEAD
                 return new OkObjectResult("Created Statute");
+=======
+                return new OkObjectResult("Put Statute");
+>>>>>>> a6cfb94b61ce83075759238ce05ecf400069d700
             }
 
             return new BadRequestObjectResult("Bad Request");

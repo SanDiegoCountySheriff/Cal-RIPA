@@ -5,10 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.17.0" />
-<<<<<<< HEAD
-=======
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
->>>>>>> a6cfb94b61ce83075759238ce05ecf400069d700
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
   </ItemGroup>
   <ItemGroup>
