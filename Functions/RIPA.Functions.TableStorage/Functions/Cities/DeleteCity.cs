@@ -15,7 +15,7 @@ namespace RIPA.Functions.TableStorage.Functions.Cities
         [FunctionName("DeleteCity")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteCity/{Id}")] HttpRequest req, string Id,
-            [Table("Cities", Connection = "AzureWebJobsStorage")] CloudTable cities, ILogger log)
+            [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
             try
             {

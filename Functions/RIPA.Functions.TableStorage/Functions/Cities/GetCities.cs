@@ -15,7 +15,7 @@ namespace RIPA.Functions.TableStorage.Functions.Cities
         [FunctionName("GetCities")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            [Table("Cities", Connection = "AzureWebJobsStorage")] CloudTable cities, ILogger log)
+            [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
             List<City> response = new List<City>();
 

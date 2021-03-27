@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -14,12 +13,16 @@ namespace RIPA.Functions.TableStorage.Functions.Cities
         [FunctionName("PutCity")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] HttpRequest req, string Id,
-            [Table("Cities", Connection = "AzureWebJobsStorage")] CloudTable cities, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] City city, string Id,
+            [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
             try
             {
-                City city = new City { PartitionKey = "CA", RowKey = Id, Name = Id, ETag = "*" };
+                city.PartitionKey = "CA";
+                city.RowKey = Id;
+                city.Name = Id;
+                city.ETag = "*";
+                city.State = "CA";
                 TableOperation createOperation = TableOperation.InsertOrReplace(city);
                 TableResult result = await cities.ExecuteAsync(createOperation);
 

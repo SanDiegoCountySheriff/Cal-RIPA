@@ -17,15 +17,15 @@ namespace RIPA.Functions.Statute.Functions
         }
 
         [FunctionName("PutStatute")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStatute/{StatuteId}")] Services.CosmosDb.Models.Statute Statute, string StatuteId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStatute/{StatuteId}")] Services.CosmosDb.Models.Statute statute, string statuteId, ILogger log)
         {
             log.LogInformation("PUT - Put Statute requested");
 
-            if (!string.IsNullOrEmpty(Statute.StatuteText))
+            if (!string.IsNullOrEmpty(statute.StatuteText))
             {
-                Statute.Id = StatuteId;
-                await _statuteCosmosDbService.UpdateStatuteAsync(StatuteId, Statute);
-                return new OkObjectResult("Put Statute");
+                statute.Id = statuteId;
+                await _statuteCosmosDbService.UpdateStatuteAsync(statuteId, statute);
+                return new OkObjectResult(statute);
             }
 
             return new BadRequestObjectResult("Bad Request");

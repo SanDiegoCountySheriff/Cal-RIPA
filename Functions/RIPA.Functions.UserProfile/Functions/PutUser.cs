@@ -25,7 +25,7 @@ namespace RIPA.Functions.UserProfile.Functions
             {
                 userProfile.Id = userProfileId;
                 await _userProfileCosmosDbService.UpdateUserProfileAsync(userProfileId, userProfile);
-                return new OkObjectResult("Put UserProfile");
+                return new OkObjectResult(userProfile);
             }
 
             return new BadRequestObjectResult("Bad Request");

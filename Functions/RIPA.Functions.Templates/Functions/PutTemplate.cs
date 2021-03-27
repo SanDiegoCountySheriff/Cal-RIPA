@@ -25,7 +25,7 @@ namespace RIPA.Functions.Templates.Functions
             {
                 template.Id = templateId;
                 await _templateCosmosDbService.UpdateTemplateAsync(templateId, template);
-                return new OkObjectResult("Put Template");
+                return new OkObjectResult(template);
             }
 
             return new BadRequestObjectResult("Bad Request");
