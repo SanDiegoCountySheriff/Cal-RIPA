@@ -20,15 +20,15 @@ namespace RIPA.Functions.Stop.Functions
         }
 
         [FunctionName("PutStop")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{stopId}")] Services.CosmosDb.Models.Stop Stop, string stopId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{stopId}")] Services.CosmosDb.Models.Stop stop, string stopId, ILogger log)
         {
             log.LogInformation("PUT - Put Stop requested");
 
-            if (!string.IsNullOrEmpty(Stop.StopText))
+            if (!string.IsNullOrEmpty(stop.StopText))
             {
-                Stop.Id = stopId;
-                await _stopCosmosDbService.UpdateStopAsync(stopId, Stop);
-                return new OkObjectResult("Put Stop");
+                stop.Id = stopId;
+                await _stopCosmosDbService.UpdateStopAsync(stopId, stop);
+                return new OkObjectResult(stop);
             }
 
             return new BadRequestObjectResult("Bad Request");

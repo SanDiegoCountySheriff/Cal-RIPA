@@ -22,7 +22,7 @@ namespace RIPA.Functions.Stop.Functions
         {
             log.LogInformation("GET - Get Stops requested");
 
-            var response = await _stopCosmosDbService.GetStopAsync("SELECT * FROM c");
+            var response = await _stopCosmosDbService.GetStopsAsync("SELECT * FROM c");
 
             return new OkObjectResult(response);
         }

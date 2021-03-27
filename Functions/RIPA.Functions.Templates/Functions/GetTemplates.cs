@@ -22,7 +22,7 @@ namespace RIPA.Functions.Templates.Functions
         {
             log.LogInformation("GET - Get templates requested");
 
-            var response = await _templateCosmosDbService.GetTemplateAsync("SELECT * FROM c");
+            var response = await _templateCosmosDbService.GetTemplatesAsync("SELECT * FROM c");
 
             return new OkObjectResult(response);
         }
