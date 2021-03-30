@@ -11,7 +11,8 @@ trigger:
     - feature/build-pipelines
   paths:
     include:
-    - Functions/*
+    - Functions/RIPA.Functions.UserProfile/*
+    - Deployment/Pipelines/azure-pipeline-userprofile.yml
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -38,9 +39,7 @@ stages:
         displayName: 'Use .NET Core sdk 3.1.404'
         inputs:
           version: 3.1.404
-      - bash: echo "workingplace  $(System.DefaultWorkingDirectory)"
-      - bash: echo "projectFolder  $(projectToBuild)"
-      - bash: echo "Service name $(BackEndSvc) "
+      
       - task: DotNetCoreCLI@2
         displayName: 'dotnet restore'
         inputs:
@@ -52,7 +51,7 @@ stages:
         inputs:
           projects: '**/*$(BackEndSvc).csproj'
           arguments: --output publish_output --configuration Release
-      - bash: echo "dotnet project folder $(projects)"
+      
       # - task: DotNetCoreCLI@2
       #   displayName: Test
       #   inputs:
