@@ -6,136 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "Statute",
-			"item": [
-				{
-					"name": "GetStatute/{Id}",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}statute/GetStatute/4",
-							"host": [
-								"{{RIPA-Functions}}statute"
-							],
-							"path": [
-								"GetStatute",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetStatutes",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}statute/GetStatutes",
-							"host": [
-								"{{RIPA-Functions}}statute"
-							],
-							"path": [
-								"GetStatutes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PutStatute/{Id}",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"statuteText\": \"aefr\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{RIPA-Functions}}statute/PutStatute/1",
-							"host": [
-								"{{RIPA-Functions}}statute"
-							],
-							"path": [
-								"PutStatute",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteStatute/{Id}",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}statute//DeleteStatute/1",
-							"host": [
-								"{{RIPA-Functions}}statute"
-							],
-							"path": [
-								"",
-								"DeleteStatute",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Stops",
 			"item": [
 				{
@@ -316,7 +186,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"county\": \"TestNEW\",\r\n    \"deactivationDate\": \"3/25/2021\"\r\n}",
+									"raw": "{\r\n    \"county\": \"Maricopa\",\r\n    \"deactivationDate\": \"3/25/2021\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -353,13 +223,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/DeleteCity/Sacramento",
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteCity/Test",
 									"host": [
 										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
 										"DeleteCity",
-										"Sacramento"
+										"Test"
 									]
 								}
 							},
@@ -460,6 +330,206 @@
 									"path": [
 										"DeleteSchool",
 										"test"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Beats",
+					"item": [
+						{
+							"name": "GetBeats",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/GetBeats",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"GetBeats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PutBeat",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"id\": 1,\r\n   \"community\": \"CARLSBAD\",\r\n   \"command\": \"NON-CONTRACT CITIES\",\r\n   \"commandAuditGroup\": null,\r\n   \"commandAuditSize\": null\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/PutBeat/1",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"PutBeat",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteBeat",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteBeat/1",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"DeleteBeat",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Statutes",
+					"item": [
+						{
+							"name": "GetStatutes",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/GetStatutes",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"GetStatutes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PutStatute",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"offenseValidationCD\": 1,\r\n   \"offenseCode\": 99999,\r\n   \"offenseTxnTypeCD\": 1,\r\n   \"offenseStatute\": \"NA - XX\",\r\n   \"offenseTypeOfStatuteCD\": \"AA\",\r\n   \"statuteLiteral\": \"CODE NOT FOUND IN TABLE\",\r\n   \"offenseDefaultTypeOfCharge\": \"0\",\r\n   \"offenseTypeOfCharge\": \"X\",\r\n   \"offenseLiteralIdentifierCD\": \"0\",\r\n   \"offenseDegree\": 0,\r\n   \"bcsHierarchyCD\": 0,\r\n   \"offenseEnacted\": \"1800-01-01\",\r\n   \"offenseRepealed\": \"\",\r\n   \"alpsCognizantCD\": \"*\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/PutStatute/99999",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"PutStatute",
+										"99999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteStatute",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteStatute/99999",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"DeleteStatute",
+										"99999"
 									]
 								}
 							},
@@ -656,7 +726,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-123-1234.\"\r\n}",
+							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-12-1234.\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

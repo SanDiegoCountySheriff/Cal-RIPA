@@ -19,7 +19,7 @@ namespace RIPA.Functions.TableStorage.Functions.Schools
         {
             try
             {
-                if (school.CDSCode == 0)
+                if (school.CDSCode == 0 )
                 {
                     throw new Exception("CDS CODE Must be Integer and is required");
                 }
