@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "msjsdiag.debugger-for-chrome",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "octref.vetur",
+    "visualstudioexptteam.vscodeintellicode",
+    "donjayamanne.githistory",
+    "hex-ci.stylelint-plus"
+  ]
+}
