@@ -13,7 +13,7 @@
       :headers="headers"
       :items="beats"
       :search="search"
-      sort-by="cityName"
+      sort-by="beat"
     >
       <template v-slot:top>
         <v-toolbar flat>
