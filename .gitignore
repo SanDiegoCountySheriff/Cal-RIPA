@@ -350,26 +350,3 @@ MigrationBackup/
 .ionide/
 
 .DS_Store
-node_modules/
-dist/
-wwwroot/
-bin/
-obj/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.swp
-*.vs
-*.csproj.user
-*.pubxml
-*.pubxml.user
-.vscode/settings.json
-.vscode/tasks.json
-/TestResults/*
-/packages/*
