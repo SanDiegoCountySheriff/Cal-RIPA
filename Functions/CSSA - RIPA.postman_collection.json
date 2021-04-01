@@ -6,6 +6,135 @@
 	},
 	"item": [
 		{
+			"name": "Stops",
+			"item": [
+				{
+					"name": "GetStop/{Id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}stop/GetStop/1",
+							"host": [
+								"{{RIPA-Functions}}stop"
+							],
+							"path": [
+								"GetStop",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetStops",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}stop/GetStops",
+							"host": [
+								"{{RIPA-Functions}}stop"
+							],
+							"path": [
+								"GetStops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutStop/{Id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"stopText\": \"Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}stop/PutStop/2",
+							"host": [
+								"{{RIPA-Functions}}stop"
+							],
+							"path": [
+								"PutStop",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteStop/{Id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}stop/DeleteStop/2",
+							"host": [
+								"{{RIPA-Functions}}stop"
+							],
+							"path": [
+								"DeleteStop",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "TableStorage",
 			"item": [
 				{
@@ -15,14 +144,24 @@
 							"name": "GetCities",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/GetCities",
+									"raw": "{{RIPA-Functions}}tablestorage/GetCities",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"GetCities"
 									]
 								}
@@ -33,10 +172,21 @@
 							"name": "PutCity",
 							"request": {
 								"method": "PUT",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "",
+									"raw": "{\r\n    \"county\": \"Maricopa\",\r\n    \"deactivationDate\": \"3/25/2021\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -44,14 +194,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/PutCity/Sacramento",
+									"raw": "{{RIPA-Functions}}tablestorage/PutCity/Test",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"PutCity",
-										"Sacramento"
+										"Test"
 									]
 								}
 							},
@@ -61,16 +210,26 @@
 							"name": "DeleteCity",
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/DeleteCity/San Francisco",
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteCity/Test",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"DeleteCity",
-										"San Francisco"
+										"Test"
 									]
 								}
 							},
@@ -85,14 +244,24 @@
 							"name": "GetSchools",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/GetSchools",
+									"raw": "{{RIPA-Functions}}tablestorage/GetSchools",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"GetSchools"
 									]
 								}
@@ -103,16 +272,35 @@
 							"name": "PutSchool",
 							"request": {
 								"method": "PUT",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cdsCode\": 1,\r\n    \"status\": \"Deactive\",\r\n    \"county\": \"desert\",\r\n    \"district\": \"columbia\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/PutSchool/Valley Highschool",
+									"raw": "{{RIPA-Functions}}tablestorage/PutSchool/test",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"PutSchool",
-										"Valley Highschool"
+										"test"
 									]
 								}
 							},
@@ -122,16 +310,226 @@
 							"name": "DeleteSchool",
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
 								"url": {
-									"raw": "{{RIPA-Functions}}/api/DeleteSchool/San Diego",
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteSchool/test",
 									"host": [
-										"{{RIPA-Functions}}"
+										"{{RIPA-Functions}}tablestorage"
 									],
 									"path": [
-										"api",
 										"DeleteSchool",
-										"San Diego"
+										"test"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Beats",
+					"item": [
+						{
+							"name": "GetBeats",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/GetBeats",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"GetBeats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PutBeat",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"id\": 1,\r\n   \"community\": \"CARLSBAD\",\r\n   \"command\": \"NON-CONTRACT CITIES\",\r\n   \"commandAuditGroup\": null,\r\n   \"commandAuditSize\": null\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/PutBeat/1",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"PutBeat",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteBeat",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteBeat/1",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"DeleteBeat",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Statutes",
+					"item": [
+						{
+							"name": "GetStatutes",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/GetStatutes",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"GetStatutes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PutStatute",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"offenseValidationCD\": 1,\r\n   \"offenseCode\": 99999,\r\n   \"offenseTxnTypeCD\": 1,\r\n   \"offenseStatute\": \"NA - XX\",\r\n   \"offenseTypeOfStatuteCD\": \"AA\",\r\n   \"statuteLiteral\": \"CODE NOT FOUND IN TABLE\",\r\n   \"offenseDefaultTypeOfCharge\": \"0\",\r\n   \"offenseTypeOfCharge\": \"X\",\r\n   \"offenseLiteralIdentifierCD\": \"0\",\r\n   \"offenseDegree\": 0,\r\n   \"bcsHierarchyCD\": 0,\r\n   \"offenseEnacted\": \"1800-01-01\",\r\n   \"offenseRepealed\": \"\",\r\n   \"alpsCognizantCD\": \"*\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/PutStatute/99999",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"PutStatute",
+										"99999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteStatute",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}tablestorage/DeleteStatute/99999",
+									"host": [
+										"{{RIPA-Functions}}tablestorage"
+									],
+									"path": [
+										"DeleteStatute",
+										"99999"
 									]
 								}
 							},
@@ -142,22 +540,240 @@
 			]
 		},
 		{
+			"name": "Templates",
+			"item": [
+				{
+					"name": "GetTemplate/{Id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}template/GetTemplate/2",
+							"host": [
+								"{{RIPA-Functions}}template"
+							],
+							"path": [
+								"GetTemplate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTemplates",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}template/GetTemplates",
+							"host": [
+								"{{RIPA-Functions}}template"
+							],
+							"path": [
+								"GetTemplates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutTemplate/{Id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"templateText\": \"Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}template/PutTemplate/2",
+							"host": [
+								"{{RIPA-Functions}}template"
+							],
+							"path": [
+								"PutTemplate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTemplate/{Id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}template/DeleteTemplate/2",
+							"host": [
+								"{{RIPA-Functions}}template"
+							],
+							"path": [
+								"DeleteTemplate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TextAnalytics",
+			"item": [
+				{
+					"name": "PostCheckPII",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-123-1234.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}pii/PostCheckPII",
+							"host": [
+								"{{RIPA-Functions}}pii"
+							],
+							"path": [
+								"PostCheckPII"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostCheckPIIBeta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Document\":\"James was at his appartment on 411 west elm street and he provided me his ssn 098-12-1234.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}pii/PostCheckPIIBeta",
+							"host": [
+								"{{RIPA-Functions}}pii"
+							],
+							"path": [
+								"PostCheckPIIBeta"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "UserProfile",
 			"item": [
 				{
 					"name": "GetUser/{Id}",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetUser/4",
+							"raw": "{{RIPA-Functions}}userprofile/GetUser/2",
 							"host": [
-								"{{RIPA-Functions}}"
+								"{{RIPA-Functions}}userprofile"
 							],
 							"path": [
-								"api",
 								"GetUser",
-								"4"
+								"2"
 							]
 						}
 					},
@@ -167,14 +783,24 @@
 					"name": "GetUsers",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetUsers",
+							"raw": "{{RIPA-Functions}}userprofile/GetUsers",
 							"host": [
-								"{{RIPA-Functions}}"
+								"{{RIPA-Functions}}userprofile"
 							],
 							"path": [
-								"api",
 								"GetUsers"
 							]
 						}
@@ -185,7 +811,18 @@
 					"name": "PutUser/{Id}",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
@@ -196,14 +833,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{RIPA-Functions}}/api/PutUser/4",
+							"raw": "{{RIPA-Functions}}userprofile/PutUser/1",
 							"host": [
-								"{{RIPA-Functions}}"
+								"{{RIPA-Functions}}userprofile"
 							],
 							"path": [
-								"api",
 								"PutUser",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -213,194 +849,26 @@
 					"name": "DeleteUser/{Id}",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{RIPA-Functions}}/api/DeleteUser/23",
+							"raw": "{{RIPA-Functions}}userprofile/DeleteUser/1",
 							"host": [
-								"{{RIPA-Functions}}"
+								"{{RIPA-Functions}}userprofile"
 							],
 							"path": [
-								"api",
 								"DeleteUser",
-								"23"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Statutes",
-			"item": [
-				{
-					"name": "GetStatute/{Id}",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetStatute/4",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"GetStatute",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetStatutes",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetStatutes",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"GetStatutes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PutStatute/{Id}",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/PutStatute/4",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"PutStatute",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteStatute/{Id}",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/DeleteStatute/23",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"DeleteStatute",
-								"23"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Templates",
-			"item": [
-				{
-					"name": "GetTemplate/{Id}",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetTemplate/4",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"GetTemplate",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetTemplate",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/GetTemplate",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"GetTemplate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PutTemplate/{Id}",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Christian\",\r\n    \"lastName\": \"Leattner\",\r\n    \"startDate\": \"01/01/2020\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/PutTemplate/4",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"PutTemplate",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteTemplate/{Id}",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{RIPA-Functions}}/api/DeleteTemplate/23",
-							"host": [
-								"{{RIPA-Functions}}"
-							],
-							"path": [
-								"api",
-								"DeleteTemplate",
-								"23"
+								"1"
 							]
 						}
 					},

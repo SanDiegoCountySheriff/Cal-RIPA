@@ -19,13 +19,13 @@ namespace RIPA.Functions.Templates.Functions
         [FunctionName("PutTemplate")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutTemplate/{templateId}")] Services.CosmosDb.Models.Template template, string templateId, ILogger log)
         {
-            log.LogInformation("POST - Create Template requested");
+            log.LogInformation("PUT - Put Template requested");
 
             if (!string.IsNullOrEmpty(template.TemplateText))
             {
                 template.Id = templateId;
                 await _templateCosmosDbService.UpdateTemplateAsync(templateId, template);
-                return new OkObjectResult("Created Template");
+                return new OkObjectResult(template);
             }
 
             return new BadRequestObjectResult("Bad Request");
