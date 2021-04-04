@@ -8,10 +8,11 @@ trigger:
   branches:
     include:
     - dev
-    - feature/build-pipelines
+    - feature/DevOps
   paths:
     include:
-    - Functions/*
+    - Functions/RIPA.Functions.domain/*
+    - Deployment/Pipelines/azure-pipeline-domain.yml
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -22,7 +23,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      # BackEndSvc: "UserProfile"
+      # BackEndSvc: "domain"
     
     jobs:
     - job: job_1
@@ -45,7 +46,7 @@ stages:
         inputs:
           projects: '**/*$(BackEndSvc).csproj'
           arguments: --output publish_output --configuration Release
-      
+     
       # - task: DotNetCoreCLI@2
       #   displayName: Test
       #   inputs:
