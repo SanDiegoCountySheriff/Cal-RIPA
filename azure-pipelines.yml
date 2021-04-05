@@ -11,7 +11,7 @@ trigger:
     - feature/DevOps
   paths:
     include:
-    - Functions/RIPA.Functions.template/*
+    - Functions/RIPA.Functions.Templates/*
     - Deployment/Pipelines/azure-pipeline-template.yml
 
 pool:
@@ -23,7 +23,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      # BackEndSvc: "domain"
+
     
     jobs:
     - job: job_1
