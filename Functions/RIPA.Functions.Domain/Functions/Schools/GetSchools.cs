@@ -8,11 +8,7 @@ using RIPA.Functions.TableStorage.Functions.Schools.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-<<<<<<< HEAD:Functions/RIPA.Functions.TableStorage/Functions/Schools/GetSchools.cs
-namespace RIPA.Functions.Cities.Functions.Schools
-=======
 namespace RIPA.Functions.TableStorage.Functions.Schools
->>>>>>> 3664cb26726da6227ef3554e11fb77e2e5beb91f:Functions/RIPA.Functions.TableStorage/Functions/GetSchools.cs
 {
     public class GetSchools
     {
