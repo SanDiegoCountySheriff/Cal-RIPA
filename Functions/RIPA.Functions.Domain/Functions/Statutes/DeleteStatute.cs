@@ -15,8 +15,7 @@ namespace RIPA.Functions.TableStorage.Functions.Statutes
     {
         [FunctionName("DeleteStatute")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStatute/{Id}")] HttpRequest req, int Id,            
-            [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStatute/{Id}")] HttpRequest req, int Id,            [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
             try
             {
