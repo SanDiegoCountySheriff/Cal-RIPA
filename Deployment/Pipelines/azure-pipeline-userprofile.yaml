@@ -8,7 +8,7 @@ trigger:
   branches:
     include:
     - dev
-    - feature/build-pipelines
+    - main
     - feature/DevOps
   paths:
     include:
