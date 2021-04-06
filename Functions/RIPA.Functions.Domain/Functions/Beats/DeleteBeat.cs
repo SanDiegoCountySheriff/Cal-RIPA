@@ -5,11 +5,11 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using RIPA.Functions.TableStorage.Functions.Beats.Models;
+using RIPA.Functions.Domain.Functions.Beats.Models;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.TableStorage.Functions.Beats
+namespace RIPA.Functions.Domain.Functions.Beats
 {
     public static class DeleteBeat
     {

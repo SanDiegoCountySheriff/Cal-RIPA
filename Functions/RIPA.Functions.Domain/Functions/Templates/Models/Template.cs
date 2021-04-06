@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace RIPA.Functions.TableStorage.Functions.Templates.Models
+namespace RIPA.Functions.Domain.Functions.Templates.Models
 {
     public class Template : TableEntity
     {

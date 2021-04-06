@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace RIPA.Functions.TableStorage.Functions.Schools.Models
+namespace RIPA.Functions.Domain.Functions.Schools.Models
 {
     public class School : TableEntity
     {

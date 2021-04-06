@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.TableStorage.Functions.Cities.Models
+namespace RIPA.Functions.Domain.Functions.Cities.Models
 {
     public class City : TableEntity
     {

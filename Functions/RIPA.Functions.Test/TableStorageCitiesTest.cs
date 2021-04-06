@@ -5,8 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using RIPA.Functions.TableStorage.Functions.Cities;
-using RIPA.Functions.TableStorage.Functions.Cities.Models;
+using RIPA.Functions.Domain.Functions.Cities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

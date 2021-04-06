@@ -5,10 +5,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
-using RIPA.Functions.TableStorage.Functions.Cities.Models;
+using RIPA.Functions.Domain.Functions.Cities.Models;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.TableStorage.Functions.Cities
+namespace RIPA.Functions.Domain.Functions.Cities
 {
     public class DeleteCity
     {
