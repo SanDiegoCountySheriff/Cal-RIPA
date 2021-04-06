@@ -3004,6 +3004,7 @@
         },
 
         {
+
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-08-01",
@@ -3012,6 +3013,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
+
             ],
             "properties": {
                 "addressSpace": {

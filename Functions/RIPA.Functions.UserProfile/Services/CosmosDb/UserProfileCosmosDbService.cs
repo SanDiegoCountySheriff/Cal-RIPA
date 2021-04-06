@@ -8,7 +8,7 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb
 {
     public class UserProfileCosmosDbService : IUserProfileCosmosDbService
     {
-        private Container _container;
+        private readonly Container _container;
         public UserProfileCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
         {
             _container = dbClient.GetContainer(databaseName, containerName);
