@@ -13,7 +13,7 @@
       :headers="headers"
       :items="beats"
       :search="search"
-      sort-by="beat"
+      sort-by="community"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -41,14 +41,26 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.beat"
-                        label="Beat"
+                        v-model="editedItem.community"
+                        label="Community"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.neighborhood"
-                        label="Neighborhood"
+                        v-model="editedItem.command"
+                        label="Command"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.commandAuditGroup"
+                        label="Command Audit Group"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.commandAuditSize"
+                        label="Command Audit Size"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -107,18 +119,25 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'Beat', value: 'beat' },
-        { text: 'Neighborhood', value: 'neighborhood' },
+        { text: 'ID', value: 'id' },
+        { text: 'Community', value: 'community' },
+        { text: 'Command', value: 'command' },
+        { text: 'Command Audit Group', value: 'commandAuditGroup' },
+        { text: 'Command Audit Size', value: 'commandAuditSize' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
-        beat: '',
-        neighborhood: '',
+        community: '',
+        command: '',
+        commandAuditGroup: '',
+        commandAuditSize: '',
       },
       defaultItem: {
-        beat: '',
-        neighborhood: '',
+        community: '',
+        command: '',
+        commandAuditGroup: '',
+        commandAuditSize: '',
       },
     }
   },
