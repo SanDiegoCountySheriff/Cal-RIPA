@@ -283,10 +283,6 @@
             "type": "string",
             "defaultValue": "ripastops"
         },
-        "dbaccount_sqlDb_container_name": {
-            "type": "string",
-            "defaultValue": "stops"
-        },
         "dbaccount_sqlDb_user_container_name": {
             "type": "string",
             "defaultValue": "userProfile"
