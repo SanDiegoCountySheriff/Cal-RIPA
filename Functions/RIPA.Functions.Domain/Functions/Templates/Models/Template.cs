@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
-namespace RIPA.Functions.Templates.Services.CosmosDb.Models
+namespace RIPA.Functions.TableStorage.Functions.Templates.Models
 {
-    public class Template
+    public class Template : TableEntity
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonRequired]
+        
         [JsonProperty(PropertyName = "templateText")]
         public string TemplateText { get; set; }
     }
