@@ -8,10 +8,11 @@ trigger:
   branches:
     include:
     - dev
+    - main
     - feature/DevOps
   paths:
     include:
-    - Functions/RIPA.Functions.domain/*
+    - Functions/RIPA.Functions.Domain/*
     - Deployment/Pipelines/azure-pipeline-domain.yml
 
 pool:
