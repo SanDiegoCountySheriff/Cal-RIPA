@@ -19,7 +19,7 @@
         <v-toolbar flat>
           <v-toolbar-title>Admin: Maintain Statutes</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="1000px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -39,10 +39,66 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12">
+                    <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.offenseCode"
                         label="Offense Code"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseStatute"
+                        label="Offense Statute"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseValidationCD"
+                        label="Offense Validation CD"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseTxnTypeCD"
+                        label="Offense Txn Type CD"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseTypeOfStatuteCD"
+                        label="Offense Type of Statute CD"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="editedItem.statuteLiteral"
+                        label="Statute Literal"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseDefaultTypeOfCharge"
+                        label="Offense Default Type of Charge"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseTypeOfCharge"
+                        label="Offense Type of Charge"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseLiteralIdentifierCD"
+                        label="Offense Literal ID CD"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseDegree"
+                        label="Offense Degree"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="editedItem.bcsHierarchyCD"
+                        label="BCS Hierarchy CD"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseEnacted"
+                        label="Offense Enacted"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.offenseRepealed"
+                        label="Offense Repealed"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.alpsCognizantCD"
+                        label="Alps Cognizant CD"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -102,20 +158,22 @@ export default {
       dialogDelete: false,
       headers: [
         { text: 'Offense Code', value: 'offenseCode' },
-        { text: 'Offense Code', value: 'offenseValidationCD' },
-        { text: 'Offense Code', value: 'offenseTxnTypeCD' },
-        { text: 'Offense Code', value: 'offenseStatute' },
-        { text: 'Offense Code', value: 'offenseTypeOfStatuteCD' },
-        { text: 'Offense Code', value: 'statuteLiteral' },
-        { text: 'Offense Code', value: 'offenseDefaultTypeOfCharge' },
-        { text: 'Offense Code', value: 'offenseTypeOfCharge' },
-        { text: 'Offense Code', value: 'offenseLiteralIdentifierCD' },
+        { text: 'Offense Statute', value: 'offenseStatute' },
+        { text: 'Offense Validation CD', value: 'offenseValidationCD' },
+        { text: 'Offense Txn Type CD', value: 'offenseTxnTypeCD' },
+        { text: 'Offense Type of Statute CD', value: 'offenseTypeOfStatuteCD' },
+        { text: 'Statute Literal', value: 'statuteLiteral' },
+        {
+          text: 'Offense Default Type of Charge',
+          value: 'offenseDefaultTypeOfCharge',
+        },
+        { text: 'Offense Type of Charge', value: 'offenseTypeOfCharge' },
+        { text: 'Offense Literal ID CD', value: 'offenseLiteralIdentifierCD' },
         { text: 'Offense Code', value: 'offenseDegree' },
-        { text: 'Offense Code', value: 'offenseDegree' },
-        { text: 'Offense Code', value: 'bcsHierarchyCD' },
-        { text: 'Offense Code', value: 'offenseEnacted' },
-        { text: 'Offense Code', value: 'offenseRepealed' },
-        { text: 'Offense Code', value: 'alpsCognizantCD' },
+        { text: 'BCS Hierarchy CD', value: 'bcsHierarchyCD' },
+        { text: 'Offense Enacted', value: 'offenseEnacted', width: '110' },
+        { text: 'Offense Repealed', value: 'offenseRepealed', width: '110' },
+        { text: 'Alps Cognizant CD', value: 'alpsCognizantCD' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -140,7 +198,25 @@ export default {
 
   methods: {
     init() {
-      this.statutes = this.items
+      this.statutes = this.items.map(item => {
+        return {
+          ...item,
+          offenseEnacted: this.formatDate(item.offenseEnacted),
+          offenseRepealed: this.formatDate(item.offenseRepealed),
+        }
+      })
+    },
+
+    formatDate(dateStr) {
+      if (dateStr.length > 0) {
+        const str = dateStr.replace(/-/g, '')
+        const year = str.substring(0, 4)
+        const month = str.substring(4, 6)
+        const day = str.substring(6, 8)
+        return `${year}-${month}-${day}`
+      }
+
+      return ''
     },
 
     editItem(item) {
