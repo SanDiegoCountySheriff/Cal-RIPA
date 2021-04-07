@@ -1,0 +1,63 @@
+# Node.js with Vue
+# Build a Node.js project that uses Vue.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+    - dev
+    - main
+    - feature/DevOps
+  paths:
+    include:
+    - UI/*
+    - Deployment/Pipelines/azure-pipeline-ui.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build
+    displayName: 'Build'   
+    jobs:
+    - job: job_1
+      displayName: 'Building UI Project'    
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          command: 'install'
+          workingDir: '**UI/'
+      - task: Npm@1
+        displayName: 'npm build'
+        inputs:
+          command: 'custom'
+          workingDir: '**UI/'
+          customCommand: 'run build'
+      - task: CopyFiles@2
+        displayname: 'copy files to artifact staging directory'
+        inputs:
+          SourceFolder: '(Build.SourcesDirectory)/'
+          Contents: '**'
+          TargetFolder: '$(build.artifactstagingdirectory)'      
+      - task: ArchiveFiles@2
+        displayName: 'Archive Files'
+        inputs:
+          rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+          includeRootFolder: true
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+          replaceExistingArchive: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifacts'
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+        
