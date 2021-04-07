@@ -1,4 +1,4 @@
-export const counties = [
+export const COUNTIES = [
   {
     name: 'Alameda',
   },

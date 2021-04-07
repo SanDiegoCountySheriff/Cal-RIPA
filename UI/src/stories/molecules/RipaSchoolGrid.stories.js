@@ -1,6 +1,6 @@
 import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid'
 import { schools } from '../data/schools'
-import { counties } from '../data/counties'
+import { COUNTIES } from '@/constants/counties'
 
 export default {
   title: 'Molecules/RipaSchoolsGrid',
@@ -21,7 +21,7 @@ export const basic = () => ({
             county: item.county.toUpperCase(),
           }
         }),
-      counties: counties,
+      counties: COUNTIES,
     }
   },
   template:
