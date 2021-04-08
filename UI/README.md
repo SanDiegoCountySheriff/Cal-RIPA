@@ -1,5 +1,7 @@
 # cal-ripa
 
+## Prerequistites > VS Code, NodeJS, Git, GitHub Desktop
+
 ## Project setup - You must be running Node 12.13.0 or higher
 
 ## You need to cd into the UI folder before running any commands below
