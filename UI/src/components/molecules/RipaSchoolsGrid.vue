@@ -11,13 +11,13 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="beats"
+      :items="schools"
       :search="search"
-      sort-by="community"
+      sort-by="name"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Beats</v-toolbar-title>
+          <v-toolbar-title>Admin: Maintain Schools</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -41,27 +41,23 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.community"
-                        label="Community"
+                        v-model="editedItem.name"
+                        label="School"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.command"
-                        label="Command"
+                        v-model="editedItem.district"
+                        label="District"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.commandAuditGroup"
-                        label="Command Audit Group"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.commandAuditSize"
-                        label="Command Audit Size"
-                      ></v-text-field>
+                      <v-autocomplete
+                        v-model="editedItem.county"
+                        :items="mappedCounties"
+                        label="County"
+                      >
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -79,7 +75,7 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title
-                >Are you sure you want to delete this beat?</v-card-title
+                >Are you sure you want to delete this school?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -110,34 +106,31 @@
 
 <script>
 export default {
-  name: 'ripa-beats-grid',
+  name: 'ripa-schools-grid',
 
   data() {
     return {
       search: '',
-      beats: [],
+      schools: [],
+      mappedCounties: [],
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'Community', value: 'community' },
-        { text: 'Command', value: 'command' },
-        { text: 'Command Audit Group', value: 'commandAuditGroup' },
-        { text: 'Command Audit Size', value: 'commandAuditSize' },
+        { text: 'School', value: 'name' },
+        { text: 'District', value: 'district' },
+        { text: 'County', value: 'county' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
-        community: '',
-        command: '',
-        commandAuditGroup: '',
-        commandAuditSize: '',
+        name: '',
+        district: '',
+        county: '',
       },
       defaultItem: {
-        community: '',
-        command: '',
-        commandAuditGroup: '',
-        commandAuditSize: '',
+        name: '',
+        district: '',
+        county: '',
       },
     }
   },
@@ -150,23 +143,24 @@ export default {
 
   methods: {
     init() {
-      this.beats = this.items
+      this.schools = this.items
+      this.mappedCounties = this.counties.map(item => item.name.toUpperCase())
     },
 
     editItem(item) {
-      this.editedIndex = this.beats.indexOf(item)
+      this.editedIndex = this.schools.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteItem(item) {
-      this.editedIndex = this.beats.indexOf(item)
+      this.editedIndex = this.schools.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     deleteItemConfirm() {
-      this.beats.splice(this.editedIndex, 1)
+      this.schools.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
@@ -188,9 +182,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.beats[this.editedIndex], this.editedItem)
+        Object.assign(this.schools[this.editedIndex], this.editedItem)
       } else {
-        this.beats.push(this.editedItem)
+        this.schools.push(this.editedItem)
       }
       this.close()
     },
@@ -198,7 +192,7 @@ export default {
 
   watch: {
     items(val) {
-      this.beats = val
+      this.schools = val
     },
     dialog(val) {
       val || this.close()
@@ -214,6 +208,10 @@ export default {
 
   props: {
     items: {
+      type: Array,
+      default: () => [],
+    },
+    counties: {
       type: Array,
       default: () => [],
     },
