@@ -1,6 +1,8 @@
-# cssa-ripa
+# cal-ripa
 
-## Project setup
+## Project setup - You must be running Node 12.13.0 or higher
+
+## You need to cd into the UI folder before running any commands below
 
 ```
 npm install --legacy-peer-deps --save
