@@ -1,6 +1,7 @@
 import RipaCitiesGrid from '@/components/molecules/RipaCitiesGrid'
 import { cities } from '../data/cities'
-import { states } from '../data/states'
+import { STATES } from '@/constants/states'
+import { COUNTIES } from '@/constants/counties'
 
 export default {
   title: 'Molecules/RipaCitiesGrid',
@@ -13,9 +14,10 @@ export const basic = () => ({
   data() {
     return {
       data: cities,
-      states: states,
+      counties: COUNTIES,
+      states: STATES,
     }
   },
   template:
-    '<ripa-cities-grid :items="data" :states="states"></ripa-cities-grid>',
+    '<ripa-cities-grid :items="data" :counties="counties" :states="states"></ripa-cities-grid>',
 })
