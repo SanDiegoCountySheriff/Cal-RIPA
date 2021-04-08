@@ -312,8 +312,8 @@
         "dns_link_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('prv_dns_link_name'))]",
         "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
         "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
-        "apim_subnet_name": "[concat(variables('virtualNetworks_ripa_vnet_name'),'-apim-subnet')]",
-        "storageBlobDataContributor_id": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+        "apim_subnet_name": "[concat(variables('virtualNetworks_ripa_vnet_name'),'-apim-subnet')]"
+        //"storageBlobDataContributor_id": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
     },
     "resources": [
         {
