@@ -4,7 +4,6 @@ import '@/plugins/storybook'
 import '@/plugins/tailwind'
 import '@mdi/font/css/materialdesignicons.css'
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
-import '../src/assets/tailwind.css'
 
 addParameters({
   viewport: {
