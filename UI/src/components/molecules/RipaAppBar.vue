@@ -9,19 +9,19 @@
     <v-spacer></v-spacer>
 
     <div>
-      <v-btn class="tw-ml-4" x-small icon>
+      <v-btn class="tw-ml-4" x-small icon to="/form">
         <v-icon>mdi-plus-box</v-icon>
       </v-btn>
 
-      <v-btn class="tw-ml-4" x-small icon>
+      <v-btn class="tw-ml-4" x-small icon to="/stops">
         <v-icon>mdi-numeric-10-box-multiple-outline</v-icon>
       </v-btn>
 
-      <v-btn class="tw-ml-4" x-small icon>
+      <v-btn class="tw-ml-4" x-small icon to="/user">
         <v-icon>mdi-account-edit</v-icon>
       </v-btn>
 
-      <v-btn class="tw-ml-4" x-small icon>
+      <v-btn class="tw-ml-4" x-small icon to="/admin">
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </div>

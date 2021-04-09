@@ -17,9 +17,5 @@ export default {
   components: {
     RipaPageContainer,
   },
-
-  data: () => ({
-    //
-  }),
 }
 </script>
