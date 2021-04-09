@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,13 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: () => import('@/components/features/RipaAdminContainer.vue'),
+    beforeEnter(to, from, next) {
+      if (store.state.isAdmin) {
+        next()
+      } else {
+        next('/')
+      }
+    },
   },
   {
     path: '/stops',

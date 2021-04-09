@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 4000",
+    "serve": "vue-cli-service serve --host localhost --port 4000",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "build-storybook": "build-storybook",
-    "storybook": "start-storybook -p 6007"
+    "storybook": "start-storybook -p 6007",
+    "data-server": "json-server --watch public/db.json --port 3004"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
     "@tailwindcss/postcss7-compat": "2.1.0",
     "autoprefixer": "9",
+    "axios": "^0.21.1",
     "core-js": "3.10.1",
     "postcss": "7",
     "register-service-worker": "1.7.2",
@@ -48,6 +50,7 @@
     "eslint-plugin-promise": "4.3.1",
     "eslint-plugin-standard": "5.0.0",
     "eslint-plugin-vue": "7.8.0",
+    "json-server": "^0.16.3",
     "prettier": "2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.0.0",

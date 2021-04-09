@@ -1,5 +1,5 @@
 <template>
-  <ripa-page-container>
+  <ripa-page-container :admin="admin">
     <ripa-home-template></ripa-home-template>
   </ripa-page-container>
 </template>
@@ -14,6 +14,13 @@ export default {
   components: {
     RipaPageContainer,
     RipaHomeTemplate,
+  },
+
+  props: {
+    admin: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>

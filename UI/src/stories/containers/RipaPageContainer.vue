@@ -1,5 +1,5 @@
 <template>
-  <ripa-page-wrapper>
+  <ripa-page-wrapper :admin="admin">
     <slot></slot>
   </ripa-page-wrapper>
 </template>
@@ -12,6 +12,13 @@ export default {
 
   components: {
     RipaPageWrapper,
+  },
+
+  props: {
+    admin: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>

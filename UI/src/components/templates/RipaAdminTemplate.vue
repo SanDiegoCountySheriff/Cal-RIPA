@@ -3,9 +3,7 @@
     :loading="loading"
     :beats="beats"
     :cities="cities"
-    :counties="counties"
     :schools="schools"
-    :states="states"
     :statutes="statutes"
   ></ripa-admin-wrapper>
 </template>
@@ -33,15 +31,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    counties: {
-      type: Array,
-      default: () => [],
-    },
     schools: {
-      type: Array,
-      default: () => [],
-    },
-    states: {
       type: Array,
       default: () => [],
     },

@@ -3,12 +3,20 @@
     <v-card-title>RIPA Stop App</v-card-title>
 
     <v-card-text>
-      <div>Initiate a new Stop</div>
-      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4 tw-mb-4">
-        <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
-        <v-btn color="primary" class="tw-ml-4" to="/form"
-          >Probation Contact Template</v-btn
-        >
+      <div>Initiate a new Stop:</div>
+      <div class="tw-mt-4 tw-mb-4">
+        <v-container fluid>
+          <v-row no-gutters dense>
+            <v-col cols="12" sm="6" class="tw-text-center">
+              <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
+            </v-col>
+            <v-col cols="12" sm="6" class="tw-text-center">
+              <v-btn color="primary" to="/form" class="tw-mt-4 sm:tw-mt-0"
+                >Probation Contact Template</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-divider></v-divider>
       <div class="tw-mt-4">About this App:</div>

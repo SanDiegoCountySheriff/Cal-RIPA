@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ripa-app-bar></ripa-app-bar>
+    <ripa-app-bar :admin="admin"></ripa-app-bar>
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
@@ -17,6 +17,13 @@ export default {
   components: {
     RipaAppBar,
     RipaContentWrapper,
+  },
+
+  props: {
+    admin: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
