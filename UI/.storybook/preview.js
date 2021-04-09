@@ -5,9 +5,19 @@ import '@/plugins/tailwind'
 import '@mdi/font/css/materialdesignicons.css'
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 
+const customViewports = {
+  panasonicCf33: {
+    name: 'Panasonic CF-33',
+    styles: {
+      width: '1440px',
+      height: '2160px',
+    },
+  },
+}
+
 addParameters({
   viewport: {
-    viewports: INITIAL_VIEWPORTS,
+    viewports: { ...INITIAL_VIEWPORTS, ...customViewports },
   },
 })
 
