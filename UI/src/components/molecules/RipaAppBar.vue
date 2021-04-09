@@ -1,0 +1,119 @@
+<template>
+  <v-app-bar flat>
+    <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')"
+      >RIPA</v-toolbar-title
+    >
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="tw-ml-4"
+          x-small
+          icon
+          @click="handleThemeChange"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>{{ getThemeIcon }}</v-icon>
+        </v-btn>
+      </template>
+      <span>{{ getThemeTooltip }}</span>
+    </v-tooltip>
+
+    <v-spacer></v-spacer>
+
+    <div>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="tw-ml-4"
+            x-small
+            icon
+            to="/form"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-plus-box</v-icon>
+          </v-btn>
+        </template>
+        <span>Create new form</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="tw-ml-4"
+            x-small
+            icon
+            to="/stops"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-numeric-10-box-multiple-outline</v-icon>
+          </v-btn>
+        </template>
+        <span>View last 10 stops</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="tw-ml-4"
+            x-small
+            icon
+            to="/user"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-account-edit</v-icon>
+          </v-btn>
+        </template>
+        <span>View user profile</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="tw-ml-4"
+            x-small
+            icon
+            to="/admin"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-cog</v-icon>
+          </v-btn>
+        </template>
+        <span>Manage admin tables</span>
+      </v-tooltip>
+    </div>
+  </v-app-bar>
+</template>
+
+<script>
+export default {
+  name: 'ripa-app-bar',
+
+  computed: {
+    getThemeIcon() {
+      return this.$vuetify.theme.dark
+        ? 'mdi-white-balance-sunny'
+        : 'mdi-moon-first-quarter'
+    },
+
+    getThemeTooltip() {
+      return this.$vuetify.theme.dark ? 'View light mode' : 'View dark mode'
+    },
+  },
+
+  methods: {
+    handleThemeChange() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
+  },
+
+  created() {
+    this.$vuetify.theme.dark = false
+  },
+}
+</script>

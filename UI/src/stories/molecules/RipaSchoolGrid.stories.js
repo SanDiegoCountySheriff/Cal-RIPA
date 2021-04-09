@@ -27,3 +27,15 @@ export const basic = () => ({
   template:
     '<ripa-schools-grid :items="data" :counties="counties"></ripa-schools-grid>',
 })
+
+export const loading = () => ({
+  components: { RipaSchoolsGrid },
+  data() {
+    return {
+      data: [],
+      counties: COUNTIES,
+    }
+  },
+  template:
+    '<ripa-schools-grid loading :items="data" :counties="counties"></ripa-schools-grid>',
+})

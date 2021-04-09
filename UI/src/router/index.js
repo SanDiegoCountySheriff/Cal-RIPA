@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/components/features/Home.vue'
+import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
+import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 
 Vue.use(VueRouter)
 
@@ -8,16 +9,27 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: RipaHomeContainer,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '@/components/features/About.vue'),
+    path: '/form',
+    name: 'Form',
+    component: RipaFormContainer,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('@/components/features/RipaAdminContainer.vue'),
+  },
+  {
+    path: '/stops',
+    name: 'Stops',
+    component: () => import('@/components/features/RipaStopsContainer.vue'),
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () => import('@/components/features/RipaUserContainer.vue'),
   },
 ]
 

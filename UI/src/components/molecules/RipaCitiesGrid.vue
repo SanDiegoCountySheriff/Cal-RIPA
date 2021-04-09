@@ -10,6 +10,7 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      :loading="loading"
       :headers="headers"
       :items="cities"
       :search="search"
@@ -211,6 +212,10 @@ export default {
   },
 
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     items: {
       type: Array,
       default: () => [],

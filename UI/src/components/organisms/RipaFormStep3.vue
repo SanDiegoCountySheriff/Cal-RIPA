@@ -10,8 +10,8 @@
         v-model="stopReason2"
       ></ripa-stop-reason>
     </v-form>
-    <v-btn color="primary" class="tw-mr-4" @click="submit"> submit </v-btn>
-    <v-btn color="error" class="tw-mr-4" @click="reset"> Reset Form </v-btn>
+    <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
+    <v-btn color="error" class="tw-mr-4" @click="reset"> Reset </v-btn>
   </div>
 </template>
 

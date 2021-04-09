@@ -21,3 +21,16 @@ export const basic = () => ({
   template:
     '<ripa-cities-grid :items="data" :counties="counties" :states="states"></ripa-cities-grid>',
 })
+
+export const loading = () => ({
+  components: { RipaCitiesGrid },
+  data() {
+    return {
+      data: [],
+      counties: COUNTIES,
+      states: STATES,
+    }
+  },
+  template:
+    '<ripa-cities-grid loading :items="data" :counties="counties" :states="states"></ripa-cities-grid>',
+})
