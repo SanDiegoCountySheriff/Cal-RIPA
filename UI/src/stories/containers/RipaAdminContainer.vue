@@ -4,9 +4,7 @@
       :loading="loading"
       :beats="beats"
       :cities="cities"
-      :counties="counties"
       :schools="schools"
-      :states="states"
       :statutes="statutes"
     ></ripa-admin-template>
   </ripa-page-container>
@@ -17,8 +15,6 @@ import RipaPageContainer from './RipaPageContainer'
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import { beats } from '../data/beats'
 import { cities } from '../data/cities'
-import { STATES } from '@/constants/states'
-import { COUNTIES } from '@/constants/counties'
 import { schools } from '../data/schools'
 import { statutes } from '../data/statutes'
 
@@ -35,9 +31,7 @@ export default {
       loading: false,
       beats: [],
       cities: [],
-      counties: COUNTIES,
       schools: [],
-      states: STATES,
       statutes: [],
     }
   },

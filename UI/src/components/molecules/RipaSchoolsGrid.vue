@@ -106,6 +106,8 @@
 </template>
 
 <script>
+import { COUNTIES } from '@/constants/counties'
+
 export default {
   name: 'ripa-schools-grid',
 
@@ -145,7 +147,7 @@ export default {
   methods: {
     init() {
       this.schools = this.items
-      this.mappedCounties = this.counties.map(item => item.name.toUpperCase())
+      this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
     },
 
     editItem(item) {
@@ -213,10 +215,6 @@ export default {
       default: false,
     },
     items: {
-      type: Array,
-      default: () => [],
-    },
-    counties: {
       type: Array,
       default: () => [],
     },

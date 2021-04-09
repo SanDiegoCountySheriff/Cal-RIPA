@@ -1,8 +1,6 @@
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import { beats } from '../data/beats'
 import { cities } from '../data/cities'
-import { STATES } from '@/constants/states'
-import { COUNTIES } from '@/constants/counties'
 import { schools } from '../data/schools'
 import { statutes } from '../data/statutes'
 
@@ -18,14 +16,12 @@ export const basic = () => ({
     return {
       beats: beats,
       cities: cities,
-      counties: COUNTIES,
       schools: schools,
-      states: STATES,
       statutes: statutes,
     }
   },
   template:
-    '<ripa-admin-template :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-template>',
+    '<ripa-admin-template :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-template>',
 })
 
 export const loading = () => ({
@@ -34,12 +30,10 @@ export const loading = () => ({
     return {
       beats: [],
       cities: [],
-      counties: COUNTIES,
       schools: [],
-      states: STATES,
       statutes: [],
     }
   },
   template:
-    '<ripa-admin-template loading :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-template>',
+    '<ripa-admin-template loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-template>',
 })

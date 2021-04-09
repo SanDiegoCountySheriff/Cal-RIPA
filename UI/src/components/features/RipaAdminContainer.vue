@@ -3,17 +3,14 @@
     :loading="loading"
     :beats="beats"
     :cities="cities"
-    :counties="counties"
     :schools="schools"
-    :states="states"
     :statutes="statutes"
   ></ripa-admin-template>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { STATES } from '@/constants/states'
-import { COUNTIES } from '@/constants/counties'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -25,25 +22,25 @@ export default {
   data() {
     return {
       loading: false,
-      beats: [],
-      cities: [],
-      counties: COUNTIES,
-      schools: [],
-      states: STATES,
-      statutes: [],
     }
   },
 
+  computed: {
+    ...mapState(['beats', 'cities', 'schools', 'statutes']),
+  },
+
   methods: {
-    getAdminData() {
+    ...mapActions(['getBeats', 'getCities', 'getSchools', 'getStatutes']),
+
+    async getAdminData() {
       this.loading = true
-      setTimeout(() => {
-        this.beats = []
-        this.cities = []
-        this.schools = []
-        this.statutes = []
-        this.loading = false
-      }, 2500)
+      await Promise.all([
+        this.getBeats(),
+        this.getCities(),
+        this.getSchools(),
+        this.getStatutes(),
+      ])
+      this.loading = false
     },
   },
 

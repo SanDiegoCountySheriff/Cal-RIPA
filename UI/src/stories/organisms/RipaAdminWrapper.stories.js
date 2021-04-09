@@ -18,14 +18,12 @@ export const basic = () => ({
     return {
       beats: beats,
       cities: cities,
-      counties: COUNTIES,
       schools: schools,
-      states: STATES,
       statutes: statutes,
     }
   },
   template:
-    '<ripa-admin-wrapper :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-wrapper :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-wrapper>',
 })
 
 export const loading = () => ({
@@ -34,12 +32,10 @@ export const loading = () => ({
     return {
       beats: [],
       cities: [],
-      counties: COUNTIES,
       schools: [],
-      states: STATES,
       statutes: [],
     }
   },
   template:
-    '<ripa-admin-wrapper loading :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-wrapper loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-wrapper>',
 })

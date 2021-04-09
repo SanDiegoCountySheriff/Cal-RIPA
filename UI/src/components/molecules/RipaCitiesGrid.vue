@@ -108,6 +108,9 @@
 </template>
 
 <script>
+import { STATES } from '@/constants/states'
+import { COUNTIES } from '@/constants/counties'
+
 export default {
   name: 'ripa-cities-grid',
 
@@ -148,8 +151,8 @@ export default {
   methods: {
     init() {
       this.cities = this.items
-      this.mappedStates = this.states.map(item => item.abbreviation)
-      this.mappedCounties = this.counties.map(item => item.name.toUpperCase())
+      this.mappedStates = STATES.map(item => item.abbreviation)
+      this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
     },
 
     editItem(item) {
@@ -217,14 +220,6 @@ export default {
       default: false,
     },
     items: {
-      type: Array,
-      default: () => [],
-    },
-    counties: {
-      type: Array,
-      default: () => [],
-    },
-    states: {
       type: Array,
       default: () => [],
     },

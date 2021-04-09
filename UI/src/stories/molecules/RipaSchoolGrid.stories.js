@@ -1,6 +1,5 @@
 import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid'
 import { schools } from '../data/schools'
-import { COUNTIES } from '@/constants/counties'
 
 export default {
   title: 'Molecules/RipaSchoolsGrid',
@@ -21,11 +20,9 @@ export const basic = () => ({
             county: item.county.toUpperCase(),
           }
         }),
-      counties: COUNTIES,
     }
   },
-  template:
-    '<ripa-schools-grid :items="data" :counties="counties"></ripa-schools-grid>',
+  template: '<ripa-schools-grid :items="data"></ripa-schools-grid>',
 })
 
 export const loading = () => ({
@@ -33,9 +30,7 @@ export const loading = () => ({
   data() {
     return {
       data: [],
-      counties: COUNTIES,
     }
   },
-  template:
-    '<ripa-schools-grid loading :items="data" :counties="counties"></ripa-schools-grid>',
+  template: '<ripa-schools-grid loading :items="data"></ripa-schools-grid>',
 })

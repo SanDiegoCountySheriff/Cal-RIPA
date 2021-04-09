@@ -12,18 +12,12 @@
         <ripa-beats-grid :loading="loading" :items="beats"></ripa-beats-grid>
       </v-tab-item>
       <v-tab-item>
-        <ripa-cities-grid
-          :loading="loading"
-          :items="cities"
-          :counties="counties"
-          :states="states"
-        ></ripa-cities-grid>
+        <ripa-cities-grid :loading="loading" :items="cities"></ripa-cities-grid>
       </v-tab-item>
       <v-tab-item>
         <ripa-schools-grid
           :loading="loading"
           :items="schools"
-          :counties="counties"
         ></ripa-schools-grid>
       </v-tab-item>
       <v-tab-item>
@@ -71,15 +65,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    counties: {
-      type: Array,
-      default: () => [],
-    },
     schools: {
-      type: Array,
-      default: () => [],
-    },
-    states: {
       type: Array,
       default: () => [],
     },
