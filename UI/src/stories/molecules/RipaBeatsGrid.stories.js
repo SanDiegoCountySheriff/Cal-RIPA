@@ -21,7 +21,7 @@ export const loading = () => ({
   components: { RipaBeatsGrid },
   data() {
     return {
-      data: beats,
+      data: [],
     }
   },
   template: '<ripa-beats-grid loading :items="data"></ripa-beats-grid>',

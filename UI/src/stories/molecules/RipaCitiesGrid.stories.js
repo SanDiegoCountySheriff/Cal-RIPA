@@ -26,7 +26,7 @@ export const loading = () => ({
   components: { RipaCitiesGrid },
   data() {
     return {
-      data: cities,
+      data: [],
       counties: COUNTIES,
       states: STATES,
     }

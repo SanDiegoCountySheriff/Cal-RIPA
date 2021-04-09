@@ -1,4 +1,4 @@
-import RipaAdminWrapper from '@/components/organisms/RipaAdminWrapper'
+import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import { beats } from '../data/beats'
 import { cities } from '../data/cities'
 import { STATES } from '@/constants/states'
@@ -7,13 +7,13 @@ import { schools } from '../data/schools'
 import { statutes } from '../data/statutes'
 
 export default {
-  title: 'Organisms/RipaAdminWrapper',
-  component: RipaAdminWrapper,
+  title: 'Templates/RipaAdminTemplate',
+  component: RipaAdminTemplate,
   parameters: {},
 }
 
 export const basic = () => ({
-  components: { RipaAdminWrapper },
+  components: { RipaAdminTemplate },
   data() {
     return {
       beats: beats,
@@ -25,11 +25,11 @@ export const basic = () => ({
     }
   },
   template:
-    '<ripa-admin-wrapper :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-template :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-template>',
 })
 
 export const loading = () => ({
-  components: { RipaAdminWrapper },
+  components: { RipaAdminTemplate },
   data() {
     return {
       beats: [],
@@ -41,5 +41,5 @@ export const loading = () => ({
     }
   },
   template:
-    '<ripa-admin-wrapper loading :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-template loading :beats="beats" :cities="cities" :counties="counties" :schools="schools" :states="states" :statutes="statutes"></ripa-admin-template>',
 })

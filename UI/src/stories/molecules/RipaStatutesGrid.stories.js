@@ -21,7 +21,7 @@ export const loading = () => ({
   components: { RipaStatutesGrid },
   data() {
     return {
-      data: statutes,
+      data: [],
     }
   },
   template: '<ripa-statutes-grid loading :items="data"></ripa-statutes-grid>',

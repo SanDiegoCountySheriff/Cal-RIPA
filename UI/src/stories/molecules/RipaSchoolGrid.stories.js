@@ -32,15 +32,7 @@ export const loading = () => ({
   components: { RipaSchoolsGrid },
   data() {
     return {
-      data: schools
-        .filter(item => item.status === 'Active')
-        .map(item => {
-          return {
-            name: item.name.toUpperCase(),
-            district: item.district.toUpperCase(),
-            county: item.county.toUpperCase(),
-          }
-        }),
+      data: [],
       counties: COUNTIES,
     }
   },
