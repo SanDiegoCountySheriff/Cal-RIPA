@@ -4,6 +4,12 @@
 
     <v-card-text>
       <div>Initiate a new Stop</div>
+      <div class="tw-flex tw-items-center tw-justify-center tw-mt-4 tw-mb-4">
+        <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
+        <v-btn color="primary" class="tw-ml-4" to="/form"
+          >Probation Contact Template</v-btn
+        >
+      </div>
       <v-divider></v-divider>
       <div class="tw-mt-4">About this App:</div>
       <p>

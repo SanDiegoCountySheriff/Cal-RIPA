@@ -12,12 +12,8 @@
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { beats } from '@/stories/data/beats'
-import { cities } from '@/stories/data/cities'
 import { STATES } from '@/constants/states'
 import { COUNTIES } from '@/constants/counties'
-import { schools } from '@/stories/data/schools'
-import { statutes } from '@/stories/data/statutes'
 
 export default {
   name: 'ripa-admin-container',
@@ -42,10 +38,10 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.beats = beats
-        this.cities = cities
-        this.schools = schools
-        this.statutes = statutes
+        this.beats = []
+        this.cities = []
+        this.schools = []
+        this.statutes = []
         this.loading = false
       }, 2500)
     },
