@@ -122,6 +122,10 @@
             "defaultValue": "cdb",
             "type": "String"
         },
+        "privateEndpoints_cdb_pe_name": {
+            "defaultValue": "cdb-pe",
+            "type": "String"
+        },
         "storageAccounts_contentsa_name": {
             "defaultValue": "contentsa",
             "type": "String"
@@ -282,6 +286,13 @@
         "dbaccount_sqlDb_submission_container_name": {
             "type": "string",
             "defaultValue": "submission"
+        },
+        "roleNameGuid": {
+            "type": "string",
+            "defaultValue": "[newGuid()]",
+            "metadata": {
+                "description": "A new GUID used to identify the role assignment"
+            }
         }
     },
     "variables": {
@@ -290,6 +301,7 @@
         "databaseAccounts_ripa_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('databaseAccounts_cdb_name'))]",
         "networkSecurityGroups_ripa_apim_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_apim_nsg_name'))]",
         "networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_vnet_cdb_subnet_nsg_name'))]",
+        "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
         "serverfarms_userprofile_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_userprofile_ASP_name'))]",
         "serverfarms_domain_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_domain_ASP_name'))]",
         "serverfarms_stop_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_stop_ASP_name'))]",
@@ -312,8 +324,8 @@
         "dns_link_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('prv_dns_link_name'))]",
         "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
         "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
-        "apim_subnet_name": "[concat(variables('virtualNetworks_ripa_vnet_name'),'-apim-subnet')]"
-        //"storageBlobDataContributor_id": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+        "apim_subnet_name": "[concat(variables('virtualNetworks_ripa_vnet_name'),'-apim-subnet')]",
+        "storageBlobDataContributor_id": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
     },
     "resources": [
         {
@@ -1953,15 +1965,7 @@
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    {
-                        //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
-                        "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
-                        "action": "Allow",
-                        "tag": "Default",
-                        "priority": 100,
-                        "name": "AllowApim",
-                        "description": "Allow APIM traffic"
-                    },
+                    
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2136,15 +2140,7 @@
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    {
-                        //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
-                        "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
-                        "action": "Allow",
-                        "tag": "Default",
-                        "priority": 100,
-                        "name": "AllowApim",
-                        "description": "Allow APIM traffic"
-                    },
+                    
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2317,15 +2313,7 @@
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    {
-                        //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
-                        "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
-                        "action": "Allow",
-                        "tag": "Default",
-                        "priority": 100,
-                        "name": "AllowApim",
-                        "description": "Allow APIM traffic"
-                    },
+                    
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2498,15 +2486,7 @@
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    {
-                        //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
-                        "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
-                        "action": "Allow",
-                        "tag": "Default",
-                        "priority": 100,
-                        "name": "AllowApim",
-                        "description": "Allow APIM traffic"
-                    },
+                    
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2561,7 +2541,8 @@
             "name": "[variables('sites_ripa_template_fa_name')]",
             "location": "[parameters('region')]",
             "identity": {
-                
+                //"principalId": "5a17954d-9516-4210-8409-e04dcd475e3a",
+                //"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619",
                 "type": "SystemAssigned"
             },
             "dependsOn": [
@@ -2680,15 +2661,7 @@
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    {
-                        //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
-                        "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
-                        "action": "Allow",
-                        "tag": "Default",
-                        "priority": 100,
-                        "name": "AllowApim",
-                        "description": "Allow APIM traffic"
-                    },
+                    
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
