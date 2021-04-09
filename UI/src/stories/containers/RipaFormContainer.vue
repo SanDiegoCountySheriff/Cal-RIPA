@@ -1,5 +1,5 @@
 <template>
-  <ripa-page-container>
+  <ripa-page-container :admin="admin">
     <div>FORM TEMPLATE GOES HERE</div>
   </ripa-page-container>
 </template>
@@ -12,6 +12,13 @@ export default {
 
   components: {
     RipaPageContainer,
+  },
+
+  props: {
+    admin: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>

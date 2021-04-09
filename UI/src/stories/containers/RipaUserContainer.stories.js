@@ -17,7 +17,12 @@ export default {
   ],
 }
 
-export const basic = () => ({
+export const admin = () => ({
   components: { RipaUserContainer },
-  template: '<ripa-user-container ></ripa-user-container>',
+  template: '<ripa-user-container admin></ripa-user-container>',
+})
+
+export const nonAdmin = () => ({
+  components: { RipaUserContainer },
+  template: '<ripa-user-container></ripa-user-container>',
 })

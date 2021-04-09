@@ -3,7 +3,7 @@
     <v-card-title>RIPA Stop App</v-card-title>
 
     <v-card-text>
-      <div>Initiate a new Stop</div>
+      <div>Initiate a new Stop:</div>
       <div class="tw-flex tw-items-center tw-justify-center tw-mt-4 tw-mb-4">
         <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
         <v-btn color="primary" class="tw-ml-4" to="/form"

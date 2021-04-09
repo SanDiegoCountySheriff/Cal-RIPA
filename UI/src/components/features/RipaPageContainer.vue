@@ -1,5 +1,5 @@
 <template>
-  <ripa-page-wrapper>
+  <ripa-page-wrapper :admin="isAdmin">
     <slot></slot>
   </ripa-page-wrapper>
 </template>
@@ -12,6 +12,12 @@ export default {
 
   components: {
     RipaPageWrapper,
+  },
+
+  computed: {
+    isAdmin() {
+      return this.$store.state.isAdmin
+    },
   },
 }
 </script>

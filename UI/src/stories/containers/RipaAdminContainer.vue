@@ -1,5 +1,5 @@
 <template>
-  <ripa-page-container>
+  <ripa-page-container :admin="admin">
     <ripa-admin-template
       :loading="loading"
       :beats="beats"
@@ -57,6 +57,13 @@ export default {
 
   created() {
     this.getAdminData()
+  },
+
+  props: {
+    admin: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
