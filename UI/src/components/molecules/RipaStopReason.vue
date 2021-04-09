@@ -1,99 +1,192 @@
 <template>
-  <div>
-    <!-- <v-form ref="stopReason" v-model="valid" lazy-validation> -->
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
-      required
-    ></v-text-field>
-
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+  <div class="ripa-stop-reason tw-p-4">
+    <ripa-header value="Reason for Stop"></ripa-header>
 
     <v-select
-      v-model="select"
-      :items="items"
-      :rules="[v => !!v || 'Item is required']"
-      label="Item"
+      v-model="reason"
+      clerable
+      dense
+      flat
+      item-text="name"
+      item-value="value"
+      label="Reason"
       required
+      :items="items"
+      :rules="reasonRules"
     ></v-select>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
+    <template v-if="reason === 1">
+      <div>
+        <v-radio-group v-model="trafficViolation">
+          <v-radio label="Moving Violation" value="1A"></v-radio>
+          <v-radio label="Equipment Violation" value="1B"></v-radio>
+          <v-radio
+            label="Non-moving Violation, including Registration Violation"
+            value="1C"
+          ></v-radio>
+        </v-radio-group>
+        <div class="tw-mt-2"></div>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-autocomplete
+              v-model="trafficViolationCode"
+              clearable
+              dense
+              flat
+              hint="Select 1 Offense Code (required)"
+              item-text="fullName"
+              item-value="offenseCode"
+              label="Offense Code"
+              :items="statutes"
+              v-bind="attrs"
+              v-on="on"
+            ></v-autocomplete>
+          </template>
+          <span>{{ trafficViolationCode }}</span>
+        </v-tooltip>
+      </div>
+    </template>
+
+    <template v-if="reason === 2">
+      <div>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Officer witnessed commission of a crime"
+          value="2A"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Matched suspect description"
+          value="2B"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Witness or Victim identification of Suspect at the scene"
+          value="2C"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Carrying Suspicious Object"
+          value="2D"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Actions indicative of casing a victim or location"
+          value="2E"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Suspected of Acting as Lookout"
+          value="2F"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Actions indicative of drug transaction"
+          value="2G"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Actions indicative of engaging in violent crime"
+          value="2H"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="reasonableSuspicion"
+          dense
+          label="Other Reasonable Suspicion of a crime"
+          value="2I"
+          hide-details
+        ></v-checkbox>
+      </div>
+    </template>
+
+    <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
+
+    <v-textarea
+      auto-grow
+      clearable
+      clear-icon="mdi-close-circle"
+      counter
+      flat
+      hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+      label="Brief Explanation"
       required
-    ></v-checkbox>
-
-    <!-- <v-btn :disabled="!valid" color="success" class="tw-mr-4" @click="validate">
-      Validate
-    </v-btn>
-
-    <v-btn color="error" class="tw-mr-4" @click="reset"> Reset Form </v-btn>
-
-    <v-btn color="warning" class="tw-mr-4" @click="resetValidation">
-      Reset Validation
-    </v-btn>
-
-    <v-btn :disabled="!valid" color="primary" class="tw-mr-4" @click="submit">
-      submit
-    </v-btn> -->
-    <!-- </v-form> -->
+      rows="1"
+      :rules="explanationRules"
+      :value="explanation"
+    ></v-textarea>
   </div>
 </template>
 
 <script>
+import RipaHeader from '@/components/atoms/RipaHeader'
+
 export default {
   name: 'ripa-stop-reason',
+
+  components: {
+    RipaHeader,
+  },
 
   data() {
     return {
       valid: true,
-      name: this.value.name || '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+      reason: null,
+      reasonRules: [v => !!v || 'Reason is required'],
+      explanation: '',
+      explanationRules: [
+        v => (v || '').length > 0 || 'Explanation is required',
+        v => (v || '').length <= 250 || 'Max 250 characters',
       ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      items: [
+        { name: 'Traffic Violation', value: 1 },
+        { name: 'Reasonable Suspicion', value: 2 },
+        {
+          name:
+            'Known to be on Parole / Probation / PRCS / Mandatory Supervision',
+          value: 3,
+        },
+        {
+          name: 'Knowledge of outstanding arrest warrant/wanted person',
+          value: 4,
+        },
+        {
+          name: 'Investigation to determine whether the person was truant',
+          value: 5,
+        },
+        { name: 'Consensual Encounter resulting in a search', value: 6 },
       ],
-      select: null,
-      items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-      checkbox: false,
+      trafficViolation: null,
+      trafficViolationCode: null,
+      reasonableSuspicion: [],
     }
   },
 
   methods: {
-    validate() {
-      this.$refs.stopReason.validate()
-    },
-
-    reset() {
-      this.$refs.stopReason.reset()
-    },
-
-    resetValidation() {
-      this.$refs.stopReason.resetValidation()
-    },
-
     submit() {
       this.$refs.stopReason.validate()
       if (!this.valid) {
         return
       }
       this.$emit('input', {
-        name: this.name,
-        year: this.email,
-        select: this.select,
-        checkbox: this.checkbox,
+        reason: this.reason,
+        explanation: this.explanation,
       })
     },
   },
@@ -103,6 +196,26 @@ export default {
       type: Object,
       default: () => {},
     },
+    statutes: {
+      type: Array,
+      default: () => [],
+    },
   },
 }
 </script>
+
+<style lang="scss">
+.v-list-item__subtitle,
+.v-list-item__title {
+  text-overflow: inherit;
+  white-space: inherit;
+}
+
+.ripa-stop-reason {
+  .v-select:not(.v-text-field--single-line):not(.v-text-field--outlined)
+    .v-select__slot
+    > input {
+    text-overflow: ellipsis;
+  }
+}
+</style>

@@ -18,6 +18,7 @@ const customViewports = {
 addParameters({
   viewport: {
     viewports: { ...INITIAL_VIEWPORTS, ...customViewports },
+    defaultViewport: 'iphonexsmax',
   },
 })
 
