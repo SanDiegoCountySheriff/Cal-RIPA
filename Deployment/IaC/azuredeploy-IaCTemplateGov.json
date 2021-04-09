@@ -610,22 +610,7 @@
                 "securityRules": []
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2018-09-01",
-            "name": "[variables('privateDnsZones_privatelink_documents_azure_com_name')]",
-            "location": "[parameters('glocation')]",
-            "properties": {
-                "maxNumberOfRecordSets": 25000,
-                "maxNumberOfVirtualNetworkLinks": 1000,
-                "maxNumberOfVirtualNetworkLinksWithRegistration": 100,
-                "numberOfRecordSets": 3,
-                "numberOfVirtualNetworkLinks": 1,
-                "numberOfVirtualNetworkLinksWithRegistration": 0
-
-            }
-        },
+       
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.operationalinsights/workspaces",
@@ -1519,69 +1504,6 @@
                 "destinationPortRanges": [],
                 "sourceAddressPrefixes": [],
                 "destinationAddressPrefixes": []
-            }
-        },
-
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/privateDnsZones/A",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',parameters('application'),'-',parameters('databaseAccounts_cdb_name'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
-            ],
-            "properties": {
-                "metadata": {
-                    "creator": "created by private endpoint ripa-cdb-pe with resource guid cd0c516d-d2ed-4488-8ca5-694f7f87392b"
-                },
-                "ttl": 10,
-                "aRecords": [
-                    {
-                        "ipv4Address": "172.16.1.4"
-                    }
-                ]
-            }
-        },
-
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/privateDnsZones/A",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',parameters('application'),'-',parameters('databaseAccounts_cdb_name'),'-',parameters('region'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
-            ],
-            "properties": {
-                "metadata": {
-                    "creator": "created by private endpoint ripa-cdb-pe with resource guid cd0c516d-d2ed-4488-8ca5-694f7f87392b"
-                },
-                "ttl": 10,
-                "aRecords": [
-                    {
-                        "ipv4Address": "172.16.1.5"
-                    }
-                ]
-            }
-        },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/privateDnsZones/SOA",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',parameters('prv_dns_soa_name'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
-            ],
-            "properties": {
-                "ttl": 3600,
-                "soaRecord": {
-                    "email": "azureprivatedns-host.microsoft.com",
-                    "expireTime": 2419200,
-                    "host": "azureprivatedns.net",
-                    "refreshTime": 3600,
-                    "retryTime": 300,
-                    "serialNumber": 1,
-                    "minimumTtl": 10
-                }
             }
         },
 
@@ -2541,8 +2463,7 @@
             "name": "[variables('sites_ripa_template_fa_name')]",
             "location": "[parameters('region')]",
             "identity": {
-                //"principalId": "5a17954d-9516-4210-8409-e04dcd475e3a",
-                //"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619",
+                
                 "type": "SystemAssigned"
             },
             "dependsOn": [
@@ -2870,23 +2791,7 @@
                 }
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',variables('dns_link_name'))]",
-            "location": "[parameters('glocation')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]"
-            ],
-            "properties": {
-                "registrationEnabled": false,
-                "virtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]"
-                }
-            }
-        },
+       
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Network/virtualNetworks",
