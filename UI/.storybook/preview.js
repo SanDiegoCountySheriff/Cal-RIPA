@@ -1,6 +1,7 @@
 import Vuetify from 'vuetify'
 import { addDecorator, addParameters } from '@storybook/vue'
 import '@/plugins/storybook'
+import '@/plugins/tailwind'
 import '@mdi/font/css/materialdesignicons.css'
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 

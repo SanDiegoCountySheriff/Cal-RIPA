@@ -33,5 +33,22 @@ module.exports = async ({ config }) => {
     include: path.resolve(__dirname, '../'),
   })
 
+  config.module.rules.push({
+    test: /\.css$/,
+    loaders: [
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true,
+          config: {
+            path: './.storybook/',
+          },
+        },
+      },
+    ],
+
+    include: path.resolve(__dirname, '../storybook/'),
+  })
+
   return config
 }

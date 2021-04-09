@@ -2463,7 +2463,8 @@
             "name": "[variables('sites_ripa_template_fa_name')]",
             "location": "[parameters('region')]",
             "identity": {
-                
+                //"principalId": "5a17954d-9516-4210-8409-e04dcd475e3a",
+                //"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619",
                 "type": "SystemAssigned"
             },
             "dependsOn": [

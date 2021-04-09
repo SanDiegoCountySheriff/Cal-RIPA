@@ -10,6 +10,7 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      :loading="loading"
       :headers="headers"
       :items="statutes"
       :search="search"
@@ -39,7 +40,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="4">
+                    <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.offenseCode"
                         label="Offense Code"
@@ -61,7 +62,7 @@
                         label="Offense Type of Statute CD"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.statuteLiteral"
                         label="Statute Literal"
@@ -83,7 +84,7 @@
                         label="Offense Degree"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="editedItem.bcsHierarchyCD"
                         label="BCS Hierarchy CD"
@@ -279,6 +280,10 @@ export default {
   },
 
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     items: {
       type: Array,
       default: () => [],
