@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-tabs v-model="tab">
+    <v-tabs v-model="tab" show-arrows>
       <v-tab>Beats</v-tab>
       <v-tab>Cities</v-tab>
       <v-tab>Schools</v-tab>
