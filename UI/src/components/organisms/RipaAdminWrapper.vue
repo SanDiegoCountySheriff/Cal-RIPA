@@ -9,10 +9,11 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <ripa-beats-grid :items="beats"></ripa-beats-grid>
+        <ripa-beats-grid :loading="loading" :items="beats"></ripa-beats-grid>
       </v-tab-item>
       <v-tab-item>
         <ripa-cities-grid
+          :loading="loading"
           :items="cities"
           :counties="counties"
           :states="states"
@@ -20,12 +21,16 @@
       </v-tab-item>
       <v-tab-item>
         <ripa-schools-grid
+          :loading="loading"
           :items="schools"
           :counties="counties"
         ></ripa-schools-grid>
       </v-tab-item>
       <v-tab-item>
-        <ripa-statutes-grid :items="statutes"></ripa-statutes-grid>
+        <ripa-statutes-grid
+          :loading="loading"
+          :items="statutes"
+        ></ripa-statutes-grid>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -54,6 +59,10 @@ export default {
   },
 
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     beats: {
       type: Array,
       default: () => [],

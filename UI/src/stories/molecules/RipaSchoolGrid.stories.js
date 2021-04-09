@@ -27,3 +27,23 @@ export const basic = () => ({
   template:
     '<ripa-schools-grid :items="data" :counties="counties"></ripa-schools-grid>',
 })
+
+export const loading = () => ({
+  components: { RipaSchoolsGrid },
+  data() {
+    return {
+      data: schools
+        .filter(item => item.status === 'Active')
+        .map(item => {
+          return {
+            name: item.name.toUpperCase(),
+            district: item.district.toUpperCase(),
+            county: item.county.toUpperCase(),
+          }
+        }),
+      counties: COUNTIES,
+    }
+  },
+  template:
+    '<ripa-schools-grid loading :items="data" :counties="counties"></ripa-schools-grid>',
+})
