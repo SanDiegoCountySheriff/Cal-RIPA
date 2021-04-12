@@ -27,30 +27,24 @@
         </v-radio-group>
         <div class="tw-mt-2"></div>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-autocomplete
-              v-model="trafficViolationCode"
-              clearable
-              dense
-              flat
-              hint="Select 1 Offense Code (required)"
-              item-text="fullName"
-              item-value="offenseCode"
-              label="Offense Code"
-              :items="statutes"
-              v-bind="attrs"
-              v-on="on"
-            ></v-autocomplete>
-          </template>
-          <span>{{ trafficViolationCode }}</span>
-        </v-tooltip>
+        <ripa-autocomplete
+          v-model="trafficViolationCode"
+          hint="Select 1 Offense Code (required)"
+          item-text="fullName"
+          item-value="offenseCode"
+          label="Offense Code"
+          :items="statutes"
+        ></ripa-autocomplete>
       </div>
     </template>
 
     <template v-if="reason === 2">
       <div>
-        <v-checkbox
+        <ripa-check-group
+          v-model="reasonableSuspicionValues"
+          :items="reasonableSuspicionItems"
+        ></ripa-check-group>
+        <!-- <v-checkbox
           v-model="reasonableSuspicion"
           dense
           label="Officer witnessed commission of a crime"
@@ -112,13 +106,14 @@
           label="Other Reasonable Suspicion of a crime"
           value="2I"
           hide-details
-        ></v-checkbox>
+        ></v-checkbox> -->
       </div>
     </template>
 
     <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
 
     <v-textarea
+      v-model="explanation"
       auto-grow
       clearable
       clear-icon="mdi-close-circle"
@@ -129,18 +124,23 @@
       required
       rows="1"
       :rules="explanationRules"
-      :value="explanation"
     ></v-textarea>
+
+    {{ getModel }}
   </div>
 </template>
 
 <script>
+import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
+import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaHeader from '@/components/atoms/RipaHeader'
 
 export default {
   name: 'ripa-stop-reason',
 
   components: {
+    RipaAutocomplete,
+    RipaCheckGroup,
     RipaHeader,
   },
 
@@ -174,8 +174,40 @@ export default {
       ],
       trafficViolation: null,
       trafficViolationCode: null,
-      reasonableSuspicion: [],
+      reasonableSuspicionItems: [
+        { name: 'Officer witnessed commission of a crime', value: '2A' },
+        { name: 'Matched suspect description', value: '2B' },
+        {
+          name: 'Witness or Victim identification of Suspect at the scene',
+          value: '2C',
+        },
+        { name: 'Carrying Suspicious Object', value: '2D' },
+        {
+          name: 'Actions indicative of casing a victim or location',
+          value: '2E',
+        },
+        { name: 'Suspected of Acting as Lookout', value: '2F' },
+        { name: 'Actions indicative of drug transaction', value: '2G' },
+        {
+          name: 'Actions indicative of engaging in violent crime',
+          value: '2H',
+        },
+        { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
+      ],
+      reasonableSuspicionValues: [],
     }
+  },
+
+  computed: {
+    getModel() {
+      return {
+        reason: this.reason,
+        explanation: this.explanation,
+        trafficViolation: this.trafficViolation,
+        trafficViolationCode: this.trafficViolationCode,
+        reasonableSuspicionValues: this.reasonableSuspicionValues,
+      }
+    },
   },
 
   methods: {
