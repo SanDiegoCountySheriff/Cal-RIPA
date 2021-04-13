@@ -26,7 +26,7 @@ stages:
       steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
+          versionSpec: '12.x'
         displayName: 'Install Node.js'
       - task: Npm@1
         displayName: 'npm install'
@@ -40,7 +40,7 @@ stages:
           workingDir: '**UI/'
           customCommand: 'run build'
       - task: CopyFiles@2
-        displayname: 'copy files to artifact staging directory'
+        displayName: 'copy files to artifact staging directory'
         inputs:
           SourceFolder: '(Build.SourcesDirectory)/'
           Contents: '**'
