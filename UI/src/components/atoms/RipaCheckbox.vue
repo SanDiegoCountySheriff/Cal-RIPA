@@ -38,7 +38,7 @@ export default {
 
   props: {
     value: {
-      type: String,
+      type: Array || String,
       default: '',
     },
     cbLabel: {

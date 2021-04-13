@@ -1,35 +1,23 @@
 <template>
   <div class="ripa-stop-reason tw-p-4">
     <ripa-header value="Reason for Stop"></ripa-header>
-    <ripa-number-input
-      v-model="numberInputValue"
-      label="Number Input Label"
-      hint="Number Input Hint"
-    ></ripa-number-input>
 
-    <v-select
+    <ripa-select
       v-model="reason"
-      clerable
-      dense
-      flat
       item-text="name"
       item-value="value"
       label="Reason"
-      required
-      :items="items"
+      :items="reasonItems"
       :rules="reasonRules"
-    ></v-select>
+    ></ripa-select>
 
     <template v-if="reason === 1">
       <div>
-        <v-radio-group v-model="trafficViolation">
-          <v-radio label="Moving Violation" value="1A"></v-radio>
-          <v-radio label="Equipment Violation" value="1B"></v-radio>
-          <v-radio
-            label="Non-moving Violation, including Registration Violation"
-            value="1C"
-          ></v-radio>
-        </v-radio-group>
+        <ripa-radio-group
+          v-model="trafficViolation"
+          :items="trafficViolationItems"
+        ></ripa-radio-group>
+
         <div class="tw-mt-2"></div>
 
         <ripa-autocomplete
@@ -69,7 +57,8 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaHeader from '@/components/atoms/RipaHeader'
-import RipaNumberInput from '@/components/atoms/RipaNumberInput'
+import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
+import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 
 export default {
@@ -79,7 +68,8 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaHeader,
-    RipaNumberInput,
+    RipaRadioGroup,
+    RipaSelect,
     RipaTextArea,
   },
 
@@ -94,7 +84,7 @@ export default {
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
-      items: [
+      reasonItems: [
         { name: 'Traffic Violation', value: 1 },
         { name: 'Reasonable Suspicion', value: 2 },
         {
@@ -113,6 +103,14 @@ export default {
         { name: 'Consensual Encounter resulting in a search', value: 6 },
       ],
       trafficViolation: null,
+      trafficViolationItems: [
+        { name: 'Moving Violation', value: '1A' },
+        { name: 'Equipment Violation', value: '1B' },
+        {
+          name: 'Non-moving Violation, including Registration Violation',
+          value: '1C',
+        },
+      ],
       trafficViolationCode: null,
       reasonableSuspicionItems: [
         { name: 'Officer witnessed commission of a crime', value: '2A' },
