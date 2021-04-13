@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Reason for Stop"
       required
-      subtitle="ABC123"
+      subtitle="§999.226(a)(10)"
     ></ripa-form-header>
 
     <ripa-date-picker

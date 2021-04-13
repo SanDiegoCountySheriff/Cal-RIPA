@@ -25,7 +25,7 @@ export default {
       },
       set(newVal) {
         this.viewModel = newVal
-        this.$emit('input', newVal)
+        this.$emit('input', Number(newVal))
       },
     },
   },

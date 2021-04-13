@@ -49,7 +49,7 @@ export default {
 
   props: {
     value: {
-      type: Number,
+      type: String || Number,
       default: null,
     },
     items: {

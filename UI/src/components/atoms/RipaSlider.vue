@@ -42,6 +42,14 @@ export default {
       type: Number,
       default: null,
     },
+    label: {
+      type: String,
+      default: '',
+    },
+    hint: {
+      type: String,
+      default: '',
+    },
     min: {
       type: Number,
       default: 1,
