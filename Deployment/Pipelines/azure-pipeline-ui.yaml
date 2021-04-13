@@ -32,19 +32,19 @@ stages:
         displayName: 'npm install'
         inputs:
           command: 'install'
-          workingDir: '**UI/'
+          workingDir: 'UI/'
 
       - task: Npm@1
         displayName: 'npm build-storybook'
         inputs:
           command: 'custom'
-          workingDir: '**UI/'
+          workingDir: 'UI/'
           customCommand: 'run build-storybook'
       - task: Npm@1
         displayName: 'npm build'
         inputs:
           command: 'custom'
-          workingDir: '**UI/'
+          workingDir: 'UI/'
           customCommand: 'run build'
       - task: CopyFiles@2
         displayName: 'copy files to artifact staging directory'
