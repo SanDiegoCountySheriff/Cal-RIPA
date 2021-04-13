@@ -34,15 +34,11 @@
             }
         },
         "application": {
-            "defaultValue": "ripa",
+            "defaultValue": "sdsd",
             "type": "string"
         },
         "region": {
             "defaultValue": "[resourceGroup().location]",
-            "type": "string"
-        },
-        "sa_region": {
-            "defaultValue": "wus2",
             "type": "string"
         },
         "glocation": {
@@ -53,20 +49,100 @@
             "defaultValue": "userprofile-fa",
             "type": "String"
         },
+        "sites_user_fa_storage_ep_suff": {
+            "defaultValue": "core.usgovcloudapi.net",
+            "type": "String"
+        },
+        "sites_user_fa_hostnamessl_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "sites_user_fa_hostnamessl_scm_ep_suff": {
+            "defaultValue": ".scm.azurewebsites.us",
+            "type": "String"
+        },
+        "sites_user_fa_hosnamebindings_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
         "domain_fa_name": {
             "defaultValue": "domain-fa",
+            "type": "String"
+        },
+        "domain_fa_storage_ep_suff": {
+            "defaultValue": "core.usgovcloudapi.net",
+            "type": "String"
+        },
+        "domain_fa_hostnamessl_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "domain_fa_hostnamessl_scm_ep_suff": {
+            "defaultValue": ".scm.azurewebsites.us",
+            "type": "String"
+        },
+        "domain_fa_hosnamebindings_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
             "type": "String"
         },
         "stop_fa_name": {
             "defaultValue": "stop-fa",
             "type": "String"
         },
+        "stop_fa_storage_ep_suff": {
+            "defaultValue": "core.usgovcloudapi.net",
+            "type": "String"
+        },
+        "stop_fa_hostnamessl_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "stop_fa_hostnamessl_scm_ep_suff": {
+            "defaultValue": ".scm.azurewebsites.us",
+            "type": "String"
+        },
+        "stop_fa_hosnamebindings_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
         "submission_fa_name": {
             "defaultValue": "submission-fa",
             "type": "String"
         },
+        "submission_fa_storage_ep_suff": {
+            "defaultValue": "core.usgovcloudapi.net",
+            "type": "String"
+        },
+        "submission_fa_hostnamessl_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "submission_fa_hostnamessl_scm_ep_suff": {
+            "defaultValue": ".scm.azurewebsites.us",
+            "type": "String"
+        },
+        "submission_fa_hosnamebindings_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "template_fa_storage_ep_suff": {
+            "defaultValue": "core.usgovcloudapi.net",
+            "type": "String"
+        },
         "template_fa_name": {
             "defaultValue": "template-fa",
+            "type": "String"
+        },
+        "template_fa_hostnamessl_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
+            "type": "String"
+        },
+        "template_fa_hostnamessl_scm_ep_suff": {
+            "defaultValue": ".scm.azurewebsites.us",
+            "type": "String"
+        },
+        "template_fa_hosnamebindings_ep_suff": {
+            "defaultValue": ".azurewebsites.us",
             "type": "String"
         },
 
@@ -122,10 +198,7 @@
             "defaultValue": "cdb",
             "type": "String"
         },
-        "privateEndpoints_cdb_pe_name": {
-            "defaultValue": "cdb-pe",
-            "type": "String"
-        },
+
         "storageAccounts_contentsa_name": {
             "defaultValue": "contentsa",
             "type": "String"
@@ -151,13 +224,10 @@
             "type": "String"
         },
         "networkSecurityGroups_vnet_cdb_subnet_nsg_name": {
-            "defaultValue": "vnet-cdb-subnet-nsg",
+            "defaultValue": "cdb-nsg",
             "type": "String"
         },
-        "privateDnsZones_privatelink_azure_com_name": {
-            "defaultValue": "pvtlink.documents.azure.com",
-            "type": "String"
-        },
+
         "actionGroups_Application_Insights_Smart_Detection_name": {
             "defaultValue": "Application Insights Smart Detection",
             "type": "String"
@@ -172,14 +242,6 @@
         },
         "apim_publisherName": {
             "defaultValue": "cssa-ripa",
-            "type": "string"
-        },
-        "prv_dns_link_name": {
-            "defaultValue": "link",
-            "type": "string"
-        },
-        "prv_dns_soa_name": {
-            "defaultValue": "@",
             "type": "string"
         },
         "accounts_ripaTA_name": {
@@ -223,6 +285,10 @@
                 "description": "Specifies the permissions to keys in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
             }
         },
+        "apim_endpoint": {
+            "type": "SecureString",
+            "defaultValue": ".azure-api.us"
+        },
         "apim_apis_userprofile_path": {
             "type": "SecureString",
             "defaultValue": "UserProfile"
@@ -230,6 +296,10 @@
         "apim_apis_userprofile_name": {
             "type": "string",
             "defaultValue": "UserProfile"
+        },
+        "apim_apis_userprofile_serviceurl": {
+            "type": "SecureString",
+            "defaultValue": "http://userprofile.usgovcloudapp.net/api"
         },
         "apim_apis_stop_path": {
             "type": "SecureString",
@@ -239,6 +309,10 @@
             "type": "string",
             "defaultValue": "Stop"
         },
+        "apim_apis_stop_serviceurl": {
+            "type": "string",
+            "defaultValue": "http://stop.usgovcloudapp.net/api"
+        },
         "apim_apis_template_path": {
             "type": "SecureString",
             "defaultValue": "Template"
@@ -246,6 +320,10 @@
         "apim_apis_template_name": {
             "type": "string",
             "defaultValue": "Template"
+        },
+        "apim_apis_template_serviceurl": {
+            "type": "SecureString",
+            "defaultValue": "http://template.usgovcloudapp.net/api"
         },
         "apim_apis_textAnalytic_path": {
             "type": "SecureString",
@@ -255,6 +333,10 @@
             "type": "string",
             "defaultValue": "TextAnalytic"
         },
+        "apim_apis_textAnalytic_serviceurl": {
+            "type": "string",
+            "defaultValue": "http://textAnalytic.usgovcloudapp.net/api"
+        },
         "apim_apis_domain_path": {
             "type": "SecureString",
             "defaultValue": "Domain"
@@ -263,6 +345,10 @@
             "type": "string",
             "defaultValue": "Domain"
         },
+        "apim_apis_domain_serviceurl": {
+            "type": "string",
+            "defaultValue": "http://domain.usgovcloudapp.net/api"
+        },
         "apim_apis_submission_path": {
             "type": "SecureString",
             "defaultValue": "Submission"
@@ -270,6 +356,10 @@
         "apim_apis_submission_name": {
             "type": "string",
             "defaultValue": "Submission"
+        },
+        "apim_apis_submission_serviceurl": {
+            "type": "string",
+            "defaultValue": "http://submission.usgovcloudapp.net/api"
         },
         "dbaccount_sqlDb_name": {
             "type": "string",
@@ -286,14 +376,8 @@
         "dbaccount_sqlDb_submission_container_name": {
             "type": "string",
             "defaultValue": "submission"
-        },
-        "roleNameGuid": {
-            "type": "string",
-            "defaultValue": "[newGuid()]",
-            "metadata": {
-                "description": "A new GUID used to identify the role assignment"
-            }
         }
+
     },
     "variables": {
         "components_ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('components_ai_name'))]",
@@ -301,7 +385,6 @@
         "databaseAccounts_ripa_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('databaseAccounts_cdb_name'))]",
         "networkSecurityGroups_ripa_apim_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_apim_nsg_name'))]",
         "networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_vnet_cdb_subnet_nsg_name'))]",
-        "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
         "serverfarms_userprofile_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_userprofile_ASP_name'))]",
         "serverfarms_domain_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_domain_ASP_name'))]",
         "serverfarms_stop_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_stop_ASP_name'))]",
@@ -321,11 +404,8 @@
         "vaults_ripa_kv_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'), '-', parameters('vaults_kv_name'))]",
         "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('virtualNetworks_vnet_name'))]",
         "workspaces_ripa_laws_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('workspaces_laws_name'))]",
-        "dns_link_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('prv_dns_link_name'))]",
-        "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
-        "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
-        "apim_subnet_name": "[concat(variables('virtualNetworks_ripa_vnet_name'),'-apim-subnet')]",
-        "storageBlobDataContributor_id": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+        "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]"
+
     },
     "resources": [
         {
@@ -610,7 +690,7 @@
                 "securityRules": []
             }
         },
-       
+
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.operationalinsights/workspaces",
@@ -630,7 +710,7 @@
                 "publicNetworkAccessForQuery": "Enabled"
             }
         },
-        
+
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts",
@@ -934,7 +1014,7 @@
                 "hostnameConfigurations": [
                     {
                         "type": "Proxy",
-                        "hostName": "[concat(variables('service_ripa_apim_wus2_name'), '.azure-api.net')]",
+                        "hostName": "[concat(variables('service_ripa_apim_wus2_name'), parameters('apim_endpoint'))]",
                         "negotiateClientCertificate": false,
                         "defaultSslBinding": true
                     }
@@ -961,7 +1041,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_userprofile_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -970,7 +1050,7 @@
                 "displayName": "[parameters('apim_apis_userprofile_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_userprofile_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -981,7 +1061,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_userprofile_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]",
@@ -999,7 +1079,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_stop_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1008,7 +1088,7 @@
                 "displayName": "[parameters('apim_apis_stop_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_stop_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -1019,7 +1099,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_stop_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_stop_name'))]",
@@ -1037,7 +1117,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_template_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1046,7 +1126,7 @@
                 "displayName": "[parameters('apim_apis_template_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_template_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -1057,7 +1137,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_template_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_template_name'))]",
@@ -1075,7 +1155,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytic_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1084,7 +1164,7 @@
                 "displayName": "[parameters('apim_apis_textAnalytic_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_textAnalytic_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -1095,7 +1175,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_textAnalytic_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytic_name'))]",
@@ -1113,7 +1193,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_domain_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1122,7 +1202,7 @@
                 "displayName": "[parameters('apim_apis_domain_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_domain_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -1133,7 +1213,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_domain_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_domain_name'))]",
@@ -1151,7 +1231,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_submission_name'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1160,7 +1240,7 @@
                 "displayName": "[parameters('apim_apis_submission_name')]",
                 "apiRevision": "1",
                 "subscriptionRequired": true,
-                "serviceUrl": "http://userprofile.cloudapp.net/api",
+                "serviceUrl": "[parameters('apim_apis_submission_serviceurl')]",
                 "protocols": [
                     "https"
                 ],
@@ -1171,7 +1251,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2020-12-01",
+            "apiVersion": "2019-12-01",
             "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_submission_name'),'/get')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_submission_name'))]",
@@ -1263,15 +1343,7 @@
                 }
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.DocumentDB/databaseAccounts/notebookWorkspaces",
-            "apiVersion": "2020-09-01",
-            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
-            ]
-        },
+
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
@@ -1779,12 +1851,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_user_fa_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_user_fa_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -1806,7 +1878,7 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('sites_user_fa_storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -1879,15 +1951,21 @@
                 "autoHealEnabled": false,
                 "cors": {
                     "allowedOrigins": [
-                        "https://functions.azure.com",
-                        "https://functions-staging.azure.com",
-                        "https://functions-next.azure.com"
+                        "*"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    
+                    {
+
+                        "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+                        "action": "Allow",
+                        "priority": 100,
+                        "name": "Apim-publicIp",
+                        "description": "Allow Apim PublicIp"
+
+                    },
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -1924,7 +2002,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_user_fa_name'), '/', variables('sites_ripa_user_fa_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('sites_ripa_user_fa_name'), '/', variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hosnamebindings_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_user_fa_name'))]"
@@ -1956,12 +2034,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_domain_fa_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_domain_fa_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -1983,7 +2061,7 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('domain_fa_storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2054,15 +2132,21 @@
                 "autoHealEnabled": false,
                 "cors": {
                     "allowedOrigins": [
-                        "https://functions.azure.com",
-                        "https://functions-staging.azure.com",
-                        "https://functions-next.azure.com"
+                        "*"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    
+                    {
+
+                        "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+                        "action": "Allow",
+                        "priority": 100,
+                        "name": "Apim-publicIp",
+                        "description": "Allow Apim PublicIp"
+
+                    },
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2099,7 +2183,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_domain_fa_name'), '/', variables('sites_ripa_domain_fa_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('sites_ripa_domain_fa_name'), '/', variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hosnamebindings_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_domain_fa_name'))]"
@@ -2129,12 +2213,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_stop_fa_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_stop_fa_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2156,7 +2240,7 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('stop_fa_storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2227,15 +2311,21 @@
                 "autoHealEnabled": false,
                 "cors": {
                     "allowedOrigins": [
-                        "https://functions.azure.com",
-                        "https://functions-staging.azure.com",
-                        "https://functions-next.azure.com"
+                        "*"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    
+                    {
+
+                        "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+                        "action": "Allow",
+                        "priority": 100,
+                        "name": "Apim-publicIp",
+                        "description": "Allow Apim PublicIp"
+
+                    },
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2272,7 +2362,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_stop_fa_name'), '/', variables('sites_ripa_stop_fa_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('sites_ripa_stop_fa_name'), '/', variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hosnamebindings_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_stop_fa_name'))]"
@@ -2302,12 +2392,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_submission_fa_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_submission_fa_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2329,7 +2419,7 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('submission_fa_storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2400,15 +2490,21 @@
                 "autoHealEnabled": false,
                 "cors": {
                     "allowedOrigins": [
-                        "https://functions.azure.com",
-                        "https://functions-staging.azure.com",
-                        "https://functions-next.azure.com"
+                        "*"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    
+                    {
+
+                        "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+                        "action": "Allow",
+                        "priority": 100,
+                        "name": "Apim-publicIp",
+                        "description": "Allow Apim PublicIp"
+
+                    },
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2445,7 +2541,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_submission_fa_name'), '/', variables('sites_ripa_submission_fa_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('sites_ripa_submission_fa_name'), '/', variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hosnamebindings_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_submission_fa_name'))]"
@@ -2477,12 +2573,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_template_fa_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_template_fa_name'), parameters('template_fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_template_fa_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('sites_ripa_template_fa_name'), parameters('template_fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2504,7 +2600,7 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('template_fa_storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2575,15 +2671,21 @@
                 "autoHealEnabled": false,
                 "cors": {
                     "allowedOrigins": [
-                        "https://functions.azure.com",
-                        "https://functions-staging.azure.com",
-                        "https://functions-next.azure.com"
+                        "*"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
                 "ipSecurityRestrictions": [
-                    
+                    {
+
+                        "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+                        "action": "Allow",
+                        "priority": 100,
+                        "name": "Apim-publicIp",
+                        "description": "Allow Apim PublicIp"
+
+                    },
                     {
                         "ipAddress": "0.0.0.0/0",
                         "action": "Deny",
@@ -2620,7 +2722,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_template_fa_name'), '/', variables('sites_ripa_template_fa_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('sites_ripa_template_fa_name'), '/', variables('sites_ripa_template_fa_name'), parameters('template_fa_hosnamebindings_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_template_fa_name'))]"
@@ -2792,7 +2894,7 @@
                 }
             }
         },
-       
+
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Network/virtualNetworks",
