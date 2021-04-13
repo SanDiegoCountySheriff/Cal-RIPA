@@ -38,6 +38,12 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = newVal
+    },
+  },
+
   props: {
     value: {
       type: Array,

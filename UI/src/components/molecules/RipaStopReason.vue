@@ -1,6 +1,11 @@
 <template>
   <div class="ripa-stop-reason tw-p-4">
     <ripa-header value="Reason for Stop"></ripa-header>
+    <ripa-number-input
+      v-model="numberInputValue"
+      label="Number Input Label"
+      hint="Number Input Hint"
+    ></ripa-number-input>
 
     <v-select
       v-model="reason"
@@ -44,87 +49,17 @@
           v-model="reasonableSuspicionValues"
           :items="reasonableSuspicionItems"
         ></ripa-check-group>
-        <!-- <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Officer witnessed commission of a crime"
-          value="2A"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Matched suspect description"
-          value="2B"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Witness or Victim identification of Suspect at the scene"
-          value="2C"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Carrying Suspicious Object"
-          value="2D"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Actions indicative of casing a victim or location"
-          value="2E"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Suspected of Acting as Lookout"
-          value="2F"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Actions indicative of drug transaction"
-          value="2G"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Actions indicative of engaging in violent crime"
-          value="2H"
-          hide-details
-        ></v-checkbox>
-        <v-checkbox
-          v-model="reasonableSuspicion"
-          dense
-          label="Other Reasonable Suspicion of a crime"
-          value="2I"
-          hide-details
-        ></v-checkbox> -->
       </div>
     </template>
 
     <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
 
-    <v-textarea
+    <ripa-text-area
       v-model="explanation"
-      auto-grow
-      clearable
-      clear-icon="mdi-close-circle"
-      counter
-      flat
       hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-      label="Brief Explanation"
-      required
-      rows="1"
+      label="Brif Explanation"
       :rules="explanationRules"
-    ></v-textarea>
+    ></ripa-text-area>
 
     {{ getModel }}
   </div>
@@ -134,6 +69,8 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaHeader from '@/components/atoms/RipaHeader'
+import RipaNumberInput from '@/components/atoms/RipaNumberInput'
+import RipaTextArea from '@/components/atoms/RipaTextArea'
 
 export default {
   name: 'ripa-stop-reason',
@@ -142,11 +79,14 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaHeader,
+    RipaNumberInput,
+    RipaTextArea,
   },
 
   data() {
     return {
       valid: true,
+      numberInputValue: null,
       reason: null,
       reasonRules: [v => !!v || 'Reason is required'],
       explanation: '',

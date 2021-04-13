@@ -1,22 +1,17 @@
 <template>
-  <v-textarea
+  <v-slider
     v-model="model"
-    auto-grow
-    clearable
-    clear-icon="mdi-close-circle"
-    counter
-    flat
-    :hint="hint"
     :label="label"
-    required
-    rows="1"
-    :rules="rules"
-  ></v-textarea>
+    :hint="hint"
+    :min="min"
+    :max="max"
+    thumb-label
+  ></v-slider>
 </template>
 
 <script>
 export default {
-  name: 'ripa-text-area',
+  name: 'ripa-slider',
 
   data() {
     return {
@@ -44,20 +39,16 @@ export default {
 
   props: {
     value: {
-      type: String,
-      default: '',
+      type: Number,
+      default: null,
     },
-    label: {
-      type: String,
-      default: '',
+    min: {
+      type: Number,
+      default: 1,
     },
-    hint: {
-      type: String,
-      default: '',
-    },
-    rules: {
-      type: Array,
-      default: () => [],
+    max: {
+      type: Number,
+      default: 50,
     },
   },
 }
