@@ -16,21 +16,12 @@ module.exports = async ({ config }) => {
   )
 
   config.module.rules.push({
-    test: /\.sass$/,
+    test: /\.scss$/,
     use: [
-      'style-loader',
-      'css-loader',
-      {
-        loader: 'sass-loader',
-        options: {
-          sassOptions: {
-            indentedSyntax: true,
-          },
-          prependData: "@import '@/sass/variables.sass'",
-        },
-      },
+      require.resolve('vue-style-loader'),
+      require.resolve('css-loader'),
+      require.resolve('sass-loader'),
     ],
-    include: path.resolve(__dirname, '../'),
   })
 
   config.module.rules.push({

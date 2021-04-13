@@ -5,10 +5,10 @@
         ref="stopReason1"
         v-model="stopReason1"
       ></ripa-stop-reason>
-      <ripa-stop-reason
+      <!-- <ripa-stop-reason
         ref="stopReason2"
         v-model="stopReason2"
-      ></ripa-stop-reason>
+      ></ripa-stop-reason> -->
     </v-form>
     <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
     <v-btn color="error" class="tw-mr-4" @click="reset"> Reset </v-btn>
