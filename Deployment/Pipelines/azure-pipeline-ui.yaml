@@ -55,7 +55,7 @@ stages:
       - task: ArchiveFiles@2
         displayName: 'Archive storybook Files'
         inputs:
-          rootFolderOrFile: '$(Build.SourcesDirectory)/storybook-static'
+          rootFolderOrFile: '$(Build.SourcesDirectory)/UI/storybook-static'
           includeRootFolder: true
           archiveType: 'zip'
           archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip'
@@ -64,7 +64,7 @@ stages:
       - task: ArchiveFiles@2
         displayName: 'Archive UI Files'
         inputs:
-          rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+          rootFolderOrFile: '$(Build.SourcesDirectory)/UI/dist'
           includeRootFolder: true
           archiveType: 'zip'
           archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
