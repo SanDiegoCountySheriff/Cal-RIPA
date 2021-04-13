@@ -1,6 +1,20 @@
 <template>
   <div class="ripa-stop-reason tw-p-4">
-    <ripa-header value="Reason for Stop"></ripa-header>
+    <ripa-form-header
+      title="Reason for Stop"
+      required
+      subtitle="ABC123"
+    ></ripa-form-header>
+
+    <ripa-date-picker
+      v-model="datePicker"
+      label="Date of Stop"
+    ></ripa-date-picker>
+
+    <ripa-time-picker
+      v-model="timePicker"
+      label="Time of Stop"
+    ></ripa-time-picker>
 
     <ripa-select
       v-model="reason"
@@ -56,10 +70,13 @@
 <script>
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import RipaHeader from '@/components/atoms/RipaHeader'
+import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaTimePicker from '@/components/atoms/RipaTimePicker'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-reason',
@@ -67,10 +84,12 @@ export default {
   components: {
     RipaAutocomplete,
     RipaCheckGroup,
-    RipaHeader,
+    RipaFormHeader,
     RipaRadioGroup,
     RipaSelect,
     RipaTextArea,
+    RipaDatePicker,
+    RipaTimePicker,
   },
 
   data() {
@@ -133,6 +152,8 @@ export default {
         { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
       ],
       reasonableSuspicionValues: [],
+      datePicker: format(new Date(), 'yyyy-MM-dd'),
+      timePicker: format(new Date(), 'h:mm'),
     }
   },
 
@@ -144,6 +165,8 @@ export default {
         trafficViolation: this.trafficViolation,
         trafficViolationCode: this.trafficViolationCode,
         reasonableSuspicionValues: this.reasonableSuspicionValues,
+        datePicker: this.datePicker,
+        timePicker: this.timePicker,
       }
     },
   },

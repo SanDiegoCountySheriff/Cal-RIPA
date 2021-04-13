@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-mb-6">
+  <div class="ripa-header">
     <span class="tw-text-xl tw-uppercase">{{ value }}</span>
   </div>
 </template>
