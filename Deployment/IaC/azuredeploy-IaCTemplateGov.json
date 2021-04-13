@@ -34,7 +34,7 @@
             }
         },
         "application": {
-            "defaultValue": "sdsd",
+            "defaultValue": "ripa",
             "type": "string"
         },
         "region": {
