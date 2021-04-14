@@ -28,20 +28,9 @@ export default new Vuex.Store({
   },
   actions: {
     getBeats({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
-          headers: {
-            Host: 'sdsd-ripa-d-apim.azure-api.us',
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(response => {
-          commit('UPDATE_BEATS', response.data)
-        })
-      // axios.get('http://localhost:3004/beats').then(response => {
-      //   commit('UPDATE_BEATS', response.data)
-      // })
+      axios.get('http://localhost:3004/beats').then(response => {
+        commit('UPDATE_BEATS', response.data)
+      })
     },
     getCities({ commit }) {
       axios.get('http://localhost:3004/cities').then(response => {
