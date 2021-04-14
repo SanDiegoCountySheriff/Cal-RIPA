@@ -10,10 +10,11 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      :loading="loading"
       :headers="headers"
       :items="cities"
       :search="search"
-      sort-by="cityName"
+      sort-by="city"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -41,15 +42,23 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.cityName"
+                        v-model="editedItem.city"
                         label="City"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-autocomplete
-                        v-model="editedItem.stateAbbr"
+                        v-model="editedItem.state"
                         :items="mappedStates"
                         label="State"
+                      >
+                      </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-autocomplete
+                        v-model="editedItem.county"
+                        :items="mappedCounties"
+                        label="County"
                       >
                       </v-autocomplete>
                     </v-col>
@@ -99,6 +108,9 @@
 </template>
 
 <script>
+import { STATES } from '@/constants/states'
+import { COUNTIES } from '@/constants/counties'
+
 export default {
   name: 'ripa-cities-grid',
 
@@ -106,22 +118,26 @@ export default {
     return {
       search: '',
       cities: [],
+      mappedCounties: [],
       mappedStates: [],
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'City', value: 'cityName' },
-        { text: 'State', value: 'stateAbbr' },
+        { text: 'City', value: 'city' },
+        { text: 'County', value: 'county' },
+        { text: 'State', value: 'state' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
-        cityName: '',
-        stateAbbr: 'CA',
+        city: '',
+        county: '',
+        state: 'CA',
       },
       defaultItem: {
-        cityName: '',
-        stateAbbr: 'CA',
+        city: '',
+        county: '',
+        state: 'CA',
       },
     }
   },
@@ -135,7 +151,8 @@ export default {
   methods: {
     init() {
       this.cities = this.items
-      this.mappedStates = this.states.map(item => item.abbreviation)
+      this.mappedStates = STATES.map(item => item.abbreviation)
+      this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
     },
 
     editItem(item) {
@@ -198,11 +215,11 @@ export default {
   },
 
   props: {
-    items: {
-      type: Array,
-      default: () => [],
+    loading: {
+      type: Boolean,
+      default: false,
     },
-    states: {
+    items: {
       type: Array,
       default: () => [],
     },

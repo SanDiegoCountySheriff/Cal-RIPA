@@ -8,10 +8,11 @@ trigger:
   branches:
     include:
     - dev
+    - main
     - feature/DevOps
   paths:
     include:
-    - Functions/RIPA.Functions.stop/*
+    - Functions/RIPA.Functions.Stop/*
     - Deployment/Pipelines/azure-pipeline-stop.yml
 
 pool:
@@ -51,7 +52,7 @@ stages:
       #   displayName: Test
       #   inputs:
       #     command: test
-      #     projects: '**/*Test.csproj'
+      #     projects: '**/*$(BackEndSvc).Test.csproj'
       #     testRunTitle: SampleTest
       
       - task: ArchiveFiles@2
