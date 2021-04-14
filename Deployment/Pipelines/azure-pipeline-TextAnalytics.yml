@@ -13,7 +13,7 @@ trigger:
   paths:
     include:
     - Functions/RIPA.Functions.TextAnalytics/*
-    - Deployment/Pipelines/azure-pipeline-template.yml
+    - Deployment/Pipelines/azure-pipeline-TextAnalytics.yml
 
 pool:
   vmImage: 'ubuntu-latest'
