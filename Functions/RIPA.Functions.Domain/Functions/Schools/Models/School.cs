@@ -6,7 +6,7 @@ namespace RIPA.Functions.Domain.Functions.Schools.Models
     public class School : TableEntity
     {
         [JsonProperty(PropertyName = "cdsCode")]
-        public int CDSCode { get; set; }
+        public long CDSCode { get; set; }
 
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
