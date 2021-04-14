@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.TextAnalytic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Stop", "RIPA.Functions.Stop\RIPA.Functions.Stop.csproj", "{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Submission", "RIPA.Functions.Submission\RIPA.Functions.Submission.csproj", "{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

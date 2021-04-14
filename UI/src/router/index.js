@@ -20,7 +20,10 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import('@/components/features/RipaAdminContainer.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
+      ),
     beforeEnter(to, from, next) {
       if (store.state.isAdmin) {
         next()
@@ -32,12 +35,18 @@ const routes = [
   {
     path: '/stops',
     name: 'Stops',
-    component: () => import('@/components/features/RipaStopsContainer.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaStopsContainer.vue'
+      ),
   },
   {
     path: '/user',
     name: 'User',
-    component: () => import('@/components/features/RipaUserContainer.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserContainer.vue'
+      ),
   },
 ]
 

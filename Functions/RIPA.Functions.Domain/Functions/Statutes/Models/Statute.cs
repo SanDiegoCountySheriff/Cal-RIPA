@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RIPA.Functions.TableStorage.Functions.Statutes.Models
+namespace RIPA.Functions.Domain.Functions.Statutes.Models
 {
     public class Statute : TableEntity
     {

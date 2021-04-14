@@ -9,9 +9,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using RIPA.Functions.TableStorage.Functions.Templates.Models;
+using RIPA.Functions.Domain.Functions.Templates.Models;
 
-namespace RIPA.Functions.TableStorage.Functions.Templates
+namespace RIPA.Functions.Domain.Functions.Templates
 {
     public static class GetTemplate
     {

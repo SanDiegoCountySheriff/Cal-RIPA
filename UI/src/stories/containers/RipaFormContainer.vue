@@ -1,17 +1,19 @@
 <template>
   <ripa-page-container :admin="admin">
-    <div>FORM TEMPLATE GOES HERE</div>
+    <ripa-form-template></ripa-form-template>
   </ripa-page-container>
 </template>
 
 <script>
 import RipaPageContainer from './RipaPageContainer'
+import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 
 export default {
   name: 'ripa-form-container',
 
   components: {
     RipaPageContainer,
+    RipaFormTemplate,
   },
 
   props: {

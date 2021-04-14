@@ -4,10 +4,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
-using RIPA.Functions.TableStorage.Functions.Templates.Models;
+using RIPA.Functions.Domain.Functions.Templates.Models;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.TableStorage.Functions.Templates
+namespace RIPA.Functions.Domain.Functions.Templates
 {
     public static class DeleteTemplate
     {
