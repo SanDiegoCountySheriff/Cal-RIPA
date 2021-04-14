@@ -1,4 +1,5 @@
 import RipaStopsTemplate from '@/components/templates/RipaStopsTemplate'
+import { stops } from '../data/stops'
 
 export default {
   title: 'Templates/RipaStopsTemplate',
@@ -10,8 +11,8 @@ export const basic = () => ({
   components: { RipaStopsTemplate },
   data() {
     return {
-      stops: [],
+      items: stops,
     }
   },
-  template: '<ripa-stops-template :stops="stops"></ripa-stops-template>',
+  template: '<ripa-stops-template :items="items"></ripa-stops-template>',
 })
