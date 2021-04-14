@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RIPA.Functions.TableStorage.Functions.Beats.Models
+namespace RIPA.Functions.Domain.Functions.Beats.Models
 {
     public class Beat : TableEntity
     {

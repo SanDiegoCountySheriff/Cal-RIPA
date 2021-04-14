@@ -8,9 +8,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using RIPA.Functions.TableStorage.Functions.Statutes.Models;
+using RIPA.Functions.Domain.Functions.Statutes.Models;
 
-namespace RIPA.Functions.TableStorage.Functions.Statutes
+namespace RIPA.Functions.Domain.Functions.Statutes
 {
     public static class GetStatutes
     {

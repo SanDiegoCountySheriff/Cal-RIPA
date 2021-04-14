@@ -4,11 +4,11 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
-using RIPA.Functions.TableStorage.Functions.Beats.Models;
+using RIPA.Functions.Domain.Functions.Beats.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.TableStorage.Functions.Beats
+namespace RIPA.Functions.Domain.Functions.Beats
 {
     public static class PutBeat
     {

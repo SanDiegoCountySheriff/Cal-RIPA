@@ -1,12 +1,12 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace RIPA.Functions.TableStorage.Functions.Schools.Models
+namespace RIPA.Functions.Domain.Functions.Schools.Models
 {
     public class School : TableEntity
     {
         [JsonProperty(PropertyName = "cdsCode")]
-        public int CDSCode { get; set; }
+        public long CDSCode { get; set; }
 
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
