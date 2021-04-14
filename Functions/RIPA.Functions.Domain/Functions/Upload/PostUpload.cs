@@ -1,6 +1,5 @@
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -12,6 +11,8 @@ using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
 using System;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
     {
         public static ILogger _log;
         public static TableBatchOperation _operations;
+        public static int _batchLimit = 100;
 
         [FunctionName("PostUpload")]
         public static async Task<IActionResult> Run(
@@ -31,246 +33,175 @@ namespace RIPA.Functions.Domain.Functions.Upload
             var formData = await req.ReadFormAsync();
             var file = req.Form.Files["file"];
 
-            //foreach (Sheet sheet in GetSheets(file))
-            //{
-            //    Console.WriteLine(sheet.Name);
-            //}
-
             var account = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("RipaStorage"));
             var client = account.CreateCloudTableClient();
-            var cities = client.GetTableReference("Cities");
-            await ReadExcelDOM(file, "City_Table", cities);
-            var schools = client.GetTableReference("Schools");
-            await ReadExcelDOM(file, "School_Table", schools);
-            var statutes = client.GetTableReference("Statutes");
-            await ReadExcelDOM(file, "Offense Table", statutes);
+
+            DataSet dataSet = RunExcelDataReader(file);
+            await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
+
+            await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
+
+            await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
 
             string responseMessage = $"Processed file";
 
             return new OkObjectResult(responseMessage);
         }
 
-        public async static Task<bool> ReadExcelDOM(IFormFile file, String sheetName, CloudTable table)
+        public static DataSet RunExcelDataReader(IFormFile file)
         {
-            using (SpreadsheetDocument document = SpreadsheetDocument.Open(file.OpenReadStream(), false))
-            {
-                WorkbookPart workbookPart = document.WorkbookPart;
-                Sheet sheet = workbookPart.Workbook.Descendants<Sheet>().
-                Where(s => s.Name == sheetName).FirstOrDefault();
+            IExcelDataReader reader = ExcelReaderFactory.CreateReader(file.OpenReadStream());
+            DataSet dataSet = reader.AsDataSet();
 
-                if (sheet == null)
+            return dataSet;
+        }
+
+        public static async Task<bool> ExecuteBatch(CloudTable table)
+        {
+            try
+            {
+                await table.ExecuteBatchAsync(_operations);
+            }
+            catch (Exception ex)
+            {
+                _log.LogError($"batch failed {ex.Message}");
+                return false;
+            }
+            _operations = new TableBatchOperation();
+            return true;
+        }
+
+        public static bool IsBatchCountExecutable(int batchCount)
+        {
+            if (batchCount == _batchLimit)
+                return true;
+            return false;
+
+        }
+
+        public static void DeduplicateBatch(TableEntity obj)
+        {
+            if (_operations.Any(x => x.Entity.RowKey == obj.RowKey))
+            {
+                _operations.Remove(_operations.First(x => x.Entity.RowKey == obj.RowKey));
+            }
+        }
+
+        public async static Task<bool> ProcessEntities(DataTable dataTable, CloudTable table)
+        {
+            int batchCount = 0;
+            int totalRows = dataTable.Rows.Count - 1;
+            _operations = new TableBatchOperation();
+            foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Skip(1))
+            {
+                totalRows--;
+                batchCount++;
+                if (IsBatchCountExecutable(batchCount))
                 {
-                    throw new ArgumentException("sheetName");
+                    await ExecuteBatch(table);
+                    batchCount = 0;
+                    Console.WriteLine($"processed {_batchLimit} - " + Environment.NewLine + $"{totalRows}");
                 }
 
-                WorksheetPart worksheetPart = (WorksheetPart)(workbookPart.GetPartById(sheet.Id));
-                _operations = new TableBatchOperation();
-                
-                int count = 0;
-                foreach (Row r in worksheetPart.Worksheet.Descendants<Row>().Where(r => r.RowIndex != 1))
+                try
                 {
-                    count++;
-                    if (count == 100)
+                    var entity = new TableEntity();
+                    switch (table.Name)
                     {
-                        try
-                        {
-                            await table.ExecuteBatchAsync(_operations);
-                        }
-                        catch (Exception ex)
-                        {
-                            _log.LogError($"batch failed {ex.Message}");
-                        }
-                        _operations = new TableBatchOperation();
-                        count = 0;
-                        Console.WriteLine($"processed 100 {r.RowIndex}");
-                    }
-
-                    switch (sheetName)
-                    {
-                        case "City_Table":
-                            UpsertCity(worksheetPart, workbookPart, r.RowIndex, table, sheetName, r);
+                        case "Cities":
+                            entity = GetCity(row);
                             break;
-                        case "School_Table":
-                            UpsertSchool(worksheetPart, workbookPart, r.RowIndex, table, sheetName);
+                        case "Schools":
+                            entity = GetSchool(row);
                             break;
-                        case "Offense Table":
-                            UpsertOffense(worksheetPart, workbookPart, r.RowIndex, table, sheetName);
+                        case "Statutes":
+                            entity = GetStatute(row);
                             break;
                         default:
                             break;
                     }
-                }
-                try
-                {
-                    await table.ExecuteBatchAsync(_operations);
+
+                    DeduplicateBatch(entity);
+                    _operations.InsertOrReplace(entity);
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError($"batch failed {ex.Message}");
+                    _log.LogError(ex.Message);
                 }
             }
+
+            await ExecuteBatch(table);
             return true;
         }
 
-        public static Sheets GetSheets(IFormFile file)
-        {
-            Sheets sheets;
-
-            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(file.OpenReadStream(), false))
-            {
-                WorkbookPart wbPart = doc.WorkbookPart;
-                sheets = wbPart.Workbook.Sheets;
-            }
-
-            return sheets;
-        }
-
-        public static string GetCellValue(string sheetName, string addressName, WorksheetPart worksheetPart, WorkbookPart workbookPart)
-        {
-            string value = null;
-
-            Cell cell = worksheetPart.Worksheet.Descendants<Cell>().
-              Where(c => c.CellReference == addressName).FirstOrDefault();
-
-            if (cell.InnerText.Length > 0)
-            {
-                value = cell.InnerText;
-
-                if (cell.DataType != null)
-                {
-                    switch (cell.DataType.Value)
-                    {
-                        case CellValues.SharedString:
-
-                            var stringTable =
-                                workbookPart.GetPartsOfType<SharedStringTablePart>()
-                                .FirstOrDefault();
-
-                            if (stringTable != null)
-                            {
-                                value =
-                                    stringTable.SharedStringTable
-                                    .ElementAt(int.Parse(value)).InnerText;
-                            }
-                            break;
-
-                        case CellValues.Boolean:
-                            switch (value)
-                            {
-                                case "0":
-                                    value = "FALSE";
-                                    break;
-                                default:
-                                    value = "TRUE";
-                                    break;
-                            }
-                            break;
-                    }
-                }
-            }
-
-            return value;
-        }
-
-        public static void UpsertCity(WorksheetPart worksheetPart, WorkbookPart workbookPart, UInt32Value rowIndex, CloudTable table, string sheetName, Row row)
+        public static City GetCity(DataRow row)
         {
             City city = new City();
-            try
+            city.ETag = "*";
+            city.PartitionKey = row.ItemArray[0].ToString();
+            city.State = row.ItemArray[0].ToString();
+            city.RowKey = row.ItemArray[1].ToString();
+            city.Name = row.ItemArray[1].ToString();
+            city.County = row.ItemArray[2].ToString();
+            string inactiveDate = row.ItemArray[3].ToString();
+            if (!string.IsNullOrEmpty(inactiveDate))
             {
-                city.ETag = "*";
-                city.PartitionKey = GetCellValue(sheetName, $"A{rowIndex}", worksheetPart, workbookPart);
-                city.State = GetCellValue(sheetName, $"A{rowIndex}", worksheetPart, workbookPart);
-                city.RowKey = GetCellValue(sheetName, $"B{rowIndex}", worksheetPart, workbookPart);
-                city.Name = GetCellValue(sheetName, $"B{rowIndex}", worksheetPart, workbookPart);
-                city.County = GetCellValue(sheetName, $"C{rowIndex}", worksheetPart, workbookPart);
-                string inactiveDate = (GetCellValue(sheetName, $"D{rowIndex}", worksheetPart, workbookPart));
-                if (!string.IsNullOrEmpty(inactiveDate))
-                {
-                    city.DeactivationDate = DateTime.FromOADate(Convert.ToDouble(inactiveDate));
-                }
-
-                var found = _operations.Where(x => x.Entity.RowKey == city.RowKey);
-                if (found.Count() > 0)
-                {
-                    _operations.Remove(found.ToList()[0]);
-                }
-                _operations.InsertOrReplace(city);
+                city.DeactivationDate = DateTime.Parse(inactiveDate);
             }
-            catch (Exception ex)
-            {
-                _log.LogError($"upsert failed for object {city} exception {ex.Message}");
-            }
+            return city;
         }
 
-        public static void UpsertSchool(WorksheetPart worksheetPart, WorkbookPart workbookPart, UInt32Value rowIndex, CloudTable table, string sheetName)
+        public static School GetSchool(DataRow row)
         {
             School school = new School();
-            try
-            {
-                school.ETag = "*";
-                school.PartitionKey = "CA";
-                school.RowKey = GetCellValue(sheetName, $"A{rowIndex}", worksheetPart, workbookPart);
-                school.CDSCode = Convert.ToInt64(school.RowKey);
-                school.Status = GetCellValue(sheetName, $"B{rowIndex}", worksheetPart, workbookPart);
-                school.County = GetCellValue(sheetName, $"C{rowIndex}", worksheetPart, workbookPart);
-                school.District = GetCellValue(sheetName, $"D{rowIndex}", worksheetPart, workbookPart);
-                school.Name = GetCellValue(sheetName, $"E{rowIndex}", worksheetPart, workbookPart);
-                //var found = operations.Where(x => x.Entity.RowKey == school.RowKey);
-                //if (found.Count() > 0)
-                //{
-                //    operations.Remove(found.ToList()[0]);
-                //}
-                _operations.InsertOrReplace(school);
-            }
-            catch (Exception ex)
-            {
-                _log.LogError($"upsert failed for object {school} exception {ex.Message}");
-            }
+            school.ETag = "*";
+            school.PartitionKey = "CA";
+            school.RowKey = row.ItemArray[0].ToString();
+            school.CDSCode = Convert.ToInt64(school.RowKey);
+            school.Status = row.ItemArray[1].ToString();
+            school.County = row.ItemArray[2].ToString();
+            school.District = row.ItemArray[3].ToString();
+            school.Name = row.ItemArray[04].ToString();
+            return school;
         }
 
-        public static void UpsertOffense(WorksheetPart worksheetPart, WorkbookPart workbookPart, UInt32Value rowIndex, CloudTable table, string sheetName)
+        public static Statute GetStatute(DataRow row)
         {
             Statute statute = new Statute();
-            try
+            statute.ETag = "*";
+            statute.PartitionKey = "CA";
+            statute.OffenseValidationCD = Convert.ToInt32(row.ItemArray[0]);
+            statute.RowKey = row.ItemArray[1].ToString();
+            statute.OffenseCode = Convert.ToInt32(statute.RowKey);
+            statute.OffenseTxnTypeCD = Convert.ToInt32(row.ItemArray[2].ToString());
+            statute.OffenseStatute = row.ItemArray[3].ToString();
+            statute.OffenseTypeOfStatuteCD = row.ItemArray[4].ToString();
+            statute.StatuteLiteral = row.ItemArray[5].ToString();
+            statute.OffenseDefaultTypeOfCharge = row.ItemArray[6].ToString();
+            statute.OffenseTypeOfCharge = row.ItemArray[7].ToString();
+            statute.OffenseLiteralIdentifierCD = row.ItemArray[8].ToString();
+            statute.OffenseDegree = String.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
+            statute.BCSHierarchyCD = String.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
+            string offenseEnacted = row.ItemArray[11].ToString();
+            if (!string.IsNullOrEmpty(offenseEnacted))
             {
-                statute.ETag = "*";
-                statute.PartitionKey = "CA";
-                statute.OffenseValidationCD = Convert.ToInt32(GetCellValue(sheetName, $"A{rowIndex}", worksheetPart, workbookPart));
-                statute.RowKey = GetCellValue(sheetName, $"B{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseCode = Convert.ToInt32(statute.RowKey);
-                statute.OffenseTxnTypeCD = Convert.ToInt32(GetCellValue(sheetName, $"C{rowIndex}", worksheetPart, workbookPart));
-                statute.OffenseStatute = GetCellValue(sheetName, $"D{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseTypeOfStatuteCD = GetCellValue(sheetName, $"E{rowIndex}", worksheetPart, workbookPart);
-                statute.StatuteLiteral = GetCellValue(sheetName, $"F{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseDefaultTypeOfCharge = GetCellValue(sheetName, $"G{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseTypeOfCharge = GetCellValue(sheetName, $"H{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseLiteralIdentifierCD = GetCellValue(sheetName, $"I{rowIndex}", worksheetPart, workbookPart);
-                statute.OffenseDegree = Convert.ToInt32(GetCellValue(sheetName, $"J{rowIndex}", worksheetPart, workbookPart));
-                statute.BCSHierarchyCD = Convert.ToInt32(GetCellValue(sheetName, $"K{rowIndex}", worksheetPart, workbookPart));
-                string offenseEnacted = GetCellValue(sheetName, $"L{rowIndex}", worksheetPart, workbookPart);
-                if (!string.IsNullOrEmpty(offenseEnacted))
-                {
+                if (offenseEnacted.Length == 8)
+                    statute.OffenseEnacted = DateTime.ParseExact(offenseEnacted, "yyyyMMdd", CultureInfo.InvariantCulture);
+                else
                     statute.OffenseEnacted = DateTime.Parse(offenseEnacted);
-                }
-                string offenseRepealed = GetCellValue(sheetName, $"M{rowIndex}", worksheetPart, workbookPart);
-                if (!string.IsNullOrEmpty(offenseRepealed))
-                {
-                    statute.OffenseRepealed = DateTime.Parse(offenseRepealed);
-                }
-                statute.ALPSCognizantCD = GetCellValue(sheetName, $"N{rowIndex}", worksheetPart, workbookPart);
-                //var found = operations.Where(x => x.Entity.RowKey == statute.RowKey);
-                //if (found.Count() > 0)
-                //{
-                //    operations.Remove(found.ToList()[0]);
-                //}
-                _operations.InsertOrReplace(statute);
-            }
-            catch (Exception ex)
-            {
-                _log.LogError($"upsert failed for object {statute} exception {ex.Message}");
-            }
-        }
 
+            }
+            string offenseRepealed = row.ItemArray[12].ToString();
+            if (!string.IsNullOrEmpty(offenseRepealed))
+            {
+                if (offenseEnacted.Length == 8)
+                    statute.OffenseRepealed = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
+                else
+                    statute.OffenseRepealed = DateTime.Parse(offenseRepealed);
+            }
+            statute.ALPSCognizantCD = row.ItemArray[13].ToString();
+            return statute;
+        }
     }
 }
 
