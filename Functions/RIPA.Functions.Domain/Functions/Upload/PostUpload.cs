@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,27 +53,27 @@ namespace RIPA.Functions.Domain.Functions.Upload
             DataSet dataSet = reader.AsDataSet();
 
             return dataSet;
-                }
+        }
 
         public static async Task<bool> ExecuteBatch(CloudTable table)
-                {
-                        try
-                        {
-                            await table.ExecuteBatchAsync(_operations);
-                        }
-                        catch (Exception ex)
-                        {
-                            _log.LogError($"batch failed {ex.Message}");
+        {
+            try
+            {
+                await table.ExecuteBatchAsync(_operations);
+            }
+            catch (Exception ex)
+            {
+                _log.LogError($"batch failed {ex.Message}");
                 return false;
-                        }
-                        _operations = new TableBatchOperation();
+            }
+            _operations = new TableBatchOperation();
             return true;
-                    }
+        }
 
         public static bool IsBatchCountExecutable(int batchCount)
-                    {
+        {
             if (batchCount == _batchLimit)
-            return true;
+                return true;
             return false;
 
         }
@@ -104,7 +103,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 }
 
                 try
-                            {
+                {
                     var entity = new TableEntity();
                     switch (table.Name)
                     {
@@ -116,14 +115,14 @@ namespace RIPA.Functions.Domain.Functions.Upload
                             break;
                         case "Statutes":
                             entity = GetStatute(row);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            break;
+                        default:
+                            break;
+                    }
 
                     DeduplicateBatch(entity);
                     _operations.InsertOrReplace(entity);
-                    }
+                }
                 catch (Exception ex)
                 {
                     _log.LogError(ex.Message);
@@ -137,15 +136,15 @@ namespace RIPA.Functions.Domain.Functions.Upload
         public static City GetCity(DataRow row)
         {
             City city = new City();
-                city.ETag = "*";
+            city.ETag = "*";
             city.PartitionKey = row.ItemArray[0].ToString();
             city.State = row.ItemArray[0].ToString();
             city.RowKey = row.ItemArray[1].ToString();
             city.Name = row.ItemArray[1].ToString();
             city.County = row.ItemArray[2].ToString();
             string inactiveDate = row.ItemArray[3].ToString();
-                if (!string.IsNullOrEmpty(inactiveDate))
-                {
+            if (!string.IsNullOrEmpty(inactiveDate))
+            {
                 city.DeactivationDate = DateTime.Parse(inactiveDate);
             }
             return city;
@@ -154,10 +153,10 @@ namespace RIPA.Functions.Domain.Functions.Upload
         public static School GetSchool(DataRow row)
         {
             School school = new School();
-                school.ETag = "*";
-                school.PartitionKey = "CA";
+            school.ETag = "*";
+            school.PartitionKey = "CA";
             school.RowKey = row.ItemArray[0].ToString();
-                school.CDSCode = Convert.ToInt64(school.RowKey);
+            school.CDSCode = Convert.ToInt64(school.RowKey);
             school.Status = row.ItemArray[1].ToString();
             school.County = row.ItemArray[2].ToString();
             school.District = row.ItemArray[3].ToString();
@@ -168,11 +167,11 @@ namespace RIPA.Functions.Domain.Functions.Upload
         public static Statute GetStatute(DataRow row)
         {
             Statute statute = new Statute();
-                statute.ETag = "*";
-                statute.PartitionKey = "CA";
+            statute.ETag = "*";
+            statute.PartitionKey = "CA";
             statute.OffenseValidationCD = Convert.ToInt32(row.ItemArray[0]);
             statute.RowKey = row.ItemArray[1].ToString();
-                statute.OffenseCode = Convert.ToInt32(statute.RowKey);
+            statute.OffenseCode = Convert.ToInt32(statute.RowKey);
             statute.OffenseTxnTypeCD = Convert.ToInt32(row.ItemArray[2].ToString());
             statute.OffenseStatute = row.ItemArray[3].ToString();
             statute.OffenseTypeOfStatuteCD = row.ItemArray[4].ToString();
@@ -183,22 +182,22 @@ namespace RIPA.Functions.Domain.Functions.Upload
             statute.OffenseDegree = String.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
             statute.BCSHierarchyCD = String.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
             string offenseEnacted = row.ItemArray[11].ToString();
-                if (!string.IsNullOrEmpty(offenseEnacted))
-                {
+            if (!string.IsNullOrEmpty(offenseEnacted))
+            {
                 if (offenseEnacted.Length == 8)
                     statute.OffenseEnacted = DateTime.ParseExact(offenseEnacted, "yyyyMMdd", CultureInfo.InvariantCulture);
                 else
                     statute.OffenseEnacted = DateTime.Parse(offenseEnacted);
 
-                }
+            }
             string offenseRepealed = row.ItemArray[12].ToString();
-                if (!string.IsNullOrEmpty(offenseRepealed))
-                {
+            if (!string.IsNullOrEmpty(offenseRepealed))
+            {
                 if (offenseEnacted.Length == 8)
                     statute.OffenseRepealed = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
                 else
                     statute.OffenseRepealed = DateTime.Parse(offenseRepealed);
-                }
+            }
             statute.ALPSCognizantCD = row.ItemArray[13].ToString();
             return statute;
         }

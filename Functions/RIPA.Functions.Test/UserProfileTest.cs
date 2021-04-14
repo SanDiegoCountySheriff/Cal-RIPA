@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using RIPA.Functions.UserProfile.Functions;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
 
 namespace RIPA.Functions.Test
