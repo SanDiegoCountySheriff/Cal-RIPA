@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/components/features/Home.vue'
+import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
+import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -8,16 +10,43 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: RipaHomeContainer,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: '/form',
+    name: 'Form',
+    component: RipaFormContainer,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
     component: () =>
-      import(/* webpackChunkName: "about" */ '@/components/features/About.vue'),
+      import(
+        /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
+      ),
+    beforeEnter(to, from, next) {
+      if (store.state.isAdmin) {
+        next()
+      } else {
+        next('/')
+      }
+    },
+  },
+  {
+    path: '/stops',
+    name: 'Stops',
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaStopsContainer.vue'
+      ),
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserContainer.vue'
+      ),
   },
 ]
 

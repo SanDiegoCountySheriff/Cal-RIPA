@@ -12,5 +12,7 @@ addons.setConfig({
   theme: ripaTheme,
   selectedPanel: undefined,
   initialActive: 'sidebar',
-  showRoots: true,
+  sidebar: {
+    showRoots: true,
+  },
 })

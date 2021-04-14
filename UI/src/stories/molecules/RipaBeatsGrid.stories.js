@@ -16,3 +16,13 @@ export const basic = () => ({
   },
   template: '<ripa-beats-grid :items="data"></ripa-beats-grid>',
 })
+
+export const loading = () => ({
+  components: { RipaBeatsGrid },
+  data() {
+    return {
+      data: [],
+    }
+  },
+  template: '<ripa-beats-grid loading :items="data"></ripa-beats-grid>',
+})
