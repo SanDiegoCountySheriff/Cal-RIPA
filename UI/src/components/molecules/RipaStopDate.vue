@@ -53,34 +53,26 @@ export default {
   data() {
     return {
       valid: true,
-      duration: null,
-      checkbox: [],
-      datePicker: format(new Date(), 'yyyy-MM-dd'),
-      timePicker: format(new Date(), 'h:mm'),
+        viewModel: { 
+        duration: this.value.duration || null,
+        checkbox: this.value.checkbox || [],
+        datePicker: format(new Date(), 'yyyy-MM-dd'),
+        timePicker: format(new Date(), 'h:mm'),
+        }
     }
   },
 
   computed: {
-    getModel() {
-      return {
-        duration: this.duration,
-        checkbox: this.checkbox,
-        explanation: this.explanation,
-        datePicker: this.datePicker,
-        timePicker: this.timePicker
-      }
+    model: {
+      get() {
+        return this.viewModel
+      },
     },
   },
 
   methods: {
-    submit() {
-      this.$emit('input', {
-        duration: this.duration,
-        checkbox: this.checkbox,
-        explanation: this.explanation,
-        datePicker: this.datePicker,
-        timePicker: this.timePicker
-      })
+    handleInput() {
+      this.$emit('input', this.viewModel)
     },
   },
 
