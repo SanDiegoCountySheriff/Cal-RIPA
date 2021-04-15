@@ -7,39 +7,43 @@
     ></ripa-form-header>
 
     <ripa-select
-      v-model="reason"
+      v-model="model.reason"
       item-text="name"
       item-value="value"
       label="Reason"
       :items="reasonItems"
       :rules="reasonRules"
+      @input="handleInput"
     ></ripa-select>
 
-    <template v-if="reason === 1">
+    <template v-if="model.reason === 1">
       <div>
         <ripa-radio-group
-          v-model="trafficViolation"
+          v-model="model.trafficViolation"
           :items="trafficViolationItems"
+          @input="handleInput"
         ></ripa-radio-group>
 
         <div class="tw-mt-2"></div>
 
         <ripa-autocomplete
-          v-model="trafficViolationCode"
+          v-model="model.trafficViolationCode"
           hint="Select 1 Offense Code (required)"
           item-text="fullName"
           item-value="offenseCode"
           label="Offense Code"
           :items="statutes"
+          @input="handleInput"
         ></ripa-autocomplete>
       </div>
     </template>
 
-    <template v-if="reason === 2">
+    <template v-if="model.reason === 2">
       <div>
         <ripa-check-group
-          v-model="reasonableSuspicionValues"
+          v-model="model.reasonableSuspicionValues"
           :items="reasonableSuspicionItems"
+          @input="handleInput"
         ></ripa-check-group>
       </div>
     </template>
@@ -47,13 +51,12 @@
     <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
 
     <ripa-text-area
-      v-model="explanation"
+      v-model="model.explanation"
       hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
       label="Brif Explanation"
       :rules="explanationRules"
+      @input="handleInput"
     ></ripa-text-area>
-
-    {{ getModel }}
   </div>
 </template>
 
@@ -80,10 +83,7 @@ export default {
   data() {
     return {
       valid: true,
-      numberInputValue: null,
-      reason: null,
       reasonRules: [v => !!v || 'Reason is required'],
-      explanation: '',
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
@@ -106,7 +106,6 @@ export default {
         },
         { name: 'Consensual Encounter resulting in a search', value: 6 },
       ],
-      trafficViolation: null,
       trafficViolationItems: [
         { name: 'Moving Violation', value: '1A' },
         { name: 'Equipment Violation', value: '1B' },
@@ -115,7 +114,6 @@ export default {
           value: '1C',
         },
       ],
-      trafficViolationCode: null,
       reasonableSuspicionItems: [
         { name: 'Officer witnessed commission of a crime', value: '2A' },
         { name: 'Matched suspect description', value: '2B' },
@@ -136,32 +134,34 @@ export default {
         },
         { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
       ],
-      reasonableSuspicionValues: [],
+      viewModel: {
+        reason: this.value.reason || null,
+        explanation: this.value.explanation || null,
+        trafficViolation: this.value.trafficViolation || null,
+        trafficViolationCode: this.value.trafficViolationCode || null,
+        reasonableSuspicionValues: this.value.reasonableSuspicionValues || [],
+      },
     }
   },
 
   computed: {
-    getModel() {
-      return {
-        reason: this.reason,
-        explanation: this.explanation,
-        trafficViolation: this.trafficViolation,
-        trafficViolationCode: this.trafficViolationCode,
-        reasonableSuspicionValues: this.reasonableSuspicionValues,
-      }
+    model: {
+      get() {
+        return this.viewModel
+      },
     },
   },
 
   methods: {
-    submit() {
-      this.$refs.stopReason.validate()
-      if (!this.valid) {
-        return
+    handleInput() {
+      if (this.viewModel.reason === 1) {
+        this.viewModel.reasonableSuspicionValues = []
       }
-      this.$emit('input', {
-        reason: this.reason,
-        explanation: this.explanation,
-      })
+      if (this.viewModel.reason === 2) {
+        this.viewModel.trafficViolation = null
+        this.viewModel.trafficViolationCode = null
+      }
+      this.$emit('input', this.viewModel)
     },
   },
 
