@@ -11,6 +11,7 @@ export default new Vuex.Store({
     cities: [],
     schools: [],
     statutes: [],
+    stops: [],
   },
   mutations: {
     UPDATE_BEATS(state, items) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     UPDATE_STATUTES(state, items) {
       state.statutes = items
+    },
+    UPDATE_STOPS(state, items) {
+      state.stops = items
     },
   },
   actions: {
@@ -85,6 +89,21 @@ export default new Vuex.Store({
       //   })
       axios.get('http://localhost:3004/statutes').then(response => {
         commit('UPDATE_STATUTES', response.data)
+      })
+    },
+    getStops({ commit }) {
+      // axios
+      //   .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
+      //     headers: {
+      //       'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+      //       'Cache-Control': 'no-cache',
+      //     },
+      //   })
+      //   .then(response => {
+      //     commit('UPDATE_STOPS', response.data)
+      //   })
+      axios.get('http://localhost:3004/stops').then(response => {
+        commit('UPDATE_STOPS', response.data)
       })
     },
   },
