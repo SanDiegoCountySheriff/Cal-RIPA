@@ -2,7 +2,11 @@
   <div class="ripa-form-header tw-mb-6">
     <ripa-header :value="title"></ripa-header>
     <div class="tw-flex">
-      {{ required }}
+      <template v-if="required">
+        <v-chip class="tw-mt-1 tw-mr-2" color="red" text-color="white" x-small>
+          required
+        </v-chip>
+      </template>
       {{ subtitle }}
     </div>
   </div>
