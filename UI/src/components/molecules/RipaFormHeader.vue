@@ -3,11 +3,21 @@
     <ripa-header :value="title"></ripa-header>
     <div class="tw-flex">
       <template v-if="required">
-        <v-chip class="tw-mt-1 tw-mr-2" color="red" text-color="white" x-small>
+        <v-chip class="tw-mt-1 tw-mr-2" color="red" text-color="white" small>
           required
         </v-chip>
       </template>
-      {{ subtitle }}
+      <v-chip
+        class="tw-mt-1"
+        color="primary"
+        outlined
+        pill
+        small
+        @click="handleSubtitleClick"
+      >
+        <v-icon left size="16"> mdi-scale-balance </v-icon>
+        {{ subtitle }}
+      </v-chip>
     </div>
   </div>
 </template>
@@ -20,6 +30,12 @@ export default {
 
   components: {
     RipaHeader,
+  },
+
+  methods: {
+    handleSubtitleClick() {
+      alert('do something...')
+    },
   },
 
   props: {
