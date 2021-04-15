@@ -14,7 +14,7 @@
       :headers="headers"
       :items="cities"
       :search="search"
-      sort-by="city"
+      sort-by="name"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -42,7 +42,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.city"
+                        v-model="editedItem.name"
                         label="City"
                       ></v-text-field>
                     </v-col>
@@ -123,19 +123,19 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'City', value: 'city' },
+        { text: 'City', value: 'name' },
         { text: 'County', value: 'county' },
         { text: 'State', value: 'state' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
-        city: '',
+        name: '',
         county: '',
         state: 'CA',
       },
       defaultItem: {
-        city: '',
+        name: '',
         county: '',
         state: 'CA',
       },
