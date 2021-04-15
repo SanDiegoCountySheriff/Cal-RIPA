@@ -1,11 +1,5 @@
 <template>
-  <v-checkbox
-    v-model="model"
-    dense
-    :label="cbLabel"
-    :value="cbValue"
-    hide-details
-  ></v-checkbox>
+  <v-checkbox v-model="model" dense :label="cbLabel" hide-details></v-checkbox>
 </template>
 
 <script>
@@ -38,14 +32,10 @@ export default {
 
   props: {
     value: {
-      type: Array || String,
-      default: '',
+      type: Boolean,
+      default: false,
     },
     cbLabel: {
-      type: String,
-      default: '',
-    },
-    cbValue: {
       type: String,
       default: '',
     },
