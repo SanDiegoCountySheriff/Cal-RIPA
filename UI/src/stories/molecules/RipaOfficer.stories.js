@@ -1,4 +1,4 @@
-import RipaStopReason from '@/components/molecules/RipaOfficer'
+import RipaOfficer from '@/components/molecules/RipaOfficer'
 
 export default {
   title: 'Molecules/RipaOfficer',
@@ -10,9 +10,9 @@ export const basic = () => ({
   components: { RipaOfficer },
   data() {
     return {
-      officerYears
+      officer: {}
     }
   },
   template:
-    '<ripa-officer v-model="officerYears"></ripa-officer>',
+    '<div><ripa-officer v-model="officerYears">{{ officer }}</ripa-officer></div>',
 })

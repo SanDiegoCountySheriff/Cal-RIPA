@@ -6,13 +6,13 @@
       subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
-    <v-checkbox
+    <ripa-checkbox
       v-model="checkbox"
       dense
-      cbLabel: "Stop in response to Call for Service"
-      cbValue: "Stop in response to Call for Service"
+      cbLabel= "Stop in response to Call for Service"
+      cbValue= "Stop in response to Call for Service"
       hide-details>
-    </v-checkbox>
+    </ripa-checkbox>
 
     <ripa-date-picker
       v-model="datePicker"
@@ -37,6 +37,7 @@ import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-date',
@@ -46,13 +47,14 @@ export default {
     RipaCheckbox,
     RipaDatePicker,
     RipaTimePicker,
+    RipaNumberInput
   },
 
   data() {
     return {
       valid: true,
-      duration: '',
-      checkbox: false,
+      duration: null,
+      checkbox: [],
       datePicker: format(new Date(), 'yyyy-MM-dd'),
       timePicker: format(new Date(), 'h:mm'),
     }

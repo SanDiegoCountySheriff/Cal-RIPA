@@ -11,12 +11,14 @@
       required>
     </ripa-number-input>
 
-    <ripa-select
-      v-model="assignment"
-      label="Officer Assignment"
-      :items="assignmentItems"
-      :rules="assignmentRules"
-    ></ripa-select>
+    <ripa-select 
+      v-model="assignment" 
+      label="Officer Assignment" 
+      :items="assignmentItems" 
+      itemText="name" 
+      itemValue="value" 
+      :rules="assignmentRules">
+    </ripa-select>
   </div>
 </template>
 
