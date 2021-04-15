@@ -17,11 +17,9 @@ export const basic = () => ({
           fullName: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge}) ${item.offenseCode}`,
         }
       }),
-      stopReason: {
-        name: 'spietrek',
-      },
+      stopReason: {},
     }
   },
   template:
-    '<ripa-stop-reason v-model="stopReason" :statutes="data"></ripa-stop-reason>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stopReason" :statutes="data"></ripa-stop-reason></div>',
 })
