@@ -1,4 +1,5 @@
 import RipaStopsWrapper from '@/components/organisms/RipaStopsWrapper'
+import { stops } from '../data/stops'
 
 export default {
   title: 'Organisms/RipaStopsWrapper',
@@ -10,8 +11,8 @@ export const basic = () => ({
   components: { RipaStopsWrapper },
   data() {
     return {
-      stops: [],
+      items: stops,
     }
   },
-  template: '<ripa-stops-wrapper :stops="stops"></ripa-stops-wrapper>',
+  template: '<ripa-stops-wrapper :items="items"></ripa-stops-wrapper>',
 })
