@@ -7,17 +7,19 @@
           required
         </v-chip>
       </template>
-      <v-chip
-        class="tw-mt-1"
-        color="primary"
-        outlined
-        pill
-        small
-        @click="handleSubtitleClick"
-      >
-        <v-icon left size="16"> mdi-scale-balance </v-icon>
-        {{ subtitle }}
-      </v-chip>
+      <template v-if="subtitle.length > 0">
+        <v-chip
+          class="tw-mt-1"
+          color="primary"
+          outlined
+          pill
+          small
+          @click="handleSubtitleClick"
+        >
+          <v-icon left size="16"> mdi-scale-balance </v-icon>
+          {{ subtitle }}
+        </v-chip>
+      </template>
     </div>
   </div>
 </template>
