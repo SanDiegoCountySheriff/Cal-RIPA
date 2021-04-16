@@ -10,9 +10,9 @@ export const basic = () => ({
   components: { RipaStopDate },
   data() {
     return {
-      stopDate: {}
+      stopDate: {},
     }
   },
   template:
-    '<div><ripa-stop-date v-model="stopDate">{{ stopDate }}</ripa-stop-date></div>'
+    '<div><ripa-stop-date v-model="stopDate"></ripa-stop-date>{{ stopDate }}</div>',
 })

@@ -1,33 +1,38 @@
 <template>
   <div class="ripa-stop-date tw-p-4">
-    <ripa-form-header
-      title="Date of Stop"
-      required
-      subtitle="§999.226(a)(10)">
+    <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
     <ripa-checkbox
-      v-model="checkbox"
+      v-model="model.checkbox"
       dense
-      cbLabel= "Stop in response to Call for Service"
-      cbValue= "Stop in response to Call for Service"
-      hide-details>
+      cbLabel="Stop in response to Call for Service"
+      cbValue="Stop in response to Call for Service"
+      hide-details
+      @input="handleInput"
+    >
     </ripa-checkbox>
 
     <ripa-date-picker
-      v-model="datePicker"
-      label="Date of Stop">
+      v-model="model.datePicker"
+      label="Date of Stop"
+      @input="handleInput"
+    >
     </ripa-date-picker>
 
     <ripa-time-picker
-      v-model="timePicker"
-      label="Time of Stop">
+      v-model="model.timePicker"
+      label="Time of Stop"
+      @input="handleInput"
+    >
     </ripa-time-picker>
 
     <ripa-number-input
-      v-model="duration"
-      label= "Stop Duration"
-      required>
+      v-model="model.duration"
+      label="Stop Duration"
+      required
+      @input="handleInput"
+    >
     </ripa-number-input>
   </div>
 </template>
@@ -37,6 +42,7 @@ import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
+import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import { format } from 'date-fns'
 
 export default {
@@ -47,18 +53,18 @@ export default {
     RipaCheckbox,
     RipaDatePicker,
     RipaTimePicker,
-    RipaNumberInput
+    RipaNumberInput,
   },
 
   data() {
     return {
       valid: true,
-        viewModel: { 
+      viewModel: {
         duration: this.value.duration || null,
         checkbox: this.value.checkbox || [],
         datePicker: format(new Date(), 'yyyy-MM-dd'),
         timePicker: format(new Date(), 'h:mm'),
-        }
+      },
     }
   },
 
@@ -84,4 +90,3 @@ export default {
   },
 }
 </script>
-

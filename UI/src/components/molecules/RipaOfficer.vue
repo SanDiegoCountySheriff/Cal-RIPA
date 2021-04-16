@@ -1,23 +1,25 @@
 <template>
   <div class="ripa-officer tw-p-4">
-    <ripa-form-header
-      title="Officer Years of Experience"
-      required>
+    <ripa-form-header title="Officer Years of Experience" required>
     </ripa-form-header>
 
     <ripa-number-input
-      v-model="years"
-      label= "Years of Experience"
-      required>
+      v-model="model.years"
+      label="Years of Experience"
+      required
+      @input="handleInput"
+    >
     </ripa-number-input>
 
-    <ripa-select 
-      v-model="assignment" 
-      label="Officer Assignment" 
-      :items="assignmentItems" 
-      itemText="name" 
-      itemValue="value" 
-      :rules="assignmentRules">
+    <ripa-select
+      v-model="model.assignment"
+      label="Officer Assignment"
+      :items="assignmentItems"
+      itemText="name"
+      itemValue="value"
+      :rules="assignmentRules"
+      @input="handleInput"
+    >
     </ripa-select>
   </div>
 </template>
@@ -39,39 +41,37 @@ export default {
   data() {
     return {
       valid: true,
-      years: null,
-      assignment: null,
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: [
         { name: 'Patrol, traffic enforcement, field operations', value: 1 },
         { name: 'Gang enforcement', value: 2 },
-        { name: 'Compliance check', value: 3, },
-        { name: 'Special events', value: 4, },
-        { name: 'Roadblock or DUI sobriety checkpoint', value: 5, },
+        { name: 'Compliance check', value: 3 },
+        { name: 'Special events', value: 4 },
+        { name: 'Roadblock or DUI sobriety checkpoint', value: 5 },
         { name: 'Narcotics/vice', value: 6 },
-        { name: 'Task force', value: 7, },
-        { name: 'K-12 public school', value: 8, },
-        { name: 'Investigative/detective', value: 9, },
+        { name: 'Task force', value: 7 },
+        { name: 'K-12 public school', value: 8 },
+        { name: 'Investigative/detective', value: 9 },
         { name: 'Others', value: 10 },
       ],
+      viewModel: {
+        years: this.value.years || null,
+        assignment: this.value.assignment || null,
+      },
     }
   },
 
   computed: {
-    getModel() {
-      return {
-        years: this.years,
-        assignment: this.assignment,
-      }
+    model: {
+      get() {
+        return this.viewModel
+      },
     },
   },
 
   methods: {
-    submit() {
-      this.$emit('input', {
-        years: this.years,
-        assignment: this.assignment,
-      })
+    handleInput() {
+      this.$emit('input', this.viewModel)
     },
   },
 
