@@ -1,11 +1,12 @@
 <template>
-  <ripa-page-wrapper :admin="isAdmin">
+  <ripa-page-wrapper :admin="admin" :online="isOnline">
     <slot></slot>
   </ripa-page-wrapper>
 </template>
 
 <script>
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'ripa-page-container',
@@ -15,8 +16,11 @@ export default {
   },
 
   computed: {
-    isAdmin() {
-      return this.$store.state.isAdmin
+    ...mapState(['isAdmin']),
+    ...mapGetters(['isOnline']),
+
+    admin() {
+      return this.isAdmin
     },
   },
 }

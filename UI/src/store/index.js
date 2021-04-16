@@ -18,6 +18,10 @@ export default new Vuex.Store({
     mappedStatutes: state => {
       return state.statutes
     },
+
+    isOnline: () => {
+      return navigator.onLine
+    },
   },
 
   mutations: {
@@ -88,6 +92,7 @@ export default new Vuex.Store({
           beat,
           {
             headers: {
+              'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
               'Cache-Control': 'no-cache',
             },

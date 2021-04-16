@@ -6,10 +6,19 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
+        <v-icon class="tw-ml-4" size="22" v-bind="attrs" v-on="on">{{
+          getOnlineIcon
+        }}</v-icon>
+      </template>
+      <span>Online Status</span>
+    </v-tooltip>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="tw-ml-4"
-          x-small
           icon
+          small
           @click="handleThemeChange"
           v-bind="attrs"
           v-on="on"
@@ -25,14 +34,7 @@
     <div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="tw-ml-4"
-            x-small
-            icon
-            to="/form"
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn class="tw-ml-4" icon small to="/form" v-bind="attrs" v-on="on">
             <v-icon>mdi-plus-box</v-icon>
           </v-btn>
         </template>
@@ -43,8 +45,8 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="tw-ml-4"
-            x-small
             icon
+            small
             to="/stops"
             v-bind="attrs"
             v-on="on"
@@ -57,14 +59,7 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="tw-ml-4"
-            x-small
-            icon
-            to="/user"
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn class="tw-ml-4" icon small to="/user" v-bind="attrs" v-on="on">
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </template>
@@ -76,8 +71,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
-              x-small
               icon
+              small
               to="/admin"
               v-bind="attrs"
               v-on="on"
@@ -108,11 +103,15 @@ export default {
     },
 
     isAdmin() {
-      return this.admin
+      return true
     },
 
     getAppTitle() {
       return 'RIPA'
+    },
+
+    getOnlineIcon() {
+      return this.online ? 'mdi-wifi' : 'mdi-wifi-off'
     },
   },
 
@@ -131,6 +130,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    online: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
+
+<style lang="scss">
+.v-btn:before {
+  background-color: inherit !important;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ripa-app-bar :admin="admin"></ripa-app-bar>
+    <ripa-app-bar :admin="admin" :online="online"></ripa-app-bar>
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
@@ -21,6 +21,10 @@ export default {
 
   props: {
     admin: {
+      type: Boolean,
+      default: false,
+    },
+    online: {
       type: Boolean,
       default: false,
     },

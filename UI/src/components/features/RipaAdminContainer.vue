@@ -29,7 +29,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['beats', 'cities', 'schools']),
+    ...mapState(['beats', 'cities', 'schools', 'isAdmin']),
     ...mapGetters(['mappedStatutes']),
   },
 
