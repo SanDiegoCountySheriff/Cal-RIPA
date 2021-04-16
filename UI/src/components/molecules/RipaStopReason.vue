@@ -48,7 +48,7 @@
       </div>
     </template>
 
-    <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
+    <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
 
     <ripa-text-area
       v-model="model.explanation"
@@ -64,6 +64,7 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
@@ -75,6 +76,7 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
+    RipaLabel,
     RipaRadioGroup,
     RipaSelect,
     RipaTextArea,
