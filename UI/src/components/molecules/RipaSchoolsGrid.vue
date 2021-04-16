@@ -18,7 +18,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Schools</v-toolbar-title>
+          <v-toolbar-title>ADMIN: MAINTAIN SCHOOLS</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">

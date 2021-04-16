@@ -18,7 +18,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Statutes</v-toolbar-title>
+          <v-toolbar-title>ADMIN: MAINTAIN STATUTES</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="1000px">
             <template v-slot:activator="{ on, attrs }">
