@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using RIPA.Functions.Domain.Functions.Beats.Models;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
@@ -36,11 +37,14 @@ namespace RIPA.Functions.Domain.Functions.Upload
             var client = account.CreateCloudTableClient();
 
             DataSet dataSet = RunExcelDataReader(file);
+
+            await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
+
             await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
 
             await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
 
-            await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
+            await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
 
             string responseMessage = $"Processed file";
 
@@ -115,6 +119,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
                             break;
                         case "Statutes":
                             entity = GetStatute(row);
+                            break;
+                        case "Beats":
+                            entity = GetBeat(row);
                             break;
                         default:
                             break;
@@ -201,6 +208,21 @@ namespace RIPA.Functions.Domain.Functions.Upload
             statute.ALPSCognizantCD = row.ItemArray[13].ToString();
             return statute;
         }
+
+        public static Beat GetBeat(DataRow row)
+        {
+            Beat beat = new Beat();
+            beat.ETag = "*";
+            beat.PartitionKey = "CA";
+            beat.RowKey = row.ItemArray[0].ToString();
+            beat.Id = Convert.ToInt32(beat.RowKey);
+            beat.Community = row.ItemArray[1].ToString();
+            beat.Command = row.ItemArray[2].ToString();
+            beat.CommandAuditGroup = row.ItemArray[3].ToString();
+            beat.CommandAuditGroup = row.ItemArray[4].ToString();
+            return beat;
+        }
+
     }
 }
 
