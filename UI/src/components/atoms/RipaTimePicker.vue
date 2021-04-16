@@ -12,7 +12,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="getTime"
+        v-model="model"
         :label="label"
         prepend-icon="mdi-clock-time-four-outline"
         readonly
@@ -56,8 +56,14 @@ export default {
         const array = this.model.split(':')
         const hour = array[0]
         const minute = array[1]
-        if (hour >= 0 && hour <= 12) {
+        if (hour > 0 && hour < 12) {
           return `${hour}:${minute} AM`
+        }
+        if (hour === 0) {
+          return `${hour + 12}:${minute} AM`
+        }
+        if (hour === 12) {
+          return `${hour}:${minute} PM`
         }
         return `${hour - 12}:${minute} PM`
       }

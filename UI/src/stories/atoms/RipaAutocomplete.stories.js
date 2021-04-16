@@ -6,7 +6,7 @@ export default {
   parameters: {},
 }
 
-export const basic = () => ({
+export const stringValues = () => ({
   components: { RipaAutocomplete },
   data() {
     return {
@@ -29,6 +29,37 @@ export const basic = () => ({
           value: '2H',
         },
         { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
+      ],
+      selection: null,
+    }
+  },
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-autocomplete v-model="selection" hint="Select 1 Offense Code (required)" item-text="name" item-value="value" label="Offense Code" :items="items"></ripa-autocomplete>{{selection}}</div>',
+})
+
+export const numericValues = () => ({
+  components: { RipaAutocomplete },
+  data() {
+    return {
+      items: [
+        { name: 'Officer witnessed commission of a crime', value: 1 },
+        { name: 'Matched suspect description', value: 2 },
+        {
+          name: 'Witness or Victim identification of Suspect at the scene',
+          value: 3,
+        },
+        { name: 'Carrying Suspicious Object', value: 4 },
+        {
+          name: 'Actions indicative of casing a victim or location',
+          value: 5,
+        },
+        { name: 'Suspected of Acting as Lookout', value: 6 },
+        { name: 'Actions indicative of drug transaction', value: 7 },
+        {
+          name: 'Actions indicative of engaging in violent crime',
+          value: 8,
+        },
+        { name: 'Other Reasonable Suspicion of a crime', value: 9 },
       ],
       selection: null,
     }

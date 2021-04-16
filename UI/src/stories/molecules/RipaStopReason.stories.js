@@ -18,10 +18,10 @@ export const basic = () => ({
         }
       }),
       stopReason: {
-        name: 'spietrek',
+        explanation: 'My name is Steve',
       },
     }
   },
   template:
-    '<ripa-stop-reason v-model="stopReason" :statutes="data"></ripa-stop-reason>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stopReason" :statutes="data"></ripa-stop-reason>{{stopReason}}</div>',
 })

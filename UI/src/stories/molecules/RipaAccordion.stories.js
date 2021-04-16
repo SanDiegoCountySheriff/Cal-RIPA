@@ -1,4 +1,5 @@
 import RipaAccordion from '@/components/molecules/RipaAccordion'
+import { stops } from '../data/stops'
 
 export default {
   title: 'Molecules/RipaAccordion',
@@ -8,5 +9,10 @@ export default {
 
 export const basic = () => ({
   components: { RipaAccordion },
-  template: '<ripa-accordion></ripa-accordion>',
+  data() {
+    return {
+      items: stops,
+    }
+  },
+  template: '<ripa-accordion :items="items"></ripa-accordion>',
 })
