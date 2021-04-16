@@ -5,10 +5,7 @@
 
     <ripa-checkbox
       v-model="model.checkbox"
-      dense
       cbLabel="Stop in response to Call for Service"
-      cbValue="Stop in response to Call for Service"
-      hide-details
       @input="handleInput"
     >
     </ripa-checkbox>
@@ -61,7 +58,7 @@ export default {
       valid: true,
       viewModel: {
         duration: this.value.duration || null,
-        checkbox: this.value.checkbox || [],
+        checkbox: this.value.checkbox || false,
         datePicker: format(new Date(), 'yyyy-MM-dd'),
         timePicker: format(new Date(), 'h:mm'),
       },
