@@ -9,7 +9,13 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <ripa-beats-grid :loading="loading" :items="beats"></ripa-beats-grid>
+        <ripa-beats-grid
+          :loading="loading"
+          :items="beats"
+          :on-add-beat="onAddBeat"
+          :on-delete-beat="onDeleteBeat"
+          :on-edit-beat="onEditBeat"
+        ></ripa-beats-grid>
       </v-tab-item>
       <v-tab-item>
         <ripa-cities-grid :loading="loading" :items="cities"></ripa-cities-grid>
@@ -72,6 +78,18 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    onAddBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onEditBeat: {
+      type: Function,
+      default: () => {},
     },
   },
 }

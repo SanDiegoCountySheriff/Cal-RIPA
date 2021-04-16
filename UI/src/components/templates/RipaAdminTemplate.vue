@@ -5,6 +5,9 @@
     :cities="cities"
     :schools="schools"
     :statutes="statutes"
+    :on-add-beat="onAddBeat"
+    :on-delete-beat="onDeleteBeat"
+    :on-edit-beat="onEditBeat"
   ></ripa-admin-wrapper>
 </template>
 
@@ -38,6 +41,18 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    onAddBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onEditBeat: {
+      type: Function,
+      default: () => {},
     },
   },
 }

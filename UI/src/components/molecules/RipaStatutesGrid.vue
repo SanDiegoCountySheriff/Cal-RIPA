@@ -211,7 +211,7 @@ export default {
     },
 
     formatDate(dateStr) {
-      if (dateStr.length > 0) {
+      if (dateStr && dateStr.length > 0) {
         const str = dateStr.replace(/-/g, '')
         const year = str.substring(0, 4)
         const month = str.substring(4, 6)

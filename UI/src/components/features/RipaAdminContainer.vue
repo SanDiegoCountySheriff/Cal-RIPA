@@ -4,13 +4,16 @@
     :beats="beats"
     :cities="cities"
     :schools="schools"
-    :statutes="statutes"
+    :statutes="mappedStatutes"
+    :on-add-beat="handleAddBeat"
+    :on-delete-beat="handleDeleteBeat"
+    :on-edit-beat="handleEditBeat"
   ></ripa-admin-template>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -26,11 +29,20 @@ export default {
   },
 
   computed: {
-    ...mapState(['beats', 'cities', 'schools', 'statutes']),
+    ...mapState(['beats', 'cities', 'schools']),
+    ...mapGetters(['mappedStatutes']),
   },
 
   methods: {
-    ...mapActions(['getBeats', 'getCities', 'getSchools', 'getStatutes']),
+    ...mapActions([
+      'getBeats',
+      'getCities',
+      'getSchools',
+      'getStatutes',
+      'addBeat',
+      'deleteBeat',
+      'editBeat',
+    ]),
 
     async getAdminData() {
       this.loading = true
@@ -40,6 +52,24 @@ export default {
         this.getSchools(),
         this.getStatutes(),
       ])
+      this.loading = false
+    },
+
+    async handleAddBeat(beat) {
+      this.loading = true
+      await Promise.all([this.addBeat(beat)])
+      this.loading = false
+    },
+
+    async handleDeleteBeat(beat) {
+      this.loading = true
+      await Promise.all([this.deleteBeat(beat)])
+      this.loading = false
+    },
+
+    async handleEditBeat(beat) {
+      this.loading = true
+      await Promise.all([this.editBeat(beat)])
       this.loading = false
     },
   },
