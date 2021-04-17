@@ -18,14 +18,14 @@ namespace RIPA.Functions.Stop.Functions
         }
 
         [FunctionName("DeleteStop")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStop/{stopId}")] HttpRequest req, string stopId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStop/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("Delete - Delete Stop requested");
 
-            if (!string.IsNullOrEmpty(stopId))
+            if (!string.IsNullOrEmpty(Id))
             {
-                await _stopCosmosDbService.DeleteStopAsync(stopId);
-                return new OkObjectResult($"Deleted {stopId}");
+                await _stopCosmosDbService.DeleteStopAsync(Id);
+                return new OkObjectResult($"Deleted {Id}");
             }
 
             return new BadRequestObjectResult("Not found");

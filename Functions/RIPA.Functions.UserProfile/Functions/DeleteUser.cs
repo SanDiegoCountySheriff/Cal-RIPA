@@ -18,14 +18,14 @@ namespace RIPA.Functions.UserProfile.Functions
         }
 
         [FunctionName("DeleteUser")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteUser/{userProfileId}")] HttpRequest req, string userProfileId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteUser/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("Delete - Delete User requested");
 
-            if (!string.IsNullOrEmpty(userProfileId))
+            if (!string.IsNullOrEmpty(Id))
             {
-                await _userProfileCosmosDbService.DeleteUserProfileAsync(userProfileId);
-                return new OkObjectResult($"Deleted {userProfileId}");
+                await _userProfileCosmosDbService.DeleteUserProfileAsync(Id);
+                return new OkObjectResult($"Deleted {Id}");
             }
 
             return new BadRequestObjectResult("Not found");

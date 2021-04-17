@@ -20,13 +20,13 @@ namespace RIPA.Functions.Stop.Functions
         }
 
         [FunctionName("GetStop")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{stopId}")] HttpRequest req, string stopId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("GET - Get Stop requested");
 
-            if (!string.IsNullOrEmpty(stopId))
+            if (!string.IsNullOrEmpty(Id))
             {
-                var response = await _stopCosmosDbService.GetStopAsync(stopId);
+                var response = await _stopCosmosDbService.GetStopAsync(Id);
                 if (response != null)
                 {
                     return new OkObjectResult(response);
