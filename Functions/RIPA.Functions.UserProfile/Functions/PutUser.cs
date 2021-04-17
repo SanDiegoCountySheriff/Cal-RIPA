@@ -17,14 +17,14 @@ namespace RIPA.Functions.UserProfile.Functions
         }
 
         [FunctionName("PutUser")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{userProfileId}")] Services.CosmosDb.Models.UserProfile userProfile, string userProfileId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Services.CosmosDb.Models.UserProfile userProfile, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
 
             if (!string.IsNullOrEmpty(userProfile.FirstName))
             {
-                userProfile.Id = userProfileId;
-                await _userProfileCosmosDbService.UpdateUserProfileAsync(userProfileId, userProfile);
+                userProfile.Id = Id;
+                await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
                 return new OkObjectResult(userProfile);
             }
 
