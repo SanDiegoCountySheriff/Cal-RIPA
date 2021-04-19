@@ -24,7 +24,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      zipname: "lower($Backendsvc)"
+      
     
     jobs:
     - job: job_1
@@ -54,7 +54,13 @@ stages:
       #     command: test
       #     projects: '**/*Test.csproj'
       #     testRunTitle: SampleTest
-      
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            $envname = "$(Backendsvc)"
+            $zipname =  $envname.ToLower()
+            Write-Host "$zipname"
       - task: ArchiveFiles@2
         displayName: 'Archive files'
         inputs:
