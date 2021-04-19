@@ -19,7 +19,7 @@ namespace RIPA.Functions.Stop.Services.CosmosDb
 
         public async Task AddStopAsync(Models.Stop stop)
         {
-            await _container.CreateItemAsync<Models.Stop>(stop, new PartitionKey(stop.Id));
+            await _container.CreateItemAsync<Models.Stop>(stop, new PartitionKey(stop.ori));
         }
 
         public async Task DeleteStopAsync(string id)
