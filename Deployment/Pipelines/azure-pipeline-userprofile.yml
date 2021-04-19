@@ -61,7 +61,7 @@ stages:
           rootFolderOrFile: 'publish_output/'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Backendsvc).zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/lower($(Backendsvc)).zip'
           replaceExistingArchive: true
      
       - task: PublishBuildArtifacts@1
