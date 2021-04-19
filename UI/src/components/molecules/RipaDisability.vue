@@ -1,7 +1,7 @@
 <template>
   <div class="ripa-disability tw-p-4">
     <ripa-form-header
-      title="Perceived Disability"
+      title="Perceived or Known Disability"
       required
       subtitle="§999.226(a)(9)">
     </ripa-form-header>
