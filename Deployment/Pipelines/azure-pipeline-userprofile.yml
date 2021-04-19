@@ -24,7 +24,7 @@ stages:
     variables:
       buildConfiguration: 'Release'
       projectToBuild: "$(System.DefaultWorkingDirectory)/Functions"
-      # BackEndSvc: "UserProfile"
+      zipname: "lower($Backendsvc)"
     
     jobs:
     - job: job_1
@@ -61,7 +61,7 @@ stages:
           rootFolderOrFile: 'publish_output/'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/lower($(Backendsvc)).zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(zipname).zip'
           replaceExistingArchive: true
      
       - task: PublishBuildArtifacts@1
