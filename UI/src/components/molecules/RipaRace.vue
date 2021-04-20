@@ -53,19 +53,18 @@ export default {
 
   methods: {
     handleInput() {
-        this.viewModel.raceValues = []
         this.$emit('input', this.viewModel)
     },
   },
 
   props: {
     value: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     items: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
   },
 }

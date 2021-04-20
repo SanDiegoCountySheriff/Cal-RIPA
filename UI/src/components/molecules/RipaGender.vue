@@ -55,7 +55,6 @@ export default {
   data() {
     return {
       valid: true,
-      checkbox: this.value.checkbox || false,
       genderItems: [
         { name: 'Male', value: '1' },
         { name: 'Female', value: '2' },
@@ -71,7 +70,7 @@ export default {
       viewModel: {
         perceivedGender: this.value.perceivedGender || null,
         perceivedLgbt: this.value.perceivedLgbt || null,
-        checkbox: this.value.checkbox || []
+        checkbox: this.value.checkbox || false
       },
     }
   },
@@ -86,9 +85,8 @@ export default {
 
   methods: {
     handleInput() {
-    if (this.viewModel.perceivedGender === 3 || 4 ) {
-        this.viewModel.perceivedLgbt = 'A'
-      }
+if ( this.viewModel.perceivedGender === 3 || this.viewModel.perceivedGender === 4 ) 
+    { this.viewModel.perceivedLgbt = 'A' }
       this.$emit('input', this.viewModel)
     },
   },
