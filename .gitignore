@@ -352,6 +352,7 @@ MigrationBackup/
 .DS_Store
 **/.DS_Store
 dist/
+storybook-static/
 wwwroot/
 bin/
 obj/

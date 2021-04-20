@@ -1,5 +1,5 @@
 <template>
-  <ripa-stops-template></ripa-stops-template>
+  <ripa-stops-template :items="items"></ripa-stops-template>
 </template>
 
 <script>
@@ -10,6 +10,12 @@ export default {
 
   components: {
     RipaStopsTemplate,
+  },
+
+  data() {
+    return {
+      items: [],
+    }
   },
 }
 </script>

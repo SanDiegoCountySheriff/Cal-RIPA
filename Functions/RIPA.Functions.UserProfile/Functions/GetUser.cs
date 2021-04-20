@@ -18,13 +18,13 @@ namespace RIPA.Functions.UserProfile.Functions
         }
 
         [FunctionName("GetUser")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetUser/{userProfileId}")] HttpRequest req, string userProfileId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetUser/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("GET - Get User requested");
 
-            if (!string.IsNullOrEmpty(userProfileId))
+            if (!string.IsNullOrEmpty(Id))
             {
-                var response = await _userProfileCosmosDbService.GetUserProfileAsync(userProfileId);
+                var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
                 if (response != null)
                 {
                     return new OkObjectResult(response);

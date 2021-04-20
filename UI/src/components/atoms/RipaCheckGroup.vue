@@ -1,24 +1,20 @@
 <template>
   <div class="ripa-check-group">
-    <ripa-checkbox
+    <v-checkbox
       v-for="(item, index) in items"
-      v-model="model"
       :key="index"
-      :cb-label="item.name"
-      :cb-value="item.value"
-    ></ripa-checkbox>
+      v-model="model"
+      dense
+      :label="item.name"
+      :value="item.value"
+      hide-details
+    ></v-checkbox>
   </div>
 </template>
 
 <script>
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
-
 export default {
   name: 'ripa-check-group',
-
-  components: {
-    RipaCheckbox,
-  },
 
   data() {
     return {
