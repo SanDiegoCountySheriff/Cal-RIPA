@@ -1,8 +1,6 @@
 <template>
   <div class="ripa-age tw-p-4">
-    <ripa-form-header title="Perceived Age" 
-    required 
-    subtitle="§999.226(a)(7)">
+    <ripa-form-header title="Perceived Age" required subtitle="§999.226(a)(7)">
     </ripa-form-header>
 
     <ripa-number-input

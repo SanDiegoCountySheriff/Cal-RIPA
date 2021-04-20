@@ -34,11 +34,11 @@
     <div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/form" v-bind="attrs" v-on="on">
+          <v-btn class="tw-ml-4" icon small to="/" v-bind="attrs" v-on="on">
             <v-icon>mdi-plus-box</v-icon>
           </v-btn>
         </template>
-        <span>Create new form</span>
+        <span>Add new stop</span>
       </v-tooltip>
 
       <v-tooltip bottom>

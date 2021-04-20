@@ -3,13 +3,15 @@
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
-      subtitle="§999.226(a)(4)">
+      subtitle="§999.226(a)(4)"
+    >
     </ripa-form-header>
 
     <ripa-check-group
-        v-model="model.raceValues"
-        :items="raceItems"
-        @input="handleInput">
+      v-model="model.raceValues"
+      :items="raceItems"
+      @input="handleInput"
+    >
     </ripa-check-group>
   </div>
 </template>
@@ -53,7 +55,7 @@ export default {
 
   methods: {
     handleInput() {
-        this.$emit('input', this.viewModel)
+      this.$emit('input', this.viewModel)
     },
   },
 
@@ -69,4 +71,3 @@ export default {
   },
 }
 </script>
-

@@ -3,13 +3,15 @@
     <ripa-form-header
       title="Perceived or Known Disability"
       required
-      subtitle="§999.226(a)(9)">
+      subtitle="§999.226(a)(9)"
+    >
     </ripa-form-header>
 
     <ripa-check-group
-        v-model="model.disability"
-        :items="disabilityItems"
-        @input="handleInput">
+      v-model="model.disability"
+      :items="disabilityItems"
+      @input="handleInput"
+    >
     </ripa-check-group>
   </div>
 </template>
@@ -35,7 +37,10 @@ export default {
         { name: 'Speech impairment or limited use of language', value: '3' },
         { name: 'Blind or limited vision', value: '4' },
         { name: 'Mental health condition', value: '5' },
-        { name: 'Intellectual or developmental disability, including dementia', value: '6' },
+        {
+          name: 'Intellectual or developmental disability, including dementia',
+          value: '6',
+        },
         { name: 'Other disability', value: '7' },
       ],
       viewModel: {
