@@ -1,12 +1,10 @@
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RIPA.Functions.Stop.Services.CosmosDb.Contracts;
+using System.Threading.Tasks;
+
 
 namespace RIPA.Functions.Stop.Functions
 {
@@ -20,14 +18,14 @@ namespace RIPA.Functions.Stop.Functions
         }
 
         [FunctionName("PutStop")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{stopId}")] Services.CosmosDb.Models.Stop stop, string stopId, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] Services.CosmosDb.Models.Stop stop, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put Stop requested");
 
-            if (!string.IsNullOrEmpty(stop.StopText))
+            if (!string.IsNullOrEmpty(Id))
             {
-                stop.Id = stopId;
-                await _stopCosmosDbService.UpdateStopAsync(stopId, stop);
+                stop.ori = Id;
+                await _stopCosmosDbService.UpdateStopAsync(Id, stop);
                 return new OkObjectResult(stop);
             }
 
