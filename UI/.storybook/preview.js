@@ -13,22 +13,22 @@ const customViewports = {
       height: '1440px',
     },
   },
-  7202: {
-    name: '7202',
+  dellLat7202: {
+    name: 'dellLat7202',
     styles: {
       width: '1366px',
       height: '768px',
     },
   },
-  7212: {
-    name: '7212',
+  dellLat7212: {
+    name: 'dellLat7212',
     styles: {
       width: '1920px',
       height: '1080px',
     },
   },
-  7220: {
-    name: '7212',
+  dellLat7220: {
+    name: 'dellLat7220',
     styles: {
       width: '1920px',
       height: '1080px',
@@ -39,7 +39,7 @@ const customViewports = {
 addParameters({
   viewport: {
     viewports: { ...INITIAL_VIEWPORTS, ...customViewports },
-    defaultViewport: '7202',
+    defaultViewport: 'dellLat7202',
   },
 })
 
