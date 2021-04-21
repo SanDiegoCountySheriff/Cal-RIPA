@@ -44,6 +44,13 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.id"
+                        type="number"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.community"
                         label="Community"
                       ></v-text-field>
