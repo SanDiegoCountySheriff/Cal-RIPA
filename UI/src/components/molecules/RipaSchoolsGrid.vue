@@ -166,6 +166,9 @@ export default {
 
     deleteItemConfirm() {
       this.schools.splice(this.editedIndex, 1)
+      if (this.onDeleteSchool) {
+        this.onDeleteSchool(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -219,6 +222,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteSchool: {
+      type: Function,
+      default: () => {},
     },
   },
 }

@@ -18,18 +18,24 @@
         ></ripa-beats-grid>
       </v-tab-item>
       <v-tab-item>
-        <ripa-cities-grid :loading="loading" :items="cities"></ripa-cities-grid>
+        <ripa-cities-grid
+          :loading="loading"
+          :items="cities"
+          :on-delete-city="onDeleteCity"
+        ></ripa-cities-grid>
       </v-tab-item>
       <v-tab-item>
         <ripa-schools-grid
           :loading="loading"
           :items="schools"
+          :on-delete-school="onDeleteSchool"
         ></ripa-schools-grid>
       </v-tab-item>
       <v-tab-item>
         <ripa-statutes-grid
           :loading="loading"
           :items="statutes"
+          :on-delete-statute="onDeleteStatute"
         ></ripa-statutes-grid>
       </v-tab-item>
     </v-tabs-items>
@@ -84,6 +90,18 @@ export default {
       default: () => {},
     },
     onDeleteBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteCity: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteSchool: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteStatute: {
       type: Function,
       default: () => {},
     },

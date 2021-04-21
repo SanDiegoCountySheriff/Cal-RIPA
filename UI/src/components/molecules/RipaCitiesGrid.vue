@@ -171,6 +171,9 @@ export default {
 
     deleteItemConfirm() {
       this.cities.splice(this.editedIndex, 1)
+      if (this.onDeleteCity) {
+        this.onDeleteCity(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -224,6 +227,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteCity: {
+      type: Function,
+      default: () => {},
     },
   },
 }

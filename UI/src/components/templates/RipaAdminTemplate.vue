@@ -7,6 +7,9 @@
     :statutes="statutes"
     :on-add-beat="onAddBeat"
     :on-delete-beat="onDeleteBeat"
+    :on-delete-city="onDeleteCity"
+    :on-delete-school="onDeleteSchool"
+    :on-delete-statute="onDeleteStatute"
     :on-edit-beat="onEditBeat"
   ></ripa-admin-wrapper>
 </template>
@@ -47,6 +50,18 @@ export default {
       default: () => {},
     },
     onDeleteBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteCity: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteSchool: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteStatute: {
       type: Function,
       default: () => {},
     },

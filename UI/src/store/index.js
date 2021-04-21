@@ -43,19 +43,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    getBeats({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(response => {
-          commit('UPDATE_BEATS', response.data)
-        })
-    },
-
     addBeat({ dispatch }, beat) {
       axios
         .put('https://sdsd-ripa-d-apim.azure-api.us/domain/PutBeat', beat, {
@@ -85,6 +72,54 @@ export default new Vuex.Store({
         })
     },
 
+    deleteCity({ dispatch }, city) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteCity/${city.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getCities')
+        })
+    },
+
+    deleteSchool({ dispatch }, school) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteSchool/${school.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getSchools')
+        })
+    },
+
+    deleteStatute({ dispatch }, statute) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteStatute/${statute.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getStatutes')
+        })
+    },
+
     editBeat({ dispatch }, beat) {
       axios
         .put(
@@ -100,6 +135,19 @@ export default new Vuex.Store({
         )
         .then(() => {
           dispatch('getBeats')
+        })
+    },
+
+    getBeats({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          commit('UPDATE_BEATS', response.data)
         })
     },
 

@@ -236,6 +236,9 @@ export default {
 
     deleteItemConfirm() {
       this.statutes.splice(this.editedIndex, 1)
+      if (this.onDeleteStatute) {
+        this.onDeleteStatute(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -289,6 +292,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteStatute: {
+      type: Function,
+      default: () => {},
     },
   },
 }

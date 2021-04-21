@@ -7,6 +7,9 @@
     :statutes="mappedStatutes"
     :on-add-beat="handleAddBeat"
     :on-delete-beat="handleDeleteBeat"
+    :on-delete-city="handleDeleteCity"
+    :on-delete-school="handleDeleteSchool"
+    :on-delete-statute="handleDeleteStatute"
     :on-edit-beat="handleEditBeat"
   ></ripa-admin-template>
 </template>
@@ -35,13 +38,16 @@ export default {
 
   methods: {
     ...mapActions([
+      'addBeat',
+      'deleteBeat',
+      'deleteCity',
+      'deleteSchool',
+      'deleteStatute',
+      'editBeat',
       'getBeats',
       'getCities',
       'getSchools',
       'getStatutes',
-      'addBeat',
-      'deleteBeat',
-      'editBeat',
     ]),
 
     async getAdminData() {
@@ -64,6 +70,24 @@ export default {
     async handleDeleteBeat(beat) {
       this.loading = true
       await Promise.all([this.deleteBeat(beat)])
+      this.loading = false
+    },
+
+    async handleDeleteCity(city) {
+      this.loading = true
+      await Promise.all([this.deleteCity(city)])
+      this.loading = false
+    },
+
+    async handleDeleteSchool(city) {
+      this.loading = true
+      await Promise.all([this.deleteSchool(school)])
+      this.loading = false
+    },
+
+    async handleDeleteStatute(statute) {
+      this.loading = true
+      await Promise.all([this.deleteStatute(statute)])
       this.loading = false
     },
 
