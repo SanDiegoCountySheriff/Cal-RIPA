@@ -79,7 +79,7 @@ export default {
       this.loading = false
     },
 
-    async handleDeleteSchool(city) {
+    async handleDeleteSchool(school) {
       this.loading = true
       await Promise.all([this.deleteSchool(school)])
       this.loading = false
