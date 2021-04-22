@@ -1,7 +1,6 @@
 Import-Module Az.ApiManagement -Force
 Import-Module az.AzResource -Force
 
-
 function Get-InstalledAzModule()
 {
     Write-Host "Checking Powershell Module Az"
@@ -149,8 +148,6 @@ function Import-FunctionApi()
         [Parameter(Mandatory = $true, HelpMessage = "functional name of the api (domain, stop, textanalytic, etc.)")] 
 		$ApiTag
 	)
-
-    Get-InstalledAzModule
 
 	Write-Host "Starting ${apiTag} import"
 
