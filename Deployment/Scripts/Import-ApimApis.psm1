@@ -1,5 +1,5 @@
 Import-Module Az.ApiManagement -Force
-Import-Module az.AzResource -Force
+Import-Module Az.Resources -Force
 
 function Get-AllAppIPRestrictions {
                 
