@@ -1,3 +1,5 @@
+Import-Module Az.ApiManagement -Force
+Import-Module az.AzResource -Force
 
 
 function Get-InstalledAzModule()
@@ -111,11 +113,6 @@ function Remove-AppIPRestriction {
         $IPAddress
     )
               
-    If (!(Get-AzContext)) {
-        Write-Host "Please login to your Azure account"
-        Connect-AzAccount -Environment AzureUSGovernment
-    }
- 
     $APIVersion = ((Get-AzResourceProvider -ProviderNamespace Microsoft.Web).ResourceTypes | Where-Object ResourceTypeName -eq sites).ApiVersions[0]
     $FunctionNameConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -Name $FunctionName -ResourceGroupName $ResourceGroupName -ApiVersion $APIVersion)
     $IpSecurityRestrictions = $FunctionNameConfig.Properties.ipsecurityrestrictions
