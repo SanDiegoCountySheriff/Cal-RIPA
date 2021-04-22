@@ -68,6 +68,6 @@ stages:
       - task: PublishBuildArtifacts@1
         displayName: 'Publish APIM Import Script'
         inputs:
-          PathtoPublish: '$(Build.SourcesDirectory)/Deployment/Scripts/Import-Apim-Apis.psm1'
+          PathtoPublish: '$(Build.SourcesDirectory)/Deployment/Scripts/Import-ApimApis.psm1'
           ArtifactName: 'import-script'
           publishLocation: 'Container'
