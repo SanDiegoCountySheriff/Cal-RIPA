@@ -1,18 +1,6 @@
 
-Param(
-   $OpenApiServicesUri,
-   $resgrp,
-   $apimName,
-   $ApiTags
-)
-
-function Get-WebAppIPRestrictions {
+function Get-AllAppIPRestrictions {
                 
-    if (!(Get-AzContext)) {
-        Write-Host "Please login to your Azure account"
-        Connect-AzAccount -Environment AzureUsGovernment
-    }
-
     $APIVersion = ((Get-AzResourceProvider -ProviderNamespace Microsoft.Web).ResourceTypes | Where-Object ResourceTypeName -eq sites).ApiVersions[0]
     $WebApps = Get-AzFunctionApp
 
@@ -34,7 +22,7 @@ function Get-WebAppIPRestrictions {
     }
 }
 
-function Set-WebAppIPRestriction {
+function Set-AppIPRestriction {
     Param(
         [Parameter(Mandatory = $true, HelpMessage = "Resource group name")] 
         $ResourceGroupName,
@@ -82,7 +70,7 @@ function Set-WebAppIPRestriction {
     }
 }
 
-function Remove-WebAppIPRestriction {
+function Remove-AppIPRestriction {
     Param(
         [Parameter(Mandatory = $true, HelpMessage = "Resource group name")] 
         $ResourceGroupName,
@@ -121,14 +109,14 @@ function Remove-WebAppIPRestriction {
     }
 }
 
-function Import-Api()
+function Import-FunctionApi()
 {
 	param (
         [Parameter(Mandatory = $true, HelpMessage = "Resource environment (d,q,p, etc.)")] 
         $Environment, 
         [Parameter(Mandatory = $true, HelpMessage = "Azure resource group")] 
 		$ResourceGroupName, 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure API Management instance")] 
+        [Parameter(Mandatory = $true, HelpMessage = "Azure API Management instance name")] 
 		$ServiceName, 
         [Parameter(Mandatory = $true, HelpMessage = "functional name of the api (domain, stop, textanalytic, etc.)")] 
 		$ApiTag
@@ -141,48 +129,38 @@ function Import-Api()
     Write-Host "Getting function key code"
     $functionCode = ((az functionapp function keys list -g sdsd-ripa-d-rg -n sdsd-ripa-d-textanalytics-fa --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select default).default
 	
-    $serviceUrl = "https://sdsd-ripa-d-$($ApiTag)-fa.azurewebsites.us"
-	$swaggerUrl = "https://sdsd-ripa-d-$($ApiTag)-fa.azurewebsites.us/api/openapi/v3.0?code=$($functionCode)"
+    $serviceUrl = "https://sdsd-ripa-d-$($ApiTag)-fa.azurewebsites.us/api"
+	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
 
     Write-Host "Getting local IP Address"
     $ipAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
     
     Write-Host "Setting access restriction for local IP Address"
-    Set-WebAppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
+    Set-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
 
 	Write-Host "Updating ${serviceUrl}"
 	Write-Host "With ${swaggerUrl}"
 
-	$apiId = "textanalytic"
-
-	# grab the existing api settings
-	#$api = Get-AzApiManagementApi -Context $ApimCntx -ApiId $apiId
-
 	# import the latest swagger
-	Write-Host "Importing api $apiId from $swaggerUrl"
-	Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $apiId -ApiId $apiId
-	#Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationPath $swaggerUrl -Path $api.Path -ApiId $apiId
+	Write-Host "Importing api $ApiTag from $swaggerUrl"
+	Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag
+	
+	Write-Host "Setting api backend to point to $ApiTag function"
+    Set-AzApiManagementPolicy -Context $ApimCntx -ApiId $ApiTag -Policy '<policies><inbound><base /><set-backend-service id="apim-generated-policy" backend-id="sdsd-ripa-d-textanalytics-fa" /></inbound></policies>' 
 
-    Set-AzApiManagementPolicy -Context $ApimCntx -ApiId $apiId -Policy '<policies><inbound><base /><set-backend-service id="apim-generated-policy" backend-id="sdsd-ripa-d-textanalytics-fa" /></inbound></policies>' 
-
-#	# reset the protocol (import modifies this for some reason)
-#	Write-Host "Updating protocol for $($api.Name) at $serviceUrl"
-#	Set-AzApiManagementApi -Context $ApimCntx -ApiId $apiId -Protocols @('https') -Name $api.Name -ServiceUrl $serviceUrl
+	# reset the protocol (import modifies this for some reason)
+	Write-Host "Updating protocol for $($api.Name) at $serviceUrl"
+	Set-AzApiManagementApi -Context $ApimCntx -ApiId $ApiTag -Protocols @('https') -Name $ApiTag -ServiceUrl $serviceUrl
 
     Write-Host "removing access restriction for local IP Address"
-    Remove-WebAppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress
+    Remove-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress
 }
 
-## Main Execution ##
-$resgrp = "sdsd-ripa-d-rg"
+#$resgrp = "sdsd-ripa-d-rg"
 
 #$ipAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
-
-#Set-WebAppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
-
-#Remove-WebAppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress 
-
-
+#Set-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
+#Remove-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress 
 
 
 # load an apim context
@@ -198,4 +176,9 @@ $resgrp = "sdsd-ripa-d-rg"
 #Write-Host "Services Updated"
 
 
-Import-Api -Environment d -ResourceGroupName $resgrp -ServiceName sdsd-ripa-d-apim -ApiTag textanalytics
+#Import-FunctionApi -Environment d -ResourceGroupName $resgrp -ServiceName sdsd-ripa-d-apim -ApiTag textanalytics
+
+Export-ModuleMember -Function Get-AllAppIPRestrictions
+Export-ModuleMember -Function Set-WebAppIPRestriction
+Export-ModuleMember -Function Remove-AppIPRestriction
+Export-ModuleMember -Function Import-FunctionApi
