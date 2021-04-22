@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RIPA.Functions.Domain\RIPA.Functions.Domain.csproj" />
-    <ProjectReference Include="..\RIPA.Functions.Domain\RIPA.Functions.Domain.csproj" />
     <ProjectReference Include="..\RIPA.Functions.UserProfile\RIPA.Functions.UserProfile.csproj" />
   </ItemGroup>
 
