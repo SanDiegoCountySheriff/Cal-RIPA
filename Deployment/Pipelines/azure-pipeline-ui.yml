@@ -1,0 +1,75 @@
+# Node.js with Vue
+# Build a Node.js project that uses Vue.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - UI/*
+      - Deployment/Pipelines/azure-pipeline-ui.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build
+    displayName: "Build"
+
+    jobs:
+      - job: job_1
+        displayName: "Building UI Project"
+
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "12.x"
+            displayName: "Install Node.js"
+
+          - task: Npm@1
+            displayName: "npm install"
+            inputs:
+              command: "install"
+              workingDir: "UI/"
+
+          - task: Npm@1
+            displayName: "npm build-storybook"
+            inputs:
+              command: "custom"
+              workingDir: "UI/"
+              customCommand: "run build-storybook"
+
+          - task: Npm@1
+            displayName: "npm build"
+            inputs:
+              command: "custom"
+              workingDir: "UI/"
+              customCommand: "run build"
+
+          - task: ArchiveFiles@2
+            displayName: "Archive storybook Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/storybook-static"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
+              replaceExistingArchive: true
+
+          - task: ArchiveFiles@2
+            displayName: "Archive UI Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/dist"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+              replaceExistingArchive: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifacts"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"

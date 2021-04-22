@@ -5,17 +5,15 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.UserProfile", "RIPA.Functions.UserProfile\RIPA.Functions.UserProfile.csproj", "{EA231A72-5FDA-4235-BCC3-D2C774080D7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.TableStorage", "RIPA.Functions.TableStorage\RIPA.Functions.TableStorage.csproj", "{7964BCA5-61B7-4DBD-A333-793BD9844C5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Domain", "RIPA.Functions.Domain\RIPA.Functions.Domain.csproj", "{7964BCA5-61B7-4DBD-A333-793BD9844C5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Test", "RIPA.Functions.Test\RIPA.Functions.Test.csproj", "{F45D4CB0-126B-4F59-AC23-74876A855516}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Statute", "RIPA.Functions.Statute\RIPA.Functions.Statute.csproj", "{7C579F74-87C7-490C-8F3D-C4FF102617D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.TextAnalytics", "RIPA.Functions.TextAnalytics\RIPA.Functions.TextAnalytics.csproj", "{1A6E7E98-5EB2-4DFF-AC62-D97623069701}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Templates", "RIPA.Functions.Templates\RIPA.Functions.Templates.csproj", "{2AC5612D-8180-406F-B406-2B4E7AB92B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Stop", "RIPA.Functions.Stop\RIPA.Functions.Stop.csproj", "{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.TextAnalytics", "RIPA.Functions.TextAnalytics\RIPA.Functions.TextAnalytics.csproj", "{1A6E7E98-5EB2-4DFF-AC62-D97623069701}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Stop", "RIPA.Functions.Stop\RIPA.Functions.Stop.csproj", "{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Submission", "RIPA.Functions.Submission\RIPA.Functions.Submission.csproj", "{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,14 +33,6 @@ Global
 		{F45D4CB0-126B-4F59-AC23-74876A855516}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F45D4CB0-126B-4F59-AC23-74876A855516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F45D4CB0-126B-4F59-AC23-74876A855516}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C579F74-87C7-490C-8F3D-C4FF102617D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C579F74-87C7-490C-8F3D-C4FF102617D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C579F74-87C7-490C-8F3D-C4FF102617D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C579F74-87C7-490C-8F3D-C4FF102617D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AC5612D-8180-406F-B406-2B4E7AB92B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AC5612D-8180-406F-B406-2B4E7AB92B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AC5612D-8180-406F-B406-2B4E7AB92B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AC5612D-8180-406F-B406-2B4E7AB92B4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1A6E7E98-5EB2-4DFF-AC62-D97623069701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1A6E7E98-5EB2-4DFF-AC62-D97623069701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A6E7E98-5EB2-4DFF-AC62-D97623069701}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +41,10 @@ Global
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF72D07-EFC1-43A2-B875-995AA2BD6A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

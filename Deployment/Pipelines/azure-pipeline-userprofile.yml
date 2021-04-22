@@ -1,0 +1,68 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - Functions/RIPA.Functions.UserProfile/*
+      - Deployment/Pipelines/azure-pipeline-userprofile.yml
+
+pool:
+  vmImage: "ubuntu-latest"
+
+stages:
+  - stage: Build
+    displayName: "Build"
+    variables:
+      buildConfiguration: "Release"
+
+    jobs:
+      - job: job_1
+        displayName: "build .net core function api"
+
+        steps:
+          - task: UseDotNet@2
+            displayName: "Use .NET Core sdk 3.1.404"
+            inputs:
+              version: 3.1.404
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet restore"
+            inputs:
+              command: restore
+              projects: "**/*$(Backendsvc).csproj "
+              vstsFeed: "e1fc634d-7bab-453f-a4a8-f3440249240f/294e5da2-a661-49bf-bf3f-3bab6aa42171"
+
+          - task: DotNetCoreCLI@2
+            displayName: Build project
+            inputs:
+              projects: "**/*$(Backendsvc).csproj"
+              arguments: --output publish_output --configuration Release
+
+          - task: ArchiveFiles@2
+            displayName: "Archive files"
+            inputs:
+              rootFolderOrFile: "publish_output/"
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Backendsvc).zip"
+              replaceExistingArchive: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifacts"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish APIM Import Script"
+            inputs:
+              PathtoPublish: "$(Build.SourcesDirectory)/Deployment/Scripts/"
+              ArtifactName: "import-script"
+              publishLocation: "Container"

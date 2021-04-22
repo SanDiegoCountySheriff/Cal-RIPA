@@ -22,10 +22,10 @@ namespace RIPA.Functions.Test
     [TestClass]
     public class TableStorageSchoolsTest
     {
-        private readonly School school = new School
-        {
-            Name = "Test",
-        };
+        //private readonly School school = new School
+        //{
+        //    Name = "Test",
+        //};
 
         private readonly ILogger logger = TestFactory.CreateLogger();
 
@@ -39,28 +39,28 @@ namespace RIPA.Functions.Test
             _schools = tableClient.GetTableReference("Schools");
         }
 
-        [TestMethod]
-        public async Task PutSchoolTest()
-        {
-            var response = (OkObjectResult)await PutSchool.Run(TestFactory.CreateHttpRequest(), school.Name, _schools, logger);
+        //[TestMethod]
+        //public async Task PutSchoolTest()
+        //{
+        //    var response = (OkObjectResult)await PutSchool.Run(TestFactory.CreateHttpRequest(), school.Name, _schools, logger);
             
-            Assert.IsTrue(response.StatusCode == 200); 
-        }
+        //    Assert.IsTrue(response.StatusCode == 200); 
+        //}
 
-        [TestMethod]
-        public async Task GetSchoolsTest()
-        {
-            var response = (OkObjectResult)await GetSchools.Run(TestFactory.CreateHttpRequest(), _schools, logger);
+        //[TestMethod]
+        //public async Task GetSchoolsTest()
+        //{
+        //    var response = (OkObjectResult)await GetSchools.Run(TestFactory.CreateHttpRequest(), _schools, logger);
 
-            Assert.IsTrue(response.StatusCode == 200);
-        }
+        //    Assert.IsTrue(response.StatusCode == 200);
+        //}
 
-        [TestMethod]
-        public async Task DeleteSchoolTest()
-        {
-            var response = (OkObjectResult)await DeleteSchool.Run(TestFactory.CreateHttpRequest(), school.Name, _schools, logger);
+        //[TestMethod]
+        //public async Task DeleteSchoolTest()
+        //{
+        //    var response = (OkObjectResult)await DeleteSchool.Run(TestFactory.CreateHttpRequest(), school.Name, _schools, logger);
 
-            Assert.IsTrue(response.StatusCode == 200);
-        }
+        //    Assert.IsTrue(response.StatusCode == 200);
+        //}
     }
 }
