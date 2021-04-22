@@ -26,3 +26,5 @@
         Import-Module Az
     }
 }
+
+Get-InstalledAzModule
