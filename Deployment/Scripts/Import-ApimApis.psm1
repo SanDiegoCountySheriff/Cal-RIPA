@@ -1,5 +1,5 @@
 Import-Module Az.ApiManagement -Force
-Import-Module Az.Resources -Force
+Import-Module az.AzResource -Force
 
 function Get-AllAppIPRestrictions {
                 
@@ -133,7 +133,7 @@ function Import-FunctionApi()
     $ipAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
     
     Write-Host "Setting access restriction for local IP Address"
-    Set-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
+    Set-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
 
 	Write-Host "Updating ${serviceUrl}"
 	Write-Host "With ${swaggerUrl}"
@@ -150,7 +150,7 @@ function Import-FunctionApi()
 	Set-AzApiManagementApi -Context $ApimCntx -ApiId $ApiTag -Protocols @('https') -Name $ApiTag -ServiceUrl $serviceUrl
 
     Write-Host "removing access restriction for local IP Address"
-    Remove-AppIPRestriction -ResourceGroupName $resgrp -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress
+    Remove-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName sdsd-ripa-d-textanalytics-fa  -IPAddress $ipAddress
 }
 
 #$resgrp = "sdsd-ripa-d-rg"
