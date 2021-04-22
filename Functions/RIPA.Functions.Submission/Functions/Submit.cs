@@ -38,7 +38,7 @@ namespace RIPA.Functions.Submission.Functions
             };
             SftpService sftpService = new SftpService(log, config);
 
-            sftpService.ListAllFiles(Environment.GetEnvironmentVariable("SftpOutput"))
+            sftpService.ListAllFiles(Environment.GetEnvironmentVariable("SftpOutput"));
                 
 
             sftpService.UploadFile(@"C:\Users\LPOPE\source\Temp\test1.txt", Environment.GetEnvironmentVariable("SftpInput"));
