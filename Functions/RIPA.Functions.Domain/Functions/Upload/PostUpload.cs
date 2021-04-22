@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using RIPA.Functions.Domain.Functions.Beats.Models;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
@@ -13,7 +17,10 @@ using System;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+
 
 namespace RIPA.Functions.Domain.Functions.Upload
 {
@@ -24,27 +31,44 @@ namespace RIPA.Functions.Domain.Functions.Upload
         public static int _batchLimit = 100;
 
         [FunctionName("PostUpload")]
+        [OpenApiOperation(operationId: "PostUpload", tags: new[] { "name" })]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiRequestBody(contentType: "multipart/form-data; boundary=<calculated when request is sent>", bodyType: typeof(UploadRequest), Deprecated = false, Required = true)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Upload Complete")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;")]
+
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            _log = log;
-            var formData = await req.ReadFormAsync();
-            var file = req.Form.Files["file"];
+            try
+            {
+                _log = log;
+                var formData = await req.ReadFormAsync();
+                var file = req.Form.Files["file"];
 
-            var account = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("RipaStorage"));
-            var client = account.CreateCloudTableClient();
+                var account = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("RipaStorage"));
+                var client = account.CreateCloudTableClient();
 
-            DataSet dataSet = RunExcelDataReader(file);
-            await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
+                DataSet dataSet = RunExcelDataReader(file);
 
-            await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
+                await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
 
-            await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
+                await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
 
-            string responseMessage = $"Processed file";
+                await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
 
-            return new OkObjectResult(responseMessage);
+                await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
+
+                string responseMessage = $"Upload Complete";
+
+                return new OkObjectResult(responseMessage);
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex.Message);
+                return new BadRequestObjectResult("File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;");
+            }
         }
 
         public static DataSet RunExcelDataReader(IFormFile file)
@@ -115,6 +139,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
                             break;
                         case "Statutes":
                             entity = GetStatute(row);
+                            break;
+                        case "Beats":
+                            entity = GetBeat(row);
                             break;
                         default:
                             break;
@@ -201,6 +228,26 @@ namespace RIPA.Functions.Domain.Functions.Upload
             statute.ALPSCognizantCD = row.ItemArray[13].ToString();
             return statute;
         }
+
+        public static Beat GetBeat(DataRow row)
+        {
+            Beat beat = new Beat();
+            beat.ETag = "*";
+            beat.PartitionKey = "CA";
+            beat.RowKey = row.ItemArray[0].ToString();
+            beat.Id = Convert.ToInt32(beat.RowKey);
+            beat.Community = row.ItemArray[1].ToString();
+            beat.Command = row.ItemArray[2].ToString();
+            beat.CommandAuditGroup = row.ItemArray[3].ToString();
+            beat.CommandAuditGroup = row.ItemArray[4].ToString();
+            return beat;
+        }
+
+        public class UploadRequest
+        {
+            public string File { get; set; }
+        }
+
     }
 }
 

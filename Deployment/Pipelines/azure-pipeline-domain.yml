@@ -40,12 +40,12 @@ stages:
         displayName: 'dotnet restore'
         inputs:
           command: restore
-          projects: '**/*$(BackEndSvc).csproj '
+          projects: '**/*$(Backendsvc).csproj '
           vstsFeed: 'e1fc634d-7bab-453f-a4a8-f3440249240f/294e5da2-a661-49bf-bf3f-3bab6aa42171'
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
-          projects: '**/*$(BackEndSvc).csproj'
+          projects: '**/*$(Backendsvc).csproj'
           arguments: --output publish_output --configuration Release
      
       # - task: DotNetCoreCLI@2
@@ -61,7 +61,7 @@ stages:
           rootFolderOrFile: 'publish_output/'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(BackEndSvc).zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Backendsvc).zip'
           replaceExistingArchive: true
      
       - task: PublishBuildArtifacts@1
