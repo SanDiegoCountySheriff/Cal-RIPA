@@ -49,13 +49,6 @@ stages:
           projects: '**/*$(Backendsvc).csproj'
           arguments: --output publish_output --configuration Release
 
-      - task: CopyFiles@2
-        displayName: 'Copy import script'
-        inputs:
-          SourceFolder: '$(Build.SourcesDirectory)/Deployment/Scripts'
-          Contents: 'Import-Apim-Apis.ps1'
-          TargetFolder: 'publish_output/'
-      
       - task: ArchiveFiles@2
         displayName: 'Archive files'
         inputs:
@@ -72,3 +65,9 @@ stages:
           ArtifactName: 'drop'
           publishLocation: 'Container'
       
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish APIM Import Script'
+        inputs:
+          PathtoPublish: '$(Build.SourcesDirectory)/Deployment/Scripts/Import-Apim-Apis.ps1'
+          ArtifactName: 'import-script'
+          publishLocation: 'Container'
