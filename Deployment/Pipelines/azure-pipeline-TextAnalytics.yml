@@ -42,18 +42,19 @@ stages:
           command: restore
           projects: '**/*$(Backendsvc).csproj '
           vstsFeed: 'e1fc634d-7bab-453f-a4a8-f3440249240f/294e5da2-a661-49bf-bf3f-3bab6aa42171'
+
       - task: DotNetCoreCLI@2
         displayName: Build project
         inputs:
           projects: '**/*$(Backendsvc).csproj'
           arguments: --output publish_output --configuration Release
-     
-      # - task: DotNetCoreCLI@2
-      #   displayName: Test
-      #   inputs:
-      #     command: test
-      #     projects: '**/*$(Backendsvc).Test.csproj'
-      #     testRunTitle: SampleTest
+
+      - task: CopyFiles@2
+        displayName: 'Copy import script'
+        inputs:
+          SourceFolder: '$(Build.SourcesDirectory)/Deployment/Scripts'
+          Contents: 'Import-Apim-Apis.ps1'
+          TargetFolder: 'publish_output/'
       
       - task: ArchiveFiles@2
         displayName: 'Archive files'
