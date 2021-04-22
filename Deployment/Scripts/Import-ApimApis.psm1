@@ -1,3 +1,35 @@
+Import-Module Az.ApiManagement -Force
+Import-Module az.AzResource -Force
+
+function Get-InstalledAzModule()
+{
+    Write-Host "Checking Powershell Module Az"
+    
+    $AzModuleVersion = (Get-InstalledModule -Name Az | Select-Object -Property Version)
+    if($AzModuleVersion) 
+    {
+        Write-Host "Powershell Module Az is installed. Checking version now."
+        $MajorMinor = "$($AzModuleVersion.Version.Major).$($AzModuleVersion.Version.Minor)"
+        $AzVersionNumber = [decimal]$MajorMinor
+        if($AzVersionNumber -lt 5.4)
+        {
+            Write-Host "Your Powershell Az Module version is $($AzVersionNumber), however the minimum required version is 5.4. Upgrading now..."
+            Update-Module -Name Az -Force
+            Import-Module Az
+        }
+        else
+        {
+            Write-Host "Powershell Module Az version is good."
+        }
+    }
+    else
+    {
+        Write-Host "You do not have Powershell Az Module installed. Installing now..."
+        Install-Module -Name Az -Scope AllUsers -AllowClobber 
+        Import-Module Az
+    }
+}
+
 
 function Get-AllAppIPRestrictions {
                 
@@ -80,11 +112,6 @@ function Remove-AppIPRestriction {
         $IPAddress
     )
               
-    If (!(Get-AzContext)) {
-        Write-Host "Please login to your Azure account"
-        Connect-AzAccount -Environment AzureUSGovernment
-    }
- 
     $APIVersion = ((Get-AzResourceProvider -ProviderNamespace Microsoft.Web).ResourceTypes | Where-Object ResourceTypeName -eq sites).ApiVersions[0]
     $FunctionNameConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -Name $FunctionName -ResourceGroupName $ResourceGroupName -ApiVersion $APIVersion)
     $IpSecurityRestrictions = $FunctionNameConfig.Properties.ipsecurityrestrictions
@@ -178,6 +205,7 @@ function Import-FunctionApi()
 
 #Import-FunctionApi -Environment d -ResourceGroupName $resgrp -ServiceName sdsd-ripa-d-apim -ApiTag textanalytics
 
+Export-ModuleMember -Function Get-InstalledAzModule
 Export-ModuleMember -Function Get-AllAppIPRestrictions
 Export-ModuleMember -Function Set-WebAppIPRestriction
 Export-ModuleMember -Function Remove-AppIPRestriction
