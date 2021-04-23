@@ -1,8 +1,5 @@
 <template>
-    <v-switch
-     v-model="model"
-     :label="label">
-      </v-switch>
+  <v-switch v-model="model" :label="label"> </v-switch>
 </template>
 
 <script>
@@ -15,7 +12,7 @@ export default {
     }
   },
 
-computed: {
+  computed: {
     model: {
       get() {
         return this.viewModel
@@ -34,8 +31,7 @@ computed: {
     },
   },
 
-
-props: {
+  props: {
     value: {
       type: Boolean,
       default: false,
@@ -44,7 +40,7 @@ props: {
     label: {
       type: String,
       default: 'no',
-    }
-  }
+    },
+  },
 }
 </script>
