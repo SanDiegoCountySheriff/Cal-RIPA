@@ -97,6 +97,14 @@
               <v-toolbar-title class="tw-uppercase"
                 >Admin: Submissions</v-toolbar-title
               >
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                @click="handleSubmit"
+                :disabled="selectedItems.length === 0"
+              >
+                Submit Selected Items
+              </v-btn>
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
@@ -124,14 +132,6 @@
 
       <v-flex xs12>
         <v-divider></v-divider>
-      </v-flex>
-
-      <v-flex xs12>
-        <div class="tw-p-4">
-          <v-btn color="primary" @click="handleSubmit">
-            Submit Selected Items
-          </v-btn>
-        </div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -162,8 +162,8 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isSubmissionDate: true,
-      submitted: true,
+      isSubmissionDate: false,
+      submitted: false,
       piiFound: false,
       errorsFound: false,
       officerName: null,
