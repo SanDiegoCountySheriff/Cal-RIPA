@@ -206,25 +206,7 @@ export default {
 
   methods: {
     init() {
-      this.statutes = this.items.map(item => {
-        return {
-          ...item,
-          offenseEnacted: this.formatDate(item.offenseEnacted),
-          offenseRepealed: this.formatDate(item.offenseRepealed),
-        }
-      })
-    },
-
-    formatDate(dateStr) {
-      if (dateStr && dateStr.length > 0) {
-        const str = dateStr.replace(/-/g, '')
-        const year = str.substring(0, 4)
-        const month = str.substring(4, 6)
-        const day = str.substring(6, 8)
-        return `${year}-${month}-${day}`
-      }
-
-      return ''
+      this.statutes = this.items
     },
 
     editItem(item) {

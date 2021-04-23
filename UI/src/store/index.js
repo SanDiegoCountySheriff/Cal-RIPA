@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { formatDate } from '@/components/utilities/dates'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isDark: true,
     isAdmin: true,
     beats: [],
     cities: [],
@@ -15,10 +17,40 @@ export default new Vuex.Store({
   },
 
   getters: {
-    mappedStatutes: state => {
-      return state.statutes
+    mappedBeats: state => {
+      return state.beats
     },
-
+    mappedCities: state => {
+      return state.cities.map(item => {
+        return {
+          ...item,
+          deactivationDate: formatDate(item.deactivationDate),
+        }
+      })
+    },
+    mappedSchools: state => {
+      return state.schools.map(item => {
+        return {
+          ...item,
+          county: item.county ? item.county.toUpperCase() : '',
+          district: item.district ? item.district.toUpperCase() : '',
+          name: item.name ? item.name.toUpperCase() : '',
+          status: item.status ? item.status.toUpperCase() : '',
+        }
+      })
+    },
+    mappedStatutes: state => {
+      return state.statutes.map(item => {
+        return {
+          ...item,
+          offenseEnacted: formatDate(item.offenseEnacted),
+          offenseRepealed: formatDate(item.offenseRepealed),
+        }
+      })
+    },
+    mappedSubmissions: state => {
+      return state.submissions
+    },
     isOnline: () => {
       return navigator.onLine
     },
@@ -190,6 +222,9 @@ export default new Vuex.Store({
         .then(response => {
           commit('UPDATE_BEATS', response.data)
         })
+        .catch(() => {
+          commit('UPDATE_BEATS', [])
+        })
     },
 
     getCities({ commit }) {
@@ -203,6 +238,9 @@ export default new Vuex.Store({
         .then(response => {
           commit('UPDATE_CITIES', response.data)
         })
+        .catch(() => {
+          commit('UPDATE_CITIES', [])
+        })
     },
 
     getSchools({ commit }) {
@@ -214,16 +252,10 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const mappedData = response.data.map(item => {
-            return {
-              ...item,
-              county: item.county ? item.county.toUpperCase() : '',
-              district: item.district ? item.district.toUpperCase() : '',
-              name: item.name ? item.name.toUpperCase() : '',
-              status: item.status ? item.status.toUpperCase() : '',
-            }
-          })
-          commit('UPDATE_SCHOOLS', mappedData)
+          commit('UPDATE_SCHOOLS', response.data)
+        })
+        .catch(() => {
+          commit('UPDATE_SCHOOLS', [])
         })
     },
 
@@ -238,6 +270,9 @@ export default new Vuex.Store({
         .then(response => {
           commit('UPDATE_STATUTES', response.data)
         })
+        .catch(() => {
+          commit('UPDATE_STATUES', [])
+        })
     },
 
     getStops({ commit }) {
@@ -250,6 +285,9 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('UPDATE_STOPS', response.data)
+        })
+        .catch(() => {
+          commit('UPDATE_STOPS', [])
         })
       // axios.get('http://localhost:3004/stops').then(response => {
       //   commit('UPDATE_STOPS', response.data)

@@ -118,11 +118,14 @@ export default {
   methods: {
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      if (this.onUpdateDark) {
+        this.onUpdateDark(this.$vuetify.theme.dark)
+      }
     },
   },
 
-  created() {
-    this.$vuetify.theme.dark = false
+  mounted() {
+    this.$vuetify.theme.dark = this.dark
   },
 
   props: {
@@ -130,9 +133,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    dark: {
+      type: Boolean,
+      default: false,
+    },
     online: {
       type: Boolean,
       default: false,
+    },
+    onUpdateDark: {
+      type: Function,
+      default: () => {},
     },
   },
 }

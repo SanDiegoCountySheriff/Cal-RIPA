@@ -1,9 +1,9 @@
 <template>
   <ripa-admin-template
     :loading="loading"
-    :beats="beats"
-    :cities="cities"
-    :schools="schools"
+    :beats="mappedBeats"
+    :cities="mappedCities"
+    :schools="mappedSchools"
     :statutes="mappedStatutes"
     :submissions="mappedSubmissions"
     :on-delete-beat="handleDeleteBeat"
@@ -31,13 +31,18 @@ export default {
   data() {
     return {
       loading: false,
-      mappedSubmissions: [],
     }
   },
 
   computed: {
     ...mapState(['beats', 'cities', 'schools', 'isAdmin']),
-    ...mapGetters(['mappedStatutes']),
+    ...mapGetters([
+      'mappedBeats',
+      'mappedCities',
+      'mappedSchools',
+      'mappedStatutes',
+      'mappedSubmissions',
+    ]),
   },
 
   methods: {

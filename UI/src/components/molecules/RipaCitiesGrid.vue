@@ -166,26 +166,9 @@ export default {
 
   methods: {
     init() {
-      this.cities = this.items.map(item => {
-        return {
-          ...item,
-          deactivationDate: this.formatDate(item.deactivationDate),
-        }
-      })
+      this.cities = this.items
       this.mappedStates = STATES.map(item => item.abbreviation)
       this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
-    },
-
-    formatDate(dateStr) {
-      if (dateStr && dateStr.length > 0) {
-        const str = dateStr.replace(/-/g, '')
-        const year = str.substring(0, 4)
-        const month = str.substring(4, 6)
-        const day = str.substring(6, 8)
-        return `${year}-${month}-${day}`
-      }
-
-      return ''
     },
 
     editItem(item) {
