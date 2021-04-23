@@ -1,13 +1,14 @@
 <template>
   <v-container class="tw-mt-2" fluid>
     <v-layout row wrap>
-      <v-flex xs12 md3>
-        <div class="tw-flex tw-justify-center">
-          <v-switch
-            v-model="isSubmissionDate"
-            label="Filter by Submission Date"
-          ></v-switch>
-        </div>
+      <v-flex xs12 md2>
+        <v-select
+          v-model="officerName"
+          class="tw-ml-2"
+          :items="getOfficers"
+          label="Officer"
+          clearable
+        ></v-select>
       </v-flex>
 
       <v-flex xs12 md2>
@@ -53,6 +54,15 @@
 
       <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
+          <v-switch
+            v-model="isSubmissionDate"
+            label="Filter by Submission Date"
+          ></v-switch>
+        </div>
+      </v-flex>
+
+      <v-flex xs12 md3>
+        <div class="tw-flex tw-justify-center">
           <v-switch v-model="submitted" label="Submitted"></v-switch>
           <v-switch
             v-model="errorsFound"
@@ -61,16 +71,6 @@
           ></v-switch>
           <v-switch v-model="piiFound" class="tw-ml-2" label="PII"></v-switch>
         </div>
-      </v-flex>
-
-      <v-flex xs12 md2>
-        <v-select
-          v-model="officerName"
-          class="tw-ml-2"
-          :items="getOfficers"
-          label="Officer"
-          clearable
-        ></v-select>
       </v-flex>
 
       <v-flex xs12>
