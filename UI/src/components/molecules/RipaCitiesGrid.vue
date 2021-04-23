@@ -199,6 +199,11 @@ export default {
       } else {
         this.cities.push(this.editedItem)
       }
+
+      if (this.onEditCity) {
+        this.onEditCity(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -229,6 +234,10 @@ export default {
       default: () => [],
     },
     onDeleteCity: {
+      type: Function,
+      default: () => {},
+    },
+    onEditCity: {
       type: Function,
       default: () => {},
     },

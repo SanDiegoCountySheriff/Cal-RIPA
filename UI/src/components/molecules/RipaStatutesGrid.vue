@@ -264,6 +264,11 @@ export default {
       } else {
         this.statutes.push(this.editedItem)
       }
+
+      if (this.onEditStatute) {
+        this.onEditStatute(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -294,6 +299,10 @@ export default {
       default: () => [],
     },
     onDeleteStatute: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStatute: {
       type: Function,
       default: () => {},
     },

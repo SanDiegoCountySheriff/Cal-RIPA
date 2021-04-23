@@ -194,6 +194,11 @@ export default {
       } else {
         this.schools.push(this.editedItem)
       }
+
+      if (this.onEditSchool) {
+        this.onEditSchool(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -224,6 +229,10 @@ export default {
       default: () => [],
     },
     onDeleteSchool: {
+      type: Function,
+      default: () => {},
+    },
+    onEditSchool: {
       type: Function,
       default: () => {},
     },

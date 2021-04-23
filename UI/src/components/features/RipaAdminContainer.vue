@@ -5,6 +5,7 @@
     :cities="cities"
     :schools="schools"
     :statutes="mappedStatutes"
+    :submissions="mappedSubmissions"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -30,6 +31,7 @@ export default {
   data() {
     return {
       loading: false,
+      mappedSubmissions: [],
     }
   },
 
