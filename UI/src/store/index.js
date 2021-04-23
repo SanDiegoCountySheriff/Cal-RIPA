@@ -214,7 +214,16 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('UPDATE_SCHOOLS', response.data)
+          const mappedData = response.data.map(item => {
+            return {
+              ...item,
+              county: item.county ? item.county.toUpperCase() : '',
+              district: item.district ? item.district.toUpperCase() : '',
+              name: item.name ? item.name.toUpperCase() : '',
+              status: item.status ? item.status.toUpperCase() : '',
+            }
+          })
+          commit('UPDATE_SCHOOLS', mappedData)
         })
     },
 
@@ -232,19 +241,19 @@ export default new Vuex.Store({
     },
 
     getStops({ commit }) {
-      // axios
-      //   .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
-      //     headers: {
-      //       'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-      //       'Cache-Control': 'no-cache',
-      //     },
-      //   })
-      //   .then(response => {
-      //     commit('UPDATE_STOPS', response.data)
-      //   })
-      axios.get('http://localhost:3004/stops').then(response => {
-        commit('UPDATE_STOPS', response.data)
-      })
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          commit('UPDATE_STOPS', response.data)
+        })
+      // axios.get('http://localhost:3004/stops').then(response => {
+      //   commit('UPDATE_STOPS', response.data)
+      // })
     },
   },
   modules: {},

@@ -1,3 +1,6 @@
+/* eslint-disable */
+
+// prettier-ignore
 export const statutes = [
   {
     offenseValidationCD: 1,

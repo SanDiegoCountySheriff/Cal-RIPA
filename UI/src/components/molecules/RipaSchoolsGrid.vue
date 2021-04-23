@@ -44,6 +44,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.name"
                         label="School"
                       ></v-text-field>
@@ -61,6 +67,18 @@
                         label="County"
                       >
                       </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.cdsCode"
+                        label="CDS Code"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.status"
+                        label="Status"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -121,9 +139,12 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'School', value: 'name' },
         { text: 'District', value: 'district' },
         { text: 'County', value: 'county' },
+        { text: 'CDS Code', value: 'cdsCode' },
+        { text: 'Status', value: 'status' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,

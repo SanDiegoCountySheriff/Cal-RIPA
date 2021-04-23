@@ -45,7 +45,7 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.rowKey"
-                        label="City"
+                        label="ID"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -69,6 +69,12 @@
                         label="County"
                       >
                       </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.deactivationDate"
+                        label="Deactiviation Date"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -135,6 +141,7 @@ export default {
         { text: 'City', value: 'name' },
         { text: 'County', value: 'county' },
         { text: 'State', value: 'state' },
+        { text: 'Deactivation Date', value: 'deactivationDate' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -159,9 +166,26 @@ export default {
 
   methods: {
     init() {
-      this.cities = this.items
+      this.cities = this.items.map(item => {
+        return {
+          ...item,
+          deactivationDate: this.formatDate(item.deactivationDate),
+        }
+      })
       this.mappedStates = STATES.map(item => item.abbreviation)
       this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
+    },
+
+    formatDate(dateStr) {
+      if (dateStr && dateStr.length > 0) {
+        const str = dateStr.replace(/-/g, '')
+        const year = str.substring(0, 4)
+        const month = str.substring(4, 6)
+        const day = str.substring(6, 8)
+        return `${year}-${month}-${day}`
+      }
+
+      return ''
     },
 
     editItem(item) {
