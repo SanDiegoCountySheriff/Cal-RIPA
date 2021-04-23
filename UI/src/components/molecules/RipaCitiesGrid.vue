@@ -44,6 +44,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="City"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.name"
                         label="City"
                       ></v-text-field>
@@ -125,6 +131,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'City', value: 'name' },
         { text: 'County', value: 'county' },
         { text: 'State', value: 'state' },

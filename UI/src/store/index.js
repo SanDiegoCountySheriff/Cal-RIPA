@@ -128,7 +128,7 @@ export default new Vuex.Store({
     editCity({ dispatch }, city) {
       axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${city.id}`,
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${city.rowKey}`,
           city,
           {
             headers: {
@@ -146,7 +146,7 @@ export default new Vuex.Store({
     editSchool({ dispatch }, school) {
       axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${school.id}`,
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${school.rowKey}`,
           school,
           {
             headers: {
@@ -164,7 +164,7 @@ export default new Vuex.Store({
     editStatute({ dispatch }, statute) {
       axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutStatute/${statute.id}`,
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutStatute/${statute.rowKey}`,
           statute,
           {
             headers: {

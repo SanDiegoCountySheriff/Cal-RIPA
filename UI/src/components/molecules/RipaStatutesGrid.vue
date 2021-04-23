@@ -44,6 +44,10 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="ID"
+                      ></v-text-field>
+                      <v-text-field
                         v-model="editedItem.offenseCode"
                         label="Offense Code"
                       ></v-text-field>
@@ -160,6 +164,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'Offense Code', value: 'offenseCode' },
         { text: 'Offense Statute', value: 'offenseStatute' },
         { text: 'Offense Validation CD', value: 'offenseValidationCD' },
