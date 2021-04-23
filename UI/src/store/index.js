@@ -212,67 +212,103 @@ export default new Vuex.Store({
     },
 
     getBeats({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
+      const items = localStorage.getItem('ripa_beats')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('UPDATE_BEATS', JSON.parse(items))
+          resolve()
         })
-        .then(response => {
-          commit('UPDATE_BEATS', response.data)
-        })
-        .catch(() => {
-          commit('UPDATE_BEATS', [])
-        })
+      } else {
+        axios
+          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            commit('UPDATE_BEATS', response.data)
+            localStorage.setItem('ripa_beats', JSON.stringify(response.data))
+          })
+          .catch(() => {
+            commit('UPDATE_BEATS', [])
+          })
+      }
     },
 
     getCities({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
+      const items = localStorage.getItem('ripa_cities')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('UPDATE_CITIES', JSON.parse(items))
+          resolve()
         })
-        .then(response => {
-          commit('UPDATE_CITIES', response.data)
-        })
-        .catch(() => {
-          commit('UPDATE_CITIES', [])
-        })
+      } else {
+        axios
+          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            commit('UPDATE_CITIES', response.data)
+            localStorage.setItem('ripa_cities', JSON.stringify(response.data))
+          })
+          .catch(() => {
+            commit('UPDATE_CITIES', [])
+          })
+      }
     },
 
     getSchools({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
+      const items = localStorage.getItem('ripa_schools')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('UPDATE_SCHOOLS', JSON.parse(items))
+          resolve()
         })
-        .then(response => {
-          commit('UPDATE_SCHOOLS', response.data)
-        })
-        .catch(() => {
-          commit('UPDATE_SCHOOLS', [])
-        })
+      } else {
+        axios
+          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            commit('UPDATE_SCHOOLS', response.data)
+            localStorage.setItem('ripa_schools', JSON.stringify(response.data))
+          })
+          .catch(() => {
+            commit('UPDATE_SCHOOLS', [])
+          })
+      }
     },
 
     getStatutes({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
+      const items = localStorage.getItem('ripa_statutes')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('UPDATE_STATUTES', JSON.parse(items))
+          resolve()
         })
-        .then(response => {
-          commit('UPDATE_STATUTES', response.data)
-        })
-        .catch(() => {
-          commit('UPDATE_STATUES', [])
-        })
+      } else {
+        axios
+          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            commit('UPDATE_STATUTES', response.data)
+            localStorage.setItem('ripa_statutes', JSON.stringify(response.data))
+          })
+          .catch(() => {
+            commit('UPDATE_STATUES', [])
+          })
+      }
     },
 
     getStops({ commit }) {
