@@ -5,6 +5,9 @@
     :dark="isDark"
     :on-update-dark="handleUpdateDark"
   >
+    <!-- <v-alert type="success" dismissible>
+      Cache was cleared and updated at 2021-04-23 11:34:26.
+    </v-alert> -->
     <slot></slot>
   </ripa-page-wrapper>
 </template>
