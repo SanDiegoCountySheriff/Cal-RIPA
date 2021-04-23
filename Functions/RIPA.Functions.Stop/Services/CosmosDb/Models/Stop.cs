@@ -1,7 +1,12 @@
-﻿namespace RIPA.Functions.Stop.Services.CosmosDb.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace RIPA.Functions.Stop.Services.CosmosDb.Models
 {
     public class Stop
+
     {
+        public string id { get { return this.ori; } set { } }
         public string ori { get; set; }
         public string Agency { get; set; }
         public string OfficerID { get; set; }
@@ -13,6 +18,7 @@
         public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
@@ -48,7 +54,7 @@
 
     public class City
     {
-        public Codes[] Codes { get; set; }
+        public List<Codes> Codes { get; set; }
     }
 
     public class Codes
