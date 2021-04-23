@@ -173,6 +173,11 @@ export default {
     items(val) {
       this.submissions = val
     },
+    submitted(val) {
+      if (!val) {
+        this.submissionDate = null
+      }
+    },
   },
 
   created() {
