@@ -202,14 +202,12 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.beats[this.editedIndex], this.editedItem)
-        if (this.onEditBeat) {
-          this.onEditBeat(this.editedItem)
-        }
       } else {
         this.beats.push(this.editedItem)
-        if (this.onAddBeat) {
-          this.onAddBeat(this.editedItem)
-        }
+      }
+
+      if (this.onEditBeat) {
+        this.onEditBeat(this.editedItem)
       }
 
       this.close()
@@ -240,10 +238,6 @@ export default {
     items: {
       type: Array,
       default: () => [],
-    },
-    onAddBeat: {
-      type: Function,
-      default: () => {},
     },
     onDeleteBeat: {
       type: Function,

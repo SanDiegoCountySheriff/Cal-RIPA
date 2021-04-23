@@ -43,19 +43,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    addBeat({ dispatch }, beat) {
-      axios
-        .put('https://sdsd-ripa-d-apim.azure-api.us/domain/PutBeat', beat, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(() => {
-          dispatch('getBeats')
-        })
-    },
-
     deleteBeat({ dispatch }, beat) {
       axios
         .put(
@@ -135,6 +122,60 @@ export default new Vuex.Store({
         )
         .then(() => {
           dispatch('getBeats')
+        })
+    },
+
+    editCity({ dispatch }, city) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${city.id}`,
+          city,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getCities')
+        })
+    },
+
+    editSchool({ dispatch }, school) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${school.id}`,
+          school,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getSchools')
+        })
+    },
+
+    editStatute({ dispatch }, statute) {
+      axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutStatute/${statute.id}`,
+          statute,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getSchools')
         })
     },
 

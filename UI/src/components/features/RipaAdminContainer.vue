@@ -5,12 +5,14 @@
     :cities="cities"
     :schools="schools"
     :statutes="mappedStatutes"
-    :on-add-beat="handleAddBeat"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
     :on-delete-statute="handleDeleteStatute"
     :on-edit-beat="handleEditBeat"
+    :on-edit-city="handleEditCity"
+    :on-edit-school="handleEditSchool"
+    :on-edit-statute="handleEditStatute"
   ></ripa-admin-template>
 </template>
 
@@ -38,12 +40,14 @@ export default {
 
   methods: {
     ...mapActions([
-      'addBeat',
       'deleteBeat',
       'deleteCity',
       'deleteSchool',
       'deleteStatute',
       'editBeat',
+      'editCity',
+      'editSchool',
+      'editStatute',
       'getBeats',
       'getCities',
       'getSchools',
@@ -58,12 +62,6 @@ export default {
         this.getSchools(),
         this.getStatutes(),
       ])
-      this.loading = false
-    },
-
-    async handleAddBeat(beat) {
-      this.loading = true
-      await Promise.all([this.addBeat(beat)])
       this.loading = false
     },
 
@@ -94,6 +92,24 @@ export default {
     async handleEditBeat(beat) {
       this.loading = true
       await Promise.all([this.editBeat(beat)])
+      this.loading = false
+    },
+
+    async handleEditCity(city) {
+      this.loading = true
+      await Promise.all([this.editCity(city)])
+      this.loading = false
+    },
+
+    async handleEditSchool(school) {
+      this.loading = true
+      await Promise.all([this.editSchool(school)])
+      this.loading = false
+    },
+
+    async handleEditStatute(statute) {
+      this.loading = true
+      await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
   },

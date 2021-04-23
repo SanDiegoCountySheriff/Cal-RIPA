@@ -12,7 +12,6 @@
         <ripa-beats-grid
           :loading="loading"
           :items="beats"
-          :on-add-beat="onAddBeat"
           :on-delete-beat="onDeleteBeat"
           :on-edit-beat="onEditBeat"
         ></ripa-beats-grid>
@@ -22,6 +21,7 @@
           :loading="loading"
           :items="cities"
           :on-delete-city="onDeleteCity"
+          :on-edit-city="onEditCity"
         ></ripa-cities-grid>
       </v-tab-item>
       <v-tab-item>
@@ -29,6 +29,7 @@
           :loading="loading"
           :items="schools"
           :on-delete-school="onDeleteSchool"
+          :on-edit-school="onEditSchool"
         ></ripa-schools-grid>
       </v-tab-item>
       <v-tab-item>
@@ -36,6 +37,7 @@
           :loading="loading"
           :items="statutes"
           :on-delete-statute="onDeleteStatute"
+          :on-edit-statute="onEditStatute"
         ></ripa-statutes-grid>
       </v-tab-item>
     </v-tabs-items>
@@ -85,10 +87,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    onAddBeat: {
-      type: Function,
-      default: () => {},
-    },
     onDeleteBeat: {
       type: Function,
       default: () => {},
@@ -106,6 +104,18 @@ export default {
       default: () => {},
     },
     onEditBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onEditCity: {
+      type: Function,
+      default: () => {},
+    },
+    onEditSchool: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStatute: {
       type: Function,
       default: () => {},
     },
