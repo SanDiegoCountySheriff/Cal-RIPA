@@ -19,7 +19,7 @@ namespace RIPA.Functions.Domain.Functions.Templates
     {
         [FunctionName("GetTemplates")]
 
-        [OpenApiOperation(operationId: "GetTemplate", tags: new[] { "name" })]
+        [OpenApiOperation(operationId: "GetTemplates", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Template")]
 
