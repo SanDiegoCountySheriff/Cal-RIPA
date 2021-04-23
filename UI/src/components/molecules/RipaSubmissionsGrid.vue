@@ -1,67 +1,20 @@
 <template>
   <v-container class="tw-mt-2" fluid>
     <v-layout row wrap>
-      <v-flex xs12 md2>
-        <v-select
-          v-model="officerName"
-          class="tw-ml-2"
-          :items="getOfficers"
-          label="Officer"
-          clearable
-        ></v-select>
-      </v-flex>
-
-      <v-flex xs12 md2>
-        <template v-if="isSubmissionDate">
-          <div class="tw-ml-2">
-            <ripa-date-picker
-              v-model="submissionFromDate"
-              label="Submission From Date"
-            ></ripa-date-picker>
-          </div>
-        </template>
-        <template v-if="!isSubmissionDate">
-          <div class="tw-ml-2">
-            <ripa-date-picker
-              v-model="stopFromDate"
-              class="tw-ml-2"
-              label="Stop From Date"
-            ></ripa-date-picker>
-          </div>
-        </template>
-      </v-flex>
-
-      <v-flex xs12 md2>
-        <template v-if="isSubmissionDate">
-          <div class="tw-ml-2">
-            <ripa-date-picker
-              v-model="submissionToDate"
-              class="tw-ml-2"
-              label="Submission To Date"
-            ></ripa-date-picker>
-          </div>
-        </template>
-        <template v-if="!isSubmissionDate">
-          <div class="tw-ml-2">
-            <ripa-date-picker
-              v-model="stopToDate"
-              class="tw-ml-2"
-              label="Stop To Date"
-            ></ripa-date-picker>
-          </div>
-        </template>
-      </v-flex>
-
-      <v-flex xs12 md3>
-        <div class="tw-flex tw-justify-center">
-          <v-switch
-            v-model="isSubmissionDate"
-            label="Filter by Submission Date"
-          ></v-switch>
+      <v-flex xs12 md6>
+        <div class="tw-ml-4">
+          <v-select
+            v-model="submissionDate"
+            class="tw-ml-2"
+            :items="getSubmissionDates"
+            label="Submission Date"
+            clearable
+            :disabled="!submitted"
+          ></v-select>
         </div>
       </v-flex>
 
-      <v-flex xs12 md3>
+      <v-flex xs12 md6>
         <div class="tw-flex tw-justify-center">
           <v-switch v-model="submitted" label="Submitted"></v-switch>
           <v-switch
@@ -85,7 +38,7 @@
           :items="getSubmissions"
           :items-per-page="10"
           :search="search"
-          sort-by="submissionDate"
+          sort-by="submissionDateStr"
           sort-desc
           show-select
           :footer-props="{
@@ -138,15 +91,10 @@
 </template>
 
 <script>
-import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import subDays from 'date-fns/subDays'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-submissions-grid',
-
-  components: {
-    RipaDatePicker,
-  },
 
   data() {
     return {
@@ -155,33 +103,23 @@ export default {
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Submission Date', value: 'submissionDateStr' },
-        { text: 'Stop Date', value: 'stopDateStr' },
         { text: 'Errors Found', value: 'errorsFound' },
         { text: 'PII Found', value: 'piiFound' },
-        { text: 'Officer Name', value: 'officerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
-      editedIndex: -1,
-      isSubmissionDate: false,
       submitted: false,
+      editedIndex: -1,
       piiFound: false,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
-      submissionFromDate: subDays(new Date(), 10).toISOString().substr(0, 10),
-      submissionToDate: new Date().toISOString().substr(0, 10),
-      stopFromDate: subDays(new Date(), 10).toISOString().substr(0, 10),
-      stopToDate: new Date().toISOString().substr(0, 10),
+      submissionDate: null,
     }
   },
 
   computed: {
     getSubmissions() {
       let filteredItems = this.submissions
-
-      if (!this.submitted) {
-        filteredItems = filteredItems.filter(item => !item.submissionDate)
-      }
 
       if (this.errorsFound) {
         filteredItems = filteredItems.filter(item => item.errorsFound)
@@ -191,39 +129,28 @@ export default {
         filteredItems = filteredItems.filter(item => item.piiFound)
       }
 
-      if (this.officerName) {
+      if (this.submissionDate) {
         filteredItems = filteredItems.filter(
-          item => item.officerName === this.officerName,
+          item => item.submissionDateStr === this.submissionDate,
         )
       }
 
-      if (this.isSubmissionDate) {
-        const fromDateInt = new Date(this.submissionFromDate).getTime()
-        const toDateInt = new Date(this.submissionToDate).getTime()
-
+      if (!this.submitted) {
         filteredItems = filteredItems.filter(
-          item =>
-            item.submissionDateInt >= fromDateInt &&
-            item.submissionDateInt <= toDateInt,
+          item => item.submissionDate === null,
         )
       }
 
       return filteredItems
     },
 
-    getOfficers() {
+    getSubmissionDates() {
       return [
-        'John',
-        'Bob',
-        'Steve',
-        'Lisa',
-        'Betty',
-        'Sarah',
-        'Julie',
-        'Anne',
-        'Maddie',
-        'Noah',
-      ]
+        '2021-04-23T18:23:59Z',
+        '2021-02-09T08:35:36Z',
+        '2021-01-06T10:05:45Z',
+        '2020-11-25T19:55:21Z',
+      ].map(item => format(new Date(item), 'yyyy-MM-dd kk:mm'))
     },
   },
 

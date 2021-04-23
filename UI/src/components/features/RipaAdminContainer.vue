@@ -59,6 +59,7 @@ export default {
       'getCities',
       'getSchools',
       'getStatutes',
+      'getUsers',
     ]),
 
     async getAdminData() {
@@ -68,6 +69,7 @@ export default {
         this.getCities(),
         this.getSchools(),
         this.getStatutes(),
+        this.getUsers(),
       ])
       this.loading = false
     },

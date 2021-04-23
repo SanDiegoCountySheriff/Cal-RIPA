@@ -329,6 +329,23 @@ export default new Vuex.Store({
       //   commit('UPDATE_STOPS', response.data)
       // })
     },
+
+    getUsers({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/userProfile/GetUsers', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log('getUsers', response.data)
+          commit('UPDATE_USERS', response.data)
+        })
+        .catch(() => {
+          commit('UPDATE_USERS', [])
+        })
+    },
   },
   modules: {},
 })
