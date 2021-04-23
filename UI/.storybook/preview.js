@@ -14,21 +14,21 @@ const customViewports = {
     },
   },
   dellLat7202: {
-    name: 'dellLat7202',
+    name: 'Dell Lat 7202',
     styles: {
       width: '1366px',
       height: '768px',
     },
   },
   dellLat7212: {
-    name: 'dellLat7212',
+    name: 'Dell Lat 7212',
     styles: {
       width: '1920px',
       height: '1080px',
     },
   },
   dellLat7220: {
-    name: 'dellLat7220',
+    name: 'Dell Lat 7220',
     styles: {
       width: '1920px',
       height: '1080px',
