@@ -7,7 +7,7 @@
 <script>
 import RipaPageContainer from './RipaPageContainer'
 import RipaStopsTemplate from '@/components/templates/RipaStopsTemplate'
-import { stops } from '../data/stops'
+import { officerStops } from '../data/officerStops'
 
 export default {
   name: 'ripa-stops-container',
@@ -19,7 +19,7 @@ export default {
 
   data() {
     return {
-      items: stops,
+      items: officerStops,
     }
   },
 

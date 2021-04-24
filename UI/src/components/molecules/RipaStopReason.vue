@@ -48,7 +48,7 @@
       </div>
     </template>
 
-    <div class="tw-mt-4 tw-mb-4 tw-font-bold">-- and --</div>
+    <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
 
     <ripa-text-area
       v-model="model.explanation"
@@ -64,9 +64,15 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
+import {
+  STOP_REASONS,
+  TRAFFIC_VIOLATIONS,
+  REASONABLE_SUSPICIONS,
+} from '@/constants/form'
 
 export default {
   name: 'ripa-stop-reason',
@@ -75,6 +81,7 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
+    RipaLabel,
     RipaRadioGroup,
     RipaSelect,
     RipaTextArea,
@@ -88,58 +95,15 @@ export default {
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
-      reasonItems: [
-        { name: 'Traffic Violation', value: 1 },
-        { name: 'Reasonable Suspicion', value: 2 },
-        {
-          name:
-            'Known to be on Parole / Probation / PRCS / Mandatory Supervision',
-          value: 3,
-        },
-        {
-          name: 'Knowledge of outstanding arrest warrant/wanted person',
-          value: 4,
-        },
-        {
-          name: 'Investigation to determine whether the person was truant',
-          value: 5,
-        },
-        { name: 'Consensual Encounter resulting in a search', value: 6 },
-      ],
-      trafficViolationItems: [
-        { name: 'Moving Violation', value: '1A' },
-        { name: 'Equipment Violation', value: '1B' },
-        {
-          name: 'Non-moving Violation, including Registration Violation',
-          value: '1C',
-        },
-      ],
-      reasonableSuspicionItems: [
-        { name: 'Officer witnessed commission of a crime', value: '2A' },
-        { name: 'Matched suspect description', value: '2B' },
-        {
-          name: 'Witness or Victim identification of Suspect at the scene',
-          value: '2C',
-        },
-        { name: 'Carrying Suspicious Object', value: '2D' },
-        {
-          name: 'Actions indicative of casing a victim or location',
-          value: '2E',
-        },
-        { name: 'Suspected of Acting as Lookout', value: '2F' },
-        { name: 'Actions indicative of drug transaction', value: '2G' },
-        {
-          name: 'Actions indicative of engaging in violent crime',
-          value: '2H',
-        },
-        { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
-      ],
+      reasonItems: STOP_REASONS,
+      trafficViolationItems: TRAFFIC_VIOLATIONS,
+      reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: {
-        reason: this.value.reason || null,
-        explanation: this.value.explanation || null,
-        trafficViolation: this.value.trafficViolation || null,
-        trafficViolationCode: this.value.trafficViolationCode || null,
-        reasonableSuspicionValues: this.value.reasonableSuspicionValues || [],
+        reason: this.value?.reason || null,
+        explanation: this.value?.explanation || null,
+        trafficViolation: this.value?.trafficViolation || null,
+        trafficViolationCode: this.value?.trafficViolationCode || null,
+        reasonableSuspicionValues: this.value?.reasonableSuspicionValues || [],
       },
     }
   },

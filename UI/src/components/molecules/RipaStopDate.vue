@@ -57,8 +57,8 @@ export default {
     return {
       valid: true,
       viewModel: {
-        duration: this.value.duration || null,
-        checkbox: this.value.checkbox || false,
+        duration: this.value?.duration || null,
+        checkbox: this.value?.checkbox || false,
         datePicker: format(new Date(), 'yyyy-MM-dd'),
         timePicker: format(new Date(), 'h:mm'),
       },

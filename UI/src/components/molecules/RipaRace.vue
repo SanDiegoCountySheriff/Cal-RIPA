@@ -3,13 +3,15 @@
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
-      subtitle="§999.226(a)(4)">
+      subtitle="§999.226(a)(4)"
+    >
     </ripa-form-header>
 
     <ripa-check-group
-        v-model="model.raceValues"
-        :items="raceItems"
-        @input="handleInput">
+      v-model="model.raceValues"
+      :items="raceItems"
+      @input="handleInput"
+    >
     </ripa-check-group>
   </div>
 </template>
@@ -17,6 +19,7 @@
 <script>
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
@@ -28,17 +31,9 @@ export default {
 
   data() {
     return {
-      raceItems: [
-        { name: 'Asian', value: '1' },
-        { name: 'Black/African American', value: '2' },
-        { name: 'Hispanic/Latino(a)', value: '3' },
-        { name: 'Middle Eastern or South Asian', value: '4' },
-        { name: 'Native American', value: '5' },
-        { name: 'Pacific Islander', value: '6' },
-        { name: 'White', value: '7' },
-      ],
+      raceItems: RACES,
       viewModel: {
-        raceValues: this.value.raceValues || [],
+        raceValues: this.value?.raceValues || [],
       },
     }
   },
@@ -53,7 +48,7 @@ export default {
 
   methods: {
     handleInput() {
-        this.$emit('input', this.viewModel)
+      this.$emit('input', this.viewModel)
     },
   },
 
@@ -69,4 +64,3 @@ export default {
   },
 }
 </script>
-
