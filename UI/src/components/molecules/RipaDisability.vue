@@ -19,6 +19,7 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
@@ -31,18 +32,7 @@ export default {
   data() {
     return {
       valid: true,
-      disabilityItems: [
-        { name: 'None', value: '1' },
-        { name: 'Deafness or difficulty hearing', value: '2' },
-        { name: 'Speech impairment or limited use of language', value: '3' },
-        { name: 'Blind or limited vision', value: '4' },
-        { name: 'Mental health condition', value: '5' },
-        {
-          name: 'Intellectual or developmental disability, including dementia',
-          value: '6',
-        },
-        { name: 'Other disability', value: '7' },
-      ],
+      disabilityItems: DISABILITIES,
       viewModel: {
         disability: this.value?.disability || [],
       },

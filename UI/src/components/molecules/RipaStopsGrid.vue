@@ -159,18 +159,7 @@ export default {
     },
 
     getOfficers() {
-      return [
-        'John',
-        'Bob',
-        'Steve',
-        'Lisa',
-        'Betty',
-        'Sarah',
-        'Julie',
-        'Anne',
-        'Maddie',
-        'Noah',
-      ]
+      return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
     },
   },
 

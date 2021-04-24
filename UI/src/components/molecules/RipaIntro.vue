@@ -36,12 +36,6 @@
         <a href="https://oag.ca.gov/ab953/regulations">AG's Website</a>.
       </p>
       <v-divider></v-divider>
-      <!-- <div class="tw-text-center tw-mt-4">
-        <v-btn outlined>Refresh Cache</v-btn>
-        <div class="tw-mt-2">
-          <span>Cache updated: 2021-04-23 11:34:26</span>
-        </div>
-      </div> -->
     </v-card-text>
   </v-card>
 </template>

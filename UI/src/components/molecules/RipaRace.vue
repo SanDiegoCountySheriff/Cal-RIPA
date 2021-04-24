@@ -19,6 +19,7 @@
 <script>
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
@@ -30,15 +31,7 @@ export default {
 
   data() {
     return {
-      raceItems: [
-        { name: 'Asian', value: '1' },
-        { name: 'Black/African American', value: '2' },
-        { name: 'Hispanic/Latino(a)', value: '3' },
-        { name: 'Middle Eastern or South Asian', value: '4' },
-        { name: 'Native American', value: '5' },
-        { name: 'Pacific Islander', value: '6' },
-        { name: 'White', value: '7' },
-      ],
+      raceItems: RACES,
       viewModel: {
         raceValues: this.value?.raceValues || [],
       },

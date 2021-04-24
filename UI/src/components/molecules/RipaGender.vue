@@ -45,6 +45,7 @@
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import { GENDERS, LGBTS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-reason',
@@ -58,18 +59,8 @@ export default {
   data() {
     return {
       valid: true,
-      genderItems: [
-        { name: 'Male', value: '1' },
-        { name: 'Female', value: '2' },
-        { name: 'Transgender Male', value: '3' },
-        { name: 'Transgender Female', value: '4' },
-      ],
-
-      lgbtItems: [
-        { name: 'Yes', value: 'A' },
-        { name: 'No', value: 'B' },
-      ],
-
+      genderItems: GENDERS,
+      lgbtItems: LGBTS,
       viewModel: {
         perceivedGender: this.value?.perceivedGender || null,
         perceivedLgbt: this.value?.perceivedLgbt || null,
