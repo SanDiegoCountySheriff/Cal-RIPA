@@ -35,14 +35,8 @@ export default {
   },
 
   computed: {
-    ...mapState(['beats', 'cities', 'schools', 'isAdmin']),
-    ...mapGetters([
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-      'mappedSubmissions',
-    ]),
+    ...mapState(['isAdmin']),
+    ...mapGetters(['mappedStops', 'mappedSubmissions']),
   },
 
   methods: {
@@ -55,24 +49,7 @@ export default {
       'editCity',
       'editSchool',
       'editStatute',
-      'getBeats',
-      'getCities',
-      'getSchools',
-      'getStatutes',
-      'getUsers',
     ]),
-
-    async getAdminData() {
-      this.loading = true
-      await Promise.all([
-        this.getBeats(),
-        this.getCities(),
-        this.getSchools(),
-        this.getStatutes(),
-        this.getUsers(),
-      ])
-      this.loading = false
-    },
 
     async handleDeleteBeat(beat) {
       this.loading = true
@@ -121,10 +98,6 @@ export default {
       await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
-  },
-
-  created() {
-    this.getAdminData()
   },
 }
 </script>

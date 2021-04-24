@@ -48,6 +48,9 @@ export default new Vuex.Store({
         }
       })
     },
+    mappedStops: state => {
+      return state.stops
+    },
     mappedSubmissions: state => {
       return state.submissions
     },
@@ -75,6 +78,15 @@ export default new Vuex.Store({
   },
 
   actions: {
+    checkCache({ state }) {
+      console.log('check cache', state)
+      localStorage.removeItem('ripa_beats')
+      localStorage.removeItem('ripa_cities')
+      localStorage.removeItem('ripa_schools')
+      localStorage.removeItem('ripa_statutes')
+      localStorage.setItem('ripa_cache_date', new Date())
+    },
+
     deleteBeat({ dispatch }, beat) {
       axios
         .put(
@@ -328,23 +340,6 @@ export default new Vuex.Store({
       // axios.get('http://localhost:3004/stops').then(response => {
       //   commit('updateStops', response.data)
       // })
-    },
-
-    getUsers({ commit }) {
-      axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/userProfile/GetUsers', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(response => {
-          console.log('getUsers', response.data)
-          commit('UPDATE_USERS', response.data)
-        })
-        .catch(() => {
-          commit('UPDATE_USERS', [])
-        })
     },
   },
   modules: {},
