@@ -99,6 +99,7 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import subDays from 'date-fns/subDays'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stops-grid',
@@ -131,7 +132,15 @@ export default {
 
   computed: {
     getStops() {
-      let filteredItems = this.stops
+      let filteredItems = this.stops.map(item => {
+        return {
+          ...item,
+          stopDateInt: item.stopDate ? new Date(item.stopDate).getTime() : null,
+          stopDateStr: item.stopDate
+            ? format(new Date(item.stopDate), 'yyyy-MM-dd kk:mm')
+            : null,
+        }
+      })
 
       if (this.errorsFound) {
         filteredItems = filteredItems.filter(item => item.errorsFound)
@@ -169,7 +178,7 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.stop.indexOf(item)
+      this.editedIndex = this.stops.indexOf(item)
       this.editedItem = Object.assign({}, item)
     },
   },
