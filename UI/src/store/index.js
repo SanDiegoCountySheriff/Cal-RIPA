@@ -78,15 +78,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    checkCache({ state }) {
-      console.log('check cache', state)
-      localStorage.removeItem('ripa_beats')
-      localStorage.removeItem('ripa_cities')
-      localStorage.removeItem('ripa_schools')
-      localStorage.removeItem('ripa_statutes')
-      localStorage.setItem('ripa_cache_date', new Date())
-    },
-
     deleteBeat({ dispatch }, beat) {
       axios
         .put(
