@@ -55,8 +55,8 @@ export default {
         { name: 'Others', value: 10 },
       ],
       viewModel: {
-        years: this.value.years || null,
-        assignment: this.value.assignment || null,
+        years: this.value?.years || null,
+        assignment: this.value?.assignment || null,
       },
     }
   },

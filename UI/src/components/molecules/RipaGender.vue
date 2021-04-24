@@ -71,9 +71,9 @@ export default {
       ],
 
       viewModel: {
-        perceivedGender: this.value.perceivedGender || null,
-        perceivedLgbt: this.value.perceivedLgbt || null,
-        checkbox: this.value.checkbox || false,
+        perceivedGender: this.value?.perceivedGender || null,
+        perceivedLgbt: this.value?.perceivedLgbt || null,
+        checkbox: this.value?.checkbox || false,
       },
     }
   },

@@ -57,19 +57,19 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    UPDATE_BEATS(state, items) {
+    updateBeats(state, items) {
       state.beats = items
     },
-    UPDATE_CITIES(state, items) {
+    updateCities(state, items) {
       state.cities = items
     },
-    UPDATE_SCHOOLS(state, items) {
+    updateSchools(state, items) {
       state.schools = items
     },
-    UPDATE_STATUTES(state, items) {
+    updateStatutes(state, items) {
       state.statutes = items
     },
-    UPDATE_STOPS(state, items) {
+    updateStops(state, items) {
       state.stops = items
     },
   },
@@ -215,7 +215,7 @@ export default new Vuex.Store({
       const items = localStorage.getItem('ripa_beats')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('UPDATE_BEATS', JSON.parse(items))
+          commit('updateBeats', JSON.parse(items))
           resolve()
         })
       } else {
@@ -227,11 +227,11 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('UPDATE_BEATS', response.data)
+            commit('updateBeats', response.data)
             localStorage.setItem('ripa_beats', JSON.stringify(response.data))
           })
           .catch(() => {
-            commit('UPDATE_BEATS', [])
+            commit('updateBeats', [])
           })
       }
     },
@@ -240,7 +240,7 @@ export default new Vuex.Store({
       const items = localStorage.getItem('ripa_cities')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('UPDATE_CITIES', JSON.parse(items))
+          commit('updateCities', JSON.parse(items))
           resolve()
         })
       } else {
@@ -252,11 +252,11 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('UPDATE_CITIES', response.data)
+            commit('updateCities', response.data)
             localStorage.setItem('ripa_cities', JSON.stringify(response.data))
           })
           .catch(() => {
-            commit('UPDATE_CITIES', [])
+            commit('updateCities', [])
           })
       }
     },
@@ -265,7 +265,7 @@ export default new Vuex.Store({
       const items = localStorage.getItem('ripa_schools')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('UPDATE_SCHOOLS', JSON.parse(items))
+          commit('updateSchools', JSON.parse(items))
           resolve()
         })
       } else {
@@ -277,11 +277,11 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('UPDATE_SCHOOLS', response.data)
+            commit('updateSchools', response.data)
             localStorage.setItem('ripa_schools', JSON.stringify(response.data))
           })
           .catch(() => {
-            commit('UPDATE_SCHOOLS', [])
+            commit('updateSchools', [])
           })
       }
     },
@@ -290,7 +290,7 @@ export default new Vuex.Store({
       const items = localStorage.getItem('ripa_statutes')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('UPDATE_STATUTES', JSON.parse(items))
+          commit('updateStatutes', JSON.parse(items))
           resolve()
         })
       } else {
@@ -302,7 +302,7 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('UPDATE_STATUTES', response.data)
+            commit('updateStatutes', response.data)
             localStorage.setItem('ripa_statutes', JSON.stringify(response.data))
           })
           .catch(() => {
@@ -320,13 +320,13 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('UPDATE_STOPS', response.data)
+          commit('updateStops', response.data)
         })
         .catch(() => {
-          commit('UPDATE_STOPS', [])
+          commit('updateStops', [])
         })
       // axios.get('http://localhost:3004/stops').then(response => {
-      //   commit('UPDATE_STOPS', response.data)
+      //   commit('updateStops', response.data)
       // })
     },
 

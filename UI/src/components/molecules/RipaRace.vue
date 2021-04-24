@@ -40,7 +40,7 @@ export default {
         { name: 'White', value: '7' },
       ],
       viewModel: {
-        raceValues: this.value.raceValues || [],
+        raceValues: this.value?.raceValues || [],
       },
     }
   },

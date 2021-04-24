@@ -137,11 +137,11 @@ export default {
         { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
       ],
       viewModel: {
-        reason: this.value.reason || null,
-        explanation: this.value.explanation || null,
-        trafficViolation: this.value.trafficViolation || null,
-        trafficViolationCode: this.value.trafficViolationCode || null,
-        reasonableSuspicionValues: this.value.reasonableSuspicionValues || [],
+        reason: this.value?.reason || null,
+        explanation: this.value?.explanation || null,
+        trafficViolation: this.value?.trafficViolation || null,
+        trafficViolationCode: this.value?.trafficViolationCode || null,
+        reasonableSuspicionValues: this.value?.reasonableSuspicionValues || [],
       },
     }
   },

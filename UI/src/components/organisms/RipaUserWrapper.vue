@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto my-12" max-width="600">
-    <ripa-officer :value="officer"></ripa-officer>
+    <ripa-officer v-model="model"></ripa-officer>
   </v-card>
 </template>
 
@@ -16,11 +16,36 @@ export default {
 
   data() {
     return {
-      officer: {
-        years: 25,
-        assignment: 1,
+      viewModel: {
+        years: this.value?.years || null,
+        assignment: this.value?.assignment || null,
       },
     }
+  },
+
+  computed: {
+    model: {
+      get() {
+        return this.viewModel
+      },
+      set(newVal) {
+        this.viewModel = newVal
+        this.$emit('input', newVal)
+      },
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = newVal
+    },
+  },
+
+  props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
   },
 }
 </script>

@@ -44,7 +44,7 @@ export default {
         { name: 'Other disability', value: '7' },
       ],
       viewModel: {
-        disability: this.value.disability || [],
+        disability: this.value?.disability || [],
       },
     }
   },

@@ -29,7 +29,7 @@ export default {
     return {
       valid: true,
       viewModel: {
-        age: this.value.age || null,
+        age: this.value?.age || null,
       },
     }
   },

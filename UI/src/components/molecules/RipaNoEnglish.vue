@@ -32,7 +32,7 @@ export default {
     return {
       valid: true,
       viewModel: {
-        checkbox: this.value.checkbox || false,
+        checkbox: this.value?.checkbox || false,
       },
     }
   },
