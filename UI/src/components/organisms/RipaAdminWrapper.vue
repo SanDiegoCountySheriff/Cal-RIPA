@@ -5,6 +5,7 @@
       <v-tab>Cities</v-tab>
       <v-tab>Schools</v-tab>
       <v-tab>Statutes</v-tab>
+      <v-tab>Stops</v-tab>
       <v-tab>Submissions</v-tab>
     </v-tabs>
 
@@ -42,6 +43,9 @@
         ></ripa-statutes-grid>
       </v-tab-item>
       <v-tab-item>
+        <ripa-stops-grid :loading="loading" :items="stops"></ripa-stops-grid>
+      </v-tab-item>
+      <v-tab-item>
         <ripa-submissions-grid
           :loading="loading"
           :items="submissions"
@@ -56,6 +60,7 @@ import RipaBeatsGrid from '@/components/molecules/RipaBeatsGrid'
 import RipaCitiesGrid from '@/components/molecules/RipaCitiesGrid'
 import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid'
 import RipaStatutesGrid from '@/components/molecules/RipaStatutesGrid'
+import RipaStopsGrid from '@/components/molecules/RipaStopsGrid'
 import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid'
 
 export default {
@@ -66,6 +71,7 @@ export default {
     RipaCitiesGrid,
     RipaSchoolsGrid,
     RipaStatutesGrid,
+    RipaStopsGrid,
     RipaSubmissionsGrid,
   },
 
@@ -93,6 +99,10 @@ export default {
       default: () => [],
     },
     statutes: {
+      type: Array,
+      default: () => [],
+    },
+    stops: {
       type: Array,
       default: () => [],
     },

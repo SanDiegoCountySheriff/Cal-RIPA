@@ -6,6 +6,7 @@
       :cities="cities"
       :schools="schools"
       :statutes="statutes"
+      :stops="stops"
       :submissions="submissions"
     ></ripa-admin-template>
   </ripa-page-container>
@@ -18,6 +19,7 @@ import { beats } from '../data/beats'
 import { cities } from '../data/cities'
 import { schools } from '../data/schools'
 import { statutes } from '../data/statutes'
+import { stops } from '../data/stops'
 import { submissions } from '../data/submissions'
 
 export default {
@@ -35,6 +37,7 @@ export default {
       cities: [],
       schools: [],
       statutes: [],
+      stops: [],
       submissions: [],
     }
   },
@@ -47,6 +50,7 @@ export default {
         this.cities = cities
         this.schools = schools
         this.statutes = statutes
+        this.stops = stops
         this.submissions = submissions
         this.loading = false
       }, 2500)

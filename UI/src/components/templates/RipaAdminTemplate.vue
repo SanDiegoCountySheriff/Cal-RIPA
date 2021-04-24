@@ -5,6 +5,7 @@
     :cities="cities"
     :schools="schools"
     :statutes="statutes"
+    :stops="stops"
     :submissions="submissions"
     :on-delete-beat="onDeleteBeat"
     :on-delete-city="onDeleteCity"
@@ -45,6 +46,10 @@ export default {
       default: () => [],
     },
     statutes: {
+      type: Array,
+      default: () => [],
+    },
+    stops: {
       type: Array,
       default: () => [],
     },

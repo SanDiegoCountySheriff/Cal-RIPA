@@ -5,6 +5,7 @@
     :cities="mappedCities"
     :schools="mappedSchools"
     :statutes="mappedStatutes"
+    :stops="mappedStops"
     :submissions="mappedSubmissions"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
@@ -36,7 +37,14 @@ export default {
 
   computed: {
     ...mapState(['isAdmin']),
-    ...mapGetters(['mappedStops', 'mappedSubmissions']),
+    ...mapGetters([
+      'mappedBeats',
+      'mappedCities',
+      'mappedSchools',
+      'mappedStatutes',
+      'mappedStops',
+      'mappedSubmissions',
+    ]),
   },
 
   methods: {
