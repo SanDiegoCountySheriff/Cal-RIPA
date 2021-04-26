@@ -30,9 +30,9 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "COMING SOON!!!")]
-        [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "COMING SOON!!!")]
+        [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "COMING SOON!!!")] 
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Services.CosmosDb.Models.Stop>), Description = "List of Stops")]
-
+      
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Stops requested");
@@ -50,12 +50,12 @@ namespace RIPA.Functions.Stop.Functions
 
             if (stopQuery.StartDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime > '{((DateTime)stopQuery.StartDate).ToString("o")}'");
+                whereStatements.Add(Environment.NewLine + $"c.StopDateTime > '{(DateTime)stopQuery.StartDate:o}'");
             }
 
             if (stopQuery.EndDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{((DateTime)stopQuery.EndDate).ToString("o")}'");
+                whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{(DateTime)stopQuery.EndDate:o}'");
             }
             
             //TODO handle filtering by error or submittion
