@@ -15,7 +15,7 @@ export const required = () => ({
     }
   },
   template:
-    '<ripa-form-header :title="title" required :subtitle="subtitle"></ripa-form-header>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-header :title="title" required :subtitle="subtitle"></ripa-form-header></div>',
 })
 
 export const notRequired = () => ({
@@ -27,7 +27,7 @@ export const notRequired = () => ({
     }
   },
   template:
-    '<ripa-form-header :title="title" :subtitle="subtitle"></ripa-form-header>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-header :title="title" :subtitle="subtitle"></ripa-form-header></div>',
 })
 
 export const requiredNoSubtitle = () => ({
@@ -37,7 +37,8 @@ export const requiredNoSubtitle = () => ({
       title: 'Reason for Stop',
     }
   },
-  template: '<ripa-form-header :title="title" required></ripa-form-header>',
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-header :title="title" required></ripa-form-header></div>',
 })
 
 export const notRequiredNoSubtitle = () => ({
@@ -47,5 +48,6 @@ export const notRequiredNoSubtitle = () => ({
       title: 'Reason for Stop',
     }
   },
-  template: '<ripa-form-header :title="title"></ripa-form-header>',
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-header :title="title"></ripa-form-header></div>',
 })

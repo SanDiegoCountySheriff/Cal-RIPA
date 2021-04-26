@@ -9,8 +9,29 @@ const customViewports = {
   panasonicCf33: {
     name: 'Panasonic CF-33',
     styles: {
-      width: '1440px',
-      height: '2160px',
+      width: '2160px',
+      height: '1440px',
+    },
+  },
+  dellLat7202: {
+    name: 'Dell Lat 7202',
+    styles: {
+      width: '1366px',
+      height: '768px',
+    },
+  },
+  dellLat7212: {
+    name: 'Dell Lat 7212',
+    styles: {
+      width: '1920px',
+      height: '1080px',
+    },
+  },
+  dellLat7220: {
+    name: 'Dell Lat 7220',
+    styles: {
+      width: '1920px',
+      height: '1080px',
     },
   },
 }
@@ -18,7 +39,7 @@ const customViewports = {
 addParameters({
   viewport: {
     viewports: { ...INITIAL_VIEWPORTS, ...customViewports },
-    defaultViewport: 'iphonexsmax',
+    defaultViewport: 'dellLat7202',
   },
 })
 

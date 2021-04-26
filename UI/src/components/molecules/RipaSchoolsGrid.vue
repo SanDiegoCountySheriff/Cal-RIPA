@@ -18,7 +18,9 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Schools</v-toolbar-title>
+          <v-toolbar-title class="tw-uppercase"
+            >Admin: Maintain Schools</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -42,6 +44,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.name"
                         label="School"
                       ></v-text-field>
@@ -59,6 +67,18 @@
                         label="County"
                       >
                       </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.cdsCode"
+                        label="CDS Code"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.status"
+                        label="Status"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -119,9 +139,12 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'School', value: 'name' },
         { text: 'District', value: 'district' },
         { text: 'County', value: 'county' },
+        { text: 'CDS Code', value: 'cdsCode' },
+        { text: 'Status', value: 'status' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -164,6 +187,9 @@ export default {
 
     deleteItemConfirm() {
       this.schools.splice(this.editedIndex, 1)
+      if (this.onDeleteSchool) {
+        this.onDeleteSchool(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -189,6 +215,11 @@ export default {
       } else {
         this.schools.push(this.editedItem)
       }
+
+      if (this.onEditSchool) {
+        this.onEditSchool(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -217,6 +248,14 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteSchool: {
+      type: Function,
+      default: () => {},
+    },
+    onEditSchool: {
+      type: Function,
+      default: () => {},
     },
   },
 }

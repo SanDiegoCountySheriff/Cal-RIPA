@@ -3,6 +3,8 @@ import { beats } from '../data/beats'
 import { cities } from '../data/cities'
 import { schools } from '../data/schools'
 import { statutes } from '../data/statutes'
+import { stops } from '../data/stops'
+import { submissions } from '../data/submissions'
 
 export default {
   title: 'Organisms/RipaAdminWrapper',
@@ -18,10 +20,12 @@ export const basic = () => ({
       cities: cities,
       schools: schools,
       statutes: statutes,
+      stops: stops,
+      submissions: submissions,
     }
   },
   template:
-    '<ripa-admin-wrapper :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-wrapper :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions"></ripa-admin-wrapper>',
 })
 
 export const loading = () => ({
@@ -32,8 +36,10 @@ export const loading = () => ({
       cities: [],
       schools: [],
       statutes: [],
+      stops: [],
+      submissions: [],
     }
   },
   template:
-    '<ripa-admin-wrapper loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes"></ripa-admin-wrapper>',
+    '<ripa-admin-wrapper loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions"></ripa-admin-wrapper>',
 })

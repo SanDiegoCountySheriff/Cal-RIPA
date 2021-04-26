@@ -1,46 +1,15 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="600">
-    <v-card-title>RIPA Stop App</v-card-title>
-
-    <v-card-text>
-      <div>Initiate a new Stop:</div>
-      <div class="tw-mt-4 tw-mb-4">
-        <v-container fluid>
-          <v-row no-gutters dense>
-            <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn color="primary" to="/form" class="tw-mt-4 sm:tw-mt-0"
-                >Probation Contact Template</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-container>
-      </div>
-      <v-divider></v-divider>
-      <div class="tw-mt-4">About this App:</div>
-      <p>
-        The Racial and Identity Profiling Act of 2015 (AB 953) requires state
-        and local law enforcement agencies, to collect data regarding stops of
-        individuals, including perceived demographic information on the person
-        stopped, and to report this data to the California Attorney General's
-        (AG) Office.
-      </p>
-      <p>
-        The AG’s Office has adopted
-        <a href="https://ripademo.azurewebsites.net/regulation"
-          >these regulations</a
-        >
-        on November 7, 2017. For more information please see the
-        <a href="https://oag.ca.gov/ab953/regulations">AG's Website</a>.
-      </p>
-    </v-card-text>
-  </v-card>
+  <ripa-intro></ripa-intro>
 </template>
 
 <script>
+import RipaIntro from '@/components/molecules/RipaIntro'
+
 export default {
   name: 'ripa-intro-wrapper',
+
+  components: {
+    RipaIntro,
+  },
 }
 </script>

@@ -6,7 +6,6 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
     public class Stop
 
     {
-
         public string id { get { return this.ori; } set { } }
         public string ori { get; set; }
         public string Agency { get; set; }

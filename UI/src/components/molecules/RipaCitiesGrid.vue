@@ -18,7 +18,9 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Cities</v-toolbar-title>
+          <v-toolbar-title class="tw-uppercase"
+            >Admin: Maintain Cities</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -42,6 +44,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.name"
                         label="City"
                       ></v-text-field>
@@ -61,6 +69,12 @@
                         label="County"
                       >
                       </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.deactivationDate"
+                        label="Deactiviation Date"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -123,9 +137,11 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'City', value: 'name' },
         { text: 'County', value: 'county' },
         { text: 'State', value: 'state' },
+        { text: 'Deactivation Date', value: 'deactivationDate' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -169,6 +185,9 @@ export default {
 
     deleteItemConfirm() {
       this.cities.splice(this.editedIndex, 1)
+      if (this.onDeleteCity) {
+        this.onDeleteCity(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -194,6 +213,11 @@ export default {
       } else {
         this.cities.push(this.editedItem)
       }
+
+      if (this.onEditCity) {
+        this.onEditCity(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -222,6 +246,14 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteCity: {
+      type: Function,
+      default: () => {},
+    },
+    onEditCity: {
+      type: Function,
+      default: () => {},
     },
   },
 }
