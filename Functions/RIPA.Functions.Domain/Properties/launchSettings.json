@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "RIPA.Functions.Domain": {
-      "commandName": "Project",
-      "commandLineArgs": "host start --pause-on-error --port 7071"
-    }
-  }
-}
