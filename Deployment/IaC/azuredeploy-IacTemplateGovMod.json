@@ -22,7 +22,7 @@
             }
         },
         "environment": {
-            "defaultValue": "q",
+            "defaultValue": "d",
             "type": "string",
             "allowedValues": [
                 "d",
