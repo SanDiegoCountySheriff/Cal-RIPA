@@ -50,6 +50,7 @@ namespace RIPA.Functions.Common.Models
         public DojSubmit DojSubmit { get; set; }
     }
 
+
     public class OfficerAssignment
     {
         public string Key { get; set; }
