@@ -18,7 +18,9 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Statutes</v-toolbar-title>
+          <v-toolbar-title class="tw-uppercase"
+            >Admin: Maintain Statutues</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="1000px">
             <template v-slot:activator="{ on, attrs }">
@@ -41,6 +43,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="4">
+                      <v-text-field
+                        v-model="editedItem.rowKey"
+                        label="ID"
+                      ></v-text-field>
                       <v-text-field
                         v-model="editedItem.offenseCode"
                         label="Offense Code"
@@ -158,6 +164,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
+        { text: 'ID', value: 'rowKey' },
         { text: 'Offense Code', value: 'offenseCode' },
         { text: 'Offense Statute', value: 'offenseStatute' },
         { text: 'Offense Validation CD', value: 'offenseValidationCD' },
@@ -199,25 +206,7 @@ export default {
 
   methods: {
     init() {
-      this.statutes = this.items.map(item => {
-        return {
-          ...item,
-          offenseEnacted: this.formatDate(item.offenseEnacted),
-          offenseRepealed: this.formatDate(item.offenseRepealed),
-        }
-      })
-    },
-
-    formatDate(dateStr) {
-      if (dateStr.length > 0) {
-        const str = dateStr.replace(/-/g, '')
-        const year = str.substring(0, 4)
-        const month = str.substring(4, 6)
-        const day = str.substring(6, 8)
-        return `${year}-${month}-${day}`
-      }
-
-      return ''
+      this.statutes = this.items
     },
 
     editItem(item) {
@@ -234,6 +223,9 @@ export default {
 
     deleteItemConfirm() {
       this.statutes.splice(this.editedIndex, 1)
+      if (this.onDeleteStatute) {
+        this.onDeleteStatute(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -259,6 +251,11 @@ export default {
       } else {
         this.statutes.push(this.editedItem)
       }
+
+      if (this.onEditStatute) {
+        this.onEditStatute(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -287,6 +284,14 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteStatute: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStatute: {
+      type: Function,
+      default: () => {},
     },
   },
 }

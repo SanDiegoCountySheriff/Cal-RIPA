@@ -372,3 +372,4 @@ yarn-error.log*
 *.pubxml.user
 /TestResults/*
 /packages/*
+.DS_Store

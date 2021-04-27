@@ -14,5 +14,6 @@ export const basic = () => ({
       items: stops,
     }
   },
-  template: '<ripa-accordion :items="items"></ripa-accordion>',
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-accordion :items="items"></ripa-accordion></div>',
 })
