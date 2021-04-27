@@ -28,7 +28,7 @@ namespace RIPA.Functions.Submission.Functions
         private static string getStopUrl = Environment.GetEnvironmentVariable("GetStopUrl");
         private static string putStopUrl = Environment.GetEnvironmentVariable("PutStopUrl");
         private static string sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
-    
+
 
         [FunctionName("PostSubmit")]
         [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
@@ -102,10 +102,10 @@ namespace RIPA.Functions.Submission.Functions
             if (stop.DojSubmit == null)
             {
                 stop.DojSubmit = new Common.Models.DojSubmit
-                {
+        {
                     Submissions = new Common.Models.Submission[0]
                 };
-            }
+        }
 
             var submissions = stop.DojSubmit.Submissions.ToList();
             submissions.Add(submission);
@@ -120,7 +120,7 @@ namespace RIPA.Functions.Submission.Functions
             var httpContent = new StringContent(JsonSerializer.Serialize(stop), UnicodeEncoding.UTF8, "application/json");
             var response = await httpClient.PutAsync(putStopUrl.Replace("{Id}", stop.id), httpContent);
             if(response.StatusCode != HttpStatusCode.OK)
-            {
+        {
                 throw new Exception($"Failed Put Stop Submission for stop id: {stop.id}");
             }
         }
