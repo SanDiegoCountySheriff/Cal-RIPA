@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RIPA.Functions.Common.Models;
 
 namespace RIPA.Functions.Stop.Services.CosmosDb
 {
@@ -17,21 +18,21 @@ namespace RIPA.Functions.Stop.Services.CosmosDb
             _container = dbClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task AddStopAsync(Models.Stop stop)
+        public async Task AddStopAsync(Common.Models.Stop stop)
         {
-            await _container.CreateItemAsync<Models.Stop>(stop, new PartitionKey(stop.ori));
+            await _container.CreateItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Ori));
         }
 
         public async Task DeleteStopAsync(string id)
         {
-            await _container.DeleteItemAsync<Models.Stop>(id, new PartitionKey(id));
+            await _container.DeleteItemAsync<Common.Models.Stop>(id, new PartitionKey(id));
         }
 
-        public async Task<Models.Stop> GetStopAsync(string id)
+        public async Task<Common.Models.Stop> GetStopAsync(string id)
         {
             try
             {
-                ItemResponse<Models.Stop> response = await _container.ReadItemAsync<Models.Stop>(id, new PartitionKey(id));
+                ItemResponse<Common.Models.Stop> response = await _container.ReadItemAsync<Common.Models.Stop>(id, new PartitionKey(id));
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -40,10 +41,10 @@ namespace RIPA.Functions.Stop.Services.CosmosDb
             }
         }
 
-        public async Task<IEnumerable<Models.Stop>> GetStopsAsync(string queryString)
+        public async Task<IEnumerable<Common.Models.Stop>> GetStopsAsync(string queryString)
         {
-            var query = _container.GetItemQueryIterator<Models.Stop>(new QueryDefinition(queryString));
-            List<Models.Stop> results = new List<Models.Stop>();
+            var query = _container.GetItemQueryIterator<Common.Models.Stop>(new QueryDefinition(queryString));
+            List<Common.Models.Stop> results = new List<Common.Models.Stop>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -54,9 +55,9 @@ namespace RIPA.Functions.Stop.Services.CosmosDb
             return results;
         }
 
-        public async Task UpdateStopAsync(string id, Models.Stop stop)
+        public async Task UpdateStopAsync(string id, Common.Models.Stop stop)
         {
-            await _container.UpsertItemAsync<Models.Stop>(stop, new PartitionKey(id));
+            await _container.UpsertItemAsync<Common.Models.Stop>(stop, new PartitionKey(id));
         }
     }
 }

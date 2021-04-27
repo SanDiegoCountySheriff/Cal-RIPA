@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
-using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
