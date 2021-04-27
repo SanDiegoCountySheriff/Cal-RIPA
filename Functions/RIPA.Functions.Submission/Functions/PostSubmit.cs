@@ -52,7 +52,7 @@ namespace RIPA.Functions.Submission.Functions
             {
                 //Create json file in AZURE storage AND Upload SFTP JSON, (update)/ PUT the Stop with update DOJ submission object and intitial status of pending...
                 var stop = await GetStop(stopId);
-                sftpService.UploadStop(stop ,$"{sftpInputPath}{stop.id}.json");
+                sftpService.UploadStop(stop ,$"{sftpInputPath}{stop.id}.json"); //TODO figure out why stop is null
                 Console.WriteLine(stop);
             }
 
