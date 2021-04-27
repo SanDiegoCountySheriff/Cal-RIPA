@@ -1,63 +1,16 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using RIPA.Functions.Submission.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Threading.Tasks;
+using System.Text;
+using System.Text.Json;
 
-
-namespace RIPA.Functions.Submission.Functions
+namespace RIPA.Functions.Submission.Services.SFTP
 {
-    public static class Submission
-    {
-        [FunctionName("Submit")]
-        [OpenApiOperation(operationId: "Submit", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "DOJ Submit Success")]
-
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            var config = new SftpConfig
-            {
-                Host = Environment.GetEnvironmentVariable("SftpHost"),
-                Port = Convert.ToInt32(Environment.GetEnvironmentVariable("SftpPort")),
-                UserName = Environment.GetEnvironmentVariable("SftpUserName"),
-                Password = Environment.GetEnvironmentVariable("SftpPassword")
-            };
-            SftpService sftpService = new SftpService(log, config);
-
-            sftpService.ListAllFiles(Environment.GetEnvironmentVariable("SftpOutput"));
-                
-
-            sftpService.UploadFile(@"C:\Users\LPOPE\source\Temp\test1.txt", Environment.GetEnvironmentVariable("SftpInput"));
-
-            string responseMessage = "DOJ record submit completed successfully";
-
-            return new OkObjectResult(responseMessage);
-        }
-    }
-
-    public class SftpConfig
-    {
-        public string Host { get; set; }
-        public int Port { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class SftpService
+    class SftpService
     {
         private readonly ILogger _logger;
         private readonly SftpConfig _config;
@@ -107,6 +60,49 @@ namespace RIPA.Functions.Submission.Functions
             }
         }
 
+        public void UploadStop(Stop stop, string remoteFilePath)
+        {
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            try
+            {
+                client.Connect();
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop));
+                MemoryStream stream = new MemoryStream(bytes);
+                client.UploadFile(stream, remoteFilePath);
+                _logger.LogInformation($"Finished uploading stop [{stop.id}] to [{remoteFilePath}]");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in uploading stop [{stop.id}] to [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
+            }
+        }
+
+        public void UploadJsonString(string jsonString, string remoteFilePath)
+        {
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            try
+            {
+                client.Connect();
+                byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
+                MemoryStream stream = new MemoryStream(bytes);
+                client.UploadFile(stream, remoteFilePath);
+                _logger.LogInformation($"Finished uploading stop [{jsonString}] to [{remoteFilePath}]");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in uploading stop [{jsonString}] to [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
+            }
+        }
+
+
         public void DownloadFile(string remoteFilePath, string localFilePath)
         {
             using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
@@ -148,4 +144,3 @@ namespace RIPA.Functions.Submission.Functions
     }
 
 }
-

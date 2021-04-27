@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace RIPA.Functions.Stop.Services.CosmosDb.Models
+namespace RIPA.Functions.Submission.Models
 {
-
     public class Stop
 
     {
@@ -18,13 +19,12 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
+        public DateTime StopDateTime { get; set; }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public Person[] StoppedPeople { get; set; }
     }
-
 
     public class OfficerAssignment
     {
@@ -142,6 +142,5 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public Codes[] Codes { get; set; }
         public int Key { get; set; }
     }
-
 
 }
