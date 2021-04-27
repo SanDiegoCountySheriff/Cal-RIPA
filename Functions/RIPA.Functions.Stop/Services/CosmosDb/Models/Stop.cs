@@ -25,6 +25,7 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public Person[] StoppedPeople { get; set; }
     }
 
+
     public class OfficerAssignment
     {
         public string Key { get; set; }
