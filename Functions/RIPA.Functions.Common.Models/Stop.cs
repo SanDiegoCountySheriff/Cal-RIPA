@@ -1,13 +1,37 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
-namespace RIPA.Functions.Stop.Services.CosmosDb.Models
+namespace RIPA.Functions.Common.Models
 {
+    public class DojSubmit
+    {
+        public Submission[] Submissions { get; set; }
+        public string Status { get; set; }
+    }
+    public class Submission
+    {
+        public Guid Id { get; set; }
+        public DateTime DateSubmitted { get; set; }
+        public string Status { get; set; }
+    }
+    
+    public enum SubmissionStatus 
+    {
+        [EnumMember(Value="Unsubmitted")]
+        Unsubmitted,
+        [EnumMember(Value = "Pending")]
+        Pending,
+        [EnumMember(Value = "Failed")]
+        Failed,
+        [EnumMember(Value = "Success")]
+        Success
+    }
 
     public class Stop
 
     {
-        public string id { get { return this.ori; } set { } }
-        public string ori { get; set; }
+        public string id { get; set; }
+        public string Ori { get; set; }
         public string Agency { get; set; }
         public string OfficerID { get; set; }
         public string ExpYears { get; set; }
@@ -18,11 +42,12 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
+        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set {} }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public Person[] StoppedPeople { get; set; }
+        public DojSubmit DojSubmit { get; set; }
     }
 
     public class OfficerAssignment
@@ -141,6 +166,5 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public Codes[] Codes { get; set; }
         public int Key { get; set; }
     }
-
 
 }
