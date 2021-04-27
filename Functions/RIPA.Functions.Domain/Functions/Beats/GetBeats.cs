@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Beats.Models;
+using RIPA.Functions.Security;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,9 +24,14 @@ namespace RIPA.Functions.Domain.Functions.Beats
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Beats")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+        [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
         {
+            if(!RIPAAuthorization.ValidateUserRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             List<Beat> response = new List<Beat>();
 
             foreach (Beat entity in await beats.ExecuteQuerySegmentedAsync(new TableQuery<Beat>(), null))
@@ -37,4 +43,3 @@ namespace RIPA.Functions.Domain.Functions.Beats
         }
     }
 }
-

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
-using System;
 using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.TextAnalytics.Startup))]
