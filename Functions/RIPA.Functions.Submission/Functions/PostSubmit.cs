@@ -51,7 +51,7 @@ namespace RIPA.Functions.Submission.Functions
             //high level report of Submission
             //its a lot of information
 
-            //TODO Create a sumbit cosmosDB record
+            //TODO Create a submission cosmosDB record
             //TODO Create directory in Azure Storage ++ Directory Naming Convention
             Guid submissionId = Guid.NewGuid();
             foreach (var stopId in submitRequest.StopIds)
