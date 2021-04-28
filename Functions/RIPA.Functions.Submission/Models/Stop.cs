@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace RIPA.Functions.Stop.Services.CosmosDb.Models
+namespace RIPA.Functions.Submission.Models
 {
     public class Stop
 
@@ -18,11 +19,11 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
+        public DateTime StopDateTime { get; set; }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
-        public PeopleStopped[] PeopleStopped { get; set; }
+        public Person[] StoppedPeople { get; set; }
     }
 
     public class OfficerAssignment
@@ -54,7 +55,7 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
 
     public class City
     {
-        public List<Codes> Codes { get; set; }
+        public Codes[] CityCodes { get; set; }
     }
 
     public class Codes
@@ -73,13 +74,13 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public object[] Codes { get; set; }
     }
 
-    public class PeopleStopped
+    public class Person
     {
         public string Id { get; set; }
         public bool IsStudent { get; set; }
-        public PerceivedRace[] PerceivedRace { get; set; }
+        public PerceivedRace[] PerceivedRaces { get; set; }
         public bool PerceivedLimitedEnglish { get; set; }
-        public PerceivedOrKnownDisability[] PerceivedOrKnownDisability { get; set; }
+        public PerceivedOrKnownDisability[] PerceivedOrKnownDisabilities { get; set; }
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
         public bool GenderNonconforming { get; set; }
@@ -88,13 +89,13 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public ReasonForStop ReasonForStop { get; set; }
         public string PerceptionKnown { get; set; }
         public string ReasonForStopExplanation { get; set; }
-        public ActionsTakenDuringStop[] ActionsTakenDuringStop { get; set; }
-        public ContrabandOrEvidenceDiscovered[] ContrabandOrEvidenceDiscovered { get; set; }
+        public ActionTakenDuringStop[] ActionsTakenDuringStop { get; set; }
+        public ContrabandOrEvidenceDiscovered[] ContrabandsOrEvidencesDiscovered { get; set; }
         public object[] BasisForSearch { get; set; }
         public string BasisForSearchBrief { get; set; }
         public object[] BasisForPropertySeizure { get; set; }
         public object[] TypeOfPropertySeized { get; set; }
-        public ResultOfStop[] ResultOfStop { get; set; }
+        public ResultOfStop[] ResultsOfStop { get; set; }
     }
 
     public class ReasonForStop
@@ -123,7 +124,7 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public int Key { get; set; }
     }
 
-    public class ActionsTakenDuringStop
+    public class ActionTakenDuringStop
     {
         public string Action { get; set; }
         public string Key { get; set; }
@@ -141,6 +142,5 @@ namespace RIPA.Functions.Stop.Services.CosmosDb.Models
         public Codes[] Codes { get; set; }
         public int Key { get; set; }
     }
-
 
 }
