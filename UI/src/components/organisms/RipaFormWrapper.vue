@@ -57,11 +57,7 @@
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
+              <ripa-form-step-3></ripa-form-step-3>
 
               <v-btn color="primary" @click="stepIndex = 4"> Continue </v-btn>
 
@@ -103,12 +99,14 @@
 
 <script>
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
+import RipaFormStep3 from '@/components/organisms/RipaFormStep3.vue'
 
 export default {
   name: 'ripa-form-wrapper',
 
   components: {
     RipaConfirmation,
+    RipaFormStep3,
   },
 
   data() {

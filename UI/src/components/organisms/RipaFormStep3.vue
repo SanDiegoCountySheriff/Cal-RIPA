@@ -2,16 +2,15 @@
   <div>
     <v-form ref="step3" lazy-validation>
       <ripa-stop-reason
-        ref="stopReason1"
-        v-model="stopReason1"
+        ref="stopReason"
+        v-model="stopReason"
       ></ripa-stop-reason>
-      <!-- <ripa-stop-reason
-        ref="stopReason2"
-        v-model="stopReason2"
-      ></ripa-stop-reason> -->
     </v-form>
-    <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
-    <v-btn color="error" class="tw-mr-4" @click="reset"> Reset </v-btn>
+    <v-divider></v-divider>
+    <div class="tw-flex tw-mt-8">
+      <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
+      <v-btn color="error" class="tw-mr-4" @click="reset"> Reset </v-btn>
+    </div>
   </div>
 </template>
 
@@ -25,11 +24,12 @@ export default {
 
   data() {
     return {
-      stopReason1: {
-        name: this.value.name1,
-      },
-      stopReason2: {
-        name: this.value.name2,
+      stopReason: {
+        reason: 2,
+        explanation: 'steve',
+        // trafficViolation: this.value?.trafficViolation || null,
+        // trafficViolationCode: this.value?.trafficViolationCode || null,
+        // reasonableSuspicionValues: this.value?.reasonableSuspicionValues || [],
       },
     }
   },
@@ -40,20 +40,11 @@ export default {
       if (!isValid) {
         return
       }
-      const stopReason1Form = this.$refs.stopReason1
-      const stopReason2Form = this.$refs.stopReason2
+      const stopReasonForm = this.$refs.stopReason
       this.$emit('input', {
-        stopReason1: {
-          name: stopReason1Form.name,
-          year: stopReason1Form.email,
-          select: stopReason1Form.select,
-          checkbox: stopReason1Form.checkbox,
-        },
-        stopReason2: {
-          name: stopReason2Form.name,
-          year: stopReason2Form.email,
-          select: stopReason2Form.select,
-          checkbox: stopReason2Form.checkbox,
+        stopReason: {
+          reason: stopReasonForm.reason,
+          explanation: stopReasonForm.explanation,
         },
       })
     },
