@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
       :online="online"
