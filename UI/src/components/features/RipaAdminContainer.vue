@@ -36,7 +36,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['isAdmin']),
+    ...mapState('user', ['isAdmin']),
     ...mapGetters([
       'mappedBeats',
       'mappedCities',

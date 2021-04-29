@@ -8,12 +8,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isDark: true,
-    isAdmin: true,
     beats: [],
     cities: [],
     schools: [],
     statutes: [],
     stops: [],
+    user: {
+      isAdmin: false,
+    },
   },
 
   getters: {
@@ -56,6 +58,9 @@ export default new Vuex.Store({
     },
     isOnline: () => {
       return navigator.onLine
+    },
+    user: state => {
+      return state.user
     },
   },
 

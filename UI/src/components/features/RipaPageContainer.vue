@@ -28,7 +28,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['isAdmin']),
+    ...mapState('user', ['isAdmin']),
     ...mapGetters([
       'isOnline',
       'mappedBeats',

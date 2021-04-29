@@ -25,7 +25,7 @@ const routes = [
         /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
       ),
     beforeEnter(to, from, next) {
-      if (store.state.isAdmin) {
+      if (store.state.user.isAdmin) {
         next()
       } else {
         next('/')
