@@ -373,3 +373,5 @@ yarn-error.log*
 /TestResults/*
 /packages/*
 .DS_Store
+
+/UI/public/config.json
