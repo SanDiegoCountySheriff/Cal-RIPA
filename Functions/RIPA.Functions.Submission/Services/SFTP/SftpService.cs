@@ -108,17 +108,17 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
-            BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-            string text;
             using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
             try
             {
+                BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
                 client.Connect();
-                var blobInfo = await blobClient.UploadAsync(client.OpenRead(remoteFilePath));
-                var download = await blobClient.DownloadAsync();
+                var blobInfo = await blobClient.UploadAsync(client.OpenRead(remoteFilePath)); //stream file to Azure Blob
+                var download = await blobClient.DownloadAsync(); //Download blob
+                string text;
                 using (StreamReader streamReader = new StreamReader(download.Value.Content))
                 {
-                    text = streamReader.ReadToEnd();
+                    text = streamReader.ReadToEnd(); //get file content
                 }
                 _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
                 return text;

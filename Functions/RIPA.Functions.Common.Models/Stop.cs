@@ -13,8 +13,24 @@ namespace RIPA.Functions.Common.Models
         public Guid Id { get; set; }
         public DateTime DateSubmitted { get; set; }
         public string Status { get; set; }
+        public SubmissionError Error { get; set; }
+    }
+    public class SubmissionError
+    {
+        public string ErrorType { get; set; }
+        public string Error { get; set; }
+        public DateTime DateReported { get; set; }
+        public string FileName { get; set; }
     }
     
+    public enum SubmissionErrorType
+    {
+        [EnumMember(Value = "FileLevelFatalError")]
+        FileLevelFatalError,
+        [EnumMember(Value = "RecordLevelError")]
+        RecordLevelError
+    }
+
     public enum SubmissionStatus 
     {
         [EnumMember(Value="Unsubmitted")]
