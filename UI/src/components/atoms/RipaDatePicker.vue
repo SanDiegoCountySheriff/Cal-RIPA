@@ -1,5 +1,6 @@
 <template>
   <v-dialog
+    tw-mt-6
     ref="dialog"
     v-model="modal"
     :return-value.sync="date"

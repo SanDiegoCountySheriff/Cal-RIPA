@@ -1,6 +1,7 @@
 <template>
   <v-slider
     v-model="model"
+    class="tw-mt-6"
     :label="label"
     :hint="hint"
     :min="min"

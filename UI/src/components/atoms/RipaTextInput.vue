@@ -1,5 +1,10 @@
 <template>
-  <v-text-field v-model="model" :label="label" :hint="hint"></v-text-field>
+  <v-text-field
+    v-model="model"
+    class="tw-mt-6"
+    :label="label"
+    :hint="hint"
+  ></v-text-field>
 </template>
 
 <script>

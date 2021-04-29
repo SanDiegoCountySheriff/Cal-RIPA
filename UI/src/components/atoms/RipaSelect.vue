@@ -1,6 +1,7 @@
 <template>
   <v-select
     v-model="model"
+    class="tw-mt-6"
     clerable
     dense
     flat

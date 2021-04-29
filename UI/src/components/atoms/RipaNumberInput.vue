@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    class="ripa-number-input"
+    class="tw-mt-6"
     v-model="model"
     type="number"
     :label="label"

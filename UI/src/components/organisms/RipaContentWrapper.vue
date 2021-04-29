@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="tw-my-6">
     <slot></slot>
   </v-container>
 </template>

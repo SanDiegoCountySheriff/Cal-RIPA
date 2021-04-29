@@ -3,13 +3,6 @@
     <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
-    <ripa-checkbox
-      v-model="model.checkbox"
-      cbLabel="Stop in response to Call for Service"
-      @input="handleInput"
-    >
-    </ripa-checkbox>
-
     <ripa-date-picker
       v-model="model.datePicker"
       label="Date of Stop"
@@ -31,6 +24,13 @@
       @input="handleInput"
     >
     </ripa-number-input>
+
+    <ripa-checkbox
+      v-model="model.checkbox"
+      cbLabel="Stop in response to Call for Service"
+      @input="handleInput"
+    >
+    </ripa-checkbox>
   </div>
 </template>
 
