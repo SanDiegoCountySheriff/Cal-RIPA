@@ -6,7 +6,6 @@
     <ripa-number-input
       v-model="model.years"
       label="Years of Experience"
-      required
       @input="handleInput"
     >
     </ripa-number-input>

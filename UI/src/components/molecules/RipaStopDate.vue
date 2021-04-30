@@ -20,7 +20,6 @@
     <ripa-number-input
       v-model="model.duration"
       label="Stop Duration"
-      required
       @input="handleInput"
     >
     </ripa-number-input>

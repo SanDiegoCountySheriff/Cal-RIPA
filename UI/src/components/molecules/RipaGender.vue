@@ -25,6 +25,7 @@
 
     <template>
       <ripa-form-header
+        class="tw-mt-8"
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"

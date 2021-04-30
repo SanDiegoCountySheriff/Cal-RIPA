@@ -6,7 +6,6 @@
     <ripa-number-input
       v-model="model.age"
       label="Perceived Age"
-      required
       @input="handleInput"
     >
     </ripa-number-input>

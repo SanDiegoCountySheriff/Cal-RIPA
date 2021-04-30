@@ -1,23 +1,17 @@
 <template>
-  <v-tooltip top>
-    <template v-slot:activator="{ on, attrs }">
-      <v-autocomplete
-        v-model="model"
-        class="tw-mt-6"
-        clearable
-        dense
-        flat
-        :hint="hint"
-        :item-text="itemText"
-        :item-value="itemValue"
-        :label="label"
-        :items="items"
-        v-bind="attrs"
-        v-on="on"
-      ></v-autocomplete>
-    </template>
-    <span>{{ model }}</span>
-  </v-tooltip>
+  <v-autocomplete
+    v-model="model"
+    class="tw-mt-6"
+    clearable
+    dense
+    flat
+    :hint="hint"
+    :item-text="itemText"
+    :item-value="itemValue"
+    :label="label"
+    :items="items"
+    :disabled="disabled"
+  ></v-autocomplete>
 </template>
 
 <script>
@@ -72,6 +66,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }
