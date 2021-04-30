@@ -3,7 +3,7 @@
     tw-mt-6
     ref="dialog"
     v-model="modal"
-    :return-value.sync="date"
+    :return-value.sync="model"
     persistent
     width="290px"
   >
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       menu: false,
+      modal: false,
       viewModel: this.value,
     }
   },

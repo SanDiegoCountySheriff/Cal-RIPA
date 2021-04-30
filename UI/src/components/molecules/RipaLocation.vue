@@ -25,7 +25,7 @@
     <ripa-number-input
       v-model="model.blockNumber"
       label="Block Number"
-      @input="handleInput"
+      @input="debounceInput"
     >
     </ripa-number-input>
 
@@ -114,6 +114,7 @@ import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
+import _ from 'lodash'
 
 export default {
   name: 'ripa-location',
@@ -154,9 +155,19 @@ export default {
   },
 
   methods: {
+    debounceInput: _.debounce(function (e) {
+      this.viewModel.blockNumber = Math.round(e / 100) * 100
+    }, 1000),
+
     handleInput() {
+      this.updateBlockNumber()
       this.updateBeatsModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateBlockNumber() {
+      if (this.viewModel.blockNumber) {
+      }
     },
 
     updateBeatsModel() {

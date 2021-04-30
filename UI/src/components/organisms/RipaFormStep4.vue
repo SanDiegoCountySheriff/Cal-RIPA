@@ -1,6 +1,6 @@
 <template>
-  <v-form ref="step3" lazy-validation>
-    <ripa-stop-reason v-model="model.stopReason"></ripa-stop-reason>
+  <v-form ref="step4" lazy-validation>
+    <div>ACTIONS TAKEN DURING STOP</div>
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -23,18 +23,14 @@
 </template>
 
 <script>
-import RipaStopReason from '@/components/molecules/RipaStopReason'
-
 export default {
-  name: 'ripa-form-step3',
-
-  components: { RipaStopReason },
+  name: 'ripa-form-step4',
 
   data() {
     return {
       isValid: true,
       viewModel: {
-        stopReason: this.value?.stopReason || null,
+        actionsTaken: this.value?.actionsTaken || null,
       },
     }
   },
@@ -59,7 +55,7 @@ export default {
     },
 
     next() {
-      this.isValid = this.$refs.step3.validate()
+      this.isValid = this.$refs.step4.validate()
       if (!this.isValid) {
         return
       }

@@ -2,7 +2,7 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
-    :return-value.sync="time"
+    :return-value.sync="model"
     persistent
     width="290px"
   >

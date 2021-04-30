@@ -4,28 +4,28 @@
     </ripa-form-header>
 
     <ripa-date-picker
-      v-model="model.datePicker"
+      v-model="model.stopDate"
       label="Date of Stop"
       @input="handleInput"
     >
     </ripa-date-picker>
 
     <ripa-time-picker
-      v-model="model.timePicker"
+      v-model="model.stopTime"
       label="Time of Stop"
       @input="handleInput"
     >
     </ripa-time-picker>
 
     <ripa-number-input
-      v-model="model.duration"
+      v-model="model.stopDuration"
       label="Stop Duration"
       @input="handleInput"
     >
     </ripa-number-input>
 
     <ripa-checkbox
-      v-model="model.checkbox"
+      v-model="model.stopInResponseToCfs"
       cbLabel="Stop in response to Call for Service"
       @input="handleInput"
     >
@@ -56,10 +56,10 @@ export default {
     return {
       valid: true,
       viewModel: {
-        duration: this.value?.duration || null,
-        checkbox: this.value?.checkbox || false,
-        datePicker: format(new Date(), 'yyyy-MM-dd'),
-        timePicker: format(new Date(), 'h:mm'),
+        stopDate: format(new Date(), 'yyyy-MM-dd'),
+        stopTime: format(new Date(), 'h:mm'),
+        stopDuration: this.value?.stopDuration || null,
+        stopInResponseToCfs: this.value?.stopInResponseToCfs || false,
       },
     }
   },

@@ -1,6 +1,10 @@
 <template>
-  <v-form ref="step3" lazy-validation>
-    <ripa-stop-reason v-model="model.stopReason"></ripa-stop-reason>
+  <v-form ref="step2" lazy-validation>
+    <ripa-student
+      v-model="model.student"
+      @input="handleInput"
+      toggle
+    ></ripa-student>
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -23,18 +27,18 @@
 </template>
 
 <script>
-import RipaStopReason from '@/components/molecules/RipaStopReason'
+import RipaStudent from '@/components/molecules/RipaStudent'
 
 export default {
-  name: 'ripa-form-step3',
+  name: 'ripa-form-step2',
 
-  components: { RipaStopReason },
+  components: { RipaStudent },
 
   data() {
     return {
       isValid: true,
       viewModel: {
-        stopReason: this.value?.stopReason || null,
+        student: this.value?.student || null,
       },
     }
   },
@@ -59,7 +63,7 @@ export default {
     },
 
     next() {
-      this.isValid = this.$refs.step3.validate()
+      this.isValid = this.$refs.step2.validate()
       if (!this.isValid) {
         return
       }
@@ -79,6 +83,18 @@ export default {
   props: {
     value: {
       type: Object,
+      default: () => {},
+    },
+    schools: {
+      type: Array,
+      default: () => {},
+    },
+    beats: {
+      type: Array,
+      default: () => {},
+    },
+    cities: {
+      type: Array,
       default: () => {},
     },
     onBack: {

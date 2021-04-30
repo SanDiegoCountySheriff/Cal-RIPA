@@ -5,6 +5,7 @@
     type="number"
     :label="label"
     :hint="hint"
+    :rules="rules"
   ></v-text-field>
 </template>
 
@@ -48,6 +49,10 @@ export default {
     hint: {
       type: String,
       default: '',
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

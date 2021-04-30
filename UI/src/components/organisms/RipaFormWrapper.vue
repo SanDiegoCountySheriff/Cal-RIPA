@@ -33,59 +33,42 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
-
-              <v-btn color="primary" @click="stepIndex = 2"> Continue </v-btn>
-
-              <v-btn text> Cancel </v-btn>
+              <ripa-form-step-1
+                :on-next="handleNext"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-1>
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
-
-              <v-btn color="primary" @click="stepIndex = 3"> Continue </v-btn>
-
-              <v-btn text> Cancel </v-btn>
+              <ripa-form-step-2
+                :on-back="handleBack"
+                :on-next="handleNext"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-2>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <ripa-form-step-3></ripa-form-step-3>
-
-              <v-btn color="primary" @click="stepIndex = 4"> Continue </v-btn>
-
-              <v-btn text> Cancel </v-btn>
+              <ripa-form-step-3
+                :on-back="handleBack"
+                :on-next="handleNext"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-3>
             </v-stepper-content>
 
             <v-stepper-content step="4">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
-
-              <v-btn color="primary" @click="stepIndex = 5"> Continue </v-btn>
-
-              <v-btn text> Cancel </v-btn>
+              <ripa-form-step-4
+                :on-back="handleBack"
+                :on-next="handleNext"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-4>
             </v-stepper-content>
 
             <v-stepper-content step="5">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
-
-              <v-btn color="primary" @click="stepIndex = 6"> Submit </v-btn>
-
-              <v-btn text> Cancel </v-btn>
+              <ripa-form-step-5
+                :on-back="handleBack"
+                :on-submit="handleSubmit"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-5>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
@@ -99,20 +82,46 @@
 
 <script>
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
-import RipaFormStep3 from '@/components/organisms/RipaFormStep3.vue'
+import RipaFormStep1 from '@/components/organisms/RipaFormStep1'
+import RipaFormStep2 from '@/components/organisms/RipaFormStep2'
+import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
+import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
+import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
 
 export default {
   name: 'ripa-form-wrapper',
 
   components: {
     RipaConfirmation,
+    RipaFormStep1,
+    RipaFormStep2,
     RipaFormStep3,
+    RipaFormStep4,
+    RipaFormStep5,
   },
 
   data() {
     return {
       stepIndex: 1,
     }
+  },
+
+  methods: {
+    handleBack() {
+      this.stepIndex = this.stepIndex - 1
+    },
+
+    handleNext() {
+      this.stepIndex = this.stepIndex + 1
+    },
+
+    handleCancel() {
+      console.log('cancel form')
+    },
+
+    handleSubmit() {
+      console.log('submit form')
+    },
   },
 }
 </script>
