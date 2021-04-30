@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-race tw-p-4">
+  <div class="ripa-race tw-pb-8">
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required

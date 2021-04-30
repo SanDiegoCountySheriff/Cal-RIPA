@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-stop-reason tw-p-4">
+  <div class="ripa-stop-reason tw-pb-8">
     <ripa-form-header
       title="Reason for Stop"
       required

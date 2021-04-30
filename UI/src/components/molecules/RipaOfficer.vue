@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-officer tw-p-4">
+  <div class="ripa-officer tw-pb-8">
     <template v-if="toggle">
       <ripa-switch
         v-model="model.editOfficer"

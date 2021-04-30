@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-disability tw-p-4">
+  <div class="ripa-disability tw-pb-8">
     <ripa-form-header
       title="Perceived or Known Disability"
       required
