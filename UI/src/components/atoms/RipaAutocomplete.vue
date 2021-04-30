@@ -6,6 +6,7 @@
     dense
     flat
     :hint="hint"
+    :persistent-hint="persistentHint"
     :item-text="itemText"
     :item-value="itemValue"
     :label="label"
@@ -62,6 +63,10 @@ export default {
     hint: {
       type: String,
       default: '',
+    },
+    persistentHint: {
+      type: Boolean,
+      default: false,
     },
     label: {
       type: String,

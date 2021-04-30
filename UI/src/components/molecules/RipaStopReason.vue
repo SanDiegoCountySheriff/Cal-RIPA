@@ -16,34 +16,65 @@
       @input="handleInput"
     ></ripa-select>
 
-    <template v-if="model.reason === 1">
-      <div>
-        <ripa-radio-group
-          v-model="model.trafficViolationDetails"
-          :items="trafficViolationItems"
-          @input="handleInput"
-        ></ripa-radio-group>
+    <template v-if="model.reasonForStop === 1">
+      <ripa-radio-group
+        v-model="model.trafficViolation"
+        :items="trafficViolationItems"
+        @input="handleInput"
+      ></ripa-radio-group>
 
-        <div class="tw-mt-2"></div>
+      <div class="tw-mt-2"></div>
 
-        <ripa-autocomplete
-          v-model="model.trafficViolationCode"
-          hint="Select 1 Offense Code (required)"
-          item-text="fullName"
-          item-value="offenseCode"
-          label="Offense Code"
-          :items="statutes"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </div>
+      <ripa-autocomplete
+        v-model="model.trafficViolationCode"
+        hint="Select 1 Offense Code (required)"
+        persistent-hint
+        item-text="fullName"
+        item-value="code"
+        label="Offense Code"
+        :items="offenseCodes"
+        @input="handleInput"
+      ></ripa-autocomplete>
     </template>
 
-    <template v-if="model.reason === 2">
+    <template v-if="model.reasonForStop === 2">
       <ripa-check-group
-        v-model="model.reasonSuspicionDetails"
+        v-model="model.reasonSuspicion"
         :items="reasonableSuspicionItems"
         @input="handleInput"
       ></ripa-check-group>
+
+      <ripa-autocomplete
+        v-model="model.reasonSuspicionCode"
+        hint="Select 1 Offense Code (required)"
+        persistent-hint
+        item-text="fullName"
+        item-value="code"
+        label="Offense Code"
+        :items="offenseCodes"
+        @input="handleInput"
+      ></ripa-autocomplete>
+    </template>
+
+    <template v-if="model.reasonForStop === 6">
+      <v-alert dense outlined type="warning" prominent>
+        Your selection indicates that a search was conducted, please select from
+        the search criteria below.
+      </v-alert>
+
+      <ripa-switch
+        v-model="model.searchOfPerson"
+        label="Search of person was conducted"
+        :max-width="300"
+        @input="handleInput"
+      ></ripa-switch>
+
+      <ripa-switch
+        v-model="model.searchOfProperty"
+        label="Search of property was conducted"
+        :max-width="300"
+        @input="handleInput"
+      ></ripa-switch>
     </template>
 
     <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
@@ -66,6 +97,7 @@ import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 import {
   STOP_REASONS,
@@ -83,6 +115,7 @@ export default {
     RipaLabel,
     RipaRadioGroup,
     RipaSelect,
+    RipaSwitch,
     RipaTextArea,
   },
 
@@ -99,9 +132,9 @@ export default {
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: {
         reasonForStop: this.value?.reasonForStop || null,
-        trafficViolationDetails: this.value?.trafficViolationDetails || null,
+        trafficViolation: this.value?.trafficViolation || null,
         trafficViolationCode: this.value?.trafficViolationCode || null,
-        reasonSuspicionDetails: this.value?.reasonSuspicionDetails || null,
+        reasonSuspicion: this.value?.reasonSuspicion || [],
         reasonSuspicionCode: this.value?.reasonSuspicionCode || null,
         searchOfPerson: this.value?.searchOfPerson || null,
         searchOfProperty: this.value?.searchOfProperty || null,
@@ -120,13 +153,6 @@ export default {
 
   methods: {
     handleInput() {
-      if (this.viewModel.reasonForStop === 1) {
-        this.viewModel.reasonSuspicionDetails = []
-      }
-      if (this.viewModel.reasonForStop === 2) {
-        this.viewModel.trafficViolationDetails = null
-        this.viewModel.trafficViolationCode = null
-      }
       this.$emit('input', this.viewModel)
     },
   },
@@ -136,7 +162,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    statutes: {
+    offenseCodes: {
       type: Array,
       default: () => [],
     },

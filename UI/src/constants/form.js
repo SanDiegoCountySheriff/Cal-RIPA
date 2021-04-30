@@ -12,24 +12,24 @@ export const OFFICER_ASSIGNMENTS = [
 ]
 
 export const DISABILITIES = [
-  { name: 'None', value: '1' },
-  { name: 'Deafness or difficulty hearing', value: '2' },
-  { name: 'Speech impairment or limited use of language', value: '3' },
-  { name: 'Blind or limited vision', value: '4' },
-  { name: 'Mental health condition', value: '5' },
+  { name: 'None', value: 1 },
+  { name: 'Deafness or difficulty hearing', value: 2 },
+  { name: 'Speech impairment or limited use of language', value: 3 },
+  { name: 'Blind or limited vision', value: 4 },
+  { name: 'Mental health condition', value: 5 },
   {
     name: 'Intellectual or developmental disability, including dementia',
-    value: '6',
+    value: 6,
   },
-  { name: 'Other disability', value: '7' },
+  { name: 'Other disability', value: 7 },
 ]
 
 export const GENDERS = [
-  { name: 'Male', value: '1' },
-  { name: 'Female', value: '2' },
-  { name: 'Transgender Male', value: '3' },
-  { name: 'Transgender Female', value: '4' },
-  { name: 'Gender Noncomforming', value: '5' },
+  { name: 'Male', value: 1 },
+  { name: 'Female', value: 2 },
+  { name: 'Transgender Male', value: 3 },
+  { name: 'Transgender Female', value: 4 },
+  { name: 'Gender Noncomforming', value: 5 },
 ]
 
 export const LGBTS = [
@@ -38,13 +38,13 @@ export const LGBTS = [
 ]
 
 export const RACES = [
-  { name: 'Asian', value: '1' },
-  { name: 'Black/African American', value: '2' },
-  { name: 'Hispanic/Latino(a)', value: '3' },
-  { name: 'Middle Eastern or South Asian', value: '4' },
-  { name: 'Native American', value: '5' },
-  { name: 'Pacific Islander', value: '6' },
-  { name: 'White', value: '7' },
+  { name: 'Asian', value: 1 },
+  { name: 'Black/African American', value: 2 },
+  { name: 'Hispanic/Latino(a)', value: 3 },
+  { name: 'Middle Eastern or South Asian', value: 4 },
+  { name: 'Native American', value: 5 },
+  { name: 'Pacific Islander', value: 6 },
+  { name: 'White', value: 7 },
 ]
 
 export const STOP_REASONS = [
@@ -66,31 +66,31 @@ export const STOP_REASONS = [
 ]
 
 export const TRAFFIC_VIOLATIONS = [
-  { name: 'Moving Violation', value: '1A' },
-  { name: 'Equipment Violation', value: '1B' },
+  { name: 'Moving Violation', value: 1 },
+  { name: 'Equipment Violation', value: 2 },
   {
     name: 'Non-moving Violation, including Registration Violation',
-    value: '1C',
+    value: 3,
   },
 ]
 
 export const REASONABLE_SUSPICIONS = [
-  { name: 'Officer witnessed commission of a crime', value: '2A' },
-  { name: 'Matched suspect description', value: '2B' },
+  { name: 'Officer witnessed commission of a crime', value: 1 },
+  { name: 'Matched suspect description', value: 2 },
   {
     name: 'Witness or Victim identification of Suspect at the scene',
-    value: '2C',
+    value: 3,
   },
-  { name: 'Carrying Suspicious Object', value: '2D' },
+  { name: 'Carrying Suspicious Object', value: 4 },
   {
     name: 'Actions indicative of casing a victim or location',
-    value: '2E',
+    value: 5,
   },
-  { name: 'Suspected of Acting as Lookout', value: '2F' },
-  { name: 'Actions indicative of drug transaction', value: '2G' },
+  { name: 'Suspected of Acting as Lookout', value: 6 },
+  { name: 'Actions indicative of drug transaction', value: 7 },
   {
     name: 'Actions indicative of engaging in violent crime',
-    value: '2H',
+    value: 8,
   },
-  { name: 'Other Reasonable Suspicion of a crime', value: '2I' },
+  { name: 'Other Reasonable Suspicion of a crime', value: 9 },
 ]
