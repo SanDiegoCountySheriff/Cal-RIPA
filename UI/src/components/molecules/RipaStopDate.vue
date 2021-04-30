@@ -17,44 +17,49 @@
     >
     </ripa-time-picker>
 
-    <ripa-number-input
+    <ripa-select
       v-model="model.stopDuration"
       label="Stop Duration"
+      :items="durationItems"
+      itemText="name"
+      itemValue="value"
       @input="handleInput"
     >
-    </ripa-number-input>
+    </ripa-select>
 
-    <ripa-checkbox
+    <ripa-switch
       v-model="model.stopInResponseToCfs"
-      cbLabel="Stop in response to Call for Service"
+      label="Stop in response to Call for Service"
+      :max-width="300"
       @input="handleInput"
-    >
-    </ripa-checkbox>
+    ></ripa-switch>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
-import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import { format } from 'date-fns'
+import { DURATIONS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-date',
 
   components: {
     RipaFormHeader,
-    RipaCheckbox,
     RipaDatePicker,
+    RipaSelect,
+    RipaSwitch,
     RipaTimePicker,
-    RipaNumberInput,
   },
 
   data() {
     return {
       valid: true,
+      durationItems: DURATIONS,
       viewModel: {
         stopDate: format(new Date(), 'yyyy-MM-dd'),
         stopTime: format(new Date(), 'h:mm'),

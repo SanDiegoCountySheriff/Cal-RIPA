@@ -11,6 +11,14 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Others', value: 10 },
 ]
 
+export const DURATIONS = [
+  { name: '0 - 10', value: 1 },
+  { name: '11 - 20', value: 2 },
+  { name: '21 - 30', value: 3 },
+  { name: '31 - 60', value: 4 },
+  { name: '60+', value: 5 },
+]
+
 export const AGES = [
   { name: '0 - 10', value: 1 },
   { name: '11 - 20', value: 2 },
