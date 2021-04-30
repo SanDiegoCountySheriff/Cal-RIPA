@@ -1,5 +1,9 @@
 <template>
-  <v-switch v-model="model" :label="label"> </v-switch>
+    <v-switch
+     v-model="model"
+     :items="items"
+     :label="label">
+      </v-switch>
 </template>
 
 <script>
@@ -37,10 +41,16 @@ export default {
       default: false,
     },
 
+    items: {
+      type: Object,
+      default: {},
+    },
+
     label: {
       type: String,
-      default: 'no',
-    },
-  },
+      default: string,
+    }
+    
+  }
 }
 </script>
