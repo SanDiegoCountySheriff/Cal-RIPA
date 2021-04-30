@@ -1,5 +1,3 @@
-import { PublicClientApplication } from '@azure/msal-browser'
-
 export const doSignIn = async () => {
   await this.$msalInstance
     .loginPopup({})

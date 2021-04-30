@@ -1,6 +1,6 @@
 <template>
   <ripa-page-wrapper
-    :admin="isAdmin"
+    :admin="user.isAdmin"
     :online="isOnline"
     :dark="isDark"
     :on-update-dark="handleUpdateDark"
@@ -28,7 +28,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['isAdmin']),
+    ...mapState(['user']),
     ...mapGetters([
       'isOnline',
       'mappedBeats',

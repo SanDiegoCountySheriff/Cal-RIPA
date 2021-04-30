@@ -13,6 +13,7 @@ export default new Vuex.Store({
     schools: [],
     statutes: [],
     stops: [],
+    isAuthConfigSet: false,
     user: {
       isAdmin: false,
     },
@@ -62,6 +63,9 @@ export default new Vuex.Store({
     user: state => {
       return state.user
     },
+    isAuthConfigSet: state => {
+      return state.isAuthConfigSet
+    },
   },
 
   mutations: {
@@ -79,6 +83,9 @@ export default new Vuex.Store({
     },
     updateStops(state, items) {
       state.stops = items
+    },
+    updateAuthConfig(state, value) {
+      state.isAuthConfigSet = value
     },
   },
 
@@ -336,6 +343,9 @@ export default new Vuex.Store({
       // axios.get('http://localhost:3004/stops').then(response => {
       //   commit('updateStops', response.data)
       // })
+    },
+    setAuthConfig({ commit }, value) {
+      commit('updateAuthConfig', value)
     },
   },
   modules: {},

@@ -1,25 +1,27 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { default as msalPlugin } from 'msal-browser'
-
-const getAuthConfig = axios.get('/config.json').then(res => {
-  return {
-    tenant: res.Authentication.TenantId,
-    clientId: res.Authentication.ClientId,
-    authority: res.Authentication.AuthorityUrl,
-  }
-})
+import * as msal from '@azure/msal-browser'
 
 const msalConfig = {
-  auth: {
-    tenant: getAuthConfig.tenant,
-    clientId: getAuthConfig.clientId,
-    authority: getAuthConfig.authority,
-  },
   cache: {
     cacheLocation: 'localStorage',
   },
   mode: 'redirect',
 }
 
-Vue.use(msalPlugin, msalConfig)
+
+async getAuthConfig() {
+  return axios.get('/config.json').then(res => {
+    console.log(res.data)
+    msalConfig.auth = {
+      tenant: res.data.Authentication.TenantId,
+      clientId: res.data.Authentication.ClientId,
+      authority: res.data.Authentication.AuthorityUrl,
+    }
+  
+    msalInstance = new msal.PublicClientApplication(msalConfig)
+  })
+}
+
+
+export default authService

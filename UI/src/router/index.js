@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import RipaLoginCheckContainer from '@/components/features/RipaLoginCheckContainer'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
@@ -16,6 +17,11 @@ const routes = [
     path: '/form',
     name: 'Form',
     component: RipaFormContainer,
+  },
+  {
+    path: '/logincheck',
+    name: 'LoginCheck',
+    component: RipaLoginCheckContainer,
   },
   {
     path: '/admin',
@@ -54,6 +60,14 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+})
+
+// if you ever hit the app and the login config
+// isn't set, start login flow
+router.beforeEach((to, from, next) => {
+  if (!store.state.isAuthConfigSet && to.name !== 'LoginCheck')
+    next({ name: 'LoginCheck' })
+  else next()
 })
 
 export default router

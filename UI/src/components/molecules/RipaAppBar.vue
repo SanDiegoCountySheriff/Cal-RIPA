@@ -103,7 +103,7 @@ export default {
     },
 
     isAdmin() {
-      return true
+      return this.admin
     },
 
     getAppTitle() {
