@@ -22,6 +22,10 @@
       ></ripa-autocomplete>
     </template>
 
+    <v-alert class="tw-mt-8" dense outlined type="info">
+      Note: Do not provide a street address if the location is a residence.
+    </v-alert>
+
     <ripa-number-input
       v-model="model.blockNumber"
       label="Block Number"
@@ -71,11 +75,6 @@
       >
       </ripa-text-input>
     </template>
-
-    <ripa-label
-      class="tw-mt-4 tw-mb-6"
-      value="Note: Do not provide a street address if the location is a residence."
-    ></ripa-label>
 
     <ripa-switch
       v-model="model.outOfCounty"

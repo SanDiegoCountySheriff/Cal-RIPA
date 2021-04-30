@@ -4,25 +4,41 @@
       <template v-if="stepIndex <= 5">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
-            <v-stepper-step :complete="stepIndex > 1" step="1">
+            <v-stepper-step
+              :rules="[() => step1Validated]"
+              :complete="stepIndex > 1"
+              step="1"
+            >
               Step 1
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="stepIndex > 2" step="2">
+            <v-stepper-step
+              :rules="[() => step2Validated]"
+              :complete="stepIndex > 2"
+              step="2"
+            >
               Step 2
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="stepIndex > 3" step="3">
+            <v-stepper-step
+              :rules="[() => step3Validated]"
+              :complete="stepIndex > 3"
+              step="3"
+            >
               Step 3
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="stepIndex > 4" step="4">
+            <v-stepper-step
+              :rules="[() => step4Validated]"
+              :complete="stepIndex > 4"
+              step="4"
+            >
               Step 4
             </v-stepper-step>
 
@@ -34,6 +50,7 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <ripa-form-step-1
+                v-model="stop"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
               ></ripa-form-step-1>
@@ -41,6 +58,7 @@
 
             <v-stepper-content step="2">
               <ripa-form-step-2
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -49,6 +67,7 @@
 
             <v-stepper-content step="3">
               <ripa-form-step-3
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -57,6 +76,7 @@
 
             <v-stepper-content step="4">
               <ripa-form-step-4
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -65,6 +85,7 @@
 
             <v-stepper-content step="5">
               <ripa-form-step-5
+                v-model="stop"
                 :on-back="handleBack"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
@@ -74,7 +95,7 @@
         </v-stepper>
       </template>
       <template v-if="stepIndex === 6">
-        <ripa-confirmation></ripa-confirmation>
+        <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
       </template>
     </v-card-text>
   </v-card>
@@ -102,7 +123,12 @@ export default {
 
   data() {
     return {
+      stop: null,
       stepIndex: 1,
+      step1Validated: true,
+      step2Validated: true,
+      step3Validated: true,
+      step4Validated: true,
     }
   },
 
@@ -120,7 +146,12 @@ export default {
     },
 
     handleSubmit() {
-      console.log('submit form')
+      this.stepIndex = 6
+    },
+
+    handleStartNew() {
+      this.stop = null
+      this.stepIndex = 1
     },
   },
 }

@@ -5,6 +5,7 @@
       class="v-input--reverse v-input--expand"
       :hint="hint"
       :persistent-hint="hint.length > 0"
+      hide-details
     >
       <template #label>
         {{ label }}
