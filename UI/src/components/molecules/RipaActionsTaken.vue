@@ -1,36 +1,28 @@
 <template>
   <div class="ripa-action-taken tw-p-4">
-    <ripa-form-header
-      title="Any actions taken during this stop?"
-      required>
+    <ripa-form-header title="Any actions taken during this stop?" required>
     </ripa-form-header>
 
-    <v-switch
-     v-model="model.switch"
-     :label="label"
-     @input="handleInput">
-    </v-switch>
+    <!-- <v-switch v-model="model.switch" :label="label" @input="handleInput">
+    </v-switch> -->
 
     <template v-if="model.switch === 1">
       <div></div>
     </template>
 
     <template v-if="model.switch === 2">
-      <div>
-        <ripa-check-group
-          v-model="model.actionTaken"
-          :items="actionTakenItems"
-          @input="handleInput">
-        </ripa-check-group>
-      </div>
+      <ripa-check-group
+        v-model="model.actionTaken"
+        :items="actionTakenItems"
+        @input="handleInput"
+      >
+      </ripa-check-group>
     </template>
-
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 
 export default {
@@ -38,7 +30,6 @@ export default {
 
   components: {
     RipaFormHeader,
-    RipaSwitch,
     RipaCheckGroup,
   },
 
@@ -64,8 +55,8 @@ export default {
         { name: 'Vehicle impounded', value: '16' },
       ],
       viewModel: {
-        switch: this.value.switch || null,
-        actionTaken: this.value.actionTaken || [],
+        switch: this.value?.switch || null,
+        actionTaken: this.value?.actionTaken || [],
       },
     }
   },
@@ -80,13 +71,13 @@ export default {
 
   methods: {
     handleInput() {
-      if (this.viewModel.switch === 1) {
-         this.viewModel.actionTaken = []
-      }
-      if (this.viewModel.switch === 2) {
-         this.viewModel.actionTaken = null
-         this.viewModel.switch = 'yes'
-      }
+      // if (this.viewModel.switch === 1) {
+      //   this.viewModel.actionTaken = []
+      // }
+      // if (this.viewModel.switch === 2) {
+      //   this.viewModel.actionTaken = null
+      //   this.viewModel.switch = 'yes'
+      // }
       this.$emit('input', this.viewModel)
     },
   },
@@ -103,4 +94,3 @@ export default {
   },
 }
 </script>
-

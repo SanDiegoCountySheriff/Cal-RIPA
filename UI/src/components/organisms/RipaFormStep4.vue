@@ -1,6 +1,6 @@
 <template>
   <v-form ref="step4" lazy-validation>
-    <div>ACTIONS TAKEN DURING STOP</div>
+    <ripa-actions-taken v-model="model.actionsTaken"></ripa-actions-taken>
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -23,8 +23,14 @@
 </template>
 
 <script>
+import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+
 export default {
   name: 'ripa-form-step4',
+
+  components: {
+    RipaActionsTaken,
+  },
 
   data() {
     return {
