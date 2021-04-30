@@ -1,6 +1,7 @@
 <template>
     <v-switch
      v-model="model"
+     :items="items"
      :label="label">
       </v-switch>
 </template>
@@ -41,10 +42,16 @@ props: {
       default: false,
     },
 
+    items: {
+      type: Object,
+      default: {},
+    },
+
     label: {
       type: String,
-      default: 'no',
+      default: string,
     }
+    
   }
 }
 </script>
