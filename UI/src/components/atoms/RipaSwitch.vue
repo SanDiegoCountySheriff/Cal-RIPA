@@ -16,7 +16,7 @@ export default {
     }
   },
 
-computed: {
+  computed: {
     model: {
       get() {
         return this.viewModel
@@ -35,8 +35,7 @@ computed: {
     },
   },
 
-
-props: {
+  props: {
     value: {
       type: Boolean,
       default: false,

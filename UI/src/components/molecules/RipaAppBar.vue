@@ -6,10 +6,19 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
+        <v-icon class="tw-ml-4" size="22" v-bind="attrs" v-on="on">{{
+          getOnlineIcon
+        }}</v-icon>
+      </template>
+      <span>Online Status</span>
+    </v-tooltip>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="tw-ml-4"
-          x-small
           icon
+          small
           @click="handleThemeChange"
           v-bind="attrs"
           v-on="on"
@@ -25,26 +34,19 @@
     <div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="tw-ml-4"
-            x-small
-            icon
-            to="/form"
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn class="tw-ml-4" icon small to="/" v-bind="attrs" v-on="on">
             <v-icon>mdi-plus-box</v-icon>
           </v-btn>
         </template>
-        <span>Create new form</span>
+        <span>Add new stop</span>
       </v-tooltip>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="tw-ml-4"
-            x-small
             icon
+            small
             to="/stops"
             v-bind="attrs"
             v-on="on"
@@ -57,14 +59,7 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="tw-ml-4"
-            x-small
-            icon
-            to="/user"
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn class="tw-ml-4" icon small to="/user" v-bind="attrs" v-on="on">
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </template>
@@ -76,8 +71,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
-              x-small
               icon
+              small
               to="/admin"
               v-bind="attrs"
               v-on="on"
@@ -108,22 +103,29 @@ export default {
     },
 
     isAdmin() {
-      return this.admin
+      return true
     },
 
     getAppTitle() {
       return 'RIPA'
+    },
+
+    getOnlineIcon() {
+      return this.online ? 'mdi-wifi' : 'mdi-wifi-off'
     },
   },
 
   methods: {
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      if (this.onUpdateDark) {
+        this.onUpdateDark(this.$vuetify.theme.dark)
+      }
     },
   },
 
-  created() {
-    this.$vuetify.theme.dark = false
+  mounted() {
+    this.$vuetify.theme.dark = this.dark
   },
 
   props: {
@@ -131,6 +133,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    dark: {
+      type: Boolean,
+      default: false,
+    },
+    online: {
+      type: Boolean,
+      default: false,
+    },
+    onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
   },
 }
 </script>
+
+<style lang="scss">
+.v-btn:before {
+  background-color: inherit !important;
+}
+</style>

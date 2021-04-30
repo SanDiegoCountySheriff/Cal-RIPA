@@ -18,7 +18,9 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admin: Maintain Beats</v-toolbar-title>
+          <v-toolbar-title class="tw-uppercase"
+            >Admin: Maintain Beats</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -40,6 +42,13 @@
               <v-card-text>
                 <v-container>
                   <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.id"
+                        type="number"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.community"
@@ -168,6 +177,9 @@ export default {
 
     deleteItemConfirm() {
       this.beats.splice(this.editedIndex, 1)
+      if (this.onDeleteBeat) {
+        this.onDeleteBeat(this.editedItem)
+      }
       this.closeDelete()
     },
 
@@ -193,6 +205,11 @@ export default {
       } else {
         this.beats.push(this.editedItem)
       }
+
+      if (this.onEditBeat) {
+        this.onEditBeat(this.editedItem)
+      }
+
       this.close()
     },
   },
@@ -221,6 +238,14 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    onDeleteBeat: {
+      type: Function,
+      default: () => {},
+    },
+    onEditBeat: {
+      type: Function,
+      default: () => {},
     },
   },
 }

@@ -1,8 +1,10 @@
 <template>
   <div class="ripa-no-english tw-p-4">
-    <ripa-form-header title="Limited or No English Fluency" 
-    required 
-    subtitle="§999.226(a)(8)">
+    <ripa-form-header
+      title="Limited or No English Fluency"
+      required
+      subtitle="§999.226(a)(8)"
+    >
     </ripa-form-header>
 
     <ripa-checkbox
@@ -23,14 +25,14 @@ export default {
 
   components: {
     RipaFormHeader,
-    RipaCheckbox
+    RipaCheckbox,
   },
 
   data() {
     return {
       valid: true,
       viewModel: {
-        checkbox: this.value.checkbox || false,
+        checkbox: this.value?.checkbox || false,
       },
     }
   },
