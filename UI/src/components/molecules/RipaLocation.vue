@@ -159,14 +159,8 @@ export default {
     }, 1000),
 
     handleInput() {
-      this.updateBlockNumber()
       this.updateBeatsModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateBlockNumber() {
-      if (this.viewModel.blockNumber) {
-      }
     },
 
     updateBeatsModel() {

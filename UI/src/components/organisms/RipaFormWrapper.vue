@@ -135,10 +135,12 @@ export default {
   methods: {
     handleBack() {
       this.stepIndex = this.stepIndex - 1
+      window.scrollTo(0, 0)
     },
 
     handleNext() {
       this.stepIndex = this.stepIndex + 1
+      window.scrollTo(0, 0)
     },
 
     handleCancel() {
@@ -147,11 +149,13 @@ export default {
 
     handleSubmit() {
       this.stepIndex = 6
+      window.scrollTo(0, 0)
     },
 
     handleStartNew() {
       this.stop = null
       this.stepIndex = 1
+      window.scrollTo(0, 0)
     },
   },
 }

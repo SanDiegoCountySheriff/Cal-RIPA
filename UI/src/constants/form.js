@@ -11,17 +11,25 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Others', value: 10 },
 ]
 
+export const AGES = [
+  { name: '0 - 10', value: 1 },
+  { name: '11 - 20', value: 2 },
+  { name: '21 - 30', value: 3 },
+  { name: '31 - 60', value: 4 },
+  { name: '60+', value: 5 },
+]
+
 export const DISABILITIES = [
-  { name: 'None', value: 1 },
-  { name: 'Deafness or difficulty hearing', value: 2 },
-  { name: 'Speech impairment or limited use of language', value: 3 },
-  { name: 'Blind or limited vision', value: 4 },
-  { name: 'Mental health condition', value: 5 },
+  { name: 'None', value: 0 },
+  { name: 'Deafness or difficulty hearing', value: 1 },
+  { name: 'Speech impairment or limited use of language', value: 2 },
+  { name: 'Blind or limited vision', value: 3 },
+  { name: 'Mental health condition', value: 4 },
   {
     name: 'Intellectual or developmental disability, including dementia',
-    value: 6,
+    value: 5,
   },
-  { name: 'Other disability', value: 7 },
+  { name: 'Other disability', value: 6 },
 ]
 
 export const GENDERS = [
@@ -30,11 +38,6 @@ export const GENDERS = [
   { name: 'Transgender Male', value: 3 },
   { name: 'Transgender Female', value: 4 },
   { name: 'Gender Noncomforming', value: 5 },
-]
-
-export const LGBTS = [
-  { name: 'Yes', value: 'A' },
-  { name: 'No', value: 'B' },
 ]
 
 export const RACES = [

@@ -5,6 +5,15 @@
       @input="handleInput"
       toggle
     ></ripa-student>
+    <ripa-race v-model="model.perceivedRace"></ripa-race>
+    <ripa-gender v-model="model.perceivedGender"></ripa-gender>
+    <ripa-age v-model="model.perceivedAge"></ripa-age>
+    <ripa-limited-english
+      v-model="model.perceivedLimitedEnglish"
+    ></ripa-limited-english>
+    <ripa-disability
+      v-model="model.perceivedOrKnownDisability"
+    ></ripa-disability>
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -27,18 +36,36 @@
 </template>
 
 <script>
+import RipaAge from '@/components/molecules/RipaAge'
+import RipaDisability from '@/components/molecules/RipaDisability'
+import RipaGender from '@/components/molecules/RipaGender'
+import RipaLimitedEnglish from '@/components/molecules/RipaLimitedEnglish'
+import RipaRace from '@/components/molecules/RipaRace'
 import RipaStudent from '@/components/molecules/RipaStudent'
 
 export default {
   name: 'ripa-form-step2',
 
-  components: { RipaStudent },
+  components: {
+    RipaAge,
+    RipaDisability,
+    RipaGender,
+    RipaLimitedEnglish,
+    RipaRace,
+    RipaStudent,
+  },
 
   data() {
     return {
       isValid: true,
       viewModel: {
         student: this.value?.student || null,
+        perceivedRace: this.value?.perceivedRace || null,
+        perceivedGender: this.value?.perceivedGender || null,
+        perceivedAge: this.value?.perceivedGender || null,
+        perceivedLimitedEnglish: this.value?.perceivedLimitedEnglish || null,
+        perceivedOrKnownDisability:
+          this.value?.perceivedOrKnownDisability || null,
       },
     }
   },

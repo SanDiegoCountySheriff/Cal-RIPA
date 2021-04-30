@@ -9,7 +9,7 @@
 
     <ripa-check-group
       v-model="model.disability"
-      :items="disabilityItems"
+      :items="getDisabilityItems"
       @input="handleInput"
     >
     </ripa-check-group>
@@ -45,10 +45,21 @@ export default {
         return this.viewModel
       },
     },
+
+    getDisabilityItems() {
+      if (this.viewModel.disability.includes(0)) {
+        return this.disabilityItems.filter(item => item.value === 0)
+      }
+
+      return this.disabilityItems
+    },
   },
 
   methods: {
     handleInput() {
+      if (this.viewModel.disability.includes(0)) {
+        this.viewModel.disability = [0]
+      }
       this.$emit('input', this.viewModel)
     },
   },

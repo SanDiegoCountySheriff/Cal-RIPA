@@ -14,13 +14,6 @@
         @input="handleInput"
       >
       </ripa-radio-group>
-
-      <ripa-checkbox
-        v-model="model.checkbox"
-        cbLabel="Gender Nonconforming"
-        @input="handleInput"
-      >
-      </ripa-checkbox>
     </template>
 
     <template>
@@ -32,12 +25,12 @@
       >
       </ripa-form-header>
 
-      <ripa-radio-group
+      <ripa-switch
         v-model="model.perceivedLgbt"
-        :items="lgbtItems"
+        label="Perceived as LGBT"
+        :max-width="200"
         @input="handleInput"
-      >
-      </ripa-radio-group>
+      ></ripa-switch>
     </template>
   </div>
 </template>
@@ -45,27 +38,25 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
-import { GENDERS, LGBTS } from '@/constants/form'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import { GENDERS } from '@/constants/form'
 
 export default {
-  name: 'ripa-stop-reason',
+  name: 'ripa-gender',
 
   components: {
     RipaFormHeader,
     RipaRadioGroup,
-    RipaCheckbox,
+    RipaSwitch,
   },
 
   data() {
     return {
       valid: true,
       genderItems: GENDERS,
-      lgbtItems: LGBTS,
       viewModel: {
         perceivedGender: this.value?.perceivedGender || null,
-        perceivedLgbt: this.value?.perceivedLgbt || null,
-        checkbox: this.value?.checkbox || false,
+        perceivedLgbt: this.value?.perceivedLgbt || false,
       },
     }
   },
@@ -80,13 +71,17 @@ export default {
 
   methods: {
     handleInput() {
+      this.updatePerceivedLgbtModel()
+      this.$emit('input', this.viewModel)
+    },
+
+    updatePerceivedLgbtModel() {
       if (
         this.viewModel.perceivedGender === 3 ||
         this.viewModel.perceivedGender === 4
       ) {
-        this.viewModel.perceivedLgbt = 'A'
+        this.viewModel.perceivedLgbt = true
       }
-      this.$emit('input', this.viewModel)
     },
   },
 
@@ -94,10 +89,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
   },
 }
