@@ -1,22 +1,22 @@
 <template>
   <div class="ripa-search tw-p-4">
-    <ripa-form-header
-      title="Was a search conducted?"
-      required>
+    <ripa-form-header title="Was a search conducted?" required>
     </ripa-form-header>
 
     <v-switch
-     v-model="model.switch"
-     :label="label"
-     :items="switchItems"
-     @input="handleInput">
+      v-model="model.switch"
+      :label="label"
+      :items="switchItems"
+      @input="handleInput"
+    >
     </v-switch>
 
     <template v-if="model.switch === 1">
       <div>
         <ripa-form-header
-        subtitle="Was a search not conducted due to consent not given?">
-        </ripa-form-header>  
+          subtitle="Was a search not conducted due to consent not given?"
+        >
+        </ripa-form-header>
 
         <ripa-radio-group
           v-model="model.consent"
@@ -28,38 +28,36 @@
 
     <template v-if="model.switch === 2">
       <div>
-        <ripa-form-header
-        subtitle="What was searched?">
-        </ripa-form-header> 
+        <ripa-form-header subtitle="What was searched?"> </ripa-form-header>
         <ripa-check-group
           v-model="model.search"
           :items="searchItems"
-          @input="handleInput">
+          @input="handleInput"
+        >
         </ripa-check-group>
       </div>
 
       <div class="tw-mt-4">
-        <ripa-form-header
-        subtitle="What was the basis of the search?">
-        </ripa-form-header> 
+        <ripa-form-header subtitle="What was the basis of the search?">
+        </ripa-form-header>
         <ripa-check-group
           v-model="model.searchBasis"
           :items="searchBasisItems"
-          @input="handleInput">
+          @input="handleInput"
+        >
         </ripa-check-group>
       </div>
 
-    <div class="tw-mt-4">
+      <div class="tw-mt-4">
         <ripa-text-area
-        v-model="model.explanation"
-        hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-        label="Please include a brief explanation"
-        :rules="explanationRules"
-        @input="handleInput"
+          v-model="model.explanation"
+          hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+          label="Please include a brief explanation"
+          :rules="explanationRules"
+          @input="handleInput"
         ></ripa-text-area>
       </div>
     </template>
-
   </div>
 </template>
 
@@ -110,10 +108,10 @@ export default {
         { name: 'Canine detention', value: '3H' },
         { name: 'Evidence of a crime', value: '3I' },
         { name: 'Incident to arrest', value: '3J' },
-        { name: 'Exigent circumstances/emergency', value: '3K' }
+        { name: 'Exigent circumstances/emergency', value: '3K' },
       ],
-    
-    explanationRules: [
+
+      explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
@@ -123,7 +121,7 @@ export default {
         consentItems: this.value.consentItems || null,
         searchItems: this.value.searchItems || null,
         explanation: this.value.explanation || null,
-        searchBasisItems: this.viewModel.searchBasisItems = []
+        searchBasisItems: (this.viewModel.searchBasisItems = []),
       },
     }
   },
