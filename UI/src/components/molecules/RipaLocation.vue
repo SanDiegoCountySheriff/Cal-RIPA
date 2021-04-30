@@ -75,7 +75,6 @@
     <ripa-label
       class="tw-mt-4 tw-mb-6"
       value="Note: Do not provide a street address if the location is a residence."
-      bold
     ></ripa-label>
 
     <ripa-switch

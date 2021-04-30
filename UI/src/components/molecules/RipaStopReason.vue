@@ -7,7 +7,7 @@
     ></ripa-form-header>
 
     <ripa-select
-      v-model="model.reason"
+      v-model="model.reasonForStop"
       item-text="name"
       item-value="value"
       label="Reason"
@@ -19,7 +19,7 @@
     <template v-if="model.reason === 1">
       <div>
         <ripa-radio-group
-          v-model="model.trafficViolation"
+          v-model="model.trafficViolationDetails"
           :items="trafficViolationItems"
           @input="handleInput"
         ></ripa-radio-group>
@@ -39,21 +39,20 @@
     </template>
 
     <template v-if="model.reason === 2">
-      <div>
-        <ripa-check-group
-          v-model="model.reasonableSuspicionValues"
-          :items="reasonableSuspicionItems"
-          @input="handleInput"
-        ></ripa-check-group>
-      </div>
+      <ripa-check-group
+        v-model="model.reasonSuspicionDetails"
+        :items="reasonableSuspicionItems"
+        @input="handleInput"
+      ></ripa-check-group>
     </template>
 
     <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
 
     <ripa-text-area
-      v-model="model.explanation"
+      v-model="model.reasonForStopExplanation"
       hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-      label="Brif Explanation"
+      persistent-hint
+      label="Brief Explanation"
       :rules="explanationRules"
       @input="handleInput"
     ></ripa-text-area>
@@ -99,11 +98,14 @@ export default {
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: {
-        reason: this.value?.reason || null,
-        explanation: this.value?.explanation || null,
-        trafficViolation: this.value?.trafficViolation || null,
+        reasonForStop: this.value?.reasonForStop || null,
+        trafficViolationDetails: this.value?.trafficViolationDetails || null,
         trafficViolationCode: this.value?.trafficViolationCode || null,
-        reasonableSuspicionValues: this.value?.reasonableSuspicionValues || [],
+        reasonSuspicionDetails: this.value?.reasonSuspicionDetails || null,
+        reasonSuspicionCode: this.value?.reasonSuspicionCode || null,
+        searchOfPerson: this.value?.searchOfPerson || null,
+        searchOfProperty: this.value?.searchOfProperty || null,
+        reasonForStopExplanation: this.value?.reasonForStopExplanation || null,
       },
     }
   },
@@ -118,11 +120,11 @@ export default {
 
   methods: {
     handleInput() {
-      if (this.viewModel.reason === 1) {
-        this.viewModel.reasonableSuspicionValues = []
+      if (this.viewModel.reasonForStop === 1) {
+        this.viewModel.reasonSuspicionDetails = []
       }
-      if (this.viewModel.reason === 2) {
-        this.viewModel.trafficViolation = null
+      if (this.viewModel.reasonForStop === 2) {
+        this.viewModel.trafficViolationDetails = null
         this.viewModel.trafficViolationCode = null
       }
       this.$emit('input', this.viewModel)

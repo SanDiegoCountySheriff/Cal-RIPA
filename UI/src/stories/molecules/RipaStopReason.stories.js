@@ -18,7 +18,7 @@ export const basic = () => ({
         }
       }),
       stopReason: {
-        explanation: 'My name is Steve',
+        reasonForStopExplanation: 'My name is Steve',
       },
     }
   },

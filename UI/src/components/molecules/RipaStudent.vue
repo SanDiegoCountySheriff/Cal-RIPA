@@ -1,39 +1,33 @@
 <template>
   <div class="ripa-race tw-p-4">
-    <ripa-form-header
-      title="Perceived Race or Ethnicity"
-      required
-      subtitle="§999.226(a)(4)"
-    >
+    <ripa-form-header title="Student" required subtitle="§999.224(a)(16)">
     </ripa-form-header>
 
-    <ripa-check-group
-      v-model="model.raceValues"
-      :items="raceItems"
+    <ripa-switch
+      v-model="model.isStudent"
+      label="K-12 Public School Student"
+      :max-width="250"
       @input="handleInput"
-    >
-    </ripa-check-group>
+    ></ripa-switch>
   </div>
 </template>
 
 <script>
-import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import { RACES } from '@/constants/form'
 
 export default {
-  name: 'ripa-race',
+  name: 'ripa-student',
 
   components: {
-    RipaCheckGroup,
+    RipaSwitch,
     RipaFormHeader,
   },
 
   data() {
     return {
-      raceItems: RACES,
       viewModel: {
-        raceValues: this.value?.raceValues || [],
+        isStudent: this.value?.isStudent || false,
       },
     }
   },

@@ -29,6 +29,7 @@ export const GENDERS = [
   { name: 'Female', value: '2' },
   { name: 'Transgender Male', value: '3' },
   { name: 'Transgender Female', value: '4' },
+  { name: 'Gender Noncomforming', value: '5' },
 ]
 
 export const LGBTS = [

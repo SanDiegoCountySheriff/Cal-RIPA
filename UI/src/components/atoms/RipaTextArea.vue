@@ -9,6 +9,7 @@
     flat
     :hint="hint"
     :label="label"
+    :persistent-hint="persistentHint"
     required
     rows="1"
     :rules="rules"
@@ -55,6 +56,10 @@ export default {
     hint: {
       type: String,
       default: '',
+    },
+    persistentHint: {
+      type: Boolean,
+      default: false,
     },
     rules: {
       type: Array,
