@@ -10,11 +10,9 @@ export const basic = () => ({
   components: { RipaActionsTaken },
   data() {
     return {
-      actionTaken: {
-        getLabelText: 'no',
-      },
+      actionsTaken: {},
     }
   },
   template:
-    '<div"><ripa-actions-taken v-model="actionTaken"></ripa-actions-taken>{{getLabelText}}</div>',
+    '<div><ripa-actions-taken v-model="actionsTaken"></ripa-actions-taken>{{actionsTaken}}</div>',
 })
