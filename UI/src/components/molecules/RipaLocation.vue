@@ -40,7 +40,7 @@
     >
     </ripa-text-input>
 
-    <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
+    <ripa-subheader text="-- or --"></ripa-subheader>
 
     <ripa-text-input
       v-model="model.intersection"
@@ -57,7 +57,7 @@
     ></ripa-switch>
 
     <template v-if="model.moreLocationOptions">
-      <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
+      <ripa-subheader text="-- or --"></ripa-subheader>
 
       <ripa-text-input
         v-model="model.highwayExit"
@@ -66,7 +66,7 @@
       >
       </ripa-text-input>
 
-      <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
+      <ripa-subheader text="-- or --"></ripa-subheader>
 
       <ripa-text-input
         v-model="model.landmark"
@@ -109,8 +109,8 @@
 <script>
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
+import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import _ from 'lodash'
@@ -121,8 +121,8 @@ export default {
   components: {
     RipaAutocomplete,
     RipaFormHeader,
-    RipaLabel,
     RipaNumberInput,
+    RipaSubheader,
     RipaSwitch,
     RipaTextInput,
   },

@@ -77,7 +77,7 @@
       ></ripa-switch>
     </template>
 
-    <ripa-label class="tw-my-4" value="-- and --" bold></ripa-label>
+    <ripa-subheader text="-- and --"></ripa-subheader>
 
     <ripa-text-area
       v-model="model.reasonForStopExplanation"
@@ -94,9 +94,9 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 import {
@@ -112,9 +112,9 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
-    RipaLabel,
     RipaRadioGroup,
     RipaSelect,
+    RipaSubheader,
     RipaSwitch,
     RipaTextArea,
   },

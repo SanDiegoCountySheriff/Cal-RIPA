@@ -15,7 +15,7 @@
     </ripa-check-group>
 
     <template v-if="!isNoneSelected">
-      <ripa-label class="tw-my-4" value="Search" bold></ripa-label>
+      <ripa-subheader text="Search"></ripa-subheader>
 
       <ripa-check-group
         v-model="model.actionsTaken"
@@ -24,7 +24,7 @@
       >
       </ripa-check-group>
 
-      <ripa-label class="tw-my-4" value="Seizure" bold></ripa-label>
+      <ripa-subheader text="Seizure"></ripa-subheader>
 
       <ripa-switch
         v-model="model.propertyWasSeized"
@@ -39,7 +39,7 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import RipaLabel from '@/components/atoms/RipaLabel'
+import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { ACTIONS_TAKEN_GENERAL, ACTIONS_TAKEN_SEARCH } from '@/constants/form'
 
@@ -49,7 +49,7 @@ export default {
   components: {
     RipaFormHeader,
     RipaCheckGroup,
-    RipaLabel,
+    RipaSubheader,
     RipaSwitch,
   },
 
