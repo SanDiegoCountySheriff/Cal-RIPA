@@ -1,7 +1,6 @@
 <template>
   <v-textarea
     v-model="model"
-    class="tw-mt-6"
     auto-grow
     clearable
     clear-icon="mdi-close-circle"

@@ -77,7 +77,7 @@
       ></ripa-switch>
     </template>
 
-    <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
+    <ripa-label class="tw-my-4" value="-- and --" bold></ripa-label>
 
     <ripa-text-area
       v-model="model.reasonForStopExplanation"

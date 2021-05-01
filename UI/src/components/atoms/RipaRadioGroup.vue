@@ -1,5 +1,5 @@
 <template>
-  <v-radio-group class="tw-mt-6" v-model="model" hide-details>
+  <v-radio-group v-model="model" hide-details>
     <v-radio
       v-for="(item, index) in items"
       :key="index"

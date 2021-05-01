@@ -40,7 +40,7 @@
     >
     </ripa-text-input>
 
-    <ripa-label class="tw-mt-4 tw-mb-6" value="-- or --" bold></ripa-label>
+    <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
 
     <ripa-text-input
       v-model="model.intersection"
@@ -57,7 +57,7 @@
     ></ripa-switch>
 
     <template v-if="model.moreLocationOptions">
-      <ripa-label class="tw-mt-4 tw-mb-6" value="-- or --" bold></ripa-label>
+      <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
 
       <ripa-text-input
         v-model="model.highwayExit"
@@ -66,7 +66,7 @@
       >
       </ripa-text-input>
 
-      <ripa-label class="tw-mt-4 tw-mb-6" value="-- or --" bold></ripa-label>
+      <ripa-label class="tw-my-4" value="-- or --" bold></ripa-label>
 
       <ripa-text-input
         v-model="model.landmark"

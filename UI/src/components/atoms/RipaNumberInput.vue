@@ -1,6 +1,5 @@
 <template>
   <v-text-field
-    class="tw-mt-6"
     v-model="model"
     type="number"
     :label="label"

@@ -7,20 +7,31 @@
     >
     </ripa-form-header>
 
-    <!-- <v-switch v-model="model.switch" :label="label" @input="handleInput">
-    </v-switch> -->
+    <ripa-check-group
+      v-model="model.actionsTaken"
+      :items="getActionsTakenItems"
+      @input="handleInput"
+    >
+    </ripa-check-group>
 
-    <template v-if="model.switch === 1">
-      <div></div>
-    </template>
+    <template v-if="!isNoneSelected">
+      <ripa-label class="tw-my-4" value="Search" bold></ripa-label>
 
-    <template v-if="model.switch === 2">
       <ripa-check-group
-        v-model="model.actionTaken"
-        :items="actionTakenItems"
+        v-model="model.actionsTaken"
+        :items="actionTakenSearchItems"
         @input="handleInput"
       >
       </ripa-check-group>
+
+      <ripa-label class="tw-my-4" value="Seizure" bold></ripa-label>
+
+      <ripa-switch
+        v-model="model.propertyWasSeized"
+        label="Property was Seized"
+        :max-width="200"
+        @input="handleInput"
+      ></ripa-switch>
     </template>
   </div>
 </template>
@@ -28,6 +39,9 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import RipaLabel from '@/components/atoms/RipaLabel'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import { ACTIONS_TAKEN_GENERAL, ACTIONS_TAKEN_SEARCH } from '@/constants/form'
 
 export default {
   name: 'ripa-action-taken',
@@ -35,32 +49,18 @@ export default {
   components: {
     RipaFormHeader,
     RipaCheckGroup,
+    RipaLabel,
+    RipaSwitch,
   },
 
   data() {
     return {
       valid: true,
-      actionTakenItems: [
-        { name: 'Person removed from vehicle by order', value: '1' },
-        { name: 'Person removed from vehicle by physical contact', value: '2' },
-        { name: 'Field sobriety test conducted', value: '3' },
-        { name: 'Curbside detention', value: '4' },
-        { name: 'Handcuffed or flex cuffed', value: '5' },
-        { name: 'Patrol car detention', value: '6' },
-        { name: 'Firearm pointed at person', value: '7' },
-        { name: 'Firearm discharged or used', value: '8' },
-        { name: 'Electronic control device used', value: '9' },
-        { name: 'Impact projectile discharged or used', value: '10' },
-        { name: 'Canine bit or held person', value: '11' },
-        { name: 'Baton or other impact weapon used', value: '12' },
-        { name: 'Chemical spray used', value: '13' },
-        { name: 'Physical or vehicle contact', value: '14' },
-        { name: 'Personal photographed', value: '15' },
-        { name: 'Vehicle impounded', value: '16' },
-      ],
+      actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
+      actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
       viewModel: {
-        switch: this.value?.switch || null,
-        actionTaken: this.value?.actionTaken || [],
+        actionsTaken: this.value?.actionTaken || [],
+        propertyWasSeized: this.value?.propertyWasSeized || false,
       },
     }
   },
@@ -70,6 +70,18 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    isNoneSelected() {
+      return this.viewModel.actionsTaken.includes(0)
+    },
+
+    getActionsTakenItems() {
+      if (this.viewModel.actionsTaken.includes(0)) {
+        return this.actionTakenGeneralItems.filter(item => item.value === 0)
+      }
+
+      return this.actionTakenGeneralItems
     },
   },
 

@@ -9,7 +9,6 @@
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="model"
-        class="tw-mt-6"
         :label="label"
         append-icon="mdi-clock-time-four-outline"
         readonly

@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-mt-6">
+  <div class="ripa-check-group">
     <v-checkbox
       v-for="(item, index) in items"
       :key="index"

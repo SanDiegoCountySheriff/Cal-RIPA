@@ -1,7 +1,6 @@
 <template>
   <v-autocomplete
     v-model="model"
-    class="tw-mt-6"
     clearable
     dense
     flat
