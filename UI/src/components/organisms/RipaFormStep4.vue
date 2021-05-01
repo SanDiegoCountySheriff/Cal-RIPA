@@ -1,6 +1,10 @@
 <template>
-  <v-form ref="step4" lazy-validation>
-    <ripa-actions-taken v-model="model.actionsTaken"></ripa-actions-taken>
+  <v-form ref="stepForm" lazy-validation>
+    <ripa-actions-taken
+      v-model="model.actionsTaken"
+      @input="handleInput"
+    ></ripa-actions-taken>
+
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -61,7 +65,7 @@ export default {
     },
 
     next() {
-      this.isValid = this.$refs.step4.validate()
+      this.isValid = this.$refs.stepForm.validate()
       if (!this.isValid) {
         return
       }

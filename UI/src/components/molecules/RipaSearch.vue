@@ -63,7 +63,6 @@
 
 <script>
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
@@ -73,7 +72,6 @@ export default {
 
   components: {
     RipaCheckGroup,
-    RipaSwitch,
     RipaFormHeader,
     RipaRadioGroup,
     RipaTextArea,

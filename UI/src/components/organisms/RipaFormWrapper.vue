@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      <template v-if="stepIndex <= 5">
+      <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step
@@ -44,13 +44,23 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="5"> Step 5 </v-stepper-step>
+            <v-stepper-step
+              :rules="[() => step5Validated]"
+              :complete="stepIndex > 5"
+              step="5"
+            >
+              Step 5
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step step="6"> Step 6 </v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
             <v-stepper-content step="1">
               <ripa-form-step-1
-                v-model="stop"
+                v-model="model"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
               ></ripa-form-step-1>
@@ -58,7 +68,7 @@
 
             <v-stepper-content step="2">
               <ripa-form-step-2
-                v-model="stop"
+                v-model="model"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -67,7 +77,7 @@
 
             <v-stepper-content step="3">
               <ripa-form-step-3
-                v-model="stop"
+                v-model="model"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -76,7 +86,7 @@
 
             <v-stepper-content step="4">
               <ripa-form-step-4
-                v-model="stop"
+                v-model="model"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -85,16 +95,25 @@
 
             <v-stepper-content step="5">
               <ripa-form-step-5
-                v-model="stop"
+                v-model="model"
+                :on-back="handleBack"
+                :on-next="handleNext"
+                :on-cancel="handleCancel"
+              ></ripa-form-step-5>
+            </v-stepper-content>
+
+            <v-stepper-content step="6">
+              <ripa-form-step-6
+                v-model="model"
                 :on-back="handleBack"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
-              ></ripa-form-step-5>
+              ></ripa-form-step-6>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </template>
-      <template v-if="stepIndex === 6">
+      <template v-if="stepIndex === confirmationStepIndex">
         <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
       </template>
     </v-card-text>
@@ -108,6 +127,7 @@ import RipaFormStep2 from '@/components/organisms/RipaFormStep2'
 import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
 import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
 import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
+import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -119,17 +139,33 @@ export default {
     RipaFormStep3,
     RipaFormStep4,
     RipaFormStep5,
+    RipaFormStep6,
   },
 
   data() {
     return {
-      stop: null,
       stepIndex: 1,
       step1Validated: true,
       step2Validated: true,
       step3Validated: true,
       step4Validated: true,
+      step5Validated: true,
+      confirmationStepIndex: 7,
+      viewModel: { stop: this.value?.stop || null },
     }
+  },
+
+  computed: {
+    model: {
+      get() {
+        return this.viewModel
+      },
+      set(newVal) {
+        console.log(newVal)
+        this.viewModel = newVal
+        this.$emit('input', newVal)
+      },
+    },
   },
 
   methods: {
@@ -148,7 +184,7 @@ export default {
     },
 
     handleSubmit() {
-      this.stepIndex = 6
+      this.stepIndex = this.confirmationStepIndex
       window.scrollTo(0, 0)
     },
 
@@ -156,6 +192,25 @@ export default {
       this.stop = null
       this.stepIndex = 1
       window.scrollTo(0, 0)
+    },
+  },
+
+  props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
+    schools: {
+      type: Array,
+      default: () => {},
+    },
+    beats: {
+      type: Array,
+      default: () => {},
+    },
+    cities: {
+      type: Array,
+      default: () => {},
     },
   },
 }

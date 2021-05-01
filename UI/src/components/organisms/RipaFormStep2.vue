@@ -1,19 +1,25 @@
 <template>
-  <v-form ref="step2" lazy-validation>
+  <v-form ref="stepForm" lazy-validation>
     <ripa-student
       v-model="model.student"
-      @input="handleInput"
       toggle
+      @input="handleInput"
     ></ripa-student>
-    <ripa-race v-model="model.perceivedRace"></ripa-race>
-    <ripa-gender v-model="model.perceivedGender"></ripa-gender>
-    <ripa-age v-model="model.perceivedAge"></ripa-age>
+    <ripa-race v-model="model.perceivedRace" @input="handleInput"></ripa-race>
+    <ripa-gender
+      v-model="model.perceivedGender"
+      @input="handleInput"
+    ></ripa-gender>
+    <ripa-age v-model="model.perceivedAge" @input="handleInput"></ripa-age>
     <ripa-limited-english
       v-model="model.perceivedLimitedEnglish"
+      @input="handleInput"
     ></ripa-limited-english>
     <ripa-disability
       v-model="model.perceivedOrKnownDisability"
+      @input="handleInput"
     ></ripa-disability>
+
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -90,7 +96,7 @@ export default {
     },
 
     next() {
-      this.isValid = this.$refs.step2.validate()
+      this.isValid = this.$refs.stepForm.validate()
       if (!this.isValid) {
         return
       }

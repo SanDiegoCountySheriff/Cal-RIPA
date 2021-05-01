@@ -1,6 +1,6 @@
 <template>
-  <v-form ref="step5" lazy-validation>
-    <div>REVIEW FORM SELECTIONS</div>
+  <v-form ref="stepForm" lazy-validation>
+    <div>RESULT OF STOP</div>
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -11,13 +11,13 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-4" @click="back">
+      <v-btn outlined color="primary" class="tw-mr-4" @click="handleBack">
         Back
       </v-btn>
-      <v-btn outlined color="error" class="tw-mr-4" @click="cancel">
+      <v-btn outlined color="error" class="tw-mr-4" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
+      <v-btn color="primary" class="tw-mr-4" @click="handleNext"> Next </v-btn>
     </div>
   </v-form>
 </template>
@@ -48,24 +48,24 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
-    back() {
+    handleBack() {
       if (this.onBack) {
         this.onBack()
       }
     },
 
-    submit() {
-      this.isValid = this.$refs.step5.validate()
+    handleNext() {
+      this.isValid = this.$refs.stepForm.validate()
       if (!this.isValid) {
         return
       }
       this.$emit('input', this.viewModel)
-      if (this.onSubmit) {
-        this.onSubmit()
+      if (this.onNext) {
+        this.onNext()
       }
     },
 
-    cancel() {
+    handleCancel() {
       if (this.onCancel) {
         this.onCancel()
       }
@@ -81,7 +81,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onNext: {
       type: Function,
       default: () => {},
     },

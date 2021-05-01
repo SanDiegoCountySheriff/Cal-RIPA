@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="step1" lazy-validation>
+  <v-form ref="stepForm" lazy-validation>
     <ripa-officer
       v-model="model.officer"
       @input="handleInput"
@@ -13,6 +13,7 @@
       :cities="cities"
       @input="handleInput"
     ></ripa-location>
+
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -66,7 +67,7 @@ export default {
     },
 
     submit() {
-      this.isValid = this.$refs.step1.validate()
+      this.isValid = this.$refs.stepForm.validate()
       if (!this.isValid) {
         return
       }
