@@ -4,21 +4,21 @@
     </ripa-form-header>
 
     <ripa-date-picker
-      v-model="model.stopDate"
+      v-model="model.stopDate.date"
       label="Date of Stop"
       @input="handleInput"
     >
     </ripa-date-picker>
 
     <ripa-time-picker
-      v-model="model.stopTime"
+      v-model="model.stopDate.time"
       label="Time of Stop"
       @input="handleInput"
     >
     </ripa-time-picker>
 
     <ripa-select
-      v-model="model.stopDuration"
+      v-model="model.stopDate.duration"
       label="Stop Duration"
       :items="durationItems"
       itemText="name"
@@ -28,7 +28,7 @@
     </ripa-select>
 
     <ripa-switch
-      v-model="model.stopInResponseToCfs"
+      v-model="model.stopDate.stopInResponseToCfs"
       label="Stop in response to Call for Service"
       :max-width="300"
       @input="handleInput"
@@ -61,10 +61,13 @@ export default {
       valid: true,
       durationItems: DURATIONS,
       viewModel: {
-        stopDate: format(new Date(), 'yyyy-MM-dd'),
-        stopTime: format(new Date(), 'h:mm'),
-        stopDuration: this.value?.stopDuration || null,
-        stopInResponseToCfs: this.value?.stopInResponseToCfs || false,
+        stopDate: {
+          date: this.value?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
+          time: this.value?.stopDate?.time || format(new Date(), 'h:mm'),
+          duration: this.value?.stopDate?.duration || null,
+          stopInResponseToCfs:
+            this.value?.stopDate?.stopInResponseToCfs || false,
+        },
       },
     }
   },

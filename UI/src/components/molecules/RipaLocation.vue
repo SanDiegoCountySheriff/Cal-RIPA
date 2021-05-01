@@ -4,15 +4,15 @@
     </ripa-form-header>
 
     <ripa-switch
-      v-model="model.isSchool"
+      v-model="model.location.isSchool"
       label="K-12 Public School"
       :max-width="200"
       @input="handleInput"
     ></ripa-switch>
 
-    <template v-if="model.isSchool">
+    <template v-if="model.location.isSchool">
       <ripa-autocomplete
-        v-model="model.school"
+        v-model="model.location.school"
         hint="Select 1 School (required)"
         item-text="fullName"
         item-value="cdsCode"
@@ -27,14 +27,14 @@
     </v-alert>
 
     <ripa-number-input
-      v-model="model.blockNumber"
+      v-model="model.location.blockNumber"
       label="Block Number"
       @input="debounceInput"
     >
     </ripa-number-input>
 
     <ripa-text-input
-      v-model="model.streetName"
+      v-model="model.location.streetName"
       label="Street Name"
       @input="handleInput"
     >
@@ -43,24 +43,24 @@
     <ripa-subheader text="-- or --"></ripa-subheader>
 
     <ripa-text-input
-      v-model="model.intersection"
+      v-model="model.location.intersection"
       label="Closest Intersection"
       @input="handleInput"
     >
     </ripa-text-input>
 
     <ripa-switch
-      v-model="model.moreLocationOptions"
+      v-model="model.location.moreLocationOptions"
       label="More Location Options"
       :max-width="225"
       @input="handleInput"
     ></ripa-switch>
 
-    <template v-if="model.moreLocationOptions">
+    <template v-if="model.location.moreLocationOptions">
       <ripa-subheader text="-- or --"></ripa-subheader>
 
       <ripa-text-input
-        v-model="model.highwayExit"
+        v-model="model.location.highwayExit"
         label="Highway and closet exit"
         @input="handleInput"
       >
@@ -69,7 +69,7 @@
       <ripa-subheader text="-- or --"></ripa-subheader>
 
       <ripa-text-input
-        v-model="model.landmark"
+        v-model="model.location.landmark"
         label="Road markerk, landmark, or other"
         @input="handleInput"
       >
@@ -77,14 +77,14 @@
     </template>
 
     <ripa-switch
-      v-model="model.outOfCounty"
+      v-model="model.location.outOfCounty"
       label="City Out of County?"
       :max-width="200"
       @input="handleInput"
     ></ripa-switch>
 
     <ripa-autocomplete
-      v-model="model.city"
+      v-model="model.location.city"
       hint="Select 1 City (required)"
       item-text="name"
       item-value="name"
@@ -94,13 +94,13 @@
     ></ripa-autocomplete>
 
     <ripa-autocomplete
-      v-model="model.beat"
+      v-model="model.location.beat"
       hint="Select 1 Beat (required)"
       item-text="fullName"
       item-value="id"
       label="Beat"
       :items="beats"
-      :disabled="model.outOfCounty"
+      :disabled="model.location.outOfCounty"
       @input="handleInput"
     ></ripa-autocomplete>
   </div>
@@ -130,17 +130,20 @@ export default {
   data() {
     return {
       viewModel: {
-        isSchool: this.value?.isSchool || false,
-        school: this.value?.school || null,
-        blockNumber: this.value?.blockNumber || null,
-        streetName: this.value?.streetName || null,
-        intersection: this.value?.intersection || null,
-        moreLocationOptions: this.value?.moreLocationOptions || false,
-        highwayExit: this.value?.highwayExit || null,
-        landmark: this.value?.landmark || null,
-        outOfCounty: this.value?.outOfCounty || false,
-        city: this.value?.city || null,
-        beat: this.value?.beat || null,
+        location: {
+          isSchool: this.value?.location?.isSchool || false,
+          school: this.value?.location?.school || null,
+          blockNumber: this.value?.location?.blockNumber || null,
+          streetName: this.value?.location?.streetName || null,
+          intersection: this.value?.location?.intersection || null,
+          moreLocationOptions:
+            this.value?.location?.moreLocationOptions || false,
+          highwayExit: this.value?.location?.highwayExit || null,
+          landmark: this.value?.location?.landmark || null,
+          outOfCounty: this.value?.location?.outOfCounty || false,
+          city: this.value?.location?.city || null,
+          beat: this.value?.location?.beat || null,
+        },
       },
     }
   },
@@ -155,7 +158,8 @@ export default {
 
   methods: {
     debounceInput: _.debounce(function (e) {
-      this.viewModel.blockNumber = Math.round(e / 100) * 100
+      this.viewModel.location.blockNumber = Math.round(e / 100) * 100
+      this.handleInput()
     }, 1000),
 
     handleInput() {
@@ -164,12 +168,15 @@ export default {
     },
 
     updateBeatsModel() {
-      if (this.viewModel.outOfCounty) {
-        this.viewModel.beat = 999
+      if (this.viewModel.location.outOfCounty) {
+        this.viewModel.location.beat = 999
       }
 
-      if (!this.viewModel.outOfCounty && this.viewModel.beat === 999) {
-        this.viewModel.beat = null
+      if (
+        !this.viewModel.location.outOfCounty &&
+        this.viewModel.location.beat === 999
+      ) {
+        this.viewModel.location.beat = null
       }
     },
   },

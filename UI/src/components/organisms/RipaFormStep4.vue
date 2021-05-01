@@ -1,9 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-actions-taken
-      v-model="model.actionsTaken"
-      @input="handleInput"
-    ></ripa-actions-taken>
+    <ripa-actions-taken v-model="model"></ripa-actions-taken>
 
     <v-spacer></v-spacer>
 
@@ -37,15 +34,6 @@ export default {
 
   components: {
     RipaActionsTaken,
-  },
-
-  data() {
-    return {
-      isValid: true,
-      viewModel: {
-        actionsTaken: this.value?.actionsTaken || null,
-      },
-    }
   },
 }
 </script>

@@ -2,19 +2,19 @@
   <div class="ripa-officer tw-pb-8">
     <template v-if="toggle">
       <ripa-switch
-        v-model="model.editOfficer"
+        v-model="model.officer.editOfficer"
         label="Edit Officer Experience and Assignment"
         :max-width="330"
         @input="handleInput"
       ></ripa-switch>
     </template>
 
-    <template v-if="!toggle || (toggle && model.editOfficer)">
+    <template v-if="!toggle || (toggle && model.officer.editOfficer)">
       <ripa-form-header title="Officer Years of Experience" required>
       </ripa-form-header>
 
       <ripa-number-input
-        v-model="model.yearsExperience"
+        v-model="model.officer.yearsExperience"
         label="Years of Experience"
         :rules="yearsExperienceRules"
         @input="handleInput"
@@ -22,7 +22,7 @@
       </ripa-number-input>
 
       <ripa-select
-        v-model="model.assignment"
+        v-model="model.officer.assignment"
         label="Officer Assignment"
         :items="assignmentItems"
         itemText="name"
@@ -32,9 +32,9 @@
       >
       </ripa-select>
 
-      <template v-if="model.assignment === 10">
+      <template v-if="model.officer.assignment === 10">
         <ripa-text-input
-          v-model="model.otherrType"
+          v-model="model.officer.otherType"
           label="Other Type"
           @input="handleInput"
         >
@@ -70,10 +70,12 @@ export default {
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
       viewModel: {
-        editOfficer: this.value?.editOfficer || false,
-        yearsExperience: this.value?.yearsExperience || null,
-        assignment: this.value?.assignment || null,
-        otherType: this.value?.otherType || null,
+        officer: {
+          editOfficer: this.value?.officer?.editOfficer || false,
+          yearsExperience: this.value?.officer?.yearsExperience || null,
+          assignment: this.value?.officer?.assignment || null,
+          otherType: this.value?.officer?.otherType || null,
+        },
       },
     }
   },
@@ -93,8 +95,8 @@ export default {
     },
 
     updateOtherTypeModel() {
-      if (this.viewModel.assignment !== 10) {
-        this.viewModel.otherType = null
+      if (this.viewModel.officer.assignment !== 10) {
+        this.viewModel.officer.otherType = null
       }
     },
   },

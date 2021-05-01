@@ -4,7 +4,7 @@
     </ripa-form-header>
 
     <ripa-switch
-      v-model="model.isStudent"
+      v-model="model.person.isStudent"
       label="K-12 Public School Student"
       :max-width="250"
       @input="handleInput"
@@ -27,7 +27,9 @@ export default {
   data() {
     return {
       viewModel: {
-        isStudent: this.value?.isStudent || false,
+        person: {
+          isStudent: this.value?.person?.isStudent || false,
+        },
       },
     }
   },

@@ -10,9 +10,9 @@ export const basic = () => ({
   components: { RipaLimitedEnglish },
   data() {
     return {
-      noEnglish: {},
+      stop: {},
     }
   },
   template:
-    '<div><ripa-limited-english v-model="noEnglish"></ripa-limited-english>{{noEnglish}}</div>',
+    '<div><ripa-limited-english v-model="stop"></ripa-limited-english>{{stop}}</div>',
 })

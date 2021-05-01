@@ -31,14 +31,5 @@ export default {
   name: 'ripa-form-step6',
 
   mixins: [RipaFormStepMixin],
-
-  data() {
-    return {
-      isValid: true,
-      viewModel: {
-        stopResult: this.value?.stopResult || null,
-      },
-    }
-  },
 }
 </script>

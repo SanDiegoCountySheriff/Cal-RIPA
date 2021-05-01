@@ -17,14 +17,16 @@ export const basic = () => ({
           fullName: `${item.description} ${item.code}`,
         }
       }),
-      stopReason: {
-        reasonForStop: 1,
-        trafficViolation: 1,
-        trafficViolationCode: 54106,
-        reasonForStopExplanation: 'My name is Steve',
+      stop: {
+        stopReason: {
+          reasonForStop: 1,
+          trafficViolation: 1,
+          trafficViolationCode: 54106,
+          reasonForStopExplanation: 'My name is Steve',
+        },
       },
     }
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stopReason" :offense-codes="data"></ripa-stop-reason>{{stopReason}}</div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stop" :offense-codes="data"></ripa-stop-reason>{{stop}}</div>',
 })

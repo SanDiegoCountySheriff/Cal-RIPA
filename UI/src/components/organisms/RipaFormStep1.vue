@@ -1,20 +1,12 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-officer
-      v-model="model.officer"
-      @input="handleInput"
-      toggle
-    ></ripa-officer>
-    <ripa-stop-date
-      v-model="model.stopDetails"
-      @input="handleInput"
-    ></ripa-stop-date>
+    <ripa-officer v-model="model" toggle></ripa-officer>
+    <ripa-stop-date v-model="model"></ripa-stop-date>
     <ripa-location
-      v-model="model.location"
+      v-model="model"
       :schools="schools"
       :beats="beats"
       :cities="cities"
-      @input="handleInput"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -47,16 +39,5 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: { RipaOfficer, RipaStopDate, RipaLocation },
-
-  data() {
-    return {
-      isValid: true,
-      viewModel: {
-        officer: this.value?.officer || null,
-        stopDetails: this.value?.stopDetails || null,
-        location: this.value?.location || null,
-      },
-    }
-  },
 }
 </script>

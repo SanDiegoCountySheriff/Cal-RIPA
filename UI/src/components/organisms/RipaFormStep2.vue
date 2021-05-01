@@ -1,24 +1,11 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-student
-      v-model="model.student"
-      toggle
-      @input="handleInput"
-    ></ripa-student>
-    <ripa-race v-model="model.perceivedRace" @input="handleInput"></ripa-race>
-    <ripa-gender
-      v-model="model.perceivedGender"
-      @input="handleInput"
-    ></ripa-gender>
-    <ripa-age v-model="model.perceivedAge" @input="handleInput"></ripa-age>
-    <ripa-limited-english
-      v-model="model.perceivedLimitedEnglish"
-      @input="handleInput"
-    ></ripa-limited-english>
-    <ripa-disability
-      v-model="model.perceivedOrKnownDisability"
-      @input="handleInput"
-    ></ripa-disability>
+    <ripa-student v-model="model" toggle></ripa-student>
+    <ripa-race v-model="model" @input="handleInput"></ripa-race>
+    <ripa-gender v-model="model"></ripa-gender>
+    <ripa-age v-model="model" @input="handleInput"></ripa-age>
+    <ripa-limited-english v-model="model"></ripa-limited-english>
+    <ripa-disability v-model="model"></ripa-disability>
 
     <v-spacer></v-spacer>
 
@@ -62,21 +49,6 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
-  },
-
-  data() {
-    return {
-      isValid: true,
-      viewModel: {
-        student: this.value?.student || null,
-        perceivedRace: this.value?.perceivedRace || null,
-        perceivedGender: this.value?.perceivedGender || null,
-        perceivedAge: this.value?.perceivedGender || null,
-        perceivedLimitedEnglish: this.value?.perceivedLimitedEnglish || null,
-        perceivedOrKnownDisability:
-          this.value?.perceivedOrKnownDisability || null,
-      },
-    }
   },
 }
 </script>

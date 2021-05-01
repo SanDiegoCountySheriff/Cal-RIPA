@@ -8,7 +8,7 @@
     </ripa-form-header>
 
     <ripa-switch
-      v-model="model.perceivedLimitedEnglish"
+      v-model="model.person.perceivedLimitedEnglish"
       label="Limited or no English fluency"
       :max-width="300"
       @input="handleInput"
@@ -32,7 +32,10 @@ export default {
     return {
       valid: true,
       viewModel: {
-        perceivedLimitedEnglish: this.value?.perceivedLimitedEnglish || false,
+        person: {
+          perceivedLimitedEnglish:
+            this.value?.person?.perceivedLimitedEnglish || false,
+        },
       },
     }
   },

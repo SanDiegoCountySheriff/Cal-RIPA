@@ -1,9 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-reason
-      v-model="model.stopReason"
-      @input="handleInput"
-    ></ripa-stop-reason>
+    <ripa-stop-reason v-model="model"></ripa-stop-reason>
 
     <v-spacer></v-spacer>
 
@@ -36,14 +33,5 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: { RipaStopReason },
-
-  data() {
-    return {
-      isValid: true,
-      viewModel: {
-        stopReason: this.value?.stopReason || null,
-      },
-    }
-  },
 }
 </script>

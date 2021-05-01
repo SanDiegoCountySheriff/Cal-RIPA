@@ -4,7 +4,7 @@
     </ripa-form-header>
 
     <ripa-select
-      v-model="model.age"
+      v-model="model.person.perceivedAge"
       label="Perceived Age"
       :items="ageItems"
       itemText="name"
@@ -33,7 +33,9 @@ export default {
       valid: true,
       ageItems: AGES,
       viewModel: {
-        age: this.value?.age || null,
+        person: {
+          perceivedAge: this.value?.person?.perceivedAge || null,
+        },
       },
     }
   },

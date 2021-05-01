@@ -1,18 +1,25 @@
 <script>
 export default {
+  data() {
+    return {
+      isValid: true,
+      viewModel: this.value || {},
+    }
+  },
+
   computed: {
     model: {
       get() {
         return this.viewModel
       },
+      set(newVal) {
+        this.viewModel = newVal
+        this.$emit('input', newVal)
+      },
     },
   },
 
   methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
-
     handleBack() {
       if (this.onBack) {
         this.onBack()

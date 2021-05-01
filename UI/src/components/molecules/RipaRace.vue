@@ -8,7 +8,7 @@
     </ripa-form-header>
 
     <ripa-check-group
-      v-model="model.raceValues"
+      v-model="model.person.perceivedRace"
       :items="raceItems"
       @input="handleInput"
     >
@@ -33,7 +33,9 @@ export default {
     return {
       raceItems: RACES,
       viewModel: {
-        raceValues: this.value?.raceValues || [],
+        person: {
+          perceivedRace: this.value?.person?.perceivedRace || [],
+        },
       },
     }
   },

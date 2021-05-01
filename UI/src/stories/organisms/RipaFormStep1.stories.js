@@ -43,10 +43,13 @@ export const basic = () => ({
         return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
       }),
       stop: {
-        // officer: {
-        //   yearsExperience: 22,
-        //   assignment: 1,
-        // },
+        officer: {
+          yearsExperience: 8,
+          assignment: 4,
+        },
+        stopDate: {
+          duration: 2,
+        },
       },
     }
   },

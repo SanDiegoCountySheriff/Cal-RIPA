@@ -13,7 +13,7 @@ export const basic = () => ({
   components: { RipaLocation },
   data() {
     return {
-      location: {},
+      stop: {},
       schools: schools
         .sort((x, y) => {
           const schoolA = x.name.toUpperCase()
@@ -46,5 +46,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-location v-model="location" :schools="schools" :beats="beats" :cities="cities"></ripa-location>{{location}}</div>',
+    '<div><ripa-location v-model="stop" :schools="schools" :beats="beats" :cities="cities"></ripa-location>{{stop}}</div>',
 })

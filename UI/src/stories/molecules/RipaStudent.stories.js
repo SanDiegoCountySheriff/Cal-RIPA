@@ -10,9 +10,8 @@ export const basic = () => ({
   components: { RipaStudent },
   data() {
     return {
-      student: { isStudent: false },
+      stop: {},
     }
   },
-  template:
-    '<div><ripa-student v-model="student"></ripa-student>{{student}}</div>',
+  template: '<div><ripa-student v-model="stop"></ripa-student>{{stop}}</div>',
 })

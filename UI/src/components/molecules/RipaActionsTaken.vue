@@ -8,7 +8,7 @@
     </ripa-form-header>
 
     <ripa-check-group
-      v-model="model.actionsTaken"
+      v-model="model.actionsTaken.actionsTakenDuringStop"
       :items="getActionsTakenItems"
       @input="handleInput"
     >
@@ -18,7 +18,7 @@
       <ripa-subheader text="Search"></ripa-subheader>
 
       <ripa-check-group
-        v-model="model.actionsTaken"
+        v-model="model.actionsTaken.actionsTakenDuringStop"
         :items="actionTakenSearchItems"
         @input="handleInput"
       >
@@ -27,7 +27,7 @@
       <ripa-subheader text="Seizure"></ripa-subheader>
 
       <ripa-switch
-        v-model="model.propertyWasSeized"
+        v-model="model.actionsTaken.propertyWasSeized"
         label="Property was Seized"
         :max-width="200"
         @input="handleInput"
@@ -59,8 +59,12 @@ export default {
       actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
       actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
       viewModel: {
-        actionsTaken: this.value?.actionTaken || [],
-        propertyWasSeized: this.value?.propertyWasSeized || false,
+        actionsTaken: {
+          actionsTakenDuringStop:
+            this.value?.actionsTaken?.actionsTakenDuringStop || [],
+          propertyWasSeized:
+            this.value?.actionsTaken?.propertyWasSeized || false,
+        },
       },
     }
   },
@@ -73,11 +77,11 @@ export default {
     },
 
     isNoneSelected() {
-      return this.viewModel.actionsTaken.includes(0)
+      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(0)
     },
 
     getActionsTakenItems() {
-      if (this.viewModel.actionsTaken.includes(0)) {
+      if (this.viewModel.actionsTaken.actionsTakenDuringStop.includes(0)) {
         return this.actionTakenGeneralItems.filter(item => item.value === 0)
       }
 
@@ -87,13 +91,6 @@ export default {
 
   methods: {
     handleInput() {
-      // if (this.viewModel.switch === 1) {
-      //   this.viewModel.actionTaken = []
-      // }
-      // if (this.viewModel.switch === 2) {
-      //   this.viewModel.actionTaken = null
-      //   this.viewModel.switch = 'yes'
-      // }
       this.$emit('input', this.viewModel)
     },
   },

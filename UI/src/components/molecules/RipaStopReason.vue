@@ -7,7 +7,7 @@
     ></ripa-form-header>
 
     <ripa-select
-      v-model="model.reasonForStop"
+      v-model="model.stopReason.reasonForStop"
       item-text="name"
       item-value="value"
       label="Reason"
@@ -16,9 +16,9 @@
       @input="handleInput"
     ></ripa-select>
 
-    <template v-if="model.reasonForStop === 1">
+    <template v-if="model.stopReason.reasonForStop === 1">
       <ripa-radio-group
-        v-model="model.trafficViolation"
+        v-model="model.stopReason.trafficViolation"
         :items="trafficViolationItems"
         @input="handleInput"
       ></ripa-radio-group>
@@ -26,7 +26,7 @@
       <div class="tw-mt-2"></div>
 
       <ripa-autocomplete
-        v-model="model.trafficViolationCode"
+        v-model="model.stopReason.trafficViolationCode"
         hint="Select 1 Offense Code (required)"
         persistent-hint
         item-text="fullName"
@@ -37,9 +37,9 @@
       ></ripa-autocomplete>
     </template>
 
-    <template v-if="model.reasonForStop === 2">
+    <template v-if="model.stopReason.reasonForStop === 2">
       <ripa-check-group
-        v-model="model.reasonSuspicion"
+        v-model="model.stopReason.reasonSuspicion"
         :items="reasonableSuspicionItems"
         @input="handleInput"
       ></ripa-check-group>
@@ -56,21 +56,21 @@
       ></ripa-autocomplete>
     </template>
 
-    <template v-if="model.reasonForStop === 6">
+    <template v-if="model.stopReason.reasonForStop === 6">
       <v-alert dense outlined type="warning" prominent>
         Your selection indicates that a search was conducted, please select from
         the search criteria below.
       </v-alert>
 
       <ripa-switch
-        v-model="model.searchOfPerson"
+        v-model="model.stopReason.searchOfPerson"
         label="Search of person was conducted"
         :max-width="300"
         @input="handleInput"
       ></ripa-switch>
 
       <ripa-switch
-        v-model="model.searchOfProperty"
+        v-model="model.stopReason.searchOfProperty"
         label="Search of property was conducted"
         :max-width="300"
         @input="handleInput"
@@ -80,7 +80,7 @@
     <ripa-subheader text="-- and --"></ripa-subheader>
 
     <ripa-text-area
-      v-model="model.reasonForStopExplanation"
+      v-model="model.stopReason.reasonForStopExplanation"
       hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
       persistent-hint
       label="Brief Explanation"
@@ -131,14 +131,19 @@ export default {
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: {
-        reasonForStop: this.value?.reasonForStop || null,
-        trafficViolation: this.value?.trafficViolation || null,
-        trafficViolationCode: this.value?.trafficViolationCode || null,
-        reasonSuspicion: this.value?.reasonSuspicion || [],
-        reasonSuspicionCode: this.value?.reasonSuspicionCode || null,
-        searchOfPerson: this.value?.searchOfPerson || null,
-        searchOfProperty: this.value?.searchOfProperty || null,
-        reasonForStopExplanation: this.value?.reasonForStopExplanation || null,
+        stopReason: {
+          reasonForStop: this.value?.stopReason?.reasonForStop || null,
+          trafficViolation: this.value?.stopReason?.trafficViolation || null,
+          trafficViolationCode:
+            this.value?.stopReason?.trafficViolationCode || null,
+          reasonSuspicion: this.value?.stopReason?.reasonSuspicion || [],
+          reasonSuspicionCode:
+            this.value?.stopReason?.reasonSuspicionCode || null,
+          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
+          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
+          reasonForStopExplanation:
+            this.value?.stopReason?.reasonForStopExplanation || null,
+        },
       },
     }
   },

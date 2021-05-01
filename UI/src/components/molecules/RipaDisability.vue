@@ -8,7 +8,7 @@
     </ripa-form-header>
 
     <ripa-check-group
-      v-model="model.disability"
+      v-model="model.person.perceivedOrKnownDisability"
       :items="getDisabilityItems"
       @input="handleInput"
     >
@@ -34,7 +34,10 @@ export default {
       valid: true,
       disabilityItems: DISABILITIES,
       viewModel: {
-        disability: this.value?.disability || [],
+        person: {
+          perceivedOrKnownDisability:
+            this.value?.person?.perceivedOrKnownDisability || [],
+        },
       },
     }
   },
@@ -47,7 +50,7 @@ export default {
     },
 
     getDisabilityItems() {
-      if (this.viewModel.disability.includes(0)) {
+      if (this.viewModel.person.perceivedOrKnownDisability.includes(0)) {
         return this.disabilityItems.filter(item => item.value === 0)
       }
 
@@ -57,8 +60,8 @@ export default {
 
   methods: {
     handleInput() {
-      if (this.viewModel.disability.includes(0)) {
-        this.viewModel.disability = [0]
+      if (this.viewModel.person.perceivedOrKnownDisability.includes(0)) {
+        this.viewModel.person.perceivedOrKnownDisability = [0]
       }
       this.$emit('input', this.viewModel)
     },

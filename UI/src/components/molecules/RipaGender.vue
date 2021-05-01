@@ -9,7 +9,7 @@
       </ripa-form-header>
 
       <ripa-radio-group
-        v-model="model.perceivedGender"
+        v-model="model.person.perceivedGender"
         :items="genderItems"
         @input="handleInput"
       >
@@ -26,7 +26,7 @@
       </ripa-form-header>
 
       <ripa-switch
-        v-model="model.perceivedLgbt"
+        v-model="model.person.perceivedLgbt"
         label="Perceived as LGBT"
         :max-width="200"
         @input="handleInput"
@@ -55,8 +55,10 @@ export default {
       valid: true,
       genderItems: GENDERS,
       viewModel: {
-        perceivedGender: this.value?.perceivedGender || null,
-        perceivedLgbt: this.value?.perceivedLgbt || false,
+        person: {
+          perceivedGender: this.value?.person?.perceivedGender || null,
+          perceivedLgbt: this.value?.person?.perceivedLgbt || false,
+        },
       },
     }
   },
@@ -76,12 +78,9 @@ export default {
     },
 
     updatePerceivedLgbtModel() {
-      if (
-        this.viewModel.perceivedGender === 3 ||
-        this.viewModel.perceivedGender === 4
-      ) {
-        this.viewModel.perceivedLgbt = true
-      }
+      this.viewModel.person.perceivedLgbt =
+        this.viewModel.person.perceivedGender === 3 ||
+        this.viewModel.person.perceivedGender === 4
     },
   },
 
