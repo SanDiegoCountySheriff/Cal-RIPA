@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       valid: true,
+      stopReason: this.value?.stopReason || null,
       actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
       actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
       viewModel: {
@@ -92,6 +93,12 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.stopReason = newVal.stopReason || null
     },
   },
 
