@@ -11,84 +11,34 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-4" @click="back">
+      <v-btn outlined color="primary" class="tw-mr-4" @click="handleBack">
         Back
       </v-btn>
-      <v-btn outlined color="error" class="tw-mr-4" @click="cancel">
+      <v-btn outlined color="error" class="tw-mr-4" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" class="tw-mr-4" @click="submit"> Submit </v-btn>
+      <v-btn color="primary" class="tw-mr-4" @click="handleSubmit">
+        Submit
+      </v-btn>
     </div>
   </v-form>
 </template>
 
 <script>
+import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+
 export default {
   name: 'ripa-form-step6',
+
+  mixins: [RipaFormStepMixin],
 
   data() {
     return {
       isValid: true,
       viewModel: {
-        actionsTaken: this.value?.actionsTaken || null,
+        stopResult: this.value?.stopResult || null,
       },
     }
-  },
-
-  computed: {
-    model: {
-      get() {
-        return this.viewModel
-      },
-    },
-  },
-
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
-
-    back() {
-      if (this.onBack) {
-        this.onBack()
-      }
-    },
-
-    submit() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
-        return
-      }
-      this.$emit('input', this.viewModel)
-      if (this.onSubmit) {
-        this.onSubmit()
-      }
-    },
-
-    cancel() {
-      if (this.onCancel) {
-        this.onCancel()
-      }
-    },
-  },
-
-  props: {
-    value: {
-      type: Object,
-      default: () => {},
-    },
-    onBack: {
-      type: Function,
-      default: () => {},
-    },
-    onSubmit: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
-      type: Function,
-      default: () => {},
-    },
   },
 }
 </script>

@@ -5,7 +5,10 @@
       @input="handleInput"
       toggle
     ></ripa-officer>
-    <ripa-stop-date v-model="model.stop" @input="handleInput"></ripa-stop-date>
+    <ripa-stop-date
+      v-model="model.stopDetails"
+      @input="handleInput"
+    ></ripa-stop-date>
     <ripa-location
       v-model="model.location"
       :schools="schools"
@@ -24,10 +27,10 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="error" class="tw-mr-4" @click="cancel">
+      <v-btn outlined color="error" class="tw-mr-4" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" class="tw-mr-4" @click="submit"> Next </v-btn>
+      <v-btn color="primary" class="tw-mr-4" @click="handleNext"> Next </v-btn>
     </div>
   </v-form>
 </template>
@@ -36,9 +39,12 @@
 import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
+import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 
 export default {
   name: 'ripa-form-step1',
+
+  mixins: [RipaFormStepMixin],
 
   components: { RipaOfficer, RipaStopDate, RipaLocation },
 
@@ -47,68 +53,10 @@ export default {
       isValid: true,
       viewModel: {
         officer: this.value?.officer || null,
-        stop: this.value?.stop || null,
+        stopDetails: this.value?.stopDetails || null,
         location: this.value?.location || null,
       },
     }
-  },
-
-  computed: {
-    model: {
-      get() {
-        return this.viewModel
-      },
-    },
-  },
-
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
-
-    submit() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
-        return
-      }
-      this.$emit('input', this.viewModel)
-      if (this.onNext) {
-        this.onNext()
-      }
-    },
-
-    cancel() {
-      if (this.onCancel) {
-        this.onCancel()
-      }
-    },
-  },
-
-  props: {
-    value: {
-      type: Object,
-      default: () => {},
-    },
-    schools: {
-      type: Array,
-      default: () => {},
-    },
-    beats: {
-      type: Array,
-      default: () => {},
-    },
-    cities: {
-      type: Array,
-      default: () => {},
-    },
-    onNext: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
-      type: Function,
-      default: () => {},
-    },
   },
 }
 </script>

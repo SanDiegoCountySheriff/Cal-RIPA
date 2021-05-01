@@ -23,72 +23,20 @@
 </template>
 
 <script>
+import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+
 export default {
   name: 'ripa-form-step5',
+
+  mixins: [RipaFormStepMixin],
 
   data() {
     return {
       isValid: true,
       viewModel: {
-        actionsTaken: this.value?.actionsTaken || null,
+        stopResult: this.value?.stopResult || null,
       },
     }
-  },
-
-  computed: {
-    model: {
-      get() {
-        return this.viewModel
-      },
-    },
-  },
-
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
-
-    handleBack() {
-      if (this.onBack) {
-        this.onBack()
-      }
-    },
-
-    handleNext() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
-        return
-      }
-      this.$emit('input', this.viewModel)
-      if (this.onNext) {
-        this.onNext()
-      }
-    },
-
-    handleCancel() {
-      if (this.onCancel) {
-        this.onCancel()
-      }
-    },
-  },
-
-  props: {
-    value: {
-      type: Object,
-      default: () => {},
-    },
-    onBack: {
-      type: Function,
-      default: () => {},
-    },
-    onNext: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
-      type: Function,
-      default: () => {},
-    },
   },
 }
 </script>
