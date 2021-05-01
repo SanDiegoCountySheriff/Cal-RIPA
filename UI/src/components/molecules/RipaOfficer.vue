@@ -31,6 +31,15 @@
         @input="handleInput"
       >
       </ripa-select>
+
+      <template v-if="model.assignment === 10">
+        <ripa-text-input
+          v-model="model.otherrType"
+          label="Other Type"
+          @input="handleInput"
+        >
+        </ripa-text-input>
+      </template>
     </template>
   </div>
 </template>
@@ -40,6 +49,7 @@ import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 import { OFFICER_ASSIGNMENTS } from '@/constants/form'
 
 export default {
@@ -50,6 +60,7 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaSwitch,
+    RipaTextInput,
   },
 
   data() {
@@ -62,6 +73,7 @@ export default {
         editOfficer: this.value?.editOfficer || false,
         yearsExperience: this.value?.yearsExperience || null,
         assignment: this.value?.assignment || null,
+        otherType: this.value?.otherType || null,
       },
     }
   },
@@ -76,7 +88,14 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateOtherTypeModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateOtherTypeModel() {
+      if (this.viewModel.assignment !== 10) {
+        this.viewModel.otherType = null
+      }
     },
   },
 

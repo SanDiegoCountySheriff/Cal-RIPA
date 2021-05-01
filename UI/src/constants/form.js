@@ -8,7 +8,7 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Task force', value: 7 },
   { name: 'K-12 public school', value: 8 },
   { name: 'Investigative/detective', value: 9 },
-  { name: 'Others', value: 10 },
+  { name: 'Other', value: 10 },
 ]
 
 export const DURATIONS = [
