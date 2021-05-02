@@ -22,7 +22,7 @@ export const basic = () => ({
           reasonForStop: 1,
           trafficViolation: 1,
           trafficViolationCode: 54106,
-          reasonForStopExplanation: 'My name is Steve',
+          reasonForStopExplanation: '',
         },
       },
     }
