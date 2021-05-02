@@ -1,5 +1,5 @@
 <template>
-  <v-checkbox v-model="model" dense :label="cbLabel" hide-details></v-checkbox>
+  <v-checkbox v-model="model" dense :label="label" hide-details></v-checkbox>
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    cbLabel: {
+    label: {
       type: String,
       default: '',
     },
