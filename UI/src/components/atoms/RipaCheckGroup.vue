@@ -5,6 +5,7 @@
       :key="index"
       v-model="model"
       dense
+      :disabled="item.disabled || false"
       :label="item.name"
       :value="item.value"
       hide-details
