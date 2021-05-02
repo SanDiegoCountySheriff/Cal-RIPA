@@ -158,7 +158,15 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateSearchModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateSearchModel() {
+      if (this.viewModel.stopReason.reasonForStop !== 6) {
+        this.viewModel.stopReason.searchOfPerson = false
+        this.viewModel.stopReason.searchOfProperty = false
+      }
     },
   },
 
