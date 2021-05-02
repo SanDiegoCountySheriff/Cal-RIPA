@@ -29,21 +29,35 @@
             Note: Do not provide a street address if the location is a
             residence.
           </v-alert>
+        </v-col>
+      </v-row>
 
-          <ripa-number-input
-            v-model="model.location.blockNumber"
-            label="Block Number"
-            @input="debounceInput"
-          >
-          </ripa-number-input>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <div class="tw-mr-4">
+            <ripa-number-input
+              v-model="model.location.blockNumber"
+              label="Block Number"
+              @input="debounceInput"
+            >
+            </ripa-number-input>
+          </div>
+        </v-col>
 
-          <ripa-text-input
-            v-model="model.location.streetName"
-            label="Street Name"
-            @input="handleInput"
-          >
-          </ripa-text-input>
+        <v-col cols="12" sm="12" md="6">
+          <div>
+            <ripa-text-input
+              v-model="model.location.streetName"
+              label="Street Name"
+              @input="handleInput"
+            >
+            </ripa-text-input>
+          </div>
+        </v-col>
+      </v-row>
 
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
           <ripa-subheader text="-- or --"></ripa-subheader>
 
           <ripa-text-input
@@ -86,27 +100,37 @@
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
+        </v-col>
+      </v-row>
 
-          <ripa-autocomplete
-            v-model="model.location.city"
-            hint="Select 1 City (required)"
-            item-text="name"
-            item-value="name"
-            label="City"
-            :items="cities"
-            @input="handleInput"
-          ></ripa-autocomplete>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <div class="tw-mr-4">
+            <ripa-autocomplete
+              v-model="model.location.city"
+              hint="Select 1 City (required)"
+              item-text="name"
+              item-value="name"
+              label="City"
+              :items="cities"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </div>
+        </v-col>
 
-          <ripa-autocomplete
-            v-model="model.location.beat"
-            hint="Select 1 Beat (required)"
-            item-text="fullName"
-            item-value="id"
-            label="Beat"
-            :items="beats"
-            :disabled="model.location.outOfCounty"
-            @input="handleInput"
-          ></ripa-autocomplete>
+        <v-col cols="12" sm="12" md="6">
+          <div>
+            <ripa-autocomplete
+              v-model="model.location.beat"
+              hint="Select 1 Beat (required)"
+              item-text="fullName"
+              item-value="id"
+              label="Beat"
+              :items="beats"
+              :disabled="model.location.outOfCounty"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </div>
         </v-col>
       </v-row>
     </v-container>
