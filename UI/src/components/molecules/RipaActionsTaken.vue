@@ -32,6 +32,24 @@
       >
       </ripa-check-group>
 
+      <template v-if="wasAskedForConsentToSearchPerson">
+        <ripa-switch
+          v-model="model.actionsTaken.personSearchConsentGiven"
+          label="Person Search Consent Given"
+          :max-width="300"
+          @input="handleInput"
+        ></ripa-switch>
+      </template>
+
+      <template v-if="wasAskedForConsentToSearchProperty">
+        <ripa-switch
+          v-model="model.actionsTaken.propertySearchConsentGiven"
+          label="Property Search Consent Given"
+          :max-width="300"
+          @input="handleInput"
+        ></ripa-switch>
+      </template>
+
       <template v-if="wasSearchConducted">
         <ripa-form-subheader
           title="Basis for Search"
@@ -126,6 +144,10 @@ export default {
   data() {
     return {
       valid: true,
+      explanationRules: [
+        v => (v || '').length > 0 || 'Explanation is required',
+        v => (v || '').length <= 250 || 'Max 250 characters',
+      ],
       actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
       actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
       basisForSearchItems: BASIS_FOR_SEARCH,
@@ -138,6 +160,10 @@ export default {
           anyActionsTaken: this.value?.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
             this.value?.actionsTaken?.actionsTakenDuringStop || [],
+          personSearchConsentGiven:
+            this.value?.actionsTaken?.personSearchConsentGiven || false,
+          propertySearchConsentGiven:
+            this.value?.actionsTaken?.propertySearchConsentGiven || false,
           basisForSearch: this.value?.actionsTaken?.basisForSearch || [],
           basisForSearchBrief:
             this.value?.actionsTaken?.basisForSearchBrief || null,
@@ -176,12 +202,21 @@ export default {
         this.viewModel.actionsTaken.actionsTakenDuringStop.includes(20)
       )
     },
+
+    wasAskedForConsentToSearchPerson() {
+      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)
+    },
+
+    wasAskedForConsentToSearchProperty() {
+      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+    },
   },
 
   methods: {
     handleInput() {
       this.updateActionsTakenModel()
       this.updateBasisForPropertySeizedModel()
+      this.updateSearchModel()
       this.$emit('input', this.viewModel)
     },
 
@@ -204,13 +239,31 @@ export default {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.isAnyActionsTakenDisabled = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+          }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
           this.isAnyActionsTakenDisabled = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+          }
         }
+      }
+
+      if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)) {
+        this.viewModel.actionsTaken.personSearchConsentGiven = false
+      }
+
+      if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)) {
+        this.viewModel.actionsTaken.propertySearchConsentGiven = false
       }
     },
   },
