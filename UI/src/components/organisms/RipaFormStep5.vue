@@ -1,6 +1,10 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <div>RESULT OF STOP</div>
+    <ripa-stop-result
+      v-model="model"
+      :offense-codes="offenseCodes"
+    ></ripa-stop-result>
+
     <v-spacer></v-spacer>
 
     <template v-if="!isValid">
@@ -23,11 +27,21 @@
 </template>
 
 <script>
+import RipaStopResult from '@/components/molecules/RipaStopResult'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 
 export default {
   name: 'ripa-form-step5',
 
   mixins: [RipaFormStepMixin],
+
+  components: { RipaStopResult },
+
+  props: {
+    offenseCodes: {
+      type: Array,
+      default: () => [],
+    },
+  },
 }
 </script>
