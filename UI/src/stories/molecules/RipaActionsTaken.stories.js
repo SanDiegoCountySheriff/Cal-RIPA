@@ -16,3 +16,25 @@ export const basic = () => ({
   template:
     '<div><ripa-actions-taken v-model="stop"></ripa-actions-taken>{{stop}}</div>',
 })
+
+export const consensualEncounterResultingInSearch = () => ({
+  components: { RipaActionsTaken },
+  data() {
+    return {
+      stop: {
+        stopReason: {
+          reasonForStop: 6,
+          trafficViolation: 1,
+          trafficViolationCode: 54106,
+          reasonSuspicion: [],
+          reasonSuspicionCode: null,
+          searchOfPerson: true,
+          searchOfProperty: true,
+          reasonForStopExplanation: '',
+        },
+      },
+    }
+  },
+  template:
+    '<div><ripa-actions-taken v-model="stop"></ripa-actions-taken>{{stop}}</div>',
+})
