@@ -81,7 +81,7 @@ import {
   ACTIONS_TAKEN_GENERAL,
   ACTIONS_TAKEN_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
-  PROPERTY_SEIZED_TYPES,
+  CONTRABAND_TYPES,
 } from '@/constants/form'
 
 export default {
@@ -102,7 +102,7 @@ export default {
       actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
       actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
-      propertySeizedTypeItems: PROPERTY_SEIZED_TYPES,
+      propertySeizedTypeItems: CONTRABAND_TYPES,
       viewModel: {
         actionsTaken: {
           anyActionsTaken: this.value?.actionsTaken?.anyActionsTaken || false,

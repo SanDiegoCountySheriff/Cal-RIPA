@@ -140,7 +140,7 @@ export const BASIS_FOR_PROPERTY_SEIZURE = [
   { name: 'Impound of vehicle', value: 5 },
 ]
 
-export const PROPERTY_SEIZED_TYPES = [
+export const CONTRABAND_TYPES = [
   { name: 'Firearm(s)', value: 1 },
   { name: 'Ammunition', value: 2 },
   { name: 'Weapon(s) other than a firearm', value: 3 },
