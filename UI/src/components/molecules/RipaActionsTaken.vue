@@ -284,10 +284,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    items: {
-      type: Object,
-      default: () => {},
-    },
   },
 }
 </script>
