@@ -3,6 +3,7 @@
     <v-switch
       v-model="model"
       class="v-input--reverse v-input--expand"
+      :disabled="disabled"
       :hint="hint"
       :persistent-hint="hint.length > 0"
       hide-details
@@ -45,6 +46,10 @@ export default {
 
   props: {
     value: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
