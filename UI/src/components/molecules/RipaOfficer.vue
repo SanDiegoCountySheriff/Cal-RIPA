@@ -1,46 +1,70 @@
 <template>
   <div class="ripa-officer tw-pb-8">
-    <template v-if="toggle">
-      <ripa-switch
-        v-model="model.officer.editOfficer"
-        label="Edit Officer Experience and Assignment"
-        :max-width="330"
-        @input="handleInput"
-      ></ripa-switch>
-    </template>
-
     <template v-if="!toggle || (toggle && model.officer.editOfficer)">
-      <ripa-form-header title="Officer Years of Experience" required>
+      <ripa-form-header
+        title="Officer Years of Experience"
+        required
+        subtitle="§999.226(a)(15)"
+      >
       </ripa-form-header>
-
-      <ripa-number-input
-        v-model="model.officer.yearsExperience"
-        label="Years of Experience"
-        :rules="yearsExperienceRules"
-        @input="handleInput"
-      >
-      </ripa-number-input>
-
-      <ripa-select
-        v-model="model.officer.assignment"
-        label="Officer Assignment"
-        :items="assignmentItems"
-        itemText="name"
-        itemValue="value"
-        :rules="assignmentRules"
-        @input="handleInput"
-      >
-      </ripa-select>
-
-      <template v-if="model.officer.assignment === 10">
-        <ripa-text-input
-          v-model="model.officer.otherType"
-          label="Other Type"
-          @input="handleInput"
-        >
-        </ripa-text-input>
-      </template>
     </template>
+
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <template v-if="toggle">
+            <ripa-switch
+              v-model="model.officer.editOfficer"
+              label="Edit Officer Experience and Assignment"
+              :max-width="350"
+              @input="handleInput"
+            ></ripa-switch>
+          </template>
+        </v-col>
+      </v-row>
+
+      <template v-if="!toggle || (toggle && model.officer.editOfficer)">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6">
+            <div class="tw-mr-4">
+              <ripa-number-input
+                v-model="model.officer.yearsExperience"
+                label="Years of Experience"
+                :rules="yearsExperienceRules"
+                @input="handleInput"
+              >
+              </ripa-number-input>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <ripa-select
+              v-model="model.officer.assignment"
+              label="Officer Assignment"
+              :items="assignmentItems"
+              itemText="name"
+              itemValue="value"
+              :rules="assignmentRules"
+              @input="handleInput"
+            >
+            </ripa-select>
+          </v-col>
+        </v-row>
+
+        <template v-if="model.officer.assignment === 10">
+          <v-row no-gutters>
+            <v-col cols="12" sm="12">
+              <ripa-text-input
+                v-model="model.officer.otherType"
+                label="Other Type"
+                @input="handleInput"
+              >
+              </ripa-text-input>
+            </v-col>
+          </v-row>
+        </template>
+      </template>
+    </v-container>
   </div>
 </template>
 

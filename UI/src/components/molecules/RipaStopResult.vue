@@ -7,152 +7,158 @@
     >
     </ripa-form-header>
 
-    <ripa-switch
-      v-model="model.stopResult.anyActionsTaken"
-      label="Any Actions Taken?"
-      :max-width="200"
-      @input="handleInput"
-    ></ripa-switch>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.stopResult.anyActionsTaken"
+            label="Any Actions Taken?"
+            :max-width="200"
+            @input="handleInput"
+          ></ripa-switch>
 
-    <template v-if="model.stopResult.anyActionsTaken">
-      <ripa-checkbox
-        v-model="value1"
-        label="Warning (verbal or written)"
-        @input="handleInput"
-      ></ripa-checkbox>
+          <template v-if="model.stopResult.anyActionsTaken">
+            <ripa-checkbox
+              v-model="value1"
+              label="Warning (verbal or written)"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <template v-if="value1">
-        <ripa-autocomplete
-          v-model="model.stopResult.warningCodes"
-          hint="Select Up to 5 Offense Codes (required)"
-          persistent-hint
-          item-text="fullName"
-          item-value="code"
-          label="Offense Code"
-          :items="offenseCodes"
-          multiple
-          chips
-          small-chips
-          deletable-chips
-          :max-selections="5"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </template>
+            <template v-if="value1">
+              <ripa-autocomplete
+                v-model="model.stopResult.warningCodes"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                :items="offenseCodes"
+                multiple
+                chips
+                small-chips
+                deletable-chips
+                :max-selections="5"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
 
-      <ripa-checkbox
-        v-model="value2"
-        label="Citation for infraction"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value2"
+              label="Citation for infraction"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <template v-if="value2">
-        <ripa-autocomplete
-          v-model="model.stopResult.citationCodes"
-          hint="Select Up to 5 Offense Codes (required)"
-          persistent-hint
-          item-text="fullName"
-          item-value="code"
-          label="Offense Code"
-          :items="offenseCodes"
-          multiple
-          chips
-          small-chips
-          deletable-chips
-          :max-selections="5"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </template>
+            <template v-if="value2">
+              <ripa-autocomplete
+                v-model="model.stopResult.citationCodes"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                :items="offenseCodes"
+                multiple
+                chips
+                small-chips
+                deletable-chips
+                :max-selections="5"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
 
-      <ripa-checkbox
-        v-model="value3"
-        label="In-field cite and release"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value3"
+              label="In-field cite and release"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <template v-if="value3">
-        <ripa-autocomplete
-          v-model="model.stopResult.infieldCodes"
-          hint="Select Up to 5 Offense Codes (required)"
-          persistent-hint
-          item-text="fullName"
-          item-value="code"
-          label="Offense Code"
-          :items="offenseCodes"
-          multiple
-          chips
-          small-chips
-          deletable-chips
-          :max-selections="5"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </template>
+            <template v-if="value3">
+              <ripa-autocomplete
+                v-model="model.stopResult.infieldCodes"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                :items="offenseCodes"
+                multiple
+                chips
+                small-chips
+                deletable-chips
+                :max-selections="5"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
 
-      <ripa-checkbox
-        label="Custodial arrest pursurant to outstanding warrant"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              label="Custodial arrest pursurant to outstanding warrant"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <ripa-checkbox
-        v-model="value5"
-        label="Custodial arrest without warrant"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value5"
+              label="Custodial arrest without warrant"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <template v-if="value5">
-        <ripa-autocomplete
-          v-model="model.stopResult.custodialArrestCodes"
-          hint="Select Up to 5 Offense Codes (required)"
-          persistent-hint
-          item-text="fullName"
-          item-value="code"
-          label="Offense Code"
-          :items="offenseCodes"
-          multiple
-          chips
-          small-chips
-          deletable-chips
-          :max-selections="5"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </template>
+            <template v-if="value5">
+              <ripa-autocomplete
+                v-model="model.stopResult.custodialArrestCodes"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                :items="offenseCodes"
+                multiple
+                chips
+                small-chips
+                deletable-chips
+                :max-selections="5"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
 
-      <ripa-checkbox
-        v-model="value6"
-        label="Field interview card completed"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value6"
+              label="Field interview card completed"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <ripa-checkbox
-        v-model="value7"
-        label="Psychiatric hold"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value7"
+              label="Psychiatric hold"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <ripa-checkbox
-        v-model="value8"
-        label="Noncriminal transport or caretaking transport"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value8"
+              label="Noncriminal transport or caretaking transport"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <ripa-checkbox
-        v-model="value9"
-        label="Contacted parent/legal guardian or other person responsible for the minor"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value9"
+              label="Contacted parent/legal guardian or other person responsible for the minor"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <ripa-checkbox
-        v-model="value10"
-        label="Contacted U.S. Department of Homeland Security"
-        @input="handleInput"
-      ></ripa-checkbox>
+            <ripa-checkbox
+              v-model="value10"
+              label="Contacted U.S. Department of Homeland Security"
+              @input="handleInput"
+            ></ripa-checkbox>
 
-      <template v-if="value10">
-        <v-alert class="tw-mt-8" dense outlined type="error" prominent>
-          Are you sure you want to select 'Contacted U.S. Department of Homeland
-          Security?'
-        </v-alert>
-      </template>
-    </template>
+            <template v-if="value10">
+              <v-alert class="tw-mt-8" dense outlined type="error" prominent>
+                Are you sure you want to select 'Contacted U.S. Department of
+                Homeland Security?'
+              </v-alert>
+            </template>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

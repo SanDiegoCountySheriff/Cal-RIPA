@@ -3,106 +3,113 @@
     <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
     </ripa-form-header>
 
-    <ripa-switch
-      v-model="model.location.isSchool"
-      label="K-12 Public School"
-      :max-width="200"
-      @input="handleInput"
-    ></ripa-switch>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.location.isSchool"
+            label="K-12 Public School"
+            :max-width="200"
+            @input="handleInput"
+          ></ripa-switch>
 
-    <template v-if="model.location.isSchool">
-      <ripa-autocomplete
-        v-model="model.location.school"
-        hint="Select 1 School (required)"
-        item-text="fullName"
-        item-value="cdsCode"
-        label="School"
-        :items="schools"
-        @input="handleInput"
-      ></ripa-autocomplete>
-    </template>
+          <template v-if="model.location.isSchool">
+            <ripa-autocomplete
+              v-model="model.location.school"
+              hint="Select 1 School (required)"
+              item-text="fullName"
+              item-value="cdsCode"
+              label="School"
+              :items="schools"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
 
-    <v-alert class="tw-mt-8" dense outlined type="info">
-      Note: Do not provide a street address if the location is a residence.
-    </v-alert>
+          <v-alert class="tw-mt-8" dense outlined type="info">
+            Note: Do not provide a street address if the location is a
+            residence.
+          </v-alert>
 
-    <ripa-number-input
-      v-model="model.location.blockNumber"
-      label="Block Number"
-      @input="debounceInput"
-    >
-    </ripa-number-input>
+          <ripa-number-input
+            v-model="model.location.blockNumber"
+            label="Block Number"
+            @input="debounceInput"
+          >
+          </ripa-number-input>
 
-    <ripa-text-input
-      v-model="model.location.streetName"
-      label="Street Name"
-      @input="handleInput"
-    >
-    </ripa-text-input>
+          <ripa-text-input
+            v-model="model.location.streetName"
+            label="Street Name"
+            @input="handleInput"
+          >
+          </ripa-text-input>
 
-    <ripa-subheader text="-- or --"></ripa-subheader>
+          <ripa-subheader text="-- or --"></ripa-subheader>
 
-    <ripa-text-input
-      v-model="model.location.intersection"
-      label="Closest Intersection"
-      @input="handleInput"
-    >
-    </ripa-text-input>
+          <ripa-text-input
+            v-model="model.location.intersection"
+            label="Closest Intersection"
+            @input="handleInput"
+          >
+          </ripa-text-input>
 
-    <ripa-switch
-      v-model="model.location.moreLocationOptions"
-      label="More Location Options"
-      :max-width="225"
-      @input="handleInput"
-    ></ripa-switch>
+          <ripa-switch
+            v-model="model.location.moreLocationOptions"
+            label="More Location Options"
+            :max-width="225"
+            @input="handleInput"
+          ></ripa-switch>
 
-    <template v-if="model.location.moreLocationOptions">
-      <ripa-subheader text="-- or --"></ripa-subheader>
+          <template v-if="model.location.moreLocationOptions">
+            <ripa-subheader text="-- or --"></ripa-subheader>
 
-      <ripa-text-input
-        v-model="model.location.highwayExit"
-        label="Highway and closet exit"
-        @input="handleInput"
-      >
-      </ripa-text-input>
+            <ripa-text-input
+              v-model="model.location.highwayExit"
+              label="Highway and closet exit"
+              @input="handleInput"
+            >
+            </ripa-text-input>
 
-      <ripa-subheader text="-- or --"></ripa-subheader>
+            <ripa-subheader text="-- or --"></ripa-subheader>
 
-      <ripa-text-input
-        v-model="model.location.landmark"
-        label="Road markerk, landmark, or other"
-        @input="handleInput"
-      >
-      </ripa-text-input>
-    </template>
+            <ripa-text-input
+              v-model="model.location.landmark"
+              label="Road markerk, landmark, or other"
+              @input="handleInput"
+            >
+            </ripa-text-input>
+          </template>
 
-    <ripa-switch
-      v-model="model.location.outOfCounty"
-      label="City Out of County?"
-      :max-width="200"
-      @input="handleInput"
-    ></ripa-switch>
+          <ripa-switch
+            v-model="model.location.outOfCounty"
+            label="City Out of County?"
+            :max-width="200"
+            @input="handleInput"
+          ></ripa-switch>
 
-    <ripa-autocomplete
-      v-model="model.location.city"
-      hint="Select 1 City (required)"
-      item-text="name"
-      item-value="name"
-      label="City"
-      :items="cities"
-      @input="handleInput"
-    ></ripa-autocomplete>
+          <ripa-autocomplete
+            v-model="model.location.city"
+            hint="Select 1 City (required)"
+            item-text="name"
+            item-value="name"
+            label="City"
+            :items="cities"
+            @input="handleInput"
+          ></ripa-autocomplete>
 
-    <ripa-autocomplete
-      v-model="model.location.beat"
-      hint="Select 1 Beat (required)"
-      item-text="fullName"
-      item-value="id"
-      label="Beat"
-      :items="beats"
-      :disabled="model.location.outOfCounty"
-      @input="handleInput"
-    ></ripa-autocomplete>
+          <ripa-autocomplete
+            v-model="model.location.beat"
+            hint="Select 1 Beat (required)"
+            item-text="fullName"
+            item-value="id"
+            label="Beat"
+            :items="beats"
+            :disabled="model.location.outOfCounty"
+            @input="handleInput"
+          ></ripa-autocomplete>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

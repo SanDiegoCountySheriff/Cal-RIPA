@@ -162,7 +162,6 @@ export default {
     handleInput(newVal) {
       const mergedStop = { ...this.stop, ...newVal }
       this.stop = mergedStop
-      console.log(mergedStop)
       this.$emit('input', mergedStop)
     },
 

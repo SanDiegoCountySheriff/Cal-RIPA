@@ -6,87 +6,93 @@
       subtitle="§999.226(a)(10)"
     ></ripa-form-header>
 
-    <ripa-select
-      v-model="model.stopReason.reasonForStop"
-      item-text="name"
-      item-value="value"
-      label="Reason"
-      :items="reasonItems"
-      :rules="reasonRules"
-      @input="handleInput"
-    ></ripa-select>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-select
+            v-model="model.stopReason.reasonForStop"
+            item-text="name"
+            item-value="value"
+            label="Reason"
+            :items="reasonItems"
+            :rules="reasonRules"
+            @input="handleInput"
+          ></ripa-select>
 
-    <template v-if="model.stopReason.reasonForStop === 1">
-      <ripa-radio-group
-        v-model="model.stopReason.trafficViolation"
-        :items="trafficViolationItems"
-        @input="handleInput"
-      ></ripa-radio-group>
+          <template v-if="model.stopReason.reasonForStop === 1">
+            <ripa-radio-group
+              v-model="model.stopReason.trafficViolation"
+              :items="trafficViolationItems"
+              @input="handleInput"
+            ></ripa-radio-group>
 
-      <div class="tw-mt-2"></div>
+            <div class="tw-mt-2"></div>
 
-      <ripa-autocomplete
-        v-model="model.stopReason.trafficViolationCode"
-        hint="Select 1 Offense Code (required)"
-        persistent-hint
-        item-text="fullName"
-        item-value="code"
-        label="Offense Code"
-        :items="offenseCodes"
-        @input="handleInput"
-      ></ripa-autocomplete>
-    </template>
+            <ripa-autocomplete
+              v-model="model.stopReason.trafficViolationCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="offenseCodes"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
 
-    <template v-if="model.stopReason.reasonForStop === 2">
-      <ripa-check-group
-        v-model="model.stopReason.reasonSuspicion"
-        :items="reasonableSuspicionItems"
-        @input="handleInput"
-      ></ripa-check-group>
+          <template v-if="model.stopReason.reasonForStop === 2">
+            <ripa-check-group
+              v-model="model.stopReason.reasonSuspicion"
+              :items="reasonableSuspicionItems"
+              @input="handleInput"
+            ></ripa-check-group>
 
-      <ripa-autocomplete
-        v-model="model.reasonSuspicionCode"
-        hint="Select 1 Offense Code (required)"
-        persistent-hint
-        item-text="fullName"
-        item-value="code"
-        label="Offense Code"
-        :items="offenseCodes"
-        @input="handleInput"
-      ></ripa-autocomplete>
-    </template>
+            <ripa-autocomplete
+              v-model="model.reasonSuspicionCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="offenseCodes"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
 
-    <template v-if="model.stopReason.reasonForStop === 6">
-      <v-alert dense outlined type="warning" prominent>
-        Your selection indicates that a search was conducted, please select from
-        the search criteria below.
-      </v-alert>
+          <template v-if="model.stopReason.reasonForStop === 6">
+            <v-alert dense outlined type="warning" prominent>
+              Your selection indicates that a search was conducted, please
+              select from the search criteria below.
+            </v-alert>
 
-      <ripa-switch
-        v-model="model.stopReason.searchOfPerson"
-        label="Search of person was conducted"
-        :max-width="300"
-        @input="handleInput"
-      ></ripa-switch>
+            <ripa-switch
+              v-model="model.stopReason.searchOfPerson"
+              label="Search of person was conducted"
+              :max-width="300"
+              @input="handleInput"
+            ></ripa-switch>
 
-      <ripa-switch
-        v-model="model.stopReason.searchOfProperty"
-        label="Search of property was conducted"
-        :max-width="300"
-        @input="handleInput"
-      ></ripa-switch>
-    </template>
+            <ripa-switch
+              v-model="model.stopReason.searchOfProperty"
+              label="Search of property was conducted"
+              :max-width="300"
+              @input="handleInput"
+            ></ripa-switch>
+          </template>
 
-    <ripa-subheader text="-- and --"></ripa-subheader>
+          <ripa-subheader text="-- and --"></ripa-subheader>
 
-    <ripa-text-area
-      v-model="model.stopReason.reasonForStopExplanation"
-      hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-      persistent-hint
-      label="Brief Explanation"
-      :rules="explanationRules"
-      @input="handleInput"
-    ></ripa-text-area>
+          <ripa-text-area
+            v-model="model.stopReason.reasonForStopExplanation"
+            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+            persistent-hint
+            label="Brief Explanation"
+            :rules="explanationRules"
+            @input="handleInput"
+          ></ripa-text-area>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
