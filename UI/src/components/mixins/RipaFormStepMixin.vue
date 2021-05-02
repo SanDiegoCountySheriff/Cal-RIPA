@@ -13,8 +13,8 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', newVal)
+        this.viewModel = { ...this.viewModel, ...newVal }
+        this.$emit('input', this.viewModel)
       },
     },
   },
@@ -52,6 +52,12 @@ export default {
       if (this.onCancel) {
         this.onCancel()
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = newVal
     },
   },
 

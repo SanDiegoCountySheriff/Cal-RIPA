@@ -1,6 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
+      {{ stop }}
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
@@ -60,24 +61,26 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <ripa-form-step-1
-                v-model="model"
+                v-model="stop"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
 
             <v-stepper-content step="2">
               <ripa-form-step-2
-                v-model="model"
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                @input="handleInput"
               ></ripa-form-step-2>
             </v-stepper-content>
 
             <v-stepper-content step="3">
               <ripa-form-step-3
-                v-model="model"
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -86,7 +89,7 @@
 
             <v-stepper-content step="4">
               <ripa-form-step-4
-                v-model="model"
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -95,7 +98,7 @@
 
             <v-stepper-content step="5">
               <ripa-form-step-5
-                v-model="model"
+                v-model="stop"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -104,7 +107,7 @@
 
             <v-stepper-content step="6">
               <ripa-form-step-6
-                v-model="model"
+                v-model="stop"
                 :on-back="handleBack"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
@@ -151,24 +154,18 @@ export default {
       step4Validated: true,
       step5Validated: true,
       confirmationStepIndex: 7,
-      viewModel: { stop: this.value?.stop || null },
+      stop: {},
     }
   },
 
-  computed: {
-    model: {
-      get() {
-        return this.viewModel
-      },
-      set(newVal) {
-        console.log(newVal)
-        this.viewModel = newVal
-        this.$emit('input', newVal)
-      },
-    },
-  },
-
   methods: {
+    handleInput(newVal) {
+      const mergedStop = { ...this.stop, ...newVal }
+      this.stop = mergedStop
+      console.log(mergedStop)
+      this.$emit('input', mergedStop)
+    },
+
     handleBack() {
       this.stepIndex = this.stepIndex - 1
       window.scrollTo(0, 0)
