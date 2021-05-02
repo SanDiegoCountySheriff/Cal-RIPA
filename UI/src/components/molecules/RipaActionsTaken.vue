@@ -7,14 +7,21 @@
     >
     </ripa-form-header>
 
-    <ripa-check-group
-      v-model="model.actionsTaken.actionsTakenDuringStop"
-      :items="getActionsTakenItems"
+    <ripa-switch
+      v-model="model.actionsTaken.anyActionsTaken"
+      label="Any Actions Taken?"
+      :max-width="200"
       @input="handleInput"
-    >
-    </ripa-check-group>
+    ></ripa-switch>
 
-    <template v-if="!isNoneSelected">
+    <template v-if="model.actionsTaken.anyActionsTaken">
+      <ripa-check-group
+        v-model="model.actionsTaken.actionsTakenDuringStop"
+        :items="actionTakenGeneralItems"
+        @input="handleInput"
+      >
+      </ripa-check-group>
+
       <ripa-subheader text="Search"></ripa-subheader>
 
       <ripa-check-group
@@ -32,6 +39,34 @@
         :max-width="200"
         @input="handleInput"
       ></ripa-switch>
+
+      <template v-if="model.actionsTaken.propertyWasSeized">
+        <ripa-form-subheader
+          title="Basis for Property Seizure"
+          required
+          subtitle="§999.226(a)(12)(D)(1)"
+        ></ripa-form-subheader>
+
+        <ripa-check-group
+          v-model="model.actionsTaken.basisForPropertySeizure"
+          :items="basisForPropertySeizureItems"
+          @input="handleInput"
+        >
+        </ripa-check-group>
+
+        <ripa-form-subheader
+          title="Types of Property Seized"
+          required
+          subtitle="§999.226(a)(12)(D)(2)"
+        ></ripa-form-subheader>
+
+        <ripa-check-group
+          v-model="model.actionsTaken.typesOfPropertySeized"
+          :items="propertySeizedTypeItems"
+          @input="handleInput"
+        >
+        </ripa-check-group>
+      </template>
     </template>
   </div>
 </template>
@@ -39,9 +74,15 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { ACTIONS_TAKEN_GENERAL, ACTIONS_TAKEN_SEARCH } from '@/constants/form'
+import {
+  ACTIONS_TAKEN_GENERAL,
+  ACTIONS_TAKEN_SEARCH,
+  BASIS_FOR_PROPERTY_SEIZURE,
+  PROPERTY_SEIZED_TYPES,
+} from '@/constants/form'
 
 export default {
   name: 'ripa-action-taken',
@@ -49,6 +90,7 @@ export default {
   components: {
     RipaFormHeader,
     RipaCheckGroup,
+    RipaFormSubheader,
     RipaSubheader,
     RipaSwitch,
   },
@@ -59,12 +101,19 @@ export default {
       stopReason: this.value?.stopReason || null,
       actionTakenGeneralItems: ACTIONS_TAKEN_GENERAL,
       actionTakenSearchItems: ACTIONS_TAKEN_SEARCH,
+      basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
+      propertySeizedTypeItems: PROPERTY_SEIZED_TYPES,
       viewModel: {
         actionsTaken: {
+          anyActionsTaken: this.value?.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
             this.value?.actionsTaken?.actionsTakenDuringStop || [],
           propertyWasSeized:
             this.value?.actionsTaken?.propertyWasSeized || false,
+          basisForPropertySeizure:
+            this.value?.actionsTaken?.basisForPropertySeizure || [],
+          typesOfPropertySeized:
+            this.value?.actionsTaken?.typesOfPropertySeized || [],
         },
       },
     }
@@ -76,23 +125,27 @@ export default {
         return this.viewModel
       },
     },
-
-    isNoneSelected() {
-      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(0)
-    },
-
-    getActionsTakenItems() {
-      if (this.viewModel.actionsTaken.actionsTakenDuringStop.includes(0)) {
-        return this.actionTakenGeneralItems.filter(item => item.value === 0)
-      }
-
-      return this.actionTakenGeneralItems
-    },
   },
 
   methods: {
     handleInput() {
+      this.updateActionsTakenModel()
+      this.updateBasisForPropertySeizedModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateActionsTakenModel() {
+      if (!this.viewModel.actionsTaken.anyActionsTaken) {
+        this.viewModel.actionsTaken.actionsTakenDuringStop = []
+        this.viewModel.actionsTaken.propertyWasSeized = false
+      }
+    },
+
+    updateBasisForPropertySeizedModel() {
+      if (!this.viewModel.actionsTaken.propertyWasSeized) {
+        this.viewModel.actionsTaken.basisForPropertySeizure = []
+        this.viewModel.actionsTaken.typesOfPropertySeized = []
+      }
     },
   },
 

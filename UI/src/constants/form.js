@@ -28,7 +28,6 @@ export const AGES = [
 ]
 
 export const DISABILITIES = [
-  { name: 'None', value: 0 },
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },
   { name: 'Blind or limited vision', value: 3 },
@@ -107,7 +106,6 @@ export const REASONABLE_SUSPICIONS = [
 ]
 
 export const ACTIONS_TAKEN_GENERAL = [
-  { name: 'None', value: 0 },
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Person removed from vehicle by physical contact', value: 2 },
   { name: 'Field sobriety test conducted', value: 3 },
@@ -132,4 +130,26 @@ export const ACTIONS_TAKEN_SEARCH = [
   { name: 'Search of person was conducted', value: 18 },
   { name: 'Asked for consent to search property', value: 19 },
   { name: 'Search of property was conducted', value: 20 },
+]
+
+export const BASIS_FOR_PROPERTY_SEIZURE = [
+  { name: 'Safekeeping as allowed by law/statute', value: 1 },
+  { name: 'Contraband', value: 2 },
+  { name: 'Evidence', value: 3 },
+  { name: 'Impound of vehicle', value: 4 },
+  { name: 'Impound of vehicle', value: 5 },
+]
+
+export const PROPERTY_SEIZED_TYPES = [
+  { name: 'Firearm(s)', value: 1 },
+  { name: 'Ammunition', value: 2 },
+  { name: 'Weapon(s) other than a firearm', value: 3 },
+  { name: 'Drugs/narcotics', value: 4 },
+  { name: 'Alcohol', value: 5 },
+  { name: 'Money', value: 6 },
+  { name: 'Drug paraphernalia', value: 7 },
+  { name: 'Suspected stolen property', value: 8 },
+  { name: 'Cell phone(s) or electronic device(s)', value: 9 },
+  { name: 'Vehicle', value: 10 },
+  { name: 'Other contraband or evidence', value: 11 },
 ]

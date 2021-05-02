@@ -7,18 +7,28 @@
     >
     </ripa-form-header>
 
-    <ripa-check-group
-      v-model="model.person.perceivedOrKnownDisability"
-      :items="getDisabilityItems"
+    <ripa-switch
+      v-model="model.person.anyDisabilities"
+      label="Any Disabilities?"
+      :max-width="200"
       @input="handleInput"
-    >
-    </ripa-check-group>
+    ></ripa-switch>
+
+    <templave v-if="model.person.anyDisabilities">
+      <ripa-check-group
+        v-model="model.person.perceivedOrKnownDisability"
+        :items="disabilityItems"
+        @input="handleInput"
+      >
+      </ripa-check-group>
+    </templave>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
 
 export default {
@@ -27,6 +37,7 @@ export default {
   components: {
     RipaFormHeader,
     RipaCheckGroup,
+    RipaSwitch,
   },
 
   data() {
@@ -35,6 +46,7 @@ export default {
       disabilityItems: DISABILITIES,
       viewModel: {
         person: {
+          anyDisabilities: this.value?.person?.anyDisabilities || false,
           perceivedOrKnownDisability:
             this.value?.person?.perceivedOrKnownDisability || [],
         },
@@ -48,22 +60,18 @@ export default {
         return this.viewModel
       },
     },
-
-    getDisabilityItems() {
-      if (this.viewModel.person.perceivedOrKnownDisability.includes(0)) {
-        return this.disabilityItems.filter(item => item.value === 0)
-      }
-
-      return this.disabilityItems
-    },
   },
 
   methods: {
     handleInput() {
-      if (this.viewModel.person.perceivedOrKnownDisability.includes(0)) {
-        this.viewModel.person.perceivedOrKnownDisability = [0]
-      }
+      this.updatePerceivedOrKnownDisabilityModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updatePerceivedOrKnownDisabilityModel() {
+      if (!this.viewModel.person.anyDisabilities) {
+        this.viewModel.person.perceivedOrKnownDisability = []
+      }
     },
   },
 
