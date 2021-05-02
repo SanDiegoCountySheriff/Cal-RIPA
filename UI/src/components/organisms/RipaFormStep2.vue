@@ -1,9 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
     <ripa-student v-model="model" toggle></ripa-student>
-    <ripa-race v-model="model" @input="handleInput"></ripa-race>
+    <ripa-race v-model="model"></ripa-race>
     <ripa-gender v-model="model"></ripa-gender>
-    <ripa-age v-model="model" @input="handleInput"></ripa-age>
+    <ripa-age v-model="model"></ripa-age>
     <ripa-limited-english v-model="model"></ripa-limited-english>
     <ripa-disability v-model="model"></ripa-disability>
 
