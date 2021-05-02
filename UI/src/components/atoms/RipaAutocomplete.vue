@@ -1,5 +1,6 @@
 <template>
   <v-autocomplete
+    class="tw-my-6"
     v-model="model"
     clearable
     dense
@@ -9,8 +10,12 @@
     :item-text="itemText"
     :item-value="itemValue"
     :label="label"
-    :items="items"
+    :items="getItems"
     :disabled="disabled"
+    :chips="chips"
+    :small-chips="smallChips"
+    :deletable-chips="deletableChips"
+    :multiple="multiple"
   ></v-autocomplete>
 </template>
 
@@ -34,6 +39,14 @@ export default {
         this.$emit('input', newVal)
       },
     },
+
+    getItems() {
+      if (this.multiple && this.viewModel.length === this.maxSelections) {
+        return this.items.filter(item => this.viewModel.includes(item.code))
+      }
+
+      return this.items
+    },
   },
 
   watch: {
@@ -44,7 +57,7 @@ export default {
 
   props: {
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null,
     },
     items: {
@@ -74,6 +87,26 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    chips: {
+      type: Boolean,
+      default: false,
+    },
+    smallChips: {
+      type: Boolean,
+      default: false,
+    },
+    deletableChips: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    maxSelections: {
+      type: Number,
+      default: 5,
     },
   },
 }
