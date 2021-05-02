@@ -1,5 +1,5 @@
 <template>
-  <v-checkbox v-model="model" dense :label="label" hide-details></v-checkbox>
+  <v-checkbox v-model="model" :label="label" hide-details></v-checkbox>
 </template>
 
 <script>

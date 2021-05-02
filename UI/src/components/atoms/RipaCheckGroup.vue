@@ -4,7 +4,6 @@
       v-for="(item, index) in items"
       :key="index"
       v-model="model"
-      dense
       :disabled="item.disabled || false"
       :label="item.name"
       :value="item.value"

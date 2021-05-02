@@ -8,12 +8,18 @@
       >
       </ripa-form-header>
 
-      <ripa-radio-group
-        v-model="model.person.perceivedGender"
-        :items="genderItems"
-        @input="handleInput"
-      >
-      </ripa-radio-group>
+      <v-container class="grey lighten-5">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-radio-group
+              v-model="model.person.perceivedGender"
+              :items="genderItems"
+              @input="handleInput"
+            >
+            </ripa-radio-group>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
 
     <template>
@@ -25,12 +31,18 @@
       >
       </ripa-form-header>
 
-      <ripa-switch
-        v-model="model.person.perceivedLgbt"
-        label="Perceived as LGBT"
-        :max-width="200"
-        @input="handleInput"
-      ></ripa-switch>
+      <v-container class="grey lighten-5">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-switch
+              v-model="model.person.perceivedLgbt"
+              label="Perceived as LGBT"
+              :max-width="200"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
   </div>
 </template>

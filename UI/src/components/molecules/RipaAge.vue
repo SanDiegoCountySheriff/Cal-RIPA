@@ -3,15 +3,21 @@
     <ripa-form-header title="Perceived Age" required subtitle="§999.226(a)(7)">
     </ripa-form-header>
 
-    <ripa-select
-      v-model="model.person.perceivedAge"
-      label="Perceived Age"
-      :items="ageItems"
-      itemText="name"
-      itemValue="value"
-      @input="handleInput"
-    >
-    </ripa-select>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-select
+            v-model="model.person.perceivedAge"
+            label="Perceived Age"
+            :items="ageItems"
+            itemText="name"
+            itemValue="value"
+            @input="handleInput"
+          >
+          </ripa-select>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

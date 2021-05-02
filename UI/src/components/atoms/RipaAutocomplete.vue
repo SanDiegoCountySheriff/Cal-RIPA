@@ -1,9 +1,8 @@
 <template>
   <v-autocomplete
-    class="tw-my-6"
+    class="tw-my-4"
     v-model="model"
     clearable
-    dense
     flat
     :hint="hint"
     :persistent-hint="persistentHint"

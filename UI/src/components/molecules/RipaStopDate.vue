@@ -3,36 +3,55 @@
     <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
-    <ripa-date-picker
-      v-model="model.stopDate.date"
-      label="Date of Stop"
-      @input="handleInput"
-    >
-    </ripa-date-picker>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="4">
+          <div class="tw-mr-4">
+            <ripa-date-picker
+              v-model="model.stopDate.date"
+              label="Date of Stop"
+              @input="handleInput"
+            >
+            </ripa-date-picker>
+          </div>
+        </v-col>
 
-    <ripa-time-picker
-      v-model="model.stopDate.time"
-      label="Time of Stop"
-      @input="handleInput"
-    >
-    </ripa-time-picker>
+        <v-col cols="12" sm="12" md="4">
+          <div class="tw-mr-4">
+            <ripa-time-picker
+              v-model="model.stopDate.time"
+              class="tw-mr-1"
+              label="Time of Stop"
+              @input="handleInput"
+            >
+            </ripa-time-picker>
+          </div>
+        </v-col>
 
-    <ripa-select
-      v-model="model.stopDate.duration"
-      label="Stop Duration"
-      :items="durationItems"
-      itemText="name"
-      itemValue="value"
-      @input="handleInput"
-    >
-    </ripa-select>
+        <v-col cols="12" sm="12" md="4">
+          <ripa-select
+            v-model="model.stopDate.duration"
+            label="Stop Duration"
+            :items="durationItems"
+            itemText="name"
+            itemValue="value"
+            @input="handleInput"
+          >
+          </ripa-select>
+        </v-col>
+      </v-row>
 
-    <ripa-switch
-      v-model="model.stopDate.stopInResponseToCfs"
-      label="Stop in response to Call for Service"
-      :max-width="300"
-      @input="handleInput"
-    ></ripa-switch>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.stopDate.stopInResponseToCfs"
+            label="Stop in response to Call for Service"
+            :max-width="300"
+            @input="handleInput"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

@@ -3,12 +3,18 @@
     <ripa-form-header title="Student" required subtitle="§999.224(a)(16)">
     </ripa-form-header>
 
-    <ripa-switch
-      v-model="model.person.isStudent"
-      label="K-12 Public School Student"
-      :max-width="250"
-      @input="handleInput"
-    ></ripa-switch>
+    <v-container class="grey lighten-5">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.person.isStudent"
+            label="K-12 Public School Student"
+            :max-width="250"
+            @input="handleInput"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
