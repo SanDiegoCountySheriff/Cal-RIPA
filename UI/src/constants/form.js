@@ -132,12 +132,30 @@ export const ACTIONS_TAKEN_SEARCH = [
   { name: 'Search of property was conducted', value: 20 },
 ]
 
+export const BASIS_FOR_SEARCH = [
+  { name: 'Consent given', value: 1 },
+  { name: 'Officer safety/safety of others', value: 2 },
+  { name: 'Search warrant', value: 3 },
+  {
+    name: 'Condition of parole / probation/ PRCS / mandatory supervision',
+    value: 4,
+  },
+  { name: 'Suspected weapons', value: 5 },
+  { name: 'Visible contraband', value: 6 },
+  { name: 'Odor of contraband', value: 7 },
+  { name: 'Canine detection', value: 8 },
+  { name: 'Evidence of crime', value: 9 },
+  { name: 'Incident to arrest', value: 10 },
+  { name: 'Exigent circumstances/emergency', value: 11 },
+  { name: 'Vehicle inventory', value: 12 },
+]
+
 export const BASIS_FOR_PROPERTY_SEIZURE = [
   { name: 'Safekeeping as allowed by law/statute', value: 1 },
   { name: 'Contraband', value: 2 },
   { name: 'Evidence', value: 3 },
   { name: 'Impound of vehicle', value: 4 },
-  { name: 'Impound of vehicle', value: 5 },
+  { name: 'Abandoned property', value: 5 },
 ]
 
 export const CONTRABAND_TYPES = [
