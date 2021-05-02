@@ -41,7 +41,11 @@ export default {
     },
 
     getItems() {
-      if (this.multiple && this.viewModel.length === this.maxSelections) {
+      if (
+        this.multiple &&
+        this.viewModel &&
+        this.viewModel.length === this.maxSelections
+      ) {
         return this.items.filter(item => this.viewModel.includes(item.code))
       }
 
