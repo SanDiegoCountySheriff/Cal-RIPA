@@ -1,4 +1,5 @@
 import RipaStopResult from '@/components/molecules/RipaStopResult'
+import { offenseCodes } from '../data/offenseCodes'
 
 export default {
   title: 'Molecules/RipaStopResult',
@@ -10,17 +11,29 @@ export const basic = () => ({
   components: { RipaStopResult },
   data() {
     return {
+      data: offenseCodes.map(item => {
+        return {
+          ...item,
+          fullName: `${item.description} ${item.code}`,
+        }
+      }),
       stop: {},
     }
   },
   template:
-    '<div><ripa-stop-result v-model="stop"></ripa-stop-result>{{stop}}</div>',
+    '<div><ripa-stop-result v-model="stop" :offense-codes="data"></ripa-stop-result>{{stop}}</div>',
 })
 
 export const consensualEncounterResultingInSearch = () => ({
   components: { RipaStopResult },
   data() {
     return {
+      data: offenseCodes.map(item => {
+        return {
+          ...item,
+          fullName: `${item.description} ${item.code}`,
+        }
+      }),
       stop: {
         stopReason: {
           reasonForStop: 6,
@@ -36,5 +49,5 @@ export const consensualEncounterResultingInSearch = () => ({
     }
   },
   template:
-    '<div><ripa-stop-result v-model="stop"></ripa-stop-result>{{stop}}</div>',
+    '<div><ripa-stop-result v-model="stop" :offense-codes="data"></ripa-stop-result>{{stop}}</div>',
 })
