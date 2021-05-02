@@ -171,3 +171,20 @@ export const CONTRABAND_TYPES = [
   { name: 'Vehicle', value: 10 },
   { name: 'Other contraband or evidence', value: 11 },
 ]
+
+export const STOP_RESULTS = [
+  { name: 'Warning (verbal or written)', value: 1 },
+  { name: 'Citation for infraction', value: 2 },
+  { name: 'In-field cite and release', value: 3 },
+  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 4 },
+  { name: 'Custodial Arrest without warrant', value: 5 },
+  { name: 'Field interview card completed', value: 6 },
+  { name: 'Psychiatric hold', value: 7 },
+  { name: 'Noncriminal transport or caretaking transport', value: 8 },
+  {
+    name:
+      'Contacted parent/legal guardian or other person responsible for the minor',
+    value: 9,
+  },
+  { name: 'Contacted U.S. Department of Homeland Security', value: 10 },
+]
