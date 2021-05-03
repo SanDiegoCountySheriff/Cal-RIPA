@@ -15,6 +15,7 @@ export default new Vuex.Store({
     stops: [],
     isAuthConfigSet: false,
     user: {
+      isLoggedIn: false,
       isAdmin: false,
     },
   },
@@ -86,6 +87,19 @@ export default new Vuex.Store({
     },
     updateAuthConfig(state, value) {
       state.isAuthConfigSet = value
+    },
+    updateUserAccount(state, value) {
+      const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
+        return roleObj === 'RIPA-ADMINS-ROLE'
+      })
+      state.user = {
+        ...state.user,
+        isAdmin: isAnAdmin.length > 0,
+        email: value.idTokenClaims.email,
+        firstName: value.idTokenClaims.given_name,
+        lastName: value.idTokenClaims.family_name,
+        isLoggedIn: true,
+      }
     },
   },
 
@@ -346,6 +360,9 @@ export default new Vuex.Store({
     },
     setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)
+    },
+    setUserAccountInfo({ commit }, value) {
+      commit('updateUserAccount', value)
     },
   },
   modules: {},

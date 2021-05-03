@@ -35,11 +35,15 @@ const AuthService = {
   },
   tryLogin: async () => {
     await msalInstance.handleRedirectPromise()
-
     const accounts = msalInstance.getAllAccounts()
+    console.log(accounts)
     if (accounts.length === 0) {
       // No user signed in
       msalInstance.loginRedirect()
+    } else {
+      // if user is signed in, get account info
+      // go to home page
+      return accounts[0]
     }
   },
 }

@@ -19,8 +19,8 @@ const routes = [
     component: RipaFormContainer,
   },
   {
-    path: '/logincheck',
-    name: 'LoginCheck',
+    path: '/login',
+    name: 'Login',
     component: RipaLoginCheckContainer,
   },
   {
@@ -65,9 +65,16 @@ const router = new VueRouter({
 // if you ever hit the app and the login config
 // isn't set, start login flow
 router.beforeEach((to, from, next) => {
-  if (!store.state.isAuthConfigSet && to.name !== 'LoginCheck')
-    next({ name: 'LoginCheck' })
-  else next()
+  if (!store.state.user.isLoggedIn && to.name !== 'Login') {
+    next({ name: 'Login' })
+  } else {
+    next()
+  }
+  // if (!store.state.isAuthConfigSet && to.name !== 'Login') {
+  //   next({ name: 'Login' })
+  // } else {
+  //   next()
+  // }
 })
 
 export default router
