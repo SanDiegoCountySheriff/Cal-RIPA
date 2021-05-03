@@ -7,7 +7,7 @@
     >
     </ripa-form-header>
 
-    <v-container class="surface">
+    <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-check-group

@@ -3,7 +3,7 @@
     <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
     </ripa-form-header>
 
-    <v-container class="surface">
+    <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
@@ -94,12 +94,14 @@
             </ripa-text-input>
           </template>
 
-          <ripa-switch
-            v-model="model.location.outOfCounty"
-            label="City Out of County?"
-            :max-width="200"
-            @input="handleInput"
-          ></ripa-switch>
+          <div class="tw-mt-8">
+            <ripa-switch
+              v-model="model.location.outOfCounty"
+              label="City Out of County?"
+              :max-width="200"
+              @input="handleInput"
+            ></ripa-switch>
+          </div>
         </v-col>
       </v-row>
 

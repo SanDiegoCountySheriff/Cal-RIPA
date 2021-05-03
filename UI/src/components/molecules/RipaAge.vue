@@ -3,7 +3,7 @@
     <ripa-form-header title="Perceived Age" required subtitle="§999.226(a)(7)">
     </ripa-form-header>
 
-    <v-container class="surface">
+    <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-select

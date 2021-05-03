@@ -3,7 +3,7 @@
     <ripa-form-header title="Student" required subtitle="§999.224(a)(16)">
     </ripa-form-header>
 
-    <v-container class="surface">
+    <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch

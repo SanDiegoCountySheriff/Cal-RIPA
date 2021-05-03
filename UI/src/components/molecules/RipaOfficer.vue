@@ -9,7 +9,7 @@
       </ripa-form-header>
     </template>
 
-    <v-container class="surface">
+    <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <template v-if="toggle">
