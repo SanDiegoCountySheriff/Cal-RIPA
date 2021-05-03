@@ -227,3 +227,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+@media only screen and (max-width: 600px) {
+  .v-stepper__content {
+    padding: 16px 16px 8px;
+  }
+}
+</style>

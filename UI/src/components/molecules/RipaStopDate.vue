@@ -17,7 +17,7 @@
         </v-col>
 
         <v-col cols="12" sm="12" md="4">
-          <div class="sm:tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-time-picker
               v-model="model.stopDate.time"
               label="Time of Stop"
