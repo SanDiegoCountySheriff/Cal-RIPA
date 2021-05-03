@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-gender tw-p-4">
+  <div class="ripa-gender tw-pb-8">
     <template class="tw-mb-4">
       <ripa-form-header
         title="Perceived Gender"
@@ -8,35 +8,41 @@
       >
       </ripa-form-header>
 
-      <ripa-radio-group
-        v-model="model.perceivedGender"
-        :items="genderItems"
-        @input="handleInput"
-      >
-      </ripa-radio-group>
-
-      <ripa-checkbox
-        v-model="model.checkbox"
-        cbLabel="Gender Nonconforming"
-        @input="handleInput"
-      >
-      </ripa-checkbox>
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-radio-group
+              v-model="model.person.perceivedGender"
+              :items="genderItems"
+              @input="handleInput"
+            >
+            </ripa-radio-group>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
 
     <template>
       <ripa-form-header
+        class="tw-mt-8"
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"
       >
       </ripa-form-header>
 
-      <ripa-radio-group
-        v-model="model.perceivedLgbt"
-        :items="lgbtItems"
-        @input="handleInput"
-      >
-      </ripa-radio-group>
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-switch
+              v-model="model.person.perceivedLgbt"
+              label="Perceived as LGBT"
+              :max-width="200"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
   </div>
 </template>
@@ -44,27 +50,27 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
-import { GENDERS, LGBTS } from '@/constants/form'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import { GENDERS } from '@/constants/form'
 
 export default {
-  name: 'ripa-stop-reason',
+  name: 'ripa-gender',
 
   components: {
     RipaFormHeader,
     RipaRadioGroup,
-    RipaCheckbox,
+    RipaSwitch,
   },
 
   data() {
     return {
       valid: true,
       genderItems: GENDERS,
-      lgbtItems: LGBTS,
       viewModel: {
-        perceivedGender: this.value?.perceivedGender || null,
-        perceivedLgbt: this.value?.perceivedLgbt || null,
-        checkbox: this.value?.checkbox || false,
+        person: {
+          perceivedGender: this.value?.person?.perceivedGender || null,
+          perceivedLgbt: this.value?.person?.perceivedLgbt || false,
+        },
       },
     }
   },
@@ -79,13 +85,14 @@ export default {
 
   methods: {
     handleInput() {
-      if (
-        this.viewModel.perceivedGender === 3 ||
-        this.viewModel.perceivedGender === 4
-      ) {
-        this.viewModel.perceivedLgbt = 'A'
-      }
+      this.updatePerceivedLgbtModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updatePerceivedLgbtModel() {
+      this.viewModel.person.perceivedLgbt =
+        this.viewModel.person.perceivedGender === 3 ||
+        this.viewModel.person.perceivedGender === 4
     },
   },
 
@@ -93,10 +100,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
   },
 }

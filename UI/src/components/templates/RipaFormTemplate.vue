@@ -1,5 +1,15 @@
 <template>
-  <ripa-form-wrapper></ripa-form-wrapper>
+  <div class="ripa-form-template">
+    {{ stop }}
+    <ripa-form-wrapper
+      v-model="stop"
+      :beats="beats"
+      :cities="cities"
+      :schools="schools"
+      :offense-codes="offenseCodes"
+      @input="handleInput"
+    ></ripa-form-wrapper>
+  </div>
 </template>
 
 <script>
@@ -10,6 +20,42 @@ export default {
 
   components: {
     RipaFormWrapper,
+  },
+
+  data() {
+    return {
+      stop: {
+        stopDate: {
+          duration: 1,
+        },
+      },
+    }
+  },
+
+  methods: {
+    handleInput(newVal) {
+      this.stop = newVal
+      this.$forceUpdate()
+    },
+  },
+
+  props: {
+    beats: {
+      type: Array,
+      default: () => [],
+    },
+    cities: {
+      type: Array,
+      default: () => [],
+    },
+    schools: {
+      type: Array,
+      default: () => [],
+    },
+    offenseCodes: {
+      type: Array,
+      default: () => [],
+    },
   },
 }
 </script>

@@ -10,9 +10,19 @@ export const basic = () => ({
   components: { RipaOfficer },
   data() {
     return {
-      officer: {},
+      stop: {},
+    }
+  },
+  template: '<div><ripa-officer v-model="stop"></ripa-officer>{{ stop }}</div>',
+})
+
+export const toggle = () => ({
+  components: { RipaOfficer },
+  data() {
+    return {
+      stop: {},
     }
   },
   template:
-    '<div><ripa-officer v-model="officer"></ripa-officer>{{ officer }}</div>',
+    '<div><ripa-officer v-model="stop" toggle></ripa-officer>{{ stop }}</div>',
 })

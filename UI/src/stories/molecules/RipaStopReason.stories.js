@@ -1,5 +1,5 @@
 import RipaStopReason from '@/components/molecules/RipaStopReason'
-import { statutes } from '../data/statutes'
+import { offenseCodes } from '../data/offenseCodes'
 
 export default {
   title: 'Molecules/RipaStopReason',
@@ -11,17 +11,22 @@ export const basic = () => ({
   components: { RipaStopReason },
   data() {
     return {
-      data: statutes.map(item => {
+      data: offenseCodes.map(item => {
         return {
           ...item,
-          fullName: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge}) ${item.offenseCode}`,
+          fullName: `${item.description} ${item.code}`,
         }
       }),
-      stopReason: {
-        explanation: 'My name is Steve',
+      stop: {
+        stopReason: {
+          reasonForStop: 1,
+          trafficViolation: 1,
+          trafficViolationCode: 54106,
+          reasonForStopExplanation: '',
+        },
       },
     }
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stopReason" :statutes="data"></ripa-stop-reason>{{stopReason}}</div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stop" :offense-codes="data"></ripa-stop-reason>{{stop}}</div>',
 })
