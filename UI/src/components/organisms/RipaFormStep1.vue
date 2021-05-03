@@ -39,5 +39,20 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: { RipaOfficer, RipaStopDate, RipaLocation },
+
+  props: {
+    beats: {
+      type: Array,
+      default: () => [],
+    },
+    cities: {
+      type: Array,
+      default: () => [],
+    },
+    schools: {
+      type: Array,
+      default: () => [],
+    },
+  },
 }
 </script>

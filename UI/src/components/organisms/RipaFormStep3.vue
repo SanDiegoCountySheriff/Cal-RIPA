@@ -1,6 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-reason v-model="model"></ripa-stop-reason>
+    <ripa-stop-reason
+      v-model="model"
+      :offense-codes="offenseCodes"
+    ></ripa-stop-reason>
 
     <v-spacer></v-spacer>
 
@@ -33,5 +36,12 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: { RipaStopReason },
+
+  props: {
+    offenseCodes: {
+      type: Array,
+      default: () => [],
+    },
+  },
 }
 </script>

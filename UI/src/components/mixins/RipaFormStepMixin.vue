@@ -1,4 +1,6 @@
 <script>
+import _ from 'lodash'
+
 export default {
   data() {
     return {
@@ -13,7 +15,9 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = { ...this.viewModel, ...newVal }
+        const mergedData = _.merge(this.viewModel, newVal)
+        this.viewModel = mergedData
+        // this.$forceUpdate()
         this.$emit('input', this.viewModel)
       },
     },

@@ -1,7 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      {{ stop }}
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
@@ -64,6 +63,9 @@
                 v-model="stop"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :beats="beats"
+                :cities="cities"
+                :schools="schools"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -84,6 +86,8 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :offense-codes="offenseCodes"
+                @input="handleInput"
               ></ripa-form-step-3>
             </v-stepper-content>
 
@@ -93,6 +97,8 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :offense-codes="offenseCodes"
+                @input="handleInput"
               ></ripa-form-step-4>
             </v-stepper-content>
 
@@ -102,6 +108,8 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :offense-codes="offenseCodes"
+                @input="handleInput"
               ></ripa-form-step-5>
             </v-stepper-content>
 
@@ -111,6 +119,7 @@
                 :on-back="handleBack"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
+                @input="handleInput"
               ></ripa-form-step-6>
             </v-stepper-content>
           </v-stepper-items>
@@ -131,6 +140,7 @@ import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
 import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
 import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
 import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
+import _ from 'lodash'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -154,14 +164,15 @@ export default {
       step4Validated: true,
       step5Validated: true,
       confirmationStepIndex: 7,
-      stop: {},
+      stop: this.value,
     }
   },
 
   methods: {
     handleInput(newVal) {
-      const mergedStop = { ...this.stop, ...newVal }
+      const mergedStop = _.merge(this.stop, newVal)
       this.stop = mergedStop
+      // this.$forceUpdate()
       this.$emit('input', mergedStop)
     },
 
@@ -191,6 +202,12 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.stop = newVal
+    },
+  },
+
   props: {
     value: {
       type: Object,
@@ -205,6 +222,10 @@ export default {
       default: () => {},
     },
     cities: {
+      type: Array,
+      default: () => {},
+    },
+    offenseCodes: {
       type: Array,
       default: () => {},
     },
