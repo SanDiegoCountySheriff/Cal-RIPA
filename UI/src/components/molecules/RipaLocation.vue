@@ -3,7 +3,7 @@
     <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
     </ripa-form-header>
 
-    <v-container class="grey lighten-5">
+    <v-container class="surface">
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch

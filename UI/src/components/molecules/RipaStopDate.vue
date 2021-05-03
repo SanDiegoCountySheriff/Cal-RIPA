@@ -3,7 +3,7 @@
     <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
-    <v-container class="grey lighten-5">
+    <v-container class="surface">
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="4">
           <div class="tw-mr-4">
