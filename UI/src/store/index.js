@@ -19,6 +19,17 @@ export default new Vuex.Store({
   getters: {
     mappedBeats: state => {
       return state.beats
+        .sort((x, y) => {
+          const beatA = x.command.toUpperCase()
+          const beatB = y.command.toUpperCase()
+          return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
+        })
+        .map(item => {
+          return {
+            ...item,
+            fullName: `${item.command} ${item.id}`,
+          }
+        })
     },
     mappedCities: state => {
       return state.cities.map(item => {
@@ -40,13 +51,23 @@ export default new Vuex.Store({
       })
     },
     mappedStatutes: state => {
-      return state.statutes.map(item => {
-        return {
-          ...item,
-          offenseEnacted: formatDate(item.offenseEnacted),
-          offenseRepealed: formatDate(item.offenseRepealed),
-        }
-      })
+      return state.statutes
+        .filter(item => item.offenseRepealed === null)
+        .map(item => {
+          return {
+            ...item,
+            code: item.offenseCode,
+            description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
+            offenseEnacted: formatDate(item.offenseEnacted),
+            offenseRepealed: formatDate(item.offenseRepealed),
+          }
+        })
+        .map(item => {
+          return {
+            ...item,
+            fullName: `${item.description} ${item.code}`,
+          }
+        })
     },
     mappedStops: state => {
       return state.stops

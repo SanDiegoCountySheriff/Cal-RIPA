@@ -6,7 +6,7 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="4">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-date-picker
               v-model="model.stopDate.date"
               label="Date of Stop"
@@ -17,10 +17,9 @@
         </v-col>
 
         <v-col cols="12" sm="12" md="4">
-          <div class="tw-mr-4">
+          <div class="sm:tw-mr-4">
             <ripa-time-picker
               v-model="model.stopDate.time"
-              class="tw-mr-1"
               label="Time of Stop"
               @input="handleInput"
             >

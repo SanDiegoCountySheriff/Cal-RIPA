@@ -34,7 +34,7 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
@@ -107,10 +107,11 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-autocomplete
               v-model="model.location.city"
               hint="Select 1 City (required)"
+              persistent-hint
               item-text="name"
               item-value="name"
               label="City"
@@ -125,6 +126,7 @@
             <ripa-autocomplete
               v-model="model.location.beat"
               hint="Select 1 Beat (required)"
+              persistent-hint
               item-text="fullName"
               item-value="id"
               label="Beat"

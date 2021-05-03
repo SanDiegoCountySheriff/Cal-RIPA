@@ -9,7 +9,6 @@
               :complete="stepIndex > 1"
               step="1"
             >
-              1
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -19,7 +18,6 @@
               :complete="stepIndex > 2"
               step="2"
             >
-              2
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -29,7 +27,6 @@
               :complete="stepIndex > 3"
               step="3"
             >
-              3
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -39,7 +36,6 @@
               :complete="stepIndex > 4"
               step="4"
             >
-              4
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -49,12 +45,11 @@
               :complete="stepIndex > 5"
               step="5"
             >
-              5
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"> 6 </v-stepper-step>
+            <v-stepper-step step="6"></v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
