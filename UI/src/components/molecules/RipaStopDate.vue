@@ -1,66 +1,92 @@
 <template>
-  <div class="ripa-stop-date tw-p-4">
+  <div class="ripa-stop-date tw-pb-8">
     <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
     </ripa-form-header>
 
-    <ripa-checkbox
-      v-model="model.checkbox"
-      cbLabel="Stop in response to Call for Service"
-      @input="handleInput"
-    >
-    </ripa-checkbox>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="4">
+          <div class="tw-mr-4">
+            <ripa-date-picker
+              v-model="model.stopDate.date"
+              label="Date of Stop"
+              @input="handleInput"
+            >
+            </ripa-date-picker>
+          </div>
+        </v-col>
 
-    <ripa-date-picker
-      v-model="model.datePicker"
-      label="Date of Stop"
-      @input="handleInput"
-    >
-    </ripa-date-picker>
+        <v-col cols="12" sm="12" md="4">
+          <div class="tw-mr-4">
+            <ripa-time-picker
+              v-model="model.stopDate.time"
+              class="tw-mr-1"
+              label="Time of Stop"
+              @input="handleInput"
+            >
+            </ripa-time-picker>
+          </div>
+        </v-col>
 
-    <ripa-time-picker
-      v-model="model.timePicker"
-      label="Time of Stop"
-      @input="handleInput"
-    >
-    </ripa-time-picker>
+        <v-col cols="12" sm="12" md="4">
+          <ripa-select
+            v-model="model.stopDate.duration"
+            label="Stop Duration"
+            :items="durationItems"
+            itemText="name"
+            itemValue="value"
+            @input="handleInput"
+          >
+          </ripa-select>
+        </v-col>
+      </v-row>
 
-    <ripa-number-input
-      v-model="model.duration"
-      label="Stop Duration"
-      required
-      @input="handleInput"
-    >
-    </ripa-number-input>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.stopDate.stopInResponseToCfs"
+            label="Stop in response to Call for Service"
+            :max-width="300"
+            @input="handleInput"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
-import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import { format } from 'date-fns'
+import { DURATIONS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-date',
 
   components: {
     RipaFormHeader,
-    RipaCheckbox,
     RipaDatePicker,
+    RipaSelect,
+    RipaSwitch,
     RipaTimePicker,
-    RipaNumberInput,
   },
 
   data() {
     return {
       valid: true,
+      durationItems: DURATIONS,
       viewModel: {
-        duration: this.value.duration || null,
-        checkbox: this.value.checkbox || false,
-        datePicker: format(new Date(), 'yyyy-MM-dd'),
-        timePicker: format(new Date(), 'h:mm'),
+        stopDate: {
+          date: this.value?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
+          time: this.value?.stopDate?.time || format(new Date(), 'h:mm'),
+          duration: this.value?.stopDate?.duration || null,
+          stopInResponseToCfs:
+            this.value?.stopDate?.stopInResponseToCfs || false,
+        },
       },
     }
   },

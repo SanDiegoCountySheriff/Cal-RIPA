@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Stop.Services.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,9 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "COMING SOON!!!")]
-        [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "COMING SOON!!!")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Services.CosmosDb.Models.Stop>), Description = "List of Stops")]
+        [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Return Submitted OR UnSubmitted stops, defaults to false")]
+        [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have errors, IsSubmitted must be true or this will be ignored")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
@@ -43,24 +44,41 @@ namespace RIPA.Functions.Stop.Functions
                 StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
                 EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
                 IsError = !string.IsNullOrWhiteSpace(req.Query["IsError"]) ? bool.Parse(req.Query["IsError"]) : false,
-                IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsError"]) ? bool.Parse(req.Query["IsError"]) : false
+                IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]) ? bool.Parse(req.Query["IsSubmitted"]) : false
             };
 
-            List<string> whereStatements = new List<string>(); 
+            List<string> whereStatements = new List<string>();
 
+            //Date Range
             if (stopQuery.StartDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime > '{((DateTime)stopQuery.StartDate).ToString("o")}'");
+                whereStatements.Add(Environment.NewLine + $"c.StopDateTime > '{(DateTime)stopQuery.StartDate:o}'");
             }
-
             if (stopQuery.EndDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{((DateTime)stopQuery.EndDate).ToString("o")}'");
+                whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{(DateTime)stopQuery.EndDate:o}'");
             }
-            
-            //TODO handle filtering by error or submittion
-            //whereStatements.Add(Environment.NewLine + $"(c.IsSubmitted = '{stopQuery.IsSubmitted.ToString()}' OR c.IsSubmitted IS NULL)");
-            //whereStatements.Add(Environment.NewLine + $"(c.IsError = '{stopQuery.IsError.ToString()}' OR c.IsError IS NULL)");
+
+            //IsSubmitted
+            if (stopQuery.IsSubmitted)
+            {
+                whereStatements.Add(Environment.NewLine + $"c.DojSubmit != null");
+                //IsError
+                if (stopQuery.IsError)
+                {
+                    whereStatements.Add(Environment.NewLine + $"c.DojSubmit.Status = '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                }
+                else
+                {
+                    whereStatements.Add(Environment.NewLine + $"c.DojSubmit.Status != '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                }
+            }
+            else
+            {
+                whereStatements.Add(Environment.NewLine + $"c.DojSubmit = null");
+            }
+
+
 
             string where = " WHERE ";
             foreach (var whereStatement in whereStatements)
@@ -79,8 +97,8 @@ namespace RIPA.Functions.Stop.Functions
         {
             public DateTime? StartDate { get; set; }
             public DateTime? EndDate { get; set; }
-            public bool? IsError { get; set; }
-            public bool? IsSubmitted { get; set; }
+            public bool IsError { get; set; }
+            public bool IsSubmitted { get; set; }
 
         }
     }

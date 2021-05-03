@@ -1,8 +1,18 @@
 <template>
+  <div class="ripa-switch" :style="{ maxWidth: maxWidth + 'px' }">
     <v-switch
-     v-model="model"
-     :label="label">
-      </v-switch>
+      v-model="model"
+      class="v-input--reverse v-input--expand"
+      :disabled="disabled"
+      :hint="hint"
+      :persistent-hint="hint.length > 0"
+      hide-details
+    >
+      <template #label>
+        {{ label }}
+      </template>
+    </v-switch>
+  </div>
 </template>
 
 <script>
@@ -15,7 +25,7 @@ export default {
     }
   },
 
-computed: {
+  computed: {
     model: {
       get() {
         return this.viewModel
@@ -34,17 +44,53 @@ computed: {
     },
   },
 
-
-props: {
+  props: {
     value: {
       type: Boolean,
       default: false,
     },
-
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     label: {
       type: String,
       default: 'no',
+    },
+    hint: {
+      type: String,
+      default: '',
+    },
+    maxWidth: {
+      type: Number,
+      default: 250,
+    },
+  },
+}
+</script>
+
+<style lang="scss">
+.v-input--reverse .v-input__slot {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  .v-application--is-ltr & {
+    .v-input--selection-controls__input {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+  }
+  .v-application--is-rtl & {
+    .v-input--selection-controls__input {
+      margin-left: 0;
+      margin-right: 8px;
     }
   }
 }
-</script>
+
+.v-input--expand .v-input__slot {
+  .v-label {
+    display: block;
+    flex: 1;
+  }
+}
+</style>

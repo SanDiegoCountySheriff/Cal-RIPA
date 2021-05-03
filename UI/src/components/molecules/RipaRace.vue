@@ -1,22 +1,31 @@
 <template>
-  <div class="ripa-race tw-p-4">
+  <div class="ripa-race tw-pb-8">
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
-      subtitle="§999.226(a)(4)">
+      subtitle="§999.226(a)(4)"
+    >
     </ripa-form-header>
 
-    <ripa-check-group
-        v-model="model.raceValues"
-        :items="raceItems"
-        @input="handleInput">
-    </ripa-check-group>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-check-group
+            v-model="model.person.perceivedRace"
+            :items="raceItems"
+            @input="handleInput"
+          >
+          </ripa-check-group>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
@@ -28,17 +37,11 @@ export default {
 
   data() {
     return {
-      raceItems: [
-        { name: 'Asian', value: '1' },
-        { name: 'Black/African American', value: '2' },
-        { name: 'Hispanic/Latino(a)', value: '3' },
-        { name: 'Middle Eastern or South Asian', value: '4' },
-        { name: 'Native American', value: '5' },
-        { name: 'Pacific Islander', value: '6' },
-        { name: 'White', value: '7' },
-      ],
+      raceItems: RACES,
       viewModel: {
-        raceValues: this.value.raceValues || [],
+        person: {
+          perceivedRace: this.value?.person?.perceivedRace || [],
+        },
       },
     }
   },
@@ -53,7 +56,7 @@ export default {
 
   methods: {
     handleInput() {
-        this.$emit('input', this.viewModel)
+      this.$emit('input', this.viewModel)
     },
   },
 
@@ -62,11 +65,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    items: {
-      type: Object,
-      default: () => {},
-    },
   },
 }
 </script>
-

@@ -1,22 +1,41 @@
 <template>
-  <div class="ripa-disability tw-p-4">
+  <div class="ripa-disability tw-pb-8">
     <ripa-form-header
       title="Perceived or Known Disability"
       required
-      subtitle="§999.226(a)(9)">
+      subtitle="§999.226(a)(9)"
+    >
     </ripa-form-header>
 
-    <ripa-check-group
-        v-model="model.disability"
-        :items="disabilityItems"
-        @input="handleInput">
-    </ripa-check-group>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.person.anyDisabilities"
+            label="Any Disabilities?"
+            :max-width="200"
+            @input="handleInput"
+          ></ripa-switch>
+
+          <template v-if="model.person.anyDisabilities">
+            <ripa-check-group
+              v-model="model.person.perceivedOrKnownDisability"
+              :items="disabilityItems"
+              @input="handleInput"
+            >
+            </ripa-check-group>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
@@ -24,22 +43,19 @@ export default {
   components: {
     RipaFormHeader,
     RipaCheckGroup,
+    RipaSwitch,
   },
 
   data() {
     return {
       valid: true,
-      disabilityItems: [
-        { name: 'None', value: '1' },
-        { name: 'Deafness or difficulty hearing', value: '2' },
-        { name: 'Speech impairment or limited use of language', value: '3' },
-        { name: 'Blind or limited vision', value: '4' },
-        { name: 'Mental health condition', value: '5' },
-        { name: 'Intellectual or developmental disability, including dementia', value: '6' },
-        { name: 'Other disability', value: '7' },
-      ],
+      disabilityItems: DISABILITIES,
       viewModel: {
-        disability: this.value.disability || [],
+        person: {
+          anyDisabilities: this.value?.person?.anyDisabilities || false,
+          perceivedOrKnownDisability:
+            this.value?.person?.perceivedOrKnownDisability || [],
+        },
       },
     }
   },
@@ -54,16 +70,19 @@ export default {
 
   methods: {
     handleInput() {
+      this.updatePerceivedOrKnownDisabilityModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updatePerceivedOrKnownDisabilityModel() {
+      if (!this.viewModel.person.anyDisabilities) {
+        this.viewModel.person.perceivedOrKnownDisability = []
+      }
     },
   },
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    items: {
       type: Object,
       default: () => {},
     },
