@@ -1,5 +1,5 @@
 <template>
-  <v-radio-group v-model="model">
+  <v-radio-group v-model="model" hide-details>
     <v-radio
       v-for="(item, index) in items"
       :key="index"
@@ -39,7 +39,7 @@ export default {
 
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     items: {

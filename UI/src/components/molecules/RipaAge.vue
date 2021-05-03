@@ -1,35 +1,47 @@
 <template>
-  <div class="ripa-age tw-p-4">
+  <div class="ripa-age tw-pb-8">
     <ripa-form-header title="Perceived Age" required subtitle="§999.226(a)(7)">
     </ripa-form-header>
 
-    <ripa-number-input
-      v-model="model.age"
-      label="Perceived Age"
-      required
-      @input="handleInput"
-    >
-    </ripa-number-input>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-select
+            v-model="model.person.perceivedAge"
+            label="Perceived Age"
+            :items="ageItems"
+            itemText="name"
+            itemValue="value"
+            @input="handleInput"
+          >
+          </ripa-select>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaNumberInput from '@/components/atoms/RipaNumberInput'
+import RipaSelect from '@/components/atoms/RipaSelect'
+import { AGES } from '@/constants/form'
 
 export default {
   name: 'ripa-age',
 
   components: {
     RipaFormHeader,
-    RipaNumberInput,
+    RipaSelect,
   },
 
   data() {
     return {
       valid: true,
+      ageItems: AGES,
       viewModel: {
-        age: this.value?.age || null,
+        person: {
+          perceivedAge: this.value?.person?.perceivedAge || null,
+        },
       },
     }
   },

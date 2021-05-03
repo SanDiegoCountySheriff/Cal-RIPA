@@ -10,11 +10,9 @@ export const basic = () => ({
   components: { RipaFormStep3 },
   data() {
     return {
-      stopReason: {
-        name1: 'spietrek',
-        name2: 'lpietrek',
-      },
+      stop: {},
     }
   },
-  template: '<ripa-form-step3 v-model="stopReason"></ripa-form-step3>',
+  template:
+    '<div><ripa-form-step3 v-model="stop"></ripa-form-step3>{{stop}}</div>',
 })

@@ -36,9 +36,13 @@
           <v-switch
             v-model="errorsFound"
             class="tw-ml-2"
-            label="Errors"
+            label="Errors Found"
           ></v-switch>
-          <v-switch v-model="piiFound" class="tw-ml-2" label="PII"></v-switch>
+          <v-switch
+            v-model="piiFound"
+            class="tw-ml-2"
+            label="PII Found"
+          ></v-switch>
         </div>
       </v-flex>
 
