@@ -28,12 +28,19 @@ namespace RIPA.Functions.Domain.Functions.Statutes
             [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
             List<Statute> response = new List<Statute>();
-
-            foreach (Statute entity in await statutes.ExecuteQuerySegmentedAsync(new TableQuery<Statute>(), null))
+            TableContinuationToken continuationToken = null;
+            do
             {
-                response.Add(entity);
+                var request = await statutes.ExecuteQuerySegmentedAsync(new TableQuery<Statute>(), continuationToken);
+                continuationToken = request.ContinuationToken;
+                foreach (Statute entity in request)
+                {
+                    response.Add(entity);
+                }
             }
+            while (continuationToken != null);
 
+            log.LogInformation($"GetStatutes returned {response.Count} statutes");
             return new OkObjectResult(response);
         }
     }

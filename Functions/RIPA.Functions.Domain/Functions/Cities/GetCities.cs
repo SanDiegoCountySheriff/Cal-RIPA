@@ -27,12 +27,20 @@ namespace RIPA.Functions.Domain.Functions.Cities
             [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
             List<City> response = new List<City>();
-
-            foreach (City entity in await cities.ExecuteQuerySegmentedAsync(new TableQuery<City>(), null))
+            TableContinuationToken continuationToken = null;
+            do
             {
-                response.Add(entity);
-            }
+                var request = await cities.ExecuteQuerySegmentedAsync(new TableQuery<City>(), continuationToken);
+                continuationToken = request.ContinuationToken;
 
+                foreach (City entity in request)
+                {
+                    response.Add(entity);
+                }
+            } 
+            while (continuationToken != null);
+            
+            log.LogInformation($"GetCities returned {response.Count} cities");
             return new OkObjectResult(response);
 
         }

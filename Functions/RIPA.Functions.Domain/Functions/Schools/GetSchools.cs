@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Schools.Models;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -28,12 +29,20 @@ namespace RIPA.Functions.Domain.Functions.Schools
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
             List<School> response = new List<School>();
-
-            foreach (School entity in await schools.ExecuteQuerySegmentedAsync(new TableQuery<School>(), null))
+            TableContinuationToken continuationToken = null;
+            do
             {
-                response.Add(entity);
-            }
+                var request = await schools.ExecuteQuerySegmentedAsync(new TableQuery<School>(), continuationToken);
+                continuationToken = request.ContinuationToken;
+                
+                foreach (School entity in request)
+                {
+                    response.Add(entity);
+                }
+            } 
+            while (continuationToken != null);
 
+            log.LogInformation($"GetSchools returned {response.Count} schools");
             return new OkObjectResult(response);
         }
     }
