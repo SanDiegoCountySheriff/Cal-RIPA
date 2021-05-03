@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
-using RIPA.Functions.Common.Models;
+using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,11 +13,10 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.SFTP
 {
-    class SftpService
+    public class SftpService : ISftpService
     {
-        private readonly ILogger _logger;
-        private readonly SftpConfig _config;
-
+        public readonly ILogger _logger;
+        public readonly SftpConfig _config;
 
         public SftpService(ILogger logger, SftpConfig sftpConfig)
         {
@@ -63,7 +63,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadStop(Stop stop, string remoteFilePath)
+        public void UploadStop(DojStop stop, string remoteFilePath)
         {
             using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
             try
@@ -72,11 +72,11 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop));
                 MemoryStream stream = new MemoryStream(bytes);
                 client.UploadFile(stream, remoteFilePath);
-                _logger.LogInformation($"Finished uploading stop [{stop.id}] to [{remoteFilePath}]");
+                _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Failed in uploading stop [{stop.id}] to [{remoteFilePath}]");
+                _logger.LogError(exception, $"Failed in uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             finally
             {
@@ -104,7 +104,6 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 client.Disconnect();
             }
         }
-
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
@@ -154,5 +153,4 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
     }
-
 }

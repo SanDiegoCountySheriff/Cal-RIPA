@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RIPA.Functions.Submission.Services.SFTP
 {
-    class SftpConfig
+    public class SftpConfig
     {
         public string Host { get; set; }
         public int Port { get; set; }
