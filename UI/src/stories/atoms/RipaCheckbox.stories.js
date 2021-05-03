@@ -14,5 +14,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-checkbox v-model="selection"></ripa-checkbox>{{selection}}</div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-checkbox v-model="selection" label="Warning (verbal or written)"></ripa-checkbox>{{selection}}</div>',
 })
