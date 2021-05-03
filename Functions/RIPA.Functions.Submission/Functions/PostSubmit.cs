@@ -6,7 +6,9 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Submission.Services.REST;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
+using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,31 +18,27 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Functions
 {
-    public static class PostSubmit
+    public class PostSubmit
     {
-        private static HttpClient httpClient = new HttpClient();
-        private static string sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
+        private readonly ISftpService _sftpService;
+        private readonly IStopService _stopService;
+        private readonly string _sftpInputPath;
 
+        public PostSubmit(ISftpService sftpService, IStopService stopService)
+        {
+            _sftpService = sftpService;
+            _stopService = stopService;
+            _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
+        }
 
         [FunctionName("PostSubmit")]
         [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "DOJ Submit Success")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, ILogger log)
         {
             log.LogInformation("Submit to DOJ requested");
-
-            var config = new SftpConfig
-            {
-                Host = Environment.GetEnvironmentVariable("SftpHost"),
-                Port = Convert.ToInt32(Environment.GetEnvironmentVariable("SftpPort")),
-                UserName = Environment.GetEnvironmentVariable("SftpUserName"),
-                Password = Environment.GetEnvironmentVariable("SftpPassword")
-            };
-            SftpService sftpService = new SftpService(log, config);
-            StopService stopService = new StopService(httpClient);
-
 
             //Grouping statistics based on user input (I think this means the query used for submission of stops)
             //high level report of Submission
@@ -51,14 +49,11 @@ namespace RIPA.Functions.Submission.Functions
             Guid submissionId = Guid.NewGuid();
             foreach (var stopId in submitRequest.StopIds)
             {
-                var stop = await stopService.GetStop(stopId); //BATCH or queue
-                var dojStop = stopService.CastToDojStop(stop);
-
+                var stop = await _stopService.GetStopAsync(stopId);
                 DateTime dateSubmitted = DateTime.UtcNow;
                 string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
-                sftpService.UploadStop(stop, $"{sftpInputPath}{fileName}");
-                stopService.PutStop(stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
-                Console.WriteLine(stop);
+                _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}");
+                await _stopService.PutStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
             }
 
             //TODO improve response 
@@ -69,12 +64,6 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
-
-
-
-
-
-
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using RIPA.Functions.Common.Models;
 using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,22 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.REST
 {
-    public class StopService
+    public class StopService : IStopService
     {
-        private static string getStopUrl = Environment.GetEnvironmentVariable("GetStopUrl");
-        private static string putStopUrl = Environment.GetEnvironmentVariable("PutStopUrl");
+        private static string _getStopUrl;
+        private static string _putStopUrl;
         private static HttpClient _httpClient;
-        public StopService(HttpClient httpClient)
+        public StopService(HttpClient httpClient, string getStopUrl, string putStopUrl)
         {
             _httpClient = httpClient;
+            _getStopUrl = getStopUrl;
+            _putStopUrl = putStopUrl;
         }
 
-        public async Task<Stop> GetStop(string id)
+        public async Task<Stop> GetStopAsync(string id)
         {
-            var response = await _httpClient.GetAsync(getStopUrl.Replace("{Id}", id));
+            var response = await _httpClient.GetAsync(_getStopUrl.Replace("{Id}", id));
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Failed Get Stop for submission by stop id: {id}");
@@ -37,14 +41,17 @@ namespace RIPA.Functions.Submission.Services.REST
             return stop;
         }
 
-        public async void PutStop(Stop stop)
+        public async Task<Stop> PutStopAsync(Stop stop)
         {
             var httpContent = new StringContent(JsonSerializer.Serialize(stop), UnicodeEncoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(putStopUrl.Replace("{Id}", stop.id), httpContent);
+            var response = await _httpClient.PutAsync(_putStopUrl.Replace("{Id}", stop.id), httpContent);
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Failed Put Stop Submission for stop id: {stop.id}");
             }
+            return stop;
+
         }
 
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
@@ -124,16 +131,16 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojLocation(RIPA.Functions.Common.Models.Location location)
         {
-            string DojLocation = location.Intersection;
+            string dojLocation = location.Intersection;
             if (location.BlockNumber != "")
-                DojLocation += " " + location.BlockNumber;
+                dojLocation += " " + location.BlockNumber;
             if (location.LandMark != "")
-                DojLocation += " " + location.LandMark;
+                dojLocation += " " + location.LandMark;
             if (location.StreetName != "")
-                DojLocation += " " + location.StreetName;
+                dojLocation += " " + location.StreetName;
             if (location.HighwayExit != "")
-                DojLocation += " " + location.HighwayExit;
-            return DojLocation;
+                dojLocation += " " + location.HighwayExit;
+            return dojLocation;
         }
 
         public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
@@ -162,8 +169,9 @@ namespace RIPA.Functions.Submission.Services.REST
                     },
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
                     ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
-                    ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x=>x.Key).ToArray()},
-                    ListResult = CastToDojListResult(personStopped.ListResultOfStop) 
+                    ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
+                    ListResult = CastToDojListResult(personStopped.ListResultOfStop)
+
                 };
             }
             return new Listperson_Stopped { };
@@ -182,7 +190,7 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 case "1": //Traffic Violation
                     primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
-                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;                        
+                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
                     break;
                 case "2": //Reasonable Suspicion
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key.Split(",") };
@@ -202,7 +210,7 @@ namespace RIPA.Functions.Submission.Services.REST
         {
             Listacttak listacttak = new Listacttak();
             var listActionsTaken = new List<Acttak>();
-            foreach(ActionTakenDuringStop atds in listActionTakenDuringStop)
+            foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
             {
                 Acttak acttak = new Acttak
                 {
@@ -219,12 +227,12 @@ namespace RIPA.Functions.Submission.Services.REST
         {
             Listresult listresult = new Listresult();
             var listResults = new List<Result>();
-            foreach(ResultOfStop ros in listResultOfStop)
+            foreach (ResultOfStop ros in listResultOfStop)
             {
                 Result result = new Result
                 {
                     ResCD = ros.Result,
-                    Res_O_CD = ros.ListCodes.Select(x=>x.Code).ToArray()
+                    Res_O_CD = ros.ListCodes.Select(x => x.Code).ToArray()
                 };
                 listResults.Add(result);
             }
