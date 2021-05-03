@@ -5,7 +5,7 @@ namespace RIPA.Functions.Common.Models
 {
     public class DojSubmit
     {
-        public Submission[] Submissions { get; set; }
+        public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
     }
     public class Submission
@@ -13,18 +13,33 @@ namespace RIPA.Functions.Common.Models
         public Guid Id { get; set; }
         public DateTime DateSubmitted { get; set; }
         public string Status { get; set; }
+        public string FileName { get; set; }
+        public SubmissionError Error { get; set; }
+    }
+    public class SubmissionError
+    {
+        public string ErrorType { get; set; }
+        public string Error { get; set; }
+        public DateTime DateReported { get; set; }
+        public string FileName { get; set; }
     }
     
+    public enum SubmissionErrorType
+    {
+        [EnumMember(Value = "FileLevelFatalError")]
+        FileLevelFatalError,
+        [EnumMember(Value = "RecordLevelError")]
+        RecordLevelError
+    }
+
     public enum SubmissionStatus 
     {
         [EnumMember(Value="Unsubmitted")]
         Unsubmitted,
-        [EnumMember(Value = "Pending")]
-        Pending,
+        [EnumMember(Value = "Submitted")]
+        Submitted,
         [EnumMember(Value = "Failed")]
-        Failed,
-        [EnumMember(Value = "Success")]
-        Success
+        Failed
     }
 
     public class Stop
@@ -46,7 +61,7 @@ namespace RIPA.Functions.Common.Models
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
-        public Person[] StoppedPeople { get; set; }
+        public PersonStopped[] ListPersonStopped { get; set; }
         public DojSubmit DojSubmit { get; set; }
     }
 
@@ -60,14 +75,14 @@ namespace RIPA.Functions.Common.Models
 
     public class ContractCity
     {
-        public object[] Codes { get; set; }
+        public Codes[] ListCodes { get; set; }
     }
 
     public class Location
     {
         public bool ToggleLocationOptions { get; set; }
         public string Intersection { get; set; }
-        public int BlockNumber { get; set; }
+        public string BlockNumber { get; set; }
         public string LandMark { get; set; }
         public string StreetName { get; set; }
         public string HighwayExit { get; set; }
@@ -80,7 +95,7 @@ namespace RIPA.Functions.Common.Models
 
     public class City
     {
-        public Codes[] CityCodes { get; set; }
+        public Codes[] ListCodes { get; set; }
     }
 
     public class Codes
@@ -91,50 +106,49 @@ namespace RIPA.Functions.Common.Models
 
     public class Beat
     {
-        public object[] Codes { get; set; }
+        public Codes[] ListCodes { get; set; }
     }
 
     public class SchoolName
     {
-        public object[] Codes { get; set; }
+        public Codes[] ListCodes { get; set; }
     }
 
-    public class Person
+    public class PersonStopped
     {
         public string Id { get; set; }
         public bool IsStudent { get; set; }
-        public PerceivedRace[] PerceivedRaces { get; set; }
+        public PerceivedRace[] ListPerceivedRace { get; set; }
         public bool PerceivedLimitedEnglish { get; set; }
-        public PerceivedOrKnownDisability[] PerceivedOrKnownDisabilities { get; set; }
+        public PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
         public bool GenderNonconforming { get; set; }
-        public int Gender { get; set; }
         public string PerceivedLgbt { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string PerceptionKnown { get; set; }
         public string ReasonForStopExplanation { get; set; }
-        public ActionTakenDuringStop[] ActionsTakenDuringStop { get; set; }
-        public ContrabandOrEvidenceDiscovered[] ContrabandsOrEvidencesDiscovered { get; set; }
+        public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+        public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
         public object[] BasisForSearch { get; set; }
         public string BasisForSearchBrief { get; set; }
         public object[] BasisForPropertySeizure { get; set; }
         public object[] TypeOfPropertySeized { get; set; }
-        public ResultOfStop[] ResultsOfStop { get; set; }
+        public ResultOfStop[] ListResultOfStop { get; set; }
     }
 
     public class ReasonForStop
     {
-        public int Key { get; set; }
+        public string Key { get; set; }
         public string Reason { get; set; }
-        public Detail[] Details { get; set; }
-        public Codes[] Codes { get; set; }
+        public Detail[] ListDetail { get; set; }
+        public Codes[] ListCodes { get; set; }
     }
 
     public class Detail
     {
         public string Reason { get; set; }
-        public int Key { get; set; }
+        public string Key { get; set; }
     }
 
     public class PerceivedRace
@@ -146,7 +160,7 @@ namespace RIPA.Functions.Common.Models
     public class PerceivedOrKnownDisability
     {
         public string Disability { get; set; }
-        public int Key { get; set; }
+        public string Key { get; set; }
     }
 
     public class ActionTakenDuringStop
@@ -158,13 +172,13 @@ namespace RIPA.Functions.Common.Models
     public class ContrabandOrEvidenceDiscovered
     {
         public string Contraband { get; set; }
-        public int Key { get; set; }
+        public string Key { get; set; }
     }
 
     public class ResultOfStop
     {
         public string Result { get; set; }
-        public Codes[] Codes { get; set; }
+        public Codes[] ListCodes { get; set; }
         public int Key { get; set; }
     }
 
