@@ -65,12 +65,6 @@ namespace RIPA.Functions.Submission.Functions
             public List<string> StopIds { get; set; }
         }
 
-
-
-
-
-
-
     }
 }
 

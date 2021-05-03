@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 
+
 namespace RIPA.Functions.Submission.Functions
 {
     public class TimerGetSubmitResults
@@ -39,6 +40,7 @@ namespace RIPA.Functions.Submission.Functions
             Guid correlationId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
             string containerName = _storageContainerNamePrefix + correlationId.ToString();
+
             BlobContainerClient blobContainerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
 
             foreach (var file in files.Where(x => x.IsDirectory == false))
@@ -49,6 +51,7 @@ namespace RIPA.Functions.Submission.Functions
                     var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, file.Name, blobContainerClient);
                     ProcessDojResponse(fileText);
                     _sftpService.DeleteFile(file.FullName);
+
                 }
                 catch (Exception e)
                 {
@@ -86,6 +89,7 @@ namespace RIPA.Functions.Submission.Functions
         }
 
         public async void ProcessRecordLevelErrors(string recordLevelErrors)
+
         {
             using (StringReader reader = new StringReader(recordLevelErrors))
             {

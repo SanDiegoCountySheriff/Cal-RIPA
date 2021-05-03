@@ -18,6 +18,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public readonly ILogger _logger;
         public readonly SftpConfig _config;
 
+
         public SftpService(ILogger logger, SftpConfig sftpConfig)
         {
             _logger = logger;

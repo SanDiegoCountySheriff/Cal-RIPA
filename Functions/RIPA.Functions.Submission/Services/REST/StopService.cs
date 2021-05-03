@@ -27,6 +27,7 @@ namespace RIPA.Functions.Submission.Services.REST
         public async Task<Stop> GetStopAsync(string id)
         {
             var response = await _httpClient.GetAsync(_getStopUrl.Replace("{Id}", id));
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Failed Get Stop for submission by stop id: {id}");
@@ -44,11 +45,13 @@ namespace RIPA.Functions.Submission.Services.REST
         {
             var httpContent = new StringContent(JsonSerializer.Serialize(stop), UnicodeEncoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(_putStopUrl.Replace("{Id}", stop.id), httpContent);
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Failed Put Stop Submission for stop id: {stop.id}");
             }
             return stop;
+
         }
 
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
@@ -168,6 +171,7 @@ namespace RIPA.Functions.Submission.Services.REST
                     ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
                     ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
+
                 };
             }
             return new Listperson_Stopped { };
