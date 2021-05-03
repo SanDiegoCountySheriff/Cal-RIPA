@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -6,18 +5,12 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Common.Models;
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.SFTP;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 
@@ -48,21 +41,23 @@ namespace RIPA.Functions.Submission.Functions
             SftpService sftpService = new SftpService(log, config);
             StopService stopService = new StopService(httpClient);
 
-            //Grouping statistics based on user input 
-            //high level report of Submission
-            //its a lot of information
 
-            //TODO Create a submission cosmosDB record
-            //TODO Create directory in Azure Storage ++ Directory Naming Convention
+            //Grouping statistics based on user input (I think this means the query used for submission of stops)
+            //high level report of Submission
+            //Count of records submitted and...
+            //Date of submission requested
+            //unique id of submission which could allow for grouping of stops by submissionId using the GetStops endpoint
+
             Guid submissionId = Guid.NewGuid();
             foreach (var stopId in submitRequest.StopIds)
             {
                 var stop = await stopService.GetStop(stopId); //BATCH or queue
-                //TODO create json file in Azure Storage directory created in above TODO
-                //TODO FORMAT STOP FOR DOJ
+                var dojStop = stopService.CastToDojStop(stop);
+
                 DateTime dateSubmitted = DateTime.UtcNow;
-                sftpService.UploadStop(stop, $"{sftpInputPath}{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json");
-                stopService.PutStop(stopService.NewSubmission(stop, dateSubmitted, submissionId));
+                string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
+                sftpService.UploadStop(stop, $"{sftpInputPath}{fileName}");
+                stopService.PutStop(stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                 Console.WriteLine(stop);
             }
 

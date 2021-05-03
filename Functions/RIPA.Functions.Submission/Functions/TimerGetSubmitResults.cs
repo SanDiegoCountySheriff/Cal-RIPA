@@ -1,14 +1,13 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.SFTP;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -21,7 +20,7 @@ namespace RIPA.Functions.Submission.Functions
         private static readonly StopService stopService = new StopService(httpClient);
 
         [FunctionName("TimerGetSubmitResults")]
-        public static async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        public static async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
@@ -34,32 +33,33 @@ namespace RIPA.Functions.Submission.Functions
             };
             SftpService sftpService = new SftpService(log, config);
 
+            var files = sftpService.ListAllFiles(sftpOutputPath);
+            if (files.Count() == 0) return; //Nothing to process --> exit
+
             Guid correlationId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(storageConnectionString);
             string containerName = storageContainerNamePrefix + correlationId.ToString();
             BlobContainerClient blobContainerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
 
-            var files = sftpService.ListAllFiles(sftpOutputPath);
             foreach (var file in files.Where(x => x.IsDirectory == false))
             {
                 try
                 {
-                    //Download process and delete
+                    //TODO DOJ Submission Cosmos object - how to correlate the submission object to this file? stop.batchId may be the link we need. 
                     var fileText = await sftpService.DownloadFileToBlobAsync(file.FullName, file.Name, blobContainerClient);
                     ProcessDojResponse(fileText);
-                    Console.WriteLine($"{fileText}"); //Process this string
-                                                      //TODO foreach result, update the records DojSubmit ojbect 
                     sftpService.DeleteFile(file.FullName);
                 }
                 catch (Exception e)
                 {
+                    log.LogError($"an error occured processing doj sftp result {e.Message}");
                     //move file to Deadletter directory on DOJ sftp if they allow us to create a directory
                     //if we cant do this on SFTP, Consider creating AZURE blob container to house these files. 
                     //and remove the blob from the results cotnainer 
                 }
-
             }
-            //Update the submission Object
+            //When do we set all records in the submissions that are pending to Success? 
+            //How to correlate the submission id to this result??? This will let us aggregate and bulk update the submissions that arent erroneous
         }
 
         public static void ProcessDojResponse(string dojResponse)
