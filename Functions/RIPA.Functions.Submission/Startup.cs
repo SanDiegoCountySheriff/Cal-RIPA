@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Submission.Services.CosmosDb;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
+
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
@@ -10,6 +11,7 @@ using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.Submission.Startup))]
 
