@@ -2,12 +2,8 @@
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
+
 {
-    public class DojSubmit
-    {
-        public Submission[] ListSubmission { get; set; }
-        public string Status { get; set; }
-    }
     public class Submission
     {
         public Guid Id { get; set; }
@@ -47,6 +43,7 @@ namespace RIPA.Functions.Common.Models
     {
         public string id { get; set; }
         public string Ori { get; set; }
+
         public string Agency { get; set; }
         public string OfficerID { get; set; }
         public string ExpYears { get; set; }
@@ -62,7 +59,8 @@ namespace RIPA.Functions.Common.Models
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public PersonStopped[] ListPersonStopped { get; set; }
-        public DojSubmit DojSubmit { get; set; }
+        public Submission[] ListSubmission { get; set; }
+        public string Status { get; set; }
     }
 
 
