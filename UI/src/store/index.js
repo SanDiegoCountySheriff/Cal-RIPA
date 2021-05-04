@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { formatDate } from '@/components/utilities/dates'
+import { formatDate } from '@/utilities/dates'
 
 Vue.use(Vuex)
 

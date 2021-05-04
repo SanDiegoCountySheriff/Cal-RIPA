@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-form-template">
-    {{ stop }}
     <ripa-form-wrapper
       v-model="stop"
       :beats="beats"
@@ -24,22 +23,22 @@ export default {
 
   data() {
     return {
-      stop: {
-        stopDate: {
-          duration: 1,
-        },
-      },
+      stop: this.value,
     }
   },
 
   methods: {
     handleInput(newVal) {
       this.stop = newVal
-      this.$forceUpdate()
+      this.$emit('input', this.stop)
     },
   },
 
   props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
     beats: {
       type: Array,
       default: () => [],

@@ -18,7 +18,7 @@ export default {
   computed: {
     getOfficer() {
       return {
-        years: this.getOfficerYearsExperience(),
+        yearsExperience: this.getOfficerYearsExperience(),
         assignment: this.getOfficerAssignment(),
       }
     },
@@ -26,8 +26,10 @@ export default {
 
   methods: {
     getOfficerYearsExperience() {
-      const years = localStorage.getItem('ripa_officer_years_experience')
-      return +years || null
+      const yearsExperience = localStorage.getItem(
+        'ripa_officer_years_experience',
+      )
+      return +yearsExperience || null
     },
 
     getOfficerAssignment() {
@@ -36,7 +38,10 @@ export default {
     },
 
     setOfficer(officer) {
-      localStorage.setItem('ripa_officer_years_experience', officer.years)
+      localStorage.setItem(
+        'ripa_officer_years_experience',
+        officer.yearsExperience,
+      )
       localStorage.setItem('ripa_officer_assignment', officer.assignment)
     },
 

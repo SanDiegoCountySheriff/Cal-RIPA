@@ -17,7 +17,6 @@
               v-model="model.officer.editOfficer"
               label="Edit Officer Experience and Assignment"
               :max-width="350"
-              :disabled="isEditOfficerDisabled"
               @input="handleInput"
             ></ripa-switch>
           </template>
@@ -94,10 +93,9 @@ export default {
       yearsExperienceRules: [v => !!v || 'Years experience is required'],
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
-      isEditOfficerDisabled: this.isOfficerRequired(),
       viewModel: {
         officer: {
-          editOfficer: this.isOfficerRequired(),
+          editOfficer: this.value?.officer?.editOfficer || null,
           yearsExperience: this.value?.officer?.yearsExperience || null,
           assignment: this.value?.officer?.assignment || null,
           otherType: this.value?.officer?.otherType || null,
@@ -115,23 +113,9 @@ export default {
   },
 
   methods: {
-    isOfficerRequired() {
-      const yearsExperience = this.viewModel?.officer?.yearsExperience || null
-      const assignment = this.viewModel?.officer?.assignment || null
-      return this.toggle && (yearsExperience === null || assignment === null)
-    },
-
     handleInput() {
-      this.updateOfficerModel()
       this.updateOtherTypeModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateOfficerModel() {
-      const officerRequired = this.isOfficerRequired()
-      if (officerRequired) {
-        this.viewModel.officer.editOfficer = true
-      }
     },
 
     updateOtherTypeModel() {

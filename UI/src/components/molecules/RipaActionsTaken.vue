@@ -64,14 +64,16 @@
         >
         </ripa-check-group>
 
-        <ripa-text-area
-          v-model="model.actionsTaken.basisForSearchBrief"
-          hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-          persistent-hint
-          label="Brief Explanation"
-          :rules="explanationRules"
-          @input="handleInput"
-        ></ripa-text-area>
+        <template v-if="isBasisForSearchBriefVisible">
+          <ripa-text-area
+            v-model="model.actionsTaken.basisForSearchBrief"
+            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+            persistent-hint
+            label="Brief Explanation"
+            :rules="explanationRules"
+            @input="handleInput"
+          ></ripa-text-area>
+        </template>
       </template>
 
       <ripa-subheader text="Seizure"></ripa-subheader>
@@ -209,6 +211,21 @@ export default {
 
     wasAskedForConsentToSearchProperty() {
       return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+    },
+
+    isBasisForSearchBriefVisible() {
+      if (this.viewModel.actionsTaken.basisForSearch.length === 0) {
+        return false
+      }
+
+      if (
+        this.viewModel.actionsTaken.basisForSearch.length === 1 &&
+        this.viewModel.actionsTaken.basisForSearch.includes(4)
+      ) {
+        return false
+      }
+
+      return true
     },
   },
 
