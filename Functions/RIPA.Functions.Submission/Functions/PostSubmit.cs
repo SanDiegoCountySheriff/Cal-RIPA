@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
@@ -22,48 +23,71 @@ namespace RIPA.Functions.Submission.Functions
     {
         private readonly ISftpService _sftpService;
         private readonly IStopService _stopService;
+        private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
+
         private readonly string _sftpInputPath;
 
-        public PostSubmit(ISftpService sftpService, IStopService stopService)
+        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
+            _submissionCosmosDbService = submissionCosmosDbService;
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
         }
 
         [FunctionName("PostSubmit")]
         [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "DOJ Submit Success")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of stops that failed submission")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, ILogger log)
         {
             log.LogInformation("Submit to DOJ requested");
-
-            //Grouping statistics based on user input (I think this means the query used for submission of stops)
-            //high level report of Submission
-            //Count of records submitted and...
-            //Date of submission requested
-            //unique id of submission which could allow for grouping of stops by submissionId using the GetStops endpoint
-
             Guid submissionId = Guid.NewGuid();
-            foreach (var stopId in submitRequest.StopIds)
+            try
             {
-                var stop = await _stopService.GetStopAsync(stopId);
-                DateTime dateSubmitted = DateTime.UtcNow;
-                string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
-                _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}");
-                await _stopService.PutStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                Models.Submission submission = new Models.Submission
+                {
+                    DateSubmitted = DateTime.UtcNow,
+                    Id = submissionId,
+                    RecordCount = submitRequest.StopIds.Count
+                };
+                await _submissionCosmosDbService.AddSubmissionAsync(submission);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
+                return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            //TODO improve response 
-            return new OkObjectResult(submitRequest);
+            List<string> failedStopIds = new List<string>();             
+
+            foreach (var stopId in submitRequest.StopIds)
+            {
+                try
+                {
+                    var stop = await _stopService.GetStopAsync(stopId);
+                    DateTime dateSubmitted = DateTime.UtcNow;
+                    string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
+                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}");
+                    await _stopService.PutStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                }
+                catch (Exception ex)
+                {
+                    log.LogError($"Failure Submitting Stop with id {stopId}: {ex.Message}");
+                    failedStopIds.Add(stopId);
+                }
+            }
+
+            return new OkObjectResult(new { failedStopIds });
         }
 
         public class SubmitRequest
         {
             public List<string> StopIds { get; set; }
         }
+
+
 
     }
 }

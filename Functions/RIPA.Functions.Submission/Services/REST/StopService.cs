@@ -64,25 +64,22 @@ namespace RIPA.Functions.Submission.Services.REST
                 FileName = fileName
             };
 
-            if (stop.DojSubmit == null)
+            if (stop.ListSubmission == null)
             {
-                stop.DojSubmit = new Common.Models.DojSubmit
-                {
-                    ListSubmission = new Common.Models.Submission[0]
-                };
+                stop.ListSubmission = new Common.Models.Submission[0];
             }
 
-            var submissions = stop.DojSubmit.ListSubmission.ToList();
+            var submissions = stop.ListSubmission.ToList();
             submissions.Add(submission);
 
-            stop.DojSubmit.ListSubmission = submissions.ToArray();
-            stop.DojSubmit.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+            stop.ListSubmission = submissions.ToArray();
+            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
             return stop;
         }
 
         public Stop ErrorSubmission(Stop stop, string errorType, string error, string fileName)
         {
-            var pendingSubmissions = stop.DojSubmit.ListSubmission.Where(x => x.FileName == fileName);
+            var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == fileName);
             foreach (var submission in pendingSubmissions)
             {
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
@@ -94,7 +91,7 @@ namespace RIPA.Functions.Submission.Services.REST
                     FileName = fileName
                 };
             }
-            stop.DojSubmit.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
+            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             return stop;
         }
 

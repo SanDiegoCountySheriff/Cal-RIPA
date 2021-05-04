@@ -3,11 +3,6 @@ using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
 {
-    public class DojSubmit
-    {
-        public Submission[] ListSubmission { get; set; }
-        public string Status { get; set; }
-    }
     public class Submission
     {
         public Guid Id { get; set; }
@@ -62,7 +57,8 @@ namespace RIPA.Functions.Common.Models
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public PersonStopped[] ListPersonStopped { get; set; }
-        public DojSubmit DojSubmit { get; set; }
+        public Submission[] ListSubmission { get; set; }
+        public string Status { get; set; }
     }
 
 
