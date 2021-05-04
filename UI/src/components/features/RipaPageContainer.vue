@@ -74,13 +74,21 @@ export default {
       if (cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
-          localStorage.removeItem('ripa_beats')
-          localStorage.removeItem('ripa_cities')
-          localStorage.removeItem('ripa_schools')
-          localStorage.removeItem('ripa_statutes')
-          localStorage.setItem('ripa_cache_date', new Date())
+          this.clearLocalStorage()
         }
       }
+
+      if (cacheDate === null) {
+        this.clearLocalStorage()
+      }
+    },
+
+    clearLocalStorage() {
+      localStorage.removeItem('ripa_beats')
+      localStorage.removeItem('ripa_cities')
+      localStorage.removeItem('ripa_schools')
+      localStorage.removeItem('ripa_statutes')
+      localStorage.setItem('ripa_cache_date', new Date())
     },
   },
 
