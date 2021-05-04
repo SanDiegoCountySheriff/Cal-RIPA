@@ -10,9 +10,9 @@ export const basic = () => ({
   components: { RipaSwitch },
   data() {
     return {
-      selection: '',
+      getLabelText: 'no',
     }
   },
   template:
-    '<div"><ripa-switch v-model="selection"></ripa-switch>{{selection}}</div>',
+    '<div"><ripa-switch v-model="getLabelText"></ripa-switch>{{getLabelText}}</div>',
 })

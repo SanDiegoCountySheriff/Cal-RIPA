@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="600">
+  <v-card class="mx-auto" max-width="600">
     <ripa-officer v-model="model"></ripa-officer>
   </v-card>
 </template>

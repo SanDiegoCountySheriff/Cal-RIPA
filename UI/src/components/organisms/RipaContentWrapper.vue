@@ -1,7 +1,7 @@
 <template>
-  <div class="tw-p-4">
+  <v-container fluid class="tw-my-6">
     <slot></slot>
-  </div>
+  </v-container>
 </template>
 
 <script>

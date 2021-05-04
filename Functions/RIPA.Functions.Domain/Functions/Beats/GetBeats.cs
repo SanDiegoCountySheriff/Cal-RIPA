@@ -27,12 +27,20 @@ namespace RIPA.Functions.Domain.Functions.Beats
             [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
         {
             List<Beat> response = new List<Beat>();
-
-            foreach (Beat entity in await beats.ExecuteQuerySegmentedAsync(new TableQuery<Beat>(), null))
+            TableContinuationToken continuationToken = null;
+            do
             {
-                response.Add(entity);
-            }
+                var request = await beats.ExecuteQuerySegmentedAsync(new TableQuery<Beat>(), continuationToken);
+                continuationToken = request.ContinuationToken;
 
+                foreach (Beat entity in request)
+                {
+                    response.Add(entity);
+                }
+            } 
+            while (continuationToken != null);
+
+            log.LogInformation($"GetBeats returned {response.Count} beats");
             return new OkObjectResult(response);
         }
     }

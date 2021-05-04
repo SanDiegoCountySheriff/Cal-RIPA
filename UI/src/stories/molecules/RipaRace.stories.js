@@ -10,9 +10,8 @@ export const basic = () => ({
   components: { RipaRace },
   data() {
     return {
-        perceivedRace: {},
+      stop: {},
     }
   },
-  template:
-    '<div><ripa-race v-model="perceivedRace"></ripa-race>{{perceivedRace}}</div>',
+  template: '<div><ripa-race v-model="stop"></ripa-race>{{stop}}</div>',
 })

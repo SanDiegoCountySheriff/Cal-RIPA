@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-race tw-p-4">
+  <div class="ripa-race tw-pb-8">
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
@@ -7,12 +7,18 @@
     >
     </ripa-form-header>
 
-    <ripa-check-group
-      v-model="model.raceValues"
-      :items="raceItems"
-      @input="handleInput"
-    >
-    </ripa-check-group>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-check-group
+            v-model="model.person.perceivedRace"
+            :items="raceItems"
+            @input="handleInput"
+          >
+          </ripa-check-group>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -33,7 +39,9 @@ export default {
     return {
       raceItems: RACES,
       viewModel: {
-        raceValues: this.value?.raceValues || [],
+        person: {
+          perceivedRace: this.value?.person?.perceivedRace || [],
+        },
       },
     }
   },
@@ -54,10 +62,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    items: {
       type: Object,
       default: () => {},
     },
