@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RIPA.Functions.Submission.Services.CosmosDb.Contracts
+{
+    public interface ISubmissionCosmosDbService
+    {
+        Task<IEnumerable<Models.Submission>> GetSubmissionsAsync(string queryString);
+        Task<Models.Submission> GetSSubmissionAsync(string id);
+        Task AddSubmissionAsync(Models.Submission submission);
+        Task UpdateSubmissionAsync(string id, Models.Submission submission);
+        Task DeleteSubmissionAsync(string id);
+    }
+}

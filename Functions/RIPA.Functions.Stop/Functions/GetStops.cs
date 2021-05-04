@@ -32,6 +32,7 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Return Submitted OR UnSubmitted stops, defaults to false")]
         [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have errors, IsSubmitted must be true or this will be ignored")]
+        [OpenApiParameter(name: "SubmissionId", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops where submission id equals input submission id, is submitted mus be true or this will be ignored")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
@@ -44,10 +45,12 @@ namespace RIPA.Functions.Stop.Functions
                 StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
                 EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
                 IsError = !string.IsNullOrWhiteSpace(req.Query["IsError"]) ? bool.Parse(req.Query["IsError"]) : false,
-                IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]) ? bool.Parse(req.Query["IsSubmitted"]) : false
+                IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]) ? bool.Parse(req.Query["IsSubmitted"]) : false,
+                SubmissionId = !string.IsNullOrWhiteSpace(req.Query["SubmissionId"]) ? req.Query["SubmissionId"] : default
             };
 
             List<string> whereStatements = new List<string>();
+            string join = "";
 
             //Date Range
             if (stopQuery.StartDate != default(DateTime))
@@ -62,20 +65,26 @@ namespace RIPA.Functions.Stop.Functions
             //IsSubmitted
             if (stopQuery.IsSubmitted)
             {
-                whereStatements.Add(Environment.NewLine + $"c.DojSubmit != null");
                 //IsError
                 if (stopQuery.IsError)
                 {
-                    whereStatements.Add(Environment.NewLine + $"c.DojSubmit.Status = '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                    whereStatements.Add(Environment.NewLine + $"c.Status = '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
                 }
                 else
                 {
-                    whereStatements.Add(Environment.NewLine + $"c.DojSubmit.Status != '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                    whereStatements.Add(Environment.NewLine + $"c.Status != '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
                 }
+                //SubmssionId
+                if (!String.IsNullOrWhiteSpace(stopQuery.SubmissionId))
+                {
+                    join = Environment.NewLine + "JOIN Submission IN c.ListSubmission";
+                    whereStatements.Add(Environment.NewLine + $"Submission.Id = '{stopQuery.SubmissionId}'");
+                }
+
             }
             else
             {
-                whereStatements.Add(Environment.NewLine + $"c.DojSubmit = null");
+                whereStatements.Add(Environment.NewLine + $"c.Status = null");
             }
 
 
@@ -88,7 +97,7 @@ namespace RIPA.Functions.Stop.Functions
             }
             where = where.Remove(where.Length - 3);
 
-            var response = await _stopCosmosDbService.GetStopsAsync("SELECT * FROM c" + where);
+            var response = await _stopCosmosDbService.GetStopsAsync("SELECT VALUE c FROM c" + join + where);
 
             return new OkObjectResult(response);
         }
@@ -99,6 +108,7 @@ namespace RIPA.Functions.Stop.Functions
             public DateTime? EndDate { get; set; }
             public bool IsError { get; set; }
             public bool IsSubmitted { get; set; }
+            public string SubmissionId { get; set; }
 
         }
     }

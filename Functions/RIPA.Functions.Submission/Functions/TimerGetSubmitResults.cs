@@ -35,7 +35,7 @@ namespace RIPA.Functions.Submission.Functions
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
             var files = _sftpService.ListAllFiles(_sftpOutputPath);
-            if (files.Count() == 0) return; //Nothing to process --> exit
+            if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
             Guid correlationId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
@@ -47,7 +47,6 @@ namespace RIPA.Functions.Submission.Functions
             {
                 try
                 {
-                    //TODO DOJ Submission Cosmos object - how to correlate the submission object to this file? stop.batchId may be the link we need. 
                     var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, file.Name, blobContainerClient);
                     ProcessDojResponse(fileText);
                     _sftpService.DeleteFile(file.FullName);
