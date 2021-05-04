@@ -17,6 +17,7 @@ export default new Vuex.Store({
     user: {
       isLoggedIn: false,
       isAdmin: false,
+      accessToken: undefined,
     },
   },
 
@@ -95,6 +96,7 @@ export default new Vuex.Store({
       state.user = {
         ...state.user,
         isAdmin: isAnAdmin.length > 0,
+        // isAdmin: false,
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,

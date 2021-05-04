@@ -4,6 +4,7 @@ import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import RipaLoginCheckContainer from '@/components/features/RipaLoginCheckContainer'
 import store from '@/store/index'
+import AuthService from '../services/auth'
 
 Vue.use(VueRouter)
 
@@ -64,17 +65,15 @@ const router = new VueRouter({
 
 // if you ever hit the app and the login config
 // isn't set, start login flow
-router.beforeEach((to, from, next) => {
-  if (!store.state.user.isLoggedIn && to.name !== 'Login') {
-    next({ name: 'Login' })
+router.beforeEach(async (to, from, next) => {
+  console.log(sessionStorage.getItem('ripa-accessToken'))
+  if (!sessionStorage.getItem('ripa-accessToken')) {
+    await AuthService.tryLogin()
+    next()
   } else {
+    console.log(store.state.user)
     next()
   }
-  // if (!store.state.isAuthConfigSet && to.name !== 'Login') {
-  //   next({ name: 'Login' })
-  // } else {
-  //   next()
-  // }
 })
 
 export default router

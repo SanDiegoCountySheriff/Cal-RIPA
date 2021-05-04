@@ -1,22 +1,21 @@
 <template>
-  <v-tooltip top>
-    <template v-slot:activator="{ on, attrs }">
-      <v-autocomplete
-        v-model="model"
-        clearable
-        dense
-        flat
-        :hint="hint"
-        :item-text="itemText"
-        :item-value="itemValue"
-        :label="label"
-        :items="items"
-        v-bind="attrs"
-        v-on="on"
-      ></v-autocomplete>
-    </template>
-    <span>{{ model }}</span>
-  </v-tooltip>
+  <v-autocomplete
+    class="tw-my-4"
+    v-model="model"
+    clearable
+    flat
+    :hint="hint"
+    :persistent-hint="persistentHint"
+    :item-text="itemText"
+    :item-value="itemValue"
+    :label="label"
+    :items="getItems"
+    :disabled="disabled"
+    :chips="chips"
+    :small-chips="smallChips"
+    :deletable-chips="deletableChips"
+    :multiple="multiple"
+  ></v-autocomplete>
 </template>
 
 <script>
@@ -39,6 +38,18 @@ export default {
         this.$emit('input', newVal)
       },
     },
+
+    getItems() {
+      if (
+        this.multiple &&
+        this.viewModel &&
+        this.viewModel.length === this.maxSelections
+      ) {
+        return this.items.filter(item => this.viewModel.includes(item.code))
+      }
+
+      return this.items
+    },
   },
 
   watch: {
@@ -49,7 +60,7 @@ export default {
 
   props: {
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null,
     },
     items: {
@@ -68,9 +79,37 @@ export default {
       type: String,
       default: '',
     },
+    persistentHint: {
+      type: Boolean,
+      default: false,
+    },
     label: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    chips: {
+      type: Boolean,
+      default: false,
+    },
+    smallChips: {
+      type: Boolean,
+      default: false,
+    },
+    deletableChips: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    maxSelections: {
+      type: Number,
+      default: 5,
     },
   },
 }

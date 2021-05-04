@@ -1,62 +1,98 @@
 <template>
-  <div class="ripa-stop-reason tw-p-4">
+  <div class="ripa-stop-reason tw-pb-8">
     <ripa-form-header
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
     ></ripa-form-header>
 
-    <ripa-select
-      v-model="model.reason"
-      item-text="name"
-      item-value="value"
-      label="Reason"
-      :items="reasonItems"
-      :rules="reasonRules"
-      @input="handleInput"
-    ></ripa-select>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-select
+            v-model="model.stopReason.reasonForStop"
+            item-text="name"
+            item-value="value"
+            label="Reason"
+            :items="reasonItems"
+            :rules="reasonRules"
+            @input="handleInput"
+          ></ripa-select>
 
-    <template v-if="model.reason === 1">
-      <div>
-        <ripa-radio-group
-          v-model="model.trafficViolation"
-          :items="trafficViolationItems"
-          @input="handleInput"
-        ></ripa-radio-group>
+          <template v-if="model.stopReason.reasonForStop === 1">
+            <ripa-radio-group
+              v-model="model.stopReason.trafficViolation"
+              :items="trafficViolationItems"
+              @input="handleInput"
+            ></ripa-radio-group>
 
-        <div class="tw-mt-2"></div>
+            <div class="tw-mt-2"></div>
 
-        <ripa-autocomplete
-          v-model="model.trafficViolationCode"
-          hint="Select 1 Offense Code (required)"
-          item-text="fullName"
-          item-value="offenseCode"
-          label="Offense Code"
-          :items="statutes"
-          @input="handleInput"
-        ></ripa-autocomplete>
-      </div>
-    </template>
+            <ripa-autocomplete
+              v-model="model.stopReason.trafficViolationCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="offenseCodes"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
 
-    <template v-if="model.reason === 2">
-      <div>
-        <ripa-check-group
-          v-model="model.reasonableSuspicionValues"
-          :items="reasonableSuspicionItems"
-          @input="handleInput"
-        ></ripa-check-group>
-      </div>
-    </template>
+          <template v-if="model.stopReason.reasonForStop === 2">
+            <ripa-check-group
+              v-model="model.stopReason.reasonSuspicion"
+              :items="reasonableSuspicionItems"
+              @input="handleInput"
+            ></ripa-check-group>
 
-    <ripa-label class="tw-mt-4 tw-mb-6" value="-- and --" bold></ripa-label>
+            <ripa-autocomplete
+              v-model="model.reasonSuspicionCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="offenseCodes"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
 
-    <ripa-text-area
-      v-model="model.explanation"
-      hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-      label="Brif Explanation"
-      :rules="explanationRules"
-      @input="handleInput"
-    ></ripa-text-area>
+          <template v-if="model.stopReason.reasonForStop === 6">
+            <v-alert dense outlined type="warning" prominent>
+              Your selection indicates that a search was conducted, please
+              select from the search criteria below.
+            </v-alert>
+
+            <ripa-switch
+              v-model="model.stopReason.searchOfPerson"
+              label="Search of person was conducted"
+              :max-width="300"
+              @input="handleInput"
+            ></ripa-switch>
+
+            <ripa-switch
+              v-model="model.stopReason.searchOfProperty"
+              label="Search of property was conducted"
+              :max-width="300"
+              @input="handleInput"
+            ></ripa-switch>
+          </template>
+
+          <ripa-subheader text="-- and --"></ripa-subheader>
+
+          <ripa-text-area
+            v-model="model.stopReason.reasonForStopExplanation"
+            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+            persistent-hint
+            label="Brief Explanation"
+            :rules="explanationRules"
+            @input="handleInput"
+          ></ripa-text-area>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -64,9 +100,10 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaLabel from '@/components/atoms/RipaLabel'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSubheader from '@/components/atoms/RipaSubheader'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 import {
   STOP_REASONS,
@@ -81,9 +118,10 @@ export default {
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
-    RipaLabel,
     RipaRadioGroup,
     RipaSelect,
+    RipaSubheader,
+    RipaSwitch,
     RipaTextArea,
   },
 
@@ -99,11 +137,19 @@ export default {
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: {
-        reason: this.value?.reason || null,
-        explanation: this.value?.explanation || null,
-        trafficViolation: this.value?.trafficViolation || null,
-        trafficViolationCode: this.value?.trafficViolationCode || null,
-        reasonableSuspicionValues: this.value?.reasonableSuspicionValues || [],
+        stopReason: {
+          reasonForStop: this.value?.stopReason?.reasonForStop || null,
+          trafficViolation: this.value?.stopReason?.trafficViolation || null,
+          trafficViolationCode:
+            this.value?.stopReason?.trafficViolationCode || null,
+          reasonSuspicion: this.value?.stopReason?.reasonSuspicion || [],
+          reasonSuspicionCode:
+            this.value?.stopReason?.reasonSuspicionCode || null,
+          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
+          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
+          reasonForStopExplanation:
+            this.value?.stopReason?.reasonForStopExplanation || null,
+        },
       },
     }
   },
@@ -118,14 +164,15 @@ export default {
 
   methods: {
     handleInput() {
-      if (this.viewModel.reason === 1) {
-        this.viewModel.reasonableSuspicionValues = []
-      }
-      if (this.viewModel.reason === 2) {
-        this.viewModel.trafficViolation = null
-        this.viewModel.trafficViolationCode = null
-      }
+      this.updateSearchModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateSearchModel() {
+      if (this.viewModel.stopReason.reasonForStop !== 6) {
+        this.viewModel.stopReason.searchOfPerson = false
+        this.viewModel.stopReason.searchOfProperty = false
+      }
     },
   },
 
@@ -134,7 +181,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    statutes: {
+    offenseCodes: {
       type: Array,
       default: () => [],
     },

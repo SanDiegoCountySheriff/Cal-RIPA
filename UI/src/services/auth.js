@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as msal from '@azure/msal-browser'
+import store from '@/store/index'
 
 let authConfig = {
   cache: {
@@ -24,28 +25,65 @@ const AuthService = {
           },
         }
         msalInstance = new msal.PublicClientApplication(authConfig)
+        store.dispatch('setAuthConfig', true)
         return true
       })
       .catch(err => {
         if (err) {
+          store.dispatch('setAuthConfig', false)
           return false
         }
       })
     return loadConfig
   },
   tryLogin: async () => {
-    await msalInstance.handleRedirectPromise()
-    const accounts = msalInstance.getAllAccounts()
-    console.log(accounts)
-    if (accounts.length === 0) {
-      // No user signed in
-      msalInstance.loginRedirect()
+    if (!sessionStorage.getItem('ripa-accessToken')) {
+      const authConfig = await getAuthConfig()
+      // if auth config gets set, try login
+      if (authConfig) {
+        msalInstance.handleRedirectPromise().then(response => {
+          // once you have the auth config, redirect to login
+          console.log(response)
+          store.dispatch('setUserAccountInfo', response)
+          sessionStorage.setItem('ripa-accessToken', response.accessToken)
+        })
+        msalInstance.loginRedirect()
+        return true
+      } else {
+        // if there is an error getting auth config, go into offline mode
+        // since we cannot authenticate the user
+        return false
+      }
     } else {
-      // if user is signed in, get account info
-      // go to home page
-      return accounts[0]
+      // user is already logged in
+      return true
     }
   },
+}
+
+const getAuthConfig = async () => {
+  const loadConfig = await axios
+    .get('/config.json')
+    .then(res => {
+      authConfig = {
+        ...authConfig,
+        auth: {
+          tenant: res.data.Authentication.TenantId,
+          clientId: res.data.Authentication.ClientId,
+          authority: res.data.Authentication.AuthorityUrl,
+        },
+      }
+      msalInstance = new msal.PublicClientApplication(authConfig)
+      store.dispatch('setAuthConfig', true)
+      return true
+    })
+    .catch(err => {
+      if (err) {
+        store.dispatch('setAuthConfig', false)
+        return false
+      }
+    })
+  return loadConfig
 }
 
 export default AuthService

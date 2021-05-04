@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-no-english tw-p-4">
+  <div class="ripa-no-english tw-pb-8">
     <ripa-form-header
       title="Limited or No English Fluency"
       required
@@ -7,32 +7,41 @@
     >
     </ripa-form-header>
 
-    <ripa-checkbox
-      v-model="model.checkbox"
-      cbLabel="Limited or no english fluency"
-      @input="handleInput"
-    >
-    </ripa-checkbox>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.person.perceivedLimitedEnglish"
+            label="Limited or no English fluency"
+            :max-width="300"
+            @input="handleInput"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
-  name: 'ripa-no-english',
+  name: 'ripa-limited-english',
 
   components: {
     RipaFormHeader,
-    RipaCheckbox,
+    RipaSwitch,
   },
 
   data() {
     return {
       valid: true,
       viewModel: {
-        checkbox: this.value?.checkbox || false,
+        person: {
+          perceivedLimitedEnglish:
+            this.value?.person?.perceivedLimitedEnglish || false,
+        },
       },
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar app dense flat>
     <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
       getAppTitle
     }}</v-toolbar-title>

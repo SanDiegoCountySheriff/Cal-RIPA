@@ -2,7 +2,6 @@
   <v-select
     v-model="model"
     clerable
-    dense
     flat
     :item-text="itemText"
     :item-value="itemValue"

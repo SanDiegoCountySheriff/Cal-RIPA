@@ -10,9 +10,8 @@ export const basic = () => ({
   components: { RipaGender },
   data() {
     return {
-        perceivedGender: {},
+      stop: {},
     }
   },
-  template:
-    '<div><ripa-gender v-model="perceivedGender"></ripa-gender>{{perceivedGender}}</div>',
+  template: '<div><ripa-gender v-model="stop"></ripa-gender>{{stop}}</div>',
 })

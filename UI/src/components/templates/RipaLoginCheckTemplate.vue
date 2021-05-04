@@ -30,6 +30,7 @@ export default {
   },
 
   async created() {
+    console.log('from auth template: ' + this.user.isLoggedIn)
     if (!this.user.isLoggedIn) {
       // if the auth config isn't set, dispatch action to get it
       const authConfigResponse = await AuthService.getAuthConfig()
@@ -41,7 +42,7 @@ export default {
         // redirect to home page
         this.$router.push('/')
       } else {
-        this.$router.push('/')
+        this.$router.next()
       }
     }
   },

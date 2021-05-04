@@ -29,12 +29,20 @@ namespace RIPA.Functions.Domain.Functions.Templates
 
         {
             List<Template> response = new List<Template>();
-
-            foreach (Template entity in await templates.ExecuteQuerySegmentedAsync(new TableQuery<Template>(), null))
+            TableContinuationToken continuationToken = null;
+            do
             {
-                response.Add(entity);
-            }
+                var request = await templates.ExecuteQuerySegmentedAsync(new TableQuery<Template>(), continuationToken);
+                continuationToken = request.ContinuationToken;
 
+                foreach (Template entity in request)
+                {
+                    response.Add(entity);
+                }
+            } 
+            while (continuationToken != null);
+            
+            log.LogInformation($"GetTemplates returned {response.Count} templates");
             return new OkObjectResult(response);
         }
     }
