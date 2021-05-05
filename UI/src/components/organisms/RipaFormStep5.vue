@@ -4,7 +4,7 @@
 
     <v-spacer></v-spacer>
 
-    <template v-if="!isValid">
+    <template v-if="!isFormValid">
       <v-alert type="error">
         Oops, you may have missed something! Please review your selections
         above.

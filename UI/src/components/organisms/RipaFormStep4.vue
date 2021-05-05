@@ -4,10 +4,11 @@
       v-model="model"
       :statutes="statutes"
     ></ripa-actions-taken>
+    <ripa-contraband v-model="model"></ripa-contraband>
 
     <v-spacer></v-spacer>
 
-    <template v-if="!isValid">
+    <template v-if="!isFormValid">
       <v-alert type="error">
         Oops, you may have missed something! Please review your selections
         above.
@@ -28,6 +29,7 @@
 
 <script>
 import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaContraband from '@/components/molecules/RipaContraband'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 
 export default {
@@ -37,6 +39,7 @@ export default {
 
   components: {
     RipaActionsTaken,
+    RipaContraband,
   },
 
   props: {
