@@ -20,6 +20,7 @@ export default {
         setTimeout(() => {
           this.isFormValid = this.$refs.stepForm.validate()
         }, 500)
+        this.$forceUpdate()
         this.$emit('input', this.viewModel)
       },
     },

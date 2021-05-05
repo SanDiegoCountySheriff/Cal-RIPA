@@ -1,5 +1,10 @@
 <template>
-  <v-checkbox v-model="model" :label="label" hide-details></v-checkbox>
+  <v-checkbox
+    v-model="model"
+    :label="label"
+    :rules="rules"
+    :hide-details="hideDetails"
+  ></v-checkbox>
 </template>
 
 <script>
@@ -38,6 +43,14 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    hideDetails: {
+      type: Boolean,
+      default: false,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }
