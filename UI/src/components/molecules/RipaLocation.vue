@@ -21,6 +21,7 @@
               item-value="cdsCode"
               label="School"
               :items="schools"
+              :rules="schoolRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -38,6 +39,7 @@
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              :rules="blockNumberRules"
               @input="debounceInput"
             >
             </ripa-number-input>
@@ -49,6 +51,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :rules="streetNameRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -63,6 +66,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :rules="intersectionRules"
             @input="handleInput"
           >
           </ripa-text-input>
@@ -80,6 +84,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :rules="highwayRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -88,7 +93,8 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
-              label="Road markerk, landmark, or other"
+              label="Road marker, landmark, or other"
+              :rules="landmarkRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -116,6 +122,7 @@
               item-value="id"
               label="City"
               :items="cities"
+              :rules="cityRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -132,6 +139,7 @@
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
+              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -188,6 +196,88 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    schoolRules() {
+      const checked = this.viewModel.location.isSchool
+      const school = this.viewModel.location.school
+      return [(checked && school !== null) || 'A school is required']
+    },
+
+    cityRules() {
+      const city = this.viewModel.location.city
+      return [city !== null || 'A city is required']
+    },
+
+    beatRules() {
+      const beat = this.viewModel.location.beat
+      return [beat !== null || 'A beat is required']
+    },
+
+    blockNumberRules() {
+      const blockNumber = this.viewModel.location.blockNumber
+      return [
+        this.isLocationOptionsFilled ||
+          blockNumber !== null ||
+          'A block number is required',
+      ]
+    },
+
+    streetNameRules() {
+      const streetName = this.viewModel.location.streetName
+      return [
+        this.isLocationOptionsFilled ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+      ]
+    },
+
+    intersectionRules() {
+      const intersection = this.viewModel.location.intersection
+      return [
+        this.isLocationOptionsFilled ||
+          (intersection && intersection.length > 0) ||
+          'An intersection is required',
+      ]
+    },
+
+    highwayRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && highwayExit && highwayExit.length > 0) ||
+          'A highway and closet exit is required',
+      ]
+    },
+
+    landmarkRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const landmark = this.viewModel.location.landmark
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && landmark && landmark.length > 0) ||
+          'A road marker, landmark, or other description is required',
+      ]
+    },
+
+    isLocationOptionsFilled() {
+      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.viewModel.location.streetName
+      const intersection = this.viewModel.location.intersection
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      const landmark = this.viewModel.location.landmark
+
+      const isValid =
+        (blockNumber !== null && streetName && streetName.length > 0) ||
+        (intersection && intersection.length > 0) ||
+        (checked && highwayExit && highwayExit.length > 0) ||
+        (checked && landmark && landmark.length > 0)
+
+      console.log(isValid)
+
+      return isValid
     },
   },
 
