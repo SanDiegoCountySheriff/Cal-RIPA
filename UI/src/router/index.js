@@ -63,15 +63,15 @@ const router = new VueRouter({
   routes,
 })
 
-// if you ever hit the app and the login config
-// isn't set, start login flow
+// if you ever hit the app and the access token
+// isn't set and the user is online, start login flow and are offline
 router.beforeEach(async (to, from, next) => {
-  console.log(sessionStorage.getItem('ripa-accessToken'))
-  if (!sessionStorage.getItem('ripa-accessToken')) {
-    await AuthService.tryLogin()
-    next()
+  if (!sessionStorage.getItem('ripa-accessToken') && store.state.isOnline) {
+    const loginAttempt = await AuthService.tryLogin()
+    if (loginAttempt) {
+      next()
+    }
   } else {
-    console.log(store.state.user)
     next()
   }
 })

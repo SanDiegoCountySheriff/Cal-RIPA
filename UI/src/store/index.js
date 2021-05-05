@@ -5,6 +5,18 @@ import { formatDate } from '@/components/utilities/dates'
 
 Vue.use(Vuex)
 
+// Setup Axios Response Interceptors
+// to add the authentication token to each header
+axios.interceptors.request.use(req => {
+  if (sessionStorage.getItem('ripa-accessToken')) {
+    req.headers.Authorization = `Bearer ${sessionStorage.getItem(
+      'ripa-accessToken',
+    )}`
+  }
+  // Important: request interceptors **must** return the request.
+  return req
+})
+
 export default new Vuex.Store({
   state: {
     isDark: true,

@@ -12,30 +12,6 @@ let authConfig = {
 let msalInstance
 
 const AuthService = {
-  getAuthConfig: async () => {
-    const loadConfig = await axios
-      .get('/config.json')
-      .then(res => {
-        authConfig = {
-          ...authConfig,
-          auth: {
-            tenant: res.data.Authentication.TenantId,
-            clientId: res.data.Authentication.ClientId,
-            authority: res.data.Authentication.AuthorityUrl,
-          },
-        }
-        msalInstance = new msal.PublicClientApplication(authConfig)
-        store.dispatch('setAuthConfig', true)
-        return true
-      })
-      .catch(err => {
-        if (err) {
-          store.dispatch('setAuthConfig', false)
-          return false
-        }
-      })
-    return loadConfig
-  },
   tryLogin: async () => {
     if (!sessionStorage.getItem('ripa-accessToken')) {
       const authConfig = await getAuthConfig()
@@ -43,12 +19,16 @@ const AuthService = {
       if (authConfig) {
         msalInstance.handleRedirectPromise().then(response => {
           // once you have the auth config, redirect to login
-          console.log(response)
+          const currentAccount = msalInstance.getAllAccounts()
+          if (!currentAccount.length) {
+            // error during authentication or couldn't find you
+            // need to handle this
+          }
           store.dispatch('setUserAccountInfo', response)
           sessionStorage.setItem('ripa-accessToken', response.accessToken)
+          return true
         })
         msalInstance.loginRedirect()
-        return true
       } else {
         // if there is an error getting auth config, go into offline mode
         // since we cannot authenticate the user
