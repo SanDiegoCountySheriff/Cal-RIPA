@@ -7,6 +7,7 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :on-cancel="onCancel"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -59,6 +60,10 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    onCancel: {
+      type: Function,
+      default: () => {},
     },
   },
 }

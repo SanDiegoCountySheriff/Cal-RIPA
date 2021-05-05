@@ -182,7 +182,9 @@ export default {
     },
 
     handleCancel() {
-      console.log('cancel form')
+      if (this.onCancel) {
+        this.onCancel()
+      }
     },
 
     handleSubmit() {
@@ -226,6 +228,10 @@ export default {
     },
     statutes: {
       type: Array,
+      default: () => {},
+    },
+    onCancel: {
+      type: Function,
       default: () => {},
     },
   },

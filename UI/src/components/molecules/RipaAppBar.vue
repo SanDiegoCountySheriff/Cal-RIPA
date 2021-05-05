@@ -34,15 +34,6 @@
     <div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/" v-bind="attrs" v-on="on">
-            <v-icon>mdi-plus-box</v-icon>
-          </v-btn>
-        </template>
-        <span>Add new stop</span>
-      </v-tooltip>
-
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="tw-ml-4"
             icon
