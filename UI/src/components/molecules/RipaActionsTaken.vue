@@ -19,6 +19,7 @@
       <ripa-check-group
         v-model="model.actionsTaken.actionsTakenDuringStop"
         :items="actionTakenGeneralItems"
+        :rules="actionsTakenRules"
         @input="handleInput"
       >
       </ripa-check-group>
@@ -28,6 +29,7 @@
       <ripa-check-group
         v-model="model.actionsTaken.actionsTakenDuringStop"
         :items="getActionTakenSearchItems"
+        :rules="actionsTakenRules"
         @input="handleInput"
       >
       </ripa-check-group>
@@ -60,6 +62,7 @@
         <ripa-check-group
           v-model="model.actionsTaken.basisForSearch"
           :items="basisForSearchItems"
+          :rules="basisForSearchRules"
           @input="handleInput"
         >
         </ripa-check-group>
@@ -95,6 +98,7 @@
         <ripa-check-group
           v-model="model.actionsTaken.basisForPropertySeizure"
           :items="basisForPropertySeizureItems"
+          :rules="basisForPropertySeizureRules"
           @input="handleInput"
         >
         </ripa-check-group>
@@ -108,6 +112,7 @@
         <ripa-check-group
           v-model="model.actionsTaken.typesOfPropertySeized"
           :items="propertySeizedTypeItems"
+          :rules="typesOfPropertySeizedRules"
           @input="handleInput"
         >
         </ripa-check-group>
@@ -185,6 +190,42 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    actionsTakenRules() {
+      const checked = this.viewModel.actionsTaken.anyActionsTaken
+      const options = this.viewModel.actionsTaken.actionsTakenDuringStop
+      return [
+        (checked && options.length > 0) ||
+          'At least one action taken is required',
+      ]
+    },
+
+    basisForSearchRules() {
+      const searchConducted = this.wasSearchConducted
+      const options = this.viewModel.actionsTaken.basisForSearch
+      return [
+        (searchConducted && options.length > 0) ||
+          'At least basis for search is required',
+      ]
+    },
+
+    basisForPropertySeizureRules() {
+      const checked = this.viewModel.actionsTaken.propertyWasSeized
+      const options = this.viewModel.actionsTaken.basisForPropertySeizure
+      return [
+        (checked && options.length > 0) ||
+          'At least one basis for property seizure is required',
+      ]
+    },
+
+    typesOfPropertySeizedRules() {
+      const checked = this.viewModel.actionsTaken.propertyWasSeized
+      const options = this.viewModel.actionsTaken.typesOfPropertySeized
+      return [
+        (checked && options.length > 0) ||
+          'At least one type of property seized is required',
+      ]
     },
 
     getActionTakenSearchItems() {

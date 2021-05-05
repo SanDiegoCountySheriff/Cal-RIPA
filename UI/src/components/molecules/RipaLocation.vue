@@ -275,8 +275,6 @@ export default {
         (checked && highwayExit && highwayExit.length > 0) ||
         (checked && landmark && landmark.length > 0)
 
-      console.log(isValid)
-
       return isValid
     },
   },
