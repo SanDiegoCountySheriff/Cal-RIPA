@@ -88,8 +88,8 @@
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
             <v-alert outlined type="warning" elevation="2" dense>
-              The explanation contains Personal Identifiable Information. Please
-              remove if possible.
+              The explanation contains personally identifying information.
+              Please remove if possible.
             </v-alert>
           </template>
 
@@ -222,7 +222,6 @@ export default {
   watch: {
     'value.stopReason.reasonForStopPiiFound': {
       handler(newVal) {
-        console.log('PII FOUND', newVal)
         this.viewModel.stopReason.reasonForStopPiiFound = newVal
       },
     },

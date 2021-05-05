@@ -553,7 +553,7 @@ export default new Vuex.Store({
         .then(response => {
           const data = response.data
           commit('updatePiiDate')
-          return data.entities.length === 0
+          return data.entities.length > 0
         })
         .catch(() => {
           return null

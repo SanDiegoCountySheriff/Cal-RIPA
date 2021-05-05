@@ -125,24 +125,22 @@ export default {
 
     async validateReasonForStopExplanationForPii(textValue) {
       let isFound = false
-      if (textValue === '') {
+      if (textValue !== '') {
         isFound = await this.validateTextForPii(textValue)
       }
-      const updatedStop = this.stop
-      updatedStop.updated = new Date()
-      updatedStop.stopReason.reasonForStopPiiFound = isFound
-      this.stop = Object.assign({}, updatedStop)
+      this.stop = Object.assign({}, this.stop)
+      this.stop.updated = new Date()
+      this.stop.stopReason.reasonForStopPiiFound = isFound
     },
 
     async validateBasisForSearchExplanationForPii(textValue) {
       let isFound = false
-      if (textValue === '') {
+      if (textValue !== '') {
         isFound = await this.validateTextForPii(textValue)
       }
-      const updatedStop = this.stop
-      updatedStop.updated = new Date()
-      updatedStop.actionsTaken.basisForSearchPiiFound = isFound
-      this.stop = Object.assign({}, updatedStop)
+      this.stop = Object.assign({}, this.stop)
+      this.stop.updated = new Date()
+      this.stop.actionsTaken.basisForSearchPiiFound = isFound
     },
   },
 

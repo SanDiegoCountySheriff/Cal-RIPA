@@ -15,6 +15,7 @@ export default {
 
   data() {
     return {
+      timeout: null,
       viewModel: this.value,
     }
   },
@@ -25,8 +26,11 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', Number(newVal))
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.viewModel = newVal
+          this.$emit('input', Number(newVal))
+        }, 500)
       },
     },
   },

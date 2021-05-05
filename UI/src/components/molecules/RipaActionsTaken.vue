@@ -70,8 +70,8 @@
         <template v-if="isBasisForSearchExplanationVisible">
           <template v-if="model.actionsTaken.basisForSearchPiiFound">
             <v-alert outlined type="warning" elevation="2" dense>
-              The explanation contains Personal Identifiable Information. Please
-              remove if possible.
+              The explanation contains personally identifying information.
+              Please remove if possible.
             </v-alert>
           </template>
 
@@ -337,6 +337,12 @@ export default {
     value(newVal) {
       this.viewModel.stopReason = newVal.stopReason || null
       this.updateSearchModel()
+    },
+
+    'value.actionsTaken.basisForSearchPiiFound': {
+      handler(newVal) {
+        this.viewModel.actionsTaken.basisForSearchPiiFound = newVal
+      },
     },
   },
 
