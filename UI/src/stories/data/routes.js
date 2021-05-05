@@ -8,10 +8,6 @@ export const routesData = [
     name: 'Admin',
   },
   {
-    path: '/form',
-    name: 'Form',
-  },
-  {
     path: '/stops',
     name: 'Stops',
   },
