@@ -5,6 +5,7 @@
     :hint="hint"
     :min="min"
     :max="max"
+    :rules="rules"
     thumb-label
   ></v-slider>
 </template>
@@ -57,6 +58,10 @@ export default {
     max: {
       type: Number,
       default: 50,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

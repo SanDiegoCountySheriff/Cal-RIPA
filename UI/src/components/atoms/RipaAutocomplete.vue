@@ -15,6 +15,7 @@
     :small-chips="smallChips"
     :deletable-chips="deletableChips"
     :multiple="multiple"
+    :rules="rules"
   ></v-autocomplete>
 </template>
 
@@ -110,6 +111,10 @@ export default {
     maxSelections: {
       type: Number,
       default: 5,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }
