@@ -8,7 +8,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isDark: true,
-    isAdmin: true,
     adminBeats: [],
     adminCities: [],
     adminSchools: [],
@@ -20,6 +19,10 @@ export default new Vuex.Store({
     formSchools: [],
     formStatutes: [],
     formStops: [],
+    user: {
+      isAdmin: true,
+      isAuthenticated: false,
+    },
   },
 
   getters: {
@@ -55,6 +58,12 @@ export default new Vuex.Store({
     },
     mappedFormStatutes: state => {
       return state.formStatutes
+    },
+    isAdmin: state => {
+      return state.user.isAdmin
+    },
+    isAuthenticated: state => {
+      return state.user.isAuthenticated
     },
     isOnline: () => {
       return navigator.onLine

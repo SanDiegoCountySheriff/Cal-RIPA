@@ -66,7 +66,7 @@
         <span>View user profile</span>
       </v-tooltip>
 
-      <template v-if="isAdmin">
+      <template v-if="admin">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -102,12 +102,12 @@ export default {
       return this.$vuetify.theme.dark ? 'View light mode' : 'View dark mode'
     },
 
-    isAdmin() {
-      return true
-    },
-
     getAppTitle() {
       return 'RIPA'
+    },
+
+    getAdmin() {
+      return this.admin
     },
 
     getOnlineIcon() {

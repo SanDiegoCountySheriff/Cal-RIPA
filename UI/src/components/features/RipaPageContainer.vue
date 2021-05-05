@@ -11,7 +11,7 @@
 
 <script>
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 
 export default {
@@ -28,8 +28,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['isAdmin']),
-    ...mapGetters(['isOnline']),
+    ...mapGetters(['isAdmin', 'isAuthenticated', 'isOnline']),
   },
 
   methods: {
@@ -70,7 +69,7 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (cacheDate !== null) {
+      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
           this.clearLocalStorage()

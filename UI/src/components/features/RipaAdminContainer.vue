@@ -20,7 +20,7 @@
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -36,7 +36,6 @@ export default {
   },
 
   computed: {
-    ...mapState(['isAdmin']),
     ...mapGetters([
       'mappedAdminBeats',
       'mappedAdminCities',
