@@ -1,5 +1,10 @@
 import RipaFormStep1 from '@/components/organisms/RipaFormStep1'
-import { formBeats, formCities, formSchools } from '../data/mappings'
+import {
+  formBeats,
+  formCountyCities,
+  formNonCountyCities,
+  formSchools,
+} from '../data/mappings'
 
 export default {
   title: 'Organisms/RipaFormStep1',
@@ -13,7 +18,8 @@ export const basic = () => ({
     return {
       schools: formSchools(),
       beats: formBeats(),
-      cities: formCities(),
+      countyCities: formCountyCities(),
+      nonCountyCities: formNonCountyCities(),
       stop: {
         officer: {
           yearsExperience: 8,
@@ -26,5 +32,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-form-step1 v-model="stop" :schools="schools" :cities="cities" :beats="beats"></ripa-form-step1>{{stop}}</div>',
+    '<div><ripa-form-step1 v-model="stop" :schools="schools" :county-cities="countyCities" :non-county-cities="nonCountyCities" :beats="beats"></ripa-form-step1>{{stop}}</div>',
 })

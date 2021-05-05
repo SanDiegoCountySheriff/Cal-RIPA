@@ -80,7 +80,11 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => {},
+    },
+    nonCountyCities: {
       type: Array,
       default: () => {},
     },

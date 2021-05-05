@@ -1,5 +1,10 @@
 import RipaLocation from '@/components/molecules/RipaLocation'
-import { formBeats, formCities, formSchools } from '../data/mappings'
+import {
+  formBeats,
+  formCountyCities,
+  formNonCountyCities,
+  formSchools,
+} from '../data/mappings'
 
 export default {
   title: 'Molecules/RipaLocation',
@@ -14,9 +19,10 @@ export const basic = () => ({
       stop: {},
       schools: formSchools(),
       beats: formBeats(),
-      cities: formCities(),
+      countyCities: formCountyCities(),
+      nonCountyCities: formNonCountyCities(),
     }
   },
   template:
-    '<div><ripa-location v-model="stop" :schools="schools" :beats="beats" :cities="cities"></ripa-location>{{stop}}</div>',
+    '<div><ripa-location v-model="stop" :schools="schools" :beats="beats" :county-cities="countyCities" :non-county-cities="nonCountyCities></ripa-location>{{stop}}</div>',
 })

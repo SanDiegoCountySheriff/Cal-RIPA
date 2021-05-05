@@ -15,7 +15,8 @@ export default new Vuex.Store({
     adminStatutes: [],
     adminStops: [],
     formBeats: [],
-    formCities: [],
+    formCountyCities: [],
+    formNonCountyCities: [],
     formSchools: [],
     formStatutes: [],
     formStops: [],
@@ -43,8 +44,11 @@ export default new Vuex.Store({
     mappedFormBeats: state => {
       return state.formBeats
     },
-    mappedFormCities: state => {
-      return state.formCities
+    mappedFormCountyCities: state => {
+      return state.formCountyCities
+    },
+    mappedFormNonCountyCities: state => {
+      return state.formNonCountyCities
     },
     mappedFormSchools: state => {
       return state.formSchools
@@ -73,8 +77,11 @@ export default new Vuex.Store({
     updateFormBeats(state, items) {
       state.formBeats = items
     },
-    updateFormCities(state, items) {
-      state.formCities = items
+    updateFormCountyCities(state, items) {
+      state.formCountyCities = items
+    },
+    updateFormNonCountyCities(state, items) {
+      state.formNonCountyCities = items
     },
     updateFormSchools(state, items) {
       state.formSchools = items
@@ -311,10 +318,12 @@ export default new Vuex.Store({
     },
 
     getFormCities({ commit }) {
-      const items = localStorage.getItem('ripa_cities')
-      if (items !== null) {
+      const items1 = localStorage.getItem('ripa_county_cities')
+      const items2 = localStorage.getItem('ripa_non_county_cities')
+      if (items1 !== null && items2 !== null) {
         return new Promise(resolve => {
-          commit('updateFormCities', JSON.parse(items))
+          commit('updateFormCountyCities', JSON.parse(items1))
+          commit('updateFormNonCountyCities', JSON.parse(items2))
           resolve()
         })
       } else {
@@ -326,23 +335,38 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            const data = response.data
-              .sort((x, y) => {
-                const cityA = x.name.toUpperCase()
-                const cityB = y.name.toUpperCase()
-                return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
-              })
+            const data = response.data.sort((x, y) => {
+              const cityA = x.name.toUpperCase()
+              const cityB = y.name.toUpperCase()
+              return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
+            })
+            const data1 = data
+              .filter(item => item.county === 'SAN DIEGO')
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
                   fullName: item.name.toUpperCase(),
                 }
               })
-            commit('updateFormCities', data)
-            localStorage.setItem('ripa_cities', JSON.stringify(data))
+            const data2 = data
+              .filter(item => item.county !== 'SAN DIEGO')
+              .map(item => {
+                return {
+                  id: item.name.toUpperCase(),
+                  fullName: item.name.toUpperCase(),
+                }
+              })
+            commit('updateFormCountyCities', data1)
+            commit('updateFormNonCountyCities', data2)
+            localStorage.setItem('ripa_county_cities', JSON.stringify(data1))
+            localStorage.setItem(
+              'ripa_non_county_cities',
+              JSON.stringify(data2),
+            )
           })
           .catch(() => {
-            commit('updateFormCities', [])
+            commit('updateFormCountyCities', [])
+            commit('updateFormNonCountyCities', [])
           })
       }
     },

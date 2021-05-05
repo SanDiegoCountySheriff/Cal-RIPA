@@ -59,7 +59,8 @@
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
                 :beats="beats"
-                :cities="cities"
+                :county-cities="countyCities"
+                :non-county-cities="nonCountyCities"
                 :schools="schools"
                 @input="handleInput"
               ></ripa-form-step-1>
@@ -152,7 +153,7 @@ export default {
 
   data() {
     return {
-      stepIndex: 4,
+      stepIndex: 1,
       step1Validated: true,
       step2Validated: true,
       step3Validated: true,
@@ -215,7 +216,11 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => {},
+    },
+    nonCountyCities: {
       type: Array,
       default: () => {},
     },

@@ -6,7 +6,8 @@
       v-model="model"
       :schools="schools"
       :beats="beats"
-      :cities="cities"
+      :county-cities="countyCities"
+      :non-county-cities="nonCountyCities"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -45,7 +46,11 @@ export default {
       type: Array,
       default: () => [],
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => [],
+    },
+    nonCountyCities: {
       type: Array,
       default: () => [],
     },

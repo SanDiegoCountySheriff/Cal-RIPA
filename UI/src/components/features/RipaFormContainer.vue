@@ -1,7 +1,8 @@
 <template>
   <ripa-form-template
     :beats="mappedFormBeats"
-    :cities="mappedFormCities"
+    :county-cities="mappedFormCountyCities"
+    :non-county-cities="mappedFormNonCountyCities"
     :schools="mappedFormSchools"
     :statutes="mappedFormStatutes"
   ></ripa-form-template>
@@ -21,7 +22,8 @@ export default {
   computed: {
     ...mapGetters([
       'mappedFormBeats',
-      'mappedFormCities',
+      'mappedFormCountyCities',
+      'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
     ]),

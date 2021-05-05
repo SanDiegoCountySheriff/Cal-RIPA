@@ -121,7 +121,7 @@
               item-text="fullName"
               item-value="id"
               label="City"
-              :items="cities"
+              :items="getCities"
               :rules="cityRules"
               @input="handleInput"
             ></ripa-autocomplete>
@@ -196,6 +196,11 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getCities() {
+      const checked = this.viewModel.location.outOfCounty
+      return checked ? this.nonCountyCities : this.countyCities
     },
 
     schoolRules() {
@@ -293,6 +298,7 @@ export default {
     updateBeatsModel() {
       if (this.viewModel.location.outOfCounty) {
         this.viewModel.location.beat = 999
+        this.viewModel.location.city = null
       }
 
       if (
@@ -300,6 +306,7 @@ export default {
         this.viewModel.location.beat === 999
       ) {
         this.viewModel.location.beat = null
+        this.viewModel.location.city = null
       }
     },
   },
@@ -317,7 +324,11 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => {},
+    },
+    nonCountyCities: {
       type: Array,
       default: () => {},
     },

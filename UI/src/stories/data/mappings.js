@@ -71,8 +71,25 @@ export const formBeats = () => {
     })
 }
 
-export const formCities = () => {
+export const formCountyCities = () => {
   return cities
+    .filter(item => item.county === 'SAN DIEGO')
+    .sort((x, y) => {
+      const cityA = x.name.toUpperCase()
+      const cityB = y.name.toUpperCase()
+      return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
+    })
+    .map(item => {
+      return {
+        id: item.name.toUpperCase(),
+        fullName: item.name.toUpperCase(),
+      }
+    })
+}
+
+export const formNonCountyCities = () => {
+  return cities
+    .filter(item => item.county !== 'SAN DIEGO')
     .sort((x, y) => {
       const cityA = x.name.toUpperCase()
       const cityB = y.name.toUpperCase()

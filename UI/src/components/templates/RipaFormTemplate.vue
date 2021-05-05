@@ -3,7 +3,8 @@
     <ripa-form-wrapper
       v-model="stop"
       :beats="beats"
-      :cities="cities"
+      :county-cities="countyCities"
+      :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
       @input="handleInput"
@@ -43,7 +44,11 @@ export default {
       type: Array,
       default: () => [],
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => [],
+    },
+    nonCountyCities: {
       type: Array,
       default: () => [],
     },

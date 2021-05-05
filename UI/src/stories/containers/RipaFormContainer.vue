@@ -4,7 +4,8 @@
     <ripa-form-template
       v-model="stop"
       :beats="mappedFormBeats"
-      :cities="mappedFormCities"
+      :county-cities="mappedFormCountyCities"
+      :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
       @input="handleInput"
@@ -18,7 +19,8 @@ import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import { format } from 'date-fns'
 import {
   formBeats,
-  formCities,
+  formCountyCities,
+  formNonCountyCities,
   formSchools,
   formStatutes,
 } from '../data/mappings'
@@ -34,7 +36,8 @@ export default {
   data() {
     return {
       mappedFormBeats: [],
-      mappedFormCities: [],
+      mappedFormCountyCities: [],
+      mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
       // stop: {
@@ -101,7 +104,8 @@ export default {
       setTimeout(() => {
         this.mappedFormSchools = formSchools()
         this.mappedFormBeats = formBeats()
-        this.mappedFormCities = formCities()
+        this.mappedFormCountyCities = formCountyCities()
+        this.mappedFormNonCountyCities = formNonCountyCities()
         this.mappedFormStatutes = formStatutes()
         this.loading = false
       }, 500)
