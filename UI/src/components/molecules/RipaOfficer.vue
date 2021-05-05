@@ -17,6 +17,7 @@
               v-model="model.officer.editOfficer"
               label="Edit Officer Experience and Assignment"
               :max-width="350"
+              :rules="editOfficerRules"
               @input="handleInput"
             ></ripa-switch>
           </template>
@@ -57,6 +58,7 @@
               <ripa-text-input
                 v-model="model.officer.otherType"
                 label="Other Type"
+                :rules="otherTypeRules"
                 @input="handleInput"
               >
               </ripa-text-input>
@@ -109,6 +111,29 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    editOfficerRules() {
+      const checked = this.viewModel.officer.editOfficer
+      const yearsExperience = this.viewModel.officer.yearsExperience
+      const assignment = this.viewModel.officer.assignment
+      return [
+        checked ||
+          (!checked && yearsExperience > 0 && assignment !== null) ||
+          'Years experience and an assignment is required',
+      ]
+    },
+
+    otherTypeRules() {
+      const assignment = this.viewModel.officer.assignment
+      const otherType = this.viewModel.officer.otherType
+      if (assignment !== 10) {
+        return []
+      }
+
+      return [
+        (otherType && otherType.length > 0) || 'A description is required',
+      ]
     },
   },
 

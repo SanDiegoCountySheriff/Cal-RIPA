@@ -7,7 +7,6 @@
       :hint="hint"
       :persistent-hint="hint.length > 0"
       :rules="rules"
-      hide-details
     >
       <template #label>
         {{ label }}
