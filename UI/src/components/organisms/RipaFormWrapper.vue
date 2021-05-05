@@ -153,7 +153,7 @@ export default {
 
   data() {
     return {
-      stepIndex: 5,
+      stepIndex: 1,
       step1Validated: true,
       step2Validated: true,
       step3Validated: true,
