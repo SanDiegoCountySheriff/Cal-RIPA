@@ -35,7 +35,7 @@
               item-text="fullName"
               item-value="code"
               label="Offense Code"
-              :items="offenseCodes"
+              :items="statutes"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -54,7 +54,7 @@
               item-text="fullName"
               item-value="code"
               label="Offense Code"
-              :items="offenseCodes"
+              :items="statutes"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -181,7 +181,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
     },

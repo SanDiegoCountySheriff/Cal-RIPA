@@ -28,5 +28,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stop" :offense-codes="data"></ripa-stop-reason>{{stop}}</div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-stop-reason v-model="stop" :statutes="data"></ripa-stop-reason>{{stop}}</div>',
 })

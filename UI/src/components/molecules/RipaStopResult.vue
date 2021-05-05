@@ -32,7 +32,7 @@
                 item-text="fullName"
                 item-value="code"
                 label="Offense Code"
-                :items="offenseCodes"
+                :items="statutes"
                 multiple
                 chips
                 small-chips
@@ -56,7 +56,7 @@
                 item-text="fullName"
                 item-value="code"
                 label="Offense Code"
-                :items="offenseCodes"
+                :items="statutes"
                 multiple
                 chips
                 small-chips
@@ -80,7 +80,7 @@
                 item-text="fullName"
                 item-value="code"
                 label="Offense Code"
-                :items="offenseCodes"
+                :items="statutes"
                 multiple
                 chips
                 small-chips
@@ -109,7 +109,7 @@
                 item-text="fullName"
                 item-value="code"
                 label="Offense Code"
-                :items="offenseCodes"
+                :items="statutes"
                 multiple
                 chips
                 small-chips
@@ -251,7 +251,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
     },

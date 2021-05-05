@@ -21,5 +21,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-form-step5 v-model="stop" :offense-codes="data"></ripa-form-step5>{{stop}}</div>',
+    '<div><ripa-form-step5 v-model="stop" :statutes="data"></ripa-form-step5>{{stop}}</div>',
 })

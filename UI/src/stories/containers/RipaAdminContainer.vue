@@ -2,11 +2,11 @@
   <ripa-page-container :admin="admin">
     <ripa-admin-template
       :loading="loading"
-      :beats="beats"
-      :cities="cities"
-      :schools="schools"
-      :statutes="statutes"
-      :stops="stops"
+      :beats="mappedAdminBeats"
+      :cities="mappedAdminCities"
+      :schools="mappedAdminSchools"
+      :statutes="mappedAdminStatutes"
+      :stops="mappedAdminStops"
       :submissions="submissions"
     ></ripa-admin-template>
   </ripa-page-container>
@@ -33,12 +33,12 @@ export default {
   data() {
     return {
       loading: false,
-      beats: [],
-      cities: [],
-      schools: [],
-      statutes: [],
-      stops: [],
-      submissions: [],
+      mappedAdminBeats: [],
+      mappedAdminCities: [],
+      mappedAdminSchools: [],
+      mappedAdminStatutes: [],
+      mappedAdminStops: [],
+      mappedAdminSubmissions: [],
     }
   },
 
@@ -46,12 +46,12 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.beats = beats
-        this.cities = cities
-        this.schools = schools
-        this.statutes = statutes
-        this.stops = stops
-        this.submissions = submissions
+        this.mappedAdminBeats = beats
+        this.mappedAdminCities = cities
+        this.mappedAdminSchools = schools
+        this.mappedAdminStatutes = statutes
+        this.mappedAdminStops = stops
+        this.mappedAdminSubmissions = submissions
         this.loading = false
       }, 2500)
     },

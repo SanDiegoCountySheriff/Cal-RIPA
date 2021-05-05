@@ -5,7 +5,7 @@
       :beats="beats"
       :cities="cities"
       :schools="schools"
-      :offense-codes="offenseCodes"
+      :statutes="statutes"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -51,7 +51,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
     },

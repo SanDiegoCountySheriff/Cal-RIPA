@@ -2,7 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-actions-taken
       v-model="model"
-      :offense-codes="offenseCodes"
+      :statutes="statutes"
     ></ripa-actions-taken>
 
     <v-spacer></v-spacer>
@@ -40,7 +40,7 @@ export default {
   },
 
   props: {
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
     },

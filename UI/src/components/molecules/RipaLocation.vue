@@ -112,8 +112,8 @@
               v-model="model.location.city"
               hint="Select 1 City (required)"
               persistent-hint
-              item-text="name"
-              item-value="name"
+              item-text="fullName"
+              item-value="id"
               label="City"
               :items="cities"
               @input="handleInput"

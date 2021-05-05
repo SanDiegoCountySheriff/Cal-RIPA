@@ -2,7 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
-      :offense-codes="offenseCodes"
+      :statutes="getStatutes"
     ></ripa-stop-reason>
 
     <v-spacer></v-spacer>
@@ -37,8 +37,14 @@ export default {
 
   components: { RipaStopReason },
 
+  computed: {
+    getStatutes() {
+      return this.statutes
+    },
+  },
+
   props: {
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
     },

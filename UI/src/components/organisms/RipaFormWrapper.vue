@@ -81,7 +81,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-3>
             </v-stepper-content>
@@ -92,7 +92,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-4>
             </v-stepper-content>
@@ -103,7 +103,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-5>
             </v-stepper-content>
@@ -167,7 +167,6 @@ export default {
     handleInput(newVal) {
       const mergedStop = _.merge(this.stop, newVal)
       this.stop = mergedStop
-      // this.$forceUpdate()
       this.$emit('input', mergedStop)
     },
 
@@ -220,7 +219,7 @@ export default {
       type: Array,
       default: () => {},
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => {},
     },

@@ -1,12 +1,12 @@
 <template>
   <ripa-admin-template
     :loading="loading"
-    :beats="mappedBeats"
-    :cities="mappedCities"
-    :schools="mappedSchools"
-    :statutes="mappedStatutes"
-    :stops="mappedStops"
-    :submissions="mappedSubmissions"
+    :beats="mappedAdminBeats"
+    :cities="mappedAdminCities"
+    :schools="mappedAdminSchools"
+    :statutes="mappedAdminStatutes"
+    :stops="mappedAdminStops"
+    :submissions="mappedAdminSubmissions"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -38,12 +38,12 @@ export default {
   computed: {
     ...mapState(['isAdmin']),
     ...mapGetters([
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-      'mappedStops',
-      'mappedSubmissions',
+      'mappedAdminBeats',
+      'mappedAdminCities',
+      'mappedAdminSchools',
+      'mappedAdminStatutes',
+      'mappedAdminStops',
+      'mappedAdminSubmissions',
     ]),
   },
 

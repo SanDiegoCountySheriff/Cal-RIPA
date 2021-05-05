@@ -29,25 +29,24 @@ export default {
 
   computed: {
     ...mapState(['isAdmin']),
-    ...mapGetters([
-      'isOnline',
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-    ]),
+    ...mapGetters(['isOnline']),
   },
 
   methods: {
-    ...mapActions(['getBeats', 'getCities', 'getSchools', 'getStatutes']),
+    ...mapActions([
+      'getFormBeats',
+      'getFormCities',
+      'getFormSchools',
+      'getFormStatutes',
+    ]),
 
-    async getAdminData() {
+    async getFormData() {
       this.loading = true
       await Promise.all([
-        this.getBeats(),
-        this.getCities(),
-        this.getSchools(),
-        this.getStatutes(),
+        this.getFormBeats(),
+        this.getFormCities(),
+        this.getFormSchools(),
+        this.getFormStatutes(),
       ])
       this.loading = false
     },
@@ -94,7 +93,7 @@ export default {
 
   created() {
     this.checkCache()
-    this.getAdminData()
+    this.getFormData()
   },
 }
 </script>

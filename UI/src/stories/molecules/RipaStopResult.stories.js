@@ -21,7 +21,7 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-stop-result v-model="stop" :offense-codes="data"></ripa-stop-result>{{stop}}</div>',
+    '<div><ripa-stop-result v-model="stop" :statutes="data"></ripa-stop-result>{{stop}}</div>',
 })
 
 export const consensualEncounterResultingInSearch = () => ({
@@ -49,5 +49,5 @@ export const consensualEncounterResultingInSearch = () => ({
     }
   },
   template:
-    '<div><ripa-stop-result v-model="stop" :offense-codes="data"></ripa-stop-result>{{stop}}</div>',
+    '<div><ripa-stop-result v-model="stop" :statutes="data"></ripa-stop-result>{{stop}}</div>',
 })

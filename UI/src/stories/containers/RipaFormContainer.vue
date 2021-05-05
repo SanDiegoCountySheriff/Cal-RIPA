@@ -3,10 +3,10 @@
     {{ stop }}
     <ripa-form-template
       v-model="stop"
-      :beats="beats"
-      :cities="cities"
-      :schools="schools"
-      :offense-codes="offenseCodes"
+      :beats="mappedFormBeats"
+      :cities="mappedFormCities"
+      :schools="mappedFormSchools"
+      :statutes="mappedFormStatutes"
       @input="handleInput"
     ></ripa-form-template>
   </ripa-page-container>
@@ -31,10 +31,10 @@ export default {
 
   data() {
     return {
-      beats: [],
-      cities: [],
-      schools: [],
-      offenseCodes: [],
+      mappedFormBeats: [],
+      mappedFormCities: [],
+      mappedFormSchools: [],
+      mappedFormStatutes: [],
       // stop: {
       //   officer: {
       //     editOfficer: false,
@@ -97,7 +97,7 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.schools = schools
+        this.mappedFormSchools = schools
           .sort((x, y) => {
             const schoolA = x.name.toUpperCase()
             const schoolB = y.name.toUpperCase()
@@ -109,7 +109,7 @@ export default {
               fullName: `${item.name} (${item.district}) ${item.cdsCode}`,
             }
           })
-        this.beats = beats
+        this.mappedFormBeats = beats
           .sort((x, y) => {
             const beatA = x.command.toUpperCase()
             const beatB = y.command.toUpperCase()
@@ -121,12 +121,12 @@ export default {
               fullName: `${item.command} ${item.id}`,
             }
           })
-        this.cities = cities.sort((x, y) => {
+        this.mappedFormCities = cities.sort((x, y) => {
           const cityA = x.name.toUpperCase()
           const cityB = y.name.toUpperCase()
           return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
         })
-        this.offenseCodes = offenseCodes.map(item => {
+        this.mappedFormStatutes = offenseCodes.map(item => {
           return {
             ...item,
             fullName: `${item.description} ${item.code}`,

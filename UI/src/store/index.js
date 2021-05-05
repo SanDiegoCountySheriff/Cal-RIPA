@@ -9,37 +9,26 @@ export default new Vuex.Store({
   state: {
     isDark: true,
     isAdmin: true,
-    beats: [],
-    cities: [],
-    schools: [],
-    statutes: [],
-    stops: [],
+    adminBeats: [],
+    adminCities: [],
+    adminSchools: [],
+    adminStatutes: [],
+    adminStops: [],
+    formBeats: [],
+    formCities: [],
+    formSchools: [],
+    formStatutes: [],
+    formStops: [],
   },
 
   getters: {
-    mappedBeats: state => {
+    mappedAdminBeats: state => {
       return state.beats
-        .sort((x, y) => {
-          const beatA = x.command.toUpperCase()
-          const beatB = y.command.toUpperCase()
-          return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
-        })
-        .map(item => {
-          return {
-            ...item,
-            fullName: `${item.command} ${item.id}`,
-          }
-        })
     },
-    mappedCities: state => {
-      return state.cities.map(item => {
-        return {
-          ...item,
-          deactivationDate: formatDate(item.deactivationDate),
-        }
-      })
+    mappedAdminCities: state => {
+      return state.cities
     },
-    mappedSchools: state => {
+    mappedAdminSchools: state => {
       return state.schools.map(item => {
         return {
           ...item,
@@ -50,30 +39,27 @@ export default new Vuex.Store({
         }
       })
     },
-    mappedStatutes: state => {
-      return state.statutes
-        .filter(item => item.offenseRepealed === null)
-        .map(item => {
-          return {
-            ...item,
-            code: item.offenseCode,
-            description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
-            offenseEnacted: formatDate(item.offenseEnacted),
-            offenseRepealed: formatDate(item.offenseRepealed),
-          }
-        })
-        .map(item => {
-          return {
-            ...item,
-            fullName: `${item.description} ${item.code}`,
-          }
-        })
+    mappedAdminStatutes: state => {
+      return state.statutes.map(item => {
+        return {
+          ...item,
+          code: item.offenseCode,
+          offenseEnacted: formatDate(item.offenseEnacted),
+          offenseRepealed: formatDate(item.offenseRepealed),
+        }
+      })
     },
-    mappedStops: state => {
-      return state.stops
+    mappedFormBeats: state => {
+      return state.formBeats
     },
-    mappedSubmissions: state => {
-      return state.submissions
+    mappedFormCities: state => {
+      return state.formCities
+    },
+    mappedFormSchools: state => {
+      return state.formSchools
+    },
+    mappedFormStatutes: state => {
+      return state.formStatutes
     },
     isOnline: () => {
       return navigator.onLine
@@ -81,17 +67,29 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    updateBeats(state, items) {
-      state.beats = items
+    updateAdminBeats(state, items) {
+      state.adminBeats = items
     },
-    updateCities(state, items) {
-      state.cities = items
+    updateAdminCities(state, items) {
+      state.adminCities = items
     },
-    updateSchools(state, items) {
-      state.schools = items
+    updateAdminSchools(state, items) {
+      state.adminSchools = items
     },
-    updateStatutes(state, items) {
-      state.statutes = items
+    updateAdminStatutes(state, items) {
+      state.adminStatutes = items
+    },
+    updateFormBeats(state, items) {
+      state.formBeats = items
+    },
+    updateFormCities(state, items) {
+      state.formCities = items
+    },
+    updateFormSchools(state, items) {
+      state.formSchools = items
+    },
+    updateFormStatutes(state, items) {
+      state.formStatutes = items
     },
     updateStops(state, items) {
       state.stops = items
@@ -111,7 +109,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getBeats')
+          dispatch('getAdminBeats')
         })
     },
 
@@ -127,7 +125,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getCities')
+          dispatch('getAdminCities')
         })
     },
 
@@ -143,7 +141,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getSchools')
+          dispatch('getAdminSchools')
         })
     },
 
@@ -159,7 +157,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getStatutes')
+          dispatch('getAdminStatutes')
         })
     },
 
@@ -177,7 +175,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getBeats')
+          dispatch('getAdminBeats')
         })
     },
 
@@ -195,7 +193,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getCities')
+          dispatch('getAdminCities')
         })
     },
 
@@ -213,7 +211,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getSchools')
+          dispatch('getAdminSchools')
         })
     },
 
@@ -231,15 +229,36 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getSchools')
+          dispatch('getAdminSchools')
         })
     },
 
-    getBeats({ commit }) {
+    getAdminBeats({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.sort((x, y) => {
+            const beatA = x.command.toUpperCase()
+            const beatB = y.command.toUpperCase()
+            return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
+          })
+          commit('updateAdminBeats', data)
+        })
+        .catch(() => {
+          commit('updateAdminBeats', [])
+        })
+    },
+
+    getFormBeats({ commit }) {
       const items = localStorage.getItem('ripa_beats')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('updateBeats', JSON.parse(items))
+          commit('updateFormBeats', JSON.parse(items))
           resolve()
         })
       } else {
@@ -251,20 +270,60 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('updateBeats', response.data)
-            localStorage.setItem('ripa_beats', JSON.stringify(response.data))
+            const data = response.data
+              .sort((x, y) => {
+                const beatA = x.command.toUpperCase()
+                const beatB = y.command.toUpperCase()
+                return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
+              })
+              .map(item => {
+                return {
+                  id: item.id,
+                  fullName: `${item.command} ${item.id}`,
+                }
+              })
+            commit('updateFormBeats', data)
+            localStorage.setItem('ripa_beats', JSON.stringify(data))
           })
           .catch(() => {
-            commit('updateBeats', [])
+            commit('updateFormBeats', [])
           })
       }
     },
 
-    getCities({ commit }) {
+    getAdminCities({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data
+            .sort((x, y) => {
+              const cityA = x.name.toUpperCase()
+              const cityB = y.name.toUpperCase()
+              return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
+            })
+            .map(item => {
+              return {
+                ...item,
+                deactivationDate: formatDate(item.deactivationDate),
+              }
+            })
+          commit('updateAdminCities', data)
+        })
+        .catch(() => {
+          commit('updateAdminCities', [])
+        })
+    },
+
+    getFormCities({ commit }) {
       const items = localStorage.getItem('ripa_cities')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('updateCities', JSON.parse(items))
+          commit('updateFormCities', JSON.parse(items))
           resolve()
         })
       } else {
@@ -276,20 +335,63 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('updateCities', response.data)
-            localStorage.setItem('ripa_cities', JSON.stringify(response.data))
+            const data = response.data
+              .sort((x, y) => {
+                const cityA = x.name.toUpperCase()
+                const cityB = y.name.toUpperCase()
+                return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
+              })
+              .map(item => {
+                return {
+                  id: item.name.toUpperCase(),
+                  fullName: item.name.toUpperCase(),
+                }
+              })
+            commit('updateFormCities', data)
+            localStorage.setItem('ripa_cities', JSON.stringify(data))
           })
           .catch(() => {
-            commit('updateCities', [])
+            commit('updateFormCities', [])
           })
       }
     },
 
-    getSchools({ commit }) {
+    getAdminSchools({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data
+            .sort((x, y) => {
+              const schoolA = x.name.toUpperCase()
+              const schoolB = y.name.toUpperCase()
+              return schoolA < schoolB ? -1 : schoolA > schoolB ? 1 : 0
+            })
+            .map(item => {
+              return {
+                ...item,
+                county: item.county ? item.county.toUpperCase() : '',
+                district: item.district ? item.district.toUpperCase() : '',
+                name: item.name ? item.name.toUpperCase() : '',
+                status: item.status ? item.status.toUpperCase() : '',
+              }
+            })
+          commit('updateAdminSchools', data)
+        })
+        .catch(() => {
+          commit('updateAdminSchools', [])
+        })
+    },
+
+    getFormSchools({ commit }) {
       const items = localStorage.getItem('ripa_schools')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('updateSchools', JSON.parse(items))
+          commit('updateFormSchools', JSON.parse(items))
           resolve()
         })
       } else {
@@ -301,20 +403,50 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('updateSchools', response.data)
-            localStorage.setItem('ripa_schools', JSON.stringify(response.data))
+            const data = response.data
+              .filter(item => item.status === 'Active')
+              .sort((x, y) => {
+                const schoolA = x.name.toUpperCase()
+                const schoolB = y.name.toUpperCase()
+                return schoolA < schoolB ? -1 : schoolA > schoolB ? 1 : 0
+              })
+              .map(item => {
+                return {
+                  cdsCode: item.cdsCode,
+                  fullName: `${item.name} (${item.district}) ${item.cdsCode}`,
+                }
+              })
+            commit('updateFormSchools', data)
+            localStorage.setItem('ripa_schools', JSON.stringify(data))
           })
           .catch(() => {
-            commit('updateSchools', [])
+            commit('updateFormSchools', [])
           })
       }
     },
 
-    getStatutes({ commit }) {
+    getAdminStatutes({ commit }) {
+      axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data
+          commit('updateAdminStatutes', data)
+        })
+        .catch(() => {
+          commit('updateAdminStatutes', [])
+        })
+    },
+
+    getFormStatutes({ commit }) {
       const items = localStorage.getItem('ripa_statutes')
       if (items !== null) {
         return new Promise(resolve => {
-          commit('updateStatutes', JSON.parse(items))
+          commit('updateFormStatutes', JSON.parse(items))
           resolve()
         })
       } else {
@@ -326,11 +458,25 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            commit('updateStatutes', response.data)
-            localStorage.setItem('ripa_statutes', JSON.stringify(response.data))
+            const data = response.data
+              .filter(item => item.offenseRepealed === null)
+              .map(item => {
+                return {
+                  code: item.offenseCode,
+                  description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
+                }
+              })
+              .map(item => {
+                return {
+                  code: item.offenseCode,
+                  fullName: `${item.description} ${item.code}`,
+                }
+              })
+            commit('updateFormStatutes', data)
+            localStorage.setItem('ripa_statutes', JSON.stringify(data))
           })
           .catch(() => {
-            commit('UPDATE_STATUES', [])
+            commit('updateFormStatutes', [])
           })
       }
     },
@@ -349,9 +495,6 @@ export default new Vuex.Store({
         .catch(() => {
           commit('updateStops', [])
         })
-      // axios.get('http://localhost:3004/stops').then(response => {
-      //   commit('updateStops', response.data)
-      // })
     },
   },
   modules: {},
