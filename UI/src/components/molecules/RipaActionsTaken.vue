@@ -19,6 +19,7 @@
       <ripa-check-group
         v-model="model.actionsTaken.actionsTakenDuringStop"
         :items="actionTakenGeneralItems"
+        :rules="actionsTakenRules"
         @input="handleInput"
       >
       </ripa-check-group>
@@ -28,6 +29,7 @@
       <ripa-check-group
         v-model="model.actionsTaken.actionsTakenDuringStop"
         :items="getActionTakenSearchItems"
+        :rules="actionsTakenRules"
         @input="handleInput"
       >
       </ripa-check-group>
@@ -60,18 +62,21 @@
         <ripa-check-group
           v-model="model.actionsTaken.basisForSearch"
           :items="basisForSearchItems"
+          :rules="basisForSearchRules"
           @input="handleInput"
         >
         </ripa-check-group>
 
-        <ripa-text-area
-          v-model="model.actionsTaken.basisForSearchBrief"
-          hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-          persistent-hint
-          label="Brief Explanation"
-          :rules="explanationRules"
-          @input="handleInput"
-        ></ripa-text-area>
+        <template v-if="isBasisForSearchBriefVisible">
+          <ripa-text-area
+            v-model="model.actionsTaken.basisForSearchBrief"
+            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+            persistent-hint
+            label="Brief Explanation"
+            :rules="explanationRules"
+            @input="handleInput"
+          ></ripa-text-area>
+        </template>
       </template>
 
       <ripa-subheader text="Seizure"></ripa-subheader>
@@ -93,6 +98,7 @@
         <ripa-check-group
           v-model="model.actionsTaken.basisForPropertySeizure"
           :items="basisForPropertySeizureItems"
+          :rules="basisForPropertySeizureRules"
           @input="handleInput"
         >
         </ripa-check-group>
@@ -106,6 +112,7 @@
         <ripa-check-group
           v-model="model.actionsTaken.typesOfPropertySeized"
           :items="propertySeizedTypeItems"
+          :rules="typesOfPropertySeizedRules"
           @input="handleInput"
         >
         </ripa-check-group>
@@ -185,6 +192,42 @@ export default {
       },
     },
 
+    actionsTakenRules() {
+      const checked = this.viewModel.actionsTaken.anyActionsTaken
+      const options = this.viewModel.actionsTaken.actionsTakenDuringStop
+      return [
+        (checked && options.length > 0) ||
+          'At least one action taken is required',
+      ]
+    },
+
+    basisForSearchRules() {
+      const searchConducted = this.wasSearchConducted
+      const options = this.viewModel.actionsTaken.basisForSearch
+      return [
+        (searchConducted && options.length > 0) ||
+          'At least basis for search is required',
+      ]
+    },
+
+    basisForPropertySeizureRules() {
+      const checked = this.viewModel.actionsTaken.propertyWasSeized
+      const options = this.viewModel.actionsTaken.basisForPropertySeizure
+      return [
+        (checked && options.length > 0) ||
+          'At least one basis for property seizure is required',
+      ]
+    },
+
+    typesOfPropertySeizedRules() {
+      const checked = this.viewModel.actionsTaken.propertyWasSeized
+      const options = this.viewModel.actionsTaken.typesOfPropertySeized
+      return [
+        (checked && options.length > 0) ||
+          'At least one type of property seized is required',
+      ]
+    },
+
     getActionTakenSearchItems() {
       return this.actionTakenSearchItems.map(item => {
         return {
@@ -209,6 +252,21 @@ export default {
 
     wasAskedForConsentToSearchProperty() {
       return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+    },
+
+    isBasisForSearchBriefVisible() {
+      if (this.viewModel.actionsTaken.basisForSearch.length === 0) {
+        return false
+      }
+
+      if (
+        this.viewModel.actionsTaken.basisForSearch.length === 1 &&
+        this.viewModel.actionsTaken.basisForSearch.includes(4)
+      ) {
+        return false
+      }
+
+      return true
     },
   },
 

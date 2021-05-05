@@ -1,5 +1,5 @@
 import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid'
-import { schools } from '../data/schools'
+import { adminSchools } from '../data/mappings'
 
 export default {
   title: 'Molecules/RipaSchoolsGrid',
@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaSchoolsGrid },
   data() {
     return {
-      data: schools
+      data: adminSchools()
         .filter(item => item.status === 'Active')
         .map(item => {
           return {

@@ -17,8 +17,10 @@ export default {
   data() {
     return {
       viewModel: {
-        years: this.value?.years || null,
-        assignment: this.value?.assignment || null,
+        officer: {
+          yearsExperience: this.value?.officer?.yearsExperience || null,
+          assignment: this.value?.officer.assignment || null,
+        },
       },
     }
   },

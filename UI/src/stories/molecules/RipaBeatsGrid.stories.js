@@ -1,5 +1,5 @@
 import RipaBeatsGrid from '@/components/molecules/RipaBeatsGrid'
-import { beats } from '../data/beats'
+import { adminBeats } from '../data/mappings'
 
 export default {
   title: 'Molecules/RipaBeatsGrid',
@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaBeatsGrid },
   data() {
     return {
-      data: beats,
+      data: adminBeats(),
     }
   },
   template: '<ripa-beats-grid :items="data"></ripa-beats-grid>',
