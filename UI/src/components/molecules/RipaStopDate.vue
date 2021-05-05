@@ -85,13 +85,13 @@ export default {
       dateRules: [
         v => !!v || 'A date is required',
         v =>
-          (v && this.isValidDateTime()) ||
+          (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       timeRules: [
         v => !!v || 'A time is required',
         v =>
-          (v && this.isValidDateTime()) ||
+          (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       durationRules: [v => !!v || 'A duration is required'],
@@ -113,17 +113,17 @@ export default {
         return this.viewModel
       },
     },
-  },
-
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
 
     isValidDateTime() {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
       return dateWithinLastHours(dateStr, timeStr, 24)
+    },
+  },
+
+  methods: {
+    handleInput() {
+      this.$emit('input', this.viewModel)
     },
   },
 
