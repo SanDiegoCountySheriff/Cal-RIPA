@@ -16,10 +16,12 @@
 import RipaPageContainer from './RipaPageContainer'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import { format } from 'date-fns'
-import { beats } from '../data/beats'
-import { cities } from '../data/cities'
-import { schools } from '../data/schools'
-import { offenseCodes } from '../data/offenseCodes'
+import {
+  formBeats,
+  formCities,
+  formSchools,
+  formStatutes,
+} from '../data/mappings'
 
 export default {
   name: 'ripa-form-container',
@@ -97,41 +99,10 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.mappedFormSchools = schools
-          .sort((x, y) => {
-            const schoolA = x.name.toUpperCase()
-            const schoolB = y.name.toUpperCase()
-            return schoolA < schoolB ? -1 : schoolA > schoolB ? 1 : 0
-          })
-          .map(item => {
-            return {
-              ...item,
-              fullName: `${item.name} (${item.district}) ${item.cdsCode}`,
-            }
-          })
-        this.mappedFormBeats = beats
-          .sort((x, y) => {
-            const beatA = x.command.toUpperCase()
-            const beatB = y.command.toUpperCase()
-            return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
-          })
-          .map(item => {
-            return {
-              ...item,
-              fullName: `${item.command} ${item.id}`,
-            }
-          })
-        this.mappedFormCities = cities.sort((x, y) => {
-          const cityA = x.name.toUpperCase()
-          const cityB = y.name.toUpperCase()
-          return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
-        })
-        this.mappedFormStatutes = offenseCodes.map(item => {
-          return {
-            ...item,
-            fullName: `${item.description} ${item.code}`,
-          }
-        })
+        this.mappedFormSchools = formSchools()
+        this.mappedFormBeats = formBeats()
+        this.mappedFormCities = formCities()
+        this.mappedFormStatutes = formStatutes()
         this.loading = false
       }, 500)
     },

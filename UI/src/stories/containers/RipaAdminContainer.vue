@@ -15,10 +15,12 @@
 <script>
 import RipaPageContainer from './RipaPageContainer'
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { beats } from '../data/beats'
-import { cities } from '../data/cities'
-import { schools } from '../data/schools'
-import { statutes } from '../data/statutes'
+import {
+  adminBeats,
+  adminCities,
+  adminSchools,
+  adminStatutes,
+} from '../data/mappings'
 import { stops } from '../data/stops'
 import { submissions } from '../data/submissions'
 
@@ -46,10 +48,10 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.mappedAdminBeats = beats
-        this.mappedAdminCities = cities
-        this.mappedAdminSchools = schools
-        this.mappedAdminStatutes = statutes
+        this.mappedAdminBeats = adminBeats()
+        this.mappedAdminCities = adminCities()
+        this.mappedAdminSchools = adminSchools()
+        this.mappedAdminStatutes = adminStatutes()
         this.mappedAdminStops = stops
         this.mappedAdminSubmissions = submissions
         this.loading = false
