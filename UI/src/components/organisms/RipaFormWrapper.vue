@@ -182,6 +182,8 @@ export default {
     },
 
     handleCancel() {
+      this.stepIndex = 1
+      window.scrollTo(0, 0)
       if (this.onCancel) {
         this.onCancel()
       }
@@ -189,12 +191,6 @@ export default {
 
     handleSubmit() {
       this.stepIndex = this.confirmationStepIndex
-      window.scrollTo(0, 0)
-    },
-
-    handleStartNew() {
-      this.stop = null
-      this.stepIndex = 1
       window.scrollTo(0, 0)
     },
   },
