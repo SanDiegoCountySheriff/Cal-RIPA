@@ -23,31 +23,22 @@ export default new Vuex.Store({
 
   getters: {
     mappedAdminBeats: state => {
-      return state.beats
+      return state.adminBeats
     },
     mappedAdminCities: state => {
-      return state.cities
+      return state.adminCities
     },
     mappedAdminSchools: state => {
-      return state.schools.map(item => {
-        return {
-          ...item,
-          county: item.county ? item.county.toUpperCase() : '',
-          district: item.district ? item.district.toUpperCase() : '',
-          name: item.name ? item.name.toUpperCase() : '',
-          status: item.status ? item.status.toUpperCase() : '',
-        }
-      })
+      return state.adminSchools
     },
     mappedAdminStatutes: state => {
-      return state.statutes.map(item => {
-        return {
-          ...item,
-          code: item.offenseCode,
-          offenseEnacted: formatDate(item.offenseEnacted),
-          offenseRepealed: formatDate(item.offenseRepealed),
-        }
-      })
+      return state.adminStatutes
+    },
+    mappedAdminStops: () => {
+      return []
+    },
+    mappedAdminSubmissions: () => {
+      return []
     },
     mappedFormBeats: state => {
       return state.formBeats
@@ -98,7 +89,7 @@ export default new Vuex.Store({
 
   actions: {
     deleteBeat({ dispatch }, beat) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteBeat/${beat.id}`,
           {
@@ -114,7 +105,7 @@ export default new Vuex.Store({
     },
 
     deleteCity({ dispatch }, city) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteCity/${city.id}`,
           {
@@ -130,7 +121,7 @@ export default new Vuex.Store({
     },
 
     deleteSchool({ dispatch }, school) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteSchool/${school.id}`,
           {
@@ -146,7 +137,7 @@ export default new Vuex.Store({
     },
 
     deleteStatute({ dispatch }, statute) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteStatute/${statute.id}`,
           {
@@ -162,7 +153,7 @@ export default new Vuex.Store({
     },
 
     editBeat({ dispatch }, beat) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/PutBeat/${beat.id}`,
           beat,
@@ -180,7 +171,7 @@ export default new Vuex.Store({
     },
 
     editCity({ dispatch }, city) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${city.rowKey}`,
           city,
@@ -198,7 +189,7 @@ export default new Vuex.Store({
     },
 
     editSchool({ dispatch }, school) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${school.rowKey}`,
           school,
@@ -216,7 +207,7 @@ export default new Vuex.Store({
     },
 
     editStatute({ dispatch }, statute) {
-      axios
+      return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/domain/PutStatute/${statute.rowKey}`,
           statute,
@@ -234,7 +225,7 @@ export default new Vuex.Store({
     },
 
     getAdminBeats({ commit }) {
-      axios
+      return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
           headers: {
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -262,7 +253,7 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        axios
+        return axios
           .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
             headers: {
               'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -292,7 +283,7 @@ export default new Vuex.Store({
     },
 
     getAdminCities({ commit }) {
-      axios
+      return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
           headers: {
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -327,7 +318,7 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        axios
+        return axios
           .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
             headers: {
               'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -357,7 +348,7 @@ export default new Vuex.Store({
     },
 
     getAdminSchools({ commit }) {
-      axios
+      return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
           headers: {
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -395,7 +386,7 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        axios
+        return axios
           .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
             headers: {
               'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -413,7 +404,9 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   cdsCode: item.cdsCode,
-                  fullName: `${item.name} (${item.district}) ${item.cdsCode}`,
+                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${
+                    item.cdsCode
+                  }`,
                 }
               })
             commit('updateFormSchools', data)
@@ -426,7 +419,7 @@ export default new Vuex.Store({
     },
 
     getAdminStatutes({ commit }) {
-      axios
+      return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
           headers: {
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -434,7 +427,14 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data
+          const data = response.data.map(item => {
+            return {
+              ...item,
+              code: item.offenseCode,
+              offenseEnacted: formatDate(item.offenseEnacted),
+              offenseRepealed: formatDate(item.offenseRepealed),
+            }
+          })
           commit('updateAdminStatutes', data)
         })
         .catch(() => {
@@ -450,7 +450,7 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        axios
+        return axios
           .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
             headers: {
               'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -482,7 +482,7 @@ export default new Vuex.Store({
     },
 
     getStops({ commit }) {
-      axios
+      return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
           headers: {
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
@@ -497,5 +497,6 @@ export default new Vuex.Store({
         })
     },
   },
+
   modules: {},
 })
