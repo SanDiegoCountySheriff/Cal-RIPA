@@ -67,9 +67,16 @@
         >
         </ripa-check-group>
 
-        <template v-if="isBasisForSearchBriefVisible">
+        <template v-if="isBasisForSearchExplanationVisible">
+          <template v-if="model.actionsTaken.basisForSearchPiiFound">
+            <v-alert outlined type="warning" elevation="2" dense>
+              The explanation contains Personal Identifiable Information. Please
+              remove if possible.
+            </v-alert>
+          </template>
+
           <ripa-text-area
-            v-model="model.actionsTaken.basisForSearchBrief"
+            v-model="model.actionsTaken.basisForSearchExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
@@ -172,8 +179,8 @@ export default {
           propertySearchConsentGiven:
             this.value?.actionsTaken?.propertySearchConsentGiven || false,
           basisForSearch: this.value?.actionsTaken?.basisForSearch || [],
-          basisForSearchBrief:
-            this.value?.actionsTaken?.basisForSearchBrief || null,
+          basisForSearchExplanation:
+            this.value?.actionsTaken?.basisForSearchExplanation || null,
           propertyWasSeized:
             this.value?.actionsTaken?.propertyWasSeized || false,
           basisForPropertySeizure:
@@ -254,7 +261,7 @@ export default {
       return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
     },
 
-    isBasisForSearchBriefVisible() {
+    isBasisForSearchExplanationVisible() {
       if (this.viewModel.actionsTaken.basisForSearch.length === 0) {
         return false
       }

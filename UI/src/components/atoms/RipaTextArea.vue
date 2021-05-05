@@ -12,6 +12,7 @@
     required
     rows="1"
     :rules="rules"
+    :loading="loading"
   ></v-textarea>
 </template>
 
@@ -63,6 +64,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

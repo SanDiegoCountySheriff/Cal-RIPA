@@ -36,6 +36,12 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.stop = newVal
+    },
+  },
+
   props: {
     value: {
       type: Object,

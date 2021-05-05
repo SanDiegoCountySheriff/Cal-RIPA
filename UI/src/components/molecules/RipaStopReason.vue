@@ -86,6 +86,13 @@
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
+          <template v-if="model.stopReason.reasonForStopPiiFound">
+            <v-alert outlined type="warning" elevation="2" dense>
+              The explanation contains Personal Identifiable Information. Please
+              remove if possible.
+            </v-alert>
+          </template>
+
           <ripa-text-area
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
@@ -154,6 +161,8 @@ export default {
           searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
           reasonForStopExplanation:
             this.value?.stopReason?.reasonForStopExplanation || null,
+          reasonForStopPiiFound:
+            this.value?.stopReason?.reasonForStopPiiFound || false,
         },
       },
     }
@@ -207,6 +216,15 @@ export default {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
       }
+    },
+  },
+
+  watch: {
+    'value.stopReason.reasonForStopPiiFound': {
+      handler(newVal) {
+        console.log('PII FOUND', newVal)
+        this.viewModel.stopReason.reasonForStopPiiFound = newVal
+      },
     },
   },
 

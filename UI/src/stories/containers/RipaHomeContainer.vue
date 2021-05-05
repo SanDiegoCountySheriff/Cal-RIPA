@@ -1,8 +1,10 @@
 <template>
   <ripa-page-container :admin="admin">
+    {{ stop }}
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
+
     <template v-if="isEditingForm">
       <ripa-form-template
         v-model="stop"
@@ -42,7 +44,7 @@ export default {
 
   data() {
     return {
-      isEditingForm: false,
+      isEditingForm: true,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
@@ -66,9 +68,8 @@ export default {
     },
 
     handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
+      this.stop = Object.assign({}, newVal)
+      this.stop.updated = new Date()
     },
 
     getFormData() {
@@ -134,6 +135,14 @@ export default {
     handleCancel() {
       this.isEditingForm = false
       this.stop = {}
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal) {
+        console.log('text changed', newVal)
+      },
     },
   },
 

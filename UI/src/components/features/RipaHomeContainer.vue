@@ -22,7 +22,7 @@
 <script>
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 export default {
@@ -51,6 +51,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['validateTextForPii']),
+
     getOfficerYearsExperience() {
       const yearsExperience = localStorage.getItem(
         'ripa_officer_years_experience',
@@ -64,12 +66,11 @@ export default {
     },
 
     handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
+      this.stop = Object.assign({}, newVal)
+      this.stop.updated = new Date()
     },
 
-    handleTemplate(value) {
+    async handleTemplate(value) {
       this.isEditingForm = true
 
       if (value === 'motor') {
@@ -120,6 +121,45 @@ export default {
     handleCancel() {
       this.isEditingForm = false
       this.stop = {}
+    },
+
+    async validateReasonForStopExplanationForPii(textValue) {
+      let isFound = false
+      if (textValue === '') {
+        isFound = await this.validateTextForPii(textValue)
+      }
+      const updatedStop = this.stop
+      updatedStop.updated = new Date()
+      updatedStop.stopReason.reasonForStopPiiFound = isFound
+      this.stop = Object.assign({}, updatedStop)
+    },
+
+    async validateBasisForSearchExplanationForPii(textValue) {
+      let isFound = false
+      if (textValue === '') {
+        isFound = await this.validateTextForPii(textValue)
+      }
+      const updatedStop = this.stop
+      updatedStop.updated = new Date()
+      updatedStop.actionsTaken.basisForSearchPiiFound = isFound
+      this.stop = Object.assign({}, updatedStop)
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopExplanationForPii(newVal)
+        }
+      },
+    },
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchExplanationForPii(newVal)
+        }
+      },
     },
   },
 }
