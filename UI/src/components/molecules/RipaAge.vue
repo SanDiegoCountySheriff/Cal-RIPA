@@ -12,6 +12,7 @@
             :items="ageItems"
             itemText="name"
             itemValue="value"
+            :rules="ageRules"
             @input="handleInput"
           >
           </ripa-select>
@@ -38,6 +39,7 @@ export default {
     return {
       valid: true,
       ageItems: AGES,
+      ageRules: [v => !!v || 'An age is required'],
       viewModel: {
         person: {
           perceivedAge: this.value?.person?.perceivedAge || null,

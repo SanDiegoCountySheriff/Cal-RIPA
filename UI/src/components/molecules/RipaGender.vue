@@ -14,6 +14,7 @@
             <ripa-radio-group
               v-model="model.person.perceivedGender"
               :items="genderItems"
+              :rules="genderRules"
               @input="handleInput"
             >
             </ripa-radio-group>
@@ -66,6 +67,7 @@ export default {
     return {
       valid: true,
       genderItems: GENDERS,
+      genderRules: [v => !!v || 'A gender is required'],
       viewModel: {
         person: {
           perceivedGender: this.value?.person?.perceivedGender || null,
