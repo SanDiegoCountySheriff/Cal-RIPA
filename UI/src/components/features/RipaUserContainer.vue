@@ -1,6 +1,6 @@
 <template>
   <ripa-user-template
-    :officer="getOfficer"
+    :stop="getStop"
     :on-update="handleUpdate"
   ></ripa-user-template>
 </template>
@@ -16,10 +16,12 @@ export default {
   },
 
   computed: {
-    getOfficer() {
+    getStop() {
       return {
-        yearsExperience: this.getOfficerYearsExperience(),
-        assignment: this.getOfficerAssignment(),
+        officer: {
+          yearsExperience: this.getOfficerYearsExperience(),
+          assignment: this.getOfficerAssignment(),
+        },
       }
     },
   },
@@ -37,16 +39,16 @@ export default {
       return +assignment || null
     },
 
-    setOfficer(officer) {
+    setStop(stop) {
       localStorage.setItem(
         'ripa_officer_years_experience',
-        officer.yearsExperience,
+        stop.officer.yearsExperience,
       )
-      localStorage.setItem('ripa_officer_assignment', officer.assignment)
+      localStorage.setItem('ripa_officer_assignment', stop.officer.assignment)
     },
 
-    handleUpdate(officer) {
-      this.setOfficer(officer)
+    handleUpdate(stop) {
+      this.setStop(stop)
     },
   },
 }
