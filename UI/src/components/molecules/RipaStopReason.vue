@@ -98,6 +98,7 @@
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
+            :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
           ></ripa-text-area>
@@ -251,6 +252,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
     statutes: {
       type: Array,

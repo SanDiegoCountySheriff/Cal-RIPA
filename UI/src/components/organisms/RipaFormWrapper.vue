@@ -90,6 +90,7 @@
 
               <ripa-form-step-3
                 v-model="stop"
+                :loading-pii="loadingPii"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -106,6 +107,7 @@
 
               <ripa-form-step-4
                 v-model="stop"
+                :loading-pii="loadingPii"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -339,6 +341,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
     nonCountyCities: {
       type: Array,

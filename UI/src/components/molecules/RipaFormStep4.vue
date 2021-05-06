@@ -1,6 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-actions-taken v-model="model"></ripa-actions-taken>
+    <ripa-actions-taken
+      v-model="model"
+      :loading-pii="loadingPii"
+    ></ripa-actions-taken>
     <ripa-contraband v-model="model"></ripa-contraband>
 
     <v-spacer></v-spacer>

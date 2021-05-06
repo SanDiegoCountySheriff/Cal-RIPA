@@ -90,6 +90,10 @@ export default {
       type: Array,
       default: () => {},
     },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
     nonCountyCities: {
       type: Array,
       default: () => {},

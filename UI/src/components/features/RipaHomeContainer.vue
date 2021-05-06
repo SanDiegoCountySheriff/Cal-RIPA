@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-form-container">
+  <div class="ripa-home-container">
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
@@ -18,6 +18,7 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
@@ -47,9 +48,10 @@ export default {
 
   data() {
     return {
-      isEditingForm: false,
-      stop: this.getDefaultStop(),
       fullStop: {},
+      isEditingForm: false,
+      loadingPii: true,
+      stop: this.getDefaultStop(),
     }
   },
 
@@ -225,6 +227,7 @@ export default {
 
     async validateReasonForStopForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
@@ -232,12 +235,14 @@ export default {
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
+        this.loadingPii = false
       }
       this.updateFullStop()
     },
 
     async validateBasisForSearchForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
@@ -245,6 +250,7 @@ export default {
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }
+        this.loadingPii = false
       }
       this.updateFullStop()
     },

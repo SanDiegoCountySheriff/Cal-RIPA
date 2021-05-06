@@ -2,6 +2,7 @@
   <v-text-field
     v-model="model"
     :label="label"
+    :loading="loading"
     :hint="hint"
     :rules="rules"
   ></v-text-field>
@@ -47,6 +48,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     hint: {
       type: String,

@@ -8,11 +8,11 @@
     flat
     :hint="hint"
     :label="label"
+    :loading="loading"
     :persistent-hint="persistentHint"
     required
     rows="1"
     :rules="rules"
-    :loading="loading"
   ></v-textarea>
 </template>
 
@@ -57,6 +57,10 @@ export default {
       type: String,
       default: '',
     },
+    loading: {
+      type: Boolean,
+      default: true,
+    },
     hint: {
       type: String,
       default: '',
@@ -68,10 +72,6 @@ export default {
     rules: {
       type: Array,
       default: () => [],
-    },
-    loading: {
-      type: Boolean,
-      default: false,
     },
   },
 }
