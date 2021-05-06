@@ -21,7 +21,7 @@ export default {
     },
     noMargins: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
 }

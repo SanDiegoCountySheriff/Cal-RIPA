@@ -236,7 +236,9 @@ export default {
     },
 
     handleDeletePerson(id) {
-      console.log('Delete Person', id)
+      if (this.onDeletePerson) {
+        this.onDeletePerson(id)
+      }
     },
 
     handleEditPerson(id) {
@@ -310,6 +312,10 @@ export default {
       default: () => {},
     },
     onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
       type: Function,
       default: () => {},
     },

@@ -87,7 +87,7 @@
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
-            <v-alert outlined type="warning" elevation="2" dense>
+            <v-alert outlined type="warning" dense>
               The explanation contains personally identifying information.
               Please remove if possible.
             </v-alert>

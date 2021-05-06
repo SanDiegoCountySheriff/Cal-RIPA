@@ -42,6 +42,7 @@ import {
   formSchools,
   formStatutes,
 } from '../data/mappings'
+import { sampleStop } from '../data/formStop'
 
 export default {
   name: 'ripa-home-container',
@@ -179,49 +180,7 @@ export default {
       }
 
       if (value === 'test') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-            duration: 3,
-            stopInResponseToCfs: false,
-          },
-          location: {
-            isSchool: false,
-            school: null,
-            blockNumber: 1100,
-            streetName: 'Fang',
-            intersection: null,
-            moreLocationOptions: false,
-            highwayExit: null,
-            landmark: null,
-            outOfCounty: false,
-            city: 'BOSTONIA',
-            beat: 555,
-          },
-          person: {
-            id: 1,
-            isStudent: false,
-            perceivedRace: [7],
-            perceivedGender: 3,
-            perceivedLgbt: true,
-            perceivedAge: 3,
-            perceivedLimitedEnglish: true,
-            anyDisabilities: true,
-            perceivedOrKnownDisability: [4, 2],
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
-        }
+        this.stop = sampleStop
       }
 
       this.updateFullStop()
@@ -263,27 +222,27 @@ export default {
     },
 
     validateReasonForStopForPii(textValue) {
-      let isFound = false
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
         isFound = textValue.contains('Steve Pietrek')
-      }
-      this.stop = Object.assign({}, this.stop)
-      this.stop.updated = new Date()
-      if (this.stop.stopReason) {
-        this.stop.stopReason.reasonForStopPiiFound = isFound
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
+        }
       }
       this.updateFullStop()
     },
 
     validateBasisForSearchForPii(textValue) {
-      let isFound = false
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
         isFound = textValue.contains('Steve Pietrek')
-      }
-      this.stop = Object.assign({}, this.stop)
-      this.stop.updated = new Date()
-      if (this.stop.actionsTaken) {
-        this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
       }
       this.updateFullStop()
     },

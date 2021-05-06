@@ -22,6 +22,7 @@
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
         :on-add-person="handleAddPerson"
+        :on-delete-person="handleDeletePerson"
         :on-cancel="handleCancel"
         @input="handleInput"
       ></ripa-form-template>
@@ -34,6 +35,7 @@ import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
+import { sampleStop } from '@/stories/data/formStop'
 
 export default {
   name: 'ripa-home-container',
@@ -98,6 +100,8 @@ export default {
       }
       this.updateFullStop()
     },
+
+    handleDeletePerson(id) {},
 
     handleTemplate(value) {
       this.isEditingForm = true
@@ -171,49 +175,7 @@ export default {
       }
 
       if (value === 'test') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-            duration: 3,
-            stopInResponseToCfs: false,
-          },
-          location: {
-            isSchool: false,
-            school: null,
-            blockNumber: 1100,
-            streetName: 'Fang',
-            intersection: null,
-            moreLocationOptions: false,
-            highwayExit: null,
-            landmark: null,
-            outOfCounty: false,
-            city: 'BOSTONIA',
-            beat: 555,
-          },
-          person: {
-            id: 1,
-            isStudent: false,
-            perceivedRace: [7],
-            perceivedGender: 3,
-            perceivedLgbt: true,
-            perceivedAge: 3,
-            perceivedLimitedEnglish: true,
-            anyDisabilities: true,
-            perceivedOrKnownDisability: [4, 2],
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
-        }
+        this.stop = sampleStop
       }
 
       this.updateFullStop()
@@ -255,27 +217,27 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      let isFound = false
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
         isFound = await this.checkTextForPii(textValue)
-      }
-      this.stop = Object.assign({}, this.stop)
-      this.stop.updated = new Date()
-      if (this.stop.stopReason) {
-        this.stop.stopReason.reasonForStopPiiFound = isFound
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
+        }
       }
       this.updateFullStop()
     },
 
     async validateBasisForSearchForPii(textValue) {
-      let isFound = false
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
         isFound = await this.checkTextForPii(textValue)
-      }
-      this.stop = Object.assign({}, this.stop)
-      this.stop.updated = new Date()
-      if (this.stop.actionsTaken) {
-        this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
       }
       this.updateFullStop()
     },

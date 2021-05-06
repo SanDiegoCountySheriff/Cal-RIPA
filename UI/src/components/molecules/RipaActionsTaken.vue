@@ -72,7 +72,7 @@
 
               <template v-if="isBasisForSearchExplanationVisible">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
-                  <v-alert outlined type="warning" elevation="2" dense>
+                  <v-alert outlined type="warning" dense>
                     The explanation contains personally identifying information.
                     Please remove if possible.
                   </v-alert>
@@ -187,6 +187,8 @@ export default {
           basisForSearch: this.value?.actionsTaken?.basisForSearch || [],
           basisForSearchExplanation:
             this.value?.actionsTaken?.basisForSearchExplanation || null,
+          basisForSearchPiiFound:
+            this.value?.actionsTaken?.basisForSearchPiiFound || false,
           propertyWasSeized:
             this.value?.actionsTaken?.propertyWasSeized || false,
           basisForPropertySeizure:
@@ -358,6 +360,8 @@ export default {
           basisForSearch: newVal?.actionsTaken?.basisForSearch || [],
           basisForSearchExplanation:
             newVal?.actionsTaken?.basisForSearchExplanation || null,
+          basisForSearchPiiFound:
+            newVal?.actionsTaken?.basisForSearchPiiFound || false,
           propertyWasSeized: newVal?.actionsTaken?.propertyWasSeized || false,
           basisForPropertySeizure:
             newVal?.actionsTaken?.basisForPropertySeizure || [],
