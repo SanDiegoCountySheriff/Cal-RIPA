@@ -122,18 +122,19 @@ function Import-FunctionApi()
 	Write-Host "Starting ${apiTag} import"
 
     $ApimCntx = New-AzApiManagementContext -ResourceGroupName $ResourceGroupName -ServiceName $ServiceName
+    $functionApp = "sdsd-ripa-$($Environment)-$($ApiTag)-fa"
 
     Write-Host "Getting function key code"
-    $functionCode = ((az functionapp function keys list -g sdsd-ripa-d-rg -n sdsd-ripa-d-$($ApiTag)-fa --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select default).default
+    $functionCode = ((az functionapp function keys list -g "sdsd-ripa-$($Environment)-rg" -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
 	
-    $serviceUrl = "https://sdsd-ripa-d-$($ApiTag)-fa.azurewebsites.us/api"
+    $serviceUrl = "https://sdsd-ripa-$($functionApp).azurewebsites.us/api"
 	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
 
     Write-Host "Getting local IP Address"
     $ipAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
     
     Write-Host "Setting access restriction for local IP Address"
-    Set-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName sdsd-ripa-d-$($ApiTag)-fa  -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
+    Set-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName $functionApp -IPAddress $ipAddress -RuleName "AllowAdoDeployment" -RuleAction "Allow" -RulePriority "900"
 
 	Write-Host "Updating ${serviceUrl}"
 	Write-Host "With ${swaggerUrl}"
@@ -143,7 +144,7 @@ function Import-FunctionApi()
 	Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag
 	
 	Write-Host "Setting api backend to point to $ApiTag function"
-    $backendPolicy = '<policies><inbound><base /><set-backend-service id="apim-generated-policy" backend-id="sdsd-ripa-d-__ApiTag__-fa" /></inbound></policies>'.Replace("__ApiTag__", $ApiTag)
+    $backendPolicy = '<policies><inbound><base /><set-backend-service id="apim-generated-policy" backend-id="__FunctionApp__" /></inbound></policies>'.Replace("__FunctionApp__", $functionApp)
     Set-AzApiManagementPolicy -Context $ApimCntx -ApiId $ApiTag -Policy $backendPolicy 
 
 	# reset the protocol (import modifies this for some reason)
@@ -151,7 +152,7 @@ function Import-FunctionApi()
 	Set-AzApiManagementApi -Context $ApimCntx -ApiId $ApiTag -Protocols @('https') -Name $ApiTag -ServiceUrl $serviceUrl
 
     Write-Host "removing access restriction for local IP Address"
-    Remove-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName sdsd-ripa-d-$($ApiTag)-fa  -IPAddress $ipAddress
+    Remove-AppIPRestriction -ResourceGroupName $ResourceGroupName -FunctionName $functionApp -IPAddress $ipAddress
 }
 
 #$resgrp = "sdsd-ripa-d-rg"
