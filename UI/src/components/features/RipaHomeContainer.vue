@@ -223,8 +223,9 @@ export default {
       const updatedPerson = {
         ...this.stop.person,
         id: this.stop.person.id,
-        stopReason: this.stop.stopReason,
         actionsTaken: this.stop.actionsTaken,
+        stopReason: this.stop.stopReason,
+        stopResult: this.stop.stopResult,
       }
 
       const updatedFullStop = Object.assign({}, this.fullStop)
@@ -233,7 +234,6 @@ export default {
       updatedFullStop.stopDate = this.stop.stopDate
       updatedFullStop.location = this.stop.location
       const personId = this.stop.person.id
-      console.log(personId)
       const people = updatedFullStop.people || []
       updatedFullStop.people = people.filter(item => item.id !== personId)
       updatedFullStop.people.push(updatedPerson)

@@ -207,7 +207,6 @@ import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
 import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
 import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
-import _ from 'lodash'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -244,9 +243,8 @@ export default {
 
   methods: {
     handleInput(newVal) {
-      const mergedStop = _.merge(this.stop, newVal)
-      this.stop = Object.assign({}, mergedStop)
-      this.$emit('input', mergedStop)
+      this.stop = Object.assign({}, newVal)
+      this.$emit('input', this.stop)
     },
 
     handleAddPerson() {

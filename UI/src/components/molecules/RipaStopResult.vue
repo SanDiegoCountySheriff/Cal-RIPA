@@ -324,7 +324,35 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateWarningCodesModel()
+      this.updateCitationCodesModel()
+      this.updateInfieldCodesModel()
+      this.updateCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateWarningCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop1) {
+        this.viewModel.stopResult.warningCodes = null
+      }
+    },
+
+    updateCitationCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
+        this.viewModel.stopResult.citationCodes = null
+      }
+    },
+
+    updateInfieldCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
+        this.viewModel.stopResult.infieldCodes = null
+      }
+    },
+
+    updateCustodiaArrestCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop5) {
+        this.viewModel.stopResult.custodialArrestCodes = null
+      }
     },
   },
 
@@ -333,31 +361,31 @@ export default {
       this.viewModel = {
         stopReason: newVal.stopReason || null,
         stopResult: {
-          anyActionsTaken: newVal.stopResult?.anyActionsTaken || false,
+          anyActionsTaken: newVal?.stopResult?.anyActionsTaken || false,
           actionsTakenDuringStop1:
-            newVal.stop?.actionsTakenDuringStop1 || false,
+            newVal?.stopResult?.actionsTakenDuringStop1 || false,
           actionsTakenDuringStop2:
-            newVal.stop?.actionsTakenDuringStop2 || false,
+            newVal?.stopResult?.actionsTakenDuringStop2 || false,
           actionsTakenDuringStop3:
-            newVal.stop?.actionsTakenDuringStop3 || false,
+            newVal?.stopResult?.actionsTakenDuringStop3 || false,
           actionsTakenDuringStop4:
-            newVal.stop?.actionsTakenDuringStop4 || false,
+            newVal?.stopResult?.actionsTakenDuringStop4 || false,
           actionsTakenDuringStop5:
-            newVal.stop?.actionsTakenDuringStop5 || false,
+            newVal?.stopResult?.actionsTakenDuringStop5 || false,
           actionsTakenDuringStop6:
-            newVal.stop?.actionsTakenDuringStop6 || false,
+            newVal?.stopResult?.actionsTakenDuringStop6 || false,
           actionsTakenDuringStop7:
-            newVal.stop?.actionsTakenDuringStop7 || false,
+            newVal?.stopResult?.actionsTakenDuringStop7 || false,
           actionsTakenDuringStop8:
-            newVal.stop?.actionsTakenDuringStop8 || false,
+            newVal?.stopResult?.actionsTakenDuringStop8 || false,
           actionsTakenDuringStop9:
-            newVal.stop?.actionsTakenDuringStop9 || false,
+            newVal?.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
-            newVal.stop?.actionsTakenDuringStop10 || false,
-          warningCodes: newVal.stopResult?.warningCodes || [],
-          citationCodes: newVal.stopResult?.citationCodes || [],
-          infieldCodes: newVal.stopResult?.infieldCodes || [],
-          custodialArrestCodes: newVal.stopResult?.custodialArrestCodes || [],
+            newVal?.stopResult?.actionsTakenDuringStop10 || false,
+          warningCodes: newVal?.stopResult?.warningCodes || [],
+          citationCodes: newVal?.stopResult?.citationCodes || [],
+          infieldCodes: newVal?.stopResult?.infieldCodes || [],
+          custodialArrestCodes: newVal?.stopResult?.custodialArrestCodes || [],
         },
       }
     },
