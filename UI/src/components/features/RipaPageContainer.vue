@@ -1,6 +1,6 @@
 <template>
   <ripa-page-wrapper
-    :admin="user.isAdmin"
+    :admin="isAdmin"
     :online="isOnline"
     :dark="isDark"
     :on-update-dark="handleUpdateDark"
@@ -53,7 +53,7 @@ export default {
     getDarkFromLocalStorage() {
       const value = localStorage.getItem('ripa_dark_theme')
       if (value === null) {
-        return 1
+        return true
       }
       return value === '1'
     },

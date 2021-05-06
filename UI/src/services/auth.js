@@ -17,18 +17,20 @@ const AuthService = {
       const authConfig = await getAuthConfig()
       // if auth config gets set, try login
       if (authConfig) {
-        msalInstance.handleRedirectPromise().then(response => {
-          // once you have the auth config, redirect to login
-          const currentAccount = msalInstance.getAllAccounts()
-          if (!currentAccount.length) {
-            // error during authentication or couldn't find you
-            // need to handle this
-          }
-          store.dispatch('setUserAccountInfo', response)
-          sessionStorage.setItem('ripa-accessToken', response.accessToken)
-          return true
-        })
+        await msalInstance.handleRedirectPromise()
+
         msalInstance.loginRedirect()
+
+        const currentAccount = await msalInstance.getAllAccounts()
+
+        if (currentAccount.length) {
+          store.dispatch('setUserAccountInfo', currentAccount[0])
+          sessionStorage.setItem(
+            'ripa-accessToken',
+            currentAccount[0].accessToken,
+          )
+          return true
+        }
       } else {
         // if there is an error getting auth config, go into offline mode
         // since we cannot authenticate the user
