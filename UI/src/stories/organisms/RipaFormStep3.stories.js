@@ -1,4 +1,5 @@
 import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
+import { formStatutes } from '../data/mappings'
 
 export default {
   title: 'Organisms/RipaFormStep3',
@@ -10,9 +11,10 @@ export const basic = () => ({
   components: { RipaFormStep3 },
   data() {
     return {
+      statutes: formStatutes(),
       stop: {},
     }
   },
   template:
-    '<div><ripa-form-step3 v-model="stop"></ripa-form-step3>{{stop}}</div>',
+    '<div><ripa-form-step3 v-model="stop" :statutes="statutes"></ripa-form-step3>{{stop}}</div>',
 })

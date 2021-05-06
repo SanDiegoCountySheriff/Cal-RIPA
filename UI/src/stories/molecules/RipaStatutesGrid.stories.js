@@ -1,5 +1,5 @@
 import RipaStatutesGrid from '@/components/molecules/RipaStatutesGrid'
-import { statutes } from '../data/statutes'
+import { adminStatutes } from '../data/mappings'
 
 export default {
   title: 'Molecules/RipaStatutesGrid',
@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaStatutesGrid },
   data() {
     return {
-      data: statutes,
+      data: adminStatutes(),
     }
   },
   template: '<ripa-statutes-grid :items="data"></ripa-statutes-grid>',

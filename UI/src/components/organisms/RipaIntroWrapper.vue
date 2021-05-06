@@ -1,5 +1,5 @@
 <template>
-  <ripa-intro></ripa-intro>
+  <ripa-intro :on-template="onTemplate"></ripa-intro>
 </template>
 
 <script>
@@ -10,6 +10,13 @@ export default {
 
   components: {
     RipaIntro,
+  },
+
+  props: {
+    onTemplate: {
+      type: Function,
+      default: () => {},
+    },
   },
 }
 </script>
