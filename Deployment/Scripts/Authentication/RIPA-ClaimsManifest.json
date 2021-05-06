@@ -1,0 +1,104 @@
+{
+	"idToken": [
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "auth_time",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "email",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "acct",
+			"source": null
+		},
+		{
+			"additionalProperties": [
+				"sam_account_name"
+			],
+			"essential": false,
+			"name": "groups",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "family_name",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "given_name",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "preferred_username",
+			"source": null
+		}
+	],
+	"accessToken": [
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "auth_time",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "email",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "acct",
+			"source": null
+		},
+		{
+			"additionalProperties": [
+				"sam_account_name"
+			],
+			"essential": false,
+			"name": "groups",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "family_name",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "given_name",
+			"source": null
+		},
+		{
+			"additionalProperties": [],
+			"essential": false,
+			"name": "preferred_username",
+			"source": null
+		}
+	],
+	"saml2Token": [
+		{
+			"additionalProperties": [
+				"sam_account_name"
+			],
+			"essential": false,
+			"name": "groups",
+			"source": null
+		}
+	]
+}
