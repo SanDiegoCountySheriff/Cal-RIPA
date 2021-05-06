@@ -207,7 +207,6 @@ export default {
     return {
       valid: true,
       stopResultItems: STOP_RESULTS,
-
       viewModel: {
         stopReason: this.value?.stopReason || null,
         stopResult: {
