@@ -4,7 +4,16 @@
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      {{ stop }}
+      <v-divider></v-divider>
+      <div class="tw-my-4">
+        {{ fullStop }}
+      </div>
+      <v-divider></v-divider>
+      <div class="tw-my-4">
+        {{ stop }}
+      </div>
+      <v-divider></v-divider>
+
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
@@ -12,6 +21,7 @@
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         @input="handleInput"
       ></ripa-form-template>
@@ -36,7 +46,8 @@ export default {
   data() {
     return {
       isEditingForm: false,
-      stop: {},
+      stop: this.getDefaultStop(),
+      fullStop: {},
     }
   },
 
@@ -69,7 +80,11 @@ export default {
 
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
-      this.stop.updated = new Date()
+      this.updateFullStop()
+    },
+
+    handleAddPerson() {
+      console.log('ADD PERSON')
     },
 
     async handleTemplate(value) {
@@ -86,11 +101,31 @@ export default {
             date: format(new Date(), 'yyyy-MM-dd'),
             time: format(new Date(), 'h:mm'),
           },
+          person: {
+            id: 1,
+          },
           stopReason: {
             reasonForStop: 1,
             trafficViolation: 1,
             trafficViolationCode: 54106,
             reasonForStopExplanation: 'Speeding',
+          },
+          stopResult: {
+            anyActionsTaken: true,
+            actionsTakenDuringStop1: false,
+            actionsTakenDuringStop2: true,
+            actionsTakenDuringStop3: false,
+            actionsTakenDuringStop4: false,
+            actionsTakenDuringStop5: false,
+            actionsTakenDuringStop6: false,
+            actionsTakenDuringStop7: false,
+            actionsTakenDuringStop8: false,
+            actionsTakenDuringStop9: false,
+            actionsTakenDuringStop10: false,
+            warningCodes: [],
+            citationCodes: [54106],
+            infieldCodes: [],
+            custodialArrestCodes: [],
           },
         }
       }
@@ -106,6 +141,9 @@ export default {
             date: format(new Date(), 'yyyy-MM-dd'),
             time: format(new Date(), 'h:mm'),
           },
+          person: {
+            id: 1,
+          },
           stopReason: {
             reasonForStop: 3,
             reasonForStopExplanation:
@@ -118,21 +156,110 @@ export default {
           },
         }
       }
+
+      if (value === 'test') {
+        this.stop = {
+          officer: {
+            editOfficer: false,
+            yearsExperience: this.getOfficerYearsExperience(),
+            assignment: this.getOfficerAssignment(),
+          },
+          stopDate: {
+            date: format(new Date(), 'yyyy-MM-dd'),
+            time: format(new Date(), 'h:mm'),
+            duration: 3,
+            stopInResponseToCfs: false,
+          },
+          location: {
+            isSchool: false,
+            school: null,
+            blockNumber: 1100,
+            streetName: 'Fang',
+            intersection: null,
+            moreLocationOptions: false,
+            highwayExit: null,
+            landmark: null,
+            outOfCounty: false,
+            city: 'BOSTONIA',
+            beat: 555,
+          },
+          person: {
+            id: 1,
+            isStudent: false,
+            perceivedRace: [7],
+            perceivedGender: 3,
+            perceivedLgbt: true,
+            perceivedAge: 3,
+            perceivedLimitedEnglish: true,
+            anyDisabilities: true,
+            perceivedOrKnownDisability: [4, 2],
+          },
+          stopReason: {
+            reasonForStop: 1,
+            trafficViolation: 1,
+            trafficViolationCode: 54106,
+            reasonForStopExplanation: 'Speeding',
+          },
+        }
+      }
+
+      this.updateFullStop()
+    },
+
+    updateFullStop() {
+      const updatedPerson = {
+        ...this.stop.person,
+        id: this.stop.person.id,
+        stopReason: this.stop.stopReason,
+        actionsTaken: this.stop.actionsTaken,
+      }
+
+      const updatedFullStop = Object.assign({}, this.fullStop)
+      updatedFullStop.updated = new Date()
+      updatedFullStop.officer = this.stop.officer
+      updatedFullStop.stopDate = this.stop.stopDate
+      updatedFullStop.location = this.stop.location
+      const personId = this.stop.person.id
+      const people = updatedFullStop.people || []
+      updatedFullStop.people = people.filter(item => item.id !== personId)
+      updatedFullStop.people.push(updatedPerson)
+      this.fullStop = Object.assign({}, updatedFullStop)
+    },
+
+    getDefaultStop() {
+      return {
+        person: {
+          id: 1,
+        },
+      }
     },
 
     handleCancel() {
       this.isEditingForm = false
-      this.stop = {}
+      this.stop = this.getDefaultStop()
+      this.updateFullStop()
     },
 
-    async validateForPii(key, textValue) {
+    async validateReasonForStopForPii(textValue) {
       let isFound = false
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
         isFound = await this.checkTextForPii(textValue)
       }
       this.stop = Object.assign({}, this.stop)
       this.stop.updated = new Date()
-      this.stop[key] = isFound
+      this.stop.stopReason.reasonForStopPiiFound = isFound
+      this.updateFullStop()
+    },
+
+    async validateBasisForSearchForPii(textValue) {
+      let isFound = false
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        isFound = await this.checkTextForPii(textValue)
+      }
+      this.stop = Object.assign({}, this.stop)
+      this.stop.updated = new Date()
+      this.stop.actionsTaken.basisForSearchPiiFound = isFound
+      this.updateFullStop()
     },
   },
 
@@ -140,14 +267,14 @@ export default {
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.validateForPii('stopReason.reasonForStopPiiFound', newVal)
+          this.validateReasonForStopForPii(newVal)
         }
       },
     },
     'stop.actionsTaken.basisForSearchExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.validateForPii('actionsTaken.basisForSearchPiiFound', newVal)
+          this.validateBasisForSearchForPii(newVal)
         }
       },
     },
