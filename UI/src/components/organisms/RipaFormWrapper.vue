@@ -112,6 +112,7 @@
             <v-stepper-content step="6">
               <ripa-form-step-6
                 v-model="stop"
+                :on-add-person="handleAddPerson"
                 :on-back="handleBack"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
@@ -171,6 +172,14 @@ export default {
       this.$emit('input', mergedStop)
     },
 
+    handleAddPerson() {
+      this.stepIndex = 2
+      window.scrollTo(0, 0)
+      if (this.onAddPerson) {
+        this.onAddPerson()
+      }
+    },
+
     handleBack() {
       this.stepIndex = this.stepIndex - 1
       window.scrollTo(0, 0)
@@ -224,6 +233,10 @@ export default {
     },
     statutes: {
       type: Array,
+      default: () => {},
+    },
+    onAddPerson: {
+      type: Function,
       default: () => {},
     },
     onCancel: {

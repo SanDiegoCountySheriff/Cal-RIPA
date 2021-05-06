@@ -11,6 +11,12 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
+      <v-btn outlined color="primary" class="tw-mr-2" @click="handleAddPerson">
+        <v-icon left> mdi-plus </v-icon>
+        Add Person
+      </v-btn>
+    </div>
+    <div class="tw-flex tw-mt-8 tw-justify-center">
       <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
         Back
       </v-btn>
