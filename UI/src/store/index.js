@@ -534,7 +534,7 @@ export default new Vuex.Store({
         })
     },
 
-    validateTextForPii({ commit }, textValue) {
+    checkTextForPii({ commit }, textValue) {
       const document = {
         Document: textValue,
       }

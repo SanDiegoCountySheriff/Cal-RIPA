@@ -42,6 +42,8 @@ export default {
 
   computed: {
     ...mapGetters([
+      'isOnline',
+      'isAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
@@ -51,7 +53,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['validateTextForPii']),
+    ...mapActions(['checkTextForPii']),
 
     getOfficerYearsExperience() {
       const yearsExperience = localStorage.getItem(
@@ -123,24 +125,14 @@ export default {
       this.stop = {}
     },
 
-    async validateReasonForStopExplanationForPii(textValue) {
+    async validateForPii(key, textValue) {
       let isFound = false
-      if (textValue !== '') {
-        isFound = await this.validateTextForPii(textValue)
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        isFound = await this.checkTextForPii(textValue)
       }
       this.stop = Object.assign({}, this.stop)
       this.stop.updated = new Date()
-      this.stop.stopReason.reasonForStopPiiFound = isFound
-    },
-
-    async validateBasisForSearchExplanationForPii(textValue) {
-      let isFound = false
-      if (textValue !== '') {
-        isFound = await this.validateTextForPii(textValue)
-      }
-      this.stop = Object.assign({}, this.stop)
-      this.stop.updated = new Date()
-      this.stop.actionsTaken.basisForSearchPiiFound = isFound
+      this.stop[key] = isFound
     },
   },
 
@@ -148,14 +140,14 @@ export default {
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.validateReasonForStopExplanationForPii(newVal)
+          this.validateForPii('stopReason.reasonForStopPiiFound', newVal)
         }
       },
     },
     'stop.actionsTaken.basisForSearchExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.validateBasisForSearchExplanationForPii(newVal)
+          this.validateForPii('actionsTaken.basisForSearchPiiFound', newVal)
         }
       },
     },

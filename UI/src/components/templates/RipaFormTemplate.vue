@@ -31,7 +31,7 @@ export default {
 
   methods: {
     handleInput(newVal) {
-      this.stop = newVal
+      this.stop = Object.assign({}, newVal)
       this.$emit('input', this.stop)
     },
   },

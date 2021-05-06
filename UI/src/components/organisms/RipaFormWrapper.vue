@@ -153,7 +153,7 @@ export default {
 
   data() {
     return {
-      stepIndex: 3,
+      stepIndex: 1,
       step1Validated: true,
       step2Validated: true,
       step3Validated: true,
@@ -167,7 +167,7 @@ export default {
   methods: {
     handleInput(newVal) {
       const mergedStop = _.merge(this.stop, newVal)
-      this.stop = mergedStop
+      this.stop = Object.assign({}, mergedStop)
       this.$emit('input', mergedStop)
     },
 
