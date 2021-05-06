@@ -59,7 +59,6 @@ namespace RIPA.Functions.Submission.Functions
 
             List<string> failedStopIds = new List<string>();
 
-
             foreach (var stopId in submitRequest.StopIds)
             {
                 try

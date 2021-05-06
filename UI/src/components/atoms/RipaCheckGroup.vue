@@ -7,7 +7,8 @@
       :disabled="item.disabled || false"
       :label="item.name"
       :value="item.value"
-      hide-details
+      :rules="rules"
+      :hide-details="index < items.length - 1"
     ></v-checkbox>
   </div>
 </template>
@@ -46,6 +47,10 @@ export default {
       default: () => [],
     },
     items: {
+      type: Array,
+      default: () => [],
+    },
+    rules: {
       type: Array,
       default: () => [],
     },

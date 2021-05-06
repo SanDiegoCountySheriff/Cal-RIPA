@@ -1,3 +1,5 @@
+import differenceInHours from 'date-fns/differenceInHours'
+
 export const formatDate = dateStr => {
   if (dateStr && dateStr.length > 0) {
     const str = dateStr.replace(/-/g, '')
@@ -8,4 +10,10 @@ export const formatDate = dateStr => {
   }
 
   return ''
+}
+
+export const dateWithinLastHours = (dateStr, timeStr, hours) => {
+  const date = Date.parse(`${dateStr} ${timeStr}`)
+  const diff = differenceInHours(new Date(), new Date(date))
+  return diff < hours
 }

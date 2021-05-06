@@ -1,5 +1,5 @@
 <template>
-  <v-radio-group v-model="model" hide-details>
+  <v-radio-group v-model="model" :rules="rules">
     <v-radio
       v-for="(item, index) in items"
       :key="index"
@@ -43,6 +43,10 @@ export default {
       default: '',
     },
     items: {
+      type: Array,
+      default: () => [],
+    },
+    rules: {
       type: Array,
       default: () => [],
     },

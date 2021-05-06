@@ -34,15 +34,6 @@
     <div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/" v-bind="attrs" v-on="on">
-            <v-icon>mdi-plus-box</v-icon>
-          </v-btn>
-        </template>
-        <span>Add new stop</span>
-      </v-tooltip>
-
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="tw-ml-4"
             icon
@@ -66,7 +57,7 @@
         <span>View user profile</span>
       </v-tooltip>
 
-      <template v-if="isAdmin">
+      <template v-if="admin">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -102,12 +93,12 @@ export default {
       return this.$vuetify.theme.dark ? 'View light mode' : 'View dark mode'
     },
 
-    isAdmin() {
-      return true
-    },
-
     getAppTitle() {
       return 'RIPA'
+    },
+
+    getAdmin() {
+      return this.admin
     },
 
     getOnlineIcon() {

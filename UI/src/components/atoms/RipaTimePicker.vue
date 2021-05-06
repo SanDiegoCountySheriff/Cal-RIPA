@@ -14,12 +14,13 @@
         readonly
         v-bind="attrs"
         v-on="on"
+        :rules="rules"
       ></v-text-field>
     </template>
     <v-time-picker v-if="modal" v-model="model" full-width>
       <v-spacer></v-spacer>
       <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.dialog.save(time)"> OK </v-btn>
+      <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
     </v-time-picker>
   </v-dialog>
 </template>
@@ -81,6 +82,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

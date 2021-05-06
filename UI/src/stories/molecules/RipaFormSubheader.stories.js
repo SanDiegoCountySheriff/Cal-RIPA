@@ -10,7 +10,7 @@ export const required = () => ({
   components: { RipaFormSubheader },
   data() {
     return {
-      title: 'Reason for Stop',
+      title: 'Basis for Search',
       subtitle: '§999.226(a)(10)',
     }
   },
@@ -22,7 +22,7 @@ export const notRequired = () => ({
   components: { RipaFormSubheader },
   data() {
     return {
-      title: 'Reason for Stop',
+      title: 'Basis for Search',
       subtitle: '§999.226(a)(10)',
     }
   },
