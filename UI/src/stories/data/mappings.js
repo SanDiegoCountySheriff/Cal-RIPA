@@ -132,7 +132,7 @@ export const formStatutes = () => {
     })
     .map(item => {
       return {
-        code: item.offenseCode,
+        code: item.code,
         fullName: `${item.description} ${item.code}`,
       }
     })

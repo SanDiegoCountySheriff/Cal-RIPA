@@ -23,7 +23,7 @@ export default {
           officer: newVal?.officer
             ? newVal.officer
             : this.viewModel.officer || {},
-          person: newVal?.officer ? newVal.person : this.viewModel.person || {},
+          person: newVal?.person ? newVal.person : this.viewModel.person || {},
           stopDate: newVal?.stopDate
             ? newVal.stopDate
             : this.viewModel.stopDate || {},

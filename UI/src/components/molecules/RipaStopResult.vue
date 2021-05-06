@@ -324,11 +324,27 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateActionsTakenModel()
       this.updateWarningCodesModel()
       this.updateCitationCodesModel()
       this.updateInfieldCodesModel()
       this.updateCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateActionsTakenModel() {
+      if (!this.viewModel.stopResult.anyActionsTaken) {
+        this.viewModel.stopResult.actionsTakenDuringStop1 = false
+        this.viewModel.stopResult.actionsTakenDuringStop2 = false
+        this.viewModel.stopResult.actionsTakenDuringStop3 = false
+        this.viewModel.stopResult.actionsTakenDuringStop4 = false
+        this.viewModel.stopResult.actionsTakenDuringStop5 = false
+        this.viewModel.stopResult.actionsTakenDuringStop6 = false
+        this.viewModel.stopResult.actionsTakenDuringStop7 = false
+        this.viewModel.stopResult.actionsTakenDuringStop8 = false
+        this.viewModel.stopResult.actionsTakenDuringStop9 = false
+        this.viewModel.stopResult.actionsTakenDuringStop10 = false
+      }
     },
 
     updateWarningCodesModel() {

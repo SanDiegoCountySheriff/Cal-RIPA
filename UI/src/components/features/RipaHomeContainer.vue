@@ -99,7 +99,7 @@ export default {
       this.updateFullStop()
     },
 
-    async handleTemplate(value) {
+    handleTemplate(value) {
       this.isEditingForm = true
 
       if (value === 'motor') {
