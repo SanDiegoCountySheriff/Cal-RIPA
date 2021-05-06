@@ -17,9 +17,11 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
-        Back
-      </v-btn>
+      <template v-if="backButtonVisible">
+        <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+          Back
+        </v-btn>
+      </template>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
@@ -49,6 +51,13 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+  },
+
+  props: {
+    backButtonVisible: {
+      type: Boolean,
+      default: true,
+    },
   },
 }
 </script>

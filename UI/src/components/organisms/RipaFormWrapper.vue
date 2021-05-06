@@ -77,6 +77,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :back-button-visible="getFormStep2BackButtonVisible"
                 @input="handleInput"
               ></ripa-form-step-2>
             </v-stepper-content>
@@ -134,6 +135,9 @@
                 v-model="stop"
                 :on-add-person="handleAddPerson"
                 :on-back="handleBack"
+                :on-delete-person="handleDeletePerson"
+                :on-edit-person="handleEditPerson"
+                :on-edit-stop="handleEditStop"
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
                 @input="handleInput"
@@ -200,12 +204,12 @@
 
 <script>
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
-import RipaFormStep1 from '@/components/organisms/RipaFormStep1'
-import RipaFormStep2 from '@/components/organisms/RipaFormStep2'
-import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
-import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
-import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
-import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
+import RipaFormStep1 from '@/components/molecules/RipaFormStep1'
+import RipaFormStep2 from '@/components/molecules/RipaFormStep2'
+import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
+import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
+import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
+import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 
 export default {
@@ -232,12 +236,18 @@ export default {
       step5Validated: true,
       confirmationStepIndex: 7,
       stop: this.value,
+      isEditStop: true,
+      isEditPerson: true,
     }
   },
 
   computed: {
     getEditPersonText() {
       return `Person: ${this.stop.person.id}`
+    },
+
+    getFormStep2BackButtonVisible() {
+      return this.isEditPerson && this.isEditStop
     },
   },
 
@@ -253,6 +263,8 @@ export default {
       if (this.onAddPerson) {
         this.onAddPerson()
       }
+      this.isEditStop = false
+      this.isEditPerson = true
     },
 
     handleBack() {
@@ -260,13 +272,35 @@ export default {
       window.scrollTo(0, 0)
     },
 
+    handleDeletePerson(id) {
+      console.log('Delete Person', id)
+    },
+
+    handleEditPerson(id) {
+      console.log('Edit Person', id)
+      this.stepIndex = 2
+      window.scrollTo(0, 0)
+      this.isEditStop = false
+      this.isEditPerson = true
+    },
+
+    handleEditStop() {
+      this.stepIndex = 1
+      window.scrollTo(0, 0)
+      this.isEditStop = true
+      this.isEditPerson = false
+    },
+
     handleNext() {
-      this.stepIndex = this.stepIndex + 1
+      this.stepIndex =
+        this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
       window.scrollTo(0, 0)
     },
 
     handleCancel() {
       this.stepIndex = 1
+      this.isEditStop = true
+      this.isEditPerson = true
       window.scrollTo(0, 0)
       if (this.onCancel) {
         this.onCancel()
@@ -274,6 +308,8 @@ export default {
     },
 
     handleSubmit() {
+      this.isEditStop = true
+      this.isEditPerson = true
       this.stepIndex = this.confirmationStepIndex
       window.scrollTo(0, 0)
     },

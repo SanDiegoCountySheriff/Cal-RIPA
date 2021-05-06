@@ -119,6 +119,18 @@ export default {
       type: Function,
       default: () => {},
     },
+    onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
+      type: Function,
+      default: () => {},
+    },
     onBack: {
       type: Function,
       default: () => {},

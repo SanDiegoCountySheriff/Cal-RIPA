@@ -1,142 +1,127 @@
 <template>
-  <div class="ripa-form-summary">
-    <v-expansion-panels v-model="panels" accordion flat multiple>
-      <v-expansion-panel>
-        <v-expansion-panel-header>Stop</v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <div>Person Count: 2</div>
+  <v-card class="ripa-form-summary mx-auto" flat>
+    <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
 
-          <div class="tw-mt-8">Date: 2021-05-06</div>
-          <div>Time: 12:37</div>
-          <div>Location</div>
-          <div>Duration (m): 21-30</div>
-          <v-btn class="tw-mt-2" dense outlined x-small>Edit Stop</v-btn>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+    <v-card-text>
+      <v-expansion-panels v-model="panels" accordion multiple>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <div>
+              Stop
+              <v-btn
+                class="tw-ml-4"
+                dense
+                outlined
+                x-small
+                @click="handleEditStop"
+                >Edit</v-btn
+              >
+            </div>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <div>Person Count: 2</div>
 
-      <v-expansion-panel>
-        <v-expansion-panel-header>Person 1</v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <div class="tw-mt-8">Person 1</div>
-          <div>Perceived Race</div>
-          <div>White</div>
-          <div>Perceived Age: 31-60</div>
-          <div>Perceived Gender: Male</div>
-          <div>Perceived LGBT: No</div>
-          <div>Perceived Disability</div>
-          <div>Reason for Stop</div>
-          <div>Traffic Violation</div>
-          <div>Motor Violation</div>
-          <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-          <div>Reason for Stop Explanation</div>
-          <div>Speeding</div>
-          <div>Actions Taken During Stop</div>
-          <div>None</div>
-          <div>Contraband Or Evidence Discovered</div>
-          <div>None</div>
-          <div>Result of Stop</div>
-          <div>Citation for infraction</div>
-          <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-          <div class="tw-flex tw-mt-2">
-            <v-btn dense outlined x-small>Edit Person 1</v-btn>
-            <v-btn class="tw-ml-2" dense outlined x-small
-              >Delete Person 1</v-btn
-            >
-          </div>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+            <div class="tw-mt-8">Date: 2021-05-06</div>
+            <div>Time: 12:37</div>
+            <div>Location</div>
+            <div>Duration (m): 21-30</div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
 
-      <v-expansion-panel>
-        <v-expansion-panel-header>Person 2</v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <div class="tw-mt-8">Person 2</div>
-          <div>Perceived Race</div>
-          <div>White</div>
-          <div>Perceived Age: 31-60</div>
-          <div>Perceived Gender: Male</div>
-          <div>Perceived LGBT: No</div>
-          <div>Perceived Disability</div>
-          <div>Reason for Stop</div>
-          <div>Traffic Violation</div>
-          <div>Motor Violation</div>
-          <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-          <div>Reason for Stop Explanation</div>
-          <div>Speeding</div>
-          <div>Actions Taken During Stop</div>
-          <div>None</div>
-          <div>Contraband Or Evidence Discovered</div>
-          <div>None</div>
-          <div>Result of Stop</div>
-          <div>Citation for infraction</div>
-          <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-          <div class="tw-flex tw-mt-2">
-            <v-btn dense outlined x-small>Edit Person 2</v-btn>
-            <v-btn class="tw-ml-2" dense outlined x-small
-              >Delete Person 2</v-btn
-            >
-          </div>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <div>
+              Person 1
+              <v-btn
+                class="tw-ml-4"
+                dense
+                outlined
+                x-small
+                @click="handleEditPerson($event, 1)"
+                >Edit</v-btn
+              >
+              <v-btn
+                class="tw-ml-2"
+                dense
+                outlined
+                x-small
+                @click="handleDeletePerson($event, 1)"
+                >Delete</v-btn
+              >
+            </div>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <div class="tw-mt-8">Person 1</div>
+            <div>Perceived Race</div>
+            <div>White</div>
+            <div>Perceived Age: 31-60</div>
+            <div>Perceived Gender: Male</div>
+            <div>Perceived LGBT: No</div>
+            <div>Perceived Disability</div>
+            <div>Reason for Stop</div>
+            <div>Traffic Violation</div>
+            <div>Motor Violation</div>
+            <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
+            <div>Reason for Stop Explanation</div>
+            <div>Speeding</div>
+            <div>Actions Taken During Stop</div>
+            <div>None</div>
+            <div>Contraband Or Evidence Discovered</div>
+            <div>None</div>
+            <div>Result of Stop</div>
+            <div>Citation for infraction</div>
+            <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
 
-    <!-- <div>Person Count: 2</div>
-
-      <div class="tw-mt-8">Date: 2021-05-06</div>
-      <div>Time: 12:37</div>
-      <div>Location</div>
-      <div>Duration (m): 21-30</div>
-      <v-btn class="tw-mt-2" dense outlined x-small>Edit Stop</v-btn>
-
-      <div class="tw-mt-8">Person 1</div>
-      <div>Perceived Race</div>
-      <div>White</div>
-      <div>Perceived Age: 31-60</div>
-      <div>Perceived Gender: Male</div>
-      <div>Perceived LGBT: No</div>
-      <div>Perceived Disability</div>
-      <div>Reason for Stop</div>
-      <div>Traffic Violation</div>
-      <div>Motor Violation</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-      <div>Reason for Stop Explanation</div>
-      <div>Speeding</div>
-      <div>Actions Taken During Stop</div>
-      <div>None</div>
-      <div>Contraband Or Evidence Discovered</div>
-      <div>None</div>
-      <div>Result of Stop</div>
-      <div>Citation for infraction</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-      <div class="tw-flex tw-mt-2">
-        <v-btn dense outlined x-small>Edit Person 1</v-btn>
-        <v-btn class="tw-ml-2" dense outlined x-small>Delete Person 1</v-btn>
-      </div>
-
-      <div class="tw-mt-8">Person 2</div>
-      <div>Perceived Race</div>
-      <div>White</div>
-      <div>Perceived Age: 31-60</div>
-      <div>Perceived Gender: Male</div>
-      <div>Perceived LGBT: No</div>
-      <div>Perceived Disability</div>
-      <div>Reason for Stop</div>
-      <div>Traffic Violation</div>
-      <div>Motor Violation</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-      <div>Reason for Stop Explanation</div>
-      <div>Speeding</div>
-      <div>Actions Taken During Stop</div>
-      <div>None</div>
-      <div>Contraband Or Evidence Discovered</div>
-      <div>None</div>
-      <div>Result of Stop</div>
-      <div>Citation for infraction</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
-      <div class="tw-flex tw-mt-2">
-        <v-btn dense outlined x-small>Edit Person 2</v-btn>
-        <v-btn class="tw-ml-2" dense outlined x-small>Delete Person 2</v-btn>
-      </div> -->
-  </div>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <div>
+              Person 2
+              <v-btn
+                class="tw-ml-4"
+                dense
+                outlined
+                x-small
+                @click="handleEditPerson($event, 2)"
+                >Edit</v-btn
+              >
+              <v-btn
+                class="tw-ml-2"
+                dense
+                outlined
+                x-small
+                @click="handleDeletePerson($event, 2)"
+                >Delete</v-btn
+              >
+            </div>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <div class="tw-mt-8">Person 2</div>
+            <div>Perceived Race</div>
+            <div>White</div>
+            <div>Perceived Age: 31-60</div>
+            <div>Perceived Gender: Male</div>
+            <div>Perceived LGBT: No</div>
+            <div>Perceived Disability</div>
+            <div>Reason for Stop</div>
+            <div>Traffic Violation</div>
+            <div>Motor Violation</div>
+            <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
+            <div>Reason for Stop Explanation</div>
+            <div>Speeding</div>
+            <div>Actions Taken During Stop</div>
+            <div>None</div>
+            <div>Contraband Or Evidence Discovered</div>
+            <div>None</div>
+            <div>Result of Stop</div>
+            <div>Citation for infraction</div>
+            <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -149,9 +134,44 @@ export default {
     }
   },
 
+  methods: {
+    handleEditStop(event) {
+      event.stopPropagation()
+      if (this.onEditStop) {
+        this.onEditStop()
+      }
+    },
+
+    handleEditPerson(event, id) {
+      event.stopPropagation()
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
+    },
+
+    handleDeletePerson(event, id) {
+      event.stopPropagation()
+      if (this.onDeletePerson) {
+        this.onDeletePerson(id)
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,
+      default: () => {},
+    },
+    onEditStop: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
+      type: Function,
       default: () => {},
     },
   },
@@ -160,7 +180,6 @@ export default {
 
 <style lang="scss">
 .ripa-form-summary {
-  border: 1px solid #ccc;
-  width: 99%;
+  width: 90%;
 }
 </style>
