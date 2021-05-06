@@ -1,6 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <div>REVIEW FORM SELECTIONS</div>
+    <ripa-form-summary v-model="model"></ripa-form-summary>
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
@@ -30,10 +30,15 @@
 
 <script>
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 
 export default {
   name: 'ripa-form-step6',
 
   mixins: [RipaFormStepMixin],
+
+  components: {
+    RipaFormSummary,
+  },
 }
 </script>
