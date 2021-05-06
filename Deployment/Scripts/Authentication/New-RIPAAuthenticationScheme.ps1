@@ -12,8 +12,8 @@ $ripaAppRegistration = New-RIPAAppRegistration `
     | ConvertFrom-Json
 
 Write-Host "Create AAD Groups"
-$adminGroupId = New-RIPAAADGroup -GroupName "RIPA-ADMINS-TEST" -Description "Some test admin group"
-$userGroupId = New-RIPAAADGroup -GroupName "RIPA-USERS-TEST" -Description "Some test admin group"
+$adminGroupId = New-RIPAAADGroup -GroupName "RIPA-ADMINS-DEV" -Description "Some test admin group"
+$userGroupId = New-RIPAAADGroup -GroupName "RIPA-USERS-DEV" -Description "Some test admin group"
 
 Write-Host "Waiting $waitTime seconds for AAD Groups propogate..."
 Start-Sleep -Seconds $waitTime
