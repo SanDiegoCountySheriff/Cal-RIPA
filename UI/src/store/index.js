@@ -134,7 +134,8 @@ export default new Vuex.Store({
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,
-        isLoggedIn: true,
+        isAuthenticated: true,
+        accessToken: value.accessToken,
       }
     },
   },
