@@ -62,6 +62,17 @@ export default {
       'getAdminStatutes',
     ]),
 
+    async getAdminData() {
+      this.loading = true
+      await Promise.all([
+        this.getAdminBeats(),
+        this.getAdminCities(),
+        this.getAdminSchools(),
+        this.getAdminStatutes(),
+      ])
+      this.loading = false
+    },
+
     async handleDeleteBeat(beat) {
       this.loading = true
       await Promise.all([this.deleteBeat(beat)])
@@ -109,6 +120,10 @@ export default {
       await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
+  },
+
+  created() {
+    this.getAdminData()
   },
 }
 </script>
