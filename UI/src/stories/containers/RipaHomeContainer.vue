@@ -22,6 +22,7 @@
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         @input="handleInput"
       ></ripa-form-template>

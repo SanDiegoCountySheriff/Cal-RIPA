@@ -40,16 +40,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="6"></v-stepper-step>
+            <v-stepper-step step="5"></v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -115,23 +106,7 @@
             </v-stepper-content>
 
             <v-stepper-content step="5">
-              <ripa-subheader
-                :text="getEditPersonText"
-                no-margins
-              ></ripa-subheader>
-
               <ripa-form-step-5
-                v-model="stop"
-                :on-back="handleBack"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :statutes="statutes"
-                @input="handleInput"
-              ></ripa-form-step-5>
-            </v-stepper-content>
-
-            <v-stepper-content step="6">
-              <ripa-form-step-6
                 v-model="stop"
                 :on-add-person="handleAddPerson"
                 :on-back="handleBack"
@@ -141,7 +116,7 @@
                 :on-submit="handleSubmit"
                 :on-cancel="handleCancel"
                 @input="handleInput"
-              ></ripa-form-step-6>
+              ></ripa-form-step-5>
             </v-stepper-content>
           </v-stepper-items>
 
@@ -182,16 +157,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="6"></v-stepper-step>
+            <v-stepper-step step="5"></v-stepper-step>
           </v-stepper-header>
         </v-stepper>
       </template>
@@ -209,7 +175,6 @@ import RipaFormStep2 from '@/components/molecules/RipaFormStep2'
 import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
 import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
-import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 
 export default {
@@ -222,7 +187,6 @@ export default {
     RipaFormStep3,
     RipaFormStep4,
     RipaFormStep5,
-    RipaFormStep6,
     RipaSubheader,
   },
 
@@ -233,7 +197,6 @@ export default {
       step2Validated: true,
       step3Validated: true,
       step4Validated: true,
-      step5Validated: true,
       confirmationStepIndex: 7,
       stop: this.value,
       isEditStop: true,

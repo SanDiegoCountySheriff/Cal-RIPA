@@ -1,4 +1,6 @@
 <script>
+import _ from 'lodash'
+
 export default {
   data() {
     return {
@@ -13,31 +15,9 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        const updatedModel = {
-          actionsTaken: newVal?.actionsTaken
-            ? newVal.actionsTaken
-            : this.viewModel.actionsTaken || {},
-          location: newVal?.location
-            ? newVal.location
-            : this.viewModel.location || {},
-          officer: newVal?.officer
-            ? newVal.officer
-            : this.viewModel.officer || {},
-          person: newVal?.person ? newVal.person : this.viewModel.person || {},
-          stopDate: newVal?.stopDate
-            ? newVal.stopDate
-            : this.viewModel.stopDate || {},
-          stopReason: newVal?.stopReason
-            ? newVal.stopReason
-            : this.viewModel.stopReason || {},
-          stopResult: newVal?.stopResult
-            ? newVal.stopResult
-            : this.viewModel.stopResult || {},
-          updated: newVal?.updated
-            ? newVal.updated
-            : this.viewModel.updated || new Date(),
-        }
-        this.viewModel = Object.assign({}, updatedModel)
+        console.log(newVal)
+        const mergedData = _.merge(this.viewModel, newVal)
+        this.viewModel = Object.assign({}, this.viewModel, mergedData)
         setTimeout(() => {
           this.isFormValid = this.$refs.stepForm.validate()
         }, 500)
