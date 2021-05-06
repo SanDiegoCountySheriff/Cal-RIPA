@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import store from '@/store/index'
 
@@ -13,11 +12,6 @@ const routes = [
     component: RipaHomeContainer,
   },
   {
-    path: '/form',
-    name: 'Form',
-    component: RipaFormContainer,
-  },
-  {
     path: '/admin',
     name: 'Admin',
     component: () =>
@@ -25,7 +19,7 @@ const routes = [
         /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
       ),
     beforeEnter(to, from, next) {
-      if (store.state.isAdmin) {
+      if (store.state.user.isAdmin) {
         next()
       } else {
         next('/')

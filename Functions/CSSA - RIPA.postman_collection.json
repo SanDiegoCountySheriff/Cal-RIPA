@@ -25,9 +25,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{RIPA-Functions}}stop/GetStop/1",
+							"raw": "{{RIPA-Functions}}{{stop}}/GetStop/1",
 							"host": [
-								"{{RIPA-Functions}}stop"
+								"{{RIPA-Functions}}{{stop}}"
 							],
 							"path": [
 								"GetStop",
@@ -54,12 +54,39 @@
 							}
 						],
 						"url": {
-							"raw": "{{RIPA-Functions}}stop/GetStops",
+							"raw": "{{RIPA-Functions}}{{stop}}/GetStops",
 							"host": [
-								"{{RIPA-Functions}}stop"
+								"{{RIPA-Functions}}{{stop}}"
 							],
 							"path": [
 								"GetStops"
+							],
+							"query": [
+								{
+									"key": "StartDate",
+									"value": "03/01/2021",
+									"disabled": true
+								},
+								{
+									"key": "EndDate",
+									"value": "4/30/2021",
+									"disabled": true
+								},
+								{
+									"key": "IsSubmitted",
+									"value": "True",
+									"disabled": true
+								},
+								{
+									"key": "IsError",
+									"value": "True",
+									"disabled": true
+								},
+								{
+									"key": "SubmissionId",
+									"value": "800d971a-60b0-489d-9980-355a56581ded",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -83,7 +110,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"stopText\": \"Test\"\r\n}",
+							"raw": "{\r\n    \"id\": \"4\",\r\n    \"ori\": \"CA0XX0000\",\r\n    \"agency\": \"XY\",\r\n    \"officerID\": \"111101000\",\r\n    \"expYears\": \"23\",\r\n    \"officerAssignment\": {\r\n        \"key\": \"2\",\r\n        \"type\": \"Gang enforcement\",\r\n        \"otherType\": \"\"\r\n    },\r\n    \"contractFundedPosition\": false,\r\n    \"contractCity\": {\r\n        \"listCodes\": null\r\n    },\r\n    \"contractFundedEvent\": false,\r\n    \"contractEvent\": \"\",\r\n    \"date\": \"2021-04-10\",\r\n    \"time\": \"14:57:05\",\r\n    \"stopDateTime\": \"2021-04-10T14:57:05\",\r\n    \"location\": {\r\n        \"toggleLocationOptions\": false,\r\n        \"intersection\": \"Boulder and Broadway\",\r\n        \"blockNumber\": \"1100\",\r\n        \"landMark\": \"\",\r\n        \"streetName\": \"Boulder Blvd\",\r\n        \"highwayExit\": \"\",\r\n        \"city\": {\r\n            \"listCodes\": null\r\n        },\r\n        \"beat\": {\r\n            \"listCodes\": null\r\n        },\r\n        \"school\": false,\r\n        \"schoolName\": {\r\n            \"listCodes\": null\r\n        },\r\n        \"outOfCounty\": false\r\n    },\r\n    \"stopDuration\": 11,\r\n    \"stopInResponseToCFS\": false,\r\n    \"listPersonStopped\": [\r\n        {\r\n            \"id\": \"1\",\r\n            \"isStudent\": false,\r\n            \"listPerceivedRace\": [\r\n                {\r\n                    \"race\": \"Asian\",\r\n                    \"key\": 1\r\n                }\r\n            ],\r\n            \"perceivedLimitedEnglish\": false,\r\n            \"listPerceivedOrKnownDisability\": [\r\n                {\r\n                    \"disability\": \"None\",\r\n                    \"key\": 8\r\n                }\r\n            ],\r\n            \"perceivedAge\": 24,\r\n            \"perceivedGender\": \"Male\",\r\n            \"genderNonconforming\": false,\r\n            \"gender\": 1,\r\n            \"perceivedLgbt\": \"No\",\r\n            \"reasonForStop\": {\r\n                \"key\": 1,\r\n                \"reason\": \"Traffic Violation\",\r\n                \"listDetail\": [\r\n                    {\r\n                        \"reason\": \"Moving Violation\",\r\n                        \"key\": 1\r\n                    }\r\n                ],\r\n                \"listCodes\": [\r\n                    {\r\n                        \"code\": \"54134\",\r\n                        \"text\": \"22349 VC - EXCESSIVE SPEED (M) 54134\"\r\n                    }\r\n                ]\r\n            },\r\n            \"perceptionKnown\": \"\",\r\n            \"reasonForStopExplanation\": \"They were driving so fast\",\r\n            \"listActionTakenDuringStop\": [\r\n                {\r\n                    \"action\": \"None\",\r\n                    \"key\": \"24,na\"\r\n                }\r\n            ],\r\n            \"listContrabandOrEvidenceDiscovered\": [\r\n                {\r\n                    \"contraband\": \"Money\",\r\n                    \"key\": 7\r\n                }\r\n            ],\r\n            \"basisForSearch\": [],\r\n            \"basisForSearchBrief\": \"\",\r\n            \"basisForPropertySeizure\": [],\r\n            \"typeOfPropertySeized\": [],\r\n            \"listResultOfStop\": [\r\n                {\r\n                    \"result\": \"Warning (verbal or written)\",\r\n                    \"listCodes\": [\r\n                        {\r\n                            \"code\": \"54134\",\r\n                            \"text\": \"22349 VC - EXCESSIVE SPEED (M) 54134\"\r\n                        }\r\n                    ],\r\n                    \"key\": 2\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"listSubmission\": [\r\n        {\r\n            \"id\": \"800d971a-60b0-489d-9980-355a56581ded\",\r\n            \"dateSubmitted\": \"05/04/2021\",\r\n            \"Status\":\"Pending\",\r\n            \"FileName\":\"test.json\",\r\n            \"Error\":null\r\n        }\r\n    ],\r\n    \"status\": \"Pending\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -91,41 +118,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{RIPA-Functions}}stop/PutStop/2",
+							"raw": "{{RIPA-Functions}}{{stop}}/PutStop/2",
 							"host": [
-								"{{RIPA-Functions}}stop"
+								"{{RIPA-Functions}}{{stop}}"
 							],
 							"path": [
 								"PutStop",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteStop/{Id}",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}stop/DeleteStop/2",
-							"host": [
-								"{{RIPA-Functions}}stop"
-							],
-							"path": [
-								"DeleteStop",
 								"2"
 							]
 						}
@@ -135,7 +133,7 @@
 			]
 		},
 		{
-			"name": "Statutes",
+			"name": "Domain",
 			"item": [
 				{
 					"name": "Cities",
@@ -157,9 +155,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/GetCities",
+									"raw": "{{RIPA-Functions}}{{domain}}/GetCities",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"GetCities"
@@ -194,9 +192,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/PutCity/Test",
+									"raw": "{{RIPA-Functions}}{{domain}}/PutCity/Test",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"PutCity",
@@ -223,9 +221,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/DeleteCity/Test",
+									"raw": "{{RIPA-Functions}}{{domain}}/DeleteCity/Test",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"DeleteCity",
@@ -257,9 +255,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/GetSchools",
+									"raw": "{{RIPA-Functions}}{{domain}}/GetSchools",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"GetSchools"
@@ -294,9 +292,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/PutSchool/test",
+									"raw": "{{RIPA-Functions}}{{domain}}/PutSchool/test",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"PutSchool",
@@ -323,9 +321,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/DeleteSchool/test",
+									"raw": "{{RIPA-Functions}}{{domain}}/DeleteSchool/test",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"DeleteSchool",
@@ -357,9 +355,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/GetBeats",
+									"raw": "{{RIPA-Functions}}{{domain}}/GetBeats",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"GetBeats"
@@ -394,9 +392,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/PutBeat/1",
+									"raw": "{{RIPA-Functions}}{{domain}}/PutBeat/1",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"PutBeat",
@@ -423,9 +421,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/DeleteBeat/1",
+									"raw": "{{RIPA-Functions}}{{domain}}/DeleteBeat/1",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"DeleteBeat",
@@ -457,9 +455,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/GetStatutes",
+									"raw": "{{RIPA-Functions}}{{domain}}/GetStatutes",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"GetStatutes"
@@ -494,9 +492,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/PutStatute/99999",
+									"raw": "{{RIPA-Functions}}{{domain}}/PutStatute/99999",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"PutStatute",
@@ -523,9 +521,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{RIPA-Functions}}tablestorage/DeleteStatute/99999",
+									"raw": "{{RIPA-Functions}}{{domain}}/DeleteStatute/99999",
 									"host": [
-										"{{RIPA-Functions}}tablestorage"
+										"{{RIPA-Functions}}{{domain}}"
 									],
 									"path": [
 										"DeleteStatute",
@@ -536,135 +534,178 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Templates",
-			"item": [
-				{
-					"name": "GetTemplate/{Id}",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}template/GetTemplate/2",
-							"host": [
-								"{{RIPA-Functions}}template"
-							],
-							"path": [
-								"GetTemplate",
-								"2"
-							]
-						}
-					},
-					"response": []
 				},
 				{
-					"name": "GetTemplates",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}template/GetTemplates",
-							"host": [
-								"{{RIPA-Functions}}template"
-							],
-							"path": [
-								"GetTemplates"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PutTemplate/{Id}",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
-							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"templateText\": \"Test\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Templates",
+					"item": [
+						{
+							"name": "GetTemplate/{Id}",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}{{domain}}/GetTemplate/default",
+									"host": [
+										"{{RIPA-Functions}}{{domain}}"
+									],
+									"path": [
+										"GetTemplate",
+										"default"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{RIPA-Functions}}template/PutTemplate/2",
-							"host": [
-								"{{RIPA-Functions}}template"
-							],
-							"path": [
-								"PutTemplate",
-								"2"
-							]
+						{
+							"name": "PutTemplate",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"templateText\": \"test\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}{{domain}}/PutTemplate/default",
+									"host": [
+										"{{RIPA-Functions}}{{domain}}"
+									],
+									"path": [
+										"PutTemplate",
+										"default"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetTemplates",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}{{domain}}/GetTemplates",
+									"host": [
+										"{{RIPA-Functions}}{{domain}}"
+									],
+									"path": [
+										"GetTemplates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteTemplate",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{RIPA-Functions}}{{domain}}/DeleteTemplate/default",
+									"host": [
+										"{{RIPA-Functions}}{{domain}}"
+									],
+									"path": [
+										"DeleteTemplate",
+										"default"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "DeleteTemplate/{Id}",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Ocp-Apim-Subscription-Key",
-								"value": " {{sub-key}}",
-								"type": "text"
+					"name": "Upload",
+					"item": [
+						{
+							"name": "PostUpload",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Ocp-Apim-Subscription-Key",
+										"value": " {{sub-key}}",
+										"type": "text"
+									},
+									{
+										"key": "Ocp-Apim-Trace",
+										"value": " true",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/LPOPE/source/repos/cssa_import/sdcs-look-up-table-2021.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{RIPA-Functions}}{{domain}}/PostUpload",
+									"host": [
+										"{{RIPA-Functions}}{{domain}}"
+									],
+									"path": [
+										"PostUpload"
+									]
+								}
 							},
-							{
-								"key": "Ocp-Apim-Trace",
-								"value": " true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{RIPA-Functions}}template/DeleteTemplate/2",
-							"host": [
-								"{{RIPA-Functions}}template"
-							],
-							"path": [
-								"DeleteTemplate",
-								"2"
-							]
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -697,9 +738,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{RIPA-Functions}}pii/PostCheckPII",
+							"raw": "{{RIPA-Functions}}{{textanalytics}}/PostCheckPII",
 							"host": [
-								"{{RIPA-Functions}}pii"
+								"{{RIPA-Functions}}{{textanalytics}}"
 							],
 							"path": [
 								"PostCheckPII"
@@ -734,9 +775,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{RIPA-Functions}}pii/PostCheckPIIBeta",
+							"raw": "{{RIPA-Functions}}{{textanalytics}}/PostCheckPIIBeta",
 							"host": [
-								"{{RIPA-Functions}}pii"
+								"{{RIPA-Functions}}{{textanalytics}}"
 							],
 							"path": [
 								"PostCheckPIIBeta"
@@ -767,9 +808,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{RIPA-Functions}}userprofile/GetUser/2",
+							"raw": "{{RIPA-Functions}}{{userprofile}}/GetUser/2",
 							"host": [
-								"{{RIPA-Functions}}userprofile"
+								"{{RIPA-Functions}}{{userprofile}}"
 							],
 							"path": [
 								"GetUser",
@@ -796,9 +837,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{RIPA-Functions}}userprofile/GetUsers",
+							"raw": "{{RIPA-Functions}}{{userprofile}}/GetUsers",
 							"host": [
-								"{{RIPA-Functions}}userprofile"
+								"{{RIPA-Functions}}{{userprofile}}"
 							],
 							"path": [
 								"GetUsers"
@@ -833,9 +874,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{RIPA-Functions}}userprofile/PutUser/1",
+							"raw": "{{RIPA-Functions}}{{userprofile}}/PutUser/1",
 							"host": [
-								"{{RIPA-Functions}}userprofile"
+								"{{RIPA-Functions}}{{userprofile}}"
 							],
 							"path": [
 								"PutUser",
@@ -862,13 +903,142 @@
 							}
 						],
 						"url": {
-							"raw": "{{RIPA-Functions}}userprofile/DeleteUser/1",
+							"raw": "{{RIPA-Functions}}{{userprofile}}/DeleteUser/1",
 							"host": [
-								"{{RIPA-Functions}}userprofile"
+								"{{RIPA-Functions}}{{userprofile}}"
 							],
 							"path": [
 								"DeleteUser",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Submission",
+			"item": [
+				{
+					"name": "PostSubmit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"StopIds\": [\r\n        \"1\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RIPA-Functions}}{{submission}}/PostSubmit",
+							"host": [
+								"{{RIPA-Functions}}{{submission}}"
+							],
+							"path": [
+								"PostSubmit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSubmission/{Id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}{{submission}}/GetSubmission/800d971a-60b0-489d-9980-355a56581ded",
+							"host": [
+								"{{RIPA-Functions}}{{submission}}"
+							],
+							"path": [
+								"GetSubmission",
+								"800d971a-60b0-489d-9980-355a56581ded"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSubmissions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}{{submission}}/GetSubmissions",
+							"host": [
+								"{{RIPA-Functions}}{{submission}}"
+							],
+							"path": [
+								"GetSubmissions"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteSubmission/{Id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": " {{sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"value": " true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{RIPA-Functions}}stop/DeleteSubmission/2",
+							"host": [
+								"{{RIPA-Functions}}stop"
+							],
+							"path": [
+								"DeleteSubmission",
+								"2"
 							]
 						}
 					},

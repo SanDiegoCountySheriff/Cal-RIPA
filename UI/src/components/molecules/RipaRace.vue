@@ -13,6 +13,7 @@
           <ripa-check-group
             v-model="model.person.perceivedRace"
             :items="raceItems"
+            :rules="raceRules"
             @input="handleInput"
           >
           </ripa-check-group>
@@ -51,6 +52,11 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    raceRules() {
+      const options = this.viewModel.person.perceivedRace
+      return [options.length > 0 || 'At least one race is required']
     },
   },
 

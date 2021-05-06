@@ -23,6 +23,7 @@
             <ripa-radio-group
               v-model="model.stopReason.trafficViolation"
               :items="trafficViolationItems"
+              :rules="trafficViolationRules"
               @input="handleInput"
             ></ripa-radio-group>
 
@@ -35,26 +36,29 @@
               item-text="fullName"
               item-value="code"
               label="Offense Code"
-              :items="offenseCodes"
+              :items="statutes"
+              :rules="trafficViolationCodeRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
           <template v-if="model.stopReason.reasonForStop === 2">
             <ripa-check-group
-              v-model="model.stopReason.reasonSuspicion"
+              v-model="model.stopReason.reasonableSuspicion"
               :items="reasonableSuspicionItems"
+              :rules="reasonableSuspicionRules"
               @input="handleInput"
             ></ripa-check-group>
 
             <ripa-autocomplete
-              v-model="model.reasonSuspicionCode"
+              v-model="model.stopReason.reasonableSuspicionCode"
               hint="Select 1 Offense Code (required)"
               persistent-hint
               item-text="fullName"
               item-value="code"
               label="Offense Code"
-              :items="offenseCodes"
+              :items="statutes"
+              :rules="reasonableSuspicionCodeRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -128,7 +132,7 @@ export default {
   data() {
     return {
       valid: true,
-      reasonRules: [v => !!v || 'Reason is required'],
+      reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
@@ -142,9 +146,10 @@ export default {
           trafficViolation: this.value?.stopReason?.trafficViolation || null,
           trafficViolationCode:
             this.value?.stopReason?.trafficViolationCode || null,
-          reasonSuspicion: this.value?.stopReason?.reasonSuspicion || [],
-          reasonSuspicionCode:
-            this.value?.stopReason?.reasonSuspicionCode || null,
+          reasonableSuspicion:
+            this.value?.stopReason?.reasonableSuspicion || [],
+          reasonableSuspicionCode:
+            this.value?.stopReason?.reasonableSuspicionCode || null,
           searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
           searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
           reasonForStopExplanation:
@@ -159,6 +164,35 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    trafficViolationRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 1
+      const options = this.viewModel.stopReason.trafficViolation
+      return [
+        (checked && options !== null) || 'A traffic violation type is required',
+      ]
+    },
+
+    trafficViolationCodeRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 1
+      const code = this.viewModel.stopReason.trafficViolationCode
+      return [(checked && code !== null) || 'A offense code is required']
+    },
+
+    reasonableSuspicionRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 2
+      const options = this.viewModel.stopReason.reasonableSuspicion
+      return [
+        (checked && options !== null && options.length > 0) ||
+          'A reasonable suspicion type is required',
+      ]
+    },
+
+    reasonableSuspicionCodeRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 2
+      const code = this.viewModel.stopReason.reasonableSuspicionCode
+      return [(checked && code !== null) || 'An offense code is required']
     },
   },
 

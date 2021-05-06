@@ -1,12 +1,13 @@
 <template>
   <div class="ripa-form-template">
-    {{ stop }}
     <ripa-form-wrapper
       v-model="stop"
       :beats="beats"
-      :cities="cities"
+      :county-cities="countyCities"
+      :non-county-cities="nonCountyCities"
       :schools="schools"
-      :offense-codes="offenseCodes"
+      :statutes="statutes"
+      :on-cancel="onCancel"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -24,27 +25,31 @@ export default {
 
   data() {
     return {
-      stop: {
-        stopDate: {
-          duration: 1,
-        },
-      },
+      stop: this.value,
     }
   },
 
   methods: {
     handleInput(newVal) {
       this.stop = newVal
-      this.$forceUpdate()
+      this.$emit('input', this.stop)
     },
   },
 
   props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
     beats: {
       type: Array,
       default: () => [],
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => [],
+    },
+    nonCountyCities: {
       type: Array,
       default: () => [],
     },
@@ -52,9 +57,13 @@ export default {
       type: Array,
       default: () => [],
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
+    },
+    onCancel: {
+      type: Function,
+      default: () => {},
     },
   },
 }

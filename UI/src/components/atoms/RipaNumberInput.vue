@@ -5,6 +5,7 @@
     :label="label"
     :hint="hint"
     :rules="rules"
+    :min="1"
   ></v-text-field>
 </template>
 

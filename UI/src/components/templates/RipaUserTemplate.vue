@@ -1,5 +1,5 @@
 <template>
-  <ripa-user-wrapper :value="officer" @input="onUpdate"></ripa-user-wrapper>
+  <ripa-user-wrapper :value="stop" @input="onUpdate"></ripa-user-wrapper>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
   },
 
   props: {
-    officer: {
+    stop: {
       type: Object,
       default: () => {},
     },

@@ -1,5 +1,10 @@
 <template>
-  <v-text-field v-model="model" :label="label" :hint="hint"></v-text-field>
+  <v-text-field
+    v-model="model"
+    :label="label"
+    :hint="hint"
+    :rules="rules"
+  ></v-text-field>
 </template>
 
 <script>
@@ -42,6 +47,10 @@ export default {
     hint: {
       type: String,
       default: '',
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

@@ -373,3 +373,4 @@ yarn-error.log*
 /TestResults/*
 /packages/*
 .DS_Store
+Functions/RIPA.Functions.Stop/Properties/launchSettings.json

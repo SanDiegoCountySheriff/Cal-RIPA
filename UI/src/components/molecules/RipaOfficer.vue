@@ -17,6 +17,7 @@
               v-model="model.officer.editOfficer"
               label="Edit Officer Experience and Assignment"
               :max-width="350"
+              :rules="editOfficerRules"
               @input="handleInput"
             ></ripa-switch>
           </template>
@@ -26,7 +27,7 @@
       <template v-if="!toggle || (toggle && model.officer.editOfficer)">
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
-            <div class="tw-mr-4">
+            <div class="md:tw-mr-4">
               <ripa-number-input
                 v-model="model.officer.yearsExperience"
                 label="Years of Experience"
@@ -57,6 +58,7 @@
               <ripa-text-input
                 v-model="model.officer.otherType"
                 label="Other Type"
+                :rules="otherTypeRules"
                 @input="handleInput"
               >
               </ripa-text-input>
@@ -95,7 +97,7 @@ export default {
       assignmentItems: OFFICER_ASSIGNMENTS,
       viewModel: {
         officer: {
-          editOfficer: this.value?.officer?.editOfficer || false,
+          editOfficer: this.value?.officer?.editOfficer || null,
           yearsExperience: this.value?.officer?.yearsExperience || null,
           assignment: this.value?.officer?.assignment || null,
           otherType: this.value?.officer?.otherType || null,
@@ -109,6 +111,29 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    editOfficerRules() {
+      const checked = this.viewModel.officer.editOfficer
+      const yearsExperience = this.viewModel.officer.yearsExperience
+      const assignment = this.viewModel.officer.assignment
+      return [
+        checked ||
+          (!checked && yearsExperience > 0 && assignment !== null) ||
+          'Years experience and an assignment is required',
+      ]
+    },
+
+    otherTypeRules() {
+      const assignment = this.viewModel.officer.assignment
+      const otherType = this.viewModel.officer.otherType
+      if (assignment !== 10) {
+        return []
+      }
+
+      return [
+        (otherType && otherType.length > 0) || 'A description is required',
+      ]
     },
   },
 
