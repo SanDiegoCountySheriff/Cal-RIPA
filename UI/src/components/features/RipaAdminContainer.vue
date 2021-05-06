@@ -64,17 +64,6 @@ export default {
 
     async handleDeleteBeat(beat) {
       this.loading = true
-      await Promise.all([
-        this.getAdminBeats(),
-        this.getAdminCities(),
-        this.getAdminSchools(),
-        this.getAdminStatutes(),
-      ])
-      this.loading = false
-    },
-
-    async handleDeleteBeat(beat) {
-      this.loading = true
       await Promise.all([this.deleteBeat(beat)])
       this.loading = false
     },
