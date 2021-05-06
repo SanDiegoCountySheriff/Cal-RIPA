@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-actions-taken v-model="model"></ripa-actions-taken>
     <ripa-contraband v-model="model"></ripa-contraband>
-    <ripa-stop-result v-model="model" :statutes="statutes"></ripa-stop-result>
 
     <v-spacer></v-spacer>
 
@@ -29,7 +28,6 @@
 import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
 import RipaContraband from '@/components/molecules/RipaContraband'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaStopResult from '@/components/molecules/RipaStopResult'
 
 export default {
   name: 'ripa-form-step4',
@@ -39,7 +37,6 @@ export default {
   components: {
     RipaActionsTaken,
     RipaContraband,
-    RipaStopResult,
   },
 
   props: {

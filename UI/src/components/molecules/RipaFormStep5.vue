@@ -1,11 +1,7 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-form-summary
-      v-model="model"
-      :on-edit-stop="onEditStop"
-      :on-edit-person="onEditPerson"
-      :on-delete-person="onDeletePerson"
-    ></ripa-form-summary>
+    <ripa-stop-result v-model="model" :statutes="statutes"></ripa-stop-result>
+
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
@@ -15,32 +11,36 @@
       </v-alert>
     </template>
 
-    <div class="tw-flex tw-mt-4 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-2" @click="handleAddPerson">
-        <v-icon left> mdi-plus </v-icon>
-        Add Person
-      </v-btn>
-    </div>
     <div class="tw-flex tw-mt-8 tw-justify-center">
+      <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+        Back
+      </v-btn>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
+      <v-btn color="primary" @click="handleNext"> Next </v-btn>
     </div>
   </v-form>
 </template>
 
 <script>
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaFormSummary from '@/components/molecules/RipaFormSummary'
+import RipaStopResult from '@/components/molecules/RipaStopResult'
 
 export default {
-  name: 'ripa-form-step5',
+  name: 'ripa-form-step4',
 
   mixins: [RipaFormStepMixin],
 
   components: {
-    RipaFormSummary,
+    RipaStopResult,
+  },
+
+  props: {
+    statutes: {
+      type: Array,
+      default: () => [],
+    },
   },
 }
 </script>
