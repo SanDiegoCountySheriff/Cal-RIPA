@@ -21,6 +21,7 @@
             <ripa-check-group
               v-model="model.actionsTaken.contrabandOrEvidenceDiscovered"
               :items="contrabandItems"
+              :rules="contrabandRules"
               @input="handleInput"
             >
             </ripa-check-group>
@@ -65,6 +66,15 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    contrabandRules() {
+      const checked = this.viewModel.actionsTaken.anyContraband
+      const options = this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered
+      return [
+        (checked && options.length > 0) ||
+          'At least one contraband is required',
+      ]
     },
   },
 

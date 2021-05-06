@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
-import RipaLoginCheckContainer from '@/components/features/RipaLoginCheckContainer'
 import store from '@/store/index'
 import AuthService from '../services/auth'
 
@@ -13,16 +11,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
-  },
-  {
-    path: '/form',
-    name: 'Form',
-    component: RipaFormContainer,
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: RipaLoginCheckContainer,
   },
   {
     path: '/admin',

@@ -9,7 +9,6 @@
               :complete="stepIndex > 1"
               step="1"
             >
-              1
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -19,7 +18,6 @@
               :complete="stepIndex > 2"
               step="2"
             >
-              2
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -29,7 +27,6 @@
               :complete="stepIndex > 3"
               step="3"
             >
-              3
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -39,7 +36,6 @@
               :complete="stepIndex > 4"
               step="4"
             >
-              4
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -49,12 +45,11 @@
               :complete="stepIndex > 5"
               step="5"
             >
-              5
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"> 6 </v-stepper-step>
+            <v-stepper-step step="6"></v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -64,7 +59,8 @@
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
                 :beats="beats"
-                :cities="cities"
+                :county-cities="countyCities"
+                :non-county-cities="nonCountyCities"
                 :schools="schools"
                 @input="handleInput"
               ></ripa-form-step-1>
@@ -86,7 +82,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-3>
             </v-stepper-content>
@@ -97,7 +93,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-4>
             </v-stepper-content>
@@ -108,7 +104,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
-                :offense-codes="offenseCodes"
+                :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-5>
             </v-stepper-content>
@@ -172,7 +168,6 @@ export default {
     handleInput(newVal) {
       const mergedStop = _.merge(this.stop, newVal)
       this.stop = mergedStop
-      // this.$forceUpdate()
       this.$emit('input', mergedStop)
     },
 
@@ -187,7 +182,9 @@ export default {
     },
 
     handleCancel() {
-      console.log('cancel form')
+      if (this.onCancel) {
+        this.onCancel()
+      }
     },
 
     handleSubmit() {
@@ -221,14 +218,30 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
       type: Array,
       default: () => {},
     },
-    offenseCodes: {
+    nonCountyCities: {
       type: Array,
+      default: () => {},
+    },
+    statutes: {
+      type: Array,
+      default: () => {},
+    },
+    onCancel: {
+      type: Function,
       default: () => {},
     },
   },
 }
 </script>
+
+<style lang="scss">
+@media only screen and (max-width: 600px) {
+  .v-stepper__content {
+    padding: 16px 16px 8px;
+  }
+}
+</style>

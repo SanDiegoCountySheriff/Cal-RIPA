@@ -11,7 +11,7 @@
 
 <script>
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 
 export default {
@@ -28,26 +28,24 @@ export default {
   },
 
   computed: {
-    ...mapState(['user']),
-    ...mapGetters([
-      'isOnline',
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-    ]),
+    ...mapGetters(['isAdmin', 'isAuthenticated', 'isOnline']),
   },
 
   methods: {
-    ...mapActions(['getBeats', 'getCities', 'getSchools', 'getStatutes']),
+    ...mapActions([
+      'getFormBeats',
+      'getFormCities',
+      'getFormSchools',
+      'getFormStatutes',
+    ]),
 
-    async getAdminData() {
+    async getFormData() {
       this.loading = true
       await Promise.all([
-        this.getBeats(),
-        this.getCities(),
-        this.getSchools(),
-        this.getStatutes(),
+        this.getFormBeats(),
+        this.getFormCities(),
+        this.getFormSchools(),
+        this.getFormStatutes(),
       ])
       this.loading = false
     },
@@ -71,22 +69,31 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (cacheDate !== null) {
+      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
-          localStorage.removeItem('ripa_beats')
-          localStorage.removeItem('ripa_cities')
-          localStorage.removeItem('ripa_schools')
-          localStorage.removeItem('ripa_statutes')
-          localStorage.setItem('ripa_cache_date', new Date())
+          this.clearLocalStorage()
         }
       }
+
+      if (cacheDate === null) {
+        this.clearLocalStorage()
+      }
+    },
+
+    clearLocalStorage() {
+      localStorage.removeItem('ripa_beats')
+      localStorage.removeItem('ripa_county_cities')
+      localStorage.removeItem('ripa_non_county_cities')
+      localStorage.removeItem('ripa_schools')
+      localStorage.removeItem('ripa_statutes')
+      localStorage.setItem('ripa_cache_date', new Date())
     },
   },
 
   created() {
     this.checkCache()
-    this.getAdminData()
+    this.getFormData()
   },
 }
 </script>

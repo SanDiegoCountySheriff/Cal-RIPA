@@ -21,6 +21,7 @@
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
               :items="disabilityItems"
+              :rules="disabilityRules"
               @input="handleInput"
             >
             </ripa-check-group>
@@ -65,6 +66,15 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    disabilityRules() {
+      const checked = this.viewModel.person.anyDisabilities
+      const options = this.viewModel.person.perceivedOrKnownDisability
+      return [
+        (checked && options.length > 0) ||
+          'At least one disability is required',
+      ]
     },
   },
 

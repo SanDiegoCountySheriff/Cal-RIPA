@@ -21,6 +21,7 @@
               item-value="cdsCode"
               label="School"
               :items="schools"
+              :rules="schoolRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -34,10 +35,11 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              :rules="blockNumberRules"
               @input="debounceInput"
             >
             </ripa-number-input>
@@ -49,6 +51,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :rules="streetNameRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -63,6 +66,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :rules="intersectionRules"
             @input="handleInput"
           >
           </ripa-text-input>
@@ -80,6 +84,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :rules="highwayRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -88,7 +93,8 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
-              label="Road markerk, landmark, or other"
+              label="Road marker, landmark, or other"
+              :rules="landmarkRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -107,14 +113,16 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-autocomplete
               v-model="model.location.city"
               hint="Select 1 City (required)"
-              item-text="name"
-              item-value="name"
+              persistent-hint
+              item-text="fullName"
+              item-value="id"
               label="City"
-              :items="cities"
+              :items="getCities"
+              :rules="cityRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -125,11 +133,13 @@
             <ripa-autocomplete
               v-model="model.location.beat"
               hint="Select 1 Beat (required)"
+              persistent-hint
               item-text="fullName"
               item-value="id"
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
+              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -187,6 +197,91 @@ export default {
         return this.viewModel
       },
     },
+
+    getCities() {
+      const checked = this.viewModel.location.outOfCounty
+      return checked ? this.nonCountyCities : this.countyCities
+    },
+
+    schoolRules() {
+      const checked = this.viewModel.location.isSchool
+      const school = this.viewModel.location.school
+      return [(checked && school !== null) || 'A school is required']
+    },
+
+    cityRules() {
+      const city = this.viewModel.location.city
+      return [city !== null || 'A city is required']
+    },
+
+    beatRules() {
+      const beat = this.viewModel.location.beat
+      return [beat !== null || 'A beat is required']
+    },
+
+    blockNumberRules() {
+      const blockNumber = this.viewModel.location.blockNumber
+      return [
+        this.isLocationOptionsFilled ||
+          blockNumber !== null ||
+          'A block number is required',
+      ]
+    },
+
+    streetNameRules() {
+      const streetName = this.viewModel.location.streetName
+      return [
+        this.isLocationOptionsFilled ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+      ]
+    },
+
+    intersectionRules() {
+      const intersection = this.viewModel.location.intersection
+      return [
+        this.isLocationOptionsFilled ||
+          (intersection && intersection.length > 0) ||
+          'An intersection is required',
+      ]
+    },
+
+    highwayRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && highwayExit && highwayExit.length > 0) ||
+          'A highway and closet exit is required',
+      ]
+    },
+
+    landmarkRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const landmark = this.viewModel.location.landmark
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && landmark && landmark.length > 0) ||
+          'A road marker, landmark, or other description is required',
+      ]
+    },
+
+    isLocationOptionsFilled() {
+      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.viewModel.location.streetName
+      const intersection = this.viewModel.location.intersection
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      const landmark = this.viewModel.location.landmark
+
+      const isValid =
+        (blockNumber !== null && streetName && streetName.length > 0) ||
+        (intersection && intersection.length > 0) ||
+        (checked && highwayExit && highwayExit.length > 0) ||
+        (checked && landmark && landmark.length > 0)
+
+      return isValid
+    },
   },
 
   methods: {
@@ -203,6 +298,7 @@ export default {
     updateBeatsModel() {
       if (this.viewModel.location.outOfCounty) {
         this.viewModel.location.beat = 999
+        this.viewModel.location.city = null
       }
 
       if (
@@ -210,6 +306,7 @@ export default {
         this.viewModel.location.beat === 999
       ) {
         this.viewModel.location.beat = null
+        this.viewModel.location.city = null
       }
     },
   },
@@ -227,7 +324,11 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => {},
+    },
+    nonCountyCities: {
       type: Array,
       default: () => {},
     },

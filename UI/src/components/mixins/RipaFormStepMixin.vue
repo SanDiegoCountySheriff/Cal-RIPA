@@ -4,7 +4,7 @@ import _ from 'lodash'
 export default {
   data() {
     return {
-      isValid: true,
+      isFormValid: true,
       viewModel: this.value || {},
     }
   },
@@ -17,7 +17,9 @@ export default {
       set(newVal) {
         const mergedData = _.merge(this.viewModel, newVal)
         this.viewModel = mergedData
-        // this.$forceUpdate()
+        setTimeout(() => {
+          this.isFormValid = this.$refs.stepForm.validate()
+        }, 500)
         this.$emit('input', this.viewModel)
       },
     },
@@ -31,8 +33,8 @@ export default {
     },
 
     handleNext() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
+      this.isFormValid = this.$refs.stepForm.validate()
+      if (!this.isFormValid) {
         return
       }
       this.$emit('input', this.viewModel)
@@ -42,8 +44,8 @@ export default {
     },
 
     handleSubmit() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
+      this.isFormValid = this.$refs.stepForm.validate()
+      if (!this.isFormValid) {
         return
       }
       this.$emit('input', this.viewModel)
@@ -78,7 +80,11 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => {},
+    },
+    nonCountyCities: {
       type: Array,
       default: () => {},
     },

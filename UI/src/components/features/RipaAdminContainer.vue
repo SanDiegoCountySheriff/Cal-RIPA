@@ -1,12 +1,12 @@
 <template>
   <ripa-admin-template
     :loading="loading"
-    :beats="mappedBeats"
-    :cities="mappedCities"
-    :schools="mappedSchools"
-    :statutes="mappedStatutes"
-    :stops="mappedStops"
-    :submissions="mappedSubmissions"
+    :beats="mappedAdminBeats"
+    :cities="mappedAdminCities"
+    :schools="mappedAdminSchools"
+    :statutes="mappedAdminStatutes"
+    :stops="mappedAdminStops"
+    :submissions="mappedAdminSubmissions"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -20,7 +20,7 @@
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -36,14 +36,13 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['isAdmin']),
     ...mapGetters([
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-      'mappedStops',
-      'mappedSubmissions',
+      'mappedAdminBeats',
+      'mappedAdminCities',
+      'mappedAdminSchools',
+      'mappedAdminStatutes',
+      'mappedAdminStops',
+      'mappedAdminSubmissions',
     ]),
   },
 
@@ -57,7 +56,22 @@ export default {
       'editCity',
       'editSchool',
       'editStatute',
+      'getAdminBeats',
+      'getAdminCities',
+      'getAdminSchools',
+      'getAdminStatutes',
     ]),
+
+    async getAdminData() {
+      this.loading = true
+      await Promise.all([
+        this.getAdminBeats(),
+        this.getAdminCities(),
+        this.getAdminSchools(),
+        this.getAdminStatutes(),
+      ])
+      this.loading = false
+    },
 
     async handleDeleteBeat(beat) {
       this.loading = true
@@ -106,6 +120,10 @@ export default {
       await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
+  },
+
+  created() {
+    this.getAdminData()
   },
 }
 </script>
