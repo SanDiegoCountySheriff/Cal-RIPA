@@ -21,7 +21,6 @@ namespace RIPA.Functions.Submission.Functions
         private readonly ISftpService _sftpService;
         private readonly IStopService _stopService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-
         private readonly string _sftpInputPath;
 
         public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService)
@@ -29,6 +28,7 @@ namespace RIPA.Functions.Submission.Functions
             _sftpService = sftpService;
             _stopService = stopService;
             _submissionCosmosDbService = submissionCosmosDbService;
+
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
         }
 
@@ -59,6 +59,7 @@ namespace RIPA.Functions.Submission.Functions
 
             List<string> failedStopIds = new List<string>();
 
+
             foreach (var stopId in submitRequest.StopIds)
             {
                 try
@@ -74,6 +75,7 @@ namespace RIPA.Functions.Submission.Functions
                     log.LogError($"Failure Submitting Stop with id {stopId}: {ex.Message}");
                     failedStopIds.Add(stopId);
                 }
+
             }
 
             return new OkObjectResult(new { failedStopIds });
@@ -83,7 +85,6 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
-
 
 
     }

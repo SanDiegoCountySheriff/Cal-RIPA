@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
+
 {
     public class Submission
     {
@@ -42,6 +43,7 @@ namespace RIPA.Functions.Common.Models
     {
         public string id { get; set; }
         public string Ori { get; set; }
+
         public string Agency { get; set; }
         public string OfficerID { get; set; }
         public string ExpYears { get; set; }
