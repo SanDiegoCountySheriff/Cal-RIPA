@@ -328,6 +328,41 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopReason: newVal.stopReason || null,
+        stopResult: {
+          anyActionsTaken: newVal.stopResult?.anyActionsTaken || false,
+          actionsTakenDuringStop1:
+            newVal.stop?.actionsTakenDuringStop1 || false,
+          actionsTakenDuringStop2:
+            newVal.stop?.actionsTakenDuringStop2 || false,
+          actionsTakenDuringStop3:
+            newVal.stop?.actionsTakenDuringStop3 || false,
+          actionsTakenDuringStop4:
+            newVal.stop?.actionsTakenDuringStop4 || false,
+          actionsTakenDuringStop5:
+            newVal.stop?.actionsTakenDuringStop5 || false,
+          actionsTakenDuringStop6:
+            newVal.stop?.actionsTakenDuringStop6 || false,
+          actionsTakenDuringStop7:
+            newVal.stop?.actionsTakenDuringStop7 || false,
+          actionsTakenDuringStop8:
+            newVal.stop?.actionsTakenDuringStop8 || false,
+          actionsTakenDuringStop9:
+            newVal.stop?.actionsTakenDuringStop9 || false,
+          actionsTakenDuringStop10:
+            newVal.stop?.actionsTakenDuringStop10 || false,
+          warningCodes: newVal.stopResult?.warningCodes || [],
+          citationCodes: newVal.stopResult?.citationCodes || [],
+          infieldCodes: newVal.stopResult?.infieldCodes || [],
+          custodialArrestCodes: newVal.stopResult?.custodialArrestCodes || [],
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

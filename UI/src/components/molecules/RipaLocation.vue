@@ -311,6 +311,26 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        location: {
+          isSchool: newVal?.location?.isSchool || false,
+          school: newVal?.location?.school || null,
+          blockNumber: newVal?.location?.blockNumber || null,
+          streetName: newVal?.location?.streetName || null,
+          intersection: newVal?.location?.intersection || null,
+          moreLocationOptions: newVal?.location?.moreLocationOptions || false,
+          highwayExit: newVal?.location?.highwayExit || null,
+          landmark: newVal?.location?.landmark || null,
+          outOfCounty: newVal?.location?.outOfCounty || false,
+          city: newVal?.location?.city || null,
+          beat: newVal?.location?.beat || null,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

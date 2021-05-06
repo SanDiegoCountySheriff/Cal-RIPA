@@ -220,6 +220,26 @@ export default {
   },
 
   watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopReason: {
+          reasonForStop: newVal?.stopReason?.reasonForStop || null,
+          trafficViolation: newVal?.stopReason?.trafficViolation || null,
+          trafficViolationCode:
+            newVal?.stopReason?.trafficViolationCode || null,
+          reasonableSuspicion: newVal?.stopReason?.reasonableSuspicion || [],
+          reasonableSuspicionCode:
+            newVal?.stopReason?.reasonableSuspicionCode || null,
+          searchOfPerson: newVal?.stopReason?.searchOfPerson || null,
+          searchOfProperty: newVal?.stopReason?.searchOfProperty || null,
+          reasonForStopExplanation:
+            newVal?.stopReason?.reasonForStopExplanation || null,
+          reasonForStopPiiFound:
+            newVal?.stopReason?.reasonForStopPiiFound || false,
+        },
+      }
+    },
+
     'value.stopReason.reasonForStopPiiFound': {
       handler(newVal) {
         this.viewModel.stopReason.reasonForStopPiiFound = newVal

@@ -333,9 +333,33 @@ export default {
     },
   },
 
+  mounted() {
+    this.updateSearchModel()
+  },
+
   watch: {
     value(newVal) {
-      this.viewModel.stopReason = newVal.stopReason || null
+      this.viewModel = {
+        stopReason: newVal?.stopReason || null,
+        actionsTaken: {
+          anyActionsTaken: newVal?.actionsTaken?.anyActionsTaken || false,
+          actionsTakenDuringStop:
+            newVal?.actionsTaken?.actionsTakenDuringStop || [],
+          personSearchConsentGiven:
+            newVal?.actionsTaken?.personSearchConsentGiven || false,
+          propertySearchConsentGiven:
+            newVal?.actionsTaken?.propertySearchConsentGiven || false,
+          basisForSearch: newVal?.actionsTaken?.basisForSearch || [],
+          basisForSearchExplanation:
+            newVal?.actionsTaken?.basisForSearchExplanation || null,
+          propertyWasSeized: newVal?.actionsTaken?.propertyWasSeized || false,
+          basisForPropertySeizure:
+            newVal?.actionsTaken?.basisForPropertySeizure || [],
+          typesOfPropertySeized:
+            newVal?.actionsTaken?.typesOfPropertySeized || [],
+        },
+      }
+
       this.updateSearchModel()
     },
 
@@ -344,10 +368,6 @@ export default {
         this.viewModel.actionsTaken.basisForSearchPiiFound = newVal
       },
     },
-  },
-
-  mounted() {
-    this.updateSearchModel()
   },
 
   props: {

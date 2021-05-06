@@ -85,6 +85,18 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        actionsTaken: {
+          anyContraband: newVal?.actionsTaken?.anyContraband || false,
+          contrabandOrEvidenceDiscovered:
+            newVal?.actionsTaken?.contrabandOrEvidenceDiscovered || [],
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

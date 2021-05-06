@@ -67,6 +67,11 @@
             </v-stepper-content>
 
             <v-stepper-content step="2">
+              <ripa-subheader
+                :text="getEditPersonText"
+                no-margins
+              ></ripa-subheader>
+
               <ripa-form-step-2
                 v-model="stop"
                 :on-back="handleBack"
@@ -77,6 +82,11 @@
             </v-stepper-content>
 
             <v-stepper-content step="3">
+              <ripa-subheader
+                :text="getEditPersonText"
+                no-margins
+              ></ripa-subheader>
+
               <ripa-form-step-3
                 v-model="stop"
                 :on-back="handleBack"
@@ -88,6 +98,11 @@
             </v-stepper-content>
 
             <v-stepper-content step="4">
+              <ripa-subheader
+                :text="getEditPersonText"
+                no-margins
+              ></ripa-subheader>
+
               <ripa-form-step-4
                 v-model="stop"
                 :on-back="handleBack"
@@ -99,6 +114,11 @@
             </v-stepper-content>
 
             <v-stepper-content step="5">
+              <ripa-subheader
+                :text="getEditPersonText"
+                no-margins
+              ></ripa-subheader>
+
               <ripa-form-step-5
                 v-model="stop"
                 :on-back="handleBack"
@@ -120,6 +140,55 @@
               ></ripa-form-step-6>
             </v-stepper-content>
           </v-stepper-items>
+
+          <v-stepper-header>
+            <v-stepper-step
+              :rules="[() => step1Validated]"
+              :complete="stepIndex > 1"
+              step="1"
+            >
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step
+              :rules="[() => step2Validated]"
+              :complete="stepIndex > 2"
+              step="2"
+            >
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step
+              :rules="[() => step3Validated]"
+              :complete="stepIndex > 3"
+              step="3"
+            >
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step
+              :rules="[() => step4Validated]"
+              :complete="stepIndex > 4"
+              step="4"
+            >
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step
+              :rules="[() => step5Validated]"
+              :complete="stepIndex > 5"
+              step="5"
+            >
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step step="6"></v-stepper-step>
+          </v-stepper-header>
         </v-stepper>
       </template>
       <template v-if="stepIndex === confirmationStepIndex">
@@ -137,6 +206,7 @@ import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
 import RipaFormStep4 from '@/components/organisms/RipaFormStep4'
 import RipaFormStep5 from '@/components/organisms/RipaFormStep5'
 import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
+import RipaSubheader from '@/components/atoms/RipaSubheader'
 import _ from 'lodash'
 
 export default {
@@ -150,6 +220,7 @@ export default {
     RipaFormStep4,
     RipaFormStep5,
     RipaFormStep6,
+    RipaSubheader,
   },
 
   data() {
@@ -163,6 +234,12 @@ export default {
       confirmationStepIndex: 7,
       stop: this.value,
     }
+  },
+
+  computed: {
+    getEditPersonText() {
+      return `Person: ${this.stop.person.id}`
+    },
   },
 
   methods: {

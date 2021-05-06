@@ -54,6 +54,16 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        person: {
+          isStudent: newVal?.person?.isStudent || false,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

@@ -84,7 +84,19 @@ export default {
     },
 
     handleAddPerson() {
-      console.log('ADD PERSON')
+      const updatedStop = this.stop
+      this.stop = Object.assign({}, updatedStop)
+      this.stop.person = {
+        id: 2,
+        isStudent: false,
+        perceivedRace: null,
+        perceivedGender: null,
+        perceivedLgbt: false,
+        perceivedAge: null,
+        anyDisabilities: false,
+        perceivedOrKnownDisability: null,
+      }
+      this.updateFullStop()
     },
 
     async handleTemplate(value) {
@@ -110,6 +122,7 @@ export default {
             trafficViolationCode: 54106,
             reasonForStopExplanation: 'Speeding',
           },
+          actionsTaken: {},
           stopResult: {
             anyActionsTaken: true,
             actionsTakenDuringStop1: false,
@@ -220,6 +233,7 @@ export default {
       updatedFullStop.stopDate = this.stop.stopDate
       updatedFullStop.location = this.stop.location
       const personId = this.stop.person.id
+      console.log(personId)
       const people = updatedFullStop.people || []
       updatedFullStop.people = people.filter(item => item.id !== personId)
       updatedFullStop.people.push(updatedPerson)
@@ -247,7 +261,9 @@ export default {
       }
       this.stop = Object.assign({}, this.stop)
       this.stop.updated = new Date()
-      this.stop.stopReason.reasonForStopPiiFound = isFound
+      if (this.stop.stopReason) {
+        this.stop.stopReason.reasonForStopPiiFound = isFound
+      }
       this.updateFullStop()
     },
 
@@ -258,7 +274,9 @@ export default {
       }
       this.stop = Object.assign({}, this.stop)
       this.stop.updated = new Date()
-      this.stop.actionsTaken.basisForSearchPiiFound = isFound
+      if (this.stop.actionsTaken) {
+        this.stop.actionsTaken.basisForSearchPiiFound = isFound
+      }
       this.updateFullStop()
     },
   },
