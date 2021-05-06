@@ -7,28 +7,22 @@
     >
     </ripa-form-header>
 
-    <v-container>
-      <v-row no-gutters>
-        <v-col cols="12" sm="12">
-          <ripa-switch
-            v-model="model.actionsTaken.anyContraband"
-            label="Any Contraband or Evidence Discovered?"
-            :max-width="350"
-            @input="handleInput"
-          ></ripa-switch>
+    <ripa-switch
+      v-model="model.actionsTaken.anyContraband"
+      label="Any Contraband or Evidence Discovered?"
+      :max-width="350"
+      @input="handleInput"
+    ></ripa-switch>
 
-          <template v-if="model.actionsTaken.anyContraband">
-            <ripa-check-group
-              v-model="model.actionsTaken.contrabandOrEvidenceDiscovered"
-              :items="contrabandItems"
-              :rules="contrabandRules"
-              @input="handleInput"
-            >
-            </ripa-check-group>
-          </template>
-        </v-col>
-      </v-row>
-    </v-container>
+    <template v-if="model.actionsTaken.anyContraband">
+      <ripa-check-group
+        v-model="model.actionsTaken.contrabandOrEvidenceDiscovered"
+        :items="contrabandItems"
+        :rules="contrabandRules"
+        @input="handleInput"
+      >
+      </ripa-check-group>
+    </template>
   </div>
 </template>
 
