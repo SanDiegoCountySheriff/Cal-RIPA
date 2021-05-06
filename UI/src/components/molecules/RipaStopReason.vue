@@ -252,7 +252,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    statutes: {
+    offenseCodes: {
       type: Array,
       default: () => [],
     },

@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Submission.Services.CosmosDb;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
-
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
