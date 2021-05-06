@@ -26,6 +26,12 @@ export default {
   },
 
   methods: {
+    handleAddPerson() {
+      if (this.onAddPerson) {
+        this.onAddPerson()
+      }
+    },
+
     handleBack() {
       if (this.onBack) {
         this.onBack()
@@ -86,6 +92,10 @@ export default {
     },
     nonCountyCities: {
       type: Array,
+      default: () => {},
+    },
+    onAddPerson: {
+      type: Function,
       default: () => {},
     },
     onBack: {
