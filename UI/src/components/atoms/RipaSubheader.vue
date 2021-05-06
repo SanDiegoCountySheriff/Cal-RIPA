@@ -1,5 +1,9 @@
 <template>
-  <ripa-label class="tw-my-4" :value="text" bold></ripa-label>
+  <ripa-label
+    :class="[noMargins ? null : 'tw-my-4']"
+    :value="text"
+    bold
+  ></ripa-label>
 </template>
 
 <script>
@@ -14,6 +18,10 @@ export default {
     text: {
       type: String,
       default: '',
+    },
+    noMargins: {
+      type: Boolean,
+      default: true,
     },
   },
 }
