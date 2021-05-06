@@ -1,5 +1,5 @@
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
-import { formStop } from '../data/formStop'
+import { exampleFullStop } from '../data/formStop'
 
 export default {
   title: 'Molecules/RipaFormSummary',
@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaFormSummary },
   data() {
     return {
-      stop: formStop,
+      stop: exampleFullStop,
     }
   },
   template:

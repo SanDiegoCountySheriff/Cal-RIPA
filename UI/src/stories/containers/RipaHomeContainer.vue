@@ -23,6 +23,7 @@
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
         :on-add-person="handleAddPerson"
+        :on-delete-person="handleDeletePerson"
         :on-cancel="handleCancel"
         @input="handleInput"
       ></ripa-form-template>
@@ -94,6 +95,15 @@ export default {
         perceivedOrKnownDisability: null,
       }
       this.updateFullStop()
+    },
+
+    handleDeletePerson(id) {
+      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
+      const updatedFullStop = {
+        ...this.fullStop,
+        people: filteredPeople,
+      }
+      this.fullStop = Object.assign({}, updatedFullStop)
     },
 
     getFormData() {

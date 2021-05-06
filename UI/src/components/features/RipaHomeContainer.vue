@@ -101,7 +101,14 @@ export default {
       this.updateFullStop()
     },
 
-    handleDeletePerson(id) {},
+    handleDeletePerson(id) {
+      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
+      const updatedFullStop = {
+        ...this.fullStop,
+        people: filteredPeople,
+      }
+      this.fullStop = Object.assign({}, updatedFullStop)
+    },
 
     handleTemplate(value) {
       this.isEditingForm = true
