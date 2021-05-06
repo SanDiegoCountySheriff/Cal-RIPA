@@ -15,9 +15,8 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        console.log(newVal)
-        const mergedData = _.merge(this.viewModel, newVal)
-        this.viewModel = Object.assign({}, this.viewModel, mergedData)
+        const mergedData = _.assign(this.viewModel, newVal)
+        this.viewModel = Object.assign({}, mergedData)
         setTimeout(() => {
           this.isFormValid = this.$refs.stepForm.validate()
         }, 500)

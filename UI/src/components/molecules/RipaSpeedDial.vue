@@ -51,6 +51,6 @@ export default {
 
 <style lang="scss">
 .ripa-speed-dial {
-  position: absolute !important;
+  position: fixed !important;
 }
 </style>
