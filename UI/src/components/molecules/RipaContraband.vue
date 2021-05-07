@@ -34,12 +34,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { CONTRABAND_TYPES } from '@/constants/form'
 
 export default {
   name: 'ripa-contraband',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -51,13 +54,7 @@ export default {
     return {
       valid: true,
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: {
-        actionsTaken: {
-          anyContraband: this.value?.actionsTaken?.anyContraband || false,
-          contrabandOrEvidenceDiscovered:
-            this.value?.actionsTaken?.contrabandOrEvidenceDiscovered || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -93,13 +90,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        actionsTaken: {
-          anyContraband: newVal?.actionsTaken?.anyContraband || false,
-          contrabandOrEvidenceDiscovered:
-            newVal?.actionsTaken?.contrabandOrEvidenceDiscovered || [],
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

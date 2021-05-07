@@ -8,7 +8,7 @@ export const sampleStop = {
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
-    duration: 3,
+    duration: 30,
     stopInResponseToCfs: false,
   },
   location: {
@@ -81,7 +81,7 @@ export const exampleFullStop = {
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
-    duration: 3,
+    duration: 30,
     stopInResponseToCfs: false,
   },
   location: {

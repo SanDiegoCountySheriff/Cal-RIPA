@@ -137,6 +137,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -151,6 +152,8 @@ import {
 
 export default {
   name: 'ripa-action-taken',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -173,29 +176,7 @@ export default {
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled: false,
       propertySeizedTypeItems: CONTRABAND_TYPES,
-      viewModel: {
-        stopReason: this.value?.stopReason || null,
-        actionsTaken: {
-          anyActionsTaken: this.value?.actionsTaken?.anyActionsTaken || false,
-          actionsTakenDuringStop:
-            this.value?.actionsTaken?.actionsTakenDuringStop || [],
-          personSearchConsentGiven:
-            this.value?.actionsTaken?.personSearchConsentGiven || false,
-          propertySearchConsentGiven:
-            this.value?.actionsTaken?.propertySearchConsentGiven || false,
-          basisForSearch: this.value?.actionsTaken?.basisForSearch || [],
-          basisForSearchExplanation:
-            this.value?.actionsTaken?.basisForSearchExplanation || null,
-          basisForSearchPiiFound:
-            this.value?.actionsTaken?.basisForSearchPiiFound || false,
-          propertyWasSeized:
-            this.value?.actionsTaken?.propertyWasSeized || false,
-          basisForPropertySeizure:
-            this.value?.actionsTaken?.basisForPropertySeizure || [],
-          typeOfPropertySeized:
-            this.value?.actionsTaken?.typeOfPropertySeized || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -354,29 +335,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        stopReason: newVal?.stopReason || null,
-        actionsTaken: {
-          anyActionsTaken: newVal?.actionsTaken?.anyActionsTaken || false,
-          actionsTakenDuringStop:
-            newVal?.actionsTaken?.actionsTakenDuringStop || [],
-          personSearchConsentGiven:
-            newVal?.actionsTaken?.personSearchConsentGiven || false,
-          propertySearchConsentGiven:
-            newVal?.actionsTaken?.propertySearchConsentGiven || false,
-          basisForSearch: newVal?.actionsTaken?.basisForSearch || [],
-          basisForSearchExplanation:
-            newVal?.actionsTaken?.basisForSearchExplanation || null,
-          basisForSearchPiiFound:
-            newVal?.actionsTaken?.basisForSearchPiiFound || false,
-          propertyWasSeized: newVal?.actionsTaken?.propertyWasSeized || false,
-          basisForPropertySeizure:
-            newVal?.actionsTaken?.basisForPropertySeizure || [],
-          typeOfPropertySeized:
-            newVal?.actionsTaken?.typeOfPropertySeized || [],
-        },
-      }
-
+      this.viewModel = this.loadModel(newVal)
       this.updateSearchModel()
     },
 

@@ -339,7 +339,6 @@ export default {
       this.stepIndex = 1
       this.isEditStop = true
       this.isEditPerson = true
-      window.scrollTo(0, 0)
       if (this.onCancel) {
         this.onCancel()
       }
@@ -358,7 +357,6 @@ export default {
             this.isEditStop = true
             this.isEditPerson = true
             this.stepIndex = this.confirmationStepIndex
-            window.scrollTo(0, 0)
             if (this.onSubmit) {
               this.onSubmit()
             }

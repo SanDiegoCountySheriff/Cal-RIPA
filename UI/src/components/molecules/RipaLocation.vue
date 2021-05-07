@@ -152,6 +152,7 @@
 <script>
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -159,6 +160,8 @@ import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-location',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -171,22 +174,7 @@ export default {
 
   data() {
     return {
-      viewModel: {
-        location: {
-          isSchool: this.value?.location?.isSchool || false,
-          school: this.value?.location?.school || null,
-          blockNumber: this.value?.location?.blockNumber || null,
-          streetName: this.value?.location?.streetName || null,
-          intersection: this.value?.location?.intersection || null,
-          moreLocationOptions:
-            this.value?.location?.moreLocationOptions || false,
-          highwayExit: this.value?.location?.highwayExit || null,
-          landmark: this.value?.location?.landmark || null,
-          outOfCounty: this.value?.location?.outOfCounty || false,
-          city: this.value?.location?.city || null,
-          beat: this.value?.location?.beat || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -313,21 +301,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        location: {
-          isSchool: newVal?.location?.isSchool || false,
-          school: newVal?.location?.school || null,
-          blockNumber: newVal?.location?.blockNumber || null,
-          streetName: newVal?.location?.streetName || null,
-          intersection: newVal?.location?.intersection || null,
-          moreLocationOptions: newVal?.location?.moreLocationOptions || false,
-          highwayExit: newVal?.location?.highwayExit || null,
-          landmark: newVal?.location?.landmark || null,
-          outOfCounty: newVal?.location?.outOfCounty || false,
-          city: newVal?.location?.city || null,
-          beat: newVal?.location?.beat || null,
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 
