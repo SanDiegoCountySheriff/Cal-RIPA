@@ -94,7 +94,7 @@ export default {
     validateReasonForStopForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
         let isFound = false
-        isFound = textValue.contains('Steve Pietrek')
+        isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
         this.stop.updated = new Date()
         if (this.stop.stopReason) {
@@ -107,7 +107,7 @@ export default {
     validateBasisForSearchForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
         let isFound = false
-        isFound = textValue.contains('Steve Pietrek')
+        isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
         this.stop.updated = new Date()
         if (this.stop.actionsTaken) {

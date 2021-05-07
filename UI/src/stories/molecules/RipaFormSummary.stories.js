@@ -11,9 +11,9 @@ export const basic = () => ({
   components: { RipaFormSummary },
   data() {
     return {
-      stop: exampleFullStop,
+      fullStop: exampleFullStop,
     }
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :stop="stop"></ripa-form-summary></div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :fullStop="fullStop"></ripa-form-summary></div>',
 })

@@ -1,5 +1,7 @@
 export const sampleStop = {
-  updated: '2021-05-06T14:32:53.959Z',
+  id: '7b7a2289-cb16-4cc5-ad70-d22ab5e1f217',
+  created: '2021-05-06T14:30:29.321Z',
+  updated: '2021-05-06T14:30:29.321Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
     date: '2021-05-06',
@@ -21,7 +23,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: 1,
+    id: 1620325829,
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -61,15 +63,17 @@ export const sampleStop = {
     personSearchConsentGiven: true,
     propertySearchConsentGiven: true,
     basisForSearch: [7],
-    basisForSearchExplanation: 'Steve Pietrek smelled like pot',
+    basisForSearchExplanation: 'John Doe smelled like pot',
     basisForSearchPiiFound: true,
     propertyWasSeized: true,
     basisForPropertySeizure: [2],
-    typesOfPropertySeized: [7, 4],
+    typeOfPropertySeized: [7, 4],
   },
 }
 
 export const exampleFullStop = {
+  id: '7b7a2289-cb16-4cc5-ad70-d22ab5e1f217',
+  created: '2021-05-06T14:30:29.321Z',
   updated: '2021-05-06T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
@@ -93,9 +97,9 @@ export const exampleFullStop = {
   },
   people: [
     {
-      id: 1,
+      id: 1620325829,
       isStudent: false,
-      perceivedRace: [7],
+      perceivedRace: [2, 7],
       perceivedGender: 3,
       perceivedLgbt: true,
       perceivedAge: 3,
@@ -132,16 +136,16 @@ export const exampleFullStop = {
         personSearchConsentGiven: true,
         propertySearchConsentGiven: true,
         basisForSearch: [7],
-        basisForSearchExplanation: 'Steve Pietrek smelled like pot',
+        basisForSearchExplanation: 'John Doe smelled like pot',
         basisForSearchPiiFound: true,
         propertyWasSeized: true,
         basisForPropertySeizure: [2],
-        typesOfPropertySeized: [7, 4],
+        typeOfPropertySeized: [7, 4],
       },
     },
     {
-      id: 2,
-      isStudent: false,
+      id: 1620325973,
+      isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
       perceivedLgbt: false,
@@ -164,8 +168,8 @@ export const exampleFullStop = {
         basisForSearch: [7],
         basisForSearchExplanation: 'Smelled like pot',
         propertyWasSeized: false,
-        basisForPropertySeizure: [],
-        typesOfPropertySeized: [],
+        basisForPropertySeizure: [2],
+        typeOfPropertySeized: [7, 4],
         basisForSearchPiiFound: false,
         anyContraband: true,
         contrabandOrEvidenceDiscovered: [4, 7],

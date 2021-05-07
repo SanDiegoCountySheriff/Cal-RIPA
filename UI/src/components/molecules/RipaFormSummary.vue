@@ -3,7 +3,16 @@
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
 
     <v-card-text>
-      <div>
+      <!-- <div class="tw-mt-4">
+        {{ stop }}
+      </div>
+      <v-divider></v-divider> -->
+      <div class="tw-mt-4">
+        {{ getFullStop }}
+      </div>
+      <v-divider></v-divider>
+
+      <!-- <div>
         Stop
         <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop"
           >Edit</v-btn
@@ -94,14 +103,21 @@
       <div>None</div>
       <div>Result of Stop</div>
       <div>Citation for infraction</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
+      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div> -->
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import { longFullStop } from '@/utilities/stop'
 export default {
   name: 'ripa-form-summary',
+
+  computed: {
+    getFullStop() {
+      return longFullStop(this.fullStop)
+    },
+  },
 
   methods: {
     handleEditStop(event) {
@@ -127,7 +143,7 @@ export default {
   },
 
   props: {
-    value: {
+    fullStop: {
       type: Object,
       default: () => {},
     },
