@@ -104,10 +104,6 @@ export default {
     getOnlineIcon() {
       return this.online ? 'mdi-wifi' : 'mdi-wifi-off'
     },
-
-    getOnlineIcon() {
-      return this.online ? 'mdi-wifi' : 'mdi-wifi-off'
-    },
   },
 
   methods: {

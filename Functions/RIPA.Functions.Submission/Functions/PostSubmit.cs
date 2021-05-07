@@ -73,6 +73,7 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     log.LogError($"Failure Submitting Stop with id {stopId}: {ex.Message}");
                     failedStopIds.Add(stopId);
+                    //TODO harden and update stop with failure to submit to DOJ
                 }
 
             }
@@ -84,6 +85,7 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
+
 
     }
 }
