@@ -96,7 +96,14 @@ export const probationStop = () => {
   }
 }
 
-export const longFullStop = fullStop => {
+export const longFullStop = (
+  fullStop,
+  beats,
+  countyCities,
+  nonCountyCities,
+  schools,
+  statutes,
+) => {
   return {
     id: fullStop.id,
     piiFound: getPiiFound(fullStop),
@@ -117,7 +124,7 @@ export const longFullStop = fullStop => {
     },
     location: {
       isSchool: fullStop.location?.isSchool || false,
-      school: getSchool(fullStop),
+      school: getSchool(fullStop, schools),
       blockNumber: fullStop.location?.blockNumber || null,
       streetName: fullStop.location?.streetName || null,
       intersection: fullStop.location?.intersection || null,
@@ -125,10 +132,13 @@ export const longFullStop = fullStop => {
       highwayExit: fullStop.location?.highwayExit || null,
       landmark: fullStop.location?.landmark || null,
       outOfCounty: fullStop.location?.outOfCounty || false,
-      city: getCity(fullStop),
-      beat: getBeat(fullStop),
+      city: getCity(
+        fullStop,
+        fullStop.location.outOfCounty ? nonCountyCities : countyCities,
+      ),
+      beat: getBeat(fullStop, beats),
     },
-    people: getPeople(fullStop),
+    people: getPeople(fullStop, statutes),
   }
 }
 
@@ -173,44 +183,49 @@ const getDuration = fullStop => {
   return null
 }
 
-const getSchool = fullStop => {
+const getSchool = (fullStop, schools) => {
   const school = fullStop.location?.school || null
+
   if (school) {
+    const [filteredSchool] = schools.filter(item => item.cdsCode === school)
     return {
       key: school,
-      text: 'GET SCHOOL TEXT',
+      text: filteredSchool ? filteredSchool.fullName : 'N/A',
     }
   }
 
   return null
 }
 
-const getCity = fullStop => {
+const getCity = (fullStop, cities) => {
   const city = fullStop.location?.city || null
+
   if (city) {
+    const [filteredCity] = cities.filter(item => item.id === city)
     return {
       key: city,
-      text: 'GET CITY TEXT',
+      text: filteredCity ? filteredCity.fullName : 'N/A',
     }
   }
 
   return null
 }
 
-const getBeat = fullStop => {
+const getBeat = (fullStop, beats) => {
   const beat = fullStop.location?.beat || null
 
   if (beat) {
+    const [filteredBeat] = beats.filter(item => item.id === beat)
     return {
       key: beat,
-      text: 'GET BEAT TEXT',
+      text: filteredBeat ? filteredBeat.fullName : 'N/A',
     }
   }
 
   return null
 }
 
-const getPeople = fullStop => {
+const getPeople = (fullStop, statutes) => {
   return fullStop.people.map(person => {
     return {
       person: {
@@ -225,9 +240,9 @@ const getPeople = fullStop => {
       stopReason: {
         reasonForStop: getReasonForStop(person),
         trafficViolation: getTrafficViolation(person),
-        trafficViolationCode: getTrafficViolationCode(person),
+        trafficViolationCode: getTrafficViolationCode(person, statutes),
         reasonableSuspicion: getReasonableSuspicion(person),
-        reasonableSuspicionCode: getReasonableSuspicionCode(person),
+        reasonableSuspicionCode: getReasonableSuspicionCode(person, statutes),
         searchOfPerson: person.stopReason?.searchOfPerson || false,
         searchOfProperty: person.stopReason?.searchOfProperty || false,
         reasonForStopExplanation:
@@ -258,10 +273,10 @@ const getPeople = fullStop => {
       stopResult: {
         anyActionsTaken: person.stopResult?.anyActionsTaken || false,
         actionsTakenDuringStop: getStopResultActionsTakenDuringStop(person),
-        warningCodes: getWarningCodes(person),
-        citationCodes: getCitationCodes(person),
-        infieldCodes: getInfieldCodes(person),
-        custodialArrestCodes: getCustodialArrestCodes(person),
+        warningCodes: getWarningCodes(person, statutes),
+        citationCodes: getCitationCodes(person, statutes),
+        infieldCodes: getInfieldCodes(person, statutes),
+        custodialArrestCodes: getCustodialArrestCodes(person, statutes),
       },
     }
   })
@@ -338,13 +353,22 @@ const getTrafficViolation = person => {
   return null
 }
 
-const getTrafficViolationCode = person => {
+const getStatute = (code, statutes) => {
+  if (code) {
+    const [filteredStatute] = statutes.filter(item => item.code === code)
+    return {
+      key: code,
+      text: filteredStatute ? filteredStatute.fullName : 'N/A',
+    }
+  }
+
+  return null
+}
+
+const getTrafficViolationCode = (person, statutes) => {
   const code = person.stopReason?.trafficViolationCode || null
   if (code) {
-    return {
-      key: person.stopReason?.trafficViolationCode || null,
-      text: 'GET STATUTE CODE TEXT',
-    }
+    return getStatute(code, statutes)
   }
 
   return null
@@ -361,13 +385,10 @@ const getReasonableSuspicion = person => {
   })
 }
 
-const getReasonableSuspicionCode = person => {
+const getReasonableSuspicionCode = (person, statutes) => {
   const code = person.stopReason?.reasonableSuspicionCode || null
   if (code) {
-    return {
-      key: code,
-      text: 'GET STATUTE CODE TEXT',
-    }
+    return getStatute(code, statutes)
   }
 
   return null
@@ -490,46 +511,34 @@ const getStopResultActionsTakenDuringStop = person => {
   })
 }
 
-const getWarningCodes = person => {
+const getWarningCodes = (person, statutes) => {
   const codes = person.stopResult?.warningCodes || []
 
   return codes.map(code => {
-    return {
-      key: code,
-      value: 'GET WARNING CODE TEXT',
-    }
+    return getStatute(code, statutes)
   })
 }
 
-const getCitationCodes = person => {
+const getCitationCodes = (person, statutes) => {
   const codes = person.stopResult?.citationCodes || []
 
   return codes.map(code => {
-    return {
-      key: code,
-      value: 'GET CITATION CODE TEXT',
-    }
+    return getStatute(code, statutes)
   })
 }
 
-const getInfieldCodes = person => {
+const getInfieldCodes = (person, statutes) => {
   const codes = person.stopResult?.infieldCodes || []
 
   return codes.map(code => {
-    return {
-      key: code,
-      value: 'GET INFIELD CODE TEXT',
-    }
+    return getStatute(code, statutes)
   })
 }
 
-const getCustodialArrestCodes = person => {
+const getCustodialArrestCodes = (person, statutes) => {
   const codes = person.stopResult?.custodialArrestCodes || []
 
   return codes.map(code => {
-    return {
-      key: code,
-      value: 'GET CUSTODIAL ARREST CODE TEXT',
-    }
+    return getStatute(code, statutes)
   })
 }

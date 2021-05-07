@@ -83,8 +83,8 @@ export const exampleFullStop = {
     stopInResponseToCfs: false,
   },
   location: {
-    isSchool: false,
-    school: null,
+    isSchool: true,
+    school: 1611766090559,
     blockNumber: 1100,
     streetName: 'Fang',
     intersection: null,

@@ -1,5 +1,13 @@
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
+import { longFullStop } from '@/utilities/stop'
 import { exampleFullStop } from '../data/formStop'
+import {
+  formBeats,
+  formCountyCities,
+  formNonCountyCities,
+  formSchools,
+  formStatutes,
+} from '../data/mappings'
 
 export default {
   title: 'Molecules/RipaFormSummary',
@@ -9,11 +17,18 @@ export default {
 
 export const basic = () => ({
   components: { RipaFormSummary },
-  data() {
-    return {
-      fullStop: exampleFullStop,
-    }
+  computed: {
+    getFullStop() {
+      return longFullStop(
+        exampleFullStop,
+        formBeats(),
+        formCountyCities(),
+        formNonCountyCities(),
+        formSchools(),
+        formStatutes(),
+      )
+    },
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :fullStop="fullStop"></ripa-form-summary></div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :fullStop="getFullStop"></ripa-form-summary></div>',
 })

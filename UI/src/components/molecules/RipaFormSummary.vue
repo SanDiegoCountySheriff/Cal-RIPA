@@ -8,7 +8,7 @@
       </div>
       <v-divider></v-divider> -->
       <div class="tw-mt-4">
-        {{ getFullStop }}
+        {{ fullStop }}
       </div>
       <v-divider></v-divider>
 
@@ -109,15 +109,8 @@
 </template>
 
 <script>
-import { longFullStop } from '@/utilities/stop'
 export default {
   name: 'ripa-form-summary',
-
-  computed: {
-    getFullStop() {
-      return longFullStop(this.fullStop)
-    },
-  },
 
   methods: {
     handleEditStop(event) {
