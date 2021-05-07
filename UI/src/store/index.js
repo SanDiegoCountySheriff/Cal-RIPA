@@ -24,6 +24,7 @@ export default new Vuex.Store({
       isAuthenticated: false,
     },
     piiDate: null,
+    officerStops: [],
   },
 
   getters: {
@@ -99,8 +100,8 @@ export default new Vuex.Store({
     updateFormStatutes(state, items) {
       state.formStatutes = items
     },
-    updateStops(state, items) {
-      state.stops = items
+    updateOfficerStops(state, items) {
+      state.officerStops = items
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
@@ -536,7 +537,7 @@ export default new Vuex.Store({
       }
     },
 
-    getStops({ commit }) {
+    getOfficerStops({ commit }) {
       return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
           headers: {
@@ -545,10 +546,10 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('updateStops', response.data)
+          commit('updateOfficerStops', response.data)
         })
         .catch(() => {
-          commit('updateStops', [])
+          commit('updateOfficerStops', [])
         })
     },
 
