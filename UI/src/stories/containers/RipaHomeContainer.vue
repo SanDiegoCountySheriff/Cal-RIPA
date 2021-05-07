@@ -35,8 +35,9 @@
 <script>
 import RipaPageContainer from './RipaPageContainer'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { format } from 'date-fns'
+import { defaultStop } from '@/utilities/stop'
 import {
   formBeats,
   formCountyCities,
@@ -44,10 +45,11 @@ import {
   formSchools,
   formStatutes,
 } from '../data/mappings'
-import { sampleStop } from '../data/formStop'
 
 export default {
   name: 'ripa-home-container',
+
+  mixins: [RipaHomeContainerMixin],
 
   components: {
     RipaPageContainer,
@@ -63,7 +65,7 @@ export default {
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
-      stop: this.getDefaultStop(),
+      stop: defaultStop(),
       fullStop: {},
     }
   },
@@ -75,36 +77,6 @@ export default {
 
     getOfficerAssignment() {
       return 1
-    },
-
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.updateFullStop()
-    },
-
-    handleAddPerson() {
-      const updatedStop = this.stop
-      this.stop = Object.assign({}, updatedStop)
-      this.stop.person = {
-        id: new Date().getTime(),
-        isStudent: false,
-        perceivedRace: null,
-        perceivedGender: null,
-        perceivedLgbt: false,
-        perceivedAge: null,
-        anyDisabilities: false,
-        perceivedOrKnownDisability: null,
-      }
-      this.updateFullStop()
-    },
-
-    handleDeletePerson(id) {
-      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
-      const updatedFullStop = {
-        ...this.fullStop,
-        people: filteredPeople,
-      }
-      this.fullStop = Object.assign({}, updatedFullStop)
     },
 
     getFormData() {
@@ -119,119 +91,6 @@ export default {
       }, 500)
     },
 
-    handleTemplate(value) {
-      this.isEditingForm = true
-
-      if (value === 'motor') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          person: {
-            id: new Date().getTime(),
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
-          actionsTaken: {},
-          stopResult: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop1: false,
-            actionsTakenDuringStop2: true,
-            actionsTakenDuringStop3: false,
-            actionsTakenDuringStop4: false,
-            actionsTakenDuringStop5: false,
-            actionsTakenDuringStop6: false,
-            actionsTakenDuringStop7: false,
-            actionsTakenDuringStop8: false,
-            actionsTakenDuringStop9: false,
-            actionsTakenDuringStop10: false,
-            warningCodes: [],
-            citationCodes: [54106],
-            infieldCodes: [],
-            custodialArrestCodes: [],
-          },
-        }
-      }
-
-      if (value === 'probation') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          person: {
-            id: new Date().getTime(),
-          },
-          stopReason: {
-            reasonForStop: 3,
-            reasonForStopExplanation:
-              'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-          },
-          actionsTaken: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop: [4, 18, 20],
-            basisForSearch: [4],
-          },
-        }
-      }
-
-      if (value === 'test') {
-        this.stop = sampleStop
-      }
-
-      this.updateFullStop()
-    },
-
-    updateFullStop() {
-      const updatedPerson = {
-        ...this.stop.person,
-        id: this.stop.person.id,
-        actionsTaken: this.stop.actionsTaken,
-        stopReason: this.stop.stopReason,
-        stopResult: this.stop.stopResult,
-      }
-
-      const updatedFullStop = Object.assign({}, this.fullStop)
-      updatedFullStop.updated = new Date()
-      updatedFullStop.officer = this.stop.officer
-      updatedFullStop.stopDate = this.stop.stopDate
-      updatedFullStop.location = this.stop.location
-      const personId = this.stop.person.id
-      const people = updatedFullStop.people || []
-      updatedFullStop.people = people.filter(item => item.id !== personId)
-      updatedFullStop.people.push(updatedPerson)
-      this.fullStop = Object.assign({}, updatedFullStop)
-    },
-
-    getDefaultStop() {
-      return {
-        person: {
-          id: new Date().getTime(),
-        },
-      }
-    },
-
-    handleCancel() {
-      this.isEditingForm = false
-      this.stop = this.getDefaultStop()
-      this.updateFullStop()
-    },
-
     validateReasonForStopForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
         let isFound = false
@@ -241,8 +100,8 @@ export default {
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
+        this.updateFullStop()
       }
-      this.updateFullStop()
     },
 
     validateBasisForSearchForPii(textValue) {
@@ -254,8 +113,8 @@ export default {
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }
+        this.updateFullStop()
       }
-      this.updateFullStop()
     },
   },
 
