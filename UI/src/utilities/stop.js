@@ -114,7 +114,7 @@ export const apiFullStop = (
     date: fullStop.stopDate.date,
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,
-    piiFound: getPiiFound(fullStop),
+    isPiiFound: getPiiFound(fullStop),
     listPersonStopped: getPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
@@ -334,8 +334,8 @@ const getTrafficViolation = person => {
   const violation = person.stopReason?.trafficViolation || null
   if (violation) {
     return {
-      code: violation.toString(),
-      text: violation ? TRAFFIC_VIOLATIONS[violation - 1].name : 'N/A',
+      key: violation.toString(),
+      reason: violation ? TRAFFIC_VIOLATIONS[violation - 1].name : 'N/A',
     }
   }
 
@@ -368,8 +368,8 @@ const getReasonableSuspicion = person => {
 
   return suspicion.map(item => {
     return {
-      code: item.toString(),
-      text: REASONABLE_SUSPICIONS[item - 1].name,
+      key: item.toString(),
+      reason: REASONABLE_SUSPICIONS[item - 1].name,
     }
   })
 }
