@@ -1,7 +1,7 @@
 <template>
   <ripa-page-container :admin="admin">
     <vue-confirm-dialog></vue-confirm-dialog>
-    <v-divider></v-divider>
+    <!-- <v-divider></v-divider>
     <div class="tw-my-4">
       {{ fullStop }}
     </div>
@@ -9,7 +9,7 @@
     <div class="tw-my-4">
       {{ stop }}
     </div>
-    <v-divider></v-divider>
+    <v-divider></v-divider> -->
 
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
