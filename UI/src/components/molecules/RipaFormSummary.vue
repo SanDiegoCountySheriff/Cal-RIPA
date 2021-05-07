@@ -11,13 +11,13 @@
         {{ fullStop }}
       </div> -->
       <v-divider></v-divider>
-      <div class="tw-my-4">
+      <!-- <div class="tw-my-4">
         {{ getFullStop.listPersonStopped[0] }}
       </div>
       <v-divider></v-divider>
       <div class="tw-my-4">
         {{ getFullStop.listPersonStopped[1] }}
-      </div>
+      </div> -->
       <v-divider></v-divider>
 
       <!-- <div>

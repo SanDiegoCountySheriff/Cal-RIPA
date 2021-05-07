@@ -4,7 +4,7 @@
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      <!-- <v-divider></v-divider>
+      <v-divider></v-divider>
       <div class="tw-my-4">
         {{ fullStop }}
       </div>
@@ -12,7 +12,7 @@
       <div class="tw-my-4">
         {{ stop }}
       </div>
-      <v-divider></v-divider> -->
+      <v-divider></v-divider>
 
       <ripa-form-template
         v-model="stop"
@@ -71,18 +71,6 @@ export default {
 
   methods: {
     ...mapActions(['checkTextForPii']),
-
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
-    },
-
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
 
     handleSubmit() {
       console.log('LONG STOP FORM SUBMITTED', this.fullStop)

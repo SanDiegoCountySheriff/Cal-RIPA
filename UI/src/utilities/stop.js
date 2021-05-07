@@ -26,14 +26,14 @@ export const defaultStop = () => {
   }
 }
 
-export const motorStop = () => {
+export const motorStop = (yearsExperience, assignment) => {
   return {
     id: uuidv4(),
     created: new Date(),
     officer: {
       editOfficer: false,
-      yearsExperience: this.getOfficerYearsExperience(),
-      assignment: this.getOfficerAssignment(),
+      yearsExperience: yearsExperience,
+      assignment: assignment,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -69,14 +69,14 @@ export const motorStop = () => {
   }
 }
 
-export const probationStop = () => {
+export const probationStop = (yearsExperience, assignment) => {
   return {
     id: uuidv4(),
     created: new Date(),
     officer: {
       editOfficer: false,
-      yearsExperience: this.getOfficerYearsExperience(),
-      assignment: this.getOfficerAssignment(),
+      yearsExperience: yearsExperience,
+      assignment: assignment,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -164,7 +164,7 @@ export const getPeopleListed = (fullStop, statutes) => {
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
-      perceivedAge: '30',
+      perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGender(person).text,
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,

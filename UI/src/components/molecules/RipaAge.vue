@@ -6,16 +6,15 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
-          <ripa-select
+          <ripa-slider
             v-model="model.person.perceivedAge"
+            class="tw-mt-4"
             label="Perceived Age"
-            :items="ageItems"
-            itemText="name"
-            itemValue="value"
+            :min="1"
+            :max="125"
             :rules="ageRules"
             @input="handleInput"
-          >
-          </ripa-select>
+          ></ripa-slider>
         </v-col>
       </v-row>
     </v-container>
@@ -24,7 +23,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaSlider from '@/components/atoms/RipaSlider'
 import { AGES } from '@/constants/form'
 
 export default {
@@ -32,14 +31,13 @@ export default {
 
   components: {
     RipaFormHeader,
-    RipaSelect,
+    RipaSlider,
   },
 
   data() {
     return {
       valid: true,
       ageItems: AGES,
-      ageRules: [v => !!v || 'An age is required'],
       viewModel: {
         person: {
           perceivedAge: this.value?.person?.perceivedAge || null,
@@ -53,6 +51,10 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    ageRules() {
+      return [v => !!v || 'An age is required']
     },
   },
 

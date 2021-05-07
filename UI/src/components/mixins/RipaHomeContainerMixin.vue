@@ -4,6 +4,18 @@ import { sampleStop } from '@/stories/data/formStop'
 
 export default {
   methods: {
+    getOfficerYearsExperience() {
+      const yearsExperience = localStorage.getItem(
+        'ripa_officer_years_experience',
+      )
+      return +yearsExperience || null
+    },
+
+    getOfficerAssignment() {
+      const assignment = localStorage.getItem('ripa_officer_assignment')
+      return +assignment || null
+    },
+
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.updateFullStop()
@@ -38,11 +50,17 @@ export default {
       this.isEditingForm = true
 
       if (value === 'motor') {
-        this.stop = motorStop()
+        this.stop = motorStop(
+          this.getOfficerYearsExperience(),
+          this.getOfficerAssignment(),
+        )
       }
 
       if (value === 'probation') {
-        this.stop = probationStop()
+        this.stop = probationStop(
+          this.getOfficerYearsExperience(),
+          this.getOfficerAssignment(),
+        )
       }
 
       if (value === 'test') {

@@ -73,14 +73,6 @@ export default {
   },
 
   methods: {
-    getOfficerYearsExperience() {
-      return 20
-    },
-
-    getOfficerAssignment() {
-      return 1
-    },
-
     getFormData() {
       this.loading = true
       setTimeout(() => {

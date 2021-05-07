@@ -1,10 +1,12 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export const sampleStop = {
-  id: '7b7a2289-cb16-4cc5-ad70-d22ab5e1f217',
-  created: '2021-05-06T14:30:29.321Z',
-  updated: '2021-05-06T14:30:29.321Z',
+  id: uuidv4(),
+  created: '2021-05-07T14:30:29.321Z',
+  updated: '2021-05-07T14:30:29.321Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
-    date: '2021-05-06',
+    date: '2021-05-07',
     time: '10:18',
     duration: 3,
     stopInResponseToCfs: false,
@@ -23,12 +25,12 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: 1620325829,
+    id: 1,
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
     perceivedLgbt: true,
-    perceivedAge: 3,
+    perceivedAge: 30,
     perceivedLimitedEnglish: true,
     anyDisabilities: true,
     perceivedOrKnownDisability: [4, 2],
@@ -72,12 +74,12 @@ export const sampleStop = {
 }
 
 export const exampleFullStop = {
-  id: '7b7a2289-cb16-4cc5-ad70-d22ab5e1f217',
-  created: '2021-05-06T14:30:29.321Z',
-  updated: '2021-05-06T14:32:53.959Z',
+  id: uuidv4(),
+  created: '2021-05-07T14:30:29.321Z',
+  updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
-    date: '2021-05-06',
+    date: '2021-05-07',
     time: '10:18',
     duration: 3,
     stopInResponseToCfs: false,
@@ -97,12 +99,12 @@ export const exampleFullStop = {
   },
   people: [
     {
-      id: 1620325829,
+      id: 1,
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
       perceivedLgbt: true,
-      perceivedAge: 3,
+      perceivedAge: 30,
       perceivedLimitedEnglish: true,
       anyDisabilities: true,
       perceivedOrKnownDisability: [4, 2],
@@ -144,12 +146,12 @@ export const exampleFullStop = {
       },
     },
     {
-      id: 1620325973,
+      id: 2,
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
       perceivedLgbt: false,
-      perceivedAge: 4,
+      perceivedAge: 40,
       anyDisabilities: true,
       perceivedOrKnownDisability: [1],
       perceivedLimitedEnglish: true,
