@@ -59,6 +59,7 @@ namespace RIPA.Functions.Common.Models
         public PersonStopped[] ListPersonStopped { get; set; }
         public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
+        public bool IsPiiFound { get; set; }
     }
 
 

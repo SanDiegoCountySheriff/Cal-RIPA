@@ -27,5 +27,10 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb.Models
         [JsonProperty(PropertyName = "startDate")]
         public DateTime StartDate { get; set; }
 
+        [JsonRequired]
+        [JsonProperty(PropertyName = "agency")]
+        public string Agency { get; set; }
+
     }
+
 }
