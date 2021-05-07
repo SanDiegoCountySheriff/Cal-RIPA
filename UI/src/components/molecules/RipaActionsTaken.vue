@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-p-4">
+  <div class="ripa-action-taken tw-pb-8">
     <ripa-form-header
       title="Actions Taken During Stop"
       required
@@ -7,117 +7,131 @@
     >
     </ripa-form-header>
 
-    <ripa-switch
-      v-model="model.actionsTaken.anyActionsTaken"
-      label="Any Actions Taken?"
-      :disabled="isAnyActionsTakenDisabled"
-      :max-width="200"
-      @input="handleInput"
-    ></ripa-switch>
-
-    <template v-if="model.actionsTaken.anyActionsTaken">
-      <ripa-check-group
-        v-model="model.actionsTaken.actionsTakenDuringStop"
-        :items="actionTakenGeneralItems"
-        :rules="actionsTakenRules"
-        @input="handleInput"
-      >
-      </ripa-check-group>
-
-      <ripa-subheader text="Search"></ripa-subheader>
-
-      <ripa-check-group
-        v-model="model.actionsTaken.actionsTakenDuringStop"
-        :items="getActionTakenSearchItems"
-        :rules="actionsTakenRules"
-        @input="handleInput"
-      >
-      </ripa-check-group>
-
-      <template v-if="wasAskedForConsentToSearchPerson">
-        <ripa-switch
-          v-model="model.actionsTaken.personSearchConsentGiven"
-          label="Person Search Consent Given"
-          :max-width="300"
-          @input="handleInput"
-        ></ripa-switch>
-      </template>
-
-      <template v-if="wasAskedForConsentToSearchProperty">
-        <ripa-switch
-          v-model="model.actionsTaken.propertySearchConsentGiven"
-          label="Property Search Consent Given"
-          :max-width="300"
-          @input="handleInput"
-        ></ripa-switch>
-      </template>
-
-      <template v-if="wasSearchConducted">
-        <ripa-form-subheader
-          title="Basis for Search"
-          required
-          subtitle="§999.226(a)(12)(B)"
-        ></ripa-form-subheader>
-
-        <ripa-check-group
-          v-model="model.actionsTaken.basisForSearch"
-          :items="basisForSearchItems"
-          :rules="basisForSearchRules"
-          @input="handleInput"
-        >
-        </ripa-check-group>
-
-        <template v-if="isBasisForSearchBriefVisible">
-          <ripa-text-area
-            v-model="model.actionsTaken.basisForSearchBrief"
-            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-            persistent-hint
-            label="Brief Explanation"
-            :rules="explanationRules"
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.actionsTaken.anyActionsTaken"
+            label="Any Actions Taken?"
+            :disabled="isAnyActionsTakenDisabled"
+            :max-width="200"
             @input="handleInput"
-          ></ripa-text-area>
-        </template>
-      </template>
+          ></ripa-switch>
 
-      <ripa-subheader text="Seizure"></ripa-subheader>
+          <template v-if="model.actionsTaken.anyActionsTaken">
+            <ripa-check-group
+              v-model="model.actionsTaken.actionsTakenDuringStop"
+              :items="actionTakenGeneralItems"
+              :rules="actionsTakenRules"
+              @input="handleInput"
+            >
+            </ripa-check-group>
 
-      <ripa-switch
-        v-model="model.actionsTaken.propertyWasSeized"
-        label="Property was Seized"
-        :max-width="200"
-        @input="handleInput"
-      ></ripa-switch>
+            <ripa-subheader text="Search"></ripa-subheader>
 
-      <template v-if="model.actionsTaken.propertyWasSeized">
-        <ripa-form-subheader
-          title="Basis for Property Seizure"
-          required
-          subtitle="§999.226(a)(12)(D)(1)"
-        ></ripa-form-subheader>
+            <ripa-check-group
+              v-model="model.actionsTaken.actionsTakenDuringStop"
+              :items="getActionTakenSearchItems"
+              :rules="actionsTakenRules"
+              @input="handleInput"
+            >
+            </ripa-check-group>
 
-        <ripa-check-group
-          v-model="model.actionsTaken.basisForPropertySeizure"
-          :items="basisForPropertySeizureItems"
-          :rules="basisForPropertySeizureRules"
-          @input="handleInput"
-        >
-        </ripa-check-group>
+            <template v-if="wasAskedForConsentToSearchPerson">
+              <ripa-switch
+                v-model="model.actionsTaken.personSearchConsentGiven"
+                label="Person Search Consent Given"
+                :max-width="300"
+                @input="handleInput"
+              ></ripa-switch>
+            </template>
 
-        <ripa-form-subheader
-          title="Types of Property Seized"
-          required
-          subtitle="§999.226(a)(12)(D)(2)"
-        ></ripa-form-subheader>
+            <template v-if="wasAskedForConsentToSearchProperty">
+              <ripa-switch
+                v-model="model.actionsTaken.propertySearchConsentGiven"
+                label="Property Search Consent Given"
+                :max-width="300"
+                @input="handleInput"
+              ></ripa-switch>
+            </template>
 
-        <ripa-check-group
-          v-model="model.actionsTaken.typesOfPropertySeized"
-          :items="propertySeizedTypeItems"
-          :rules="typesOfPropertySeizedRules"
-          @input="handleInput"
-        >
-        </ripa-check-group>
-      </template>
-    </template>
+            <template v-if="wasSearchConducted">
+              <ripa-form-subheader
+                title="Basis for Search"
+                required
+                subtitle="§999.226(a)(12)(B)"
+              ></ripa-form-subheader>
+
+              <ripa-check-group
+                v-model="model.actionsTaken.basisForSearch"
+                :items="basisForSearchItems"
+                :rules="basisForSearchRules"
+                @input="handleInput"
+              >
+              </ripa-check-group>
+
+              <template v-if="isBasisForSearchExplanationVisible">
+                <template v-if="model.actionsTaken.basisForSearchPiiFound">
+                  <v-alert outlined type="warning" dense>
+                    The explanation contains personally identifying information.
+                    Please remove if possible.
+                  </v-alert>
+                </template>
+
+                <ripa-text-area
+                  v-model="model.actionsTaken.basisForSearchExplanation"
+                  hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+                  persistent-hint
+                  label="Brief Explanation"
+                  :loading="loadingPii"
+                  :rules="explanationRules"
+                  @input="handleInput"
+                ></ripa-text-area>
+              </template>
+            </template>
+
+            <ripa-subheader text="Seizure"></ripa-subheader>
+
+            <ripa-switch
+              v-model="model.actionsTaken.propertyWasSeized"
+              label="Property was Seized"
+              :max-width="200"
+              @input="handleInput"
+            ></ripa-switch>
+
+            <template v-if="model.actionsTaken.propertyWasSeized">
+              <ripa-form-subheader
+                title="Basis for Property Seizure"
+                required
+                subtitle="§999.226(a)(12)(D)(1)"
+              ></ripa-form-subheader>
+
+              <ripa-check-group
+                v-model="model.actionsTaken.basisForPropertySeizure"
+                :items="basisForPropertySeizureItems"
+                :rules="basisForPropertySeizureRules"
+                @input="handleInput"
+              >
+              </ripa-check-group>
+
+              <ripa-form-subheader
+                title="Types of Property Seized"
+                required
+                subtitle="§999.226(a)(12)(D)(2)"
+              ></ripa-form-subheader>
+
+              <ripa-check-group
+                v-model="model.actionsTaken.typesOfPropertySeized"
+                :items="propertySeizedTypeItems"
+                :rules="typesOfPropertySeizedRules"
+                @input="handleInput"
+              >
+              </ripa-check-group>
+            </template>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -172,8 +186,10 @@ export default {
           propertySearchConsentGiven:
             this.value?.actionsTaken?.propertySearchConsentGiven || false,
           basisForSearch: this.value?.actionsTaken?.basisForSearch || [],
-          basisForSearchBrief:
-            this.value?.actionsTaken?.basisForSearchBrief || null,
+          basisForSearchExplanation:
+            this.value?.actionsTaken?.basisForSearchExplanation || null,
+          basisForSearchPiiFound:
+            this.value?.actionsTaken?.basisForSearchPiiFound || false,
           propertyWasSeized:
             this.value?.actionsTaken?.propertyWasSeized || false,
           basisForPropertySeizure:
@@ -254,7 +270,7 @@ export default {
       return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
     },
 
-    isBasisForSearchBriefVisible() {
+    isBasisForSearchExplanationVisible() {
       if (this.viewModel.actionsTaken.basisForSearch.length === 0) {
         return false
       }
@@ -326,21 +342,53 @@ export default {
     },
   },
 
-  watch: {
-    value(newVal) {
-      this.viewModel.stopReason = newVal.stopReason || null
-      this.updateSearchModel()
-    },
-  },
-
   mounted() {
     this.updateSearchModel()
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopReason: newVal?.stopReason || null,
+        actionsTaken: {
+          anyActionsTaken: newVal?.actionsTaken?.anyActionsTaken || false,
+          actionsTakenDuringStop:
+            newVal?.actionsTaken?.actionsTakenDuringStop || [],
+          personSearchConsentGiven:
+            newVal?.actionsTaken?.personSearchConsentGiven || false,
+          propertySearchConsentGiven:
+            newVal?.actionsTaken?.propertySearchConsentGiven || false,
+          basisForSearch: newVal?.actionsTaken?.basisForSearch || [],
+          basisForSearchExplanation:
+            newVal?.actionsTaken?.basisForSearchExplanation || null,
+          basisForSearchPiiFound:
+            newVal?.actionsTaken?.basisForSearchPiiFound || false,
+          propertyWasSeized: newVal?.actionsTaken?.propertyWasSeized || false,
+          basisForPropertySeizure:
+            newVal?.actionsTaken?.basisForPropertySeizure || [],
+          typesOfPropertySeized:
+            newVal?.actionsTaken?.typesOfPropertySeized || [],
+        },
+      }
+
+      this.updateSearchModel()
+    },
+
+    'value.actionsTaken.basisForSearchPiiFound': {
+      handler(newVal) {
+        this.viewModel.actionsTaken.basisForSearchPiiFound = newVal
+      },
+    },
   },
 
   props: {
     value: {
       type: Object,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
   },
 }

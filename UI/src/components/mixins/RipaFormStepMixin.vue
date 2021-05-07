@@ -15,8 +15,8 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        const mergedData = _.merge(this.viewModel, newVal)
-        this.viewModel = mergedData
+        const mergedData = _.assign({}, this.viewModel, newVal)
+        this.viewModel = Object.assign({}, mergedData)
         setTimeout(() => {
           this.isFormValid = this.$refs.stepForm.validate()
         }, 500)
@@ -26,6 +26,12 @@ export default {
   },
 
   methods: {
+    handleAddPerson() {
+      if (this.onAddPerson) {
+        this.onAddPerson()
+      }
+    },
+
     handleBack() {
       if (this.onBack) {
         this.onBack()
@@ -84,8 +90,28 @@ export default {
       type: Array,
       default: () => {},
     },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
     nonCountyCities: {
       type: Array,
+      default: () => {},
+    },
+    onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
+      type: Function,
       default: () => {},
     },
     onBack: {

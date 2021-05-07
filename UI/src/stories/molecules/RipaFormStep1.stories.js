@@ -1,4 +1,4 @@
-import RipaFormStep1 from '@/components/organisms/RipaFormStep1'
+import RipaFormStep1 from '@/components/molecules/RipaFormStep1'
 import {
   formBeats,
   formCountyCities,
@@ -7,7 +7,7 @@ import {
 } from '../data/mappings'
 
 export default {
-  title: 'Organisms/RipaFormStep1',
+  title: 'Molecules/RipaFormStep1',
   component: RipaFormStep1,
   parameters: {},
 }

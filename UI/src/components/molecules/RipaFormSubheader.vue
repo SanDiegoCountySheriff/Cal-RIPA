@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-form-header tw-mb-8">
+  <div class="ripa-form-header tw-my-8">
     <ripa-subheader :text="title"></ripa-subheader>
     <div class="tw-flex">
       <template v-if="required">

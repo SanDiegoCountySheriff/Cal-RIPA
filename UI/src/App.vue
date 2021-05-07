@@ -2,6 +2,7 @@
   <v-app>
     <v-main fluid>
       <ripa-page-container>
+        <vue-confirm-dialog></vue-confirm-dialog>
         <ripa-pwa-wrapper></ripa-pwa-wrapper>
         <router-view :key="$route.fullPath" />
       </ripa-page-container>

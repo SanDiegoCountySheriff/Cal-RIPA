@@ -60,6 +60,17 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        person: {
+          perceivedLimitedEnglish:
+            newVal?.person?.perceivedLimitedEnglish || false,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

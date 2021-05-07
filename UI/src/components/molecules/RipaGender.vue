@@ -98,6 +98,17 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        person: {
+          perceivedGender: newVal?.person?.perceivedGender || null,
+          perceivedLgbt: newVal?.person?.perceivedLgbt || false,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

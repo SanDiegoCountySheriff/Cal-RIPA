@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-p-4">
+  <div class="ripa-action-taken tw-pb-8">
     <ripa-form-header
       title="Contraband or Evidence Discovered"
       required
@@ -87,6 +87,18 @@ export default {
     updateContrabandOrEvidenceDiscoveredModel() {
       if (!this.viewModel.actionsTaken.anyContraband) {
         this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        actionsTaken: {
+          anyContraband: newVal?.actionsTaken?.anyContraband || false,
+          contrabandOrEvidenceDiscovered:
+            newVal?.actionsTaken?.contrabandOrEvidenceDiscovered || [],
+        },
       }
     },
   },

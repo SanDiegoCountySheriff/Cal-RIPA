@@ -66,6 +66,16 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        person: {
+          perceivedRace: newVal?.person?.perceivedRace || [],
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

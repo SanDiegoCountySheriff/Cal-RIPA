@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-p-4">
+  <div class="ripa-action-taken tw-pb-8">
     <ripa-form-header
       title="Result of Stop"
       required
@@ -323,7 +323,86 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateActionsTakenModel()
+      this.updateWarningCodesModel()
+      this.updateCitationCodesModel()
+      this.updateInfieldCodesModel()
+      this.updateCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateActionsTakenModel() {
+      if (!this.viewModel.stopResult.anyActionsTaken) {
+        this.viewModel.stopResult.actionsTakenDuringStop1 = false
+        this.viewModel.stopResult.actionsTakenDuringStop2 = false
+        this.viewModel.stopResult.actionsTakenDuringStop3 = false
+        this.viewModel.stopResult.actionsTakenDuringStop4 = false
+        this.viewModel.stopResult.actionsTakenDuringStop5 = false
+        this.viewModel.stopResult.actionsTakenDuringStop6 = false
+        this.viewModel.stopResult.actionsTakenDuringStop7 = false
+        this.viewModel.stopResult.actionsTakenDuringStop8 = false
+        this.viewModel.stopResult.actionsTakenDuringStop9 = false
+        this.viewModel.stopResult.actionsTakenDuringStop10 = false
+      }
+    },
+
+    updateWarningCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop1) {
+        this.viewModel.stopResult.warningCodes = null
+      }
+    },
+
+    updateCitationCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
+        this.viewModel.stopResult.citationCodes = null
+      }
+    },
+
+    updateInfieldCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
+        this.viewModel.stopResult.infieldCodes = null
+      }
+    },
+
+    updateCustodiaArrestCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop5) {
+        this.viewModel.stopResult.custodialArrestCodes = null
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopReason: newVal.stopReason || null,
+        stopResult: {
+          anyActionsTaken: newVal?.stopResult?.anyActionsTaken || false,
+          actionsTakenDuringStop1:
+            newVal?.stopResult?.actionsTakenDuringStop1 || false,
+          actionsTakenDuringStop2:
+            newVal?.stopResult?.actionsTakenDuringStop2 || false,
+          actionsTakenDuringStop3:
+            newVal?.stopResult?.actionsTakenDuringStop3 || false,
+          actionsTakenDuringStop4:
+            newVal?.stopResult?.actionsTakenDuringStop4 || false,
+          actionsTakenDuringStop5:
+            newVal?.stopResult?.actionsTakenDuringStop5 || false,
+          actionsTakenDuringStop6:
+            newVal?.stopResult?.actionsTakenDuringStop6 || false,
+          actionsTakenDuringStop7:
+            newVal?.stopResult?.actionsTakenDuringStop7 || false,
+          actionsTakenDuringStop8:
+            newVal?.stopResult?.actionsTakenDuringStop8 || false,
+          actionsTakenDuringStop9:
+            newVal?.stopResult?.actionsTakenDuringStop9 || false,
+          actionsTakenDuringStop10:
+            newVal?.stopResult?.actionsTakenDuringStop10 || false,
+          warningCodes: newVal?.stopResult?.warningCodes || [],
+          citationCodes: newVal?.stopResult?.citationCodes || [],
+          infieldCodes: newVal?.stopResult?.infieldCodes || [],
+          custodialArrestCodes: newVal?.stopResult?.custodialArrestCodes || [],
+        },
+      }
     },
   },
 

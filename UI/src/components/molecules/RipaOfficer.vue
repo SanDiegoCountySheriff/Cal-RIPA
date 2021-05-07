@@ -150,6 +150,19 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        officer: {
+          editOfficer: newVal?.officer?.editOfficer || null,
+          yearsExperience: newVal?.officer?.yearsExperience || null,
+          assignment: newVal?.officer?.assignment || null,
+          otherType: newVal?.officer?.otherType || null,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

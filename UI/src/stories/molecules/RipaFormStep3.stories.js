@@ -1,8 +1,8 @@
-import RipaFormStep3 from '@/components/organisms/RipaFormStep3'
+import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
 import { formStatutes } from '../data/mappings'
 
 export default {
-  title: 'Organisms/RipaFormStep3',
+  title: 'Molecules/RipaFormStep3',
   component: RipaFormStep3,
   parameters: {},
 }

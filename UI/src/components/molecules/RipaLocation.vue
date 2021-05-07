@@ -40,7 +40,7 @@
               v-model="model.location.blockNumber"
               label="Block Number"
               :rules="blockNumberRules"
-              @input="debounceInput"
+              @input="handleInput"
             >
             </ripa-number-input>
           </div>
@@ -156,7 +156,6 @@ import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import _ from 'lodash'
 
 export default {
   name: 'ripa-location',
@@ -285,14 +284,15 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function (e) {
-      this.viewModel.location.blockNumber = Math.round(e / 100) * 100
-      this.handleInput()
-    }, 1000),
-
     handleInput() {
       this.updateBeatsModel()
+      this.updateBlockNumberModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateBlockNumberModel() {
+      const blockNumber = this.viewModel.location.blockNumber
+      this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
     },
 
     updateBeatsModel() {
@@ -307,6 +307,26 @@ export default {
       ) {
         this.viewModel.location.beat = null
         this.viewModel.location.city = null
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        location: {
+          isSchool: newVal?.location?.isSchool || false,
+          school: newVal?.location?.school || null,
+          blockNumber: newVal?.location?.blockNumber || null,
+          streetName: newVal?.location?.streetName || null,
+          intersection: newVal?.location?.intersection || null,
+          moreLocationOptions: newVal?.location?.moreLocationOptions || false,
+          highwayExit: newVal?.location?.highwayExit || null,
+          landmark: newVal?.location?.landmark || null,
+          outOfCounty: newVal?.location?.outOfCounty || false,
+          city: newVal?.location?.city || null,
+          beat: newVal?.location?.beat || null,
+        },
       }
     },
   },
