@@ -52,7 +52,7 @@ export default {
     return {
       fullStop: {},
       isEditingForm: false,
-      loadingPii: true,
+      loadingPii: false,
       stop: defaultStop(),
     }
   },

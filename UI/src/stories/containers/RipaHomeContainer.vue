@@ -20,6 +20,7 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
@@ -60,6 +61,7 @@ export default {
   data() {
     return {
       isEditingForm: false,
+      loadingPii: true,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
@@ -93,6 +95,7 @@ export default {
 
     validateReasonForStopForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
         let isFound = false
         isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
@@ -100,12 +103,14 @@ export default {
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
+        this.loadingPii = false
         this.updateFullStop()
       }
     },
 
     validateBasisForSearchForPii(textValue) {
       if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
         let isFound = false
         isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
@@ -113,6 +118,7 @@ export default {
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }
+        this.loadingPii = false
         this.updateFullStop()
       }
     },

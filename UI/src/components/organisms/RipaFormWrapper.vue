@@ -276,10 +276,11 @@ export default {
 
     handleCancel() {
       this.$confirm({
-        message: `Are you sure you want to cancel the form?`,
+        title: 'Confirm Cancel',
+        message: `Are you sure you want to cancel the form? You will lose all changes.`,
         button: {
           no: 'No',
-          yes: 'Yes',
+          yes: 'Cancel',
         },
         callback: confirm => {
           if (confirm) {
@@ -297,10 +298,11 @@ export default {
 
     handleDeletePerson(id) {
       this.$confirm({
-        message: `Are you sure you want to delete the user?`,
+        title: 'Confirm Delete',
+        message: `Are you sure you want to delete the person?`,
         button: {
           no: 'No',
-          yes: 'Yes',
+          yes: 'Delete',
         },
         callback: confirm => {
           if (confirm) {
