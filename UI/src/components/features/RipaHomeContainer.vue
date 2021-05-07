@@ -91,7 +91,7 @@ export default {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.person = {
-        id: 2,
+        id: new Date().getTime(),
         isStudent: false,
         perceivedRace: null,
         perceivedGender: null,
@@ -127,7 +127,7 @@ export default {
             time: format(new Date(), 'h:mm'),
           },
           person: {
-            id: 1,
+            id: new Date().getTime(),
           },
           stopReason: {
             reasonForStop: 1,
@@ -168,7 +168,7 @@ export default {
             time: format(new Date(), 'h:mm'),
           },
           person: {
-            id: 1,
+            id: new Date().getTime(),
           },
           stopReason: {
             reasonForStop: 3,
@@ -214,7 +214,7 @@ export default {
     getDefaultStop() {
       return {
         person: {
-          id: 1,
+          id: new Date().getTime(),
         },
       }
     },
