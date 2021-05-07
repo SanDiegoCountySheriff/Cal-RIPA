@@ -10,15 +10,15 @@
       <!-- <div class="tw-mt-4">
         {{ fullStop }}
       </div> -->
-      <v-divider></v-divider>
-      <!-- <div class="tw-my-4">
+      <!-- <v-divider></v-divider>
+      <div class="tw-my-4">
         {{ getFullStop.listPersonStopped[0] }}
       </div>
       <v-divider></v-divider>
       <div class="tw-my-4">
         {{ getFullStop.listPersonStopped[1] }}
-      </div> -->
-      <v-divider></v-divider>
+      </div>
+      <v-divider></v-divider> -->
 
       <!-- <div>
         Stop

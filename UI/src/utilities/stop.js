@@ -300,8 +300,8 @@ const getReasonForStop = (person, statutes) => {
     return {
       key: reason.toString(),
       reason: reason ? STOP_REASONS[reason - 1].name : 'N/A',
-      details: getReasonForStopDetails(reason, person),
-      codes: getReasonForStopCodes(reason, person, statutes),
+      listDetail: getReasonForStopDetails(reason, person),
+      listCodes: getReasonForStopCodes(reason, person, statutes),
     }
   }
 
@@ -508,16 +508,16 @@ const getResultOfStop = (person, statutes) => {
       result: STOP_RESULTS[item - 1].name,
     }
     if (item === 1) {
-      stopResult.codes = getWarningCodes(person, statutes)
+      stopResult.listCodes = getWarningCodes(person, statutes)
     }
     if (item === 2) {
-      stopResult.codes = getCitationCodes(person, statutes)
+      stopResult.listCodes = getCitationCodes(person, statutes)
     }
     if (item === 3) {
-      stopResult.codes = getInfieldCodes(person, statutes)
+      stopResult.listCodes = getInfieldCodes(person, statutes)
     }
     if (item === 5) {
-      stopResult.codes = getCustodialArrestCodes(person, statutes)
+      stopResult.listCodes = getCustodialArrestCodes(person, statutes)
     }
 
     return stopResult
