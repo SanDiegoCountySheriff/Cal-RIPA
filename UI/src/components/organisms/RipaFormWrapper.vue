@@ -274,10 +274,42 @@ export default {
       window.scrollTo(0, 0)
     },
 
+    handleCancel() {
+      this.$confirm({
+        message: `Are you sure you want to cancel the form?`,
+        button: {
+          no: 'No',
+          yes: 'Yes',
+        },
+        callback: confirm => {
+          if (confirm) {
+            this.stepIndex = 1
+            this.isEditStop = true
+            this.isEditPerson = true
+            window.scrollTo(0, 0)
+            if (this.onCancel) {
+              this.onCancel()
+            }
+          }
+        },
+      })
+    },
+
     handleDeletePerson(id) {
-      if (this.onDeletePerson) {
-        this.onDeletePerson(id)
-      }
+      this.$confirm({
+        message: `Are you sure you want to delete the user?`,
+        button: {
+          no: 'No',
+          yes: 'Yes',
+        },
+        callback: confirm => {
+          if (confirm) {
+            if (this.onDeletePerson) {
+              this.onDeletePerson(id)
+            }
+          }
+        },
+      })
     },
 
     handleEditPerson(id) {
@@ -299,16 +331,6 @@ export default {
       this.stepIndex =
         this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
       window.scrollTo(0, 0)
-    },
-
-    handleCancel() {
-      this.stepIndex = 1
-      this.isEditStop = true
-      this.isEditPerson = true
-      window.scrollTo(0, 0)
-      if (this.onCancel) {
-        this.onCancel()
-      }
     },
 
     handleSubmit() {

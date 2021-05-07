@@ -226,7 +226,12 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue.length > 0
+      ) {
         this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
@@ -241,7 +246,12 @@ export default {
     },
 
     async validateBasisForSearchForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue.length > 0
+      ) {
         this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)

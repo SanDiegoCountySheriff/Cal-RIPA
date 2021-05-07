@@ -1,5 +1,6 @@
 <template>
   <ripa-page-container :admin="admin">
+    <vue-confirm-dialog></vue-confirm-dialog>
     <v-divider></v-divider>
     <div class="tw-my-4">
       {{ fullStop }}
