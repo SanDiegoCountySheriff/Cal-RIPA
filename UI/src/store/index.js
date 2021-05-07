@@ -244,6 +244,24 @@ export default new Vuex.Store({
         })
     },
 
+    editStop({ dispatch }, stop) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
+          stop,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getStops')
+        })
+    },
+
     getAdminBeats({ commit }) {
       return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
