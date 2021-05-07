@@ -100,7 +100,7 @@ export const exampleFullStop = {
       id: 1620325829,
       isStudent: false,
       perceivedRace: [2, 7],
-      perceivedGender: 3,
+      perceivedGender: 5,
       perceivedLgbt: true,
       perceivedAge: 3,
       perceivedLimitedEnglish: true,

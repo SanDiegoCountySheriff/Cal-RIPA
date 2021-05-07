@@ -25,8 +25,9 @@
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
         :on-add-person="handleAddPerson"
-        :on-delete-person="handleDeletePerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -38,7 +39,6 @@ import RipaPageContainer from './RipaPageContainer'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { defaultStop } from '@/utilities/stop'
 import {
   formBeats,
   formCountyCities,
@@ -60,6 +60,7 @@ export default {
 
   data() {
     return {
+      fullStop: {},
       isEditingForm: false,
       loadingPii: true,
       mappedFormBeats: [],
@@ -67,8 +68,7 @@ export default {
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
-      stop: defaultStop(),
-      fullStop: {},
+      stop: {},
     }
   },
 
@@ -91,6 +91,10 @@ export default {
         this.mappedFormStatutes = formStatutes()
         this.loading = false
       }, 500)
+    },
+
+    handleSubmit() {
+      console.log('LONG STOP FORM SUBMITTED', this.fullStop)
     },
 
     validateReasonForStopForPii(textValue) {

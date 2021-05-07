@@ -23,8 +23,9 @@
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
         :on-add-person="handleAddPerson"
-        :on-delete-person="handleDeletePerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -35,7 +36,6 @@
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { defaultStop } from '@/utilities/stop'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -53,7 +53,7 @@ export default {
       fullStop: {},
       isEditingForm: false,
       loadingPii: false,
-      stop: defaultStop(),
+      stop: {},
     }
   },
 
@@ -82,6 +82,10 @@ export default {
     getOfficerAssignment() {
       const assignment = localStorage.getItem('ripa_officer_assignment')
       return +assignment || null
+    },
+
+    handleSubmit() {
+      console.log('LONG STOP FORM SUBMITTED', this.fullStop)
     },
 
     async validateReasonForStopForPii(textValue) {

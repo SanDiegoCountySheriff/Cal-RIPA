@@ -335,11 +335,36 @@ export default {
       window.scrollTo(0, 0)
     },
 
-    handleSubmit() {
+    handleStartNew() {
+      this.stepIndex = 1
       this.isEditStop = true
       this.isEditPerson = true
-      this.stepIndex = this.confirmationStepIndex
       window.scrollTo(0, 0)
+      if (this.onCancel) {
+        this.onCancel()
+      }
+    },
+
+    handleSubmit() {
+      this.$confirm({
+        title: 'Confirm Submission',
+        message: `Are you sure you want to submit the form?`,
+        button: {
+          no: 'No',
+          yes: 'Submit',
+        },
+        callback: confirm => {
+          if (confirm) {
+            this.isEditStop = true
+            this.isEditPerson = true
+            this.stepIndex = this.confirmationStepIndex
+            window.scrollTo(0, 0)
+            if (this.onSubmit) {
+              this.onSubmit()
+            }
+          }
+        },
+      })
     },
   },
 
@@ -382,11 +407,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onCancel: {
+      type: Function,
+      default: () => {},
+    },
     onDeletePerson: {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onSubmit: {
       type: Function,
       default: () => {},
     },

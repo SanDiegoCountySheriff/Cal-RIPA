@@ -9,10 +9,9 @@
       :schools="schools"
       :statutes="statutes"
       :on-add-person="onAddPerson"
-      :on-delete-person="onDeletePerson"
-      :on-edit-person="onEditPerson"
-      :on-edit-stop="onEditStop"
       :on-cancel="onCancel"
+      :on-delete-person="onDeletePerson"
+      :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -80,19 +79,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onCancel: {
+      type: Function,
+      default: () => {},
+    },
     onDeletePerson: {
       type: Function,
       default: () => {},
     },
-    onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
+    onSubmit: {
       type: Function,
       default: () => {},
     },
