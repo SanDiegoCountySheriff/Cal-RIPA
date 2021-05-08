@@ -636,7 +636,12 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('updateOfficerStops', response.data)
+          const data = response.data.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateOfficerStops', data)
         })
         .catch(() => {
           commit('updateOfficerStops', [])
