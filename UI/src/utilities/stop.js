@@ -98,7 +98,7 @@ export const probationStop = (yearsExperience, assignment) => {
   }
 }
 
-export const apiFullStop = (
+export const apiStop = (
   fullStop,
   beats,
   countyCities,

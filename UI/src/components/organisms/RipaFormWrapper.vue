@@ -135,6 +135,7 @@
             <v-stepper-content step="6">
               <ripa-form-step-6
                 v-model="stop"
+                :api-stop="getApiStop"
                 :on-add-person="handleAddPerson"
                 :on-back="handleBack"
                 :on-delete-person="handleDeletePerson"
@@ -213,6 +214,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
+import { apiStop } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -250,6 +252,17 @@ export default {
 
     getFormStep2BackButtonVisible() {
       return this.isEditPerson && this.isEditStop
+    },
+
+    getApiStop() {
+      return apiStop(
+        this.fullStop,
+        this.beats,
+        this.countyCities,
+        this.nonCountyCities,
+        this.schools,
+        this.statutes,
+      )
     },
   },
 
@@ -315,6 +328,7 @@ export default {
     },
 
     handleEditPerson(id) {
+      console.log('Edit Person in Form', id)
       this.stepIndex = 2
       window.scrollTo(0, 0)
       this.isEditStop = false
@@ -357,7 +371,7 @@ export default {
             this.isEditPerson = true
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
-              this.onSubmit()
+              this.onSubmit(this.getApiStop)
             }
           }
         },
@@ -386,6 +400,10 @@ export default {
     },
     countyCities: {
       type: Array,
+      default: () => {},
+    },
+    fullStop: {
+      type: Object,
       default: () => {},
     },
     loadingPii: {

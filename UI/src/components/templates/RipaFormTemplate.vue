@@ -4,6 +4,7 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :full-stop="fullStop"
       :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :schools="schools"
@@ -58,6 +59,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => [],
+    },
+    fullStop: {
+      type: Object,
+      default: () => {},
     },
     loadingPii: {
       type: Boolean,

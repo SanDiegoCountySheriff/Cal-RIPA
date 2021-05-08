@@ -20,6 +20,7 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :full-stop="fullStop"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
@@ -85,8 +86,8 @@ export default {
       }, 500)
     },
 
-    handleSubmit() {
-      console.log('LONG STOP FORM SUBMITTED', this.fullStop)
+    handleSubmit(apiStop) {
+      console.log('API STOP SUBMITTED', apiStop)
     },
 
     validateReasonForStopForPii(textValue) {

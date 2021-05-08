@@ -1,5 +1,5 @@
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
-import { apiFullStop } from '@/utilities/stop'
+import { apiStop } from '@/utilities/stop'
 import { exampleFullStop } from '../data/formStop'
 import {
   formBeats,
@@ -19,7 +19,7 @@ export const basic = () => ({
   components: { RipaFormSummary },
   computed: {
     getFullStop() {
-      return apiFullStop(
+      return apiStop(
         exampleFullStop,
         formBeats(),
         formCountyCities(),

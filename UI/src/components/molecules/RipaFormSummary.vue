@@ -7,9 +7,9 @@
         {{ stop }}
       </div>
       <v-divider></v-divider> -->
-      <!-- <div class="tw-mt-4">
-        {{ fullStop }}
-      </div> -->
+      <div class="tw-mt-4">
+        {{ apiStop }}
+      </div>
       <!-- <v-divider></v-divider>
       <div class="tw-my-4">
         {{ getFullStop.listPersonStopped[0] }}
@@ -121,9 +121,9 @@ export default {
   name: 'ripa-form-summary',
 
   computed: {
-    getFullStop() {
-      console.log(this.fullStop)
-      return this.fullStop
+    getApiStop() {
+      console.log(this.apiStop)
+      return this.apiStop
     },
   },
 
@@ -151,7 +151,7 @@ export default {
   },
 
   props: {
-    fullStop: {
+    apiStop: {
       type: Object,
       default: () => {},
     },
