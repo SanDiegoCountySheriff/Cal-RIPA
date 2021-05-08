@@ -119,7 +119,7 @@ export const apiStop = (
   const outOfCounty = fullStop.location?.outOfCounty || false
 
   return {
-    agency: 'TBD',
+    agency: 'INSIGHT',
     date: fullStop.stopDate.date,
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,
@@ -143,7 +143,7 @@ export const apiStop = (
       otherType: stop.officer?.otherType || '',
       type: assignment.text,
     },
-    officerId: 'TBD',
+    officerId: '202105081234',
     stopDateTime: formatDateTime(
       fullStop.stopDate.date,
       fullStop.stopDate.time,

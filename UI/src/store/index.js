@@ -312,7 +312,7 @@ export default new Vuex.Store({
         })
     },
 
-    editStop({ dispatch }, stop) {
+    editOfficerStop({ dispatch }, stop) {
       return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
@@ -326,7 +326,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getStops')
+          dispatch('getOfficerStops')
         })
     },
 

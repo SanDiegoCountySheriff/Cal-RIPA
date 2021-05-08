@@ -71,10 +71,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii']),
+    ...mapActions(['checkTextForPii', 'editOfficerStop']),
 
     handleSubmit(apiStop) {
       console.log('API STOP SUBMITTED', apiStop)
+      this.editOfficerStop(apiStop)
     },
 
     async validateReasonForStopForPii(textValue) {
