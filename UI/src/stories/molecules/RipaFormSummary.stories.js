@@ -19,7 +19,6 @@ export const onePerson = () => ({
   components: { RipaFormSummary },
   computed: {
     getApiStop() {
-      console.log(onePersonFullStop)
       return apiStop(
         onePersonFullStop,
         formBeats(),

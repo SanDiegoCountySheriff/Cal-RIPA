@@ -74,7 +74,6 @@ export default {
     ...mapActions(['checkTextForPii', 'editOfficerStop']),
 
     handleSubmit(apiStop) {
-      console.log('API STOP SUBMITTED', apiStop)
       this.editOfficerStop(apiStop)
     },
 
