@@ -24,12 +24,15 @@
 </template>
 
 <script>
-import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaCheckGroup,
@@ -39,11 +42,7 @@ export default {
   data() {
     return {
       raceItems: RACES,
-      viewModel: {
-        person: {
-          perceivedRace: this.value?.person?.perceivedRace || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -68,11 +67,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        person: {
-          perceivedRace: newVal?.person?.perceivedRace || [],
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

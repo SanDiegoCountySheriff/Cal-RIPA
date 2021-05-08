@@ -188,6 +188,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -195,6 +196,8 @@ import { STOP_RESULTS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -207,37 +210,7 @@ export default {
     return {
       valid: true,
       stopResultItems: STOP_RESULTS,
-      viewModel: {
-        stopReason: this.value?.stopReason || null,
-        stopResult: {
-          anyActionsTaken: this.value?.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            this.value?.stop?.actionsTakenDuringStop1 || false,
-          actionsTakenDuringStop2:
-            this.value?.stop?.actionsTakenDuringStop2 || false,
-          actionsTakenDuringStop3:
-            this.value?.stop?.actionsTakenDuringStop3 || false,
-          actionsTakenDuringStop4:
-            this.value?.stop?.actionsTakenDuringStop4 || false,
-          actionsTakenDuringStop5:
-            this.value?.stop?.actionsTakenDuringStop5 || false,
-          actionsTakenDuringStop6:
-            this.value?.stop?.actionsTakenDuringStop6 || false,
-          actionsTakenDuringStop7:
-            this.value?.stop?.actionsTakenDuringStop7 || false,
-          actionsTakenDuringStop8:
-            this.value?.stop?.actionsTakenDuringStop8 || false,
-          actionsTakenDuringStop9:
-            this.value?.stop?.actionsTakenDuringStop9 || false,
-          actionsTakenDuringStop10:
-            this.value?.stop?.actionsTakenDuringStop10 || false,
-          warningCodes: this.value?.stopResult?.warningCodes || [],
-          citationCodes: this.value?.stopResult?.citationCodes || [],
-          infieldCodes: this.value?.stopResult?.infieldCodes || [],
-          custodialArrestCodes:
-            this.value?.stopResult?.custodialArrestCodes || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -373,36 +346,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        stopReason: newVal.stopReason || null,
-        stopResult: {
-          anyActionsTaken: newVal?.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            newVal?.stopResult?.actionsTakenDuringStop1 || false,
-          actionsTakenDuringStop2:
-            newVal?.stopResult?.actionsTakenDuringStop2 || false,
-          actionsTakenDuringStop3:
-            newVal?.stopResult?.actionsTakenDuringStop3 || false,
-          actionsTakenDuringStop4:
-            newVal?.stopResult?.actionsTakenDuringStop4 || false,
-          actionsTakenDuringStop5:
-            newVal?.stopResult?.actionsTakenDuringStop5 || false,
-          actionsTakenDuringStop6:
-            newVal?.stopResult?.actionsTakenDuringStop6 || false,
-          actionsTakenDuringStop7:
-            newVal?.stopResult?.actionsTakenDuringStop7 || false,
-          actionsTakenDuringStop8:
-            newVal?.stopResult?.actionsTakenDuringStop8 || false,
-          actionsTakenDuringStop9:
-            newVal?.stopResult?.actionsTakenDuringStop9 || false,
-          actionsTakenDuringStop10:
-            newVal?.stopResult?.actionsTakenDuringStop10 || false,
-          warningCodes: newVal?.stopResult?.warningCodes || [],
-          citationCodes: newVal?.stopResult?.citationCodes || [],
-          infieldCodes: newVal?.stopResult?.infieldCodes || [],
-          custodialArrestCodes: newVal?.stopResult?.custodialArrestCodes || [],
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

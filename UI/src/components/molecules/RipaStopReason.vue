@@ -112,6 +112,7 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -125,6 +126,8 @@ import {
 
 export default {
   name: 'ripa-stop-reason',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -148,24 +151,7 @@ export default {
       reasonItems: STOP_REASONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: {
-        stopReason: {
-          reasonForStop: this.value?.stopReason?.reasonForStop || null,
-          trafficViolation: this.value?.stopReason?.trafficViolation || null,
-          trafficViolationCode:
-            this.value?.stopReason?.trafficViolationCode || null,
-          reasonableSuspicion:
-            this.value?.stopReason?.reasonableSuspicion || [],
-          reasonableSuspicionCode:
-            this.value?.stopReason?.reasonableSuspicionCode || null,
-          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
-          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
-          reasonForStopExplanation:
-            this.value?.stopReason?.reasonForStopExplanation || null,
-          reasonForStopPiiFound:
-            this.value?.stopReason?.reasonForStopPiiFound || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -222,23 +208,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        stopReason: {
-          reasonForStop: newVal?.stopReason?.reasonForStop || null,
-          trafficViolation: newVal?.stopReason?.trafficViolation || null,
-          trafficViolationCode:
-            newVal?.stopReason?.trafficViolationCode || null,
-          reasonableSuspicion: newVal?.stopReason?.reasonableSuspicion || [],
-          reasonableSuspicionCode:
-            newVal?.stopReason?.reasonableSuspicionCode || null,
-          searchOfPerson: newVal?.stopReason?.searchOfPerson || null,
-          searchOfProperty: newVal?.stopReason?.searchOfProperty || null,
-          reasonForStopExplanation:
-            newVal?.stopReason?.reasonForStopExplanation || null,
-          reasonForStopPiiFound:
-            newVal?.stopReason?.reasonForStopPiiFound || false,
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
 
     'value.stopReason.reasonForStopPiiFound': {

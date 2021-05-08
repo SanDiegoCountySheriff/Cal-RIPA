@@ -10,7 +10,7 @@ import RipaAccordion from '@/components/molecules/RipaAccordion'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 
 export default {
-  name: 'ripa-stops-wrapper',
+  name: 'ripa-officer-stops-wrapper',
 
   components: {
     RipaAccordion,

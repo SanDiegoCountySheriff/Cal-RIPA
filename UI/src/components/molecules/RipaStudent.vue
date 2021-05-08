@@ -19,11 +19,14 @@
 </template>
 
 <script>
-import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-student',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaSwitch,
@@ -32,11 +35,7 @@ export default {
 
   data() {
     return {
-      viewModel: {
-        person: {
-          isStudent: this.value?.person?.isStudent || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -56,11 +55,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        person: {
-          isStudent: newVal?.person?.isStudent || false,
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

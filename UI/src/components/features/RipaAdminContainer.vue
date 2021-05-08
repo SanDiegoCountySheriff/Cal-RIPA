@@ -7,14 +7,17 @@
     :statutes="mappedAdminStatutes"
     :stops="mappedAdminStops"
     :submissions="mappedAdminSubmissions"
+    :users="mappedAdminUsers"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
     :on-delete-statute="handleDeleteStatute"
+    :on-delete-user="handleDeleteUser"
     :on-edit-beat="handleEditBeat"
     :on-edit-city="handleEditCity"
     :on-edit-school="handleEditSchool"
     :on-edit-statute="handleEditStatute"
+    :on-edit-user="handleEditUser"
   ></ripa-admin-template>
 </template>
 
@@ -43,6 +46,7 @@ export default {
       'mappedAdminStatutes',
       'mappedAdminStops',
       'mappedAdminSubmissions',
+      'mappedAdminUsers',
     ]),
   },
 
@@ -52,14 +56,17 @@ export default {
       'deleteCity',
       'deleteSchool',
       'deleteStatute',
+      'deleteUser',
       'editBeat',
       'editCity',
       'editSchool',
       'editStatute',
+      'editUser',
       'getAdminBeats',
       'getAdminCities',
       'getAdminSchools',
       'getAdminStatutes',
+      'getAdminUsers',
     ]),
 
     async getAdminData() {
@@ -69,6 +76,7 @@ export default {
         this.getAdminCities(),
         this.getAdminSchools(),
         this.getAdminStatutes(),
+        this.getAdminUsers(),
       ])
       this.loading = false
     },
@@ -97,6 +105,12 @@ export default {
       this.loading = false
     },
 
+    async handleDeleteUser(user) {
+      this.loading = true
+      await Promise.all([this.deleteUser(user)])
+      this.loading = false
+    },
+
     async handleEditBeat(beat) {
       this.loading = true
       await Promise.all([this.editBeat(beat)])
@@ -118,6 +132,12 @@ export default {
     async handleEditStatute(statute) {
       this.loading = true
       await Promise.all([this.editStatute(statute)])
+      this.loading = false
+    },
+
+    async handleEditUser(user) {
+      this.loading = true
+      await Promise.all([this.editUser(user)])
       this.loading = false
     },
   },
