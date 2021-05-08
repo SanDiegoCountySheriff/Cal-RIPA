@@ -1,6 +1,5 @@
 <script>
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
-import { sampleStop } from '@/stories/data/formStop'
 
 export default {
   methods: {
@@ -63,9 +62,10 @@ export default {
         )
       }
 
-      if (value === 'test') {
-        this.stop = sampleStop
-      }
+      this.stop = defaultStop(
+        this.getOfficerYearsExperience(),
+        this.getOfficerAssignment(),
+      )
 
       this.updateFullStop()
     },

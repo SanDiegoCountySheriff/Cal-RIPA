@@ -16,10 +16,19 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = () => {
+export const defaultStop = (yearsExperience, assignment) => {
   return {
     id: uuidv4(),
     created: new Date(),
+    officer: {
+      editOfficer: false,
+      yearsExperience: yearsExperience,
+      assignment: assignment,
+    },
+    stopDate: {
+      date: format(new Date(), 'yyyy-MM-dd'),
+      time: format(new Date(), 'h:mm'),
+    },
     person: {
       id: new Date().getTime(),
     },
@@ -165,7 +174,7 @@ export const getPeopleListed = (fullStop, statutes) => {
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
       perceivedAge: person.perceivedAge?.toString() || null,
-      perceivedGender: getPerceivedGender(person).text,
+      perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       reasonForStop: getReasonForStop(person, statutes),
@@ -203,7 +212,10 @@ const getOfficerAssignment = fullStop => {
     }
   }
 
-  return null
+  return {
+    code: '',
+    text: '',
+  }
 }
 
 const getSchool = (fullStop, schools) => {
@@ -277,9 +289,14 @@ const getPerceivedGender = person => {
   return null
 }
 
+const getPerceivedGenderText = person => {
+  const gender = getPerceivedGender(person)
+  return gender ? gender.text : ''
+}
+
 const getGenderNonconforming = person => {
   const gender = getPerceivedGender(person)
-  return gender.code === 5
+  return gender ? gender.code === 5 : null
 }
 
 const getPerceivedOrKnownDisability = person => {
