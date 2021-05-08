@@ -20,7 +20,7 @@
       </div>
       <v-divider></v-divider> -->
 
-      <!-- <div>
+      <div>
         Stop
         <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop"
           >Edit</v-btn
@@ -111,7 +111,7 @@
       <div>None</div>
       <div>Result of Stop</div>
       <div>Citation for infraction</div>
-      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div> -->
+      <div>22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106</div>
     </v-card-text>
   </v-card>
 </template>

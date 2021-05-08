@@ -25,7 +25,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: 1,
+    id: uuidv4(),
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -99,7 +99,7 @@ export const exampleFullStop = {
   },
   people: [
     {
-      id: 1,
+      id: uuidv4(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
@@ -146,7 +146,7 @@ export const exampleFullStop = {
       },
     },
     {
-      id: 2,
+      id: uuidv4(),
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,

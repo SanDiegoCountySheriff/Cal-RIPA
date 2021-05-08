@@ -13,6 +13,7 @@ export default new Vuex.Store({
     adminSchools: [],
     adminStatutes: [],
     adminStops: [],
+    adminUsers: [],
     formBeats: [],
     formCountyCities: [],
     formNonCountyCities: [],
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     mappedAdminSubmissions: () => {
       return []
+    },
+    mappedAdminUsers: state => {
+      return state.adminUsers
     },
     mappedFormBeats: state => {
       return state.formBeats
@@ -85,6 +89,9 @@ export default new Vuex.Store({
     updateAdminStatutes(state, items) {
       state.adminStatutes = items
     },
+    updateAdminUsers(state, items) {
+      state.adminUsers = items
+    },
     updateFormBeats(state, items) {
       state.formBeats = items
     },
@@ -109,6 +116,32 @@ export default new Vuex.Store({
   },
 
   actions: {
+    checkTextForPii({ commit }, textValue) {
+      const document = {
+        Document: textValue,
+      }
+      return axios
+        .post(
+          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
+          document,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          const data = response.data
+          commit('updatePiiDate')
+          return data.entities.length > 0
+        })
+        .catch(() => {
+          return null
+        })
+    },
+
     deleteBeat({ dispatch }, beat) {
       return axios
         .put(
@@ -170,6 +203,22 @@ export default new Vuex.Store({
         )
         .then(() => {
           dispatch('getAdminStatutes')
+        })
+    },
+
+    deleteUser({ dispatch }, user) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/DeleteUser/${user.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
         })
     },
 
@@ -242,6 +291,24 @@ export default new Vuex.Store({
         )
         .then(() => {
           dispatch('getAdminSchools')
+        })
+    },
+
+    editUser({ dispatch }, user) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/PutUser/${user.id}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
         })
     },
 
@@ -498,6 +565,29 @@ export default new Vuex.Store({
         })
     },
 
+    getAdminUsers({ commit }) {
+      return axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/userProfile/GetUsers', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.map(item => {
+            return {
+              ...item,
+              code: item.offenseCode,
+              startDate: formatDate(item.startDate),
+            }
+          })
+          commit('updateAdminUsers', data)
+        })
+        .catch(() => {
+          commit('updateAdminUsers', [])
+        })
+    },
+
     getFormStatutes({ commit }) {
       const items = localStorage.getItem('ripa_statutes')
       if (items !== null) {
@@ -550,32 +640,6 @@ export default new Vuex.Store({
         })
         .catch(() => {
           commit('updateOfficerStops', [])
-        })
-    },
-
-    checkTextForPii({ commit }, textValue) {
-      const document = {
-        Document: textValue,
-      }
-      return axios
-        .post(
-          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
-          document,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(response => {
-          const data = response.data
-          commit('updatePiiDate')
-          return data.entities.length > 0
-        })
-        .catch(() => {
-          return null
         })
     },
   },
