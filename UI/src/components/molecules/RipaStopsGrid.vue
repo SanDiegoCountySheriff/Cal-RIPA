@@ -1,7 +1,7 @@
 <template>
   <v-container class="tw-mt-2" fluid>
-    <v-layout row wrap>
-      <v-flex xs12 md3>
+    <v-layout row align-center nowrap>
+      <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopFromDate"
@@ -11,7 +11,7 @@
         </div>
       </v-flex>
 
-      <v-flex xs12 md3>
+      <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopToDate"
@@ -21,7 +21,7 @@
         </div>
       </v-flex>
 
-      <v-flex xs12 md3>
+      <v-flex xs12 md2>
         <v-select
           v-model="status"
           class="tw-ml-2"
@@ -43,6 +43,21 @@
             class="tw-ml-2"
             label="PII Found"
           ></v-switch>
+        </div>
+      </v-flex>
+
+      <v-flex xs12 md3>
+        <div class="tw-flex tw-justify-center">
+          <v-autocomplete
+            v-model="codess"
+            :items="items"
+            dense
+            chips
+            deletable-chips
+            small-chips
+            label="Error Codes"
+            multiple
+          ></v-autocomplete>
         </div>
       </v-flex>
 
