@@ -1,7 +1,7 @@
-import RipaFormStep6 from '@/components/organisms/RipaFormStep6'
+import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 
 export default {
-  title: 'Organisms/RipaFormStep6',
+  title: 'Molecules/RipaFormStep6',
   component: RipaFormStep6,
   parameters: {},
 }

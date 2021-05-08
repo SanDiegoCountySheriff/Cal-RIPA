@@ -86,11 +86,19 @@
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
+          <template v-if="model.stopReason.reasonForStopPiiFound">
+            <v-alert outlined type="warning" dense>
+              The explanation contains personally identifying information.
+              Please remove if possible.
+            </v-alert>
+          </template>
+
           <ripa-text-area
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
+            :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
           ></ripa-text-area>
@@ -154,6 +162,8 @@ export default {
           searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
           reasonForStopExplanation:
             this.value?.stopReason?.reasonForStopExplanation || null,
+          reasonForStopPiiFound:
+            this.value?.stopReason?.reasonForStopPiiFound || false,
         },
       },
     }
@@ -210,12 +220,44 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopReason: {
+          reasonForStop: newVal?.stopReason?.reasonForStop || null,
+          trafficViolation: newVal?.stopReason?.trafficViolation || null,
+          trafficViolationCode:
+            newVal?.stopReason?.trafficViolationCode || null,
+          reasonableSuspicion: newVal?.stopReason?.reasonableSuspicion || [],
+          reasonableSuspicionCode:
+            newVal?.stopReason?.reasonableSuspicionCode || null,
+          searchOfPerson: newVal?.stopReason?.searchOfPerson || null,
+          searchOfProperty: newVal?.stopReason?.searchOfProperty || null,
+          reasonForStopExplanation:
+            newVal?.stopReason?.reasonForStopExplanation || null,
+          reasonForStopPiiFound:
+            newVal?.stopReason?.reasonForStopPiiFound || false,
+        },
+      }
+    },
+
+    'value.stopReason.reasonForStopPiiFound': {
+      handler(newVal) {
+        this.viewModel.stopReason.reasonForStopPiiFound = newVal
+      },
+    },
+  },
+
   props: {
     value: {
       type: Object,
       default: () => {},
     },
-    offenseCodes: {
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
+    statutes: {
       type: Array,
       default: () => [],
     },

@@ -127,6 +127,19 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        stopDate: {
+          date: newVal?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
+          time: newVal?.stopDate?.time || format(new Date(), 'h:mm'),
+          duration: newVal?.stopDate?.duration || null,
+          stopInResponseToCfs: newVal?.stopDate?.stopInResponseToCfs || false,
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

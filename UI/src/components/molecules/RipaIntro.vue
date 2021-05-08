@@ -72,7 +72,7 @@ export default {
 
     handleDefaultTemplate() {
       if (this.onTemplate) {
-        this.onTemplate('probation')
+        this.onTemplate('test')
       }
     },
   },

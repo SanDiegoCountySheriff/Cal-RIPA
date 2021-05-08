@@ -2,7 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-actions-taken
       v-model="model"
-      :statutes="statutes"
+      :loading-pii="loadingPii"
     ></ripa-actions-taken>
     <ripa-contraband v-model="model"></ripa-contraband>
 

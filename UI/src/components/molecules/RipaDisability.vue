@@ -91,6 +91,18 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = {
+        person: {
+          anyDisabilities: newVal?.person?.anyDisabilities || false,
+          perceivedOrKnownDisability:
+            newVal?.person?.perceivedOrKnownDisability || [],
+        },
+      }
+    },
+  },
+
   props: {
     value: {
       type: Object,

@@ -24,15 +24,17 @@
 </template>
 
 <script>
-import RipaStopResult from '@/components/molecules/RipaStopResult'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+import RipaStopResult from '@/components/molecules/RipaStopResult'
 
 export default {
-  name: 'ripa-form-step5',
+  name: 'ripa-form-step4',
 
   mixins: [RipaFormStepMixin],
 
-  components: { RipaStopResult },
+  components: {
+    RipaStopResult,
+  },
 
   props: {
     statutes: {

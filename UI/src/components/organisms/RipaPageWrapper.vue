@@ -6,15 +6,19 @@
       :dark="dark"
       :on-update-dark="onUpdateDark"
     ></ripa-app-bar>
+
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
+
+    <ripa-speed-dial></ripa-speed-dial>
   </div>
 </template>
 
 <script>
 import RipaAppBar from '@/components/molecules/RipaAppBar'
 import RipaContentWrapper from '@/components/organisms/RipaContentWrapper'
+import RipaSpeedDial from '@/components/molecules/RipaSpeedDial'
 
 export default {
   name: 'ripa-page-wrapper',
@@ -22,6 +26,7 @@ export default {
   components: {
     RipaAppBar,
     RipaContentWrapper,
+    RipaSpeedDial,
   },
 
   props: {

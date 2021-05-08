@@ -1,8 +1,20 @@
 <template>
   <ripa-page-container :admin="admin">
+    <vue-confirm-dialog></vue-confirm-dialog>
+    <v-divider></v-divider>
+    <div class="tw-my-4">
+      {{ fullStop }}
+    </div>
+    <v-divider></v-divider>
+    <div class="tw-my-4">
+      {{ stop }}
+    </div>
+    <v-divider></v-divider>
+
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
+
     <template v-if="isEditingForm">
       <ripa-form-template
         v-model="stop"
@@ -11,6 +23,8 @@
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :on-add-person="handleAddPerson"
+        :on-delete-person="handleDeletePerson"
         :on-cancel="handleCancel"
         @input="handleInput"
       ></ripa-form-template>
@@ -30,6 +44,7 @@ import {
   formSchools,
   formStatutes,
 } from '../data/mappings'
+import { sampleStop } from '../data/formStop'
 
 export default {
   name: 'ripa-home-container',
@@ -48,27 +63,48 @@ export default {
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
-      stop: {},
+      stop: this.getDefaultStop(),
+      fullStop: {},
     }
   },
 
   methods: {
     getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
+      return 20
     },
 
     getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
+      return 1
     },
 
     handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
+      this.stop = Object.assign({}, newVal)
+      this.updateFullStop()
+    },
+
+    handleAddPerson() {
+      const updatedStop = this.stop
+      this.stop = Object.assign({}, updatedStop)
+      this.stop.person = {
+        id: 2,
+        isStudent: false,
+        perceivedRace: null,
+        perceivedGender: null,
+        perceivedLgbt: false,
+        perceivedAge: null,
+        anyDisabilities: false,
+        perceivedOrKnownDisability: null,
+      }
+      this.updateFullStop()
+    },
+
+    handleDeletePerson(id) {
+      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
+      const updatedFullStop = {
+        ...this.fullStop,
+        people: filteredPeople,
+      }
+      this.fullStop = Object.assign({}, updatedFullStop)
     },
 
     getFormData() {
@@ -97,11 +133,32 @@ export default {
             date: format(new Date(), 'yyyy-MM-dd'),
             time: format(new Date(), 'h:mm'),
           },
+          person: {
+            id: 1,
+          },
           stopReason: {
             reasonForStop: 1,
             trafficViolation: 1,
             trafficViolationCode: 54106,
             reasonForStopExplanation: 'Speeding',
+          },
+          actionsTaken: {},
+          stopResult: {
+            anyActionsTaken: true,
+            actionsTakenDuringStop1: false,
+            actionsTakenDuringStop2: true,
+            actionsTakenDuringStop3: false,
+            actionsTakenDuringStop4: false,
+            actionsTakenDuringStop5: false,
+            actionsTakenDuringStop6: false,
+            actionsTakenDuringStop7: false,
+            actionsTakenDuringStop8: false,
+            actionsTakenDuringStop9: false,
+            actionsTakenDuringStop10: false,
+            warningCodes: [],
+            citationCodes: [54106],
+            infieldCodes: [],
+            custodialArrestCodes: [],
           },
         }
       }
@@ -117,6 +174,9 @@ export default {
             date: format(new Date(), 'yyyy-MM-dd'),
             time: format(new Date(), 'h:mm'),
           },
+          person: {
+            id: 1,
+          },
           stopReason: {
             reasonForStop: 3,
             reasonForStopExplanation:
@@ -129,11 +189,90 @@ export default {
           },
         }
       }
+
+      if (value === 'test') {
+        this.stop = sampleStop
+      }
+
+      this.updateFullStop()
+    },
+
+    updateFullStop() {
+      const updatedPerson = {
+        ...this.stop.person,
+        id: this.stop.person.id,
+        actionsTaken: this.stop.actionsTaken,
+        stopReason: this.stop.stopReason,
+        stopResult: this.stop.stopResult,
+      }
+
+      const updatedFullStop = Object.assign({}, this.fullStop)
+      updatedFullStop.updated = new Date()
+      updatedFullStop.officer = this.stop.officer
+      updatedFullStop.stopDate = this.stop.stopDate
+      updatedFullStop.location = this.stop.location
+      const personId = this.stop.person.id
+      const people = updatedFullStop.people || []
+      updatedFullStop.people = people.filter(item => item.id !== personId)
+      updatedFullStop.people.push(updatedPerson)
+      this.fullStop = Object.assign({}, updatedFullStop)
+    },
+
+    getDefaultStop() {
+      return {
+        person: {
+          id: 1,
+        },
+      }
     },
 
     handleCancel() {
       this.isEditingForm = false
-      this.stop = {}
+      this.stop = this.getDefaultStop()
+      this.updateFullStop()
+    },
+
+    validateReasonForStopForPii(textValue) {
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
+        isFound = textValue.contains('Steve Pietrek')
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
+        }
+      }
+      this.updateFullStop()
+    },
+
+    validateBasisForSearchForPii(textValue) {
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        let isFound = false
+        isFound = textValue.contains('Steve Pietrek')
+        this.stop = Object.assign({}, this.stop)
+        this.stop.updated = new Date()
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
+      }
+      this.updateFullStop()
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 

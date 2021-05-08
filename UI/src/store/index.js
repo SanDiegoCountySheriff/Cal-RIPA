@@ -23,6 +23,7 @@ export default new Vuex.Store({
       isAdmin: true,
       isAuthenticated: false,
     },
+    piiDate: null,
   },
 
   getters: {
@@ -101,8 +102,8 @@ export default new Vuex.Store({
     updateStops(state, items) {
       state.stops = items
     },
-    updateStops(state, items) {
-      state.stops = items
+    updatePiiDate(state) {
+      state.piiDate = new Date()
     },
   },
 
@@ -536,6 +537,32 @@ export default new Vuex.Store({
         })
         .catch(() => {
           commit('updateStops', [])
+        })
+    },
+
+    checkTextForPii({ commit }, textValue) {
+      const document = {
+        Document: textValue,
+      }
+      return axios
+        .post(
+          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
+          document,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          const data = response.data
+          commit('updatePiiDate')
+          return data.entities.length > 0
+        })
+        .catch(() => {
+          return null
         })
     },
   },

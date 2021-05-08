@@ -2,6 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
+      :loading-pii="loadingPii"
       :statutes="getStatutes"
     ></ripa-stop-reason>
 
