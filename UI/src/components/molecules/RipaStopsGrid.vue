@@ -2,16 +2,6 @@
   <v-container class="tw-mt-2" fluid>
     <v-layout row wrap>
       <v-flex xs12 md3>
-        <v-select
-          v-model="officerName"
-          class="tw-ml-2"
-          :items="getOfficers"
-          label="Officer"
-          clearable
-        ></v-select>
-      </v-flex>
-
-      <v-flex xs12 md3>
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopFromDate"
@@ -29,6 +19,16 @@
             label="Stop To Date"
           ></ripa-date-picker>
         </div>
+      </v-flex>
+
+      <v-flex xs12 md3>
+        <v-select
+          v-model="status"
+          class="tw-ml-2"
+          :items="statuses"
+          label="Status"
+          clearable
+        ></v-select>
       </v-flex>
 
       <v-flex xs12 md3>
@@ -54,6 +54,8 @@
         <v-data-table
           :loading="loading"
           :headers="headers"
+          :show-select="true"
+          :single-select="false"
           :items="getStops"
           :items-per-page="10"
           :search="search"
@@ -104,6 +106,7 @@
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import subDays from 'date-fns/subDays'
 import { format } from 'date-fns'
+import { SUBMISSION_STATUSES } from '../../constants/stop'
 
 export default {
   name: 'ripa-stops-grid',
@@ -119,10 +122,9 @@ export default {
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Stop Date', value: 'stopDateStr' },
+        { text: 'Status', value: 'stopStatus' },
         { text: 'Errors Found', value: 'errorsFound' },
         { text: 'PII Found', value: 'piiFound' },
-        { text: 'Officer Name', value: 'officerName' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       piiFound: false,
@@ -131,6 +133,7 @@ export default {
       selectedItems: [],
       stopFromDate: subDays(new Date(), 10).toISOString().substr(0, 10),
       stopToDate: new Date().toISOString().substr(0, 10),
+      statuses: SUBMISSION_STATUSES,
     }
   },
 

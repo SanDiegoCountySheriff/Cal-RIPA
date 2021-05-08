@@ -38,8 +38,8 @@ export default new Vuex.Store({
     mappedAdminStatutes: state => {
       return state.adminStatutes
     },
-    mappedAdminStops: () => {
-      return []
+    mappedAdminStops: state => {
+      return state.stops
     },
     mappedAdminSubmissions: () => {
       return []
