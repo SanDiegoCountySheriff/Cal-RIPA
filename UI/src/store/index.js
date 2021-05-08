@@ -337,6 +337,9 @@ export default new Vuex.Store({
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
             'Cache-Control': 'no-cache',
           },
+        )
+        .then(() => {
+          dispatch('getBeats')
         })
         .then(response => {
           const data = response.data.sort((x, y) => {
@@ -395,6 +398,9 @@ export default new Vuex.Store({
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
             'Cache-Control': 'no-cache',
           },
+        )
+        .then(() => {
+          dispatch('getSchools')
         })
         .then(response => {
           const data = response.data
