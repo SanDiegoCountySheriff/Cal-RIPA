@@ -7,12 +7,12 @@
       <!-- <v-divider></v-divider>
       <div class="tw-my-4">
         {{ fullStop }}
-      </div> -->
+      </div>
       <v-divider></v-divider>
       <div class="tw-my-4">
         {{ stop }}
       </div>
-      <v-divider></v-divider>
+      <v-divider></v-divider> -->
 
       <ripa-form-template
         v-model="stop"
@@ -88,7 +88,6 @@ export default {
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
-        this.stop.updated = new Date()
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
@@ -108,7 +107,6 @@ export default {
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
-        this.stop.updated = new Date()
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }

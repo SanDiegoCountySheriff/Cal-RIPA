@@ -5,6 +5,7 @@ export default {
   methods: {
     loadModel(newValue) {
       return {
+        id: newValue?.id,
         actionsTaken: {
           anyActionsTaken: newValue?.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
@@ -48,6 +49,7 @@ export default {
         },
         person: {
           anyDisabilities: newValue?.person?.anyDisabilities || false,
+          id: newValue?.person?.id,
           isStudent: newValue?.person?.isStudent || false,
           perceivedAge: newValue?.person?.perceivedAge || null,
           perceivedGender: newValue?.person?.perceivedGender || null,

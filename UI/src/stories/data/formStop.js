@@ -2,8 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 export const sampleStop = {
   id: uuidv4(),
-  created: '2021-05-07T14:30:29.321Z',
-  updated: '2021-05-07T14:30:29.321Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
     date: '2021-05-07',
@@ -73,7 +71,82 @@ export const sampleStop = {
   },
 }
 
-export const exampleFullStop = {
+export const onePersonFullStop = {
+  id: uuidv4(),
+  created: '2021-05-07T14:30:29.321Z',
+  updated: '2021-05-07T14:32:53.959Z',
+  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  stopDate: {
+    date: '2021-05-07',
+    time: '10:18',
+    duration: 30,
+    stopInResponseToCfs: false,
+  },
+  location: {
+    isSchool: true,
+    school: 1611766090559,
+    blockNumber: 1100,
+    streetName: 'Fang',
+    intersection: null,
+    moreLocationOptions: false,
+    highwayExit: null,
+    landmark: null,
+    outOfCounty: false,
+    city: 'BOSTONIA',
+    beat: 555,
+  },
+  people: [
+    {
+      id: uuidv4(),
+      isStudent: false,
+      perceivedRace: [2, 7],
+      perceivedGender: 5,
+      perceivedLgbt: true,
+      perceivedAge: 30,
+      perceivedLimitedEnglish: true,
+      anyDisabilities: true,
+      perceivedOrKnownDisability: [4, 2],
+      stopReason: {
+        reasonForStop: 1,
+        trafficViolation: 1,
+        trafficViolationCode: 54106,
+        reasonForStopExplanation: 'Speeding',
+        reasonForStopPiiFound: false,
+      },
+      stopResult: {
+        anyActionsTaken: true,
+        actionsTakenDuringStop1: true,
+        actionsTakenDuringStop2: true,
+        actionsTakenDuringStop3: false,
+        actionsTakenDuringStop4: false,
+        actionsTakenDuringStop5: false,
+        actionsTakenDuringStop6: false,
+        actionsTakenDuringStop7: false,
+        actionsTakenDuringStop8: false,
+        actionsTakenDuringStop9: false,
+        actionsTakenDuringStop10: false,
+        warningCodes: [54134],
+        citationCodes: [35152],
+        infieldCodes: null,
+        custodialArrestCodes: null,
+      },
+      actionsTaken: {
+        anyActionsTaken: true,
+        actionsTakenDuringStop: [1, 4, 5, 17, 18, 19, 20],
+        personSearchConsentGiven: true,
+        propertySearchConsentGiven: true,
+        basisForSearch: [7],
+        basisForSearchExplanation: 'John Doe smelled like pot',
+        basisForSearchPiiFound: true,
+        propertyWasSeized: true,
+        basisForPropertySeizure: [2],
+        typeOfPropertySeized: [7, 4],
+      },
+    },
+  ],
+}
+
+export const twoPersonFullStop = {
   id: uuidv4(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',

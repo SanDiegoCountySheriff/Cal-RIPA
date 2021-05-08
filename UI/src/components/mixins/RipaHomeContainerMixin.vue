@@ -48,24 +48,28 @@ export default {
     handleTemplate(value) {
       this.isEditingForm = true
 
-      if (value === 'motor') {
-        this.stop = motorStop(
-          this.getOfficerYearsExperience(),
-          this.getOfficerAssignment(),
-        )
-      }
+      switch (value) {
+        case 'motor':
+          this.stop = motorStop(
+            this.getOfficerYearsExperience(),
+            this.getOfficerAssignment(),
+          )
+          break
 
-      if (value === 'probation') {
-        this.stop = probationStop(
-          this.getOfficerYearsExperience(),
-          this.getOfficerAssignment(),
-        )
-      }
+        case 'probation':
+          this.stop = probationStop(
+            this.getOfficerYearsExperience(),
+            this.getOfficerAssignment(),
+          )
+          break
 
-      this.stop = defaultStop(
-        this.getOfficerYearsExperience(),
-        this.getOfficerAssignment(),
-      )
+        default:
+          this.stop = defaultStop(
+            this.getOfficerYearsExperience(),
+            this.getOfficerAssignment(),
+          )
+          break
+      }
 
       this.updateFullStop()
     },
@@ -80,6 +84,8 @@ export default {
       }
 
       const updatedFullStop = Object.assign({}, this.fullStop)
+      updatedFullStop.created = this.stop.created
+      updatedFullStop.id = this.stop.id
       updatedFullStop.updated = new Date()
       updatedFullStop.officer = this.stop.officer
       updatedFullStop.stopDate = this.stop.stopDate

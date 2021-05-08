@@ -96,7 +96,6 @@ export default {
         let isFound = false
         isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
-        this.stop.updated = new Date()
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
@@ -111,7 +110,6 @@ export default {
         let isFound = false
         isFound = textValue.contains('John Doe')
         this.stop = Object.assign({}, this.stop)
-        this.stop.updated = new Date()
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }

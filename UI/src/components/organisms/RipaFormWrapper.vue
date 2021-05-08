@@ -274,7 +274,6 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
-      window.scrollTo(0, 0)
       if (this.onAddPerson) {
         this.onAddPerson()
       }
@@ -300,7 +299,6 @@ export default {
             this.stepIndex = 1
             this.isEditStop = true
             this.isEditPerson = true
-            window.scrollTo(0, 0)
             if (this.onCancel) {
               this.onCancel()
             }
@@ -330,14 +328,12 @@ export default {
     handleEditPerson(id) {
       console.log('Edit Person in Form', id)
       this.stepIndex = 2
-      window.scrollTo(0, 0)
       this.isEditStop = false
       this.isEditPerson = true
     },
 
     handleEditStop() {
       this.stepIndex = 1
-      window.scrollTo(0, 0)
       this.isEditStop = true
       this.isEditPerson = false
     },
