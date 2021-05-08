@@ -1,6 +1,4 @@
 <script>
-import _ from 'lodash'
-
 export default {
   data() {
     return {
@@ -15,8 +13,7 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        const mergedData = _.assign({}, this.viewModel, newVal)
-        this.viewModel = Object.assign({}, mergedData)
+        this.viewModel = Object.assign({}, newVal)
         setTimeout(() => {
           this.isFormValid = this.$refs.stepForm.validate()
         }, 500)

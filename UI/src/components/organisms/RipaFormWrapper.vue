@@ -315,7 +315,6 @@ export default {
     },
 
     handleEditPerson(id) {
-      console.log('Edit Person', id)
       this.stepIndex = 2
       window.scrollTo(0, 0)
       this.isEditStop = false

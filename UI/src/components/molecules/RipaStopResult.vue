@@ -207,7 +207,6 @@ export default {
   },
 
   data() {
-    console.log(this.value)
     return {
       valid: true,
       stopResultItems: STOP_RESULTS,
@@ -218,7 +217,6 @@ export default {
   computed: {
     model: {
       get() {
-        console.log(this.viewModel)
         return this.viewModel
       },
     },
