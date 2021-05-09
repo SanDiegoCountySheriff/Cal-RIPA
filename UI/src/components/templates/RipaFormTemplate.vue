@@ -5,10 +5,12 @@
       :beats="beats"
       :county-cities="countyCities"
       :full-stop="fullStop"
+      :last-location="lastLocation"
       :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
@@ -64,6 +66,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     loadingPii: {
       type: Boolean,
       default: false,
@@ -79,6 +85,10 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
     },
     onAddPerson: {
       type: Function,

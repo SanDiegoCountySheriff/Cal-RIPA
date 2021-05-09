@@ -82,6 +82,7 @@ export default {
 
     handleSubmit(apiStop) {
       this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
     },
 
     validateReasonForStopForPii(textValue) {

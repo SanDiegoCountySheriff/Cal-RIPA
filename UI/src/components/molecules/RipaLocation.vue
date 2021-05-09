@@ -5,6 +5,19 @@
 
     <v-container>
       <v-row no-gutters>
+        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
+            :disabled="!validLastLocation"
+            @click="handleLastLocation"
+            >Last Location</v-btn
+          >
+          <v-btn outlined small disabled>Favorite Locations</v-btn>
+        </div>
+      </v-row>
+      <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
@@ -278,6 +291,10 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
+    handleLastLocation() {
+      this.viewModel.location = this.lastLocation
+    },
+
     updateBlockNumberModel() {
       const blockNumber = this.viewModel.location.blockNumber
       this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
@@ -322,9 +339,17 @@ export default {
       type: Array,
       default: () => {},
     },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     nonCountyCities: {
       type: Array,
       default: () => {},
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
     },
   },
 }

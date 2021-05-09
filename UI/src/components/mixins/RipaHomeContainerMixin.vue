@@ -2,6 +2,21 @@
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 
 export default {
+  computed: {
+    getLastLocation() {
+      const lastLocation = localStorage.getItem('ripa_last_location')
+      if (lastLocation) {
+        return JSON.parse(lastLocation)
+      }
+
+      return null
+    },
+
+    isLastLocationValid() {
+      return this.getLastLocation !== null
+    },
+  },
+
   methods: {
     getOfficerYearsExperience() {
       const yearsExperience = localStorage.getItem(
@@ -72,6 +87,10 @@ export default {
       }
 
       this.updateFullStop()
+    },
+
+    setLastLocation(stop) {
+      localStorage.setItem('ripa_last_location', JSON.stringify(stop.location))
     },
 
     updateFullStop() {

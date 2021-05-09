@@ -60,8 +60,10 @@
                 :on-cancel="handleCancel"
                 :beats="beats"
                 :county-cities="countyCities"
+                :last-location="lastLocation"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
+                :valid-last-location="validLastLocation"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -402,6 +404,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     loadingPii: {
       type: Boolean,
       default: false,
@@ -413,6 +419,10 @@ export default {
     statutes: {
       type: Array,
       default: () => {},
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
     },
     onAddPerson: {
       type: Function,

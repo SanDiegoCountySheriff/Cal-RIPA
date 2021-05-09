@@ -9,10 +9,12 @@
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
+        :last-location="getLastLocation"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :valid-last-location="isLastLocationValid"
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
@@ -66,6 +68,7 @@ export default {
 
     handleSubmit(apiStop) {
       this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
     },
 
     async validateReasonForStopForPii(textValue) {
