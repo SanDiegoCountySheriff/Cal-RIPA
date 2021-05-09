@@ -22,7 +22,7 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       isAdmin: true,
-      isAuthenticated: false,
+      isAuthenticated: true,
     },
     piiDate: null,
     officerStops: [],

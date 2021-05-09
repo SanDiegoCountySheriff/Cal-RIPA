@@ -1,16 +1,9 @@
 <template>
   <ripa-page-container :admin="admin">
-    <vue-confirm-dialog></vue-confirm-dialog>
-    <!-- <v-divider></v-divider>
-    <div class="tw-my-4">
-      {{ fullStop }}
-    </div>
+    {{ fullStop }}
     <v-divider></v-divider>
-    <div class="tw-my-4">
-      {{ stop }}
-    </div>
-    <v-divider></v-divider> -->
-
+    {{ stop }}
+    <vue-confirm-dialog></vue-confirm-dialog>
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
@@ -40,6 +33,7 @@ import RipaPageContainer from './RipaPageContainer'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import {
   formBeats,
   formCountyCities,
@@ -51,7 +45,7 @@ import {
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin],
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
     RipaPageContainer,
@@ -63,7 +57,7 @@ export default {
     return {
       fullStop: {},
       isEditingForm: false,
-      loadingPii: true,
+      loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
@@ -87,7 +81,7 @@ export default {
     },
 
     handleSubmit(apiStop) {
-      console.log('API STOP SUBMITTED', apiStop)
+      this.addApiStop(apiStop)
     },
 
     validateReasonForStopForPii(textValue) {

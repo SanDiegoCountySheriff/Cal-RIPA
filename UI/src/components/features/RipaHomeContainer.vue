@@ -27,12 +27,13 @@
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin],
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
     RipaFormTemplate,
@@ -61,10 +62,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'editOfficerStop']),
+    ...mapActions(['checkTextForPii']),
 
     handleSubmit(apiStop) {
-      this.editOfficerStop(apiStop)
+      this.addApiStop(apiStop)
     },
 
     async validateReasonForStopForPii(textValue) {

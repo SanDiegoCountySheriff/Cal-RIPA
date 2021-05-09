@@ -75,31 +75,34 @@ export default {
     },
 
     updateFullStop() {
-      const updatedPerson = {
-        ...this.stop.person,
-        id: this.stop.person.id,
-        actionsTaken: this.stop.actionsTaken,
-        stopReason: this.stop.stopReason,
-        stopResult: this.stop.stopResult,
-      }
+      if (this.stop.person) {
+        const updatedPerson = {
+          ...this.stop.person,
+          id: this.stop?.person.id,
+          actionsTaken: this.stop?.actionsTaken || null,
+          stopReason: this.stop?.stopReason || null,
+          stopResult: this.stop?.stopResult || null,
+        }
 
-      const updatedFullStop = Object.assign({}, this.fullStop)
-      updatedFullStop.created = this.stop.created
-      updatedFullStop.id = this.stop.id
-      updatedFullStop.updated = new Date()
-      updatedFullStop.officer = this.stop.officer
-      updatedFullStop.stopDate = this.stop.stopDate
-      updatedFullStop.location = this.stop.location
-      const personId = this.stop.person.id
-      const people = updatedFullStop.people || []
-      updatedFullStop.people = people.filter(item => item.id !== personId)
-      updatedFullStop.people.push(updatedPerson)
-      this.fullStop = Object.assign({}, updatedFullStop)
+        const updatedFullStop = Object.assign({}, this.fullStop)
+        updatedFullStop.created = this.stop.created
+        updatedFullStop.id = this.stop.id
+        updatedFullStop.updated = new Date()
+        updatedFullStop.officer = this.stop.officer
+        updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.location = this.stop.location
+        const personId = this.stop.person.id
+        const people = updatedFullStop.people || []
+        updatedFullStop.people = people.filter(item => item.id !== personId)
+        updatedFullStop.people.push(updatedPerson)
+        this.fullStop = Object.assign({}, updatedFullStop)
+      }
     },
 
     handleCancel() {
       this.isEditingForm = false
-      this.stop = defaultStop()
+      this.stop = {}
+      this.fullStop = {}
       this.updateFullStop()
     },
   },
