@@ -21,6 +21,7 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
+      agency: 'Insight',
       isAdmin: true,
       isAuthenticated: true,
       officerId: '2021050812345',
@@ -30,6 +31,18 @@ export default new Vuex.Store({
   },
 
   getters: {
+    agency: state => {
+      return state.user.agency
+    },
+    isAdmin: state => {
+      return state.user.isAdmin
+    },
+    isAuthenticated: state => {
+      return state.user.isAuthenticated
+    },
+    isOnline: () => {
+      return navigator.onLine
+    },
     mappedAdminBeats: state => {
       return state.adminBeats
     },
@@ -65,15 +78,6 @@ export default new Vuex.Store({
     },
     mappedFormStatutes: state => {
       return state.formStatutes
-    },
-    isAdmin: state => {
-      return state.user.isAdmin
-    },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
-    },
-    isOnline: () => {
-      return navigator.onLine
     },
     officerId: state => {
       return state.user.officerId

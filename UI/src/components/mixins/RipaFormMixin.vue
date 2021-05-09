@@ -6,6 +6,7 @@ export default {
     loadModel(newValue) {
       return {
         id: newValue.id,
+        agency: newValue.agency,
         officerId: newValue.officerId,
         actionsTaken: {
           anyActionsTaken: newValue?.actionsTaken?.anyActionsTaken || false,

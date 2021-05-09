@@ -69,6 +69,7 @@ export default {
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
             this.officerId,
+            this.agency,
           )
           break
 
@@ -77,6 +78,7 @@ export default {
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
             this.officerId,
+            this.agency,
           )
           break
 
@@ -85,6 +87,7 @@ export default {
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
             this.officerId,
+            this.agency,
           )
           break
       }
@@ -107,6 +110,7 @@ export default {
         }
 
         const updatedFullStop = Object.assign({}, this.fullStop)
+        updatedFullStop.agency = this.stop.agency
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
         updatedFullStop.location = this.stop.location
