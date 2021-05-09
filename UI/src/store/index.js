@@ -13,6 +13,7 @@ export default new Vuex.Store({
     adminSchools: [],
     adminStatutes: [],
     adminStops: [],
+    adminUsers: [],
     formBeats: [],
     formCountyCities: [],
     formNonCountyCities: [],
@@ -20,13 +21,28 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
+      agency: 'Insight',
       isAdmin: true,
-      isAuthenticated: false,
+      isAuthenticated: true,
+      officerId: '2021050812345',
     },
     piiDate: null,
+    officerStops: [],
   },
 
   getters: {
+    agency: state => {
+      return state.user.agency
+    },
+    isAdmin: state => {
+      return state.user.isAdmin
+    },
+    isAuthenticated: state => {
+      return state.user.isAuthenticated
+    },
+    isOnline: () => {
+      return navigator.onLine
+    },
     mappedAdminBeats: state => {
       return state.adminBeats
     },
@@ -45,6 +61,9 @@ export default new Vuex.Store({
     mappedAdminSubmissions: () => {
       return []
     },
+    mappedAdminUsers: state => {
+      return state.adminUsers
+    },
     mappedFormBeats: state => {
       return state.formBeats
     },
@@ -60,14 +79,8 @@ export default new Vuex.Store({
     mappedFormStatutes: state => {
       return state.formStatutes
     },
-    isAdmin: state => {
-      return state.user.isAdmin
-    },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
-    },
-    isOnline: () => {
-      return navigator.onLine
+    officerId: state => {
+      return state.user.officerId
     },
   },
 
@@ -84,6 +97,9 @@ export default new Vuex.Store({
     updateAdminStatutes(state, items) {
       state.adminStatutes = items
     },
+    updateAdminUsers(state, items) {
+      state.adminUsers = items
+    },
     updateFormBeats(state, items) {
       state.formBeats = items
     },
@@ -99,8 +115,8 @@ export default new Vuex.Store({
     updateFormStatutes(state, items) {
       state.formStatutes = items
     },
-    updateStops(state, items) {
-      state.stops = items
+    updateOfficerStops(state, items) {
+      state.officerStops = items
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
@@ -108,6 +124,33 @@ export default new Vuex.Store({
   },
 
   actions: {
+    checkTextForPii({ commit }, textValue) {
+      const document = {
+        Document: textValue,
+      }
+      return axios
+        .post(
+          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
+          document,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          const data = response.data
+          commit('updatePiiDate')
+          return data.entities.length > 0
+        })
+        .catch(error => {
+          console.log('There was an error checking for PII.', error)
+          return null
+        })
+    },
+
     deleteBeat({ dispatch }, beat) {
       return axios
         .put(
@@ -120,6 +163,10 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
+          dispatch('getAdminBeats')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the beat.', error)
           dispatch('getAdminBeats')
         })
     },
@@ -138,6 +185,10 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminCities')
         })
+        .catch(error => {
+          console.log('There was an error deleting the city.', error)
+          dispatch('getAdminCities')
+        })
     },
 
     deleteSchool({ dispatch }, school) {
@@ -152,6 +203,10 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
+          dispatch('getAdminSchools')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the school.', error)
           dispatch('getAdminSchools')
         })
     },
@@ -170,6 +225,30 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminStatutes')
         })
+        .catch(error => {
+          console.log('There was an error deleting the statute.', error)
+          dispatch('getAdminStatutes')
+        })
+    },
+
+    deleteUser({ dispatch }, user) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/DeleteUser/${user.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the user.', error)
+          dispatch('getAdminUsers')
+        })
     },
 
     editBeat({ dispatch }, beat) {
@@ -186,6 +265,10 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
+          dispatch('getAdminBeats')
+        })
+        .catch(error => {
+          console.log('There was an error saving the beat.', error)
           dispatch('getAdminBeats')
         })
     },
@@ -206,6 +289,10 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminCities')
         })
+        .catch(error => {
+          console.log('There was an error saving the city.', error)
+          dispatch('getAdminCities')
+        })
     },
 
     editSchool({ dispatch }, school) {
@@ -224,6 +311,10 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminSchools')
         })
+        .catch(error => {
+          console.log('There was an error saving the school.', error)
+          dispatch('getAdminSchools')
+        })
     },
 
     editStatute({ dispatch }, statute) {
@@ -240,7 +331,55 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getAdminSchools')
+          dispatch('getAdminStatutes')
+        })
+        .catch(error => {
+          console.log('There was an error saving the statute.', error)
+          dispatch('getAdminStatutes')
+        })
+    },
+
+    editUser({ dispatch }, user) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/PutUser/${user.id}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getAdminUsers')
+        })
+    },
+
+    editOfficerStop({ dispatch }, stop) {
+      return axios
+        .put(
+          `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
+          stop,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getOfficerStops')
+        })
+        .catch(error => {
+          console.log('There was an error saving the officer stop.', error)
+          dispatch('getOfficerStops')
         })
     },
 
@@ -260,7 +399,8 @@ export default new Vuex.Store({
           })
           commit('updateAdminBeats', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving beats.', error)
           commit('updateAdminBeats', [])
         })
     },
@@ -296,7 +436,8 @@ export default new Vuex.Store({
             commit('updateFormBeats', data)
             localStorage.setItem('ripa_beats', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving beats.', error)
             commit('updateFormBeats', [])
           })
       }
@@ -325,7 +466,8 @@ export default new Vuex.Store({
             })
           commit('updateAdminCities', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving cities.', error)
           commit('updateAdminCities', [])
         })
     },
@@ -377,7 +519,8 @@ export default new Vuex.Store({
               JSON.stringify(data2),
             )
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving cities.', error)
             commit('updateFormCountyCities', [])
             commit('updateFormNonCountyCities', [])
           })
@@ -410,7 +553,8 @@ export default new Vuex.Store({
             })
           commit('updateAdminSchools', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving schools.', error)
           commit('updateAdminSchools', [])
         })
     },
@@ -449,7 +593,8 @@ export default new Vuex.Store({
             commit('updateFormSchools', data)
             localStorage.setItem('ripa_schools', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving schools.', error)
             commit('updateFormSchools', [])
           })
       }
@@ -474,7 +619,8 @@ export default new Vuex.Store({
           })
           commit('updateAdminStatutes', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving statutes.', error)
           commit('updateAdminStatutes', [])
         })
     },
@@ -512,13 +658,38 @@ export default new Vuex.Store({
             commit('updateFormStatutes', data)
             localStorage.setItem('ripa_statutes', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving statutes.', error)
             commit('updateFormStatutes', [])
           })
       }
     },
 
-    getStops({ commit }) {
+    getAdminUsers({ commit }) {
+      return axios
+        .get('https://sdsd-ripa-d-apim.azure-api.us/userProfile/GetUsers', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.map(item => {
+            return {
+              ...item,
+              code: item.offenseCode,
+              startDate: formatDate(item.startDate),
+            }
+          })
+          commit('updateAdminUsers', data)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving users.', error)
+          commit('updateAdminUsers', [])
+        })
+    },
+
+    getOfficerStops({ commit }) {
       return axios
         .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
           headers: {
@@ -527,36 +698,16 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('updateStops', response.data)
+          const data = response.data.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateOfficerStops', data)
         })
-        .catch(() => {
-          commit('updateStops', [])
-        })
-    },
-
-    checkTextForPii({ commit }, textValue) {
-      const document = {
-        Document: textValue,
-      }
-      return axios
-        .post(
-          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
-          document,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(response => {
-          const data = response.data
-          commit('updatePiiDate')
-          return data.entities.length > 0
-        })
-        .catch(() => {
-          return null
+        .catch(error => {
+          console.log('There was an error retrieving officer stops.', error)
+          commit('updateOfficerStops', [])
         })
     },
   },

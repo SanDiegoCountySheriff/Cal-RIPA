@@ -3,6 +3,7 @@ import { beats } from './beats'
 import { cities } from './cities'
 import { schools } from './schools'
 import { statutes } from './statutes'
+import { users } from './users'
 
 export const adminBeats = () => {
   return beats.sort((x, y) => {
@@ -54,6 +55,21 @@ export const adminStatutes = () => {
       offenseRepealed: formatDate(item.offenseRepealed),
     }
   })
+}
+
+export const adminUsers = () => {
+  return users
+    .sort((x, y) => {
+      const userA = x.lastName.toUpperCase()
+      const userB = y.lastName.toUpperCase()
+      return userA < userB ? -1 : userA > userB ? 1 : 0
+    })
+    .map(item => {
+      return {
+        ...item,
+        name: `${item.firstName} ${item.lastName}`,
+      }
+    })
 }
 
 export const formBeats = () => {

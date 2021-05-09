@@ -17,3 +17,8 @@ export const dateWithinLastHours = (dateStr, timeStr, hours) => {
   const diff = differenceInHours(new Date(), new Date(date))
   return diff < hours
 }
+
+export const formatDateTime = (dateStr, timeStr) => {
+  const date = Date.parse(`${dateStr} ${timeStr}`)
+  return new Date(date)
+}

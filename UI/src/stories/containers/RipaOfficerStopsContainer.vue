@@ -1,12 +1,12 @@
 <template>
   <ripa-page-container :admin="admin">
-    <ripa-stops-template :items="items"></ripa-stops-template>
+    <ripa-officer-stops-template :items="items"></ripa-officer-stops-template>
   </ripa-page-container>
 </template>
 
 <script>
 import RipaPageContainer from './RipaPageContainer'
-import RipaStopsTemplate from '@/components/templates/RipaStopsTemplate'
+import RipaOfficerStopsTemplate from '@/components/templates/RipaOfficerStopsTemplate'
 import { officerStops } from '../data/officerStops'
 
 export default {
@@ -14,7 +14,7 @@ export default {
 
   components: {
     RipaPageContainer,
-    RipaStopsTemplate,
+    RipaOfficerStopsTemplate,
   },
 
   data() {

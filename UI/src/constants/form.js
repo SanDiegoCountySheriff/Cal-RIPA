@@ -105,7 +105,7 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Other Reasonable Suspicion of a crime', value: 9 },
 ]
 
-export const ACTIONS_TAKEN_GENERAL = [
+export const ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Person removed from vehicle by physical contact', value: 2 },
   { name: 'Field sobriety test conducted', value: 3 },
@@ -122,14 +122,11 @@ export const ACTIONS_TAKEN_GENERAL = [
   { name: 'Chemical spray used', value: 14 },
   { name: 'Physical or vehicle contact', value: 15 },
   { name: 'Personal photographed', value: 16 },
-  { name: 'Vehicle impounded', value: 22 },
-]
-
-export const ACTIONS_TAKEN_SEARCH = [
   { name: 'Asked for consent to search another person', value: 17 },
   { name: 'Search of person was conducted', value: 18 },
   { name: 'Asked for consent to search property', value: 19 },
   { name: 'Search of property was conducted', value: 20 },
+  { name: 'Vehicle impounded', value: 22 },
 ]
 
 export const BASIS_FOR_SEARCH = [

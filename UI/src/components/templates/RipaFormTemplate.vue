@@ -4,15 +4,17 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :full-stop="fullStop"
+      :last-location="lastLocation"
       :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
-      :on-delete-person="onDeletePerson"
-      :on-edit-person="onEditPerson"
-      :on-edit-stop="onEditStop"
       :on-cancel="onCancel"
+      :on-delete-person="onDeletePerson"
+      :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -60,6 +62,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    fullStop: {
+      type: Object,
+      default: () => {},
+    },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     loadingPii: {
       type: Boolean,
       default: false,
@@ -76,7 +86,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
+    },
     onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onCancel: {
       type: Function,
       default: () => {},
     },
@@ -84,15 +102,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
+    onSubmit: {
       type: Function,
       default: () => {},
     },

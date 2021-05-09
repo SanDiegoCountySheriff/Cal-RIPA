@@ -30,16 +30,18 @@
         </v-col>
 
         <v-col cols="12" sm="12" md="4">
-          <ripa-select
-            v-model="model.stopDate.duration"
-            label="Stop Duration"
-            :items="durationItems"
-            itemText="name"
-            itemValue="value"
-            :rules="durationRules"
-            @input="handleInput"
-          >
-          </ripa-select>
+          <div class="md:tw-mr-4">
+            <ripa-number-input
+              v-model="model.stopDate.duration"
+              label="Stop Duration"
+              hint="Duration of Stop should be defined in minutes. Maximum of 1440."
+              :min="1"
+              :max="1440"
+              :rules="durationRules"
+              @input="handleInput"
+            >
+            </ripa-number-input>
+          </div>
         </v-col>
       </v-row>
 
@@ -59,21 +61,23 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
-import { format } from 'date-fns'
 import { DURATIONS } from '@/constants/form'
 import { dateWithinLastHours } from '@/utilities/dates'
 
 export default {
   name: 'ripa-stop-date',
 
+  mixins: [RipaFormMixin],
+
   components: {
     RipaFormHeader,
     RipaDatePicker,
-    RipaSelect,
+    RipaNumberInput,
     RipaSwitch,
     RipaTimePicker,
   },
@@ -95,15 +99,7 @@ export default {
           'Date and Time must be within the past 24 hours',
       ],
       durationRules: [v => !!v || 'A duration is required'],
-      viewModel: {
-        stopDate: {
-          date: this.value?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
-          time: this.value?.stopDate?.time || format(new Date(), 'h:mm'),
-          duration: this.value?.stopDate?.duration || null,
-          stopInResponseToCfs:
-            this.value?.stopDate?.stopInResponseToCfs || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -129,14 +125,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        stopDate: {
-          date: newVal?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
-          time: newVal?.stopDate?.time || format(new Date(), 'h:mm'),
-          duration: newVal?.stopDate?.duration || null,
-          stopInResponseToCfs: newVal?.stopDate?.stopInResponseToCfs || false,
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

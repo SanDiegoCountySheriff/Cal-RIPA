@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="600">
+  <v-card class="ripa-confirmation mx-auto my-12" flat max-width="600">
     <v-card-title class="tw-uppercase">Ripa Stop App</v-card-title>
 
     <v-card-text>
@@ -26,3 +26,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.ripa-confirmation {
+  border: 1px solid #ccc !important;
+}
+</style>

@@ -60,8 +60,10 @@
                 :on-cancel="handleCancel"
                 :beats="beats"
                 :county-cities="countyCities"
+                :last-location="lastLocation"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
+                :valid-last-location="validLastLocation"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -135,6 +137,7 @@
             <v-stepper-content step="6">
               <ripa-form-step-6
                 v-model="stop"
+                :api-stop="getApiStop"
                 :on-add-person="handleAddPerson"
                 :on-back="handleBack"
                 :on-delete-person="handleDeletePerson"
@@ -213,6 +216,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
+import { apiStop } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -251,6 +255,17 @@ export default {
     getFormStep2BackButtonVisible() {
       return this.isEditPerson && this.isEditStop
     },
+
+    getApiStop() {
+      return apiStop(
+        this.fullStop,
+        this.beats,
+        this.countyCities,
+        this.nonCountyCities,
+        this.schools,
+        this.statutes,
+      )
+    },
   },
 
   methods: {
@@ -261,7 +276,6 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
-      window.scrollTo(0, 0)
       if (this.onAddPerson) {
         this.onAddPerson()
       }
@@ -276,17 +290,17 @@ export default {
 
     handleCancel() {
       this.$confirm({
-        message: `Are you sure you want to cancel the form?`,
+        title: 'Confirm Cancel',
+        message: `Are you sure you want to cancel the form? You will lose all changes.`,
         button: {
           no: 'No',
-          yes: 'Yes',
+          yes: 'Cancel',
         },
         callback: confirm => {
           if (confirm) {
             this.stepIndex = 1
             this.isEditStop = true
             this.isEditPerson = true
-            window.scrollTo(0, 0)
             if (this.onCancel) {
               this.onCancel()
             }
@@ -297,10 +311,11 @@ export default {
 
     handleDeletePerson(id) {
       this.$confirm({
-        message: `Are you sure you want to delete the user?`,
+        title: 'Confirm Delete',
+        message: `Are you sure you want to delete the person?`,
         button: {
           no: 'No',
-          yes: 'Yes',
+          yes: 'Delete',
         },
         callback: confirm => {
           if (confirm) {
@@ -313,16 +328,14 @@ export default {
     },
 
     handleEditPerson(id) {
-      console.log('Edit Person', id)
+      console.log('Edit Person in Form', id)
       this.stepIndex = 2
-      window.scrollTo(0, 0)
       this.isEditStop = false
       this.isEditPerson = true
     },
 
     handleEditStop() {
       this.stepIndex = 1
-      window.scrollTo(0, 0)
       this.isEditStop = true
       this.isEditPerson = false
     },
@@ -333,11 +346,34 @@ export default {
       window.scrollTo(0, 0)
     },
 
-    handleSubmit() {
+    handleStartNew() {
+      this.stepIndex = 1
       this.isEditStop = true
       this.isEditPerson = true
-      this.stepIndex = this.confirmationStepIndex
-      window.scrollTo(0, 0)
+      if (this.onCancel) {
+        this.onCancel()
+      }
+    },
+
+    handleSubmit() {
+      this.$confirm({
+        title: 'Confirm Submission',
+        message: `Are you sure you want to submit the form?`,
+        button: {
+          no: 'No',
+          yes: 'Submit',
+        },
+        callback: confirm => {
+          if (confirm) {
+            this.isEditStop = true
+            this.isEditPerson = true
+            this.stepIndex = this.confirmationStepIndex
+            if (this.onSubmit) {
+              this.onSubmit(this.getApiStop)
+            }
+          }
+        },
+      })
     },
   },
 
@@ -364,6 +400,14 @@ export default {
       type: Array,
       default: () => {},
     },
+    fullStop: {
+      type: Object,
+      default: () => {},
+    },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     loadingPii: {
       type: Boolean,
       default: false,
@@ -376,7 +420,15 @@ export default {
       type: Array,
       default: () => {},
     },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
+    },
     onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onCancel: {
       type: Function,
       default: () => {},
     },
@@ -384,7 +436,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onSubmit: {
       type: Function,
       default: () => {},
     },

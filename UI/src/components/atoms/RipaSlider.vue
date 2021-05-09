@@ -6,7 +6,7 @@
     :min="min"
     :max="max"
     :rules="rules"
-    thumb-label
+    thumb-label="always"
   ></v-slider>
 </template>
 

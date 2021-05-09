@@ -50,12 +50,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { GENDERS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -68,12 +71,7 @@ export default {
       valid: true,
       genderItems: GENDERS,
       genderRules: [v => !!v || 'A gender is required'],
-      viewModel: {
-        person: {
-          perceivedGender: this.value?.person?.perceivedGender || null,
-          perceivedLgbt: this.value?.person?.perceivedLgbt || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -100,12 +98,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = {
-        person: {
-          perceivedGender: newVal?.person?.perceivedGender || null,
-          perceivedLgbt: newVal?.person?.perceivedLgbt || false,
-        },
-      }
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

@@ -7,7 +7,9 @@
       :schools="schools"
       :beats="beats"
       :county-cities="countyCities"
+      :last-location="lastLocation"
       :non-county-cities="nonCountyCities"
+      :valid-last-location="validLastLocation"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -50,13 +52,21 @@ export default {
       type: Array,
       default: () => [],
     },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     nonCountyCities: {
       type: Array,
-      default: () => [],
+      default: () => {},
     },
     schools: {
       type: Array,
       default: () => [],
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
     },
   },
 }

@@ -31,7 +31,7 @@ const routes = [
     name: 'Stops',
     component: () =>
       import(
-        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaStopsContainer.vue'
+        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
       ),
   },
   {

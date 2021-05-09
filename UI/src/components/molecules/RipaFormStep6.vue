@@ -2,6 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-form-summary
       v-model="model"
+      :api-stop="apiStop"
       :on-edit-stop="onEditStop"
       :on-edit-person="onEditPerson"
       :on-delete-person="onDeletePerson"
@@ -41,6 +42,13 @@ export default {
 
   components: {
     RipaFormSummary,
+  },
+
+  props: {
+    apiStop: {
+      type: Object,
+      default: () => {},
+    },
   },
 }
 </script>
