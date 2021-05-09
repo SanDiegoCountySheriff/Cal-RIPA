@@ -106,6 +106,8 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
+
 export default {
   name: 'ripa-users-grid',
 
@@ -189,7 +191,9 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
       } else {
-        this.editedItem.id = new Date().getTime()
+        this.editedItem.id =
+          format(new Date(), 'yyyy/MM/dd') +
+          (Math.floor(Math.random() * 90000) + 10000).toString()
         this.users.push(this.editedItem)
       }
 

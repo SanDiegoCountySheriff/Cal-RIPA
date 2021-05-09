@@ -16,40 +16,46 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = (yearsExperience, assignment) => {
+export const defaultStop = (yearsExperience, assignment, officerId) => {
   return {
+    actionsTaken: {},
     id: uuidv4(),
     created: new Date(),
     officer: {
       editOfficer: false,
-      yearsExperience: yearsExperience,
-      assignment: assignment,
+      yearsExperience,
+      assignment,
+    },
+    officerId,
+    person: {
+      id: new Date().getTime(),
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'h:mm'),
     },
-    person: {
-      id: new Date().getTime(),
-    },
+    stopReason: {},
+    stopResult: {},
   }
 }
 
-export const motorStop = (yearsExperience, assignment) => {
+export const motorStop = (yearsExperience, assignment, officerId) => {
   return {
-    id: uuidv4(),
+    actionsTaken: {},
     created: new Date(),
+    id: uuidv4(),
     officer: {
       editOfficer: false,
-      yearsExperience: yearsExperience,
-      assignment: assignment,
+      yearsExperience,
+      assignment,
+    },
+    officerId,
+    person: {
+      id: new Date().getTime(),
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'h:mm'),
-    },
-    person: {
-      id: new Date().getTime(),
     },
     stopReason: {
       reasonForStop: 1,
@@ -57,7 +63,6 @@ export const motorStop = (yearsExperience, assignment) => {
       trafficViolationCode: 54106,
       reasonForStopExplanation: 'Speeding',
     },
-    actionsTaken: {},
     stopResult: {
       anyActionsTaken: true,
       actionsTakenDuringStop1: false,
@@ -78,31 +83,32 @@ export const motorStop = (yearsExperience, assignment) => {
   }
 }
 
-export const probationStop = (yearsExperience, assignment) => {
+export const probationStop = (yearsExperience, assignment, officerId) => {
   return {
-    id: uuidv4(),
+    actionsTaken: {
+      anyActionsTaken: true,
+      actionsTakenDuringStop: [4, 18, 20],
+      basisForSearch: [4],
+    },
     created: new Date(),
+    id: uuidv4(),
     officer: {
       editOfficer: false,
       yearsExperience: yearsExperience,
       assignment: assignment,
     },
+    officerId,
+    person: {
+      id: new Date().getTime(),
+    },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'h:mm'),
-    },
-    person: {
-      id: new Date().getTime(),
     },
     stopReason: {
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-    },
-    actionsTaken: {
-      anyActionsTaken: true,
-      actionsTakenDuringStop: [4, 18, 20],
-      basisForSearch: [4],
     },
   }
 }
@@ -119,7 +125,7 @@ export const apiStop = (
   const outOfCounty = fullStop.location?.outOfCounty || false
 
   return {
-    agency: 'TBD',
+    agency: 'INSIGHT',
     date: fullStop.stopDate.date,
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,
@@ -143,7 +149,7 @@ export const apiStop = (
       otherType: stop.officer?.otherType || '',
       type: assignment.text,
     },
-    officerId: 'TBD',
+    officerId: fullStop.officerId,
     stopDateTime: formatDateTime(
       fullStop.stopDate.date,
       fullStop.stopDate.time,

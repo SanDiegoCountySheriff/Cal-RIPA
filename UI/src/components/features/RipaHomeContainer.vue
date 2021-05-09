@@ -4,25 +4,17 @@
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      <!-- <v-divider></v-divider>
-      <div class="tw-my-4">
-        {{ fullStop }}
-      </div>
-      <v-divider></v-divider>
-      <div class="tw-my-4">
-        {{ stop }}
-      </div>
-      <v-divider></v-divider> -->
-
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
+        :last-location="getLastLocation"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :valid-last-location="isLastLocationValid"
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
@@ -37,12 +29,13 @@
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin],
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
     RipaFormTemplate,
@@ -67,6 +60,7 @@ export default {
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
+      'officerId',
     ]),
   },
 
@@ -74,7 +68,8 @@ export default {
     ...mapActions(['checkTextForPii']),
 
     handleSubmit(apiStop) {
-      console.log('API STOP SUBMITTED', apiStop)
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
     },
 
     async validateReasonForStopForPii(textValue) {

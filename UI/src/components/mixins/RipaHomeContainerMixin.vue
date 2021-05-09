@@ -2,6 +2,21 @@
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 
 export default {
+  computed: {
+    getLastLocation() {
+      const lastLocation = localStorage.getItem('ripa_last_location')
+      if (lastLocation) {
+        return JSON.parse(lastLocation)
+      }
+
+      return null
+    },
+
+    isLastLocationValid() {
+      return this.getLastLocation !== null
+    },
+  },
+
   methods: {
     getOfficerYearsExperience() {
       const yearsExperience = localStorage.getItem(
@@ -53,6 +68,7 @@ export default {
           this.stop = motorStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
 
@@ -60,6 +76,7 @@ export default {
           this.stop = probationStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
 
@@ -67,6 +84,7 @@ export default {
           this.stop = defaultStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
       }
@@ -74,32 +92,40 @@ export default {
       this.updateFullStop()
     },
 
-    updateFullStop() {
-      const updatedPerson = {
-        ...this.stop.person,
-        id: this.stop.person.id,
-        actionsTaken: this.stop.actionsTaken,
-        stopReason: this.stop.stopReason,
-        stopResult: this.stop.stopResult,
-      }
+    setLastLocation(stop) {
+      localStorage.setItem('ripa_last_location', JSON.stringify(stop.location))
+    },
 
-      const updatedFullStop = Object.assign({}, this.fullStop)
-      updatedFullStop.created = this.stop.created
-      updatedFullStop.id = this.stop.id
-      updatedFullStop.updated = new Date()
-      updatedFullStop.officer = this.stop.officer
-      updatedFullStop.stopDate = this.stop.stopDate
-      updatedFullStop.location = this.stop.location
-      const personId = this.stop.person.id
-      const people = updatedFullStop.people || []
-      updatedFullStop.people = people.filter(item => item.id !== personId)
-      updatedFullStop.people.push(updatedPerson)
-      this.fullStop = Object.assign({}, updatedFullStop)
+    updateFullStop() {
+      if (this.stop.person) {
+        const updatedPerson = {
+          ...this.stop.person,
+          id: this.stop?.person.id,
+          actionsTaken: this.stop?.actionsTaken || null,
+          stopReason: this.stop?.stopReason || null,
+          stopResult: this.stop?.stopResult || null,
+        }
+
+        const updatedFullStop = Object.assign({}, this.fullStop)
+        updatedFullStop.created = this.stop.created
+        updatedFullStop.id = this.stop.id
+        updatedFullStop.location = this.stop.location
+        updatedFullStop.officer = this.stop.officer
+        updatedFullStop.officerId = this.stop.officerId
+        updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.updated = new Date()
+        const personId = this.stop.person.id
+        const people = updatedFullStop.people || []
+        updatedFullStop.people = people.filter(item => item.id !== personId)
+        updatedFullStop.people.push(updatedPerson)
+        this.fullStop = Object.assign({}, updatedFullStop)
+      }
     },
 
     handleCancel() {
       this.isEditingForm = false
-      this.stop = defaultStop()
+      this.stop = {}
+      this.fullStop = {}
       this.updateFullStop()
     },
   },

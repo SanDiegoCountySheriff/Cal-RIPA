@@ -122,7 +122,6 @@ export default {
 
   computed: {
     getApiStop() {
-      console.log(this.apiStop)
       return this.apiStop
     },
   },

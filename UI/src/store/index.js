@@ -22,7 +22,8 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       isAdmin: true,
-      isAuthenticated: false,
+      isAuthenticated: true,
+      officerId: '2021050812345',
     },
     piiDate: null,
     officerStops: [],
@@ -73,6 +74,9 @@ export default new Vuex.Store({
     },
     isOnline: () => {
       return navigator.onLine
+    },
+    officerId: state => {
+      return state.user.officerId
     },
   },
 
@@ -312,7 +316,7 @@ export default new Vuex.Store({
         })
     },
 
-    editStop({ dispatch }, stop) {
+    editOfficerStop({ dispatch }, stop) {
       return axios
         .put(
           `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
@@ -326,7 +330,7 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getStops')
+          dispatch('getOfficerStops')
         })
     },
 
@@ -337,9 +341,6 @@ export default new Vuex.Store({
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
             'Cache-Control': 'no-cache',
           },
-        )
-        .then(() => {
-          dispatch('getBeats')
         })
         .then(response => {
           const data = response.data.sort((x, y) => {
@@ -398,9 +399,6 @@ export default new Vuex.Store({
             'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
             'Cache-Control': 'no-cache',
           },
-        )
-        .then(() => {
-          dispatch('getSchools')
         })
         .then(response => {
           const data = response.data
@@ -642,7 +640,12 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          commit('updateOfficerStops', response.data)
+          const data = response.data.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateOfficerStops', data)
         })
         .catch(() => {
           commit('updateOfficerStops', [])
