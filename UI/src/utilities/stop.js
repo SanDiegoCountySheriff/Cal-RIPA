@@ -16,9 +16,10 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = (yearsExperience, assignment, officerId) => {
+export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
   return {
     actionsTaken: {},
+    agency,
     id: uuidv4(),
     created: new Date(),
     officer: {
@@ -39,9 +40,10 @@ export const defaultStop = (yearsExperience, assignment, officerId) => {
   }
 }
 
-export const motorStop = (yearsExperience, assignment, officerId) => {
+export const motorStop = (yearsExperience, assignment, officerId, agency) => {
   return {
     actionsTaken: {},
+    agency,
     created: new Date(),
     id: uuidv4(),
     officer: {
@@ -83,13 +85,19 @@ export const motorStop = (yearsExperience, assignment, officerId) => {
   }
 }
 
-export const probationStop = (yearsExperience, assignment, officerId) => {
+export const probationStop = (
+  yearsExperience,
+  assignment,
+  officerId,
+  agency,
+) => {
   return {
     actionsTaken: {
       anyActionsTaken: true,
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
+    agency,
     created: new Date(),
     id: uuidv4(),
     officer: {
@@ -125,7 +133,7 @@ export const apiStop = (
   const outOfCounty = fullStop.location?.outOfCounty || false
 
   return {
-    agency: 'INSIGHT',
+    agency: fullStop.officerId,
     date: fullStop.stopDate.date,
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,

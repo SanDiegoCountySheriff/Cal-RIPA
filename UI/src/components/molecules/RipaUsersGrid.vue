@@ -60,6 +60,12 @@
                         label="Start Date"
                       ></v-text-field>
                     </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.agency"
+                        label="Agency"
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -123,6 +129,7 @@ export default {
         { text: 'Last Name', value: 'lastName' },
         { text: 'Full Name', value: 'name' },
         { text: 'Start Date', value: 'startDate' },
+        { text: 'Agency', value: 'agency' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -130,11 +137,13 @@ export default {
         firstName: '',
         lastName: '',
         startDate: '',
+        agency: '',
       },
       defaultItem: {
         firstName: '',
         lastName: '',
         startDate: '',
+        agency: '',
       },
     }
   },
@@ -193,7 +202,7 @@ export default {
       } else {
         this.editedItem.id =
           format(new Date(), 'yyyy/MM/dd') +
-          (Math.floor(Math.random() * 90000) + 10000).toString()
+          (Math.floor(Math.random() * 99999) + 10000).toString()
         this.users.push(this.editedItem)
       }
 

@@ -1,8 +1,5 @@
 <template>
   <ripa-page-container :admin="admin">
-    {{ fullStop }}
-    <v-divider></v-divider>
-    {{ stop }}
     <vue-confirm-dialog></vue-confirm-dialog>
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
@@ -55,6 +52,7 @@ export default {
 
   data() {
     return {
+      agency: 'Insight',
       fullStop: {},
       isAuthenticated: true,
       isEditingForm: false,
