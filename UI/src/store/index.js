@@ -23,6 +23,7 @@ export default new Vuex.Store({
     user: {
       isAdmin: true,
       isAuthenticated: true,
+      officerId: '2021050812345',
     },
     piiDate: null,
     officerStops: [],
@@ -73,6 +74,9 @@ export default new Vuex.Store({
     },
     isOnline: () => {
       return navigator.onLine
+    },
+    officerId: state => {
+      return state.user.officerId
     },
   },
 

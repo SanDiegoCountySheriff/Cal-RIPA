@@ -60,6 +60,7 @@ export default {
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
+      'officerId',
     ]),
   },
 

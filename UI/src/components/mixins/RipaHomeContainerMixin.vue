@@ -68,6 +68,7 @@ export default {
           this.stop = motorStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
 
@@ -75,6 +76,7 @@ export default {
           this.stop = probationStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
 
@@ -82,6 +84,7 @@ export default {
           this.stop = defaultStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.officerId,
           )
           break
       }
@@ -106,10 +109,11 @@ export default {
         const updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
-        updatedFullStop.updated = new Date()
-        updatedFullStop.officer = this.stop.officer
-        updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.location = this.stop.location
+        updatedFullStop.officer = this.stop.officer
+        updatedFullStop.officerId = this.stop.officerId
+        updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)

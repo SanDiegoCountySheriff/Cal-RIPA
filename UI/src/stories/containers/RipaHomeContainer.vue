@@ -56,13 +56,16 @@ export default {
   data() {
     return {
       fullStop: {},
+      isAuthenticated: true,
       isEditingForm: false,
+      isOnline: true,
       loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
+      officerId: '2021050812345',
       stop: {},
     }
   },

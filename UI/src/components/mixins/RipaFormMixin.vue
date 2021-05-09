@@ -5,7 +5,8 @@ export default {
   methods: {
     loadModel(newValue) {
       return {
-        id: newValue?.id,
+        id: newValue.id,
+        officerId: newValue.officerId,
         actionsTaken: {
           anyActionsTaken: newValue?.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
