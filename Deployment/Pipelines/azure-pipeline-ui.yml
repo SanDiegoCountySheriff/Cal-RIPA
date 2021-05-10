@@ -67,7 +67,7 @@ stages:
           #     archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
           #     replaceExistingArchive: true
           
-          - script: ls -la
+          - script: ls -la ./UI/
 
           - task: ArchiveFiles@2
             displayName: "Archive config Files"
