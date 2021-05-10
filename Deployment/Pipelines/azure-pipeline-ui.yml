@@ -67,6 +67,15 @@ stages:
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
               replaceExistingArchive: true
 
+          - task: ArchiveFiles@2
+            displayName: "Archive config Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/*.config.json"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-config.zip"
+              replaceExistingArchive: true
+
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts"
             inputs:
