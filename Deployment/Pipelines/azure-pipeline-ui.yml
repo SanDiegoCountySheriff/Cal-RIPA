@@ -24,48 +24,48 @@ stages:
         displayName: "Building UI Project"
 
         steps:
-          # - task: NodeTool@0
-          #   inputs:
-          #     versionSpec: "12.x"
-          #   displayName: "Install Node.js"
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "12.x"
+            displayName: "Install Node.js"
 
-          # - task: Npm@1
-          #   displayName: "npm install"
-          #   inputs:
-          #     command: "install"
-          #     workingDir: "UI/"
+          - task: Npm@1
+            displayName: "npm install"
+            inputs:
+              command: "install"
+              workingDir: "UI/"
 
-          # - task: Npm@1
-          #   displayName: "npm build-storybook"
-          #   inputs:
-          #     command: "custom"
-          #     workingDir: "UI/"
-          #     customCommand: "run build-storybook"
+          - task: Npm@1
+            displayName: "npm build-storybook"
+            inputs:
+              command: "custom"
+              workingDir: "UI/"
+              customCommand: "run build-storybook"
 
-          # - task: Npm@1
-          #   displayName: "npm build"
-          #   inputs:
-          #     command: "custom"
-          #     workingDir: "UI/"
-          #     customCommand: "run build"
+          - task: Npm@1
+            displayName: "npm build"
+            inputs:
+              command: "custom"
+              workingDir: "UI/"
+              customCommand: "run build"
 
-          # - task: ArchiveFiles@2
-          #   displayName: "Archive storybook Files"
-          #   inputs:
-          #     rootFolderOrFile: "$(Build.SourcesDirectory)/UI/storybook-static"
-          #     includeRootFolder: true
-          #     archiveType: "zip"
-          #     archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
-          #     replaceExistingArchive: true
+          - task: ArchiveFiles@2
+            displayName: "Archive storybook Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/storybook-static"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
+              replaceExistingArchive: true
 
-          # - task: ArchiveFiles@2
-          #   displayName: "Archive UI Files"
-          #   inputs:
-          #     rootFolderOrFile: "$(Build.SourcesDirectory)/UI/dist"
-          #     includeRootFolder: true
-          #     archiveType: "zip"
-          #     archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
-          #     replaceExistingArchive: true
+          - task: ArchiveFiles@2
+            displayName: "Archive UI Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/dist"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+              replaceExistingArchive: true
 
           - task: ArchiveFiles@2
             displayName: "Archive config Files"
