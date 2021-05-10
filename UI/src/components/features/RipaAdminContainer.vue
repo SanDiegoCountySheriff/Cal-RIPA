@@ -5,7 +5,7 @@
     :cities="mappedAdminCities"
     :schools="mappedAdminSchools"
     :statutes="mappedAdminStatutes"
-    :stops="mappedAdminStops"
+    :stops="stops"
     :submissions="mappedAdminSubmissions"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
@@ -20,7 +20,7 @@
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -44,6 +44,7 @@ export default {
       'mappedAdminStops',
       'mappedAdminSubmissions',
     ]),
+    ...mapState(['stops']),
   },
 
   methods: {

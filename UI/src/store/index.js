@@ -39,6 +39,7 @@ export default new Vuex.Store({
       return state.adminStatutes
     },
     mappedAdminStops: state => {
+      console.log(state.stops)
       return state.stops
     },
     mappedAdminSubmissions: () => {
@@ -99,6 +100,7 @@ export default new Vuex.Store({
       state.formStatutes = items
     },
     updateStops(state, items) {
+      console.log(items)
       state.stops = items
     },
   },

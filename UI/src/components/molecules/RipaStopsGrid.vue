@@ -49,7 +49,7 @@
       <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
-            v-model="codess"
+            v-model="codes"
             :items="items"
             dense
             chips
