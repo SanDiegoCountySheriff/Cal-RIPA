@@ -72,7 +72,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Archive config Files"
             inputs:
-              rootFolderOrFile: "$(Build.SourcesDirectory)/*.config.json"
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/*.config.json"
               includeRootFolder: true
               archiveType: "zip"
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-config.zip"
