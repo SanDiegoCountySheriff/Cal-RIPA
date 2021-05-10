@@ -66,13 +66,11 @@ stages:
           #     archiveType: "zip"
           #     archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
           #     replaceExistingArchive: true
-          
-          - script: ls -la
 
           - task: ArchiveFiles@2
             displayName: "Archive config Files"
             inputs:
-              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/*"
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/config"
               includeRootFolder: true
               archiveType: "zip"
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-config.zip"
