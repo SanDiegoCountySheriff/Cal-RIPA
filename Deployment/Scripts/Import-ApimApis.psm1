@@ -39,7 +39,7 @@ function Import-FunctionApi()
     $backend = Get-AzApiManagementBackend -Context $ApimCntx -BackendId $functionApp
     $ErrorActionPreference = $oldErrorActionPreference	
 
-    if!($backend)
+    if(!$backend)
     {
         Import-Module .\New-RIPAApimBackend.psm1 -Force
         New-RIPAApimBackend -ResourceGroupName $ResourceGroupName -ServiceName $ServiceName -FunctionName $functionApp
