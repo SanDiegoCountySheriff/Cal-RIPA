@@ -1,12 +1,13 @@
 {
-	"Authentication" : {
-		"ClientId" : "3f47a395-5d13-4781-aa63-dc5886f05bb2",
-		"AuthorityUrl" : "https://login.microsoftonline.com/",
-		"TenantId" : "a44e5271-a297-4daf-a3a9-f90a3146f3f5",
-		"PrimaryDomain" : "californiasheriffs.onmicrosoft.com"
+	"Authentication": {
+		"ClientId": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6",
+		"AuthorityUrl": "https://login.microsoftonline.com/7832cdfd-b337-4d07-af7e-9de082e16b31",
+		"TenantId": "7832cdfd-b337-4d07-af7e-9de082e16b31",
+		"PrimaryDomain": "sdsheriff.gov"
 	},
-	"Configuration" : {
-		"ServicesBaseUrl" : "https://sdsd-ripa-d-apim.azure-api.us/",
-		"DefaultCounty" : "San Diego"
+	"Configuration": {
+		"ServicesBaseUrl": "https://sdsd-ripa-d-apim.azure-api.us/",
+		"Subscription": "f142a7cd1c0d40279ada26a42c319c94",
+		"DefaultCounty": "San Diego"
 	}
 }

@@ -58,6 +58,12 @@ stages:
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
               replaceExistingArchive: true
 
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)/UI'
+              Contents: '*.config.json'
+              TargetFolder: '$(Build.SourcesDirectory)/UI/dist'
+
           - task: ArchiveFiles@2
             displayName: "Archive UI Files"
             inputs:

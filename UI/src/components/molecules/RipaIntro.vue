@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="600">
-    <v-card-title class="tw-uppercase">Ripa Stop App</v-card-title>
+    <v-card-title class="tw-uppercase">Ripa Stops</v-card-title>
 
     <v-card-text>
       <div>Initiate a new Stop:</div>

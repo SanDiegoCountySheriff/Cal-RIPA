@@ -189,12 +189,12 @@ export default new Vuex.Store({
       }
       return axios
         .post(
-          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
+          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
           document,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -283,15 +283,12 @@ export default new Vuex.Store({
 
     deleteUser({ dispatch }, user) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/DeleteUser/${user.id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getAdminUsers')
         })
@@ -388,12 +385,12 @@ export default new Vuex.Store({
     editUser({ dispatch }, user) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/PutUser/${user.id}`,
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
           user,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -409,17 +406,13 @@ export default new Vuex.Store({
 
     editOfficerStop({ dispatch }, stop) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
-          stop,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getOfficerStops')
         })
