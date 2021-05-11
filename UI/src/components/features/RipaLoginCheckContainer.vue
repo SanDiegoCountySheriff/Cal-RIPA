@@ -6,7 +6,7 @@
 import RipaLoginCheckTemplate from '@/components/templates/RipaLoginCheckTemplate'
 
 export default {
-  name: 'ripa-home-container',
+  name: 'ripa-login-check-container',
 
   components: {
     RipaLoginCheckTemplate,
