@@ -1,8 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RIPA.Functions.Domain.Functions.Beats.Models
 {
