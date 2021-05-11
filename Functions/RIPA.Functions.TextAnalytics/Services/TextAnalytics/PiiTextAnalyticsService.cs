@@ -2,8 +2,6 @@
 using Azure.AI.TextAnalytics;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.TextAnalytics.Services.TextAnalytics
