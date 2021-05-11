@@ -12,9 +12,14 @@
             small
             :disabled="!validLastLocation"
             @click="handleLastLocation"
-            >Last Location</v-btn
+            >Last Location
+          </v-btn>
+          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorite">
+            Open Favorite Location
+          </v-btn>
+          <v-btn outlined small @click="handleSaveFavorite"
+            >Save Location</v-btn
           >
-          <v-btn outlined small disabled>Favorite Locations</v-btn>
         </div>
       </v-row>
       <v-row no-gutters>
@@ -295,6 +300,18 @@ export default {
       this.viewModel.location = this.lastLocation
     },
 
+    handleOpenFavorite() {
+      if (this.onOpenFavorite) {
+        this.onOpenFavorite()
+      }
+    },
+
+    handleSaveFavorite() {
+      if (this.onSaveFavorite) {
+        this.onSaveFavorite(this.viewModel.location)
+      }
+    },
+
     updateBlockNumberModel() {
       const blockNumber = this.viewModel.location.blockNumber
       this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
@@ -350,6 +367,14 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    onOpenFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }

@@ -18,18 +18,27 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-open-favorite="handleOpenFavorite"
+        :on-save-favorite="handleSaveFavorite"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
   </div>
 </template>
 
 <script>
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -38,6 +47,7 @@ export default {
   mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
+    RipaAddFavoriteDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
   },

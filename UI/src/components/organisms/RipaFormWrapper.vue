@@ -64,6 +64,8 @@
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"
+                :on-open-favorite="onOpenFavorite"
+                :on-save-favorite="onSaveFavorite"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -433,6 +435,14 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
       type: Function,
       default: () => {},
     },

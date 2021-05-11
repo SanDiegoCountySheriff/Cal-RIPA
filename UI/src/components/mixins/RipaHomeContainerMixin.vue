@@ -2,6 +2,13 @@
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 
 export default {
+  data() {
+    return {
+      savedLocation: null,
+      showAddFavoriteDialog: false,
+    }
+  },
+
   computed: {
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
@@ -30,9 +37,25 @@ export default {
       return +assignment || null
     },
 
+    getFavoriteLocations() {
+      const locations = localStorage.getItem('ripa_favorite_locations')
+      return locations ? JSON.parse(locations) : []
+    },
+
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.updateFullStop()
+    },
+
+    handleAddFavorite(name) {
+      const location = {
+        id: new Date().getTime(),
+        name,
+        location: this.savedLocation,
+      }
+      const locations = this.getFavoriteLocations()
+      locations.push(location)
+      this.setFavoriteLocations(locations)
     },
 
     handleAddPerson() {
@@ -58,6 +81,16 @@ export default {
         people: filteredPeople,
       }
       this.fullStop = Object.assign({}, updatedFullStop)
+    },
+
+    handleOpenFavorite(name) {
+      console.log('OPEN FAVORITE', name)
+    },
+
+    handleSaveFavorite(location) {
+      this.savedLocation = location
+      this.showAddFavoriteDialog = true
+      console.log('DISPLAY SAVE FAVORITE DIALOG')
     },
 
     handleTemplate(value) {
@@ -93,6 +126,10 @@ export default {
       }
 
       this.updateFullStop()
+    },
+
+    setFavoriteLocations(locations) {
+      localStorage.setItem('ripa_favorite_locations', JSON.stringify(locations))
     },
 
     setLastLocation(stop) {

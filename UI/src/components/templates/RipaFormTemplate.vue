@@ -14,6 +14,8 @@
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
+      :on-open-favorite="onOpenFavorite"
+      :on-save-favorite="onSaveFavorite"
       :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
@@ -99,6 +101,14 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
       type: Function,
       default: () => {},
     },

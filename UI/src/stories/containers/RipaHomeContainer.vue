@@ -18,19 +18,28 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-open-favorite="handleOpenFavorite"
+        :on-save-favorite="handleSaveFavorite"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
   </ripa-page-container>
 </template>
 
 <script>
-import RipaPageContainer from './RipaPageContainer'
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaPageContainer from './RipaPageContainer'
 import {
   formBeats,
   formCountyCities,
@@ -45,9 +54,10 @@ export default {
   mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
-    RipaPageContainer,
+    RipaAddFavoriteDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaPageContainer,
   },
 
   data() {
@@ -81,16 +91,25 @@ export default {
       }, 500)
     },
 
+    handleCloseDialog() {
+      this.showAddFavoriteDialog = false
+    },
+
     handleSubmit(apiStop) {
       this.addApiStop(apiStop)
       this.setLastLocation(this.stop)
     },
 
     validateReasonForStopForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue !== ''
+      ) {
         this.loadingPii = true
         let isFound = false
-        isFound = textValue.contains('John Doe')
+        isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
@@ -101,10 +120,15 @@ export default {
     },
 
     validateBasisForSearchForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue !== ''
+      ) {
         this.loadingPii = true
         let isFound = false
-        isFound = textValue.contains('John Doe')
+        isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
