@@ -24,10 +24,10 @@
     "register-service-worker": "1.7.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.1.2",
     "vue": "2.6.12",
-    "vue-msal-browser": "^1.0.4",
     "vue-confirm-dialog": "^1.0.2",
+    "vue-msal-browser": "^1.0.4",
     "vue-router": "3.5.1",
-    "vuetify": "2.4.11",
+    "vuetify": "2.5.0",
     "vuex": "3.6.2"
   },
   "devDependencies": {
@@ -58,7 +58,7 @@
     "eslint-plugin-vue": "7.9.0",
     "json-server": "0.16.3",
     "node-sass": "5.0.0",
-    "prettier": "2.2.1",
+    "prettier": "2.3.0",
     "sass": "1.32.12",
     "sass-loader": "10.1.1",
     "storybook-vue-router": "1.0.7",

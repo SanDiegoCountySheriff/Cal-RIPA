@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate } from '@/utilities/dates'
-import AuthService from '../services/auth'
 
 Vue.use(Vuex)
 
@@ -40,8 +39,8 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
-      isAdmin: true,
-      isAuthenticated: true,
+      isAdmin: false,
+      isAuthenticated: false,
       officerId: '2021050812345',
     },
     apiConfig: null,
@@ -162,7 +161,6 @@ export default new Vuex.Store({
       state.user = {
         ...state.user,
         isAdmin: isAnAdmin.length > 0,
-        // isAdmin: false,
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,
@@ -173,18 +171,18 @@ export default new Vuex.Store({
   },
 
   actions: {
-    checkTextForPii({ commit }, textValue) {
+    checkTextForPii({ commit, state }, textValue) {
       const document = {
         Document: textValue,
       }
       return axios
         .post(
-          `https://sdsd-ripa-d-apim.azure-api.us/textanalytics/PostCheckPii`,
+          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
           document,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -271,17 +269,14 @@ export default new Vuex.Store({
         })
     },
 
-    deleteUser({ dispatch }, user) {
+    deleteUser({ dispatch, state }, user) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/DeleteUser/${user.id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getAdminUsers')
         })
@@ -375,15 +370,15 @@ export default new Vuex.Store({
         })
     },
 
-    editUser({ dispatch }, user) {
+    editUser({ dispatch, state }, user) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/userProfile/PutUser/${user.id}`,
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
           user,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -397,19 +392,15 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ dispatch }, stop) {
+    editOfficerStop({ dispatch, state }, stop) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/stop/PutStop/${stop.id}`,
-          stop,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}/stop/PutStop/${stop.id}`, stop, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getOfficerStops')
         })

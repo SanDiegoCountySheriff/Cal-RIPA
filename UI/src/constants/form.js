@@ -179,8 +179,7 @@ export const STOP_RESULTS = [
   { name: 'Psychiatric hold', value: 7 },
   { name: 'Noncriminal transport or caretaking transport', value: 8 },
   {
-    name:
-      'Contacted parent/legal guardian or other person responsible for the minor',
+    name: 'Contacted parent/legal guardian or other person responsible for the minor',
     value: 9,
   },
   { name: 'Contacted U.S. Department of Homeland Security', value: 10 },

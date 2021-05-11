@@ -124,7 +124,7 @@ export const probationStop = (
     },
     agency,
     created: new Date(),
-    id: uuidv4(),
+    id: new Date().getTime(),
     location: {
       isSchool: false,
       school: null,
@@ -219,9 +219,8 @@ export const getPeopleListed = (fullStop, statutes) => {
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
-      listContrabandOrEvidenceDiscovered: getContrabandOrEvidenceDiscovered(
-        person,
-      ),
+      listContrabandOrEvidenceDiscovered:
+        getContrabandOrEvidenceDiscovered(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
