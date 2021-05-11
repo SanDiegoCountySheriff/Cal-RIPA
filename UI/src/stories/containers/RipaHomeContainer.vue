@@ -31,6 +31,7 @@
       :show-dialog="showFavoritesDialog"
       :favorites="favorites"
       :on-open-favorite="handleOpenFavorite"
+      :on-delete-favorite="handleDeleteFavorite"
     ></ripa-favorites-dialog>
 
     <ripa-add-favorite-dialog

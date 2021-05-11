@@ -72,6 +72,12 @@ export default {
       this.updateFullStop()
     },
 
+    handleDeleteFavorite(id) {
+      const locations = this.getFavoriteLocations()
+      const filteredLocations = locations.filter(item => item.id !== id)
+      this.setFavoriteLocations(filteredLocations)
+    },
+
     handleDeletePerson(id) {
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {

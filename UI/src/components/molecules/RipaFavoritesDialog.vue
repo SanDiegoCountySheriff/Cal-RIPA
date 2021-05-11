@@ -12,6 +12,7 @@
               <ripa-favorites-grid
                 :items="favorites"
                 :on-open-favorite="onOpenFavorite"
+                :on-delete-favorite="onDeleteFavorite"
               ></ripa-favorites-grid>
             </v-col>
           </v-row>
@@ -70,7 +71,7 @@ export default {
     },
 
     handleDelete() {
-      if (this.onDelete) {
+      if (this.onDeleteFavorite) {
         this.onDeleteFavorite(this.favorite)
       }
     },
@@ -103,15 +104,19 @@ export default {
       type: Boolean,
       default: false,
     },
-    onSaveFavorite: {
-      type: Function,
-      default: () => {},
-    },
     onClose: {
       type: Function,
       default: () => {},
     },
+    onDeleteFavorite: {
+      type: Function,
+      default: () => {},
+    },
     onOpenFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
       type: Function,
       default: () => {},
     },

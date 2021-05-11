@@ -14,9 +14,7 @@
       :headers="headers"
       :items="favorites"
       :search="search"
-      @click:row="handleRowClick"
       sort-by="name"
-      single-select
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -138,9 +136,9 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.users.splice(this.editedIndex, 1)
+      this.favorites.splice(this.editedIndex, 1)
       if (this.onDeleteFavorite) {
-        this.onDeleteFavorite(this.editedItem)
+        this.onDeleteFavorite(this.editedItem.id)
       }
       this.closeDelete()
     },
@@ -179,7 +177,6 @@ export default {
       if (this.onEditFavorite) {
         this.onEditFavorite(this.editedItem)
       }
-
       this.close()
     },
   },
