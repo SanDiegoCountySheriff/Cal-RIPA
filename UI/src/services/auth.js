@@ -18,17 +18,17 @@ const AuthService = {
       // if auth config gets set, try login
       if (authConfig) {
         await msalInstance.handleRedirectPromise()
-
         msalInstance.loginRedirect()
 
         const currentAccount = await msalInstance.getAllAccounts()
+        const accessToken = await msalInstance.acquireTokenSilent({
+          account: currentAccount[0],
+          scopes: ['user.read'],
+        })
 
         if (currentAccount.length) {
           store.dispatch('setUserAccountInfo', currentAccount[0])
-          sessionStorage.setItem(
-            'ripa-accessToken',
-            currentAccount[0].accessToken,
-          )
+          sessionStorage.setItem('ripa-accessToken', accessToken.accessToken)
           return true
         }
       } else {
@@ -40,6 +40,9 @@ const AuthService = {
       // user is already logged in
       return true
     }
+  },
+  getApiConfig: () => {
+    return axios.get('/config.json')
   },
 }
 
@@ -57,11 +60,16 @@ const getAuthConfig = async () => {
       }
       msalInstance = new msal.PublicClientApplication(authConfig)
       store.dispatch('setAuthConfig', true)
+      store.dispatch('setApiConfig', {
+        apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+        apiSubscription: res.data.Configuration.Subscription,
+      })
       return true
     })
     .catch(err => {
       if (err) {
         store.dispatch('setAuthConfig', false)
+        store.dispatch('setApiConfig', null)
         return false
       }
     })

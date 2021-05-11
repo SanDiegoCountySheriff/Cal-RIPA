@@ -13,6 +13,7 @@
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
+import AuthService from '../../services/auth'
 
 export default {
   name: 'ripa-page-container',
@@ -28,7 +29,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAdmin', 'isAuthenticated', 'isOnline']),
+    ...mapGetters(['isAdmin', 'isAuthenticated', 'apiConfig', 'isOnline']),
   },
 
   methods: {
@@ -37,6 +38,7 @@ export default {
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
+      'setApiConfig',
     ]),
 
     async getFormData() {
@@ -91,9 +93,19 @@ export default {
     },
   },
 
-  created() {
+  async created() {
+    console.log('pageContainer mounted')
     this.checkCache()
-    this.getFormData()
+    if (this.apiConfig === null) {
+      await AuthService.getApiConfig().then(res => {
+        this.setApiConfig({
+          apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+          apiSubscription: res.data.Configuration.Subscription,
+        })
+        console.log('api config set in page container')
+        this.getFormData()
+      })
+    }
   },
 }
 </script>
