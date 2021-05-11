@@ -24,7 +24,7 @@ function Import-FunctionApi()
     $functionCode = ((az functionapp function keys list -g "sdsd-ripa-$($Environment)-rg" -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
-	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
+	  $swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
 
 	Write-Host "Updating ${serviceUrl}"
 
