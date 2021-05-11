@@ -25,7 +25,6 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.1.2",
     "vue": "2.6.12",
     "vue-confirm-dialog": "^1.0.2",
-    "vue-msal-browser": "^1.0.4",
     "vue-router": "3.5.1",
     "vuetify": "2.5.0",
     "vuex": "3.6.2"
