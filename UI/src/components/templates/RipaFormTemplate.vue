@@ -4,10 +4,17 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :full-stop="fullStop"
+      :last-location="lastLocation"
+      :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :valid-last-location="validLastLocation"
+      :on-add-person="onAddPerson"
       :on-cancel="onCancel"
+      :on-delete-person="onDeletePerson"
+      :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -31,8 +38,14 @@ export default {
 
   methods: {
     handleInput(newVal) {
-      this.stop = newVal
+      this.stop = Object.assign({}, newVal)
       this.$emit('input', this.stop)
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.stop = newVal
     },
   },
 
@@ -49,6 +62,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    fullStop: {
+      type: Object,
+      default: () => {},
+    },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
     nonCountyCities: {
       type: Array,
       default: () => [],
@@ -61,7 +86,23 @@ export default {
       type: Array,
       default: () => [],
     },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
+    },
+    onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
     onCancel: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmit: {
       type: Function,
       default: () => {},
     },

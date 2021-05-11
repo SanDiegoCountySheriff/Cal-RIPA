@@ -6,11 +6,17 @@
     :on-update-dark="handleUpdateDark"
   >
     <slot></slot>
+    <ripa-interval
+      :delay="stopInternalMs"
+      @tick="checkLocalStorage"
+    ></ripa-interval>
   </ripa-page-wrapper>
 </template>
 
 <script>
+import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import AuthService from '../../services/auth'
@@ -18,13 +24,17 @@ import AuthService from '../../services/auth'
 export default {
   name: 'ripa-page-container',
 
+  mixins: [RipaApiStopJobMixin],
+
   components: {
+    RipaInterval,
     RipaPageWrapper,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
+      stopInternalMs: 5000,
     }
   },
 
@@ -34,6 +44,7 @@ export default {
 
   methods: {
     ...mapActions([
+      'editOfficerStop',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
@@ -90,6 +101,14 @@ export default {
       localStorage.removeItem('ripa_schools')
       localStorage.removeItem('ripa_statutes')
       localStorage.setItem('ripa_cache_date', new Date())
+    },
+
+    async runApiStopsJob(apiStops) {
+      if (this.isOnline && this.isAuthenticated) {
+        for (let index = 0; index < apiStops.length; index++) {
+          await this.editOfficerStop(apiStops[index])
+        }
+      }
     },
   },
 

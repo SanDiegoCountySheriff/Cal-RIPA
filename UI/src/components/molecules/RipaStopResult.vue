@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-p-4">
+  <div class="ripa-action-taken tw-pb-8">
     <ripa-form-header
       title="Result of Stop"
       required
@@ -188,6 +188,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -195,6 +196,8 @@ import { STOP_RESULTS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -207,38 +210,7 @@ export default {
     return {
       valid: true,
       stopResultItems: STOP_RESULTS,
-
-      viewModel: {
-        stopReason: this.value?.stopReason || null,
-        stopResult: {
-          anyActionsTaken: this.value?.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            this.value?.stop?.actionsTakenDuringStop1 || false,
-          actionsTakenDuringStop2:
-            this.value?.stop?.actionsTakenDuringStop2 || false,
-          actionsTakenDuringStop3:
-            this.value?.stop?.actionsTakenDuringStop3 || false,
-          actionsTakenDuringStop4:
-            this.value?.stop?.actionsTakenDuringStop4 || false,
-          actionsTakenDuringStop5:
-            this.value?.stop?.actionsTakenDuringStop5 || false,
-          actionsTakenDuringStop6:
-            this.value?.stop?.actionsTakenDuringStop6 || false,
-          actionsTakenDuringStop7:
-            this.value?.stop?.actionsTakenDuringStop7 || false,
-          actionsTakenDuringStop8:
-            this.value?.stop?.actionsTakenDuringStop8 || false,
-          actionsTakenDuringStop9:
-            this.value?.stop?.actionsTakenDuringStop9 || false,
-          actionsTakenDuringStop10:
-            this.value?.stop?.actionsTakenDuringStop10 || false,
-          warningCodes: this.value?.stopResult?.warningCodes || [],
-          citationCodes: this.value?.stopResult?.citationCodes || [],
-          infieldCodes: this.value?.stopResult?.infieldCodes || [],
-          custodialArrestCodes:
-            this.value?.stopResult?.custodialArrestCodes || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -324,7 +296,57 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateActionsTakenModel()
+      this.updateWarningCodesModel()
+      this.updateCitationCodesModel()
+      this.updateInfieldCodesModel()
+      this.updateCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateActionsTakenModel() {
+      if (!this.viewModel.stopResult.anyActionsTaken) {
+        this.viewModel.stopResult.actionsTakenDuringStop1 = false
+        this.viewModel.stopResult.actionsTakenDuringStop2 = false
+        this.viewModel.stopResult.actionsTakenDuringStop3 = false
+        this.viewModel.stopResult.actionsTakenDuringStop4 = false
+        this.viewModel.stopResult.actionsTakenDuringStop5 = false
+        this.viewModel.stopResult.actionsTakenDuringStop6 = false
+        this.viewModel.stopResult.actionsTakenDuringStop7 = false
+        this.viewModel.stopResult.actionsTakenDuringStop8 = false
+        this.viewModel.stopResult.actionsTakenDuringStop9 = false
+        this.viewModel.stopResult.actionsTakenDuringStop10 = false
+      }
+    },
+
+    updateWarningCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop1) {
+        this.viewModel.stopResult.warningCodes = null
+      }
+    },
+
+    updateCitationCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
+        this.viewModel.stopResult.citationCodes = null
+      }
+    },
+
+    updateInfieldCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
+        this.viewModel.stopResult.infieldCodes = null
+      }
+    },
+
+    updateCustodiaArrestCodesModel() {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop5) {
+        this.viewModel.stopResult.custodialArrestCodes = null
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

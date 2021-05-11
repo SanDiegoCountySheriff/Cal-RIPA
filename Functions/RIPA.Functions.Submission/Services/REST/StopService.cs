@@ -116,9 +116,9 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.ListCodes?.FirstOrDefault().Code,
+                    City = stop.Location.City.Codes.Code,
                     K12_Flag = stop.Location.School ? "Y" : null,
-                    K12Code = stop.Location.School ? stop.Location.SchoolName.ListCodes?.FirstOrDefault().Code : null
+                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : null
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
                 ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped)

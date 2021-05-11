@@ -1,18 +1,24 @@
 <template>
-  <div class="ripa-form-container">
+  <div class="ripa-home-container">
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      {{ stop }}
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :full-stop="fullStop"
+        :last-location="getLastLocation"
+        :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :valid-last-location="isLastLocationValid"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -21,12 +27,15 @@
 
 <script>
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { mapGetters } from 'vuex'
-import { format } from 'date-fns'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
+
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
     RipaFormTemplate,
@@ -35,91 +44,88 @@ export default {
 
   data() {
     return {
+      fullStop: {},
       isEditingForm: false,
+      loadingPii: false,
       stop: {},
     }
   },
 
   computed: {
     ...mapGetters([
+      'isOnline',
+      'isAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
+      'officerId',
+      'agency',
     ]),
   },
 
   methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
+    ...mapActions(['checkTextForPii']),
+
+    handleSubmit(apiStop) {
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
     },
 
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
-    },
-
-    handleTemplate(value) {
-      this.isEditingForm = true
-
-      if (value === 'motor') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
+    async validateReasonForStopForPii(textValue) {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue.length > 0
+      ) {
+        this.loadingPii = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
         }
-      }
-
-      if (value === 'probation') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 3,
-            reasonForStopExplanation:
-              'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-          },
-          actionsTaken: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop: [4, 18, 20],
-            basisForSearch: [4],
-          },
-        }
+        this.loadingPii = false
+        this.updateFullStop()
       }
     },
 
-    handleCancel() {
-      this.isEditingForm = false
-      this.stop = {}
+    async validateBasisForSearchForPii(textValue) {
+      if (
+        this.isOnline &&
+        this.isAuthenticated &&
+        textValue &&
+        textValue.length > 0
+      ) {
+        this.loadingPii = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
+        this.loadingPii = false
+        this.updateFullStop()
+      }
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 }

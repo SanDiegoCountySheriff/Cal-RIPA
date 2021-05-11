@@ -72,6 +72,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -80,6 +81,8 @@ import { OFFICER_ASSIGNMENTS } from '@/constants/form'
 
 export default {
   name: 'ripa-officer',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -95,14 +98,7 @@ export default {
       yearsExperienceRules: [v => !!v || 'Years experience is required'],
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
-      viewModel: {
-        officer: {
-          editOfficer: this.value?.officer?.editOfficer || null,
-          yearsExperience: this.value?.officer?.yearsExperience || null,
-          assignment: this.value?.officer?.assignment || null,
-          otherType: this.value?.officer?.otherType || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -147,6 +143,12 @@ export default {
       if (this.viewModel.officer.assignment !== 10) {
         this.viewModel.officer.otherType = null
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

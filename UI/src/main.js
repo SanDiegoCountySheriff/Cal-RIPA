@@ -5,11 +5,14 @@ import router from './router'
 import store from './store'
 import './plugins/tailwind'
 import vuetify from './plugins/vuetify'
-// import { msal, msalInstance } from './plugins/auth'
+import VueConfirmDialog from 'vue-confirm-dialog'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$workbox = wb
+
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 new Vue({
   router,

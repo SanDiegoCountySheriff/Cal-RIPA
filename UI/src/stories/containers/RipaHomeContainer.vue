@@ -1,17 +1,24 @@
 <template>
   <ripa-page-container :admin="admin">
+    <vue-confirm-dialog></vue-confirm-dialog>
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
+
     <template v-if="isEditingForm">
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :full-stop="fullStop"
+        :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -21,8 +28,9 @@
 <script>
 import RipaPageContainer from './RipaPageContainer'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { format } from 'date-fns'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import {
   formBeats,
   formCountyCities,
@@ -34,6 +42,8 @@ import {
 export default {
   name: 'ripa-home-container',
 
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+
   components: {
     RipaPageContainer,
     RipaFormTemplate,
@@ -42,35 +52,23 @@ export default {
 
   data() {
     return {
+      agency: 'Insight',
+      fullStop: {},
+      isAuthenticated: true,
       isEditingForm: false,
+      isOnline: true,
+      loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
+      officerId: '2021050812345',
       stop: {},
     }
   },
 
   methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
-    },
-
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
-    },
-
     getFormData() {
       this.loading = true
       setTimeout(() => {
@@ -83,57 +81,54 @@ export default {
       }, 500)
     },
 
-    handleTemplate(value) {
-      this.isEditingForm = true
+    handleSubmit(apiStop) {
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
+    },
 
-      if (value === 'motor') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
+    validateReasonForStopForPii(textValue) {
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
+        let isFound = false
+        isFound = textValue.contains('John Doe')
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
         }
-      }
-
-      if (value === 'probation') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 3,
-            reasonForStopExplanation:
-              'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-          },
-          actionsTaken: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop: [4, 18, 20],
-            basisForSearch: [4],
-          },
-        }
+        this.loadingPii = false
+        this.updateFullStop()
       }
     },
 
-    handleCancel() {
-      this.isEditingForm = false
-      this.stop = {}
+    validateBasisForSearchForPii(textValue) {
+      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+        this.loadingPii = true
+        let isFound = false
+        isFound = textValue.contains('John Doe')
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
+        this.loadingPii = false
+        this.updateFullStop()
+      }
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 

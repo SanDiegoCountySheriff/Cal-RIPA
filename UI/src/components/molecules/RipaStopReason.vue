@@ -86,11 +86,19 @@
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
+          <template v-if="model.stopReason.reasonForStopPiiFound">
+            <v-alert outlined type="warning" dense>
+              The explanation contains personally identifying information.
+              Please remove if possible.
+            </v-alert>
+          </template>
+
           <ripa-text-area
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
+            :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
           ></ripa-text-area>
@@ -104,6 +112,7 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -117,6 +126,8 @@ import {
 
 export default {
   name: 'ripa-stop-reason',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -140,22 +151,7 @@ export default {
       reasonItems: STOP_REASONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: {
-        stopReason: {
-          reasonForStop: this.value?.stopReason?.reasonForStop || null,
-          trafficViolation: this.value?.stopReason?.trafficViolation || null,
-          trafficViolationCode:
-            this.value?.stopReason?.trafficViolationCode || null,
-          reasonableSuspicion:
-            this.value?.stopReason?.reasonableSuspicion || [],
-          reasonableSuspicionCode:
-            this.value?.stopReason?.reasonableSuspicionCode || null,
-          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
-          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
-          reasonForStopExplanation:
-            this.value?.stopReason?.reasonForStopExplanation || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -210,10 +206,26 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
+    },
+
+    'value.stopReason.reasonForStopPiiFound': {
+      handler(newVal) {
+        this.viewModel.stopReason.reasonForStopPiiFound = newVal
+      },
+    },
+  },
+
   props: {
     value: {
       type: Object,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
     statutes: {
       type: Array,

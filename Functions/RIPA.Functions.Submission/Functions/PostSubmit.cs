@@ -6,14 +6,11 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.REST.Contracts;
-using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 
@@ -60,8 +57,7 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            List<string> failedStopIds = new List<string>();             
-
+            List<string> failedStopIds = new List<string>();
 
             foreach (var stopId in submitRequest.StopIds)
             {
@@ -77,6 +73,7 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     log.LogError($"Failure Submitting Stop with id {stopId}: {ex.Message}");
                     failedStopIds.Add(stopId);
+                    //TODO harden and update stop with failure to submit to DOJ
                 }
 
             }
@@ -88,7 +85,6 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
-
 
     }
 }

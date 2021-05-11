@@ -375,3 +375,4 @@ yarn-error.log*
 .DS_Store
 
 /UI/public/config.json
+Functions/RIPA.Functions.Stop/Properties/launchSettings.json

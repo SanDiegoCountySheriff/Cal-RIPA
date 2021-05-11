@@ -34,12 +34,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -51,13 +54,7 @@ export default {
     return {
       valid: true,
       disabilityItems: DISABILITIES,
-      viewModel: {
-        person: {
-          anyDisabilities: this.value?.person?.anyDisabilities || false,
-          perceivedOrKnownDisability:
-            this.value?.person?.perceivedOrKnownDisability || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -88,6 +85,12 @@ export default {
       if (!this.viewModel.person.anyDisabilities) {
         this.viewModel.person.perceivedOrKnownDisability = []
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 
