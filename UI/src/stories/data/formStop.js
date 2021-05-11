@@ -21,7 +21,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: new Date.getTime(),
+    id: new Date().getTime(),
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -70,7 +70,7 @@ export const sampleStop = {
 }
 
 export const onePersonFullStop = {
-  id: new Date.getTime(),
+  id: new Date().getTime(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -95,7 +95,7 @@ export const onePersonFullStop = {
   },
   people: [
     {
-      id: new Date.getTime(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
@@ -145,7 +145,7 @@ export const onePersonFullStop = {
 }
 
 export const twoPersonFullStop = {
-  id: new Date.getTime(),
+  id: new Date().getTime(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -170,7 +170,7 @@ export const twoPersonFullStop = {
   },
   people: [
     {
-      id: new Date.getTime(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
@@ -217,7 +217,7 @@ export const twoPersonFullStop = {
       },
     },
     {
-      id: new Date.getTime(),
+      id: new Date().getTime(),
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
