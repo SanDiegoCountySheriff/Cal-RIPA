@@ -1,5 +1,6 @@
 <script>
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
+import { format } from 'date-fns'
 
 export default {
   data() {
@@ -50,6 +51,7 @@ export default {
         id: new Date().getTime(),
         name,
         location: this.savedLocation,
+        updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const locations = this.getFavoriteLocations()
       locations.push(location)
@@ -72,6 +74,11 @@ export default {
       this.updateFullStop()
     },
 
+    handleCloseDialog() {
+      this.showAddFavoriteDialog = false
+      this.showFavoritesDialog = false
+    },
+
     handleDeleteFavorite(id) {
       const locations = this.getFavoriteLocations()
       const filteredLocations = locations.filter(item => item.id !== id)
@@ -85,6 +92,17 @@ export default {
         people: filteredPeople,
       }
       this.fullStop = Object.assign({}, updatedFullStop)
+    },
+
+    handleEditFavorite(favorite) {
+      const updatedFav = Object.assign({}, favorite)
+      updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
+      const locations = this.getFavoriteLocations()
+      const filteredLocations = locations.filter(
+        item => item.id !== updatedFav.id,
+      )
+      filteredLocations.push(updatedFav)
+      this.setFavoriteLocations(filteredLocations)
     },
 
     handleInput(newVal) {

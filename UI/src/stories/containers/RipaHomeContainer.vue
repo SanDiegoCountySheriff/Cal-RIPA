@@ -30,6 +30,8 @@
     <ripa-favorites-dialog
       :show-dialog="showFavoritesDialog"
       :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditFavorite"
       :on-open-favorite="handleOpenFavorite"
       :on-delete-favorite="handleDeleteFavorite"
     ></ripa-favorites-dialog>
@@ -100,10 +102,6 @@ export default {
         this.mappedFormStatutes = formStatutes()
         this.loading = false
       }, 500)
-    },
-
-    handleCloseDialog() {
-      this.showAddFavoriteDialog = false
     },
 
     handleSubmit(apiStop) {

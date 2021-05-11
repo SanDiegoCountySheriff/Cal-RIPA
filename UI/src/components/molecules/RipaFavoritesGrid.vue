@@ -14,7 +14,9 @@
       :headers="headers"
       :items="favorites"
       :search="search"
+      @click:row="handleRowClick"
       sort-by="name"
+      single-select
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -73,10 +75,10 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="tw-mr-2" @click="editItem(item)">
+        <v-icon small class="tw-mr-2" @click="editItem($event, item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
         <div>No Data</div>
@@ -123,13 +125,15 @@ export default {
       this.favorites = this.items
     },
 
-    editItem(item) {
+    editItem(event, item) {
+      event.stopPropagation()
       this.editedIndex = this.favorites.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem(item) {
+    deleteItem(event, item) {
+      event.stopPropagation()
       this.editedIndex = this.favorites.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
