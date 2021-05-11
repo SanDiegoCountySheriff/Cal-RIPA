@@ -26,7 +26,7 @@ namespace RIPA.Functions.Submission.Functions
             _stopService = stopService;
             _sftpOutputPath = Environment.GetEnvironmentVariable("SftpOutputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefix");
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixResults");
         }
 
         [FunctionName("TimerGetSubmitResults")]
