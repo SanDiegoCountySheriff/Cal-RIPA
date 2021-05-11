@@ -343,6 +343,7 @@ export default {
     lastLocation(newVal) {
       if (newVal) {
         this.viewModel.location = newVal
+        this.handleInput()
       }
     },
   },

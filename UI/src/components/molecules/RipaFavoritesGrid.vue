@@ -34,13 +34,11 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-textarea
+                      <v-text-field
                         v-model="editedItem.name"
-                        auto-grow
                         label="Favorite Name"
                         required
-                        rows="2"
-                      ></v-textarea>
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
