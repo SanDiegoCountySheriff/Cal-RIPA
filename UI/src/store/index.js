@@ -58,8 +58,8 @@ export default new Vuex.Store({
     isAuthenticated: state => {
       return state.user.isAuthenticated
     },
-    isOnline: () => {
-      return navigator.onLine
+    isOnline: state => {
+      return navigator.onLine && state.user.isAuthenticated
     },
     mappedAdminBeats: state => {
       return state.adminBeats
