@@ -14,8 +14,8 @@
             @click="handleLastLocation"
             >Last Location
           </v-btn>
-          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorite">
-            Open Favorite Location
+          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorites">
+            Open Favorites
           </v-btn>
           <v-btn outlined small @click="handleSaveFavorite"
             >Save Location</v-btn
@@ -297,12 +297,14 @@ export default {
     },
 
     handleLastLocation() {
-      this.viewModel.location = this.lastLocation
+      if (this.onOpenLastLocation) {
+        this.onOpenLastLocation()
+      }
     },
 
-    handleOpenFavorite() {
-      if (this.onOpenFavorite) {
-        this.onOpenFavorite()
+    handleOpenFavorites() {
+      if (this.onOpenFavorites) {
+        this.onOpenFavorites()
       }
     },
 
@@ -337,6 +339,12 @@ export default {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
     },
+
+    lastLocation(newVal) {
+      if (newVal) {
+        this.viewModel.location = newVal
+      }
+    },
   },
 
   props: {
@@ -368,7 +376,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    onOpenFavorite: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
       type: Function,
       default: () => {},
     },

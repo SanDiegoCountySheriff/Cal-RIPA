@@ -11,6 +11,7 @@
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
+        :last-location="lastLocation"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
@@ -18,12 +19,19 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
-        :on-open-favorite="handleOpenFavorite"
+        :on-open-favorites="handleOpenFavorites"
+        :on-open-last-location="handleOpenLastLocation"
         :on-save-favorite="handleSaveFavorite"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-favorites-dialog
+      :show-dialog="showFavoritesDialog"
+      :favorites="favorites"
+      :on-open-favorite="handleOpenFavorite"
+    ></ripa-favorites-dialog>
 
     <ripa-add-favorite-dialog
       :show-dialog="showAddFavoriteDialog"
@@ -36,6 +44,7 @@
 <script>
 import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
@@ -55,6 +64,7 @@ export default {
 
   components: {
     RipaAddFavoriteDialog,
+    RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
     RipaPageContainer,

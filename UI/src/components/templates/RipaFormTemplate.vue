@@ -14,7 +14,8 @@
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
-      :on-open-favorite="onOpenFavorite"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
       :on-submit="onSubmit"
       @input="handleInput"
@@ -104,7 +105,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenFavorite: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
       type: Function,
       default: () => {},
     },

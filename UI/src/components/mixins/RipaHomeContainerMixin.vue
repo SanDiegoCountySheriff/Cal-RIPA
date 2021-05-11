@@ -4,12 +4,26 @@ import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 export default {
   data() {
     return {
+      favorites: [],
+      lastLocation: null,
       savedLocation: null,
       showAddFavoriteDialog: false,
+      showFavoritesDialog: false,
     }
   },
 
   computed: {
+    isLastLocationValid() {
+      return this.getLastLocation !== null
+    },
+  },
+
+  methods: {
+    getFavoriteLocations() {
+      const locations = localStorage.getItem('ripa_favorite_locations')
+      return locations ? JSON.parse(locations) : []
+    },
+
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
       if (lastLocation) {
@@ -19,32 +33,16 @@ export default {
       return null
     },
 
-    isLastLocationValid() {
-      return this.getLastLocation !== null
-    },
-  },
-
-  methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
-    },
-
     getOfficerAssignment() {
       const assignment = localStorage.getItem('ripa_officer_assignment')
       return +assignment || null
     },
 
-    getFavoriteLocations() {
-      const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
-    },
-
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.updateFullStop()
+    getOfficerYearsExperience() {
+      const yearsExperience = localStorage.getItem(
+        'ripa_officer_years_experience',
+      )
+      return +yearsExperience || null
     },
 
     handleAddFavorite(name) {
@@ -83,14 +81,33 @@ export default {
       this.fullStop = Object.assign({}, updatedFullStop)
     },
 
-    handleOpenFavorite(name) {
-      console.log('OPEN FAVORITE', name)
+    handleInput(newVal) {
+      this.stop = Object.assign({}, newVal)
+      this.updateFullStop()
+    },
+
+    handleOpenFavorite(id) {
+      this.showFavoritesDialog = false
+      const favorites = this.getFavoriteLocations()
+      const [favorite] = favorites.filter(item => item.id === id)
+      if (favorite) {
+        this.lastLocation = favorite.location
+      }
+    },
+
+    handleOpenFavorites() {
+      this.favorites = this.getFavoriteLocations()
+      this.showFavoritesDialog = true
+    },
+
+    handleOpenLastLocation() {
+      const location = this.getLastLocation()
+      this.lastLocation = location
     },
 
     handleSaveFavorite(location) {
       this.savedLocation = location
       this.showAddFavoriteDialog = true
-      console.log('DISPLAY SAVE FAVORITE DIALOG')
     },
 
     handleTemplate(value) {

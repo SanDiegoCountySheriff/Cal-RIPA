@@ -10,7 +10,8 @@
       :last-location="lastLocation"
       :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
-      :on-open-favorite="onOpenFavorite"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
     ></ripa-location>
 
@@ -70,7 +71,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    onOpenFavorite: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
       type: Function,
       default: () => {},
     },

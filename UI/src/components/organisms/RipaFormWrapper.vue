@@ -64,7 +64,8 @@
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"
-                :on-open-favorite="onOpenFavorite"
+                :on-open-favorites="onOpenFavorites"
+                :on-open-last-location="onOpenLastLocation"
                 :on-save-favorite="onSaveFavorite"
                 @input="handleInput"
               ></ripa-form-step-1>
@@ -438,7 +439,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenFavorite: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
       type: Function,
       default: () => {},
     },

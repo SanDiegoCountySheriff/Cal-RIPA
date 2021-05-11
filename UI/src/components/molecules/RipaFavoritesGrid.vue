@@ -164,7 +164,6 @@ export default {
     handleRowClick(item, row) {
       row.select(true)
       if (this.onOpenFavorite) {
-        console.log(item.id)
         this.onOpenFavorite(item.id)
       }
     },
