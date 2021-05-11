@@ -3,6 +3,7 @@
     :admin="isAdmin"
     :online="isOnline"
     :dark="isDark"
+    :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
   >
     <slot></slot>
@@ -39,7 +40,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAdmin', 'isAuthenticated', 'apiConfig', 'isOnline']),
+    ...mapGetters([
+      'isAdmin',
+      'invalidUser',
+      'isAuthenticated',
+      'apiConfig',
+      'isOnline',
+    ]),
   },
 
   methods: {
@@ -113,15 +120,19 @@ export default {
   },
 
   async created() {
-    this.checkCache()
-    if (this.apiConfig === null) {
-      await AuthService.getApiConfig().then(res => {
-        this.setApiConfig({
-          apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-          apiSubscription: res.data.Configuration.Subscription,
+    if (this.invalidUser) {
+      this.$router.push('/checkUser')
+    } else {
+      this.checkCache()
+      if (this.apiConfig === null) {
+        await AuthService.getApiConfig().then(res => {
+          this.setApiConfig({
+            apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+            apiSubscription: res.data.Configuration.Subscription,
+          })
+          this.getFormData()
         })
-        this.getFormData()
-      })
+      }
     }
   },
 }

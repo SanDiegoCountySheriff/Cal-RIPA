@@ -41,6 +41,7 @@ export default new Vuex.Store({
     user: {
       agency: 'Insight',
       isAdmin: true,
+      isInvalid: false,
       isAuthenticated: true,
       officerId: '2021050812345',
     },
@@ -110,6 +111,9 @@ export default new Vuex.Store({
     apiConfig: state => {
       return state.apiConfig
     },
+    invalidUser: state => {
+      return state.user.isInvalid
+    },
   },
 
   mutations: {
@@ -154,6 +158,12 @@ export default new Vuex.Store({
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
+    },
+    updateInvalidUser(state, value) {
+      state.user = {
+        ...state.user,
+        isInvalid: value,
+      }
     },
     updateUserAccount(state, value) {
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
@@ -755,6 +765,9 @@ export default new Vuex.Store({
     },
     setApiConfig({ commit, state }, value) {
       commit('updateApiConfig', value)
+    },
+    setInvalidUser({ commit }, value) {
+      commit('updateInvalidUser', value)
     },
   },
 

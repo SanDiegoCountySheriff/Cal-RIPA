@@ -3,6 +3,7 @@
     <ripa-app-bar
       :admin="admin"
       :online="online"
+      :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
     ></ripa-app-bar>
@@ -11,7 +12,7 @@
       <slot></slot>
     </ripa-content-wrapper>
 
-    <ripa-speed-dial></ripa-speed-dial>
+    <ripa-speed-dial v-if="!invalidUser"></ripa-speed-dial>
   </div>
 </template>
 
@@ -45,6 +46,10 @@ export default {
     onUpdateDark: {
       type: Function,
       default: () => {},
+    },
+    invalidUser: {
+      type: Boolean,
+      default: false,
     },
   },
 }

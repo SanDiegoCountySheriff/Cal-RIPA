@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
+import router from '../router'
 
 let authConfig = {
   cache: {
@@ -18,18 +19,24 @@ const AuthService = {
       // if auth config gets set, try login
       if (authConfig) {
         await msalInstance.handleRedirectPromise()
-        msalInstance.loginRedirect()
-
         const currentAccount = await msalInstance.getAllAccounts()
-        const accessToken = await msalInstance.acquireTokenSilent({
-          account: currentAccount[0],
-          scopes: ['user.read'],
-        })
-
         if (currentAccount.length) {
+          currentAccount[0].idTokenClaims.roles = []
+          // check to see if user is not in any groups.  If not, redirect
+          if (currentAccount[0].idTokenClaims.roles.length === 0) {
+            store.dispatch('setInvalidUser', true)
+            // redirect to home page
+            router.push('/checkUser')
+          }
+          const accessToken = await msalInstance.acquireTokenSilent({
+            account: currentAccount[0],
+            scopes: ['user.read'],
+          })
           store.dispatch('setUserAccountInfo', currentAccount[0])
           sessionStorage.setItem('ripa-accessToken', accessToken.accessToken)
           return true
+        } else {
+          msalInstance.loginRedirect()
         }
       } else {
         // if there is an error getting auth config, go into offline mode
