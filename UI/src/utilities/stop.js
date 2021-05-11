@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import { v4 as uuidv4 } from 'uuid'
 import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
@@ -20,7 +19,7 @@ export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
   return {
     actionsTaken: {},
     agency,
-    id: uuidv4(),
+    id: new Date().getTime(),
     created: new Date(),
     officer: {
       editOfficer: false,
@@ -45,7 +44,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
     actionsTaken: {},
     agency,
     created: new Date(),
-    id: uuidv4(),
+    id: new Date().getTime(),
     officer: {
       editOfficer: false,
       yearsExperience,
@@ -99,7 +98,7 @@ export const probationStop = (
     },
     agency,
     created: new Date(),
-    id: uuidv4(),
+    id: new Date().getTime(),
     officer: {
       editOfficer: false,
       yearsExperience: yearsExperience,
