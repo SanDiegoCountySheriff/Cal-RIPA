@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -22,14 +23,17 @@ namespace RIPA.Functions.Submission.Functions
         private readonly IStopService _stopService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
         private readonly string _sftpInputPath;
+        private readonly string _storageConnectionString;
+        private readonly string _storageContainerNamePrefix;
 
         public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
             _submissionCosmosDbService = submissionCosmosDbService;
-
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
+            _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
         }
 
         [FunctionName("PostSubmit")]
@@ -41,6 +45,9 @@ namespace RIPA.Functions.Submission.Functions
         {
             log.LogInformation("Submit to DOJ requested");
             Guid submissionId = Guid.NewGuid();
+            BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
+            string containerName = _storageContainerNamePrefix + submissionId.ToString();
+            BlobContainerClient blobContainerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
             try
             {
                 Models.Submission submission = new Models.Submission
@@ -66,7 +73,7 @@ namespace RIPA.Functions.Submission.Functions
                     var stop = await _stopService.GetStopAsync(stopId);
                     DateTime dateSubmitted = DateTime.UtcNow;
                     string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
-                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}");
+                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                     await _stopService.PutStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                 }
                 catch (Exception ex)
@@ -85,6 +92,7 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
+
 
     }
 }

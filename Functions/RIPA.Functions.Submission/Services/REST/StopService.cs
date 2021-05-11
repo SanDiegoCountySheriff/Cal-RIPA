@@ -142,7 +142,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
         {
-            Listperson_Stopped dojListPersonStopped = new Listperson_Stopped();
+            var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
             {
                 Person_Stopped dojPersonStopped = new Person_Stopped
@@ -161,17 +161,17 @@ namespace RIPA.Functions.Submission.Services.REST
                             Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                         },
                         Gend = personStopped.PerceivedGender,
-                        LGBT = personStopped.PerceivedLgbt,
+                        LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
                         GenNC = personStopped.GenderNonconforming ? "Y" : "N"
                     },
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
                     ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
                     ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
-
                 };
+                listDojPersonStopped.Add(dojPersonStopped);
             }
-            return new Listperson_Stopped { };
+            return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)

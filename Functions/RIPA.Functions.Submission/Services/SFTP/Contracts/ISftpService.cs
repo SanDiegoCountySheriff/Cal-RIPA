@@ -13,7 +13,7 @@ namespace RIPA.Functions.Submission.Services.SFTP.Contracts
     {
         IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".");
         void UploadFile(string localFilePath, string remoteFilePath);
-        void UploadStop(DojStop stop, string remoteFilePath);
+        void UploadStop(DojStop stop, string remoteFilePath, string fileName, BlobContainerClient blobContainerClient);
         void UploadJsonString(string jsonString, string remoteFilePath);
         Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient);
         void DeleteFile(string remoteFilePath);
