@@ -94,7 +94,6 @@ export default {
   },
 
   async created() {
-    console.log('pageContainer mounted')
     this.checkCache()
     if (this.apiConfig === null) {
       await AuthService.getApiConfig().then(res => {
@@ -102,7 +101,6 @@ export default {
           apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
           apiSubscription: res.data.Configuration.Subscription,
         })
-        console.log('api config set in page container')
         this.getFormData()
       })
     }
