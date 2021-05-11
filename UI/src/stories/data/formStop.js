@@ -1,7 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
-
 export const sampleStop = {
-  id: uuidv4(),
+  id: new Date().getTime(),
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
     date: '2021-05-07',
@@ -23,7 +21,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: uuidv4(),
+    id: new Date().getTime(),
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -72,7 +70,7 @@ export const sampleStop = {
 }
 
 export const onePersonFullStop = {
-  id: uuidv4(),
+  id: new Date().getTime(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -97,7 +95,7 @@ export const onePersonFullStop = {
   },
   people: [
     {
-      id: uuidv4(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
@@ -147,7 +145,7 @@ export const onePersonFullStop = {
 }
 
 export const twoPersonFullStop = {
-  id: uuidv4(),
+  id: new Date().getTime(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -172,7 +170,7 @@ export const twoPersonFullStop = {
   },
   people: [
     {
-      id: uuidv4(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 5,
@@ -219,7 +217,7 @@ export const twoPersonFullStop = {
       },
     },
     {
-      id: uuidv4(),
+      id: new Date().getTime(),
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
