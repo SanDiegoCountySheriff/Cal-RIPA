@@ -28,9 +28,13 @@ export default {
       set(newVal) {
         if (this.timeout) clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
-          this.viewModel = newVal
-          this.$emit('input', Number(newVal))
-        }, 500)
+          let updatedValue = newVal
+          if (this.roundDown) {
+            updatedValue = Math.floor(updatedValue / 100) * 100
+          }
+          this.viewModel = updatedValue
+          this.$emit('input', Number(this.viewModel))
+        }, 1500)
       },
     },
   },
@@ -53,6 +57,10 @@ export default {
     hint: {
       type: String,
       default: '',
+    },
+    roundDown: {
+      type: Boolean,
+      default: false,
     },
     rules: {
       type: Array,

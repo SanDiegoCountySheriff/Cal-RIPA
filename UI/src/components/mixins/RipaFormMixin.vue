@@ -64,7 +64,7 @@ export default {
         },
         stopDate: {
           date: newValue?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
-          time: newValue?.stopDate?.time || format(new Date(), 'h:mm'),
+          time: newValue?.stopDate?.time || format(new Date(), 'k:mm'),
           duration: newValue?.stopDate?.duration || null,
           stopInResponseToCfs: newValue?.stopDate?.stopInResponseToCfs || false,
         },

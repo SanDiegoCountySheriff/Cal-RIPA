@@ -6,7 +6,13 @@
     <v-container>
       <v-row no-gutters>
         <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
-          <v-btn class="tw-mr-2" outlined small @click="handleCurrentLocation">
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
+            :loading="isGeoLocationLoading"
+            @click="handleCurrentLocation"
+          >
             Current Location
           </v-btn>
           <v-btn
@@ -60,6 +66,7 @@
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              round-down
               :rules="blockNumberRules"
               @input="handleInput"
             >
@@ -160,7 +167,6 @@
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
-              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -195,6 +201,7 @@ export default {
 
   data() {
     return {
+      isGeoLocationLoading: false,
       viewModel: this.loadModel(this.value),
     }
   },
@@ -220,11 +227,6 @@ export default {
     cityRules() {
       const city = this.viewModel.location.city
       return [city !== null || 'A city is required']
-    },
-
-    beatRules() {
-      const beat = this.viewModel.location.beat
-      return [beat !== null || 'A beat is required']
     },
 
     blockNumberRules() {
@@ -295,8 +297,8 @@ export default {
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          debugger
+        this.isGeoLocationLoading = true
+        navigator.geolocation.getCurrentPosition(position => {
           const positionInfo =
             'Your current position is (' +
             'Latitude: ' +
@@ -306,6 +308,8 @@ export default {
             position.coords.longitude +
             ')'
           console.log(positionInfo)
+          this.isGeoLocationLoading = false
+          // https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-117.1328002,32.834727&f=json
         })
       } else {
         console.log('Geolocation is not supported by this browser.')
@@ -314,7 +318,6 @@ export default {
 
     handleInput() {
       this.updateBeatsModel()
-      this.updateBlockNumberModel()
       this.$emit('input', this.viewModel)
     },
 
@@ -334,11 +337,6 @@ export default {
       if (this.onSaveFavorite) {
         this.onSaveFavorite(this.viewModel.location)
       }
-    },
-
-    updateBlockNumberModel() {
-      const blockNumber = this.viewModel.location.blockNumber
-      this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
     },
 
     updateBeatsModel() {

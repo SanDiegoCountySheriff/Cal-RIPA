@@ -1,5 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
+    {{ stop }}
     <v-card-text>
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">

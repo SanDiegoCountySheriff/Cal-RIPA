@@ -36,8 +36,8 @@ export default {
         if (this.timeout) clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
           this.viewModel = newVal
-          this.$emit('input', newVal)
-        }, 500)
+          this.$emit('input', this.viewModel)
+        }, 1500)
       },
     },
   },

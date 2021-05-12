@@ -45,7 +45,7 @@ export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {},
     stopResult: {},
@@ -82,7 +82,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {
       reasonForStop: 1,
@@ -149,7 +149,7 @@ export const probationStop = (
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {
       reasonForStop: 3,
