@@ -12,6 +12,7 @@ import {
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   CONTRABAND_TYPES,
+  SEIZED_PROPERTY_TYPES,
   STOP_RESULTS,
 } from '@/constants/form'
 
@@ -215,7 +216,7 @@ export const getPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: getGenderNonconforming(person),
+      genderNonconforming: person.person?.genderNonconforming || false,
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
@@ -343,11 +344,6 @@ const getPerceivedGender = person => {
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
   return gender ? gender.text : ''
-}
-
-const getGenderNonconforming = person => {
-  const gender = getPerceivedGender(person)
-  return gender ? gender.code === 5 : null
 }
 
 const getPerceivedOrKnownDisability = person => {
@@ -500,7 +496,7 @@ const getTypeOfPropertySeized = person => {
   return types.map(item => {
     return {
       key: item.toString(),
-      type: CONTRABAND_TYPES[item - 1].name,
+      type: SEIZED_PROPERTY_TYPES[item - 1].name,
     }
   })
 }

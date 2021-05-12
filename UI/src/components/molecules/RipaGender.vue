@@ -19,6 +19,14 @@
             >
             </ripa-radio-group>
           </v-col>
+          <v-col cols="12" sm="12">
+            <ripa-switch
+              v-model="model.person.genderNonconforming"
+              label="Gender Nonconforming"
+              :max-width="250"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
         </v-row>
       </v-container>
     </template>

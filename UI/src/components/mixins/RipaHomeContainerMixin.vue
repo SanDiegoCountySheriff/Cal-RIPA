@@ -66,6 +66,7 @@ export default {
         isStudent: false,
         perceivedRace: null,
         perceivedGender: null,
+        genderNonconforming: false,
         perceivedLgbt: false,
         perceivedAge: null,
         anyDisabilities: false,

@@ -48,7 +48,6 @@ export const GENDERS = [
   { name: 'Female', value: 2 },
   { name: 'Transgender Male', value: 3 },
   { name: 'Transgender Female', value: 4 },
-  { name: 'Gender Noncomforming', value: 5 },
 ]
 
 export const RACES = [
@@ -62,6 +61,11 @@ export const RACES = [
 ]
 
 export const STOP_REASONS = [
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+    value: 7,
+  },
+  { name: 'Determine whether the student violated school policy', value: 8 },
   { name: 'Traffic Violation', value: 1 },
   { name: 'Reasonable Suspicion', value: 2 },
   {
@@ -77,11 +81,6 @@ export const STOP_REASONS = [
     value: 5,
   },
   { name: 'Consensual Encounter resulting in a search', value: 6 },
-  {
-    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
-    value: 7,
-  },
-  { name: 'Determine whether the student violated school policy', value: 8 },
 ]
 
 export const EDUCATION_VIOLATIONS = [
@@ -182,6 +181,20 @@ export const BASIS_FOR_PROPERTY_SEIZURE = [
 ]
 
 export const CONTRABAND_TYPES = [
+  { name: 'Firearm(s)', value: 2 },
+  { name: 'Ammunition', value: 3 },
+  { name: 'Weapon(s) other than a firearm', value: 4 },
+  { name: 'Drugs/narcotics', value: 5 },
+  { name: 'Alcohol', value: 6 },
+  { name: 'Money', value: 7 },
+  { name: 'Drug paraphernalia', value: 8 },
+  { name: 'Suspected stolen property', value: 9 },
+  { name: 'Cell phone(s) or electronic device(s)', value: 10 },
+  { name: 'Vehicle', value: 11 },
+  { name: 'Other contraband or evidence', value: 12 },
+]
+
+export const SEIZED_PROPERTY_TYPES = [
   { name: 'Firearm(s)', value: 1 },
   { name: 'Ammunition', value: 2 },
   { name: 'Weapon(s) other than a firearm', value: 3 },
@@ -196,13 +209,15 @@ export const CONTRABAND_TYPES = [
 ]
 
 export const STOP_RESULTS = [
-  { name: 'Warning (verbal or written)', value: 1 },
-  { name: 'Citation for infraction', value: 2 },
-  { name: 'In-field cite and release', value: 3 },
-  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 4 },
-  { name: 'Custodial Arrest without warrant', value: 5 },
-  { name: 'Field interview card completed', value: 6 },
-  { name: 'Psychiatric hold', value: 7 },
+  { name: 'Referral to school administrator', value: 12 },
+  { name: 'Referral to school counselor or other support staff', value: 13 },
+  { name: 'Warning (verbal or written)', value: 2 },
+  { name: 'Citation for infraction', value: 3 },
+  { name: 'In-field cite and release', value: 4 },
+  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 5 },
+  { name: 'Custodial Arrest without warrant', value: 6 },
+  { name: 'Field interview card completed', value: 7 },
+  { name: 'Psychiatric hold', value: 10 },
   { name: 'Noncriminal transport or caretaking transport', value: 8 },
   {
     name: 'Contacted parent/legal guardian or other person responsible for the minor',
