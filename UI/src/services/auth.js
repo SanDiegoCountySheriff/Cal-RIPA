@@ -14,14 +14,13 @@ let msalInstance
 
 const AuthService = {
   tryLogin: async () => {
-    if (!sessionStorage.getItem('ripa-accessToken')) {
+    if (!sessionStorage.getItem('ripa-idToken')) {
       const authConfig = await getAuthConfig()
       // if auth config gets set, try login
       if (authConfig) {
         await msalInstance.handleRedirectPromise()
         const currentAccount = await msalInstance.getAllAccounts()
         if (currentAccount.length) {
-          currentAccount[0].idTokenClaims.roles = []
           // check to see if user is not in any groups.  If not, redirect
           if (currentAccount[0].idTokenClaims.roles.length === 0) {
             store.dispatch('setInvalidUser', true)
@@ -33,7 +32,7 @@ const AuthService = {
             scopes: ['user.read'],
           })
           store.dispatch('setUserAccountInfo', currentAccount[0])
-          sessionStorage.setItem('ripa-accessToken', accessToken.accessToken)
+          sessionStorage.setItem('ripa-idToken', accessToken.idToken)
           return true
         } else {
           msalInstance.loginRedirect()

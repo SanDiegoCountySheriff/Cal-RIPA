@@ -13,9 +13,9 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    if (sessionStorage.getItem('ripa-accessToken')) {
+    if (sessionStorage.getItem('ripa-idToken')) {
       req.headers.Authorization = `Bearer ${sessionStorage.getItem(
-        'ripa-accessToken',
+        'ripa-idToken',
       )}`
       return req
     }
