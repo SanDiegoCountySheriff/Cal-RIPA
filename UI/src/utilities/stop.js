@@ -6,6 +6,8 @@ import {
   GENDERS,
   DISABILITIES,
   STOP_REASONS,
+  EDUCATION_VIOLATIONS,
+  EDUCATION_CODE_SECTIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
   ACTIONS_TAKEN,
@@ -395,6 +397,9 @@ const getReasonForStopDetails = (reasonKey, person) => {
   if (reasonKey === 2) {
     return [getReasonableSuspicion(person)]
   }
+  if (reasonKey === 7) {
+    return [getEducationViolation(person)]
+  }
 
   return []
 }
@@ -403,11 +408,26 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
   if (reasonKey === 1) {
     return [getTrafficViolationCode(person, statutes)]
   }
-  if (reasonKey === 1) {
+  if (reasonKey === 2) {
     return [getReasonableSuspicionCode(person, statutes)]
+  }
+  if (reasonKey === 7) {
+    return [getEducationViolationCode(person)]
   }
 
   return []
+}
+
+const getEducationViolation = person => {
+  const violation = person.stopReason?.educationViolation || null
+  if (violation) {
+    return {
+      key: violation.toString(),
+      reason: violation ? EDUCATION_VIOLATIONS[violation - 1].name : 'N/A',
+    }
+  }
+
+  return null
 }
 
 const getTrafficViolation = person => {
@@ -429,6 +449,29 @@ const getStatute = (code, statutes) => {
       code: code.toString(),
       text: filteredStatute ? filteredStatute.fullName : 'N/A',
     }
+  }
+
+  return null
+}
+
+const getEducationCodeSection = code => {
+  if (code) {
+    const [filteredSubsection] = EDUCATION_CODE_SECTIONS.filter(
+      item => item.code === code,
+    )
+    return {
+      code: code.toString(),
+      text: filteredSubsection ? filteredSubsection.fullName : 'N/A',
+    }
+  }
+
+  return null
+}
+
+const getEducationViolationCode = person => {
+  const code = person.stopReason?.educationViolationCode || null
+  if (code) {
+    return getEducationCodeSection(code)
   }
 
   return null

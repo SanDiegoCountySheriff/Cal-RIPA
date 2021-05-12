@@ -228,79 +228,83 @@ export const STOP_RESULTS = [
 
 export const EDUCATION_CODE_SECTIONS = [
   {
-    name: '48900(a)(1) - Caused/ attempted/ threatened to cause injury',
-    value: 1,
+    fullName: '48900(a)(1) - Caused/ attempted/ threatened to cause injury',
+    code: 1,
   },
   {
-    name: '48900(a)(2) - Used force or violence upon person',
-    value: 2,
+    fullName: '48900(a)(2) - Used force or violence upon person',
+    code: 2,
   },
   {
-    name: '48900(b) - Possessed/sold/furnished a firearm, knife, explosive, etc',
-    value: 3,
+    fullName:
+      '48900(b) - Possessed/sold/furnished a firearm, knife, explosive, etc',
+    code: 3,
   },
   {
-    name: '48900(c) - Possessed/used/sold/furnished/under influence of intoxicant',
-    value: 4,
+    fullName:
+      '48900(c) - Possessed/used/sold/furnished/under influence of intoxicant',
+    code: 4,
   },
   {
-    name: '48900(d) - Offered/arranged/negotiated to sell an intoxicant',
-    value: 5,
+    fullName: '48900(d) - Offered/arranged/negotiated to sell an intoxicant',
+    code: 5,
   },
   {
-    name: '48900(e) - Committed or attempted to commit robbery/extortion',
-    value: 6,
+    fullName: '48900(e) - Committed or attempted to commit robbery/extortion',
+    code: 6,
   },
   {
-    name: '48900(f) - Caused or attempted to cause damage to property',
-    value: 7,
+    fullName: '48900(f) - Caused or attempted to cause damage to property',
+    code: 7,
   },
   {
-    name: '48900(g) - Stole or attempted to steal property',
-    value: 8,
+    fullName: '48900(g) - Stole or attempted to steal property',
+    code: 8,
   },
   {
-    name: '48900(h) - Possessed or used tobacco, or nicotine products',
-    value: 9,
+    fullName: '48900(h) - Possessed or used tobacco, or nicotine products',
+    code: 9,
   },
   {
-    name: '48900(i) - Committed an obscene act or engaged in profanity',
+    fullName: '48900(i) - Committed an obscene act or engaged in profanity',
     value: 10,
   },
   {
-    name: '48900(j) - Possess/offer/arrange/negotiate to sell drug paraphernalia',
-    value: 11,
+    fullName:
+      '48900(j) - Possess/offer/arrange/negotiate to sell drug paraphernalia',
+    code: 11,
   },
   {
-    name: '48900(k)(1) - Disrupted activities or willfully defied authority',
-    value: 12,
+    fullName:
+      '48900(k)(1) - Disrupted activities or willfully defied authority',
+    code: 12,
   },
   {
-    name: '48900(l) - Knowingly received stolen property',
-    value: 13,
+    fullName: '48900(l) - Knowingly received stolen property',
+    code: 13,
   },
   {
-    name: '48900(m) - Possessed an imitation firearm',
-    value: 14,
+    fullName: '48900(m) - Possessed an imitation firearm',
+    code: 14,
   },
   {
-    name: '48900(n) - Commit/attempt sexual assault or sexual battery',
-    value: 15,
+    fullName: '48900(n) - Commit/attempt sexual assault or sexual battery',
+    code: 15,
   },
   {
-    name: '48900(o) - Harassed, threatened, or intimidated a witness',
-    value: 16,
+    fullName: '48900(o) - Harassed, threatened, or intimidated a witness',
+    code: 16,
   },
   {
-    name: '48900(p) - Offered/arranged/negotiated to sell, or sold Soma',
-    value: 17,
+    fullName: '48900(p) - Offered/arranged/negotiated to sell, or sold Soma',
+    code: 17,
   },
   {
-    name: '48900(q) - Engaged in, or attempted hazing',
-    value: 18,
+    fullName: '48900(q) - Engaged in, or attempted hazing',
+    code: 18,
   },
   {
-    name: '48900(r) - Engaged in bullying',
-    value: 19,
+    fullName: '48900(r) - Engaged in bullying',
+    code: 19,
   },
 ]

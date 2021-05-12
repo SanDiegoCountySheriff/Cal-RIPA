@@ -35,8 +35,8 @@
                 v-model="model.stopReason.educationViolationCode"
                 hint="Select 1 Education Code (required)"
                 persistent-hint
-                item-text="name"
-                item-value="value"
+                item-text="fullName"
+                item-value="code"
                 label="Education Code"
                 :items="educationCodeSectionItems"
                 :rules="educationViolationCodeRules"
