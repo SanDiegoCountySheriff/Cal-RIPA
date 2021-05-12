@@ -5,6 +5,19 @@
 
     <v-container>
       <v-row no-gutters>
+        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
+            :disabled="!validLastLocation"
+            @click="handleLastLocation"
+            >Last Location</v-btn
+          >
+          <v-btn outlined small disabled>Favorite Locations</v-btn>
+        </div>
+      </v-row>
+      <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
@@ -21,6 +34,7 @@
               item-value="cdsCode"
               label="School"
               :items="schools"
+              :rules="schoolRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </template>
@@ -34,11 +48,12 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
-              @input="debounceInput"
+              :rules="blockNumberRules"
+              @input="handleInput"
             >
             </ripa-number-input>
           </div>
@@ -49,6 +64,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :rules="streetNameRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -63,6 +79,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :rules="intersectionRules"
             @input="handleInput"
           >
           </ripa-text-input>
@@ -80,6 +97,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :rules="highwayRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -88,7 +106,8 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
-              label="Road markerk, landmark, or other"
+              label="Road marker, landmark, or other"
+              :rules="landmarkRules"
               @input="handleInput"
             >
             </ripa-text-input>
@@ -107,14 +126,16 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-4">
+          <div class="md:tw-mr-4">
             <ripa-autocomplete
               v-model="model.location.city"
               hint="Select 1 City (required)"
-              item-text="name"
-              item-value="name"
+              persistent-hint
+              item-text="fullName"
+              item-value="id"
               label="City"
-              :items="cities"
+              :items="getCities"
+              :rules="cityRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -125,11 +146,13 @@
             <ripa-autocomplete
               v-model="model.location.beat"
               hint="Select 1 Beat (required)"
+              persistent-hint
               item-text="fullName"
               item-value="id"
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
+              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -142,14 +165,16 @@
 <script>
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import _ from 'lodash'
 
 export default {
   name: 'ripa-location',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -162,22 +187,7 @@ export default {
 
   data() {
     return {
-      viewModel: {
-        location: {
-          isSchool: this.value?.location?.isSchool || false,
-          school: this.value?.location?.school || null,
-          blockNumber: this.value?.location?.blockNumber || null,
-          streetName: this.value?.location?.streetName || null,
-          intersection: this.value?.location?.intersection || null,
-          moreLocationOptions:
-            this.value?.location?.moreLocationOptions || false,
-          highwayExit: this.value?.location?.highwayExit || null,
-          landmark: this.value?.location?.landmark || null,
-          outOfCounty: this.value?.location?.outOfCounty || false,
-          city: this.value?.location?.city || null,
-          beat: this.value?.location?.beat || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -187,22 +197,113 @@ export default {
         return this.viewModel
       },
     },
+
+    getCities() {
+      const checked = this.viewModel.location.outOfCounty
+      return checked ? this.nonCountyCities : this.countyCities
+    },
+
+    schoolRules() {
+      const checked = this.viewModel.location.isSchool
+      const school = this.viewModel.location.school
+      return [(checked && school !== null) || 'A school is required']
+    },
+
+    cityRules() {
+      const city = this.viewModel.location.city
+      return [city !== null || 'A city is required']
+    },
+
+    beatRules() {
+      const beat = this.viewModel.location.beat
+      return [beat !== null || 'A beat is required']
+    },
+
+    blockNumberRules() {
+      const blockNumber = this.viewModel.location.blockNumber
+      return [
+        this.isLocationOptionsFilled ||
+          blockNumber !== null ||
+          'A block number is required',
+      ]
+    },
+
+    streetNameRules() {
+      const streetName = this.viewModel.location.streetName
+      return [
+        this.isLocationOptionsFilled ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+      ]
+    },
+
+    intersectionRules() {
+      const intersection = this.viewModel.location.intersection
+      return [
+        this.isLocationOptionsFilled ||
+          (intersection && intersection.length > 0) ||
+          'An intersection is required',
+      ]
+    },
+
+    highwayRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && highwayExit && highwayExit.length > 0) ||
+          'A highway and closet exit is required',
+      ]
+    },
+
+    landmarkRules() {
+      const checked = this.viewModel.location.moreLocationOptions
+      const landmark = this.viewModel.location.landmark
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && landmark && landmark.length > 0) ||
+          'A road marker, landmark, or other description is required',
+      ]
+    },
+
+    isLocationOptionsFilled() {
+      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.viewModel.location.streetName
+      const intersection = this.viewModel.location.intersection
+      const checked = this.viewModel.location.moreLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
+      const landmark = this.viewModel.location.landmark
+
+      const isValid =
+        (blockNumber !== null && streetName && streetName.length > 0) ||
+        (intersection && intersection.length > 0) ||
+        (checked && highwayExit && highwayExit.length > 0) ||
+        (checked && landmark && landmark.length > 0)
+
+      return isValid
+    },
   },
 
   methods: {
-    debounceInput: _.debounce(function (e) {
-      this.viewModel.location.blockNumber = Math.round(e / 100) * 100
-      this.handleInput()
-    }, 1000),
-
     handleInput() {
       this.updateBeatsModel()
+      this.updateBlockNumberModel()
       this.$emit('input', this.viewModel)
+    },
+
+    handleLastLocation() {
+      this.viewModel.location = this.lastLocation
+    },
+
+    updateBlockNumberModel() {
+      const blockNumber = this.viewModel.location.blockNumber
+      this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
     },
 
     updateBeatsModel() {
       if (this.viewModel.location.outOfCounty) {
         this.viewModel.location.beat = 999
+        this.viewModel.location.city = null
       }
 
       if (
@@ -210,7 +311,14 @@ export default {
         this.viewModel.location.beat === 999
       ) {
         this.viewModel.location.beat = null
+        this.viewModel.location.city = null
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 
@@ -227,9 +335,21 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
       type: Array,
       default: () => {},
+    },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
+    nonCountyCities: {
+      type: Array,
+      default: () => {},
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
     },
   },
 }

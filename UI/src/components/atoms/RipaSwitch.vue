@@ -6,7 +6,8 @@
       :disabled="disabled"
       :hint="hint"
       :persistent-hint="hint.length > 0"
-      hide-details
+      :rules="rules"
+      :hide-details="rules.length === 0"
     >
       <template #label>
         {{ label }}
@@ -64,6 +65,10 @@ export default {
     maxWidth: {
       type: Number,
       default: 250,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

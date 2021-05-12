@@ -6,48 +6,59 @@
     :on-update-dark="handleUpdateDark"
   >
     <slot></slot>
+    <ripa-interval
+      :delay="stopInternalMs"
+      @tick="checkLocalStorage"
+    ></ripa-interval>
   </ripa-page-wrapper>
 </template>
 
 <script>
+import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
+import AuthService from '../../services/auth'
 
 export default {
   name: 'ripa-page-container',
 
+  mixins: [RipaApiStopJobMixin],
+
   components: {
+    RipaInterval,
     RipaPageWrapper,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
+      stopInternalMs: 5000,
     }
   },
 
   computed: {
-    ...mapState(['isAdmin']),
-    ...mapGetters([
-      'isOnline',
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-    ]),
+    ...mapGetters(['isAdmin', 'isAuthenticated', 'apiConfig', 'isOnline']),
   },
 
   methods: {
-    ...mapActions(['getBeats', 'getCities', 'getSchools', 'getStatutes']),
+    ...mapActions([
+      'editOfficerStop',
+      'getFormBeats',
+      'getFormCities',
+      'getFormSchools',
+      'getFormStatutes',
+      'setApiConfig',
+    ]),
 
-    async getAdminData() {
+    async getFormData() {
       this.loading = true
       await Promise.all([
-        this.getBeats(),
-        this.getCities(),
-        this.getSchools(),
-        this.getStatutes(),
+        this.getFormBeats(),
+        this.getFormCities(),
+        this.getFormSchools(),
+        this.getFormStatutes(),
       ])
       this.loading = false
     },
@@ -55,7 +66,7 @@ export default {
     getDarkFromLocalStorage() {
       const value = localStorage.getItem('ripa_dark_theme')
       if (value === null) {
-        return 1
+        return true
       }
       return value === '1'
     },
@@ -71,22 +82,47 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (cacheDate !== null) {
+      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
-          localStorage.removeItem('ripa_beats')
-          localStorage.removeItem('ripa_cities')
-          localStorage.removeItem('ripa_schools')
-          localStorage.removeItem('ripa_statutes')
-          localStorage.setItem('ripa_cache_date', new Date())
+          this.clearLocalStorage()
+        }
+      }
+
+      if (cacheDate === null) {
+        this.clearLocalStorage()
+      }
+    },
+
+    clearLocalStorage() {
+      localStorage.removeItem('ripa_beats')
+      localStorage.removeItem('ripa_county_cities')
+      localStorage.removeItem('ripa_non_county_cities')
+      localStorage.removeItem('ripa_schools')
+      localStorage.removeItem('ripa_statutes')
+      localStorage.setItem('ripa_cache_date', new Date())
+    },
+
+    async runApiStopsJob(apiStops) {
+      if (this.isOnline && this.isAuthenticated) {
+        for (let index = 0; index < apiStops.length; index++) {
+          await this.editOfficerStop(apiStops[index])
         }
       }
     },
   },
 
-  created() {
+  async created() {
     this.checkCache()
-    this.getAdminData()
+    if (this.apiConfig === null) {
+      await AuthService.getApiConfig().then(res => {
+        this.setApiConfig({
+          apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+          apiSubscription: res.data.Configuration.Subscription,
+        })
+        this.getFormData()
+      })
+    }
   },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="600">
-    <v-card-title class="tw-uppercase">Ripa Stop App</v-card-title>
+    <v-card-title class="tw-uppercase">Ripa Stops</v-card-title>
 
     <v-card-text>
       <div>Initiate a new Stop:</div>
@@ -8,11 +8,24 @@
         <v-container fluid>
           <v-row no-gutters dense>
             <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn color="primary" to="/form">Motor/Traffic Template</v-btn>
+              <v-btn outlined color="primary" @click="handleMotorTemplate"
+                >Motor/Traffic Template</v-btn
+              >
             </v-col>
             <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn color="primary" to="/form" class="tw-mt-4 sm:tw-mt-0"
+              <v-btn
+                outlined
+                color="primary"
+                @click="handleProbationTemplate"
+                class="tw-mt-4 sm:tw-mt-0"
                 >Probation Contact Template</v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-row no-gutters dense>
+            <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
+              <v-btn color="primary" @click="handleDefaultTemplate"
+                >Default Template</v-btn
               >
             </v-col>
           </v-row>
@@ -43,5 +56,32 @@
 <script>
 export default {
   name: 'ripa-intro',
+
+  methods: {
+    handleMotorTemplate() {
+      if (this.onTemplate) {
+        this.onTemplate('motor')
+      }
+    },
+
+    handleProbationTemplate() {
+      if (this.onTemplate) {
+        this.onTemplate('probation')
+      }
+    },
+
+    handleDefaultTemplate() {
+      if (this.onTemplate) {
+        this.onTemplate()
+      }
+    },
+  },
+
+  props: {
+    onTemplate: {
+      type: Function,
+      default: () => {},
+    },
+  },
 }
 </script>

@@ -27,7 +27,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 client.Connect();
@@ -46,7 +46,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public void UploadFile(string localFilePath, string remoteFilePath)
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 client.Connect();
@@ -64,15 +64,17 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadStop(DojStop stop, string remoteFilePath)
+        public void UploadStop(DojStop stop, string remoteFilePath, string fileName,  BlobContainerClient blobContainerClient)
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
+                BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
                 client.Connect();
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop));
                 MemoryStream stream = new MemoryStream(bytes);
-                client.UploadFile(stream, remoteFilePath);
+                blobClient.UploadAsync(stream); // stream file to Azure Blob
+                client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
                 _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             catch (Exception exception)
@@ -87,7 +89,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public void UploadJsonString(string jsonString, string remoteFilePath)
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 client.Connect();
@@ -108,7 +110,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
@@ -137,7 +139,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public void DeleteFile(string remoteFilePath)
         {
-            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, _config.Password);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 client.Connect();

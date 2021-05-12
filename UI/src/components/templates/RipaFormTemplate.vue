@@ -1,12 +1,20 @@
 <template>
   <div class="ripa-form-template">
-    {{ stop }}
     <ripa-form-wrapper
       v-model="stop"
       :beats="beats"
-      :cities="cities"
+      :county-cities="countyCities"
+      :full-stop="fullStop"
+      :last-location="lastLocation"
+      :loading-pii="loadingPii"
+      :non-county-cities="nonCountyCities"
       :schools="schools"
-      :offense-codes="offenseCodes"
+      :statutes="statutes"
+      :valid-last-location="validLastLocation"
+      :on-add-person="onAddPerson"
+      :on-cancel="onCancel"
+      :on-delete-person="onDeletePerson"
+      :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -24,27 +32,49 @@ export default {
 
   data() {
     return {
-      stop: {
-        stopDate: {
-          duration: 1,
-        },
-      },
+      stop: this.value,
     }
   },
 
   methods: {
     handleInput(newVal) {
+      this.stop = Object.assign({}, newVal)
+      this.$emit('input', this.stop)
+    },
+  },
+
+  watch: {
+    value(newVal) {
       this.stop = newVal
-      this.$forceUpdate()
     },
   },
 
   props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
     beats: {
       type: Array,
       default: () => [],
     },
-    cities: {
+    countyCities: {
+      type: Array,
+      default: () => [],
+    },
+    fullStop: {
+      type: Object,
+      default: () => {},
+    },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
+    nonCountyCities: {
       type: Array,
       default: () => [],
     },
@@ -52,9 +82,29 @@ export default {
       type: Array,
       default: () => [],
     },
-    offenseCodes: {
+    statutes: {
       type: Array,
       default: () => [],
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
+    },
+    onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onCancel: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmit: {
+      type: Function,
+      default: () => {},
     },
   },
 }

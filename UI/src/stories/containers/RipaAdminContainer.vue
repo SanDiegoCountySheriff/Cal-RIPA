@@ -2,12 +2,13 @@
   <ripa-page-container :admin="admin">
     <ripa-admin-template
       :loading="loading"
-      :beats="beats"
-      :cities="cities"
-      :schools="schools"
-      :statutes="statutes"
-      :stops="stops"
-      :submissions="submissions"
+      :beats="mappedAdminBeats"
+      :cities="mappedAdminCities"
+      :schools="mappedAdminSchools"
+      :statutes="mappedAdminStatutes"
+      :stops="mappedAdminStops"
+      :submissions="mappedAdminSubmissions"
+      :users="mappedAdminUsers"
     ></ripa-admin-template>
   </ripa-page-container>
 </template>
@@ -15,10 +16,13 @@
 <script>
 import RipaPageContainer from './RipaPageContainer'
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { beats } from '../data/beats'
-import { cities } from '../data/cities'
-import { schools } from '../data/schools'
-import { statutes } from '../data/statutes'
+import {
+  adminBeats,
+  adminCities,
+  adminSchools,
+  adminStatutes,
+  adminUsers,
+} from '../data/mappings'
 import { stops } from '../data/stops'
 import { submissions } from '../data/submissions'
 
@@ -33,12 +37,13 @@ export default {
   data() {
     return {
       loading: false,
-      beats: [],
-      cities: [],
-      schools: [],
-      statutes: [],
-      stops: [],
-      submissions: [],
+      mappedAdminBeats: [],
+      mappedAdminCities: [],
+      mappedAdminSchools: [],
+      mappedAdminStatutes: [],
+      mappedAdminStops: [],
+      mappedAdminSubmissions: [],
+      mappedAdminUsers: [],
     }
   },
 
@@ -46,12 +51,13 @@ export default {
     getAdminData() {
       this.loading = true
       setTimeout(() => {
-        this.beats = beats
-        this.cities = cities
-        this.schools = schools
-        this.statutes = statutes
-        this.stops = stops
-        this.submissions = submissions
+        this.mappedAdminBeats = adminBeats()
+        this.mappedAdminCities = adminCities()
+        this.mappedAdminSchools = adminSchools()
+        this.mappedAdminStatutes = adminStatutes()
+        this.mappedAdminStops = stops
+        this.mappedAdminSubmissions = submissions
+        this.mappedAdminUsers = adminUsers()
         this.loading = false
       }, 2500)
     },

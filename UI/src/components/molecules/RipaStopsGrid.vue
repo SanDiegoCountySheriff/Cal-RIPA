@@ -39,7 +39,7 @@
             label="Errors Found"
           ></v-switch>
           <v-switch
-            v-model="piiFound"
+            v-model="isPiiFound"
             class="tw-ml-2"
             label="PII Found"
           ></v-switch>
@@ -84,9 +84,9 @@
               disabled
             ></v-simple-checkbox>
           </template>
-          <template v-slot:item.piiFound="{ item }">
+          <template v-slot:item.isPiiFound="{ item }">
             <v-simple-checkbox
-              v-model="item.piiFound"
+              v-model="item.isPiiFound"
               disabled
             ></v-simple-checkbox>
           </template>
@@ -120,12 +120,12 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Stop Date', value: 'stopDateStr' },
         { text: 'Errors Found', value: 'errorsFound' },
-        { text: 'PII Found', value: 'piiFound' },
+        { text: 'PII Found', value: 'isPiiFound' },
         { text: 'Officer Name', value: 'officerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      piiFound: false,
+      isPiiFound: false,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
@@ -150,8 +150,8 @@ export default {
         filteredItems = filteredItems.filter(item => item.errorsFound)
       }
 
-      if (this.piiFound) {
-        filteredItems = filteredItems.filter(item => item.piiFound)
+      if (this.isPiiFound) {
+        filteredItems = filteredItems.filter(item => item.isPiiFound)
       }
 
       if (this.officerName) {

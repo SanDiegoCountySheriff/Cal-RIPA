@@ -9,6 +9,8 @@ namespace RIPA.Functions.Domain
         public override void Configure(IFunctionsHostBuilder builder)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            //Makes sure all the tables exist. 
         }
     }
 }

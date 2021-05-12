@@ -1,10 +1,8 @@
 <script>
-import _ from 'lodash'
-
 export default {
   data() {
     return {
-      isValid: true,
+      isFormValid: true,
       viewModel: this.value || {},
     }
   },
@@ -15,15 +13,22 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        const mergedData = _.merge(this.viewModel, newVal)
-        this.viewModel = mergedData
-        // this.$forceUpdate()
+        this.viewModel = Object.assign({}, newVal)
+        setTimeout(() => {
+          this.isFormValid = this.$refs.stepForm.validate()
+        }, 500)
         this.$emit('input', this.viewModel)
       },
     },
   },
 
   methods: {
+    handleAddPerson() {
+      if (this.onAddPerson) {
+        this.onAddPerson()
+      }
+    },
+
     handleBack() {
       if (this.onBack) {
         this.onBack()
@@ -31,8 +36,8 @@ export default {
     },
 
     handleNext() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
+      this.isFormValid = this.$refs.stepForm.validate()
+      if (!this.isFormValid) {
         return
       }
       this.$emit('input', this.viewModel)
@@ -42,8 +47,8 @@ export default {
     },
 
     handleSubmit() {
-      this.isValid = this.$refs.stepForm.validate()
-      if (!this.isValid) {
+      this.isFormValid = this.$refs.stepForm.validate()
+      if (!this.isFormValid) {
         return
       }
       this.$emit('input', this.viewModel)
@@ -78,8 +83,32 @@ export default {
       type: Array,
       default: () => {},
     },
-    cities: {
+    countyCities: {
       type: Array,
+      default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
+    nonCountyCities: {
+      type: Array,
+      default: () => {},
+    },
+    onAddPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
+      type: Function,
       default: () => {},
     },
     onBack: {

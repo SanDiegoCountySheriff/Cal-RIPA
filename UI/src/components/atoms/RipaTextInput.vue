@@ -1,5 +1,11 @@
 <template>
-  <v-text-field v-model="model" :label="label" :hint="hint"></v-text-field>
+  <v-text-field
+    v-model="model"
+    :label="label"
+    :loading="loading"
+    :hint="hint"
+    :rules="rules"
+  ></v-text-field>
 </template>
 
 <script>
@@ -8,6 +14,7 @@ export default {
 
   data() {
     return {
+      timeout: null,
       viewModel: this.value,
     }
   },
@@ -18,8 +25,11 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', newVal)
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.viewModel = newVal
+          this.$emit('input', newVal)
+        }, 500)
       },
     },
   },
@@ -39,9 +49,17 @@ export default {
       type: String,
       default: '',
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     hint: {
       type: String,
       default: '',
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
 }

@@ -64,25 +64,22 @@ namespace RIPA.Functions.Submission.Services.REST
                 FileName = fileName
             };
 
-            if (stop.DojSubmit == null)
+            if (stop.ListSubmission == null)
             {
-                stop.DojSubmit = new Common.Models.DojSubmit
-                {
-                    ListSubmission = new Common.Models.Submission[0]
-                };
+                stop.ListSubmission = new Common.Models.Submission[0];
             }
 
-            var submissions = stop.DojSubmit.ListSubmission.ToList();
+            var submissions = stop.ListSubmission.ToList();
             submissions.Add(submission);
 
-            stop.DojSubmit.ListSubmission = submissions.ToArray();
-            stop.DojSubmit.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+            stop.ListSubmission = submissions.ToArray();
+            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
             return stop;
         }
 
         public Stop ErrorSubmission(Stop stop, string errorType, string error, string fileName)
         {
-            var pendingSubmissions = stop.DojSubmit.ListSubmission.Where(x => x.FileName == fileName);
+            var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == fileName);
             foreach (var submission in pendingSubmissions)
             {
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
@@ -94,7 +91,7 @@ namespace RIPA.Functions.Submission.Services.REST
                     FileName = fileName
                 };
             }
-            stop.DojSubmit.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
+            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             return stop;
         }
 
@@ -119,9 +116,9 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.ListCodes?.FirstOrDefault().Code,
+                    City = stop.Location.City.Codes.Code,
                     K12_Flag = stop.Location.School ? "Y" : null,
-                    K12Code = stop.Location.School ? stop.Location.SchoolName.ListCodes?.FirstOrDefault().Code : null
+                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : null
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
                 ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped)
@@ -145,7 +142,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
         {
-            Listperson_Stopped dojListPersonStopped = new Listperson_Stopped();
+            var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
             {
                 Person_Stopped dojPersonStopped = new Person_Stopped
@@ -164,17 +161,17 @@ namespace RIPA.Functions.Submission.Services.REST
                             Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                         },
                         Gend = personStopped.PerceivedGender,
-                        LGBT = personStopped.PerceivedLgbt,
+                        LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
                         GenNC = personStopped.GenderNonconforming ? "Y" : "N"
                     },
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
                     ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
                     ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
-
                 };
+                listDojPersonStopped.Add(dojPersonStopped);
             }
-            return new Listperson_Stopped { };
+            return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)

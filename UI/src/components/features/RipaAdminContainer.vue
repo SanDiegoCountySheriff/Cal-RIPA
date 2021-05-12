@@ -1,26 +1,29 @@
 <template>
   <ripa-admin-template
     :loading="loading"
-    :beats="mappedBeats"
-    :cities="mappedCities"
-    :schools="mappedSchools"
-    :statutes="mappedStatutes"
-    :stops="mappedStops"
-    :submissions="mappedSubmissions"
+    :beats="mappedAdminBeats"
+    :cities="mappedAdminCities"
+    :schools="mappedAdminSchools"
+    :statutes="mappedAdminStatutes"
+    :stops="mappedAdminStops"
+    :submissions="mappedAdminSubmissions"
+    :users="mappedAdminUsers"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
     :on-delete-statute="handleDeleteStatute"
+    :on-delete-user="handleDeleteUser"
     :on-edit-beat="handleEditBeat"
     :on-edit-city="handleEditCity"
     :on-edit-school="handleEditSchool"
     :on-edit-statute="handleEditStatute"
+    :on-edit-user="handleEditUser"
   ></ripa-admin-template>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -36,14 +39,14 @@ export default {
   },
 
   computed: {
-    ...mapState(['isAdmin']),
     ...mapGetters([
-      'mappedBeats',
-      'mappedCities',
-      'mappedSchools',
-      'mappedStatutes',
-      'mappedStops',
-      'mappedSubmissions',
+      'mappedAdminBeats',
+      'mappedAdminCities',
+      'mappedAdminSchools',
+      'mappedAdminStatutes',
+      'mappedAdminStops',
+      'mappedAdminSubmissions',
+      'mappedAdminUsers',
     ]),
   },
 
@@ -53,11 +56,30 @@ export default {
       'deleteCity',
       'deleteSchool',
       'deleteStatute',
+      'deleteUser',
       'editBeat',
       'editCity',
       'editSchool',
       'editStatute',
+      'editUser',
+      'getAdminBeats',
+      'getAdminCities',
+      'getAdminSchools',
+      'getAdminStatutes',
+      'getAdminUsers',
     ]),
+
+    async getAdminData(beat) {
+      this.loading = true
+      await Promise.all([
+        this.getAdminBeats(),
+        this.getAdminCities(),
+        this.getAdminSchools(),
+        this.getAdminStatutes(),
+        this.getAdminUsers(),
+      ])
+      this.loading = false
+    },
 
     async handleDeleteBeat(beat) {
       this.loading = true
@@ -80,6 +102,12 @@ export default {
     async handleDeleteStatute(statute) {
       this.loading = true
       await Promise.all([this.deleteStatute(statute)])
+      this.loading = false
+    },
+
+    async handleDeleteUser(user) {
+      this.loading = true
+      await Promise.all([this.deleteUser(user)])
       this.loading = false
     },
 
@@ -106,6 +134,16 @@ export default {
       await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
+
+    async handleEditUser(user) {
+      this.loading = true
+      await Promise.all([this.editUser(user)])
+      this.loading = false
+    },
+  },
+
+  created() {
+    this.getAdminData()
   },
 }
 </script>

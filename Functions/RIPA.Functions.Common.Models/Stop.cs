@@ -4,11 +4,7 @@ using System.Runtime.Serialization;
 namespace RIPA.Functions.Common.Models
 
 {
-    public class DojSubmit
-    {
-        public Submission[] ListSubmission { get; set; }
-        public string Status { get; set; }
-    }
+
     public class Submission
     {
         public Guid Id { get; set; }
@@ -35,10 +31,12 @@ namespace RIPA.Functions.Common.Models
 
     public enum SubmissionStatus 
     {
-        [EnumMember(Value="Unsubmitted")]
+        [EnumMember(Value= "Unsubmitted")]
         Unsubmitted,
         [EnumMember(Value = "Submitted")]
         Submitted,
+        [EnumMember(Value = "Resubmitted")]
+        Resubmitted,
         [EnumMember(Value = "Failed")]
         Failed
     }
@@ -48,15 +46,10 @@ namespace RIPA.Functions.Common.Models
     {
         public string id { get; set; }
         public string Ori { get; set; }
-
         public string Agency { get; set; }
         public string OfficerID { get; set; }
         public string ExpYears { get; set; }
         public OfficerAssignment OfficerAssignment { get; set; }
-        public bool ContractFundedPosition { get; set; }
-        public ContractCity ContractCity { get; set; }
-        public bool ContractFundedEvent { get; set; }
-        public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
         public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set {} }
@@ -64,7 +57,9 @@ namespace RIPA.Functions.Common.Models
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public PersonStopped[] ListPersonStopped { get; set; }
-        public DojSubmit DojSubmit { get; set; }
+        public Submission[] ListSubmission { get; set; }
+        public string Status { get; set; }
+        public bool IsPiiFound { get; set; }
     }
 
 
@@ -75,12 +70,7 @@ namespace RIPA.Functions.Common.Models
         public string OtherType { get; set; }
     }
 
-    public class ContractCity
-    {
-        public Codes[] ListCodes { get; set; }
-    }
-
-    public class Location
+        public class Location
     {
         public bool ToggleLocationOptions { get; set; }
         public string Intersection { get; set; }
@@ -97,7 +87,7 @@ namespace RIPA.Functions.Common.Models
 
     public class City
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class Codes
@@ -108,12 +98,12 @@ namespace RIPA.Functions.Common.Models
 
     public class Beat
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class SchoolName
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class PersonStopped
@@ -126,7 +116,7 @@ namespace RIPA.Functions.Common.Models
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
         public bool GenderNonconforming { get; set; }
-        public string PerceivedLgbt { get; set; }
+        public bool PerceivedLgbt { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string PerceptionKnown { get; set; }
         public string ReasonForStopExplanation { get; set; }

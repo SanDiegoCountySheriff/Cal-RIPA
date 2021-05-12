@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-p-4">
+  <div class="ripa-action-taken tw-pb-8">
     <ripa-form-header
       title="Contraband or Evidence Discovered"
       required
@@ -21,6 +21,7 @@
             <ripa-check-group
               v-model="model.actionsTaken.contrabandOrEvidenceDiscovered"
               :items="contrabandItems"
+              :rules="contrabandRules"
               @input="handleInput"
             >
             </ripa-check-group>
@@ -33,12 +34,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { CONTRABAND_TYPES } from '@/constants/form'
 
 export default {
   name: 'ripa-contraband',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -50,13 +54,7 @@ export default {
     return {
       valid: true,
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: {
-        actionsTaken: {
-          anyContraband: this.value?.actionsTaken?.anyContraband || false,
-          contrabandOrEvidenceDiscovered:
-            this.value?.actionsTaken?.contrabandOrEvidenceDiscovered || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -65,6 +63,15 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    contrabandRules() {
+      const checked = this.viewModel.actionsTaken.anyContraband
+      const options = this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered
+      return [
+        (checked && options.length > 0) ||
+          'At least one contraband is required',
+      ]
     },
   },
 
@@ -78,6 +85,12 @@ export default {
       if (!this.viewModel.actionsTaken.anyContraband) {
         this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

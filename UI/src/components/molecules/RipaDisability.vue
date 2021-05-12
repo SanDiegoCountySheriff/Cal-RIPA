@@ -21,6 +21,7 @@
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
               :items="disabilityItems"
+              :rules="disabilityRules"
               @input="handleInput"
             >
             </ripa-check-group>
@@ -33,12 +34,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -50,13 +54,7 @@ export default {
     return {
       valid: true,
       disabilityItems: DISABILITIES,
-      viewModel: {
-        person: {
-          anyDisabilities: this.value?.person?.anyDisabilities || false,
-          perceivedOrKnownDisability:
-            this.value?.person?.perceivedOrKnownDisability || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -65,6 +63,15 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    disabilityRules() {
+      const checked = this.viewModel.person.anyDisabilities
+      const options = this.viewModel.person.perceivedOrKnownDisability
+      return [
+        (checked && options.length > 0) ||
+          'At least one disability is required',
+      ]
     },
   },
 
@@ -78,6 +85,12 @@ export default {
       if (!this.viewModel.person.anyDisabilities) {
         this.viewModel.person.perceivedOrKnownDisability = []
       }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

@@ -1,8 +1,11 @@
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { beats } from '../data/beats'
-import { cities } from '../data/cities'
-import { schools } from '../data/schools'
-import { statutes } from '../data/statutes'
+import {
+  adminBeats,
+  adminCities,
+  adminSchools,
+  adminStatutes,
+  adminUsers,
+} from '../data/mappings'
 import { stops } from '../data/stops'
 import { submissions } from '../data/submissions'
 
@@ -16,16 +19,17 @@ export const basic = () => ({
   components: { RipaAdminTemplate },
   data() {
     return {
-      beats: beats,
-      cities: cities,
-      schools: schools,
-      statutes: statutes,
+      beats: adminBeats(),
+      cities: adminCities(),
+      schools: adminSchools(),
+      statutes: adminStatutes(),
       stops: stops,
       submissions: submissions,
+      users: adminUsers(),
     }
   },
   template:
-    '<ripa-admin-template :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions"></ripa-admin-template>',
+    '<ripa-admin-template :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions" :users="users"></ripa-admin-template>',
 })
 
 export const loading = () => ({
@@ -38,8 +42,9 @@ export const loading = () => ({
       statutes: [],
       stops: [],
       submissions: [],
+      users: [],
     }
   },
   template:
-    '<ripa-admin-template loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions"></ripa-admin-template>',
+    '<ripa-admin-template loading :beats="beats" :cities="cities" :schools="schools" :statutes="statutes" :stops="stops" :submissions="submissions" :users="users"></ripa-admin-template>',
 })

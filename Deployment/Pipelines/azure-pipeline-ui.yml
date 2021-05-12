@@ -58,6 +58,12 @@ stages:
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
               replaceExistingArchive: true
 
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)/UI'
+              Contents: '*.config.json'
+              TargetFolder: '$(Build.SourcesDirectory)/UI/dist'
+
           - task: ArchiveFiles@2
             displayName: "Archive UI Files"
             inputs:
@@ -65,6 +71,15 @@ stages:
               includeRootFolder: true
               archiveType: "zip"
               archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+              replaceExistingArchive: true
+
+          - task: ArchiveFiles@2
+            displayName: "Archive config Files"
+            inputs:
+              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/config"
+              includeRootFolder: true
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-config.zip"
               replaceExistingArchive: true
 
           - task: PublishBuildArtifacts@1

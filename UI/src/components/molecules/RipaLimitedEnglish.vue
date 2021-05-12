@@ -24,10 +24,13 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-limited-english',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -37,12 +40,7 @@ export default {
   data() {
     return {
       valid: true,
-      viewModel: {
-        person: {
-          perceivedLimitedEnglish:
-            this.value?.person?.perceivedLimitedEnglish || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -57,6 +55,12 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 
