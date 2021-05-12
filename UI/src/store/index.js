@@ -674,7 +674,7 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   code: item.offenseCode,
-                  description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
+                  description: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
                 }
               })
               .map(item => {

@@ -19,6 +19,31 @@
             @input="handleInput"
           ></ripa-select>
 
+          <template v-if="model.stopReason.reasonForStop === 8">
+            <ripa-radio-group
+              v-model="model.stopReason.educationViolation"
+              :items="educationViolationItems"
+              :rules="educationViolationRules"
+              @input="handleInput"
+            ></ripa-radio-group>
+
+            <template v-if="model.stopReason.educationViolation === 1">
+              <div class="tw-mt-2"></div>
+
+              <ripa-autocomplete
+                v-model="model.stopReason.educationViolationCode"
+                hint="Select 1 48900 Offense Code (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                :items="statutes"
+                :rules="educationViolationCodeRules"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
+          </template>
+
           <template v-if="model.stopReason.reasonForStop === 1">
             <ripa-radio-group
               v-model="model.stopReason.trafficViolation"
@@ -120,6 +145,7 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 import {
   STOP_REASONS,
+  EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
 } from '@/constants/form'
@@ -149,6 +175,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
       reasonItems: STOP_REASONS,
+      educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
       viewModel: this.loadModel(this.value),
@@ -160,6 +187,24 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    educationViolationRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 8
+      const options = this.viewModel.stopReason.educationViolation
+      return [
+        (checked && options !== null) ||
+          'An education violation type is required',
+      ]
+    },
+
+    educationViolationCodeRules() {
+      const checked1 = this.viewModel.stopReason.reasonForStop === 8
+      const checked2 = this.viewModel.stopReason.educationViolation === 1
+      const code = this.viewModel.stopReason.educationViolationCode
+      return [
+        (checked1 && checked2 && code !== null) || 'A offense code is required',
+      ]
     },
 
     trafficViolationRules() {

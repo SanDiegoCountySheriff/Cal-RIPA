@@ -28,6 +28,10 @@ export const AGES = [
 ]
 
 export const DISABILITIES = [
+  {
+    name: 'Disability related to hyperactivity or impulsive behavior"',
+    value: 7,
+  },
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },
   { name: 'Blind or limited vision', value: 3 },
@@ -73,6 +77,28 @@ export const STOP_REASONS = [
     value: 5,
   },
   { name: 'Consensual Encounter resulting in a search', value: 6 },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+    value: 7,
+  },
+  { name: 'Determine whether the student violated school policy', value: 8 },
+]
+
+export const EDUCATION_VIOLATIONS = [
+  { name: '48900 - Suspension or expulsion (select subsection)', value: 1 },
+  { name: '48900.2 - Suspension or expulsion for sexual harassment', value: 2 },
+  {
+    name: '48900.3 - Suspension or expulsion for hate violence',
+    value: 3,
+  },
+  {
+    name: '48900.4 - Suspension or expulsion for harassment, threats or intimidation',
+    value: 4,
+  },
+  {
+    name: '48900.7 - Suspension or expulsion for terroristic threats',
+    value: 5,
+  },
 ]
 
 export const TRAFFIC_VIOLATIONS = [
