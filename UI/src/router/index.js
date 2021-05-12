@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import RipaUserCheckContainer from '@/components/features/RipaUserCheckContainer'
 import store from '@/store/index'
 // import AuthService from '../services/auth'
 
@@ -43,6 +44,14 @@ const routes = [
         /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserContainer.vue'
       ),
   },
+  {
+    path: '/checkUser',
+    name: 'Check User',
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserCheckContainer.vue'
+      ),
+  },
 ]
 
 const router = new VueRouter({
@@ -54,15 +63,14 @@ const router = new VueRouter({
 // if you ever hit the app and the access token
 // isn't set and the user is online, start login flow and are offline
 router.beforeEach(async (to, from, next) => {
-  next()
-  // if (sessionStorage.getItem('ripa-accessToken') === null && navigator.onLine) {
-  //   const loginAttempt = await AuthService.tryLogin()
-  //   if (loginAttempt) {
-  //     next()
-  //   }
-  // } else {
-  //   next()
-  // }
+  if (sessionStorage.getItem('ripa-idToken') === null && navigator.onLine) {
+    const loginAttempt = await AuthService.tryLogin()
+    if (loginAttempt) {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

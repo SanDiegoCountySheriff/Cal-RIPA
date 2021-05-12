@@ -12,9 +12,9 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    if (sessionStorage.getItem('ripa-accessToken')) {
+    if (sessionStorage.getItem('ripa-idToken')) {
       req.headers.Authorization = `Bearer ${sessionStorage.getItem(
-        'ripa-accessToken',
+        'ripa-idToken',
       )}`
       return req
     }
@@ -39,8 +39,9 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
-      isAdmin: false,
-      isAuthenticated: false,
+      isAdmin: true,
+      isInvalid: false,
+      isAuthenticated: true,
       officerId: '2021050812345',
     },
     apiConfig: null,
@@ -109,6 +110,9 @@ export default new Vuex.Store({
     apiConfig: state => {
       return state.apiConfig
     },
+    invalidUser: state => {
+      return state.user.isInvalid
+    },
   },
 
   mutations: {
@@ -153,6 +157,12 @@ export default new Vuex.Store({
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
+    },
+    updateInvalidUser(state, value) {
+      state.user = {
+        ...state.user,
+        isInvalid: value,
+      }
     },
     updateUserAccount(state, value) {
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
@@ -746,6 +756,9 @@ export default new Vuex.Store({
     },
     setApiConfig({ commit, state }, value) {
       commit('updateApiConfig', value)
+    },
+    setInvalidUser({ commit }, value) {
+      commit('updateInvalidUser', value)
     },
   },
 
