@@ -7,6 +7,7 @@
     :max="max"
     :rules="rules"
     thumb-label="always"
+    validate-on-blur
   ></v-slider>
 </template>
 

@@ -13,6 +13,7 @@
     required
     rows="1"
     :rules="rules"
+    validate-on-blur
   ></v-textarea>
 </template>
 

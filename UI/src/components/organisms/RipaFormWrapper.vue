@@ -1,6 +1,5 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
-    {{ stop }}
     <v-card-text>
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
@@ -298,7 +297,7 @@ export default {
         message: `Are you sure you want to cancel the form? You will lose all changes.`,
         button: {
           no: 'No',
-          yes: 'Cancel',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {
@@ -319,7 +318,7 @@ export default {
         message: `Are you sure you want to delete the person?`,
         button: {
           no: 'No',
-          yes: 'Delete',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {
@@ -365,7 +364,7 @@ export default {
         message: `Are you sure you want to submit the form?`,
         button: {
           no: 'No',
-          yes: 'Submit',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {

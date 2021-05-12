@@ -6,6 +6,7 @@
     :hint="hint"
     :rules="rules"
     :min="1"
+    validate-on-blur
   ></v-text-field>
 </template>
 

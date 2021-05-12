@@ -5,6 +5,7 @@
     :loading="loading"
     :hint="hint"
     :rules="rules"
+    validate-on-blur
   ></v-text-field>
 </template>
 
