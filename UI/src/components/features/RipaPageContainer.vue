@@ -1,7 +1,7 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
-    :online="isOnline"
+    :online="isOnlineAndAuthenticated"
     :dark="isDark"
     :on-update-dark="handleUpdateDark"
   >
@@ -39,7 +39,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAdmin', 'isAuthenticated', 'apiConfig', 'isOnline']),
+    ...mapGetters(['isAdmin', 'apiConfig', 'isOnlineAndAuthenticated']),
   },
 
   methods: {
@@ -82,7 +82,7 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
+      if (this.isOnlineAndAuthenticated && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
           this.clearLocalStorage()
@@ -104,7 +104,7 @@ export default {
     },
 
     async runApiStopsJob(apiStops) {
-      if (this.isOnline && this.isAuthenticated) {
+      if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
           await this.editOfficerStop(apiStops[index])
         }

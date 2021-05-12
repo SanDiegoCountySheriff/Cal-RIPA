@@ -77,9 +77,8 @@ export default {
     return {
       agency: 'Insight',
       fullStop: {},
-      isAuthenticated: true,
       isEditingForm: false,
-      isOnline: true,
+      isOnlineAndAuthenticated: true,
       loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
@@ -110,12 +109,7 @@ export default {
     },
 
     validateReasonForStopForPii(textValue) {
-      if (
-        this.isOnline &&
-        this.isAuthenticated &&
-        textValue &&
-        textValue !== ''
-      ) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         this.loadingPii = true
         let isFound = false
         isFound = textValue.includes('John Doe')
@@ -129,12 +123,7 @@ export default {
     },
 
     validateBasisForSearchForPii(textValue) {
-      if (
-        this.isOnline &&
-        this.isAuthenticated &&
-        textValue &&
-        textValue !== ''
-      ) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         this.loadingPii = true
         let isFound = false
         isFound = textValue.includes('John Doe')

@@ -6,6 +6,9 @@
     <v-container>
       <v-row no-gutters>
         <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
+          <v-btn class="tw-mr-2" outlined small @click="handleCurrentLocation">
+            Current Location
+          </v-btn>
           <v-btn
             class="tw-mr-2"
             outlined
@@ -290,6 +293,25 @@ export default {
   },
 
   methods: {
+    handleCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          debugger
+          const positionInfo =
+            'Your current position is (' +
+            'Latitude: ' +
+            position.coords.latitude +
+            ', ' +
+            'Longitude: ' +
+            position.coords.longitude +
+            ')'
+          console.log(positionInfo)
+        })
+      } else {
+        console.log('Geolocation is not supported by this browser.')
+      }
+    },
+
     handleInput() {
       this.updateBeatsModel()
       this.updateBlockNumberModel()

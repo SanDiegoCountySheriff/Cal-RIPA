@@ -14,7 +14,7 @@ export default {
     },
 
     checkLocalStorage() {
-      if (!this.isLocked && this.isOnline && this.isAuthenticated) {
+      if (!this.isLocked && this.isOnlineAndAuthenticated) {
         this.isLocked = true
         const apiStops = this.getApiStops()
         if (apiStops.length > 0) {

@@ -26,14 +26,17 @@ export default {
   data() {
     return {
       stopInternalMs: 5000,
-      isOnline: true,
-      isAuthenticated: true,
+      isOnlineAndAuthenticated: true,
     }
   },
 
   methods: {
     runApiStopsJob(apiStops) {
-      console.log('RUN API STOPS', apiStops)
+      if (this.isOnlineAndAuthenticated) {
+        for (let index = 0; index < apiStops.length; index++) {
+          console.log('RUN API STOP', apiStops[index])
+        }
+      }
     },
   },
 
