@@ -43,9 +43,8 @@ export default {
     ...mapGetters([
       'isAdmin',
       'invalidUser',
-      'isAuthenticated',
+      'isOnlineAndAuthenticated',
       'apiConfig',
-      'isOnline',
     ]),
   },
 

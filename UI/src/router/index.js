@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
-import RipaUserCheckContainer from '@/components/features/RipaUserCheckContainer'
 import store from '@/store/index'
-// import AuthService from '../services/auth'
+import AuthService from '../services/auth'
 
 Vue.use(VueRouter)
 
