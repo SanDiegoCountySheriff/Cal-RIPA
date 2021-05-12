@@ -49,7 +49,12 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateDisabilityModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateDisabilityModel() {
+      this.viewModel.person.anyDisabilities = false
     },
   },
 

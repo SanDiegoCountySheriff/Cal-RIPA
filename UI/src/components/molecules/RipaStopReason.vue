@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-stop-reason tw-pb-8">
+    {{ viewModel.stopReason }}
     <ripa-form-header
       title="Reason for Stop"
       required
@@ -19,7 +20,7 @@
             @input="handleInput"
           ></ripa-select>
 
-          <template v-if="model.stopReason.reasonForStop === 8">
+          <template v-if="model.stopReason.reasonForStop === 7">
             <ripa-radio-group
               v-model="model.stopReason.educationViolation"
               :items="educationViolationItems"
@@ -32,12 +33,12 @@
 
               <ripa-autocomplete
                 v-model="model.stopReason.educationViolationCode"
-                hint="Select 1 48900 Offense Code (required)"
+                hint="Select 1 Education Code (required)"
                 persistent-hint
-                item-text="fullName"
-                item-value="code"
-                label="Offense Code"
-                :items="statutes"
+                item-text="name"
+                item-value="value"
+                label="Education Code"
+                :items="educationCodeSectionItems"
                 :rules="educationViolationCodeRules"
                 @input="handleInput"
               ></ripa-autocomplete>
@@ -148,6 +149,7 @@ import {
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
 
 export default {
@@ -175,6 +177,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
       reasonItems: STOP_REASONS,
+      educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
@@ -190,7 +193,7 @@ export default {
     },
 
     educationViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 8
+      const checked = this.viewModel.stopReason.reasonForStop === 7
       const options = this.viewModel.stopReason.educationViolation
       return [
         (checked && options !== null) ||
@@ -199,7 +202,7 @@ export default {
     },
 
     educationViolationCodeRules() {
-      const checked1 = this.viewModel.stopReason.reasonForStop === 8
+      const checked1 = this.viewModel.stopReason.reasonForStop === 7
       const checked2 = this.viewModel.stopReason.educationViolation === 1
       const code = this.viewModel.stopReason.educationViolationCode
       return [

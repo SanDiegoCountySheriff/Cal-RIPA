@@ -71,6 +71,9 @@ export default {
         },
         stopReason: {
           reasonForStop: newValue?.stopReason?.reasonForStop || null,
+          educationViolation: newValue?.stopReason?.educationViolation || null,
+          educationViolationCode:
+            newValue?.stopReason?.educationViolationCode || null,
           trafficViolation: newValue?.stopReason?.trafficViolation || null,
           trafficViolationCode:
             newValue?.stopReason?.trafficViolationCode || null,

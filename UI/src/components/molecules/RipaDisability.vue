@@ -20,7 +20,7 @@
           <template v-if="model.person.anyDisabilities">
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
-              :items="disabilityItems"
+              :items="getDisabilityItems"
               :rules="disabilityRules"
               @input="handleInput"
             >
@@ -63,6 +63,14 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getDisabilityItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.disabilityItems
+      }
+
+      return this.disabilityItems.filter(item => item.value !== 7)
     },
 
     disabilityRules() {

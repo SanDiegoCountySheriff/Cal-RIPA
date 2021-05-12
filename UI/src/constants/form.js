@@ -29,7 +29,7 @@ export const AGES = [
 
 export const DISABILITIES = [
   {
-    name: 'Disability related to hyperactivity or impulsive behavior"',
+    name: 'Disability related to hyperactivity or impulsive behavior',
     value: 7,
   },
   { name: 'Deafness or difficulty hearing', value: 1 },
@@ -224,4 +224,83 @@ export const STOP_RESULTS = [
     value: 9,
   },
   { name: 'Contacted U.S. Department of Homeland Security', value: 10 },
+]
+
+export const EDUCATION_CODE_SECTIONS = [
+  {
+    name: '48900(a)(1) - Caused/ attempted/ threatened to cause injury',
+    value: 1,
+  },
+  {
+    name: '48900(a)(2) - Used force or violence upon person',
+    value: 2,
+  },
+  {
+    name: '48900(b) - Possessed/sold/furnished a firearm, knife, explosive, etc',
+    value: 3,
+  },
+  {
+    name: '48900(c) - Possessed/used/sold/furnished/under influence of intoxicant',
+    value: 4,
+  },
+  {
+    name: '48900(d) - Offered/arranged/negotiated to sell an intoxicant',
+    value: 5,
+  },
+  {
+    name: '48900(e) - Committed or attempted to commit robbery/extortion',
+    value: 6,
+  },
+  {
+    name: '48900(f) - Caused or attempted to cause damage to property',
+    value: 7,
+  },
+  {
+    name: '48900(g) - Stole or attempted to steal property',
+    value: 8,
+  },
+  {
+    name: '48900(h) - Possessed or used tobacco, or nicotine products',
+    value: 9,
+  },
+  {
+    name: '48900(i) - Committed an obscene act or engaged in profanity',
+    value: 10,
+  },
+  {
+    name: '48900(j) - Possess/offer/arrange/negotiate to sell drug paraphernalia',
+    value: 11,
+  },
+  {
+    name: '48900(k)(1) - Disrupted activities or willfully defied authority',
+    value: 12,
+  },
+  {
+    name: '48900(l) - Knowingly received stolen property',
+    value: 13,
+  },
+  {
+    name: '48900(m) - Possessed an imitation firearm',
+    value: 14,
+  },
+  {
+    name: '48900(n) - Commit/attempt sexual assault or sexual battery',
+    value: 15,
+  },
+  {
+    name: '48900(o) - Harassed, threatened, or intimidated a witness',
+    value: 16,
+  },
+  {
+    name: '48900(p) - Offered/arranged/negotiated to sell, or sold Soma',
+    value: 17,
+  },
+  {
+    name: '48900(q) - Engaged in, or attempted hazing',
+    value: 18,
+  },
+  {
+    name: '48900(r) - Engaged in bullying',
+    value: 19,
+  },
 ]
