@@ -18,6 +18,23 @@
           ></ripa-switch>
 
           <template v-if="model.stopResult.anyActionsTaken">
+            <template v-if="model.person.isStudent">
+              <ripa-checkbox
+                v-model="model.stopResult.actionsTakenDuringStop12"
+                label="Referral to school administrator"
+                :rules="actionsTakenRules"
+                hide-details
+                @input="handleInput"
+              ></ripa-checkbox>
+              <ripa-checkbox
+                v-model="model.stopResult.actionsTakenDuringStop13"
+                label="Referral to school counselor or other support staff"
+                :rules="actionsTakenRules"
+                hide-details
+                @input="handleInput"
+              ></ripa-checkbox>
+            </template>
+
             <ripa-checkbox
               v-model="model.stopResult.actionsTakenDuringStop1"
               label="Warning (verbal or written)"
@@ -237,6 +254,8 @@ export default {
       const value8 = this.viewModel.stopResult.actionsTakenDuringStop8
       const value9 = this.viewModel.stopResult.actionsTakenDuringStop9
       const value10 = this.viewModel.stopResult.actionsTakenDuringStop10
+      const value12 = this.viewModel.stopResult.actionsTakenDuringStop12
+      const value13 = this.viewModel.stopResult.actionsTakenDuringStop13
       return [
         (checked &&
           (value1 ||
@@ -248,7 +267,9 @@ export default {
             value7 ||
             value8 ||
             value9 ||
-            value10)) ||
+            value10 ||
+            value12 ||
+            value13)) ||
           'An action taken is required',
       ]
     },
@@ -316,6 +337,8 @@ export default {
         this.viewModel.stopResult.actionsTakenDuringStop8 = false
         this.viewModel.stopResult.actionsTakenDuringStop9 = false
         this.viewModel.stopResult.actionsTakenDuringStop10 = false
+        this.viewModel.stopResult.actionsTakenDuringStop12 = false
+        this.viewModel.stopResult.actionsTakenDuringStop13 = false
       }
     },
 

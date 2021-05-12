@@ -50,11 +50,19 @@ export default {
   methods: {
     handleInput() {
       this.updateDisabilityModel()
+      this.updateStopResultModel()
       this.$emit('input', this.viewModel)
     },
 
     updateDisabilityModel() {
       this.viewModel.person.anyDisabilities = false
+    },
+
+    updateStopResultModel() {
+      if (!this.viewModel.person.isStudent) {
+        this.viewModel.stopResult.actionsTakenDuringStop12 = false
+        this.viewModel.stopResult.actionsTakenDuringStop13 = false
+      }
     },
   },
 

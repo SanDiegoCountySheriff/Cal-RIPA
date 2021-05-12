@@ -109,6 +109,10 @@ export default {
             newValue?.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
             newValue?.stopResult?.actionsTakenDuringStop10 || false,
+          actionsTakenDuringStop12:
+            newValue?.stopResult?.actionsTakenDuringStop12 || false,
+          actionsTakenDuringStop13:
+            newValue?.stopResult?.actionsTakenDuringStop13 || false,
           warningCodes: newValue?.stopResult?.warningCodes || [],
           citationCodes: newValue?.stopResult?.citationCodes || [],
           infieldCodes: newValue?.stopResult?.infieldCodes || [],

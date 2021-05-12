@@ -119,6 +119,8 @@ export const motorStop = (
       actionsTakenDuringStop8: false,
       actionsTakenDuringStop9: false,
       actionsTakenDuringStop10: false,
+      actionsTakenDuringStop12: false,
+      actionsTakenDuringStop13: false,
       warningCodes: [],
       citationCodes: [54106],
       infieldCodes: [],
@@ -593,6 +595,10 @@ const getResultOfStop = (person, statutes) => {
     person.stopResult?.actionsTakenDuringStop9 || false
   const actionsTakenDuringStop10 =
     person.stopResult?.actionsTakenDuringStop10 || false
+  const actionsTakenDuringStop12 =
+    person.stopResult?.actionsTakenDuringStop12 || false
+  const actionsTakenDuringStop13 =
+    person.stopResult?.actionsTakenDuringStop13 || false
 
   if (actionsTakenDuringStop1) {
     types.push(1)
@@ -623,6 +629,12 @@ const getResultOfStop = (person, statutes) => {
   }
   if (actionsTakenDuringStop10) {
     types.push(10)
+  }
+  if (actionsTakenDuringStop12) {
+    types.push(12)
+  }
+  if (actionsTakenDuringStop13) {
+    types.push(13)
   }
 
   return types.map(item => {
