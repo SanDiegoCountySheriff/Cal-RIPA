@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+        "agency": {
+            "value": "sdsd"
+        },
+        "environment": {
+            "value": "d"
+        },
+        "application": {
+            "value": "ripa"
+        },
+        "deploy_rg": {
+            "value": true
+        },
+        "rg": {
+            "value": "rg"
+        },
+        "rgLocation": {
+            "value": "westus2"
+        },
+        "templatelinkuri": {
+            "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.json"
+        },
+        "parameterlinkuri_d": {
+            "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.parameters.json"
+        },
+        "parameterlinkuri_q": {
+            "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovQA.parameters.json"
+        },
+        "parameterlinkuri_p": {
+            "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovProd.parameters.json"
+        }
+    }
+}

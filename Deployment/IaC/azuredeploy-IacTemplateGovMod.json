@@ -3012,6 +3012,24 @@
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "Account",
+                            "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
+                            
+                        },
+                        {
+                            "name": "ContainerName",
+                            "value": "[parameters('dbaccount_sqlDb_submission_container_name')]"
+                        },
+                        {
+                            "name": "DatabaseName",
+                            "value": "[parameters('dbaccount_sqlDb_name')]"
+                        },
+                        {
+                            "name": "Key",
+                            "value": "[variables('user_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
