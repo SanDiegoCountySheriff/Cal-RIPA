@@ -46,6 +46,11 @@ export default {
       return +yearsExperience || null
     },
 
+    getOfficerOtherType() {
+      const otherType = localStorage.getItem('ripa_officer_other_type')
+      return otherType || null
+    },
+
     handleAddFavorite(name) {
       const location = {
         id: new Date().getTime(),
@@ -143,6 +148,7 @@ export default {
           this.stop = motorStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -152,6 +158,7 @@ export default {
           this.stop = probationStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -161,6 +168,7 @@ export default {
           this.stop = defaultStop(
             this.getOfficerYearsExperience(),
             this.getOfficerAssignment(),
+            this.getOfficerOtherType(),
             this.officerId,
             this.agency,
           )

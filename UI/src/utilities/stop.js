@@ -16,7 +16,13 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
+export const defaultStop = (
+  yearsExperience,
+  assignment,
+  otherType,
+  officerId,
+  agency,
+) => {
   return {
     actionsTaken: {},
     agency,
@@ -39,6 +45,7 @@ export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
       editOfficer: false,
       yearsExperience,
       assignment,
+      otherType,
     },
     officerId,
     person: {
@@ -53,7 +60,13 @@ export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
   }
 }
 
-export const motorStop = (yearsExperience, assignment, officerId, agency) => {
+export const motorStop = (
+  yearsExperience,
+  assignment,
+  otherType,
+  officerId,
+  agency,
+) => {
   return {
     actionsTaken: {},
     agency,
@@ -76,6 +89,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
       editOfficer: false,
       yearsExperience,
       assignment,
+      otherType,
     },
     officerId,
     person: {
@@ -114,6 +128,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
 export const probationStop = (
   yearsExperience,
   assignment,
+  otherType,
   officerId,
   agency,
 ) => {
@@ -143,6 +158,7 @@ export const probationStop = (
       editOfficer: false,
       yearsExperience: yearsExperience,
       assignment: assignment,
+      otherType,
     },
     officerId,
     person: {
