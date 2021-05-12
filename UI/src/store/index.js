@@ -394,7 +394,7 @@ export default new Vuex.Store({
 
     editOfficerStop({ dispatch, state }, stop) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}/stop/PutStop/${stop.id}`, stop, {
+        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,

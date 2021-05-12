@@ -4,7 +4,7 @@ module.exports = {
   publicPath: './',
 
   pwa: {
-    name: 'Ripa Stop App',
+    name: 'Ripa Stops',
     themeColor: '#42b983',
     msTileColor: '#42b983',
     appleMobileWebAppCache: 'yes',

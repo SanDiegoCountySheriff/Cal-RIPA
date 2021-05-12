@@ -64,15 +64,17 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadStop(DojStop stop, string remoteFilePath)
+        public void UploadStop(DojStop stop, string remoteFilePath, string fileName,  BlobContainerClient blobContainerClient)
         {
             using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
+                BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
                 client.Connect();
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop));
                 MemoryStream stream = new MemoryStream(bytes);
-                client.UploadFile(stream, remoteFilePath);
+                blobClient.UploadAsync(stream); // stream file to Azure Blob
+                client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
                 _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             catch (Exception exception)
