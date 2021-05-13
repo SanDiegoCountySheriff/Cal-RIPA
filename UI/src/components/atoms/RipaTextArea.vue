@@ -8,10 +8,12 @@
     flat
     :hint="hint"
     :label="label"
+    :loading="loading"
     :persistent-hint="persistentHint"
     required
     rows="1"
     :rules="rules"
+    validate-on-blur
   ></v-textarea>
 </template>
 
@@ -21,6 +23,7 @@ export default {
 
   data() {
     return {
+      timeout: null,
       viewModel: this.value,
     }
   },
@@ -31,8 +34,11 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', newVal)
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.viewModel = newVal
+          this.$emit('input', this.viewModel)
+        }, 1500)
       },
     },
   },
@@ -51,6 +57,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: true,
     },
     hint: {
       type: String,

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Templates.Models;
+using RIPA.Functions.Security;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,6 +28,11 @@ namespace RIPA.Functions.Domain.Functions.Templates
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteTemplate/{Id}")] HttpRequest req, string Id,
             [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
         {
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 Template template = new Template { PartitionKey = "CA", RowKey = Id, ETag = "*" };

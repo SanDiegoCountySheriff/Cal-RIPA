@@ -6,6 +6,7 @@
     :hint="hint"
     :rules="rules"
     :min="1"
+    validate-on-blur
   ></v-text-field>
 </template>
 
@@ -15,6 +16,7 @@ export default {
 
   data() {
     return {
+      timeout: null,
       viewModel: this.value,
     }
   },
@@ -25,8 +27,11 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', Number(newVal))
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.viewModel = newVal
+          this.$emit('input', Number(this.viewModel))
+        }, 1500)
       },
     },
   },

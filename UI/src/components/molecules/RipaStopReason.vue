@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-stop-reason tw-pb-8">
+    {{ viewModel.stopReason }}
     <ripa-form-header
       title="Reason for Stop"
       required
@@ -18,6 +19,31 @@
             :rules="reasonRules"
             @input="handleInput"
           ></ripa-select>
+
+          <template v-if="model.stopReason.reasonForStop === 7">
+            <ripa-radio-group
+              v-model="model.stopReason.educationViolation"
+              :items="educationViolationItems"
+              :rules="educationViolationRules"
+              @input="handleInput"
+            ></ripa-radio-group>
+
+            <template v-if="model.stopReason.educationViolation === 1">
+              <div class="tw-mt-2"></div>
+
+              <ripa-autocomplete
+                v-model="model.stopReason.educationViolationCode"
+                hint="Select 1 Education Code (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Education Code"
+                :items="educationCodeSectionItems"
+                :rules="educationViolationCodeRules"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
+          </template>
 
           <template v-if="model.stopReason.reasonForStop === 1">
             <ripa-radio-group
@@ -86,11 +112,19 @@
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
+          <template v-if="model.stopReason.reasonForStopPiiFound">
+            <v-alert outlined type="warning" dense>
+              The explanation contains personally identifying information.
+              Please remove if possible.
+            </v-alert>
+          </template>
+
           <ripa-text-area
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
+            :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
           ></ripa-text-area>
@@ -104,6 +138,7 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -111,12 +146,16 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextArea from '@/components/atoms/RipaTextArea'
 import {
   STOP_REASONS,
+  EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-reason',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -138,24 +177,11 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
       reasonItems: STOP_REASONS,
+      educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
+      educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: {
-        stopReason: {
-          reasonForStop: this.value?.stopReason?.reasonForStop || null,
-          trafficViolation: this.value?.stopReason?.trafficViolation || null,
-          trafficViolationCode:
-            this.value?.stopReason?.trafficViolationCode || null,
-          reasonableSuspicion:
-            this.value?.stopReason?.reasonableSuspicion || [],
-          reasonableSuspicionCode:
-            this.value?.stopReason?.reasonableSuspicionCode || null,
-          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
-          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
-          reasonForStopExplanation:
-            this.value?.stopReason?.reasonForStopExplanation || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -164,6 +190,24 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    educationViolationRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 7
+      const options = this.viewModel.stopReason.educationViolation
+      return [
+        (checked && options !== null) ||
+          'An education violation type is required',
+      ]
+    },
+
+    educationViolationCodeRules() {
+      const checked1 = this.viewModel.stopReason.reasonForStop === 7
+      const checked2 = this.viewModel.stopReason.educationViolation === 1
+      const code = this.viewModel.stopReason.educationViolationCode
+      return [
+        (checked1 && checked2 && code !== null) || 'A offense code is required',
+      ]
     },
 
     trafficViolationRules() {
@@ -210,12 +254,28 @@ export default {
     },
   },
 
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
+    },
+
+    'value.stopReason.reasonForStopPiiFound': {
+      handler(newVal) {
+        this.viewModel.stopReason.reasonForStopPiiFound = newVal
+      },
+    },
+  },
+
   props: {
     value: {
       type: Object,
       default: () => {},
     },
-    offenseCodes: {
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
+    statutes: {
       type: Array,
       default: () => [],
     },

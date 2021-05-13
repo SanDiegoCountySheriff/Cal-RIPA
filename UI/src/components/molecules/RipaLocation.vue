@@ -5,6 +5,33 @@
 
     <v-container>
       <v-row no-gutters>
+        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
+            :loading="isGeoLocationLoading"
+            @click="handleCurrentLocation"
+          >
+            Current Location
+          </v-btn>
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
+            :disabled="!validLastLocation"
+            @click="handleLastLocation"
+            >Last Location
+          </v-btn>
+          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorites">
+            Open Favorites
+          </v-btn>
+          <v-btn outlined small @click="handleSaveFavorite"
+            >Save Location</v-btn
+          >
+        </div>
+      </v-row>
+      <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
@@ -39,8 +66,9 @@
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              round-down
               :rules="blockNumberRules"
-              @input="debounceInput"
+              @input="handleInput"
             >
             </ripa-number-input>
           </div>
@@ -139,7 +167,6 @@
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
-              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -152,14 +179,16 @@
 <script>
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import _ from 'lodash'
 
 export default {
   name: 'ripa-location',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaAutocomplete,
@@ -172,22 +201,8 @@ export default {
 
   data() {
     return {
-      viewModel: {
-        location: {
-          isSchool: this.value?.location?.isSchool || false,
-          school: this.value?.location?.school || null,
-          blockNumber: this.value?.location?.blockNumber || null,
-          streetName: this.value?.location?.streetName || null,
-          intersection: this.value?.location?.intersection || null,
-          moreLocationOptions:
-            this.value?.location?.moreLocationOptions || false,
-          highwayExit: this.value?.location?.highwayExit || null,
-          landmark: this.value?.location?.landmark || null,
-          outOfCounty: this.value?.location?.outOfCounty || false,
-          city: this.value?.location?.city || null,
-          beat: this.value?.location?.beat || null,
-        },
-      },
+      isGeoLocationLoading: false,
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -212,11 +227,6 @@ export default {
     cityRules() {
       const city = this.viewModel.location.city
       return [city !== null || 'A city is required']
-    },
-
-    beatRules() {
-      const beat = this.viewModel.location.beat
-      return [beat !== null || 'A beat is required']
     },
 
     blockNumberRules() {
@@ -285,29 +295,109 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function (e) {
-      this.viewModel.location.blockNumber = Math.round(e / 100) * 100
-      this.handleInput()
-    }, 1000),
+    handleCurrentLocation() {
+      if (navigator.geolocation) {
+        this.isGeoLocationLoading = true
+        navigator.geolocation.getCurrentPosition(position => {
+          const positionInfo =
+            'Your current position is (' +
+            'Latitude: ' +
+            position.coords.latitude +
+            ', ' +
+            'Longitude: ' +
+            position.coords.longitude +
+            ')'
+          console.log(positionInfo)
+          this.isGeoLocationLoading = false
+          // https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-117.1328002,32.834727&f=json
+        })
+      } else {
+        console.log('Geolocation is not supported by this browser.')
+      }
+    },
 
     handleInput() {
-      this.updateBeatsModel()
       this.$emit('input', this.viewModel)
     },
 
-    updateBeatsModel() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
-        this.viewModel.location.city = null
+    handleInputOutOfCounty(newVal) {
+      const currentVal = this.viewModel.location.outOfCounty
+      if (newVal !== currentVal) {
+        this.updateOutOfCountyModel()
+        this.handleInput()
       }
+    },
 
-      if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
-      ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
+    handleLastLocation() {
+      if (this.onOpenLastLocation) {
+        this.onOpenLastLocation()
       }
+    },
+
+    handleOpenFavorites() {
+      if (this.onOpenFavorites) {
+        this.onOpenFavorites()
+      }
+    },
+
+    handleSaveFavorite() {
+      if (this.onSaveFavorite) {
+        this.onSaveFavorite(this.viewModel.location)
+      }
+    },
+
+    updateBlockNumberModel() {
+      this.$nextTick(() => {
+        let blockNumber = this.viewModel.location.blockNumber
+        blockNumber = Math.floor(blockNumber / 100) * 100
+        this.viewModel.location.blockNumber = blockNumber
+      })
+    },
+
+    updateOutOfCountyModel() {
+      this.$nextTick(() => {
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
+
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
+      })
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
+    },
+
+    lastLocation(newVal) {
+      if (newVal) {
+        this.viewModel.location = newVal
+        this.handleInput()
+      }
+    },
+
+    'viewModel.location.outOfCounty': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateOutOfCountyModel()
+        }
+      },
+    },
+
+    'viewModel.location.blockNumber': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateBlockNumberModel()
+        }
+      },
     },
   },
 
@@ -328,8 +418,28 @@ export default {
       type: Array,
       default: () => {},
     },
+    lastLocation: {
+      type: Object,
+      default: () => {},
+    },
     nonCountyCities: {
       type: Array,
+      default: () => {},
+    },
+    validLastLocation: {
+      type: Boolean,
+      default: false,
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
       default: () => {},
     },
   },

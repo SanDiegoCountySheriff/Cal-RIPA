@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Security;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
 using System.Net;
 using System.Threading.Tasks;
@@ -32,6 +33,11 @@ namespace RIPA.Functions.UserProfile.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetUser/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("GET - Get User requested");
+
+            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
 
             if (!string.IsNullOrEmpty(Id))
             {

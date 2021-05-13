@@ -7,7 +7,8 @@
       :schools="mappedAdminSchools"
       :statutes="mappedAdminStatutes"
       :stops="mappedAdminStops"
-      :submissions="submissions"
+      :submissions="mappedAdminSubmissions"
+      :users="mappedAdminUsers"
     ></ripa-admin-template>
   </ripa-page-container>
 </template>
@@ -20,6 +21,7 @@ import {
   adminCities,
   adminSchools,
   adminStatutes,
+  adminUsers,
 } from '../data/mappings'
 import { stops } from '../data/stops'
 import { submissions } from '../data/submissions'
@@ -41,6 +43,7 @@ export default {
       mappedAdminStatutes: [],
       mappedAdminStops: [],
       mappedAdminSubmissions: [],
+      mappedAdminUsers: [],
     }
   },
 
@@ -54,6 +57,7 @@ export default {
         this.mappedAdminStatutes = adminStatutes()
         this.mappedAdminStops = stops
         this.mappedAdminSubmissions = submissions
+        this.mappedAdminUsers = adminUsers()
         this.loading = false
       }, 2500)
     },

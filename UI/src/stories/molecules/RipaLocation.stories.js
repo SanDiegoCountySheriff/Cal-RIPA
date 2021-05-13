@@ -24,5 +24,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-location v-model="stop" :schools="schools" :beats="beats" :county-cities="countyCities" :non-county-cities="nonCountyCities></ripa-location>{{stop}}</div>',
+    '<div><ripa-location v-model="stop" :schools="schools" :beats="beats" :county-cities="countyCities" :non-county-cities="nonCountyCities"></ripa-location>{{stop}}</div>',
 })

@@ -1,125 +1,142 @@
 <template>
-  <div class="ripa-form-container">
+  <div class="ripa-home-container">
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      {{ stop }}
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :full-stop="fullStop"
+        :last-location="lastLocation"
+        :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :valid-last-location="isLastLocationValid"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-open-favorites="handleOpenFavorites"
+        :on-open-last-location="handleOpenLastLocation"
+        :on-save-favorite="handleSaveFavorite"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-favorites-dialog
+      :show-dialog="showFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditFavorite"
+      :on-open-favorite="handleOpenFavorite"
+      :on-delete-favorite="handleDeleteFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
   </div>
 </template>
 
 <script>
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { mapGetters } from 'vuex'
-import { format } from 'date-fns'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+
   components: {
+    RipaAddFavoriteDialog,
+    RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
   },
 
   data() {
     return {
+      fullStop: {},
       isEditingForm: false,
+      loadingPii: false,
       stop: {},
     }
   },
 
   computed: {
     ...mapGetters([
+      'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
+      'officerId',
+      'agency',
     ]),
   },
 
   methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
+    ...mapActions(['checkTextForPii']),
+
+    handleSubmit(apiStop) {
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
     },
 
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    handleInput(newVal) {
-      this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
-    },
-
-    handleTemplate(value) {
-      this.isEditingForm = true
-
-      if (value === 'motor') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
+    async validateReasonForStopForPii(textValue) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+        this.loadingPii = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
         }
-      }
-
-      if (value === 'probation') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 3,
-            reasonForStopExplanation:
-              'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-          },
-          actionsTaken: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop: [4, 18, 20],
-            basisForSearch: [4],
-          },
-        }
+        this.loadingPii = false
+        this.updateFullStop()
       }
     },
 
-    handleCancel() {
-      this.isEditingForm = false
-      this.stop = {}
+    async validateBasisForSearchForPii(textValue) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+        this.loadingPii = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
+        this.loadingPii = false
+        this.updateFullStop()
+      }
+    },
+  },
+
+  watch: {
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 }

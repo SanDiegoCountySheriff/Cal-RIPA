@@ -12,8 +12,18 @@ export const formatDate = dateStr => {
   return ''
 }
 
+export const dateNotInFuture = (dateStr, timeStr) => {
+  const date = Date.parse(`${dateStr} ${timeStr}`)
+  return new Date().getTime() >= new Date(date).getTime()
+}
+
 export const dateWithinLastHours = (dateStr, timeStr, hours) => {
   const date = Date.parse(`${dateStr} ${timeStr}`)
   const diff = differenceInHours(new Date(), new Date(date))
   return diff < hours
+}
+
+export const formatDateTime = (dateStr, timeStr) => {
+  const date = Date.parse(`${dateStr} ${timeStr}`)
+  return new Date(date)
 }

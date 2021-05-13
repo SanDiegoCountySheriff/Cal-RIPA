@@ -20,7 +20,7 @@
           <template v-if="model.person.anyDisabilities">
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
-              :items="disabilityItems"
+              :items="getDisabilityItems"
               :rules="disabilityRules"
               @input="handleInput"
             >
@@ -34,12 +34,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -51,13 +54,7 @@ export default {
     return {
       valid: true,
       disabilityItems: DISABILITIES,
-      viewModel: {
-        person: {
-          anyDisabilities: this.value?.person?.anyDisabilities || false,
-          perceivedOrKnownDisability:
-            this.value?.person?.perceivedOrKnownDisability || [],
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -66,6 +63,14 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getDisabilityItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.disabilityItems
+      }
+
+      return this.disabilityItems.filter(item => item.value !== 7)
     },
 
     disabilityRules() {
@@ -80,14 +85,27 @@ export default {
 
   methods: {
     handleInput() {
-      this.updatePerceivedOrKnownDisabilityModel()
       this.$emit('input', this.viewModel)
     },
 
     updatePerceivedOrKnownDisabilityModel() {
-      if (!this.viewModel.person.anyDisabilities) {
+      this.$nextTick(() => {
         this.viewModel.person.perceivedOrKnownDisability = []
-      }
+      })
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
+    },
+
+    'viewModel.person.anyDisabilities': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updatePerceivedOrKnownDisabilityModel()
+        }
+      },
     },
   },
 

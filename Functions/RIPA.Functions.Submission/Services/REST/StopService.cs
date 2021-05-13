@@ -102,7 +102,7 @@ namespace RIPA.Functions.Submission.Services.REST
                 LEARecordID = stop.id,
                 ORI = stop.Ori,
                 TX_Type = "I",
-                SDate = stop.Date,
+                SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
                 STime = stop.Time,
                 SDur = stop.StopDuration.ToString(),
                 Officer = new Officer
@@ -116,9 +116,9 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.ListCodes?.FirstOrDefault().Code,
+                    City = stop.Location.City.Codes.Code,
                     K12_Flag = stop.Location.School ? "Y" : null,
-                    K12Code = stop.Location.School ? stop.Location.SchoolName.ListCodes?.FirstOrDefault().Code : null
+                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : null
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
                 ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped)
@@ -142,7 +142,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
         {
-            Listperson_Stopped dojListPersonStopped = new Listperson_Stopped();
+            var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
             {
                 Person_Stopped dojPersonStopped = new Person_Stopped
@@ -160,18 +160,25 @@ namespace RIPA.Functions.Submission.Services.REST
                         {
                             Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                         },
-                        Gend = personStopped.PerceivedGender,
-                        LGBT = personStopped.PerceivedLgbt,
+                        Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
+                        LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
                         GenNC = personStopped.GenderNonconforming ? "Y" : "N"
+
                     },
+                    Is_Stud = personStopped.IsStudent ? "Y" : "N",
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
-                    ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
+                    ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                    ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToArray() },
+                    BasSearch_N = personStopped.BasisForSearchBrief,
+                    ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToArray() },
+                    ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToArray() },
                     ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
 
                 };
+                listDojPersonStopped.Add(dojPersonStopped);
             }
-            return new Listperson_Stopped { };
+            return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
@@ -203,26 +210,27 @@ namespace RIPA.Functions.Submission.Services.REST
             return primaryReason;
         }
 
-        public static Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop)
+        public static Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
         {
-            Listacttak listacttak = new Listacttak();
             var listActionsTaken = new List<Acttak>();
             foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
             {
+                var isCon = "na";
+                if (atds.Key == "17") { isCon = isPersonSearchConsentGiven ? "Y" : "N"; }
+                else if (atds.Key == "19") { isCon = isPropertySearchConsentGiven ? "Y" : "N"; }
+
                 Acttak acttak = new Acttak
                 {
                     Act_CD = atds.Key,
-                    Is_Con = atds.Key.Length == 2 ? atds.Action : "na"
+                    Is_Con = isCon
                 };
                 listActionsTaken.Add(acttak);
             }
-            listacttak.ActTak = listActionsTaken.ToArray();
-            return listacttak;
+            return new Listacttak { ActTak = listActionsTaken.ToArray() };
         }
 
         public static Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
         {
-            Listresult listresult = new Listresult();
             var listResults = new List<Result>();
             foreach (ResultOfStop ros in listResultOfStop)
             {
@@ -233,8 +241,27 @@ namespace RIPA.Functions.Submission.Services.REST
                 };
                 listResults.Add(result);
             }
-            return listresult;
+            return new Listresult { Result = listResults.ToArray() };
         }
+
+        public static string CastToDojPercievedGender(string percievedGender)
+        {
+            switch (percievedGender)
+            {
+                case "Male":
+                    return PercievedGender.Male.ToString();
+                case "Female":
+                    return PercievedGender.Female.ToString();
+                case "Transgender man/boy":
+                    return PercievedGender.TransgenderManBoy.ToString();
+                case "Transgender woman/girl":
+                    return PercievedGender.TransgenderWomanGirl.ToString();
+            }
+
+            return "";
+        }
+
+
 
     }
 }

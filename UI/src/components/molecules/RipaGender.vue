@@ -19,6 +19,14 @@
             >
             </ripa-radio-group>
           </v-col>
+          <v-col cols="12" sm="12">
+            <ripa-switch
+              v-model="model.person.genderNonconforming"
+              label="Gender Nonconforming"
+              :max-width="250"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
         </v-row>
       </v-container>
     </template>
@@ -50,12 +58,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { GENDERS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -68,12 +79,7 @@ export default {
       valid: true,
       genderItems: GENDERS,
       genderRules: [v => !!v || 'A gender is required'],
-      viewModel: {
-        person: {
-          perceivedGender: this.value?.person?.perceivedGender || null,
-          perceivedLgbt: this.value?.person?.perceivedLgbt || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -95,6 +101,12 @@ export default {
       this.viewModel.person.perceivedLgbt =
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

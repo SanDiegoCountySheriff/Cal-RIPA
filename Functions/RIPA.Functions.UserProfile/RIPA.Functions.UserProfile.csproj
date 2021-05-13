@@ -14,6 +14,9 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="0.5.1-preview" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
   </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
+	</ItemGroup>
   <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
