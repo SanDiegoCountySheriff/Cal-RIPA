@@ -12,7 +12,7 @@
     "data-server": "json-server --watch public/db.json --port 3004"
   },
   "dependencies": {
-    "@azure/msal-browser": "^2.14.1",
+    "@azure/msal-browser": "^2.14.2",
     "@mdi/font": "5.9.55",
     "@tailwindcss/postcss7-compat": "2.1.2",
     "autoprefixer": "9",
@@ -30,7 +30,7 @@
     "vuex": "3.6.2"
   },
   "devDependencies": {
-    "@babel/core": "7.14.0",
+    "@babel/core": "7.14.2",
     "@storybook/addon-actions": "6.2.9",
     "@storybook/addon-essentials": "6.2.9",
     "@storybook/addon-links": "6.2.9",
@@ -58,7 +58,7 @@
     "json-server": "0.16.3",
     "node-sass": "5.0.0",
     "prettier": "2.3.0",
-    "sass": "1.32.12",
+    "sass": "1.32.13",
     "sass-loader": "10.1.1",
     "storybook-vue-router": "1.0.7",
     "vue-cli-plugin-tailwind": "2.0.6",
