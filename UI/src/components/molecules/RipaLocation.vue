@@ -317,8 +317,15 @@ export default {
     },
 
     handleInput() {
-      this.updateBeatsModel()
       this.$emit('input', this.viewModel)
+    },
+
+    handleInputOutOfCounty(newVal) {
+      const currentVal = this.viewModel.location.outOfCounty
+      if (newVal !== currentVal) {
+        this.updateOutOfCountyModel()
+        this.handleInput()
+      }
     },
 
     handleLastLocation() {
@@ -339,19 +346,29 @@ export default {
       }
     },
 
-    updateBeatsModel() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
-        this.viewModel.location.city = null
-      }
+    updateBlockNumberModel() {
+      this.$nextTick(() => {
+        let blockNumber = this.viewModel.location.blockNumber
+        blockNumber = Math.floor(blockNumber / 100) * 100
+        this.viewModel.location.blockNumber = blockNumber
+      })
+    },
 
-      if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
-      ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
-      }
+    updateOutOfCountyModel() {
+      this.$nextTick(() => {
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
+
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
+      })
     },
   },
 
@@ -365,6 +382,22 @@ export default {
         this.viewModel.location = newVal
         this.handleInput()
       }
+    },
+
+    'viewModel.location.outOfCounty': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateOutOfCountyModel()
+        }
+      },
+    },
+
+    'viewModel.location.blockNumber': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateBlockNumberModel()
+        }
+      },
     },
   },
 

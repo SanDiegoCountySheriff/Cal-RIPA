@@ -70,6 +70,15 @@ export default {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
     },
+
+    'viewModel.person.isStudent': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateDisabilityModel()
+          this.updateStopResultModel()
+        }
+      },
+    },
   },
 
   props: {
