@@ -1,4 +1,9 @@
 <script>
+import {
+  getOfficerYearsExperience,
+  getOfficerAssignment,
+  getOfficerOtherType,
+} from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 import { format } from 'date-fns'
 
@@ -32,23 +37,6 @@ export default {
       }
 
       return null
-    },
-
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
-    },
-
-    getOfficerOtherType() {
-      const otherType = localStorage.getItem('ripa_officer_other_type')
-      return otherType || null
     },
 
     handleAddFavorite(name) {
@@ -146,9 +134,9 @@ export default {
       switch (value) {
         case 'motor':
           this.stop = motorStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
-            this.getOfficerOtherType(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -156,9 +144,9 @@ export default {
 
         case 'probation':
           this.stop = probationStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
-            this.getOfficerOtherType(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -166,9 +154,9 @@ export default {
 
         default:
           this.stop = defaultStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
-            this.getOfficerOtherType(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
