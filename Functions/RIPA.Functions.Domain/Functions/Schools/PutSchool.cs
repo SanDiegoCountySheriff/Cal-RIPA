@@ -37,9 +37,9 @@ namespace RIPA.Functions.Domain.Functions.Schools
 
             try
             {
-                if (school.CDSCode == 0)
+                if (string.IsNullOrWhiteSpace(school.CDSCode))
                 {
-                    throw new Exception("CDS CODE Must be Integer and is required");
+                    throw new Exception("CDS CODE Must be provided");
                 }
                 school.PartitionKey = "CA";
                 school.RowKey = Id;

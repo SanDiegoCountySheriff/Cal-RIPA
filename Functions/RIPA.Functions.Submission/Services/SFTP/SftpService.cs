@@ -71,7 +71,8 @@ namespace RIPA.Functions.Submission.Services.SFTP
             {
                 BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
                 client.Connect();
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop));
+                var options = new JsonSerializerOptions() { IgnoreNullValues = true };
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop, options));
                 MemoryStream stream = new MemoryStream(bytes);
                 blobClient.UploadAsync(stream); // stream file to Azure Blob
                 client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 

@@ -20,7 +20,19 @@ namespace RIPA.Functions.Common.Models
         public DateTime DateReported { get; set; }
         public string FileName { get; set; }
     }
-    
+
+    public enum PercievedGender
+    {
+        [EnumMember(Value = "Male")]
+        Male = 1,
+        [EnumMember(Value = "Female")]
+        Female = 2,
+        [EnumMember(Value = "Transgender man/boy")]
+        TransgenderManBoy = 3,
+        [EnumMember(Value = "Transgender woman/girl")]
+        TransgenderWomanGirl = 4
+    }
+
     public enum SubmissionErrorType
     {
         [EnumMember(Value = "FileLevelFatalError")]
@@ -29,9 +41,9 @@ namespace RIPA.Functions.Common.Models
         RecordLevelError
     }
 
-    public enum SubmissionStatus 
+    public enum SubmissionStatus
     {
-        [EnumMember(Value= "Unsubmitted")]
+        [EnumMember(Value = "Unsubmitted")]
         Unsubmitted,
         [EnumMember(Value = "Submitted")]
         Submitted,
@@ -52,7 +64,7 @@ namespace RIPA.Functions.Common.Models
         public OfficerAssignment OfficerAssignment { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set {} }
+        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
@@ -70,7 +82,7 @@ namespace RIPA.Functions.Common.Models
         public string OtherType { get; set; }
     }
 
-        public class Location
+    public class Location
     {
         public bool ToggleLocationOptions { get; set; }
         public string Intersection { get; set; }
@@ -118,15 +130,34 @@ namespace RIPA.Functions.Common.Models
         public bool GenderNonconforming { get; set; }
         public bool PerceivedLgbt { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
-        public string PerceptionKnown { get; set; }
         public string ReasonForStopExplanation { get; set; }
         public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+        public bool PersonSearchConsentGiven { get; set; }
+        public bool PropertySearchConsentGiven { get; set; }
         public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
-        public object[] BasisForSearch { get; set; }
+        public BasisForSearch[] ListBasisForSearch { get; set; }
         public string BasisForSearchBrief { get; set; }
-        public object[] BasisForPropertySeizure { get; set; }
-        public object[] TypeOfPropertySeized { get; set; }
+        public BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
+        public TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
         public ResultOfStop[] ListResultOfStop { get; set; }
+    }
+
+    public class TypeOfPropertySeized
+    {
+        public string Key { get; set; }
+        public string Type { get; set; }
+    }
+
+    public class BasisForPropertySeizure
+    {
+        public string Key { get; set; }
+        public string Basis { get; set; }
+    }
+
+    public class BasisForSearch
+    {
+        public string Key { get; set; }
+        public string Basis { get; set; }
     }
 
     public class ReasonForStop
