@@ -69,6 +69,7 @@ const getAuthConfig = async () => {
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
         apiSubscription: res.data.Configuration.Subscription,
+        defaultCounty: res.data.Configuration.DefaultCounty,
       })
       return true
     })

@@ -450,7 +450,6 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        console.log(state)
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
             headers: {
@@ -534,7 +533,13 @@ export default new Vuex.Store({
               return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
             })
             const data1 = data
-              .filter(item => item.county === 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.updateApiConfig.defaultCounty
+                  ? state.updateApiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty === configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -542,7 +547,13 @@ export default new Vuex.Store({
                 }
               })
             const data2 = data
-              .filter(item => item.county !== 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.updateApiConfig.defaultCounty
+                  ? state.updateApiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty !== configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -748,15 +759,19 @@ export default new Vuex.Store({
           commit('updateOfficerStops', [])
         })
     },
-    setAuthConfig({ commit, state }, value) {
+
+    setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)
     },
-    setUserAccountInfo({ commit, state }, value) {
+
+    setUserAccountInfo({ commit }, value) {
       commit('updateUserAccount', value)
     },
-    setApiConfig({ commit, state }, value) {
+
+    setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
     },
+
     setInvalidUser({ commit }, value) {
       commit('updateInvalidUser', value)
     },
