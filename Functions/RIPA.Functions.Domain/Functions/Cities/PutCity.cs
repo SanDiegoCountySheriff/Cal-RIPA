@@ -27,7 +27,7 @@ namespace RIPA.Functions.Domain.Functions.Cities
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "City failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] HttpRequest req, City city, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] City city, HttpRequest req,string Id,
             [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())

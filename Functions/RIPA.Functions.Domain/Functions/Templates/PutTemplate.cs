@@ -28,7 +28,7 @@ namespace RIPA.Functions.Domain.Functions.Templates
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Template failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutTemplate/{Id}")] HttpRequest req, Template template, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutTemplate/{Id}")] Template template, HttpRequest req, string Id,
             [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())

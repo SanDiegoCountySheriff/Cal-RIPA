@@ -27,7 +27,7 @@ namespace RIPA.Functions.Domain.Functions.Schools
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "School failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] HttpRequest req, School school, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] School school, HttpRequest req, string Id,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
