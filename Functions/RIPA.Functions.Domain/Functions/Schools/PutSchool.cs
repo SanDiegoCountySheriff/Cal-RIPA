@@ -27,7 +27,7 @@ namespace RIPA.Functions.Domain.Functions.Schools
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "School failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] HttpRequest req, School school, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] School school, HttpRequest req, string Id,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -37,9 +37,9 @@ namespace RIPA.Functions.Domain.Functions.Schools
 
             try
             {
-                if (school.CDSCode == 0)
+                if (string.IsNullOrWhiteSpace(school.CDSCode))
                 {
-                    throw new Exception("CDS CODE Must be Integer and is required");
+                    throw new Exception("CDS CODE Must be provided");
                 }
                 school.PartitionKey = "CA";
                 school.RowKey = Id;

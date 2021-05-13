@@ -30,7 +30,7 @@ namespace RIPA.Functions.UserProfile.Functions
         [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Services.CosmosDb.Models.UserProfile), Deprecated = false, Description = "User Profile object", Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Services.CosmosDb.Models.UserProfile), Description = "User Profile Created")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "User Profile failed on insert or replace")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] HttpRequest req, Services.CosmosDb.Models.UserProfile userProfile, string Id, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Services.CosmosDb.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
 

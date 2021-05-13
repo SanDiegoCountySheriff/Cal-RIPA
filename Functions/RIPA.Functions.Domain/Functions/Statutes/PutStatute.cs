@@ -28,7 +28,7 @@ namespace RIPA.Functions.Domain.Functions.Statutes
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Statute failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutStatute/{Id}")] HttpRequest req, Statute statute, int Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutStatute/{Id}")] Statute statute, HttpRequest req, int Id,
              [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())

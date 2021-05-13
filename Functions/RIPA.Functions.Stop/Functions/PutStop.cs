@@ -32,7 +32,7 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Created")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
 
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] HttpRequest req, Common.Models.Stop stop, string Id, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] Common.Models.Stop stop, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put Stop requested");
 
@@ -44,6 +44,10 @@ namespace RIPA.Functions.Stop.Functions
             if (!string.IsNullOrEmpty(Id))
             {
                 stop.id = Id;
+                if (stop.OfficerID.Length != 9)
+                {
+                    return new BadRequestObjectResult("Office ID must be 9 char");
+                }
                 stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
                 await _stopCosmosDbService.UpdateStopAsync(Id, stop);
                 return new OkObjectResult(stop);
