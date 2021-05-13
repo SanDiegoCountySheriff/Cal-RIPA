@@ -26,7 +26,7 @@ namespace RIPA.Functions.Domain.Functions.Beats
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutBeat/{Id}")] HttpRequest req, Beat beat, int Id,
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutBeat/{Id}")] Beat beat, HttpRequest req, int Id,
             [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
 
         {
