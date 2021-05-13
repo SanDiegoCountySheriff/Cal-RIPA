@@ -230,8 +230,6 @@ export const apiStop = (
 export const getPeopleListed = (fullStop, statutes) => {
   return fullStop.people.map(person => {
     return {
-      basisForPropertySeizure: getBasisForPropertySeizure(person),
-      basisForSearch: getBasisForSearch(person),
       basisForSearchBrief:
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
@@ -240,11 +238,14 @@ export const getPeopleListed = (fullStop, statutes) => {
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      listBasisForPropertySeizure: getBasisForPropertySeizure(person),
+      listBasisForSearch: getBasisForSearch(person),
       listContrabandOrEvidenceDiscovered:
         getContrabandOrEvidenceDiscovered(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
+      listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
@@ -253,7 +254,6 @@ export const getPeopleListed = (fullStop, statutes) => {
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
-      typeOfPropertySeized: getTypeOfPropertySeized(person),
     }
   })
 }
@@ -369,12 +369,23 @@ const getPerceivedGenderText = person => {
 const getPerceivedOrKnownDisability = person => {
   const disability = person.perceivedOrKnownDisability || []
 
-  return disability.map(item => {
+  const mappedItems = disability.map(item => {
     return {
       key: item.toString(),
       disability: DISABILITIES[item - 1].name,
     }
   })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '8',
+      disability: 'None',
+    },
+  ]
 }
 
 const getReasonForStop = (person, statutes) => {
@@ -511,7 +522,7 @@ const getReasonableSuspicionCode = (person, statutes) => {
 const getActionsTakenDuringStop = person => {
   const actions = person.actionsTaken?.actionsTakenDuringStop || []
 
-  return actions.map(item => {
+  const mappedItems = actions.map(item => {
     const action = {
       key: item.toString(),
       action: ACTIONS_TAKEN[item - 1].name,
@@ -527,6 +538,17 @@ const getActionsTakenDuringStop = person => {
 
     return action
   })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '24',
+      action: 'None',
+    },
+  ]
 }
 
 const getBasisForSearch = person => {
@@ -563,14 +585,25 @@ const getTypeOfPropertySeized = person => {
 }
 
 const getContrabandOrEvidenceDiscovered = person => {
-  const types = person.actionsTaken?.contrabandOrEvidenceDiscovered || []
+  const contrabands = person.actionsTaken?.contrabandOrEvidenceDiscovered || []
 
-  return types.map(item => {
+  const mappedItems = contrabands.map(item => {
     return {
       key: item.toString(),
       contraband: CONTRABAND_TYPES[item - 1].name,
     }
   })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '1',
+      contraband: 'None',
+    },
+  ]
 }
 
 const getResultOfStop = (person, statutes) => {
@@ -637,7 +670,7 @@ const getResultOfStop = (person, statutes) => {
     types.push(13)
   }
 
-  return types.map(item => {
+  const mappedItems = types.map(item => {
     const stopResult = {
       key: item.toString(),
       result: STOP_RESULTS[item - 1].name,
@@ -657,6 +690,17 @@ const getResultOfStop = (person, statutes) => {
 
     return stopResult
   })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '1',
+      result: 'None',
+    },
+  ]
 }
 
 const getWarningCodes = (person, statutes) => {

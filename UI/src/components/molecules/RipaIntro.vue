@@ -7,46 +7,26 @@
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
           <v-row no-gutters dense>
-            <v-col cols="12" sm="12" md="6" class="tw-text-center">
-              <v-btn
-                color="primary"
-                outlined
-                :width="275"
-                @click="handleMotorTemplate"
+            <v-col cols="12" sm="6" class="tw-text-center">
+              <v-btn outlined color="primary" @click="handleMotorTemplate"
+                >Motor/Traffic Template</v-btn
               >
-                Motor/Traffic Template
-              </v-btn>
             </v-col>
-            <v-col cols="12" sm="12" md="6" class="tw-text-center">
+            <v-col cols="12" sm="6" class="tw-text-center">
               <v-btn
-                class="tw-mt-4 sm:tw-mt-0"
-                color="primary"
                 outlined
-                :width="275"
+                color="primary"
                 @click="handleProbationTemplate"
+                class="tw-mt-4 sm:tw-mt-0"
+                >Probation Contact Template</v-btn
               >
-                Probation Contact Template
-              </v-btn>
             </v-col>
-            <v-col cols="12" sm="12" md="6" class="tw-text-center">
-              <v-btn
-                class="tw-mt-4"
-                color="primary"
-                :width="275"
-                @click="handleDefaultTemplate"
+          </v-row>
+          <v-row no-gutters dense>
+            <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
+              <v-btn color="primary" @click="handleDefaultTemplate"
+                >Default Template</v-btn
               >
-                Default Template
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="12" md="6" class="tw-text-center">
-              <v-btn
-                class="tw-mt-4"
-                color="primary"
-                :width="275"
-                @click="handleDefaultTemplate"
-              >
-                Favorite Templates
-              </v-btn>
             </v-col>
           </v-row>
         </v-container>

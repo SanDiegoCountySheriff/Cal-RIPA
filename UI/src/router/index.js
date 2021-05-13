@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import store from '@/store/index'
 import AuthService from '../services/auth'
+import { isValidOfficer } from '@/utilities/officer'
 
 Vue.use(VueRouter)
 
@@ -11,6 +12,13 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
+    beforeEnter(to, from, next) {
+      if (isValidOfficer()) {
+        next()
+      } else {
+        next('/user')
+      }
+    },
   },
   {
     path: '/admin',
