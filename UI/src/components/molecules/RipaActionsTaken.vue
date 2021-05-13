@@ -147,7 +147,7 @@ import {
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
-  CONTRABAND_TYPES,
+  SEIZED_PROPERTY_TYPES,
 } from '@/constants/form'
 
 export default {
@@ -175,7 +175,7 @@ export default {
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled: false,
-      propertySeizedTypeItems: CONTRABAND_TYPES,
+      propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
       viewModel: this.loadModel(this.value),
     }
   },

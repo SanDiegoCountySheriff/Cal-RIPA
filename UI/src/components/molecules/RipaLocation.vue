@@ -10,11 +10,25 @@
             class="tw-mr-2"
             outlined
             small
+            :loading="isGeoLocationLoading"
+            @click="handleCurrentLocation"
+          >
+            Current Location
+          </v-btn>
+          <v-btn
+            class="tw-mr-2"
+            outlined
+            small
             :disabled="!validLastLocation"
             @click="handleLastLocation"
-            >Last Location</v-btn
+            >Last Location
+          </v-btn>
+          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorites">
+            Open Favorites
+          </v-btn>
+          <v-btn outlined small @click="handleSaveFavorite"
+            >Save Location</v-btn
           >
-          <v-btn outlined small disabled>Favorite Locations</v-btn>
         </div>
       </v-row>
       <v-row no-gutters>
@@ -52,6 +66,7 @@
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              round-down
               :rules="blockNumberRules"
               @input="handleInput"
             >
@@ -152,7 +167,6 @@
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
-              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -187,6 +201,7 @@ export default {
 
   data() {
     return {
+      isGeoLocationLoading: false,
       viewModel: this.loadModel(this.value),
     }
   },
@@ -212,11 +227,6 @@ export default {
     cityRules() {
       const city = this.viewModel.location.city
       return [city !== null || 'A city is required']
-    },
-
-    beatRules() {
-      const beat = this.viewModel.location.beat
-      return [beat !== null || 'A beat is required']
     },
 
     blockNumberRules() {
@@ -285,40 +295,109 @@ export default {
   },
 
   methods: {
+    handleCurrentLocation() {
+      if (navigator.geolocation) {
+        this.isGeoLocationLoading = true
+        navigator.geolocation.getCurrentPosition(position => {
+          const positionInfo =
+            'Your current position is (' +
+            'Latitude: ' +
+            position.coords.latitude +
+            ', ' +
+            'Longitude: ' +
+            position.coords.longitude +
+            ')'
+          console.log(positionInfo)
+          this.isGeoLocationLoading = false
+          // https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-117.1328002,32.834727&f=json
+        })
+      } else {
+        console.log('Geolocation is not supported by this browser.')
+      }
+    },
+
     handleInput() {
-      this.updateBeatsModel()
-      this.updateBlockNumberModel()
       this.$emit('input', this.viewModel)
     },
 
+    handleInputOutOfCounty(newVal) {
+      const currentVal = this.viewModel.location.outOfCounty
+      if (newVal !== currentVal) {
+        this.updateOutOfCountyModel()
+        this.handleInput()
+      }
+    },
+
     handleLastLocation() {
-      this.viewModel.location = this.lastLocation
+      if (this.onOpenLastLocation) {
+        this.onOpenLastLocation()
+      }
+    },
+
+    handleOpenFavorites() {
+      if (this.onOpenFavorites) {
+        this.onOpenFavorites()
+      }
+    },
+
+    handleSaveFavorite() {
+      if (this.onSaveFavorite) {
+        this.onSaveFavorite(this.viewModel.location)
+      }
     },
 
     updateBlockNumberModel() {
-      const blockNumber = this.viewModel.location.blockNumber
-      this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
+      this.$nextTick(() => {
+        let blockNumber = this.viewModel.location.blockNumber
+        blockNumber = Math.floor(blockNumber / 100) * 100
+        this.viewModel.location.blockNumber = blockNumber
+      })
     },
 
-    updateBeatsModel() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
-        this.viewModel.location.city = null
-      }
+    updateOutOfCountyModel() {
+      this.$nextTick(() => {
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
 
-      if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
-      ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
-      }
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
+      })
     },
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
+    },
+
+    lastLocation(newVal) {
+      if (newVal) {
+        this.viewModel.location = newVal
+        this.handleInput()
+      }
+    },
+
+    'viewModel.location.outOfCounty': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateOutOfCountyModel()
+        }
+      },
+    },
+
+    'viewModel.location.blockNumber': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateBlockNumberModel()
+        }
+      },
     },
   },
 
@@ -350,6 +429,18 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }

@@ -16,6 +16,7 @@
     :deletable-chips="deletableChips"
     :multiple="multiple"
     :rules="rules"
+    validate-on-blur
   ></v-autocomplete>
 </template>
 

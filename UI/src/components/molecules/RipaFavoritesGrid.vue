@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ripa-favorites-grid">
     <v-card-title>
       <v-text-field
         v-model="search"
@@ -12,28 +12,19 @@
     <v-data-table
       :loading="loading"
       :headers="headers"
-      :items="users"
+      :items="favorites"
       :search="search"
-      sort-by="lastName"
+      @click:row="handleRowClick"
+      sort-by="name"
+      single-select
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="tw-uppercase"
-            >Admin: Maintain Users</v-toolbar-title
+            >Admin: Maintain Favorites</v-toolbar-title
           >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="tw-mb-2"
-                v-bind="attrs"
-                v-on="on"
-              >
-                New Item
-              </v-btn>
-            </template>
             <v-card>
               <v-card-title>
                 <span>{{ formTitle }}</span>
@@ -44,26 +35,9 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.firstName"
-                        label="First Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.lastName"
-                        label="Last Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.startDate"
-                        label="Start Date"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.agency"
-                        label="Agency"
+                        v-model="editedItem.name"
+                        label="Favorite Name"
+                        required
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -82,7 +56,7 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title
-                >Are you sure you want to delete this user?</v-card-title
+                >Are you sure you want to delete this favorite?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -99,10 +73,10 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="tw-mr-2" @click="editItem(item)">
+        <v-icon small class="tw-mr-2" @click="editItem($event, item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
         <div>No Data</div>
@@ -115,35 +89,25 @@
 import { format } from 'date-fns'
 
 export default {
-  name: 'ripa-users-grid',
+  name: 'ripa-favorites-grid',
 
   data() {
     return {
       search: '',
-      users: [],
+      favorites: [],
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'First Name', value: 'firstName' },
-        { text: 'Last Name', value: 'lastName' },
-        { text: 'Full Name', value: 'name' },
-        { text: 'Start Date', value: 'startDate' },
-        { text: 'Agency', value: 'agency' },
+        { text: 'Name', value: 'name' },
+        { text: 'Update Date', value: 'updateDate', width: '150' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
-        firstName: '',
-        lastName: '',
-        startDate: '',
-        agency: '',
+        name: '',
       },
       defaultItem: {
-        firstName: '',
-        lastName: '',
-        startDate: '',
-        agency: '',
+        name: '',
       },
     }
   },
@@ -156,25 +120,27 @@ export default {
 
   methods: {
     init() {
-      this.users = this.items
+      this.favorites = this.items
     },
 
-    editItem(item) {
-      this.editedIndex = this.users.indexOf(item)
+    editItem(event, item) {
+      event.stopPropagation()
+      this.editedIndex = this.favorites.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem(item) {
-      this.editedIndex = this.users.indexOf(item)
+    deleteItem(event, item) {
+      event.stopPropagation()
+      this.editedIndex = this.favorites.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
     deleteItemConfirm() {
-      this.users.splice(this.editedIndex, 1)
-      if (this.onDeleteUser) {
-        this.onDeleteUser(this.editedItem)
+      this.favorites.splice(this.editedIndex, 1)
+      if (this.onDeleteFavorite) {
+        this.onDeleteFavorite(this.editedItem.id)
       }
       this.closeDelete()
     },
@@ -195,28 +161,31 @@ export default {
       })
     },
 
+    handleRowClick(item, row) {
+      row.select(true)
+      if (this.onOpenFavorite) {
+        this.onOpenFavorite(item.id)
+      }
+    },
+
     save() {
-      this.editedName = `${this.editedItem.fullName} ${this.editedItem.lastName}`
+      this.editedItem.updateDate = format(new Date(), 'yyyy-MM-dd')
       if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], this.editedItem)
+        Object.assign(this.favorites[this.editedIndex], this.editedItem)
       } else {
-        this.editedItem.id =
-          format(new Date(), 'yyyy/MM/dd') +
-          (Math.floor(Math.random() * 99999) + 10000).toString()
-        this.users.push(this.editedItem)
+        this.onDeleteFavorite.push(this.editedItem)
       }
 
-      if (this.onEditUser) {
-        this.onEditUser(this.editedItem)
+      if (this.onEditFavorite) {
+        this.onEditFavorite(this.editedItem)
       }
-
       this.close()
     },
   },
 
   watch: {
     items(val) {
-      this.users = val
+      this.favorites = val
     },
     dialog(val) {
       val || this.close()
@@ -239,14 +208,28 @@ export default {
       type: Array,
       default: () => [],
     },
-    onDeleteUser: {
+    onDeleteFavorite: {
       type: Function,
       default: () => {},
     },
-    onEditUser: {
+    onEditFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenFavorite: {
       type: Function,
       default: () => {},
     },
   },
 }
 </script>
+
+<style lang="scss">
+.ripa-favorites-grid {
+  .v-data-table__wrapper {
+    tr:hover {
+      cursor: pointer !important;
+    }
+  }
+}
+</style>

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate } from '@/utilities/dates'
-import AuthService from '../services/auth'
 
 Vue.use(Vuex)
 
@@ -60,8 +59,8 @@ export default new Vuex.Store({
     isAuthenticated: state => {
       return state.user.isAuthenticated
     },
-    isOnline: () => {
-      return navigator.onLine
+    isOnlineAndAuthenticated: state => {
+      return navigator.onLine && state.user.isAuthenticated
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -172,7 +171,6 @@ export default new Vuex.Store({
       state.user = {
         ...state.user,
         isAdmin: isAnAdmin.length > 0,
-        // isAdmin: false,
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,
@@ -183,7 +181,7 @@ export default new Vuex.Store({
   },
 
   actions: {
-    checkTextForPii({ commit }, textValue) {
+    checkTextForPii({ commit, state }, textValue) {
       const document = {
         Document: textValue,
       }
@@ -281,7 +279,7 @@ export default new Vuex.Store({
         })
     },
 
-    deleteUser({ dispatch }, user) {
+    deleteUser({ dispatch, state }, user) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
           headers: {
@@ -382,7 +380,7 @@ export default new Vuex.Store({
         })
     },
 
-    editUser({ dispatch }, user) {
+    editUser({ dispatch, state }, user) {
       return axios
         .put(
           `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
@@ -404,7 +402,7 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ dispatch }, stop) {
+    editOfficerStop({ dispatch, state }, stop) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -686,7 +684,7 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   code: item.offenseCode,
-                  description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
+                  description: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
                 }
               })
               .map(item => {

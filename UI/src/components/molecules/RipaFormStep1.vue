@@ -10,6 +10,9 @@
       :last-location="lastLocation"
       :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-last-location="onOpenLastLocation"
+      :on-save-favorite="onSaveFavorite"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -67,6 +70,18 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }
