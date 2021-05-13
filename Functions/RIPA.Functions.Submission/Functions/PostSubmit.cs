@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -6,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
@@ -41,9 +43,15 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of stops that failed submission")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, SubmitRequest submitRequest, ILogger log)
         {
             log.LogInformation("Submit to DOJ requested");
+
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             Guid submissionId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
             string containerName = _storageContainerNamePrefix + submissionId.ToString();

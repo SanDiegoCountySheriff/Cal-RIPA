@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Security;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,6 +30,11 @@ namespace RIPA.Functions.UserProfile.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Users requested");
+
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
 
             var response = await _userProfileCosmosDbService.GetUserProfilesAsync("SELECT * FROM c ORDER BY c.name");
 

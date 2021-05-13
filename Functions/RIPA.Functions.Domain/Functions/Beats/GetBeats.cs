@@ -27,7 +27,7 @@ namespace RIPA.Functions.Domain.Functions.Beats
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
         [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
         {
-            if(!RIPAAuthorization.ValidateUserRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            if(!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
             {
                 return new UnauthorizedResult();
             }

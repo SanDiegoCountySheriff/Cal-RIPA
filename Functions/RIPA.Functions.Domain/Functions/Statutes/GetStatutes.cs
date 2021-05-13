@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
+using RIPA.Functions.Security;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,6 +28,11 @@ namespace RIPA.Functions.Domain.Functions.Statutes
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
+            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             List<Statute> response = new List<Statute>();
             TableContinuationToken continuationToken = null;
             do

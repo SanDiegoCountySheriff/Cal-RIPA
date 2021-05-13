@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -26,28 +27,81 @@ namespace RIPA.Functions.Security
             return claims.IsInRole("RIPA-ADMINS-ROLE");
         }
 
+        public static async Task<bool> ValidateUserOrAdministratorRole(HttpRequest req, ILogger log)
+        {
+            var claims = await ValidateAccessToken(req, log);
+
+            return claims.IsInRole("RIPA-ADMINS-ROLE") || claims.IsInRole("RIPA-USERS-ROLE");
+        }
+
 
         private static async Task<ClaimsPrincipal> ValidateAccessToken(HttpRequest req, ILogger log)
+        {
+            try
+            {
+                var accessToken = ExtractTokenFromRequestHeaders(req);
+                Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = false;
+#if DEBUG
+                Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+#endif
+
+                SecurityToken securityToken;
+                ISecurityTokenValidator tokenValidator = new JwtSecurityTokenHandler();
+                TokenValidationParameters validationParameters = await ConfigureTokenValidationParameters();
+
+                var claimsPrincipal = tokenValidator.ValidateToken(accessToken, validationParameters, out securityToken);
+
+                if (!claimsPrincipal.Identity.IsAuthenticated)
+                {
+                    throw new SecurityTokenExpiredException();
+                }
+
+                ValidateTokenLifetime(securityToken);
+                ValidateTokenAudience(securityToken);
+
+                return claimsPrincipal;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.ToString());
+                throw;
+            }
+        }
+
+        private static void ValidateTokenAudience(SecurityToken securityToken)
+        {
+            var audiences = ((System.IdentityModel.Tokens.Jwt.JwtSecurityToken)securityToken).Audiences;
+            bool ripaAudience = audiences.Contains(AuthorizationConfiguration.RIPAAppClientID);
+
+            if (!ripaAudience)
+            {
+                throw new SecurityTokenInvalidAudienceException();
+            }
+        }
+
+        private static void ValidateTokenLifetime(SecurityToken securityToken)
+        {
+            double timeLeft = securityToken.ValidTo.ToLocalTime().Subtract(DateTime.Now).TotalMilliseconds;
+
+            if (timeLeft <= 0)
+            {
+                throw new SecurityTokenExpiredException();
+            }
+        }
+
+        private static async Task<TokenValidationParameters> ConfigureTokenValidationParameters()
         {
             var clientID = AuthorizationConfiguration.RIPAAppClientID;
             var authority = AuthorizationConfiguration.RIPAAutorityName;
             var validIssuers = AuthorizationConfiguration.RIPAValidIssuers;
 
-            var accessToken = GetAccessToken(req);
-
-#if DEBUG
-            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-#endif
-
             ConfigurationManager<OpenIdConnectConfiguration> configManager =
-            new ConfigurationManager<OpenIdConnectConfiguration>(
-            $"{authority}/.well-known/openid-configuration",
-            new OpenIdConnectConfigurationRetriever());
+                new ConfigurationManager<OpenIdConnectConfiguration>(
+                    $"{authority}/.well-known/openid-configuration",
+                    new OpenIdConnectConfigurationRetriever());
 
             OpenIdConnectConfiguration config = null;
             config = await configManager.GetConfigurationAsync();
-
-            ISecurityTokenValidator tokenValidator = new JwtSecurityTokenHandler();
 
             TokenValidationParameters validationParameters = new TokenValidationParameters
             {
@@ -56,23 +110,10 @@ namespace RIPA.Functions.Security
                 IssuerSigningKeys = config.SigningKeys
             };
 
-            try
-            {
-                SecurityToken securityToken;
-
-                var claimsPrincipal = tokenValidator.ValidateToken(accessToken, validationParameters, out securityToken);
-
-                return claimsPrincipal;
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex.ToString());
-            }
-
-            return null;
+            return validationParameters;
         }
 
-        private static string GetAccessToken(HttpRequest req)
+        private static string ExtractTokenFromRequestHeaders(HttpRequest req)
         {
             var authorizationHeader = req.Headers?["Authorization"];
 
@@ -83,7 +124,7 @@ namespace RIPA.Functions.Security
                 return parts[1];
             }
 
-            throw new UnauthorizedAccessException();
+            throw new SecurityTokenValidationException();
         }
     }
 }
