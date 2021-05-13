@@ -9,7 +9,7 @@
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
-        :last-location="getLastLocation"
+        :last-location="lastLocation"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
@@ -18,18 +18,38 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-open-favorites="handleOpenFavorites"
+        :on-open-last-location="handleOpenLastLocation"
+        :on-save-favorite="handleSaveFavorite"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-favorites-dialog
+      :show-dialog="showFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditFavorite"
+      :on-open-favorite="handleOpenFavorite"
+      :on-delete-favorite="handleDeleteFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
   </div>
 </template>
 
 <script>
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -38,6 +58,8 @@ export default {
   mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
+    RipaAddFavoriteDialog,
+    RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
   },
@@ -53,8 +75,7 @@ export default {
 
   computed: {
     ...mapGetters([
-      'isOnline',
-      'isAuthenticated',
+      'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
@@ -74,12 +95,7 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      if (
-        this.isOnline &&
-        this.isAuthenticated &&
-        textValue &&
-        textValue.length > 0
-      ) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
         this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
@@ -93,12 +109,7 @@ export default {
     },
 
     async validateBasisForSearchForPii(textValue) {
-      if (
-        this.isOnline &&
-        this.isAuthenticated &&
-        textValue &&
-        textValue.length > 0
-      ) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
         this.loadingPii = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)

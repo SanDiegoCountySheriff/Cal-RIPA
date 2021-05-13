@@ -11,6 +11,7 @@
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
+        :last-location="lastLocation"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
@@ -18,19 +19,39 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-open-favorites="handleOpenFavorites"
+        :on-open-last-location="handleOpenLastLocation"
+        :on-save-favorite="handleSaveFavorite"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-favorites-dialog
+      :show-dialog="showFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditFavorite"
+      :on-open-favorite="handleOpenFavorite"
+      :on-delete-favorite="handleDeleteFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
   </ripa-page-container>
 </template>
 
 <script>
-import RipaPageContainer from './RipaPageContainer'
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaPageContainer from './RipaPageContainer'
 import {
   formBeats,
   formCountyCities,
@@ -45,18 +66,19 @@ export default {
   mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
 
   components: {
-    RipaPageContainer,
+    RipaAddFavoriteDialog,
+    RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaPageContainer,
   },
 
   data() {
     return {
       agency: 'Insight',
       fullStop: {},
-      isAuthenticated: true,
       isEditingForm: false,
-      isOnline: true,
+      isOnlineAndAuthenticated: true,
       loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
@@ -87,10 +109,10 @@ export default {
     },
 
     validateReasonForStopForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         this.loadingPii = true
         let isFound = false
-        isFound = textValue.contains('John Doe')
+        isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
@@ -101,10 +123,10 @@ export default {
     },
 
     validateBasisForSearchForPii(textValue) {
-      if (this.isOnline && this.isAuthenticated && textValue !== '') {
+      if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         this.loadingPii = true
         let isFound = false
-        isFound = textValue.contains('John Doe')
+        isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound

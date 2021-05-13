@@ -6,25 +6,48 @@ import {
   GENDERS,
   DISABILITIES,
   STOP_REASONS,
+  EDUCATION_VIOLATIONS,
+  EDUCATION_CODE_SECTIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   CONTRABAND_TYPES,
+  SEIZED_PROPERTY_TYPES,
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
+export const defaultStop = (
+  yearsExperience,
+  assignment,
+  otherType,
+  officerId,
+  agency,
+) => {
   return {
     actionsTaken: {},
     agency,
     id: new Date().getTime(),
     created: new Date(),
+    location: {
+      isSchool: false,
+      school: null,
+      blockNumber: null,
+      streetName: null,
+      intersection: null,
+      moreLocationOptions: false,
+      highwayExit: null,
+      landmark: null,
+      outOfCounty: false,
+      city: null,
+      beat: null,
+    },
     officer: {
       editOfficer: false,
       yearsExperience,
       assignment,
+      otherType,
     },
     officerId,
     person: {
@@ -32,23 +55,43 @@ export const defaultStop = (yearsExperience, assignment, officerId, agency) => {
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {},
     stopResult: {},
   }
 }
 
-export const motorStop = (yearsExperience, assignment, officerId, agency) => {
+export const motorStop = (
+  yearsExperience,
+  assignment,
+  otherType,
+  officerId,
+  agency,
+) => {
   return {
     actionsTaken: {},
     agency,
     created: new Date(),
     id: new Date().getTime(),
+    location: {
+      isSchool: false,
+      school: null,
+      blockNumber: null,
+      streetName: null,
+      intersection: null,
+      moreLocationOptions: false,
+      highwayExit: null,
+      landmark: null,
+      outOfCounty: false,
+      city: null,
+      beat: null,
+    },
     officer: {
       editOfficer: false,
       yearsExperience,
       assignment,
+      otherType,
     },
     officerId,
     person: {
@@ -56,7 +99,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {
       reasonForStop: 1,
@@ -76,6 +119,8 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
       actionsTakenDuringStop8: false,
       actionsTakenDuringStop9: false,
       actionsTakenDuringStop10: false,
+      actionsTakenDuringStop12: false,
+      actionsTakenDuringStop13: false,
       warningCodes: [],
       citationCodes: [54106],
       infieldCodes: [],
@@ -87,6 +132,7 @@ export const motorStop = (yearsExperience, assignment, officerId, agency) => {
 export const probationStop = (
   yearsExperience,
   assignment,
+  otherType,
   officerId,
   agency,
 ) => {
@@ -99,10 +145,24 @@ export const probationStop = (
     agency,
     created: new Date(),
     id: new Date().getTime(),
+    location: {
+      isSchool: false,
+      school: null,
+      blockNumber: null,
+      streetName: null,
+      intersection: null,
+      moreLocationOptions: false,
+      highwayExit: null,
+      landmark: null,
+      outOfCounty: false,
+      city: null,
+      beat: null,
+    },
     officer: {
       editOfficer: false,
       yearsExperience: yearsExperience,
       assignment: assignment,
+      otherType,
     },
     officerId,
     person: {
@@ -110,7 +170,7 @@ export const probationStop = (
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'h:mm'),
+      time: format(new Date(), 'k:mm'),
     },
     stopReason: {
       reasonForStop: 3,
@@ -176,13 +236,12 @@ export const getPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: getGenderNonconforming(person),
+      genderNonconforming: person.person?.genderNonconforming || false,
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
-      listContrabandOrEvidenceDiscovered: getContrabandOrEvidenceDiscovered(
-        person,
-      ),
+      listContrabandOrEvidenceDiscovered:
+        getContrabandOrEvidenceDiscovered(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
@@ -307,11 +366,6 @@ const getPerceivedGenderText = person => {
   return gender ? gender.text : ''
 }
 
-const getGenderNonconforming = person => {
-  const gender = getPerceivedGender(person)
-  return gender ? gender.code === 5 : null
-}
-
 const getPerceivedOrKnownDisability = person => {
   const disability = person.perceivedOrKnownDisability || []
 
@@ -345,6 +399,9 @@ const getReasonForStopDetails = (reasonKey, person) => {
   if (reasonKey === 2) {
     return [getReasonableSuspicion(person)]
   }
+  if (reasonKey === 7) {
+    return [getEducationViolation(person)]
+  }
 
   return []
 }
@@ -353,11 +410,26 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
   if (reasonKey === 1) {
     return [getTrafficViolationCode(person, statutes)]
   }
-  if (reasonKey === 1) {
+  if (reasonKey === 2) {
     return [getReasonableSuspicionCode(person, statutes)]
+  }
+  if (reasonKey === 7) {
+    return [getEducationViolationCode(person)]
   }
 
   return []
+}
+
+const getEducationViolation = person => {
+  const violation = person.stopReason?.educationViolation || null
+  if (violation) {
+    return {
+      key: violation.toString(),
+      reason: violation ? EDUCATION_VIOLATIONS[violation - 1].name : 'N/A',
+    }
+  }
+
+  return null
 }
 
 const getTrafficViolation = person => {
@@ -379,6 +451,29 @@ const getStatute = (code, statutes) => {
       code: code.toString(),
       text: filteredStatute ? filteredStatute.fullName : 'N/A',
     }
+  }
+
+  return null
+}
+
+const getEducationCodeSection = code => {
+  if (code) {
+    const [filteredSubsection] = EDUCATION_CODE_SECTIONS.filter(
+      item => item.code === code,
+    )
+    return {
+      code: code.toString(),
+      text: filteredSubsection ? filteredSubsection.fullName : 'N/A',
+    }
+  }
+
+  return null
+}
+
+const getEducationViolationCode = person => {
+  const code = person.stopReason?.educationViolationCode || null
+  if (code) {
+    return getEducationCodeSection(code)
   }
 
   return null
@@ -462,7 +557,7 @@ const getTypeOfPropertySeized = person => {
   return types.map(item => {
     return {
       key: item.toString(),
-      type: CONTRABAND_TYPES[item - 1].name,
+      type: SEIZED_PROPERTY_TYPES[item - 1].name,
     }
   })
 }
@@ -500,6 +595,10 @@ const getResultOfStop = (person, statutes) => {
     person.stopResult?.actionsTakenDuringStop9 || false
   const actionsTakenDuringStop10 =
     person.stopResult?.actionsTakenDuringStop10 || false
+  const actionsTakenDuringStop12 =
+    person.stopResult?.actionsTakenDuringStop12 || false
+  const actionsTakenDuringStop13 =
+    person.stopResult?.actionsTakenDuringStop13 || false
 
   if (actionsTakenDuringStop1) {
     types.push(1)
@@ -530,6 +629,12 @@ const getResultOfStop = (person, statutes) => {
   }
   if (actionsTakenDuringStop10) {
     types.push(10)
+  }
+  if (actionsTakenDuringStop12) {
+    types.push(12)
+  }
+  if (actionsTakenDuringStop13) {
+    types.push(13)
   }
 
   return types.map(item => {

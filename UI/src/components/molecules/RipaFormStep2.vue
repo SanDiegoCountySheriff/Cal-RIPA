@@ -1,6 +1,8 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-student v-model="model" toggle></ripa-student>
+    <template v-if="isSchool">
+      <ripa-student v-model="model" toggle></ripa-student>
+    </template>
     <ripa-race v-model="model"></ripa-race>
     <ripa-gender v-model="model"></ripa-gender>
     <ripa-age v-model="model"></ripa-age>
@@ -51,6 +53,12 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+  },
+
+  computed: {
+    isSchool() {
+      return this.viewModel.location.isSchool
+    },
   },
 
   props: {

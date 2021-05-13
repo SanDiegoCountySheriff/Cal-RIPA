@@ -9,6 +9,7 @@
       :value="item.value"
       :rules="rules"
       :hide-details="index < items.length - 1"
+      validate-on-blur
     ></v-checkbox>
   </div>
 </template>

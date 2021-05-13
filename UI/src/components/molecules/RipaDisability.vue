@@ -20,7 +20,7 @@
           <template v-if="model.person.anyDisabilities">
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
-              :items="disabilityItems"
+              :items="getDisabilityItems"
               :rules="disabilityRules"
               @input="handleInput"
             >
@@ -65,6 +65,14 @@ export default {
       },
     },
 
+    getDisabilityItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.disabilityItems
+      }
+
+      return this.disabilityItems.filter(item => item.value !== 7)
+    },
+
     disabilityRules() {
       const checked = this.viewModel.person.anyDisabilities
       const options = this.viewModel.person.perceivedOrKnownDisability
@@ -77,20 +85,27 @@ export default {
 
   methods: {
     handleInput() {
-      this.updatePerceivedOrKnownDisabilityModel()
       this.$emit('input', this.viewModel)
     },
 
     updatePerceivedOrKnownDisabilityModel() {
-      if (!this.viewModel.person.anyDisabilities) {
+      this.$nextTick(() => {
         this.viewModel.person.perceivedOrKnownDisability = []
-      }
+      })
     },
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
+    },
+
+    'viewModel.person.anyDisabilities': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updatePerceivedOrKnownDisabilityModel()
+        }
+      },
     },
   },
 

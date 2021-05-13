@@ -64,6 +64,9 @@
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"
+                :on-open-favorites="onOpenFavorites"
+                :on-open-last-location="onOpenLastLocation"
+                :on-save-favorite="onSaveFavorite"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -294,7 +297,7 @@ export default {
         message: `Are you sure you want to cancel the form? You will lose all changes.`,
         button: {
           no: 'No',
-          yes: 'Cancel',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {
@@ -315,7 +318,7 @@ export default {
         message: `Are you sure you want to delete the person?`,
         button: {
           no: 'No',
-          yes: 'Delete',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {
@@ -361,7 +364,7 @@ export default {
         message: `Are you sure you want to submit the form?`,
         button: {
           no: 'No',
-          yes: 'Submit',
+          yes: 'Yes',
         },
         callback: confirm => {
           if (confirm) {
@@ -433,6 +436,18 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
       type: Function,
       default: () => {},
     },

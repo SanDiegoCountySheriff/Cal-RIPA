@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="600">
+  <v-card class="mx-auto" max-width="650">
     <v-card-title class="tw-uppercase">Ripa Stops</v-card-title>
 
     <v-card-text>
@@ -7,26 +7,46 @@
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
           <v-row no-gutters dense>
-            <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn outlined color="primary" @click="handleMotorTemplate"
-                >Motor/Traffic Template</v-btn
-              >
-            </v-col>
-            <v-col cols="12" sm="6" class="tw-text-center">
+            <v-col cols="12" sm="12" md="6" class="tw-text-center">
               <v-btn
-                outlined
                 color="primary"
-                @click="handleProbationTemplate"
-                class="tw-mt-4 sm:tw-mt-0"
-                >Probation Contact Template</v-btn
+                outlined
+                :width="275"
+                @click="handleMotorTemplate"
               >
+                Motor/Traffic Template
+              </v-btn>
             </v-col>
-          </v-row>
-          <v-row no-gutters dense>
-            <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="primary" @click="handleDefaultTemplate"
-                >Default Template</v-btn
+            <v-col cols="12" sm="12" md="6" class="tw-text-center">
+              <v-btn
+                class="tw-mt-4 sm:tw-mt-0"
+                color="primary"
+                outlined
+                :width="275"
+                @click="handleProbationTemplate"
               >
+                Probation Contact Template
+              </v-btn>
+            </v-col>
+            <v-col cols="12" sm="12" md="6" class="tw-text-center">
+              <v-btn
+                class="tw-mt-4"
+                color="primary"
+                :width="275"
+                @click="handleDefaultTemplate"
+              >
+                Default Template
+              </v-btn>
+            </v-col>
+            <v-col cols="12" sm="12" md="6" class="tw-text-center">
+              <v-btn
+                class="tw-mt-4"
+                color="primary"
+                :width="275"
+                @click="handleDefaultTemplate"
+              >
+                Favorite Templates
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>

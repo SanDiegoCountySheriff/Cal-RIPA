@@ -4,6 +4,7 @@
     :label="label"
     :rules="rules"
     :hide-details="hideDetails"
+    validate-on-blur
   ></v-checkbox>
 </template>
 

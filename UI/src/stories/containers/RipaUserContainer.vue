@@ -25,6 +25,7 @@ export default {
         officer: {
           yearsExperience: this.getOfficerYearsExperience(),
           assignment: this.getOfficerAssignment(),
+          otherType: this.getOfficerOtherType(),
         },
       }
     },
@@ -43,12 +44,18 @@ export default {
       return +assignment || null
     },
 
+    getOfficerOtherType() {
+      const otherType = localStorage.getItem('ripa_officer_other_type')
+      return otherType || null
+    },
+
     setStop(stop) {
       localStorage.setItem(
         'ripa_officer_years_experience',
         stop.officer.yearsExperience,
       )
       localStorage.setItem('ripa_officer_assignment', stop.officer.assignment)
+      localStorage.setItem('ripa_officer_other_type', stop.officer.otherType)
     },
 
     handleUpdate(stop) {
