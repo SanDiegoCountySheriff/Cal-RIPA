@@ -182,7 +182,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             school.ETag = "*";
             school.PartitionKey = "CA";
             school.RowKey = row.ItemArray[0].ToString();
-            school.CDSCode = Convert.ToInt64(school.RowKey);
+            school.CDSCode = school.RowKey;
             school.Status = row.ItemArray[1].ToString();
             school.County = row.ItemArray[2].ToString();
             school.District = row.ItemArray[3].ToString();
