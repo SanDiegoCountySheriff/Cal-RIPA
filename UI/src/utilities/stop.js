@@ -230,8 +230,6 @@ export const apiStop = (
 export const getPeopleListed = (fullStop, statutes) => {
   return fullStop.people.map(person => {
     return {
-      basisForPropertySeizure: getBasisForPropertySeizure(person),
-      basisForSearch: getBasisForSearch(person),
       basisForSearchBrief:
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
@@ -240,11 +238,14 @@ export const getPeopleListed = (fullStop, statutes) => {
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      listBasisForPropertySeizure: getBasisForPropertySeizure(person),
+      listBasisForSearch: getBasisForSearch(person),
       listContrabandOrEvidenceDiscovered:
         getContrabandOrEvidenceDiscovered(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStop(person, statutes),
+      listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
@@ -253,7 +254,6 @@ export const getPeopleListed = (fullStop, statutes) => {
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
-      typeOfPropertySeized: getTypeOfPropertySeized(person),
     }
   })
 }
