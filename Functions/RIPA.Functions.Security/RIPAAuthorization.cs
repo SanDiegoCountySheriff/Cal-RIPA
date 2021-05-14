@@ -113,7 +113,7 @@ namespace RIPA.Functions.Security
             return validationParameters;
         }
 
-        private static string ExtractTokenFromRequestHeaders(HttpRequest req)
+        public static string ExtractTokenFromRequestHeaders(HttpRequest req)
         {
             var authorizationHeader = req.Headers?["Authorization"];
 

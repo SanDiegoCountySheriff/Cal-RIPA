@@ -37,6 +37,8 @@ namespace RIPA.Functions.Common.Models
     {
         [EnumMember(Value = "FileLevelFatalError")]
         FileLevelFatalError,
+        [EnumMember(Value = "RecordLevelFatalError")]
+        RecordLevelFatalError,
         [EnumMember(Value = "RecordLevelError")]
         RecordLevelError
     }
@@ -202,7 +204,7 @@ namespace RIPA.Functions.Common.Models
     {
         public string Result { get; set; }
         public Codes[] ListCodes { get; set; }
-        public int Key { get; set; }
+        public string Key { get; set; }
     }
 
 }
