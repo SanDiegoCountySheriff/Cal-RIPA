@@ -75,6 +75,7 @@
 
             <v-stepper-content step="2">
               <ripa-subheader
+                class="tw-text-right"
                 :text="getEditPersonText"
                 no-margins
               ></ripa-subheader>
@@ -254,7 +255,8 @@ export default {
 
   computed: {
     getEditPersonText() {
-      return `Person: ${this.stop.person.id}`
+      const personIndex = this.stop.person.index || 1
+      return `Person: ${personIndex}`
     },
 
     getFormStep2BackButtonVisible() {

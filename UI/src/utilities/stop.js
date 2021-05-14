@@ -53,6 +53,7 @@ export const defaultStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -100,6 +101,7 @@ export const motorStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -172,6 +174,7 @@ export const probationStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),

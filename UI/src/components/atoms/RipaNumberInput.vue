@@ -44,7 +44,7 @@ export default {
 
     handleInput(newVal) {
       this.$nextTick(() => {
-        this.viewModel = newVal
+        this.viewModel = Number(newVal)
         this.$emit('input', this.viewModel)
       })
     },
