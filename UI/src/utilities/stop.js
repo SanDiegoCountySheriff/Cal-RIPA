@@ -264,6 +264,7 @@ export const getPeopleListed = (fullStop, statutes) => {
 }
 
 const getPiiFound = fullStop => {
+  const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false
   let basisForSearchPiiFound = false
@@ -277,7 +278,7 @@ const getPiiFound = fullStop => {
     }
   }
 
-  return reasonForStopPiiFound || basisForSearchPiiFound
+  return locationPiiFound || reasonForStopPiiFound || basisForSearchPiiFound
 }
 
 const getOfficerAssignment = fullStop => {

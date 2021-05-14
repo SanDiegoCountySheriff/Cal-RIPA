@@ -14,6 +14,7 @@
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
+      :on-gps-location="onGpsLocation"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -104,6 +105,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

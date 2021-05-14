@@ -191,7 +191,6 @@ export default new Vuex.Store({
           document,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -209,11 +208,37 @@ export default new Vuex.Store({
         })
     },
 
+    checkGpsLocation({ commit }) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const positionInfo =
+          'Your current position is (' +
+          'Latitude: ' +
+          position.coords.latitude +
+          ', ' +
+          'Longitude: ' +
+          position.coords.longitude +
+          ')'
+        console.log(positionInfo)
+        const latLong = `${position.coords.longitude},${position.coords.latitude}`
+        const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
+        return fetch(url)
+          .then(response => response.json())
+          .then(data => console.log(data))
+        // return axios
+        //   .get(url)
+        //   .then(response => {
+        //     console.log(response)
+        //   })
+        //   .catch(error => {
+        //     console.log('There was an error retrieving GPS location.', error)
+        //   })
+      })
+    },
+
     deleteBeat({ dispatch, state }, beat) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -231,7 +256,6 @@ export default new Vuex.Store({
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.id}`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -249,7 +273,6 @@ export default new Vuex.Store({
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.id}`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -269,7 +292,6 @@ export default new Vuex.Store({
           `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.id}`,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
@@ -288,7 +310,6 @@ export default new Vuex.Store({
       return axios
         .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -306,7 +327,6 @@ export default new Vuex.Store({
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -328,7 +348,6 @@ export default new Vuex.Store({
           city,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -351,7 +370,6 @@ export default new Vuex.Store({
           school,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -374,7 +392,6 @@ export default new Vuex.Store({
           statute,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -397,7 +414,6 @@ export default new Vuex.Store({
           user,
           {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Content-Type': 'application/json',
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -417,7 +433,6 @@ export default new Vuex.Store({
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -436,7 +451,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -466,7 +480,6 @@ export default new Vuex.Store({
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
@@ -498,7 +511,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -537,7 +549,6 @@ export default new Vuex.Store({
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
@@ -596,7 +607,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -636,7 +646,6 @@ export default new Vuex.Store({
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
@@ -671,7 +680,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
@@ -704,7 +712,6 @@ export default new Vuex.Store({
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
             headers: {
-              Authorization: sessionStorage.getItem('ripa-idToken'),
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
@@ -738,7 +745,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUsers`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
           },
@@ -763,7 +769,6 @@ export default new Vuex.Store({
       return axios
         .get(`${state.apiConfig.apiBaseUrl}stop/GetStops`, {
           headers: {
-            Authorization: sessionStorage.getItem('ripa-idToken'),
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },

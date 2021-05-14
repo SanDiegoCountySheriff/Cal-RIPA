@@ -68,6 +68,7 @@
                 :on-open-favorites="onOpenFavorites"
                 :on-open-last-location="onOpenLastLocation"
                 :on-save-favorite="onSaveFavorite"
+                :on-gps-location="onGpsLocation"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
@@ -453,6 +454,10 @@ export default {
       default: () => {},
     },
     onSubmit: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

@@ -64,7 +64,7 @@
 
               <ripa-check-group
                 v-model="model.actionsTaken.basisForSearch"
-                :items="basisForSearchItems"
+                :items="getBasisForSearchItems"
                 :rules="basisForSearchRules"
                 @input="handleInput"
               >
@@ -171,7 +171,7 @@ export default {
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
       ],
-      actionTakenItems: ACTIONS_TAKEN,
+      actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled: false,
@@ -224,13 +224,13 @@ export default {
     },
 
     getActionsTakenGeneralItems() {
-      return this.actionTakenItems.filter(
+      return this.actionsTakenItems.filter(
         item => ![17, 18, 19, 20].includes(item.value),
       )
     },
 
     getActionsTakenSearchItems() {
-      return this.actionTakenItems
+      return this.actionsTakenItems
         .filter(item => [17, 18, 19, 20].includes(item.value))
         .map(item => {
           return {
@@ -240,6 +240,16 @@ export default {
               (item.value === 18 || item.value === 20),
           }
         })
+    },
+
+    getBasisForSearchitems() {
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      if (actionsTaken.includes(20)) {
+        return this.basisForSearchItems
+      }
+
+      return this.basisForSearchItems.filter(item => item.value !== 12)
     },
 
     wasSearchConducted() {

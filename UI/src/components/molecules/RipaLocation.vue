@@ -6,15 +6,17 @@
     <v-container>
       <v-row no-gutters>
         <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
-          <v-btn
-            class="tw-mr-2"
-            outlined
-            small
-            :loading="isGeoLocationLoading"
-            @click="handleCurrentLocation"
-          >
-            Current Location
-          </v-btn>
+          <template v-if="isGeolocationAvailable">
+            <v-btn
+              class="tw-mr-2"
+              outlined
+              small
+              :loading="isGeoLocationLoading"
+              @click="handleCurrentLocation"
+            >
+              Current Location
+            </v-btn>
+          </template>
           <v-btn
             class="tw-mr-2"
             outlined
@@ -227,6 +229,10 @@ export default {
       },
     },
 
+    isGeolocationAvailable() {
+      return navigator.geolocation
+    },
+
     getCities() {
       const checked = this.viewModel.location.outOfCounty
       return checked ? this.nonCountyCities : this.countyCities
@@ -311,20 +317,9 @@ export default {
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        this.isGeoLocationLoading = true
-        navigator.geolocation.getCurrentPosition(position => {
-          const positionInfo =
-            'Your current position is (' +
-            'Latitude: ' +
-            position.coords.latitude +
-            ', ' +
-            'Longitude: ' +
-            position.coords.longitude +
-            ')'
-          console.log(positionInfo)
-          this.isGeoLocationLoading = false
-          // https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-117.1328002,32.834727&f=json
-        })
+        if (this.onGpsLocation) {
+          this.onGpsLocation()
+        }
       } else {
         console.log('Geolocation is not supported by this browser.')
       }
@@ -468,6 +463,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

@@ -14,6 +14,7 @@
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
+      :on-gps-location="onGpsLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
@@ -118,6 +119,10 @@ export default {
       default: () => {},
     },
     onSubmit: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

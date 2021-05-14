@@ -21,6 +21,7 @@
         :on-open-favorites="handleOpenFavorites"
         :on-open-last-location="handleOpenLastLocation"
         :on-save-favorite="handleSaveFavorite"
+        :on-gps-location="handleGpsLocation"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
@@ -83,15 +84,22 @@ export default {
       'mappedFormStatutes',
       'officerId',
       'agency',
+      'gpsLocationAddress',
     ]),
   },
 
   methods: {
-    ...mapActions(['checkTextForPii']),
+    ...mapActions(['checkTextForPii', 'checkGpsLocation']),
 
     handleSubmit(apiStop) {
       this.addApiStop(apiStop)
       this.setLastLocation(this.stop)
+    },
+
+    async handleGpsLocation() {
+      this.isGeoLocationLoading = true
+      await this.checkGpsLocation()
+      this.isGeoLocationLoading = false
     },
 
     async validateLocationForPii(textValue) {
