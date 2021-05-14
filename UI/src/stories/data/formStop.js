@@ -23,7 +23,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: uniqueId(),
+    id: new Date().getTime(),
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -100,7 +100,7 @@ export const onePersonFullStop = {
   },
   people: [
     {
-      id: uniqueId(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -178,7 +178,7 @@ export const twoPersonFullStop = {
   },
   people: [
     {
-      id: uniqueId(),
+      id: new Date().getTime(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -226,7 +226,7 @@ export const twoPersonFullStop = {
       },
     },
     {
-      id: uniqueId(),
+      id: new Date().getTime(),
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,

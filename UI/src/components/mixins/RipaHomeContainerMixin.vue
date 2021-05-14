@@ -42,7 +42,7 @@ export default {
 
     handleAddFavorite(name) {
       const location = {
-        id: uniqueId(),
+        id: new Date().getTime(),
         name,
         location: this.savedLocation,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
@@ -56,7 +56,7 @@ export default {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.person = {
-        id: uniqueId(),
+        id: new Date().getTime(),
         isStudent: false,
         perceivedRace: null,
         perceivedGender: null,
