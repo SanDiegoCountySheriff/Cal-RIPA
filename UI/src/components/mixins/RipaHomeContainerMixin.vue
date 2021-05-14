@@ -5,7 +5,6 @@ import {
   getOfficerOtherType,
 } from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
-import { uniqueId } from '@/utilities/dates'
 import { format } from 'date-fns'
 
 export default {
