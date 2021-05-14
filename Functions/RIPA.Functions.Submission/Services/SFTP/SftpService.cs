@@ -75,9 +75,14 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 client.Connect();
                 var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(stop, settings));
-                MemoryStream stream = new MemoryStream(bytes);
-                blobClient.UploadAsync(stream); // stream file to Azure Blob
-                client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
+                using( MemoryStream stream = new MemoryStream(bytes))
+                {
+                    blobClient.UploadAsync(stream); // stream file to Azure Blob
+                }
+                using (MemoryStream stream = new MemoryStream(bytes))
+                {
+                    client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
+                }
                 _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             catch (Exception exception)
