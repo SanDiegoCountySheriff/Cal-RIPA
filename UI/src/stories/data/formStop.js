@@ -1,5 +1,7 @@
+import { uniqueId } from '@/utilities/dates'
+
 export const sampleStop = {
-  id: new Date().getTime(),
+  id: uniqueId(),
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
   stopDate: {
     date: '2021-05-07',
@@ -21,7 +23,7 @@ export const sampleStop = {
     beat: 555,
   },
   person: {
-    id: new Date().getTime(),
+    id: uniqueId(),
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -73,7 +75,7 @@ export const sampleStop = {
 }
 
 export const onePersonFullStop = {
-  id: new Date().getTime(),
+  id: uniqueId(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -98,7 +100,7 @@ export const onePersonFullStop = {
   },
   people: [
     {
-      id: new Date().getTime(),
+      id: uniqueId(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -151,7 +153,7 @@ export const onePersonFullStop = {
 }
 
 export const twoPersonFullStop = {
-  id: new Date().getTime(),
+  id: uniqueId(),
   created: '2021-05-07T14:30:29.321Z',
   updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
@@ -176,7 +178,7 @@ export const twoPersonFullStop = {
   },
   people: [
     {
-      id: new Date().getTime(),
+      id: uniqueId(),
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -224,7 +226,7 @@ export const twoPersonFullStop = {
       },
     },
     {
-      id: new Date().getTime(),
+      id: uniqueId(),
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,

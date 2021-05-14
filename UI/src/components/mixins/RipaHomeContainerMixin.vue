@@ -5,6 +5,7 @@ import {
   getOfficerOtherType,
 } from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
+import { uniqueId } from '@/utilities/dates'
 import { format } from 'date-fns'
 
 export default {
@@ -41,7 +42,7 @@ export default {
 
     handleAddFavorite(name) {
       const location = {
-        id: new Date().getTime(),
+        id: uniqueId(),
         name,
         location: this.savedLocation,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
@@ -55,7 +56,7 @@ export default {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.person = {
-        id: new Date().getTime(),
+        id: uniqueId(),
         isStudent: false,
         perceivedRace: null,
         perceivedGender: null,

@@ -113,6 +113,9 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
+    gpsLocationAddress: () => {
+      return ''
+    },
   },
 
   mutations: {

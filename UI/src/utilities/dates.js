@@ -1,4 +1,5 @@
 import differenceInHours from 'date-fns/differenceInHours'
+import { format } from 'date-fns'
 
 export const formatDate = dateStr => {
   if (dateStr && dateStr.length > 0) {
@@ -26,4 +27,8 @@ export const dateWithinLastHours = (dateStr, timeStr, hours) => {
 export const formatDateTime = (dateStr, timeStr) => {
   const date = Date.parse(`${dateStr} ${timeStr}`)
   return new Date(date)
+}
+
+export const uniqueId = () => {
+  return format(new Date(), 'yyyyMMddkkmm')
 }

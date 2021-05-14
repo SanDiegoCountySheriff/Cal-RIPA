@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { formatDateTime } from '@/utilities/dates'
+import { formatDateTime, uniqueId } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
   RACES,
@@ -28,7 +28,7 @@ export const defaultStop = (
   return {
     actionsTaken: {},
     agency,
-    id: new Date().getTime(),
+    id: uniqueId(),
     created: new Date(),
     location: {
       isSchool: false,
@@ -52,7 +52,7 @@ export const defaultStop = (
     },
     officerId,
     person: {
-      id: new Date().getTime(),
+      id: uniqueId(),
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -74,7 +74,7 @@ export const motorStop = (
     actionsTaken: {},
     agency,
     created: new Date(),
-    id: new Date().getTime(),
+    id: uniqueId(),
     location: {
       isSchool: false,
       school: null,
@@ -97,7 +97,7 @@ export const motorStop = (
     },
     officerId,
     person: {
-      id: new Date().getTime(),
+      id: uniqueId(),
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -146,7 +146,7 @@ export const probationStop = (
     },
     agency,
     created: new Date(),
-    id: new Date().getTime(),
+    id: uniqueId(),
     location: {
       isSchool: false,
       school: null,
@@ -169,7 +169,7 @@ export const probationStop = (
     },
     officerId,
     person: {
-      id: new Date().getTime(),
+      id: uniqueId(),
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
