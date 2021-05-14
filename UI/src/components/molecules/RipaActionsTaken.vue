@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-action-taken tw-pb-8">
-    {{ model.actionsTaken }}
     <ripa-form-header
       title="Actions Taken During Stop"
       required
