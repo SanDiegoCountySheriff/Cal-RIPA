@@ -1,6 +1,8 @@
 ﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Services.Stop.CosmosDb;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.CosmosDb;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST;
@@ -22,12 +24,13 @@ namespace RIPA.Functions.Submission
         {
             builder.Services.AddSingleton<IStopService>(InitializeStopService());
             builder.Services.AddSingleton<ISftpService>(InitializeSftpService());
-            builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeSubmissionCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<IStopCosmosDbService>(InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult());
         }
 
         private static StopService InitializeStopService()
         {
-            return new StopService(new HttpClient(), Environment.GetEnvironmentVariable("GetStopUrl"), Environment.GetEnvironmentVariable("PutStopUrl"));
+            return new StopService();
         }
 
         private static SftpService InitializeSftpService()
@@ -45,10 +48,10 @@ namespace RIPA.Functions.Submission
             return new SftpService(loggerFactory.CreateLogger(typeof(SftpService)), sftpConfig);
         }
 
-        private static async Task<SubmissionCosmosDbService> InitializeCosmosClientInstanceAsync()
+        private static async Task<SubmissionCosmosDbService> InitializeSubmissionCosmosClientInstanceAsync()
         {
             string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("ContainerName");
+            string containerName = Environment.GetEnvironmentVariable("ContainerNameSubmissions");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
             Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
@@ -58,5 +61,20 @@ namespace RIPA.Functions.Submission
 
             return cosmosDbService;
         }
+
+        private static async Task<StopCosmosDbService> InitializeStopCosmosClientInstanceAsync()
+        {
+            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+            string containerName = Environment.GetEnvironmentVariable("ContainerNameStops");
+            string account = Environment.GetEnvironmentVariable("Account");
+            string key = Environment.GetEnvironmentVariable("Key");
+            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            StopCosmosDbService cosmosDbService = new StopCosmosDbService(client, databaseName, containerName);
+            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+
+            return cosmosDbService;
+        }
+
     }
 }

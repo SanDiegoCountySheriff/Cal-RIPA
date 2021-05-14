@@ -14,46 +14,6 @@ namespace RIPA.Functions.Submission.Services.REST
 {
     public class StopService : IStopService
     {
-        private static string _getStopUrl;
-        private static string _putStopUrl;
-        private static HttpClient _httpClient;
-        public StopService(HttpClient httpClient, string getStopUrl, string putStopUrl)
-        {
-            _httpClient = httpClient;
-            _getStopUrl = getStopUrl;
-            _putStopUrl = putStopUrl;
-        }
-
-        public async Task<Stop> GetStopAsync(string id)
-        {
-            var response = await _httpClient.GetAsync(_getStopUrl.Replace("{Id}", id));
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception($"Failed Get Stop for submission by stop id: {id}");
-            }
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            Stop stop = JsonSerializer.Deserialize<Stop>(jsonString, options);
-            return stop;
-        }
-
-        public async Task<Stop> PutStopAsync(Stop stop)
-        {
-            var httpContent = new StringContent(JsonSerializer.Serialize(stop), UnicodeEncoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(_putStopUrl.Replace("{Id}", stop.id), httpContent);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception($"Failed Put Stop Submission for stop id: {stop.id}");
-            }
-            return stop;
-
-        }
-
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
         {
             Common.Models.Submission submission = new Common.Models.Submission
@@ -117,11 +77,11 @@ namespace RIPA.Functions.Submission.Services.REST
                 {
                     Loc = CastToDojLocation(stop.Location),
                     City = stop.Location.City.Codes.Code,
-                    K12_Flag = stop.Location.School ? "Y" : null,
-                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : null
+                    K12_Flag = stop.Location.School ? "Y" : string.Empty,
+                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped)
+                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School)
             };
             return dojStop;
         }
@@ -140,7 +100,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return dojLocation;
         }
 
-        public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
+        public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
         {
             var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
@@ -162,10 +122,9 @@ namespace RIPA.Functions.Submission.Services.REST
                         },
                         Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
                         LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
-                        GenNC = personStopped.GenderNonconforming ? "Y" : "N"
-
+                        GenNC = personStopped.GenderNonconforming ? "5" : string.Empty
                     },
-                    Is_Stud = personStopped.IsStudent ? "Y" : "N",
+                    Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
                     ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
                     ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToArray() },
@@ -195,14 +154,16 @@ namespace RIPA.Functions.Submission.Services.REST
                 case "1": //Traffic Violation
                     primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
                     primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 case "2": //Reasonable Suspicion
-                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key.Split(",") };
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToArray() };
                     primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
                     break;
                 case "7": //Education Code
                     primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
                     primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 default: //All other stop reason keys
                     break;
@@ -236,7 +197,7 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 Result result = new Result
                 {
-                    ResCD = ros.Result,
+                    ResCD = ros.Key,
                     Res_O_CD = ros.ListCodes.Select(x => x.Code).ToArray()
                 };
                 listResults.Add(result);

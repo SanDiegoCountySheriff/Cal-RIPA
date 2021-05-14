@@ -14,7 +14,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Submission", "RIPA.Functions.Submission\RIPA.Functions.Submission.csproj", "{FE63A249-2AC4-415F-A839-BC5D46BDFAB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Common.Models", "RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj", "{6E87F55B-3C74-4DF3-9933-19E0B14967CB}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Security", "RIPA.Functions.Security\RIPA.Functions.Security.csproj", "{F6D39E84-EEDA-488B-91D5-DBBB8B6EC3B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Security", "RIPA.Functions.Security\RIPA.Functions.Security.csproj", "{F6D39E84-EEDA-488B-91D5-DBBB8B6EC3B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Common.Services", "RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj", "{2452C3A2-0A02-4B33-AB34-4F141C2B358B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +53,10 @@ Global
 		{F6D39E84-EEDA-488B-91D5-DBBB8B6EC3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D39E84-EEDA-488B-91D5-DBBB8B6EC3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D39E84-EEDA-488B-91D5-DBBB8B6EC3B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2452C3A2-0A02-4B33-AB34-4F141C2B358B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2452C3A2-0A02-4B33-AB34-4F141C2B358B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2452C3A2-0A02-4B33-AB34-4F141C2B358B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2452C3A2-0A02-4B33-AB34-4F141C2B358B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
