@@ -84,7 +84,7 @@ export default {
       'mappedFormStatutes',
       'officerId',
       'agency',
-      'gpsLocationAddress',
+      'mappedGpsLocationAddress',
     ]),
   },
 
@@ -167,6 +167,9 @@ export default {
           this.validateBasisForSearchForPii(newVal)
         }
       },
+    },
+    mappedGpsLocationAddress(newVal) {
+      this.lastLocation = newVal
     },
   },
 }

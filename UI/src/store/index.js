@@ -47,6 +47,7 @@ export default new Vuex.Store({
     apiConfig: null,
     piiDate: null,
     officerStops: [],
+    gpsLocationAddress: null,
   },
 
   getters: {
@@ -113,8 +114,35 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
-    gpsLocationAddress: () => {
-      return ''
+    mappedGpsLocationAddress: state => {
+      if (
+        state.gpsLocationAddress === undefined ||
+        state.gpsLocationAddress === null
+      ) {
+        return {
+          blockNumber: null,
+          streetName: null,
+          city: null,
+        }
+      }
+
+      const blockNumber = state.gpsLocationAddress.address.AddNum
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const streetName = state.gpsLocationAddress.address.Address
+      const parsedStreetName = streetName
+        ? streetName.replace(blockNumber, '').trim()
+        : null
+      const city = state.gpsLocationAddress.address.city
+      const countyCityFound =
+        state.formCountyCities.filter(item => item.id === city).length > 0
+      const nonCountyCityFound =
+        state.formNonCountyCities.filter(item => item.id === city).length > 0
+      const parsedCity = countyCityFound || nonCountyCityFound ? city : null
+      return {
+        blockNumber: parsedBlockNumber,
+        streetName: parsedStreetName,
+        city: parsedCity,
+      }
     },
   },
 
@@ -148,6 +176,9 @@ export default new Vuex.Store({
     },
     updateFormStatutes(state, items) {
       state.formStatutes = items
+    },
+    updateGpsLocationAddress(state, data) {
+      state.gpsLocationAddress = data
     },
     updateOfficerStops(state, items) {
       state.officerStops = items
@@ -226,7 +257,9 @@ export default new Vuex.Store({
         const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
         return fetch(url)
           .then(response => response.json())
-          .then(data => console.log(data))
+          .then(data => {
+            commit('updateGpsLocationAddress', data)
+          })
       })
     },
 
