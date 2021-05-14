@@ -22,7 +22,7 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleNext"> Next </v-btn>
+      <v-btn color="primary" @click="handleStep3Next"> Next </v-btn>
     </div>
   </v-form>
 </template>
@@ -40,6 +40,30 @@ export default {
   components: {
     RipaActionsTaken,
     RipaContraband,
+  },
+
+  methods: {
+    handleStep3Next() {
+      const piiFound =
+        this.viewModel.actionsTaken?.basisForSearchPiiFound || false
+      if (piiFound) {
+        this.$confirm({
+          title: 'Confirm Cancel',
+          message: `This page contains personally identifying information. Are you sure you want to continue?`,
+          button: {
+            no: 'No',
+            yes: 'Yes',
+          },
+          callback: confirm => {
+            if (confirm) {
+              this.handleNext()
+            }
+          },
+        })
+      } else {
+        this.handleNext()
+      }
+    },
   },
 
   props: {

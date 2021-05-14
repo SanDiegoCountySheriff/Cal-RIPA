@@ -61,6 +61,7 @@
                 :beats="beats"
                 :county-cities="countyCities"
                 :last-location="lastLocation"
+                :loading-pii="loadingPii"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"

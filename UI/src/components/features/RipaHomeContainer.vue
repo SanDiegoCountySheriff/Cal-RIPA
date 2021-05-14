@@ -94,6 +94,21 @@ export default {
       this.setLastLocation(this.stop)
     },
 
+    async validateLocationForPii(textValue) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+        this.loadingPii = true
+        let isFound = false
+        isFound = await this.checkTextForPii(trimmedTextValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.location) {
+          this.stop.location.piiFound = isFound
+        }
+        this.loadingPii = false
+        this.updateFullStop()
+      }
+    },
+
     async validateReasonForStopForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
         this.loadingPii = true
@@ -124,6 +139,13 @@ export default {
   },
 
   watch: {
+    'stop.location.fullAddress': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateLocationForPii(newVal)
+        }
+      },
+    },
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {

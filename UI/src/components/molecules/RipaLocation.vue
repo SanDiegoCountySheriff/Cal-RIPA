@@ -61,12 +61,23 @@
       </v-row>
 
       <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <div class="md:tw-mr-4">
+            <template v-if="model.location.piiFound">
+              <v-alert outlined type="warning" dense>
+                The explanation contains personally identifying information.
+                Please remove if possible.
+              </v-alert>
+            </template>
+          </div>
+        </v-col>
+
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
-              round-down
+              :loading="loadingPii"
               :rules="blockNumberRules"
               @input="handleInput"
             >
@@ -79,6 +90,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :loading="loadingPii"
               :rules="streetNameRules"
               @input="handleInput"
             >
@@ -94,6 +106,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :loading="loadingPii"
             :rules="intersectionRules"
             @input="handleInput"
           >
@@ -112,6 +125,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"
             >
@@ -317,7 +331,18 @@ export default {
     },
 
     handleInput() {
+      this.updateFullAddressModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateFullAddressModel() {
+      const streetName = this.viewModel.location?.streetName || ''
+      const highwayExit = this.viewModel.location?.highwayExit || ''
+      const intersection = this.viewModel.location?.intersection || ''
+      const landMark = this.viewModel.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.viewModel.location.fullAddress = fullAddress
     },
 
     handleInputOutOfCounty(newVal) {
@@ -421,6 +446,10 @@ export default {
     lastLocation: {
       type: Object,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
     nonCountyCities: {
       type: Array,

@@ -108,6 +108,21 @@ export default {
       this.setLastLocation(this.stop)
     },
 
+    validateLocationForPii(textValue) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
+        const trimmedTextValue = textValue.trim()
+        this.loadingPii = true
+        let isFound = false
+        isFound = trimmedTextValue.includes('John Doe')
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.location) {
+          this.stop.location.piiFound = isFound
+        }
+        this.loadingPii = false
+        this.updateFullStop()
+      }
+    },
+
     validateReasonForStopForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         this.loadingPii = true
@@ -138,6 +153,13 @@ export default {
   },
 
   watch: {
+    'stop.location.fullAddress': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateLocationForPii(newVal)
+        }
+      },
+    },
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {

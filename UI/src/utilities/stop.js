@@ -33,6 +33,7 @@ export const defaultStop = (
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -77,6 +78,7 @@ export const motorStop = (
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -148,6 +150,7 @@ export const probationStop = (
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -202,10 +205,12 @@ export const apiStop = (
       beat: getBeat(fullStop, beats),
       blockNumber: fullStop.location?.blockNumber?.toString() || '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
+      fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
       intersection: fullStop.location?.intersection || '',
       landMark: fullStop.location?.landmark || '',
       outOfCounty,
+      piiFound: fullStop.location?.piiFound || false,
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
       streetName: fullStop.location?.streetName || '',

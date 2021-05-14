@@ -39,6 +39,7 @@ export default {
           moreLocationOptions: newValue?.location?.moreLocationOptions || false,
           highwayExit: newValue?.location?.highwayExit || null,
           landmark: newValue?.location?.landmark || null,
+          piiFound: newValue?.location?.piiFound || false,
           outOfCounty: newValue?.location?.outOfCounty || false,
           city: newValue?.location?.city || null,
           beat: newValue?.location?.beat || null,

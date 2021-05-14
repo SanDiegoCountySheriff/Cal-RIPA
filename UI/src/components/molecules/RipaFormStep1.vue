@@ -8,6 +8,7 @@
       :beats="beats"
       :county-cities="countyCities"
       :last-location="lastLocation"
+      :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
@@ -28,7 +29,7 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleNext"> Next </v-btn>
+      <v-btn color="primary" @click="handleStep1Next"> Next </v-btn>
     </div>
   </v-form>
 </template>
@@ -45,6 +46,29 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: { RipaOfficer, RipaStopDate, RipaLocation },
+
+  methods: {
+    handleStep1Next() {
+      const piiFound = this.viewModel.location?.piiFound || false
+      if (piiFound) {
+        this.$confirm({
+          title: 'Confirm Cancel',
+          message: `This page contains personally identifying information. Are you sure you want to continue?`,
+          button: {
+            no: 'No',
+            yes: 'Yes',
+          },
+          callback: confirm => {
+            if (confirm) {
+              this.handleNext()
+            }
+          },
+        })
+      } else {
+        this.handleNext()
+      }
+    },
+  },
 
   props: {
     beats: {
