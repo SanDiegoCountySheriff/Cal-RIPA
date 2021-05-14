@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-action-taken tw-pb-8">
+    {{ viewModel.stopReason }}
     <ripa-form-header
       title="Result of Stop"
       required

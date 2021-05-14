@@ -227,14 +227,6 @@ export default new Vuex.Store({
         return fetch(url)
           .then(response => response.json())
           .then(data => console.log(data))
-        // return axios
-        //   .get(url)
-        //   .then(response => {
-        //     console.log(response)
-        //   })
-        //   .catch(error => {
-        //     console.log('There was an error retrieving GPS location.', error)
-        //   })
       })
     },
 

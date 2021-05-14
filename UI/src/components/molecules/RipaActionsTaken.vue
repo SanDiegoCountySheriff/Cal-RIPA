@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-action-taken tw-pb-8">
+    {{ model.actionsTaken }}
     <ripa-form-header
       title="Actions Taken During Stop"
       required
@@ -78,7 +79,7 @@
                   </v-alert>
                 </template>
 
-                <ripa-text-area
+                <ripa-text-input
                   v-model="model.actionsTaken.basisForSearchExplanation"
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
@@ -86,7 +87,7 @@
                   :loading="loadingPii"
                   :rules="explanationRules"
                   @input="handleInput"
-                ></ripa-text-area>
+                ></ripa-text-input>
               </template>
             </template>
 
@@ -142,7 +143,7 @@ import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import RipaTextArea from '@/components/atoms/RipaTextArea'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
@@ -161,7 +162,7 @@ export default {
     RipaFormSubheader,
     RipaSubheader,
     RipaSwitch,
-    RipaTextArea,
+    RipaTextInput,
   },
 
   data() {
@@ -170,6 +171,7 @@ export default {
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
+        v => (v || '').length >= 3 || 'Min 5 characters',
       ],
       actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
@@ -242,7 +244,7 @@ export default {
         })
     },
 
-    getBasisForSearchitems() {
+    getBasisForSearchItems() {
       const actionsTaken =
         this.viewModel.actionsTaken?.actionsTakenDuringStop || []
       if (actionsTaken.includes(20)) {
@@ -286,22 +288,33 @@ export default {
   methods: {
     handleInput() {
       this.updateActionsTakenModel()
-      this.updateBasisForPropertySeizedModel()
+      this.updatePropertyWasSeizedModel()
       this.updateSearchModel()
       this.$emit('input', this.viewModel)
     },
 
     updateActionsTakenModel() {
       if (!this.viewModel.actionsTaken.anyActionsTaken) {
-        this.viewModel.actionsTaken.actionsTakenDuringStop = []
+        this.viewModel.actionsTaken.actionsTakenDuringStop = null
         this.viewModel.actionsTaken.propertyWasSeized = false
+        this.viewModel.actionsTaken.personSearchConsentGiven = false
+        this.viewModel.actionsTaken.propertySearchConsentGiven = false
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
     },
 
-    updateBasisForPropertySeizedModel() {
+    updatePropertyWasSeizedModel() {
       if (!this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.basisForPropertySeizure = []
-        this.viewModel.actionsTaken.typeOfPropertySeized = []
+        this.viewModel.actionsTaken.basisForPropertySeizure = null
+        this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.anyContraband = false
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
+      }
+
+      if (this.viewModel.actionsTaken.propertyWasSeized) {
+        this.viewModel.actionsTaken.anyContraband = true
       }
     },
 

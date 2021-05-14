@@ -130,8 +130,8 @@ export default {
 
       return [
         (otherType && otherType.length > 0) || 'Other type is required',
-        v => (v || '').length <= 250 || 'Max 60 characters',
-        v => (v || '').length >= 3 || 'Min 3 characters',
+        v => (v || '').length <= 60 || 'Max 60 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
       ]
     },
   },

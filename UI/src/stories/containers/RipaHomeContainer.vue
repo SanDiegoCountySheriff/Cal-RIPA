@@ -110,7 +110,7 @@ export default {
 
     validateLocationForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
-        const trimmedTextValue = textValue.trim()
+        const trimmedTextValue = textValue
         this.loadingPii = true
         let isFound = false
         isFound = trimmedTextValue.includes('John Doe')

@@ -103,7 +103,7 @@ export default {
     },
 
     async validateLocationForPii(textValue) {
-      const trimmedTextValue = textValue ? textValue.trim() : ''
+      const trimmedTextValue = textValue || ''
       if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
         this.loadingPii = true
         let isFound = false

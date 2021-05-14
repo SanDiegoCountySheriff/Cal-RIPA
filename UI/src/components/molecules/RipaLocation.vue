@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-location tw-pb-8">
+    {{ model.location }}
     <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
     </ripa-form-header>
 
