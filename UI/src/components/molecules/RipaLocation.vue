@@ -5,33 +5,52 @@
 
     <v-container>
       <v-row no-gutters>
-        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
           <template v-if="isGeolocationAvailable">
+            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+              <v-btn
+                class="tw-w-full"
+                outlined
+                small
+                :loading="isGeoLocationLoading"
+                @click="handleCurrentLocation"
+              >
+                Current Location
+              </v-btn>
+            </div>
+          </template>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
             <v-btn
-              class="tw-mr-2"
+              class="tw-w-full"
               outlined
               small
-              :loading="isGeoLocationLoading"
-              @click="handleCurrentLocation"
-            >
-              Current Location
+              :disabled="!validLastLocation"
+              @click="handleLastLocation"
+              >Last Location
             </v-btn>
-          </template>
-          <v-btn
-            class="tw-mr-2"
-            outlined
-            small
-            :disabled="!validLastLocation"
-            @click="handleLastLocation"
-            >Last Location
-          </v-btn>
-          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorites">
-            Open Favorites
-          </v-btn>
-          <v-btn outlined small @click="handleSaveFavorite"
-            >Save Location</v-btn
-          >
-        </div>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              @click="handleOpenFavorites"
+            >
+              Open Favorites
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
+              Save Location
+            </v-btn>
+          </div>
+        </v-col>
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
