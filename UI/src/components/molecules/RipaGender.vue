@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-gender tw-pb-8">
-    {{ model.person }}
     <template class="tw-mb-4">
       <ripa-form-header
         title="Perceived Gender"
