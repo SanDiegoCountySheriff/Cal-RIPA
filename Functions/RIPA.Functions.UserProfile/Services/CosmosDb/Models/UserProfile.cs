@@ -31,6 +31,12 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb.Models
         [JsonProperty(PropertyName = "agency")]
         public string Agency { get; set; }
 
+        [JsonProperty(PropertyName = "assignment")]
+        public string Assignment{ get; set; }
+
+        [JsonProperty(PropertyName = "otherType")]
+        public string OtherType { get; set; }
+
     }
 
 }
