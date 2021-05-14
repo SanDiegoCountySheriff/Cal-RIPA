@@ -565,8 +565,8 @@ export default new Vuex.Store({
             const data1 = data
               .filter(item => {
                 const itemCounty = item.county ? item.county.toUpperCase() : ''
-                const configCounty = state.updateApiConfig.defaultCounty
-                  ? state.updateApiConfig.defaultCounty.toUpperCase()
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
                   : ''
                 return itemCounty === configCounty
               })
@@ -579,8 +579,8 @@ export default new Vuex.Store({
             const data2 = data
               .filter(item => {
                 const itemCounty = item.county ? item.county.toUpperCase() : ''
-                const configCounty = state.updateApiConfig.defaultCounty
-                  ? state.updateApiConfig.defaultCounty.toUpperCase()
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
                   : ''
                 return itemCounty !== configCounty
               })
