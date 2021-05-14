@@ -225,9 +225,15 @@ export default {
     },
 
     getActionsTakenGeneralItems() {
-      return this.actionsTakenItems.filter(
+      const filteredItems = this.actionsTakenItems.filter(
         item => ![17, 18, 19, 20].includes(item.value),
       )
+
+      if (!this.viewModel.person.isStudent) {
+        return filteredItems.filter(item => item.value !== 23)
+      }
+
+      return filteredItems
     },
 
     getActionsTakenSearchItems() {
@@ -246,11 +252,17 @@ export default {
     getBasisForSearchItems() {
       const actionsTaken =
         this.viewModel.actionsTaken?.actionsTakenDuringStop || []
-      if (actionsTaken.includes(20)) {
-        return this.basisForSearchItems
+      let filteredItems = this.basisForSearchItems
+
+      if (!this.viewModel.person.isStudent) {
+        filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
-      return this.basisForSearchItems.filter(item => item.value !== 12)
+      if (actionsTaken.includes(20)) {
+        return filteredItems
+      }
+
+      return filteredItems.filter(item => item.value !== 12)
     },
 
     wasSearchConducted() {
@@ -347,6 +359,15 @@ export default {
 
       if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)) {
         this.viewModel.actionsTaken.propertySearchConsentGiven = false
+      }
+
+      if (
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(18) &&
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(20)
+      ) {
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
     },
   },

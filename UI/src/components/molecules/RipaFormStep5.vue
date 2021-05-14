@@ -18,7 +18,7 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleNext"> Next </v-btn>
+      <v-btn color="primary" @click="handleStep5Next"> Next </v-btn>
     </div>
   </v-form>
 </template>
@@ -34,6 +34,30 @@ export default {
 
   components: {
     RipaStopResult,
+  },
+
+  methods: {
+    handleStep5Next() {
+      const anyActionsTaken =
+        this.viewModel.stopResult?.anyActionsTaken || false
+      if (!anyActionsTaken) {
+        this.$confirm({
+          title: 'Confirm Cancel',
+          message: `This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?`,
+          button: {
+            no: 'No',
+            yes: 'Yes',
+          },
+          callback: confirm => {
+            if (confirm) {
+              this.handleNext()
+            }
+          },
+        })
+      } else {
+        this.handleNext()
+      }
+    },
   },
 
   props: {

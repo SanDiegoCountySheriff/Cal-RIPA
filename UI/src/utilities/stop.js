@@ -59,7 +59,9 @@ export const defaultStop = (
       time: format(new Date(), 'k:mm'),
     },
     stopReason: {},
-    stopResult: {},
+    stopResult: {
+      anyActionsTaken: true,
+    },
   }
 }
 
@@ -179,6 +181,9 @@ export const probationStop = (
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
+    },
+    stopResult: {
+      anyActionsTaken: true,
     },
   }
 }
