@@ -50,6 +50,13 @@ const AuthService = {
   getApiConfig: () => {
     return axios.get('/config.json')
   },
+  getIsAuthenticated: async () => {
+    if(sessionStorage.getItem('ripa-idToken')) {
+        const accounts = await msalInstance.getAllAccounts()
+        return accounts.length > 0
+    }
+    return false
+  },
 }
 
 const getAuthConfig = async () => {
