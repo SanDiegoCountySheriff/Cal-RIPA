@@ -50,6 +50,10 @@ const AuthService = {
   getApiConfig: () => {
     return axios.get('/config.json')
   },
+  getIsAuthenticated: () => {
+    const accounts = await msalInstance.getAllAccounts()
+    return accounts && accounts.length > 0
+  },
 }
 
 const getAuthConfig = async () => {
