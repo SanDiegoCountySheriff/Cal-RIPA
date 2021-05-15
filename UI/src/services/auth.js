@@ -52,12 +52,8 @@ const AuthService = {
   },
   getIsAuthenticated: async () => {
     if(sessionStorage.getItem('ripa-idToken')) {
-      const authConfig = await getAuthConfig()
-      if (authConfig){
-        await msalInstance.handleRedirectPromise()
         const accounts = await msalInstance.getAllAccounts()
         return accounts.length > 0
-      }
     }
     return false
   },
