@@ -13,20 +13,24 @@ export const formatDate = dateStr => {
   return ''
 }
 
+const parseDate = (dateStr, timeStr) => {
+  const date = new Date(`${dateStr}T${timeStr}`)
+  return new Date(date)
+}
+
 export const dateNotInFuture = (dateStr, timeStr) => {
-  const date = Date.parse(`${dateStr} ${timeStr}`)
-  return new Date().getTime() >= new Date(date).getTime()
+  const date = parseDate(dateStr, timeStr)
+  return new Date().getTime() >= date.getTime()
 }
 
 export const dateWithinLastHours = (dateStr, timeStr, hours) => {
-  const date = Date.parse(`${dateStr} ${timeStr}`)
-  const diff = differenceInHours(new Date(), new Date(date))
+  const date = parseDate(dateStr, timeStr)
+  const diff = differenceInHours(new Date(), date)
   return diff < hours
 }
 
 export const formatDateTime = (dateStr, timeStr) => {
-  const date = Date.parse(`${dateStr} ${timeStr}`)
-  return new Date(date)
+  return new Date(`${dateStr}T${timeStr}`)
 }
 
 export const uniqueId = () => {
