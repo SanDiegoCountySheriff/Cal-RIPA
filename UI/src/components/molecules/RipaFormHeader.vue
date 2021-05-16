@@ -36,7 +36,13 @@ export default {
 
   methods: {
     handleSubtitleClick() {
-      alert('do something...')
+      const parsedSubtitle = this.subtitle
+        .replace('§', '')
+        .replace(/[.]/g, '-')
+        .replace(/[(]/g, '-')
+        .replace(/[)]/g, '')
+      const url = `regulation#${parsedSubtitle}`
+      window.open(url, '_blank')
     },
   },
 
