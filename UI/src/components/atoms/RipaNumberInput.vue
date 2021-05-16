@@ -2,6 +2,7 @@
   <v-text-field
     :value="viewModel"
     type="number"
+    inputmode="numeric"
     :label="label"
     :hint="hint"
     :rules="rules"
