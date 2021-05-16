@@ -21,10 +21,10 @@
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
-      <v-alert type="error">
+      <ripa-alert alert-type="error">
         Oops, you may have missed something! Please review your selections
         above.
-      </v-alert>
+      </ripa-alert>
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">

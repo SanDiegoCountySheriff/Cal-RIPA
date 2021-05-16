@@ -74,10 +74,10 @@
             ></ripa-autocomplete>
           </template>
 
-          <v-alert class="tw-mt-8" dense outlined type="info">
+          <ripa-alert class="tw-mt-8" alert-outlined alert-type="info">
             Note: Do not provide a street address if the location is a
             residence.
-          </v-alert>
+          </ripa-alert>
         </v-col>
       </v-row>
 
@@ -85,10 +85,10 @@
         <v-col cols="12" sm="12">
           <div class="md:tw-mr-4">
             <template v-if="model.location.piiFound">
-              <v-alert outlined type="warning" dense>
+              <ripa-alert alert-outlined alert-type="warning">
                 The explanation contains personally identifying information.
                 Please remove if possible.
-              </v-alert>
+              </ripa-alert>
             </template>
           </div>
         </v-col>
@@ -212,6 +212,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
@@ -226,6 +227,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaFormHeader,
     RipaNumberInput,

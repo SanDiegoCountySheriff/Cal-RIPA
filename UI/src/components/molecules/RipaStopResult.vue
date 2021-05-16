@@ -239,10 +239,10 @@
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.actionsTakenDuringStop10">
-              <v-alert class="tw-mt-8" dense outlined type="error" prominent>
+              <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
-              </v-alert>
+              </ripa-alert>
             </template>
           </template>
         </v-col>
@@ -252,10 +252,11 @@
 </template>
 
 <script>
-import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { STOP_RESULTS } from '@/constants/form'
 
@@ -265,9 +266,10 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
-    RipaFormHeader,
+    RipaAlert,
     RipaAutocomplete,
     RipaCheckbox,
+    RipaFormHeader,
     RipaSwitch,
   },
 

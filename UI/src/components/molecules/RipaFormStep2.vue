@@ -12,10 +12,10 @@
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
-      <v-alert type="error">
+      <ripa-alert alert-type="error">
         Oops, you may have missed something! Please review your selections
         above.
-      </v-alert>
+      </ripa-alert>
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
@@ -34,6 +34,7 @@
 
 <script>
 import RipaAge from '@/components/molecules/RipaAge'
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaDisability from '@/components/molecules/RipaDisability'
 import RipaGender from '@/components/molecules/RipaGender'
 import RipaLimitedEnglish from '@/components/molecules/RipaLimitedEnglish'
@@ -48,6 +49,7 @@ export default {
 
   components: {
     RipaAge,
+    RipaAlert,
     RipaDisability,
     RipaGender,
     RipaLimitedEnglish,

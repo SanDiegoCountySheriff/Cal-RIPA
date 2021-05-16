@@ -89,10 +89,10 @@
           </template>
 
           <template v-if="model.stopReason.reasonForStop === 6">
-            <v-alert dense outlined type="warning" prominent>
+            <ripa-alert alert-outlined alert-type="warning">
               Your selection indicates that a search was conducted, please
               select from the search criteria below.
-            </v-alert>
+            </ripa-alert>
 
             <ripa-switch
               v-model="model.stopReason.searchOfPerson"
@@ -114,10 +114,10 @@
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
-            <v-alert outlined type="warning" dense>
+            <ripa-alert alert-outlined alert-type="warning">
               The explanation contains personally identifying information.
               Please remove if possible.
-            </v-alert>
+            </ripa-alert>
           </template>
 
           <ripa-text-input
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
@@ -159,6 +160,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,

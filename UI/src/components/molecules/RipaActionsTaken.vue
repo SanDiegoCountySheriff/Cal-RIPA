@@ -72,10 +72,10 @@
 
               <template v-if="isBasisForSearchExplanationVisible">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
-                  <v-alert outlined type="warning" dense>
+                  <ripa-alert alert-outlined alert-type="warning">
                     The explanation contains personally identifying information.
                     Please remove if possible.
-                  </v-alert>
+                  </ripa-alert>
                 </template>
 
                 <ripa-text-input
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
@@ -156,6 +157,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaFormHeader,
     RipaCheckGroup,
     RipaFormSubheader,
