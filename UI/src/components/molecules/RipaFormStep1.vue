@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
@@ -53,7 +54,7 @@ export default {
 
   mixins: [RipaFormStepMixin],
 
-  components: { RipaOfficer, RipaStopDate, RipaLocation },
+  components: { RipaAlert, RipaOfficer, RipaStopDate, RipaLocation },
 
   methods: {
     handleStep1Next() {
