@@ -44,6 +44,13 @@ const AuthService = {
       }
     } else {
       // user is already logged in
+      const authConfig = await getAuthConfig()
+      if (authConfig) {
+        const currentAccount = await msalInstance.getAllAccounts()
+        if (currentAccount.length) {
+          store.dispatch('setUserAccountInfo', currentAccount[0])
+        }
+      }
       return true
     }
   },

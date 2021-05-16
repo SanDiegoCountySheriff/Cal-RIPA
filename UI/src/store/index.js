@@ -39,9 +39,9 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
-      isAdmin: true,
+      isAdmin: false,
       isInvalid: false,
-      isAuthenticated: true,
+      isAuthenticated: false,
       officerId: '2021050812345',
     },
     apiConfig: null,
@@ -209,7 +209,6 @@ export default new Vuex.Store({
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,
         isAuthenticated: true,
-        accessToken: value.accessToken,
       }
     },
   },
@@ -243,23 +242,18 @@ export default new Vuex.Store({
     },
 
     checkGpsLocation({ commit }) {
-      navigator.geolocation.getCurrentPosition(position => {
-        const positionInfo =
-          'Your current position is (' +
-          'Latitude: ' +
-          position.coords.latitude +
-          ', ' +
-          'Longitude: ' +
-          position.coords.longitude +
-          ')'
-        console.log(positionInfo)
-        const latLong = `${position.coords.longitude},${position.coords.latitude}`
-        const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
-        return fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            commit('updateGpsLocationAddress', data)
-          })
+      return new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(position => {
+          const latLong = `${position.coords.longitude},${position.coords.latitude}`
+          const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              commit('updateGpsLocationAddress', data)
+              resolve()
+            })
+        })
       })
     },
 
