@@ -62,7 +62,7 @@
                 :county-cities="countyCities"
                 :last-location="lastLocation"
                 :loading-gps="loadingGps"
-                :loading-pii="loadingPii"
+                :loading-pii="loadingPiiStep1"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"
@@ -99,7 +99,7 @@
 
               <ripa-form-step-3
                 v-model="stop"
-                :loading-pii="loadingPii"
+                :loading-pii="loadingPiiStep3"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -116,7 +116,7 @@
 
               <ripa-form-step-4
                 v-model="stop"
-                :loading-pii="loadingPii"
+                :loading-pii="loadingPiiStep4"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -420,7 +420,15 @@ export default {
       type: Boolean,
       default: false,
     },
-    loadingPii: {
+    loadingPiiStep1: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep3: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep4: {
       type: Boolean,
       default: false,
     },

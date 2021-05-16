@@ -11,7 +11,9 @@
         :full-stop="fullStop"
         :last-location="lastLocation"
         :loading-gps="loadingGps"
-        :loading-pii="loadingPii"
+        :loading-pii-step1="loadingPiiStep1"
+        :loading-pii-step3="loadingPiiStep3"
+        :loading-pii-step4="loadingPiiStep4"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
@@ -71,7 +73,9 @@ export default {
       fullStop: {},
       isEditingForm: false,
       loadingGps: false,
-      loadingPii: false,
+      loadingPiiStep1: false,
+      loadingPiiStep3: false,
+      loadingPiiStep4: false,
       stop: {},
     }
   },
@@ -107,42 +111,42 @@ export default {
     async validateLocationForPii(textValue) {
       const trimmedTextValue = textValue || ''
       if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
-        this.loadingPii = true
+        this.loadingPiiStep1 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.location) {
           this.stop.location.piiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep1 = false
         this.updateFullStop()
       }
     },
 
     async validateReasonForStopForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
-        this.loadingPii = true
+        this.loadingPiiStep3 = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep3 = false
         this.updateFullStop()
       }
     },
 
     async validateBasisForSearchForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
-        this.loadingPii = true
+        this.loadingPiiStep4 = true
         let isFound = false
         isFound = await this.checkTextForPii(textValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep4 = false
         this.updateFullStop()
       }
     },

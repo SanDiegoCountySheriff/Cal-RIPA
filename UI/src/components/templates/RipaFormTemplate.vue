@@ -7,7 +7,9 @@
       :full-stop="fullStop"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
-      :loading-pii="loadingPii"
+      :loading-pii-step1="loadingPiiStep1"
+      :loading-pii-step3="loadingPiiStep3"
+      :loading-pii-step4="loadingPiiStep4"
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
@@ -79,7 +81,15 @@ export default {
       type: Boolean,
       default: false,
     },
-    loadingPii: {
+    loadingPiiStep1: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep3: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep4: {
       type: Boolean,
       default: false,
     },
