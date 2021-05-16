@@ -20,6 +20,10 @@ export default {
         this.$emit('input', this.viewModel)
       },
     },
+
+    isBackNextDisabled() {
+      return this.loadingGps || this.loadingPii
+    },
   },
 
   methods: {

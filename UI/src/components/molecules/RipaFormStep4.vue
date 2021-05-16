@@ -16,13 +16,25 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+      <v-btn
+        outlined
+        color="primary"
+        class="tw-mr-2"
+        :disabled="isBackNextDisabled"
+        @click="handleBack"
+      >
         Back
       </v-btn>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleStep3Next"> Next </v-btn>
+      <v-btn
+        color="primary"
+        :disabled="isBackNextDisabled"
+        @click="handleStep3Next"
+      >
+        Next
+      </v-btn>
     </div>
   </v-form>
 </template>
