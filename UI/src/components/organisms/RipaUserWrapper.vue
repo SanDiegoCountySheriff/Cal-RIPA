@@ -20,6 +20,7 @@ export default {
         officer: {
           yearsExperience: this.value?.officer?.yearsExperience || null,
           assignment: this.value?.officer.assignment || null,
+          otherType: this.value?.officer.otherType || null,
         },
       },
     }
