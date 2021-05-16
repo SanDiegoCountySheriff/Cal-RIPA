@@ -1,9 +1,11 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
+using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,18 +66,23 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadStop(DojStop stop, string remoteFilePath, string fileName,  BlobContainerClient blobContainerClient)
+        public void UploadStop(DojStop stop, string remoteFilePath, string fileName, BlobContainerClient blobContainerClient)
         {
             using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(_config.KeyFile, _config.Password));
             try
             {
                 BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
                 client.Connect();
-                var options = new JsonSerializerOptions() { IgnoreNullValues = true };
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(stop, options));
-                MemoryStream stream = new MemoryStream(bytes);
-                blobClient.UploadAsync(stream); // stream file to Azure Blob
-                client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
+                var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(stop, settings));
+                using( MemoryStream stream = new MemoryStream(bytes))
+                {
+                    blobClient.UploadAsync(stream); // stream file to Azure Blob
+                }
+                using (MemoryStream stream = new MemoryStream(bytes))
+                {
+                    client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
+                }
                 _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             catch (Exception exception)

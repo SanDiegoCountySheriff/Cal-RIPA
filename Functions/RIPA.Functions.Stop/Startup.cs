@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using RIPA.Functions.Stop.Services.CosmosDb;
-using RIPA.Functions.Stop.Services.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.Stop.CosmosDb;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System;
 using System.Threading.Tasks;
 
