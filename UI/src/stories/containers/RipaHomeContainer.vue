@@ -82,7 +82,9 @@ export default {
       isEditingForm: false,
       isOnlineAndAuthenticated: true,
       loadingGps: false,
-      loadingPii: false,
+      loadingPiiStep1: false,
+      loadingPiiStep3: false,
+      loadingPiiStep4: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
@@ -114,42 +116,42 @@ export default {
     validateLocationForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
         const trimmedTextValue = textValue
-        this.loadingPii = true
+        this.loadingPiiStep1 = true
         let isFound = false
         isFound = trimmedTextValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.location) {
           this.stop.location.piiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep1 = false
         this.updateFullStop()
       }
     },
 
     validateReasonForStopForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
-        this.loadingPii = true
+        this.loadingPiiStep3 = true
         let isFound = false
         isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep3 = false
         this.updateFullStop()
       }
     },
 
     validateBasisForSearchForPii(textValue) {
       if (this.isOnlineAndAuthenticated && textValue && textValue !== '') {
-        this.loadingPii = true
+        this.loadingPiiStep4 = true
         let isFound = false
         isFound = textValue.includes('John Doe')
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
         }
-        this.loadingPii = false
+        this.loadingPiiStep4 = false
         this.updateFullStop()
       }
     },
