@@ -8,32 +8,42 @@
       :beats="beats"
       :county-cities="countyCities"
       :last-location="lastLocation"
+      :loading-gps="loadingGps"
+      :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
+      :on-gps-location="onGpsLocation"
     ></ripa-location>
 
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
-      <v-alert type="error">
+      <ripa-alert alert-type="error">
         Oops, you may have missed something! Please review your selections
         above.
-      </v-alert>
+      </ripa-alert>
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleNext"> Next </v-btn>
+      <v-btn
+        color="primary"
+        :disabled="isBackNextDisabled"
+        @click="handleStep1Next"
+      >
+        Next
+      </v-btn>
     </div>
   </v-form>
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
@@ -44,7 +54,30 @@ export default {
 
   mixins: [RipaFormStepMixin],
 
-  components: { RipaOfficer, RipaStopDate, RipaLocation },
+  components: { RipaAlert, RipaOfficer, RipaStopDate, RipaLocation },
+
+  methods: {
+    handleStep1Next() {
+      const piiFound = this.viewModel.location?.piiFound || false
+      if (piiFound) {
+        this.$confirm({
+          title: 'Confirm Cancel',
+          message: `This page contains personally identifying information. Are you sure you want to continue?`,
+          button: {
+            no: 'No',
+            yes: 'Yes',
+          },
+          callback: confirm => {
+            if (confirm) {
+              this.handleNext()
+            }
+          },
+        })
+      } else {
+        this.handleNext()
+      }
+    },
+  },
 
   props: {
     beats: {
@@ -80,6 +113,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

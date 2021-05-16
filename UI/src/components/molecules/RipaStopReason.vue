@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-stop-reason tw-pb-8">
-    {{ viewModel.stopReason }}
     <ripa-form-header
       title="Reason for Stop"
       required
@@ -17,7 +16,7 @@
             label="Reason"
             :items="reasonItems"
             :rules="reasonRules"
-            @input="handleInput"
+            @input="handleReasonForStopInput"
           ></ripa-select>
 
           <template v-if="model.stopReason.reasonForStop === 7">
@@ -90,16 +89,17 @@
           </template>
 
           <template v-if="model.stopReason.reasonForStop === 6">
-            <v-alert dense outlined type="warning" prominent>
+            <ripa-alert alert-outlined alert-type="warning">
               Your selection indicates that a search was conducted, please
               select from the search criteria below.
-            </v-alert>
+            </ripa-alert>
 
             <ripa-switch
               v-model="model.stopReason.searchOfPerson"
               label="Search of person was conducted"
               :max-width="300"
               @input="handleInput"
+              :rules="searchRules"
             ></ripa-switch>
 
             <ripa-switch
@@ -107,19 +107,20 @@
               label="Search of property was conducted"
               :max-width="300"
               @input="handleInput"
+              :rules="searchRules"
             ></ripa-switch>
           </template>
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
-            <v-alert outlined type="warning" dense>
+            <ripa-alert alert-outlined alert-type="warning">
               The explanation contains personally identifying information.
               Please remove if possible.
-            </v-alert>
+            </ripa-alert>
           </template>
 
-          <ripa-text-area
+          <ripa-text-input
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
@@ -127,7 +128,7 @@
             :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
-          ></ripa-text-area>
+          ></ripa-text-input>
         </v-col>
       </v-row>
     </v-container>
@@ -135,6 +136,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
@@ -143,7 +145,7 @@ import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import RipaTextArea from '@/components/atoms/RipaTextArea'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
   EDUCATION_VIOLATIONS,
@@ -158,6 +160,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
@@ -165,16 +168,18 @@ export default {
     RipaSelect,
     RipaSubheader,
     RipaSwitch,
-    RipaTextArea,
+    RipaTextInput,
   },
 
   data() {
     return {
       valid: true,
+      reasonForStopValue: this.value.stopReason?.reasonForStop || null,
       reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
+        v => (v || '').length >= 3 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
@@ -238,11 +243,45 @@ export default {
       const code = this.viewModel.stopReason.reasonableSuspicionCode
       return [(checked && code !== null) || 'An offense code is required']
     },
+
+    searchRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 6
+      const checkedPerson = this.viewModel.stopReason.searchOfPerson
+      const checkedProperty = this.viewModel.stopReason.searchOfProperty
+      if (checked) {
+        return [
+          checkedPerson ||
+            checkedProperty ||
+            'Your selection indicates that a search was conducted, please select from the search criteria below.',
+        ]
+      }
+
+      return []
+    },
   },
 
   methods: {
+    handleReasonForStopInput() {
+      if (this.reasonForStopValue !== this.viewModel.stopReason.reasonForStop) {
+        this.viewModel.actionsTaken.anyActionsTaken = false
+        this.viewModel.actionsTaken.actionsTakenDuringStop = null
+        this.viewModel.actionsTaken.personSearchConsentGiven = false
+        this.viewModel.actionsTaken.propertySearchConsentGiven = false
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
+        this.viewModel.actionsTaken.propertyWasSeized = false
+        this.viewModel.actionsTaken.basisForPropertySeizure = null
+        this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.anyContraband = false
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
+      }
+      this.handleInput()
+    },
+
     handleInput() {
       this.updateSearchModel()
+      this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
 
@@ -256,6 +295,7 @@ export default {
 
   watch: {
     value(newVal) {
+      this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
       this.viewModel = this.loadModel(newVal)
     },
 

@@ -131,6 +131,7 @@ export const REASONABLE_SUSPICIONS = [
 ]
 
 export const ACTIONS_TAKEN = [
+  { name: 'Admission or written statement obtained from student', value: 23 },
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Person removed from vehicle by physical contact', value: 2 },
   { name: 'Field sobriety test conducted', value: 3 },
@@ -155,6 +156,7 @@ export const ACTIONS_TAKEN = [
 ]
 
 export const BASIS_FOR_SEARCH = [
+  { name: 'Suspected violation of school policy', value: 13 },
   { name: 'Consent given', value: 1 },
   { name: 'Officer safety/safety of others', value: 2 },
   { name: 'Search warrant', value: 3 },

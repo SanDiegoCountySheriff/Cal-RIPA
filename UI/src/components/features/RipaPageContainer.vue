@@ -128,6 +128,7 @@ export default {
           this.setApiConfig({
             apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
             apiSubscription: res.data.Configuration.Subscription,
+            defaultCounty: res.data.Configuration.DefaultCounty,
           })
           this.getFormData()
         })

@@ -5,31 +5,52 @@
 
     <v-container>
       <v-row no-gutters>
-        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
-          <v-btn
-            class="tw-mr-2"
-            outlined
-            small
-            :loading="isGeoLocationLoading"
-            @click="handleCurrentLocation"
-          >
-            Current Location
-          </v-btn>
-          <v-btn
-            class="tw-mr-2"
-            outlined
-            small
-            :disabled="!validLastLocation"
-            @click="handleLastLocation"
-            >Last Location
-          </v-btn>
-          <v-btn class="tw-mr-2" outlined small @click="handleOpenFavorites">
-            Open Favorites
-          </v-btn>
-          <v-btn outlined small @click="handleSaveFavorite"
-            >Save Location</v-btn
-          >
-        </div>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <template v-if="isGeolocationAvailable">
+            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+              <v-btn
+                class="tw-w-full"
+                outlined
+                small
+                :loading="loadingGps"
+                @click="handleCurrentLocation"
+              >
+                Current Location
+              </v-btn>
+            </div>
+          </template>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              :disabled="!validLastLocation"
+              @click="handleLastLocation"
+              >Last Location
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              @click="handleOpenFavorites"
+            >
+              Open Favorites
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
+              Save Location
+            </v-btn>
+          </div>
+        </v-col>
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
@@ -53,20 +74,31 @@
             ></ripa-autocomplete>
           </template>
 
-          <v-alert class="tw-mt-8" dense outlined type="info">
+          <ripa-alert class="tw-mt-8" alert-outlined alert-type="info">
             Note: Do not provide a street address if the location is a
             residence.
-          </v-alert>
+          </ripa-alert>
         </v-col>
       </v-row>
 
       <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <div class="md:tw-mr-4">
+            <template v-if="model.location.piiFound">
+              <ripa-alert alert-outlined alert-type="warning">
+                The explanation contains personally identifying information.
+                Please remove if possible.
+              </ripa-alert>
+            </template>
+          </div>
+        </v-col>
+
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
-              round-down
+              :loading="loadingPii"
               :rules="blockNumberRules"
               @input="handleInput"
             >
@@ -79,6 +111,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :loading="loadingPii"
               :rules="streetNameRules"
               @input="handleInput"
             >
@@ -94,6 +127,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :loading="loadingPii"
             :rules="intersectionRules"
             @input="handleInput"
           >
@@ -112,6 +146,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"
             >
@@ -177,6 +212,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
@@ -191,6 +227,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaFormHeader,
     RipaNumberInput,
@@ -201,7 +238,6 @@ export default {
 
   data() {
     return {
-      isGeoLocationLoading: false,
       viewModel: this.loadModel(this.value),
     }
   },
@@ -211,6 +247,10 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    isGeolocationAvailable() {
+      return navigator.geolocation
     },
 
     getCities() {
@@ -297,27 +337,27 @@ export default {
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        this.isGeoLocationLoading = true
-        navigator.geolocation.getCurrentPosition(position => {
-          const positionInfo =
-            'Your current position is (' +
-            'Latitude: ' +
-            position.coords.latitude +
-            ', ' +
-            'Longitude: ' +
-            position.coords.longitude +
-            ')'
-          console.log(positionInfo)
-          this.isGeoLocationLoading = false
-          // https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-117.1328002,32.834727&f=json
-        })
+        if (this.onGpsLocation) {
+          this.onGpsLocation()
+        }
       } else {
         console.log('Geolocation is not supported by this browser.')
       }
     },
 
     handleInput() {
+      this.updateFullAddressModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateFullAddressModel() {
+      const streetName = this.viewModel.location?.streetName || ''
+      const highwayExit = this.viewModel.location?.highwayExit || ''
+      const intersection = this.viewModel.location?.intersection || ''
+      const landMark = this.viewModel.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.viewModel.location.fullAddress = fullAddress
     },
 
     handleInputOutOfCounty(newVal) {
@@ -422,6 +462,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    loadingGps: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
     nonCountyCities: {
       type: Array,
       default: () => {},
@@ -439,6 +487,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

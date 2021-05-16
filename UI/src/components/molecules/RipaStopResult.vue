@@ -60,6 +60,18 @@
                 :rules="warningRules"
                 @input="handleInput"
               ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeWarningVisible">
+                <div class="tw-mt-4 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    @click="handlePullReasonCodeWarning"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
             </template>
 
             <ripa-checkbox
@@ -87,6 +99,18 @@
                 :rules="citationRules"
                 @input="handleInput"
               ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeCitationVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    @click="handlePullReasonCodeCitation"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
             </template>
 
             <ripa-checkbox
@@ -114,6 +138,18 @@
                 :rules="infieldRules"
                 @input="handleInput"
               ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeInfieldVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    @click="handlePullReasonCodeInfield"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
             </template>
 
             <ripa-checkbox
@@ -149,6 +185,18 @@
                 :rules="custodialArrestRules"
                 @input="handleInput"
               ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeCustodialArrestVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    @click="handlePullReasonCodeCustodialArrest"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
             </template>
 
             <ripa-checkbox
@@ -191,10 +239,10 @@
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.actionsTakenDuringStop10">
-              <v-alert class="tw-mt-8" dense outlined type="error" prominent>
+              <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
-              </v-alert>
+              </ripa-alert>
             </template>
           </template>
         </v-col>
@@ -204,10 +252,11 @@
 </template>
 
 <script>
-import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { STOP_RESULTS } from '@/constants/form'
 
@@ -217,9 +266,10 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
-    RipaFormHeader,
+    RipaAlert,
     RipaAutocomplete,
     RipaCheckbox,
+    RipaFormHeader,
     RipaSwitch,
   },
 
@@ -240,6 +290,35 @@ export default {
 
     isHomelandSecuritySelected() {
       return this.viewModel.stopResult.actionsTakenDuringStop10
+    },
+
+    isPullReasonCodeValid() {
+      const reasonForStop = this.viewModel.stopReason?.reasonForStop || []
+      return [1, 2, 3, 5].includes(reasonForStop)
+    },
+
+    isPullReasonCodeWarningVisible() {
+      const codes = this.viewModel.stopResult?.warningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeCitationVisible() {
+      const codes = this.viewModel.stopResult?.citationCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeInfieldVisible() {
+      const codes = this.viewModel.stopResult?.infieldCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeCustodialArrestVisible() {
+      const codes = this.viewModel.stopResult?.custodialArrestCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     actionsTakenRules() {
@@ -323,6 +402,51 @@ export default {
       this.updateInfieldCodesModel()
       this.updateCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
+    },
+
+    getReasonCode() {
+      const trafficViolationCode =
+        this.viewModel.stopReason?.trafficViolationCode || null
+      const reasonableSuspicionCode =
+        this.viewModel.stopReason?.reasonableSuspicionCode || null
+
+      if (trafficViolationCode) {
+        return trafficViolationCode
+      }
+
+      if (reasonableSuspicionCode) {
+        return reasonableSuspicionCode
+      }
+
+      return null
+    },
+
+    handlePullReasonCodeWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.warningCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeCitation() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.citationCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeInfield() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.infieldCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeCustodialArrest() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.custodialArrestCodes.push(reasonCode)
+      }
     },
 
     updateActionsTakenModel() {

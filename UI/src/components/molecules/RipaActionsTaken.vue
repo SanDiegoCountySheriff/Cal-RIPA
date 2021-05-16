@@ -64,7 +64,7 @@
 
               <ripa-check-group
                 v-model="model.actionsTaken.basisForSearch"
-                :items="basisForSearchItems"
+                :items="getBasisForSearchItems"
                 :rules="basisForSearchRules"
                 @input="handleInput"
               >
@@ -72,13 +72,13 @@
 
               <template v-if="isBasisForSearchExplanationVisible">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
-                  <v-alert outlined type="warning" dense>
+                  <ripa-alert alert-outlined alert-type="warning">
                     The explanation contains personally identifying information.
                     Please remove if possible.
-                  </v-alert>
+                  </ripa-alert>
                 </template>
 
-                <ripa-text-area
+                <ripa-text-input
                   v-model="model.actionsTaken.basisForSearchExplanation"
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
@@ -86,7 +86,7 @@
                   :loading="loadingPii"
                   :rules="explanationRules"
                   @input="handleInput"
-                ></ripa-text-area>
+                ></ripa-text-input>
               </template>
             </template>
 
@@ -136,13 +136,14 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import RipaTextArea from '@/components/atoms/RipaTextArea'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
@@ -156,12 +157,13 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaFormHeader,
     RipaCheckGroup,
     RipaFormSubheader,
     RipaSubheader,
     RipaSwitch,
-    RipaTextArea,
+    RipaTextInput,
   },
 
   data() {
@@ -170,8 +172,9 @@ export default {
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
+        v => (v || '').length >= 3 || 'Min 5 characters',
       ],
-      actionTakenItems: ACTIONS_TAKEN,
+      actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled: false,
@@ -224,13 +227,19 @@ export default {
     },
 
     getActionsTakenGeneralItems() {
-      return this.actionTakenItems.filter(
+      const filteredItems = this.actionsTakenItems.filter(
         item => ![17, 18, 19, 20].includes(item.value),
       )
+
+      if (!this.viewModel.person.isStudent) {
+        return filteredItems.filter(item => item.value !== 23)
+      }
+
+      return filteredItems
     },
 
     getActionsTakenSearchItems() {
-      return this.actionTakenItems
+      return this.actionsTakenItems
         .filter(item => [17, 18, 19, 20].includes(item.value))
         .map(item => {
           return {
@@ -240,6 +249,22 @@ export default {
               (item.value === 18 || item.value === 20),
           }
         })
+    },
+
+    getBasisForSearchItems() {
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      let filteredItems = this.basisForSearchItems
+
+      if (!this.viewModel.person.isStudent) {
+        filteredItems = filteredItems.filter(item => item.value !== 13)
+      }
+
+      if (actionsTaken.includes(20)) {
+        return filteredItems
+      }
+
+      return filteredItems.filter(item => item.value !== 12)
     },
 
     wasSearchConducted() {
@@ -276,22 +301,33 @@ export default {
   methods: {
     handleInput() {
       this.updateActionsTakenModel()
-      this.updateBasisForPropertySeizedModel()
+      this.updatePropertyWasSeizedModel()
       this.updateSearchModel()
       this.$emit('input', this.viewModel)
     },
 
     updateActionsTakenModel() {
       if (!this.viewModel.actionsTaken.anyActionsTaken) {
-        this.viewModel.actionsTaken.actionsTakenDuringStop = []
+        this.viewModel.actionsTaken.actionsTakenDuringStop = null
         this.viewModel.actionsTaken.propertyWasSeized = false
+        this.viewModel.actionsTaken.personSearchConsentGiven = false
+        this.viewModel.actionsTaken.propertySearchConsentGiven = false
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
     },
 
-    updateBasisForPropertySeizedModel() {
+    updatePropertyWasSeizedModel() {
       if (!this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.basisForPropertySeizure = []
-        this.viewModel.actionsTaken.typeOfPropertySeized = []
+        this.viewModel.actionsTaken.basisForPropertySeizure = null
+        this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.anyContraband = false
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
+      }
+
+      if (this.viewModel.actionsTaken.propertyWasSeized) {
+        this.viewModel.actionsTaken.anyContraband = true
       }
     },
 
@@ -325,6 +361,15 @@ export default {
 
       if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)) {
         this.viewModel.actionsTaken.propertySearchConsentGiven = false
+      }
+
+      if (
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(18) &&
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(20)
+      ) {
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
     },
   },

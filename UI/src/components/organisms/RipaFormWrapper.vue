@@ -61,18 +61,22 @@
                 :beats="beats"
                 :county-cities="countyCities"
                 :last-location="lastLocation"
+                :loading-gps="loadingGps"
+                :loading-pii="loadingPiiStep1"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
                 :valid-last-location="validLastLocation"
                 :on-open-favorites="onOpenFavorites"
                 :on-open-last-location="onOpenLastLocation"
                 :on-save-favorite="onSaveFavorite"
+                :on-gps-location="onGpsLocation"
                 @input="handleInput"
               ></ripa-form-step-1>
             </v-stepper-content>
 
             <v-stepper-content step="2">
               <ripa-subheader
+                class="tw-text-right"
                 :text="getEditPersonText"
                 no-margins
               ></ripa-subheader>
@@ -95,7 +99,7 @@
 
               <ripa-form-step-3
                 v-model="stop"
-                :loading-pii="loadingPii"
+                :loading-pii="loadingPiiStep3"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -112,7 +116,7 @@
 
               <ripa-form-step-4
                 v-model="stop"
-                :loading-pii="loadingPii"
+                :loading-pii="loadingPiiStep4"
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
@@ -252,7 +256,8 @@ export default {
 
   computed: {
     getEditPersonText() {
-      return `Person: ${this.stop.person.id}`
+      const personIndex = this.stop.person.index || 1
+      return `Person: ${personIndex}`
     },
 
     getFormStep2BackButtonVisible() {
@@ -411,7 +416,19 @@ export default {
       type: Object,
       default: () => {},
     },
-    loadingPii: {
+    loadingGps: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep1: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep3: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep4: {
       type: Boolean,
       default: false,
     },
@@ -452,6 +469,10 @@ export default {
       default: () => {},
     },
     onSubmit: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

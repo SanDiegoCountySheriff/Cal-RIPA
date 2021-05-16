@@ -195,7 +195,14 @@ export default {
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
-        updatedFullStop.people = people.filter(item => item.id !== personId)
+        updatedFullStop.people = people
+          .filter(item => item.id !== personId)
+          .map((item, index) => {
+            return {
+              ...item,
+              index: index + 1,
+            }
+          })
         updatedFullStop.people.push(updatedPerson)
         this.fullStop = Object.assign({}, updatedFullStop)
       }

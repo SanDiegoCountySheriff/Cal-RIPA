@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { formatDateTime } from '@/utilities/dates'
+import { formatDateTime, uniqueId } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
   RACES,
@@ -28,11 +28,12 @@ export const defaultStop = (
   return {
     actionsTaken: {},
     agency,
-    id: new Date().getTime(),
+    id: uniqueId(),
     created: new Date(),
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -52,13 +53,16 @@ export const defaultStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'k:mm'),
     },
     stopReason: {},
-    stopResult: {},
+    stopResult: {
+      anyActionsTaken: true,
+    },
   }
 }
 
@@ -73,10 +77,11 @@ export const motorStop = (
     actionsTaken: {},
     agency,
     created: new Date(),
-    id: new Date().getTime(),
+    id: uniqueId(),
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -96,6 +101,7 @@ export const motorStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -144,10 +150,11 @@ export const probationStop = (
     },
     agency,
     created: new Date(),
-    id: new Date().getTime(),
+    id: uniqueId(),
     location: {
       isSchool: false,
       school: null,
+      fullAddress: '',
       blockNumber: null,
       streetName: null,
       intersection: null,
@@ -167,6 +174,7 @@ export const probationStop = (
     officerId,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -176,6 +184,9 @@ export const probationStop = (
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
+    },
+    stopResult: {
+      anyActionsTaken: true,
     },
   }
 }
@@ -202,10 +213,12 @@ export const apiStop = (
       beat: getBeat(fullStop, beats),
       blockNumber: fullStop.location?.blockNumber?.toString() || '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
+      fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
       intersection: fullStop.location?.intersection || '',
       landMark: fullStop.location?.landmark || '',
       outOfCounty,
+      piiFound: fullStop.location?.piiFound || false,
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
       streetName: fullStop.location?.streetName || '',
@@ -259,6 +272,7 @@ export const getPeopleListed = (fullStop, statutes) => {
 }
 
 const getPiiFound = fullStop => {
+  const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false
   let basisForSearchPiiFound = false
@@ -272,7 +286,7 @@ const getPiiFound = fullStop => {
     }
   }
 
-  return reasonForStopPiiFound || basisForSearchPiiFound
+  return locationPiiFound || reasonForStopPiiFound || basisForSearchPiiFound
 }
 
 const getOfficerAssignment = fullStop => {

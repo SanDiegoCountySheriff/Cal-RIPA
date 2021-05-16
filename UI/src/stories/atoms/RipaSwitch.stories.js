@@ -14,5 +14,5 @@ export const basic = () => ({
     }
   },
   template:
-    '<div"><ripa-switch v-model="getLabelText"></ripa-switch>{{getLabelText}}</div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-switch v-model="getLabelText"></ripa-switch>{{getLabelText}}</div>',
 })

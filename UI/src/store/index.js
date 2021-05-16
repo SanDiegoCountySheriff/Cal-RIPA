@@ -39,14 +39,15 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
-      isAdmin: true,
+      isAdmin: false,
       isInvalid: false,
-      isAuthenticated: true,
+      isAuthenticated: false,
       officerId: '2021050812345',
     },
     apiConfig: null,
     piiDate: null,
     officerStops: [],
+    gpsLocationAddress: null,
   },
 
   getters: {
@@ -113,6 +114,36 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
+    mappedGpsLocationAddress: state => {
+      if (
+        state.gpsLocationAddress === undefined ||
+        state.gpsLocationAddress === null
+      ) {
+        return {
+          blockNumber: null,
+          streetName: null,
+          city: null,
+        }
+      }
+
+      const blockNumber = state.gpsLocationAddress.address.AddNum
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const streetName = state.gpsLocationAddress.address.Address
+      const parsedStreetName = streetName
+        ? streetName.replace(blockNumber, '').trim()
+        : null
+      const city = state.gpsLocationAddress.address.city
+      const countyCityFound =
+        state.formCountyCities.filter(item => item.id === city).length > 0
+      const nonCountyCityFound =
+        state.formNonCountyCities.filter(item => item.id === city).length > 0
+      const parsedCity = countyCityFound || nonCountyCityFound ? city : null
+      return {
+        blockNumber: parsedBlockNumber,
+        streetName: parsedStreetName,
+        city: parsedCity,
+      }
+    },
   },
 
   mutations: {
@@ -146,6 +177,9 @@ export default new Vuex.Store({
     updateFormStatutes(state, items) {
       state.formStatutes = items
     },
+    updateGpsLocationAddress(state, data) {
+      state.gpsLocationAddress = data
+    },
     updateOfficerStops(state, items) {
       state.officerStops = items
     },
@@ -175,7 +209,6 @@ export default new Vuex.Store({
         firstName: value.idTokenClaims.given_name,
         lastName: value.idTokenClaims.family_name,
         isAuthenticated: true,
-        accessToken: value.accessToken,
       }
     },
   },
@@ -206,6 +239,22 @@ export default new Vuex.Store({
           console.log('There was an error checking for PII.', error)
           return null
         })
+    },
+
+    checkGpsLocation({ commit }) {
+      return new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(position => {
+          const latLong = `${position.coords.longitude},${position.coords.latitude}`
+          const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              commit('updateGpsLocationAddress', data)
+              resolve()
+            })
+        })
+      })
     },
 
     deleteBeat({ dispatch, state }, beat) {
@@ -450,7 +499,6 @@ export default new Vuex.Store({
           resolve()
         })
       } else {
-        console.log(state)
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
             headers: {
@@ -534,7 +582,13 @@ export default new Vuex.Store({
               return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
             })
             const data1 = data
-              .filter(item => item.county === 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty === configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -542,7 +596,13 @@ export default new Vuex.Store({
                 }
               })
             const data2 = data
-              .filter(item => item.county !== 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty !== configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -748,15 +808,19 @@ export default new Vuex.Store({
           commit('updateOfficerStops', [])
         })
     },
-    setAuthConfig({ commit, state }, value) {
+
+    setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)
     },
-    setUserAccountInfo({ commit, state }, value) {
+
+    setUserAccountInfo({ commit }, value) {
       commit('updateUserAccount', value)
     },
-    setApiConfig({ commit, state }, value) {
+
+    setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
     },
+
     setInvalidUser({ commit }, value) {
       commit('updateInvalidUser', value)
     },

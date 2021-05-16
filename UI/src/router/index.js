@@ -70,7 +70,8 @@ const router = new VueRouter({
 // if you ever hit the app and the access token
 // isn't set and the user is online, start login flow and are offline
 router.beforeEach(async (to, from, next) => {
-  if (await AuthService.getIsAuthenticated() !== true && navigator.onLine) {
+  const isAuthenticated = await AuthService.getIsAuthenticated()
+  if (!isAuthenticated && navigator.onLine) {
     const loginAttempt = await AuthService.tryLogin()
     if (loginAttempt) {
       next()
