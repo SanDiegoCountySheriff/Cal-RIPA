@@ -12,7 +12,7 @@
                 class="tw-w-full"
                 outlined
                 small
-                :loading="isGeoLocationLoading"
+                :loading="loadingGps"
                 @click="handleCurrentLocation"
               >
                 Current Location
@@ -236,7 +236,6 @@ export default {
 
   data() {
     return {
-      isGeoLocationLoading: false,
       viewModel: this.loadModel(this.value),
     }
   },
@@ -460,6 +459,10 @@ export default {
     lastLocation: {
       type: Object,
       default: () => {},
+    },
+    loadingGps: {
+      type: Boolean,
+      default: false,
     },
     loadingPii: {
       type: Boolean,

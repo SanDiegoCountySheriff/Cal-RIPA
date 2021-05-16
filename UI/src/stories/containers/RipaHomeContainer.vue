@@ -79,6 +79,7 @@ export default {
       fullStop: {},
       isEditingForm: false,
       isOnlineAndAuthenticated: true,
+      loadingGps: false,
       loadingPii: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],

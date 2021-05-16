@@ -87,6 +87,10 @@ export default {
       type: Array,
       default: () => {},
     },
+    loadingGps: {
+      type: Boolean,
+      defaeult: false,
+    },
     loadingPii: {
       type: Boolean,
       default: false,

@@ -10,6 +10,7 @@
         :county-cities="mappedFormCountyCities"
         :full-stop="fullStop"
         :last-location="lastLocation"
+        :loading-gps="loadingGps"
         :loading-pii="loadingPii"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
@@ -69,6 +70,7 @@ export default {
     return {
       fullStop: {},
       isEditingForm: false,
+      loadingGps: false,
       loadingPii: false,
       stop: {},
     }
@@ -97,9 +99,9 @@ export default {
     },
 
     async handleGpsLocation() {
-      this.isGeoLocationLoading = true
+      this.loadingGps = true
       await this.checkGpsLocation()
-      this.isGeoLocationLoading = false
+      this.loadingGps = false
     },
 
     async validateLocationForPii(textValue) {

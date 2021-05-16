@@ -61,6 +61,7 @@
                 :beats="beats"
                 :county-cities="countyCities"
                 :last-location="lastLocation"
+                :loading-gps="loadingGps"
                 :loading-pii="loadingPii"
                 :non-county-cities="nonCountyCities"
                 :schools="schools"
@@ -414,6 +415,10 @@ export default {
     lastLocation: {
       type: Object,
       default: () => {},
+    },
+    loadingGps: {
+      type: Boolean,
+      default: false,
     },
     loadingPii: {
       type: Boolean,
