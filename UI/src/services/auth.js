@@ -47,14 +47,19 @@ const AuthService = {
       return true
     }
   },
+
   getApiConfig: () => {
     return axios.get('/config.json')
   },
+
   getIsAuthenticated: async () => {
-    if(sessionStorage.getItem('ripa-idToken')) {
+    if (sessionStorage.getItem('ripa-idToken')) {
+      if (msalInstance) {
         const accounts = await msalInstance.getAllAccounts()
         return accounts.length > 0
+      }
     }
+
     return false
   },
 }
