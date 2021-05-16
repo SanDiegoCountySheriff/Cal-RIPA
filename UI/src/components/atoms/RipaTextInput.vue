@@ -54,7 +54,6 @@ export default {
 
   watch: {
     value(newVal) {
-      console.log('watch')
       this.viewModel = newVal
     },
   },
