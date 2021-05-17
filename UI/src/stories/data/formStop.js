@@ -24,7 +24,6 @@ export const sampleStop = {
   },
   person: {
     id: new Date().getTime(),
-    index: 1,
     isStudent: false,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -102,7 +101,6 @@ export const onePersonFullStop = {
   people: [
     {
       id: new Date().getTime(),
-      index: 1,
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -181,7 +179,6 @@ export const twoPersonFullStop = {
   people: [
     {
       id: new Date().getTime(),
-      index: 1,
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -230,7 +227,6 @@ export const twoPersonFullStop = {
     },
     {
       id: new Date().getTime(),
-      index: 2,
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,

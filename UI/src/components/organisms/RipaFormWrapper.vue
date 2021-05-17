@@ -211,8 +211,8 @@ export default {
 
   computed: {
     getEditPersonText() {
-      const personIndex = this.stop.person?.index || 1
-      return `Person: ${personIndex}`
+      const personId = this.stop.person?.id || 'N/A'
+      return `Person: ${personId}`
     },
 
     getFormStep2BackButtonVisible() {
@@ -239,6 +239,9 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       if (this.onAddPerson) {
         this.onAddPerson()
       }
@@ -248,6 +251,9 @@ export default {
 
     handleBack() {
       this.stepIndex = this.stepIndex - 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       window.scrollTo(0, 0)
     },
 
@@ -262,6 +268,9 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = 1
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             this.isEditStop = true
             this.isEditPerson = true
             if (this.onCancel) {
@@ -293,12 +302,18 @@ export default {
     handleEditPerson(id) {
       console.log('Edit Person in Form', id)
       this.stepIndex = 2
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = false
       this.isEditPerson = true
     },
 
     handleEditStop() {
       this.stepIndex = 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = true
       this.isEditPerson = false
     },
@@ -306,11 +321,17 @@ export default {
     handleNext() {
       this.stepIndex =
         this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       window.scrollTo(0, 0)
     },
 
     handleStartNew() {
       this.stepIndex = 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = true
       this.isEditPerson = true
       if (this.onCancel) {
@@ -343,12 +364,6 @@ export default {
   watch: {
     value(newVal) {
       this.stop = newVal
-    },
-
-    stepIndex(newVal) {
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(newVal)
-      }
     },
 
     formStepIndex(newVal) {
