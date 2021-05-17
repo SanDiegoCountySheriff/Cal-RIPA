@@ -49,13 +49,18 @@ namespace RIPA.Functions.Submission.Functions
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, HttpRequest req, ILogger log)
         {
             log.LogInformation("Submit to DOJ requested");
-
-            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
-
-            var accessToken = RIPAAuthorization.ExtractTokenFromRequestHeaders(req);
 
             Guid submissionId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
