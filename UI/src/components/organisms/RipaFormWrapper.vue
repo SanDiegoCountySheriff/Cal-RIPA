@@ -4,47 +4,27 @@
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
-            <v-stepper-step
-              :rules="[() => step1Validated]"
-              :complete="stepIndex > 1"
-              step="1"
-            >
+            <v-stepper-step :complete="stepIndex > 1" step="1">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step2Validated]"
-              :complete="stepIndex > 2"
-              step="2"
-            >
+            <v-stepper-step :complete="stepIndex > 2" step="2">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step3Validated]"
-              :complete="stepIndex > 3"
-              step="3"
-            >
+            <v-stepper-step :complete="stepIndex > 3" step="3">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step4Validated]"
-              :complete="stepIndex > 4"
-              step="4"
-            >
+            <v-stepper-step :complete="stepIndex > 4" step="4">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
+            <v-stepper-step :complete="stepIndex > 5" step="5">
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -158,47 +138,27 @@
           </v-stepper-items>
 
           <v-stepper-header>
-            <v-stepper-step
-              :rules="[() => step1Validated]"
-              :complete="stepIndex > 1"
-              step="1"
-            >
+            <v-stepper-step :complete="stepIndex > 1" step="1">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step2Validated]"
-              :complete="stepIndex > 2"
-              step="2"
-            >
+            <v-stepper-step :complete="stepIndex > 2" step="2">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step3Validated]"
-              :complete="stepIndex > 3"
-              step="3"
-            >
+            <v-stepper-step :complete="stepIndex > 3" step="3">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step4Validated]"
-              :complete="stepIndex > 4"
-              step="4"
-            >
+            <v-stepper-step :complete="stepIndex > 4" step="4">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
+            <v-stepper-step :complete="stepIndex > 5" step="5">
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -241,12 +201,7 @@ export default {
 
   data() {
     return {
-      stepIndex: 1,
-      step1Validated: true,
-      step2Validated: true,
-      step3Validated: true,
-      step4Validated: true,
-      step5Validated: true,
+      stepIndex: this.formStepIndex,
       confirmationStepIndex: 7,
       stop: this.value,
       isEditStop: true,
@@ -256,7 +211,7 @@ export default {
 
   computed: {
     getEditPersonText() {
-      const personIndex = this.stop.person.index || 1
+      const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
     },
 
@@ -389,6 +344,16 @@ export default {
     value(newVal) {
       this.stop = newVal
     },
+
+    stepIndex(newVal) {
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(newVal)
+      }
+    },
+
+    formStepIndex(newVal) {
+      this.stepIndex = newVal
+    },
   },
 
   props: {
@@ -407,6 +372,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    formStepIndex: {
+      type: Number,
+      default: 1,
     },
     fullStop: {
       type: Object,
@@ -465,6 +434,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onStepIndexChange: {
       type: Function,
       default: () => {},
     },

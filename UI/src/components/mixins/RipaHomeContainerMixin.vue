@@ -129,6 +129,7 @@ export default {
     },
 
     handleTemplate(value) {
+      localStorage.setItem('ripa_form_editing', '1')
       this.isEditingForm = true
 
       switch (value) {
@@ -209,9 +210,12 @@ export default {
     },
 
     handleCancel() {
+      localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_editing')
+      localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_full_stop')
       this.isEditingForm = false
-      this.stop = {}
-      this.fullStop = {}
+      this.stop = defaultStop()
       this.updateFullStop()
     },
   },

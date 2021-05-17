@@ -4,6 +4,7 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
@@ -21,6 +22,7 @@
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-save-favorite="onSaveFavorite"
+      :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
@@ -68,6 +70,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => [],
+    },
+    formStepIndex: {
+      type: Number,
+      default: 1,
     },
     fullStop: {
       type: Object,
@@ -130,6 +136,10 @@ export default {
       default: () => {},
     },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onStepIndexChange: {
       type: Function,
       default: () => {},
     },
