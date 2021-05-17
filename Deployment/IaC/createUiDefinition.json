@@ -3,13 +3,88 @@
     "handler": "Microsoft.Azure.CreateUIDef",
     "version": "0.1.2-preview",
     "parameters": {
-        "config": {
-            "isWizard": false,
-            "basics": { }
-        },
-        "basics": [ ],
-        "steps": [ ], 
-        "outputs": { }
-        
+        "resourceTypes": [
+            "microsoft.resources/resourcegroups"
+        ],
+		"config": {
+			"isWizard": false,
+			"basics": {
+				"description": "Customized description with **markdown**, see [more](https://www.microsoft.com).",				
+				"resourceGroup": {
+					"constraints": {
+						"validations": [
+							{
+								"isValid": "[not(contains(resourceGroup().name, 'test'))]",
+								"message": "Resource group name can't contain 'test'."
+							}
+						]
+					},
+					"allowExisting": true
+				}
+			}
+		},
+        "basics": [
+           
+            {
+                "name": "agName",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency Name",
+                "defaultValue": "San Diego County Sheriff",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },
+            {
+                "name": "agAbbvn",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency abbreviation",
+                "defaultValue": "sdsd",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },
+            {
+                "name": "agId",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency Unique Id",
+                "defaultValue": "",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },
+			{
+                "name": "privateDomain",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Private Domain",
+                "defaultValue": "",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            }
+			
+        ],
+        "steps": [],
+        "outputs": {            
+            "agencyName": "[basics('agName')]",
+            "agencyAbbreviation": "[basics('agAbbvn')]",
+            "agencyId": "[basics('agId')]",
+			"privateDomain": "[basics('privateDomain')]"
+        }
     }
 }

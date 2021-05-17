@@ -31,20 +31,13 @@
         "parameterlinkuri_d": {
             "type": "string",
             "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.parameters.json"
-        },
-        "parameterlinkuri_q": {
-            "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovQA.parameters.json"
-        },
-        "parameterlinkuri_p": {
-            "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovProd.parameters.json"
         }
+        
 
     },
     "variables": {
         "rgName": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('rg'))]"
-        //"parameterlinkuri": "[or(if(equals(parameters('environment'),'d'), parameters('parameterlinkuri_d'),parameters('parameterlinkuri_q')),if(equals(parameters('environment'),'q'), parameters('parameterlinkuri_q'),parameters('parameterlinkuri_p')),if(equals(parameters('environment'),'p'), parameters('parameterlinkuri_p'),parameters('parameterlinkuri_d')))]"
+        
     },
     "resources": [
         {
@@ -72,48 +65,6 @@
                 },
                 "parametersLink": {
                     "uri": "[parameters('parameterlinkuri_d')]",
-                    "contentVersion": "1.0.0.0"
-                }
-            }
-        },
-        {
-            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'q'))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
-            "name": "QaDeployment",
-            "resourceGroup": "[variables('rgName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('rgName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[parameters('templatelinkuri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parametersLink": {
-                    "uri": "[parameters('parameterlinkuri_q')]",
-                    "contentVersion": "1.0.0.0"
-                }
-            }
-        },
-        {
-            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'p'))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
-            "name": "ProdDeployment",
-            "resourceGroup": "[variables('rgName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('rgName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[parameters('templatelinkuri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parametersLink": {
-                    "uri": "[parameters('parameterlinkuri_p')]",
                     "contentVersion": "1.0.0.0"
                 }
             }
