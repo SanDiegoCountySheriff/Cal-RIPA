@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Templates.Models;
+using RIPA.Functions.Security;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -28,6 +29,11 @@ namespace RIPA.Functions.Domain.Functions.Templates
             [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
 
         {
+            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             List<Template> response = new List<Template>();
             TableContinuationToken continuationToken = null;
             do

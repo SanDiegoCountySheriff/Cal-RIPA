@@ -5,6 +5,7 @@
         title="Officer Years of Experience"
         required
         subtitle="§999.226(a)(15)"
+        class="tw-mb-4"
       >
       </ripa-form-header>
     </template>
@@ -128,7 +129,9 @@ export default {
       }
 
       return [
-        (otherType && otherType.length > 0) || 'A description is required',
+        (otherType && otherType.length > 0) || 'Other type is required',
+        v => (v || '').length <= 60 || 'Max 60 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
       ]
     },
   },

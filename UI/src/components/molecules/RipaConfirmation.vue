@@ -1,5 +1,5 @@
 <template>
-  <v-card class="ripa-confirmation mx-auto my-12" flat max-width="600">
+  <v-card class="ripa-confirmation mx-auto my-12" flat max-width="650">
     <v-card-title class="tw-uppercase">Ripa Stops</v-card-title>
 
     <v-card-text>

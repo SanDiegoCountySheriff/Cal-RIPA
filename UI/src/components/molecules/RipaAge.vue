@@ -10,7 +10,7 @@
             v-model="model.person.perceivedAge"
             label="Perceived Age"
             :min="1"
-            :max="125"
+            :max="1250"
             :rules="ageRules"
             @input="handleInput"
           >
@@ -53,7 +53,10 @@ export default {
     },
 
     ageRules() {
-      return [v => !!v || 'An age is required']
+      return [
+        v => !!v || 'An age is required',
+        v => (v >= 1 && v <= 120) || 'Age must be between 1 and 120 years',
+      ]
     },
   },
 

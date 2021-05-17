@@ -77,20 +77,27 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateContrabandOrEvidenceDiscoveredModel()
       this.$emit('input', this.viewModel)
     },
 
     updateContrabandOrEvidenceDiscoveredModel() {
-      if (!this.viewModel.actionsTaken.anyContraband) {
+      this.$nextTick(() => {
         this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
-      }
+      })
     },
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
+    },
+
+    'viewModel.actionsTaken.anyContraband': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateContrabandOrEvidenceDiscoveredModel()
+        }
+      },
     },
   },
 

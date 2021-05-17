@@ -6,7 +6,8 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Stop.Services.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Security;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -31,6 +32,11 @@ namespace RIPA.Functions.Stop.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("GET - Get Stop requested");
+
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
 
             if (!string.IsNullOrEmpty(Id))
             {

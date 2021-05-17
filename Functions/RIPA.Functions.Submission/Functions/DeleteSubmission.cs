@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 
 namespace RIPA.Functions.Submission.Functions
@@ -34,11 +35,18 @@ namespace RIPA.Functions.Submission.Functions
         {
             log.LogInformation("Delete - Delete Submission requested");
 
-            if (!string.IsNullOrEmpty(Id))
-            {
-                await _submissionCosmosDbService.DeleteSubmissionAsync(Id);
-                return new OkObjectResult($"Deleted {Id}");
-            }
+            // NOTE: LM: I do not believe the system should allow Submissions to be deleted.
+
+            //if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            //{
+            //    return new UnauthorizedResult();
+            //}
+
+            //if (!string.IsNullOrEmpty(Id))
+            //{
+            //    await _submissionCosmosDbService.DeleteSubmissionAsync(Id);
+            //    return new OkObjectResult($"Deleted {Id}");
+            //}
 
             return new BadRequestObjectResult("Not found");
         }

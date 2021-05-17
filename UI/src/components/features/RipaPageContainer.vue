@@ -1,8 +1,9 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
-    :online="isOnline"
+    :online="isOnlineAndAuthenticated"
     :dark="isDark"
+    :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
   >
     <slot></slot>
@@ -39,7 +40,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAdmin', 'isAuthenticated', 'apiConfig', 'isOnline']),
+    ...mapGetters([
+      'isAdmin',
+      'invalidUser',
+      'isOnlineAndAuthenticated',
+      'apiConfig',
+    ]),
   },
 
   methods: {
@@ -82,7 +88,7 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
+      if (this.isOnlineAndAuthenticated && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
           this.clearLocalStorage()
@@ -104,7 +110,7 @@ export default {
     },
 
     async runApiStopsJob(apiStops) {
-      if (this.isOnline && this.isAuthenticated) {
+      if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
           await this.editOfficerStop(apiStops[index])
         }
@@ -113,15 +119,20 @@ export default {
   },
 
   async created() {
-    this.checkCache()
-    if (this.apiConfig === null) {
-      await AuthService.getApiConfig().then(res => {
-        this.setApiConfig({
-          apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-          apiSubscription: res.data.Configuration.Subscription,
+    if (this.invalidUser) {
+      this.$router.push('/checkUser')
+    } else {
+      this.checkCache()
+      if (this.apiConfig === null) {
+        await AuthService.getApiConfig().then(res => {
+          this.setApiConfig({
+            apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+            apiSubscription: res.data.Configuration.Subscription,
+            defaultCounty: res.data.Configuration.DefaultCounty,
+          })
+          this.getFormData()
         })
-        this.getFormData()
-      })
+      }
     }
   },
 }

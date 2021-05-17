@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
-using RIPA.Functions.Common.Models;
 
-namespace RIPA.Functions.Stop.Services.CosmosDb.Contracts
+namespace RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts
 {
     public interface IStopCosmosDbService
     {

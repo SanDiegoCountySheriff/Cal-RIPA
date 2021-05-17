@@ -39,6 +39,7 @@ export default {
           moreLocationOptions: newValue?.location?.moreLocationOptions || false,
           highwayExit: newValue?.location?.highwayExit || null,
           landmark: newValue?.location?.landmark || null,
+          piiFound: newValue?.location?.piiFound || false,
           outOfCounty: newValue?.location?.outOfCounty || false,
           city: newValue?.location?.city || null,
           beat: newValue?.location?.beat || null,
@@ -55,6 +56,7 @@ export default {
           isStudent: newValue?.person?.isStudent || false,
           perceivedAge: newValue?.person?.perceivedAge || null,
           perceivedGender: newValue?.person?.perceivedGender || null,
+          genderNonconforming: newValue?.person?.genderNonconforming || false,
           perceivedLimitedEnglish:
             newValue?.person?.perceivedLimitedEnglish || false,
           perceivedLgbt: newValue?.person?.perceivedLgbt || false,
@@ -64,12 +66,15 @@ export default {
         },
         stopDate: {
           date: newValue?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
-          time: newValue?.stopDate?.time || format(new Date(), 'h:mm'),
+          time: newValue?.stopDate?.time || format(new Date(), 'k:mm'),
           duration: newValue?.stopDate?.duration || null,
           stopInResponseToCfs: newValue?.stopDate?.stopInResponseToCfs || false,
         },
         stopReason: {
           reasonForStop: newValue?.stopReason?.reasonForStop || null,
+          educationViolation: newValue?.stopReason?.educationViolation || null,
+          educationViolationCode:
+            newValue?.stopReason?.educationViolationCode || null,
           trafficViolation: newValue?.stopReason?.trafficViolation || null,
           trafficViolationCode:
             newValue?.stopReason?.trafficViolationCode || null,
@@ -105,6 +110,10 @@ export default {
             newValue?.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
             newValue?.stopResult?.actionsTakenDuringStop10 || false,
+          actionsTakenDuringStop12:
+            newValue?.stopResult?.actionsTakenDuringStop12 || false,
+          actionsTakenDuringStop13:
+            newValue?.stopResult?.actionsTakenDuringStop13 || false,
           warningCodes: newValue?.stopResult?.warningCodes || [],
           citationCodes: newValue?.stopResult?.citationCodes || [],
           infieldCodes: newValue?.stopResult?.infieldCodes || [],

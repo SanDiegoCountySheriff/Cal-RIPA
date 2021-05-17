@@ -2,7 +2,6 @@
   <div class="ripa-no-english tw-pb-8">
     <ripa-form-header
       title="Limited or No English Fluency"
-      required
       subtitle="§999.226(a)(8)"
     >
     </ripa-form-header>

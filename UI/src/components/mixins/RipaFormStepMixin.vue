@@ -20,6 +20,10 @@ export default {
         this.$emit('input', this.viewModel)
       },
     },
+
+    isBackNextDisabled() {
+      return this.loadingGps || this.loadingPii
+    },
   },
 
   methods: {
@@ -86,6 +90,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    loadingGps: {
+      type: Boolean,
+      defaeult: false,
     },
     loadingPii: {
       type: Boolean,

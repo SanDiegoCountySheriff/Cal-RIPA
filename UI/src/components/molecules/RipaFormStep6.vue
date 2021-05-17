@@ -10,10 +10,10 @@
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
-      <v-alert type="error">
+      <ripa-alert alert-type="error">
         Oops, you may have missed something! Please review your selections
         above.
-      </v-alert>
+      </ripa-alert>
     </template>
 
     <div class="tw-flex tw-mt-4 tw-justify-center">
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 
@@ -41,6 +42,7 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: {
+    RipaAlert,
     RipaFormSummary,
   },
 

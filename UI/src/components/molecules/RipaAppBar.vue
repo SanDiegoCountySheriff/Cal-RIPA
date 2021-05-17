@@ -1,8 +1,11 @@
 <template>
   <v-app-bar app dense flat>
-    <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
-      getAppTitle
-    }}</v-toolbar-title>
+    <v-toolbar-title
+      v-if="!invalidUser"
+      class="tw-cursor-pointer"
+      @click="$router.push('/')"
+      >{{ getAppTitle }}</v-toolbar-title
+    >
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
@@ -31,7 +34,7 @@
 
     <v-spacer></v-spacer>
 
-    <div>
+    <div v-if="!invalidUser">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -102,7 +105,7 @@ export default {
     },
 
     getOnlineIcon() {
-      return this.online ? 'mdi-wifi' : 'mdi-wifi-off'
+      return this.online ? 'mdi-wifi' : 'mdi-wifi-strength-off'
     },
   },
 
@@ -135,6 +138,10 @@ export default {
     onUpdateDark: {
       type: Function,
       default: () => {},
+    },
+    invalidUser: {
+      type: Boolean,
+      default: false,
     },
   },
 }

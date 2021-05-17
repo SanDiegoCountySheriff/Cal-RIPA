@@ -1,8 +1,35 @@
 <script>
+import {
+  getOfficerYearsExperience,
+  getOfficerAssignment,
+  getOfficerOtherType,
+} from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
+import { format } from 'date-fns'
 
 export default {
+  data() {
+    return {
+      favorites: [],
+      lastLocation: null,
+      savedLocation: null,
+      showAddFavoriteDialog: false,
+      showFavoritesDialog: false,
+    }
+  },
+
   computed: {
+    isLastLocationValid() {
+      return this.getLastLocation !== null
+    },
+  },
+
+  methods: {
+    getFavoriteLocations() {
+      const locations = localStorage.getItem('ripa_favorite_locations')
+      return locations ? JSON.parse(locations) : []
+    },
+
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
       if (lastLocation) {
@@ -12,27 +39,16 @@ export default {
       return null
     },
 
-    isLastLocationValid() {
-      return this.getLastLocation !== null
-    },
-  },
-
-  methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
-      )
-      return +yearsExperience || null
-    },
-
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.updateFullStop()
+    handleAddFavorite(name) {
+      const location = {
+        id: new Date().getTime(),
+        name,
+        location: this.savedLocation,
+        updateDate: format(new Date(), 'yyyy-MM-dd'),
+      }
+      const locations = this.getFavoriteLocations()
+      locations.push(location)
+      this.setFavoriteLocations(locations)
     },
 
     handleAddPerson() {
@@ -43,12 +59,24 @@ export default {
         isStudent: false,
         perceivedRace: null,
         perceivedGender: null,
+        genderNonconforming: false,
         perceivedLgbt: false,
         perceivedAge: null,
         anyDisabilities: false,
         perceivedOrKnownDisability: null,
       }
       this.updateFullStop()
+    },
+
+    handleCloseDialog() {
+      this.showAddFavoriteDialog = false
+      this.showFavoritesDialog = false
+    },
+
+    handleDeleteFavorite(id) {
+      const locations = this.getFavoriteLocations()
+      const filteredLocations = locations.filter(item => item.id !== id)
+      this.setFavoriteLocations(filteredLocations)
     },
 
     handleDeletePerson(id) {
@@ -60,14 +88,55 @@ export default {
       this.fullStop = Object.assign({}, updatedFullStop)
     },
 
+    handleEditFavorite(favorite) {
+      const updatedFav = Object.assign({}, favorite)
+      updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
+      const locations = this.getFavoriteLocations()
+      const filteredLocations = locations.filter(
+        item => item.id !== updatedFav.id,
+      )
+      filteredLocations.push(updatedFav)
+      this.setFavoriteLocations(filteredLocations)
+    },
+
+    handleInput(newVal) {
+      this.stop = Object.assign({}, newVal)
+      this.updateFullStop()
+    },
+
+    handleOpenFavorite(id) {
+      this.showFavoritesDialog = false
+      const favorites = this.getFavoriteLocations()
+      const [favorite] = favorites.filter(item => item.id === id)
+      if (favorite) {
+        this.lastLocation = favorite.location
+      }
+    },
+
+    handleOpenFavorites() {
+      this.favorites = this.getFavoriteLocations()
+      this.showFavoritesDialog = true
+    },
+
+    handleOpenLastLocation() {
+      const location = this.getLastLocation()
+      this.lastLocation = location
+    },
+
+    handleSaveFavorite(location) {
+      this.savedLocation = location
+      this.showAddFavoriteDialog = true
+    },
+
     handleTemplate(value) {
       this.isEditingForm = true
 
       switch (value) {
         case 'motor':
           this.stop = motorStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -75,8 +144,9 @@ export default {
 
         case 'probation':
           this.stop = probationStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -84,8 +154,9 @@ export default {
 
         default:
           this.stop = defaultStop(
-            this.getOfficerYearsExperience(),
-            this.getOfficerAssignment(),
+            getOfficerYearsExperience(),
+            getOfficerAssignment(),
+            getOfficerOtherType(),
             this.officerId,
             this.agency,
           )
@@ -93,6 +164,10 @@ export default {
       }
 
       this.updateFullStop()
+    },
+
+    setFavoriteLocations(locations) {
+      localStorage.setItem('ripa_favorite_locations', JSON.stringify(locations))
     },
 
     setLastLocation(stop) {
@@ -120,7 +195,14 @@ export default {
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
-        updatedFullStop.people = people.filter(item => item.id !== personId)
+        updatedFullStop.people = people
+          .filter(item => item.id !== personId)
+          .map((item, index) => {
+            return {
+              ...item,
+              index: index + 1,
+            }
+          })
         updatedFullStop.people.push(updatedPerson)
         this.fullStop = Object.assign({}, updatedFullStop)
       }

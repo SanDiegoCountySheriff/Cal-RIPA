@@ -6,7 +6,10 @@
       :county-cities="countyCities"
       :full-stop="fullStop"
       :last-location="lastLocation"
-      :loading-pii="loadingPii"
+      :loading-gps="loadingGps"
+      :loading-pii-step1="loadingPiiStep1"
+      :loading-pii-step3="loadingPiiStep3"
+      :loading-pii-step4="loadingPiiStep4"
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
@@ -14,6 +17,10 @@
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
+      :on-gps-location="onGpsLocation"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-last-location="onOpenLastLocation"
+      :on-save-favorite="onSaveFavorite"
       :on-submit="onSubmit"
       @input="handleInput"
     ></ripa-form-wrapper>
@@ -70,7 +77,19 @@ export default {
       type: Object,
       default: () => {},
     },
-    loadingPii: {
+    loadingGps: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep1: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep3: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPiiStep4: {
       type: Boolean,
       default: false,
     },
@@ -102,7 +121,23 @@ export default {
       type: Function,
       default: () => {},
     },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
     onSubmit: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
       type: Function,
       default: () => {},
     },

@@ -5,17 +5,52 @@
 
     <v-container>
       <v-row no-gutters>
-        <div class="tw-flex tw-w-full tw-mt-4 tw-justify-center">
-          <v-btn
-            class="tw-mr-2"
-            outlined
-            small
-            :disabled="!validLastLocation"
-            @click="handleLastLocation"
-            >Last Location</v-btn
-          >
-          <v-btn outlined small disabled>Favorite Locations</v-btn>
-        </div>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <template v-if="isGeolocationAvailable">
+            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+              <v-btn
+                class="tw-w-full"
+                outlined
+                small
+                :loading="loadingGps"
+                @click="handleCurrentLocation"
+              >
+                Current Location
+              </v-btn>
+            </div>
+          </template>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              :disabled="!validLastLocation"
+              @click="handleLastLocation"
+              >Last Location
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              @click="handleOpenFavorites"
+            >
+              Open Favorites
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="3">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
+              Save Location
+            </v-btn>
+          </div>
+        </v-col>
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
@@ -39,19 +74,31 @@
             ></ripa-autocomplete>
           </template>
 
-          <v-alert class="tw-mt-8" dense outlined type="info">
+          <ripa-alert class="tw-mt-8" alert-outlined alert-type="info">
             Note: Do not provide a street address if the location is a
             residence.
-          </v-alert>
+          </ripa-alert>
         </v-col>
       </v-row>
 
       <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <div class="md:tw-mr-4">
+            <template v-if="model.location.piiFound">
+              <ripa-alert alert-outlined alert-type="warning">
+                The explanation contains personally identifying information.
+                Please remove if possible.
+              </ripa-alert>
+            </template>
+          </div>
+        </v-col>
+
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
             <ripa-number-input
               v-model="model.location.blockNumber"
               label="Block Number"
+              :loading="loadingPii"
               :rules="blockNumberRules"
               @input="handleInput"
             >
@@ -64,6 +111,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
+              :loading="loadingPii"
               :rules="streetNameRules"
               @input="handleInput"
             >
@@ -79,6 +127,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
+            :loading="loadingPii"
             :rules="intersectionRules"
             @input="handleInput"
           >
@@ -97,6 +146,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closet exit"
+              :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"
             >
@@ -152,7 +202,6 @@
               label="Beat"
               :items="beats"
               :disabled="model.location.outOfCounty"
-              :rules="beatRules"
               @input="handleInput"
             ></ripa-autocomplete>
           </div>
@@ -163,6 +212,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
@@ -177,6 +227,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaFormHeader,
     RipaNumberInput,
@@ -198,6 +249,10 @@ export default {
       },
     },
 
+    isGeolocationAvailable() {
+      return navigator.geolocation
+    },
+
     getCities() {
       const checked = this.viewModel.location.outOfCounty
       return checked ? this.nonCountyCities : this.countyCities
@@ -212,11 +267,6 @@ export default {
     cityRules() {
       const city = this.viewModel.location.city
       return [city !== null || 'A city is required']
-    },
-
-    beatRules() {
-      const beat = this.viewModel.location.beat
-      return [beat !== null || 'A beat is required']
     },
 
     blockNumberRules() {
@@ -285,40 +335,109 @@ export default {
   },
 
   methods: {
+    handleCurrentLocation() {
+      if (navigator.geolocation) {
+        if (this.onGpsLocation) {
+          this.onGpsLocation()
+        }
+      } else {
+        console.log('Geolocation is not supported by this browser.')
+      }
+    },
+
     handleInput() {
-      this.updateBeatsModel()
-      this.updateBlockNumberModel()
+      this.updateFullAddressModel()
       this.$emit('input', this.viewModel)
     },
 
+    updateFullAddressModel() {
+      const streetName = this.viewModel.location?.streetName || ''
+      const highwayExit = this.viewModel.location?.highwayExit || ''
+      const intersection = this.viewModel.location?.intersection || ''
+      const landMark = this.viewModel.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.viewModel.location.fullAddress = fullAddress
+    },
+
+    handleInputOutOfCounty(newVal) {
+      const currentVal = this.viewModel.location.outOfCounty
+      if (newVal !== currentVal) {
+        this.updateOutOfCountyModel()
+        this.handleInput()
+      }
+    },
+
     handleLastLocation() {
-      this.viewModel.location = this.lastLocation
+      if (this.onOpenLastLocation) {
+        this.onOpenLastLocation()
+      }
+    },
+
+    handleOpenFavorites() {
+      if (this.onOpenFavorites) {
+        this.onOpenFavorites()
+      }
+    },
+
+    handleSaveFavorite() {
+      if (this.onSaveFavorite) {
+        this.onSaveFavorite(this.viewModel.location)
+      }
     },
 
     updateBlockNumberModel() {
-      const blockNumber = this.viewModel.location.blockNumber
-      this.viewModel.location.blockNumber = Math.round(blockNumber / 100) * 100
+      this.$nextTick(() => {
+        let blockNumber = this.viewModel.location.blockNumber
+        blockNumber = Math.floor(blockNumber / 100) * 100
+        this.viewModel.location.blockNumber = blockNumber
+      })
     },
 
-    updateBeatsModel() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
-        this.viewModel.location.city = null
-      }
+    updateOutOfCountyModel() {
+      this.$nextTick(() => {
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
 
-      if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
-      ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
-      }
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
+      })
     },
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
+    },
+
+    lastLocation(newVal) {
+      if (newVal) {
+        this.viewModel.location = newVal
+        this.handleInput()
+      }
+    },
+
+    'viewModel.location.outOfCounty': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateOutOfCountyModel()
+        }
+      },
+    },
+
+    'viewModel.location.blockNumber': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.updateBlockNumberModel()
+        }
+      },
     },
   },
 
@@ -343,6 +462,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    loadingGps: {
+      type: Boolean,
+      default: false,
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
+    },
     nonCountyCities: {
       type: Array,
       default: () => {},
@@ -350,6 +477,22 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onGpsLocation: {
+      type: Function,
+      default: () => {},
     },
   },
 }

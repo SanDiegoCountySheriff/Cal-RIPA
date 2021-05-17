@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Cities.Models;
+using RIPA.Functions.Security;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -25,9 +27,14 @@ namespace RIPA.Functions.Domain.Functions.Cities
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "City failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] City city, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutCity/{Id}")] City city, HttpRequest req,string Id,
             [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            {
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 city.PartitionKey = "CA";

@@ -67,7 +67,7 @@ import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
 import { DURATIONS } from '@/constants/form'
-import { dateWithinLastHours } from '@/utilities/dates'
+import { dateWithinLastHours, dateNotInFuture } from '@/utilities/dates'
 
 export default {
   name: 'ripa-stop-date',
@@ -98,7 +98,12 @@ export default {
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
-      durationRules: [v => !!v || 'A duration is required'],
+      durationRules: [
+        v => !!v || 'A duration is required',
+        v =>
+          (v >= 1 && v <= 1440) ||
+          'Duration must be between 1 and 1440 minutes',
+      ],
       viewModel: this.loadModel(this.value),
     }
   },
@@ -113,7 +118,11 @@ export default {
     isValidDateTime() {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
-      return dateWithinLastHours(dateStr, timeStr, 24)
+
+      return (
+        dateWithinLastHours(dateStr, timeStr, 24) &&
+        dateNotInFuture(dateStr, timeStr)
+      )
     },
   },
 
