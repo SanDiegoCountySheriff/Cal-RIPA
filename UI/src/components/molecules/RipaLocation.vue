@@ -145,7 +145,7 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
-              label="Highway and closet exit"
+              label="Highway and closest exit"
               :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"
