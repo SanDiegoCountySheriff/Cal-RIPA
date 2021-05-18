@@ -18,6 +18,7 @@
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
+      :on-edit-person="onEditPerson"
       :on-gps-location="onGpsLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
@@ -124,6 +125,10 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
       type: Function,
       default: () => {},
     },

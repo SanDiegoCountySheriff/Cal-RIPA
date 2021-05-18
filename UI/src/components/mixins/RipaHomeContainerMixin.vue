@@ -99,6 +99,20 @@ export default {
       this.setFavoriteLocations(filteredLocations)
     },
 
+    handleEditPerson(id) {
+      const [filteredPerson] = this.fullStop.people.filter(
+        item => item.id === id,
+      )
+      if (filteredPerson) {
+        debugger
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+        debugger
+      }
+    },
+
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.updateFullStop()
@@ -210,6 +224,7 @@ export default {
     },
 
     handleCancel() {
+      localStorage.removeItem('ripa_form_current_user')
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_stop')

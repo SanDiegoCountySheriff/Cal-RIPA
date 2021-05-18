@@ -301,6 +301,9 @@ export default {
 
     handleEditPerson(id) {
       console.log('Edit Person in Form', id)
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
       this.stepIndex = 2
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
@@ -437,6 +440,10 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditPerson: {
       type: Function,
       default: () => {},
     },

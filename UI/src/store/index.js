@@ -792,29 +792,28 @@ export default new Vuex.Store({
         })
     },
 
-    getUser({ commit, state }) {
-      const id = '1620469917330'
-      return axios
-        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-          console.log('There was an error retrieving user.', error)
-        })
-    },
+    // getUser({ commit, state }) {
+    //   const id = '1620469917330'
+    //   return axios
+    //     .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+    //       headers: {
+    //         'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+    //         'Cache-Control': 'no-cache',
+    //       },
+    //     })
+    //     .then(response => {
+    //       console.log(response)
+    //     })
+    //     .catch(error => {
+    //       console.log('There was an error retrieving user.', error)
+    //     })
+    // },
 
     setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)
     },
 
     setUserAccountInfo({ commit }, value) {
-      console.log('user account info', value)
       commit('updateUserAccount', value)
     },
 

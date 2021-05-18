@@ -22,6 +22,7 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-edit-person="handleEditPerson"
         :on-gps-location="handleGpsLocation"
         :on-open-favorites="handleOpenFavorites"
         :on-open-last-location="handleOpenLastLocation"
@@ -161,10 +162,12 @@ export default {
   },
 
   mounted() {
+    const localFormCurrentUser = localStorage.getItem('ripa_form_current_user')
     const localFormEditing = localStorage.getItem('ripa_form_editing')
     const localStop = localStorage.getItem('ripa_form_stop')
     const localFullStop = localStorage.getItem('ripa_form_full_stop')
     const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
     if (localFormEditing) {
       const isEditing = localFormEditing === '1'
       const parsedStop = JSON.parse(localStop)
@@ -188,6 +191,10 @@ export default {
     fullStop(newVal) {
       this.fullStop = newVal
       if (this.isEditingForm) {
+        localStorage.setItem(
+          'ripa_form_current_user',
+          this.stop.person.id.toString(),
+        )
         localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
         localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
       }
