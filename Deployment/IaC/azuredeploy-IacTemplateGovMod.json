@@ -435,13 +435,13 @@
         "networkInt_ipconfig2_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('networkinterface_ipconfig2_name'))]",
         "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
         "user_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
-        //"user_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=','[',resourceId('Microsoft.KeyVault/vaults/secrets', variables('vaults_ripa_kv_name'),parameters('vaults_kv_secrets_key1')).secretUriWithVersion,']', ')')]",
         "domain_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key3'),')')]",
         "textanalytics_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key4'),')')]",
         "apim_policy_value1":"[concat(parameters('policyCont1_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont1_b'))]",
-        "apim_policy_value2":"[concat(parameters('policyCont2_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont2_b'))]"
-        
-
+        "apim_policy_value2":"[concat(parameters('policyCont2_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont2_b'))]",
+        "ripa_app_id":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
+        "ripa_tenant_id":"asdf",
+        "ripa_tenant_name":"asdf"
     },
     "resources": [
         {
@@ -2431,7 +2431,6 @@
                         },
                         {
                             "name": "Account",
-                            //"value": "https://sdsd-ripa-d-cdb.documents.azure.us"
                             "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
                             
                         },
@@ -2447,8 +2446,12 @@
                             "name": "Key",
                            "value": "[variables('user_fa_keyvault_referencestring')]"
                            
+                        },
+                        {
+                            "name": "ripa_app_id",
+                           "value": "[variables('user_fa_keyvault_referencestring')]"
+                           
                         }
-
                     ],
                     "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
                     "linuxFxVersion": "[parameters('linuxFxVersion')]"
