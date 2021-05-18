@@ -30,3 +30,24 @@ The following resources will be created on Azure Government cloud by running "az
 - Network interface
 - Storage account's 
 - Network security group for cosmosdb and API management.
+
+#### Deploying infrastructure through ArmTemplate
+
+To deploy ArmTemplate via the command line (using the Azure CLI ) you can use the commands below.
+
+###### To Create ResourceGroup
+
+```
+az group create --name <resourcegroupName> --location <location>
+```
+
+###### To deploy template 
+
+```
+az deployment group create --resource-group <resourcegroupName> --name <deploymentName> --template-file <templateFile>
+```
+###### To deploy template with parameters file
+
+```
+az deployment group create --resource-group <resourcegroupName> --name <deploymentName> --template-file <templateFile> --parameters <parameterFile>
+```
