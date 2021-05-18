@@ -80,12 +80,21 @@ export default {
     },
 
     handleDeletePerson(id) {
+      // update fullStop
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {
         ...this.fullStop,
         people: filteredPeople,
       }
       this.fullStop = Object.assign({}, updatedFullStop)
+      // update stop
+      const [filteredPerson] = this.fullStop.people[0]
+      if (filteredPerson) {
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+      }
     },
 
     handleEditFavorite(favorite) {
@@ -104,12 +113,10 @@ export default {
         item => item.id === id,
       )
       if (filteredPerson) {
-        debugger
         this.stop = {
           ...this.stop,
           person: filteredPerson,
         }
-        debugger
       }
     },
 
@@ -199,7 +206,7 @@ export default {
           stopResult: this.stop?.stopResult || null,
         }
 
-        const updatedFullStop = Object.assign({}, this.fullStop)
+        let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agency = this.stop.agency
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
@@ -219,6 +226,10 @@ export default {
             }
           })
         updatedFullStop.people.push(updatedPerson)
+        updatedFullStop = {
+          ...updatedFullStop,
+          people: updatedFullStop.people.sort((a, b) => a.id - b.id),
+        }
         this.fullStop = Object.assign({}, updatedFullStop)
       }
     },
