@@ -41,8 +41,7 @@ namespace RIPA.Functions.Submission
                 Port = Convert.ToInt32(Environment.GetEnvironmentVariable("SftpPort")),
                 UserName = Environment.GetEnvironmentVariable("SftpUserName"),
                 Password = Environment.GetEnvironmentVariable("SftpPassword"),
-                KeyFile = Environment.GetEnvironmentVariable("SftpKeyFile")
-
+                Key = Environment.GetEnvironmentVariable("SftpKey")
             };
             LoggerFactory loggerFactory = new LoggerFactory();
             return new SftpService(loggerFactory.CreateLogger(typeof(SftpService)), sftpConfig);
