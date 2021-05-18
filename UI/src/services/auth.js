@@ -37,6 +37,7 @@ const AuthService = {
             JSON.stringify(currentAccount[0]),
           )
           sessionStorage.setItem('ripa-idToken', accessToken.idToken)
+          // set a timer to refresh the token in 55 minutes
           return true
         } else {
           msalInstance.loginRedirect()
@@ -64,14 +65,37 @@ const AuthService = {
   },
 
   getIsAuthenticated: async () => {
-    if (sessionStorage.getItem('ripa-idToken')) {
-      if (msalInstance) {
-        const accounts = await msalInstance.getAllAccounts()
-        return accounts.length > 0
-      }
-    }
+    const userAccount = JSON.parse(sessionStorage.getItem('ripa-userAccount'))
 
-    return false
+    if (userAccount) {
+      const silentRequest = {
+        scopes: ['User.Read'],
+        account: userAccount,
+        forceRefresh: false,
+      }
+      // if we still have the user account, refresh the token
+      await msalInstance
+        .acquireTokenSilent(silentRequest)
+        .then(res => {
+          return true
+        })
+        .catch(error => {
+          if (
+            error.name === 'InteractionRequiredAuthError' ||
+            error.name === 'ServerError'
+          ) {
+            // remove user info from session storage
+            sessionStorage.removeItem('ripa-userAccount')
+            sessionStorage.removeItem('ripa-idToken')
+            sessionStorage.removeItem('ripa-logOutAttempt')
+            // fallback to interaction when silent call fails
+            return false
+          }
+        })
+    } else {
+      // if we don't have user account info, need to login
+      return false
+    }
   },
   doLogOut: async () => {
     const currentAccount = sessionStorage.getItem('ripa-userAccount')
