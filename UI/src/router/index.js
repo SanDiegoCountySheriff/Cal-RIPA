@@ -15,6 +15,8 @@ const routes = [
     beforeEnter(to, from, next) {
       if (isValidOfficer()) {
         next()
+      } else if (!store.state.user.isAuthenticated) {
+        next()
       } else {
         next('/user')
       }
@@ -72,8 +74,16 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   const isAuthenticated = await AuthService.getIsAuthenticated()
   if (!isAuthenticated && navigator.onLine) {
-    const loginAttempt = await AuthService.tryLogin()
-    if (loginAttempt) {
+    if (!sessionStorage.getItem('ripa-logOutAttempt')) {
+      const loginAttempt = await AuthService.tryLogin()
+      if (loginAttempt) {
+        next()
+      }
+    } else {
+      // ONLY if the user has explicity logged out
+      // don't automatically try the redirect. Clear the flag
+      // and wait for the user to click "Log In" (or submit a form, etc.)
+      sessionStorage.removeItem('ripa-logOutAttempt')
       next()
     }
   } else {

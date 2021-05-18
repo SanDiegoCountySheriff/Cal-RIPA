@@ -3,16 +3,19 @@
     <ripa-app-bar
       :admin="admin"
       :online="online"
+      :authenticated="authenticated"
       :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
+      @handleLogOut="handleLogOut"
+      @handleLogIn="handleLogIn"
     ></ripa-app-bar>
 
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
 
-    <ripa-speed-dial v-if="!invalidUser"></ripa-speed-dial>
+    <ripa-speed-dial v-if="!invalidUser && authenticated"></ripa-speed-dial>
   </div>
 </template>
 
@@ -28,6 +31,15 @@ export default {
     RipaAppBar,
     RipaContentWrapper,
     RipaSpeedDial,
+  },
+
+  methods: {
+    handleLogOut() {
+      this.$emit('handleLogOut')
+    },
+    handleLogIn() {
+      this.$emit('handleLogIn')
+    },
   },
 
   props: {
@@ -48,6 +60,10 @@ export default {
       default: () => {},
     },
     invalidUser: {
+      type: Boolean,
+      default: false,
+    },
+    authenticated: {
       type: Boolean,
       default: false,
     },

@@ -32,6 +32,10 @@ const AuthService = {
             scopes: ['user.read'],
           })
           store.dispatch('setUserAccountInfo', currentAccount[0])
+          sessionStorage.setItem(
+            'ripa-userAccount',
+            JSON.stringify(currentAccount[0]),
+          )
           sessionStorage.setItem('ripa-idToken', accessToken.idToken)
           return true
         } else {
@@ -68,6 +72,20 @@ const AuthService = {
     }
 
     return false
+  },
+  doLogOut: async () => {
+    console.log('logout')
+    const currentAccount = sessionStorage.getItem('ripa-userAccount')
+    sessionStorage.setItem('ripa-logOutAttempt', true)
+    // remove user info from session storage
+    sessionStorage.removeItem('ripa-userAccount')
+    sessionStorage.removeItem('ripa-idToken')
+    if (currentAccount) {
+      msalInstance.logoutRedirect({
+        account: JSON.parse(currentAccount),
+        postLogoutRedirectUri: window.location.origin,
+      })
+    }
   },
 }
 

@@ -2,9 +2,12 @@
   <ripa-page-wrapper
     :admin="isAdmin"
     :online="isOnlineAndAuthenticated"
+    :authenticated="isAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
+    @handleLogOut="handleLogOut"
+    @handleLogIn="handleLogIn"
   >
     <slot></slot>
     <ripa-interval
@@ -44,6 +47,7 @@ export default {
       'isAdmin',
       'invalidUser',
       'isOnlineAndAuthenticated',
+      'isAuthenticated',
       'apiConfig',
     ]),
   },
@@ -80,6 +84,15 @@ export default {
     handleUpdateDark(value) {
       this.isDark = value
       this.setDarkToLocalStorage()
+    },
+
+    handleLogOut() {
+      // do logout..will redirect to tenant and then back to page
+      AuthService.doLogOut()
+    },
+
+    handleLogIn() {
+      AuthService.tryLogin()
     },
 
     setDarkToLocalStorage() {

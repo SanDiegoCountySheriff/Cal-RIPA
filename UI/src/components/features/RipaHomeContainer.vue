@@ -1,7 +1,10 @@
 <template>
   <div class="ripa-home-container">
     <template v-if="!isEditingForm">
-      <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
+      <ripa-intro-template
+        v-if="getAuthAndLocalStorageCheck"
+        :on-template="handleTemplate"
+      ></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
       <ripa-form-template
@@ -91,7 +94,17 @@ export default {
       'officerId',
       'agency',
       'mappedGpsLocationAddress',
+      'isAuthenticated',
     ]),
+    getAuthAndLocalStorageCheck() {
+      // if the user is NOT authenticated AND does not have a local storage cache
+      // that means they haven't logged in and must reauthenticate
+      if (!this.isAuthenticated && !localStorage.getItem('ripa_cache_date')) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
 
   methods: {
