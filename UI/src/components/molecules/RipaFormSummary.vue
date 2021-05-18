@@ -38,7 +38,7 @@
         :key="person.id"
       >
         <div class="tw-mt-4">
-          Person {{ index + 1 }}
+          Person {{ index + 1 }} ({{ person.id }})
           <v-btn
             class="tw-ml-4"
             dense
