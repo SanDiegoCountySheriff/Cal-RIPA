@@ -74,7 +74,6 @@ const AuthService = {
     return false
   },
   doLogOut: async () => {
-    console.log('logout')
     const currentAccount = sessionStorage.getItem('ripa-userAccount')
     sessionStorage.setItem('ripa-logOutAttempt', true)
     // remove user info from session storage

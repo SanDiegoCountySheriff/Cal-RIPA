@@ -162,7 +162,6 @@ export default {
       }
     },
     handleLogOut() {
-      console.log('log out')
       this.$emit('handleLogOut')
     },
     handleLogIn() {
