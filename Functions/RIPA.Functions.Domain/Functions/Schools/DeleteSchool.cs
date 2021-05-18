@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Security;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -31,8 +32,16 @@ namespace RIPA.Functions.Domain.Functions.Schools
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteSchool/{Id}")] HttpRequest req, string Id,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -31,9 +32,16 @@ namespace RIPA.Functions.Submission.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Submissions requested");
-
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

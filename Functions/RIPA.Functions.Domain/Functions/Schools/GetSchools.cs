@@ -29,8 +29,16 @@ namespace RIPA.Functions.Domain.Functions.Schools
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 
@@ -40,12 +48,12 @@ namespace RIPA.Functions.Domain.Functions.Schools
             {
                 var request = await schools.ExecuteQuerySegmentedAsync(new TableQuery<School>(), continuationToken);
                 continuationToken = request.ContinuationToken;
-                
+
                 foreach (School entity in request)
                 {
                     response.Add(entity);
                 }
-            } 
+            }
             while (continuationToken != null);
 
             log.LogInformation($"GetSchools returned {response.Count} schools");

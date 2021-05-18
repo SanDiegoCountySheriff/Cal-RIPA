@@ -210,13 +210,13 @@ namespace RIPA.Functions.Submission.Services.REST
             switch (percievedGender)
             {
                 case "Male":
-                    return PercievedGender.Male.ToString();
+                    return ((int)PercievedGender.Male).ToString();
                 case "Female":
-                    return PercievedGender.Female.ToString();
+                    return ((int)PercievedGender.Female).ToString();
                 case "Transgender man/boy":
-                    return PercievedGender.TransgenderManBoy.ToString();
+                    return ((int)PercievedGender.TransgenderManBoy).ToString();
                 case "Transgender woman/girl":
-                    return PercievedGender.TransgenderWomanGirl.ToString();
+                    return ((int)PercievedGender.TransgenderWomanGirl).ToString();
             }
 
             return "";

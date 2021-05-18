@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using RIPA.Functions.Security;
 using RIPA.Functions.TextAnalytics.Models;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,8 +40,16 @@ namespace RIPA.Functions.TextAnalytics.Functions
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

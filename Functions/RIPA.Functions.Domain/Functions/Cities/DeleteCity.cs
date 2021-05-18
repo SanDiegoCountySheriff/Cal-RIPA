@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Security;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -30,8 +31,16 @@ namespace RIPA.Functions.Domain.Functions.Cities
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteCity/{Id}")] HttpRequest req, string Id,
             [Table("Cities", Connection = "RipaStorage")] CloudTable cities, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

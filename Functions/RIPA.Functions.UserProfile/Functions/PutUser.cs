@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -33,9 +34,16 @@ namespace RIPA.Functions.UserProfile.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Services.CosmosDb.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
-
-            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

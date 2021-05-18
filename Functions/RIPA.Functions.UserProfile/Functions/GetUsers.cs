@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
 using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -31,8 +32,16 @@ namespace RIPA.Functions.UserProfile.Functions
         {
             log.LogInformation("GET - Get Users requested");
 
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Beats.Models;
 using RIPA.Functions.Security;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,8 +28,16 @@ namespace RIPA.Functions.Domain.Functions.Beats
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
         [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
         {
-            if(!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 
@@ -43,7 +52,7 @@ namespace RIPA.Functions.Domain.Functions.Beats
                 {
                     response.Add(entity);
                 }
-            } 
+            }
             while (continuationToken != null);
 
             log.LogInformation($"GetBeats returned {response.Count} beats");

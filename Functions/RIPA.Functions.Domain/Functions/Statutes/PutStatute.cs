@@ -31,8 +31,16 @@ namespace RIPA.Functions.Domain.Functions.Statutes
             [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutStatute/{Id}")] Statute statute, HttpRequest req, int Id,
              [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 
