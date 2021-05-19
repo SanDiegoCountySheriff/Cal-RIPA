@@ -6,7 +6,7 @@
 		"PrimaryDomain": "sdsheriff.gov"
 	},
 	"Configuration": {
-		"ServicesBaseUrl": "https://sdsd-ripa-1-apim.azure-api.us/",
+		"ServicesBaseUrl": "https://sdsd-ripa-q-apim.azure-api.us/",
 		"Subscription": "1188db29d44d497e956b7c277ed3244c",
 		"DefaultCounty": "San Diego"
 	}
