@@ -49,6 +49,10 @@ namespace RIPA.Functions.UserProfile.Functions
 
             if (!string.IsNullOrEmpty(userProfile.OfficerId) || userProfile.OfficerId.Length != 9)
             {
+                if (!string.IsNullOrEmpty(userProfile.OfficerId))
+                    if (userProfile.OfficerId.Length != 9)
+                        return new BadRequestObjectResult("officer must be 9 chars");
+
                 userProfile.Id = Id;
                 await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
                 return new OkObjectResult(userProfile);
