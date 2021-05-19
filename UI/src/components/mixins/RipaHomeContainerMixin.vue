@@ -241,8 +241,8 @@ export default {
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_full_stop')
       this.isEditingForm = false
-      this.stop = defaultStop()
-      this.updateFullStop()
+      this.stop = null
+      this.fullStop = null
     },
   },
 }

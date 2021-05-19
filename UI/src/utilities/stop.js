@@ -223,7 +223,7 @@ export const apiStop = (
     },
     officerAssignment: {
       key: assignment.code.toString(),
-      otherType: stop.officer?.otherType || '',
+      otherType: fullStop.officer?.otherType || '',
       type: assignment.text,
     },
     officerId: fullStop.officerId,

@@ -160,8 +160,8 @@ export default {
         Object.assign(this.users[this.editedIndex], this.editedItem)
       } else {
         this.editedItem.id =
-          format(new Date(), 'yyyy/MM/dd') +
-          (Math.floor(Math.random() * 99999) + 10000).toString()
+          format(new Date(), 'yyMMdd') +
+          (Math.floor(Math.random() * 999) + 100).toString()
         this.users.push(this.editedItem)
       }
 

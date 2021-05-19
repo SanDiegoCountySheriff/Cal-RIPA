@@ -358,6 +358,9 @@ export default {
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
+            if (this.onCancel) {
+              this.onCancel()
+            }
           }
         },
       })

@@ -42,7 +42,7 @@ export default new Vuex.Store({
       isAdmin: false,
       isInvalid: false,
       isAuthenticated: false,
-      officerId: '2021050812345',
+      officerId: '210508123',
     },
     apiConfig: null,
     piiDate: null,
