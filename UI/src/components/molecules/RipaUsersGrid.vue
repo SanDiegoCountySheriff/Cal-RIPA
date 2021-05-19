@@ -44,6 +44,12 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.id"
+                        label="ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.firstName"
                         label="First Name"
                       ></v-text-field>
@@ -56,14 +62,26 @@
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.agency"
+                        label="Agency"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.startDate"
                         label="Start Date"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.agency"
-                        label="Agency"
+                        v-model="editedItem.assignment"
+                        label="Assignment"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.otherType"
+                        label="Other Type"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -109,8 +127,11 @@ export default {
         { text: 'First Name', value: 'firstName' },
         { text: 'Last Name', value: 'lastName' },
         { text: 'Full Name', value: 'name' },
-        { text: 'Start Date', value: 'startDate' },
         { text: 'Agency', value: 'agency' },
+        { text: 'Start Date', value: 'startDate' },
+        { text: 'Officer ID', value: 'officerId' },
+        { text: 'Assignment', value: 'assignment' },
+        { text: 'Other Type', value: 'otherType' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -159,7 +180,7 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
       } else {
-        this.editedItem.id =
+        this.editedItem.officerId =
           format(new Date(), 'yyMMdd') +
           (Math.floor(Math.random() * 999) + 100).toString()
         this.users.push(this.editedItem)
