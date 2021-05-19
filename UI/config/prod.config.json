@@ -9,6 +9,7 @@
 		"Environment": "p",
 		"ServicesBaseUrl": "https://sdsd-ripa-p-apim.azure-api.us/",
 		"Subscription": "################################",
-		"DefaultCounty": "San Diego"
+		"DefaultCounty": "San Diego",
+		"DisplayBeatsInput": "true"
 	}
 }
