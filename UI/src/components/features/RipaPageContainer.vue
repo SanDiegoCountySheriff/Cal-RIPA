@@ -132,21 +132,64 @@ export default {
   },
 
   async created() {
+    console.log('page container created')
+    // check if the user is invalid
+    // if so, redirect
+    // if not, check cache to see if we need to clear local storage
+
+    // check if we have an id token AND it's valid
+    // if not
+    // IF the user explicity clicked logged out, just redirect to home
+    // if not, force user to login
+    // if we DO have it, make sure store is updated with values
     if (this.invalidUser) {
       this.$router.push('/checkUser')
     } else {
       this.checkCache()
-      if (this.apiConfig === null) {
-        await AuthService.getApiConfig().then(res => {
-          this.setApiConfig({
-            apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-            apiSubscription: res.data.Configuration.Subscription,
-            defaultCounty: res.data.Configuration.DefaultCounty,
-          })
-          this.getFormData()
-        })
+      const isTokenValid = await AuthService.checkToken()
+      console.log('token valid ' + isTokenValid)
+      if (!isTokenValid) {
+        // check to see if the user manually logged out
+        const didManualLogOut = AuthService.checkManualLogOut()
+        // if they DID manual logout, don't auto try to login again
+        if (!didManualLogOut) {
+          const loginAttempt = await AuthService.tryLogin()
+          console.log('login attempt from page container' + loginAttempt)
+          if (loginAttempt) {
+            this.getFormData()
+          }
+        }
       }
     }
+
+    // if (this.invalidUser) {
+    //   this.$router.push('/checkUser')
+    // } else {
+    //   this.checkCache()
+    //   if (this.apiConfig === null) {
+    //     console.log('getting api config in page container')
+    //     await AuthService.getApiConfig().then(async res => {
+    //       this.setApiConfig({
+    //         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+    //         apiSubscription: res.data.Configuration.Subscription,
+    //         defaultCounty: res.data.Configuration.DefaultCounty,
+    //       })
+    //       console.log('checking auth in page container')
+    //       const isAuthenticated = await AuthService.getIsAuthenticated()
+    //       console.log('is authenticated result ' + isAuthenticated)
+    //       if (!isAuthenticated && navigator.onLine) {
+    //         console.log('not authenticated from page container')
+    //         const loginAttempt = await AuthService.tryLogin()
+    //         console.log('coming back from login in page container')
+    //         if (loginAttempt) {
+    //           this.getFormData()
+    //         }
+    //       } else {
+    //         this.getFormData()
+    //       }
+    //     })
+    //   }
+    // }
   },
 }
 </script>

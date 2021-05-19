@@ -69,26 +69,29 @@ const router = new VueRouter({
   routes,
 })
 
-// if you ever hit the app and the access token
-// isn't set and the user is online, start login flow and are offline
-router.beforeEach(async (to, from, next) => {
-  const isAuthenticated = await AuthService.getIsAuthenticated()
-  if (!isAuthenticated && navigator.onLine) {
-    if (!sessionStorage.getItem('ripa-logOutAttempt')) {
-      const loginAttempt = await AuthService.tryLogin()
-      if (loginAttempt) {
-        next()
-      }
-    } else {
-      // ONLY if the user has explicity logged out
-      // don't automatically try the redirect. Clear the flag
-      // and wait for the user to click "Log In" (or submit a form, etc.)
-      sessionStorage.removeItem('ripa-logOutAttempt')
-      next()
-    }
-  } else {
-    next()
-  }
-})
+// // if you ever hit the app and the access token
+// // isn't set and the user is online, start login flow and are offline
+// router.beforeEach(async (to, from, next) => {
+//   // console.log('router before each logic')
+//   // const isAuthenticated = await AuthService.getIsAuthenticated()
+//   // if (!isAuthenticated && navigator.onLine) {
+//   //   console.log('not authenticated from router')
+//   //   if (!sessionStorage.getItem('ripa-logOutAttempt')) {
+//   //     const loginAttempt = await AuthService.tryLogin()
+//   //     if (loginAttempt) {
+//   //       next()
+//   //     }
+//   //   } else {
+//   //     // ONLY if the user has explicity logged out
+//   //     // don't automatically try the redirect. Clear the flag
+//   //     // and wait for the user to click "Log In" (or submit a form, etc.)
+//   //     sessionStorage.removeItem('ripa-logOutAttempt')
+//   //     next()
+//   //   }
+//   // } else {
+//   //   // if you are authenticated, check to see if your access has expired
+//   //   next()
+//   // }
+// })
 
 export default router
