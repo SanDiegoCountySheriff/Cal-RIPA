@@ -303,6 +303,7 @@
         "apim_endpoint": {
             "type": "SecureString",
             "defaultValue": ".azure-api.us"
+
         },
         "apim_apis_userprofile_path": {
             "type": "SecureString",
@@ -2696,7 +2697,6 @@
                 "hostNameType": "Verified"
             }
         },
-
         // domain Function app
         {
             "condition": "[parameters('deploy_rg')]",
