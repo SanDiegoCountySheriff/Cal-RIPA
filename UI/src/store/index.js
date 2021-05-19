@@ -39,6 +39,7 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
+      oid: 'be800c67-a2b6-4da8-a39d-09fc696be154',
       isAdmin: false,
       isInvalid: false,
       isAuthenticated: false,
