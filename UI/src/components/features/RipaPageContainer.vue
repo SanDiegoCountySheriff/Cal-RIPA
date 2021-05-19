@@ -92,6 +92,7 @@ export default {
     },
 
     handleLogIn() {
+      AuthService.clearManualLogOut()
       AuthService.tryLogin()
     },
 
@@ -133,10 +134,6 @@ export default {
 
   async created() {
     console.log('page container created')
-    // check if the user is invalid
-    // if so, redirect
-    // if not, check cache to see if we need to clear local storage
-
     // check if we have an id token AND it's valid
     // if not
     // IF the user explicity clicked logged out, just redirect to home
@@ -149,9 +146,10 @@ export default {
       const isTokenValid = await AuthService.checkToken()
       console.log('token valid ' + isTokenValid)
       if (!isTokenValid) {
-        // check to see if the user manually logged out
+        // if the token ISN'T valid, check to see if the user manually logged out
         const didManualLogOut = AuthService.checkManualLogOut()
-        // if they DID manual logout, don't auto try to login again
+        // if they DID manually logout, don't auto try to login again
+        // if they did NOT manually logout, auto try the login again
         if (!didManualLogOut) {
           const loginAttempt = await AuthService.tryLogin()
           console.log('login attempt from page container' + loginAttempt)
@@ -159,6 +157,9 @@ export default {
             this.getFormData()
           }
         }
+      } else {
+        // if the token IS valid, clear log out attempt
+        AuthService.clearManualLogOut()
       }
     }
 

@@ -42,13 +42,10 @@ const AuthService = {
         msalInstance.loginRedirect()
       }
     } else {
-      // user is already logged in
-      const authConfig = await getAuthConfig()
-      if (authConfig) {
-        const currentAccount = await msalInstance.getAllAccounts()
-        if (currentAccount.length) {
-          store.dispatch('setUserAccountInfo', currentAccount[0])
-        }
+      sessionStorage.removeItem('ripa-logOutAttempt')
+      const currentAccount = await msalInstance.getAllAccounts()
+      if (currentAccount.length) {
+        store.dispatch('setUserAccountInfo', currentAccount[0])
       }
       return true
     }
@@ -167,7 +164,15 @@ const AuthService = {
     return loadConfig
   },
   checkManualLogOut: () => {
-    return sessionStorage.getItem('ripa-logOutAttempt')
+    const manualLogOut = sessionStorage.getItem('ripa-logOutAttempt')
+    if (manualLogOut === null) {
+      return false
+    } else {
+      return true
+    }
+  },
+  clearManualLogOut: () => {
+    sessionStorage.removeItem('ripa-logOutAttempt')
   },
 }
 
