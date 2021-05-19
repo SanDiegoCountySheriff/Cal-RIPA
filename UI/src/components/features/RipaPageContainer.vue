@@ -137,3 +137,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.update-dialog {
+  z-index: 999 !important;
+}
+</style>
