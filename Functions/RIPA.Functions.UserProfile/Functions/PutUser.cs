@@ -47,7 +47,7 @@ namespace RIPA.Functions.UserProfile.Functions
                 return new UnauthorizedResult();
             }
 
-            if (!string.IsNullOrEmpty(userProfile.FirstName))
+            if (!string.IsNullOrEmpty(userProfile.OfficerId) || userProfile.OfficerId.Length != 9)
             {
                 userProfile.Id = Id;
                 await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
