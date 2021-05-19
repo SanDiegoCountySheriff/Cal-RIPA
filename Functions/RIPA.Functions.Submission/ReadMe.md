@@ -13,8 +13,6 @@ local.settings.json should include values:
    "SftpPassword": "test",
    "SftpInputPath": "/upload/input/",
    "SftpOutputPath": "/upload/output/",
-   "GetStopUrl": "http://localhost:7072/api/GetStop/{Id}",
-   "PutStopUrl": "http://localhost:7072/api/PutStop/{Id}",
    "RipaStorage": "{RIPA storage connection string}",
    "ContainerPrefix": "results",
     
