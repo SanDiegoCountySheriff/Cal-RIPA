@@ -27,15 +27,30 @@
         "application": {
             "value": "ripa"
         },
-        "ripa_app_id": {
+        "fa_config_ripa_app_id": {
             "value": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6"
         },
-        "ripa_tenant_id": {
+        "fa_config_ripa_tenant_id": {
             "value":"7832cdfd-b337-4d07-af7e-9de082e16b31"
         },
-        "ripa_tenant_name": {
+        "fa_config_ripa_tenant_name": {
             "value":"sdsheriff.gov"
-        }
+        },
+        "stop_fa_config_ori": {
+            "value": "CA0370000"
+        },
+        "secret_host":{
+            "value" : "Host of SFTP"
+        },
+        "secret_username":{
+            "value" : "SFTP username"
+        },
+        "secret_password":{
+            "value" : "SFTP PPK password"
+        },
+        "secret_key":{
+            "value" : "SFTP PPK in OpenSSH.web format"
+        }        
     }
   }
   
