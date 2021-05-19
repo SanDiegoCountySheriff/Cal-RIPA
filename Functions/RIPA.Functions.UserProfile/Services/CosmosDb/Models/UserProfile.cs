@@ -9,6 +9,8 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb.Models
         public string Id { get; set; }
 
         //Custom ID 9 character!
+        [JsonProperty(PropertyName = "officerId")]
+        public string OfficerId { get; set; }
 
         [JsonRequired]
         [JsonProperty(PropertyName = "firstName")]

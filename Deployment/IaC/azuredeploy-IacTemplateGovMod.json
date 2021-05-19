@@ -33,6 +33,10 @@
                 "description": "d = development, q = test, p = prod."
             }
         },
+        "apim_policy_env": {
+            "defaultValue": "d",
+            "type": "string"
+        },
         "application": {
             "defaultValue": "ripa",
             "type": "string"
@@ -49,103 +53,34 @@
             "defaultValue": "userprofile-fa",
             "type": "String"
         },
-        "sites_user_fa_storage_ep_suff": {
+        "storage_ep_suff": {
             "defaultValue": "core.usgovcloudapi.net",
             "type": "String"
         },
-        "sites_user_fa_hostnamessl_ep_suff": {
+        "fa_hostnamessl_ep_suff": {
             "defaultValue": ".azurewebsites.us",
             "type": "String"
         },
-        "sites_user_fa_hostnamessl_scm_ep_suff": {
+        "fa_hostnamessl_scm_ep_suff": {
             "defaultValue": ".scm.azurewebsites.us",
-            "type": "String"
-        },
-        "sites_user_fa_hosnamebindings_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
             "type": "String"
         },
         "domain_fa_name": {
             "defaultValue": "domain-fa",
             "type": "String"
         },
-        "domain_fa_storage_ep_suff": {
-            "defaultValue": "core.usgovcloudapi.net",
-            "type": "String"
-        },
-        "domain_fa_hostnamessl_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-        "domain_fa_hostnamessl_scm_ep_suff": {
-            "defaultValue": ".scm.azurewebsites.us",
-            "type": "String"
-        },
-        "domain_fa_hosnamebindings_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
         "stop_fa_name": {
             "defaultValue": "stop-fa",
-            "type": "String"
-        },
-        "stop_fa_storage_ep_suff": {
-            "defaultValue": "core.usgovcloudapi.net",
-            "type": "String"
-        },
-        "stop_fa_hostnamessl_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-        "stop_fa_hostnamessl_scm_ep_suff": {
-            "defaultValue": ".scm.azurewebsites.us",
-            "type": "String"
-        },
-        "stop_fa_hosnamebindings_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
             "type": "String"
         },
         "submission_fa_name": {
             "defaultValue": "submission-fa",
             "type": "String"
         },
-        "submission_fa_storage_ep_suff": {
-            "defaultValue": "core.usgovcloudapi.net",
+        "textanalytics_fa_name": {
+            "defaultValue": "textanalytic-fa",
             "type": "String"
         },
-        "submission_fa_hostnamessl_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-        "submission_fa_hostnamessl_scm_ep_suff": {
-            "defaultValue": ".scm.azurewebsites.us",
-            "type": "String"
-        },
-        "submission_fa_hosnamebindings_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-        "template_fa_storage_ep_suff": {
-            "defaultValue": "core.usgovcloudapi.net",
-            "type": "String"
-        },
-        "template_fa_name": {
-            "defaultValue": "template-fa",
-            "type": "String"
-        },
-        "template_fa_hostnamessl_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-        "template_fa_hostnamessl_scm_ep_suff": {
-            "defaultValue": ".scm.azurewebsites.us",
-            "type": "String"
-        },
-        "template_fa_hosnamebindings_ep_suff": {
-            "defaultValue": ".azurewebsites.us",
-            "type": "String"
-        },
-
         "use32BitWorkerProcess": {
             "defaultValue": false,
             "type": "bool"
@@ -178,8 +113,8 @@
             "defaultValue": "submission-fa-asp",
             "type": "String"
         },
-        "serverfarms_template_ASP_name": {
-            "defaultValue": "template-fa-asp",
+        "serverfarms_textanalytics_ASP_name": {
+            "defaultValue": "textanalytic-fa-asp",
             "type": "String"
         },
         "virtualNetworks_vnet_name": {
@@ -198,13 +133,21 @@
             "defaultValue": "cdb",
             "type": "String"
         },
-
+        
+         "networkInterface_cdb_pe_nic_name": {
+            "defaultValue": "cdb-pe-nic",
+            "type": "String"
+        },
         "storageAccounts_contentsa_name": {
             "defaultValue": "contentsa",
             "type": "String"
         },
         "storageAccounts_functionssa_name": {
             "defaultValue": "functionssa",
+            "type": "String"
+        },
+        "storageAccounts_sbsa_name": {
+            "defaultValue": "sbsa",
             "type": "String"
         },
         "workspaces_laws_name": {
@@ -285,9 +228,30 @@
                 "description": "Specifies the permissions to keys in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
             }
         },
+        "vaults_kv_secrets_key1":{
+            "type":"string",
+            "defaultValue": "dbkey1"
+        },
+        "vaults_kv_secrets_key2":{
+            "type":"string",
+            "defaultValue": "dbkey2"
+        },
+        "vaults_kv_secrets_key3":{
+            "type":"string",
+            "defaultValue": "ripaStorage"
+        },
+        "vaults_kv_secrets_key4":{
+            "type":"string",
+            "defaultValue": "takey1"
+        },
+        "vaults_kv_secrets_key5":{
+            "type":"string",
+            "defaultValue": "takey2"
+        },
         "apim_endpoint": {
             "type": "SecureString",
             "defaultValue": ".azure-api.us"
+            //"defaultValue":".azure-api.net"
         },
         "apim_apis_userprofile_path": {
             "type": "SecureString",
@@ -295,7 +259,7 @@
         },
         "apim_apis_userprofile_name": {
             "type": "string",
-            "defaultValue": "UserProfile"
+            "defaultValue": "userprofile"
         },
         "apim_apis_userprofile_serviceurl": {
             "type": "SecureString",
@@ -307,23 +271,11 @@
         },
         "apim_apis_stop_name": {
             "type": "string",
-            "defaultValue": "Stop"
+            "defaultValue": "stop"
         },
         "apim_apis_stop_serviceurl": {
             "type": "string",
             "defaultValue": "http://stop.usgovcloudapp.net/api"
-        },
-        "apim_apis_template_path": {
-            "type": "SecureString",
-            "defaultValue": "Template"
-        },
-        "apim_apis_template_name": {
-            "type": "string",
-            "defaultValue": "Template"
-        },
-        "apim_apis_template_serviceurl": {
-            "type": "SecureString",
-            "defaultValue": "http://template.usgovcloudapp.net/api"
         },
         "apim_apis_textAnalytic_path": {
             "type": "SecureString",
@@ -331,7 +283,7 @@
         },
         "apim_apis_textAnalytic_name": {
             "type": "string",
-            "defaultValue": "TextAnalytic"
+            "defaultValue": "textanalytic"
         },
         "apim_apis_textAnalytic_serviceurl": {
             "type": "string",
@@ -343,7 +295,7 @@
         },
         "apim_apis_domain_name": {
             "type": "string",
-            "defaultValue": "Domain"
+            "defaultValue": "domain"
         },
         "apim_apis_domain_serviceurl": {
             "type": "string",
@@ -355,7 +307,7 @@
         },
         "apim_apis_submission_name": {
             "type": "string",
-            "defaultValue": "Submission"
+            "defaultValue": "submission"
         },
         "apim_apis_submission_serviceurl": {
             "type": "string",
@@ -376,6 +328,76 @@
         "dbaccount_sqlDb_submission_container_name": {
             "type": "string",
             "defaultValue": "submission"
+        },
+        "privateDnsZones_privatelink_azure_com_name": {
+            "defaultValue": "pvtlink.documents.azure.com",
+            "type": "String"
+        },
+        "privateDnsZones_vnetlink_name": {
+            "defaultValue": "vnetlink",
+            "type": "String"
+        },
+        "policyCont1_a": {
+            "type": "string"
+            
+        },
+        "policyCont1_b": {
+            "type": "string"
+            
+        },
+        "policyCont2_a": {
+            "type": "string"
+            
+        },
+         "policyCont2_b": {
+            "type": "string"
+            
+        },
+        "apim_subnet_name":{
+            "type": "string",
+            "defaultValue":"-apim-subnet"
+        },
+        "cdb_subnet_name":{
+            "type": "string",
+            "defaultValue":"-cdb-subnet"
+        },
+        "networkinterface_ipconfig1_name":{
+            "type": "string",
+            "defaultValue":"sql.privateEndpoint"
+        },
+        "networkinterface_ipconfig2_name":{
+            "type": "string",
+            "defaultValue":"sql-usgovarizona.privateEndpoint"
+        },
+        "prv_dns_soa_name": {
+            "defaultValue": "@",
+            "type": "string"
+        },
+        "privateEndpoints_cdb_pe_name": {
+            "defaultValue": "cdb-pe",
+            "type": "String"
+        },
+        "Vnet_addressprefixes": {
+            "type": "array",
+            "defaultValue": [
+               "172.16.0.0/16"
+            ]
+        },
+        "apim_subnet_addressprefix": {
+            "defaultValue": "172.16.0.0/24",
+            "type": "String"
+        },
+        "cdb_subnet_addressprefix": {
+            "defaultValue": "172.16.1.0/24",
+            "type": "String"
+        },
+        "cdb_private_ipaddress1": {
+            "defaultValue": "172.16.1.4",
+            "type": "String"
+        },
+        "cdb_private_ipaddress2": {
+            "defaultValue": "172.16.1.5",
+            "type": "String"
         }
 
     },
@@ -389,22 +411,36 @@
         "serverfarms_domain_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_domain_ASP_name'))]",
         "serverfarms_stop_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_stop_ASP_name'))]",
         "serverfarms_submission_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_submission_ASP_name'))]",
-        "serverfarms_template_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_template_ASP_name'))]",
+        "serverfarms_textanalytics_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_textanalytics_ASP_name'))]",
         "service_ripa_apim_wus2_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('service_apim_name'))]",
         "sites_ripa_user_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('sites_user_fa_name'))]",
         "sites_ripa_domain_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('domain_fa_name'))]",
         "sites_ripa_stop_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('stop_fa_name'))]",
         "sites_ripa_submission_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('submission_fa_name'))]",
-        "sites_ripa_template_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('template_fa_name'))]",
+        "sites_ripa_textanalytics_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('textanalytics_fa_name'))]",
         "smartdetectoralertrules_failure_anomalies___ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('smartdetectoralertrules_failure_anomalies___name'))]",
         "storageAccounts_ripacontentsa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_contentsa_name'))]",
         "storageAccounts_ripafunctionssa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_functionssa_name'))]",
         "storageAccounts_ripansgflowlogssa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_nsgflowlogssa_name'))]",
         "storageAccounts_ripawebsa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_websa_name'))]",
+        "storageAccounts_ripadsbsa_name":"[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_sbsa_name'))]",
         "vaults_ripa_kv_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'), '-', parameters('vaults_kv_name'))]",
         "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('virtualNetworks_vnet_name'))]",
         "workspaces_ripa_laws_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('workspaces_laws_name'))]",
-        "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]"
+        "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
+        "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
+        "privatednszones_a_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-',parameters('region'))]",
+        "networkInt_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkInterface_cdb_pe_nic_name'))]",
+        "networkInt_ipconfig1_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('networkinterface_ipconfig1_name'))]",
+        "networkInt_ipconfig2_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('networkinterface_ipconfig2_name'))]",
+        "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
+        "user_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
+        //"user_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=','[',resourceId('Microsoft.KeyVault/vaults/secrets', variables('vaults_ripa_kv_name'),parameters('vaults_kv_secrets_key1')).secretUriWithVersion,']', ')')]",
+        "domain_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key3'),')')]",
+        "textanalytics_fa_keyvault_referencestring":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key4'),')')]",
+        "apim_policy_value1":"[concat(parameters('policyCont1_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont1_b'))]",
+        "apim_policy_value2":"[concat(parameters('policyCont2_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont2_b'))]"
+        
 
     },
     "resources": [
@@ -459,6 +495,9 @@
             "location": "[parameters('region')]",
             "name": "[variables('vaults_ripa_kv_name')]",
             "type": "Microsoft.KeyVault/vaults",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('sites_ripa_user_fa_name'))]"
+            ],
             "properties": {
                 "sku": {
                     "family": "A",
@@ -467,8 +506,7 @@
                 "tenantId": "[parameters('kv_tenantId')]",
                 "accessPolicies": [
                     {
-                        //"tenantId": "[parameters('kv_tenantId')]",
-                        //"objectId": "b079fea9-5f9c-48ee-b7aa-0b5fa4bdcf32",
+                        
                         "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01','Full').identity.tenantId]",
                         //"objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01').principalId]",
                         "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01','Full').identity.principalId]",
@@ -510,8 +548,8 @@
                         }
                     },
                     {
-                        "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_template_fa_name')), '2018-11-01','Full').identity.tenantId]",
-                        "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_template_fa_name')), '2018-11-01','Full').identity.principalId]",
+                        "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_textanalytics_fa_name')), '2018-11-01','Full').identity.tenantId]",
+                        "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_textanalytics_fa_name')), '2018-11-01','Full').identity.principalId]",
                         "permissions": {
                             "keys": "[parameters('kv_keysPermissions')]",
                             "secrets": "[parameters('kv_secretsPermissions')]",
@@ -690,7 +728,22 @@
                 "securityRules": []
             }
         },
-
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('privateDnsZones_privatelink_documents_azure_com_name')]",
+            "location": "[parameters('glocation')]",
+            "properties": {
+                "maxNumberOfRecordSets": 25000,
+                "maxNumberOfVirtualNetworkLinks": 1000,
+                "maxNumberOfVirtualNetworkLinksWithRegistration": 100,
+                "numberOfRecordSets": 3,
+                "numberOfVirtualNetworkLinks": 1,
+                "numberOfVirtualNetworkLinksWithRegistration": 0,
+                "provisioningState": "Succeeded"
+            }
+        },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.operationalinsights/workspaces",
@@ -800,6 +853,43 @@
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": true,
                 "allowSharedKeyAccess": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('storageAccounts_ripadsbsa_name')]",
+            "location": "[parameters('region')]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "virtualNetworkRules": [],
@@ -968,12 +1058,12 @@
                 "targetWorkerSizeId": 0
             }
         },
-        //template Serverfarms
+        //textanalytics Serverfarms
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
-            "name": "[variables('serverfarms_template_ASP_riparg_af76_name')]",
+            "name": "[variables('serverfarms_textanalytics_ASP_riparg_af76_name')]",
             "location": "[parameters('region')]",
             "sku": {
                 "name": "Y1",
@@ -1001,7 +1091,7 @@
             "name": "[variables('service_ripa_apim_wus2_name')]",
             "location": "[parameters('region')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), '-apim-subnet'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
             ],
             "sku": {
                 "name": "Developer",
@@ -1020,7 +1110,7 @@
                     }
                 ],
                 "virtualNetworkConfiguration": {
-                    "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), '-apim-subnet'))]"
+                    "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
                 },
                 "customProperties": {
                     "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168": "false",
@@ -1058,23 +1148,7 @@
                 "path": "[parameters('apim_apis_userprofile_path')]"
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_userprofile_name'),'/get')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]",
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_userprofile_name')",
-                "templateParameters": [],
-                "responses": []
-            }
-        },
+        
         //stop api
         {
             "condition": "[parameters('deploy_rg')]",
@@ -1096,61 +1170,7 @@
                 "path": "[parameters('apim_apis_stop_path')]"
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_stop_name'),'/get')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_stop_name'))]",
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_stop_name')",
-                "templateParameters": [],
-                "responses": []
-            }
-        },
-        //template api
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_template_name'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "[parameters('apim_apis_template_name')]",
-                "apiRevision": "1",
-                "subscriptionRequired": true,
-                "serviceUrl": "[parameters('apim_apis_template_serviceurl')]",
-                "protocols": [
-                    "https"
-                ],
-                "isCurrent": true,
-                "path": "[parameters('apim_apis_template_path')]"
-            }
-        },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_template_name'),'/get')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_template_name'))]",
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_template_name')",
-                "templateParameters": [],
-                "responses": []
-            }
-        },
+        
         //TextAnalytic api
         {
             "condition": "[parameters('deploy_rg')]",
@@ -1172,23 +1192,7 @@
                 "path": "[parameters('apim_apis_textAnalytic_path')]"
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_textAnalytic_name'),'/get')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytic_name'))]",
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_textAnalytic_name')",
-                "templateParameters": [],
-                "responses": []
-            }
-        },
+        
         //Domain api
         {
             "condition": "[parameters('deploy_rg')]",
@@ -1210,23 +1214,7 @@
                 "path": "[parameters('apim_apis_domain_path')]"
             }
         },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_domain_name'),'/get')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_domain_name'))]",
-                "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
-            ],
-            "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_domain_name')",
-                "templateParameters": [],
-                "responses": []
-            }
-        },
+       
         //submission api
         {
             "condition": "[parameters('deploy_rg')]",
@@ -1250,21 +1238,62 @@
         },
         {
             "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.ApiManagement/service/apis/operations",
+            "type": "Microsoft.ApiManagement/service/policies",
             "apiVersion": "2019-12-01",
-            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/',parameters('apim_apis_submission_name'),'/get')]",
+            "name": "[concat(variables('service_ripa_apim_wus2_name'), '/policy')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_submission_name'))]",
                 "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
             ],
             "properties": {
-                "displayName": "get",
-                "method": "GET",
-                "urlTemplate": "/parameters('apim_apis_submission_name')",
-                "templateParameters": [],
-                "responses": []
-            }
+               
+                //"value": "[parameters('policyCont1')]",
+                "value": "[if(equals(parameters('environment'),parameters('apim_policy_env')), variables('apim_policy_value1'), variables('apim_policy_value2'))]",
+                "format": "xml"
+              }
         },
+        // {
+        //     "condition": "[parameters('deploy_rg')]",
+        //     "type": "Microsoft.Network/networkInterfaces",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[variables('networkInt_cdb_name')]",
+        //     "location": "[parameters('region')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
+        //     ],
+        //     "properties": {
+        //         "ipConfigurations": [
+        //             {
+        //                 "name": "[variables('networkInt_ipconfig1_name')]",
+        //                 "properties": {
+        //                     "privateIPAddress": "[parameters('cdb_private_ipaddress1')]",
+        //                     "privateIPAllocationMethod": "Dynamic",
+        //                     "subnet": {
+        //                         "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
+        //                     },
+        //                     "primary": true,
+        //                     "privateIPAddressVersion": "IPv4"
+        //                 }
+        //             },
+        //             {
+        //                 "name": "[variables('networkInt_ipconfig2_name')]",
+        //                 "properties": {
+        //                     "privateIPAddress": "[parameters('cdb_private_ipaddress2')]",
+        //                     "privateIPAllocationMethod": "Dynamic",
+        //                     "subnet": {
+        //                         "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
+        //                     },
+        //                     "primary": false,
+        //                     "privateIPAddressVersion": "IPv4"
+        //                 }
+        //             }
+        //         ],
+        //         "dnsSettings": {
+        //             "dnsServers": []
+        //         },
+        //         "enableAcceleratedNetworking": false,
+        //         "enableIPForwarding": false
+        //     }
+        // },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.DocumentDB/databaseAccounts",
@@ -1272,7 +1301,7 @@
             "name": "[variables('databaseAccounts_ripa_cdb_name')]",
             "location": "[parameters('region')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), '-cdb-subnet'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
             ],
             "tags": {
                 "defaultExperience": "Core (SQL)",
@@ -1287,7 +1316,7 @@
                 "isVirtualNetworkFilterEnabled": true,
                 "virtualNetworkRules": [
                     {
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), '-cdb-subnet'))]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]",
                         "ignoreMissingVNetServiceEndpoint": true
                     }
                 ],
@@ -1358,6 +1387,86 @@
                 }
             }
         },
+        //KeyVault Secrets
+          {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "name": "[concat(variables('vaults_ripa_kv_name'), '/',parameters('vaults_kv_secrets_key1'))]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+                //"[resourceId('Microsoft.DocumentDb/databaseAccounts/', variables('databaseAccounts_ripa_cdb_name'))]"
+            ],
+            "properties": {
+                "value": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key2'))]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                },
+                "value":"[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').secondaryMasterKey]"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key3'))]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+            ],
+            "properties": {
+                "contentType": "domain storage connection string",
+                "attributes": {
+                    "enabled": true
+                },
+                "value":"[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripacontentsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key4'))]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                },
+                "value":"[listKeys(concat('Microsoft.CognitiveServices/accounts/',  variables('TA_Name')), '2017-04-18').key1]"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key5'))]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                },
+                "value":"[listKeys(concat('Microsoft.CognitiveServices/accounts/',  variables('TA_Name')), '2017-04-18').key2]"
+            }
+        },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.insights/components",
@@ -1379,7 +1488,7 @@
             }
         },
 
-
+        
         //SecurityRule for Internet-Vnet-443
         {
             "condition": "[parameters('deploy_rg')]",
@@ -1578,7 +1687,67 @@
                 "destinationAddressPrefixes": []
             }
         },
-
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',variables('databaseAccounts_ripa_cdb_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": "created by private endpoint sdsd-ripa-d-cdb-pe with resource guid 5ec440bf-79fb-48b0-bbd6-213a1302c193"
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "[parameters('cdb_private_ipaddress1')]"
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateDnsZones/A",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/',variables('privatednszones_a_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
+            ],
+            "properties": {
+                "metadata": {
+                    "creator": "created by private endpoint with resource guid 5ec440bf-79fb-48b0-bbd6-213a1302c193"
+                },
+                "ttl": 10,
+                "aRecords": [
+                    {
+                        "ipv4Address": "[parameters('cdb_private_ipaddress2')]"
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateDnsZones/SOA",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/', parameters('prv_dns_soa_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
+            ],
+            "properties": {
+                "ttl": 3600,
+                "soaRecord": {
+                    "email": "azureprivatedns-host.microsoft.com",
+                    "expireTime": 2419200,
+                    "host": "azureprivatedns.us",
+                    "minimumTtl": 10,
+                    "refreshTime": 3600,
+                    "retryTime": 300,
+                    "serialNumber": 1
+                }
+            }
+        },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/blobServices",
@@ -1660,6 +1829,32 @@
                 },
                 "deleteRetentionPolicy": {
                     "enabled": false
+                },
+                 "staticWebsite": {
+                    "enabled": true,
+                    "indexDocument": "index.html"
+                }
+
+            }
+        },
+        {
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",     
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('storageAccounts_ripadsbsa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripadsbsa_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
                 }
             }
         },
@@ -1720,9 +1915,22 @@
 
         },
         {
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('storageAccounts_ripadsbsa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripadsbsa_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            }
+        },
+        {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripacontentsa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripacontentsa_name'))]"
@@ -1736,7 +1944,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripafunctionssa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name'))]"
@@ -1750,7 +1958,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripansgflowlogssa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripansgflowlogssa_name'))]"
@@ -1764,7 +1972,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripawebsa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripawebsa_name'))]"
@@ -1776,9 +1984,23 @@
             }
         },
         {
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('storageAccounts_ripadsbsa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripadsbsa_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripacontentsa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripacontentsa_name'))]"
@@ -1792,7 +2014,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripafunctionssa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name'))]"
@@ -1806,7 +2028,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripansgflowlogssa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripansgflowlogssa_name'))]"
@@ -1820,7 +2042,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2019-06-01",
             "name": "[concat(variables('storageAccounts_ripawebsa_name'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripawebsa_name'))]"
@@ -1829,6 +2051,327 @@
                 "cors": {
                     "corsRules": []
                 }
+            }
+        },
+        {
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('storageAccounts_ripadsbsa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripadsbsa_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        //CosmosDB PrivateEndpoint
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpoints_ripa_cdb_pe_name')]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpoints_ripa_cdb_pe_name')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
+                            "groupIds": [
+                                "Sql"
+                            ],
+                            "privateLinkServiceConnectionState": {
+                                "status": "Approved",
+                                "actionsRequired": "None"
+                            }
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [],
+                // "networkInterfaces": [
+                //     {
+                //         "id": "[resourceId('Microsoft.Network/networkInterfaces/', variables('networkInt_cdb_name'))]"
+                //     }
+                // ],
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
+                },
+                "customDnsConfigs": []
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpoints_ripa_cdb_pe_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpoints_ripa_cdb_pe_name'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-documents-azure-us",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        // {
+        //     "condition": "[parameters('deploy_rg')]",
+        //     "type": "Microsoft.DocumentDB/databaseAccounts/privateEndpointConnections",
+        //     "apiVersion": "2020-09-01",
+        //     "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', variables('databaseAccounts_ripa_cdb_name'), '-peConn')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
+        //         "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpoints_ripa_cdb_pe_name'))]"
+        //     ],
+        //     "properties": {
+        //         "provisioningState": "Succeeded",
+        //         "groupId": "Sql",
+        //         "privateEndpoint": {
+        //             "id": "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpoints_ripa_cdb_pe_name'))]"
+        //         },
+        //         "privateLinkServiceConnectionState": {
+        //             "status": "Approved"
+        //         }
+        //     }
+        // },
+        //CosmosDB userprofile container
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2020-09-01",
+            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_user_container_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "[parameters('dbaccount_sqlDb_user_container_name')]",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    }
+                }
+            }
+        },
+        //CosmosDB stop container
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2020-09-01",
+            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_stop_container_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "[parameters('dbaccount_sqlDb_stop_container_name')]",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    }
+                }
+            }
+        },
+        //cosmosDB submission container
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2020-09-01",
+            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_submission_container_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "[parameters('dbaccount_sqlDb_submission_container_name')]",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/submissionId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/', parameters('privateDnsZones_vnetlink_name'))]",
+            "location": "[parameters('glocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]"
+                }
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-08-01",
+            "name": "[variables('virtualNetworks_ripa_vnet_name')]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": "[parameters('Vnet_addressprefixes')]"
+                },
+                "subnets": [
+                    {
+                        "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name'))]",
+                        "properties": {
+                            "addressPrefix": "[parameters('apim_subnet_addressprefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
+                            },
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
+                        "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name'))]",
+                        "properties": {
+                            "addressPrefix": "[parameters('cdb_subnet_addressprefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
+                            },
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/', variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('apim_subnet_addressprefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
+                },
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/', variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('cdb_subnet_addressprefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
+                },
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
             }
         },
         // UserProfile Function app
@@ -1844,19 +2387,21 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_userprofile_ASP_riparg_af76_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name'))]",
-                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
+                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
+                "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+                
             ],
             "kind": "functionapp,linux",
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hostnamessl_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hostnamessl_scm_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_user_fa_name'), parameters('fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -1878,11 +2423,30 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('sites_user_fa_storage_ep_suff'))]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "Account",
+                            //"value": "https://sdsd-ripa-d-cdb.documents.azure.us"
+                            "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
+                            
+                        },
+                        {
+                            "name": "ContainerName",
+                            "value": "[parameters('dbaccount_sqlDb_user_container_name')]"
+                        },
+                        {
+                            "name": "DatabaseName",
+                            "value": "[parameters('dbaccount_sqlDb_name')]"
+                        },
+                        {
+                            "name": "Key",
+                           "value": "[variables('user_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
@@ -2002,7 +2566,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_user_fa_name'), '/', variables('sites_ripa_user_fa_name'), parameters('sites_user_fa_hosnamebindings_ep_suff'))]",
+            "name": "[concat(variables('sites_ripa_user_fa_name'), '/', variables('sites_ripa_user_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_user_fa_name'))]"
@@ -2034,12 +2598,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hostnamessl_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hostnamessl_scm_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_domain_fa_name'), parameters('fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2061,11 +2625,16 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('domain_fa_storage_ep_suff'))]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "RipaStorage",
+                            "value": "[variables('domain_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
@@ -2183,7 +2752,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_domain_fa_name'), '/', variables('sites_ripa_domain_fa_name'), parameters('domain_fa_hosnamebindings_ep_suff'))]",
+            "name": "[concat(variables('sites_ripa_domain_fa_name'), '/', variables('sites_ripa_domain_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_domain_fa_name'))]"
@@ -2206,19 +2775,20 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_stop_ASP_riparg_af76_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name'))]",
-                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
+                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
+                "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
             ],
             "kind": "functionapp,linux",
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hostnamessl_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hostnamessl_scm_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_stop_fa_name'), parameters('fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2240,11 +2810,29 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('stop_fa_storage_ep_suff'))]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "Account",
+                            "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
+                            
+                        },
+                        {
+                            "name": "ContainerName",
+                            "value": "[parameters('dbaccount_sqlDb_stop_container_name')]"
+                        },
+                        {
+                            "name": "DatabaseName",
+                            "value": "[parameters('dbaccount_sqlDb_name')]"
+                        },
+                        {
+                            "name": "Key",
+                            "value": "[variables('user_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
@@ -2362,7 +2950,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_stop_fa_name'), '/', variables('sites_ripa_stop_fa_name'), parameters('stop_fa_hosnamebindings_ep_suff'))]",
+            "name": "[concat(variables('sites_ripa_stop_fa_name'), '/', variables('sites_ripa_stop_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_stop_fa_name'))]"
@@ -2392,12 +2980,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hostnamessl_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hostnamessl_scm_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_submission_fa_name'), parameters('fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -2419,11 +3007,29 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('submission_fa_storage_ep_suff'))]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "Account",
+                            "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
+                            
+                        },
+                        {
+                            "name": "ContainerName",
+                            "value": "[parameters('dbaccount_sqlDb_submission_container_name')]"
+                        },
+                        {
+                            "name": "DatabaseName",
+                            "value": "[parameters('dbaccount_sqlDb_name')]"
+                        },
+                        {
+                            "name": "Key",
+                            "value": "[variables('user_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
@@ -2541,7 +3147,7 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_submission_fa_name'), '/', variables('sites_ripa_submission_fa_name'), parameters('submission_fa_hosnamebindings_ep_suff'))]",
+            "name": "[concat(variables('sites_ripa_submission_fa_name'), '/', variables('sites_ripa_submission_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('sites_ripa_submission_fa_name'))]"
@@ -2551,39 +3157,38 @@
                 "hostNameType": "Verified"
             }
         },
-        // template Function app
+        // textanalytics Function app
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
-            "name": "[variables('sites_ripa_template_fa_name')]",
+            "name": "[variables('sites_ripa_textanalytics_fa_name')]",
             "location": "[parameters('region')]",
             "identity": {
-                //"principalId": "5a17954d-9516-4210-8409-e04dcd475e3a",
-                //"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619",
                 "type": "SystemAssigned"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_template_ASP_riparg_af76_name'))]",
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_textanalytics_ASP_riparg_af76_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name'))]",
-                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
+                "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', variables('TA_Name'))]"
             ],
             "kind": "functionapp,linux",
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('sites_ripa_template_fa_name'), parameters('template_fa_hostnamessl_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_textanalytics_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('sites_ripa_template_fa_name'), parameters('template_fa_hostnamessl_scm_ep_suff'))]",
+                        "name": "[concat(variables('sites_ripa_textanalytics_fa_name'), parameters('fa_hostnamessl_scm_ep_suff'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_template_ASP_riparg_af76_name'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_textanalytics_ASP_riparg_af76_name'))]",
                 "reserved": true,
                 "isXenon": false,
                 "hyperV": false,
@@ -2600,11 +3205,21 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('template_fa_storage_ep_suff'))]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "TextAnalyticsEndpoint",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('TA_Name'))).endpoint]"
+                            
+                        },
+                        {
+                            "name": "TextAnalyticsKey",
+                            "value": "[variables('textanalytics_fa_keyvault_referencestring')]"
+                           
                         }
 
                     ],
@@ -2625,10 +3240,10 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_template_fa_name'), '/web')]",
+            "name": "[concat(variables('sites_ripa_textanalytics_fa_name'), '/web')]",
             "location": "[parameters('region')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('sites_ripa_template_fa_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('sites_ripa_textanalytics_fa_name'))]"
             ],
             "properties": {
                 "numberOfWorkers": 1,
@@ -2650,7 +3265,7 @@
                 "remoteDebuggingVersion": "VS2019",
                 "logsDirectorySizeLimit": 35,
                 "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$variables('sites_ripa_template_fa_name')",
+                "publishingUsername": "$variables('sites_ripa_textanalytics_fa_name')",
                 "azureStorageAccounts": {},
                 "scmType": "None",
                 "use32BitWorkerProcess": false,
@@ -2722,13 +3337,13 @@
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
-            "name": "[concat(variables('sites_ripa_template_fa_name'), '/', variables('sites_ripa_template_fa_name'), parameters('template_fa_hosnamebindings_ep_suff'))]",
+            "name": "[concat(variables('sites_ripa_textanalytics_fa_name'), '/', variables('sites_ripa_textanalytics_fa_name'), parameters('fa_hostnamessl_ep_suff'))]",
             "location": "[parameters('region')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('sites_ripa_template_fa_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('sites_ripa_textanalytics_fa_name'))]"
             ],
             "properties": {
-                "siteName": "[variables('sites_ripa_template_fa_name')]",
+                "siteName": "[variables('sites_ripa_textanalytics_fa_name')]",
                 "hostNameType": "Verified"
             }
         },
@@ -2765,218 +3380,20 @@
                 }
             }
         },
-        //CosmosDB user container
+        
         {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
-            "apiVersion": "2020-09-01",
-            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_user_container_name'))]",
+            "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_ripadsbsa_name'), '/default/$web')]",
             "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_ripadsbsa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripadsbsa_name'))]"
             ],
             "properties": {
-                "resource": {
-                    "id": "[parameters('dbaccount_sqlDb_user_container_name')]",
-                    "indexingPolicy": {
-                        "indexingMode": "consistent",
-                        "automatic": true,
-                        "includedPaths": [
-                            {
-                                "path": "/*"
-                            }
-                        ],
-                        "excludedPaths": [
-                            {
-                                "path": "/\"_etag\"/?"
-                            }
-                        ]
-                    },
-                    "partitionKey": {
-                        "paths": [
-                            "/userId"
-                        ],
-                        "kind": "Hash"
-                    },
-                    "uniqueKeyPolicy": {
-                        "uniqueKeys": []
-                    },
-                    "conflictResolutionPolicy": {
-                        "mode": "LastWriterWins",
-                        "conflictResolutionPath": "/_ts"
-                    }
-                }
-            }
-        },
-        //CosmosDB stop container
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
-            "apiVersion": "2020-09-01",
-            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_stop_container_name'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
-            ],
-            "properties": {
-                "resource": {
-                    "id": "[parameters('dbaccount_sqlDb_stop_container_name')]",
-                    "indexingPolicy": {
-                        "indexingMode": "consistent",
-                        "automatic": true,
-                        "includedPaths": [
-                            {
-                                "path": "/*"
-                            }
-                        ],
-                        "excludedPaths": [
-                            {
-                                "path": "/\"_etag\"/?"
-                            }
-                        ]
-                    },
-                    "partitionKey": {
-                        "paths": [
-                            "/stopId"
-                        ],
-                        "kind": "Hash"
-                    },
-                    "uniqueKeyPolicy": {
-                        "uniqueKeys": []
-                    },
-                    "conflictResolutionPolicy": {
-                        "mode": "LastWriterWins",
-                        "conflictResolutionPath": "/_ts"
-                    }
-                }
-            }
-        },
-        //cosmosDB submission container
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
-            "apiVersion": "2020-09-01",
-            "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_submission_container_name'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
-            ],
-            "properties": {
-                "resource": {
-                    "id": "[parameters('dbaccount_sqlDb_submission_container_name')]",
-                    "indexingPolicy": {
-                        "indexingMode": "consistent",
-                        "automatic": true,
-                        "includedPaths": [
-                            {
-                                "path": "/*"
-                            }
-                        ],
-                        "excludedPaths": [
-                            {
-                                "path": "/\"_etag\"/?"
-                            }
-                        ]
-                    },
-                    "partitionKey": {
-                        "paths": [
-                            "/submissionId"
-                        ],
-                        "kind": "Hash"
-                    },
-                    "uniqueKeyPolicy": {
-                        "uniqueKeys": []
-                    },
-                    "conflictResolutionPolicy": {
-                        "mode": "LastWriterWins",
-                        "conflictResolutionPath": "/_ts"
-                    }
-                }
-            }
-        },
-
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2020-08-01",
-            "name": "[variables('virtualNetworks_ripa_vnet_name')]",
-            "location": "[parameters('region')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
-            ],
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "172.16.0.0/16"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '-apim-subnet')]",
-                        "properties": {
-                            "addressPrefix": "172.16.0.0/24",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
-                            },
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '-cdb-subnet')]",
-                        "properties": {
-                            "addressPrefix": "172.16.1.0/24",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
-                            },
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    }
-                ],
-                "virtualNetworkPeerings": [],
-                "enableDdosProtection": false
-            }
-        },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2020-08-01",
-            "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/', variables('virtualNetworks_ripa_vnet_name'), '-apim-subnet')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
-            ],
-            "properties": {
-                "addressPrefix": "172.16.0.0/24",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
-                },
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-        },
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2020-08-01",
-            "name": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/', variables('virtualNetworks_ripa_vnet_name'), '-cdb-subnet')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
-            ],
-            "properties": {
-                "addressPrefix": "172.16.1.0/24",
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
-                },
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Disabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
@@ -2993,7 +3410,6 @@
                 "denyEncryptionScopeOverride": false,
                 "publicAccess": "None"
             }
-
         },
         {
             "condition": "[parameters('deploy_rg')]",

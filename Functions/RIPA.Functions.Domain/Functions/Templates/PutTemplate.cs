@@ -31,8 +31,16 @@ namespace RIPA.Functions.Domain.Functions.Templates
             [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutTemplate/{Id}")] Template template, HttpRequest req, string Id,
             [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 

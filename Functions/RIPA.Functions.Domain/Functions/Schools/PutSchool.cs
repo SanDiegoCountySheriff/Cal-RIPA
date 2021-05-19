@@ -30,8 +30,16 @@ namespace RIPA.Functions.Domain.Functions.Schools
             [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] School school, HttpRequest req, string Id,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
-            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            try
             {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
 
