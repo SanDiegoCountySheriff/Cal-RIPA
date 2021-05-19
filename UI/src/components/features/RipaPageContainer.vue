@@ -158,7 +158,7 @@ export default {
           }
         }
       } else {
-        // if the token IS valid, clear log out attempt
+        // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
       }
     }
@@ -191,6 +191,10 @@ export default {
     //     })
     //   }
     // }
+  },
+
+  updated() {
+    // check for log in here
   },
 }
 </script>

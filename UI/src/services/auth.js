@@ -2,6 +2,7 @@ import axios from 'axios'
 import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
 import router from '../router'
+import { add, isAfter } from 'date-fns'
 import { consensualEncounterResultingInSearch } from '../stories/molecules/RipaActionsTaken.stories'
 
 let authConfig = {
@@ -18,6 +19,7 @@ const AuthService = {
     if (!sessionStorage.getItem('ripa-idToken')) {
       await msalInstance.handleRedirectPromise()
       const currentAccount = await msalInstance.getAllAccounts()
+      console.log('checking account with no token ' + currentAccount)
       if (currentAccount.length) {
         // check to see if user is not in any groups.  If not, redirect
         if (currentAccount[0].idTokenClaims.roles.length === 0) {
@@ -35,6 +37,10 @@ const AuthService = {
           JSON.stringify(currentAccount[0]),
         )
         sessionStorage.setItem('ripa-idToken', accessToken.idToken)
+        sessionStorage.setItem(
+          'ripa-tokenExpirationDate',
+          add(new Date(), { minutes: 5 }),
+        )
         sessionStorage.removeItem('ripa-logOutAttempt')
         return true
       } else {
@@ -58,24 +64,35 @@ const AuthService = {
   checkToken: async () => {
     // check if we have a user account AND token
     const userAccount = JSON.parse(sessionStorage.getItem('ripa-userAccount'))
-    const idToken = sessionStorage.getItem('ripa-accessToken')
+    const idToken = sessionStorage.getItem('ripa-idToken')
     if (userAccount && idToken) {
       // if SO, try to get a token using that
       console.log('we have both pieces of info we need to get the token')
-      const silentRequest = {
-        scopes: ['User.Read'],
-      }
-      const tokenRequest = await msalInstance.acquireTokenSilent(silentRequest)
-      if (tokenRequest.idToken) {
-        // we were able to receive a valid token from the server
-        // update it and return true
-        store.dispatch('setUserAccountInfo', userAccount)
-        sessionStorage.setItem('ripa-idToken', tokenRequest.idToken)
-        return true
+      // check to see if the current time is greater than the expiration date
+      const tokenExpDate = sessionStorage.getItem('ripa-tokenExpirationDate')
+      const isTokenExpired = isAfter(new Date(), new Date(tokenExpDate))
+      if (isTokenExpired) {
+        console.log('token expired')
+        clearLocalStorageAuthInfo()
+        await msalInstance.handleRedirectPromise()
+        msalInstance.logout()
+        return false
+        // msalInstance.loginRedirect()
       } else {
-        // NEEDS REWORKING...if the token has expired...need to force the
-        // user to login agin
-        console.log('token has expired here')
+        const silentRequest = {
+          scopes: ['User.Read'],
+          account: userAccount,
+        }
+        const tokenRequest = await msalInstance.acquireTokenSilent(
+          silentRequest,
+        )
+        if (tokenRequest.idToken) {
+          // we were able to receive a valid token from the server
+          // update it and return true
+          store.dispatch('setUserAccountInfo', userAccount)
+          sessionStorage.setItem('ripa-idToken', tokenRequest.idToken)
+          return true
+        }
       }
     } else {
       // if NOT, we are missing pieces of the login information, go to login
@@ -210,6 +227,7 @@ const getAuthConfig = async () => {
 const clearLocalStorageAuthInfo = () => {
   sessionStorage.removeItem('ripa-userAccount')
   sessionStorage.removeItem('ripa-idToken')
+  sessionStorage.removeItem('ripa-tokenExpirationDate')
 }
 
 export default AuthService
