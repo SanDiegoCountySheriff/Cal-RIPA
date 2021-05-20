@@ -30,6 +30,7 @@ const AuthService = {
         const accessToken = await msalInstance.acquireTokenSilent({
           account: currentAccount[0],
           scopes: ['user.read'],
+          redirectUri: window.location.origin,
         })
         store.dispatch('setUserAccountInfo', currentAccount[0])
         sessionStorage.setItem(
@@ -75,13 +76,17 @@ const AuthService = {
         console.log('token expired')
         clearLocalStorageAuthInfo()
         await msalInstance.handleRedirectPromise()
-        msalInstance.logout()
+        msalInstance.logoutRedirect({
+          account: userAccount,
+          postLogoutRedirectUri: window.location.origin,
+        })
         return false
         // msalInstance.loginRedirect()
       } else {
         const silentRequest = {
           scopes: ['User.Read'],
           account: userAccount,
+          redirectUri: window.location.origin,
         }
         const tokenRequest = await msalInstance.acquireTokenSilent(
           silentRequest,
