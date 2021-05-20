@@ -12,15 +12,15 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
-    beforeEnter(to, from, next) {
-      if (isValidOfficer()) {
-        next()
-      } else if (!store.state.user.isAuthenticated) {
-        next()
-      } else {
-        next('/user')
-      }
-    },
+    // beforeEnter(to, from, next) {
+    //   if (isValidOfficer()) {
+    //     next()
+    //   } else if (!store.state.user.isAuthenticated) {
+    //     next()
+    //   } else {
+    //     next('/user')
+    //   }
+    // },
   },
   {
     path: '/admin',
@@ -84,6 +84,8 @@ router.beforeEach(async (to, from, next) => {
       if (loginAttempt) {
         next()
       }
+    } else {
+      next()
     }
   } else {
     // if the token IS valid, clear any log out attempt

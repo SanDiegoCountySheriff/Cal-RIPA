@@ -147,10 +147,9 @@ export default {
         // if they did NOT manually logout, auto try the login again
         if (!didManualLogOut) {
           const loginAttempt = await AuthService.tryLogin()
-          if (loginAttempt) {
-            this.getFormData()
-          }
+          this.getFormData()
         }
+        this.getFormData()
       } else {
         // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
