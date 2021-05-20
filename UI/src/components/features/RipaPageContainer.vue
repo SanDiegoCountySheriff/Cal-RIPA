@@ -154,47 +154,16 @@ export default {
           const loginAttempt = await AuthService.tryLogin()
           console.log('login attempt from page container' + loginAttempt)
           if (loginAttempt) {
-            this.getFormData()
+            // this.getFormData()
           }
         }
       } else {
+        console.log('token is valid from page container created')
         // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
+        // this.getFormData()
       }
     }
-
-    // if (this.invalidUser) {
-    //   this.$router.push('/checkUser')
-    // } else {
-    //   this.checkCache()
-    //   if (this.apiConfig === null) {
-    //     console.log('getting api config in page container')
-    //     await AuthService.getApiConfig().then(async res => {
-    //       this.setApiConfig({
-    //         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-    //         apiSubscription: res.data.Configuration.Subscription,
-    //         defaultCounty: res.data.Configuration.DefaultCounty,
-    //       })
-    //       console.log('checking auth in page container')
-    //       const isAuthenticated = await AuthService.getIsAuthenticated()
-    //       console.log('is authenticated result ' + isAuthenticated)
-    //       if (!isAuthenticated && navigator.onLine) {
-    //         console.log('not authenticated from page container')
-    //         const loginAttempt = await AuthService.tryLogin()
-    //         console.log('coming back from login in page container')
-    //         if (loginAttempt) {
-    //           this.getFormData()
-    //         }
-    //       } else {
-    //         this.getFormData()
-    //       }
-    //     })
-    //   }
-    // }
-  },
-
-  updated() {
-    // check for log in here
   },
 }
 </script>

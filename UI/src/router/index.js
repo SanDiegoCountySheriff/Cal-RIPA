@@ -69,29 +69,30 @@ const router = new VueRouter({
   routes,
 })
 
-// // if you ever hit the app and the access token
-// // isn't set and the user is online, start login flow and are offline
-// router.beforeEach(async (to, from, next) => {
-//   // console.log('router before each logic')
-//   // const isAuthenticated = await AuthService.getIsAuthenticated()
-//   // if (!isAuthenticated && navigator.onLine) {
-//   //   console.log('not authenticated from router')
-//   //   if (!sessionStorage.getItem('ripa-logOutAttempt')) {
-//   //     const loginAttempt = await AuthService.tryLogin()
-//   //     if (loginAttempt) {
-//   //       next()
-//   //     }
-//   //   } else {
-//   //     // ONLY if the user has explicity logged out
-//   //     // don't automatically try the redirect. Clear the flag
-//   //     // and wait for the user to click "Log In" (or submit a form, etc.)
-//   //     sessionStorage.removeItem('ripa-logOutAttempt')
-//   //     next()
-//   //   }
-//   // } else {
-//   //   // if you are authenticated, check to see if your access has expired
-//   //   next()
-//   // }
-// })
+// if you ever hit the app and the access token
+// isn't set and the user is online, start login flow and are offline
+router.beforeEach(async (to, from, next) => {
+  // check for log in here
+  const isTokenValid = await AuthService.checkToken()
+  console.log('token valid from router before each ' + isTokenValid)
+  if (!isTokenValid) {
+    // if the token ISN'T valid, check to see if the user manually logged out
+    const didManualLogOut = AuthService.checkManualLogOut()
+    // if they DID manually logout, don't auto try to login again
+    // if they did NOT manually logout, auto try the login again
+    if (!didManualLogOut) {
+      const loginAttempt = await AuthService.tryLogin()
+      console.log('login attempt from router before each' + loginAttempt)
+      if (loginAttempt) {
+        next()
+      }
+    }
+  } else {
+    console.log('token is valid from router before each')
+    // if the token IS valid, clear any log out attempt
+    AuthService.clearManualLogOut()
+    next()
+  }
+})
 
 export default router

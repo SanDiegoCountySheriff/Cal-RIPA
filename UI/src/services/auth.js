@@ -111,6 +111,7 @@ const AuthService = {
           scopes: ['User.Read'],
           account: userAccount,
           forceRefresh: false,
+          redirectUri: window.location.pathname,
         }
         // if we still have the user account, refresh the token
         const tokenResponse = await msalInstance.acquireTokenSilent(
