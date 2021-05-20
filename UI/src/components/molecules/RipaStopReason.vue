@@ -4,6 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
+      :on-open-statute="onOpenStatute"
     ></ripa-form-header>
 
     <v-container>
@@ -14,7 +15,7 @@
             item-text="name"
             item-value="value"
             label="Reason"
-            :items="reasonItems"
+            :items="getReasonItems"
             :rules="reasonRules"
             @input="handleReasonForStopInput"
           ></ripa-select>
@@ -197,6 +198,16 @@ export default {
       },
     },
 
+    getReasonItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.reasonItems
+      }
+
+      return this.reasonItems.filter(
+        item => item.value !== 7 && item.value !== 8,
+      )
+    },
+
     educationViolationRules() {
       const checked = this.viewModel.stopReason.reasonForStop === 7
       const options = this.viewModel.stopReason.educationViolation
@@ -289,6 +300,35 @@ export default {
       if (this.viewModel.stopReason.reasonForStop !== 6) {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 6) {
+        if (this.viewModel.stopReason.searchOfPerson) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+          }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.viewModel.stopReason.searchOfProperty) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+          }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
       }
     },
   },

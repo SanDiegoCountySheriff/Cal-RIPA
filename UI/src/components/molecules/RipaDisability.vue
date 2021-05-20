@@ -4,6 +4,7 @@
       title="Perceived or Known Disability"
       required
       subtitle="§999.226(a)(9)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 

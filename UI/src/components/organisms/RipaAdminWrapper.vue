@@ -56,7 +56,6 @@
         <ripa-users-grid
           :loading="loading"
           :items="users"
-          :on-delete-user="onDeleteUser"
           :on-edit-user="onEditUser"
         ></ripa-users-grid>
       </v-tab-item>
@@ -138,10 +137,6 @@ export default {
       default: () => {},
     },
     onDeleteStatute: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteUser: {
       type: Function,
       default: () => {},
     },

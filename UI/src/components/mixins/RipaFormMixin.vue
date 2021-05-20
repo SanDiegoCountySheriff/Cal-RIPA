@@ -123,5 +123,12 @@ export default {
       }
     },
   },
+
+  props: {
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
+    },
+  },
 }
 </script>

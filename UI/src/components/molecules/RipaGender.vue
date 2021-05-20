@@ -5,6 +5,7 @@
         title="Perceived Gender"
         required
         subtitle="§999.226(a)(5)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
@@ -40,6 +41,7 @@
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
@@ -121,9 +123,12 @@ export default {
     },
 
     updatePerceivedLgbtModel() {
-      this.viewModel.person.perceivedLgbt =
+      if (
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
+      ) {
+        this.viewModel.person.perceivedLgbt = true
+      }
     },
   },
 

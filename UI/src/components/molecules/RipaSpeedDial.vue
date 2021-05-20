@@ -16,9 +16,6 @@
         <v-icon v-else> mdi-plus </v-icon>
       </v-btn>
     </template>
-    <v-btn fab dark small color="primary darken-2" to="/">
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
     <v-btn fab dark small color="primary darken-2" to="/stops">
       <v-icon>mdi-numeric-10-box-multiple-outline</v-icon>
     </v-btn>

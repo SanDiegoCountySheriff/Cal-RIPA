@@ -6,6 +6,7 @@
         required
         subtitle="§999.226(a)(15)"
         class="tw-mb-4"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
     </template>
@@ -103,7 +104,7 @@ export default {
         v => !!v || 'Years of Experience is required',
         v =>
           (v >= 1 && v <= 50) ||
-          'Years of Experience must be between 1 and 50 Years',  
+          'Years of Experience must be between 1 and 50 Years',
       ],
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,

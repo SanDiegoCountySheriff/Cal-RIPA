@@ -131,6 +131,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
+    },
     onSubmit: {
       type: Function,
       default: () => {},

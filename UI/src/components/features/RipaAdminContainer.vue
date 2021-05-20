@@ -12,7 +12,6 @@
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
     :on-delete-statute="handleDeleteStatute"
-    :on-delete-user="handleDeleteUser"
     :on-edit-beat="handleEditBeat"
     :on-edit-city="handleEditCity"
     :on-edit-school="handleEditSchool"
@@ -56,7 +55,6 @@ export default {
       'deleteCity',
       'deleteSchool',
       'deleteStatute',
-      'deleteUser',
       'editBeat',
       'editCity',
       'editSchool',
@@ -102,12 +100,6 @@ export default {
     async handleDeleteStatute(statute) {
       this.loading = true
       await Promise.all([this.deleteStatute(statute)])
-      this.loading = false
-    },
-
-    async handleDeleteUser(user) {
-      this.loading = true
-      await Promise.all([this.deleteUser(user)])
       this.loading = false
     },
 

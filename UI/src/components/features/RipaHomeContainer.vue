@@ -8,6 +8,7 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :form-step-index="formStepIndex"
         :full-stop="fullStop"
         :last-location="lastLocation"
         :loading-gps="loadingGps"
@@ -21,10 +22,13 @@
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-edit-person="handleEditPerson"
+        :on-gps-location="handleGpsLocation"
         :on-open-favorites="handleOpenFavorites"
         :on-open-last-location="handleOpenLastLocation"
+        :on-open-statute="handleOpenStatute"
         :on-save-favorite="handleSaveFavorite"
-        :on-gps-location="handleGpsLocation"
+        :on-step-index-change="handleStepIndexChange"
         :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
@@ -44,6 +48,11 @@
       :on-close="handleCloseDialog"
       :on-add-favorite="handleAddFavorite"
     ></ripa-add-favorite-dialog>
+
+    <ripa-statute-dialog
+      :show-dialog="showStatuteDialog"
+      :on-close="handleCloseDialog"
+    ></ripa-statute-dialog>
   </div>
 </template>
 
@@ -54,6 +63,7 @@ import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -66,6 +76,7 @@ export default {
     RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaStatuteDialog,
   },
 
   data() {
@@ -77,6 +88,7 @@ export default {
       loadingPiiStep3: false,
       loadingPiiStep4: false,
       stop: {},
+      stopIndex: 1,
     }
   },
 
@@ -96,6 +108,11 @@ export default {
 
   methods: {
     ...mapActions(['checkTextForPii', 'checkGpsLocation']),
+
+    handleStepIndexChange(index) {
+      this.formStepIndex = index
+      localStorage.setItem('ripa_form_step_index', index.toString())
+    },
 
     handleSubmit(apiStop) {
       this.addApiStop(apiStop)
@@ -152,7 +169,51 @@ export default {
     },
   },
 
+  mounted() {
+    const localFormCurrentUser = localStorage.getItem('ripa_form_current_user')
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const isEditing = localFormEditing === '1'
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+      const [filteredPerson] = parsedFullStop.people.filter(
+        item => item.id === Number(localFormCurrentUser),
+      )
+      this.stop = parsedStop
+      this.fullStop = {
+        ...parsedFullStop,
+        person: filteredPerson,
+      }
+      if (Object.keys(this.fullStop).length > 0) {
+        this.isEditingForm = isEditing
+        this.formStepIndex = Number(stepIndex)
+      } else {
+        localStorage.removeItem('ripa_form_editing')
+      }
+    }
+  },
+
   watch: {
+    stop(newVal) {
+      this.stop = newVal
+    },
+
+    fullStop(newVal) {
+      this.fullStop = newVal
+      if (this.isEditingForm) {
+        localStorage.setItem(
+          'ripa_form_current_user',
+          this.stop.person.id.toString(),
+        )
+        localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+      }
+    },
+
     'stop.location.fullAddress': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -160,6 +221,7 @@ export default {
         }
       },
     },
+
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -167,6 +229,7 @@ export default {
         }
       },
     },
+
     'stop.actionsTaken.basisForSearchExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -174,6 +237,7 @@ export default {
         }
       },
     },
+
     mappedGpsLocationAddress(newVal) {
       this.lastLocation = newVal
     },
