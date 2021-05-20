@@ -121,9 +121,12 @@ export default {
     },
 
     updatePerceivedLgbtModel() {
-      this.viewModel.person.perceivedLgbt =
+      if (
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
+      ) {
+        this.viewModel.person.perceivedLgbt = true
+      }
     },
   },
 

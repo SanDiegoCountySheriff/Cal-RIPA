@@ -39,7 +39,7 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
-      oid: 'be800c67-a2b6-4da8-a39d-09fc696be154',
+      oid: '',
       isAdmin: false,
       isInvalid: false,
       isAuthenticated: false,
@@ -200,16 +200,18 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
+      console.log('updateUserAccount')
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
       state.user = {
         ...state.user,
-        isAdmin: isAnAdmin.length > 0,
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
-        lastName: value.idTokenClaims.family_name,
+        isAdmin: isAnAdmin.length > 0,
         isAuthenticated: true,
+        lastName: value.idTokenClaims.family_name,
+        oid: value.idTokenClaims.oid,
       }
     },
   },
@@ -793,22 +795,23 @@ export default new Vuex.Store({
         })
     },
 
-    // getUser({ commit, state }) {
-    //   const id = '1620469917330'
-    //   return axios
-    //     .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
-    //       headers: {
-    //         'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-    //         'Cache-Control': 'no-cache',
-    //       },
-    //     })
-    //     .then(response => {
-    //       console.log(response)
-    //     })
-    //     .catch(error => {
-    //       console.log('There was an error retrieving user.', error)
-    //     })
-    // },
+    getUser({ commit, state }) {
+      console.log('getUser')
+      const id = state.user.oid
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving user.', error)
+        })
+    },
 
     setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)

@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-action-taken tw-pb-8">
+    {{ model }}
     <ripa-form-header
       title="Actions Taken During Stop"
       required
@@ -177,7 +178,8 @@ export default {
       actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
-      isAnyActionsTakenDisabled: false,
+      isAnyActionsTakenDisabled1: false,
+      isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
       viewModel: this.loadModel(this.value),
     }
@@ -245,8 +247,8 @@ export default {
           return {
             ...item,
             disabled:
-              this.isAnyActionsTakenDisabled &&
-              (item.value === 18 || item.value === 20),
+              (this.isAnyActionsTakenDisabled1 && item.value === 18) ||
+              (this.isAnyActionsTakenDisabled2 && item.value === 20),
           }
         })
     },
@@ -334,7 +336,7 @@ export default {
     updateSearchModel() {
       if (this.viewModel.stopReason) {
         if (this.viewModel.stopReason.searchOfPerson) {
-          this.isAnyActionsTakenDisabled = true
+          this.isAnyActionsTakenDisabled1 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
@@ -342,9 +344,14 @@ export default {
           ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
           }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
         }
         if (this.viewModel.stopReason.searchOfProperty) {
-          this.isAnyActionsTakenDisabled = true
+          this.isAnyActionsTakenDisabled2 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
@@ -352,6 +359,11 @@ export default {
           ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
           }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
         }
       }
 

@@ -20,7 +20,6 @@ import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
-import AuthService from '../../services/auth'
 
 export default {
   name: 'ripa-page-container',
@@ -55,11 +54,13 @@ export default {
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
+      'getUser',
       'setApiConfig',
     ]),
 
     async getFormData() {
       this.loading = true
+      await Promise.all([this.getUser()])
       await Promise.all([
         this.getFormBeats(),
         this.getFormCities(),
@@ -119,20 +120,27 @@ export default {
   },
 
   async created() {
+    console.log('created 1')
     if (this.invalidUser) {
+      console.log('created 2')
       this.$router.push('/checkUser')
     } else {
+      console.log('created 3')
       this.checkCache()
-      if (this.apiConfig === null) {
-        await AuthService.getApiConfig().then(res => {
-          this.setApiConfig({
-            apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-            apiSubscription: res.data.Configuration.Subscription,
-            defaultCounty: res.data.Configuration.DefaultCounty,
-          })
-          this.getFormData()
-        })
-      }
+      console.log('created 4')
+      this.getFormData()
+      // if (this.apiConfig === null) {
+      //   console.log('created 5')
+      //   await AuthService.getApiConfig().then(res => {
+      //     this.setApiConfig({
+      //       apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+      //       apiSubscription: res.data.Configuration.Subscription,
+      //       defaultCounty: res.data.Configuration.DefaultCounty,
+      //     })
+      //     console.log('created 6')
+      //     this.getFormData()
+      //   })
+      // }
     }
   },
 }
