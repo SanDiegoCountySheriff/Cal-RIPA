@@ -12,15 +12,15 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
-    // beforeEnter(to, from, next) {
-    //   if (isValidOfficer()) {
-    //     next()
-    //   } else if (!store.state.user.isAuthenticated) {
-    //     next()
-    //   } else {
-    //     next('/user')
-    //   }
-    // },
+    beforeEnter(to, from, next) {
+      if (isValidOfficer()) {
+        next()
+      } else if (!store.state.user.isAuthenticated) {
+        next()
+      } else {
+        next('/user')
+      }
+    },
   },
   {
     path: '/admin',
