@@ -133,12 +133,17 @@ export default new Vuex.Store({
       const parsedStreetName = streetName
         ? streetName.replace(blockNumber, '').trim()
         : null
-      const city = state.gpsLocationAddress.address.city
+      const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
+      const upperCaseCity = city ? city.toUpperCase() : city
       const countyCityFound =
-        state.formCountyCities.filter(item => item.id === city).length > 0
+        state.formCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
       const nonCountyCityFound =
-        state.formNonCountyCities.filter(item => item.id === city).length > 0
-      const parsedCity = countyCityFound || nonCountyCityFound ? city : null
+        state.formNonCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
+      const parsedCity =
+        countyCityFound || nonCountyCityFound ? upperCaseCity : null
+
       return {
         blockNumber: parsedBlockNumber,
         streetName: parsedStreetName,
