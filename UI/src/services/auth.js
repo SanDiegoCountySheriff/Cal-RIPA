@@ -68,12 +68,10 @@ const AuthService = {
     const idToken = sessionStorage.getItem('ripa-idToken')
     if (userAccount && idToken) {
       // if SO, try to get a token using that
-      console.log('we have both pieces of info we need to get the token')
       // check to see if the current time is greater than the expiration date
       const tokenExpDate = sessionStorage.getItem('ripa-tokenExpirationDate')
       const isTokenExpired = isAfter(new Date(), new Date(tokenExpDate))
       if (isTokenExpired) {
-        console.log('token expired')
         clearLocalStorageAuthInfo()
         await msalInstance.handleRedirectPromise()
         msalInstance.logoutRedirect({
@@ -108,7 +106,6 @@ const AuthService = {
   getIsAuthenticated: async () => {
     const userAccount = JSON.parse(sessionStorage.getItem('ripa-userAccount'))
     store.dispatch('setUserAccountInfo', userAccount)
-    console.log(msalInstance)
     if (msalInstance === undefined) {
       await getAuthConfig()
       if (userAccount) {

@@ -133,18 +133,11 @@ export default {
   },
 
   async created() {
-    console.log('page container created')
-    // check if we have an id token AND it's valid
-    // if not
-    // IF the user explicity clicked logged out, just redirect to home
-    // if not, force user to login
-    // if we DO have it, make sure store is updated with values
     if (this.invalidUser) {
       this.$router.push('/checkUser')
     } else {
       this.checkCache()
       const isTokenValid = await AuthService.checkToken()
-      console.log('token valid ' + isTokenValid)
       if (!isTokenValid) {
         // if the token ISN'T valid, check to see if the user manually logged out
         const didManualLogOut = AuthService.checkManualLogOut()
@@ -152,16 +145,14 @@ export default {
         // if they did NOT manually logout, auto try the login again
         if (!didManualLogOut) {
           const loginAttempt = await AuthService.tryLogin()
-          console.log('login attempt from page container' + loginAttempt)
           if (loginAttempt) {
-            // this.getFormData()
+            this.getFormData()
           }
         }
       } else {
-        console.log('token is valid from page container created')
         // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
-        // this.getFormData()
+        this.getFormData()
       }
     }
   },

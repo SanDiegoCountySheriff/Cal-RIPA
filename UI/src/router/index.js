@@ -74,7 +74,6 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   // check for log in here
   const isTokenValid = await AuthService.checkToken()
-  console.log('token valid from router before each ' + isTokenValid)
   if (!isTokenValid) {
     // if the token ISN'T valid, check to see if the user manually logged out
     const didManualLogOut = AuthService.checkManualLogOut()
@@ -82,13 +81,11 @@ router.beforeEach(async (to, from, next) => {
     // if they did NOT manually logout, auto try the login again
     if (!didManualLogOut) {
       const loginAttempt = await AuthService.tryLogin()
-      console.log('login attempt from router before each' + loginAttempt)
       if (loginAttempt) {
         next()
       }
     }
   } else {
-    console.log('token is valid from router before each')
     // if the token IS valid, clear any log out attempt
     AuthService.clearManualLogOut()
     next()
