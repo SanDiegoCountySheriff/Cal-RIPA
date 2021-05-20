@@ -198,6 +198,7 @@ export const apiStop = (
 ) => {
   const assignment = getOfficerAssignment(fullStop)
   const outOfCounty = fullStop.location?.outOfCounty || false
+  const duration = fullStop.stopDate?.duration || null
 
   return {
     agency: fullStop.agency,
@@ -231,7 +232,7 @@ export const apiStop = (
       fullStop.stopDate.date,
       fullStop.stopDate.time,
     ),
-    stopDuration: fullStop.stopDate.duration.toString(),
+    stopDuration: duration ? duration.toString() : null,
     stopInResponseToCfs: fullStop.stopDate?.stopInResponseToCfs || false,
     time: fullStop.stopDate.time,
   }

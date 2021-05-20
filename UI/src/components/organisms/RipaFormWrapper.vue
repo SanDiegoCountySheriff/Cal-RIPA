@@ -48,6 +48,7 @@
                 :valid-last-location="validLastLocation"
                 :on-open-favorites="onOpenFavorites"
                 :on-open-last-location="onOpenLastLocation"
+                :on-open-statute="onOpenStatute"
                 :on-save-favorite="onSaveFavorite"
                 :on-gps-location="onGpsLocation"
                 @input="handleInput"
@@ -66,6 +67,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :back-button-visible="getFormStep2BackButtonVisible"
                 @input="handleInput"
               ></ripa-form-step-2>
@@ -83,6 +85,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-3>
@@ -100,6 +103,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-4>
@@ -116,6 +120,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-5>
@@ -455,6 +460,10 @@ export default {
       default: () => {},
     },
     onOpenLastLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStatute: {
       type: Function,
       default: () => {},
     },

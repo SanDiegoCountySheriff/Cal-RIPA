@@ -15,6 +15,7 @@ export default {
       savedLocation: null,
       showAddFavoriteDialog: false,
       showFavoritesDialog: false,
+      showStatuteDialog: false,
     }
   },
 
@@ -71,6 +72,7 @@ export default {
     handleCloseDialog() {
       this.showAddFavoriteDialog = false
       this.showFavoritesDialog = false
+      this.showStatuteDialog = false
     },
 
     handleDeleteFavorite(id) {
@@ -142,6 +144,11 @@ export default {
     handleOpenLastLocation() {
       const location = this.getLastLocation()
       this.lastLocation = location
+    },
+
+    handleOpenStatute(statute) {
+      console.log(statute)
+      this.showStatuteDialog = true
     },
 
     handleSaveFavorite(location) {

@@ -120,14 +120,10 @@ export default {
   },
 
   async created() {
-    console.log('created 1')
     if (this.invalidUser) {
-      console.log('created 2')
       this.$router.push('/checkUser')
     } else {
-      console.log('created 3')
       this.checkCache()
-      console.log('created 4')
       this.getFormData()
       // if (this.apiConfig === null) {
       //   console.log('created 5')

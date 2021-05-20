@@ -1,6 +1,11 @@
 <template>
   <div class="ripa-race tw-pb-8">
-    <ripa-form-header title="Student" required subtitle="§999.224(a)(16)">
+    <ripa-form-header
+      title="Student"
+      required
+      subtitle="§999.224(a)(16)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>

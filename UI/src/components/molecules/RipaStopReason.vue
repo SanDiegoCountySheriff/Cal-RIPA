@@ -4,6 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
+      :on-open-statute="onOpenStatute"
     ></ripa-form-header>
 
     <v-container>

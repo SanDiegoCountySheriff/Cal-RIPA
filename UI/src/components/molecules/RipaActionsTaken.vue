@@ -1,10 +1,10 @@
 <template>
   <div class="ripa-action-taken tw-pb-8">
-    {{ model }}
     <ripa-form-header
       title="Actions Taken During Stop"
       required
       subtitle="§999.226(a)(12)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 
@@ -14,7 +14,7 @@
           <ripa-switch
             v-model="model.actionsTaken.anyActionsTaken"
             label="Any Actions Taken?"
-            :disabled="isAnyActionsTakenDisabled"
+            :disabled="isAnyActionsTakenDisabled1 || isAnyActionsTakenDisabled2"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
@@ -61,6 +61,7 @@
                 title="Basis for Search"
                 required
                 subtitle="§999.226(a)(12)(B)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -105,6 +106,7 @@
                 title="Basis for Property Seizure"
                 required
                 subtitle="§999.226(a)(12)(D)(1)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -119,6 +121,7 @@
                 title="Types of Property Seized"
                 required
                 subtitle="§999.226(a)(12)(D)(2)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group

@@ -26,6 +26,7 @@
         :on-gps-location="handleGpsLocation"
         :on-open-favorites="handleOpenFavorites"
         :on-open-last-location="handleOpenLastLocation"
+        :on-open-statute="handleOpenStatute"
         :on-save-favorite="handleSaveFavorite"
         :on-step-index-change="handleStepIndexChange"
         :on-submit="handleSubmit"
@@ -47,6 +48,11 @@
       :on-close="handleCloseDialog"
       :on-add-favorite="handleAddFavorite"
     ></ripa-add-favorite-dialog>
+
+    <ripa-statute-dialog
+      :show-dialog="showStatuteDialog"
+      :on-close="handleCloseDialog"
+    ></ripa-statute-dialog>
   </div>
 </template>
 
@@ -57,6 +63,7 @@ import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -69,6 +76,7 @@ export default {
     RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaStatuteDialog,
   },
 
   data() {

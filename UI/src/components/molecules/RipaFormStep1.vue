@@ -1,7 +1,14 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-officer v-model="model" toggle></ripa-officer>
-    <ripa-stop-date v-model="model"></ripa-stop-date>
+    <ripa-officer
+      v-model="model"
+      toggle
+      :on-open-statute="onOpenStatute"
+    ></ripa-officer>
+    <ripa-stop-date
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-stop-date>
     <ripa-location
       v-model="model"
       :schools="schools"
@@ -14,6 +21,7 @@
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
+      :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
       :on-gps-location="onGpsLocation"
     ></ripa-location>

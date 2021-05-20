@@ -6,6 +6,7 @@
         required
         subtitle="§999.226(a)(15)"
         class="tw-mb-4"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
     </template>

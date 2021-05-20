@@ -36,7 +36,9 @@ export default {
 
   methods: {
     handleSubtitleClick() {
-      alert('do something...')
+      if (this.onOpenStatute) {
+        this.onOpenStatute(this.subtitle)
+      }
     },
   },
 
@@ -52,6 +54,10 @@ export default {
     subtitle: {
       type: String,
       default: '',
+    },
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
     },
   },
 }
