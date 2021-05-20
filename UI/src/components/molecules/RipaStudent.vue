@@ -1,6 +1,11 @@
 <template>
   <div class="ripa-race tw-pb-8">
-    <ripa-form-header title="Student" required subtitle="§999.224(a)(16)">
+    <ripa-form-header
+      title="Student"
+      required
+      subtitle="§999.224(a)(16)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>
@@ -49,6 +54,7 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateStopReasonModel()
       this.updateDisabilityModel()
       this.updateStopResultModel()
       this.$emit('input', this.viewModel)
@@ -56,6 +62,17 @@ export default {
 
     updateDisabilityModel() {
       this.viewModel.person.anyDisabilities = false
+    },
+
+    updateStopReasonModel() {
+      if (!this.viewModel.person.isStudent) {
+        if (
+          this.viewModel.stopReason.reasonForStop === 7 ||
+          this.viewModel.stopReason.reasonForStop === 8
+        ) {
+          this.viewModel.stopReason.reasonForStop = null
+        }
+      }
     },
 
     updateStopResultModel() {

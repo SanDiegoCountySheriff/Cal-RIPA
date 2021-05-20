@@ -59,11 +59,13 @@ export default {
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
+      'getUser',
       'setApiConfig',
     ]),
 
     async getFormData() {
       this.loading = true
+      await Promise.all([this.getUser()])
       await Promise.all([
         this.getFormBeats(),
         this.getFormCities(),
@@ -158,3 +160,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.update-dialog {
+  z-index: 999 !important;
+}
+</style>

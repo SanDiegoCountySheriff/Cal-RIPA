@@ -15,6 +15,7 @@ export default {
       savedLocation: null,
       showAddFavoriteDialog: false,
       showFavoritesDialog: false,
+      showStatuteDialog: false,
     }
   },
 
@@ -71,6 +72,7 @@ export default {
     handleCloseDialog() {
       this.showAddFavoriteDialog = false
       this.showFavoritesDialog = false
+      this.showStatuteDialog = false
     },
 
     handleDeleteFavorite(id) {
@@ -80,12 +82,21 @@ export default {
     },
 
     handleDeletePerson(id) {
+      // update fullStop
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {
         ...this.fullStop,
         people: filteredPeople,
       }
       this.fullStop = Object.assign({}, updatedFullStop)
+      // update stop
+      const [filteredPerson] = this.fullStop.people[0]
+      if (filteredPerson) {
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+      }
     },
 
     handleEditFavorite(favorite) {
@@ -97,6 +108,18 @@ export default {
       )
       filteredLocations.push(updatedFav)
       this.setFavoriteLocations(filteredLocations)
+    },
+
+    handleEditPerson(id) {
+      const [filteredPerson] = this.fullStop.people.filter(
+        item => item.id === id,
+      )
+      if (filteredPerson) {
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+      }
     },
 
     handleInput(newVal) {
@@ -123,12 +146,18 @@ export default {
       this.lastLocation = location
     },
 
+    handleOpenStatute(statute) {
+      console.log(statute)
+      this.showStatuteDialog = true
+    },
+
     handleSaveFavorite(location) {
       this.savedLocation = location
       this.showAddFavoriteDialog = true
     },
 
     handleTemplate(value) {
+      localStorage.setItem('ripa_form_editing', '1')
       this.isEditingForm = true
 
       switch (value) {
@@ -184,7 +213,7 @@ export default {
           stopResult: this.stop?.stopResult || null,
         }
 
-        const updatedFullStop = Object.assign({}, this.fullStop)
+        let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agency = this.stop.agency
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
@@ -204,15 +233,23 @@ export default {
             }
           })
         updatedFullStop.people.push(updatedPerson)
+        updatedFullStop = {
+          ...updatedFullStop,
+          people: updatedFullStop.people.sort((a, b) => a.id - b.id),
+        }
         this.fullStop = Object.assign({}, updatedFullStop)
       }
     },
 
     handleCancel() {
+      localStorage.removeItem('ripa_form_current_user')
+      localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_editing')
+      localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_full_stop')
       this.isEditingForm = false
-      this.stop = {}
-      this.fullStop = {}
-      this.updateFullStop()
+      this.stop = null
+      this.fullStop = null
     },
   },
 }

@@ -6,6 +6,7 @@
         required
         subtitle="§999.226(a)(15)"
         class="tw-mb-4"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
     </template>
@@ -32,6 +33,9 @@
               <ripa-number-input
                 v-model="model.officer.yearsExperience"
                 label="Years of Experience"
+                hint="Years of experience should be defined in years. Maximum of 50 and minimum of 1."
+                :min="1"
+                :max="50"
                 :rules="yearsExperienceRules"
                 @input="handleInput"
               >
@@ -96,7 +100,12 @@ export default {
   data() {
     return {
       valid: true,
-      yearsExperienceRules: [v => !!v || 'Years experience is required'],
+      yearsExperienceRules: [
+        v => !!v || 'Years of Experience is required',
+        v =>
+          (v >= 1 && v <= 50) ||
+          'Years of Experience must be between 1 and 50 Years',
+      ],
       assignmentRules: [v => !!v || 'An assignment is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
       viewModel: this.loadModel(this.value),

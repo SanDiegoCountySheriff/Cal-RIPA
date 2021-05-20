@@ -4,47 +4,27 @@
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
-            <v-stepper-step
-              :rules="[() => step1Validated]"
-              :complete="stepIndex > 1"
-              step="1"
-            >
+            <v-stepper-step :complete="stepIndex > 1" step="1">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step2Validated]"
-              :complete="stepIndex > 2"
-              step="2"
-            >
+            <v-stepper-step :complete="stepIndex > 2" step="2">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step3Validated]"
-              :complete="stepIndex > 3"
-              step="3"
-            >
+            <v-stepper-step :complete="stepIndex > 3" step="3">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step4Validated]"
-              :complete="stepIndex > 4"
-              step="4"
-            >
+            <v-stepper-step :complete="stepIndex > 4" step="4">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
+            <v-stepper-step :complete="stepIndex > 5" step="5">
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -68,6 +48,7 @@
                 :valid-last-location="validLastLocation"
                 :on-open-favorites="onOpenFavorites"
                 :on-open-last-location="onOpenLastLocation"
+                :on-open-statute="onOpenStatute"
                 :on-save-favorite="onSaveFavorite"
                 :on-gps-location="onGpsLocation"
                 @input="handleInput"
@@ -86,6 +67,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :back-button-visible="getFormStep2BackButtonVisible"
                 @input="handleInput"
               ></ripa-form-step-2>
@@ -103,6 +85,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-3>
@@ -120,6 +103,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-4>
@@ -136,6 +120,7 @@
                 :on-back="handleBack"
                 :on-next="handleNext"
                 :on-cancel="handleCancel"
+                :on-open-statute="onOpenStatute"
                 :statutes="statutes"
                 @input="handleInput"
               ></ripa-form-step-5>
@@ -158,47 +143,27 @@
           </v-stepper-items>
 
           <v-stepper-header>
-            <v-stepper-step
-              :rules="[() => step1Validated]"
-              :complete="stepIndex > 1"
-              step="1"
-            >
+            <v-stepper-step :complete="stepIndex > 1" step="1">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step2Validated]"
-              :complete="stepIndex > 2"
-              step="2"
-            >
+            <v-stepper-step :complete="stepIndex > 2" step="2">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step3Validated]"
-              :complete="stepIndex > 3"
-              step="3"
-            >
+            <v-stepper-step :complete="stepIndex > 3" step="3">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step4Validated]"
-              :complete="stepIndex > 4"
-              step="4"
-            >
+            <v-stepper-step :complete="stepIndex > 4" step="4">
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step
-              :rules="[() => step5Validated]"
-              :complete="stepIndex > 5"
-              step="5"
-            >
+            <v-stepper-step :complete="stepIndex > 5" step="5">
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -241,12 +206,7 @@ export default {
 
   data() {
     return {
-      stepIndex: 1,
-      step1Validated: true,
-      step2Validated: true,
-      step3Validated: true,
-      step4Validated: true,
-      step5Validated: true,
+      stepIndex: this.formStepIndex,
       confirmationStepIndex: 7,
       stop: this.value,
       isEditStop: true,
@@ -256,8 +216,8 @@ export default {
 
   computed: {
     getEditPersonText() {
-      const personIndex = this.stop.person.index || 1
-      return `Person: ${personIndex}`
+      const personId = this.stop.person?.id || 'N/A'
+      return `Person: ${personId}`
     },
 
     getFormStep2BackButtonVisible() {
@@ -284,6 +244,9 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       if (this.onAddPerson) {
         this.onAddPerson()
       }
@@ -293,6 +256,9 @@ export default {
 
     handleBack() {
       this.stepIndex = this.stepIndex - 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       window.scrollTo(0, 0)
     },
 
@@ -307,6 +273,9 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = 1
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             this.isEditStop = true
             this.isEditPerson = true
             if (this.onCancel) {
@@ -337,13 +306,22 @@ export default {
 
     handleEditPerson(id) {
       console.log('Edit Person in Form', id)
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
       this.stepIndex = 2
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = false
       this.isEditPerson = true
     },
 
     handleEditStop() {
       this.stepIndex = 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = true
       this.isEditPerson = false
     },
@@ -351,11 +329,17 @@ export default {
     handleNext() {
       this.stepIndex =
         this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       window.scrollTo(0, 0)
     },
 
     handleStartNew() {
       this.stepIndex = 1
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
       this.isEditStop = true
       this.isEditPerson = true
       if (this.onCancel) {
@@ -379,6 +363,9 @@ export default {
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
+            if (this.onCancel) {
+              this.onCancel()
+            }
           }
         },
       })
@@ -388,6 +375,10 @@ export default {
   watch: {
     value(newVal) {
       this.stop = newVal
+    },
+
+    formStepIndex(newVal) {
+      this.stepIndex = newVal
     },
   },
 
@@ -407,6 +398,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    formStepIndex: {
+      type: Number,
+      default: 1,
     },
     fullStop: {
       type: Object,
@@ -456,6 +451,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
     onOpenFavorites: {
       type: Function,
       default: () => {},
@@ -464,7 +463,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
+    },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onStepIndexChange: {
       type: Function,
       default: () => {},
     },

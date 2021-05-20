@@ -39,10 +39,11 @@ export default new Vuex.Store({
     formStops: [],
     user: {
       agency: 'Insight',
+      oid: '',
       isAdmin: false,
       isInvalid: false,
       isAuthenticated: false,
-      officerId: '2021050812345',
+      officerId: '210508123',
     },
     apiConfig: null,
     piiDate: null,
@@ -132,12 +133,17 @@ export default new Vuex.Store({
       const parsedStreetName = streetName
         ? streetName.replace(blockNumber, '').trim()
         : null
-      const city = state.gpsLocationAddress.address.city
+      const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
+      const upperCaseCity = city ? city.toUpperCase() : city
       const countyCityFound =
-        state.formCountyCities.filter(item => item.id === city).length > 0
+        state.formCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
       const nonCountyCityFound =
-        state.formNonCountyCities.filter(item => item.id === city).length > 0
-      const parsedCity = countyCityFound || nonCountyCityFound ? city : null
+        state.formNonCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
+      const parsedCity =
+        countyCityFound || nonCountyCityFound ? upperCaseCity : null
+
       return {
         blockNumber: parsedBlockNumber,
         streetName: parsedStreetName,
@@ -199,16 +205,18 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
+      console.log('updateUserAccount')
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
       state.user = {
         ...state.user,
-        isAdmin: isAnAdmin.length > 0,
         email: value.idTokenClaims.email,
         firstName: value.idTokenClaims.given_name,
-        lastName: value.idTokenClaims.family_name,
+        isAdmin: isAnAdmin.length > 0,
         isAuthenticated: true,
+        lastName: value.idTokenClaims.family_name,
+        oid: value.idTokenClaims.oid,
       }
     },
   },
@@ -325,23 +333,6 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error deleting the statute.', error)
           dispatch('getAdminStatutes')
-        })
-    },
-
-    deleteUser({ dispatch, state }, user) {
-      return axios
-        .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(() => {
-          dispatch('getAdminUsers')
-        })
-        .catch(error => {
-          console.log('There was an error deleting the user.', error)
-          dispatch('getAdminUsers')
         })
     },
 
@@ -806,6 +797,24 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error retrieving officer stops.', error)
           commit('updateOfficerStops', [])
+        })
+    },
+
+    getUser({ commit, state }) {
+      console.log('getUser')
+      const id = state.user.oid
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving user.', error)
         })
     },
 

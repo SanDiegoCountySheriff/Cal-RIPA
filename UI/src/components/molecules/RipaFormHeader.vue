@@ -36,13 +36,9 @@ export default {
 
   methods: {
     handleSubtitleClick() {
-      const parsedSubtitle = this.subtitle
-        .replace('§', '')
-        .replace(/[.]/g, '-')
-        .replace(/[(]/g, '-')
-        .replace(/[)]/g, '')
-      const url = `regulation#${parsedSubtitle}`
-      window.open(url, '_blank')
+      if (this.onOpenStatute) {
+        this.onOpenStatute(this.subtitle)
+      }
     },
   },
 
@@ -58,6 +54,10 @@ export default {
     subtitle: {
       type: String,
       default: '',
+    },
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
     },
   },
 }

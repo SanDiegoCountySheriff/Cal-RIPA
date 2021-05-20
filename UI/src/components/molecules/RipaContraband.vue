@@ -4,6 +4,7 @@
       title="Contraband or Evidence Discovered"
       required
       subtitle="§999.226(a)(12)(C)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 

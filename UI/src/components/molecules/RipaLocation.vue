@@ -1,6 +1,11 @@
 <template>
   <div class="ripa-location tw-pb-8">
-    <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
+    <ripa-form-header
+      title="Location"
+      required
+      subtitle="§999.226(a)(3)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>
@@ -145,7 +150,7 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
-              label="Highway and closet exit"
+              label="Highway and closest exit"
               :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"

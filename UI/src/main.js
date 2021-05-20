@@ -21,7 +21,6 @@ async function appStartUp() {
   // get config on app startup
   const configLoaded = await AuthService.getAuthConfig()
   if (configLoaded) {
-    console.log('config loaded')
     new Vue({
       router,
       store,
@@ -29,6 +28,11 @@ async function appStartUp() {
       render: h => h(App),
     }).$mount('#app')
   } else {
-    console.log('error loading config')
+    new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App),
+    }).$mount('#app')
   }
 }

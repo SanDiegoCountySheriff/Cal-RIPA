@@ -12,7 +12,6 @@
     :on-delete-city="onDeleteCity"
     :on-delete-school="onDeleteSchool"
     :on-delete-statute="onDeleteStatute"
-    :on-delete-user="onDeleteUser"
     :on-edit-beat="onEditBeat"
     :on-edit-city="onEditCity"
     :on-edit-school="onEditSchool"
@@ -77,10 +76,6 @@ export default {
       default: () => {},
     },
     onDeleteStatute: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteUser: {
       type: Function,
       default: () => {},
     },
