@@ -82,6 +82,7 @@ export default {
   methods: {
     ...mapActions([
       'editOfficerStop',
+      'editOfficerUser',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
@@ -118,7 +119,7 @@ export default {
     },
 
     handleSaveUser(officer) {
-      console.log('save user', officer)
+      this.editOfficerUser(officer)
     },
 
     handleUpdateDark(value) {

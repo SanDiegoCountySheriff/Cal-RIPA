@@ -11,7 +11,9 @@
       </v-card-title>
 
       <v-card-text>
-        <ripa-officer v-model="modelStop"></ripa-officer>
+        <v-form ref="dialogForm" lazy-validation>
+          <ripa-officer v-model="modelStop"></ripa-officer>
+        </v-form>
       </v-card-text>
 
       <v-card-actions>
@@ -35,6 +37,7 @@ export default {
 
   data() {
     return {
+      isFormValid: false,
       viewModelDialog: this.showDialog,
       viewModelStop: this.stop,
     }
@@ -81,6 +84,10 @@ export default {
     },
 
     handleSave() {
+      this.isFormValid = this.$refs.dialogForm.validate()
+      if (!this.isFormValid) {
+        return
+      }
       if (this.onSave) {
         this.onSave(this.viewModelStop)
       }

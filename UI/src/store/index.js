@@ -224,17 +224,19 @@ export default new Vuex.Store({
       state.user = {
         ...state.user,
         email: value.idTokenClaims.email,
-        firstName: value.idTokenClaims.given_name,
         isAdmin: isAnAdmin.length > 0,
         isAuthenticated: true,
-        lastName: value.idTokenClaims.family_name,
         oid: value.idTokenClaims.oid,
       }
     },
     updateUserProfile(state, value) {
       state.user = {
         ...state.user,
+        id: value.id,
         agency: value.agency,
+        firstName: value.firstName,
+        lastName: value.lastName,
+        fullName: value.name,
         assignment: value.assignment ? Number(value.assignment) : null,
         officerId: value.officerId,
         otherType: value.otherType ? value.otherType : null,
@@ -469,6 +471,40 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error saving the user.', error)
           dispatch('getAdminUsers')
+        })
+    },
+
+    editOfficerUser({ dispatch, state }, officer) {
+      const userId = state.user.oid
+      const user = {
+        id: state.user.oid,
+        firstName: state.user.firstName,
+        lastName: state.user.lastName,
+        name: state.user.fullName,
+        agency: state.user.agency,
+        startDate: state.user.startDate,
+        officerId: state.user.officerId,
+        assignment: officer.officer.assignment,
+        otherType: officer.officer.otherType,
+      }
+      return axios
+        .put(
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getUser')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getUser')
         })
     },
 
