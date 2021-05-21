@@ -1,7 +1,14 @@
 <template>
-  <ripa-officer-stops-template
-    :items="officerStops"
-  ></ripa-officer-stops-template>
+  <div>
+    <v-progress-linear
+      v-if="loading"
+      indeterminate
+      color="cyan"
+    ></v-progress-linear>
+    <ripa-officer-stops-template
+      :items="officerStops"
+    ></ripa-officer-stops-template>
+  </div>
 </template>
 
 <script>
@@ -10,6 +17,12 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-officer-stops-container',
+
+  data() {
+    return {
+      loading: true,
+    }
+  },
 
   components: {
     RipaOfficerStopsTemplate,
