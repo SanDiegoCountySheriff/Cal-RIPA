@@ -347,11 +347,6 @@ export default {
           ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
           }
-        } else {
-          this.viewModel.actionsTaken.actionsTakenDuringStop =
-            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 18,
-            )
         }
         if (this.viewModel.stopReason.searchOfProperty) {
           this.isAnyActionsTakenDisabled2 = true
@@ -362,11 +357,6 @@ export default {
           ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
           }
-        } else {
-          this.viewModel.actionsTaken.actionsTakenDuringStop =
-            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 20,
-            )
         }
       }
 
