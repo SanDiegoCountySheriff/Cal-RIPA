@@ -1,63 +1,84 @@
 <template>
   <v-card>
-    <v-tabs v-model="tab" show-arrows>
-      <v-tab>Beats</v-tab>
-      <v-tab>Cities</v-tab>
-      <v-tab>Schools</v-tab>
-      <v-tab>Statutes</v-tab>
-      <v-tab>Stops</v-tab>
+    <v-tabs v-model="tabLevel1" show-arrows>
+      <v-tab>Introduction</v-tab>
       <v-tab>Submissions</v-tab>
+      <v-tab>Stops</v-tab>
       <v-tab>Users</v-tab>
+      <v-tab>Domains</v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tabLevel1">
       <v-tab-item>
-        <ripa-beats-grid
-          :loading="loading"
-          :items="beats"
-          :on-delete-beat="onDeleteBeat"
-          :on-edit-beat="onEditBeat"
-        ></ripa-beats-grid>
+        <v-card-text>
+          <div>
+            This screen allows you to manage Submissions, Stops, Users, and
+            Domain lists
+          </div>
+        </v-card-text>
       </v-tab-item>
-      <v-tab-item>
-        <ripa-cities-grid
-          :loading="loading"
-          :items="cities"
-          :on-delete-city="onDeleteCity"
-          :on-edit-city="onEditCity"
-        ></ripa-cities-grid>
-      </v-tab-item>
-      <v-tab-item>
-        <ripa-schools-grid
-          :loading="loading"
-          :items="schools"
-          :on-delete-school="onDeleteSchool"
-          :on-edit-school="onEditSchool"
-        ></ripa-schools-grid>
-      </v-tab-item>
-      <v-tab-item>
-        <ripa-statutes-grid
-          :loading="loading"
-          :items="statutes"
-          :on-delete-statute="onDeleteStatute"
-          :on-edit-statute="onEditStatute"
-        ></ripa-statutes-grid>
-      </v-tab-item>
-      <v-tab-item>
-        <ripa-stops-grid :loading="loading" :items="stops"></ripa-stops-grid>
-      </v-tab-item>
+
       <v-tab-item>
         <ripa-submissions-grid
           :loading="loading"
           :items="submissions"
         ></ripa-submissions-grid>
       </v-tab-item>
+
+      <v-tab-item>
+        <ripa-stops-grid :loading="loading" :items="stops"></ripa-stops-grid>
+      </v-tab-item>
+
       <v-tab-item>
         <ripa-users-grid
           :loading="loading"
           :items="users"
           :on-edit-user="onEditUser"
         ></ripa-users-grid>
+      </v-tab-item>
+
+      <v-tab-item>
+        <v-tabs v-model="tabLevel2" show-arrows>
+          <v-tab>Beats</v-tab>
+          <v-tab>Cities</v-tab>
+          <v-tab>Schools</v-tab>
+          <v-tab>Statutes</v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tabLevel2">
+          <v-tab-item>
+            <ripa-beats-grid
+              :loading="loading"
+              :items="beats"
+              :on-delete-beat="onDeleteBeat"
+              :on-edit-beat="onEditBeat"
+            ></ripa-beats-grid>
+          </v-tab-item>
+          <v-tab-item>
+            <ripa-cities-grid
+              :loading="loading"
+              :items="cities"
+              :on-delete-city="onDeleteCity"
+              :on-edit-city="onEditCity"
+            ></ripa-cities-grid>
+          </v-tab-item>
+          <v-tab-item>
+            <ripa-schools-grid
+              :loading="loading"
+              :items="schools"
+              :on-delete-school="onDeleteSchool"
+              :on-edit-school="onEditSchool"
+            ></ripa-schools-grid>
+          </v-tab-item>
+          <v-tab-item>
+            <ripa-statutes-grid
+              :loading="loading"
+              :items="statutes"
+              :on-delete-statute="onDeleteStatute"
+              :on-edit-statute="onEditStatute"
+            ></ripa-statutes-grid>
+          </v-tab-item>
+        </v-tabs-items>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -87,8 +108,20 @@ export default {
 
   data() {
     return {
-      tab: 0,
+      tabLevel1: 0,
+      tabLevel2: 0,
     }
+  },
+
+  watch: {
+    tabLevel1(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.tabLevel1 = newValue
+        if (this.onTabChange) {
+          this.onTabChange(newValue)
+        }
+      }
+    },
   },
 
   props: {
@@ -157,6 +190,10 @@ export default {
       default: () => {},
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onTabChange: {
       type: Function,
       default: () => {},
     },
