@@ -140,7 +140,6 @@ export default {
     },
 
     handleOpenStatute(statute) {
-      console.log(statute)
       this.showStatuteDialog = true
     },
 

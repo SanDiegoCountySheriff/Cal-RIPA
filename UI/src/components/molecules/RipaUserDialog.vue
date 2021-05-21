@@ -27,7 +27,7 @@
 import RipaOfficer from '@/components/molecules/RipaOfficer'
 
 export default {
-  name: 'ripa-statute-dialog',
+  name: 'ripa-user-dialog',
 
   components: {
     RipaOfficer,
@@ -79,6 +79,7 @@ export default {
         this.onClose()
       }
     },
+
     handleSave() {
       if (this.onSave) {
         this.onSave(this.viewModelStop)

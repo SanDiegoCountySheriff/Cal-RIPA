@@ -35,14 +35,6 @@ const routes = [
         /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
       ),
   },
-  {
-    path: '/checkUser',
-    name: 'Check User',
-    component: () =>
-      import(
-        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserCheckContainer.vue'
-      ),
-  },
 ]
 
 const router = new VueRouter({

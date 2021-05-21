@@ -107,6 +107,7 @@ export default new Vuex.Store({
         agency: state.user.agency,
         assignment: state.user.assignment,
         officerId: state.user.officerId,
+        oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
@@ -247,7 +248,6 @@ export default new Vuex.Store({
       )
       localStorage.setItem('ripa_officer_assignment', state.user.assignment)
       localStorage.setItem('ripa_officer_other_type', state.user.otherType)
-      console.log(state.user)
     },
   },
 
@@ -840,11 +840,11 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          console.log(response)
           commit('updateUserProfile', response.data)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
+          commit('updateInvalidUser', true)
         })
     },
 

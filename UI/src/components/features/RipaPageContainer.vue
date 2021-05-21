@@ -19,12 +19,17 @@
       :on-close="handleClose"
       :on-save="handleSaveUser"
     ></ripa-user-dialog>
+
+    <ripa-invalid-user-dialog
+      :show-dialog="showInvalidUserDialog"
+    ></ripa-invalid-user-dialog>
   </ripa-page-wrapper>
 </template>
 
 <script>
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
+import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
@@ -37,6 +42,7 @@ export default {
 
   components: {
     RipaInterval,
+    RipaInvalidUserDialog,
     RipaPageWrapper,
     RipaUserDialog,
   },
@@ -45,6 +51,7 @@ export default {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMs: 5000,
+      showInvalidUserDialog: false,
       showUserDialog: false,
     }
   },
@@ -83,9 +90,12 @@ export default {
       'setApiConfig',
     ]),
 
+    async getUserData() {
+      await Promise.all([this.getUser()])
+    },
+
     async getFormData() {
       this.loading = true
-      await Promise.all([this.getUser()])
       await Promise.all([
         this.getFormBeats(),
         this.getFormCities(),
@@ -157,18 +167,20 @@ export default {
   },
 
   async created() {
-    if (this.invalidUser) {
-      this.$router.push('/checkUser')
-    } else {
-      this.checkCache()
-      this.getFormData()
+    if (this.isOnlineAndAuthenticated) {
+      this.getUserData()
     }
+  },
+
+  watch: {
+    invalidUser(newVal) {
+      if (newVal) {
+        this.showInvalidUserDialog = true
+      } else {
+        this.checkCache()
+        this.getFormData()
+      }
+    },
   },
 }
 </script>
-
-<style lang="scss">
-.update-dialog {
-  z-index: 999 !important;
-}
-</style>

@@ -1,11 +1,8 @@
 <template>
   <v-app-bar app dense flat>
-    <v-toolbar-title
-      v-if="!invalidUser"
-      class="tw-cursor-pointer"
-      @click="$router.push('/')"
-      >{{ getAppTitle }}</v-toolbar-title
-    >
+    <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
+      getAppTitle
+    }}</v-toolbar-title>
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
