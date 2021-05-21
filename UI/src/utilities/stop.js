@@ -18,19 +18,11 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = (
-  startDate,
-  yearsExperience,
-  assignment,
-  otherType,
-  officerId,
-  agency,
-) => {
+export const defaultStop = officer => {
   return {
     actionsTaken: {},
-    agency,
+    agency: officer.agency,
     id: uniqueId(),
-    created: new Date(),
     location: {
       isSchool: false,
       school: null,
@@ -47,12 +39,13 @@ export const defaultStop = (
     },
     officer: {
       editOfficer: false,
-      startDate,
-      yearsExperience,
-      assignment,
-      otherType,
+      startDate: officer.startDate,
+      yearsExperience: officer.yearsExperience,
+      assignment: officer.assignment,
+      otherType: officer.otherType,
     },
-    officerId,
+    officerId: officer.officerId,
+    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
     },
@@ -67,18 +60,10 @@ export const defaultStop = (
   }
 }
 
-export const motorStop = (
-  startDate,
-  yearsExperience,
-  assignment,
-  otherType,
-  officerId,
-  agency,
-) => {
+export const motorStop = officer => {
   return {
     actionsTaken: {},
-    agency,
-    created: new Date(),
+    agency: officer.agency,
     id: uniqueId(),
     location: {
       isSchool: false,
@@ -96,12 +81,13 @@ export const motorStop = (
     },
     officer: {
       editOfficer: false,
-      startDate,
-      yearsExperience,
-      assignment,
-      otherType,
+      startDate: officer.startDate,
+      yearsExperience: officer.yearsExperience,
+      assignment: officer.assignment,
+      otherType: officer.otherType,
     },
-    officerId,
+    officerId: officer.officerId,
+    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
     },
@@ -137,22 +123,14 @@ export const motorStop = (
   }
 }
 
-export const probationStop = (
-  startDate,
-  yearsExperience,
-  assignment,
-  otherType,
-  officerId,
-  agency,
-) => {
+export const probationStop = officer => {
   return {
     actionsTaken: {
       anyActionsTaken: true,
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
-    agency,
-    created: new Date(),
+    agency: officer.agency,
     id: uniqueId(),
     location: {
       isSchool: false,
@@ -170,12 +148,13 @@ export const probationStop = (
     },
     officer: {
       editOfficer: false,
-      startDate,
-      yearsExperience: yearsExperience,
-      assignment: assignment,
-      otherType,
+      startDate: officer.startDate,
+      yearsExperience: officer.yearsExperience,
+      assignment: officer.assignment,
+      otherType: officer.otherType,
     },
-    officerId,
+    officerId: officer.officerId,
+    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
     },
@@ -194,7 +173,46 @@ export const probationStop = (
   }
 }
 
-export const apiStop = (
+export const apiStopToFullStop = apiStop => {
+  const blockNumber = apiStop.location.blockNumber || null
+  const schoolNumber = apiStop.location.schoolName?.codes?.code || null
+  const cityName = apiStop.location.city?.codes?.code || null
+  const beatNumber = apiStop.location.beat?.codes?.code || null
+
+  return {
+    agency: apiStop.agency,
+    id: apiStop.id,
+    officer: {
+      editOfficer: false,
+      yearsExperience: Number(apiStop.expYears),
+      assignment: Number(apiStop.officerAssignment.key),
+      otherType: apiStop.officerAssignment.otherType || null,
+    },
+    officerId: apiStop.officerId || null,
+    officerName: apiStop.officerName || null,
+    stopDate: {
+      date: apiStop.date,
+      time: apiStop.time,
+      duration: Number(apiStop.stopDuration),
+      stopInResponseToCfs: apiStop.stopInResponseToCfs,
+    },
+    location: {
+      isSchool: apiStop.location.school || false,
+      school: schoolNumber ? Number(schoolNumber) : null,
+      blockNumber: blockNumber ? Number(blockNumber) : null,
+      streetName: apiStop.location.streetName || null,
+      intersection: apiStop.location.intersection || null,
+      moreLocationOptions: apiStop.location.toggleLocationOptions || false,
+      highwayExit: apiStop.location.highwayExit || null,
+      landmark: apiStop.location.landMark || null,
+      outOfCounty: apiStop.location.outOfCounty || false,
+      city: cityName || null,
+      beat: beatNumber ? Number(beatNumber) : null,
+    },
+  }
+}
+
+export const fullStopToApiStop = (
   fullStop,
   beats,
   countyCities,
@@ -234,6 +252,7 @@ export const apiStop = (
       type: assignment.text,
     },
     officerId: fullStop.officerId,
+    officerName: fullStop.officerName,
     stopDateTime: formatDateTime(
       fullStop.stopDate.date,
       fullStop.stopDate.time,

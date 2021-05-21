@@ -8,7 +8,7 @@
   >
     <v-card>
       <v-card-title>
-        <span>Statute §999.226.1(a)(2)</span>
+        <span>Statute §999.226(a)(2)</span>
       </v-card-title>
 
       <v-card-text>

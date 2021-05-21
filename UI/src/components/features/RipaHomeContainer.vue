@@ -102,8 +102,6 @@ export default {
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
-      'officerId',
-      'agency',
       'mappedGpsLocationAddress',
       'displayBeatInput',
     ]),

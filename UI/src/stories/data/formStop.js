@@ -75,10 +75,11 @@ export const sampleStop = {
 }
 
 export const onePersonFullStop = {
+  agency: 'sdsd',
   id: uniqueId(),
-  created: '2021-05-07T14:30:29.321Z',
-  updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officerId: '210518694',
+  officerName: 'Steve Pietrek',
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -153,10 +154,11 @@ export const onePersonFullStop = {
 }
 
 export const twoPersonFullStop = {
+  agency: 'sdsd',
   id: uniqueId(),
-  created: '2021-05-07T14:30:29.321Z',
-  updated: '2021-05-07T14:32:53.959Z',
   officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officerId: '210518694',
+  officerName: 'Steve Pietrek',
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -548,6 +550,7 @@ export const apiStops = [
       type: 'Other',
     },
     officerId: '210518694',
+    officerName: 'Steve Pietrek',
     stopDateTime: '2021-05-21T12:17:00.000Z',
     stopDuration: '45',
     stopInResponseToCfs: false,

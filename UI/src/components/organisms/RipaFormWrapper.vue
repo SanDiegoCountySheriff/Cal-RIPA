@@ -189,7 +189,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
-import { apiStop } from '@/utilities/stop'
+import { fullStopToApiStop } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -226,7 +226,7 @@ export default {
     },
 
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         this.fullStop,
         this.beats,
         this.countyCities,

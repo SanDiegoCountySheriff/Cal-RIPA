@@ -45,6 +45,7 @@ export default new Vuex.Store({
       isInvalid: false,
       isAuthenticated: false,
       officerId: null,
+      officerName: null,
       assignment: null,
       otherType: null,
     },
@@ -55,9 +56,6 @@ export default new Vuex.Store({
   },
 
   getters: {
-    agency: state => {
-      return state.user.agency
-    },
     isAdmin: state => {
       return state.user.isAdmin
     },
@@ -108,14 +106,12 @@ export default new Vuex.Store({
         agency: state.user.agency,
         assignment: state.user.assignment,
         officerId: state.user.officerId,
+        officerName: state.user.officerName,
         oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
       }
-    },
-    officerId: state => {
-      return state.user.officerId
     },
     user: state => {
       return state.user
@@ -270,16 +266,16 @@ export default new Vuex.Store({
         yearsExperience: differenceInYears(value.startDate),
       }
 
-      localStorage.setItem(
-        'ripa_officer_start_date',
-        formatDate(state.user.startDate),
-      )
-      localStorage.setItem(
-        'ripa_officer_years_experience',
-        state.user.yearsExperience,
-      )
-      localStorage.setItem('ripa_officer_assignment', state.user.assignment)
-      localStorage.setItem('ripa_officer_other_type', state.user.otherType)
+      const officer = {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.fullName,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
+      localStorage.setItem('ripa_officer', JSON.stringify(officer))
     },
   },
 

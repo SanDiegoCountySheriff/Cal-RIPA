@@ -1,5 +1,5 @@
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
-import { apiStop } from '@/utilities/stop'
+import { fullStopToApiStop, apiStopToFullStop } from '@/utilities/stop'
 import { onePersonFullStop, twoPersonFullStop } from '../data/formStop'
 import {
   formBeats,
@@ -17,9 +17,14 @@ export default {
 
 export const onePerson = () => ({
   components: { RipaFormSummary },
+  data() {
+    return {
+      fullStop: onePersonFullStop,
+    }
+  },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -28,16 +33,19 @@ export const onePerson = () => ({
         formStatutes(),
       )
     },
+    getFullStop() {
+      return apiStopToFullStop(this.getApiStop)
+    },
   },
   template:
-    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div></div>',
 })
 
 export const twoPerson = () => ({
   components: { RipaFormSummary },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),
