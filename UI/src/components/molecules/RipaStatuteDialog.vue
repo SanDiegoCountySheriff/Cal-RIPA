@@ -8,12 +8,13 @@
   >
     <v-card>
       <v-card-title>
-        <span>Statute §999.226(a)(2)</span>
+        <span>Statute §999.226.1(a)(2)</span>
       </v-card-title>
 
       <v-card-text>
         <div class="ripa-statute">
-          <h1>Article 3. Data Elements To Be Reported</h1>
+          {{ statute }}
+          <!-- <h1>Article 3. Data Elements To Be Reported</h1>
           <h2>§ 999.226</h2>
           <ul>
             <li>
@@ -75,13 +76,13 @@
                 </ul>
               </ul>
             </li>
-          </ul>
+          </ul> -->
         </div>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="handleClose"> Cancel </v-btn>
+        <v-btn color="blue darken-1" text @click="handleClose"> Close </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -139,6 +140,10 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
+    },
+    statute: {
+      type: Object,
+      default: () => {},
     },
     onClose: {
       type: Function,

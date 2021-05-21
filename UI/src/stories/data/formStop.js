@@ -277,3 +277,280 @@ export const twoPersonFullStop = {
     },
   ],
 }
+
+export const apiStops = [
+  {
+    agency: 'sdsd',
+    date: '2021-05-21',
+    expYears: '11',
+    id: '202105210817',
+    isPiiFound: false,
+    listPersonStopped: [
+      {
+        basisForSearchBrief: null,
+        basisForSearchPiiFound: false,
+        genderNonconforming: false,
+        id: 1621599463614,
+        isStudent: true,
+        listActionTakenDuringStop: [
+          {
+            key: '23',
+            action: 'Admission or written statement obtained from student',
+          },
+          {
+            key: '1',
+            action: 'Person removed from vehicle by order',
+          },
+          {
+            key: '17',
+            action: 'Asked for consent to search another person',
+            personSearchConsentGiven: true,
+          },
+          {
+            key: '19',
+            action: 'Asked for consent to search property',
+            propertySearchConsentGiven: true,
+          },
+        ],
+        listBasisForPropertySeizure: [
+          {
+            key: '2',
+            basis: 'Contraband',
+          },
+        ],
+        listBasisForSearch: [],
+        listContrabandOrEvidenceDiscovered: [
+          {
+            key: '5',
+            contraband: 'Drugs/narcotics',
+          },
+          {
+            key: '8',
+            contraband: 'Drug paraphernalia',
+          },
+        ],
+        listPerceivedOrKnownDisability: [
+          {
+            key: '7',
+            disability:
+              'Disability related to hyperactivity or impulsive behavior',
+          },
+          {
+            key: '2',
+            disability: 'Speech impairment or limited use of language',
+          },
+          {
+            key: '4',
+            disability: 'Mental health condition',
+          },
+        ],
+        listPerceivedRace: [
+          {
+            key: '7',
+            race: 'White',
+          },
+        ],
+        listResultOfStop: [
+          {
+            key: '2',
+            result: 'Warning (verbal or written)',
+            listCodes: [
+              {
+                code: '54106',
+                text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+              },
+            ],
+          },
+          {
+            key: '12',
+            result: 'Referral to school administrator',
+          },
+          {
+            key: '13',
+            result: 'Referral to school counselor or other support staff',
+          },
+        ],
+        listTypeOfPropertySeized: [
+          {
+            key: '4',
+            type: 'Drugs/narcotics',
+          },
+          {
+            key: '7',
+            type: 'Drug paraphernalia',
+          },
+        ],
+        perceivedAge: '45',
+        perceivedGender: 'Male',
+        perceivedLgbt: true,
+        perceivedLimitedEnglish: true,
+        reasonForStop: {
+          key: '1',
+          reason: 'Traffic Violation',
+          listDetail: [
+            {
+              key: '1',
+              reason: 'Moving Violation',
+            },
+          ],
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+        },
+        reasonForStopExplanation: 'Speeding',
+        reasonForStopPiiFound: false,
+      },
+      {
+        basisForSearchBrief: null,
+        basisForSearchPiiFound: false,
+        genderNonconforming: false,
+        id: 1621599598723,
+        isStudent: false,
+        listActionTakenDuringStop: [
+          {
+            key: '23',
+            action: 'Admission or written statement obtained from student',
+          },
+          {
+            key: '1',
+            action: 'Person removed from vehicle by order',
+          },
+          {
+            key: '17',
+            action: 'Asked for consent to search another person',
+            personSearchConsentGiven: true,
+          },
+          {
+            key: '19',
+            action: 'Asked for consent to search property',
+            propertySearchConsentGiven: true,
+          },
+        ],
+        listBasisForPropertySeizure: [
+          {
+            key: '2',
+            basis: 'Contraband',
+          },
+        ],
+        listBasisForSearch: [],
+        listContrabandOrEvidenceDiscovered: [
+          {
+            key: '5',
+            contraband: 'Drugs/narcotics',
+          },
+          {
+            key: '8',
+            contraband: 'Drug paraphernalia',
+          },
+        ],
+        listPerceivedOrKnownDisability: [
+          {
+            key: '4',
+            disability: 'Mental health condition',
+          },
+        ],
+        listPerceivedRace: [
+          {
+            key: '2',
+            race: 'Black/African American',
+          },
+        ],
+        listResultOfStop: [
+          {
+            key: '2',
+            result: 'Warning (verbal or written)',
+            listCodes: [
+              {
+                code: '54106',
+                text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+              },
+            ],
+          },
+          {
+            key: '12',
+            result: 'Referral to school administrator',
+          },
+          {
+            key: '13',
+            result: 'Referral to school counselor or other support staff',
+          },
+        ],
+        listTypeOfPropertySeized: [
+          {
+            key: '4',
+            type: 'Drugs/narcotics',
+          },
+          {
+            key: '7',
+            type: 'Drug paraphernalia',
+          },
+        ],
+        perceivedAge: '18',
+        perceivedGender: 'Male',
+        perceivedLgbt: false,
+        perceivedLimitedEnglish: false,
+        reasonForStop: {
+          key: '1',
+          reason: 'Traffic Violation',
+          listDetail: [
+            {
+              key: '1',
+              reason: 'Moving Violation',
+            },
+          ],
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+        },
+        reasonForStopExplanation: 'Speeding',
+        reasonForStopPiiFound: false,
+      },
+    ],
+    location: {
+      beat: {
+        codes: {
+          code: '551',
+          text: 'ALPINE 551',
+        },
+      },
+      blockNumber: '1100',
+      city: {
+        codes: {
+          code: 'ALPINE',
+          text: 'ALPINE',
+        },
+      },
+      fullAddress: '',
+      highwayExit: '',
+      intersection: '',
+      landMark: '',
+      outOfCounty: false,
+      piiFound: false,
+      school: true,
+      schoolName: {
+        codes: {
+          code: '19768696023816',
+          text: '138TH STREET (WISEBURN UNIFIED) 19768696023816',
+        },
+      },
+      streetName: 'Fanning Dr',
+      toggleLocationOptions: false,
+    },
+    officerAssignment: {
+      key: '10',
+      otherType: 'New Recruit Training',
+      type: 'Other',
+    },
+    officerId: '210518694',
+    stopDateTime: '2021-05-21T12:17:00.000Z',
+    stopDuration: '45',
+    stopInResponseToCfs: false,
+    time: '08:17',
+  },
+]
