@@ -67,7 +67,7 @@ namespace RIPA.Functions.Submission.Services.REST
                 SDur = stop.StopDuration.ToString(),
                 Officer = new Officer
                 {
-                    UID = stop.OfficerID,
+                    UID = stop.OfficerId,
                     ExpYears = stop.ExpYears,
                     AT = stop.OfficerAssignment.Key,
                     ATOth = stop.OfficerAssignment.OtherType,
