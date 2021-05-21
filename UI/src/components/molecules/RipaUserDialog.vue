@@ -4,6 +4,7 @@
     max-width="650px"
     :light="getLight"
     :dark="getDark"
+    persistent
   >
     <v-card>
       <v-card-title>
@@ -12,13 +13,20 @@
 
       <v-card-text>
         <v-form ref="dialogForm" lazy-validation>
-          <ripa-officer v-model="modelStop"></ripa-officer>
+          <ripa-user
+            v-model="modelUser"
+            :is-invalid-user="isInvalidUser"
+          ></ripa-user>
         </v-form>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="handleClose"> Cancel </v-btn>
+        <template v-if="!isInvalidUser">
+          <v-btn color="blue darken-1" text @click="handleClose">
+            Cancel
+          </v-btn>
+        </template>
         <v-btn color="blue darken-1" text @click="handleSave"> Save </v-btn>
       </v-card-actions>
     </v-card>
@@ -26,20 +34,20 @@
 </template>
 
 <script>
-import RipaOfficer from '@/components/molecules/RipaOfficer'
+import RipaUser from '@/components/molecules/RipaUser'
 
 export default {
   name: 'ripa-user-dialog',
 
   components: {
-    RipaOfficer,
+    RipaUser,
   },
 
   data() {
     return {
       isFormValid: false,
       viewModelDialog: this.showDialog,
-      viewModelStop: this.stop,
+      viewModelUser: this.user,
     }
   },
 
@@ -58,12 +66,12 @@ export default {
       },
     },
 
-    modelStop: {
+    modelUser: {
       get() {
-        return this.viewModelStop
+        return this.viewModelUser
       },
       set(newValue) {
-        this.viewModelStop = newValue
+        this.viewModelUser = newValue
       },
     },
 
@@ -78,6 +86,10 @@ export default {
 
   methods: {
     handleClose() {
+      this.isFormValid = this.$refs.dialogForm.validate()
+      if (!this.isFormValid) {
+        return
+      }
       if (this.onClose) {
         this.onClose()
       }
@@ -89,7 +101,7 @@ export default {
         return
       }
       if (this.onSave) {
-        this.onSave(this.viewModelStop)
+        this.onSave(this.viewModelUser)
       }
       this.handleClose()
     },
@@ -99,17 +111,21 @@ export default {
     showDialog(newValue) {
       this.viewModelDialog = newValue
     },
-    stop(newValue) {
-      this.viewModelStop = newValue
+    user(newValue) {
+      this.viewModelUser = newValue
     },
   },
 
   props: {
+    isInvalidUser: {
+      type: Boolean,
+      default: false,
+    },
     showDialog: {
       type: Boolean,
       default: false,
     },
-    stop: {
+    user: {
       type: Object,
       default: () => {},
     },

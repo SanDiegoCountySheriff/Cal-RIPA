@@ -1,0 +1,190 @@
+<template>
+  <div class="ripa-user tw-pb-8">
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <div class="md:tw-mr-4">
+            <ripa-text-input
+              v-model="model.startDate"
+              label="Start Date"
+              :disabled="!isInvalidUser"
+              :rules="startDateRules"
+              @input="handleInput"
+            >
+            </ripa-text-input>
+          </div>
+        </v-col>
+
+        <v-col cols="12" sm="12" md="6">
+          <div>
+            <ripa-number-input
+              v-model="model.yearsExperience"
+              label="Years of Experience"
+              disabled
+            >
+            </ripa-number-input>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <div class="md:tw-mr-4">
+            <ripa-text-input
+              v-model="model.agency"
+              label="Agency"
+              :disabled="!isInvalidUser"
+              :rules="agencyRules"
+              @input="handleInput"
+            >
+            </ripa-text-input>
+          </div>
+        </v-col>
+
+        <v-col cols="12" sm="12" md="6">
+          <ripa-select
+            v-model="model.assignment"
+            label="Officer Assignment"
+            :items="assignmentItems"
+            itemText="name"
+            itemValue="value"
+            :rules="assignmentRules"
+            @input="handleInput"
+          >
+          </ripa-select>
+        </v-col>
+      </v-row>
+
+      <template v-if="model.assignment === 10">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-text-input
+              v-model="model.otherType"
+              label="Other Type"
+              :rules="otherTypeRules"
+              @input="handleInput"
+            >
+            </ripa-text-input>
+          </v-col>
+        </v-row>
+      </template>
+    </v-container>
+  </div>
+</template>
+
+<script>
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaNumberInput from '@/components/atoms/RipaNumberInput'
+import RipaSelect from '@/components/atoms/RipaSelect'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
+import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import {
+  isValidDate,
+  dateNotInFuture,
+  differenceInYears,
+  formatShortDate,
+} from '@/utilities/dates'
+
+export default {
+  name: 'ripa-officer',
+
+  mixins: [RipaFormMixin],
+
+  components: {
+    RipaNumberInput,
+    RipaSelect,
+    RipaTextInput,
+  },
+
+  data() {
+    return {
+      valid: true,
+      yearsExperienceRules: [
+        v => !!v || 'Years of Experience is required',
+        v =>
+          (v >= 1 && v <= 50) ||
+          'Years of Experience must be between 1 and 50 Years',
+      ],
+      agencyRules: [v => !!v || 'An agency is required'],
+      assignmentRules: [v => !!v || 'An assignment is required'],
+      assignmentItems: OFFICER_ASSIGNMENTS,
+      viewModel: this.value,
+    }
+  },
+
+  computed: {
+    model: {
+      get() {
+        return this.viewModel
+      },
+    },
+
+    startDateRules() {
+      const startDate = this.viewModel.startDate
+      const isValid = isValidDate(startDate)
+      const isNotFuture = dateNotInFuture(startDate)
+
+      return [
+        (startDate && startDate.length > 0) || 'Start date is required',
+        isValid || 'Start date is not a valid date',
+        !isNotFuture || 'Start date is in the future',
+      ]
+    },
+
+    otherTypeRules() {
+      const assignment = this.viewModel.assignment
+      const otherType = this.viewModel.otherType
+      if (assignment !== 10) {
+        return []
+      }
+
+      return [
+        (otherType && otherType.length > 0) || 'Other type is required',
+        v => (v || '').length <= 60 || 'Max 60 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
+      ]
+    },
+  },
+
+  methods: {
+    handleInput() {
+      this.updateStartDateModel()
+      this.updateOtherTypeModel()
+      this.$emit('input', this.viewModel)
+    },
+
+    updateStartDateModel() {
+      const startDate = this.viewModel.startDate
+      const isValid = isValidDate(startDate)
+
+      if (isValid) {
+        this.viewModel.startDate = formatShortDate(startDate)
+        this.viewModel.yearsExperience = differenceInYears(startDate)
+      }
+    },
+
+    updateOtherTypeModel() {
+      if (this.viewModel.assignment !== 10) {
+        this.viewModel.otherType = null
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = newVal
+    },
+  },
+
+  props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
+    isInvalidUser: {
+      type: Boolean,
+      default: false,
+    },
+  },
+}
+</script>

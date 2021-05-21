@@ -16,7 +16,8 @@
     ></ripa-interval>
 
     <ripa-user-dialog
-      :stop="getStop"
+      :is-invalid-user="invalidUser"
+      :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleClose"
       :on-save="handleSaveUser"
@@ -66,19 +67,16 @@ export default {
       'invalidUser',
       'isOnlineAndAuthenticated',
       'apiConfig',
-      'officer',
+      'mappedUser',
     ]),
 
-    getStop() {
+    getMappedUser() {
       return {
-        agency: this.officer.agency,
-        officerId: this.officer.officerId,
-        officer: {
-          assignment: this.officer.assignment,
-          otherType: this.officer.otherType,
-          startDate: this.officer.startDate,
-          yearsExperience: this.officer.yearsExperience,
-        },
+        agency: this.mappedUser.agency,
+        assignment: this.mappedUser.assignment,
+        otherType: this.mappedUser.otherType,
+        startDate: this.mappedUser.startDate,
+        yearsExperience: this.mappedUser.yearsExperience,
       }
     },
   },
@@ -122,8 +120,8 @@ export default {
       this.showUserDialog = false
     },
 
-    handleSaveUser(officer) {
-      this.editOfficerUser(officer)
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
     },
 
     handleUpdateDark(value) {
@@ -180,7 +178,7 @@ export default {
   watch: {
     invalidUser(newVal) {
       if (newVal) {
-        this.showInvalidUserDialog = true
+        this.showUserDialog = true
       } else {
         this.checkCache()
         this.getFormData()
