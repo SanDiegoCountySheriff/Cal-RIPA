@@ -33,6 +33,9 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Return Submitted OR UnSubmitted stops, defaults to false")]
         [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have errors, IsSubmitted must be true or this will be ignored")]
         [OpenApiParameter(name: "SubmissionId", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops where submission id equals input submission id, is submitted mus be true or this will be ignored")]
+        [OpenApiParameter(name: "OfficerId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Returns Submitted Stops where officer id")]
+        [OpenApiParameter(name: "Offset", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "offsets the records from 0, requires limit parameter")]
+        [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
@@ -59,9 +62,12 @@ namespace RIPA.Functions.Stop.Functions
                 EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
                 IsError = !string.IsNullOrWhiteSpace(req.Query["IsError"]) ? bool.Parse(req.Query["IsError"]) : false,
                 IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]) ? bool.Parse(req.Query["IsSubmitted"]) : false,
-                SubmissionId = !string.IsNullOrWhiteSpace(req.Query["SubmissionId"]) ? req.Query["SubmissionId"] : default
+                SubmissionId = !string.IsNullOrWhiteSpace(req.Query["SubmissionId"]) ? req.Query["SubmissionId"] : default,
+                OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
+                Offset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default,
+                Limit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default
             };
-
+ 
             List<string> whereStatements = new List<string>();
             string join = "";
 
@@ -100,7 +106,18 @@ namespace RIPA.Functions.Stop.Functions
                 whereStatements.Add(Environment.NewLine + $"c.Status = null");
             }
 
+            //OfficerId
+            if (!string.IsNullOrWhiteSpace(stopQuery.OfficerId))
+            {
+                whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
+            }
 
+            //limit 
+            var limit = string.Empty;
+            if(stopQuery.Limit != 0)
+            {
+                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
+            }
 
             string where = " WHERE ";
             foreach (var whereStatement in whereStatements)
@@ -110,7 +127,9 @@ namespace RIPA.Functions.Stop.Functions
             }
             where = where.Remove(where.Length - 3);
 
-            var response = await _stopCosmosDbService.GetStopsAsync("SELECT VALUE c FROM c" + join + where);
+            var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
+
+            var response = await _stopCosmosDbService.GetStopsAsync("SELECT VALUE c FROM c" + join + where + order + limit);
 
             return new OkObjectResult(response);
         }
@@ -122,6 +141,9 @@ namespace RIPA.Functions.Stop.Functions
             public bool IsError { get; set; }
             public bool IsSubmitted { get; set; }
             public string SubmissionId { get; set; }
+            public string OfficerId { get; set; }
+            public int Limit { get; set; }
+            public int Offset { get; set; }
 
         }
     }

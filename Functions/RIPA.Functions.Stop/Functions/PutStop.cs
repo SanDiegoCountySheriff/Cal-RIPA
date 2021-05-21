@@ -52,7 +52,7 @@ namespace RIPA.Functions.Stop.Functions
             if (!string.IsNullOrEmpty(Id))
             {
                 stop.id = Id;
-                if (stop.OfficerID.Length != 9)
+                if (stop.OfficerId.Length != 9)
                 {
                     return new BadRequestObjectResult("Office ID must be 9 char");
                 }
