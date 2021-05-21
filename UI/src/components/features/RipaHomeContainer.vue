@@ -1,125 +1,245 @@
 <template>
-  <div class="ripa-form-container">
+  <div class="ripa-home-container">
     <template v-if="!isEditingForm">
       <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
-      {{ stop }}
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :form-step-index="formStepIndex"
+        :full-stop="fullStop"
+        :last-location="lastLocation"
+        :loading-gps="loadingGps"
+        :loading-pii-step1="loadingPiiStep1"
+        :loading-pii-step3="loadingPiiStep3"
+        :loading-pii-step4="loadingPiiStep4"
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :valid-last-location="isLastLocationValid"
+        :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
+        :on-delete-person="handleDeletePerson"
+        :on-edit-person="handleEditPerson"
+        :on-gps-location="handleGpsLocation"
+        :on-open-favorites="handleOpenFavorites"
+        :on-open-last-location="handleOpenLastLocation"
+        :on-open-statute="handleOpenStatute"
+        :on-save-favorite="handleSaveFavorite"
+        :on-step-index-change="handleStepIndexChange"
+        :on-submit="handleSubmit"
         @input="handleInput"
       ></ripa-form-template>
     </template>
+
+    <ripa-favorites-dialog
+      :show-dialog="showFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditFavorite"
+      :on-open-favorite="handleOpenFavorite"
+      :on-delete-favorite="handleDeleteFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddFavorite"
+    ></ripa-add-favorite-dialog>
+
+    <ripa-statute-dialog
+      :show-dialog="showStatuteDialog"
+      :on-close="handleCloseDialog"
+    ></ripa-statute-dialog>
   </div>
 </template>
 
 <script>
+import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
-import { mapGetters } from 'vuex'
-import { format } from 'date-fns'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
+  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+
   components: {
+    RipaAddFavoriteDialog,
+    RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaStatuteDialog,
   },
 
   data() {
     return {
+      fullStop: {},
       isEditingForm: false,
+      loadingGps: false,
+      loadingPiiStep1: false,
+      loadingPiiStep3: false,
+      loadingPiiStep4: false,
       stop: {},
+      stopIndex: 1,
     }
   },
 
   computed: {
     ...mapGetters([
+      'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
+      'officerId',
+      'agency',
+      'mappedGpsLocationAddress',
     ]),
   },
 
   methods: {
-    getOfficerYearsExperience() {
-      const yearsExperience = localStorage.getItem(
-        'ripa_officer_years_experience',
+    ...mapActions(['checkTextForPii', 'checkGpsLocation']),
+
+    handleStepIndexChange(index) {
+      this.formStepIndex = index
+      localStorage.setItem('ripa_form_step_index', index.toString())
+    },
+
+    handleSubmit(apiStop) {
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
+    },
+
+    async handleGpsLocation() {
+      this.loadingGps = true
+      await this.checkGpsLocation()
+      this.loadingGps = false
+    },
+
+    async validateLocationForPii(textValue) {
+      const trimmedTextValue = textValue || ''
+      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+        this.loadingPiiStep1 = true
+        let isFound = false
+        isFound = await this.checkTextForPii(trimmedTextValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.location) {
+          this.stop.location.piiFound = isFound
+        }
+        this.loadingPiiStep1 = false
+        this.updateFullStop()
+      }
+    },
+
+    async validateReasonForStopForPii(textValue) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+        this.loadingPiiStep3 = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.stopReason) {
+          this.stop.stopReason.reasonForStopPiiFound = isFound
+        }
+        this.loadingPiiStep3 = false
+        this.updateFullStop()
+      }
+    },
+
+    async validateBasisForSearchForPii(textValue) {
+      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+        this.loadingPiiStep4 = true
+        let isFound = false
+        isFound = await this.checkTextForPii(textValue)
+        this.stop = Object.assign({}, this.stop)
+        if (this.stop.actionsTaken) {
+          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+        }
+        this.loadingPiiStep4 = false
+        this.updateFullStop()
+      }
+    },
+  },
+
+  mounted() {
+    const localFormCurrentUser = localStorage.getItem('ripa_form_current_user')
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const isEditing = localFormEditing === '1'
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+      const [filteredPerson] = parsedFullStop.people.filter(
+        item => item.id === Number(localFormCurrentUser),
       )
-      return +yearsExperience || null
-    },
+      this.stop = parsedStop
+      this.fullStop = {
+        ...parsedFullStop,
+        person: filteredPerson,
+      }
+      if (Object.keys(this.fullStop).length > 0) {
+        this.isEditingForm = isEditing
+        this.formStepIndex = Number(stepIndex)
+      } else {
+        localStorage.removeItem('ripa_form_editing')
+      }
+    }
+  },
 
-    getOfficerAssignment() {
-      const assignment = localStorage.getItem('ripa_officer_assignment')
-      return +assignment || null
-    },
-
-    handleInput(newVal) {
+  watch: {
+    stop(newVal) {
       this.stop = newVal
-      this.$forceUpdate()
-      console.log(this.stop)
     },
 
-    handleTemplate(value) {
-      this.isEditingForm = true
-
-      if (value === 'motor') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 1,
-            trafficViolation: 1,
-            trafficViolationCode: 54106,
-            reasonForStopExplanation: 'Speeding',
-          },
-        }
-      }
-
-      if (value === 'probation') {
-        this.stop = {
-          officer: {
-            editOfficer: false,
-            yearsExperience: this.getOfficerYearsExperience(),
-            assignment: this.getOfficerAssignment(),
-          },
-          stopDate: {
-            date: format(new Date(), 'yyyy-MM-dd'),
-            time: format(new Date(), 'h:mm'),
-          },
-          stopReason: {
-            reasonForStop: 3,
-            reasonForStopExplanation:
-              'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-          },
-          actionsTaken: {
-            anyActionsTaken: true,
-            actionsTakenDuringStop: [4, 18, 20],
-            basisForSearch: [4],
-          },
-        }
+    fullStop(newVal) {
+      this.fullStop = newVal
+      if (this.isEditingForm) {
+        localStorage.setItem(
+          'ripa_form_current_user',
+          this.stop.person.id.toString(),
+        )
+        localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
       }
     },
 
-    handleCancel() {
-      this.isEditingForm = false
-      this.stop = {}
+    'stop.location.fullAddress': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateLocationForPii(newVal)
+        }
+      },
+    },
+
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
+    },
+
+    mappedGpsLocationAddress(newVal) {
+      this.lastLocation = newVal
     },
   },
 }

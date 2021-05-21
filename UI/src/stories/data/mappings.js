@@ -3,6 +3,8 @@ import { beats } from './beats'
 import { cities } from './cities'
 import { schools } from './schools'
 import { statutes } from './statutes'
+import { users } from './users'
+import { favorites } from './favorites'
 
 export const adminBeats = () => {
   return beats.sort((x, y) => {
@@ -54,6 +56,21 @@ export const adminStatutes = () => {
       offenseRepealed: formatDate(item.offenseRepealed),
     }
   })
+}
+
+export const adminUsers = () => {
+  return users
+    .sort((x, y) => {
+      const userA = x.lastName.toUpperCase()
+      const userB = y.lastName.toUpperCase()
+      return userA < userB ? -1 : userA > userB ? 1 : 0
+    })
+    .map(item => {
+      return {
+        ...item,
+        name: `${item.firstName} ${item.lastName}`,
+      }
+    })
 }
 
 export const formBeats = () => {
@@ -132,8 +149,16 @@ export const formStatutes = () => {
     })
     .map(item => {
       return {
-        code: item.offenseCode,
+        code: item.code,
         fullName: `${item.description} ${item.code}`,
       }
     })
+}
+
+export const favoriteLocations = () => {
+  return favorites.sort((x, y) => {
+    const favA = x.name.toUpperCase()
+    const favB = y.name.toUpperCase()
+    return favA < favB ? -1 : favA > favB ? 1 : 0
+  })
 }

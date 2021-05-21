@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 
 namespace RIPA.Functions.Submission.Functions
@@ -24,21 +25,28 @@ namespace RIPA.Functions.Submission.Functions
         }
 
         [FunctionName("DeleteSubmission")]
-        [OpenApiOperation(operationId: "DeleteSubmission", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Submission deleted")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
+        //[OpenApiOperation(operationId: "DeleteSubmission", tags: new[] { "name" })]
+        //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        //[OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
+        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Submission deleted")]
+        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "deleted", Route = "DeleteSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("Delete - Delete Submission requested");
 
-            if (!string.IsNullOrEmpty(Id))
-            {
-                await _submissionCosmosDbService.DeleteSubmissionAsync(Id);
-                return new OkObjectResult($"Deleted {Id}");
-            }
+            // NOTE: LM: I do not believe the system should allow Submissions to be deleted.
+
+            //if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            //{
+            //    return new UnauthorizedResult();
+            //}
+
+            //if (!string.IsNullOrEmpty(Id))
+            //{
+            //    await _submissionCosmosDbService.DeleteSubmissionAsync(Id);
+            //    return new OkObjectResult($"Deleted {Id}");
+            //}
 
             return new BadRequestObjectResult("Not found");
         }

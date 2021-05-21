@@ -7,6 +7,7 @@
     :statutes="mappedAdminStatutes"
     :stops="stops"
     :submissions="mappedAdminSubmissions"
+    :users="mappedAdminUsers"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -15,6 +16,7 @@
     :on-edit-city="handleEditCity"
     :on-edit-school="handleEditSchool"
     :on-edit-statute="handleEditStatute"
+    :on-edit-user="handleEditUser"
   ></ripa-admin-template>
 </template>
 
@@ -43,6 +45,7 @@ export default {
       'mappedAdminStatutes',
       'mappedAdminStops',
       'mappedAdminSubmissions',
+      'mappedAdminUsers',
     ]),
     ...mapState(['stops']),
   },
@@ -57,14 +60,16 @@ export default {
       'editCity',
       'editSchool',
       'editStatute',
+      'editUser',
       'getAdminBeats',
       'getAdminCities',
       'getAdminSchools',
       'getAdminStatutes',
       'getStops',
+      'getAdminUsers',
     ]),
 
-    async getAdminData() {
+    async getAdminData(beat) {
       this.loading = true
       await Promise.all([
         this.getAdminBeats(),
@@ -72,6 +77,7 @@ export default {
         this.getAdminSchools(),
         this.getAdminStatutes(),
         this.getStops(),
+        this.getAdminUsers(),
       ])
       this.loading = false
     },
@@ -121,6 +127,12 @@ export default {
     async handleEditStatute(statute) {
       this.loading = true
       await Promise.all([this.editStatute(statute)])
+      this.loading = false
+    },
+
+    async handleEditUser(user) {
+      this.loading = true
+      await Promise.all([this.editUser(user)])
       this.loading = false
     },
   },

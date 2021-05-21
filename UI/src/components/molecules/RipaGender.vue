@@ -5,19 +5,31 @@
         title="Perceived Gender"
         required
         subtitle="§999.226(a)(5)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
       <v-container>
         <v-row no-gutters>
           <v-col cols="12" sm="12">
-            <ripa-radio-group
-              v-model="model.person.perceivedGender"
-              :items="genderItems"
-              :rules="genderRules"
+            <template v-if="isGenderListVisible">
+              <ripa-radio-group
+                v-model="model.person.perceivedGender"
+                :items="genderItems"
+                :rules="genderRules"
+                @input="handleInput"
+              >
+              </ripa-radio-group>
+            </template>
+          </v-col>
+
+          <v-col cols="12" sm="12">
+            <ripa-switch
+              v-model="model.person.genderNonconforming"
+              label="Gender Nonconforming"
+              :max-width="250"
               @input="handleInput"
-            >
-            </ripa-radio-group>
+            ></ripa-switch>
           </v-col>
         </v-row>
       </v-container>
@@ -29,6 +41,7 @@
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
@@ -50,12 +63,15 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { GENDERS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
+
+  mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
@@ -67,13 +83,7 @@ export default {
     return {
       valid: true,
       genderItems: GENDERS,
-      genderRules: [v => !!v || 'A gender is required'],
-      viewModel: {
-        person: {
-          perceivedGender: this.value?.person?.perceivedGender || null,
-          perceivedLgbt: this.value?.person?.perceivedLgbt || false,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -83,18 +93,48 @@ export default {
         return this.viewModel
       },
     },
+
+    genderRules() {
+      if (!this.isGenderListVisible) {
+        return []
+      }
+
+      return [v => !!v || 'A gender is required']
+    },
+
+    isGenderListVisible() {
+      const gc = this.viewModel.person?.genderNonconforming || false
+      return !gc
+    },
   },
 
   methods: {
     handleInput() {
+      this.updateGenderModel()
       this.updatePerceivedLgbtModel()
       this.$emit('input', this.viewModel)
     },
 
+    updateGenderModel() {
+      const gc = this.viewModel.person?.genderNonconforming || false
+      if (gc) {
+        this.viewModel.person.perceivedGender = null
+      }
+    },
+
     updatePerceivedLgbtModel() {
-      this.viewModel.person.perceivedLgbt =
+      if (
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
+      ) {
+        this.viewModel.person.perceivedLgbt = true
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.viewModel = this.loadModel(newVal)
     },
   },
 

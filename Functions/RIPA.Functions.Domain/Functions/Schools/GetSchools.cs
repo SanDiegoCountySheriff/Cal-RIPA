@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Schools.Models;
+using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -28,18 +29,31 @@ namespace RIPA.Functions.Domain.Functions.Schools
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
             List<School> response = new List<School>();
             TableContinuationToken continuationToken = null;
             do
             {
                 var request = await schools.ExecuteQuerySegmentedAsync(new TableQuery<School>(), continuationToken);
                 continuationToken = request.ContinuationToken;
-                
+
                 foreach (School entity in request)
                 {
                     response.Add(entity);
                 }
-            } 
+            }
             while (continuationToken != null);
 
             log.LogInformation($"GetSchools returned {response.Count} schools");

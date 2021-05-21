@@ -5,6 +5,23 @@ import { formatDate } from '@/utilities/dates'
 
 Vue.use(Vuex)
 
+// Setup Axios Response Interceptors
+// to add the authentication token to each header
+axios.interceptors.request.use(req => {
+  if (req.url === '/config.json') {
+    // no need to append access token for local config file
+    return req
+  } else {
+    if (sessionStorage.getItem('ripa-idToken')) {
+      req.headers.Authorization = `Bearer ${sessionStorage.getItem(
+        'ripa-idToken',
+      )}`
+      return req
+    }
+  }
+  return req
+})
+
 export default new Vuex.Store({
   state: {
     isDark: true,
@@ -13,6 +30,7 @@ export default new Vuex.Store({
     adminSchools: [],
     adminStatutes: [],
     adminStops: [],
+    adminUsers: [],
     formBeats: [],
     formCountyCities: [],
     formNonCountyCities: [],
@@ -20,12 +38,32 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
-      isAdmin: true,
+      agency: 'Insight',
+      oid: '',
+      isAdmin: false,
+      isInvalid: false,
       isAuthenticated: false,
+      officerId: '210508123',
     },
+    apiConfig: null,
+    piiDate: null,
+    officerStops: [],
+    gpsLocationAddress: null,
   },
 
   getters: {
+    agency: state => {
+      return state.user.agency
+    },
+    isAdmin: state => {
+      return state.user.isAdmin
+    },
+    isAuthenticated: state => {
+      return state.user.isAuthenticated
+    },
+    isOnlineAndAuthenticated: state => {
+      return navigator.onLine && state.user.isAuthenticated
+    },
     mappedAdminBeats: state => {
       return state.adminBeats
     },
@@ -45,6 +83,9 @@ export default new Vuex.Store({
     mappedAdminSubmissions: () => {
       return []
     },
+    mappedAdminUsers: state => {
+      return state.adminUsers
+    },
     mappedFormBeats: state => {
       return state.formBeats
     },
@@ -60,14 +101,55 @@ export default new Vuex.Store({
     mappedFormStatutes: state => {
       return state.formStatutes
     },
-    isAdmin: state => {
-      return state.user.isAdmin
+    officerId: state => {
+      return state.user.officerId
     },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
+    user: state => {
+      return state.user
     },
-    isOnline: () => {
-      return navigator.onLine
+    isAuthConfigSet: state => {
+      return state.isAuthConfigSet
+    },
+    apiConfig: state => {
+      return state.apiConfig
+    },
+    invalidUser: state => {
+      return state.user.isInvalid
+    },
+    mappedGpsLocationAddress: state => {
+      if (
+        state.gpsLocationAddress === undefined ||
+        state.gpsLocationAddress === null
+      ) {
+        return {
+          blockNumber: null,
+          streetName: null,
+          city: null,
+        }
+      }
+
+      const blockNumber = state.gpsLocationAddress.address.AddNum
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const streetName = state.gpsLocationAddress.address.Address
+      const parsedStreetName = streetName
+        ? streetName.replace(blockNumber, '').trim()
+        : null
+      const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
+      const upperCaseCity = city ? city.toUpperCase() : city
+      const countyCityFound =
+        state.formCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
+      const nonCountyCityFound =
+        state.formNonCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
+      const parsedCity =
+        countyCityFound || nonCountyCityFound ? upperCaseCity : null
+
+      return {
+        blockNumber: parsedBlockNumber,
+        streetName: parsedStreetName,
+        city: parsedCity,
+      }
     },
   },
 
@@ -84,6 +166,9 @@ export default new Vuex.Store({
     updateAdminStatutes(state, items) {
       state.adminStatutes = items
     },
+    updateAdminUsers(state, items) {
+      state.adminUsers = items
+    },
     updateFormBeats(state, items) {
       state.formBeats = items
     },
@@ -99,68 +184,146 @@ export default new Vuex.Store({
     updateFormStatutes(state, items) {
       state.formStatutes = items
     },
-    updateStops(state, items) {
-      console.log(items)
-      state.stops = items
+    updateGpsLocationAddress(state, data) {
+      state.gpsLocationAddress = data
+    },
+    updateOfficerStops(state, items) {
+      state.officerStops = items
+    },
+    updatePiiDate(state) {
+      state.piiDate = new Date()
+    },
+    updateAuthConfig(state, value) {
+      state.isAuthConfigSet = value
+    },
+    updateApiConfig(state, value) {
+      state.apiConfig = value
+    },
+    updateInvalidUser(state, value) {
+      state.user = {
+        ...state.user,
+        isInvalid: value,
+      }
+    },
+    updateUserAccount(state, value) {
+      console.log('updateUserAccount')
+      const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
+        return roleObj === 'RIPA-ADMINS-ROLE'
+      })
+      state.user = {
+        ...state.user,
+        email: value.idTokenClaims.email,
+        firstName: value.idTokenClaims.given_name,
+        isAdmin: isAnAdmin.length > 0,
+        isAuthenticated: true,
+        lastName: value.idTokenClaims.family_name,
+        oid: value.idTokenClaims.oid,
+      }
     },
   },
 
   actions: {
-    deleteBeat({ dispatch }, beat) {
+    checkTextForPii({ commit, state }, textValue) {
+      const document = {
+        Document: textValue,
+      }
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteBeat/${beat.id}`,
+        .post(
+          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
+          document,
           {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
         )
+        .then(response => {
+          const data = response.data
+          commit('updatePiiDate')
+          return data.entities.length > 0
+        })
+        .catch(error => {
+          console.log('There was an error checking for PII.', error)
+          return null
+        })
+    },
+
+    checkGpsLocation({ commit }) {
+      return new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(position => {
+          const latLong = `${position.coords.longitude},${position.coords.latitude}`
+          const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              commit('updateGpsLocationAddress', data)
+              resolve()
+            })
+        })
+      })
+    },
+
+    deleteBeat({ dispatch, state }, beat) {
+      return axios
+        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
         .then(() => {
+          dispatch('getAdminBeats')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the beat.', error)
           dispatch('getAdminBeats')
         })
     },
 
-    deleteCity({ dispatch }, city) {
+    deleteCity({ dispatch, state }, city) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteCity/${city.id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
+          dispatch('getAdminCities')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the city.', error)
           dispatch('getAdminCities')
         })
     },
 
-    deleteSchool({ dispatch }, school) {
+    deleteSchool({ dispatch, state }, school) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteSchool/${school.id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
+          dispatch('getAdminSchools')
+        })
+        .catch(error => {
+          console.log('There was an error deleting the school.', error)
           dispatch('getAdminSchools')
         })
     },
 
-    deleteStatute({ dispatch }, statute) {
+    deleteStatute({ dispatch, state }, statute) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/DeleteStatute/${statute.id}`,
+          `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.id}`,
           {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -168,35 +331,39 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminStatutes')
         })
+        .catch(error => {
+          console.log('There was an error deleting the statute.', error)
+          dispatch('getAdminStatutes')
+        })
     },
 
-    editBeat({ dispatch }, beat) {
+    editBeat({ dispatch, state }, beat) {
       return axios
-        .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutBeat/${beat.id}`,
-          beat,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
+          dispatch('getAdminBeats')
+        })
+        .catch(error => {
+          console.log('There was an error saving the beat.', error)
           dispatch('getAdminBeats')
         })
     },
 
-    editCity({ dispatch }, city) {
+    editCity({ dispatch, state }, city) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${city.rowKey}`,
+          `${state.apiConfig.apiBaseUrl}domain/PutCity/${city.rowKey}`,
           city,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -204,17 +371,21 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminCities')
         })
+        .catch(error => {
+          console.log('There was an error saving the city.', error)
+          dispatch('getAdminCities')
+        })
     },
 
-    editSchool({ dispatch }, school) {
+    editSchool({ dispatch, state }, school) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutCity/${school.rowKey}`,
+          `${state.apiConfig.apiBaseUrl}domain/PutCity/${school.rowKey}`,
           school,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
@@ -222,31 +393,79 @@ export default new Vuex.Store({
         .then(() => {
           dispatch('getAdminSchools')
         })
+        .catch(error => {
+          console.log('There was an error saving the school.', error)
+          dispatch('getAdminSchools')
+        })
     },
 
-    editStatute({ dispatch }, statute) {
+    editStatute({ dispatch, state }, statute) {
       return axios
         .put(
-          `https://sdsd-ripa-d-apim.azure-api.us/domain/PutStatute/${statute.rowKey}`,
+          `${state.apiConfig.apiBaseUrl}domain/PutStatute/${statute.rowKey}`,
           statute,
           {
             headers: {
               'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           },
         )
         .then(() => {
-          dispatch('getAdminSchools')
+          dispatch('getAdminStatutes')
+        })
+        .catch(error => {
+          console.log('There was an error saving the statute.', error)
+          dispatch('getAdminStatutes')
         })
     },
 
-    getAdminBeats({ commit }) {
+    editUser({ dispatch, state }, user) {
       return axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
+        .put(
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getAdminUsers')
+        })
+    },
+
+    editOfficerStop({ dispatch, state }, stop) {
+      return axios
+        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(() => {
+          dispatch('getOfficerStops')
+        })
+        .catch(error => {
+          console.log('There was an error saving the officer stop.', error)
+          dispatch('getOfficerStops')
+        })
+    },
+
+    getAdminBeats({ commit, state }) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
         })
@@ -258,12 +477,13 @@ export default new Vuex.Store({
           })
           commit('updateAdminBeats', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving beats.', error)
           commit('updateAdminBeats', [])
         })
     },
 
-    getFormBeats({ commit }) {
+    getFormBeats({ commit, state }) {
       const items = localStorage.getItem('ripa_beats')
       if (items !== null) {
         return new Promise(resolve => {
@@ -272,9 +492,9 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetBeats', {
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           })
@@ -294,17 +514,18 @@ export default new Vuex.Store({
             commit('updateFormBeats', data)
             localStorage.setItem('ripa_beats', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving beats.', error)
             commit('updateFormBeats', [])
           })
       }
     },
 
-    getAdminCities({ commit }) {
+    getAdminCities({ commit, state }) {
       return axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
+        .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
           headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
         })
@@ -323,12 +544,13 @@ export default new Vuex.Store({
             })
           commit('updateAdminCities', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving cities.', error)
           commit('updateAdminCities', [])
         })
     },
 
-    getFormCities({ commit }) {
+    getFormCities({ commit, state }) {
       const items1 = localStorage.getItem('ripa_county_cities')
       const items2 = localStorage.getItem('ripa_non_county_cities')
       if (items1 !== null && items2 !== null) {
@@ -339,9 +561,9 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetCities', {
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           })
@@ -352,7 +574,13 @@ export default new Vuex.Store({
               return cityA < cityB ? -1 : cityA > cityB ? 1 : 0
             })
             const data1 = data
-              .filter(item => item.county === 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty === configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -360,7 +588,13 @@ export default new Vuex.Store({
                 }
               })
             const data2 = data
-              .filter(item => item.county !== 'SAN DIEGO')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty !== configCounty
+              })
               .map(item => {
                 return {
                   id: item.name.toUpperCase(),
@@ -375,18 +609,19 @@ export default new Vuex.Store({
               JSON.stringify(data2),
             )
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving cities.', error)
             commit('updateFormCountyCities', [])
             commit('updateFormNonCountyCities', [])
           })
       }
     },
 
-    getAdminSchools({ commit }) {
+    getAdminSchools({ commit, state }) {
       return axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
+        .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
           headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
         })
@@ -408,12 +643,13 @@ export default new Vuex.Store({
             })
           commit('updateAdminSchools', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving schools.', error)
           commit('updateAdminSchools', [])
         })
     },
 
-    getFormSchools({ commit }) {
+    getFormSchools({ commit, state }) {
       const items = localStorage.getItem('ripa_schools')
       if (items !== null) {
         return new Promise(resolve => {
@@ -422,9 +658,9 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetSchools', {
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           })
@@ -447,17 +683,18 @@ export default new Vuex.Store({
             commit('updateFormSchools', data)
             localStorage.setItem('ripa_schools', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving schools.', error)
             commit('updateFormSchools', [])
           })
       }
     },
 
-    getAdminStatutes({ commit }) {
+    getAdminStatutes({ commit, state }) {
       return axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
+        .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
           headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
         })
@@ -472,12 +709,13 @@ export default new Vuex.Store({
           })
           commit('updateAdminStatutes', data)
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('There was an error retrieving statutes.', error)
           commit('updateAdminStatutes', [])
         })
     },
 
-    getFormStatutes({ commit }) {
+    getFormStatutes({ commit, state }) {
       const items = localStorage.getItem('ripa_statutes')
       if (items !== null) {
         return new Promise(resolve => {
@@ -486,9 +724,9 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get('https://sdsd-ripa-d-apim.azure-api.us/domain/GetStatutes', {
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
             headers: {
-              'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
             },
           })
@@ -498,7 +736,7 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   code: item.offenseCode,
-                  description: `${item.offenseStatute} ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
+                  description: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
                 }
               })
               .map(item => {
@@ -510,26 +748,91 @@ export default new Vuex.Store({
             commit('updateFormStatutes', data)
             localStorage.setItem('ripa_statutes', JSON.stringify(data))
           })
-          .catch(() => {
+          .catch(error => {
+            console.log('There was an error retrieving statutes.', error)
             commit('updateFormStatutes', [])
           })
       }
     },
 
-    getStops({ commit }) {
+    getAdminUsers({ commit, state }) {
       return axios
-        .get('https://sdsd-ripa-d-apim.azure-api.us/stop/GetStops', {
+        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUsers`, {
           headers: {
-            'Ocp-Apim-Subscription-Key': 'f142a7cd1c0d40279ada26a42c319c94',
+            'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
-          commit('updateStops', response.data)
+          const data = response.data.map(item => {
+            return {
+              ...item,
+              code: item.offenseCode,
+              startDate: formatDate(item.startDate),
+            }
+          })
+          commit('updateAdminUsers', data)
         })
-        .catch(() => {
-          commit('updateStops', [])
+        .catch(error => {
+          console.log('There was an error retrieving users.', error)
+          commit('updateAdminUsers', [])
         })
+    },
+
+    getOfficerStops({ commit, state }) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateOfficerStops', data)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving officer stops.', error)
+          commit('updateOfficerStops', [])
+        })
+    },
+
+    getUser({ commit, state }) {
+      console.log('getUser')
+      const id = state.user.oid
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving user.', error)
+        })
+    },
+
+    setAuthConfig({ commit }, value) {
+      commit('updateAuthConfig', value)
+    },
+
+    setUserAccountInfo({ commit }, value) {
+      commit('updateUserAccount', value)
+    },
+
+    setApiConfig({ commit }, value) {
+      commit('updateApiConfig', value)
+    },
+
+    setInvalidUser({ commit }, value) {
+      commit('updateInvalidUser', value)
     },
   },
 

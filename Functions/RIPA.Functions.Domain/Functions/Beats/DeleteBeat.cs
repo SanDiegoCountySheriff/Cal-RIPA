@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Beats.Models;
+using RIPA.Functions.Security;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,6 +29,19 @@ namespace RIPA.Functions.Domain.Functions.Beats
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteBeat/{Id}")] HttpRequest req, int Id,
             [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 Beat beat = new Beat { PartitionKey = "CA", RowKey = Id.ToString(), Id = Id, ETag = "*" };

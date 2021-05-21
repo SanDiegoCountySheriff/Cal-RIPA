@@ -4,6 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
+      :on-open-statute="onOpenStatute"
     ></ripa-form-header>
 
     <v-container>
@@ -14,10 +15,35 @@
             item-text="name"
             item-value="value"
             label="Reason"
-            :items="reasonItems"
+            :items="getReasonItems"
             :rules="reasonRules"
-            @input="handleInput"
+            @input="handleReasonForStopInput"
           ></ripa-select>
+
+          <template v-if="model.stopReason.reasonForStop === 7">
+            <ripa-radio-group
+              v-model="model.stopReason.educationViolation"
+              :items="educationViolationItems"
+              :rules="educationViolationRules"
+              @input="handleInput"
+            ></ripa-radio-group>
+
+            <template v-if="model.stopReason.educationViolation === 1">
+              <div class="tw-mt-2"></div>
+
+              <ripa-autocomplete
+                v-model="model.stopReason.educationViolationCode"
+                hint="Select 1 Education Code (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Education Code"
+                :items="educationCodeSectionItems"
+                :rules="educationViolationCodeRules"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </template>
+          </template>
 
           <template v-if="model.stopReason.reasonForStop === 1">
             <ripa-radio-group
@@ -64,16 +90,17 @@
           </template>
 
           <template v-if="model.stopReason.reasonForStop === 6">
-            <v-alert dense outlined type="warning" prominent>
+            <ripa-alert alert-outlined alert-type="warning">
               Your selection indicates that a search was conducted, please
               select from the search criteria below.
-            </v-alert>
+            </ripa-alert>
 
             <ripa-switch
               v-model="model.stopReason.searchOfPerson"
               label="Search of person was conducted"
               :max-width="300"
               @input="handleInput"
+              :rules="searchRules"
             ></ripa-switch>
 
             <ripa-switch
@@ -81,19 +108,28 @@
               label="Search of property was conducted"
               :max-width="300"
               @input="handleInput"
+              :rules="searchRules"
             ></ripa-switch>
           </template>
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
-          <ripa-text-area
+          <template v-if="model.stopReason.reasonForStopPiiFound">
+            <ripa-alert alert-outlined alert-type="warning">
+              The explanation contains personally identifying information.
+              Please remove if possible.
+            </ripa-alert>
+          </template>
+
+          <ripa-text-input
             v-model="model.stopReason.reasonForStopExplanation"
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
+            :loading="loadingPii"
             :rules="explanationRules"
             @input="handleInput"
-          ></ripa-text-area>
+          ></ripa-text-input>
         </v-col>
       </v-row>
     </v-container>
@@ -101,24 +137,31 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import RipaTextArea from '@/components/atoms/RipaTextArea'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
+  EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-reason',
 
+  mixins: [RipaFormMixin],
+
   components: {
+    RipaAlert,
     RipaAutocomplete,
     RipaCheckGroup,
     RipaFormHeader,
@@ -126,36 +169,25 @@ export default {
     RipaSelect,
     RipaSubheader,
     RipaSwitch,
-    RipaTextArea,
+    RipaTextInput,
   },
 
   data() {
     return {
       valid: true,
+      reasonForStopValue: this.value.stopReason?.reasonForStop || null,
       reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
+        v => (v || '').length >= 3 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
+      educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
+      educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: {
-        stopReason: {
-          reasonForStop: this.value?.stopReason?.reasonForStop || null,
-          trafficViolation: this.value?.stopReason?.trafficViolation || null,
-          trafficViolationCode:
-            this.value?.stopReason?.trafficViolationCode || null,
-          reasonableSuspicion:
-            this.value?.stopReason?.reasonableSuspicion || [],
-          reasonableSuspicionCode:
-            this.value?.stopReason?.reasonableSuspicionCode || null,
-          searchOfPerson: this.value?.stopReason?.searchOfPerson || null,
-          searchOfProperty: this.value?.stopReason?.searchOfProperty || null,
-          reasonForStopExplanation:
-            this.value?.stopReason?.reasonForStopExplanation || null,
-        },
-      },
+      viewModel: this.loadModel(this.value),
     }
   },
 
@@ -164,6 +196,34 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getReasonItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.reasonItems
+      }
+
+      return this.reasonItems.filter(
+        item => item.value !== 7 && item.value !== 8,
+      )
+    },
+
+    educationViolationRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 7
+      const options = this.viewModel.stopReason.educationViolation
+      return [
+        (checked && options !== null) ||
+          'An education violation type is required',
+      ]
+    },
+
+    educationViolationCodeRules() {
+      const checked1 = this.viewModel.stopReason.reasonForStop === 7
+      const checked2 = this.viewModel.stopReason.educationViolation === 1
+      const code = this.viewModel.stopReason.educationViolationCode
+      return [
+        (checked1 && checked2 && code !== null) || 'A offense code is required',
+      ]
     },
 
     trafficViolationRules() {
@@ -194,11 +254,45 @@ export default {
       const code = this.viewModel.stopReason.reasonableSuspicionCode
       return [(checked && code !== null) || 'An offense code is required']
     },
+
+    searchRules() {
+      const checked = this.viewModel.stopReason.reasonForStop === 6
+      const checkedPerson = this.viewModel.stopReason.searchOfPerson
+      const checkedProperty = this.viewModel.stopReason.searchOfProperty
+      if (checked) {
+        return [
+          checkedPerson ||
+            checkedProperty ||
+            'Your selection indicates that a search was conducted, please select from the search criteria below.',
+        ]
+      }
+
+      return []
+    },
   },
 
   methods: {
+    handleReasonForStopInput() {
+      if (this.reasonForStopValue !== this.viewModel.stopReason.reasonForStop) {
+        this.viewModel.actionsTaken.anyActionsTaken = false
+        this.viewModel.actionsTaken.actionsTakenDuringStop = null
+        this.viewModel.actionsTaken.personSearchConsentGiven = false
+        this.viewModel.actionsTaken.propertySearchConsentGiven = false
+        this.viewModel.actionsTaken.basisForSearch = null
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
+        this.viewModel.actionsTaken.propertyWasSeized = false
+        this.viewModel.actionsTaken.basisForPropertySeizure = null
+        this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.anyContraband = false
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
+      }
+      this.handleInput()
+    },
+
     handleInput() {
       this.updateSearchModel()
+      this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
 
@@ -207,6 +301,48 @@ export default {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
       }
+
+      if (this.viewModel.stopReason.reasonForStop === 6) {
+        if (this.viewModel.stopReason.searchOfPerson) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+          }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.viewModel.stopReason.searchOfProperty) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+          }
+        } else {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+    },
+  },
+
+  watch: {
+    value(newVal) {
+      this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
+      this.viewModel = this.loadModel(newVal)
+    },
+
+    'value.stopReason.reasonForStopPiiFound': {
+      handler(newVal) {
+        this.viewModel.stopReason.reasonForStopPiiFound = newVal
+      },
     },
   },
 
@@ -214,6 +350,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    loadingPii: {
+      type: Boolean,
+      default: false,
     },
     statutes: {
       type: Array,

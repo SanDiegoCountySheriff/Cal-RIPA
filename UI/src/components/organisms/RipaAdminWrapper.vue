@@ -7,6 +7,7 @@
       <v-tab>Statutes</v-tab>
       <v-tab>Stops</v-tab>
       <v-tab>Submissions</v-tab>
+      <v-tab>Users</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
@@ -51,6 +52,13 @@
           :items="submissions"
         ></ripa-submissions-grid>
       </v-tab-item>
+      <v-tab-item>
+        <ripa-users-grid
+          :loading="loading"
+          :items="users"
+          :on-edit-user="onEditUser"
+        ></ripa-users-grid>
+      </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
@@ -62,6 +70,7 @@ import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid'
 import RipaStatutesGrid from '@/components/molecules/RipaStatutesGrid'
 import RipaStopsGrid from '@/components/molecules/RipaStopsGrid'
 import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid'
+import RipaUsersGrid from '@/components/molecules/RipaUsersGrid'
 
 export default {
   name: 'ripa-admin-wrapper',
@@ -73,6 +82,7 @@ export default {
     RipaStatutesGrid,
     RipaStopsGrid,
     RipaSubmissionsGrid,
+    RipaUsersGrid,
   },
 
   data() {
@@ -110,6 +120,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    users: {
+      type: Array,
+      default: () => [],
+    },
     onDeleteBeat: {
       type: Function,
       default: () => {},
@@ -139,6 +153,10 @@ export default {
       default: () => {},
     },
     onEditStatute: {
+      type: Function,
+      default: () => {},
+    },
+    onEditUser: {
       type: Function,
       default: () => {},
     },

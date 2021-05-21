@@ -2,6 +2,8 @@ using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
@@ -16,25 +18,28 @@ namespace RIPA.Functions.Submission.Functions
     {
         private readonly ISftpService _sftpService;
         private readonly IStopService _stopService;
+        private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly string _sftpOutputPath;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
 
-        public TimerGetSubmitResults(ISftpService sftpService, IStopService stopService)
+        public TimerGetSubmitResults(ISftpService sftpService, IStopService stopService, IStopCosmosDbService stopCosmosDbService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
+            _stopCosmosDbService = stopCosmosDbService;
             _sftpOutputPath = Environment.GetEnvironmentVariable("SftpOutputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefix");
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixResults");
         }
 
         [FunctionName("TimerGetSubmitResults")]
-        public async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log)
+        public async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
             var files = _sftpService.ListAllFiles(_sftpOutputPath);
+
             if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
             Guid correlationId = Guid.NewGuid();
@@ -66,10 +71,12 @@ namespace RIPA.Functions.Submission.Functions
         {
             var split1 = dojResponse.Split("Agency ORI|File name|Date Submitted|Time Submitted|Error message");
             var split2 = split1[1].Split("Agency ORI|File name|LEA record ID|Error List");
-            var fileLevelFatalErrors = split2[0].Replace("Record Level Errors:", string.Empty).Trim();
-            var recordLevelErrors = split2[1].Trim();
+            var fileLevelFatalErrors = split2[0].Replace("Record Level Fatal Errors:", string.Empty).Trim();
+            var recordLevelFatalErrors = split2[1].Replace("Record Level Errors:", string.Empty).Trim();
+            var recordLevelErrors = split2[2].Trim();
             ProcessFileLevelFatalErrors(fileLevelFatalErrors);
-            ProcessRecordLevelErrors(recordLevelErrors);
+            ProcessRecordLevelErrors(recordLevelFatalErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError));
+            ProcessRecordLevelErrors(recordLevelErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError));
         }
 
         public async void ProcessFileLevelFatalErrors(string fileLevelFatalErrors)
@@ -81,14 +88,13 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     var fileLevelFatalError = DeserializeFileLevelFatalError(line);
                     var stopId = fileLevelFatalError.FileName.Split("_")[2].Replace(".json", string.Empty);
-                    var stop = await _stopService.GetStopAsync(stopId);
-                    await _stopService.PutStopAsync(_stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError), fileLevelFatalError.ErrorMessage, fileLevelFatalError.FileName));
+                    var stop = await _stopCosmosDbService.GetStopAsync(stopId);
+                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError), fileLevelFatalError.ErrorMessage, fileLevelFatalError.FileName));
                 }
             }
         }
 
-        public async void ProcessRecordLevelErrors(string recordLevelErrors)
-
+        public async void ProcessRecordLevelErrors(string recordLevelErrors, string type)
         {
             using (StringReader reader = new StringReader(recordLevelErrors))
             {
@@ -96,8 +102,8 @@ namespace RIPA.Functions.Submission.Functions
                 while ((line = reader.ReadLine()) != null)
                 {
                     var recordLevelError = DeserializeRecordLevelError(line);
-                    var stop = await _stopService.GetStopAsync(recordLevelError.LeaRecordId);
-                    await _stopService.PutStopAsync(_stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError), recordLevelError.ErrorList, recordLevelError.FileName));
+                    var stop = await _stopCosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
+                    await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, type, recordLevelError.ErrorList, recordLevelError.FileName));
                 }
             }
         }
@@ -111,7 +117,7 @@ namespace RIPA.Functions.Submission.Functions
                 FileName = values[1],
                 DateSubmitted = values[2],
                 TimeSubmitted = values[3],
-                ErrorMessage = values[4]
+                ErrorMessage = values[4].Replace("\"",string.Empty)
             };
             return fileLevelFatalError;
         }
@@ -133,7 +139,7 @@ namespace RIPA.Functions.Submission.Functions
                 AgencyOri = values[0],
                 FileName = values[1],
                 LeaRecordId = values[2],
-                ErrorList = values[3]
+                ErrorList = values[3].Replace("\"", string.Empty)
             };
             return recordLevelError;
         }

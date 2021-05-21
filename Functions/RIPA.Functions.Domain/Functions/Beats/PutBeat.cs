@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Beats.Models;
+using RIPA.Functions.Security;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -24,10 +27,23 @@ namespace RIPA.Functions.Domain.Functions.Beats
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutBeat/{Id}")] Beat beat, int Id,
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutBeat/{Id}")] Beat beat, HttpRequest req, int Id,
             [Table("Beats", Connection = "RipaStorage")] CloudTable beats, ILogger log)
 
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 beat.PartitionKey = "CA";

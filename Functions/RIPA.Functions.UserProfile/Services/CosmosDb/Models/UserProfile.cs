@@ -8,6 +8,10 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb.Models
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
+        //Custom ID 9 character!
+        [JsonProperty(PropertyName = "officerId")]
+        public string OfficerId { get; set; }
+
         [JsonRequired]
         [JsonProperty(PropertyName = "firstName")]
         public string FirstName { get; set; }
@@ -25,5 +29,16 @@ namespace RIPA.Functions.UserProfile.Services.CosmosDb.Models
         [JsonProperty(PropertyName = "startDate")]
         public DateTime StartDate { get; set; }
 
+        [JsonRequired]
+        [JsonProperty(PropertyName = "agency")]
+        public string Agency { get; set; }
+
+        [JsonProperty(PropertyName = "assignment")]
+        public string Assignment{ get; set; }
+
+        [JsonProperty(PropertyName = "otherType")]
+        public string OtherType { get; set; }
+
     }
+
 }

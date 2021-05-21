@@ -7,6 +7,7 @@
     :statutes="statutes"
     :stops="stops"
     :submissions="submissions"
+    :users="users"
     :on-delete-beat="onDeleteBeat"
     :on-delete-city="onDeleteCity"
     :on-delete-school="onDeleteSchool"
@@ -15,6 +16,7 @@
     :on-edit-city="onEditCity"
     :on-edit-school="onEditSchool"
     :on-edit-statute="onEditStatute"
+    :on-edit-user="onEditUser"
   ></ripa-admin-wrapper>
 </template>
 
@@ -57,6 +59,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    users: {
+      type: Array,
+      default: () => [],
+    },
     onDeleteBeat: {
       type: Function,
       default: () => {},
@@ -86,6 +92,10 @@ export default {
       default: () => {},
     },
     onEditStatute: {
+      type: Function,
+      default: () => {},
+    },
+    onEditUser: {
       type: Function,
       default: () => {},
     },

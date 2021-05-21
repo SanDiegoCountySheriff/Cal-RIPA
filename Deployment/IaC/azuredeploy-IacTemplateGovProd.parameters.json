@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyCont1_a": {
+            "value": "<policies>\r\n  <inbound>\r\n    <cors allow-credentials=\"true\">\r\n      <allowed-origins>\r\n        <origin>http://localhost:4000</origin>\r\n        <origin>https://localhost:4000</origin>\r\n        <origin>https://"
+           
+        },
+        "policyCont1_b": {
+            "value": ".z3.web.core.usgovcloudapi.net</origin>\r\n      </allowed-origins>\r\n      <allowed-methods>\r\n        <method>GET</method>\r\n        <method>PUT</method>\r\n        <method>POST</method>\r\n        <method>DELETE</method>\r\n      </allowed-methods>\r\n      <allowed-headers>\r\n        <header>Cache-Control</header>\r\n        <header>Ocp-Apim-Trace</header>\r\n        <header>Authorization</header>\r\n        <header>Content-Type</header>\r\n      </allowed-headers>\r\n    </cors>\r\n  </inbound>\r\n  <backend>\r\n    <forward-request />\r\n  </backend>\r\n  <outbound />\r\n  <on-error />\r\n</policies>"
+            
+        },
+        "policyCont2_a": {
+            "value": "<policies>\r\n  <inbound>\r\n    <cors allow-credentials=\"true\">\r\n      <allowed-origins>\r\n  <origin>https://"
+           
+        },
+        "policyCont2_b": {
+            "value": ".z3.web.core.usgovcloudapi.net</origin>\r\n      </allowed-origins>\r\n      <allowed-methods>\r\n        <method>GET</method>\r\n        <method>PUT</method>\r\n        <method>POST</method>\r\n        <method>DELETE</method>\r\n      </allowed-methods>\r\n      <allowed-headers>\r\n        <header>Cache-Control</header>\r\n        <header>Ocp-Apim-Trace</header>\r\n        <header>Authorization</header>\r\n        <header>Content-Type</header>\r\n      </allowed-headers>\r\n    </cors>\r\n  </inbound>\r\n  <backend>\r\n    <forward-request />\r\n  </backend>\r\n  <outbound />\r\n  <on-error />\r\n</policies>"
+            
+        },
+        "agency": {
+            "value": "sdsd"
+        },
+        "environment": {
+            "value": "p"
+        },
+        "application": {
+            "value": "ripa"
+        }
+    }
+  }
+  

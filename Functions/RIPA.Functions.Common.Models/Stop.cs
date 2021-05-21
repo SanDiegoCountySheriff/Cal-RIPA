@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 namespace RIPA.Functions.Common.Models
 
 {
+
     public class Submission
     {
         public Guid Id { get; set; }
@@ -19,21 +20,37 @@ namespace RIPA.Functions.Common.Models
         public DateTime DateReported { get; set; }
         public string FileName { get; set; }
     }
-    
+
+    public enum PercievedGender
+    {
+        [EnumMember(Value = "Male")]
+        Male = 1,
+        [EnumMember(Value = "Female")]
+        Female = 2,
+        [EnumMember(Value = "Transgender man/boy")]
+        TransgenderManBoy = 3,
+        [EnumMember(Value = "Transgender woman/girl")]
+        TransgenderWomanGirl = 4
+    }
+
     public enum SubmissionErrorType
     {
         [EnumMember(Value = "FileLevelFatalError")]
         FileLevelFatalError,
+        [EnumMember(Value = "RecordLevelFatalError")]
+        RecordLevelFatalError,
         [EnumMember(Value = "RecordLevelError")]
         RecordLevelError
     }
 
-    public enum SubmissionStatus 
+    public enum SubmissionStatus
     {
-        [EnumMember(Value="Unsubmitted")]
+        [EnumMember(Value = "Unsubmitted")]
         Unsubmitted,
         [EnumMember(Value = "Submitted")]
         Submitted,
+        [EnumMember(Value = "Resubmitted")]
+        Resubmitted,
         [EnumMember(Value = "Failed")]
         Failed
     }
@@ -43,24 +60,20 @@ namespace RIPA.Functions.Common.Models
     {
         public string id { get; set; }
         public string Ori { get; set; }
-
         public string Agency { get; set; }
         public string OfficerID { get; set; }
         public string ExpYears { get; set; }
         public OfficerAssignment OfficerAssignment { get; set; }
-        public bool ContractFundedPosition { get; set; }
-        public ContractCity ContractCity { get; set; }
-        public bool ContractFundedEvent { get; set; }
-        public string ContractEvent { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set {} }
+        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }
         public PersonStopped[] ListPersonStopped { get; set; }
         public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
+        public bool IsPiiFound { get; set; }
     }
 
 
@@ -69,11 +82,6 @@ namespace RIPA.Functions.Common.Models
         public string Key { get; set; }
         public string Type { get; set; }
         public string OtherType { get; set; }
-    }
-
-    public class ContractCity
-    {
-        public Codes[] ListCodes { get; set; }
     }
 
     public class Location
@@ -93,7 +101,7 @@ namespace RIPA.Functions.Common.Models
 
     public class City
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class Codes
@@ -104,12 +112,12 @@ namespace RIPA.Functions.Common.Models
 
     public class Beat
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class SchoolName
     {
-        public Codes[] ListCodes { get; set; }
+        public Codes Codes { get; set; }
     }
 
     public class PersonStopped
@@ -122,17 +130,36 @@ namespace RIPA.Functions.Common.Models
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
         public bool GenderNonconforming { get; set; }
-        public string PerceivedLgbt { get; set; }
+        public bool PerceivedLgbt { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
-        public string PerceptionKnown { get; set; }
         public string ReasonForStopExplanation { get; set; }
         public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+        public bool PersonSearchConsentGiven { get; set; }
+        public bool PropertySearchConsentGiven { get; set; }
         public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
-        public object[] BasisForSearch { get; set; }
+        public BasisForSearch[] ListBasisForSearch { get; set; }
         public string BasisForSearchBrief { get; set; }
-        public object[] BasisForPropertySeizure { get; set; }
-        public object[] TypeOfPropertySeized { get; set; }
+        public BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
+        public TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
         public ResultOfStop[] ListResultOfStop { get; set; }
+    }
+
+    public class TypeOfPropertySeized
+    {
+        public string Key { get; set; }
+        public string Type { get; set; }
+    }
+
+    public class BasisForPropertySeizure
+    {
+        public string Key { get; set; }
+        public string Basis { get; set; }
+    }
+
+    public class BasisForSearch
+    {
+        public string Key { get; set; }
+        public string Basis { get; set; }
     }
 
     public class ReasonForStop
@@ -177,7 +204,7 @@ namespace RIPA.Functions.Common.Models
     {
         public string Result { get; set; }
         public Codes[] ListCodes { get; set; }
-        public int Key { get; set; }
+        public string Key { get; set; }
     }
 
 }

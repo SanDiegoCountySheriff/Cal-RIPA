@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Templates.Models;
+using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,6 +28,18 @@ namespace RIPA.Functions.Domain.Functions.Templates
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetTemplate/{Id}")] HttpRequest req, string Id,
             [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
 
             try
             {

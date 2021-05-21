@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Schools.Models;
+using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -25,14 +27,27 @@ namespace RIPA.Functions.Domain.Functions.Schools
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "School failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] School school, string Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutSchool/{Id}")] School school, HttpRequest req, string Id,
             [Table("Schools", Connection = "RipaStorage")] CloudTable schools, ILogger log)
         {
             try
             {
-                if (school.CDSCode == 0)
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
                 {
-                    throw new Exception("CDS CODE Must be Integer and is required");
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(school.CDSCode))
+                {
+                    throw new Exception("CDS CODE Must be provided");
                 }
                 school.PartitionKey = "CA";
                 school.RowKey = Id;

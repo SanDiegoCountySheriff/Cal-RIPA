@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
+using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -26,9 +28,22 @@ namespace RIPA.Functions.Domain.Functions.Statutes
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Statute failed on insert or replace")]
 
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutStatute/{Id}")] Statute statute, int Id,
+            [HttpTrigger(AuthorizationLevel.Function, "Put", Route = "PutStatute/{Id}")] Statute statute, HttpRequest req, int Id,
              [Table("Statutes", Connection = "RipaStorage")] CloudTable statutes, ILogger log)
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 if (statute.OffenseCode == 0)

@@ -9,6 +9,7 @@
     required
     :items="items"
     :rules="rules"
+    validate-on-blur
   ></v-select>
 </template>
 

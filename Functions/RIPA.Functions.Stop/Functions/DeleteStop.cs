@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Stop.Services.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -32,11 +32,13 @@ namespace RIPA.Functions.Stop.Functions
         {
             log.LogInformation("Delete - Delete Stop requested");
 
-            if (!string.IsNullOrEmpty(Id))
-            {
-                await _stopCosmosDbService.DeleteStopAsync(Id);
-                return new OkObjectResult($"Deleted {Id}");
-            }
+            // NOTE: LM: I do not believe the system should allow Stops to be deleted
+
+            //if (!string.IsNullOrEmpty(Id))
+            //{
+            //    await _stopCosmosDbService.DeleteStopAsync(Id);
+            //    return new OkObjectResult($"Deleted {Id}");
+            //}
 
             return new BadRequestObjectResult("Not found");
         }

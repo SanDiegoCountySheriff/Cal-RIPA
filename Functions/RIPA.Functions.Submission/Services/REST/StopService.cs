@@ -14,46 +14,6 @@ namespace RIPA.Functions.Submission.Services.REST
 {
     public class StopService : IStopService
     {
-        private static string _getStopUrl;
-        private static string _putStopUrl;
-        private static HttpClient _httpClient;
-        public StopService(HttpClient httpClient, string getStopUrl, string putStopUrl)
-        {
-            _httpClient = httpClient;
-            _getStopUrl = getStopUrl;
-            _putStopUrl = putStopUrl;
-        }
-
-        public async Task<Stop> GetStopAsync(string id)
-        {
-            var response = await _httpClient.GetAsync(_getStopUrl.Replace("{Id}", id));
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception($"Failed Get Stop for submission by stop id: {id}");
-            }
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            Stop stop = JsonSerializer.Deserialize<Stop>(jsonString, options);
-            return stop;
-        }
-
-        public async Task<Stop> PutStopAsync(Stop stop)
-        {
-            var httpContent = new StringContent(JsonSerializer.Serialize(stop), UnicodeEncoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(_putStopUrl.Replace("{Id}", stop.id), httpContent);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception($"Failed Put Stop Submission for stop id: {stop.id}");
-            }
-            return stop;
-
-        }
-
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
         {
             Common.Models.Submission submission = new Common.Models.Submission
@@ -102,7 +62,7 @@ namespace RIPA.Functions.Submission.Services.REST
                 LEARecordID = stop.id,
                 ORI = stop.Ori,
                 TX_Type = "I",
-                SDate = stop.Date,
+                SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
                 STime = stop.Time,
                 SDur = stop.StopDuration.ToString(),
                 Officer = new Officer
@@ -116,12 +76,12 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.ListCodes?.FirstOrDefault().Code,
-                    K12_Flag = stop.Location.School ? "Y" : null,
-                    K12Code = stop.Location.School ? stop.Location.SchoolName.ListCodes?.FirstOrDefault().Code : null
+                    City = stop.Location.City.Codes.Code,
+                    K12_Flag = stop.Location.School ? "Y" : string.Empty,
+                    K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped)
+                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School)
             };
             return dojStop;
         }
@@ -140,9 +100,9 @@ namespace RIPA.Functions.Submission.Services.REST
             return dojLocation;
         }
 
-        public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped)
+        public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
         {
-            Listperson_Stopped dojListPersonStopped = new Listperson_Stopped();
+            var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
             {
                 Person_Stopped dojPersonStopped = new Person_Stopped
@@ -160,18 +120,24 @@ namespace RIPA.Functions.Submission.Services.REST
                         {
                             Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                         },
-                        Gend = personStopped.PerceivedGender,
-                        LGBT = personStopped.PerceivedLgbt,
-                        GenNC = personStopped.GenderNonconforming ? "Y" : "N"
+                        Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
+                        LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
+                        GenNC = personStopped.GenderNonconforming ? "5" : string.Empty
                     },
+                    Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
-                    ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop),
+                    ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                    ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToArray() },
+                    BasSearch_N = personStopped.BasisForSearchBrief,
+                    ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToArray() },
+                    ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToArray() },
                     ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
 
                 };
+                listDojPersonStopped.Add(dojPersonStopped);
             }
-            return new Listperson_Stopped { };
+            return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
@@ -188,14 +154,16 @@ namespace RIPA.Functions.Submission.Services.REST
                 case "1": //Traffic Violation
                     primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
                     primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 case "2": //Reasonable Suspicion
-                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key.Split(",") };
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToArray() };
                     primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
                     break;
                 case "7": //Education Code
                     primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
                     primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 default: //All other stop reason keys
                     break;
@@ -203,38 +171,58 @@ namespace RIPA.Functions.Submission.Services.REST
             return primaryReason;
         }
 
-        public static Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop)
+        public static Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
         {
-            Listacttak listacttak = new Listacttak();
             var listActionsTaken = new List<Acttak>();
             foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
             {
+                var isCon = "na";
+                if (atds.Key == "17") { isCon = isPersonSearchConsentGiven ? "Y" : "N"; }
+                else if (atds.Key == "19") { isCon = isPropertySearchConsentGiven ? "Y" : "N"; }
+
                 Acttak acttak = new Acttak
                 {
                     Act_CD = atds.Key,
-                    Is_Con = atds.Key.Length == 2 ? atds.Action : "na"
+                    Is_Con = isCon
                 };
                 listActionsTaken.Add(acttak);
             }
-            listacttak.ActTak = listActionsTaken.ToArray();
-            return listacttak;
+            return new Listacttak { ActTak = listActionsTaken.ToArray() };
         }
 
         public static Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
         {
-            Listresult listresult = new Listresult();
             var listResults = new List<Result>();
             foreach (ResultOfStop ros in listResultOfStop)
             {
                 Result result = new Result
                 {
-                    ResCD = ros.Result,
+                    ResCD = ros.Key,
                     Res_O_CD = ros.ListCodes.Select(x => x.Code).ToArray()
                 };
                 listResults.Add(result);
             }
-            return listresult;
+            return new Listresult { Result = listResults.ToArray() };
         }
+
+        public static string CastToDojPercievedGender(string percievedGender)
+        {
+            switch (percievedGender)
+            {
+                case "Male":
+                    return ((int)PercievedGender.Male).ToString();
+                case "Female":
+                    return ((int)PercievedGender.Female).ToString();
+                case "Transgender man/boy":
+                    return ((int)PercievedGender.TransgenderManBoy).ToString();
+                case "Transgender woman/girl":
+                    return ((int)PercievedGender.TransgenderWomanGirl).ToString();
+            }
+
+            return "";
+        }
+
+
 
     }
 }

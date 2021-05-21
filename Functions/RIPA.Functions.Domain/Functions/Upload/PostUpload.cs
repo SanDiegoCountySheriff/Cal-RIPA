@@ -13,12 +13,12 @@ using RIPA.Functions.Domain.Functions.Beats.Models;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
+using RIPA.Functions.Security;
 using System;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 
@@ -37,10 +37,21 @@ namespace RIPA.Functions.Domain.Functions.Upload
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Upload Complete")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;")]
 
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ILogger log)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
+            try
+            {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
+
             try
             {
                 _log = log;
@@ -183,7 +194,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             school.ETag = "*";
             school.PartitionKey = "CA";
             school.RowKey = row.ItemArray[0].ToString();
-            school.CDSCode = Convert.ToInt64(school.RowKey);
+            school.CDSCode = school.RowKey;
             school.Status = row.ItemArray[1].ToString();
             school.County = row.ItemArray[2].ToString();
             school.District = row.ItemArray[3].ToString();

@@ -2993,6 +2993,7 @@
                 "denyEncryptionScopeOverride": false,
                 "publicAccess": "None"
             }
+
         },
         {
             "condition": "[parameters('deploy_rg')]",

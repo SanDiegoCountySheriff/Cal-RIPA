@@ -1,46 +1,66 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
-    :online="isOnline"
+    :online="isOnlineAndAuthenticated"
     :dark="isDark"
+    :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
   >
     <slot></slot>
+    <ripa-interval
+      :delay="stopInternalMs"
+      @tick="checkLocalStorage"
+    ></ripa-interval>
   </ripa-page-wrapper>
 </template>
 
 <script>
+import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 
 export default {
   name: 'ripa-page-container',
 
+  mixins: [RipaApiStopJobMixin],
+
   components: {
+    RipaInterval,
     RipaPageWrapper,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
+      stopInternalMs: 5000,
     }
   },
 
   computed: {
-    ...mapGetters(['isAdmin', 'isAuthenticated', 'isOnline']),
+    ...mapGetters([
+      'isAdmin',
+      'invalidUser',
+      'isOnlineAndAuthenticated',
+      'apiConfig',
+    ]),
   },
 
   methods: {
     ...mapActions([
+      'editOfficerStop',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
+      'getUser',
+      'setApiConfig',
     ]),
 
     async getFormData() {
       this.loading = true
+      await Promise.all([this.getUser()])
       await Promise.all([
         this.getFormBeats(),
         this.getFormCities(),
@@ -53,7 +73,7 @@ export default {
     getDarkFromLocalStorage() {
       const value = localStorage.getItem('ripa_dark_theme')
       if (value === null) {
-        return 1
+        return true
       }
       return value === '1'
     },
@@ -69,7 +89,7 @@ export default {
 
     checkCache() {
       const cacheDate = localStorage.getItem('ripa_cache_date')
-      if (this.isAuthenticated && this.isOnline && cacheDate !== null) {
+      if (this.isOnlineAndAuthenticated && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
         if (hours > 23) {
           this.clearLocalStorage()
@@ -89,11 +109,41 @@ export default {
       localStorage.removeItem('ripa_statutes')
       localStorage.setItem('ripa_cache_date', new Date())
     },
+
+    async runApiStopsJob(apiStops) {
+      if (this.isOnlineAndAuthenticated) {
+        for (let index = 0; index < apiStops.length; index++) {
+          await this.editOfficerStop(apiStops[index])
+        }
+      }
+    },
   },
 
-  created() {
-    this.checkCache()
-    this.getFormData()
+  async created() {
+    if (this.invalidUser) {
+      this.$router.push('/checkUser')
+    } else {
+      this.checkCache()
+      this.getFormData()
+      // if (this.apiConfig === null) {
+      //   console.log('created 5')
+      //   await AuthService.getApiConfig().then(res => {
+      //     this.setApiConfig({
+      //       apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
+      //       apiSubscription: res.data.Configuration.Subscription,
+      //       defaultCounty: res.data.Configuration.DefaultCounty,
+      //     })
+      //     console.log('created 6')
+      //     this.getFormData()
+      //   })
+      // }
+    }
   },
 }
 </script>
+
+<style lang="scss">
+.update-dialog {
+  z-index: 999 !important;
+}
+</style>
