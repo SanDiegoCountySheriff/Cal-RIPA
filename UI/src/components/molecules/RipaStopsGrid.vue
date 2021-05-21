@@ -23,7 +23,6 @@
 
       <v-flex xs12 md2>
         <v-select
-          v-model="status"
           class="tw-ml-2"
           :items="statuses"
           label="Status"
@@ -49,7 +48,6 @@
       <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
-            v-model="codes"
             :items="items"
             dense
             chips
@@ -95,8 +93,11 @@
           <template v-slot:no-data>
             <div>No Data</div>
           </template>
-          <template v-slot:item.errorsFound="{ item }">
-            <v-simple-checkbox
+          <template v-slot:item.isPiiFound="{ item }">
+            {{ item.isPiiFound ? 'Yes' : 'No' }}
+          </template>
+          <!-- <template v-slot:item.errorsFound="{ item }"> -->
+          <!-- <v-simple-checkbox
               v-model="item.errorsFound"
               disabled
             ></v-simple-checkbox>
@@ -105,8 +106,8 @@
             <v-simple-checkbox
               v-model="item.isPiiFound"
               disabled
-            ></v-simple-checkbox>
-          </template>
+            ></v-simple-checkbox> -->
+          <!-- </template> -->
         </v-data-table>
       </v-flex>
 
@@ -120,7 +121,7 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import subDays from 'date-fns/subDays'
-import { format } from 'date-fns'
+import { format, isAfter, isBefore } from 'date-fns'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 
 export default {
@@ -136,8 +137,8 @@ export default {
       stops: [],
       headers: [
         { text: 'ID', value: 'id' },
-        { text: 'Stop Date', value: 'stopDateStr' },
-        { text: 'Status', value: 'stopStatus' },
+        { text: 'Stop Date', value: 'stopDateTime' },
+        { text: 'Status', value: 'status' },
         { text: 'Errors Found', value: 'errorsFound' },
         { text: 'PII Found', value: 'isPiiFound' },
         { text: 'Officer Name', value: 'officerName' },
@@ -159,6 +160,7 @@ export default {
       let filteredItems = this.stops.map(item => {
         return {
           ...item,
+          status: item.status === null ? 'Not Submitted' : item.status,
           stopDateInt: item.stopDate ? new Date(item.stopDate).getTime() : null,
           stopDateStr: item.stopDate
             ? format(new Date(item.stopDate), 'yyyy-MM-dd kk:mm')
@@ -180,13 +182,12 @@ export default {
         )
       }
 
-      const fromDateInt = new Date(this.stopFromDate).getTime()
-      const toDateInt = new Date(this.stopToDate).getTime()
-
-      filteredItems = filteredItems.filter(
-        item =>
-          item.stopDateInt >= fromDateInt && item.stopDateInt <= toDateInt,
-      )
+      filteredItems = filteredItems.filter(item => {
+        return (
+          isAfter(new Date(item.stopDateTime), new Date(this.stopFromDate)) &&
+          isBefore(new Date(item.stopDateTime), new Date(this.stopToDate))
+        )
+      })
 
       return filteredItems
     },

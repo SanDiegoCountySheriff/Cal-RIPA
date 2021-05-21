@@ -5,7 +5,7 @@
     :cities="mappedAdminCities"
     :schools="mappedAdminSchools"
     :statutes="mappedAdminStatutes"
-    :stops="stops"
+    :stops="mappedAdminStops"
     :submissions="mappedAdminSubmissions"
     :users="mappedAdminUsers"
     :on-delete-beat="handleDeleteBeat"
@@ -47,7 +47,6 @@ export default {
       'mappedAdminSubmissions',
       'mappedAdminUsers',
     ]),
-    ...mapState(['stops']),
   },
 
   methods: {
@@ -65,7 +64,7 @@ export default {
       'getAdminCities',
       'getAdminSchools',
       'getAdminStatutes',
-      'getStops',
+      'getOfficerStops',
       'getAdminUsers',
     ]),
 
@@ -76,7 +75,7 @@ export default {
         this.getAdminCities(),
         this.getAdminSchools(),
         this.getAdminStatutes(),
-        this.getStops(),
+        this.getOfficerStops(),
         this.getAdminUsers(),
       ])
       this.loading = false
