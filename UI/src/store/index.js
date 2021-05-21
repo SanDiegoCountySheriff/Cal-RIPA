@@ -245,6 +245,10 @@ export default new Vuex.Store({
       }
 
       localStorage.setItem(
+        'ripa_officer_start_date',
+        formatDate(state.user.startDate),
+      )
+      localStorage.setItem(
         'ripa_officer_years_experience',
         state.user.yearsExperience,
       )

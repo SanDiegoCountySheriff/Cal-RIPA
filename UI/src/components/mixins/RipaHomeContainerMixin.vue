@@ -1,5 +1,6 @@
 <script>
 import {
+  getOfficerStartDate,
   getOfficerYearsExperience,
   getOfficerAssignment,
   getOfficerOtherType,
@@ -155,6 +156,7 @@ export default {
       switch (value) {
         case 'motor':
           this.stop = motorStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),
@@ -165,6 +167,7 @@ export default {
 
         case 'probation':
           this.stop = probationStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),
@@ -175,6 +178,7 @@ export default {
 
         default:
           this.stop = defaultStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),

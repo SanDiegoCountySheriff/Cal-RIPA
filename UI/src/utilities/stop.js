@@ -19,6 +19,7 @@ import {
 } from '@/constants/form'
 
 export const defaultStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -46,6 +47,7 @@ export const defaultStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience,
       assignment,
       otherType,
@@ -66,6 +68,7 @@ export const defaultStop = (
 }
 
 export const motorStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -93,6 +96,7 @@ export const motorStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience,
       assignment,
       otherType,
@@ -134,6 +138,7 @@ export const motorStop = (
 }
 
 export const probationStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -165,6 +170,7 @@ export const probationStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience: yearsExperience,
       assignment: assignment,
       otherType,

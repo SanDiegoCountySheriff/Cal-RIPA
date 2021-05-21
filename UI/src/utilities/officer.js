@@ -1,3 +1,8 @@
+export const getOfficerStartDate = () => {
+  const startDate = localStorage.getItem('ripa_officer_start_date')
+  return startDate || null
+}
+
 export const getOfficerYearsExperience = () => {
   const yearsExperience = localStorage.getItem('ripa_officer_years_experience')
   return +yearsExperience || null
