@@ -2,6 +2,8 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
+    :light="getLight"
+    :dark="getDark"
     :return-value.sync="model"
     persistent
     width="290px"
@@ -45,6 +47,14 @@ export default {
         this.viewModel = newVal
         this.$emit('input', newVal)
       },
+    },
+
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
+
+    getDark() {
+      return !this.$vuetify.theme.dark
     },
   },
 

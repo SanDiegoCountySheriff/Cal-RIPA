@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { formatDate, difffernceInYears } from '@/utilities/dates'
+import { formatDate, differenceInYears } from '@/utilities/dates'
+import { format } from 'date-fns'
 
 Vue.use(Vuex)
 
@@ -38,7 +39,7 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
-      agency: 'Insight',
+      agency: '',
       oid: '',
       isAdmin: false,
       isInvalid: false,
@@ -102,7 +103,7 @@ export default new Vuex.Store({
     mappedFormStatutes: state => {
       return state.formStatutes
     },
-    officer: state => {
+    mappedUser: state => {
       return {
         agency: state.user.agency,
         assignment: state.user.assignment,
@@ -242,27 +243,31 @@ export default new Vuex.Store({
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
+      const firstName = value.idTokenClaims.given_name
+      const lastName = value.idTokenClaims.family_name
+      const fullName = `${firstName} ${lastName}`
+
       state.user = {
         ...state.user,
         email: value.idTokenClaims.email,
+        firstName,
+        fullName,
         isAdmin: isAnAdmin.length > 0,
         isAuthenticated: true,
+        lastName,
         oid: value.idTokenClaims.oid,
       }
     },
     updateUserProfile(state, value) {
       state.user = {
         ...state.user,
-        id: value.id,
+        id: state.user.oid,
         agency: value.agency,
-        firstName: value.firstName,
-        lastName: value.lastName,
-        fullName: value.name,
         assignment: value.assignment ? Number(value.assignment) : null,
         officerId: value.officerId,
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
-        yearsExperience: difffernceInYears(value.startDate),
+        yearsExperience: differenceInYears(value.startDate),
       }
 
       localStorage.setItem(
@@ -499,19 +504,24 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerUser({ dispatch, state }, officer) {
+    editOfficerUser({ dispatch, state }, mappedUser) {
+      const officerId =
+        state.user.officerId ||
+        format(new Date(), 'yyMMdd') +
+          (Math.floor(Math.random() * 999) + 100).toString()
       const userId = state.user.oid
       const user = {
         id: state.user.oid,
         firstName: state.user.firstName,
         lastName: state.user.lastName,
         name: state.user.fullName,
-        agency: state.user.agency,
-        startDate: state.user.startDate,
-        officerId: state.user.officerId,
-        assignment: officer.officer.assignment,
-        otherType: officer.officer.otherType,
+        agency: mappedUser.agency,
+        startDate: mappedUser.startDate,
+        officerId,
+        assignment: mappedUser.assignment,
+        otherType: mappedUser.otherType,
       }
+
       return axios
         .put(
           `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,

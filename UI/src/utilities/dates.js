@@ -1,6 +1,7 @@
 import differenceInHours from 'date-fns/differenceInHours'
-import differenceInYears from 'date-fns/differenceInYears'
-import { format } from 'date-fns'
+import { differenceInYears as diffInYears } from 'date-fns'
+import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 
 export const formatDate = dateStr => {
   if (dateStr && dateStr.length > 0) {
@@ -14,6 +15,11 @@ export const formatDate = dateStr => {
   return ''
 }
 
+export const isValidDate = dateStr => {
+  const date = parseDate(dateStr, '00:00')
+  return isValid(date)
+}
+
 const parseDate = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}`)
 }
@@ -23,8 +29,8 @@ export const dateNotInFuture = (dateStr, timeStr) => {
   return new Date().getTime() >= date.getTime()
 }
 
-export const difffernceInYears = date => {
-  const diff = differenceInYears(new Date(), new Date(date))
+export const differenceInYears = date => {
+  const diff = diffInYears(new Date(), new Date(date))
   return diff
 }
 
@@ -36,6 +42,11 @@ export const dateWithinLastHours = (dateStr, timeStr, hours) => {
 
 export const formatDateTime = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}`)
+}
+
+export const formatShortDate = dateStr => {
+  const date = parseDate(dateStr, '00:00')
+  return format(new Date(date), 'yyyy-MM-dd')
 }
 
 export const uniqueId = () => {
