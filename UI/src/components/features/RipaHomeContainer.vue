@@ -8,6 +8,7 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :display-beat-input="displayBeatInput"
         :form-step-index="formStepIndex"
         :full-stop="fullStop"
         :last-location="lastLocation"
@@ -104,6 +105,7 @@ export default {
       'officerId',
       'agency',
       'mappedGpsLocationAddress',
+      'displayBeatInput',
     ]),
   },
 

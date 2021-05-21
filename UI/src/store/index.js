@@ -128,6 +128,9 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
+    displayBeatInput: state => {
+      return state.apiConfig?.displayBeatInput || false
+    },
     mappedGpsLocationAddress: state => {
       if (
         state.gpsLocationAddress === undefined ||
