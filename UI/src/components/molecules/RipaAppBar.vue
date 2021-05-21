@@ -53,7 +53,14 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/user" v-bind="attrs" v-on="on">
+          <v-btn
+            class="tw-ml-4"
+            icon
+            small
+            @click="handleUserChange"
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </template>
@@ -116,6 +123,12 @@ export default {
         this.onUpdateDark(this.$vuetify.theme.dark)
       }
     },
+
+    handleUserChange() {
+      if (this.onUpdateUser) {
+        this.onUpdateUser()
+      }
+    },
   },
 
   mounted() {
@@ -136,6 +149,10 @@ export default {
       default: false,
     },
     onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

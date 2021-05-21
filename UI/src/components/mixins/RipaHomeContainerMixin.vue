@@ -55,16 +55,9 @@ export default {
     handleAddPerson() {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
+      this.stop.actionsTaken = {}
       this.stop.person = {
         id: new Date().getTime(),
-        isStudent: false,
-        perceivedRace: null,
-        perceivedGender: null,
-        genderNonconforming: false,
-        perceivedLgbt: false,
-        perceivedAge: null,
-        anyDisabilities: false,
-        perceivedOrKnownDisability: null,
       }
       this.updateFullStop()
     },

@@ -6,6 +6,7 @@
       :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
+      :on-update-user="onUpdateUser"
     ></ripa-app-bar>
 
     <ripa-content-wrapper>
@@ -44,6 +45,10 @@ export default {
       default: false,
     },
     onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

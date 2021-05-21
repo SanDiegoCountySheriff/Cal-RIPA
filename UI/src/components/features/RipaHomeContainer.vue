@@ -81,6 +81,7 @@ export default {
 
   data() {
     return {
+      formStepIndex: 1,
       fullStop: {},
       isEditingForm: false,
       loadingGps: false,

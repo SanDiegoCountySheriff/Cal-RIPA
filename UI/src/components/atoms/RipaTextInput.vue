@@ -7,6 +7,7 @@
       :loading="loading"
       :hint="hint"
       :rules="rules"
+      :disabled="disabled"
       validate-on-blur
       @input="debounceInput"
     ></v-text-field>
@@ -78,6 +79,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

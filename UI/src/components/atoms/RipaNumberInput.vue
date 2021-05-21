@@ -8,6 +8,7 @@
     :rules="rules"
     :min="1"
     validate-on-blur
+    :disabled="disabled"
     @input="debounceInput"
     @keypress="handleKeyPress"
   ></v-text-field>
@@ -73,6 +74,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

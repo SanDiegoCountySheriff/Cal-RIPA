@@ -46,6 +46,7 @@ export default {
         },
         officer: {
           editOfficer: newValue?.officer?.editOfficer || null,
+          startDate: newValue?.officer?.startDate || null,
           yearsExperience: newValue?.officer?.yearsExperience || null,
           assignment: newValue?.officer?.assignment || null,
           otherType: newValue?.officer?.otherType || null,

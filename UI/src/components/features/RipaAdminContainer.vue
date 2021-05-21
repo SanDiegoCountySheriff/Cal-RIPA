@@ -67,7 +67,7 @@ export default {
       'getAdminUsers',
     ]),
 
-    async getAdminData(beat) {
+    async getAdminData() {
       this.loading = true
       await Promise.all([
         this.getAdminBeats(),

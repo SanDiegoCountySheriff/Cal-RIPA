@@ -30,20 +30,29 @@
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
             <div class="md:tw-mr-4">
-              <ripa-number-input
-                v-model="model.officer.yearsExperience"
-                label="Years of Experience"
-                hint="Years of experience should be defined in years. Maximum of 50 and minimum of 1."
-                :min="1"
-                :max="50"
-                :rules="yearsExperienceRules"
-                @input="handleInput"
+              <ripa-text-input
+                v-model="model.officer.startDate"
+                label="Start Date"
+                disabled
               >
-              </ripa-number-input>
+              </ripa-text-input>
             </div>
           </v-col>
 
           <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-number-input
+                v-model="model.officer.yearsExperience"
+                label="Years of Experience"
+                disabled
+              >
+              </ripa-number-input>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
             <ripa-select
               v-model="model.officer.assignment"
               label="Officer Assignment"

@@ -1,4 +1,5 @@
 import differenceInHours from 'date-fns/differenceInHours'
+import differenceInYears from 'date-fns/differenceInYears'
 import { format } from 'date-fns'
 
 export const formatDate = dateStr => {
@@ -20,6 +21,11 @@ const parseDate = (dateStr, timeStr) => {
 export const dateNotInFuture = (dateStr, timeStr) => {
   const date = parseDate(dateStr, timeStr)
   return new Date().getTime() >= date.getTime()
+}
+
+export const difffernceInYears = date => {
+  const diff = differenceInYears(new Date(), new Date(date))
+  return diff
 }
 
 export const dateWithinLastHours = (dateStr, timeStr, hours) => {

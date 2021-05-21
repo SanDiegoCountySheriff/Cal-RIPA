@@ -5,19 +5,28 @@
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
+    :on-update-user="handleUpdateUser"
   >
     <slot></slot>
     <ripa-interval
       :delay="stopInternalMs"
       @tick="checkLocalStorage"
     ></ripa-interval>
+
+    <ripa-user-dialog
+      :stop="getStop"
+      :show-dialog="showUserDialog"
+      :on-close="handleClose"
+      :on-save="handleSaveUser"
+    ></ripa-user-dialog>
   </ripa-page-wrapper>
 </template>
 
 <script>
+import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 
@@ -29,12 +38,14 @@ export default {
   components: {
     RipaInterval,
     RipaPageWrapper,
+    RipaUserDialog,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMs: 5000,
+      showUserDialog: false,
     }
   },
 
@@ -44,7 +55,21 @@ export default {
       'invalidUser',
       'isOnlineAndAuthenticated',
       'apiConfig',
+      'officer',
     ]),
+
+    getStop() {
+      return {
+        agency: this.officer.agency,
+        officerId: this.officer.officerId,
+        officer: {
+          assignment: this.officer.assignment,
+          otherType: this.officer.otherType,
+          startDate: this.officer.startDate,
+          yearsExperience: this.officer.yearsExperience,
+        },
+      }
+    },
   },
 
   methods: {
@@ -78,9 +103,21 @@ export default {
       return value === '1'
     },
 
+    handleClose() {
+      this.showUserDialog = false
+    },
+
+    handleSaveUser(officer) {
+      console.log('save user', officer)
+    },
+
     handleUpdateDark(value) {
       this.isDark = value
       this.setDarkToLocalStorage()
+    },
+
+    handleUpdateUser() {
+      this.showUserDialog = true
     },
 
     setDarkToLocalStorage() {
@@ -125,18 +162,6 @@ export default {
     } else {
       this.checkCache()
       this.getFormData()
-      // if (this.apiConfig === null) {
-      //   console.log('created 5')
-      //   await AuthService.getApiConfig().then(res => {
-      //     this.setApiConfig({
-      //       apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-      //       apiSubscription: res.data.Configuration.Subscription,
-      //       defaultCounty: res.data.Configuration.DefaultCounty,
-      //     })
-      //     console.log('created 6')
-      //     this.getFormData()
-      //   })
-      // }
     }
   },
 }

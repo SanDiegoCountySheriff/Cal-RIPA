@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { formatDate } from '@/utilities/dates'
+import { formatDate, difffernceInYears } from '@/utilities/dates'
 
 Vue.use(Vuex)
 
@@ -43,7 +43,9 @@ export default new Vuex.Store({
       isAdmin: false,
       isInvalid: false,
       isAuthenticated: false,
-      officerId: '210508123',
+      officerId: null,
+      assignment: null,
+      otherType: null,
     },
     apiConfig: null,
     piiDate: null,
@@ -99,6 +101,16 @@ export default new Vuex.Store({
     },
     mappedFormStatutes: state => {
       return state.formStatutes
+    },
+    officer: state => {
+      return {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
     },
     officerId: state => {
       return state.user.officerId
@@ -205,7 +217,6 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      console.log('updateUserAccount')
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
@@ -218,6 +229,25 @@ export default new Vuex.Store({
         lastName: value.idTokenClaims.family_name,
         oid: value.idTokenClaims.oid,
       }
+    },
+    updateUserProfile(state, value) {
+      state.user = {
+        ...state.user,
+        agency: value.agency,
+        assignment: value.assignment ? Number(value.assignment) : null,
+        officerId: value.officerId,
+        otherType: value.otherType ? value.otherType : null,
+        startDate: value.startDate,
+        yearsExperience: difffernceInYears(value.startDate),
+      }
+
+      localStorage.setItem(
+        'ripa_officer_years_experience',
+        state.user.yearsExperience,
+      )
+      localStorage.setItem('ripa_officer_assignment', state.user.assignment)
+      localStorage.setItem('ripa_officer_other_type', state.user.otherType)
+      console.log(state.user)
     },
   },
 
@@ -801,7 +831,6 @@ export default new Vuex.Store({
     },
 
     getUser({ commit, state }) {
-      console.log('getUser')
       const id = state.user.oid
       return axios
         .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
@@ -812,6 +841,7 @@ export default new Vuex.Store({
         })
         .then(response => {
           console.log(response)
+          commit('updateUserProfile', response.data)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
