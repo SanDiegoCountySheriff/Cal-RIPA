@@ -14,8 +14,7 @@ export const formatDate = dateStr => {
 }
 
 const parseDate = (dateStr, timeStr) => {
-  const date = new Date(`${dateStr}T${timeStr}`)
-  return new Date(date)
+  return new Date(`${dateStr}T${timeStr}`)
 }
 
 export const dateNotInFuture = (dateStr, timeStr) => {
