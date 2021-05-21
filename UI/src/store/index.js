@@ -131,6 +131,24 @@ export default new Vuex.Store({
     displayBeatInput: state => {
       return state.apiConfig?.displayBeatInput || false
     },
+    displayEnvironment: state => {
+      return state.apiConfig?.displayEnvironment || false
+    },
+    environmentName: state => {
+      switch (state.apiConfig.environmentName) {
+        case 'p':
+          return 'PROD'
+        case 'd':
+          return 'DEV'
+        case 'q':
+          return 'QA'
+        case 'u':
+          return 'UAT'
+
+        default:
+          return ''
+      }
+    },
     mappedGpsLocationAddress: state => {
       if (
         state.gpsLocationAddress === undefined ||

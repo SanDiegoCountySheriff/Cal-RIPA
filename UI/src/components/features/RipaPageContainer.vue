@@ -1,6 +1,8 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
+    :display-environment="displayEnvironment"
+    :environment-name="environmentName"
     :online="isOnlineAndAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
@@ -58,6 +60,8 @@ export default {
 
   computed: {
     ...mapGetters([
+      'displayEnvironment',
+      'environmentName',
       'isAdmin',
       'invalidUser',
       'isOnlineAndAuthenticated',

@@ -2,13 +2,14 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
+      :display-environment="displayEnvironment"
+      :environment-name="environmentName"
       :online="online"
       :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
       :on-update-user="onUpdateUser"
     ></ripa-app-bar>
-
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
@@ -39,6 +40,14 @@ export default {
     dark: {
       type: Boolean,
       default: false,
+    },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
     },
     online: {
       type: Boolean,

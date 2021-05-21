@@ -101,6 +101,10 @@ export default {
     },
 
     getAppTitle() {
+      if (this.displayEnvironment) {
+        return `RIPA (${this.environmentName})`
+      }
+
       return 'RIPA'
     },
 
@@ -140,6 +144,14 @@ export default {
     dark: {
       type: Boolean,
       default: false,
+    },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
     },
     online: {
       type: Boolean,

@@ -90,7 +90,7 @@ const getAuthConfig = async () => {
         apiSubscription: res.data.Configuration.Subscription,
         defaultCounty: res.data.Configuration.DefaultCounty,
         displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
-        environment: res.data.Configuration.Environment,
+        environmentName: res.data.Configuration.Environment,
         displayEnvironment: res.data.Configuration.Environment !== 'p',
       })
       return true
