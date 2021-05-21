@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="model" max-width="400px" :light="getLight" :dark="getDark">
+  <v-dialog
+    v-model="model"
+    max-width="400px"
+    :light="getLight"
+    :dark="getDark"
+    persistent
+  >
     <v-card>
       <v-card-title>
         <span>User Not Authorized</span>
