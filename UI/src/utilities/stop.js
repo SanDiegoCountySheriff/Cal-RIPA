@@ -19,6 +19,7 @@ import {
 } from '@/constants/form'
 
 export const defaultStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -46,6 +47,7 @@ export const defaultStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience,
       assignment,
       otherType,
@@ -56,7 +58,7 @@ export const defaultStop = (
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'k:mm'),
+      time: format(new Date(), 'kk:mm'),
     },
     stopReason: {},
     stopResult: {
@@ -66,6 +68,7 @@ export const defaultStop = (
 }
 
 export const motorStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -93,6 +96,7 @@ export const motorStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience,
       assignment,
       otherType,
@@ -103,7 +107,7 @@ export const motorStop = (
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'k:mm'),
+      time: format(new Date(), 'kk:mm'),
     },
     stopReason: {
       reasonForStop: 1,
@@ -134,6 +138,7 @@ export const motorStop = (
 }
 
 export const probationStop = (
+  startDate,
   yearsExperience,
   assignment,
   otherType,
@@ -165,6 +170,7 @@ export const probationStop = (
     },
     officer: {
       editOfficer: false,
+      startDate,
       yearsExperience: yearsExperience,
       assignment: assignment,
       otherType,
@@ -175,7 +181,7 @@ export const probationStop = (
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'k:mm'),
+      time: format(new Date(), 'kk:mm'),
     },
     stopReason: {
       reasonForStop: 3,

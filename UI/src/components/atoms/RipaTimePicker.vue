@@ -46,26 +46,6 @@ export default {
         this.$emit('input', newVal)
       },
     },
-
-    getTime() {
-      if (this.model) {
-        const array = this.model.split(':')
-        const hour = array[0]
-        const minute = array[1]
-        if (hour > 0 && hour < 12) {
-          return `${hour}:${minute} AM`
-        }
-        if (hour === 0) {
-          return `${hour + 12}:${minute} AM`
-        }
-        if (hour === 12) {
-          return `${hour}:${minute} PM`
-        }
-        return `${hour - 12}:${minute} PM`
-      }
-
-      return null
-    },
   },
 
   watch: {
@@ -90,5 +70,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

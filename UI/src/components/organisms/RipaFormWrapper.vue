@@ -40,6 +40,7 @@
                 :on-cancel="handleCancel"
                 :beats="beats"
                 :county-cities="countyCities"
+                :display-beat-input="displayBeatInput"
                 :last-location="lastLocation"
                 :loading-gps="loadingGps"
                 :loading-pii="loadingPiiStep1"
@@ -398,6 +399,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
     },
     formStepIndex: {
       type: Number,

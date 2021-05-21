@@ -1,5 +1,6 @@
 <script>
 import {
+  getOfficerStartDate,
   getOfficerYearsExperience,
   getOfficerAssignment,
   getOfficerOtherType,
@@ -55,16 +56,9 @@ export default {
     handleAddPerson() {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
+      this.stop.actionsTaken = {}
       this.stop.person = {
         id: new Date().getTime(),
-        isStudent: false,
-        perceivedRace: null,
-        perceivedGender: null,
-        genderNonconforming: false,
-        perceivedLgbt: false,
-        perceivedAge: null,
-        anyDisabilities: false,
-        perceivedOrKnownDisability: null,
       }
       this.updateFullStop()
     },
@@ -147,7 +141,6 @@ export default {
     },
 
     handleOpenStatute(statute) {
-      console.log(statute)
       this.showStatuteDialog = true
     },
 
@@ -163,6 +156,7 @@ export default {
       switch (value) {
         case 'motor':
           this.stop = motorStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),
@@ -173,6 +167,7 @@ export default {
 
         case 'probation':
           this.stop = probationStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),
@@ -183,6 +178,7 @@ export default {
 
         default:
           this.stop = defaultStop(
+            getOfficerStartDate(),
             getOfficerYearsExperience(),
             getOfficerAssignment(),
             getOfficerOtherType(),

@@ -1,11 +1,8 @@
 <template>
   <v-app-bar app dense flat>
-    <v-toolbar-title
-      v-if="!invalidUser"
-      class="tw-cursor-pointer"
-      @click="$router.push('/')"
-      >{{ getAppTitle }}</v-toolbar-title
-    >
+    <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
+      getAppTitle
+    }}</v-toolbar-title>
 
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
@@ -53,7 +50,14 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/user" v-bind="attrs" v-on="on">
+          <v-btn
+            class="tw-ml-4"
+            icon
+            small
+            @click="handleUserChange"
+            v-bind="attrs"
+            v-on="on"
+          >
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </template>
@@ -97,6 +101,10 @@ export default {
     },
 
     getAppTitle() {
+      if (this.displayEnvironment) {
+        return `RIPA (${this.environmentName})`
+      }
+
       return 'RIPA'
     },
 
@@ -116,6 +124,12 @@ export default {
         this.onUpdateDark(this.$vuetify.theme.dark)
       }
     },
+
+    handleUserChange() {
+      if (this.onUpdateUser) {
+        this.onUpdateUser()
+      }
+    },
   },
 
   mounted() {
@@ -131,11 +145,23 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
+    },
     online: {
       type: Boolean,
       default: false,
     },
     onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },
