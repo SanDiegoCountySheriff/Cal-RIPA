@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-stop-reason tw-pb-8">
-    {{ model.stopReason }}
     <ripa-form-header
       title="Reason for Stop"
       required

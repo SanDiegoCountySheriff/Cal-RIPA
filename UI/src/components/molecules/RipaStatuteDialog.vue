@@ -8,14 +8,20 @@
   >
     <v-card>
       <v-card-title>
-        <span>Statute §999.226(a)(2)</span>
+        <span>Statute {{ statuteTitle }}</span>
       </v-card-title>
 
       <v-card-text>
         <div class="ripa-statute">
-          {{ statute }}
+          <h1>{{ statuteContent.id }}. {{ statuteContent.text }}</h1>
+          <ul>
+            <li v-for="(item, index) in statuteContent.level3" :key="index">
+              {{ item.id }}. {{ item.text }}
+            </li>
+          </ul>
           <!-- <h1>Article 3. Data Elements To Be Reported</h1>
           <h2>§ 999.226</h2>
+          
           <ul>
             <li>
               (a) The data elements regarding stops that shall be collected by
@@ -111,6 +117,14 @@ export default {
         }
         this.viewModel = newValue
       },
+    },
+
+    statuteTitle() {
+      return (this.statute && this.statute.statute) || ''
+    },
+
+    statuteContent() {
+      return (this.statute && this.statute.content) || []
     },
 
     getLight() {

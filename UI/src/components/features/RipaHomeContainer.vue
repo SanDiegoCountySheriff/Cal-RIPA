@@ -52,6 +52,7 @@
 
     <ripa-statute-dialog
       :show-dialog="showStatuteDialog"
+      :statute="statute"
       :on-close="handleCloseDialog"
     ></ripa-statute-dialog>
   </div>
@@ -89,6 +90,7 @@ export default {
       loadingPiiStep1: false,
       loadingPiiStep3: false,
       loadingPiiStep4: false,
+      statute: null,
       stop: {},
       stopIndex: 1,
     }
@@ -96,6 +98,7 @@ export default {
 
   computed: {
     ...mapGetters([
+      'invalidUser',
       'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
@@ -128,7 +131,11 @@ export default {
 
     async validateLocationForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
-      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep1 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)
@@ -143,7 +150,11 @@ export default {
 
     async validateReasonForStopForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
-      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep3 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)
@@ -158,7 +169,11 @@ export default {
 
     async validateBasisForSearchForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
-      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep4 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)

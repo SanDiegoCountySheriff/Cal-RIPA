@@ -1,6 +1,7 @@
 <script>
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 import { format } from 'date-fns'
+import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
   data() {
@@ -140,6 +141,10 @@ export default {
     },
 
     handleOpenStatute(statute) {
+      this.statute = {
+        statute,
+        content: getStatuteContent(statute),
+      }
       this.showStatuteDialog = true
     },
 
