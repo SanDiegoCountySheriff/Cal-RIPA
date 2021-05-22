@@ -1,15 +1,15 @@
 export const STATUTES = [
   {
     statuteID: '999.224',
-    level1: [
+    children: [
       {
         id: 'a',
         text: 'For purposes of Government Code section 12525.5 and this chapter only, the following definitions shall apply:,',
-        level2: [
+        children: [
           {
             id: '16',
             text: "Student' means any person who is enrolled in a K-12 Public School, or any person who is subject to California’s compulsory education law as provided in Education Code section 48200. A 'student' includes persons between 6 and 18 years of age who are not otherwise exempt from the compulsory education laws as provided in Education Code section 48200. 'Student' also refers to persons up to 22 years of age who are being provided special education and services, as provided under Education Code section 56026. The reporting requirements of this chapter regarding 'students' apply only to interactions between officers and students that take place in a K-12 Public School.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'Example: A person between the ages of 6 and 18 who is not enrolled in a K-12 Public School because he or she has been expelled or is temporarily suspended from school is a student for purposes of these regulations.',
@@ -38,11 +38,11 @@ export const STATUTES = [
   },
   {
     statuteID: '999.226',
-    level1: [
+    children: [
       {
         id: 'a',
         text: 'The data elements regarding stops that shall be collected by peace officers subject to this chapter are defined as follows:',
-        level2: [
+        children: [
           {
             id: '1',
             text: "'ORI number' is the data element that refers to the reporting agency’s Originating Agency Identifier, a unique identification code number assigned by the Federal Bureau of Investigation.",
@@ -50,7 +50,7 @@ export const STATUTES = [
           {
             id: '2',
             text: 'Date, Time, and Duration of Stop',
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: "'Date of Stop' refers to the year, month, and day when the stop occurred. It shall be recorded as the date on which the stop began. If the stop extends over two days (e.g., if a stop began at 2330 hours on January 1st and concluded at 0030 hours on January 2nd), the 'Date of Stop' should be recorded as the first date (in this example, January 1st).",
@@ -65,7 +65,7 @@ export const STATUTES = [
               },
               {
                 id: 'example',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: "Example: Officer A stops a vehicle for suspected driving under the influence (DUI) at 1300 hours. Officer B then arrives at the scene 15 minutes later and conducts a field sobriety test on the driver, who fails the tests. Officer B then arrests and takes the driver into custody at 1345. 'Duration of Stop' would be reported as 45 minutes.",
@@ -81,11 +81,11 @@ export const STATUTES = [
           {
             id: '3',
             text: "'Location of Stop' refers to the physical location where the stop took place and shall be reported as follows:",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'The officer shall report one of the following options, which are provided in order of preference:',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'Block number and street name',
@@ -113,11 +113,11 @@ export const STATUTES = [
           {
             id: '4',
             text: "'Perceived Race or Ethnicity of Person Stopped' refers to the officer’s perception of the race or ethnicity of the person stopped. When reporting this data element, the officer shall make his or her determination of the person’s race or ethnicity based on personal observation only. The officer shall not ask the person stopped his or her race or ethnicity, or ask questions or make comments or statements designed to elicit this information.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'When reporting this data element, the officer shall select all of the following data values that apply:',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'Asian',
@@ -148,7 +148,7 @@ export const STATUTES = [
                   },
                   {
                     id: 'example',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: "Example: If a person appears to be both Black and Latino(a), the officer shall select both 'Black/African American' and 'Hispanic/Latino(a).'",
@@ -190,11 +190,11 @@ export const STATUTES = [
           {
             id: '5',
             text: "'Perceived Gender of Person Stopped' refers to the officer’s perception of the person’s gender. When reporting this data element, the officer shall make his or her determination of the person’s gender based on personal observation only. The officer shall not ask the person stopped his or her gender or use the gender specified on the person’s driver’s license or other identification, recognizing that the officer’s observation may not reflect the gender specified on the person’s identification.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: "When reporting this data element, the officer shall select at least one of the following data values. In doing so and when applicable, the officer may select 'Gender nonconforming' in addition to one of the four enumerated gender data values of Male, Female, Transgender man/boy, or Transgender woman/girl. If the officer cannot perceive the person stopped to be within the categories of Male, Female, Transgender man/boy, or Transgender woman/girl, the officer must select 'Gender nonconforming' as the only data value.",
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'Male',
@@ -220,7 +220,7 @@ export const STATUTES = [
               {
                 id: 'B',
                 text: 'For purposes of completing this data element, the officer shall refer to the following definitions:',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: "'Transgender man/boy' means a person who was assigned female at birth but who currently identifies as a man, or boy if the person is a minor.",
@@ -252,7 +252,7 @@ export const STATUTES = [
           {
             id: '9',
             text: "'Perceived or Known Disability of Person Stopped' refers to the officer’s perception that the person stopped displayed signs of one or more of the following conditions; the officer’s knowledge that the person stopped has one or more of the following conditions because the person stopped so advised the officer; or the officer’s prior knowledge that the person stopped had one or more of the following conditions. Nothing in this provision alters any existing requirements to comply with reasonable accommodation and anti-discrimination laws with respect to the treatment of people with  disabilities. When reporting this data element, the officer shall select all of the following data values that apply:",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'Deafness or difficulty hearing',
@@ -286,15 +286,15 @@ export const STATUTES = [
           {
             id: '10',
             text: "'Reason for Stop' refers to the primary reason why the officer stopped the person.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'When reporting this data element, the officer shall identify only the primary reason for stopping a person, by selecting one of the following data values. Justifications that did not inform the officer’s primary reason for the stop shall not be selected.',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'Traffic violation. When selecting this data value, the officer shall also identify the applicable Vehicle Code section and subdivision using the Department’s standard California Justice Information Services (CJIS) Offense Table. When the person stopped is the driver, the officer shall also designate the primary type of violation:',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Moving violation',
@@ -312,7 +312,7 @@ export const STATUTES = [
                   {
                     id: '2',
                     text: "Reasonable suspicion that the person was engaged in criminal activity. This data value should not be selected if 'Traffic violation' is the reason for the stop. When selecting this data value, the officer shall select all applicable circumstances that gave rise to the officer’s reasonable suspicion from the list provided below. In addition, using the Department’s standard CJIS Offense Table, the officer shall identify the primary code section and subdivision of the suspected violation of law that formed the basis for the stop, if known to the officer.",
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Officer witnessed commission of a crime',
@@ -366,7 +366,7 @@ export const STATUTES = [
                   {
                     id: '6',
                     text: 'Consensual encounter resulting in a search. A consensual encounter is an interaction in which the officer does not exert any authority over, or use any force on, a person, and the person is free to leave. The officer shall only select this data value if a consensual encounter results in a search, regardless of whether the resulting search is consensual.',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: "Example: During the course of a witness interview in which the person is free to leave, the officer asks to search the person’s bag, and the person consents. In this case the reason for stop is a 'consensual encounter resulting in a search.'",
@@ -378,7 +378,7 @@ export const STATUTES = [
               {
                 id: 'B',
                 text: "When reporting the 'Reason for Stop,' the officer shall also provide a brief explanation (250-character maximum) regarding the reason for the stop. This explanation shall include additional detail beyond the general data values selected for the 'Reason for Stop.' Officers shall not include any personal identifying information of the persons stopped or Unique Identifying Information of any officer in this explanation.",
-                level3: [
+                children: [
                   {
                     id: '1',
                     text: "Example: If the officer selected 'Reasonable suspicion that the person was engaged in criminal activity/Actions indicative of a drug transaction, the officer must use this field to briefly note the specific nature of the actions indicative of a drug transaction and why they were suspicious.",
@@ -398,11 +398,11 @@ export const STATUTES = [
           {
             id: '12',
             text: "'Actions Taken by Officer During Stop' refers to an officer’s actions toward the person stopped.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'The reporting officer shall select all of the following data values that apply, even if any or all of the actions were undertaken by another officer:',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'Person removed from vehicle by order',
@@ -470,7 +470,7 @@ export const STATUTES = [
                   {
                     id: '17',
                     text: 'Asked for consent to search person',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Consent given',
@@ -488,7 +488,7 @@ export const STATUTES = [
                   {
                     id: '19',
                     text: 'Asked for consent to search property',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Consent given',
@@ -520,11 +520,11 @@ export const STATUTES = [
               {
                 id: 'B',
                 text: "'Basis for Search.' If, during the stop, the officer conducted a search of the person, the person’s property, or both, the officer shall report the basis for the search.",
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: 'The officer shall identify the basis for the search by selecting all of the following data values that apply:',
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Consent given',
@@ -578,7 +578,7 @@ export const STATUTES = [
                   {
                     id: '2',
                     text: "When reporting the 'Basis for Search,' the officer shall also provide a brief explanation (250-character maximum) regarding the basis for the search. This explanation shall include additional detail beyond the general data values selected for 'Basis for Search.' Officers shall not include any personal identifying information of the persons stopped or Unique Identifying Information of any officer in this explanation. If the basis for the search is “Condition of parole/probation/PRCS/mandatory supervision,” this explanation is not required.",
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: "Example: If the officer selected 'Suspected weapons' as the 'Basis for Search,' the officer must use this field to explain the specific nature of the suspected weapons (i.e., what were the specific objects, shapes, and/or movements observed that made the officer suspicious and what type of weapons were suspected).",
@@ -590,7 +590,7 @@ export const STATUTES = [
               {
                 id: 'C',
                 text: "'Contraband or Evidence Discovered, if Any.' The officer shall indicate whether contraband or evidence was discovered during the stop, including contraband or evidence discovered in plain view or as the result of a search, and the type of contraband or evidence discovered, by selecting all of the following data values that apply:",
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: "None. If 'None' is selected, no other data values can be selected.",
@@ -640,11 +640,11 @@ export const STATUTES = [
               {
                 id: 'D',
                 text: 'Additional Data Regarding Type of Property Seized.',
-                level4: [
+                children: [
                   {
                     id: '1',
                     text: "'Basis for Property Seizure.' If the officer seized property during the stop, regardless of whether the property belonged to the person stopped, the officer shall report the basis for the property seizure by selecting all of the following data values that apply:",
-                    level4: [
+                    children: [
                       {
                         id: '1',
                         text: 'Safekeeping as allowed by law/statute',
@@ -670,7 +670,7 @@ export const STATUTES = [
                   {
                     id: '2',
                     text: "'Type of Property Seized.' If the officer seized property during the stop, regardless of whether the property belonged to the person stopped,the officer shall report the type of property seized, by selecting all of the following data values that apply:",
-                    level5: [
+                    children: [
                       {
                         id: 'a',
                         text: 'Firearm(s)',
@@ -724,7 +724,7 @@ export const STATUTES = [
           {
             id: '13',
             text: "'Result of Stop' refers to the outcome of the stop. When reporting this data element, the officer shall select all of the following data values that apply. In addition, for warnings, citations, cite and release, and custodial arrests (with the exception of an arrest pursuant to an outstanding warrant) the officer shall also, using the Department’s standard CJIS Offense Table, identify the code, including the section number and appropriate subdivision, that is the basis for the warning, citation, cite and release, or custodial arrest, where applicable. If more than one code section forms the basis for the warning, citation, cite and release or custodial arrest, the officer shall identify all applicable code sections and subdivisions. If the Result of Stop is based on an ordinance, the officer shall select 'local ordinance viol' from the Department’s CJIS Offense Table without the need for the specific section number.",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: "No action. If 'No Action' is selected, no other data values can be selected.",
@@ -782,7 +782,7 @@ export const STATUTES = [
           {
             id: '16',
             text: "'Type of Assignment of Officer' refers to the type of assignment to which an officer is assigned at the time of the stop. When reporting this data element, the officer shall select one of the following data values:",
-            level3: [
+            children: [
               {
                 id: 'A',
                 text: 'Patrol, traffic enforcement, field operations',

@@ -1,13 +1,12 @@
 <template>
   <li>
     <span class="label">{{ node.id }}. {{ node.text }}</span>
-
     <ul v-if="node.children && node.children.length">
-      <node
+      <ripa-node-tree
         v-for="(child, index) in node.children"
         :node="child"
         :key="index"
-      ></node>
+      ></ripa-node-tree>
     </ul>
   </li>
 </template>
