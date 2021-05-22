@@ -42,7 +42,7 @@ export default new Vuex.Store({
       agency: '',
       oid: '',
       isAdmin: false,
-      isInvalid: false,
+      isInvalid: null,
       isAuthenticated: false,
       officerId: null,
       officerName: null,
@@ -284,6 +284,7 @@ export default new Vuex.Store({
       const document = {
         Document: textValue,
       }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
@@ -908,6 +909,7 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
+          commit('updateInvalidUser', false)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)

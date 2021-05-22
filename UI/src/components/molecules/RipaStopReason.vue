@@ -1,5 +1,6 @@
 <template>
   <div class="ripa-stop-reason tw-pb-8">
+    {{ model.stopReason }}
     <ripa-form-header
       title="Reason for Stop"
       required
@@ -291,9 +292,33 @@ export default {
     },
 
     handleInput() {
+      this.updateReasonForStopModel()
       this.updateSearchModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
+    },
+
+    updateReasonForStopModel() {
+      if (this.viewModel.stopReason.reasonForStop === 1) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 2) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 7) {
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+      }
     },
 
     updateSearchModel() {

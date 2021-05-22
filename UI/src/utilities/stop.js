@@ -205,11 +205,185 @@ export const apiStopToFullStop = apiStop => {
       moreLocationOptions: apiStop.location.toggleLocationOptions || false,
       highwayExit: apiStop.location.highwayExit || null,
       landmark: apiStop.location.landMark || null,
+      piiFound: apiStop.location.piiFound || false,
       outOfCounty: apiStop.location.outOfCounty || false,
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
+    people: getFullStopPeopleListed(apiStop.listPersonStopped),
   }
+}
+
+const getFullStopPeopleListed = people => {
+  return people.map(person => {
+    return {
+      id: person.id,
+      isStudent: person.isStudent,
+      perceivedRace: getKeyArray(person.listPerceivedRace),
+      perceivedGender: getPerceivedGenderCode(person),
+      genderNonconforming: person.genderNonconforming,
+      perceivedLgbt: person.perceivedLgbt,
+      perceivedAge: Number(person.perceivedAge),
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish,
+      anyDisabilities: person.listPerceivedOrKnownDisability.length > 0,
+      perceivedOrKnownDisability: getKeyArray(
+        person.listPerceivedOrKnownDisability,
+      ),
+      stopReason: {
+        reasonForStop: Number(person.reasonForStop.key),
+        trafficViolation: getTrafficViolationDetailKey(person.reasonForStop),
+        trafficViolationCode: getTrafficViolationDetailCode(
+          person.reasonForStop,
+        ),
+        reasonableSuspicion: getReasonableSuspicionDetailKeys(
+          person.reasonForStop,
+        ),
+        reasonableSuspicionCode: getReasonableSuspicionDetailCode(
+          person.reasonForStop,
+        ),
+        educationViolation: getEducationViolationDetailKey(
+          person.reasonForStop,
+        ),
+        educationViolationCode: getEducationViolationDetailCode(
+          person.reasonForStop,
+        ),
+        reasonForStopExplanation: person.reasonForStopExplanation,
+        reasonForStopPiiFound: person.reasonForStopPiiFound,
+      },
+      stopResult: {
+        anyActionsTaken: person.listResultOfStop.length > 0,
+        actionsTakenDuringStop1: getKeyFoundInArray(person.listResultOfStop, 1),
+        actionsTakenDuringStop2: getKeyFoundInArray(person.listResultOfStop, 2),
+        actionsTakenDuringStop3: getKeyFoundInArray(person.listResultOfStop, 3),
+        actionsTakenDuringStop4: getKeyFoundInArray(person.listResultOfStop, 4),
+        actionsTakenDuringStop5: getKeyFoundInArray(person.listResultOfStop, 5),
+        actionsTakenDuringStop6: getKeyFoundInArray(person.listResultOfStop, 6),
+        actionsTakenDuringStop7: getKeyFoundInArray(person.listResultOfStop, 7),
+        actionsTakenDuringStop8: getKeyFoundInArray(person.listResultOfStop, 8),
+        actionsTakenDuringStop9: getKeyFoundInArray(person.listResultOfStop, 9),
+        actionsTakenDuringStop10: getKeyFoundInArray(
+          person.listResultOfStop,
+          10,
+        ),
+        actionsTakenDuringStop12: getKeyFoundInArray(
+          person.listResultOfStop,
+          12,
+        ),
+        actionsTakenDuringStop13: getKeyFoundInArray(
+          person.listResultOfStop,
+          13,
+        ),
+        warningCodes: getCodePropValueGivenKeyInArray(
+          person.listResultOfStop,
+          1,
+        ),
+        citationCodes: getCodePropValueGivenKeyInArray(
+          person.listResultOfStop,
+          2,
+        ),
+        infieldCodes: getCodePropValueGivenKeyInArray(
+          person.listResultOfStop,
+          3,
+        ),
+        custodialArrestCodes: getCodePropValueGivenKeyInArray(
+          person.listResultOfStop,
+          5,
+        ),
+      },
+      actionsTaken: {
+        anyActionsTaken: person.listActionTakenDuringStop.length > 0,
+        actionsTakenDuringStop: getKeyArray(person.listActionTakenDuringStop),
+        personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
+          person.listActionTakenDuringStop,
+          17,
+          'personSearchConsentGiven',
+        ),
+        propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
+          person.listActionTakenDuringStop,
+          19,
+          'propertySearchConsentGiven',
+        ),
+        basisForSearch: getKeyArray(person.listBasisForSearch),
+        basisForSearchExplanation: person.basisForSearchBrief,
+        basisForSearchPiiFound: person.basisForSearchPiiFound,
+        propertyWasSeized:
+          person.listBasisForPropertySeizure.length > 0 ||
+          person.typeOfPropertySeized.length > 0,
+        basisForPropertySeizure: getKeyArray(
+          person.listBasisForPropertySeizure,
+        ),
+        typeOfPropertySeized: getKeyArray(person.listTypeOfPropertySeized),
+      },
+    }
+  })
+}
+
+const getTrafficViolationDetailKey = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 1) {
+    return Number(stopReason.listDetail[0].key)
+  }
+
+  return null
+}
+
+const getTrafficViolationDetailCode = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 1) {
+    return Number(stopReason.listCodes[0].code)
+  }
+
+  return null
+}
+
+const getReasonableSuspicionDetailKeys = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 2) {
+    return stopReason.listDetail.map(item => Number(item.key))
+  }
+
+  return null
+}
+
+const getReasonableSuspicionDetailCode = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 2) {
+    return Number(stopReason.listCodes[0].code)
+  }
+
+  return null
+}
+
+const getEducationViolationDetailKey = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 7) {
+    return Number(stopReason.listDetail[0].key)
+  }
+
+  return null
+}
+
+const getEducationViolationDetailCode = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 7) {
+    return Number(stopReason.listCodes[0].code)
+  }
+
+  return null
+}
+
+const getKeyFoundInArray = (items, key) => {
+  return items.filter(item => Number(item.key) === key).length > 0
+}
+
+const getCodePropValueGivenKeyInArray = (items, key) => {
+  const [filteredItem] = items.filter(item => Number(item.key) === key)
+  return filteredItem
+    ? filteredItem.listCodes.map(item => Number(item.code))
+    : null
+}
+
+const getBooleanPropValueGivenKeyInArray = (items, key, prop) => {
+  const [filteredItem] = items.filter(item => Number(item.key) === key)
+  return filteredItem ? filteredItem[prop] : false
+}
+
+const getKeyArray = items => {
+  return items.map(item => Number(item.key))
 }
 
 export const fullStopToApiStop = (
@@ -230,7 +404,7 @@ export const fullStopToApiStop = (
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,
     isPiiFound: getPiiFound(fullStop),
-    listPersonStopped: getPeopleListed(fullStop, statutes),
+    listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
       blockNumber: fullStop.location?.blockNumber?.toString() || '',
@@ -263,14 +437,14 @@ export const fullStopToApiStop = (
   }
 }
 
-export const getPeopleListed = (fullStop, statutes) => {
+export const getApiStopPeopleListed = (fullStop, statutes) => {
   return fullStop.people.map(person => {
     return {
       basisForSearchBrief:
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: person.person?.genderNonconforming || false,
+      genderNonconforming: person.genderNonconforming || false,
       id: person.id,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
@@ -395,15 +569,22 @@ const getPerceivedRace = person => {
 const getPerceivedGender = person => {
   const gender = person.perceivedGender || null
   if (gender) {
-    const [filteredGender] = GENDERS.filter(item => item.value === gender)
+    const [filteredGenderValue] = GENDERS.filter(item => item.value === gender)
+    const [filteredGenderName] = GENDERS.filter(item => item.name === gender)
+    const filteredGender = filteredGenderValue || filteredGenderName
 
     return {
-      code: gender.toString(),
+      code: filteredGender ? filteredGender.value : null,
       text: filteredGender ? filteredGender.name : 'N/A',
     }
   }
 
   return null
+}
+
+const getPerceivedGenderCode = person => {
+  const gender = getPerceivedGender(person)
+  return gender ? gender.code : null
 }
 
 const getPerceivedGenderText = person => {

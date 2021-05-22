@@ -2,7 +2,12 @@ import { uniqueId } from '@/utilities/dates'
 
 export const sampleStop = {
   id: uniqueId(),
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -18,6 +23,7 @@ export const sampleStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
@@ -38,6 +44,10 @@ export const sampleStop = {
     reasonForStop: 1,
     trafficViolation: 1,
     trafficViolationCode: 54106,
+    reasonableSuspicion: null,
+    reasonableSuspicionCode: null,
+    educationViolation: null,
+    educationViolationCode: null,
     reasonForStopExplanation: 'Speeding at 2222 Ghost Road',
     reasonForStopPiiFound: true,
   },
@@ -77,7 +87,12 @@ export const sampleStop = {
 export const onePersonFullStop = {
   agency: 'sdsd',
   id: uniqueId(),
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
   officerId: '210518694',
   officerName: 'Steve Pietrek',
   stopDate: {
@@ -95,6 +110,7 @@ export const onePersonFullStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
@@ -115,6 +131,10 @@ export const onePersonFullStop = {
         reasonForStop: 1,
         trafficViolation: 1,
         trafficViolationCode: 54106,
+        reasonableSuspicion: null,
+        reasonableSuspicionCode: null,
+        educationViolation: null,
+        educationViolationCode: null,
         reasonForStopExplanation: 'Speeding',
         reasonForStopPiiFound: false,
       },
@@ -156,7 +176,12 @@ export const onePersonFullStop = {
 export const twoPersonFullStop = {
   agency: 'sdsd',
   id: uniqueId(),
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
   officerId: '210518694',
   officerName: 'Steve Pietrek',
   stopDate: {
@@ -174,6 +199,7 @@ export const twoPersonFullStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
@@ -194,6 +220,10 @@ export const twoPersonFullStop = {
         reasonForStop: 1,
         trafficViolation: 1,
         trafficViolationCode: 54106,
+        reasonableSuspicion: null,
+        reasonableSuspicionCode: null,
+        educationViolation: null,
+        educationViolationCode: null,
         reasonForStopExplanation: 'Speeding',
         reasonForStopPiiFound: false,
       },

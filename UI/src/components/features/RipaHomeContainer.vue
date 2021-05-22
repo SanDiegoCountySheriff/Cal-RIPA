@@ -127,7 +127,7 @@ export default {
     },
 
     async validateLocationForPii(textValue) {
-      const trimmedTextValue = textValue || ''
+      const trimmedTextValue = textValue ? textValue.trim() : ''
       if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
         this.loadingPiiStep1 = true
         let isFound = false
@@ -142,10 +142,11 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
         this.loadingPiiStep3 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
@@ -156,10 +157,11 @@ export default {
     },
 
     async validateBasisForSearchForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
         this.loadingPiiStep4 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound

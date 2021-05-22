@@ -52,7 +52,7 @@ export const twoPerson = () => ({
   },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),
