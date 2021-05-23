@@ -788,7 +788,17 @@ const getKeyArray = items => {
 }
 
 export const fullStopToStop = fullStop => {
-  return fullStop
+  const person = fullStop.people.length > 0 ? fullStop.people[0] : null
+  return {
+    agency: fullStop.agency,
+    id: fullStop.id,
+    officer: fullStop.officer,
+    officerId: fullStop.officerId,
+    officerName: fullStop.officerName,
+    stopDate: fullStop.stopDate,
+    location: fullStop.location,
+    ...person,
+  }
 }
 
 export const fullStopToApiStop = (
