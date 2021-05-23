@@ -13,6 +13,7 @@ namespace RIPA.Functions.Stop
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddLogging();
             builder.Services.AddSingleton<IStopCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
         }
 

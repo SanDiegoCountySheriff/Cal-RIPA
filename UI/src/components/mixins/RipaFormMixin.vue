@@ -46,6 +46,7 @@ export default {
         },
         officer: {
           editOfficer: newValue?.officer?.editOfficer || null,
+          startDate: newValue?.officer?.startDate || null,
           yearsExperience: newValue?.officer?.yearsExperience || null,
           assignment: newValue?.officer?.assignment || null,
           otherType: newValue?.officer?.otherType || null,
@@ -66,7 +67,7 @@ export default {
         },
         stopDate: {
           date: newValue?.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
-          time: newValue?.stopDate?.time || format(new Date(), 'k:mm'),
+          time: newValue?.stopDate?.time || format(new Date(), 'kk:mm'),
           duration: newValue?.stopDate?.duration || null,
           stopInResponseToCfs: newValue?.stopDate?.stopInResponseToCfs || false,
         },

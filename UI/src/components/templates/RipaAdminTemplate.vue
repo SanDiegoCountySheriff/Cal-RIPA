@@ -17,6 +17,7 @@
     :on-edit-school="onEditSchool"
     :on-edit-statute="onEditStatute"
     :on-edit-user="onEditUser"
+    :on-tab-change="onTabChange"
   ></ripa-admin-wrapper>
 </template>
 
@@ -96,6 +97,10 @@ export default {
       default: () => {},
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onTabChange: {
       type: Function,
       default: () => {},
     },

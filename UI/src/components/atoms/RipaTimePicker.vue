@@ -2,6 +2,8 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
+    :light="getLight"
+    :dark="getDark"
     :return-value.sync="model"
     persistent
     width="290px"
@@ -47,24 +49,12 @@ export default {
       },
     },
 
-    getTime() {
-      if (this.model) {
-        const array = this.model.split(':')
-        const hour = array[0]
-        const minute = array[1]
-        if (hour > 0 && hour < 12) {
-          return `${hour}:${minute} AM`
-        }
-        if (hour === 0) {
-          return `${hour + 12}:${minute} AM`
-        }
-        if (hour === 12) {
-          return `${hour}:${minute} PM`
-        }
-        return `${hour - 12}:${minute} PM`
-      }
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
 
-      return null
+    getDark() {
+      return !this.$vuetify.theme.dark
     },
   },
 
@@ -90,5 +80,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss"></style>

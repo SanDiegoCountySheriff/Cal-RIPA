@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaTimePicker },
   data() {
     return {
-      selection: format(new Date(), 'k:mm'),
+      selection: format(new Date(), 'kk:mm'),
     }
   },
   template:

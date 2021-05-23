@@ -1537,7 +1537,7 @@
                 "attributes": {
                     "enabled": true
                 },
-                "value":"parameters('secret_key')"
+                "value":"[parameters('secret_key')]"
             }
         },
         {
@@ -1553,7 +1553,7 @@
                 "attributes": {
                     "enabled": true
                 },
-                "value":"parameters('secret_host')"
+                "value":"[parameters('secret_host')]"
             }
         },
         {
@@ -1569,7 +1569,7 @@
                 "attributes": {
                     "enabled": true
                 },
-                "value":"parameters('secret_password')"
+                "value":"[parameters('secret_password')]"
             }
         },
         {
@@ -1585,7 +1585,7 @@
                 "attributes": {
                     "enabled": true
                 },
-                "value":"parameters('secret_username')"
+                "value":"[parameters('secret_username')]"
             }
         },
         {

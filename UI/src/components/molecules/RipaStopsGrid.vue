@@ -67,7 +67,6 @@
         <v-data-table
           :loading="loading"
           :headers="headers"
-          :show-select="true"
           :single-select="false"
           :items="getStops"
           :items-per-page="10"
@@ -96,18 +95,6 @@
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
-          <!-- <template v-slot:item.errorsFound="{ item }"> -->
-          <!-- <v-simple-checkbox
-              v-model="item.errorsFound"
-              disabled
-            ></v-simple-checkbox>
-          </template>
-          <template v-slot:item.isPiiFound="{ item }">
-            <v-simple-checkbox
-              v-model="item.isPiiFound"
-              disabled
-            ></v-simple-checkbox> -->
-          <!-- </template> -->
         </v-data-table>
       </v-flex>
 

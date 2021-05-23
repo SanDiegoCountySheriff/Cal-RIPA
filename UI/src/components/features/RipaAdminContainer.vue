@@ -17,6 +17,7 @@
     :on-edit-school="handleEditSchool"
     :on-edit-statute="handleEditStatute"
     :on-edit-user="handleEditUser"
+    :on-tab-change="handleTabChange"
   ></ripa-admin-template>
 </template>
 
@@ -64,20 +65,30 @@ export default {
       'getAdminCities',
       'getAdminSchools',
       'getAdminStatutes',
-      'getOfficerStops',
+      'getAdminStops',
       'getAdminUsers',
+      'getAdminSubmissions',
     ]),
 
-    async getAdminData(beat) {
+    async handleTabChange(tabIndex) {
       this.loading = true
-      await Promise.all([
-        this.getAdminBeats(),
-        this.getAdminCities(),
-        this.getAdminSchools(),
-        this.getAdminStatutes(),
-        this.getOfficerStops(),
-        this.getAdminUsers(),
-      ])
+      if (tabIndex === 1) {
+        await Promise.all([this.getAdminSubmissions()])
+      }
+      if (tabIndex === 2) {
+        await Promise.all([this.getAdminStops()])
+      }
+      if (tabIndex === 3) {
+        await Promise.all([this.getAdminUsers()])
+      }
+      if (tabIndex === 4) {
+        await Promise.all([
+          this.getAdminBeats(),
+          this.getAdminCities(),
+          this.getAdminSchools(),
+          this.getAdminStatutes(),
+        ])
+      }
       this.loading = false
     },
 
@@ -134,10 +145,6 @@ export default {
       await Promise.all([this.editUser(user)])
       this.loading = false
     },
-  },
-
-  created() {
-    this.getAdminData()
   },
 }
 </script>

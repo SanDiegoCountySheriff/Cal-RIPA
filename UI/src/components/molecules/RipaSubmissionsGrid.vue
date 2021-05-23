@@ -1,22 +1,37 @@
 <template>
   <v-container class="tw-mt-2" fluid>
     <v-layout row wrap>
-      <v-flex xs12 md6>
-        <div class="tw-ml-4">
-          <v-select
-            v-model="submissionDate"
+      <v-flex xs12 md2>
+        <div class="tw-ml-2">
+          <ripa-date-picker
+            v-model="stopFromDate"
             class="tw-ml-2"
-            :items="getSubmissionDates"
-            label="Submission Date"
-            clearable
-            :disabled="!submitted"
-          ></v-select>
+            label="Stop From Date"
+          ></ripa-date-picker>
         </div>
       </v-flex>
 
-      <v-flex xs12 md6>
+      <v-flex xs12 md2>
+        <div class="tw-ml-2">
+          <ripa-date-picker
+            v-model="stopToDate"
+            class="tw-ml-2"
+            label="Stop To Date"
+          ></ripa-date-picker>
+        </div>
+      </v-flex>
+
+      <v-flex xs12 md2>
+        <v-select
+          class="tw-ml-2"
+          :items="statuses"
+          label="Status"
+          clearable
+        ></v-select>
+      </v-flex>
+
+      <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
-          <v-switch v-model="submitted" label="Submitted Stops"></v-switch>
           <v-switch
             v-model="errorsFound"
             class="tw-ml-2"
@@ -30,6 +45,20 @@
         </div>
       </v-flex>
 
+      <v-flex xs12 md3>
+        <div class="tw-flex tw-justify-center">
+          <v-autocomplete
+            :items="items"
+            dense
+            chips
+            deletable-chips
+            small-chips
+            label="Error Codes"
+            multiple
+          ></v-autocomplete>
+        </div>
+      </v-flex>
+
       <v-flex xs12>
         <v-divider></v-divider>
       </v-flex>
@@ -40,6 +69,7 @@
           :loading="loading"
           :headers="headers"
           :items="getSubmissions"
+          :single-select="false"
           :items-per-page="10"
           :search="search"
           sort-by="submissionDateStr"
@@ -95,10 +125,17 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import subDays from 'date-fns/subDays'
+import { format, isAfter, isBefore } from 'date-fns'
+import { SUBMISSION_STATUSES } from '../../constants/stop'
 
 export default {
   name: 'ripa-submissions-grid',
+
+  components: {
+    RipaDatePicker,
+  },
 
   data() {
     return {
@@ -106,10 +143,10 @@ export default {
       submissions: [],
       headers: [
         { text: 'ID', value: 'id' },
-        { text: 'Submission Date', value: 'submissionDateStr' },
-        { text: 'Errors Found', value: 'errorsFound' },
+        { text: 'Stop Date', value: 'submissionDateStr' },
+        { text: 'Status', value: 'status' },
+        { text: 'Errors', value: 'errorsFound' },
         { text: 'PII Found', value: 'isPiiFound' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       submitted: false,
       editedIndex: -1,

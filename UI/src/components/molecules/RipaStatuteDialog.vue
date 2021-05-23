@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="model" max-width="650px">
+  <v-dialog
+    v-model="model"
+    max-width="650px"
+    :light="getLight"
+    :dark="getDark"
+    persistent
+  >
     <v-card>
       <v-card-title>
         <span>Statute §999.226(a)(2)</span>
@@ -104,6 +110,14 @@ export default {
         }
         this.viewModel = newValue
       },
+    },
+
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
+
+    getDark() {
+      return !this.$vuetify.theme.dark
     },
   },
 
