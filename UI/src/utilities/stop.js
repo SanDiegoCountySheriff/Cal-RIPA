@@ -103,8 +103,8 @@ export const motorStop = officer => {
     },
     stopResult: {
       anyActionsTaken: true,
-      actionsTakenDuringStop2: true,
-      actionsTakenDuringStop3: false,
+      actionsTakenDuringStop2: false,
+      actionsTakenDuringStop3: true,
       actionsTakenDuringStop4: false,
       actionsTakenDuringStop5: false,
       actionsTakenDuringStop6: false,
@@ -289,6 +289,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push(getSummaryPerceivedAge(person))
     items.push(getSummaryLimitedEnglish(person))
     items.push(getSummaryPerceivedOrKnownDisability(person))
+    items.push(getSummaryReasonForStop(person))
     items.push(getSummaryActionsTaken(person))
     items.push(getSummaryBasisForSearch(person))
     items.push(getSummaryBasisForSearchExplanation(person))
@@ -376,6 +377,30 @@ const getSummaryPerceivedOrKnownDisability = person => {
     level: 2,
     header: 'Perceived Disability',
     children: disabilities,
+  }
+}
+
+const getSummaryReasonForStop = person => {
+  const reasons = []
+  reasons.push({
+    detail: person.reasonForStop.reason,
+  })
+
+  if (Number(person.reasonForStop.key) === 1) {
+    reasons.push({
+      marginLeft: true,
+      detail: person.reasonForStop.listDetail[0].reason,
+    })
+    reasons.push({
+      marginLeft: true,
+      detail: person.reasonForStop.listCodes[0].text,
+    })
+  }
+
+  return {
+    level: 2,
+    header: 'Reason for Stop',
+    children: reasons,
   }
 }
 
@@ -475,13 +500,23 @@ const getSummaryContraband = person => {
 }
 
 const getSummaryResultOfStop = person => {
-  const results = person.listResultOfStop
-    .map(item => item.result)
-    .map(item => {
-      return {
-        detail: item,
-      }
+  const results = []
+  for (let index = 0; index < person.listResultOfStop.length; index++) {
+    const item = person.listResultOfStop[index]
+    results.push({
+      detail: item.result,
     })
+
+    if (item.listCodes) {
+      const codes = item.listCodes.map(code => {
+        return {
+          marginLeft: true,
+          detail: code.text,
+        }
+      })
+      results.push(...codes)
+    }
+  }
   return {
     level: 2,
     header: 'Result of Stop',

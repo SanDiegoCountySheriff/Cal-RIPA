@@ -11,7 +11,7 @@
         {{ apiStop }}
       </div>
 
-      <div>
+      <div class="tw-mb-2">
         <span class="tw-text-base tw-font-bold">Stop</span>
         <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
           Edit
@@ -23,11 +23,12 @@
       </div>
 
       <div
+        class="tw-mb-2"
         v-for="(person, index) in apiStop.listPersonStopped"
         :key="person.id"
       >
         <div class="tw-mt-4 tw-text-base tw-font-bold">
-          Person {{ index + 1 }} ({{ person.id }})
+          Person {{ index + 1 }}
           <v-btn
             class="tw-ml-4"
             dense

@@ -12,9 +12,11 @@
         {{ item.header }}
       </div>
       <div class="tw-ml-8" v-for="child in item.children" :key="child.detail">
-        <span :style="{ color: getPrimaryColor }">
-          {{ child.detail }}
-        </span>
+        <div :class="getChildMarginLeft(child)">
+          <span :style="{ color: getPrimaryColor }">
+            {{ child.detail }}
+          </span>
+        </div>
       </div>
     </template>
 
@@ -47,6 +49,12 @@ export default {
 
     getMarginLeft() {
       return this.item.marginLeft ? 'tw-ml-4' : ''
+    },
+  },
+
+  methods: {
+    getChildMarginLeft(child) {
+      return child.marginLeft ? 'tw-ml-4' : ''
     },
   },
 
