@@ -1,5 +1,5 @@
 <template>
-  <div :class="getMarginTop">
+  <div :class="[getMarginTop, getMarginLeft]">
     <template v-if="item.level === 1">
       {{ item.header }}
       <span class="tw-ml-2" :style="{ color: getPrimaryColor }">{{
@@ -43,6 +43,10 @@ export default {
 
     getMarginTop() {
       return this.item.marginTop ? 'tw-mt-4' : ''
+    },
+
+    getMarginLeft() {
+      return this.item.marginLeft ? 'tw-ml-4' : ''
     },
   },
 

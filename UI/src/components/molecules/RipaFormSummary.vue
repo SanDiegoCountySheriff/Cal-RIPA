@@ -10,15 +10,6 @@
       <div class="tw-mt-4">
         {{ apiStop }}
       </div>
-      <!-- <v-divider></v-divider>
-      <div class="tw-my-4">
-        {{ getFullStop.listPersonStopped[0] }}
-      </div>
-      <v-divider></v-divider>
-      <div class="tw-my-4">
-        {{ getFullStop.listPersonStopped[1] }}
-      </div>
-      <v-divider></v-divider> -->
 
       <div>
         <span class="tw-text-base tw-font-bold">Stop</span>

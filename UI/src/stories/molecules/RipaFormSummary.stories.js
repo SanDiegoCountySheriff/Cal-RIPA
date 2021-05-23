@@ -60,4 +60,7 @@ export const twoPerson = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
+  created() {
+    this.$vuetify.theme.dark = true
+  },
 })

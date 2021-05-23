@@ -225,7 +225,7 @@ export const STOP_RESULTS = [
     name: 'Contacted parent/legal guardian or other person responsible for the minor',
     value: 9,
   },
-  { name: 'Contacted U.S. Department of Homeland Security', value: 10 },
+  { name: 'Contacted U.S. Department of Homeland Security', value: 11 },
 ]
 
 export const EDUCATION_CODE_SECTIONS = [

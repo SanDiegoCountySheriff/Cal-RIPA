@@ -34,113 +34,125 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <ripa-form-step-1
-                v-model="stop"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :beats="beats"
-                :county-cities="countyCities"
-                :display-beat-input="displayBeatInput"
-                :is-edit-stop="isEditStop"
-                :last-location="lastLocation"
-                :loading-gps="loadingGps"
-                :loading-pii="loadingPiiStep1"
-                :non-county-cities="nonCountyCities"
-                :schools="schools"
-                :valid-last-location="validLastLocation"
-                :on-open-favorites="onOpenFavorites"
-                :on-open-last-location="onOpenLastLocation"
-                :on-open-statute="onOpenStatute"
-                :on-save-favorite="onSaveFavorite"
-                :on-gps-location="onGpsLocation"
-                @input="handleInput"
-              ></ripa-form-step-1>
+              <template v-if="stepIndex === 1">
+                <ripa-form-step-1
+                  v-model="stop"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  :beats="beats"
+                  :county-cities="countyCities"
+                  :display-beat-input="displayBeatInput"
+                  :is-edit-stop="isEditStop"
+                  :last-location="lastLocation"
+                  :loading-gps="loadingGps"
+                  :loading-pii="loadingPiiStep1"
+                  :non-county-cities="nonCountyCities"
+                  :schools="schools"
+                  :valid-last-location="validLastLocation"
+                  :on-open-favorites="onOpenFavorites"
+                  :on-open-last-location="onOpenLastLocation"
+                  :on-open-statute="onOpenStatute"
+                  :on-save-favorite="onSaveFavorite"
+                  :on-gps-location="onGpsLocation"
+                  @input="handleInput"
+                ></ripa-form-step-1>
+              </template>
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <ripa-subheader
-                class="tw-text-right"
-                :text="getEditPersonText"
-                no-margins
-              ></ripa-subheader>
+              <template v-if="stepIndex === 2">
+                <ripa-subheader
+                  class="tw-text-right"
+                  :text="getEditPersonText"
+                  no-margins
+                ></ripa-subheader>
 
-              <ripa-form-step-2
-                v-model="stop"
-                :on-back="handleBack"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :on-open-statute="onOpenStatute"
-                :back-button-visible="getFormStep2BackButtonVisible"
-                @input="handleInput"
-              ></ripa-form-step-2>
+                <ripa-form-step-2
+                  v-model="stop"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  :on-open-statute="onOpenStatute"
+                  :back-button-visible="getFormStep2BackButtonVisible"
+                  @input="handleInput"
+                ></ripa-form-step-2>
+              </template>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <ripa-subheader
-                :text="getEditPersonText"
-                no-margins
-              ></ripa-subheader>
+              <template v-if="stepIndex === 3">
+                <ripa-subheader
+                  :text="getEditPersonText"
+                  no-margins
+                ></ripa-subheader>
 
-              <ripa-form-step-3
-                v-model="stop"
-                :loading-pii="loadingPiiStep3"
-                :on-back="handleBack"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :on-open-statute="onOpenStatute"
-                :statutes="statutes"
-                @input="handleInput"
-              ></ripa-form-step-3>
+                <ripa-form-step-3
+                  v-model="stop"
+                  :loading-pii="loadingPiiStep3"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  :on-open-statute="onOpenStatute"
+                  :statutes="statutes"
+                  @input="handleInput"
+                ></ripa-form-step-3>
+              </template>
             </v-stepper-content>
 
             <v-stepper-content step="4">
-              <ripa-subheader
-                :text="getEditPersonText"
-                no-margins
-              ></ripa-subheader>
+              <template v-if="stepIndex === 4">
+                <ripa-subheader
+                  :text="getEditPersonText"
+                  no-margins
+                ></ripa-subheader>
 
-              <ripa-form-step-4
-                v-model="stop"
-                :loading-pii="loadingPiiStep4"
-                :on-back="handleBack"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :on-open-statute="onOpenStatute"
-                :statutes="statutes"
-                @input="handleInput"
-              ></ripa-form-step-4>
+                <ripa-form-step-4
+                  v-model="stop"
+                  :loading-pii="loadingPiiStep4"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  :on-open-statute="onOpenStatute"
+                  :statutes="statutes"
+                  @input="handleInput"
+                ></ripa-form-step-4>
+              </template>
             </v-stepper-content>
 
             <v-stepper-content step="5">
-              <ripa-subheader
-                :text="getEditPersonText"
-                no-margins
-              ></ripa-subheader>
+              <template v-if="stepIndex === 5">
+                <ripa-subheader
+                  :text="getEditPersonText"
+                  no-margins
+                ></ripa-subheader>
 
-              <ripa-form-step-5
-                v-model="stop"
-                :on-back="handleBack"
-                :on-next="handleNext"
-                :on-cancel="handleCancel"
-                :on-open-statute="onOpenStatute"
-                :statutes="statutes"
-                @input="handleInput"
-              ></ripa-form-step-5>
+                <ripa-form-step-5
+                  v-model="stop"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  :on-open-statute="onOpenStatute"
+                  :statutes="statutes"
+                  @input="handleInput"
+                ></ripa-form-step-5>
+              </template>
             </v-stepper-content>
 
             <v-stepper-content step="6">
-              <ripa-form-step-6
-                v-model="stop"
-                :api-stop="getApiStop"
-                :on-add-person="handleAddPerson"
-                :on-back="handleBack"
-                :on-delete-person="handleDeletePerson"
-                :on-edit-person="handleEditPerson"
-                :on-edit-stop="handleEditStop"
-                :on-submit="handleSubmit"
-                :on-cancel="handleCancel"
-                @input="handleInput"
-              ></ripa-form-step-6>
+              <template v-if="stepIndex === 6">
+                <ripa-form-step-6
+                  v-model="stop"
+                  :api-stop="getApiStop"
+                  :on-add-person="handleAddPerson"
+                  :on-back="handleBack"
+                  :on-delete-person="handleDeletePerson"
+                  :on-edit-person="handleEditPerson"
+                  :on-edit-stop="handleEditStop"
+                  :on-submit="handleSubmit"
+                  :on-cancel="handleCancel"
+                  @input="handleInput"
+                ></ripa-form-step-6>
+              </template>
             </v-stepper-content>
           </v-stepper-items>
 
