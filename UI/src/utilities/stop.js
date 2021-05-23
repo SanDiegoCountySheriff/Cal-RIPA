@@ -173,6 +173,208 @@ export const probationStop = officer => {
   }
 }
 
+export const apiStopStopSummary = apiStop => {
+  const items = []
+  items.push(getSummaryPersonCount(apiStop))
+  items.push(getSummaryDate(apiStop))
+  items.push(getSummaryTime(apiStop))
+  items.push(getSummaryLocation(apiStop))
+  items.push(getSummaryOfficer(apiStop))
+  items.push(getSummaryDuration(apiStop))
+  items.push(getSummaryStopInResponseToCfs(apiStop))
+  return items
+}
+
+const getSummaryPersonCount = apiStop => {
+  return {
+    level: 1,
+    header: 'Person Count',
+    detail: apiStop.listPersonStopped.length,
+  }
+}
+
+const getSummaryDate = apiStop => {
+  return {
+    marginTop: true,
+    level: 1,
+    header: 'Date',
+    detail: apiStop.date,
+  }
+}
+
+const getSummaryTime = apiStop => {
+  return {
+    level: 1,
+    header: 'Time',
+    detail: apiStop.time,
+  }
+}
+
+const getSummaryLocation = apiStop => {
+  return {
+    level: 3,
+    header: 'Location',
+    children: [
+      {
+        header: 'School Name',
+        detail: apiStop.location.schoolName.codes.text,
+      },
+      { header: 'Block Number', detail: apiStop.location.blockNumber },
+      { header: 'Street Name', detail: apiStop.location.streetName },
+      {
+        header: 'Intersection',
+        detail: apiStop.location.intersection,
+      },
+      { header: 'Landmark', detail: apiStop.location.landMark },
+      { header: 'City', detail: apiStop.location.city.codes.text },
+      { header: 'Beat', detail: apiStop.location.beat.codes.text },
+    ],
+  }
+}
+
+const getSummaryOfficer = apiStop => {
+  return {
+    level: 3,
+    header: 'Officer',
+    children: [
+      {
+        header: 'Agency',
+        detail: apiStop.agency,
+      },
+      {
+        header: 'Officer ID',
+        detail: apiStop.officerId,
+      },
+      {
+        header: 'Officer Name',
+        detail: apiStop.officerName,
+      },
+      { header: 'Years Experience', detail: apiStop.expYears },
+      { header: 'Assignment', detail: apiStop.officerAssignment.type },
+      {
+        header: 'Other Type',
+        detail: apiStop.officerAssignment.otherType,
+      },
+    ],
+  }
+}
+
+const getSummaryDuration = apiStop => {
+  return {
+    level: 1,
+    header: 'Duration (m)',
+    detail: apiStop.stopDuration,
+  }
+}
+
+const getSummaryStopInResponseToCfs = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop in Response to CFS',
+    detail: apiStop.stopInResponseToCfs,
+  }
+}
+
+export const apiStopPersonSummary = (apiStop, personId) => {
+  const [person] = apiStop.listPersonStopped.filter(
+    item => item.id === personId,
+  )
+  if (person) {
+    const items = []
+    items.push(getSummaryStudent(person))
+    items.push(getSummaryPerceivedRace(person))
+    items.push(getSummaryPerceivedGender(person))
+    items.push(getSummaryGenderNonconforming(person))
+    items.push(getSummaryPerceivedLgbt(person))
+    items.push(getSummaryPerceivedAge(person))
+    items.push(getSummaryLimitedEnglish(person))
+    items.push(getSummaryPerceivedOrKnownDisability(person))
+    // perceivedOrKnownDisability: getKeyArray(
+    //   person.listPerceivedOrKnownDisability,
+    // ),
+    return items
+  }
+  return []
+}
+
+const getSummaryStudent = person => {
+  return {
+    level: 1,
+    header: 'Is Student',
+    detail: person.isStudent,
+  }
+}
+
+const getSummaryPerceivedRace = person => {
+  const races = person.listPerceivedRace
+    .map(item => item.race)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+  return {
+    level: 2,
+    header: 'Perceived Race',
+    children: races,
+  }
+}
+
+const getSummaryPerceivedGender = person => {
+  return {
+    level: 1,
+    header: 'Perceived Gender',
+    detail: person.perceivedGender,
+  }
+}
+
+const getSummaryGenderNonconforming = person => {
+  return {
+    level: 1,
+    header: 'Gender Noncomforning',
+    detail: person.genderNonconforming,
+  }
+}
+
+const getSummaryPerceivedLgbt = person => {
+  return {
+    level: 1,
+    header: 'Perceived LGBT',
+    detail: person.perceivedLgbt,
+  }
+}
+
+const getSummaryPerceivedAge = person => {
+  return {
+    level: 1,
+    header: 'Perceived Age',
+    detail: person.perceivedAge,
+  }
+}
+
+const getSummaryLimitedEnglish = person => {
+  return {
+    level: 1,
+    header: 'Limited English',
+    detail: person.perceivedLimitedEnglish,
+  }
+}
+
+const getSummaryPerceivedOrKnownDisability = person => {
+  const disabilities = person.listPerceivedOrKnownDisability
+    .map(item => item.disability)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+  return {
+    level: 2,
+    header: 'Perceived Disability',
+    children: disabilities,
+  }
+}
+
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location.blockNumber || null
   const schoolNumber = apiStop.location.schoolName?.codes?.code || null
