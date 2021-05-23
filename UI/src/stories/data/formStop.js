@@ -2,7 +2,12 @@ import { uniqueId } from '@/utilities/dates'
 
 export const sampleStop = {
   id: uniqueId(),
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -18,18 +23,19 @@ export const sampleStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
   },
   person: {
     id: new Date().getTime(),
-    isStudent: false,
+    isStudent: true,
     perceivedRace: [7],
     perceivedGender: 3,
     genderNonconforming: false,
     perceivedLgbt: true,
-    perceivedAge: 30,
+    perceivedAge: 18,
     perceivedLimitedEnglish: true,
     anyDisabilities: true,
     perceivedOrKnownDisability: [4, 2],
@@ -38,14 +44,17 @@ export const sampleStop = {
     reasonForStop: 1,
     trafficViolation: 1,
     trafficViolationCode: 54106,
+    reasonableSuspicion: null,
+    reasonableSuspicionCode: null,
+    educationViolation: null,
+    educationViolationCode: null,
     reasonForStopExplanation: 'Speeding at 2222 Ghost Road',
     reasonForStopPiiFound: true,
   },
   stopResult: {
     anyActionsTaken: true,
-    actionsTakenDuringStop1: true,
     actionsTakenDuringStop2: true,
-    actionsTakenDuringStop3: false,
+    actionsTakenDuringStop3: true,
     actionsTakenDuringStop4: false,
     actionsTakenDuringStop5: false,
     actionsTakenDuringStop6: false,
@@ -53,8 +62,9 @@ export const sampleStop = {
     actionsTakenDuringStop8: false,
     actionsTakenDuringStop9: false,
     actionsTakenDuringStop10: false,
-    actionsTakenDuringStop12: false,
-    actionsTakenDuringStop13: false,
+    actionsTakenDuringStop11: false,
+    actionsTakenDuringStop12: true,
+    actionsTakenDuringStop13: true,
     warningCodes: [54134],
     citationCodes: [35152],
     infieldCodes: null,
@@ -75,10 +85,16 @@ export const sampleStop = {
 }
 
 export const onePersonFullStop = {
+  agency: 'sdsd',
   id: uniqueId(),
-  created: '2021-05-07T14:30:29.321Z',
-  updated: '2021-05-07T14:32:53.959Z',
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
+  officerId: '210518694',
+  officerName: 'Steve Pietrek',
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -94,19 +110,20 @@ export const onePersonFullStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
   },
   people: [
     {
-      id: new Date().getTime(),
-      isStudent: false,
+      id: new Date().getTime() + '1',
+      isStudent: true,
       perceivedRace: [2, 7],
       perceivedGender: 3,
       genderNonconforming: true,
       perceivedLgbt: true,
-      perceivedAge: 30,
+      perceivedAge: 18,
       perceivedLimitedEnglish: true,
       anyDisabilities: true,
       perceivedOrKnownDisability: [4, 2],
@@ -114,14 +131,17 @@ export const onePersonFullStop = {
         reasonForStop: 1,
         trafficViolation: 1,
         trafficViolationCode: 54106,
+        reasonableSuspicion: null,
+        reasonableSuspicionCode: null,
+        educationViolation: null,
+        educationViolationCode: null,
         reasonForStopExplanation: 'Speeding',
         reasonForStopPiiFound: false,
       },
       stopResult: {
         anyActionsTaken: true,
-        actionsTakenDuringStop1: true,
         actionsTakenDuringStop2: true,
-        actionsTakenDuringStop3: false,
+        actionsTakenDuringStop3: true,
         actionsTakenDuringStop4: false,
         actionsTakenDuringStop5: false,
         actionsTakenDuringStop6: false,
@@ -129,7 +149,8 @@ export const onePersonFullStop = {
         actionsTakenDuringStop8: false,
         actionsTakenDuringStop9: false,
         actionsTakenDuringStop10: false,
-        actionsTakenDuringStop12: false,
+        actionsTakenDuringStop11: true,
+        actionsTakenDuringStop12: true,
         actionsTakenDuringStop13: false,
         warningCodes: [54134],
         citationCodes: [35152],
@@ -153,10 +174,16 @@ export const onePersonFullStop = {
 }
 
 export const twoPersonFullStop = {
+  agency: 'sdsd',
   id: uniqueId(),
-  created: '2021-05-07T14:30:29.321Z',
-  updated: '2021-05-07T14:32:53.959Z',
-  officer: { editOfficer: false, yearsExperience: 25, assignment: 1 },
+  officer: {
+    editOfficer: false,
+    yearsExperience: 25,
+    assignment: 1,
+    otherType: null,
+  },
+  officerId: '210518694',
+  officerName: 'Steve Pietrek',
   stopDate: {
     date: '2021-05-07',
     time: '10:18',
@@ -172,13 +199,14 @@ export const twoPersonFullStop = {
     moreLocationOptions: false,
     highwayExit: null,
     landmark: null,
+    piiFound: false,
     outOfCounty: false,
     city: 'BOSTONIA',
     beat: 555,
   },
   people: [
     {
-      id: new Date().getTime(),
+      id: new Date().getTime() + '1',
       isStudent: false,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -192,14 +220,17 @@ export const twoPersonFullStop = {
         reasonForStop: 1,
         trafficViolation: 1,
         trafficViolationCode: 54106,
+        reasonableSuspicion: null,
+        reasonableSuspicionCode: null,
+        educationViolation: null,
+        educationViolationCode: null,
         reasonForStopExplanation: 'Speeding',
         reasonForStopPiiFound: false,
       },
       stopResult: {
         anyActionsTaken: true,
-        actionsTakenDuringStop1: true,
         actionsTakenDuringStop2: true,
-        actionsTakenDuringStop3: false,
+        actionsTakenDuringStop3: true,
         actionsTakenDuringStop4: false,
         actionsTakenDuringStop5: false,
         actionsTakenDuringStop6: false,
@@ -207,6 +238,9 @@ export const twoPersonFullStop = {
         actionsTakenDuringStop8: false,
         actionsTakenDuringStop9: false,
         actionsTakenDuringStop10: false,
+        actionsTakenDuringStop11: true,
+        actionsTakenDuringStop12: true,
+        actionsTakenDuringStop13: true,
         warningCodes: [54134],
         citationCodes: [35152],
         infieldCodes: null,
@@ -226,13 +260,13 @@ export const twoPersonFullStop = {
       },
     },
     {
-      id: new Date().getTime(),
+      id: new Date().getTime() + '2',
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
       genderNonconforming: false,
       perceivedLgbt: false,
-      perceivedAge: 40,
+      perceivedAge: 18,
       anyDisabilities: true,
       perceivedOrKnownDisability: [1],
       perceivedLimitedEnglish: true,
@@ -259,9 +293,8 @@ export const twoPersonFullStop = {
       },
       stopResult: {
         anyActionsTaken: true,
-        actionsTakenDuringStop1: false,
-        actionsTakenDuringStop2: true,
-        actionsTakenDuringStop3: false,
+        actionsTakenDuringStop2: false,
+        actionsTakenDuringStop3: true,
         actionsTakenDuringStop4: false,
         actionsTakenDuringStop5: false,
         actionsTakenDuringStop6: false,
@@ -269,6 +302,9 @@ export const twoPersonFullStop = {
         actionsTakenDuringStop8: false,
         actionsTakenDuringStop9: false,
         actionsTakenDuringStop10: false,
+        actionsTakenDuringStop11: true,
+        actionsTakenDuringStop12: false,
+        actionsTakenDuringStop13: false,
         warningCodes: [],
         citationCodes: [35152, 35154],
         infieldCodes: [],
@@ -277,3 +313,281 @@ export const twoPersonFullStop = {
     },
   ],
 }
+
+export const apiStops = [
+  {
+    agency: 'sdsd',
+    date: '2021-05-21',
+    expYears: '11',
+    id: '202105210817',
+    isPiiFound: false,
+    listPersonStopped: [
+      {
+        basisForSearchBrief: null,
+        basisForSearchPiiFound: false,
+        genderNonconforming: false,
+        id: 1621599463614,
+        isStudent: true,
+        listActionTakenDuringStop: [
+          {
+            key: '23',
+            action: 'Admission or written statement obtained from student',
+          },
+          {
+            key: '1',
+            action: 'Person removed from vehicle by order',
+          },
+          {
+            key: '17',
+            action: 'Asked for consent to search another person',
+            personSearchConsentGiven: true,
+          },
+          {
+            key: '19',
+            action: 'Asked for consent to search property',
+            propertySearchConsentGiven: true,
+          },
+        ],
+        listBasisForPropertySeizure: [
+          {
+            key: '2',
+            basis: 'Contraband',
+          },
+        ],
+        listBasisForSearch: [],
+        listContrabandOrEvidenceDiscovered: [
+          {
+            key: '5',
+            contraband: 'Drugs/narcotics',
+          },
+          {
+            key: '8',
+            contraband: 'Drug paraphernalia',
+          },
+        ],
+        listPerceivedOrKnownDisability: [
+          {
+            key: '7',
+            disability:
+              'Disability related to hyperactivity or impulsive behavior',
+          },
+          {
+            key: '2',
+            disability: 'Speech impairment or limited use of language',
+          },
+          {
+            key: '4',
+            disability: 'Mental health condition',
+          },
+        ],
+        listPerceivedRace: [
+          {
+            key: '7',
+            race: 'White',
+          },
+        ],
+        listResultOfStop: [
+          {
+            key: '2',
+            result: 'Warning (verbal or written)',
+            listCodes: [
+              {
+                code: '54106',
+                text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+              },
+            ],
+          },
+          {
+            key: '12',
+            result: 'Referral to school administrator',
+          },
+          {
+            key: '13',
+            result: 'Referral to school counselor or other support staff',
+          },
+        ],
+        listTypeOfPropertySeized: [
+          {
+            key: '4',
+            type: 'Drugs/narcotics',
+          },
+          {
+            key: '7',
+            type: 'Drug paraphernalia',
+          },
+        ],
+        perceivedAge: '45',
+        perceivedGender: 'Male',
+        perceivedLgbt: true,
+        perceivedLimitedEnglish: true,
+        reasonForStop: {
+          key: '1',
+          reason: 'Traffic Violation',
+          listDetail: [
+            {
+              key: '1',
+              reason: 'Moving Violation',
+            },
+          ],
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+        },
+        reasonForStopExplanation: 'Speeding',
+        reasonForStopPiiFound: false,
+      },
+      {
+        basisForSearchBrief: null,
+        basisForSearchPiiFound: false,
+        genderNonconforming: false,
+        id: 1621599598723,
+        isStudent: false,
+        listActionTakenDuringStop: [
+          {
+            key: '23',
+            action: 'Admission or written statement obtained from student',
+          },
+          {
+            key: '1',
+            action: 'Person removed from vehicle by order',
+          },
+          {
+            key: '17',
+            action: 'Asked for consent to search another person',
+            personSearchConsentGiven: true,
+          },
+          {
+            key: '19',
+            action: 'Asked for consent to search property',
+            propertySearchConsentGiven: true,
+          },
+        ],
+        listBasisForPropertySeizure: [
+          {
+            key: '2',
+            basis: 'Contraband',
+          },
+        ],
+        listBasisForSearch: [],
+        listContrabandOrEvidenceDiscovered: [
+          {
+            key: '5',
+            contraband: 'Drugs/narcotics',
+          },
+          {
+            key: '8',
+            contraband: 'Drug paraphernalia',
+          },
+        ],
+        listPerceivedOrKnownDisability: [
+          {
+            key: '4',
+            disability: 'Mental health condition',
+          },
+        ],
+        listPerceivedRace: [
+          {
+            key: '2',
+            race: 'Black/African American',
+          },
+        ],
+        listResultOfStop: [
+          {
+            key: '2',
+            result: 'Warning (verbal or written)',
+            listCodes: [
+              {
+                code: '54106',
+                text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+              },
+            ],
+          },
+          {
+            key: '12',
+            result: 'Referral to school administrator',
+          },
+          {
+            key: '13',
+            result: 'Referral to school counselor or other support staff',
+          },
+        ],
+        listTypeOfPropertySeized: [
+          {
+            key: '4',
+            type: 'Drugs/narcotics',
+          },
+          {
+            key: '7',
+            type: 'Drug paraphernalia',
+          },
+        ],
+        perceivedAge: '18',
+        perceivedGender: 'Male',
+        perceivedLgbt: false,
+        perceivedLimitedEnglish: false,
+        reasonForStop: {
+          key: '1',
+          reason: 'Traffic Violation',
+          listDetail: [
+            {
+              key: '1',
+              reason: 'Moving Violation',
+            },
+          ],
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+        },
+        reasonForStopExplanation: 'Speeding',
+        reasonForStopPiiFound: false,
+      },
+    ],
+    location: {
+      beat: {
+        codes: {
+          code: '551',
+          text: 'ALPINE 551',
+        },
+      },
+      blockNumber: '1100',
+      city: {
+        codes: {
+          code: 'ALPINE',
+          text: 'ALPINE',
+        },
+      },
+      fullAddress: '',
+      highwayExit: '',
+      intersection: '',
+      landMark: '',
+      outOfCounty: false,
+      piiFound: false,
+      school: true,
+      schoolName: {
+        codes: {
+          code: '19768696023816',
+          text: '138TH STREET (WISEBURN UNIFIED) 19768696023816',
+        },
+      },
+      streetName: 'Fanning Dr',
+      toggleLocationOptions: false,
+    },
+    officerAssignment: {
+      key: '10',
+      otherType: 'New Recruit Training',
+      type: 'Other',
+    },
+    officerId: '210518694',
+    officerName: 'Steve Pietrek',
+    stopDateTime: '2021-05-21T12:17:00.000Z',
+    stopDuration: '45',
+    stopInResponseToCfs: false,
+    time: '08:17',
+  },
+]

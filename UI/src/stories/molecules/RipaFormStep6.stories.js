@@ -1,5 +1,5 @@
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
-import { apiStop } from '@/utilities/stop'
+import { fullStopToApiStop } from '@/utilities/stop'
 import { onePersonFullStop, twoPersonFullStop } from '../data/formStop'
 import {
   formBeats,
@@ -24,7 +24,7 @@ export const onePerson = () => ({
   },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -52,7 +52,7 @@ export const twoPerson = () => ({
   },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),

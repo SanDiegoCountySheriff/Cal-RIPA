@@ -7,6 +7,7 @@
     ></ripa-officer>
     <ripa-stop-date
       v-model="model"
+      :is-edit-stop="isEditStop"
       :on-open-statute="onOpenStatute"
     ></ripa-stop-date>
     <ripa-location
@@ -98,6 +99,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    isEditStop: {
       type: Boolean,
       default: false,
     },

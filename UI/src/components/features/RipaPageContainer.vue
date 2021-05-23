@@ -16,7 +16,7 @@
     ></ripa-interval>
 
     <ripa-user-dialog
-      :is-invalid-user="invalidUser"
+      :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleClose"
@@ -91,6 +91,7 @@ export default {
       'getFormStatutes',
       'getUser',
       'setApiConfig',
+      'setInvalidUser',
     ]),
 
     async getUserData() {
@@ -172,12 +173,14 @@ export default {
   async created() {
     if (this.isOnlineAndAuthenticated) {
       this.getUserData()
+    } else {
+      this.setInvalidUser(true)
     }
   },
 
   watch: {
     invalidUser(newVal) {
-      if (newVal) {
+      if (newVal && !this.isOnlineAndAuthenticated) {
         this.showUserDialog = true
       } else {
         this.checkCache()
