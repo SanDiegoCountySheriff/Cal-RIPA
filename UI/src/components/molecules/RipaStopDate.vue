@@ -15,6 +15,7 @@
             <ripa-date-picker
               v-model="model.stopDate.date"
               label="Date of Stop"
+              :disabled="isEditStop"
               :rules="dateRules"
               @input="handleInput"
             >
@@ -27,6 +28,7 @@
             <ripa-time-picker
               v-model="model.stopDate.time"
               label="Time of Stop"
+              :disabled="isEditStop"
               :rules="timeRules"
               @input="handleInput"
             >
@@ -94,12 +96,14 @@ export default {
       dateRules: [
         v => !!v || 'A date is required',
         v =>
+          this.isEditStop ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       timeRules: [
         v => !!v || 'A time is required',
         v =>
+          this.isEditStop ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
@@ -147,6 +151,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    isEditStop: {
+      type: Boolean,
+      default: false,
     },
   },
 }

@@ -13,8 +13,6 @@
 
       <v-card-text>
         <div class="ripa-statute">
-          <!-- {{ statuteContent }} -->
-          <!-- <h1>{{ statuteContent.id }}. {{ statuteContent.text }}</h1> -->
           <ripa-tree :tree-data="statuteContent"></ripa-tree>
         </div>
       </v-card-text>

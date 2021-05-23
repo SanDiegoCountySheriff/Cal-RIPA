@@ -41,6 +41,7 @@
                 :beats="beats"
                 :county-cities="countyCities"
                 :display-beat-input="displayBeatInput"
+                :is-edit-stop="isEditStop"
                 :last-location="lastLocation"
                 :loading-gps="loadingGps"
                 :loading-pii="loadingPiiStep1"

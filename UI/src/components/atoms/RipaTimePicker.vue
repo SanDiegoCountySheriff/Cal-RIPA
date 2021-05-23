@@ -11,6 +11,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="model"
+        :disabled="disabled"
         :label="label"
         append-icon="mdi-clock-time-four-outline"
         readonly
@@ -68,6 +69,10 @@ export default {
     value: {
       type: String,
       default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     label: {
       type: String,
