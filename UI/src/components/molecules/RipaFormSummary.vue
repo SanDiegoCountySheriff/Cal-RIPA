@@ -3,15 +3,18 @@
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
 
     <v-card-text>
-      <div class="tw-mt-4">
+      <!-- <div class="tw-my-4">
         {{ apiStop }}
-      </div>
+        <v-divider></v-divider>
+      </div> -->
 
       <div class="tw-mb-2">
         <span class="tw-text-base tw-font-bold">Stop</span>
-        <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
-          Edit
-        </v-btn>
+        <template v-if="editButtons">
+          <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
+            Edit
+          </v-btn>
+        </template>
       </div>
 
       <div v-for="(item, index) in getApiStopStopSummary" :key="index">
@@ -19,31 +22,32 @@
       </div>
 
       <div
-        class="tw-mb-2"
         v-for="(person, index) in apiStop.listPersonStopped"
         :key="person.id"
       >
-        <div class="tw-mt-4 tw-text-base tw-font-bold">
+        <div class="tw-my-4 tw-text-base tw-font-bold">
           Person {{ index + 1 }}
-          <v-btn
-            class="tw-ml-4"
-            dense
-            outlined
-            x-small
-            @click="handleEditPerson($event, person.id)"
-          >
-            Edit
-          </v-btn>
-          <template v-if="apiStop.listPersonStopped.length > 1">
+          <template v-if="editButtons">
             <v-btn
-              class="tw-ml-2"
+              class="tw-ml-4"
               dense
               outlined
               x-small
-              @click="handleDeletePerson($event, person.id)"
+              @click="handleEditPerson($event, person.id)"
             >
-              Delete
+              Edit
             </v-btn>
+            <template v-if="apiStop.listPersonStopped.length > 1">
+              <v-btn
+                class="tw-ml-2"
+                dense
+                outlined
+                x-small
+                @click="handleDeletePerson($event, person.id)"
+              >
+                Delete
+              </v-btn>
+            </template>
           </template>
         </div>
 
@@ -119,6 +123,10 @@ export default {
     apiStop: {
       type: Object,
       default: () => {},
+    },
+    editButtons: {
+      type: Boolean,
+      default: false,
     },
     onDeletePerson: {
       type: Function,

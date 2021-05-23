@@ -211,32 +211,55 @@ const getSummaryTime = apiStop => {
 }
 
 const getSummaryLocation = apiStop => {
+  const children = []
+
+  if (apiStop.school && apiStop.location.schoolName) {
+    children.push({
+      header: 'School Name',
+      detail: apiStop.location.schoolName.codes.text,
+    })
+  }
+  if (apiStop.location.blockNumber) {
+    return {
+      header: 'Block Number',
+      detail: apiStop.location.blockNumber,
+    }
+  }
+  if (apiStop.location.streetName) {
+    return {
+      header: 'Street Name',
+      detail: apiStop.location.streetName,
+    }
+  }
+  if (apiStop.location.intersection) {
+    return {
+      header: 'Intersection',
+      detail: apiStop.location.intersection,
+    }
+  }
+  if (apiStop.location.landMark) {
+    return {
+      header: 'Landmark',
+      detail: apiStop.location.landMark,
+    }
+  }
+  if (apiStop.location.city) {
+    return {
+      header: 'City',
+      detail: apiStop.location.beat.codes.text,
+    }
+  }
+  if (apiStop.location.beat) {
+    return {
+      header: 'Beat',
+      detail: apiStop.location.beat.codes.text,
+    }
+  }
+
   return {
     level: 3,
     header: 'Location',
-    children: [
-      {
-        header: 'School Name',
-        detail: apiStop.location.schoolName
-          ? apiStop.location.schoolName.codes.text
-          : '',
-      },
-      { header: 'Block Number', detail: apiStop.location.blockNumber },
-      { header: 'Street Name', detail: apiStop.location.streetName },
-      {
-        header: 'Intersection',
-        detail: apiStop.location.intersection,
-      },
-      { header: 'Landmark', detail: apiStop.location.landMark },
-      {
-        header: 'City',
-        detail: apiStop.location.city ? apiStop.location.city.codes.text : '',
-      },
-      {
-        header: 'Beat',
-        detail: apiStop.location.beat ? apiStop.location.beat.codes.text : '',
-      },
-    ],
+    children,
   }
 }
 
@@ -762,6 +785,10 @@ const getBooleanPropValueGivenKeyInArray = (items, key, prop) => {
 
 const getKeyArray = items => {
   return items.map(item => Number(item.key))
+}
+
+export const fullStopToStop = fullStop => {
+  return fullStop
 }
 
 export const fullStopToApiStop = (
