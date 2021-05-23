@@ -15,7 +15,6 @@
             <ripa-date-picker
               v-model="model.stopDate.date"
               label="Date of Stop"
-              :disabled="isEditStop"
               :rules="dateRules"
               @input="handleInput"
             >
@@ -28,7 +27,6 @@
             <ripa-time-picker
               v-model="model.stopDate.time"
               label="Time of Stop"
-              :disabled="isEditStop"
               :rules="timeRules"
               @input="handleInput"
             >

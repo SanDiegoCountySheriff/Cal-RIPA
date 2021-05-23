@@ -217,7 +217,9 @@ const getSummaryLocation = apiStop => {
     children: [
       {
         header: 'School Name',
-        detail: apiStop.location.schoolName.codes.text,
+        detail: apiStop.location.schoolName
+          ? apiStop.location.schoolName.codes.text
+          : '',
       },
       { header: 'Block Number', detail: apiStop.location.blockNumber },
       { header: 'Street Name', detail: apiStop.location.streetName },
@@ -226,8 +228,14 @@ const getSummaryLocation = apiStop => {
         detail: apiStop.location.intersection,
       },
       { header: 'Landmark', detail: apiStop.location.landMark },
-      { header: 'City', detail: apiStop.location.city.codes.text },
-      { header: 'Beat', detail: apiStop.location.beat.codes.text },
+      {
+        header: 'City',
+        detail: apiStop.location.city ? apiStop.location.city.codes.text : '',
+      },
+      {
+        header: 'Beat',
+        detail: apiStop.location.beat ? apiStop.location.beat.codes.text : '',
+      },
     ],
   }
 }
@@ -290,6 +298,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push(getSummaryLimitedEnglish(person))
     items.push(getSummaryPerceivedOrKnownDisability(person))
     items.push(getSummaryReasonForStop(person))
+    items.push(getSummaryReasonForStopExplanation(person))
     items.push(getSummaryActionsTaken(person))
     items.push(getSummaryBasisForSearch(person))
     items.push(getSummaryBasisForSearchExplanation(person))
@@ -386,21 +395,34 @@ const getSummaryReasonForStop = person => {
     detail: person.reasonForStop.reason,
   })
 
-  if (Number(person.reasonForStop.key) === 1) {
-    reasons.push({
+  const keys = person.reasonForStop.listDetail.map(item => {
+    return {
       marginLeft: true,
-      detail: person.reasonForStop.listDetail[0].reason,
-    })
-    reasons.push({
+      detail: item.reason,
+    }
+  })
+  reasons.push(...keys)
+
+  const codes = person.reasonForStop.listCodes.map(item => {
+    return {
       marginLeft: true,
-      detail: person.reasonForStop.listCodes[0].text,
-    })
-  }
+      detail: item.text,
+    }
+  })
+  reasons.push(...codes)
 
   return {
     level: 2,
     header: 'Reason for Stop',
     children: reasons,
+  }
+}
+
+const getSummaryReasonForStopExplanation = person => {
+  return {
+    level: 1,
+    header: 'Reason for Stop Explanation',
+    detail: person.reasonForStopExplanation,
   }
 }
 
@@ -413,8 +435,10 @@ const getSummaryActionsTaken = person => {
       }
     })
   if (
-    person.listBasisForPropertySeizure.length > 0 ||
-    person.typeOfPropertySeized.length > 0
+    person.listBasisForPropertySeizure &&
+    person.typeOfPropertySeized &&
+    (person.listBasisForPropertySeizure.length > 0 ||
+      person.typeOfPropertySeized.length > 0)
   ) {
     actions.push({
       detail: 'Property was seized',
@@ -994,7 +1018,7 @@ const getReasonForStopDetails = (reasonKey, person) => {
     return [getTrafficViolation(person)]
   }
   if (reasonKey === 2) {
-    return [getReasonableSuspicion(person)]
+    return getReasonableSuspicion(person)
   }
   if (reasonKey === 7) {
     return [getEducationViolation(person)]
@@ -1095,8 +1119,7 @@ const getTrafficViolationCode = (person, statutes) => {
 }
 
 const getReasonableSuspicion = person => {
-  const suspicion = person.reasonableSuspicion || []
-
+  const suspicion = person.stopReason?.reasonableSuspicion || []
   return suspicion.map(item => {
     const [filteredSuspicion] = REASONABLE_SUSPICIONS.filter(
       item2 => item2.value === item,

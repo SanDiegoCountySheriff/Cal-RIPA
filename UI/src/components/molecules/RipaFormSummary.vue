@@ -3,10 +3,6 @@
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
 
     <v-card-text>
-      <!-- <div class="tw-mt-4">
-        {{ stop }}
-      </div>
-      <v-divider></v-divider> -->
       <div class="tw-mt-4">
         {{ apiStop }}
       </div>
