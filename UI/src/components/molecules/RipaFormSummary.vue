@@ -3,11 +3,6 @@
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
 
     <v-card-text>
-      <!-- <div class="tw-my-4">
-        {{ apiStop }}
-        <v-divider></v-divider>
-      </div> -->
-
       <div class="tw-mb-2">
         <span class="tw-text-base tw-font-bold">Stop</span>
         <template v-if="editButtons">
