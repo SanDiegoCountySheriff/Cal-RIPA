@@ -4,9 +4,12 @@
     :display-environment="displayEnvironment"
     :environment-name="environmentName"
     :online="isOnlineAndAuthenticated"
+    :authenticated="isOnlineAndAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
+    @handleLogOut="handleLogOut"
+    @handleLogIn="handleLogIn"
     :on-update-user="handleUpdateUser"
   >
     <slot></slot>
@@ -37,6 +40,7 @@ import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
+import AuthService from '../../services/auth'
 
 export default {
   name: 'ripa-page-container',
@@ -66,6 +70,7 @@ export default {
       'isAdmin',
       'invalidUser',
       'isOnlineAndAuthenticated',
+      'isAuthenticated',
       'apiConfig',
       'mappedUser',
     ]),
@@ -130,8 +135,19 @@ export default {
       this.setDarkToLocalStorage()
     },
 
+<<<<<<< HEAD
+    handleLogOut() {
+      // do logout..will redirect to tenant and then back to page
+      AuthService.doLogOut()
+    },
+
+    handleLogIn() {
+      AuthService.clearManualLogOut()
+      AuthService.tryLogin()
+=======
     handleUpdateUser() {
       this.showUserDialog = true
+>>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
     },
 
     setDarkToLocalStorage() {
@@ -174,7 +190,27 @@ export default {
     if (this.isOnlineAndAuthenticated) {
       this.getUserData()
     } else {
+<<<<<<< HEAD
+      this.checkCache()
+      const isTokenValid = await AuthService.checkToken()
+      if (!isTokenValid) {
+        // if the token ISN'T valid, check to see if the user manually logged out
+        const didManualLogOut = AuthService.checkManualLogOut()
+        // if they DID manually logout, don't auto try to login again
+        // if they did NOT manually logout, auto try the login again
+        if (!didManualLogOut) {
+          const loginAttempt = await AuthService.tryLogin()
+          this.getFormData()
+        }
+        this.getFormData()
+      } else {
+        // if the token IS valid, clear any log out attempt
+        AuthService.clearManualLogOut()
+        this.getFormData()
+      }
+=======
       this.setInvalidUser(true)
+>>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
     }
   },
 
