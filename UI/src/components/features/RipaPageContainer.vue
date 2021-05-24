@@ -2,7 +2,7 @@
   <ripa-page-wrapper
     :admin="isAdmin"
     :online="isOnlineAndAuthenticated"
-    :authenticated="isAuthenticated"
+    :authenticated="isOnlineAndAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"

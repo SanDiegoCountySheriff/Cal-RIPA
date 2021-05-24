@@ -205,7 +205,6 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      console.log('updateUserAccount')
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
