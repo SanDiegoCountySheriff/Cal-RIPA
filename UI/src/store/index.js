@@ -936,7 +936,7 @@ export default new Vuex.Store({
 
     getAdminSubmissions({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}GetSubmissions`, {
+        .get(`${state.apiConfig.apiBaseUrl}/Submission/GetSubmissions`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
