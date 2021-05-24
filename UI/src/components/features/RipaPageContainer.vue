@@ -135,7 +135,6 @@ export default {
       this.setDarkToLocalStorage()
     },
 
-<<<<<<< HEAD
     handleLogOut() {
       // do logout..will redirect to tenant and then back to page
       AuthService.doLogOut()
@@ -144,10 +143,10 @@ export default {
     handleLogIn() {
       AuthService.clearManualLogOut()
       AuthService.tryLogin()
-=======
+    },
+
     handleUpdateUser() {
       this.showUserDialog = true
->>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
     },
 
     setDarkToLocalStorage() {
@@ -190,7 +189,6 @@ export default {
     if (this.isOnlineAndAuthenticated) {
       this.getUserData()
     } else {
-<<<<<<< HEAD
       this.checkCache()
       const isTokenValid = await AuthService.checkToken()
       if (!isTokenValid) {
@@ -199,18 +197,13 @@ export default {
         // if they DID manually logout, don't auto try to login again
         // if they did NOT manually logout, auto try the login again
         if (!didManualLogOut) {
-          const loginAttempt = await AuthService.tryLogin()
-          this.getFormData()
+          await AuthService.tryLogin()
         }
-        this.getFormData()
       } else {
         // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
-        this.getFormData()
       }
-=======
-      this.setInvalidUser(true)
->>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
+      this.getFormData()
     }
   },
 
