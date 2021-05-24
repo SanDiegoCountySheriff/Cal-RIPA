@@ -28,9 +28,9 @@
             "type": "string",
             "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.json"
         },
-        "parameterlinkuri_d": {
+        "parameterlinkuri": {
             "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.parameters.json"
+            "defaultValue": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMkpc.parameters.json"
         }
         
 
@@ -64,7 +64,7 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parametersLink": {
-                    "uri": "[parameters('parameterlinkuri_d')]",
+                    "uri": "[parameters('parameterlinkuri')]",
                     "contentVersion": "1.0.0.0"
                 }
             }

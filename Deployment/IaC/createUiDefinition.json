@@ -70,7 +70,7 @@
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
-                    "required": true,
+                    "required": false,
                     "regex": "",
                     "validationMessage": ""
                 },
@@ -83,7 +83,7 @@
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
-                    "required": true,
+                    "required": false,
                     "regex": "",
                     "validationMessage": ""
                 },
@@ -96,7 +96,7 @@
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
-                    "required": true,
+                    "required": false,
                     "regex": "",
                     "validationMessage": ""
                 },

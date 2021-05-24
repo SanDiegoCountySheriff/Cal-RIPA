@@ -27,10 +27,11 @@
             "allowedValues": [
                 "d",
                 "q",
-                "p"
+                "p",
+                "m"
             ],
             "metadata": {
-                "description": "d = development, q = test, p = prod."
+                "description": "d = development, q = test, p = prod, m = marketplaceTesting."
             }
         },
         "apim_policy_env": {

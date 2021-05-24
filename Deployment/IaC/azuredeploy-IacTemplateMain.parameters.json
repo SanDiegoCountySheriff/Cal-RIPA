@@ -24,7 +24,7 @@
         "templatelinkuri": {
             "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.json"
         },
-        "parameterlinkuri_d": {
+        "parameterlinkuri": {
             "value": "https://raw.githubusercontent.com/SanDiegoCountySheriff/Cal-RIPA/feature/DevOps/Deployment/IaC/azuredeploy-IacTemplateGovMod.parameters.json"
         }
     }
