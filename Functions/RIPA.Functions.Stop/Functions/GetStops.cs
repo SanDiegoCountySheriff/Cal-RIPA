@@ -31,13 +31,15 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Return Submitted OR UnSubmitted stops, defaults to false")]
-        [OpenApiParameter(name: "IsError", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have errors, IsSubmitted must be true or this will be ignored")]
-        [OpenApiParameter(name: "SubmissionId", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops where submission id equals input submission id, is submitted mus be true or this will be ignored")]
+        [OpenApiParameter(name: "Status", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String Status: Unsubmitted, Submitted, Resubmitted, Failed")]
+        [OpenApiParameter(name: "IsPII", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have been flagged for PII")]
+        [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String ErrorCode: Error code must exist on stop submission to return")]
         [OpenApiParameter(name: "OfficerId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Returns Submitted Stops where officer id")]
         [OpenApiParameter(name: "Offset", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "offsets the records from 0, requires limit parameter")]
         [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
+        //ADD SUMMARY
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Stops requested");
@@ -60,14 +62,22 @@ namespace RIPA.Functions.Stop.Functions
             {
                 StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
                 EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
-                IsError = !string.IsNullOrWhiteSpace(req.Query["IsError"]) ? bool.Parse(req.Query["IsError"]) : false,
-                IsSubmitted = !string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]) ? bool.Parse(req.Query["IsSubmitted"]) : false,
-                SubmissionId = !string.IsNullOrWhiteSpace(req.Query["SubmissionId"]) ? req.Query["SubmissionId"] : default,
+                ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
+                Status = !string.IsNullOrWhiteSpace(req.Query["Status"]) ? req.Query["Status"] : default,
                 OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
                 Offset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default,
                 Limit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default
             };
- 
+
+            if (!string.IsNullOrWhiteSpace(req.Query["isPii"]))
+            {
+                stopQuery.IsPII = bool.Parse(req.Query["isPii"]);
+            }
+            if (!string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]))
+            {
+                stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
+            }
+
             List<string> whereStatements = new List<string>();
             string join = string.Empty;
 
@@ -81,29 +91,34 @@ namespace RIPA.Functions.Stop.Functions
                 whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{(DateTime)stopQuery.EndDate:o}'");
             }
 
-            //IsSubmitted
-            if (stopQuery.IsSubmitted)
+            //IsPII
+            if (stopQuery.IsPII != null)
             {
-                //IsError
-                if (stopQuery.IsError)
+                whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
+            }
+
+            //Status
+            if (!string.IsNullOrWhiteSpace(stopQuery.Status))
+            {
+                if (stopQuery.Status == SubmissionStatus.Unsubmitted.ToString())
                 {
-                    whereStatements.Add(Environment.NewLine + $"c.Status = '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                    whereStatements.Add(Environment.NewLine + $"c.Status = null");
                 }
                 else
                 {
-                    whereStatements.Add(Environment.NewLine + $"c.Status != '{Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)}'");
+                    whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
                 }
-                //SubmssionId
-                if (!String.IsNullOrWhiteSpace(stopQuery.SubmissionId))
-                {
-                    join = Environment.NewLine + "JOIN Submission IN c.ListSubmission";
-                    whereStatements.Add(Environment.NewLine + $"Submission.Id = '{stopQuery.SubmissionId}'");
-                }
-
             }
-            else
+
+            //ErrorCode TODO
+
+            //IsSubmitted
+            if (stopQuery.IsSubmitted != null)
             {
-                whereStatements.Add(Environment.NewLine + $"c.Status = null");
+                if (!bool.Parse(stopQuery.IsSubmitted.ToString()))
+                    whereStatements.Add(Environment.NewLine + $"c.Status = null");
+                else
+                    whereStatements.Add(Environment.NewLine + $"c.Status != null");
             }
 
             //OfficerId
@@ -114,7 +129,7 @@ namespace RIPA.Functions.Stop.Functions
 
             //limit 
             var limit = string.Empty;
-            if(stopQuery.Limit != 0)
+            if (stopQuery.Limit != 0)
             {
                 limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
             }
@@ -143,9 +158,10 @@ namespace RIPA.Functions.Stop.Functions
         {
             public DateTime? StartDate { get; set; }
             public DateTime? EndDate { get; set; }
-            public bool IsError { get; set; }
-            public bool IsSubmitted { get; set; }
-            public string SubmissionId { get; set; }
+            public bool? IsPII { get; set; }
+            public string ErrorCode { get; set; }
+            public string Status { get; set; }
+            public bool? IsSubmitted { get; set; }
             public string OfficerId { get; set; }
             public int Limit { get; set; }
             public int Offset { get; set; }
