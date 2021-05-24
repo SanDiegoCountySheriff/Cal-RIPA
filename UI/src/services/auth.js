@@ -132,7 +132,11 @@ const AuthService = {
         return false
       }
     } else {
-      return sessionStorage.getItem('ripa-idToken')
+      if (sessionStorage.getItem('ripa-idToken')) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   doLogOut: async () => {
@@ -180,7 +184,11 @@ const AuthService = {
   },
   checkManualLogOut: () => {
     const manualLogOut = sessionStorage.getItem('ripa-logOutAttempt')
-    return manualLogOut === null
+    if (manualLogOut === null) {
+      return false
+    } else {
+      return true
+    }
   },
   clearManualLogOut: () => {
     sessionStorage.removeItem('ripa-logOutAttempt')
