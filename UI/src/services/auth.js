@@ -3,7 +3,6 @@ import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
 import router from '../router'
 import { add, isAfter } from 'date-fns'
-import { consensualEncounterResultingInSearch } from '../stories/molecules/RipaActionsTaken.stories'
 
 let authConfig = {
   cache: {
