@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { formatDate } from '@/utilities/dates'
+import { formatDate, differenceInYears } from '@/utilities/dates'
+import { format } from 'date-fns'
 
 Vue.use(Vuex)
 
@@ -38,12 +39,15 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
-      agency: 'Insight',
+      agency: '',
       oid: '',
       isAdmin: false,
-      isInvalid: false,
+      isInvalid: null,
       isAuthenticated: false,
-      officerId: '210508123',
+      officerId: null,
+      officerName: null,
+      assignment: null,
+      otherType: null,
     },
     apiConfig: null,
     piiDate: null,
@@ -52,9 +56,6 @@ export default new Vuex.Store({
   },
 
   getters: {
-    agency: state => {
-      return state.user.agency
-    },
     isAdmin: state => {
       return state.user.isAdmin
     },
@@ -100,8 +101,17 @@ export default new Vuex.Store({
     mappedFormStatutes: state => {
       return state.formStatutes
     },
-    officerId: state => {
-      return state.user.officerId
+    mappedUser: state => {
+      return {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.officerName,
+        oid: state.user.oid,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
     },
     user: state => {
       return state.user
@@ -114,6 +124,27 @@ export default new Vuex.Store({
     },
     invalidUser: state => {
       return state.user.isInvalid
+    },
+    displayBeatInput: state => {
+      return state.apiConfig?.displayBeatInput || false
+    },
+    displayEnvironment: state => {
+      return state.apiConfig?.displayEnvironment || false
+    },
+    environmentName: state => {
+      switch (state.apiConfig.environmentName) {
+        case 'p':
+          return 'PROD'
+        case 'd':
+          return 'DEV'
+        case 'q':
+          return 'QA'
+        case 'u':
+          return 'UAT'
+
+        default:
+          return ''
+      }
     },
     mappedGpsLocationAddress: state => {
       if (
@@ -208,15 +239,43 @@ export default new Vuex.Store({
       const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
         return roleObj === 'RIPA-ADMINS-ROLE'
       })
+      const firstName = value.idTokenClaims.given_name
+      const lastName = value.idTokenClaims.family_name
+      const fullName = `${firstName} ${lastName}`
+
       state.user = {
         ...state.user,
         email: value.idTokenClaims.email,
-        firstName: value.idTokenClaims.given_name,
+        firstName,
+        fullName,
         isAdmin: isAnAdmin.length > 0,
         isAuthenticated: true,
-        lastName: value.idTokenClaims.family_name,
+        lastName,
         oid: value.idTokenClaims.oid,
       }
+    },
+    updateUserProfile(state, value) {
+      state.user = {
+        ...state.user,
+        id: state.user.oid,
+        agency: value.agency,
+        assignment: value.assignment ? Number(value.assignment) : null,
+        officerId: value.officerId,
+        otherType: value.otherType ? value.otherType : null,
+        startDate: value.startDate,
+        yearsExperience: differenceInYears(value.startDate),
+      }
+
+      const officer = {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.fullName,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
+      localStorage.setItem('ripa_officer', JSON.stringify(officer))
     },
   },
 
@@ -225,6 +284,7 @@ export default new Vuex.Store({
       const document = {
         Document: textValue,
       }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
@@ -438,6 +498,45 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error saving the user.', error)
           dispatch('getAdminUsers')
+        })
+    },
+
+    editOfficerUser({ dispatch, state }, mappedUser) {
+      const officerId =
+        state.user.officerId ||
+        format(new Date(), 'yyMMdd') +
+          (Math.floor(Math.random() * 999) + 100).toString()
+      const userId = state.user.oid
+      const user = {
+        id: state.user.oid,
+        firstName: state.user.firstName,
+        lastName: state.user.lastName,
+        name: state.user.fullName,
+        agency: mappedUser.agency,
+        startDate: mappedUser.startDate,
+        officerId,
+        assignment: mappedUser.assignment,
+        otherType: mappedUser.otherType,
+      }
+
+      return axios
+        .put(
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getUser')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getUser')
         })
     },
 
@@ -800,7 +899,6 @@ export default new Vuex.Store({
     },
 
     getUser({ commit, state }) {
-      console.log('getUser')
       const id = state.user.oid
       return axios
         .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
@@ -810,10 +908,12 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          console.log(response)
+          commit('updateUserProfile', response.data)
+          commit('updateInvalidUser', false)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
+          commit('updateInvalidUser', true)
         })
     },
 

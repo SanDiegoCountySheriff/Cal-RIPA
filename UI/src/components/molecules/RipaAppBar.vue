@@ -135,6 +135,10 @@ export default {
     },
 
     getAppTitle() {
+      if (this.displayEnvironment) {
+        return `RIPA (${this.environmentName})`
+      }
+
       return 'RIPA'
     },
 
@@ -167,6 +171,12 @@ export default {
     handleLogIn() {
       this.$emit('handleLogIn')
     },
+
+    handleUserChange() {
+      if (this.onUpdateUser) {
+        this.onUpdateUser()
+      }
+    },
   },
 
   mounted() {
@@ -182,11 +192,23 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
+    },
     online: {
       type: Boolean,
       default: false,
     },
     onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

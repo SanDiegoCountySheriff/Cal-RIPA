@@ -8,6 +8,7 @@
     :rules="rules"
     :min="1"
     validate-on-blur
+    :disabled="disabled"
     @input="debounceInput"
     @keypress="handleKeyPress"
   ></v-text-field>
@@ -26,10 +27,6 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function (e) {
-      this.parseNumber(e)
-    }, 1000),
-
     handleKeyPress(event) {
       const charCode = event.which ? event.which : event.keyCode
       if (charCode < 48 || charCode > 57) {
@@ -38,6 +35,10 @@ export default {
         return true
       }
     },
+
+    debounceInput: _.debounce(function (e) {
+      this.parseNumber(e)
+    }, 1000),
 
     parseNumber(newVal) {
       this.handleInput(newVal)
@@ -73,6 +74,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

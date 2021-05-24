@@ -7,6 +7,7 @@
     ></ripa-officer>
     <ripa-stop-date
       v-model="model"
+      :is-edit-stop="isEditStop"
       :on-open-statute="onOpenStatute"
     ></ripa-stop-date>
     <ripa-location
@@ -14,6 +15,7 @@
       :schools="schools"
       :beats="beats"
       :county-cities="countyCities"
+      :display-beat-input="displayBeatInput"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii="loadingPii"
@@ -95,6 +97,14 @@ export default {
     countyCities: {
       type: Array,
       default: () => [],
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    isEditStop: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,

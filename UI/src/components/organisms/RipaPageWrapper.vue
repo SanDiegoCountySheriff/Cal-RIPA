@@ -2,6 +2,8 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
+      :display-environment="displayEnvironment"
+      :environment-name="environmentName"
       :online="online"
       :authenticated="authenticated"
       :invalidUser="invalidUser"
@@ -9,8 +11,8 @@
       :on-update-dark="onUpdateDark"
       @handleLogOut="handleLogOut"
       @handleLogIn="handleLogIn"
+      :on-update-user="onUpdateUser"
     ></ripa-app-bar>
-
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
@@ -51,11 +53,23 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
+    },
     online: {
       type: Boolean,
       default: false,
     },
     onUpdateDark: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

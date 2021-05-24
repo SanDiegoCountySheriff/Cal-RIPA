@@ -1,6 +1,8 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
+    :display-environment="displayEnvironment"
+    :environment-name="environmentName"
     :online="isOnlineAndAuthenticated"
     :authenticated="isOnlineAndAuthenticated"
     :dark="isDark"
@@ -8,19 +10,34 @@
     :on-update-dark="handleUpdateDark"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
+    :on-update-user="handleUpdateUser"
   >
     <slot></slot>
     <ripa-interval
       :delay="stopInternalMs"
       @tick="checkLocalStorage"
     ></ripa-interval>
+
+    <ripa-user-dialog
+      :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :user="getMappedUser"
+      :show-dialog="showUserDialog"
+      :on-close="handleClose"
+      :on-save="handleSaveUser"
+    ></ripa-user-dialog>
+
+    <ripa-invalid-user-dialog
+      :show-dialog="showInvalidUserDialog"
+    ></ripa-invalid-user-dialog>
   </ripa-page-wrapper>
 </template>
 
 <script>
-import RipaInterval from '@/components/atoms/RipaInterval'
-import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaInterval from '@/components/atoms/RipaInterval'
+import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
+import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import AuthService from '../../services/auth'
@@ -32,40 +49,62 @@ export default {
 
   components: {
     RipaInterval,
+    RipaInvalidUserDialog,
     RipaPageWrapper,
+    RipaUserDialog,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMs: 5000,
+      showInvalidUserDialog: false,
+      showUserDialog: false,
     }
   },
 
   computed: {
     ...mapGetters([
+      'displayEnvironment',
+      'environmentName',
       'isAdmin',
       'invalidUser',
       'isOnlineAndAuthenticated',
       'isAuthenticated',
       'apiConfig',
+      'mappedUser',
     ]),
+
+    getMappedUser() {
+      return {
+        agency: this.mappedUser.agency,
+        assignment: this.mappedUser.assignment,
+        otherType: this.mappedUser.otherType,
+        startDate: this.mappedUser.startDate,
+        yearsExperience: this.mappedUser.yearsExperience,
+      }
+    },
   },
 
   methods: {
     ...mapActions([
       'editOfficerStop',
+      'editOfficerUser',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
       'getUser',
       'setApiConfig',
+      'setInvalidUser',
     ]),
+
+    async getUserData() {
+      await Promise.all([this.getUser()])
+    },
 
     async getFormData() {
       this.loading = true
-      await Promise.all([this.getUser()])
       await Promise.all([
         this.getFormBeats(),
         this.getFormCities(),
@@ -83,11 +122,20 @@ export default {
       return value === '1'
     },
 
+    handleClose() {
+      this.showUserDialog = false
+    },
+
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
+    },
+
     handleUpdateDark(value) {
       this.isDark = value
       this.setDarkToLocalStorage()
     },
 
+<<<<<<< HEAD
     handleLogOut() {
       // do logout..will redirect to tenant and then back to page
       AuthService.doLogOut()
@@ -96,6 +144,10 @@ export default {
     handleLogIn() {
       AuthService.clearManualLogOut()
       AuthService.tryLogin()
+=======
+    handleUpdateUser() {
+      this.showUserDialog = true
+>>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
     },
 
     setDarkToLocalStorage() {
@@ -135,9 +187,10 @@ export default {
   },
 
   async created() {
-    if (this.invalidUser) {
-      this.$router.push('/checkUser')
+    if (this.isOnlineAndAuthenticated) {
+      this.getUserData()
     } else {
+<<<<<<< HEAD
       this.checkCache()
       const isTokenValid = await AuthService.checkToken()
       if (!isTokenValid) {
@@ -155,13 +208,21 @@ export default {
         AuthService.clearManualLogOut()
         this.getFormData()
       }
+=======
+      this.setInvalidUser(true)
+>>>>>>> 2dfdcbb32eb5ad216ca57ac2d1812fa67f2974b0
     }
+  },
+
+  watch: {
+    invalidUser(newVal) {
+      if (newVal && !this.isOnlineAndAuthenticated) {
+        this.showUserDialog = true
+      } else {
+        this.checkCache()
+        this.getFormData()
+      }
+    },
   },
 }
 </script>
-
-<style lang="scss">
-.update-dialog {
-  z-index: 999 !important;
-}
-</style>

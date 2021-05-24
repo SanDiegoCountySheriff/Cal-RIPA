@@ -196,21 +196,23 @@
           </div>
         </v-col>
 
-        <v-col cols="12" sm="12" md="6">
-          <div>
-            <ripa-autocomplete
-              v-model="model.location.beat"
-              hint="Select 1 Beat (required)"
-              persistent-hint
-              item-text="fullName"
-              item-value="id"
-              label="Beat"
-              :items="beats"
-              :disabled="model.location.outOfCounty"
-              @input="handleInput"
-            ></ripa-autocomplete>
-          </div>
-        </v-col>
+        <template v-if="displayBeatInput">
+          <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-autocomplete
+                v-model="model.location.beat"
+                hint="Select 1 Beat (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="id"
+                label="Beat"
+                :items="beats"
+                :disabled="model.location.outOfCounty"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </div>
+          </v-col>
+        </template>
       </v-row>
     </v-container>
   </div>
@@ -462,6 +464,10 @@ export default {
     countyCities: {
       type: Array,
       default: () => {},
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,

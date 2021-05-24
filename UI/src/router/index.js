@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import store from '@/store/index'
 import AuthService from '../services/auth'
-import { isValidOfficer } from '@/utilities/officer'
 
 Vue.use(VueRouter)
 
@@ -12,15 +11,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
-    beforeEnter(to, from, next) {
-      if (isValidOfficer()) {
-        next()
-      } else if (!store.state.user.isAuthenticated) {
-        next()
-      } else {
-        next('/user')
-      }
-    },
   },
   {
     path: '/admin',
@@ -43,22 +33,6 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
-      ),
-  },
-  {
-    path: '/user',
-    name: 'User',
-    component: () =>
-      import(
-        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserContainer.vue'
-      ),
-  },
-  {
-    path: '/checkUser',
-    name: 'Check User',
-    component: () =>
-      import(
-        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserCheckContainer.vue'
       ),
   },
 ]

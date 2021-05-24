@@ -51,9 +51,9 @@ import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import RipaPageContainer from './RipaPageContainer'
+import RipaStopMixin from '@/components/mixins/RipaStopMixin'
 import {
   formBeats,
   formCountyCities,
@@ -65,7 +65,7 @@ import {
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+  mixins: [RipaStopMixin, RipaApiStopJobMixin],
 
   components: {
     RipaAddFavoriteDialog,
@@ -91,6 +91,7 @@ export default {
       mappedFormSchools: [],
       mappedFormStatutes: [],
       officerId: '2021050812345',
+      officerName: 'Steve Pietrek',
       stop: {},
     }
   },
