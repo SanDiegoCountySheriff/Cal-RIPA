@@ -11,6 +11,7 @@ using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -149,9 +150,34 @@ namespace RIPA.Functions.Stop.Functions
 
             var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
 
-            var response = await _stopCosmosDbService.GetStopsAsync("SELECT VALUE c FROM c" + join + where + order + limit);
+            var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order} {limit}");
 
+            var summary = await _stopCosmosDbService.GetStopStatusCounts($"SELECT COUNT(c.id) AS Count, c.Status AS Status FROM c {join} {where} GROUP BY c.Status");
+
+            SummaryResponse summaryResponse = new SummaryResponse()
+            {
+                Total = summary.Sum(x => x.Count),
+                Submitted = summary.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
+                Unsubmitted = summary.Where(x => x.Status == null).Select(x => x.Count).FirstOrDefault(),
+                Resubmitted = summary.Where(x => x.Status == "Resubmitted").Select(x => x.Count).FirstOrDefault(),
+                Failed = summary.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
+            };
+
+            var response = new
+            {
+                stops = stopResponse,
+                summary = summaryResponse
+            };
             return new OkObjectResult(response);
+        }
+
+        public class SummaryResponse
+        {
+            public int Total { get; set; }
+            public int Submitted { get; set; }
+            public int Unsubmitted { get; set; }
+            public int Failed { get; set; }
+            public int Resubmitted { get; set; }
         }
 
         public class StopQuery
