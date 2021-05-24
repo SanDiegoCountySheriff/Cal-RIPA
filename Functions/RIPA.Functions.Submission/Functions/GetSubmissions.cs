@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiOperation(operationId: "GetSubmissions", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Models.Submission>), Description = "List of Submissions")]
+        [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range submission query")]
+        [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range submission query")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Submissions requested");
@@ -45,9 +48,46 @@ namespace RIPA.Functions.Submission.Functions
                 return new UnauthorizedResult();
             }
 
-            var response = await _submissionCosmosDbService.GetSubmissionsAsync("SELECT * FROM c ORDER BY c.dateSubmitted");
+            SubmissionQuery submissionQuery = new SubmissionQuery()
+            {
+                StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
+                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default
+            };
+
+            List<string> whereStatements = new List<string>();
+
+            //Date Range
+            if (submissionQuery.StartDate != default(DateTime))
+            {
+                whereStatements.Add(Environment.NewLine + $"c.dateSubmitted > '{(DateTime)submissionQuery.StartDate:o}'");
+            }
+            if (submissionQuery.EndDate != default(DateTime))
+            {
+                whereStatements.Add(Environment.NewLine + $"c.dateSubmitted < '{(DateTime)submissionQuery.EndDate:o}'");
+            }
+
+            string where = string.Empty;
+            if (whereStatements.Count > 0)
+            {
+                where = " WHERE ";
+                foreach (var whereStatement in whereStatements)
+                {
+                    where += Environment.NewLine + whereStatement;
+                    where += Environment.NewLine + "AND";
+                }
+                where = where.Remove(where.Length - 3);
+            }
+
+            var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
+
+            var response = await _submissionCosmosDbService.GetSubmissionsAsync("SELECT * FROM c" + where + order);
 
             return new OkObjectResult(response);
+        }
+        public class SubmissionQuery
+        {
+            public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
         }
     }
 }

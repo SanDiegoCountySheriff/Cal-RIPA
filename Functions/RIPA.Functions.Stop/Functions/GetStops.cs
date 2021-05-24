@@ -69,7 +69,7 @@ namespace RIPA.Functions.Stop.Functions
             };
  
             List<string> whereStatements = new List<string>();
-            string join = "";
+            string join = string.Empty;
 
             //Date Range
             if (stopQuery.StartDate != default(DateTime))
@@ -119,13 +119,18 @@ namespace RIPA.Functions.Stop.Functions
                 limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
             }
 
-            string where = " WHERE ";
-            foreach (var whereStatement in whereStatements)
+            string where = string.Empty;
+            if (whereStatements.Count > 0)
             {
-                where += Environment.NewLine + whereStatement;
-                where += Environment.NewLine + "AND";
+                where = " WHERE ";
+
+                foreach (var whereStatement in whereStatements)
+                {
+                    where += Environment.NewLine + whereStatement;
+                    where += Environment.NewLine + "AND";
+                }
+                where = where.Remove(where.Length - 3);
             }
-            where = where.Remove(where.Length - 3);
 
             var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
 
