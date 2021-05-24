@@ -43,7 +43,7 @@
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2021-04-01",
             "location": "[parameters('rgLocation')]",
             "name": "[parameters('rg')]",
             "properties": {}
