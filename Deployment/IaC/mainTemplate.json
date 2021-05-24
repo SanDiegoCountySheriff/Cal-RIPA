@@ -45,7 +45,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2018-05-01",
             "location": "[parameters('rgLocation')]",
-            "name": "[variables('rgName')]",
+            "name": "[parameters('rg')]",
             "properties": {}
         },
         {
@@ -53,9 +53,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "DevDeployment",
-            "resourceGroup": "[variables('rgName')]",
+            "resourceGroup": "[parameters('rg')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('rgName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rg'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -74,7 +74,7 @@
         "resourcegroup_name": {
             "condition": "[parameters('deploy_rg')]",
             "type": "string",
-            "value": "[variables('rgName')]"
+            "value": "[parameters('rg')]"
         },
         "subscription": {
             "type": "object",

@@ -24,12 +24,11 @@
 			}
 		},
         "basics": [
-           
             {
                 "name": "agName",
                 "type": "Microsoft.Common.TextBox",
                 "label": "Agency Name",
-                "defaultValue": "San Diego County Sheriff",
+                "defaultValue": "San Diego County Sheriffs Department",
                 "toolTip": "",
                 "constraints": {
                     "required": true,
@@ -39,9 +38,9 @@
                 "visible": true
             },
             {
-                "name": "agAbbvn",
+                "name": "agAbbr",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Agency abbreviation",
+                "label": "Agency Abbreviation",
                 "defaultValue": "sdsd",
                 "toolTip": "",
                 "constraints": {
@@ -52,9 +51,22 @@
                 "visible": true
             },
             {
-                "name": "agId",
+                "name": "agapplication",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Agency Unique Id",
+                "label": "Agency Application",
+                "defaultValue": "ripa",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },
+            {
+                "name": "appId",
+                "type": "Microsoft.Common.TextBox",
+                "label": "AppId",
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
@@ -64,10 +76,10 @@
                 },
                 "visible": true
             },
-			{
-                "name": "privateDomain",
+            {
+                "name": "tenant",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Private Domain",
+                "label": "Tenant",
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
@@ -76,15 +88,53 @@
                     "validationMessage": ""
                 },
                 "visible": true
-            }
+            },
+            {
+                "name": "LogAuth",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Login Authority",
+                "defaultValue": "",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },               
+            {
+                "name": "DnsSelector",
+                "type": "Microsoft.Solutions.ResourceSelector",
+                "label": "Dns Zone",
+                "resourceType": "Microsoft.Network/dnsZones",
+                "options": {
+                    "filter": {
+                        "subscription": "onBasics"
+                    }
+                }
+            },
+            {
+                "name": "PrivateDomain",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Private Domain",
+                "defaultValue": "",
+                "toolTip": "",
+                "constraints": {
+                    "required": false,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            }   
+            
 			
         ],
         "steps": [],
         "outputs": {            
-            "agencyName": "[basics('agName')]",
-            "agencyAbbreviation": "[basics('agAbbvn')]",
-            "agencyId": "[basics('agId')]",
-			"privateDomain": "[basics('privateDomain')]"
+            "agency": "[basics('agAbbr')]",
+            "application": "[basics('agapplication')]",
+            "rg":"[resourceGroup().name]",
+            "rgLocation":"[resourceGroup().location]"
         }
     }
 }
