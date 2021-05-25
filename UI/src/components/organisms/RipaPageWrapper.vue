@@ -17,7 +17,11 @@
       <slot></slot>
     </ripa-content-wrapper>
 
-    <ripa-speed-dial v-if="!invalidUser && authenticated"></ripa-speed-dial>
+    <ripa-speed-dial
+      v-if="
+        !invalidUser && authenticated && $route.path.indexOf('/admin') === -1
+      "
+    ></ripa-speed-dial>
   </div>
 </template>
 

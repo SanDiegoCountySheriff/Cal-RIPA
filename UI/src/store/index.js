@@ -956,12 +956,7 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          // const data = response.data.sort((x, y) => {
-          //   const stopA = x.stopDateTime
-          //   const stopB = y.stopDateTime
-          //   return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
-          // })
-          commit('updateAdminSubmissions', response)
+          commit('updateAdminSubmissions', response.data)
         })
         .catch(error => {
           console.log('There was an error retrieving admin submissions.', error)

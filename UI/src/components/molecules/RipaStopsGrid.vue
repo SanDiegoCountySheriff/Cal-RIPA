@@ -182,39 +182,7 @@ export default {
 
   computed: {
     getStops() {
-      let filteredItems = this.stops.map(item => {
-        return {
-          ...item,
-          status: item.status === null ? 'Not Submitted' : item.status,
-          stopDateInt: item.stopDate ? new Date(item.stopDate).getTime() : null,
-          stopDateStr: item.stopDate
-            ? format(new Date(item.stopDate), 'yyyy-MM-dd kk:mm')
-            : null,
-        }
-      })
-
-      if (this.errorsFound) {
-        filteredItems = filteredItems.filter(item => item.errorsFound)
-      }
-
-      if (this.isPiiFound) {
-        filteredItems = filteredItems.filter(item => item.isPiiFound)
-      }
-
-      if (this.officerName) {
-        filteredItems = filteredItems.filter(
-          item => item.officerName === this.officerName,
-        )
-      }
-
-      filteredItems = filteredItems.filter(item => {
-        return (
-          isAfter(new Date(item.stopDateTime), new Date(this.stopFromDate)) &&
-          isBefore(new Date(item.stopDateTime), new Date(this.stopToDate))
-        )
-      })
-
-      return filteredItems
+      return this.stops
     },
     getTotalStops() {
       return this.stops.length
