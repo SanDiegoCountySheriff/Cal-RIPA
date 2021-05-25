@@ -49,6 +49,7 @@ export default {
 
 <style lang="scss">
 .update-dialog {
+  z-index: 999 !important;
   position: fixed;
   left: 50%;
   bottom: 64px;

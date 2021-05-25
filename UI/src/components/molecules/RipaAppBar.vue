@@ -33,7 +33,7 @@
       <v-spacer></v-spacer>
 
       <div v-if="!invalidUser">
-        <v-tooltip v-if="authenticated" bottom>
+        <v-tooltip v-if="authenticated && online" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
@@ -49,13 +49,13 @@
           <span>View last 10 stops</span>
         </v-tooltip>
 
-        <v-tooltip v-if="authenticated" bottom>
+        <v-tooltip v-if="authenticated && online" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
               icon
               small
-              to="/user"
+              @click="handleUserChange"
               v-bind="attrs"
               v-on="on"
             >
@@ -65,7 +65,7 @@
           <span>View user profile</span>
         </v-tooltip>
 
-        <template v-if="authenticated && admin">
+        <template v-if="authenticated && online && admin">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -83,7 +83,7 @@
           </v-tooltip>
         </template>
 
-        <v-tooltip bottom>
+        <v-tooltip v-if="online" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"

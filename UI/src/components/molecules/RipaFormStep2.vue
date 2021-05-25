@@ -74,7 +74,7 @@ export default {
 
   computed: {
     isSchool() {
-      return this.viewModel.location.isSchool
+      return this.viewModel?.location?.isSchool || false
     },
   },
 

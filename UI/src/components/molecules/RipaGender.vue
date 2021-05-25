@@ -12,15 +12,13 @@
       <v-container>
         <v-row no-gutters>
           <v-col cols="12" sm="12">
-            <template v-if="isGenderListVisible">
-              <ripa-radio-group
-                v-model="model.person.perceivedGender"
-                :items="genderItems"
-                :rules="genderRules"
-                @input="handleInput"
-              >
-              </ripa-radio-group>
-            </template>
+            <ripa-radio-group
+              v-model="model.person.perceivedGender"
+              :items="genderItems"
+              :rules="genderRules"
+              @input="handleInput"
+            >
+            </ripa-radio-group>
           </v-col>
 
           <v-col cols="12" sm="12">
@@ -95,31 +93,14 @@ export default {
     },
 
     genderRules() {
-      if (!this.isGenderListVisible) {
-        return []
-      }
-
       return [v => !!v || 'A gender is required']
-    },
-
-    isGenderListVisible() {
-      const gc = this.viewModel.person?.genderNonconforming || false
-      return !gc
     },
   },
 
   methods: {
     handleInput() {
-      this.updateGenderModel()
       this.updatePerceivedLgbtModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateGenderModel() {
-      const gc = this.viewModel.person?.genderNonconforming || false
-      if (gc) {
-        this.viewModel.person.perceivedGender = null
-      }
     },
 
     updatePerceivedLgbtModel() {

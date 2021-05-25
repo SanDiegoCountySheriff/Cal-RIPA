@@ -77,7 +77,15 @@ export default {
 
   data() {
     return {
-      agency: 'Insight',
+      officer: {
+        agency: 'Insight',
+        startDate: '2010-05-18',
+        yearsExperience: 11,
+        assignment: 1,
+        otherType: null,
+        officerId: '2021050812345',
+        officerName: 'Steve Pietrek',
+      },
       fullStop: {},
       isEditingForm: false,
       isOnlineAndAuthenticated: true,
@@ -90,8 +98,6 @@ export default {
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
-      officerId: '2021050812345',
-      officerName: 'Steve Pietrek',
       stop: {},
     }
   },

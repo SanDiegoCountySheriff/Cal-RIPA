@@ -25,10 +25,6 @@ export default {
 </script>
 
 <style lang="scss">
-.update-dialog {
-  z-index: 999 !important;
-}
-
 .v-menu__content {
   max-width: 500px !important;
 }
