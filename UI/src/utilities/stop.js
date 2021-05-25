@@ -462,14 +462,15 @@ const getSummaryActionsTaken = person => {
     })
   if (
     person.listBasisForPropertySeizure &&
-    person.typeOfPropertySeized &&
+    person.listTypeOfPropertySeized &&
     (person.listBasisForPropertySeizure.length > 0 ||
-      person.typeOfPropertySeized.length > 0)
+      person.listTypeOfPropertySeized.length > 0)
   ) {
     actions.push({
       detail: 'Property was seized',
     })
   }
+
   return {
     level: 2,
     header: 'Actions Taken During Stop',
@@ -485,6 +486,7 @@ const getSummaryBasisForSearch = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -498,7 +500,7 @@ const getSummaryBasisForSearchExplanation = person => {
     marginLeft: true,
     level: 1,
     header: 'Basis for Search Explanation',
-    detail: person.basisForSearchBrief,
+    detail: person.basisForSearchBrief || 'None',
   }
 }
 
@@ -510,6 +512,7 @@ const getSummaryBasisForPropertySeizure = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -526,6 +529,7 @@ const getSummaryTypeOfPropertySeized = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -542,6 +546,7 @@ const getSummaryContraband = person => {
         detail: item,
       }
     })
+
   return {
     level: 2,
     header: 'Contraband or Evidence Discovered',
@@ -713,7 +718,7 @@ const getFullStopPeopleListed = people => {
         basisForSearchPiiFound: person.basisForSearchPiiFound,
         propertyWasSeized:
           person.listBasisForPropertySeizure.length > 0 ||
-          person.typeOfPropertySeized.length > 0,
+          person.listTypeOfPropertySeized.length > 0,
         basisForPropertySeizure: getKeyArray(
           person.listBasisForPropertySeizure,
         ),
@@ -864,7 +869,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
       genderNonconforming: person.genderNonconforming || false,
-      id: person.id,
+      id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
@@ -1004,7 +1009,7 @@ const getPerceivedGender = person => {
 
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
-  return gender ? gender.code : null
+  return gender ? gender.code : 5
 }
 
 const getPerceivedGenderText = person => {

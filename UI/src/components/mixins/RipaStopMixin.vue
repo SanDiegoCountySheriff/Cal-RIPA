@@ -193,6 +193,7 @@ export default {
         const updatedPerson = {
           ...this.stop.person,
           id: this.stop?.person.id,
+          index: this.stop?.person.index,
           actionsTaken: this.stop?.actionsTaken || null,
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
@@ -210,14 +211,7 @@ export default {
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
-        updatedFullStop.people = people
-          .filter(item => item.id !== personId)
-          .map((item, index) => {
-            return {
-              ...item,
-              index: index + 1,
-            }
-          })
+        updatedFullStop.people = people.filter(item => item.id !== personId)
         updatedFullStop.people.push(updatedPerson)
         updatedFullStop = {
           ...updatedFullStop,
