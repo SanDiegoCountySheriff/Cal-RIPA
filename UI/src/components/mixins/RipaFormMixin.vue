@@ -55,6 +55,7 @@ export default {
         person: {
           anyDisabilities: newValue?.person?.anyDisabilities || false,
           id: newValue?.person?.id,
+          index: newValue?.person?.index,
           isStudent: newValue?.person?.isStudent || false,
           perceivedAge: newValue?.person?.perceivedAge || null,
           perceivedGender: newValue?.person?.perceivedGender || null,

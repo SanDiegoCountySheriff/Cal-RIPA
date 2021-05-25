@@ -82,6 +82,7 @@
             <v-stepper-content step="3">
               <template v-if="stepIndex === 3">
                 <ripa-subheader
+                  class="tw-text-right"
                   :text="getEditPersonText"
                   no-margins
                 ></ripa-subheader>
@@ -102,6 +103,7 @@
             <v-stepper-content step="4">
               <template v-if="stepIndex === 4">
                 <ripa-subheader
+                  class="tw-text-right"
                   :text="getEditPersonText"
                   no-margins
                 ></ripa-subheader>
@@ -122,6 +124,7 @@
             <v-stepper-content step="5">
               <template v-if="stepIndex === 5">
                 <ripa-subheader
+                  class="tw-text-right"
                   :text="getEditPersonText"
                   no-margins
                 ></ripa-subheader>
@@ -230,8 +233,8 @@ export default {
 
   computed: {
     getEditPersonText() {
-      const personId = this.stop.person?.id || 'N/A'
-      return `Person: ${personId}`
+      const personIndex = this.stop.person?.index || 1
+      return `Person: ${personIndex}`
     },
 
     getFormStep2BackButtonVisible() {

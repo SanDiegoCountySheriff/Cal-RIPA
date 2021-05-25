@@ -30,6 +30,7 @@ export const sampleStop = {
   },
   person: {
     id: new Date().getTime(),
+    index: 1,
     isStudent: true,
     perceivedRace: [7],
     perceivedGender: 3,
@@ -118,6 +119,7 @@ export const onePersonFullStop = {
   people: [
     {
       id: new Date().getTime() + '1',
+      index: 1,
       isStudent: true,
       perceivedRace: [2, 7],
       perceivedGender: 3,
@@ -261,6 +263,7 @@ export const twoPersonFullStop = {
     },
     {
       id: new Date().getTime() + '2',
+      index: 2,
       isStudent: true,
       perceivedRace: [2],
       perceivedGender: 1,
@@ -591,3 +594,135 @@ export const apiStops = [
     time: '08:17',
   },
 ]
+
+export const invalidApiStop1 = {
+  id: '202105182150',
+  ori: 'CA0370000',
+  agency: 'Insight',
+  officerId: '210518694',
+  officerName: 'TEST',
+  expYears: '12',
+  officerAssignment: {
+    key: '10',
+    type: 'Other',
+    otherType: 'New recruit training',
+  },
+  date: '2021-05-18',
+  time: '21:50',
+  stopDateTime: '2021-05-18T21:50:00',
+  location: {
+    toggleLocationOptions: false,
+    intersection: '',
+    blockNumber: '25300',
+    landMark: '',
+    streetName: 'Cedar Rd',
+    highwayExit: '',
+    city: {
+      codes: {
+        code: 'ALPINE',
+        text: 'ALPINE',
+      },
+    },
+    beat: null,
+    school: false,
+    schoolName: null,
+    outOfCounty: false,
+  },
+  stopDuration: 30,
+  stopInResponseToCFS: false,
+  listPersonStopped: [
+    {
+      id: '1',
+      isStudent: false,
+      listPerceivedRace: [
+        {
+          race: 'White',
+          key: 7,
+        },
+      ],
+      perceivedLimitedEnglish: false,
+      listPerceivedOrKnownDisability: [
+        {
+          disability: 'None',
+          key: '8',
+        },
+      ],
+      perceivedAge: 60,
+      perceivedGender: 'Female',
+      genderNonconforming: false,
+      perceivedLgbt: false,
+      reasonForStop: {
+        key: '1',
+        reason:
+          'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+        listDetail: [
+          {
+            reason: 'Moving Violation',
+            key: '1',
+          },
+        ],
+        listCodes: [
+          {
+            code: '54106',
+            text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+          },
+        ],
+      },
+      reasonForStopExplanation: 'Speeding',
+      listActionTakenDuringStop: [
+        {
+          action: 'None',
+          key: '24',
+        },
+      ],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      listContrabandOrEvidenceDiscovered: [
+        {
+          contraband: 'None',
+          key: '1',
+        },
+      ],
+      listBasisForSearch: [],
+      basisForSearchBrief: null,
+      listBasisForPropertySeizure: [],
+      listTypeOfPropertySeized: [],
+      listResultOfStop: [
+        {
+          result: 'Referral to school counselor or other support staff',
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+          key: '2',
+        },
+      ],
+    },
+  ],
+  listSubmission: [
+    {
+      id: 'd3e317ed-c17b-49ea-8364-152bb4bbcb21',
+      dateSubmitted: '2021-05-13T19:25:54.2637531Z',
+      status: 'Failed',
+      fileName: '20210513192554_CA0370000_202105120107.json',
+      error: {
+        errorType: 'FileLevelFatalError',
+        error:
+          'Invalid file format was received. The file cannot be processed.',
+        dateReported: '2021-05-14T22:16:43.1898325Z',
+        fileName: '20210513192554_CA0370000_202105120107.json',
+      },
+    },
+    {
+      id: 'db2e450e-f617-410b-8869-0cd2a0b5f131',
+      dateSubmitted: '2021-05-14T19:44:55.0778183Z',
+      status: 'Submitted',
+      fileName: '20210514194455_CA0370000_202105120107.json',
+      error: null,
+    },
+  ],
+  status: null,
+  isPiiFound: false,
+}

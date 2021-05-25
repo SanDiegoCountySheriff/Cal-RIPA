@@ -18,7 +18,7 @@ const AuthService = {
     if (!sessionStorage.getItem('ripa-idToken')) {
       await msalInstance.handleRedirectPromise()
       const currentAccount = await msalInstance.getAllAccounts()
-      console.log('checking account with no token ' + currentAccount)
+      console.log('checking account with no token ' + currentAccount[0])
       if (currentAccount.length) {
         // check to see if user is not in any groups.  If not, redirect
         if (currentAccount[0].idTokenClaims.roles.length === 0) {
@@ -166,6 +166,9 @@ const AuthService = {
           apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
           apiSubscription: res.data.Configuration.Subscription,
           defaultCounty: res.data.Configuration.DefaultCounty,
+          displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
+          environmentName: res.data.Configuration.Environment,
+          displayEnvironment: res.data.Configuration.Environment !== 'p',
         })
         return true
       })

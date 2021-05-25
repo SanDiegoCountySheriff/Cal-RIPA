@@ -59,6 +59,7 @@ export default {
       this.stop.actionsTaken = {}
       this.stop.person = {
         id: new Date().getTime(),
+        index: this.fullStop.people.length + 1,
       }
       this.updateFullStop()
     },
@@ -80,11 +81,16 @@ export default {
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {
         ...this.fullStop,
-        people: filteredPeople,
+        people: filteredPeople.map((person, index) => {
+          return {
+            ...person,
+            index: index + 1,
+          }
+        }),
       }
       this.fullStop = Object.assign({}, updatedFullStop)
       // update stop
-      const [filteredPerson] = this.fullStop.people[0]
+      const filteredPerson = this.fullStop.people[0]
       if (filteredPerson) {
         this.stop = {
           ...this.stop,
@@ -187,6 +193,7 @@ export default {
         const updatedPerson = {
           ...this.stop.person,
           id: this.stop?.person.id,
+          index: this.stop?.person.index,
           actionsTaken: this.stop?.actionsTaken || null,
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
@@ -204,18 +211,18 @@ export default {
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
-        updatedFullStop.people = people
-          .filter(item => item.id !== personId)
-          .map((item, index) => {
-            return {
-              ...item,
-              index: index + 1,
-            }
-          })
+        updatedFullStop.people = people.filter(item => item.id !== personId)
         updatedFullStop.people.push(updatedPerson)
         updatedFullStop = {
           ...updatedFullStop,
-          people: updatedFullStop.people.sort((a, b) => a.id - b.id),
+          people: updatedFullStop.people
+            .sort((a, b) => a.id - b.id)
+            .map((person, index) => {
+              return {
+                ...person,
+                index: index + 1,
+              }
+            }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
       }

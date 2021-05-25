@@ -48,6 +48,7 @@ export const defaultStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -90,6 +91,7 @@ export const motorStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -157,6 +159,7 @@ export const probationStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -459,14 +462,15 @@ const getSummaryActionsTaken = person => {
     })
   if (
     person.listBasisForPropertySeizure &&
-    person.typeOfPropertySeized &&
+    person.listTypeOfPropertySeized &&
     (person.listBasisForPropertySeizure.length > 0 ||
-      person.typeOfPropertySeized.length > 0)
+      person.listTypeOfPropertySeized.length > 0)
   ) {
     actions.push({
       detail: 'Property was seized',
     })
   }
+
   return {
     level: 2,
     header: 'Actions Taken During Stop',
@@ -482,6 +486,7 @@ const getSummaryBasisForSearch = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -495,7 +500,7 @@ const getSummaryBasisForSearchExplanation = person => {
     marginLeft: true,
     level: 1,
     header: 'Basis for Search Explanation',
-    detail: person.basisForSearchBrief,
+    detail: person.basisForSearchBrief || 'None',
   }
 }
 
@@ -507,6 +512,7 @@ const getSummaryBasisForPropertySeizure = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -523,6 +529,7 @@ const getSummaryTypeOfPropertySeized = person => {
         detail: item,
       }
     })
+
   return {
     marginLeft: true,
     level: 2,
@@ -539,6 +546,7 @@ const getSummaryContraband = person => {
         detail: item,
       }
     })
+
   return {
     level: 2,
     header: 'Contraband or Evidence Discovered',
@@ -613,9 +621,10 @@ export const apiStopToFullStop = apiStop => {
 }
 
 const getFullStopPeopleListed = people => {
-  return people.map(person => {
+  return people.map((person, index) => {
     return {
       id: person.id,
+      index: index + 1,
       isStudent: person.isStudent,
       perceivedRace: getKeyArray(person.listPerceivedRace),
       perceivedGender: getPerceivedGenderCode(person),
@@ -709,7 +718,7 @@ const getFullStopPeopleListed = people => {
         basisForSearchPiiFound: person.basisForSearchPiiFound,
         propertyWasSeized:
           person.listBasisForPropertySeizure.length > 0 ||
-          person.typeOfPropertySeized.length > 0,
+          person.listTypeOfPropertySeized.length > 0,
         basisForPropertySeizure: getKeyArray(
           person.listBasisForPropertySeizure,
         ),
@@ -853,14 +862,15 @@ export const fullStopToApiStop = (
 }
 
 export const getApiStopPeopleListed = (fullStop, statutes) => {
-  return fullStop.people.map(person => {
+  return fullStop.people.map((person, index) => {
     return {
       basisForSearchBrief:
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
       genderNonconforming: person.genderNonconforming || false,
-      id: person.id,
+      id: index + 1,
+      index: index + 1,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
       listBasisForPropertySeizure: getBasisForPropertySeizure(person),
@@ -999,7 +1009,7 @@ const getPerceivedGender = person => {
 
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
-  return gender ? gender.code : null
+  return gender ? gender.code : 5
 }
 
 const getPerceivedGenderText = person => {
