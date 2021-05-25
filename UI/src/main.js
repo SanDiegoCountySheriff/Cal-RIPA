@@ -18,21 +18,11 @@ Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 appStartUp()
 
 async function appStartUp() {
-  // get config on app startup
-  const configLoaded = await AuthService.getAuthConfig()
-  if (configLoaded) {
-    new Vue({
-      router,
-      store,
-      vuetify,
-      render: h => h(App),
-    }).$mount('#app')
-  } else {
-    new Vue({
-      router,
-      store,
-      vuetify,
-      render: h => h(App),
-    }).$mount('#app')
-  }
+  await AuthService.getAuthConfig()
+  new Vue({
+    router,
+    store,
+    vuetify,
+    render: h => h(App),
+  }).$mount('#app')
 }

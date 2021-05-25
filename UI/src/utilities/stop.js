@@ -48,6 +48,7 @@ export const defaultStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -90,6 +91,7 @@ export const motorStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -157,6 +159,7 @@ export const probationStop = officer => {
     officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
+      index: 1,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -613,9 +616,10 @@ export const apiStopToFullStop = apiStop => {
 }
 
 const getFullStopPeopleListed = people => {
-  return people.map(person => {
+  return people.map((person, index) => {
     return {
       id: person.id,
+      index: index + 1,
       isStudent: person.isStudent,
       perceivedRace: getKeyArray(person.listPerceivedRace),
       perceivedGender: getPerceivedGenderCode(person),
@@ -853,7 +857,7 @@ export const fullStopToApiStop = (
 }
 
 export const getApiStopPeopleListed = (fullStop, statutes) => {
-  return fullStop.people.map(person => {
+  return fullStop.people.map((person, index) => {
     return {
       basisForSearchBrief:
         person.actionsTaken?.basisForSearchExplanation || null,
@@ -861,6 +865,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchPiiFound || false,
       genderNonconforming: person.genderNonconforming || false,
       id: person.id,
+      index: index + 1,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
       listBasisForPropertySeizure: getBasisForPropertySeizure(person),

@@ -59,6 +59,7 @@ export default {
       this.stop.actionsTaken = {}
       this.stop.person = {
         id: new Date().getTime(),
+        index: this.fullStop.people.length + 1,
       }
       this.updateFullStop()
     },
@@ -80,11 +81,16 @@ export default {
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {
         ...this.fullStop,
-        people: filteredPeople,
+        people: filteredPeople.map((person, index) => {
+          return {
+            ...person,
+            index: index + 1,
+          }
+        }),
       }
       this.fullStop = Object.assign({}, updatedFullStop)
       // update stop
-      const [filteredPerson] = this.fullStop.people[0]
+      const filteredPerson = this.fullStop.people[0]
       if (filteredPerson) {
         this.stop = {
           ...this.stop,
@@ -215,7 +221,14 @@ export default {
         updatedFullStop.people.push(updatedPerson)
         updatedFullStop = {
           ...updatedFullStop,
-          people: updatedFullStop.people.sort((a, b) => a.id - b.id),
+          people: updatedFullStop.people
+            .sort((a, b) => a.id - b.id)
+            .map((person, index) => {
+              return {
+                ...person,
+                index: index + 1,
+              }
+            }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
       }
