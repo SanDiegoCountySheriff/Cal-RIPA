@@ -1,7 +1,10 @@
 <template>
   <div class="ripa-home-container">
     <template v-if="!isEditingForm">
-      <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
+      <ripa-intro-template
+        v-if="getAuthAndLocalStorageCheck"
+        :on-template="handleTemplate"
+      ></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
       <ripa-form-template
@@ -52,6 +55,7 @@
 
     <ripa-statute-dialog
       :show-dialog="showStatuteDialog"
+      :statute="statute"
       :on-close="handleCloseDialog"
     ></ripa-statute-dialog>
   </div>
@@ -62,15 +66,15 @@ import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
+import RipaStopMixin from '@/components/mixins/RipaStopMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+  mixins: [RipaStopMixin, RipaApiStopJobMixin],
 
   components: {
     RipaAddFavoriteDialog,
@@ -89,6 +93,7 @@ export default {
       loadingPiiStep1: false,
       loadingPiiStep3: false,
       loadingPiiStep4: false,
+      statute: null,
       stop: {},
       stopIndex: 1,
     }
@@ -96,17 +101,26 @@ export default {
 
   computed: {
     ...mapGetters([
+      'invalidUser',
       'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
-      'officerId',
-      'agency',
       'mappedGpsLocationAddress',
+      'isAuthenticated',
       'displayBeatInput',
     ]),
+    getAuthAndLocalStorageCheck() {
+      // if the user is NOT authenticated AND does not have a local storage cache
+      // that means they haven't logged in and must reauthenticate
+      if (!this.isAuthenticated && !localStorage.getItem('ripa_cache_date')) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
 
   methods: {
@@ -129,8 +143,12 @@ export default {
     },
 
     async validateLocationForPii(textValue) {
-      const trimmedTextValue = textValue || ''
-      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep1 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)
@@ -144,10 +162,15 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep3 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
@@ -158,10 +181,15 @@ export default {
     },
 
     async validateBasisForSearchForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep4 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound

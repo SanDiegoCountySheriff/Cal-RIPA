@@ -1,12 +1,7 @@
 <script>
-import {
-  getOfficerStartDate,
-  getOfficerYearsExperience,
-  getOfficerAssignment,
-  getOfficerOtherType,
-} from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 import { format } from 'date-fns'
+import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
   data() {
@@ -27,6 +22,11 @@ export default {
   },
 
   methods: {
+    getOfficerFromLocalStorage() {
+      const officer = localStorage.getItem('ripa_officer')
+      return officer ? JSON.parse(officer) : null
+    },
+
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -141,6 +141,10 @@ export default {
     },
 
     handleOpenStatute(statute) {
+      this.statute = {
+        statute,
+        content: getStatuteContent(statute),
+      }
       this.showStatuteDialog = true
     },
 
@@ -155,36 +159,15 @@ export default {
 
       switch (value) {
         case 'motor':
-          this.stop = motorStop(
-            getOfficerStartDate(),
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = motorStop(this.getOfficerFromLocalStorage())
           break
 
         case 'probation':
-          this.stop = probationStop(
-            getOfficerStartDate(),
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = probationStop(this.getOfficerFromLocalStorage())
           break
 
         default:
-          this.stop = defaultStop(
-            getOfficerStartDate(),
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = defaultStop(this.getOfficerFromLocalStorage())
           break
       }
 
@@ -216,6 +199,7 @@ export default {
         updatedFullStop.location = this.stop.location
         updatedFullStop.officer = this.stop.officer
         updatedFullStop.officerId = this.stop.officerId
+        updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id

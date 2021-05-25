@@ -26,7 +26,12 @@
       </v-tab-item>
 
       <v-tab-item>
-        <ripa-stops-grid :loading="loading" :items="stops"></ripa-stops-grid>
+        <ripa-stops-grid
+          :loading="loading"
+          :items="stops"
+          :errorCodeSearch="errorCodeSearch"
+          @callErrorCodeSearch="handleCallErrorCodeSearch"
+        ></ripa-stops-grid>
       </v-tab-item>
 
       <v-tab-item>
@@ -124,6 +129,12 @@ export default {
     },
   },
 
+  methods: {
+    handleCallErrorCodeSearch(val) {
+      this.$emit('handleCallErrorCodeSearch', val)
+    },
+  },
+
   props: {
     loading: {
       type: Boolean,
@@ -152,6 +163,10 @@ export default {
     submissions: {
       type: Array,
       default: () => [],
+    },
+    errorCodeSearch: {
+      type: Object,
+      default: () => {},
     },
     users: {
       type: Array,

@@ -15,20 +15,18 @@ Vue.prototype.$workbox = wb
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
-appStartup()
+appStartUp()
 
-async function appStartup() {
-  const isAuthenticated = await AuthService.getIsAuthenticated()
-  if (!isAuthenticated && navigator.onLine) {
-    const loginAttempt = await AuthService.tryLogin()
-    if (loginAttempt) {
-      new Vue({
-        router,
-        store,
-        vuetify,
-        render: h => h(App),
-      }).$mount('#app')
-    }
+async function appStartUp() {
+  // get config on app startup
+  const configLoaded = await AuthService.getAuthConfig()
+  if (configLoaded) {
+    new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App),
+    }).$mount('#app')
   } else {
     new Vue({
       router,

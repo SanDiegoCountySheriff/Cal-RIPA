@@ -8,6 +8,7 @@
     :stops="mappedAdminStops"
     :submissions="mappedAdminSubmissions"
     :users="mappedAdminUsers"
+    :errorCodeSearch="mappedErrorCodeAdminSearch"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -18,6 +19,7 @@
     :on-edit-statute="handleEditStatute"
     :on-edit-user="handleEditUser"
     :on-tab-change="handleTabChange"
+    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
   ></ripa-admin-template>
 </template>
 
@@ -47,6 +49,7 @@ export default {
       'mappedAdminStops',
       'mappedAdminSubmissions',
       'mappedAdminUsers',
+      'mappedErrorCodeAdminSearch',
     ]),
   },
 
@@ -68,7 +71,12 @@ export default {
       'getAdminStops',
       'getAdminUsers',
       'getAdminSubmissions',
+      'getErrorCodes',
     ]),
+
+    async handleCallErrorCodeSearch(val) {
+      this.getErrorCodes(val)
+    },
 
     async handleTabChange(tabIndex) {
       this.loading = true

@@ -48,13 +48,17 @@
       <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
-            :items="items"
+            :items="getErrorCodeSearchItems"
+            :loading="errorCodesLoading"
+            @input="handleChangeSearchCodes"
+            cache-items
+            :search-input.sync="search"
+            multiple
             dense
             chips
             deletable-chips
             small-chips
             label="Error Codes"
-            multiple
           ></v-autocomplete>
         </div>
       </v-flex>
@@ -69,7 +73,11 @@
           :headers="headers"
           :single-select="false"
           :items="getStops"
+          :server-items-length="getTotalStops"
           :items-per-page="10"
+          @update:page="handleUpdatePage"
+          @update:sortBy="handleUpdateSort"
+          @update:options="handleUpdateOptions"
           :search="search"
           sort-by="stopDateStr"
           sort-desc
@@ -111,6 +119,8 @@ import subDays from 'date-fns/subDays'
 import { format, isAfter, isBefore } from 'date-fns'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 
+import _ from 'lodash'
+
 export default {
   name: 'ripa-stops-grid',
 
@@ -121,6 +131,7 @@ export default {
   data() {
     return {
       search: '',
+      errorCodesLoading: false,
       stops: [],
       headers: [
         { text: 'ID', value: 'id' },
@@ -178,9 +189,14 @@ export default {
 
       return filteredItems
     },
-
+    getTotalStops() {
+      return this.stops.length
+    },
     getOfficers() {
       return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
+    },
+    getErrorCodeSearchItems() {
+      return this.errorCodeSearch.items
     },
   },
 
@@ -193,11 +209,27 @@ export default {
       this.editedIndex = this.stops.indexOf(item)
       this.editedItem = Object.assign({}, item)
     },
+    callErrorCodeSearch: _.debounce(function (val) {
+      this.errorCodesLoading = true
+      this.$emit('callErrorCodeSearch', val)
+    }, 400),
+    handleChangeSearchCodes(val) {
+      console.log(val)
+    },
   },
 
   watch: {
     items(val) {
       this.stops = val
+    },
+    search(val) {
+      // call API to search error codes here
+      if (val) {
+        this.callErrorCodeSearch(val)
+      }
+    },
+    errorCodeSearch(val) {
+      this.errorCodesLoading = false
     },
   },
 
@@ -216,6 +248,10 @@ export default {
     },
     onEdit: {
       type: Function,
+      default: () => {},
+    },
+    errorCodeSearch: {
+      type: Object,
       default: () => {},
     },
   },

@@ -8,6 +8,7 @@
     :stops="stops"
     :submissions="submissions"
     :users="users"
+    :errorCodeSearch="errorCodeSearch"
     :on-delete-beat="onDeleteBeat"
     :on-delete-city="onDeleteCity"
     :on-delete-school="onDeleteSchool"
@@ -18,6 +19,7 @@
     :on-edit-statute="onEditStatute"
     :on-edit-user="onEditUser"
     :on-tab-change="onTabChange"
+    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
   ></ripa-admin-wrapper>
 </template>
 
@@ -29,6 +31,12 @@ export default {
 
   components: {
     RipaAdminWrapper,
+  },
+
+  methods: {
+    handleCallErrorCodeSearch(val) {
+      this.$emit('handleCallErrorCodeSearch', val)
+    },
   },
 
   props: {
@@ -63,6 +71,10 @@ export default {
     users: {
       type: Array,
       default: () => [],
+    },
+    errorCodeSearch: {
+      type: Object,
+      default: () => {},
     },
     onDeleteBeat: {
       type: Function,

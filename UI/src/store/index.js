@@ -43,9 +43,10 @@ export default new Vuex.Store({
       agency: '',
       oid: '',
       isAdmin: false,
-      isInvalid: false,
+      isInvalid: null,
       isAuthenticated: false,
       officerId: null,
+      officerName: null,
       assignment: null,
       otherType: null,
     },
@@ -53,12 +54,15 @@ export default new Vuex.Store({
     piiDate: null,
     officerStops: [],
     gpsLocationAddress: null,
+    errorCodeAdminSearch: {
+      loading: false,
+      items: [],
+      search: null,
+      select: null,
+    },
   },
 
   getters: {
-    agency: state => {
-      return state.user.agency
-    },
     isAdmin: state => {
       return state.user.isAdmin
     },
@@ -109,14 +113,12 @@ export default new Vuex.Store({
         agency: state.user.agency,
         assignment: state.user.assignment,
         officerId: state.user.officerId,
+        officerName: state.user.officerName,
         oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
       }
-    },
-    officerId: state => {
-      return state.user.officerId
     },
     user: state => {
       return state.user
@@ -185,6 +187,9 @@ export default new Vuex.Store({
         streetName: parsedStreetName,
         city: parsedCity,
       }
+    },
+    mappedErrorCodeAdminSearch: state => {
+      return state.errorCodeAdminSearch
     },
   },
 
@@ -277,16 +282,23 @@ export default new Vuex.Store({
         yearsExperience: differenceInYears(value.startDate),
       }
 
-      localStorage.setItem(
-        'ripa_officer_start_date',
-        formatDate(state.user.startDate),
-      )
-      localStorage.setItem(
-        'ripa_officer_years_experience',
-        state.user.yearsExperience,
-      )
-      localStorage.setItem('ripa_officer_assignment', state.user.assignment)
-      localStorage.setItem('ripa_officer_other_type', state.user.otherType)
+      const officer = {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.fullName,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
+      localStorage.setItem('ripa_officer', JSON.stringify(officer))
+    },
+    updateErrorCodeAdminSearch(state, value) {
+      state.errorCodeAdminSearch = {
+        loading: false,
+        ...state.errorCodeAdminSearch,
+        ...value,
+      }
     },
   },
 
@@ -295,6 +307,7 @@ export default new Vuex.Store({
       const document = {
         Document: textValue,
       }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
@@ -967,10 +980,34 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
+          commit('updateInvalidUser', false)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
           commit('updateInvalidUser', true)
+        })
+    },
+
+    getErrorCodes({ commit, state }, value) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}Stops/GetErrorCodes?search=${value}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // need to map out what the response would be
+          commit('updateErrorCodeAdminSearch', response)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('updateErrorCodeAdminSearch', {
+            items: ['new value', 'new value 2', 'new value 3'],
+          })
         })
     },
 

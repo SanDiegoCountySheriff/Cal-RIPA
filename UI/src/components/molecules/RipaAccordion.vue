@@ -16,8 +16,8 @@
         </v-row>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <div class="tw-text-xs tw-break-words">{{ item.jsonStop }}</div>
-        <div class="stopAccordionWrapper--detailSection">
+        <ripa-form-summary :apiStop="item"> </ripa-form-summary>
+        <!-- <div class="stopAccordionWrapper--detailSection">
           <v-row align="center">
             <v-col cols="3">DETAILS </v-col>
           </v-row>
@@ -189,17 +189,22 @@
               </v-col>
             </v-row>
           </div>
-        </div>
+        </div> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
 
 <script>
+import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 import { format } from 'date-fns'
 
 export default {
   name: 'ripa-accordion',
+
+  components: {
+    RipaFormSummary,
+  },
 
   props: {
     items: {

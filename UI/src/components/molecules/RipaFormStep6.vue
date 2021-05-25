@@ -2,6 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-form-summary
       v-model="model"
+      edit-buttons
       :api-stop="apiStop"
       :on-edit-stop="onEditStop"
       :on-edit-person="onEditPerson"

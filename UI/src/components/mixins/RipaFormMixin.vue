@@ -8,6 +8,7 @@ export default {
         id: newValue.id,
         agency: newValue.agency,
         officerId: newValue.officerId,
+        officerName: newValue.officerName,
         actionsTaken: {
           anyActionsTaken: newValue?.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:

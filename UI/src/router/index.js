@@ -46,13 +46,24 @@ const router = new VueRouter({
 // if you ever hit the app and the access token
 // isn't set and the user is online, start login flow and are offline
 router.beforeEach(async (to, from, next) => {
-  const isAuthenticated = await AuthService.getIsAuthenticated()
-  if (!isAuthenticated && navigator.onLine) {
-    const loginAttempt = await AuthService.tryLogin()
-    if (loginAttempt) {
+  // check for log in here
+  const isTokenValid = await AuthService.checkToken()
+  if (!isTokenValid) {
+    // if the token ISN'T valid, check to see if the user manually logged out
+    const didManualLogOut = AuthService.checkManualLogOut()
+    // if they DID manually logout, don't auto try to login again
+    // if they did NOT manually logout, auto try the login again
+    if (!didManualLogOut) {
+      const loginAttempt = await AuthService.tryLogin()
+      if (loginAttempt) {
+        next()
+      }
+    } else {
       next()
     }
   } else {
+    // if the token IS valid, clear any log out attempt
+    AuthService.clearManualLogOut()
     next()
   }
 })
