@@ -58,5 +58,17 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
         {
             await _container.UpsertItemAsync<Common.Models.Stop>(stop, new PartitionKey(id));
         }
-    }
+
+        public async Task<IEnumerable<Common.Models.StopStatusCount>> GetStopStatusCounts(string queryString)
+        {
+            var query = _container.GetItemQueryIterator<Common.Models.StopStatusCount>(new QueryDefinition(queryString));
+            List<Common.Models.StopStatusCount> results = new List<Common.Models.StopStatusCount>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+            return results;
+        }
+    }    
 }
