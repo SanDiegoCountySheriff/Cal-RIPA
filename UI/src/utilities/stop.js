@@ -864,7 +864,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
       genderNonconforming: person.genderNonconforming || false,
-      id: person.id,
+      id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
       listActionTakenDuringStop: getActionsTakenDuringStop(person),
