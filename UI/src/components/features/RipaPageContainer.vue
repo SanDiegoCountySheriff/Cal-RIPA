@@ -183,13 +183,18 @@ export default {
         }
       }
     },
+
+    async updateData() {
+      this.checkCache()
+      await this.getUserData()
+      await this.getFormData()
+    },
   },
 
   async created() {
     if (this.isOnlineAndAuthenticated) {
-      this.getUserData()
+      this.updateData()
     } else {
-      this.checkCache()
       const isTokenValid = await AuthService.checkToken()
       if (!isTokenValid) {
         // if the token ISN'T valid, check to see if the user manually logged out
@@ -203,7 +208,7 @@ export default {
         // if the token IS valid, clear any log out attempt
         AuthService.clearManualLogOut()
       }
-      this.getFormData()
+      this.updateData()
     }
   },
 
@@ -213,7 +218,6 @@ export default {
         this.showUserDialog = true
       } else {
         this.checkCache()
-        this.getFormData()
       }
     },
   },

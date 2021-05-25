@@ -1,6 +1,5 @@
 <template>
   <v-expansion-panels>
-    {{ items }}
     <v-expansion-panel
       class="stopAccordionWrapper"
       v-for="(item, i) in items"
