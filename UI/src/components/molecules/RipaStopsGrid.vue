@@ -1,6 +1,6 @@
 <template>
   <v-container class="tw-mt-2" fluid>
-    <v-layout row align-center nowrap>
+    <v-layout row align-center nowrap class="stopsGridContainer">
       <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
@@ -30,13 +30,8 @@
         ></v-select>
       </v-flex>
 
-      <v-flex xs12 md3>
+      <v-flex xs12 md2>
         <div class="tw-flex tw-justify-center">
-          <v-switch
-            v-model="errorsFound"
-            class="tw-ml-2"
-            label="Errors Found"
-          ></v-switch>
           <v-switch
             v-model="isPiiFound"
             class="tw-ml-2"
@@ -45,7 +40,7 @@
         </div>
       </v-flex>
 
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
             :items="getErrorCodeSearchItems"
@@ -64,20 +59,42 @@
       </v-flex>
 
       <v-flex xs12>
-        <v-divider></v-divider>
-      </v-flex>
-
-      <v-flex xs12>
+        <div class="stopsSummary">
+          <p>
+            <span class="label">Total</span>
+            <span class="count">6964</span>
+          </p>
+          <p>
+            <span class="label">Submitted</span>
+            <span class="count">4999</span>
+          </p>
+          <p>
+            <span class="label">Not Submitted</span>
+            <span class="count">614</span>
+          </p>
+          <p>
+            <span class="label">Errors</span>
+            <span class="count">1354</span>
+          </p>
+          <p>
+            <span class="label">Resubmit</span>
+            <span class="count">33</span>
+          </p>
+        </div>
         <v-data-table
+          class="adminStopsTable"
           :loading="loading"
           :headers="headers"
           :single-select="false"
+          show-select
           :items="getStops"
           :server-items-length="getTotalStops"
           :items-per-page="10"
           @update:page="handleUpdatePage"
           @update:sortBy="handleUpdateSort"
           @update:options="handleUpdateOptions"
+          @item-selected="handleRowSelected"
+          @toggle-select-all="handleToggleSelectAll"
           :search="search"
           sort-by="stopDateStr"
           sort-desc
@@ -90,6 +107,12 @@
               <v-toolbar-title class="tw-uppercase"
                 >Admin: Stops</v-toolbar-title
               >
+              <v-btn class="submitAllBtn"> Submit All Stops to DOJ </v-btn>
+              <v-spacer></v-spacer>
+
+              <v-btn v-if="selectedItems.length > 0">
+                Submit Selected Stops ({{ selectedItems.length }})
+              </v-btn>
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
@@ -205,6 +228,28 @@ export default {
       this.stops = this.items
     },
 
+    handleRowSelected(item) {
+      if (item.value) {
+        this.selectedItems.push(item.item)
+      } else {
+        this.selectedItems = this.selectedItems.filter(itemObj => {
+          return itemObj.id !== item.item.id
+        })
+      }
+    },
+
+    handleToggleSelectAll(item) {
+      if (item.value) {
+        this.selectedItems = item.items
+      } else {
+        item.items.forEach(selectedItemObj => {
+          this.selectedItems = this.selectedItems.filter(itemObj => {
+            return itemObj.id !== selectedItemObj.id
+          })
+        })
+      }
+    },
+
     editItem(item) {
       this.editedIndex = this.stops.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -214,6 +259,7 @@ export default {
       this.$emit('callErrorCodeSearch', val)
     }, 400),
     handleChangeSearchCodes(val) {
+      // need to call getStops API here with search codes
       console.log(val)
     },
   },
@@ -257,3 +303,39 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.stopsGridContainer {
+  margin: 0px;
+
+  .adminStopsTable {
+    .submitAllBtn {
+      margin-left: 20px;
+    }
+  }
+
+  .stopsSummary {
+    display: flex;
+    padding: 15px;
+    border: 1px solid #333;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    > p {
+      flex: 1;
+      margin-bottom: 0px;
+
+      span {
+        display: block;
+        text-align: center;
+      }
+
+      span.label {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+</style>
