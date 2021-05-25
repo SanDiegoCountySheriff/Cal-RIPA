@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +38,6 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Models.Submission), Description = "Subission Object")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
-        //summary of errors
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
         {
@@ -69,15 +70,18 @@ namespace RIPA.Functions.Submission.Functions
                 if (submissionResponse != null)
                 {
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {limit}");//
-                    var response = new 
-                    {    
+                    var response = new
+                    {
                         submission = submissionResponse,
-                        stops = stopResponse
+                        stops = stopResponse,
+                        summary =  from g in 
+                                       stopResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.Error != null).GroupBy(x => x.Error.Error) 
+                                   select new { Code = string.Empty, ErrorMessage = g.Key, Count = g.Count() }
                     };
+                   
                     return new OkObjectResult(response);
                 }
             }
-
             return new BadRequestObjectResult("Submission Id not found");
         }
     }
