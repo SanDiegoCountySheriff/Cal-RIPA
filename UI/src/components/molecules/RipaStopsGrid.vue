@@ -110,7 +110,7 @@
               <v-btn class="submitAllBtn"> Submit All Stops to DOJ </v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn v-if="selectedItems.length > 0">
+              <v-btn class="submitSelectedBtn" v-if="selectedItems.length > 0">
                 Submit Selected Stops ({{ selectedItems.length }})
               </v-btn>
             </v-toolbar>
@@ -142,6 +142,8 @@ import subDays from 'date-fns/subDays'
 import { format, isAfter, isBefore } from 'date-fns'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 
+import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
+
 import _ from 'lodash'
 
 export default {
@@ -150,6 +152,8 @@ export default {
   components: {
     RipaDatePicker,
   },
+
+  mixins: [RipaEditStopMixin],
 
   data() {
     return {
@@ -251,8 +255,7 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.stops.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.handleEditStop(item)
     },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true
@@ -311,6 +314,11 @@ export default {
   .adminStopsTable {
     .submitAllBtn {
       margin-left: 20px;
+    }
+
+    .submitAllBtn,
+    .submitSelectedBtn {
+      border: 1px solid #666;
     }
   }
 
