@@ -4,7 +4,12 @@ import {
   apiStopToFullStop,
   fullStopToStop,
 } from '@/utilities/stop'
-import { onePersonFullStop, twoPersonFullStop } from '../data/formStop'
+import {
+  onePersonFullStop,
+  twoPersonFullStop,
+  invalidApiStop1,
+  invalidApiStop2,
+} from '../data/formStop'
 import {
   formBeats,
   formCountyCities,
@@ -132,6 +137,25 @@ export const twoPersonEdit = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary edit-buttons :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{getApiStop}}</div><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div><div style="margin-top:40px;">{{getStop}}</div></div>',
+  created() {
+    this.$vuetify.theme.dark = true
+  },
+})
+
+export const invalidOnePerson1 = () => ({
+  components: { RipaFormSummary },
+  data() {
+    return {
+      fullStop: onePersonFullStop,
+    }
+  },
+  computed: {
+    getApiStop() {
+      return invalidApiStop1
+    },
+  },
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
   created() {
     this.$vuetify.theme.dark = true
   },
