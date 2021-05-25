@@ -13,5 +13,6 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts
         Task UpdateStopAsync(string id, Common.Models.Stop stop);
         Task DeleteStopAsync(string id);
         Task<IEnumerable<Common.Models.StopStatusCount>> GetStopStatusCounts(string queryString);
+        Task<IEnumerable<Common.Models.ErrorCode>> GetErrorCodes(string inputText);
     }
 }
