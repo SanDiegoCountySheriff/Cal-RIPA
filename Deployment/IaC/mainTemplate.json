@@ -40,23 +40,21 @@
         
     },
     "resources": [
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2021-04-01",
-            "location": "[parameters('rgLocation')]",
-            "name": "[parameters('rg')]",
-            "properties": {}
-        },
+        // {
+        //     "condition": "[parameters('deploy_rg')]",
+        //     "type": "Microsoft.Resources/resourceGroups",
+        //     "apiVersion": "2021-04-01",
+        //     "location": "[parameters('rgLocation')]",
+        //     "name": "[parameters('rg')]",
+        //     "properties": {}
+        // },
         {
             "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "DevDeployment",
             "resourceGroup": "[parameters('rg')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rg'))]"
-            ],
+            "dependsOn": [  ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -79,6 +77,12 @@
         "subscription": {
             "type": "object",
             "value": "[subscription()]"
+        },
+        "application": {
+            "condition": "[parameters('deploy_rg')]",
+            "type": "string",
+            "value": "[parameters('application')]"
         }
+
     }
 }

@@ -70,7 +70,7 @@
                 "defaultValue": "",
                 "toolTip": "",
                 "constraints": {
-                    "required": false,
+                    "required": true,
                     "regex": "",
                     "validationMessage": ""
                 },
