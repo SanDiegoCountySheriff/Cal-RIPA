@@ -15,16 +15,15 @@ let msalInstance
 
 const AuthService = {
   tryLogin: async () => {
+    console.log('tryLogin')
     if (!sessionStorage.getItem('ripa-idToken')) {
       await msalInstance.handleRedirectPromise()
       const currentAccount = await msalInstance.getAllAccounts()
-      console.log('checking account with no token ' + currentAccount[0])
       if (currentAccount.length) {
         // check to see if user is not in any groups.  If not, redirect
         if (currentAccount[0].idTokenClaims.roles.length === 0) {
           store.dispatch('setInvalidUser', true)
-          // redirect to home page
-          router.push('/checkUser')
+          router.push('/')
         }
         const accessToken = await msalInstance.acquireTokenSilent({
           account: currentAccount[0],
@@ -62,6 +61,7 @@ const AuthService = {
   },
 
   checkToken: async () => {
+    console.log('checkToken')
     // check if we have a user account AND token
     const userAccount = JSON.parse(sessionStorage.getItem('ripa-userAccount'))
     const idToken = sessionStorage.getItem('ripa-idToken')
@@ -103,6 +103,7 @@ const AuthService = {
   },
 
   getIsAuthenticated: async () => {
+    console.log('getIsAuthenticated')
     const userAccount = JSON.parse(sessionStorage.getItem('ripa-userAccount'))
     store.dispatch('setUserAccountInfo', userAccount)
     if (msalInstance === undefined) {
@@ -135,7 +136,9 @@ const AuthService = {
       return sessionStorage.getItem('ripa-idToken')
     }
   },
+
   doLogOut: async () => {
+    console.log('doLogOut')
     // get user from local storage
     const currentAccount = sessionStorage.getItem('ripa-userAccount')
     sessionStorage.setItem('ripa-logOutAttempt', true)
@@ -148,7 +151,9 @@ const AuthService = {
       })
     }
   },
+
   getAuthConfig: async () => {
+    console.log('getAuthConfig')
     const loadConfig = await axios
       .get('/config.json')
       .then(res => {
@@ -181,16 +186,21 @@ const AuthService = {
       })
     return loadConfig
   },
+
   checkManualLogOut: () => {
+    console.log('checkManualLogOut')
     const manualLogOut = sessionStorage.getItem('ripa-logOutAttempt')
     return manualLogOut !== null
   },
+
   clearManualLogOut: () => {
+    console.log('clearManualLogOut')
     sessionStorage.removeItem('ripa-logOutAttempt')
   },
 }
 
 const getAuthConfig = async () => {
+  console.log('getAuthConfig')
   const loadConfig = await axios
     .get('/config.json')
     .then(res => {
