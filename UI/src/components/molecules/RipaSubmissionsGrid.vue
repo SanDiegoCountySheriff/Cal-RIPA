@@ -94,12 +94,16 @@ export default {
       selectedItems: [],
       submissionFromDate: null,
       submissionToDate: null,
+      format,
     }
   },
 
   computed: {
     getSubmissions() {
       return this.submissions
+    },
+    getFormattedDate(whichDate) {
+      return format(new Date(whichDate), 'yyyy-MM-dd kk:mm')
     },
   },
 
