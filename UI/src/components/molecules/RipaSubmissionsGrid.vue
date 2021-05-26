@@ -47,9 +47,9 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="tw-mr-2" @click="editItem(item)">
-              <v-btn small> Details </v-btn>
-            </v-icon>
+            <v-btn small @click="handleGoToSubmission(item)">
+              View Submission Details
+            </v-btn>
           </template>
           <template v-slot:item.dateSubmitted="{ item }">
             {{ format(new Date(item.dateSubmitted), 'yyyy-MM-dd kk:mm') }}
@@ -89,6 +89,7 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Submission Date', value: 'dateSubmitted' },
         { text: 'Total Stops', value: 'recordCount' },
+        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       selectedItems: [],
@@ -112,13 +113,8 @@ export default {
       this.submissions = this.items
     },
 
-    editItem(item) {
-      this.editedIndex = this.submissions.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-    },
-
-    handleSubmit() {
-      console.log(this.selectedItems)
+    handleGoToSubmission(whichSubmission) {
+      this.$router.push(`/admin/submission/${whichSubmission.id}`)
     },
   },
 
