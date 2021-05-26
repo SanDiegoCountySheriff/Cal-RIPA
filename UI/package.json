@@ -17,7 +17,7 @@
     "@tailwindcss/postcss7-compat": "2.1.2",
     "autoprefixer": "9",
     "axios": "0.21.1",
-    "core-js": "3.12.1",
+    "core-js": "3.13.0",
     "date-fns": "^2.21.3",
     "lodash": "^4.17.21",
     "postcss": "7",
@@ -26,7 +26,7 @@
     "vue": "2.6.12",
     "vue-confirm-dialog": "^1.0.2",
     "vue-router": "3.5.1",
-    "vuetify": "2.5.0",
+    "vuetify": "2.5.1",
     "vuex": "3.6.2"
   },
   "devDependencies": {
