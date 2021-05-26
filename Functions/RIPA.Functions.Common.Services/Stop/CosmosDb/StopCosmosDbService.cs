@@ -70,5 +70,19 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             }
             return results;
         }
-    }    
+
+        public async Task<IEnumerable<Common.Models.ErrorCode>> GetErrorCodes(string inputText)
+        {
+            var queryString = $"SELECT submission.Error.Error ErrorMessage from ErrorMessage JOIN submission in ErrorMessage.ListSubmission WHERE CONTAINS(submission.Error.Error, '{inputText}')";
+            var query = _container.GetItemQueryIterator<Common.Models.ErrorCode>(new QueryDefinition(queryString));
+            List<Common.Models.ErrorCode> results = new List<Common.Models.ErrorCode>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+            return results;
+        }
+
+    }
 }
