@@ -3,6 +3,7 @@ import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
 import router from '../router'
 import { add, isAfter } from 'date-fns'
+import { consensualEncounterResultingInSearch } from '../stories/molecules/RipaActionsTaken.stories'
 
 let authConfig = {
   cache: {
@@ -18,7 +19,7 @@ const AuthService = {
     if (!sessionStorage.getItem('ripa-idToken')) {
       await msalInstance.handleRedirectPromise()
       const currentAccount = await msalInstance.getAllAccounts()
-      console.log('checking account with no token ' + currentAccount[0])
+      console.log('checking account with no token ' + currentAccount)
       if (currentAccount.length) {
         // check to see if user is not in any groups.  If not, redirect
         if (currentAccount[0].idTokenClaims.roles.length === 0) {
@@ -39,7 +40,7 @@ const AuthService = {
         sessionStorage.setItem('ripa-idToken', accessToken.idToken)
         sessionStorage.setItem(
           'ripa-tokenExpirationDate',
-          add(new Date(), { minutes: 5 }),
+          add(new Date(), { minutes: 60 }),
         )
         sessionStorage.removeItem('ripa-logOutAttempt')
         return true
@@ -71,13 +72,13 @@ const AuthService = {
       const tokenExpDate = sessionStorage.getItem('ripa-tokenExpirationDate')
       const isTokenExpired = isAfter(new Date(), new Date(tokenExpDate))
       if (isTokenExpired) {
-        clearLocalStorageAuthInfo()
-        await msalInstance.handleRedirectPromise()
-        msalInstance.logoutRedirect({
-          account: userAccount,
-          postLogoutRedirectUri: window.location.origin,
-        })
-        return false
+        // clearLocalStorageAuthInfo()
+        // await msalInstance.handleRedirectPromise()
+        // msalInstance.logoutRedirect({
+        //   account: userAccount,
+        //   postLogoutRedirectUri: window.location.origin,
+        // })
+        // return false
         // msalInstance.loginRedirect()
       } else {
         const silentRequest = {
@@ -132,7 +133,11 @@ const AuthService = {
         return false
       }
     } else {
-      return sessionStorage.getItem('ripa-idToken')
+      if (sessionStorage.getItem('ripa-idToken')) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   doLogOut: async () => {
@@ -166,9 +171,6 @@ const AuthService = {
           apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
           apiSubscription: res.data.Configuration.Subscription,
           defaultCounty: res.data.Configuration.DefaultCounty,
-          displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
-          environmentName: res.data.Configuration.Environment,
-          displayEnvironment: res.data.Configuration.Environment !== 'p',
         })
         return true
       })
@@ -183,7 +185,11 @@ const AuthService = {
   },
   checkManualLogOut: () => {
     const manualLogOut = sessionStorage.getItem('ripa-logOutAttempt')
-    return manualLogOut !== null
+    if (manualLogOut === null) {
+      return false
+    } else {
+      return true
+    }
   },
   clearManualLogOut: () => {
     sessionStorage.removeItem('ripa-logOutAttempt')
@@ -208,9 +214,6 @@ const getAuthConfig = async () => {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
         apiSubscription: res.data.Configuration.Subscription,
         defaultCounty: res.data.Configuration.DefaultCounty,
-        displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
-        environmentName: res.data.Configuration.Environment,
-        displayEnvironment: res.data.Configuration.Environment !== 'p',
       })
       return true
     })

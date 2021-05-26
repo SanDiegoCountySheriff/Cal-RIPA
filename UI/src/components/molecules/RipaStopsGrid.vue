@@ -58,27 +58,27 @@
         </div>
       </v-flex>
 
-      <v-flex xs12>
+      <v-flex v-if="stops.summary.total" xs12>
         <div class="stopsSummary">
           <p>
             <span class="label">Total</span>
-            <span class="count">6964</span>
+            <span class="count">{{ stops.summary.total }}</span>
           </p>
           <p>
             <span class="label">Submitted</span>
-            <span class="count">4999</span>
+            <span class="count">{{ stops.summary.submitted }}</span>
           </p>
           <p>
             <span class="label">Not Submitted</span>
-            <span class="count">614</span>
+            <span class="count">{{ stops.summary.unsubmitted }}</span>
           </p>
           <p>
             <span class="label">Errors</span>
-            <span class="count">1354</span>
+            <span class="count">{{ stops.summary.failed }}</span>
           </p>
           <p>
             <span class="label">Resubmit</span>
-            <span class="count">33</span>
+            <span class="count">{{ stops.summary.resubmitted }}</span>
           </p>
         </div>
         <v-data-table
@@ -182,7 +182,7 @@ export default {
 
   computed: {
     getStops() {
-      return this.stops
+      return this.stops.stops
     },
     getTotalStops() {
       return this.stops.length

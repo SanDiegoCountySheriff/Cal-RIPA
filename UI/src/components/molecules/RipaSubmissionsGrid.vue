@@ -51,6 +51,10 @@
               <v-btn small> Details </v-btn>
             </v-icon>
           </template>
+          <template v-slot:item.dateSubmitted="{ item }">
+            {{ format(new Date(item.dateSubmitted), 'yyyy-MM-dd kk:mm') }}
+          </template>
+
           <template v-slot:no-data>
             <div>No Submissions Found</div>
           </template>
@@ -83,8 +87,8 @@ export default {
       submissions: [],
       headers: [
         { text: 'ID', value: 'id' },
-        { text: 'Submission Date', value: 'submissionDateStr' },
-        { text: 'Total Stops', value: 'stopsOnl' },
+        { text: 'Submission Date', value: 'dateSubmitted' },
+        { text: 'Total Stops', value: 'recordCount' },
       ],
       editedIndex: -1,
       selectedItems: [],
@@ -96,15 +100,6 @@ export default {
   computed: {
     getSubmissions() {
       return this.submissions
-    },
-
-    getSubmissionDates() {
-      return [
-        '2021-04-23T18:23:59Z',
-        '2021-02-09T08:35:36Z',
-        '2021-01-06T10:05:45Z',
-        '2020-11-25T19:55:21Z',
-      ].map(item => format(new Date(item), 'yyyy-MM-dd kk:mm'))
     },
   },
 

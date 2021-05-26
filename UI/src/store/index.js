@@ -934,16 +934,22 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data.sort((x, y) => {
+          const data = response.data.stops.sort((x, y) => {
             const stopA = x.stopDateTime
             const stopB = y.stopDateTime
             return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
           })
-          commit('updateAdminStops', data)
+          commit('updateAdminStops', {
+            summary: response.data.summary,
+            stops: data,
+          })
         })
         .catch(error => {
           console.log('There was an error retrieving admin stops.', error)
-          commit('updateAdminStops', [])
+          commit('updateAdminStops', {
+            summary: {},
+            stops: [],
+          })
         })
     },
 
@@ -960,7 +966,7 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log('There was an error retrieving admin submissions.', error)
-          commit('updateAdminStops', [])
+          commit('updateAdminSubmissions', [])
         })
     },
 
