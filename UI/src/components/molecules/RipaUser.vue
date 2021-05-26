@@ -7,7 +7,6 @@
             <ripa-text-input
               v-model="model.startDate"
               label="Start Date"
-              :disabled="!isInvalidUser"
               :rules="startDateRules"
               @input="handleInput"
             >

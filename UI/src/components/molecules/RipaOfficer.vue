@@ -33,7 +33,6 @@
               <ripa-text-input
                 v-model="model.officer.startDate"
                 label="Start Date"
-                disabled
               >
               </ripa-text-input>
             </div>
