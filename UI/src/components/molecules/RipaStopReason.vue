@@ -328,6 +328,7 @@ export default {
 
       if (this.viewModel.stopReason.reasonForStop === 6) {
         if (this.viewModel.stopReason.searchOfPerson) {
+          this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
             -1
@@ -335,12 +336,15 @@ export default {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
           }
         } else {
-          this.viewModel.actionsTaken.actionsTakenDuringStop =
-            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 18,
-            )
+          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop =
+              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 18,
+              )
+          }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
+          this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
             -1
@@ -348,10 +352,12 @@ export default {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
           }
         } else {
-          this.viewModel.actionsTaken.actionsTakenDuringStop =
-            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 20,
-            )
+          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop =
+              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 20,
+              )
+          }
         }
       }
     },
