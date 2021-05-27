@@ -3,9 +3,12 @@
     <v-layout row>
       <v-flex xs12>
         <v-toolbar flat>
-          <v-toolbar-title class="tw-uppercase"
+          <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
             >Submission Details</v-toolbar-title
           >
+          <v-btn @click="handleBackToSubmissions" class="backToSubmissionsBtn">
+            Back to Submissions
+          </v-btn>
         </v-toolbar>
       </v-flex>
     </v-layout>
@@ -32,7 +35,7 @@
       <v-flex v-if="submission.summary.length" xs12>
         <div class="submissionSummary">
           <p v-for="(errorCode, index) in submission.summary" :key="index">
-            <span class="label">{{ errorCode.label }}</span>
+            <span class="label">{{ errorCode.code }}</span>
             <span class="count">{{ errorCode.count }}</span>
           </p>
         </div>
@@ -106,6 +109,12 @@ export default {
     }
   },
 
+  methods: {
+    handleBackToSubmissions() {
+      this.$router.push('/admin')
+    },
+  },
+
   props: {
     submissionId: {
       type: String,
@@ -118,6 +127,12 @@ export default {
 </script>
 
 <style lang="scss">
+.submissionDetail--titleBar {
+  button.backToSubmissionsBtn {
+    margin-left: 20px;
+    border: 1px solid #666;
+  }
+}
 .submissionDetail--header {
   padding: 16px;
   span {
