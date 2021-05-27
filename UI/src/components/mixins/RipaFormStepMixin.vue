@@ -119,6 +119,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditAgencyQuestions: {
+      type: Function,
+      default: () => {},
+    },
     onEditPerson: {
       type: Function,
       default: () => {},

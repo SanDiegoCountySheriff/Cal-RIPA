@@ -159,6 +159,7 @@
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :back-button-visible="getFormStep6BackButtonVisible"
                   @input="handleInput"
                 ></ripa-form-step-6>
               </template>
@@ -172,6 +173,7 @@
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
                   :on-delete-person="handleDeletePerson"
+                  :on-edit-agency-questions="handleEditAgencyQuestions"
                   :on-edit-person="handleEditPerson"
                   :on-edit-stop="handleEditStop"
                   :on-submit="handleSubmit"
@@ -549,6 +551,10 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditAgencyQuestions: {
       type: Function,
       default: () => {},
     },

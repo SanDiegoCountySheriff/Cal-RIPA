@@ -161,13 +161,13 @@ export const probationStop = () => {
 
 export const apiStopStopSummary = apiStop => {
   const items = []
-  items.push(getSummaryPersonCount(apiStop))
-  items.push(getSummaryDate(apiStop))
-  items.push(getSummaryTime(apiStop))
-  items.push(getSummaryLocation(apiStop))
-  items.push(getSummaryOfficer(apiStop))
-  items.push(getSummaryDuration(apiStop))
-  items.push(getSummaryStopInResponseToCfs(apiStop))
+  items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
+  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -298,23 +298,35 @@ export const apiStopPersonSummary = (apiStop, personId) => {
   )
   if (person) {
     const items = []
-    items.push(getSummaryStudent(person))
-    items.push(getSummaryPerceivedRace(person))
-    items.push(getSummaryPerceivedGender(person))
-    items.push(getSummaryGenderNonconforming(person))
-    items.push(getSummaryPerceivedLgbt(person))
-    items.push(getSummaryPerceivedAge(person))
-    items.push(getSummaryLimitedEnglish(person))
-    items.push(getSummaryPerceivedOrKnownDisability(person))
-    items.push(getSummaryReasonForStop(person))
-    items.push(getSummaryReasonForStopExplanation(person))
-    items.push(getSummaryActionsTaken(person))
-    items.push(getSummaryBasisForSearch(person))
-    items.push(getSummaryBasisForSearchExplanation(person))
-    items.push(getSummaryBasisForPropertySeizure(person))
-    items.push(getSummaryTypeOfPropertySeized(person))
-    items.push(getSummaryContraband(person))
-    items.push(getSummaryResultOfStop(person))
+    items.push({ id: 'B1', content: getSummaryStudent(person) })
+    items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
+    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
+    items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
+    items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
+    items.push({
+      id: 'B8',
+      content: getSummaryPerceivedOrKnownDisability(person),
+    })
+    items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    items.push({
+      id: 'B10',
+      content: getSummaryReasonForStopExplanation(person),
+    })
+    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
+    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+    items.push({
+      id: 'B13',
+      content: getSummaryBasisForSearchExplanation(person),
+    })
+    items.push({
+      id: 'B14',
+      content: getSummaryBasisForPropertySeizure(person),
+    })
+    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    items.push({ id: 'B16', content: getSummaryContraband(person) })
+    items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
     return items
   }
   return []
@@ -559,6 +571,42 @@ const getSummaryResultOfStop = person => {
     level: 2,
     header: 'Result of Stop',
     children: results,
+  }
+}
+
+export const getAgencyQuestionsFromLocalStorage = () => {
+  const questions = localStorage.getItem('ripa_agency_questions')
+  return questions ? JSON.parse(questions) : null
+}
+
+export const apiStopAgencyQuestionsSummary = apiStop => {
+  const items = []
+  const questions = getAgencyQuestionsFromLocalStorage()
+  if (questions.length > 0) {
+    let index = 0
+    for (const value of Object.entries(apiStop.agencyQuestions)) {
+      if (value) {
+        const question = questions[index]
+        if (question) {
+          const label = question.label
+          items.push({
+            id: `C${index}`,
+            content: getSummaryAgencyQuestion(label, value[1]),
+          })
+        }
+      }
+      index = index + 1
+    }
+  }
+
+  return items
+}
+
+const getSummaryAgencyQuestion = (question, answer) => {
+  return {
+    level: 1,
+    header: question,
+    detail: answer,
   }
 }
 
