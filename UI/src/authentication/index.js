@@ -11,6 +11,8 @@ export default {
       const config = {
         tenant: res.data.Authentication.TenantId,
         clientId: res.data.Authentication.ClientId,
+        postLogoutRedirectUri: window.location.origin,
+        redirectUri: window.location.origin,
         cacheLocation: 'localStorage',
       }
       store.dispatch('setApiConfig', {
