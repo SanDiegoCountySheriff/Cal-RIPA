@@ -53,7 +53,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       disabilityItems: DISABILITIES,
       viewModel: this.loadModel(this.value),
     }

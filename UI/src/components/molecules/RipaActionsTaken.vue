@@ -172,7 +172,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',

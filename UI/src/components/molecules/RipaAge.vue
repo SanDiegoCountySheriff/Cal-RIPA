@@ -44,7 +44,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       ageItems: AGES,
       viewModel: this.loadModel(this.value),
     }

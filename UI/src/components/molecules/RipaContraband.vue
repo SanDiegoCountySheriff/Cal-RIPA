@@ -53,7 +53,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       contrabandItems: CONTRABAND_TYPES,
       viewModel: this.loadModel(this.value),
     }

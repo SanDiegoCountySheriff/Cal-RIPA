@@ -89,7 +89,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       durationItems: DURATIONS,
       dateRules: [
         v => !!v || 'A date is required',

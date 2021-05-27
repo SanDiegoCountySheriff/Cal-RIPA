@@ -174,7 +174,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       reasonForStopValue: this.value.stopReason?.reasonForStop || null,
       reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [

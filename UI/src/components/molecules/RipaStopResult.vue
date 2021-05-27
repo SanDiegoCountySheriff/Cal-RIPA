@@ -276,7 +276,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       stopResultItems: STOP_RESULTS,
       viewModel: this.loadModel(this.value),
     }

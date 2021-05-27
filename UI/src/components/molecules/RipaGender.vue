@@ -80,7 +80,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       genderItems: GENDERS,
       viewModel: this.loadModel(this.value),
     }
