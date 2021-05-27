@@ -227,7 +227,6 @@ export default {
     },
 
     handleCancel() {
-      localStorage.removeItem('ripa_form_current_user')
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_stop')

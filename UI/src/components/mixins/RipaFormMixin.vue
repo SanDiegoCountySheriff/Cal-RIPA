@@ -7,9 +7,6 @@ export default {
       return {
         id: newValue.id,
         template: newValue.template,
-        agency: newValue.agency,
-        officerId: newValue.officerId,
-        officerName: newValue.officerName,
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
@@ -45,12 +42,6 @@ export default {
           outOfCounty: newValue.location?.outOfCounty || false,
           city: newValue.location?.city || null,
           beat: newValue.location?.beat || null,
-        },
-        officer: {
-          startDate: newValue.officer?.startDate || null,
-          yearsExperience: newValue.officer?.yearsExperience || null,
-          assignment: newValue.officer?.assignment || null,
-          otherType: newValue.officer?.otherType || null,
         },
         person: {
           anyDisabilities: newValue.person?.anyDisabilities || false,
