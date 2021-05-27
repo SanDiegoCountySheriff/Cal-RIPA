@@ -119,13 +119,28 @@
             </v-icon>
           </template>
           <template v-slot:footer>
-            <v-pagination
-              v-model="currentPage"
-              :length="getPaginationLength"
-              @next="handleNextPage"
-              @input="handleJumpToPage"
-              @previous="handlePreviousPage"
-            ></v-pagination>
+            <div class="paginationWrapper">
+              <p>
+                Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
+                {{ stops.summary.total }}
+              </p>
+              <v-pagination
+                v-model="currentPage"
+                :length="getPaginationLength"
+                @next="handleNextPage"
+                @input="handleJumpToPage"
+                @previous="handlePreviousPage"
+              ></v-pagination>
+              <v-combobox
+                outlined
+                dense
+                v-model="itemsPerPage"
+                :items="itemsPerPageOptions"
+                label="Items per page"
+                @input="handleUpdateItemsPerPage"
+                class="itemsPerPageSelector"
+              ></v-combobox>
+            </div>
           </template>
           <template v-slot:no-data>
             <div>No Data</div>
@@ -196,7 +211,7 @@ export default {
       return this.stops.stops
     },
     getTotalStops() {
-      return this.stops.length
+      return this.stops.stops.length
     },
     getOfficers() {
       return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
@@ -206,6 +221,20 @@ export default {
     },
     getPaginationLength() {
       return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+    },
+    calculateItemsTo() {
+      if (this.currentPage === this.getPaginationLength) {
+        return this.stops.summary.total
+      } else {
+        return this.currentPage - 1 + this.itemsPerPage
+      }
+    },
+    calculateItemsFrom() {
+      if (this.currentPage === 1) {
+        return this.currentPage
+      } else {
+        return (this.currentPage - 1) * this.itemsPerPage + 1
+      }
     },
   },
 
@@ -361,6 +390,21 @@ export default {
         font-size: 1.2rem;
         font-weight: bold;
       }
+    }
+  }
+
+  .paginationWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    p {
+      margin: 0;
+    }
+
+    .itemsPerPageSelector {
+      max-width: 150px;
+      margin-left: 10px;
     }
   }
 }
