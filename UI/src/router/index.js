@@ -25,9 +25,10 @@ const routes = [
       requiresAuthentication: true,
     },
     beforeEnter(to, from, next) {
-      if (store.state.isOnlineAndAuthenticated && store.state.user.isAdmin) {
+      if (store.getters.isOnlineAndAuthenticated && store.state.user.isAdmin) {
         next()
       } else {
+        debugger
         next('/')
       }
     },
@@ -43,7 +44,7 @@ const routes = [
       requiresAuthentication: true,
     },
     beforeEnter(to, from, next) {
-      if (store.state.isOnlineAndAuthenticated) {
+      if (store.getters.isOnlineAndAuthenticated) {
         next()
       } else {
         next('/')
