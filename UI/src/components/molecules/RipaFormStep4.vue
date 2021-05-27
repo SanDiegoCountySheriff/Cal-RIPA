@@ -31,7 +31,7 @@
       <v-btn
         color="primary"
         :disabled="isBackNextDisabled"
-        @click="handleStep3Next"
+        @click="handleStep4Next"
       >
         Next
       </v-btn>
@@ -57,7 +57,7 @@ export default {
   },
 
   methods: {
-    handleStep3Next() {
+    handleStep4Next() {
       const piiFound =
         this.viewModel.actionsTaken?.basisForSearchPiiFound || false
       if (piiFound) {
@@ -77,13 +77,6 @@ export default {
       } else {
         this.handleNext()
       }
-    },
-  },
-
-  props: {
-    statutes: {
-      type: Array,
-      default: () => [],
     },
   },
 }

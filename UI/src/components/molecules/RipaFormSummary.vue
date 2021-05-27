@@ -1,7 +1,6 @@
 <template>
   <v-card class="ripa-form-summary mx-auto" flat>
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
-
     <v-card-text>
       <div class="tw-mb-2">
         <span class="tw-text-base tw-font-bold">Stop</span>
@@ -52,15 +51,6 @@
         >
           <ripa-list :item="item"></ripa-list>
         </div>
-
-        <!-- <ripa-list :item="getStudent(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getPerceivedRace(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getPerceivedAge(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getPerceivedGender(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getGenderConforming(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getPerceivedLgbt(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getLimitedEnglish(person.id)"></ripa-list> -->
-        <!-- <ripa-list :item="getPerceivedDisability(person.id)"></ripa-list> -->
       </div>
     </v-card-text>
   </v-card>

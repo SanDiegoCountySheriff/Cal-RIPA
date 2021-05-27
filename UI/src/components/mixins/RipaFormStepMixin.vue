@@ -81,15 +81,19 @@ export default {
     },
     schools: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     beats: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     countyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
+    },
+    agencyQuestions: {
+      type: Array,
+      default: () => [],
     },
     loadingGps: {
       type: Boolean,
@@ -101,7 +105,11 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
+    },
+    statutes: {
+      type: Array,
+      default: () => [],
     },
     onAddPerson: {
       type: Function,

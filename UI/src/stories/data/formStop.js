@@ -3,7 +3,6 @@ import { uniqueId } from '@/utilities/dates'
 export const sampleStop = {
   id: uniqueId(),
   officer: {
-    editOfficer: false,
     yearsExperience: 25,
     assignment: 1,
     otherType: null,
@@ -89,7 +88,6 @@ export const onePersonFullStop = {
   agency: 'sdsd',
   id: uniqueId(),
   officer: {
-    editOfficer: false,
     yearsExperience: 25,
     assignment: 1,
     otherType: null,
@@ -179,7 +177,6 @@ export const twoPersonFullStop = {
   agency: 'sdsd',
   id: uniqueId(),
   officer: {
-    editOfficer: false,
     yearsExperience: 25,
     assignment: 1,
     otherType: null,

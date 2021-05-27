@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { format } from 'date-fns'
+import authentication from '@/authentication'
 
 Vue.use(Vuex)
 
@@ -13,12 +14,10 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    if (sessionStorage.getItem('ripa-idToken')) {
-      req.headers.Authorization = `Bearer ${sessionStorage.getItem(
-        'ripa-idToken',
-      )}`
+    authentication.acquireToken().then(token => {
+      req.headers.Authorization = `Bearer ${token}`
       return req
-    }
+    })
   }
   return req
 })
@@ -59,11 +58,14 @@ export default new Vuex.Store({
     isAdmin: state => {
       return state.user.isAdmin
     },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
+    isAuthenticated: () => {
+      return authentication.isAuthenticated()
     },
-    isOnlineAndAuthenticated: state => {
-      return navigator.onLine && state.user.isAuthenticated
+    isOnline: () => {
+      return navigator.onLine
+    },
+    isOnlineAndAuthenticated: () => {
+      return navigator.onLine && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -115,9 +117,6 @@ export default new Vuex.Store({
     },
     user: state => {
       return state.user
-    },
-    isAuthConfigSet: state => {
-      return state.isAuthConfigSet
     },
     apiConfig: state => {
       return state.apiConfig
@@ -181,6 +180,16 @@ export default new Vuex.Store({
         city: parsedCity,
       }
     },
+    mappedAgencyQuestions: state => {
+      return state.apiConfig.agencyQuestions.map(item => {
+        return {
+          maxLength: item.MaxLength,
+          label: item.Prompt,
+          required: item.Required,
+          questionType: item.Type,
+        }
+      })
+    },
   },
 
   mutations: {
@@ -223,9 +232,6 @@ export default new Vuex.Store({
     updatePiiDate(state) {
       state.piiDate = new Date()
     },
-    updateAuthConfig(state, value) {
-      state.isAuthConfigSet = value
-    },
     updateApiConfig(state, value) {
       state.apiConfig = value
     },
@@ -236,22 +242,24 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
-        return roleObj === 'RIPA-ADMINS-ROLE'
-      })
-      const firstName = value.idTokenClaims.given_name
-      const lastName = value.idTokenClaims.family_name
-      const fullName = `${firstName} ${lastName}`
+      if (value && value.profile) {
+        const isAnAdmin = value.profile.roles.filter(roleObj => {
+          return roleObj === 'RIPA-ADMINS-ROLE'
+        })
+        const firstName = value.profile.given_name
+        const lastName = value.profile.family_name
+        const fullName = `${firstName} ${lastName}`
 
-      state.user = {
-        ...state.user,
-        email: value.idTokenClaims.email,
-        firstName,
-        fullName,
-        isAdmin: isAnAdmin.length > 0,
-        isAuthenticated: true,
-        lastName,
-        oid: value.idTokenClaims.oid,
+        state.user = {
+          ...state.user,
+          email: value.profile.email,
+          firstName,
+          fullName,
+          isAdmin: isAnAdmin.length > 0,
+          isAuthenticated: true,
+          lastName,
+          oid: value.profile.oid,
+        }
       }
     },
     updateUserProfile(state, value) {
@@ -885,7 +893,8 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data.sort((x, y) => {
+          const stops = response.data?.stops || []
+          const data = stops.sort((x, y) => {
             const stopA = x.stopDateTime
             const stopB = y.stopDateTime
             return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
@@ -917,20 +926,12 @@ export default new Vuex.Store({
         })
     },
 
-    setAuthConfig({ commit }, value) {
-      commit('updateAuthConfig', value)
-    },
-
     setUserAccountInfo({ commit }, value) {
       commit('updateUserAccount', value)
     },
 
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
-    },
-
-    setInvalidUser({ commit }, value) {
-      commit('updateInvalidUser', value)
     },
   },
 

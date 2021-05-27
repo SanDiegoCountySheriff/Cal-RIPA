@@ -11,9 +11,11 @@
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :agency-questions="mappedAgencyQuestions"
         :display-beat-input="displayBeatInput"
         :form-step-index="formStepIndex"
         :full-stop="fullStop"
+        :is-authenticated="isAuthenticated"
         :last-location="lastLocation"
         :loading-gps="loadingGps"
         :loading-pii-step1="loadingPiiStep1"
@@ -125,6 +127,7 @@ export default {
       'mappedUser',
       'isAuthenticated',
       'displayBeatInput',
+      'mappedAgencyQuestions',
     ]),
 
     getAuthAndLocalStorageCheck() {
@@ -238,7 +241,6 @@ export default {
   },
 
   mounted() {
-    const localFormCurrentUser = localStorage.getItem('ripa_form_current_user')
     const localFormEditing = localStorage.getItem('ripa_form_editing')
     const localStop = localStorage.getItem('ripa_form_stop')
     const localFullStop = localStorage.getItem('ripa_form_full_stop')
@@ -248,17 +250,14 @@ export default {
       const isEditing = localFormEditing === '1'
       const parsedStop = JSON.parse(localStop)
       const parsedFullStop = JSON.parse(localFullStop)
-      const [filteredPerson] = parsedFullStop.people.filter(
-        item => item.id === Number(localFormCurrentUser),
-      )
+
       this.stop = parsedStop
-      this.fullStop = {
-        ...parsedFullStop,
-        person: filteredPerson,
-      }
+      this.fullStop = parsedFullStop
+
       if (Object.keys(this.fullStop).length > 0) {
         this.isEditingForm = isEditing
         this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
       } else {
         localStorage.removeItem('ripa_form_editing')
       }
@@ -273,11 +272,9 @@ export default {
     fullStop(newVal) {
       this.fullStop = newVal
       if (this.isEditingForm) {
-        localStorage.setItem(
-          'ripa_form_current_user',
-          this.stop.person.id.toString(),
-        )
-        localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        if (this.stop) {
+          localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        }
         localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
       }
     },
