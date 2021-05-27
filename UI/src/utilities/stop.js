@@ -23,6 +23,7 @@ export const defaultStop = officer => {
     actionsTaken: {},
     agency: officer.agency,
     id: uniqueId(),
+    template: null,
     location: {
       isSchool: false,
       school: null,
@@ -38,7 +39,6 @@ export const defaultStop = officer => {
       beat: null,
     },
     officer: {
-      editOfficer: false,
       startDate: officer.startDate,
       yearsExperience: officer.yearsExperience,
       assignment: officer.assignment,
@@ -66,6 +66,7 @@ export const motorStop = officer => {
     actionsTaken: {},
     agency: officer.agency,
     id: uniqueId(),
+    template: 'motor',
     location: {
       isSchool: false,
       school: null,
@@ -81,7 +82,6 @@ export const motorStop = officer => {
       beat: null,
     },
     officer: {
-      editOfficer: false,
       startDate: officer.startDate,
       yearsExperience: officer.yearsExperience,
       assignment: officer.assignment,
@@ -134,6 +134,7 @@ export const probationStop = officer => {
     },
     agency: officer.agency,
     id: uniqueId(),
+    template: 'probation',
     location: {
       isSchool: false,
       school: null,
@@ -149,7 +150,6 @@ export const probationStop = officer => {
       beat: null,
     },
     officer: {
-      editOfficer: false,
       startDate: officer.startDate,
       yearsExperience: officer.yearsExperience,
       assignment: officer.assignment,
@@ -588,8 +588,8 @@ export const apiStopToFullStop = apiStop => {
   return {
     agency: apiStop.agency,
     id: apiStop.id,
+    template: apiStop.telemetry.template,
     officer: {
-      editOfficer: false,
       yearsExperience: Number(apiStop.expYears),
       assignment: Number(apiStop.officerAssignment.key),
       otherType: apiStop.officerAssignment.otherType || null,
@@ -801,6 +801,7 @@ export const fullStopToStop = fullStop => {
   return {
     agency: fullStop.agency,
     id: fullStop.id,
+    template: fullStop.template,
     officer: fullStop.officer,
     officerId: fullStop.officerId,
     officerName: fullStop.officerName,

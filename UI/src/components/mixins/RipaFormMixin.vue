@@ -6,6 +6,7 @@ export default {
     loadModel(newValue) {
       return {
         id: newValue.id,
+        template: newValue.template,
         agency: newValue.agency,
         officerId: newValue.officerId,
         officerName: newValue.officerName,
@@ -46,7 +47,6 @@ export default {
           beat: newValue?.location?.beat || null,
         },
         officer: {
-          editOfficer: newValue?.officer?.editOfficer || null,
           startDate: newValue?.officer?.startDate || null,
           yearsExperience: newValue?.officer?.yearsExperience || null,
           assignment: newValue?.officer?.assignment || null,
