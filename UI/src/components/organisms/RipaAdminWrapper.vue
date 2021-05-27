@@ -32,6 +32,8 @@
           :items="stops"
           :errorCodeSearch="errorCodeSearch"
           @callErrorCodeSearch="handleCallErrorCodeSearch"
+          @redoItemsPerPage="handleRedoItemsPerPage"
+          @paginate="handlePaginate"
         ></ripa-stops-grid>
       </v-tab-item>
 
@@ -133,6 +135,12 @@ export default {
   methods: {
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
+    },
+    handleRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', pageData)
+    },
+    handlePaginate(pageData) {
+      this.$emit('handlePaginate', pageData)
     },
   },
 

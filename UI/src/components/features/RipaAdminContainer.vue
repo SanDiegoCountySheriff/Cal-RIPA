@@ -21,6 +21,8 @@
     :on-edit-user="handleEditUser"
     :on-tab-change="handleTabChange"
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+    @handleRedoItemsPerPage="handleRedoItemsPerPage"
+    @handlePaginate="handlePaginate"
   ></ripa-admin-template>
 </template>
 
@@ -126,6 +128,22 @@ export default {
         ])
       }
       this.loading = false
+    },
+
+    async handleRedoItemsPerPage(pageData) {
+      this.loading = true
+      if (pageData.type === 'stops') {
+        await Promise.all([this.getAdminStops(pageData)])
+        this.loading = false
+      }
+    },
+
+    async handlePaginate(pageData) {
+      this.loading = true
+      if (pageData.type === 'stops') {
+        await Promise.all([this.getAdminStops(pageData)])
+        this.loading = false
+      }
     },
 
     async handleDeleteBeat(beat) {

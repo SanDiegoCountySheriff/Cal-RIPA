@@ -86,10 +86,11 @@
           :loading="loading"
           :headers="headers"
           :single-select="false"
+          :hide-default-footer="true"
           show-select
           :items="getStops"
           :server-items-length="getTotalStops"
-          :items-per-page="10"
+          @update:items-per-page="handleUpdateItemsPerPage"
           @update:page="handleUpdatePage"
           @update:sortBy="handleUpdateSort"
           @update:options="handleUpdateOptions"
@@ -98,9 +99,6 @@
           :search="search"
           sort-by="stopDateStr"
           sort-desc
-          :footer-props="{
-            itemsPerPageOptions: [10, 25, 50, 100, 250, -1],
-          }"
         >
           <template v-slot:top>
             <v-toolbar flat>
@@ -119,6 +117,15 @@
             <v-icon small class="tw-mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
+          </template>
+          <template v-slot:footer>
+            <v-pagination
+              v-model="currentPage"
+              :length="getPaginationLength"
+              @next="handleNextPage"
+              @input="handleJumpToPage"
+              @previous="handlePreviousPage"
+            ></v-pagination>
           </template>
           <template v-slot:no-data>
             <div>No Data</div>
@@ -177,6 +184,10 @@ export default {
       stopFromDate: subDays(new Date(), 10).toISOString().substr(0, 10),
       stopToDate: new Date().toISOString().substr(0, 10),
       statuses: SUBMISSION_STATUSES,
+      currentPage: 1,
+      itemsPerPageOptions: [10, 25, 50, 100, 250],
+      itemsPerPage: 10,
+      currentOffset: this.currentPage * this.itemsPerPage,
     }
   },
 
@@ -193,6 +204,9 @@ export default {
     getErrorCodeSearchItems() {
       return this.errorCodeSearch.items
     },
+    getPaginationLength() {
+      return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+    },
   },
 
   methods: {
@@ -200,6 +214,42 @@ export default {
       this.stops = this.items
     },
 
+    handleUpdateItemsPerPage(val) {
+      console.log(val)
+      this.itemsPerPage = val
+      // calculate the page you SHOULD be on with the new items per page
+      const newPage = Math.ceil(this.currentOffset / val)
+      this.$emit('redoItemsPerPage', {
+        type: 'stops',
+        limit: this.itemsPerPage,
+        offset: this.itemsPerPage * newPage,
+      })
+    },
+    handleNextPage() {
+      // the pagination component updates the current page
+      // BEFORE these are called but this math is based on the
+      // current value. So need to subtract 1
+      this.$emit('paginate', {
+        type: 'stops',
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+      })
+    },
+    handlePreviousPage() {
+      this.$emit('paginate', {
+        type: 'stops',
+        offset: this.itemsPerPage * (this.currentPage - 1),
+        limit: this.itemsPerPage,
+      })
+    },
+    handleJumpToPage() {
+      this.$emit('paginate', {
+        type: 'stops',
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+      })
+      console.log(this.currentPage)
+    },
     handleRowSelected(item) {
       if (item.value) {
         this.selectedItems.push(item.item)

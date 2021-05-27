@@ -21,6 +21,8 @@
     :on-edit-user="onEditUser"
     :on-tab-change="onTabChange"
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+    @handleRedoItemsPerPage="handleRedoItemsPerPage"
+    @handlePaginate="handlePaginate"
   ></ripa-admin-wrapper>
 </template>
 
@@ -37,6 +39,12 @@ export default {
   methods: {
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
+    },
+    handleRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', pageData)
+    },
+    handlePaginate(pageData) {
+      this.$emit('handlePaginate', pageData)
     },
   },
 

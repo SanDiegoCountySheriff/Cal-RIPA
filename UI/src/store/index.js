@@ -932,9 +932,16 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }) {
+    getAdminStops({ commit, state }, pageData) {
+      let queryString = ''
+      if (pageData) {
+        queryString = `?Offset=${pageData.offset}`
+        if (pageData.limit) {
+          queryString = `${queryString}&Limit=${pageData.limit}`
+        }
+      }
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops`, {
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
