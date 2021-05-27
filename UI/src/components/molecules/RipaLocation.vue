@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-location tw-pb-8">
+  <div class="ripa-location tw-pb-4">
     <ripa-form-header
       title="Location"
       required

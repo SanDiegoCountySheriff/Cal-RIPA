@@ -1009,7 +1009,7 @@ const getPerceivedGender = person => {
 
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
-  return gender ? gender.code : 5
+  return gender ? gender.code : null
 }
 
 const getPerceivedGenderText = person => {

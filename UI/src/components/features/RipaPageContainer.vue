@@ -8,9 +8,9 @@
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
+    :on-update-user="handleUpdateUser"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
-    :on-update-user="handleUpdateUser"
   >
     <slot></slot>
     <ripa-interval

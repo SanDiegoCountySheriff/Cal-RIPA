@@ -15,6 +15,7 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
@@ -27,6 +28,7 @@
       :on-save-favorite="onSaveFavorite"
       :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
+      :on-update-user="onUpdateUser"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -118,6 +120,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    user: {
+      type: Object,
+      default: () => {},
+    },
     validLastLocation: {
       type: Boolean,
       default: false,
@@ -163,6 +169,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },
