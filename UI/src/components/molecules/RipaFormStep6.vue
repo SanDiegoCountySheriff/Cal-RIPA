@@ -1,6 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    {{ customQuestions }}
+    {{ agencyQuestions }}
 
     <v-spacer></v-spacer>
 

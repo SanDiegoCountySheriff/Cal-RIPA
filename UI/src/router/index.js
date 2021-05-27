@@ -28,7 +28,6 @@ const routes = [
       if (store.getters.isOnlineAndAuthenticated && store.state.user.isAdmin) {
         next()
       } else {
-        debugger
         next('/')
       }
     },

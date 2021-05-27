@@ -108,6 +108,10 @@ export const motorStop = () => {
       custodialArrestCodes: [],
       pullFromReasonCode: true,
     },
+    agencyQuestions: {
+      question1: 'Red',
+      question2: 'F-150',
+    },
   }
 }
 
@@ -588,6 +592,7 @@ export const apiStopToFullStop = apiStop => {
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
+    agencyQuestions: apiStop.agencyQuestions || null,
     people: getFullStopPeopleListed(apiStop),
   }
 }
@@ -779,6 +784,7 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     stopDate: fullStop.stopDate,
     location: fullStop.location,
+    agencyQuestions: fullStop.agencyQuestions,
     ...person,
   }
 }
@@ -818,6 +824,7 @@ export const fullStopToApiStop = (
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
+    agencyQuestions: fullStop.agencyQuestions || null,
     isPiiFound: getPiiFound(fullStop),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {

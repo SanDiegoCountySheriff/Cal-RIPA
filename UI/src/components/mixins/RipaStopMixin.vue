@@ -196,6 +196,7 @@ export default {
 
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agency = this.stop.agency
+        updatedFullStop.agencyQuestions = this.stop.agencyQuestions
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
         updatedFullStop.template = this.stop.template

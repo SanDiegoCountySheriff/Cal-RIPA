@@ -91,7 +91,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    customQuestions: {
+    agencyQuestions: {
       type: Array,
       default: () => [],
     },

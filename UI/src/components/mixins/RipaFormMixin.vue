@@ -123,6 +123,17 @@ export default {
           custodialArrestCodes: newValue.stopResult?.custodialArrestCodes || [],
           pullFromReasonCode: newValue.stopResult?.pullFromReasonCode || false,
         },
+        agencyQuestions: {
+          question1: newValue.agencyQuestions?.question1 || null,
+          question2: newValue.agencyQuestions?.question2 || null,
+          question3: newValue.agencyQuestions?.question3 || null,
+          question4: newValue.agencyQuestions?.question4 || null,
+          question5: newValue.agencyQuestions?.question5 || null,
+          question6: newValue.agencyQuestions?.question6 || null,
+          question7: newValue.agencyQuestions?.question7 || null,
+          question8: newValue.agencyQuestions?.question8 || null,
+          question9: newValue.agencyQuestions?.question9 || null,
+        },
       }
     },
   },

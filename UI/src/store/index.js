@@ -180,8 +180,8 @@ export default new Vuex.Store({
         city: parsedCity,
       }
     },
-    mappedCustomQuestions: state => {
-      return state.apiConfig.customQuestions.map(item => {
+    mappedAgencyQuestions: state => {
+      return state.apiConfig.agencyQuestions.map(item => {
         return {
           maxLength: item.MaxLength,
           label: item.Prompt,

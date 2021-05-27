@@ -1,5 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
+    {{ stop }}
     <v-card-text>
       <template v-if="stepIndex <= 7">
         <v-stepper v-model="stepIndex">
@@ -29,7 +30,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="customQuestions.length > 0">
+            <template v-if="agencyQuestions.length > 0">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -155,7 +156,7 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
-                  :custom-questions="customQuestions"
+                  :agency-questions="agencyQuestions"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
@@ -208,7 +209,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="customQuestions.length > 0">
+            <template v-if="agencyQuestions.length > 0">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -260,7 +261,7 @@ export default {
       stop: this.value,
       isEditStop: true,
       isEditPerson: true,
-      isEditCustomQuestions: this.customQuestions.length > 0,
+      isEditAgencyQuestions: this.agencyQuestions.length > 0,
     }
   },
 
@@ -275,7 +276,7 @@ export default {
     },
 
     getFormStep6BackButtonVisible() {
-      return this.isEditPerson && this.isEditStop && this.isEditCustomQuestions
+      return this.isEditPerson && this.isEditStop && this.isEditAgencyQuestions
     },
 
     getApiStop() {
@@ -306,7 +307,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
-      this.isEditCustomQuestions = false
+      this.isEditAgencyQuestions = false
     },
 
     handleBack() {
@@ -333,7 +334,7 @@ export default {
             }
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditCustomQuestions = this.customQuestions.length > 0
+            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
             if (this.onCancel) {
               this.onCancel()
             }
@@ -370,7 +371,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
-      this.isEditCustomQuestions = false
+      this.isEditAgencyQuestions = false
     },
 
     handleEditStop() {
@@ -380,17 +381,17 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = false
-      this.isEditCustomQuestions = false
+      this.isEditAgencyQuestions = false
     },
 
-    handleEditCustomQuestions() {
+    handleEditAgencyQuestions() {
       this.stepIndex = 6
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
       this.isEditStop = false
       this.isEditPerson = false
-      this.isEditCustomQuestions = true
+      this.isEditAgencyQuestions = true
     },
 
     getNextStepIndex() {
@@ -402,7 +403,7 @@ export default {
         return 7
       }
 
-      if (this.stepIndex === 5 && !this.isEditCustomQuestions) {
+      if (this.stepIndex === 5 && !this.isEditAgencyQuestions) {
         return 7
       }
 
@@ -425,7 +426,7 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = true
-      this.isEditCustomQuestions = this.customQuestions.length > 0
+      this.isEditAgencyQuestions = this.agencyQuestions.length > 0
       if (this.onCancel) {
         this.onCancel()
       }
@@ -443,7 +444,7 @@ export default {
           if (confirm) {
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditCustomQuestions = this.customQuestions.length > 0
+            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
@@ -484,7 +485,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    customQuestions: {
+    agencyQuestions: {
       type: Array,
       default: () => [],
     },
