@@ -1,0 +1,196 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+		"resourceTypes": [
+            "microsoft.resources/resourcegroups"
+        ],
+		"config": {
+			"isWizard": false,
+			"basics": {
+				"description": "Customized description with **markdown**, see [more](https://www.microsoft.com).",				
+				"resourceGroup": {
+					"constraints": {
+						"validations": [
+							{
+								"isValid": "[not(contains(resourceGroup().name, 'test'))]",
+								"message": "Resource group name can't contain 'test'."
+							}
+						]
+					},
+					"allowExisting": true
+				}
+			}
+		},
+        "basics": [
+			{
+                "name": "agName",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency Name",
+                "defaultValue": "San Diego County Sheriffs Department",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "",
+                    "validationMessage": ""
+                },
+                "visible": true
+            },
+            {
+                "name": "agAbbr",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency Abbreviation",
+                "defaultValue": "sdsd",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[a-z0-9-]{1,4}$",
+                    "validationMessage": "The Agency Abbreviation Name must be between 1 and 4 characters long and contain Lower case characters"
+                },
+                "visible": true
+            },
+            {
+                "name": "agapplication",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Agency Application",
+                "defaultValue": "ripa",
+                "toolTip": "",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[a-z0-9-]{1,6}$",
+                    "validationMessage": "The Agency Application Name must be between 1 and 6 characters long and contain Lower case characters"
+                },
+                "visible": true
+            }
+			
+        ],
+        "steps": [
+            {
+                "name": "Auth",
+                "label": "Authentication",
+                "elements": [
+                    
+                        {
+							"name": "appReg",
+							"type": "Microsoft.Common.TextBox",
+							"label": "AppRegistration",
+							"defaultValue": "",
+							"toolTip": "",
+							"constraints": {
+								"required": false,
+								"regex": "",
+								"validationMessage": ""
+							},
+							"visible": true
+						},
+						{
+							"name": "tenant",
+							"type": "Microsoft.Common.TextBox",
+							"label": "TenantId",
+							"defaultValue": "",
+							"toolTip": "",
+							"constraints": {
+								"required": false,
+								"regex": "",
+								"validationMessage": ""
+							},
+							"visible": true
+						},
+						{
+							"name": "LogAuth",
+							"type": "Microsoft.Common.TextBox",
+							"label": "Login Authority",
+							"defaultValue": "https://login.microsoftonline.com",
+							"toolTip": "",
+							"constraints": {
+								"required": false,
+								"regex": "",
+								"validationMessage": ""
+							},
+							"visible": true
+						}     
+                    
+                ]
+            },
+			{
+                "name": "PrvDom",
+                "label": "Private Domain",
+                "elements": [
+                    {
+						"name": "PrvDomSec",
+						"type": "Microsoft.Common.OptionsGroup",
+						"label": "Domain Selection",
+						"defaultValue": "ripa-sdsd.cssa.cloud",
+						"toolTip": "",
+						"constraints": {
+							"allowedValues": [
+							{
+								"label": "ripa-sdsd.cssa.cloud",
+								"value": "oDefaultDomne"
+							},
+							{
+								"label": "Private Domain",
+								"value": "PrvDo"
+							}
+							],
+							"required": false
+						},
+						"visible": true
+					},
+					{
+						"name": "cert",
+						"type": "Microsoft.Common.FileUpload",
+						"label": "Certificate",
+						"toolTip": "",
+						"constraints": {
+							"required": true,
+							"accept": ".doc,.docx,.xml,application/msword"
+						},
+						"options": {
+							"multiple": false,
+							"uploadMode": "file",
+							"openMode": "text",
+							"encoding": "UTF-8"
+						},
+						"visible": false
+					},
+					{
+						"name": "pass",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Password",
+						"defaultValue": "",
+						"toolTip": "",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": false
+					},
+					{
+						"name": "DomDnsZone",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Domain DNS Zone",
+						"defaultValue": "sdsd",
+						"toolTip": "",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": false
+					}
+						
+                ]
+            }
+            
+        ],
+        "outputs": {
+            "agency": "[basics('agAbbr')]",
+            "application": "[basics('agapplication')]",
+            "resourcegr_name":"[resourceGroup().name]",
+            "region":"[resourceGroup().location]"
+        }
+    }
+}

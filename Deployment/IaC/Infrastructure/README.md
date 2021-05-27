@@ -1,6 +1,5 @@
 # RIPA Infrastructure as Code
 The following resources will be created on Azure public cloud by running "azuredeploy-IaCTemplate.json" template. 
-- App Configuration
 - Application Insights
 - API Management service
 - Azure Cosmos DB account
@@ -15,8 +14,7 @@ The following resources will be created on Azure public cloud by running "azured
 - Storage account's 
 - Network security group for cosmosdb and API management.
 
-The following resources will be created on Azure Government cloud by running "azuredeploy-IaCTemplateGov.json" template.
-- App Configuration
+The following resources will be created on Azure Government cloud by running "azuredeploy-IaCTemplateGovMod.json" template.
 - Application Insights
 - API Management service
 - Azure Cosmos DB account

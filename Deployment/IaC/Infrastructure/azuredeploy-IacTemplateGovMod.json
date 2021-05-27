@@ -27,11 +27,10 @@
             "allowedValues": [
                 "d",
                 "q",
-                "p",
-                "m"
+                "p"
             ],
             "metadata": {
-                "description": "d = development, q = test, p = prod, m = marketplaceTesting."
+                "description": "d = development, q = test, p = prod."
             }
         },
         "apim_policy_env": {
@@ -513,19 +512,19 @@
         "keyvault_secret_sftp_username":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]"
     },
     "resources": [
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.AppConfiguration/configurationStores",
-            "apiVersion": "2020-07-01-preview",
-            "name": "[variables('configurationStores_ripa_ac_name')]",
-            "location": "[parameters('region')]",
-            "sku": {
-                "name": "standard"
-            },
-            "properties": {
-                "encryption": {}
-            }
-        },
+        // {
+        //     "condition": "[parameters('deploy_rg')]",
+        //     "type": "Microsoft.AppConfiguration/configurationStores",
+        //     "apiVersion": "2020-07-01-preview",
+        //     "name": "[variables('configurationStores_ripa_ac_name')]",
+        //     "location": "[parameters('region')]",
+        //     "sku": {
+        //         "name": "standard"
+        //     },
+        //     "properties": {
+        //         "encryption": {}
+        //     }
+        // },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.insights/actionGroups",
