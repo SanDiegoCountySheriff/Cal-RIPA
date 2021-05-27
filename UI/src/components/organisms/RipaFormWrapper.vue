@@ -402,6 +402,10 @@ export default {
         return 7
       }
 
+      if (this.stepIndex === 5 && !this.isEditCustomQuestions) {
+        return 7
+      }
+
       return this.stepIndex + 1
     },
 
