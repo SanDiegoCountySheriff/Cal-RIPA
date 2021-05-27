@@ -1,6 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
+      {{ fullStop }}
       <template v-if="stepIndex <= 6">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
@@ -397,6 +398,7 @@ export default {
     },
 
     formStepIndex(newVal) {
+      console.log('step index', newVal)
       this.stepIndex = newVal
     },
   },
@@ -408,15 +410,19 @@ export default {
     },
     schools: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     beats: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     countyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
+    },
+    customQuestions: {
+      type: Array,
+      default: () => [],
     },
     displayBeatInput: {
       type: Boolean,
@@ -456,11 +462,11 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     statutes: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     user: {
       type: Object,

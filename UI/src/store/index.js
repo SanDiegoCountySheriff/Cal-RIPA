@@ -180,6 +180,16 @@ export default new Vuex.Store({
         city: parsedCity,
       }
     },
+    mappedCustomQuestions: state => {
+      return state.apiConfig.customQuestions.map(item => {
+        return {
+          maxLength: item.MaxLength,
+          label: item.Prompt,
+          required: item.Required,
+          questionType: item.Type,
+        }
+      })
+    },
   },
 
   mutations: {
@@ -921,6 +931,7 @@ export default new Vuex.Store({
     },
 
     setApiConfig({ commit }, value) {
+      console.log(value)
       commit('updateApiConfig', value)
     },
   },

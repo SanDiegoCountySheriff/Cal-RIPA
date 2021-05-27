@@ -120,7 +120,7 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     schools: {
       type: Array,
