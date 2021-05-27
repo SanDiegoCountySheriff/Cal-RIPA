@@ -79,12 +79,5 @@ export default {
       return this.statutes
     },
   },
-
-  props: {
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
-  },
 }
 </script>

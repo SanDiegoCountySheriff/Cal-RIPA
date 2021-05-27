@@ -424,6 +424,7 @@ export default {
     handlePullReasonCodeWarning() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.warningCodes.push(reasonCode)
       }
     },
@@ -431,6 +432,7 @@ export default {
     handlePullReasonCodeCitation() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.citationCodes.push(reasonCode)
       }
     },
@@ -438,6 +440,7 @@ export default {
     handlePullReasonCodeInfield() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.infieldCodes.push(reasonCode)
       }
     },
@@ -445,6 +448,7 @@ export default {
     handlePullReasonCodeCustodialArrest() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.custodialArrestCodes.push(reasonCode)
       }
     },

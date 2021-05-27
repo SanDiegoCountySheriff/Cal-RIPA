@@ -15,7 +15,15 @@
           <v-alert outlined dense type="info">
             <v-row align="center">
               <v-col class="grow">
-                {{ getOfficerInfo }}
+                <template v-if="isValidUser">
+                  {{ getOfficerInfo }}
+                </template>
+                <template v-if="!isValidUser">
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                </template>
               </v-col>
               <v-col class="shrink">
                 <v-btn color="primary" small @click="handleUpdateUser">
@@ -51,6 +59,10 @@ export default {
   },
 
   computed: {
+    isValidUser() {
+      return this.user && this.user.assignment
+    },
+
     getOfficerInfo() {
       if (this.user) {
         const otherType =
@@ -66,7 +78,7 @@ export default {
   },
 
   methods: {
-    getOfficerAssignmentText(officer) {
+    getOfficerAssignmentText() {
       if (this.user && this.user.assignment) {
         const [assignment] = OFFICER_ASSIGNMENTS.filter(
           item => item.value === this.user.assignment,
