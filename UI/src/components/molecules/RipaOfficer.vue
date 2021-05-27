@@ -12,26 +12,26 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
-          <template v-if="isValidUser">
-            <v-alert outlined dense type="info">
-              <v-row align="center">
-                <v-col class="grow">
+          <v-alert outlined dense type="info">
+            <v-row align="center">
+              <v-col class="grow">
+                <template v-if="isValidUser">
                   {{ getOfficerInfo }}
-                </v-col>
-                <v-col class="shrink">
-                  <v-btn color="primary" small @click="handleUpdateUser">
-                    Update
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-alert>
-          </template>
-          <template v-if="!isValidUser">
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-          </template>
+                </template>
+                <template v-if="!isValidUser">
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                </template>
+              </v-col>
+              <v-col class="shrink">
+                <v-btn color="primary" small @click="handleUpdateUser">
+                  Update
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-alert>
         </v-col>
       </v-row>
     </v-container>

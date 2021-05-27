@@ -96,8 +96,6 @@ export default {
       'getFormSchools',
       'getFormStatutes',
       'getUser',
-      'setApiConfig',
-      'setInvalidUser',
     ]),
 
     async getUserData() {
@@ -198,7 +196,7 @@ export default {
 
   watch: {
     invalidUser(newVal) {
-      if (newVal && this.isOnline && !this.isAuthenticated) {
+      if (newVal && this.isOnline && this.isAuthenticated) {
         this.showUserDialog = true
       } else {
         this.checkCache()

@@ -119,9 +119,6 @@ export default new Vuex.Store({
     user: state => {
       return state.user
     },
-    isAuthConfigSet: state => {
-      return state.isAuthConfigSet
-    },
     apiConfig: state => {
       return state.apiConfig
     },
@@ -225,9 +222,6 @@ export default new Vuex.Store({
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
-    },
-    updateAuthConfig(state, value) {
-      state.isAuthConfigSet = value
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
@@ -922,20 +916,12 @@ export default new Vuex.Store({
         })
     },
 
-    setAuthConfig({ commit }, value) {
-      commit('updateAuthConfig', value)
-    },
-
     setUserAccountInfo({ commit }, value) {
       commit('updateUserAccount', value)
     },
 
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
-    },
-
-    setInvalidUser({ commit }, value) {
-      commit('updateInvalidUser', value)
     },
   },
 
