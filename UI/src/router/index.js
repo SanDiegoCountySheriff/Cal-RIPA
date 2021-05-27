@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
-import authentication from '@/authentication'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
