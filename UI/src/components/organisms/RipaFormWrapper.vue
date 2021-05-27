@@ -1,7 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      {{ fullStop }}
       <template v-if="stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
@@ -30,7 +29,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="anyCustomQuestions">
+            <template v-if="customQuestions.length > 0">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -156,6 +155,7 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
+                  :custom-questions="customQuestions"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
@@ -208,7 +208,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="anyCustomQuestions">
+            <template v-if="customQuestions.length > 0">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -260,15 +260,11 @@ export default {
       stop: this.value,
       isEditStop: true,
       isEditPerson: true,
-      isEditCustomQuestions: this.anyCustomQuestions,
+      isEditCustomQuestions: this.customQuestions.length > 0,
     }
   },
 
   computed: {
-    anyCustomQuestions() {
-      return this.customQuestions.length > 0
-    },
-
     getEditPersonText() {
       const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
@@ -337,7 +333,7 @@ export default {
             }
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditCustomQuestions = this.anyCustomQuestions
+            this.isEditCustomQuestions = this.customQuestions.length > 0
             if (this.onCancel) {
               this.onCancel()
             }
@@ -397,22 +393,20 @@ export default {
       this.isEditCustomQuestions = true
     },
 
+    getNextStepIndex() {
+      if (this.isEditStop && !this.isEditPerson) {
+        return 7
+      }
+
+      if (!this.isEditStop && this.isEditPerson && this.stepIndex === 5) {
+        return 7
+      }
+
+      return this.stepIndex + 1
+    },
+
     handleNext() {
-      if (
-        this.isEditStop &&
-        !this.isEditPerson &&
-        !this.isEditCustomQuestions
-      ) {
-        this.stepIndex = 7
-      }
-      if (
-        !this.isEditStop &&
-        this.isEditPerson &&
-        !this.isEditCustomQuestions
-      ) {
-        this.stepIndex = 7
-      }
-      this.stepIndex = this.stepIndex + 1
+      this.stepIndex = this.getNextStepIndex()
 
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
@@ -427,7 +421,7 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = true
-      this.isEditCustomQuestions = this.anyCustomQuestions
+      this.isEditCustomQuestions = this.customQuestions.length > 0
       if (this.onCancel) {
         this.onCancel()
       }
@@ -445,7 +439,7 @@ export default {
           if (confirm) {
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditCustomQuestions = this.anyCustomQuestions
+            this.isEditCustomQuestions = this.customQuestions.length > 0
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
@@ -465,7 +459,6 @@ export default {
     },
 
     formStepIndex(newVal) {
-      console.log('step index', newVal)
       this.stepIndex = newVal
     },
   },
