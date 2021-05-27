@@ -11,6 +11,7 @@ export default {
       const config = {
         tenant: res.data.Authentication.TenantId,
         clientId: res.data.Authentication.ClientId,
+        extraQueryParameter: 'prompt=admin_consent',
         postLogoutRedirectUri: window.location.origin,
         redirectUri: window.location.origin,
         cacheLocation: 'localStorage',
