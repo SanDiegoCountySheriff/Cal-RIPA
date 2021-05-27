@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-user tw-pb-8">
+  <div class="ripa-user">
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
@@ -20,6 +20,7 @@
               v-model="model.yearsExperience"
               label="Years of Experience"
               disabled
+              :rules="yearsExperienceRules"
             >
             </ripa-number-input>
           </div>
@@ -97,7 +98,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       yearsExperienceRules: [
         v => !!v || 'Years of Experience is required',
         v =>
