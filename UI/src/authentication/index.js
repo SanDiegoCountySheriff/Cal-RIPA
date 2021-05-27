@@ -35,7 +35,6 @@ export default {
           // try pull the user out of local storage
           const user = this.authenticationContext.getCachedUser()
           store.dispatch('setUserAccountInfo', user)
-          console.log(user)
           if (user) {
             resolve()
           } else {

@@ -324,7 +324,6 @@ export default {
     },
 
     handleEditPerson(id) {
-      console.log('Edit Person in Form', id)
       if (this.onEditPerson) {
         this.onEditPerson(id)
       }

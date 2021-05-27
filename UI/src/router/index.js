@@ -51,11 +51,9 @@ router.beforeEach(async (to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuthentication)) {
       // this route requires auth, check if logged in
       if (authentication.isAuthenticated()) {
-        debugger
         // only proceed if authenticated.
         next()
       } else {
-        debugger
         authentication.signIn()
       }
     } else {
