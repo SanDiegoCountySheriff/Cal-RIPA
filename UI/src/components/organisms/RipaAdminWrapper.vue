@@ -1,15 +1,15 @@
 <template>
   <v-card>
     <v-tabs v-model="tabLevel1" show-arrows>
-      <v-tab>Introduction</v-tab>
-      <v-tab>Submissions</v-tab>
-      <v-tab>Stops</v-tab>
-      <v-tab>Users</v-tab>
-      <v-tab>Domains</v-tab>
+      <v-tab to="/admin">Introduction</v-tab>
+      <v-tab to="/admin/submissions">Submissions</v-tab>
+      <v-tab to="/admin/stops">Stops</v-tab>
+      <v-tab to="/admin/users">Users</v-tab>
+      <v-tab to="/admin/domains">Domains</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
-      <v-tab-item>
+      <v-tab-item id="/">
         <v-card-text>
           <div>
             This screen allows you to manage Submissions, Stops, Users, and
@@ -18,7 +18,7 @@
         </v-card-text>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item value="/admin/submissions" id="/admin/submissions">
         <ripa-submissions-grid
           :loading="loading"
           :items="submissions"
@@ -26,7 +26,7 @@
         ></ripa-submissions-grid>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item value="/admin/stops" id="/admin/stops">
         <ripa-stops-grid
           :loading="loading"
           :items="stops"
@@ -35,7 +35,7 @@
         ></ripa-stops-grid>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item value="/admin/users" id="/admin/users">
         <ripa-users-grid
           :loading="loading"
           :items="users"

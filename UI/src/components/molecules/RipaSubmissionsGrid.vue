@@ -68,17 +68,17 @@
       </v-layout>
     </v-container>
     <!-- submission detail screen gets rendered here -->
-    <v-progress-linear
-      v-if="currentSubmissionLoading"
-      indeterminate
-      color="cyan"
-    ></v-progress-linear>
-    <router-view :submission="currentSubmission"></router-view>
+    <ripa-submission
+      v-if="this.$route.params.submissionId"
+      :submissionId="this.$route.params.submissionId"
+      :submission="currentSubmission"
+    ></ripa-submission>
   </div>
 </template>
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaSubmission from '@/components/molecules/RipaSubmission'
 import { format } from 'date-fns'
 
 export default {
@@ -86,6 +86,7 @@ export default {
 
   components: {
     RipaDatePicker,
+    RipaSubmission,
   },
 
   data() {
@@ -123,7 +124,7 @@ export default {
 
     handleGoToSubmission(whichSubmission) {
       this.currentSubmissionLoading = true
-      this.$router.push(`/admin/submission/${whichSubmission.id}`)
+      this.$router.push(`/admin/submissions/${whichSubmission.id}`)
     },
   },
 

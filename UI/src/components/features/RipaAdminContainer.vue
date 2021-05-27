@@ -46,7 +46,7 @@ export default {
       handler: function (params) {
         if (params.submissionId) {
           console.log('new route with submission id')
-          this.handleTabChange(1)
+          this.handleTabChange('/admin/submissions/')
         }
       },
       deep: true,
@@ -95,22 +95,29 @@ export default {
     },
 
     async handleTabChange(tabIndex) {
+      console.log(tabIndex)
       this.loading = true
-      if (tabIndex === 1 && !this.$route.params.submissionId) {
+      if (
+        tabIndex === '/admin/submissions/' &&
+        !this.$route.params.submissionId
+      ) {
         await Promise.all([this.getAdminSubmissions()])
       }
-      if (tabIndex === 1 && this.$route.params.submissionId) {
+      if (
+        tabIndex === '/admin/submissions/' &&
+        this.$route.params.submissionId
+      ) {
         await Promise.all([
           this.getAdminSubmission(this.$route.params.submissionId),
         ])
       }
-      if (tabIndex === 2) {
+      if (tabIndex === '/admin/stops') {
         await Promise.all([this.getAdminStops()])
       }
-      if (tabIndex === 3) {
+      if (tabIndex === '/admin/users') {
         await Promise.all([this.getAdminUsers()])
       }
-      if (tabIndex === 4) {
+      if (tabIndex === '/admin/domains') {
         await Promise.all([
           this.getAdminBeats(),
           this.getAdminCities(),

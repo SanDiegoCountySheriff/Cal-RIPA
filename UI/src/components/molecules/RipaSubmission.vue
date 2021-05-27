@@ -1,5 +1,10 @@
 <template>
   <v-container class="tw-mt-2" fluid>
+    <v-progress-linear
+      v-if="currentSubmissionLoading"
+      indeterminate
+      color="cyan"
+    ></v-progress-linear>
     <v-layout row>
       <v-flex xs12>
         <v-toolbar flat>
@@ -106,12 +111,29 @@ export default {
         { text: 'Actions', value: 'actions' },
       ],
       format,
+      currentSubmissionLoading: false,
     }
   },
 
   methods: {
     handleBackToSubmissions() {
       this.$router.push('/admin')
+    },
+  },
+
+  created() {
+    if (this.submissionId) {
+      this.currentSubmissionLoading = true
+      // this.$emit('loadNewSubmission', newValue)
+    }
+  },
+
+  watch: {
+    submissionId(newValue, oldValue) {
+      console.log(newValue)
+      if (newValue !== oldValue) {
+        this.$emit('loadNewSubmission', newValue)
+      }
     },
   },
 

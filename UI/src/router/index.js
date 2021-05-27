@@ -32,8 +32,30 @@ const routes = [
     },
     children: [
       {
-        path: 'submission/:submissionId',
-        component: RipaSubmission,
+        path: 'submissions',
+        component: RipaAdminContainer,
+        props: true,
+        children: [
+          {
+            path: ':submissionId',
+            component: RipaAdminContainer,
+            props: true,
+          },
+        ],
+      },
+      {
+        path: 'users',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'stops',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'domains',
+        component: RipaAdminContainer,
         props: true,
       },
     ],
