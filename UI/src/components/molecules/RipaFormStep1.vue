@@ -3,7 +3,9 @@
     <ripa-officer
       v-model="model"
       toggle
+      :user="user"
       :on-open-statute="onOpenStatute"
+      :on-update-user="onUpdateUser"
     ></ripa-officer>
     <ripa-stop-date
       v-model="model"
@@ -118,6 +120,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    user: {
+      type: Object,
+      default: () => {},
+    },
     validLastLocation: {
       type: Boolean,
       default: false,
@@ -135,6 +141,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

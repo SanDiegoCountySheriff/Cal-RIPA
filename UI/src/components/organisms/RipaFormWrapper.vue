@@ -48,12 +48,14 @@
                   :loading-pii="loadingPiiStep1"
                   :non-county-cities="nonCountyCities"
                   :schools="schools"
+                  :user="user"
                   :valid-last-location="validLastLocation"
                   :on-open-favorites="onOpenFavorites"
                   :on-open-last-location="onOpenLastLocation"
                   :on-open-statute="onOpenStatute"
                   :on-save-favorite="onSaveFavorite"
                   :on-gps-location="onGpsLocation"
+                  :on-update-user="onUpdateUser"
                   @input="handleInput"
                 ></ripa-form-step-1>
               </template>
@@ -456,6 +458,10 @@ export default {
       type: Array,
       default: () => {},
     },
+    user: {
+      type: Object,
+      default: () => {},
+    },
     validLastLocation: {
       type: Boolean,
       default: false,
@@ -501,6 +507,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

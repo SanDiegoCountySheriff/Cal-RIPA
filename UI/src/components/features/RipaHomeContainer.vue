@@ -22,6 +22,7 @@
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :user="mappedUser"
         :valid-last-location="isLastLocationValid"
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
@@ -34,6 +35,7 @@
         :on-save-favorite="handleSaveFavorite"
         :on-step-index-change="handleStepIndexChange"
         :on-submit="handleSubmit"
+        :on-update-user="handleUpdateUser"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -58,6 +60,14 @@
       :statute="statute"
       :on-close="handleCloseDialog"
     ></ripa-statute-dialog>
+
+    <ripa-user-dialog
+      :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :user="getMappedUser"
+      :show-dialog="showUserDialog"
+      :on-close="handleClose"
+      :on-save="handleSaveUser"
+    ></ripa-user-dialog>
   </div>
 </template>
 
@@ -69,6 +79,7 @@ import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaStopMixin from '@/components/mixins/RipaStopMixin'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -82,6 +93,7 @@ export default {
     RipaFormTemplate,
     RipaIntroTemplate,
     RipaStatuteDialog,
+    RipaUserDialog,
   },
 
   data() {
@@ -93,6 +105,7 @@ export default {
       loadingPiiStep1: false,
       loadingPiiStep3: false,
       loadingPiiStep4: false,
+      showUserDialog: false,
       statute: null,
       stop: {},
       stopIndex: 1,
@@ -109,9 +122,11 @@ export default {
       'mappedFormSchools',
       'mappedFormStatutes',
       'mappedGpsLocationAddress',
+      'mappedUser',
       'isAuthenticated',
       'displayBeatInput',
     ]),
+
     getAuthAndLocalStorageCheck() {
       // if the user is NOT authenticated AND does not have a local storage cache
       // that means they haven't logged in and must reauthenticate
@@ -121,10 +136,34 @@ export default {
         return true
       }
     },
+
+    getMappedUser() {
+      return {
+        agency: this.mappedUser.agency,
+        assignment: this.mappedUser.assignment,
+        otherType: this.mappedUser.otherType,
+        startDate: this.mappedUser.startDate,
+        yearsExperience: this.mappedUser.yearsExperience,
+      }
+    },
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'checkGpsLocation']),
+    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
+
+    handleClose() {
+      this.showUserDialog = false
+    },
+
+    async handleGpsLocation() {
+      this.loadingGps = true
+      await this.checkGpsLocation()
+      this.loadingGps = false
+    },
+
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
+    },
 
     handleStepIndexChange(index) {
       this.formStepIndex = index
@@ -136,10 +175,8 @@ export default {
       this.setLastLocation(this.stop)
     },
 
-    async handleGpsLocation() {
-      this.loadingGps = true
-      await this.checkGpsLocation()
-      this.loadingGps = false
+    handleUpdateUser() {
+      this.showUserDialog = true
     },
 
     async validateLocationForPii(textValue) {
