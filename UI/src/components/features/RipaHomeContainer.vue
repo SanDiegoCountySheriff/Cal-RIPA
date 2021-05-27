@@ -254,9 +254,9 @@ export default {
       const [filteredPerson] = parsedFullStop.people.filter(
         item => item.id === Number(localFormCurrentUser),
       )
-      this.stop = parsedStop
-      this.fullStop = {
-        ...parsedFullStop,
+      this.fullStop = parsedFullStop
+      this.stop = {
+        ...parsedStop,
         person: filteredPerson,
       }
       if (Object.keys(this.fullStop).length > 0) {
