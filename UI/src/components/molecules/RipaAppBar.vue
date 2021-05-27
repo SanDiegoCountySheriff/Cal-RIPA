@@ -100,15 +100,17 @@
         </v-tooltip>
       </div>
     </v-app-bar>
+
     <v-banner v-if="!authenticated" single-line :sticky="true">
       You are not logged in. While you can initiate a new stop, you must be
       logged in to submit it.
       <template v-slot:actions>
         <v-btn
+          small
           outlined
           color="primary"
           @click="handleLogIn"
-          class="tw-mt-4 sm:tw-mt-0"
+          class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
           >Login</v-btn
         >
       </template>
