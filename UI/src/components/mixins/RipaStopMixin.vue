@@ -203,6 +203,8 @@ export default {
         updatedFullStop.agency = this.stop.agency
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
+        updatedFullStop.template = this.stop.template
+        updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
         updatedFullStop.officer = this.stop.officer
         updatedFullStop.officerId = this.stop.officerId
