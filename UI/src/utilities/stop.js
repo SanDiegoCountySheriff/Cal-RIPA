@@ -24,6 +24,7 @@ export const defaultStop = officer => {
     agency: officer.agency,
     id: uniqueId(),
     template: null,
+    stepTrace: [],
     location: {
       isSchool: false,
       school: null,
@@ -57,6 +58,7 @@ export const defaultStop = officer => {
     stopReason: {},
     stopResult: {
       anyActionsTaken: true,
+      pullFromReasonCode: false,
     },
   }
 }
@@ -67,6 +69,7 @@ export const motorStop = officer => {
     agency: officer.agency,
     id: uniqueId(),
     template: 'motor',
+    stepTrace: [],
     location: {
       isSchool: false,
       school: null,
@@ -121,6 +124,7 @@ export const motorStop = officer => {
       citationCodes: [54106],
       infieldCodes: [],
       custodialArrestCodes: [],
+      pullFromReasonCode: true,
     },
   }
 }
@@ -135,6 +139,7 @@ export const probationStop = officer => {
     agency: officer.agency,
     id: uniqueId(),
     template: 'probation',
+    stepTrace: [],
     location: {
       isSchool: false,
       school: null,
@@ -172,6 +177,7 @@ export const probationStop = officer => {
     },
     stopResult: {
       anyActionsTaken: true,
+      pullFromReasonCode: false,
     },
   }
 }
@@ -588,7 +594,8 @@ export const apiStopToFullStop = apiStop => {
   return {
     agency: apiStop.agency,
     id: apiStop.id,
-    template: apiStop.telemetry.template,
+    template: apiStop.telemetry?.template || null,
+    stepTrace: apiStop.telemetry?.stepTrace || [],
     officer: {
       yearsExperience: Number(apiStop.expYears),
       assignment: Number(apiStop.officerAssignment.key),
@@ -616,11 +623,13 @@ export const apiStopToFullStop = apiStop => {
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
-    people: getFullStopPeopleListed(apiStop.listPersonStopped),
+    people: getFullStopPeopleListed(apiStop),
   }
 }
 
-const getFullStopPeopleListed = people => {
+const getFullStopPeopleListed = apiStop => {
+  const telemetry = apiStop.telemetry || null
+  const people = apiStop.listPersonStopped
   return people.map((person, index) => {
     return {
       id: person.id,
@@ -699,6 +708,7 @@ const getFullStopPeopleListed = people => {
           person.listResultOfStop,
           6,
         ),
+        pullFromReasonCode: telemetry?.pullFromReasonCode || false,
       },
       actionsTaken: {
         anyActionsTaken: person.listActionTakenDuringStop.length > 0,
@@ -802,6 +812,7 @@ export const fullStopToStop = fullStop => {
     agency: fullStop.agency,
     id: fullStop.id,
     template: fullStop.template,
+    stepTrace: fullStop.stepTrace,
     officer: fullStop.officer,
     officerId: fullStop.officerId,
     officerName: fullStop.officerName,
@@ -822,12 +833,20 @@ export const fullStopToApiStop = (
   const assignment = getOfficerAssignment(fullStop)
   const outOfCounty = fullStop.location?.outOfCounty || false
   const duration = fullStop.stopDate?.duration || null
+  const lookupCacheDate = localStorage.getItem('ripa_ripa_cache_date')
 
   return {
     agency: fullStop.agency,
     date: fullStop.stopDate.date,
     expYears: fullStop.officer?.yearsExperience?.toString() || '',
     id: fullStop.id,
+    telemetry: {
+      template: fullStop.template || null,
+      stepTrace: fullStop.stepTrace,
+      lookupCacheDate: lookupCacheDate ? new Date(lookupCacheDate) : null,
+      pullFromReasonCode:
+        fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
+    },
     isPiiFound: getPiiFound(fullStop),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
