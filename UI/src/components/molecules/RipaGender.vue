@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-gender tw-pb-8">
+  <div class="ripa-gender tw-pb-4">
     <template class="tw-mb-4">
       <ripa-form-header
         title="Perceived Gender"

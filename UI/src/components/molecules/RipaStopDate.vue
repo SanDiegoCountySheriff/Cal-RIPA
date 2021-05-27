@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-stop-date tw-pb-8">
+  <div class="ripa-stop-date tw-pb-4">
     <ripa-form-header
       title="Date of Stop"
       required

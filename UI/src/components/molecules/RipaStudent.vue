@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-race tw-pb-8">
+  <div class="ripa-race tw-pb-4">
     <ripa-form-header
       title="Student"
       required

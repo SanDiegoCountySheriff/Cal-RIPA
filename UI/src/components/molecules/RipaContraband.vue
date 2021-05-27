@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Contraband or Evidence Discovered"
       required
