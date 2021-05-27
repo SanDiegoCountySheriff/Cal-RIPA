@@ -22,6 +22,7 @@
         <ripa-submissions-grid
           :loading="loading"
           :items="submissions"
+          :currentSubmission="currentSubmission"
         ></ripa-submissions-grid>
       </v-tab-item>
 
@@ -163,6 +164,9 @@ export default {
     submissions: {
       type: Array,
       default: () => [],
+    },
+    currentSubmission: {
+      type: Object,
     },
     errorCodeSearch: {
       type: Object,

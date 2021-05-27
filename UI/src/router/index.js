@@ -2,9 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import RipaAdminContainer from '@/components/features/RipaAdminContainer.vue'
+import RipaSubmission from '@/components/molecules/RipaSubmission'
 import store from '@/store/index'
 import AuthService from '../services/auth'
 import RipaAdminContainerStories from '../stories/containers/RipaAdminContainer.stories'
+import RipaSubmissionsGridStories from '../stories/molecules/RipaSubmissionsGrid.stories'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,13 @@ const routes = [
         next('/')
       }
     },
+    children: [
+      {
+        path: 'submission/:submissionId',
+        component: RipaSubmission,
+        props: true,
+      },
+    ],
   },
   {
     path: '/stops',
@@ -36,10 +45,6 @@ const routes = [
       import(
         /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
       ),
-  },
-  {
-    path: '/admin/submission/:submissionId',
-    component: RipaAdminContainer,
   },
 ]
 

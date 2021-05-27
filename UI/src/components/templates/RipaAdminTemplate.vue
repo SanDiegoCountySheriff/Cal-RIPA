@@ -7,6 +7,7 @@
     :statutes="statutes"
     :stops="stops"
     :submissions="submissions"
+    :currentSubmission="currentSubmission"
     :users="users"
     :errorCodeSearch="errorCodeSearch"
     :on-delete-beat="onDeleteBeat"
@@ -67,6 +68,9 @@ export default {
     submissions: {
       type: Array,
       default: () => [],
+    },
+    currentSubmission: {
+      type: Object,
     },
     users: {
       type: Array,

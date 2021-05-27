@@ -72,14 +72,14 @@ const AuthService = {
       const tokenExpDate = sessionStorage.getItem('ripa-tokenExpirationDate')
       const isTokenExpired = isAfter(new Date(), new Date(tokenExpDate))
       if (isTokenExpired) {
-        // clearLocalStorageAuthInfo()
-        // await msalInstance.handleRedirectPromise()
-        // msalInstance.logoutRedirect({
-        //   account: userAccount,
-        //   postLogoutRedirectUri: window.location.origin,
-        // })
-        // return false
-        // msalInstance.loginRedirect()
+        clearLocalStorageAuthInfo()
+        await msalInstance.handleRedirectPromise()
+        msalInstance.logoutRedirect({
+          account: userAccount,
+          postLogoutRedirectUri: window.location.origin,
+        })
+        msalInstance.loginRedirect()
+        return false
       } else {
         const silentRequest = {
           scopes: ['User.Read'],

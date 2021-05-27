@@ -7,6 +7,7 @@
     :statutes="mappedAdminStatutes"
     :stops="mappedAdminStops"
     :submissions="mappedAdminSubmissions"
+    :currentSubmission="mappedAdminSubmission"
     :users="mappedAdminUsers"
     :errorCodeSearch="mappedErrorCodeAdminSearch"
     :on-delete-beat="handleDeleteBeat"
@@ -40,6 +41,19 @@ export default {
     }
   },
 
+  watch: {
+    '$route.params': {
+      handler: function (params) {
+        if (params.submissionId) {
+          console.log('new route with submission id')
+          this.handleTabChange(1)
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+
   computed: {
     ...mapGetters([
       'mappedAdminBeats',
@@ -48,6 +62,7 @@ export default {
       'mappedAdminStatutes',
       'mappedAdminStops',
       'mappedAdminSubmissions',
+      'mappedAdminSubmission',
       'mappedAdminUsers',
       'mappedErrorCodeAdminSearch',
     ]),
@@ -71,6 +86,7 @@ export default {
       'getAdminStops',
       'getAdminUsers',
       'getAdminSubmissions',
+      'getAdminSubmission',
       'getErrorCodes',
     ]),
 
@@ -80,8 +96,13 @@ export default {
 
     async handleTabChange(tabIndex) {
       this.loading = true
-      if (tabIndex === 1) {
+      if (tabIndex === 1 && !this.$route.params.submissionId) {
         await Promise.all([this.getAdminSubmissions()])
+      }
+      if (tabIndex === 1 && this.$route.params.submissionId) {
+        await Promise.all([
+          this.getAdminSubmission(this.$route.params.submissionId),
+        ])
       }
       if (tabIndex === 2) {
         await Promise.all([this.getAdminStops()])

@@ -32,6 +32,7 @@ export default new Vuex.Store({
     adminStatutes: [],
     adminStops: [],
     adminSubmissions: [],
+    adminSubmission: null,
     adminUsers: [],
     formBeats: [],
     formCountyCities: [],
@@ -89,6 +90,9 @@ export default new Vuex.Store({
     },
     mappedAdminSubmissions: state => {
       return state.adminSubmissions
+    },
+    mappedAdminSubmission: state => {
+      return state.adminSubmission
     },
     mappedAdminUsers: state => {
       return state.adminUsers
@@ -235,6 +239,9 @@ export default new Vuex.Store({
     },
     updateAdminSubmissions(state, items) {
       state.adminSubmissions = items
+    },
+    updateAdminSubmission(state, items) {
+      state.adminSubmission = items
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
@@ -955,18 +962,42 @@ export default new Vuex.Store({
 
     getAdminSubmissions({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}/Submission/GetSubmissions`, {
+        .get(`${state.apiConfig.apiBaseUrl}submission/GetSubmissions`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
+          console.log(response.data)
           commit('updateAdminSubmissions', response.data)
         })
         .catch(error => {
           console.log('There was an error retrieving admin submissions.', error)
           commit('updateAdminSubmissions', [])
+        })
+    },
+
+    getAdminSubmission({ commit, state }, submissionId) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          commit('updateAdminSubmission', response.data)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error retrieving the admin submission.',
+            error,
+          )
+          commit('updateAdminSubmission', [])
         })
     },
 
