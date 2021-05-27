@@ -884,7 +884,8 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data.sort((x, y) => {
+          const stops = response.data?.stops || []
+          const data = stops.sort((x, y) => {
             const stopA = x.stopDateTime
             const stopB = y.stopDateTime
             return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
