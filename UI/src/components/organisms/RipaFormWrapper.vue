@@ -42,6 +42,7 @@
                   :beats="beats"
                   :county-cities="countyCities"
                   :display-beat-input="displayBeatInput"
+                  :is-authenticated="isAuthenticated"
                   :is-edit-stop="isEditStop"
                   :last-location="lastLocation"
                   :loading-gps="loadingGps"
@@ -428,6 +429,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,

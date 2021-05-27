@@ -1,12 +1,14 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-officer
-      v-model="model"
-      toggle
-      :user="user"
-      :on-open-statute="onOpenStatute"
-      :on-update-user="onUpdateUser"
-    ></ripa-officer>
+    <template v-if="isAuthenticated">
+      <ripa-officer
+        v-model="model"
+        :is-authenticated="isAuthenticated"
+        :user="user"
+        :on-open-statute="onOpenStatute"
+        :on-update-user="onUpdateUser"
+      ></ripa-officer>
+    </template>
     <ripa-stop-date
       v-model="model"
       :is-edit-stop="isEditStop"
@@ -101,6 +103,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    isAuthenticated: {
       type: Boolean,
       default: false,
     },

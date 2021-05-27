@@ -181,7 +181,7 @@ export default {
       }
     },
 
-    async updateData() {
+    async updateAuthenticatedData() {
       this.checkCache()
       await this.getUserData()
       await this.getFormData()
@@ -190,7 +190,9 @@ export default {
 
   async created() {
     if (this.isOnlineAndAuthenticated) {
-      this.updateData()
+      this.updateAuthenticatedData()
+    } else {
+      await this.getFormData()
     }
   },
 
@@ -198,8 +200,6 @@ export default {
     invalidUser(newVal) {
       if (newVal && this.isOnline && this.isAuthenticated) {
         this.showUserDialog = true
-      } else {
-        this.checkCache()
       }
     },
   },

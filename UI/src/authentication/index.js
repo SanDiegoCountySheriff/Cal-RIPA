@@ -38,8 +38,7 @@ export default {
           if (user) {
             resolve()
           } else {
-            // no user at all - go sign in.
-            this.signIn()
+            resolve()
           }
         }
       })

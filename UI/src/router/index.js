@@ -54,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
         // only proceed if authenticated.
         next()
       } else {
-        authentication.signIn()
+        next()
       }
     } else {
       next()

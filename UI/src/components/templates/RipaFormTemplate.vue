@@ -7,6 +7,7 @@
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
@@ -87,6 +88,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,
