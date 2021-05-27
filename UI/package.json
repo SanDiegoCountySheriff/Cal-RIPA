@@ -15,6 +15,7 @@
     "@azure/msal-browser": "^2.14.2",
     "@mdi/font": "5.9.55",
     "@tailwindcss/postcss7-compat": "2.1.2",
+    "adal-angular": "^1.0.18",
     "autoprefixer": "9",
     "axios": "0.21.1",
     "core-js": "3.13.0",

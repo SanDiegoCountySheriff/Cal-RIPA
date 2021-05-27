@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { format } from 'date-fns'
+import authentication from '@/authentication'
 
 Vue.use(Vuex)
 
@@ -13,10 +14,9 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    if (sessionStorage.getItem('ripa-idToken')) {
-      req.headers.Authorization = `Bearer ${sessionStorage.getItem(
-        'ripa-idToken',
-      )}`
+    const token = authentication.bearerToken()
+    if (token) {
+      req.headers.Authorization = `Bearer ${token}`
       return req
     }
   }
@@ -59,11 +59,14 @@ export default new Vuex.Store({
     isAdmin: state => {
       return state.user.isAdmin
     },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
+    isAuthenticated: () => {
+      return authentication.isAuthenticated()
     },
-    isOnlineAndAuthenticated: state => {
-      return navigator.onLine && state.user.isAuthenticated
+    isOnline: () => {
+      return navigator.onLine
+    },
+    isOnlineAndAuthenticated: () => {
+      return navigator.onLine && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -236,22 +239,24 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
-        return roleObj === 'RIPA-ADMINS-ROLE'
-      })
-      const firstName = value.idTokenClaims.given_name
-      const lastName = value.idTokenClaims.family_name
-      const fullName = `${firstName} ${lastName}`
+      if (value && value.profile) {
+        const isAnAdmin = value.profile.roles.filter(roleObj => {
+          return roleObj === 'RIPA-ADMINS-ROLE'
+        })
+        const firstName = value.profile.given_name
+        const lastName = value.profile.family_name
+        const fullName = `${firstName} ${lastName}`
 
-      state.user = {
-        ...state.user,
-        email: value.idTokenClaims.email,
-        firstName,
-        fullName,
-        isAdmin: isAnAdmin.length > 0,
-        isAuthenticated: true,
-        lastName,
-        oid: value.idTokenClaims.oid,
+        state.user = {
+          ...state.user,
+          email: value.profile.email,
+          firstName,
+          fullName,
+          isAdmin: isAnAdmin.length > 0,
+          isAuthenticated: true,
+          lastName,
+          oid: value.profile.oid,
+        }
       }
     },
     updateUserProfile(state, value) {
