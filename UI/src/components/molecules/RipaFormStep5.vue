@@ -41,7 +41,7 @@ import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaStopResult from '@/components/molecules/RipaStopResult'
 
 export default {
-  name: 'ripa-form-step4',
+  name: 'ripa-form-step5',
 
   mixins: [RipaFormStepMixin],
 
@@ -71,13 +71,6 @@ export default {
       } else {
         this.handleNext()
       }
-    },
-  },
-
-  props: {
-    statutes: {
-      type: Array,
-      default: () => [],
     },
   },
 }

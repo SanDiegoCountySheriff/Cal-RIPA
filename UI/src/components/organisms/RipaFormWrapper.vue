@@ -2,7 +2,7 @@
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
       {{ fullStop }}
-      <template v-if="stepIndex <= 6">
+      <template v-if="stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -30,7 +30,14 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"></v-stepper-step>
+            <template v-if="anyCustomQuestions">
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+            </template>
+
+            <v-stepper-step step="7"></v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -149,6 +156,18 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  @input="handleInput"
+                ></ripa-form-step-6>
+              </template>
+            </v-stepper-content>
+
+            <v-stepper-content step="7">
+              <template v-if="stepIndex === 7">
+                <ripa-form-step-7
+                  v-model="stop"
                   :api-stop="getApiStop"
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
@@ -158,7 +177,7 @@
                   :on-submit="handleSubmit"
                   :on-cancel="handleCancel"
                   @input="handleInput"
-                ></ripa-form-step-6>
+                ></ripa-form-step-7>
               </template>
             </v-stepper-content>
           </v-stepper-items>
@@ -189,7 +208,14 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"></v-stepper-step>
+            <template v-if="anyCustomQuestions">
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+            </template>
+
+            <v-stepper-step step="7"></v-stepper-step>
           </v-stepper-header>
         </v-stepper>
       </template>
@@ -208,6 +234,7 @@ import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
 import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
+import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import { fullStopToApiStop } from '@/utilities/stop'
 
@@ -222,20 +249,26 @@ export default {
     RipaFormStep4,
     RipaFormStep5,
     RipaFormStep6,
+    RipaFormStep7,
     RipaSubheader,
   },
 
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 7,
+      confirmationStepIndex: 8,
       stop: this.value,
       isEditStop: true,
       isEditPerson: true,
+      isEditCustomQuestions: this.anyCustomQuestions,
     }
   },
 
   computed: {
+    anyCustomQuestions() {
+      return this.customQuestions.length > 0
+    },
+
     getEditPersonText() {
       const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
@@ -243,6 +276,10 @@ export default {
 
     getFormStep2BackButtonVisible() {
       return this.isEditPerson && this.isEditStop
+    },
+
+    getFormStep6BackButtonVisible() {
+      return this.isEditPerson && this.isEditStop && this.isEditCustomQuestions
     },
 
     getApiStop() {
@@ -273,6 +310,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
+      this.isEditCustomQuestions = false
     },
 
     handleBack() {
@@ -299,6 +337,7 @@ export default {
             }
             this.isEditStop = true
             this.isEditPerson = true
+            this.isEditCustomQuestions = this.anyCustomQuestions
             if (this.onCancel) {
               this.onCancel()
             }
@@ -335,6 +374,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
+      this.isEditCustomQuestions = false
     },
 
     handleEditStop() {
@@ -344,11 +384,36 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = false
+      this.isEditCustomQuestions = false
+    },
+
+    handleEditCustomQuestions() {
+      this.stepIndex = 6
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+      this.isEditStop = false
+      this.isEditPerson = false
+      this.isEditCustomQuestions = true
     },
 
     handleNext() {
-      this.stepIndex =
-        this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
+      if (
+        this.isEditStop &&
+        !this.isEditPerson &&
+        !this.isEditCustomQuestions
+      ) {
+        this.stepIndex = 7
+      }
+      if (
+        !this.isEditStop &&
+        this.isEditPerson &&
+        !this.isEditCustomQuestions
+      ) {
+        this.stepIndex = 7
+      }
+      this.stepIndex = this.stepIndex + 1
+
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -362,6 +427,7 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = true
+      this.isEditCustomQuestions = this.anyCustomQuestions
       if (this.onCancel) {
         this.onCancel()
       }
@@ -379,6 +445,7 @@ export default {
           if (confirm) {
             this.isEditStop = true
             this.isEditPerson = true
+            this.isEditCustomQuestions = this.anyCustomQuestions
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)

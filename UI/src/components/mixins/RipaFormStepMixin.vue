@@ -91,6 +91,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    customQuestions: {
+      type: Array,
+      default: () => [],
+    },
     loadingGps: {
       type: Boolean,
       defaeult: false,
@@ -100,6 +104,10 @@ export default {
       default: false,
     },
     nonCountyCities: {
+      type: Array,
+      default: () => [],
+    },
+    statutes: {
       type: Array,
       default: () => [],
     },
