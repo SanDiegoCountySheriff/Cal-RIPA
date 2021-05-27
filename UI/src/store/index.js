@@ -31,6 +31,7 @@ export default new Vuex.Store({
     adminStatutes: [],
     adminStops: [],
     adminUsers: [],
+    agencyQuestions: [],
     formBeats: [],
     formCountyCities: [],
     formNonCountyCities: [],
@@ -180,15 +181,9 @@ export default new Vuex.Store({
         city: parsedCity,
       }
     },
-    mappedAgencyQuestions: state => {
-      return state.apiConfig.agencyQuestions.map(item => {
-        return {
-          maxLength: item.MaxLength,
-          label: item.Prompt,
-          required: item.Required,
-          questionType: item.Type,
-        }
-      })
+    mappedAgencyQuestions: () => {
+      const questions = localStorage.getItem('ripa_agency_questions')
+      return questions ? JSON.parse(questions) : []
     },
   },
 
@@ -234,6 +229,28 @@ export default new Vuex.Store({
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
+    },
+    updateAgencyQuestions(state, value) {
+      localStorage.removeItem('ripa_agency_questions')
+      const agencyQuestions = value.agencyQuestions || null
+
+      if (agencyQuestions) {
+        const questions = value.agencyQuestions.map(item => {
+          return {
+            maxLength: item.MaxLength,
+            label: item.Prompt,
+            required: item.Required,
+            questionType: item.Type,
+          }
+        })
+        if (questions.length > 0) {
+          localStorage.setItem(
+            'ripa_agency_questions',
+            JSON.stringify(questions),
+          )
+        }
+        state.agencyQuestions = questions
+      }
     },
     updateInvalidUser(state, value) {
       state.user = {
@@ -932,6 +949,7 @@ export default new Vuex.Store({
 
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
+      commit('updateAgencyQuestions', value)
     },
   },
 
