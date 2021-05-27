@@ -47,11 +47,6 @@ export default {
     })
   },
 
-  bearerToken() {
-    const token = localStorage.getItem(`adal.access.token.key${this.clientId}`)
-    return token || ''
-  },
-
   acquireToken() {
     return new Promise((resolve, reject) => {
       this.authenticationContext.acquireToken(this.clientId, (error, token) => {

@@ -14,11 +14,10 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    const token = authentication.bearerToken()
-    if (token) {
+    authentication.acquireToken().then(token => {
       req.headers.Authorization = `Bearer ${token}`
       return req
-    }
+    })
   }
   return req
 })
