@@ -86,7 +86,7 @@
             {{ item.listSubmission.length ? 'Yes' : 'No' }}
           </template>
           <template v-slot:no-data>
-            <div>No Data</div>
+            <div>No Stops Found in This Submission</div>
           </template>
         </v-data-table>
       </v-flex>
@@ -117,7 +117,7 @@ export default {
 
   methods: {
     handleBackToSubmissions() {
-      this.$router.push('/admin')
+      this.$router.push('/admin/submissions')
     },
   },
 
