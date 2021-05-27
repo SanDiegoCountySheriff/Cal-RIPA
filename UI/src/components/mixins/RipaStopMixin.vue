@@ -22,11 +22,6 @@ export default {
   },
 
   methods: {
-    getOfficerFromLocalStorage() {
-      const officer = localStorage.getItem('ripa_officer')
-      return officer ? JSON.parse(officer) : null
-    },
-
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -165,15 +160,15 @@ export default {
 
       switch (value) {
         case 'motor':
-          this.stop = motorStop(this.getOfficerFromLocalStorage())
+          this.stop = motorStop()
           break
 
         case 'probation':
-          this.stop = probationStop(this.getOfficerFromLocalStorage())
+          this.stop = probationStop()
           break
 
         default:
-          this.stop = defaultStop(this.getOfficerFromLocalStorage())
+          this.stop = defaultStop()
           break
       }
 
@@ -235,6 +230,7 @@ export default {
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
       this.isEditingForm = false
       this.stop = null

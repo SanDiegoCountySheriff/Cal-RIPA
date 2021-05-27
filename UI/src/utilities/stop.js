@@ -18,10 +18,9 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
-export const defaultStop = officer => {
+export const defaultStop = () => {
   return {
     actionsTaken: {},
-    agency: officer.agency,
     id: uniqueId(),
     template: null,
     stepTrace: [],
@@ -39,14 +38,6 @@ export const defaultStop = officer => {
       city: null,
       beat: null,
     },
-    officer: {
-      startDate: officer.startDate,
-      yearsExperience: officer.yearsExperience,
-      assignment: officer.assignment,
-      otherType: officer.otherType,
-    },
-    officerId: officer.officerId,
-    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -63,10 +54,9 @@ export const defaultStop = officer => {
   }
 }
 
-export const motorStop = officer => {
+export const motorStop = () => {
   return {
     actionsTaken: {},
-    agency: officer.agency,
     id: uniqueId(),
     template: 'motor',
     stepTrace: [],
@@ -84,14 +74,6 @@ export const motorStop = officer => {
       city: null,
       beat: null,
     },
-    officer: {
-      startDate: officer.startDate,
-      yearsExperience: officer.yearsExperience,
-      assignment: officer.assignment,
-      otherType: officer.otherType,
-    },
-    officerId: officer.officerId,
-    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -129,14 +111,13 @@ export const motorStop = officer => {
   }
 }
 
-export const probationStop = officer => {
+export const probationStop = () => {
   return {
     actionsTaken: {
       anyActionsTaken: true,
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
-    agency: officer.agency,
     id: uniqueId(),
     template: 'probation',
     stepTrace: [],
@@ -154,14 +135,6 @@ export const probationStop = officer => {
       city: null,
       beat: null,
     },
-    officer: {
-      startDate: officer.startDate,
-      yearsExperience: officer.yearsExperience,
-      assignment: officer.assignment,
-      otherType: officer.otherType,
-    },
-    officerId: officer.officerId,
-    officerName: officer.officerName,
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -592,17 +565,9 @@ export const apiStopToFullStop = apiStop => {
   const beatNumber = apiStop.location.beat?.codes?.code || null
 
   return {
-    agency: apiStop.agency,
     id: apiStop.id,
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.stepTrace || [],
-    officer: {
-      yearsExperience: Number(apiStop.expYears),
-      assignment: Number(apiStop.officerAssignment.key),
-      otherType: apiStop.officerAssignment.otherType || null,
-    },
-    officerId: apiStop.officerId || null,
-    officerName: apiStop.officerName || null,
     stopDate: {
       date: apiStop.date,
       time: apiStop.time,
@@ -809,17 +774,18 @@ const getKeyArray = items => {
 export const fullStopToStop = fullStop => {
   const person = fullStop.people.length > 0 ? fullStop.people[0] : null
   return {
-    agency: fullStop.agency,
     id: fullStop.id,
     template: fullStop.template,
     stepTrace: fullStop.stepTrace,
-    officer: fullStop.officer,
-    officerId: fullStop.officerId,
-    officerName: fullStop.officerName,
     stopDate: fullStop.stopDate,
     location: fullStop.location,
     ...person,
   }
+}
+
+export const getOfficerFromLocalStorage = () => {
+  const officer = localStorage.getItem('ripa_officer')
+  return officer ? JSON.parse(officer) : null
 }
 
 export const fullStopToApiStop = (
@@ -830,20 +796,25 @@ export const fullStopToApiStop = (
   schools,
   statutes,
 ) => {
-  const assignment = getOfficerAssignment(fullStop)
+  const officer = getOfficerFromLocalStorage()
+  const assignment = getOfficerAssignment(officer.assignment)
   const outOfCounty = fullStop.location?.outOfCounty || false
   const duration = fullStop.stopDate?.duration || null
-  const lookupCacheDate = localStorage.getItem('ripa_ripa_cache_date')
+  const lookupCacheDate = localStorage.getItem('ripa_cache_date')
+  const formCached = localStorage.getItem('ripa_form_cached')
 
   return {
-    agency: fullStop.agency,
+    agency: officer.agency,
     date: fullStop.stopDate.date,
-    expYears: fullStop.officer?.yearsExperience?.toString() || '',
+    expYears: officer.yearsExperience?.toString() || '',
     id: fullStop.id,
     telemetry: {
       template: fullStop.template || null,
+      formCached: formCached === '1',
       stepTrace: fullStop.stepTrace,
-      lookupCacheDate: lookupCacheDate ? new Date(lookupCacheDate) : null,
+      lookupCacheDate: lookupCacheDate
+        ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
+        : null,
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
@@ -866,11 +837,11 @@ export const fullStopToApiStop = (
     },
     officerAssignment: {
       key: assignment.code.toString(),
-      otherType: fullStop.officer?.otherType || '',
+      otherType: officer?.otherType || '',
       type: assignment.text,
     },
-    officerId: fullStop.officerId,
-    officerName: fullStop.officerName,
+    officerId: officer.officerId,
+    officerName: officer.officerName,
     stopDateTime: formatDateTime(
       fullStop.stopDate.date,
       fullStop.stopDate.time,
@@ -931,22 +902,14 @@ const getPiiFound = fullStop => {
   return locationPiiFound || reasonForStopPiiFound || basisForSearchPiiFound
 }
 
-const getOfficerAssignment = fullStop => {
-  const assignment = fullStop.officer?.assignment || null
-  if (assignment) {
-    const [filteredAssignment] = OFFICER_ASSIGNMENTS.filter(
-      item => item.value === assignment,
-    )
-
-    return {
-      code: assignment.toString(),
-      text: filteredAssignment ? filteredAssignment.name : 'N/A',
-    }
-  }
+const getOfficerAssignment = assignment => {
+  const [filteredAssignment] = OFFICER_ASSIGNMENTS.filter(
+    item => item.value === assignment,
+  )
 
   return {
-    code: '',
-    text: '',
+    code: assignment.toString(),
+    text: filteredAssignment ? filteredAssignment.name : 'N/A',
   }
 }
 

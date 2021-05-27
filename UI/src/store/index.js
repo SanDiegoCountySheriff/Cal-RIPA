@@ -931,7 +931,6 @@ export default new Vuex.Store({
     },
 
     setApiConfig({ commit }, value) {
-      console.log(value)
       commit('updateApiConfig', value)
     },
   },

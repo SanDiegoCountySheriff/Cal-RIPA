@@ -262,6 +262,7 @@ export default {
       if (Object.keys(this.fullStop).length > 0) {
         this.isEditingForm = isEditing
         this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
       } else {
         localStorage.removeItem('ripa_form_editing')
       }

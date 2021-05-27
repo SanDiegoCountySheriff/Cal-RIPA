@@ -1,6 +1,7 @@
 <template>
   <v-card class="ripa-form-summary mx-auto" flat>
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
+    {{ apiStop }}
 
     <v-card-text>
       <div class="tw-mb-2">
