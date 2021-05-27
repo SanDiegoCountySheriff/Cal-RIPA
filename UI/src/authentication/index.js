@@ -52,23 +52,18 @@ export default {
 
   acquireToken() {
     return new Promise((resolve, reject) => {
-      this.authenticationContext.acquireToken(
-        '<azure active directory resource id>',
-        (error, token) => {
-          if (error || !token) {
-            return reject(error)
-          } else {
-            return resolve(token)
-          }
-        },
-      )
+      this.authenticationContext.acquireToken(this.clientId, (error, token) => {
+        if (error || !token) {
+          return reject(error)
+        } else {
+          return resolve(token)
+        }
+      })
     })
   },
 
   acquireTokenRedirect() {
-    this.authenticationContext.acquireTokenRedirect(
-      '<azure active directory resource id>',
-    )
+    this.authenticationContext.acquireTokenRedirect(this.clientId)
   },
 
   isAuthenticated() {
