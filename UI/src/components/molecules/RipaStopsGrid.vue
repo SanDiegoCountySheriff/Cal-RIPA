@@ -58,7 +58,7 @@
         </div>
       </v-flex>
 
-      <v-flex v-if="stops.summary.total" xs12>
+      <v-flex v-if="stops.summary" xs12>
         <div class="stopsSummary">
           <p>
             <span class="label">Total</span>
@@ -260,8 +260,8 @@ export default {
       default: false,
     },
     items: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     onEdit: {
       type: Function,

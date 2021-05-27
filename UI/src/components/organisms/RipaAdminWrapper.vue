@@ -158,12 +158,12 @@ export default {
       default: () => [],
     },
     stops: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     submissions: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     currentSubmission: {
       type: Object,
