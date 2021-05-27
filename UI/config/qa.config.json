@@ -11,5 +11,19 @@
 		"Subscription": "1188db29d44d497e956b7c277ed3244c",
 		"DefaultCounty": "San Diego",
 		"DisplayBeatsInput": "true"
-	}
+	},
+	"CustomQuestions" : [
+		"AnImportantQuestion" : {
+			"Type" : "Text",
+			"Prompt" : "This is some extra question?",
+			"MaxLength" : 250,
+			"Required" : True 
+		},
+		"AnotherImportantQuestion" : {
+			"Type" : "Text",
+			"Prompt" : "Did you wash your teeth?",
+			"MaxLength" : 250,
+			"Required" : True 
+		}
+	]
 }
