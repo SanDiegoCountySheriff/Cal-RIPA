@@ -1,5 +1,8 @@
 <template>
-  <ripa-officer-stops-wrapper :items="items"></ripa-officer-stops-wrapper>
+  <ripa-officer-stops-wrapper
+    :items="items"
+    :loading="loading"
+  ></ripa-officer-stops-wrapper>
 </template>
 
 <script>
@@ -16,6 +19,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

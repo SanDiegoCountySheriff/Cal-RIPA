@@ -1,6 +1,7 @@
 <template>
   <ripa-officer-stops-template
     :items="officerStops"
+    :loading="loading"
   ></ripa-officer-stops-template>
 </template>
 
@@ -13,6 +14,12 @@ export default {
 
   components: {
     RipaOfficerStopsTemplate,
+  },
+
+  data() {
+    return {
+      loading: false,
+    }
   },
 
   computed: {
