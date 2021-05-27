@@ -59,23 +59,4 @@ const router = new VueRouter({
   routes,
 })
 
-// if you ever hit the app and the access token
-// isn't set and the user is online, start login flow and are offline
-router.beforeEach(async (to, from, next) => {
-  if (navigator.onLine) {
-    if (to.matched.some(record => record.meta.requiresAuthentication)) {
-      // this route requires auth, check if logged in
-      if (authentication.isAuthenticated()) {
-        // only proceed if authenticated.
-        next()
-      } else {
-        next()
-      }
-    } else {
-      next()
-    }
-  }
-  next()
-})
-
 export default router
