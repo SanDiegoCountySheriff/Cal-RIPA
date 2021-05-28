@@ -1,7 +1,10 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      <template v-if="stepIndex <= 7">
+      <template v-if="stepIndex == 0">
+        <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+      </template>
+      <template v-if="stepIndex >= 1 && stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -238,6 +241,7 @@ import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
+import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { fullStopToApiStop } from '@/utilities/stop'
 
 export default {
@@ -253,6 +257,7 @@ export default {
     RipaFormStep6,
     RipaFormStep7,
     RipaSubheader,
+    RipaTemplate,
   },
 
   data() {
@@ -587,6 +592,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },
