@@ -31,11 +31,10 @@
             "allowedValues": [
                 "d",
                 "q",
-                "p",
-                "m"
+                "p"
             ],
             "metadata": {
-                "description": "d = development, q = test, p = prod, m = marketplaceTesting."
+                "description": "d = development, q = test, p = prod."
             }
         },
         "region": {

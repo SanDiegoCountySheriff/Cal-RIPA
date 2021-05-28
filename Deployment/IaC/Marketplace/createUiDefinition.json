@@ -53,7 +53,7 @@
             {
                 "name": "agapplication",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Agency Application",
+                "label": "Agency Application Name",
                 "defaultValue": "ripa",
                 "toolTip": "",
                 "constraints": {
@@ -127,7 +127,7 @@
 							"allowedValues": [
 							{
 								"label": "ripa-sdsd.cssa.cloud",
-								"value": "oDefaultDomne"
+								"value": "DefaultDomain"
 							},
 							{
 								"label": "Private Domain",
@@ -139,48 +139,56 @@
 						"visible": true
 					},
 					{
-						"name": "cert",
-						"type": "Microsoft.Common.FileUpload",
-						"label": "Certificate",
-						"toolTip": "",
-						"constraints": {
-							"required": true,
-							"accept": ".doc,.docx,.xml,application/msword"
-						},
-						"options": {
-							"multiple": false,
-							"uploadMode": "file",
-							"openMode": "text",
-							"encoding": "UTF-8"
-						},
-						"visible": false
-					},
-					{
-						"name": "pass",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Password",
-						"defaultValue": "",
-						"toolTip": "",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": false
-					},
-					{
-						"name": "DomDnsZone",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Domain DNS Zone",
-						"defaultValue": "sdsd",
-						"toolTip": "",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": false
-					}
+						"name": "DnsSec",
+						"type": "Microsoft.Common.Section",
+						"label": "",
+						"elements": [
+							{
+								"name": "cert",
+								"type": "Microsoft.Common.FileUpload",
+								"label": "Certificate",
+								"toolTip": "",
+								"constraints": {
+									"required": false,
+									"accept": ".doc,.docx,.xml,application/msword"
+								},
+								"options": {
+									"multiple": false,
+									"uploadMode": "file",
+									"openMode": "text",
+									"encoding": "UTF-8"
+								},
+								"visible": true
+							},
+							{
+								"name": "pass",
+								"type": "Microsoft.Common.TextBox",
+								"label": "Password",
+								"defaultValue": "",
+								"toolTip": "",
+								"constraints": {
+									"required": false,
+									"regex": "",
+									"validationMessage": ""
+								},
+								"visible": true
+							},
+							{
+								"name": "DomDnsZone",
+								"type": "Microsoft.Common.TextBox",
+								"label": "Domain DNS Zone",
+								"defaultValue": "",
+								"toolTip": "",
+								"constraints": {
+									"required": false,
+									"regex": "",
+									"validationMessage": ""
+								},
+								"visible": true
+							}
+						],
+							"visible": true
+            		}
 						
                 ]
             }
