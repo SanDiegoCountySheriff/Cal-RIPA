@@ -154,9 +154,9 @@ export default {
       this.showAddFavoriteDialog = true
     },
 
-    handleTemplate(value) {
+    handleOpenTemplate(value) {
       localStorage.setItem('ripa_form_editing', '1')
-      this.isEditingForm = true
+      this.formStepIndex = 1
 
       switch (value) {
         case 'motor':
@@ -206,7 +206,6 @@ export default {
         updatedFullStop.officerId = this.stop.officerId
         updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
-        updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)
@@ -232,7 +231,7 @@ export default {
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
-      this.isEditingForm = false
+      this.formStepIndex = 0
       this.stop = null
       this.fullStop = null
     },

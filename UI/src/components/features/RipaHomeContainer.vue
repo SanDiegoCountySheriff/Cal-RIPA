@@ -1,46 +1,39 @@
 <template>
   <div class="ripa-home-container">
-    <template v-if="!isEditingForm">
-      <ripa-intro-template
-        v-if="getAuthAndLocalStorageCheck"
-        :on-template="handleTemplate"
-      ></ripa-intro-template>
-    </template>
-    <template v-if="isEditingForm">
-      <ripa-form-template
-        v-model="stop"
-        :beats="mappedFormBeats"
-        :county-cities="mappedFormCountyCities"
-        :agency-questions="mappedAgencyQuestions"
-        :display-beat-input="displayBeatInput"
-        :form-step-index="formStepIndex"
-        :full-stop="fullStop"
-        :is-authenticated="isAuthenticated"
-        :last-location="lastLocation"
-        :loading-gps="loadingGps"
-        :loading-pii-step1="loadingPiiStep1"
-        :loading-pii-step3="loadingPiiStep3"
-        :loading-pii-step4="loadingPiiStep4"
-        :non-county-cities="mappedFormNonCountyCities"
-        :schools="mappedFormSchools"
-        :statutes="mappedFormStatutes"
-        :user="mappedUser"
-        :valid-last-location="isLastLocationValid"
-        :on-add-person="handleAddPerson"
-        :on-cancel="handleCancel"
-        :on-delete-person="handleDeletePerson"
-        :on-edit-person="handleEditPerson"
-        :on-gps-location="handleGpsLocation"
-        :on-open-favorites="handleOpenFavorites"
-        :on-open-last-location="handleOpenLastLocation"
-        :on-open-statute="handleOpenStatute"
-        :on-save-favorite="handleSaveFavorite"
-        :on-step-index-change="handleStepIndexChange"
-        :on-submit="handleSubmit"
-        :on-update-user="handleUpdateUser"
-        @input="handleInput"
-      ></ripa-form-template>
-    </template>
+    <ripa-form-template
+      v-model="stop"
+      :beats="mappedFormBeats"
+      :county-cities="mappedFormCountyCities"
+      :agency-questions="mappedAgencyQuestions"
+      :display-beat-input="displayBeatInput"
+      :form-step-index="formStepIndex"
+      :full-stop="fullStop"
+      :is-authenticated="isAuthenticated"
+      :last-location="lastLocation"
+      :loading-gps="loadingGps"
+      :loading-pii-step1="loadingPiiStep1"
+      :loading-pii-step3="loadingPiiStep3"
+      :loading-pii-step4="loadingPiiStep4"
+      :non-county-cities="mappedFormNonCountyCities"
+      :schools="mappedFormSchools"
+      :statutes="mappedFormStatutes"
+      :user="mappedUser"
+      :valid-last-location="isLastLocationValid"
+      :on-add-person="handleAddPerson"
+      :on-cancel="handleCancel"
+      :on-delete-person="handleDeletePerson"
+      :on-edit-person="handleEditPerson"
+      :on-gps-location="handleGpsLocation"
+      :on-open-favorites="handleOpenFavorites"
+      :on-open-last-location="handleOpenLastLocation"
+      :on-open-statute="handleOpenStatute"
+      :on-open-template="handleOpenTemplate"
+      :on-save-favorite="handleSaveFavorite"
+      :on-step-index-change="handleStepIndexChange"
+      :on-submit="handleSubmit"
+      :on-update-user="handleUpdateUser"
+      @input="handleInput"
+    ></ripa-form-template>
 
     <ripa-favorites-dialog
       :show-dialog="showFavoritesDialog"
@@ -78,7 +71,6 @@ import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaStopMixin from '@/components/mixins/RipaStopMixin'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
@@ -93,16 +85,14 @@ export default {
     RipaAddFavoriteDialog,
     RipaFavoritesDialog,
     RipaFormTemplate,
-    RipaIntroTemplate,
     RipaStatuteDialog,
     RipaUserDialog,
   },
 
   data() {
     return {
-      formStepIndex: 1,
+      formStepIndex: 0,
       fullStop: {},
-      isEditingForm: false,
       loadingGps: false,
       loadingPiiStep1: false,
       loadingPiiStep3: false,
@@ -247,7 +237,6 @@ export default {
     const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
 
     if (localFormEditing) {
-      const isEditing = localFormEditing === '1'
       const parsedStop = JSON.parse(localStop)
       const parsedFullStop = JSON.parse(localFullStop)
 
@@ -255,7 +244,6 @@ export default {
       this.fullStop = parsedFullStop
 
       if (Object.keys(this.fullStop).length > 0) {
-        this.isEditingForm = isEditing
         this.formStepIndex = Number(stepIndex)
         localStorage.setItem('ripa_form_cached', '1')
       } else {
@@ -271,7 +259,7 @@ export default {
 
     fullStop(newVal) {
       this.fullStop = newVal
-      if (this.isEditingForm) {
+      if (this.formStepIndex > 0) {
         if (this.stop) {
           localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
         }

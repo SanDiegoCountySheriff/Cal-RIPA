@@ -1,10 +1,10 @@
 import StoryRouter from 'storybook-vue-router'
-import RipaIntro from '@/components/molecules/RipaIntro'
+import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { routesData } from '../data/routes'
 
 export default {
-  title: 'Molecules/RipaIntro',
-  component: RipaIntro,
+  title: 'Molecules/RipaTemplate',
+  component: RipaTemplate,
   parameters: {},
   decorators: [
     StoryRouter(
@@ -18,6 +18,6 @@ export default {
 }
 
 export const basic = () => ({
-  components: { RipaIntro },
-  template: '<div class="tw-p-4 tw-mt-4"><ripa-intro></ripa-intro></div>',
+  components: { RipaTemplate },
+  template: '<div class="tw-p-4 tw-mt-4"><ripa-template></ripa-template></div>',
 })

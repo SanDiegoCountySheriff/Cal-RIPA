@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
 import RipaAdminContainer from '@/components/features/RipaAdminContainer.vue'
-import RipaSubmission from '@/components/molecules/RipaSubmission'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
