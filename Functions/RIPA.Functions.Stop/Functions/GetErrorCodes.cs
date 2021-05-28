@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Security;
 
 namespace RIPA.Functions.Stop.Functions
 {
@@ -32,6 +34,18 @@ namespace RIPA.Functions.Stop.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("Get - GetErrorCodes requested.");
+            try
+            {
+                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
 
             var inputText = req.Query["Search"];
             var response = await _stopCosmosDbService.GetErrorCodes(inputText);
