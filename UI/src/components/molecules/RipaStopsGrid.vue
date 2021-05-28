@@ -7,6 +7,7 @@
             v-model="stopFromDate"
             class="tw-ml-2"
             label="Stop From Date"
+            @input="fromDateChange"
           ></ripa-date-picker>
         </div>
       </v-flex>
@@ -17,6 +18,7 @@
             v-model="stopToDate"
             class="tw-ml-2"
             label="Stop To Date"
+            @input="toDateChange"
           ></ripa-date-picker>
         </div>
       </v-flex>
@@ -27,6 +29,7 @@
           :items="statuses"
           label="Status"
           clearable
+          @change="statusChange"
         ></v-select>
       </v-flex>
 
@@ -36,6 +39,7 @@
             v-model="isPiiFound"
             class="tw-ml-2"
             label="PII Found"
+            @change="piiChange"
           ></v-switch>
         </div>
       </v-flex>
@@ -90,10 +94,6 @@
           show-select
           :items="getStops"
           :server-items-length="getTotalStops"
-          @update:items-per-page="handleUpdateItemsPerPage"
-          @update:page="handleUpdatePage"
-          @update:sortBy="handleUpdateSort"
-          @update:options="handleUpdateOptions"
           @item-selected="handleRowSelected"
           @toggle-select-all="handleToggleSelectAll"
           :search="search"
@@ -196,8 +196,9 @@ export default {
       errorsFound: false,
       officerName: null,
       selectedItems: [],
-      stopFromDate: subDays(new Date(), 10).toISOString().substr(0, 10),
-      stopToDate: new Date().toISOString().substr(0, 10),
+      stopFromDate: null,
+      stopToDate: null,
+      currentStatusFilter: null,
       statuses: SUBMISSION_STATUSES,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
@@ -236,6 +237,14 @@ export default {
         return (this.currentPage - 1) * this.itemsPerPage + 1
       }
     },
+    getFilterStatus() {
+      return {
+        isPiiFound: this.isPiiFound,
+        stopFromDate: this.stopFromDate,
+        stopToDate: this.stopToDate,
+        currentStatusFilter: this.currentStatusFilter,
+      }
+    },
   },
 
   methods: {
@@ -259,23 +268,23 @@ export default {
       // BEFORE these are called but this math is based on the
       // current value. So need to subtract 1
       this.$emit('paginate', {
-        type: 'stops',
         offset: this.itemsPerPage * (this.currentPage - 1) + 1,
         limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
       })
     },
     handlePreviousPage() {
       this.$emit('paginate', {
-        type: 'stops',
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
       })
     },
     handleJumpToPage() {
       this.$emit('paginate', {
-        type: 'stops',
         offset: this.itemsPerPage * (this.currentPage - 1) + 1,
         limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
       })
       console.log(this.currentPage)
     },
@@ -311,6 +320,39 @@ export default {
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
       console.log(val)
+    },
+    fromDateChange(val) {
+      this.stopFromDate = val
+      this.handleFilter()
+    },
+    toDateChange(val) {
+      this.stopToDate = val
+      this.handleFilter()
+    },
+    statusChange(val) {
+      this.currentStatusFilter = val
+      this.handleFilter()
+    },
+    piiChange(val) {
+      this.isPiiFound = val
+      this.handleFilter()
+    },
+    handleFilter() {
+      // whenever you change a filter, you're going to
+      // reset the paging because it would all change with new settings
+      const filterData = {
+        offset: null,
+        limit: this.itemsPerPage,
+        filters: {
+          stopFromDate: this.stopFromDate,
+          stopToDate: this.stopToDate,
+          status: this.currentStatusFilter,
+          isPiiFound: this.isPiiFound,
+        },
+      }
+      this.$emit('handleAdminStopsFiltering', filterData)
+      // console.log(filterStatus)
+      console.log('filter')
     },
   },
 

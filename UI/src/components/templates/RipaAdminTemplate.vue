@@ -46,6 +46,9 @@ export default {
     handlePaginate(pageData) {
       this.$emit('handlePaginate', pageData)
     },
+    handleAdminStopsFiltering(filterData) {
+      this.$emit('handleAdminStopsFiltering', filterData)
+    },
   },
 
   props: {

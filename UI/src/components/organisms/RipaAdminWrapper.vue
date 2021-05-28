@@ -33,7 +33,8 @@
           :errorCodeSearch="errorCodeSearch"
           @callErrorCodeSearch="handleCallErrorCodeSearch"
           @redoItemsPerPage="handleRedoItemsPerPage"
-          @paginate="handlePaginate"
+          @paginate="handleAdminStopsPagination"
+          @handleAdminStopsFiltering="handleAdminStopsFiltering"
         ></ripa-stops-grid>
       </v-tab-item>
 
@@ -139,8 +140,15 @@ export default {
     handleRedoItemsPerPage(pageData) {
       this.$emit('handleRedoItemsPerPage', pageData)
     },
-    handlePaginate(pageData) {
-      this.$emit('handlePaginate', pageData)
+    handleAdminStopsPagination(pageData) {
+      this.$emit('handlePaginate', {
+        // add in the type in the wrapper
+        type: 'stops',
+        ...pageData,
+      })
+    },
+    handleAdminStopsFiltering(filterData) {
+      this.$emit('handleAdminStopsFiltering', filterData)
     },
   },
 

@@ -932,14 +932,37 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }, pageData) {
+    getAdminStops({ commit, state }, queryData) {
       let queryString = ''
-      if (pageData) {
-        queryString = `?Offset=${pageData.offset}`
-        if (pageData.limit) {
-          queryString = `${queryString}&Limit=${pageData.limit}`
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
+        // if you send an items per page, set it, otherwise just default to 10
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
+
+        if (queryData.filters.stopFromDate !== null) {
+          queryString = `${queryString}&StartDate=${queryData.filters.stopFromDate}`
+        }
+
+        if (queryData.filters.stopToDate !== null) {
+          queryString = `${queryString}&EndDate=${queryData.filters.stopToDate}`
+        }
+
+        if (queryData.filters.status !== null) {
+          queryString = `${queryString}&Status=${queryData.filters.status}`
+        }
+
+        if (queryData.filters.isPiiFound !== null) {
+          queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
         }
       }
+
       return axios
         .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {

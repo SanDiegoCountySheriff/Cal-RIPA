@@ -23,6 +23,7 @@
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
     @handleRedoItemsPerPage="handleRedoItemsPerPage"
     @handlePaginate="handlePaginate"
+    @handleAdminStopsFiltering="handleAdminStopsFiltering"
   ></ripa-admin-template>
 </template>
 
@@ -144,6 +145,12 @@ export default {
         await Promise.all([this.getAdminStops(pageData)])
         this.loading = false
       }
+    },
+
+    async handleAdminStopsFiltering(filterData) {
+      this.loading = true
+      await Promise.all([this.getAdminStops(filterData)])
+      this.loading = false
     },
 
     async handleDeleteBeat(beat) {
