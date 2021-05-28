@@ -164,7 +164,7 @@
 								"name": "pass",
 								"type": "Microsoft.Common.TextBox",
 								"label": "Password",
-								"defaultValue": "[steps('PrvDom').PrvDomSec]",
+								"defaultValue": "",
 								"toolTip": "",
 								"constraints": {
 									"required": true,

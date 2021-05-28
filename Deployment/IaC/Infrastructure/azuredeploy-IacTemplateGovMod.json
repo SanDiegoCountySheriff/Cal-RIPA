@@ -1537,11 +1537,7 @@
                 "attributes": {
                     "enabled": true
                 },
-<<<<<<< HEAD:Deployment/IaC/Infrastructure/azuredeploy-IacTemplateGovMod.json
-                "value":"parameters('secret_key')"
-=======
                 "value":"[parameters('secret_key')]"
->>>>>>> 64d2da48475bec3add19e2c62645ce3d2084b958:Deployment/IaC/azuredeploy-IacTemplateGovMod.json
             }
         },
         {
@@ -1557,11 +1553,7 @@
                 "attributes": {
                     "enabled": true
                 },
-<<<<<<< HEAD:Deployment/IaC/Infrastructure/azuredeploy-IacTemplateGovMod.json
-                "value":"parameters('secret_host')"
-=======
                 "value":"[parameters('secret_host')]"
->>>>>>> 64d2da48475bec3add19e2c62645ce3d2084b958:Deployment/IaC/azuredeploy-IacTemplateGovMod.json
             }
         },
         {
@@ -1577,11 +1569,7 @@
                 "attributes": {
                     "enabled": true
                 },
-<<<<<<< HEAD:Deployment/IaC/Infrastructure/azuredeploy-IacTemplateGovMod.json
-                "value":"parameters('secret_password')"
-=======
                 "value":"[parameters('secret_password')]"
->>>>>>> 64d2da48475bec3add19e2c62645ce3d2084b958:Deployment/IaC/azuredeploy-IacTemplateGovMod.json
             }
         },
         {
@@ -1597,11 +1585,7 @@
                 "attributes": {
                     "enabled": true
                 },
-<<<<<<< HEAD:Deployment/IaC/Infrastructure/azuredeploy-IacTemplateGovMod.json
-                "value":"parameters('secret_username')"
-=======
                 "value":"[parameters('secret_username')]"
->>>>>>> 64d2da48475bec3add19e2c62645ce3d2084b958:Deployment/IaC/azuredeploy-IacTemplateGovMod.json
             }
         },
         {
