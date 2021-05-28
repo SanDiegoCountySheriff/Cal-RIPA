@@ -259,7 +259,7 @@ export default {
 
     fullStop(newVal) {
       this.fullStop = newVal
-      if (this.isEditingForm) {
+      if (this.formStepIndex > 0) {
         if (this.stop) {
           localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
         }

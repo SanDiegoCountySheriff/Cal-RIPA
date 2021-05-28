@@ -49,24 +49,26 @@
           <ripa-list :item="item.content"></ripa-list>
         </div>
 
-        <div class="tw-my-4 tw-text-base tw-font-bold">
-          <span class="tw-text-base tw-font-bold">Agency Questions</span>
-          <template v-if="editButtons">
-            <v-btn
-              class="tw-ml-4"
-              dense
-              outlined
-              x-small
-              @click="handleEditAgencyQuestions"
-            >
-              Edit
-            </v-btn>
-          </template>
-        </div>
+        <template v-if="anyAgencyQuestions">
+          <div class="tw-my-4 tw-text-base tw-font-bold">
+            <span class="tw-text-base tw-font-bold">Agency Questions</span>
+            <template v-if="editButtons">
+              <v-btn
+                class="tw-ml-4"
+                dense
+                outlined
+                x-small
+                @click="handleEditAgencyQuestions"
+              >
+                Edit
+              </v-btn>
+            </template>
+          </div>
 
-        <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
-          <ripa-list :item="item.content"></ripa-list>
-        </div>
+          <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
+            <ripa-list :item="item.content"></ripa-list>
+          </div>
+        </template>
       </div>
     </v-card-text>
   </v-card>
@@ -88,6 +90,10 @@ export default {
   },
 
   computed: {
+    anyAgencyQuestions() {
+      return this.apiStopAgencyQuestionsSummary.length > 0
+    },
+
     getApiStop() {
       return this.apiStop
     },
@@ -97,8 +103,7 @@ export default {
     },
 
     getApiStopAgencyQuestionsSummary() {
-      const items = apiStopAgencyQuestionsSummary(this.apiStop)
-      return items
+      return apiStopAgencyQuestionsSummary(this.apiStop)
     },
   },
 
