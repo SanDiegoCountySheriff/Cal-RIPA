@@ -78,7 +78,7 @@
 							"defaultValue": "",
 							"toolTip": "",
 							"constraints": {
-								"required": false,
+								"required": true,
 								"regex": "",
 								"validationMessage": ""
 							},
@@ -91,7 +91,7 @@
 							"defaultValue": "",
 							"toolTip": "",
 							"constraints": {
-								"required": false,
+								"required": true,
 								"regex": "",
 								"validationMessage": ""
 							},
@@ -104,7 +104,7 @@
 							"defaultValue": "https://login.microsoftonline.com",
 							"toolTip": "",
 							"constraints": {
-								"required": false,
+								"required": true,
 								"regex": "",
 								"validationMessage": ""
 							},
@@ -115,18 +115,18 @@
             },
 			{
                 "name": "PrvDom",
-                "label": "Private Domain",
+                "label": "Application Domain",
                 "elements": [
                     {
 						"name": "PrvDomSec",
 						"type": "Microsoft.Common.OptionsGroup",
 						"label": "Domain Selection",
-						"defaultValue": "ripa-sdsd.cssa.cloud",
+						"defaultValue": "[concat(basics('agapplication'),'-',basics('agAbbr'),'.cssa.cloud')]",
 						"toolTip": "",
 						"constraints": {
 							"allowedValues": [
 							{
-								"label": "ripa-sdsd.cssa.cloud",
+								"label": "[concat(basics('agapplication'),'-',basics('agAbbr'),'.cssa.cloud')]",
 								"value": "DefaultDomain"
 							},
 							{
@@ -134,7 +134,7 @@
 								"value": "PrvDo"
 							}
 							],
-							"required": false
+							"required": true
 						},
 						"visible": true
 					},
@@ -149,7 +149,7 @@
 								"label": "Certificate",
 								"toolTip": "",
 								"constraints": {
-									"required": false,
+									"required": true,
 									"accept": ".doc,.docx,.xml,application/msword"
 								},
 								"options": {
@@ -164,10 +164,10 @@
 								"name": "pass",
 								"type": "Microsoft.Common.TextBox",
 								"label": "Password",
-								"defaultValue": "",
+								"defaultValue": "[steps('PrvDom').PrvDomSec]",
 								"toolTip": "",
 								"constraints": {
-									"required": false,
+									"required": true,
 									"regex": "",
 									"validationMessage": ""
 								},
@@ -180,14 +180,14 @@
 								"defaultValue": "",
 								"toolTip": "",
 								"constraints": {
-									"required": false,
+									"required": true,
 									"regex": "",
 									"validationMessage": ""
 								},
 								"visible": true
 							}
 						],
-							"visible": true
+							"visible": "[equals(steps('PrvDom').PrvDomSec,'PrvDo')]"
             		}
 						
                 ]
