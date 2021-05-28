@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="model" max-width="500px">
+  <v-dialog
+    v-model="model"
+    max-width="500px"
+    :light="getLight"
+    :dark="getDark"
+    persistent
+  >
     <v-card>
       <v-card-title>
         <span>Add Favorite</span>
@@ -59,6 +65,14 @@ export default {
         }
         this.viewModel = newValue
       },
+    },
+
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
+
+    getDark() {
+      return !this.$vuetify.theme.dark
     },
 
     getSaveDiabled() {

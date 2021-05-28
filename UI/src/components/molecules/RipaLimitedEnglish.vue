@@ -1,8 +1,9 @@
 <template>
-  <div class="ripa-no-english tw-pb-8">
+  <div class="ripa-no-english tw-pb-4">
     <ripa-form-header
       title="Limited or No English Fluency"
       subtitle="§999.226(a)(8)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 
@@ -38,7 +39,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       viewModel: this.loadModel(this.value),
     }
   },

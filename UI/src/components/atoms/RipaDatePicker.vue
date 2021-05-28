@@ -2,6 +2,8 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
+    :light="getLight"
+    :dark="getDark"
     :return-value.sync="model"
     persistent
     width="290px"
@@ -9,6 +11,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="model"
+        :disabled="disabled"
         :label="label"
         append-icon="mdi-calendar"
         readonly
@@ -47,6 +50,14 @@ export default {
         this.$emit('input', newVal)
       },
     },
+
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
+
+    getDark() {
+      return !this.$vuetify.theme.dark
+    },
   },
 
   watch: {
@@ -59,6 +70,10 @@ export default {
     value: {
       type: String,
       default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     label: {
       type: String,

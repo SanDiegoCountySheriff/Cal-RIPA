@@ -10,6 +10,7 @@ using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace RIPA.Functions.Submission
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddLogging();
             builder.Services.AddSingleton<IStopService>(InitializeStopService());
             builder.Services.AddSingleton<ISftpService>(InitializeSftpService());
             builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeSubmissionCosmosClientInstanceAsync().GetAwaiter().GetResult());
@@ -43,6 +45,9 @@ namespace RIPA.Functions.Submission
                 Password = Environment.GetEnvironmentVariable("SftpPassword"),
                 Key = Environment.GetEnvironmentVariable("SftpKey")
             };
+#if DEBUG
+            sftpConfig.Key = File.ReadAllText(@"C:\Users\LPOPE\source\repos\DOJ Attachments\Keys\lplp.ppk");
+#endif
             LoggerFactory loggerFactory = new LoggerFactory();
             return new SftpService(loggerFactory.CreateLogger(typeof(SftpService)), sftpConfig);
         }

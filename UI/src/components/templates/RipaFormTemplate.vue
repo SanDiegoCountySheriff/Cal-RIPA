@@ -4,7 +4,11 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :agency-questions="agencyQuestions"
+      :display-beat-input="displayBeatInput"
+      :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
@@ -13,15 +17,20 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
       :on-delete-person="onDeletePerson"
+      :on-edit-person="onEditPerson"
       :on-gps-location="onGpsLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
+      :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
+      :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
+      :on-update-user="onUpdateUser"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -69,9 +78,25 @@ export default {
       type: Array,
       default: () => [],
     },
+    agencyQuestions: {
+      type: Array,
+      default: () => [],
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    formStepIndex: {
+      type: Number,
+      default: 1,
+    },
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,
@@ -105,6 +130,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    user: {
+      type: Object,
+      default: () => {},
+    },
     validLastLocation: {
       type: Boolean,
       default: false,
@@ -121,6 +150,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
     onOpenFavorites: {
       type: Function,
       default: () => {},
@@ -129,7 +162,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onOpenStatute: {
+      type: Function,
+      default: () => {},
+    },
     onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onStepIndexChange: {
       type: Function,
       default: () => {},
     },
@@ -138,6 +179,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

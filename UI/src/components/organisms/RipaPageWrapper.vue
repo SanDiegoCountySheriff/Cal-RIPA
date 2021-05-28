@@ -2,17 +2,26 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
+      :display-environment="displayEnvironment"
+      :environment-name="environmentName"
       :online="online"
+      :authenticated="authenticated"
       :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
+      @handleLogOut="handleLogOut"
+      @handleLogIn="handleLogIn"
+      :on-update-user="onUpdateUser"
     ></ripa-app-bar>
-
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
 
-    <ripa-speed-dial v-if="!invalidUser"></ripa-speed-dial>
+    <ripa-speed-dial
+      v-if="
+        !invalidUser && authenticated && $route.path.indexOf('/admin') === -1
+      "
+    ></ripa-speed-dial>
   </div>
 </template>
 
@@ -30,6 +39,15 @@ export default {
     RipaSpeedDial,
   },
 
+  methods: {
+    handleLogOut() {
+      this.$emit('handleLogOut')
+    },
+    handleLogIn() {
+      this.$emit('handleLogIn')
+    },
+  },
+
   props: {
     admin: {
       type: Boolean,
@@ -39,6 +57,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
+    },
     online: {
       type: Boolean,
       default: false,
@@ -47,7 +73,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onUpdateUser: {
+      type: Function,
+      default: () => {},
+    },
     invalidUser: {
+      type: Boolean,
+      default: false,
+    },
+    authenticated: {
       type: Boolean,
       default: false,
     },

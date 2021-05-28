@@ -1,5 +1,5 @@
 import RipaAccordion from '@/components/molecules/RipaAccordion'
-import { stops } from '../data/stops'
+import { apiStops } from '../data/formStop'
 
 export default {
   title: 'Molecules/RipaAccordion',
@@ -11,7 +11,7 @@ export const basic = () => ({
   components: { RipaAccordion },
   data() {
     return {
-      items: stops,
+      items: apiStops,
     }
   },
   template:

@@ -1,9 +1,10 @@
 <template>
-  <div class="ripa-race tw-pb-8">
+  <div class="ripa-race tw-pb-4">
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
       subtitle="§999.226(a)(4)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 

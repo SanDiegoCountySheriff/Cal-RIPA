@@ -1,11 +1,7 @@
 <script>
-import {
-  getOfficerYearsExperience,
-  getOfficerAssignment,
-  getOfficerOtherType,
-} from '@/utilities/officer'
 import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
 import { format } from 'date-fns'
+import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
   data() {
@@ -15,6 +11,7 @@ export default {
       savedLocation: null,
       showAddFavoriteDialog: false,
       showFavoritesDialog: false,
+      showStatuteDialog: false,
     }
   },
 
@@ -54,16 +51,10 @@ export default {
     handleAddPerson() {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
+      this.stop.actionsTaken = {}
       this.stop.person = {
         id: new Date().getTime(),
-        isStudent: false,
-        perceivedRace: null,
-        perceivedGender: null,
-        genderNonconforming: false,
-        perceivedLgbt: false,
-        perceivedAge: null,
-        anyDisabilities: false,
-        perceivedOrKnownDisability: null,
+        index: this.fullStop.people.length + 1,
       }
       this.updateFullStop()
     },
@@ -71,6 +62,7 @@ export default {
     handleCloseDialog() {
       this.showAddFavoriteDialog = false
       this.showFavoritesDialog = false
+      this.showStatuteDialog = false
     },
 
     handleDeleteFavorite(id) {
@@ -80,12 +72,26 @@ export default {
     },
 
     handleDeletePerson(id) {
+      // update fullStop
       const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
       const updatedFullStop = {
         ...this.fullStop,
-        people: filteredPeople,
+        people: filteredPeople.map((person, index) => {
+          return {
+            ...person,
+            index: index + 1,
+          }
+        }),
       }
       this.fullStop = Object.assign({}, updatedFullStop)
+      // update stop
+      const filteredPerson = this.fullStop.people[0]
+      if (filteredPerson) {
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+      }
     },
 
     handleEditFavorite(favorite) {
@@ -97,6 +103,18 @@ export default {
       )
       filteredLocations.push(updatedFav)
       this.setFavoriteLocations(filteredLocations)
+    },
+
+    handleEditPerson(id) {
+      const [filteredPerson] = this.fullStop.people.filter(
+        item => item.id === id,
+      )
+      if (filteredPerson) {
+        this.stop = {
+          ...this.stop,
+          person: filteredPerson,
+        }
+      }
     },
 
     handleInput(newVal) {
@@ -123,43 +141,34 @@ export default {
       this.lastLocation = location
     },
 
+    handleOpenStatute(statute) {
+      this.statute = {
+        statute,
+        content: getStatuteContent(statute),
+      }
+      this.showStatuteDialog = true
+    },
+
     handleSaveFavorite(location) {
       this.savedLocation = location
       this.showAddFavoriteDialog = true
     },
 
     handleTemplate(value) {
+      localStorage.setItem('ripa_form_editing', '1')
       this.isEditingForm = true
 
       switch (value) {
         case 'motor':
-          this.stop = motorStop(
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = motorStop()
           break
 
         case 'probation':
-          this.stop = probationStop(
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = probationStop()
           break
 
         default:
-          this.stop = defaultStop(
-            getOfficerYearsExperience(),
-            getOfficerAssignment(),
-            getOfficerOtherType(),
-            this.officerId,
-            this.agency,
-          )
+          this.stop = defaultStop()
           break
       }
 
@@ -179,40 +188,53 @@ export default {
         const updatedPerson = {
           ...this.stop.person,
           id: this.stop?.person.id,
+          index: this.stop?.person.index,
           actionsTaken: this.stop?.actionsTaken || null,
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
         }
 
-        const updatedFullStop = Object.assign({}, this.fullStop)
+        let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agency = this.stop.agency
+        updatedFullStop.agencyQuestions = this.stop.agencyQuestions
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
+        updatedFullStop.template = this.stop.template
+        updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
         updatedFullStop.officer = this.stop.officer
         updatedFullStop.officerId = this.stop.officerId
+        updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
-        updatedFullStop.people = people
-          .filter(item => item.id !== personId)
-          .map((item, index) => {
-            return {
-              ...item,
-              index: index + 1,
-            }
-          })
+        updatedFullStop.people = people.filter(item => item.id !== personId)
         updatedFullStop.people.push(updatedPerson)
+        updatedFullStop = {
+          ...updatedFullStop,
+          people: updatedFullStop.people
+            .sort((a, b) => a.id - b.id)
+            .map((person, index) => {
+              return {
+                ...person,
+                index: index + 1,
+              }
+            }),
+        }
         this.fullStop = Object.assign({}, updatedFullStop)
       }
     },
 
     handleCancel() {
+      localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_editing')
+      localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_cached')
+      localStorage.removeItem('ripa_form_full_stop')
       this.isEditingForm = false
-      this.stop = {}
-      this.fullStop = {}
-      this.updateFullStop()
+      this.stop = null
+      this.fullStop = null
     },
   },
 }

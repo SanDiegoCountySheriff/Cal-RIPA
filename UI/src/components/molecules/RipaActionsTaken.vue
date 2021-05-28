@@ -1,9 +1,10 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Actions Taken During Stop"
       required
       subtitle="§999.226(a)(12)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 
@@ -13,7 +14,7 @@
           <ripa-switch
             v-model="model.actionsTaken.anyActionsTaken"
             label="Any Actions Taken?"
-            :disabled="isAnyActionsTakenDisabled"
+            :disabled="isAnyActionsTakenDisabled1 || isAnyActionsTakenDisabled2"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
@@ -60,6 +61,7 @@
                 title="Basis for Search"
                 required
                 subtitle="§999.226(a)(12)(B)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -104,6 +106,7 @@
                 title="Basis for Property Seizure"
                 required
                 subtitle="§999.226(a)(12)(D)(1)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -118,6 +121,7 @@
                 title="Types of Property Seized"
                 required
                 subtitle="§999.226(a)(12)(D)(2)"
+                :on-open-statute="onOpenStatute"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -168,7 +172,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
@@ -177,7 +180,8 @@ export default {
       actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
-      isAnyActionsTakenDisabled: false,
+      isAnyActionsTakenDisabled1: false,
+      isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
       viewModel: this.loadModel(this.value),
     }
@@ -245,8 +249,8 @@ export default {
           return {
             ...item,
             disabled:
-              this.isAnyActionsTakenDisabled &&
-              (item.value === 18 || item.value === 20),
+              (this.isAnyActionsTakenDisabled1 && item.value === 18) ||
+              (this.isAnyActionsTakenDisabled2 && item.value === 20),
           }
         })
     },
@@ -334,7 +338,7 @@ export default {
     updateSearchModel() {
       if (this.viewModel.stopReason) {
         if (this.viewModel.stopReason.searchOfPerson) {
-          this.isAnyActionsTakenDisabled = true
+          this.isAnyActionsTakenDisabled1 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
@@ -344,7 +348,7 @@ export default {
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
-          this.isAnyActionsTakenDisabled = true
+          this.isAnyActionsTakenDisabled2 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (
             this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===

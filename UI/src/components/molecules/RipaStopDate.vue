@@ -1,6 +1,11 @@
 <template>
-  <div class="ripa-stop-date tw-pb-8">
-    <ripa-form-header title="Date of Stop" required subtitle="§999.226(a)(10)">
+  <div class="ripa-stop-date tw-pb-4">
+    <ripa-form-header
+      title="Date of Stop"
+      required
+      subtitle="§999.226(a)(2)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>
@@ -84,17 +89,18 @@ export default {
 
   data() {
     return {
-      valid: true,
       durationItems: DURATIONS,
       dateRules: [
         v => !!v || 'A date is required',
         v =>
+          this.isEditStop ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       timeRules: [
         v => !!v || 'A time is required',
         v =>
+          this.isEditStop ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
@@ -142,6 +148,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    isEditStop: {
+      type: Boolean,
+      default: false,
     },
   },
 }

@@ -26,7 +26,7 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
             await _container.DeleteItemAsync<Models.Submission>(id, new PartitionKey(id));
         }
 
-        public async Task<Models.Submission> GetSSubmissionAsync(string id)
+        public async Task<Models.Submission> GetSubmissionAsync(string id)
         {
             try
             {

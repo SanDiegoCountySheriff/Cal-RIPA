@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { formatDate } from '@/utilities/dates'
+import { formatDate, differenceInYears } from '@/utilities/dates'
+import { format } from 'date-fns'
+import authentication from '@/authentication'
 
 Vue.use(Vuex)
 
@@ -12,12 +14,10 @@ axios.interceptors.request.use(req => {
     // no need to append access token for local config file
     return req
   } else {
-    if (sessionStorage.getItem('ripa-idToken')) {
-      req.headers.Authorization = `Bearer ${sessionStorage.getItem(
-        'ripa-idToken',
-      )}`
+    authentication.acquireToken().then(token => {
+      req.headers.Authorization = `Bearer ${token}`
       return req
-    }
+    })
   }
   return req
 })
@@ -29,7 +29,9 @@ export default new Vuex.Store({
     adminCities: [],
     adminSchools: [],
     adminStatutes: [],
-    adminStops: [],
+    adminStops: {},
+    adminSubmissions: {},
+    adminSubmission: null,
     adminUsers: [],
     formBeats: [],
     formCountyCities: [],
@@ -38,30 +40,40 @@ export default new Vuex.Store({
     formStatutes: [],
     formStops: [],
     user: {
-      agency: 'Insight',
+      agency: '',
+      oid: '',
       isAdmin: false,
-      isInvalid: false,
+      isInvalid: null,
       isAuthenticated: false,
-      officerId: '2021050812345',
+      officerId: null,
+      officerName: null,
+      assignment: null,
+      otherType: null,
     },
     apiConfig: null,
     piiDate: null,
     officerStops: [],
     gpsLocationAddress: null,
+    errorCodeAdminSearch: {
+      loading: false,
+      items: [],
+      search: null,
+      select: null,
+    },
   },
 
   getters: {
-    agency: state => {
-      return state.user.agency
-    },
     isAdmin: state => {
       return state.user.isAdmin
     },
-    isAuthenticated: state => {
-      return state.user.isAuthenticated
+    isAuthenticated: () => {
+      return authentication.isAuthenticated()
     },
-    isOnlineAndAuthenticated: state => {
-      return navigator.onLine && state.user.isAuthenticated
+    isOnline: () => {
+      return navigator.onLine
+    },
+    isOnlineAndAuthenticated: () => {
+      return navigator.onLine && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -75,11 +87,14 @@ export default new Vuex.Store({
     mappedAdminStatutes: state => {
       return state.adminStatutes
     },
-    mappedAdminStops: () => {
-      return []
+    mappedAdminStops: state => {
+      return state.adminStops
     },
-    mappedAdminSubmissions: () => {
-      return []
+    mappedAdminSubmissions: state => {
+      return state.adminSubmissions
+    },
+    mappedAdminSubmission: state => {
+      return state.adminSubmission
     },
     mappedAdminUsers: state => {
       return state.adminUsers
@@ -99,20 +114,47 @@ export default new Vuex.Store({
     mappedFormStatutes: state => {
       return state.formStatutes
     },
-    officerId: state => {
-      return state.user.officerId
+    mappedUser: state => {
+      return {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.officerName,
+        oid: state.user.oid,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
     },
     user: state => {
       return state.user
-    },
-    isAuthConfigSet: state => {
-      return state.isAuthConfigSet
     },
     apiConfig: state => {
       return state.apiConfig
     },
     invalidUser: state => {
       return state.user.isInvalid
+    },
+    displayBeatInput: state => {
+      return state.apiConfig?.displayBeatInput || false
+    },
+    displayEnvironment: state => {
+      return state.apiConfig?.displayEnvironment || false
+    },
+    environmentName: state => {
+      switch (state.apiConfig.environmentName) {
+        case 'p':
+          return 'PROD'
+        case 'd':
+          return 'DEV'
+        case 'q':
+          return 'QA'
+        case 'u':
+          return 'UAT'
+
+        default:
+          return ''
+      }
     },
     mappedGpsLocationAddress: state => {
       if (
@@ -132,17 +174,35 @@ export default new Vuex.Store({
       const parsedStreetName = streetName
         ? streetName.replace(blockNumber, '').trim()
         : null
-      const city = state.gpsLocationAddress.address.city
+      const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
+      const upperCaseCity = city ? city.toUpperCase() : city
       const countyCityFound =
-        state.formCountyCities.filter(item => item.id === city).length > 0
+        state.formCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
       const nonCountyCityFound =
-        state.formNonCountyCities.filter(item => item.id === city).length > 0
-      const parsedCity = countyCityFound || nonCountyCityFound ? city : null
+        state.formNonCountyCities.filter(item => item.id === upperCaseCity)
+          .length > 0
+      const parsedCity =
+        countyCityFound || nonCountyCityFound ? upperCaseCity : null
+
       return {
         blockNumber: parsedBlockNumber,
         streetName: parsedStreetName,
         city: parsedCity,
       }
+    },
+    mappedErrorCodeAdminSearch: state => {
+      return state.errorCodeAdminSearch
+    },
+    mappedAgencyQuestions: state => {
+      return state.apiConfig.agencyQuestions.map(item => {
+        return {
+          maxLength: item.MaxLength,
+          label: item.Prompt,
+          required: item.Required,
+          questionType: item.Type,
+        }
+      })
     },
   },
 
@@ -183,11 +243,17 @@ export default new Vuex.Store({
     updateOfficerStops(state, items) {
       state.officerStops = items
     },
+    updateAdminStops(state, items) {
+      state.adminStops = items
+    },
+    updateAdminSubmissions(state, items) {
+      state.adminSubmissions = items
+    },
+    updateAdminSubmission(state, items) {
+      state.adminSubmission = items
+    },
     updatePiiDate(state) {
       state.piiDate = new Date()
-    },
-    updateAuthConfig(state, value) {
-      state.isAuthConfigSet = value
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
@@ -199,16 +265,54 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      const isAnAdmin = value.idTokenClaims.roles.filter(roleObj => {
-        return roleObj === 'RIPA-ADMINS-ROLE'
-      })
+      if (value && value.profile) {
+        const isAnAdmin = value.profile.roles.filter(roleObj => {
+          return roleObj === 'RIPA-ADMINS-ROLE'
+        })
+        const firstName = value.profile.given_name
+        const lastName = value.profile.family_name
+        const fullName = `${firstName} ${lastName}`
+
+        state.user = {
+          ...state.user,
+          email: value.profile.email,
+          firstName,
+          fullName,
+          isAdmin: isAnAdmin.length > 0,
+          isAuthenticated: true,
+          lastName,
+          oid: value.profile.oid,
+        }
+      }
+    },
+    updateUserProfile(state, value) {
       state.user = {
         ...state.user,
-        isAdmin: isAnAdmin.length > 0,
-        email: value.idTokenClaims.email,
-        firstName: value.idTokenClaims.given_name,
-        lastName: value.idTokenClaims.family_name,
-        isAuthenticated: true,
+        id: state.user.oid,
+        agency: value.agency,
+        assignment: value.assignment ? Number(value.assignment) : null,
+        officerId: value.officerId,
+        otherType: value.otherType ? value.otherType : null,
+        startDate: value.startDate,
+        yearsExperience: differenceInYears(value.startDate),
+      }
+
+      const officer = {
+        agency: state.user.agency,
+        assignment: state.user.assignment,
+        officerId: state.user.officerId,
+        officerName: state.user.fullName,
+        otherType: state.user.otherType,
+        startDate: formatDate(state.user.startDate),
+        yearsExperience: state.user.yearsExperience,
+      }
+      localStorage.setItem('ripa_officer', JSON.stringify(officer))
+    },
+    updateErrorCodeAdminSearch(state, value) {
+      state.errorCodeAdminSearch = {
+        loading: false,
+        ...state.errorCodeAdminSearch,
+        ...value,
       }
     },
   },
@@ -218,6 +322,7 @@ export default new Vuex.Store({
       const document = {
         Document: textValue,
       }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
@@ -328,23 +433,6 @@ export default new Vuex.Store({
         })
     },
 
-    deleteUser({ dispatch, state }, user) {
-      return axios
-        .put(`${state.apiConfig.apiBaseUrl}userProfile/DeleteUser/${user.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
-          },
-        })
-        .then(() => {
-          dispatch('getAdminUsers')
-        })
-        .catch(error => {
-          console.log('There was an error deleting the user.', error)
-          dispatch('getAdminUsers')
-        })
-    },
-
     editBeat({ dispatch, state }, beat) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
@@ -448,6 +536,45 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error saving the user.', error)
           dispatch('getAdminUsers')
+        })
+    },
+
+    editOfficerUser({ dispatch, state }, mappedUser) {
+      const officerId =
+        state.user.officerId ||
+        format(new Date(), 'yyMMdd') +
+          (Math.floor(Math.random() * 999) + 100).toString()
+      const userId = state.user.oid
+      const user = {
+        id: state.user.oid,
+        firstName: state.user.firstName,
+        lastName: state.user.lastName,
+        name: state.user.fullName,
+        agency: mappedUser.agency,
+        startDate: mappedUser.startDate,
+        officerId,
+        assignment: mappedUser.assignment,
+        otherType: mappedUser.otherType,
+      }
+
+      return axios
+        .put(
+          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,
+          user,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(() => {
+          dispatch('getUser')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getUser')
         })
     },
 
@@ -788,15 +915,20 @@ export default new Vuex.Store({
     },
 
     getOfficerStops({ commit, state }) {
+      const officerId = state.user.officerId
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
-          const data = response.data.sort((x, y) => {
+          const stops = response.data?.stops || []
+          const data = stops.sort((x, y) => {
             const stopA = x.stopDateTime
             const stopB = y.stopDateTime
             return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
@@ -806,6 +938,147 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error retrieving officer stops.', error)
           commit('updateOfficerStops', [])
+        })
+    },
+
+    getAdminStops({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
+        // if you send an items per page, set it, otherwise just default to 10
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
+
+        if (queryData.filters.stopFromDate !== null) {
+          queryString = `${queryString}&StartDate=${queryData.filters.stopFromDate}`
+        }
+
+        if (queryData.filters.stopToDate !== null) {
+          queryString = `${queryString}&EndDate=${queryData.filters.stopToDate}`
+        }
+
+        if (queryData.filters.status !== null) {
+          queryString = `${queryString}&Status=${queryData.filters.status}`
+        }
+
+        if (queryData.filters.isPiiFound !== null) {
+          queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
+        }
+      }
+
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.stops.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateAdminStops', {
+            summary: response.data.summary,
+            stops: data,
+          })
+        })
+        .catch(error => {
+          console.log('There was an error retrieving admin stops.', error)
+          commit('updateAdminStops', {
+            summary: {},
+            stops: [],
+          })
+        })
+    },
+
+    getAdminSubmissions({ commit, state }) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}submission/GetSubmissions`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response.data)
+          commit('updateAdminSubmissions', response.data)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving admin submissions.', error)
+          commit('updateAdminSubmissions', [])
+        })
+    },
+
+    getAdminSubmission({ commit, state }, submissionId) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          commit('updateAdminSubmission', response.data)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error retrieving the admin submission.',
+            error,
+          )
+          commit('updateAdminSubmission', [])
+        })
+    },
+
+    getUser({ commit, state }) {
+      const id = state.user.oid
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          commit('updateUserProfile', response.data)
+          commit('updateInvalidUser', false)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving user.', error)
+          commit('updateInvalidUser', true)
+        })
+    },
+
+    getErrorCodes({ commit, state }, value) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}Stops/GetErrorCodes?search=${value}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // need to map out what the response would be
+          commit('updateErrorCodeAdminSearch', response)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('updateErrorCodeAdminSearch', {
+            items: ['new value', 'new value 2', 'new value 3'],
+          })
         })
     },
 
@@ -819,10 +1092,6 @@ export default new Vuex.Store({
 
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
-    },
-
-    setInvalidUser({ commit }, value) {
-      commit('updateInvalidUser', value)
     },
   },
 

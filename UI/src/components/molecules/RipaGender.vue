@@ -1,25 +1,24 @@
 <template>
-  <div class="ripa-gender tw-pb-8">
+  <div class="ripa-gender tw-pb-4">
     <template class="tw-mb-4">
       <ripa-form-header
         title="Perceived Gender"
         required
         subtitle="§999.226(a)(5)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
       <v-container>
         <v-row no-gutters>
           <v-col cols="12" sm="12">
-            <template v-if="isGenderListVisible">
-              <ripa-radio-group
-                v-model="model.person.perceivedGender"
-                :items="genderItems"
-                :rules="genderRules"
-                @input="handleInput"
-              >
-              </ripa-radio-group>
-            </template>
+            <ripa-radio-group
+              v-model="model.person.perceivedGender"
+              :items="genderItems"
+              clear-selection
+              @input="handleInput"
+            >
+            </ripa-radio-group>
           </v-col>
 
           <v-col cols="12" sm="12">
@@ -40,6 +39,7 @@
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"
+        :on-open-statute="onOpenStatute"
       >
       </ripa-form-header>
 
@@ -50,6 +50,7 @@
               v-model="model.person.perceivedLgbt"
               label="Perceived as LGBT"
               :max-width="200"
+              :disabled="isPerceivedLgbtDisabled"
               @input="handleInput"
             ></ripa-switch>
           </v-col>
@@ -79,7 +80,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       genderItems: GENDERS,
       viewModel: this.loadModel(this.value),
     }
@@ -92,38 +92,27 @@ export default {
       },
     },
 
-    genderRules() {
-      if (!this.isGenderListVisible) {
-        return []
-      }
-
-      return [v => !!v || 'A gender is required']
-    },
-
-    isGenderListVisible() {
-      const gc = this.viewModel.person?.genderNonconforming || false
-      return !gc
+    isPerceivedLgbtDisabled() {
+      return (
+        this.viewModel.person.perceivedGender === 3 ||
+        this.viewModel.person.perceivedGender === 4
+      )
     },
   },
 
   methods: {
     handleInput() {
-      this.updateGenderModel()
       this.updatePerceivedLgbtModel()
       this.$emit('input', this.viewModel)
     },
 
-    updateGenderModel() {
-      const gc = this.viewModel.person?.genderNonconforming || false
-      if (gc) {
-        this.viewModel.person.perceivedGender = null
-      }
-    },
-
     updatePerceivedLgbtModel() {
-      this.viewModel.person.perceivedLgbt =
+      if (
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
+      ) {
+        this.viewModel.person.perceivedLgbt = true
+      }
     },
   },
 

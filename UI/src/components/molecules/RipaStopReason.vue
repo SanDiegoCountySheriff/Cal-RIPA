@@ -1,9 +1,10 @@
 <template>
-  <div class="ripa-stop-reason tw-pb-8">
+  <div class="ripa-stop-reason tw-pb-4">
     <ripa-form-header
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
+      :on-open-statute="onOpenStatute"
     ></ripa-form-header>
 
     <v-container>
@@ -14,7 +15,7 @@
             item-text="name"
             item-value="value"
             label="Reason"
-            :items="reasonItems"
+            :items="getReasonItems"
             :rules="reasonRules"
             @input="handleReasonForStopInput"
           ></ripa-select>
@@ -173,7 +174,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       reasonForStopValue: this.value.stopReason?.reasonForStop || null,
       reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [
@@ -195,6 +195,16 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getReasonItems() {
+      if (this.viewModel.person.isStudent) {
+        return this.reasonItems
+      }
+
+      return this.reasonItems.filter(
+        item => item.value !== 7 && item.value !== 8,
+      )
     },
 
     educationViolationRules() {
@@ -280,15 +290,74 @@ export default {
     },
 
     handleInput() {
+      this.updateReasonForStopModel()
       this.updateSearchModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
+    },
+
+    updateReasonForStopModel() {
+      if (this.viewModel.stopReason.reasonForStop === 1) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 2) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 7) {
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+      }
     },
 
     updateSearchModel() {
       if (this.viewModel.stopReason.reasonForStop !== 6) {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 6) {
+        if (this.viewModel.stopReason.searchOfPerson) {
+          this.viewModel.actionsTaken.anyActionsTaken = true
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+          }
+        } else {
+          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop =
+              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 18,
+              )
+          }
+        }
+        if (this.viewModel.stopReason.searchOfProperty) {
+          this.viewModel.actionsTaken.anyActionsTaken = true
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
+            -1
+          ) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+          }
+        } else {
+          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop =
+              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 20,
+              )
+          }
+        }
       }
     },
   },

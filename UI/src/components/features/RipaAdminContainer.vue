@@ -7,23 +7,29 @@
     :statutes="mappedAdminStatutes"
     :stops="mappedAdminStops"
     :submissions="mappedAdminSubmissions"
+    :currentSubmission="mappedAdminSubmission"
     :users="mappedAdminUsers"
+    :errorCodeSearch="mappedErrorCodeAdminSearch"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
     :on-delete-statute="handleDeleteStatute"
-    :on-delete-user="handleDeleteUser"
     :on-edit-beat="handleEditBeat"
     :on-edit-city="handleEditCity"
     :on-edit-school="handleEditSchool"
     :on-edit-statute="handleEditStatute"
     :on-edit-user="handleEditUser"
+    :on-tab-change="handleTabChange"
+    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+    @handleRedoItemsPerPage="handleRedoItemsPerPage"
+    @handlePaginate="handlePaginate"
+    @handleAdminStopsFiltering="handleAdminStopsFiltering"
   ></ripa-admin-template>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -38,6 +44,19 @@ export default {
     }
   },
 
+  watch: {
+    '$route.params': {
+      handler: function (params) {
+        if (params.submissionId) {
+          console.log('new route with submission id')
+          this.handleTabChange('/admin/submissions')
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+
   computed: {
     ...mapGetters([
       'mappedAdminBeats',
@@ -46,7 +65,9 @@ export default {
       'mappedAdminStatutes',
       'mappedAdminStops',
       'mappedAdminSubmissions',
+      'mappedAdminSubmission',
       'mappedAdminUsers',
+      'mappedErrorCodeAdminSearch',
     ]),
   },
 
@@ -56,7 +77,6 @@ export default {
       'deleteCity',
       'deleteSchool',
       'deleteStatute',
-      'deleteUser',
       'editBeat',
       'editCity',
       'editSchool',
@@ -66,18 +86,70 @@ export default {
       'getAdminCities',
       'getAdminSchools',
       'getAdminStatutes',
+      'getAdminStops',
       'getAdminUsers',
+      'getAdminSubmissions',
+      'getAdminSubmission',
+      'getErrorCodes',
     ]),
 
-    async getAdminData(beat) {
+    async handleCallErrorCodeSearch(val) {
+      this.getErrorCodes(val)
+    },
+
+    async handleTabChange(tabIndex) {
+      console.log(tabIndex)
       this.loading = true
-      await Promise.all([
-        this.getAdminBeats(),
-        this.getAdminCities(),
-        this.getAdminSchools(),
-        this.getAdminStatutes(),
-        this.getAdminUsers(),
-      ])
+      if (
+        tabIndex === '/admin/submissions' &&
+        !this.$route.params.submissionId
+      ) {
+        await Promise.all([this.getAdminSubmissions()])
+      }
+      if (
+        tabIndex === '/admin/submissions' &&
+        this.$route.params.submissionId
+      ) {
+        await Promise.all([
+          this.getAdminSubmission(this.$route.params.submissionId),
+        ])
+      }
+      if (tabIndex === '/admin/stops') {
+        await Promise.all([this.getAdminStops()])
+      }
+      if (tabIndex === '/admin/users') {
+        await Promise.all([this.getAdminUsers()])
+      }
+      if (tabIndex === '/admin/domains') {
+        await Promise.all([
+          this.getAdminBeats(),
+          this.getAdminCities(),
+          this.getAdminSchools(),
+          this.getAdminStatutes(),
+        ])
+      }
+      this.loading = false
+    },
+
+    async handleRedoItemsPerPage(pageData) {
+      this.loading = true
+      if (pageData.type === 'stops') {
+        await Promise.all([this.getAdminStops(pageData)])
+        this.loading = false
+      }
+    },
+
+    async handlePaginate(pageData) {
+      this.loading = true
+      if (pageData.type === 'stops') {
+        await Promise.all([this.getAdminStops(pageData)])
+        this.loading = false
+      }
+    },
+
+    async handleAdminStopsFiltering(filterData) {
+      this.loading = true
+      await Promise.all([this.getAdminStops(filterData)])
       this.loading = false
     },
 
@@ -102,12 +174,6 @@ export default {
     async handleDeleteStatute(statute) {
       this.loading = true
       await Promise.all([this.deleteStatute(statute)])
-      this.loading = false
-    },
-
-    async handleDeleteUser(user) {
-      this.loading = true
-      await Promise.all([this.deleteUser(user)])
       this.loading = false
     },
 
@@ -140,10 +206,6 @@ export default {
       await Promise.all([this.editUser(user)])
       this.loading = false
     },
-  },
-
-  created() {
-    this.getAdminData()
   },
 }
 </script>

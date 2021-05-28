@@ -1,26 +1,46 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
+    :display-environment="displayEnvironment"
+    :environment-name="environmentName"
     :online="isOnlineAndAuthenticated"
+    :authenticated="isOnlineAndAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
+    :on-update-user="handleUpdateUser"
+    @handleLogOut="handleLogOut"
+    @handleLogIn="handleLogIn"
   >
     <slot></slot>
     <ripa-interval
       :delay="stopInternalMs"
       @tick="checkLocalStorage"
     ></ripa-interval>
+
+    <ripa-user-dialog
+      :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :user="getMappedUser"
+      :show-dialog="showUserDialog"
+      :on-close="handleClose"
+      :on-save="handleSaveUser"
+    ></ripa-user-dialog>
+
+    <ripa-invalid-user-dialog
+      :show-dialog="showInvalidUserDialog"
+    ></ripa-invalid-user-dialog>
   </ripa-page-wrapper>
 </template>
 
 <script>
-import RipaInterval from '@/components/atoms/RipaInterval'
-import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaInterval from '@/components/atoms/RipaInterval'
+import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
+import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
-import AuthService from '../../services/auth'
+import authentication from '@/authentication'
 
 export default {
   name: 'ripa-page-container',
@@ -29,34 +49,58 @@ export default {
 
   components: {
     RipaInterval,
+    RipaInvalidUserDialog,
     RipaPageWrapper,
+    RipaUserDialog,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMs: 5000,
+      showInvalidUserDialog: false,
+      showUserDialog: false,
     }
   },
 
   computed: {
     ...mapGetters([
+      'displayEnvironment',
+      'environmentName',
       'isAdmin',
       'invalidUser',
+      'isOnline',
       'isOnlineAndAuthenticated',
+      'isAuthenticated',
       'apiConfig',
+      'mappedUser',
     ]),
+
+    getMappedUser() {
+      return {
+        agency: this.mappedUser.agency,
+        assignment: this.mappedUser.assignment,
+        otherType: this.mappedUser.otherType,
+        startDate: this.mappedUser.startDate,
+        yearsExperience: this.mappedUser.yearsExperience,
+      }
+    },
   },
 
   methods: {
     ...mapActions([
       'editOfficerStop',
+      'editOfficerUser',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
-      'setApiConfig',
+      'getUser',
     ]),
+
+    async getUserData() {
+      await Promise.all([this.getUser()])
+    },
 
     async getFormData() {
       this.loading = true
@@ -77,9 +121,29 @@ export default {
       return value === '1'
     },
 
+    handleClose() {
+      this.showUserDialog = false
+    },
+
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
+    },
+
     handleUpdateDark(value) {
       this.isDark = value
       this.setDarkToLocalStorage()
+    },
+
+    handleLogOut() {
+      authentication.signOut()
+    },
+
+    handleLogIn() {
+      authentication.signIn()
+    },
+
+    handleUpdateUser() {
+      this.showUserDialog = true
     },
 
     setDarkToLocalStorage() {
@@ -116,24 +180,28 @@ export default {
         }
       }
     },
+
+    async updateAuthenticatedData() {
+      this.checkCache()
+      await this.getUserData()
+      await this.getFormData()
+    },
   },
 
   async created() {
-    if (this.invalidUser) {
-      this.$router.push('/checkUser')
+    if (this.isOnlineAndAuthenticated) {
+      this.updateAuthenticatedData()
     } else {
-      this.checkCache()
-      if (this.apiConfig === null) {
-        await AuthService.getApiConfig().then(res => {
-          this.setApiConfig({
-            apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
-            apiSubscription: res.data.Configuration.Subscription,
-            defaultCounty: res.data.Configuration.DefaultCounty,
-          })
-          this.getFormData()
-        })
-      }
+      await this.getFormData()
     }
+  },
+
+  watch: {
+    invalidUser(newVal) {
+      if (newVal && this.isOnline && this.isAuthenticated) {
+        this.showUserDialog = true
+      }
+    },
   },
 }
 </script>

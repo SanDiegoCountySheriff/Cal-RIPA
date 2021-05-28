@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import RipaAdminContainer from '@/components/features/RipaAdminContainer.vue'
+import RipaSubmission from '@/components/molecules/RipaSubmission'
 import store from '@/store/index'
-import AuthService from '../services/auth'
-import { isValidOfficer } from '@/utilities/officer'
 
 Vue.use(VueRouter)
 
@@ -12,12 +12,8 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaHomeContainer,
-    beforeEnter(to, from, next) {
-      if (isValidOfficer()) {
-        next()
-      } else {
-        next('/user')
-      }
+    meta: {
+      requiresAuthentication: true,
     },
   },
   {
@@ -27,13 +23,45 @@ const routes = [
       import(
         /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
       ),
+    meta: {
+      requiresAuthentication: true,
+    },
     beforeEnter(to, from, next) {
-      if (store.state.user.isAdmin) {
+      if (store.getters.isOnlineAndAuthenticated && store.state.user.isAdmin) {
         next()
       } else {
         next('/')
       }
     },
+    children: [
+      {
+        path: 'submissions',
+        component: RipaAdminContainer,
+        props: true,
+        children: [
+          {
+            path: ':submissionId',
+            component: RipaAdminContainer,
+            props: true,
+          },
+        ],
+      },
+      {
+        path: 'users',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'stops',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'domains',
+        component: RipaAdminContainer,
+        props: true,
+      },
+    ],
   },
   {
     path: '/stops',
@@ -42,22 +70,16 @@ const routes = [
       import(
         /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
       ),
-  },
-  {
-    path: '/user',
-    name: 'User',
-    component: () =>
-      import(
-        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserContainer.vue'
-      ),
-  },
-  {
-    path: '/checkUser',
-    name: 'Check User',
-    component: () =>
-      import(
-        /* webpackChunkName: "ripa-user" */ '@/components/features/RipaUserCheckContainer.vue'
-      ),
+    meta: {
+      requiresAuthentication: true,
+    },
+    beforeEnter(to, from, next) {
+      if (store.getters.isOnlineAndAuthenticated) {
+        next()
+      } else {
+        next('/')
+      }
+    },
   },
 ]
 
@@ -65,20 +87,6 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
-})
-
-// if you ever hit the app and the access token
-// isn't set and the user is online, start login flow and are offline
-router.beforeEach(async (to, from, next) => {
-  const isAuthenticated = await AuthService.getIsAuthenticated()
-  if (!isAuthenticated && navigator.onLine) {
-    const loginAttempt = await AuthService.tryLogin()
-    if (loginAttempt) {
-      next()
-    }
-  } else {
-    next()
-  }
 })
 
 export default router

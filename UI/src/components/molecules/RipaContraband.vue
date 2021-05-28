@@ -1,9 +1,10 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Contraband or Evidence Discovered"
       required
       subtitle="§999.226(a)(12)(C)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 
@@ -52,7 +53,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       contrabandItems: CONTRABAND_TYPES,
       viewModel: this.loadModel(this.value),
     }

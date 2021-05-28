@@ -1,9 +1,10 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Result of Stop"
       required
       subtitle="§999.226(a)(13)"
+      :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
 
@@ -18,32 +19,15 @@
           ></ripa-switch>
 
           <template v-if="model.stopResult.anyActionsTaken">
-            <template v-if="model.person.isStudent">
-              <ripa-checkbox
-                v-model="model.stopResult.actionsTakenDuringStop12"
-                label="Referral to school administrator"
-                :rules="actionsTakenRules"
-                hide-details
-                @input="handleInput"
-              ></ripa-checkbox>
-              <ripa-checkbox
-                v-model="model.stopResult.actionsTakenDuringStop13"
-                label="Referral to school counselor or other support staff"
-                :rules="actionsTakenRules"
-                hide-details
-                @input="handleInput"
-              ></ripa-checkbox>
-            </template>
-
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop1"
+              v-model="model.stopResult.actionsTakenDuringStop2"
               label="Warning (verbal or written)"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop1">
+            <template v-if="model.stopResult.actionsTakenDuringStop2">
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -75,14 +59,14 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop2"
+              v-model="model.stopResult.actionsTakenDuringStop3"
               label="Citation for infraction"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop2">
+            <template v-if="model.stopResult.actionsTakenDuringStop3">
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -114,14 +98,14 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop3"
+              v-model="model.stopResult.actionsTakenDuringStop4"
               label="In-field cite and release"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop3">
+            <template v-if="model.stopResult.actionsTakenDuringStop4">
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -153,7 +137,7 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop4"
+              v-model="model.stopResult.actionsTakenDuringStop5"
               label="Custodial arrest pursurant to outstanding warrant"
               :rules="actionsTakenRules"
               hide-details
@@ -161,14 +145,14 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop5"
+              v-model="model.stopResult.actionsTakenDuringStop6"
               label="Custodial arrest without warrant"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop5">
+            <template v-if="model.stopResult.actionsTakenDuringStop6">
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -200,16 +184,8 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop6"
-              label="Field interview card completed"
-              :rules="actionsTakenRules"
-              hide-details
-              @input="handleInput"
-            ></ripa-checkbox>
-
-            <ripa-checkbox
               v-model="model.stopResult.actionsTakenDuringStop7"
-              label="Psychiatric hold"
+              label="Field interview card completed"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
@@ -233,16 +209,41 @@
 
             <ripa-checkbox
               v-model="model.stopResult.actionsTakenDuringStop10"
+              label="Psychiatric hold"
+              :rules="actionsTakenRules"
+              hide-details
+              @input="handleInput"
+            ></ripa-checkbox>
+
+            <ripa-checkbox
+              v-model="model.stopResult.actionsTakenDuringStop11"
               label="Contacted U.S. Department of Homeland Security"
               :rules="actionsTakenRules"
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop10">
+            <template v-if="model.stopResult.actionsTakenDuringStop11">
               <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
               </ripa-alert>
+            </template>
+
+            <template v-if="model.person.isStudent">
+              <ripa-checkbox
+                v-model="model.stopResult.actionsTakenDuringStop12"
+                label="Referral to school administrator"
+                :rules="actionsTakenRules"
+                hide-details
+                @input="handleInput"
+              ></ripa-checkbox>
+              <ripa-checkbox
+                v-model="model.stopResult.actionsTakenDuringStop13"
+                label="Referral to school counselor or other support staff"
+                :rules="actionsTakenRules"
+                hide-details
+                @input="handleInput"
+              ></ripa-checkbox>
             </template>
           </template>
         </v-col>
@@ -275,7 +276,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       stopResultItems: STOP_RESULTS,
       viewModel: this.loadModel(this.value),
     }
@@ -323,7 +323,6 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.stopResult.anyActionsTaken
-      const value1 = this.viewModel.stopResult.actionsTakenDuringStop1
       const value2 = this.viewModel.stopResult.actionsTakenDuringStop2
       const value3 = this.viewModel.stopResult.actionsTakenDuringStop3
       const value4 = this.viewModel.stopResult.actionsTakenDuringStop4
@@ -333,12 +332,12 @@ export default {
       const value8 = this.viewModel.stopResult.actionsTakenDuringStop8
       const value9 = this.viewModel.stopResult.actionsTakenDuringStop9
       const value10 = this.viewModel.stopResult.actionsTakenDuringStop10
+      const value11 = this.viewModel.stopResult.actionsTakenDuringStop11
       const value12 = this.viewModel.stopResult.actionsTakenDuringStop12
       const value13 = this.viewModel.stopResult.actionsTakenDuringStop13
       return [
         (checked &&
-          (value1 ||
-            value2 ||
+          (value2 ||
             value3 ||
             value4 ||
             value5 ||
@@ -347,6 +346,7 @@ export default {
             value8 ||
             value9 ||
             value10 ||
+            value11 ||
             value12 ||
             value13)) ||
           'An action taken is required',
@@ -355,7 +355,7 @@ export default {
 
     warningRules() {
       const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop1
+      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop2
       const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -365,7 +365,7 @@ export default {
 
     citationRules() {
       const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop2
+      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop3
       const options = this.viewModel.stopResult.citationCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -375,7 +375,7 @@ export default {
 
     infieldRules() {
       const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop3
+      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop4
       const options = this.viewModel.stopResult.infieldCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -385,7 +385,7 @@ export default {
 
     custodialArrestRules() {
       const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop5
+      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop6
       const options = this.viewModel.stopResult.custodialArrestCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -424,6 +424,7 @@ export default {
     handlePullReasonCodeWarning() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.warningCodes.push(reasonCode)
       }
     },
@@ -431,6 +432,7 @@ export default {
     handlePullReasonCodeCitation() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.citationCodes.push(reasonCode)
       }
     },
@@ -438,6 +440,7 @@ export default {
     handlePullReasonCodeInfield() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.infieldCodes.push(reasonCode)
       }
     },
@@ -445,6 +448,7 @@ export default {
     handlePullReasonCodeCustodialArrest() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.custodialArrestCodes.push(reasonCode)
       }
     },

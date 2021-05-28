@@ -1,12 +1,8 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-form-summary
-      v-model="model"
-      :api-stop="apiStop"
-      :on-edit-stop="onEditStop"
-      :on-edit-person="onEditPerson"
-      :on-delete-person="onDeletePerson"
-    ></ripa-form-summary>
+    {{ model.agencyQuestions }}
+    {{ agencyQuestions }}
+
     <v-spacer></v-spacer>
 
     <template v-if="!isFormValid">
@@ -16,17 +12,24 @@
       </ripa-alert>
     </template>
 
-    <div class="tw-flex tw-mt-4 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-2" @click="handleAddPerson">
-        <v-icon left> mdi-plus </v-icon>
-        Add Person
-      </v-btn>
-    </div>
     <div class="tw-flex tw-mt-8 tw-justify-center">
+      <template v-if="backButtonVisible">
+        <v-btn
+          outlined
+          color="primary"
+          class="tw-mr-2"
+          :disabled="isBackNextDisabled"
+          @click="handleBack"
+        >
+          Back
+        </v-btn>
+      </template>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
+      <v-btn color="primary" :disabled="isBackNextDisabled" @click="handleNext">
+        Next
+      </v-btn>
     </div>
   </v-form>
 </template>
@@ -34,7 +37,6 @@
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 
 export default {
   name: 'ripa-form-step6',
@@ -43,13 +45,12 @@ export default {
 
   components: {
     RipaAlert,
-    RipaFormSummary,
   },
 
   props: {
-    apiStop: {
-      type: Object,
-      default: () => {},
+    backButtonVisible: {
+      type: Boolean,
+      default: true,
     },
   },
 }

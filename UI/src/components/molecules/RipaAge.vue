@@ -1,6 +1,11 @@
 <template>
-  <div class="ripa-age tw-pb-8">
-    <ripa-form-header title="Perceived Age" required subtitle="§999.226(a)(7)">
+  <div class="ripa-age tw-pb-4">
+    <ripa-form-header
+      title="Perceived Age"
+      required
+      subtitle="§999.226(a)(7)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>
@@ -39,7 +44,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       ageItems: AGES,
       viewModel: this.loadModel(this.value),
     }

@@ -22,7 +22,13 @@
             >Admin: Maintain Cities</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog
+            v-model="dialog"
+            max-width="500px"
+            :light="getLight"
+            :dark="getDark"
+            persistent
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -63,12 +69,13 @@
                       </v-autocomplete>
                     </v-col>
                     <v-col cols="12">
-                      <v-autocomplete
+                      <v-combobox
                         v-model="editedItem.county"
                         :items="mappedCounties"
+                        @change="handleCountyChange"
                         label="County"
                       >
-                      </v-autocomplete>
+                      </v-combobox>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -89,7 +96,13 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-dialog
+            v-model="dialogDelete"
+            max-width="500px"
+            :light="getLight"
+            :dark="getDark"
+            persistent
+          >
             <v-card>
               <v-card-title
                 >Are you sure you want to delete this city?</v-card-title
@@ -123,7 +136,6 @@
 
 <script>
 import { STATES } from '@/constants/states'
-import { COUNTIES } from '@/constants/counties'
 
 export default {
   name: 'ripa-cities-grid',
@@ -162,13 +174,29 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+
+    getLight() {
+      return this.$vuetify.theme.dark
+    },
+
+    getDark() {
+      return !this.$vuetify.theme.dark
+    },
   },
 
   methods: {
     init() {
       this.cities = this.items
       this.mappedStates = STATES.map(item => item.abbreviation)
-      this.mappedCounties = COUNTIES.map(item => item.name.toUpperCase())
+      this.mappedCounties = this.items
+        .map(item => item.county.toUpperCase())
+        .sort()
+    },
+
+    handleCountyChange() {
+      this.editedItem.county = this.editedItem.county
+        ? this.editedItem.county.toUpperCase()
+        : ''
     },
 
     editItem(item) {

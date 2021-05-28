@@ -7,17 +7,22 @@
     :statutes="statutes"
     :stops="stops"
     :submissions="submissions"
+    :currentSubmission="currentSubmission"
     :users="users"
+    :errorCodeSearch="errorCodeSearch"
     :on-delete-beat="onDeleteBeat"
     :on-delete-city="onDeleteCity"
     :on-delete-school="onDeleteSchool"
     :on-delete-statute="onDeleteStatute"
-    :on-delete-user="onDeleteUser"
     :on-edit-beat="onEditBeat"
     :on-edit-city="onEditCity"
     :on-edit-school="onEditSchool"
     :on-edit-statute="onEditStatute"
     :on-edit-user="onEditUser"
+    :on-tab-change="onTabChange"
+    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+    @handleRedoItemsPerPage="handleRedoItemsPerPage"
+    @handlePaginate="handlePaginate"
   ></ripa-admin-wrapper>
 </template>
 
@@ -29,6 +34,21 @@ export default {
 
   components: {
     RipaAdminWrapper,
+  },
+
+  methods: {
+    handleCallErrorCodeSearch(val) {
+      this.$emit('handleCallErrorCodeSearch', val)
+    },
+    handleRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', pageData)
+    },
+    handlePaginate(pageData) {
+      this.$emit('handlePaginate', pageData)
+    },
+    handleAdminStopsFiltering(filterData) {
+      this.$emit('handleAdminStopsFiltering', filterData)
+    },
   },
 
   props: {
@@ -53,16 +73,23 @@ export default {
       default: () => [],
     },
     stops: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     submissions: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
+    },
+    currentSubmission: {
+      type: Object,
     },
     users: {
       type: Array,
       default: () => [],
+    },
+    errorCodeSearch: {
+      type: Object,
+      default: () => {},
     },
     onDeleteBeat: {
       type: Function,
@@ -77,10 +104,6 @@ export default {
       default: () => {},
     },
     onDeleteStatute: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteUser: {
       type: Function,
       default: () => {},
     },
@@ -101,6 +124,10 @@ export default {
       default: () => {},
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onTabChange: {
       type: Function,
       default: () => {},
     },

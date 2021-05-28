@@ -1,5 +1,5 @@
-import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
-import { apiStop } from '@/utilities/stop'
+import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
+import { fullStopToApiStop } from '@/utilities/stop'
 import { onePersonFullStop, twoPersonFullStop } from '../data/formStop'
 import {
   formBeats,
@@ -10,13 +10,13 @@ import {
 } from '../data/mappings'
 
 export default {
-  title: 'Molecules/RipaFormStep6',
-  component: RipaFormStep6,
+  title: 'Molecules/RipaFormStep7',
+  component: RipaFormStep7,
   parameters: {},
 }
 
 export const onePerson = () => ({
-  components: { RipaFormStep6 },
+  components: { RipaFormStep7 },
   data() {
     return {
       stop: {},
@@ -24,7 +24,7 @@ export const onePerson = () => ({
   },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -35,7 +35,7 @@ export const onePerson = () => ({
     },
   },
   template:
-    '<div><ripa-form-step6 v-model="stop" :apiStop="getApiStop" :on-submit="handleSubmit"></ripa-form-step6>{{stop}}</div>',
+    '<div><ripa-form-step7 v-model="stop" :apiStop="getApiStop" :on-submit="handleSubmit"></ripa-form-step7>{{stop}}</div>',
   methods: {
     handleSubmit() {
       console.log('handle submit', this.getApiStop)
@@ -44,7 +44,7 @@ export const onePerson = () => ({
 })
 
 export const twoPerson = () => ({
-  components: { RipaFormStep6 },
+  components: { RipaFormStep7 },
   data() {
     return {
       stop: {},
@@ -52,7 +52,7 @@ export const twoPerson = () => ({
   },
   computed: {
     getApiStop() {
-      return apiStop(
+      return fullStopToApiStop(
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -63,7 +63,7 @@ export const twoPerson = () => ({
     },
   },
   template:
-    '<div><ripa-form-step6 v-model="stop" :apiStop="getApiStop" :on-submit="handleSubmit"></ripa-form-step6>{{stop}}</div>',
+    '<div><ripa-form-step7 v-model="stop" :apiStop="getApiStop" :on-submit="handleSubmit"></ripa-form-step7>{{stop}}</div>',
   methods: {
     handleSubmit() {
       console.log('handle submit', this.getApiStop)

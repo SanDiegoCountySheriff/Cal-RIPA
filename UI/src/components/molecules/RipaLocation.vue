@@ -1,6 +1,11 @@
 <template>
-  <div class="ripa-location tw-pb-8">
-    <ripa-form-header title="Location" required subtitle="§999.226(a)(3)">
+  <div class="ripa-location tw-pb-4">
+    <ripa-form-header
+      title="Location"
+      required
+      subtitle="§999.226(a)(3)"
+      :on-open-statute="onOpenStatute"
+    >
     </ripa-form-header>
 
     <v-container>
@@ -145,7 +150,7 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
-              label="Highway and closet exit"
+              label="Highway and closest exit"
               :loading="loadingPii"
               :rules="highwayRules"
               @input="handleInput"
@@ -191,21 +196,23 @@
           </div>
         </v-col>
 
-        <v-col cols="12" sm="12" md="6">
-          <div>
-            <ripa-autocomplete
-              v-model="model.location.beat"
-              hint="Select 1 Beat (required)"
-              persistent-hint
-              item-text="fullName"
-              item-value="id"
-              label="Beat"
-              :items="beats"
-              :disabled="model.location.outOfCounty"
-              @input="handleInput"
-            ></ripa-autocomplete>
-          </div>
-        </v-col>
+        <template v-if="displayBeatInput">
+          <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-autocomplete
+                v-model="model.location.beat"
+                hint="Select 1 Beat (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="id"
+                label="Beat"
+                :items="beats"
+                :disabled="model.location.outOfCounty"
+                @input="handleInput"
+              ></ripa-autocomplete>
+            </div>
+          </v-col>
+        </template>
       </v-row>
     </v-container>
   </div>
@@ -448,15 +455,19 @@ export default {
     },
     schools: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     beats: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     countyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,
@@ -472,7 +483,7 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     validLastLocation: {
       type: Boolean,

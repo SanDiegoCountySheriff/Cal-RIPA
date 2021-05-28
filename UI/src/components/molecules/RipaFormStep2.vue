@@ -1,13 +1,20 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
     <template v-if="isSchool">
-      <ripa-student v-model="model" toggle></ripa-student>
+      <ripa-student
+        v-model="model"
+        toggle
+        :on-open-statute="onOpenStatute"
+      ></ripa-student>
     </template>
-    <ripa-race v-model="model"></ripa-race>
-    <ripa-gender v-model="model"></ripa-gender>
-    <ripa-age v-model="model"></ripa-age>
+    <ripa-race v-model="model" :on-open-statute="onOpenStatute"></ripa-race>
+    <ripa-gender v-model="model" :on-open-statute="onOpenStatute"></ripa-gender>
+    <ripa-age v-model="model" :on-open-statute="onOpenStatute"></ripa-age>
     <ripa-limited-english v-model="model"></ripa-limited-english>
-    <ripa-disability v-model="model"></ripa-disability>
+    <ripa-disability
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-disability>
 
     <v-spacer></v-spacer>
 
@@ -67,7 +74,7 @@ export default {
 
   computed: {
     isSchool() {
-      return this.viewModel.location.isSchool
+      return this.viewModel?.location?.isSchool || false
     },
   },
 

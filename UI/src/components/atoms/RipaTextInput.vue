@@ -1,16 +1,16 @@
 <template>
-  <div v-if="isVisible">
-    <v-text-field
-      ref="ripaTextInput"
-      :value="viewModel"
-      :label="label"
-      :loading="loading"
-      :hint="hint"
-      :rules="rules"
-      validate-on-blur
-      @input="debounceInput"
-    ></v-text-field>
-  </div>
+  <v-text-field
+    ref="ripaTextInput"
+    :value="viewModel"
+    :label="label"
+    :loading="loading"
+    :hint="hint"
+    :rules="rules"
+    :disabled="disabled"
+    validate-on-blur
+    @input="debounceInput"
+    @paste.prevent
+  ></v-text-field>
 </template>
 
 <script>
@@ -21,7 +21,6 @@ export default {
 
   data() {
     return {
-      isVisible: true,
       viewModel: this.value,
     }
   },
@@ -32,7 +31,6 @@ export default {
     }, 1000),
 
     parseText(newVal) {
-      this.isVisible = false
       const currentText = newVal || ''
       const parsedText = currentText
         .replace(
@@ -47,7 +45,6 @@ export default {
       this.$nextTick(() => {
         this.viewModel = newVal
         this.$emit('input', this.viewModel)
-        this.isVisible = true
       })
     },
   },
@@ -78,6 +75,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

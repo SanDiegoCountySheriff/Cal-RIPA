@@ -1,84 +1,121 @@
 <template>
-  <v-app-bar app dense flat>
-    <v-toolbar-title
-      v-if="!invalidUser"
-      class="tw-cursor-pointer"
-      @click="$router.push('/')"
-      >{{ getAppTitle }}</v-toolbar-title
-    >
+  <div>
+    <v-app-bar app dense flat>
+      <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
+        getAppTitle
+      }}</v-toolbar-title>
 
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-icon class="tw-ml-4" size="22" v-bind="attrs" v-on="on">{{
-          getOnlineIcon
-        }}</v-icon>
-      </template>
-      <span>Online Status</span>
-    </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon class="tw-ml-4" size="22" v-bind="attrs" v-on="on">{{
+            getOnlineIcon
+          }}</v-icon>
+        </template>
+        <span>Online Status</span>
+      </v-tooltip>
 
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          class="tw-ml-4"
-          icon
-          small
-          @click="handleThemeChange"
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon>{{ getThemeIcon }}</v-icon>
-        </v-btn>
-      </template>
-      <span>{{ getThemeTooltip }}</span>
-    </v-tooltip>
-
-    <v-spacer></v-spacer>
-
-    <div v-if="!invalidUser">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="tw-ml-4"
             icon
             small
-            to="/stops"
+            @click="handleThemeChange"
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>mdi-numeric-10-box-multiple-outline</v-icon>
+            <v-icon>{{ getThemeIcon }}</v-icon>
           </v-btn>
         </template>
-        <span>View last 10 stops</span>
+        <span>{{ getThemeTooltip }}</span>
       </v-tooltip>
 
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="tw-ml-4" icon small to="/user" v-bind="attrs" v-on="on">
-            <v-icon>mdi-account-edit</v-icon>
-          </v-btn>
-        </template>
-        <span>View user profile</span>
-      </v-tooltip>
+      <v-spacer></v-spacer>
 
-      <template v-if="admin">
-        <v-tooltip bottom>
+      <div v-if="!invalidUser">
+        <v-tooltip v-if="authenticated && online" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
               icon
               small
-              to="/admin"
+              to="/stops"
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon>mdi-cog</v-icon>
+              <v-icon>mdi-numeric-10-box-multiple-outline</v-icon>
             </v-btn>
           </template>
-          <span>Manage admin tables</span>
+          <span>View last 10 stops</span>
         </v-tooltip>
+
+        <v-tooltip v-if="authenticated && online" bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="tw-ml-4"
+              icon
+              small
+              @click="handleUserChange"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-account-edit</v-icon>
+            </v-btn>
+          </template>
+          <span>View user profile</span>
+        </v-tooltip>
+
+        <template v-if="authenticated && online && admin">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="tw-ml-4"
+                icon
+                small
+                to="/admin"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-cog</v-icon>
+              </v-btn>
+            </template>
+            <span>Manage admin tables</span>
+          </v-tooltip>
+        </template>
+
+        <v-tooltip v-if="online" bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="tw-ml-4"
+              icon
+              small
+              @click="handleAuth"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>{{ authenticated ? 'mdi-logout' : 'mdi-login' }}</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ authenticated ? 'Logout' : 'Login' }}</span>
+        </v-tooltip>
+      </div>
+    </v-app-bar>
+
+    <v-banner v-if="!authenticated" single-line :sticky="true">
+      You are not logged in. While you can initiate a new stop, you must be
+      logged in to submit it.
+      <template v-slot:actions>
+        <v-btn
+          small
+          outlined
+          color="primary"
+          @click="handleLogIn"
+          class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
+          >Login</v-btn
+        >
       </template>
-    </div>
-  </v-app-bar>
+    </v-banner>
+  </div>
 </template>
 
 <script>
@@ -97,6 +134,10 @@ export default {
     },
 
     getAppTitle() {
+      if (this.displayEnvironment) {
+        return `RIPA (${this.environmentName})`
+      }
+
       return 'RIPA'
     },
 
@@ -116,6 +157,25 @@ export default {
         this.onUpdateDark(this.$vuetify.theme.dark)
       }
     },
+    handleAuth() {
+      if (this.authenticated) {
+        this.handleLogOut()
+      } else {
+        this.handleLogIn()
+      }
+    },
+    handleLogOut() {
+      this.$emit('handleLogOut')
+    },
+    handleLogIn() {
+      this.$emit('handleLogIn')
+    },
+
+    handleUserChange() {
+      if (this.onUpdateUser) {
+        this.onUpdateUser()
+      }
+    },
   },
 
   mounted() {
@@ -131,6 +191,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayEnvironment: {
+      type: Boolean,
+      default: false,
+    },
+    environmentName: {
+      type: String,
+      default: '',
+    },
     online: {
       type: Boolean,
       default: false,
@@ -139,7 +207,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onUpdateUser: {
+      type: Function,
+      default: () => {},
+    },
     invalidUser: {
+      type: Boolean,
+      default: false,
+    },
+    authenticated: {
       type: Boolean,
       default: false,
     },

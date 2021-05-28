@@ -1,14 +1,21 @@
 <template>
   <div class="ripa-home-container">
     <template v-if="!isEditingForm">
-      <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
+      <ripa-intro-template
+        v-if="getAuthAndLocalStorageCheck"
+        :on-template="handleTemplate"
+      ></ripa-intro-template>
     </template>
     <template v-if="isEditingForm">
       <ripa-form-template
         v-model="stop"
         :beats="mappedFormBeats"
         :county-cities="mappedFormCountyCities"
+        :agency-questions="mappedAgencyQuestions"
+        :display-beat-input="displayBeatInput"
+        :form-step-index="formStepIndex"
         :full-stop="fullStop"
+        :is-authenticated="isAuthenticated"
         :last-location="lastLocation"
         :loading-gps="loadingGps"
         :loading-pii-step1="loadingPiiStep1"
@@ -17,15 +24,20 @@
         :non-county-cities="mappedFormNonCountyCities"
         :schools="mappedFormSchools"
         :statutes="mappedFormStatutes"
+        :user="mappedUser"
         :valid-last-location="isLastLocationValid"
         :on-add-person="handleAddPerson"
         :on-cancel="handleCancel"
         :on-delete-person="handleDeletePerson"
+        :on-edit-person="handleEditPerson"
+        :on-gps-location="handleGpsLocation"
         :on-open-favorites="handleOpenFavorites"
         :on-open-last-location="handleOpenLastLocation"
+        :on-open-statute="handleOpenStatute"
         :on-save-favorite="handleSaveFavorite"
-        :on-gps-location="handleGpsLocation"
+        :on-step-index-change="handleStepIndexChange"
         :on-submit="handleSubmit"
+        :on-update-user="handleUpdateUser"
         @input="handleInput"
       ></ripa-form-template>
     </template>
@@ -44,6 +56,20 @@
       :on-close="handleCloseDialog"
       :on-add-favorite="handleAddFavorite"
     ></ripa-add-favorite-dialog>
+
+    <ripa-statute-dialog
+      :show-dialog="showStatuteDialog"
+      :statute="statute"
+      :on-close="handleCloseDialog"
+    ></ripa-statute-dialog>
+
+    <ripa-user-dialog
+      :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :user="getMappedUser"
+      :show-dialog="showUserDialog"
+      :on-close="handleClose"
+      :on-save="handleSaveUser"
+    ></ripa-user-dialog>
   </div>
 </template>
 
@@ -52,54 +78,84 @@ import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaHomeContainerMixin from '@/components/mixins/RipaHomeContainerMixin'
 import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
+import RipaStopMixin from '@/components/mixins/RipaStopMixin'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaHomeContainerMixin, RipaApiStopJobMixin],
+  mixins: [RipaStopMixin, RipaApiStopJobMixin],
 
   components: {
     RipaAddFavoriteDialog,
     RipaFavoritesDialog,
     RipaFormTemplate,
     RipaIntroTemplate,
+    RipaStatuteDialog,
+    RipaUserDialog,
   },
 
   data() {
     return {
+      formStepIndex: 1,
       fullStop: {},
       isEditingForm: false,
       loadingGps: false,
       loadingPiiStep1: false,
       loadingPiiStep3: false,
       loadingPiiStep4: false,
+      showUserDialog: false,
+      statute: null,
       stop: {},
+      stopIndex: 1,
     }
   },
 
   computed: {
     ...mapGetters([
+      'invalidUser',
       'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
-      'officerId',
-      'agency',
       'mappedGpsLocationAddress',
+      'mappedUser',
+      'isAuthenticated',
+      'displayBeatInput',
+      'mappedAgencyQuestions',
     ]),
+
+    getAuthAndLocalStorageCheck() {
+      // if the user is NOT authenticated AND does not have a local storage cache
+      // that means they haven't logged in and must reauthenticate
+      if (!this.isAuthenticated && !localStorage.getItem('ripa_cache_date')) {
+        return false
+      } else {
+        return true
+      }
+    },
+
+    getMappedUser() {
+      return {
+        agency: this.mappedUser.agency,
+        assignment: this.mappedUser.assignment,
+        otherType: this.mappedUser.otherType,
+        startDate: this.mappedUser.startDate,
+        yearsExperience: this.mappedUser.yearsExperience,
+      }
+    },
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'checkGpsLocation']),
+    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
 
-    handleSubmit(apiStop) {
-      this.addApiStop(apiStop)
-      this.setLastLocation(this.stop)
+    handleClose() {
+      this.showUserDialog = false
     },
 
     async handleGpsLocation() {
@@ -108,9 +164,31 @@ export default {
       this.loadingGps = false
     },
 
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
+    },
+
+    handleStepIndexChange(index) {
+      this.formStepIndex = index
+      localStorage.setItem('ripa_form_step_index', index.toString())
+    },
+
+    handleSubmit(apiStop) {
+      this.addApiStop(apiStop)
+      this.setLastLocation(this.stop)
+    },
+
+    handleUpdateUser() {
+      this.showUserDialog = true
+    },
+
     async validateLocationForPii(textValue) {
-      const trimmedTextValue = textValue || ''
-      if (this.isOnlineAndAuthenticated && trimmedTextValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep1 = true
         let isFound = false
         isFound = await this.checkTextForPii(trimmedTextValue)
@@ -124,10 +202,15 @@ export default {
     },
 
     async validateReasonForStopForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep3 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound = isFound
@@ -138,10 +221,15 @@ export default {
     },
 
     async validateBasisForSearchForPii(textValue) {
-      if (this.isOnlineAndAuthenticated && textValue && textValue.length > 0) {
+      const trimmedTextValue = textValue ? textValue.trim() : ''
+      if (
+        this.isOnlineAndAuthenticated &&
+        !this.invalidUser &&
+        trimmedTextValue.length > 0
+      ) {
         this.loadingPiiStep4 = true
         let isFound = false
-        isFound = await this.checkTextForPii(textValue)
+        isFound = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound = isFound
@@ -152,7 +240,45 @@ export default {
     },
   },
 
+  mounted() {
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const isEditing = localFormEditing === '1'
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+
+      this.stop = parsedStop
+      this.fullStop = parsedFullStop
+
+      if (Object.keys(this.fullStop).length > 0) {
+        this.isEditingForm = isEditing
+        this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
+      } else {
+        localStorage.removeItem('ripa_form_editing')
+      }
+    }
+  },
+
   watch: {
+    stop(newVal) {
+      this.stop = newVal
+    },
+
+    fullStop(newVal) {
+      this.fullStop = newVal
+      if (this.isEditingForm) {
+        if (this.stop) {
+          localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        }
+        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+      }
+    },
+
     'stop.location.fullAddress': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -160,6 +286,7 @@ export default {
         }
       },
     },
+
     'stop.stopReason.reasonForStopExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -167,6 +294,7 @@ export default {
         }
       },
     },
+
     'stop.actionsTaken.basisForSearchExplanation': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
@@ -174,6 +302,7 @@ export default {
         }
       },
     },
+
     mappedGpsLocationAddress(newVal) {
       this.lastLocation = newVal
     },

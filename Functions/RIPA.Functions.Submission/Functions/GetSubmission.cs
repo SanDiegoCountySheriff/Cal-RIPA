@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 
@@ -19,16 +22,20 @@ namespace RIPA.Functions.Submission.Functions
     public class GetSubmission
     {
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
+        private readonly IStopCosmosDbService _stopCosmosDbService;
 
-        public GetSubmission(ISubmissionCosmosDbService submissionCosmosDbService)
+        public GetSubmission(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
         {
             _submissionCosmosDbService = submissionCosmosDbService;
+            _stopCosmosDbService = stopCosmosDbService;
         }
 
         [FunctionName("GetSubmission")]
         [OpenApiOperation(operationId: "GetSubmission", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
+        [OpenApiParameter(name: "Offset", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "offsets the records from 0, requires limit parameter")]
+        [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Models.Submission), Description = "Subission Object")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
         public async Task<IActionResult> Run(
@@ -48,15 +55,33 @@ namespace RIPA.Functions.Submission.Functions
                 return new UnauthorizedResult();
             }
 
+            //limit 
+            var queryLimit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default;
+            var queryOffset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default;
+            var limit = string.Empty;
+            if (queryLimit != 0)
+            {
+                limit = Environment.NewLine + $"OFFSET {queryOffset} LIMIT {queryLimit}";
+            }
+
             if (!string.IsNullOrEmpty(Id))
             {
-                var response = await _submissionCosmosDbService.GetSSubmissionAsync(Id);
-                if (response != null)
+                var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
+                if (submissionResponse != null)
                 {
+                    var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {limit}");//
+                    var response = new
+                    {
+                        submission = submissionResponse,
+                        stops = stopResponse,
+                        summary =  from g in 
+                                       stopResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.Error != null).GroupBy(x => x.Error.Error) 
+                                   select new { Code = string.Empty, ErrorMessage = g.Key, Count = g.Count() }
+                    };
+                   
                     return new OkObjectResult(response);
                 }
             }
-
             return new BadRequestObjectResult("Submission Id not found");
         }
     }
