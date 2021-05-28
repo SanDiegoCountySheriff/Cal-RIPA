@@ -268,6 +268,7 @@ export default {
       isEditStop: true,
       isEditPerson: true,
       isEditAgencyQuestions: this.agencyQuestions.length > 0,
+      stepTrace: null,
     }
   },
 
@@ -462,6 +463,18 @@ export default {
         },
       })
     },
+
+    createStepTrace(index, startTimeStamp) {
+      this.stepTrace = {
+        index,
+        startTimeStamp,
+      }
+    },
+
+    updateStepTrace(endTimeStamp) {
+      this.stepTrace.endTimeStamp = endTimeStamp
+      this.stop.stepTrace.push(this.stepTrace)
+    },
   },
 
   watch: {
@@ -469,7 +482,18 @@ export default {
       this.stop = newVal
     },
 
-    formStepIndex(newVal) {
+    formStepIndex(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        if (oldVal > 0 && oldVal < 7) {
+          this.updateStepTrace(new Date())
+        }
+        if (newVal > 0 && newVal < 7) {
+          this.createStepTrace(newVal, new Date())
+        }
+        if (newVal === 0) {
+          this.stepTrace = null
+        }
+      }
       this.stepIndex = newVal
     },
   },

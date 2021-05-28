@@ -206,7 +206,6 @@ export default {
         updatedFullStop.officerId = this.stop.officerId
         updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
-        updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)
