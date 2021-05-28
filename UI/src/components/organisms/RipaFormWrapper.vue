@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      <template v-if="stepIndex <= 6">
+      <template v-if="stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -29,7 +29,14 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"></v-stepper-step>
+            <template v-if="agencyQuestions.length > 0">
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+            </template>
+
+            <v-stepper-step step="7"></v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -42,18 +49,21 @@
                   :beats="beats"
                   :county-cities="countyCities"
                   :display-beat-input="displayBeatInput"
+                  :is-authenticated="isAuthenticated"
                   :is-edit-stop="isEditStop"
                   :last-location="lastLocation"
                   :loading-gps="loadingGps"
                   :loading-pii="loadingPiiStep1"
                   :non-county-cities="nonCountyCities"
                   :schools="schools"
+                  :user="user"
                   :valid-last-location="validLastLocation"
                   :on-open-favorites="onOpenFavorites"
                   :on-open-last-location="onOpenLastLocation"
                   :on-open-statute="onOpenStatute"
                   :on-save-favorite="onSaveFavorite"
                   :on-gps-location="onGpsLocation"
+                  :on-update-user="onUpdateUser"
                   @input="handleInput"
                 ></ripa-form-step-1>
               </template>
@@ -145,6 +155,19 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
+                  :agency-questions="agencyQuestions"
+                  :on-back="handleBack"
+                  :on-next="handleNext"
+                  :on-cancel="handleCancel"
+                  @input="handleInput"
+                ></ripa-form-step-6>
+              </template>
+            </v-stepper-content>
+
+            <v-stepper-content step="7">
+              <template v-if="stepIndex === 7">
+                <ripa-form-step-7
+                  v-model="stop"
                   :api-stop="getApiStop"
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
@@ -154,7 +177,7 @@
                   :on-submit="handleSubmit"
                   :on-cancel="handleCancel"
                   @input="handleInput"
-                ></ripa-form-step-6>
+                ></ripa-form-step-7>
               </template>
             </v-stepper-content>
           </v-stepper-items>
@@ -185,7 +208,14 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6"></v-stepper-step>
+            <template v-if="agencyQuestions.length > 0">
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+            </template>
+
+            <v-stepper-step step="7"></v-stepper-step>
           </v-stepper-header>
         </v-stepper>
       </template>
@@ -204,6 +234,7 @@ import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
 import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
+import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import { fullStopToApiStop } from '@/utilities/stop'
 
@@ -218,16 +249,18 @@ export default {
     RipaFormStep4,
     RipaFormStep5,
     RipaFormStep6,
+    RipaFormStep7,
     RipaSubheader,
   },
 
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 7,
+      confirmationStepIndex: 8,
       stop: this.value,
       isEditStop: true,
       isEditPerson: true,
+      isEditAgencyQuestions: this.agencyQuestions.length > 0,
     }
   },
 
@@ -239,6 +272,10 @@ export default {
 
     getFormStep2BackButtonVisible() {
       return this.isEditPerson && this.isEditStop
+    },
+
+    getFormStep6BackButtonVisible() {
+      return this.isEditPerson && this.isEditStop && this.isEditAgencyQuestions
     },
 
     getApiStop() {
@@ -269,6 +306,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
+      this.isEditAgencyQuestions = false
     },
 
     handleBack() {
@@ -295,6 +333,7 @@ export default {
             }
             this.isEditStop = true
             this.isEditPerson = true
+            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
             if (this.onCancel) {
               this.onCancel()
             }
@@ -322,7 +361,6 @@ export default {
     },
 
     handleEditPerson(id) {
-      console.log('Edit Person in Form', id)
       if (this.onEditPerson) {
         this.onEditPerson(id)
       }
@@ -332,6 +370,7 @@ export default {
       }
       this.isEditStop = false
       this.isEditPerson = true
+      this.isEditAgencyQuestions = false
     },
 
     handleEditStop() {
@@ -341,11 +380,38 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = false
+      this.isEditAgencyQuestions = false
+    },
+
+    handleEditAgencyQuestions() {
+      this.stepIndex = 6
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+      this.isEditStop = false
+      this.isEditPerson = false
+      this.isEditAgencyQuestions = true
+    },
+
+    getNextStepIndex() {
+      if (this.isEditStop && !this.isEditPerson) {
+        return 7
+      }
+
+      if (!this.isEditStop && this.isEditPerson && this.stepIndex === 5) {
+        return 7
+      }
+
+      if (this.stepIndex === 5 && !this.isEditAgencyQuestions) {
+        return 7
+      }
+
+      return this.stepIndex + 1
     },
 
     handleNext() {
-      this.stepIndex =
-        this.isEditStop && !this.isEditPerson ? 6 : this.stepIndex + 1
+      this.stepIndex = this.getNextStepIndex()
+
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -359,6 +425,7 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = true
+      this.isEditAgencyQuestions = this.agencyQuestions.length > 0
       if (this.onCancel) {
         this.onCancel()
       }
@@ -376,6 +443,7 @@ export default {
           if (confirm) {
             this.isEditStop = true
             this.isEditPerson = true
+            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
@@ -406,15 +474,19 @@ export default {
     },
     schools: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     beats: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     countyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
+    },
+    agencyQuestions: {
+      type: Array,
+      default: () => [],
     },
     displayBeatInput: {
       type: Boolean,
@@ -427,6 +499,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,
@@ -450,10 +526,14 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     statutes: {
       type: Array,
+      default: () => [],
+    },
+    user: {
+      type: Object,
       default: () => {},
     },
     validLastLocation: {
@@ -501,6 +581,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

@@ -1,12 +1,24 @@
 <template>
-  <v-radio-group v-model="model" :rules="rules">
-    <v-radio
-      v-for="(item, index) in items"
-      :key="index"
-      :label="item.name"
-      :value="item.value"
-    ></v-radio>
-  </v-radio-group>
+  <div class="ripa-radio-group">
+    <v-radio-group v-model="model" :rules="rules">
+      <v-radio
+        v-for="(item, index) in items"
+        :key="index"
+        :label="item.name"
+        :value="item.value"
+      ></v-radio>
+    </v-radio-group>
+    <template v-if="isClearVisible">
+      <v-btn
+        class="tw-ml-4"
+        text
+        color="primary"
+        x-small
+        @click="handleClearSelection"
+        >Clear selection</v-btn
+      >
+    </template>
+  </div>
 </template>
 
 <script>
@@ -29,6 +41,16 @@ export default {
         this.$emit('input', newVal)
       },
     },
+
+    isClearVisible() {
+      return this.viewModel !== null && this.clearSelection
+    },
+  },
+
+  methods: {
+    handleClearSelection() {
+      this.viewModel = null
+    },
   },
 
   watch: {
@@ -49,6 +71,10 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    clearSelection: {
+      type: Boolean,
+      default: false,
     },
   },
 }

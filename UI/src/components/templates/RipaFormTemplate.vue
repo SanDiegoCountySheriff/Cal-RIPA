@@ -4,9 +4,11 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
+      :agency-questions="agencyQuestions"
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
@@ -15,6 +17,7 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel="onCancel"
@@ -27,6 +30,7 @@
       :on-save-favorite="onSaveFavorite"
       :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
+      :on-update-user="onUpdateUser"
       @input="handleInput"
     ></ripa-form-wrapper>
   </div>
@@ -74,6 +78,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    agencyQuestions: {
+      type: Array,
+      default: () => [],
+    },
     displayBeatInput: {
       type: Boolean,
       default: false,
@@ -85,6 +93,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     lastLocation: {
       type: Object,
@@ -117,6 +129,10 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    user: {
+      type: Object,
+      default: () => {},
     },
     validLastLocation: {
       type: Boolean,
@@ -163,6 +179,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

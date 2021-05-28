@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-age tw-pb-8">
+  <div class="ripa-age tw-pb-4">
     <ripa-form-header
       title="Perceived Age"
       required
@@ -44,7 +44,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       ageItems: AGES,
       viewModel: this.loadModel(this.value),
     }

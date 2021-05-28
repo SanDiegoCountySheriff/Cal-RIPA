@@ -9,7 +9,6 @@
     :disabled="disabled"
     validate-on-blur
     @input="debounceInput"
-    @keypress="handleKeyPress"
     @paste.prevent
   ></v-text-field>
 </template>
@@ -27,17 +26,6 @@ export default {
   },
 
   methods: {
-    handleKeyPress(event) {
-      const charCode = event.which ? event.which : event.keyCode
-      if (
-        charCode.match(
-          /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])|\s/,
-        )
-      ) {
-        event.preventDefault()
-      }
-    },
-
     debounceInput: _.debounce(function (e) {
       this.parseText(e)
     }, 1000),

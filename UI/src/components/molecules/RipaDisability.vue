@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-disability tw-pb-8">
+  <div class="ripa-disability tw-pb-4">
     <ripa-form-header
       title="Perceived or Known Disability"
       required
@@ -53,7 +53,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       disabilityItems: DISABILITIES,
       viewModel: this.loadModel(this.value),
     }

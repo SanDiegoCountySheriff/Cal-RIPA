@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Result of Stop"
       required
@@ -276,7 +276,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       stopResultItems: STOP_RESULTS,
       viewModel: this.loadModel(this.value),
     }
@@ -425,6 +424,7 @@ export default {
     handlePullReasonCodeWarning() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.warningCodes.push(reasonCode)
       }
     },
@@ -432,6 +432,7 @@ export default {
     handlePullReasonCodeCitation() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.citationCodes.push(reasonCode)
       }
     },
@@ -439,6 +440,7 @@ export default {
     handlePullReasonCodeInfield() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.infieldCodes.push(reasonCode)
       }
     },
@@ -446,6 +448,7 @@ export default {
     handlePullReasonCodeCustodialArrest() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.custodialArrestCodes.push(reasonCode)
       }
     },

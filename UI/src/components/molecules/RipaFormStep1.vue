@@ -1,10 +1,14 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-officer
-      v-model="model"
-      toggle
-      :on-open-statute="onOpenStatute"
-    ></ripa-officer>
+    <template v-if="isAuthenticated">
+      <ripa-officer
+        v-model="model"
+        :is-authenticated="isAuthenticated"
+        :user="user"
+        :on-open-statute="onOpenStatute"
+        :on-update-user="onUpdateUser"
+      ></ripa-officer>
+    </template>
     <ripa-stop-date
       v-model="model"
       :is-edit-stop="isEditStop"
@@ -102,6 +106,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
     isEditStop: {
       type: Boolean,
       default: false,
@@ -112,11 +120,15 @@ export default {
     },
     nonCountyCities: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     schools: {
       type: Array,
       default: () => [],
+    },
+    user: {
+      type: Object,
+      default: () => {},
     },
     validLastLocation: {
       type: Boolean,
@@ -135,6 +147,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onUpdateUser: {
       type: Function,
       default: () => {},
     },

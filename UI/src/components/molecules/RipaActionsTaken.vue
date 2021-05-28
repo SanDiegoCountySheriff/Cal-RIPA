@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-action-taken tw-pb-8">
+  <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
       title="Actions Taken During Stop"
       required
@@ -172,7 +172,6 @@ export default {
 
   data() {
     return {
-      valid: true,
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
