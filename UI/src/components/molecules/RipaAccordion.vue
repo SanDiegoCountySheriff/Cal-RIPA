@@ -16,7 +16,8 @@
         </v-row>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <div class="stopAccordionWrapper--detailSection">
+        <ripa-form-summary :apiStop="item"> </ripa-form-summary>
+        <!-- <div class="stopAccordionWrapper--detailSection">
           <v-row align="center">
             <v-col cols="3">DETAILS </v-col>
           </v-row>
@@ -188,17 +189,22 @@
               </v-col>
             </v-row>
           </div>
-        </div>
+        </div> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
 
 <script>
+import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 import { format } from 'date-fns'
 
 export default {
   name: 'ripa-accordion',
+
+  components: {
+    RipaFormSummary,
+  },
 
   props: {
     items: {
@@ -209,7 +215,7 @@ export default {
 
   methods: {
     formatStopDate(date) {
-      return format(new Date(date), 'yyyy-MM-dd')
+      return format(new Date(date), 'MM-dd-yyyy')
     },
   },
 }
