@@ -12,12 +12,6 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ripa-officer-stops-container',
 
-  data() {
-    return {
-      loading: true,
-    }
-  },
-
   components: {
     RipaOfficerStopsTemplate,
   },
