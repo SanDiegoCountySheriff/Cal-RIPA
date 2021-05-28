@@ -1,7 +1,10 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      <template v-if="stepIndex <= 7">
+      <template v-if="stepIndex == 0">
+        <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+      </template>
+      <template v-if="stepIndex >= 1 && stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -159,6 +162,7 @@
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :back-button-visible="getFormStep6BackButtonVisible"
                   @input="handleInput"
                 ></ripa-form-step-6>
               </template>
@@ -172,6 +176,7 @@
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
                   :on-delete-person="handleDeletePerson"
+                  :on-edit-agency-questions="handleEditAgencyQuestions"
                   :on-edit-person="handleEditPerson"
                   :on-edit-stop="handleEditStop"
                   :on-submit="handleSubmit"
@@ -236,6 +241,7 @@ import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
+import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { fullStopToApiStop } from '@/utilities/stop'
 
 export default {
@@ -251,6 +257,7 @@ export default {
     RipaFormStep6,
     RipaFormStep7,
     RipaSubheader,
+    RipaTemplate,
   },
 
   data() {
@@ -261,6 +268,7 @@ export default {
       isEditStop: true,
       isEditPerson: true,
       isEditAgencyQuestions: this.agencyQuestions.length > 0,
+      stepTrace: null,
     }
   },
 
@@ -455,6 +463,18 @@ export default {
         },
       })
     },
+
+    createStepTrace(index, startTimeStamp) {
+      this.stepTrace = {
+        index,
+        startTimeStamp,
+      }
+    },
+
+    updateStepTrace(endTimeStamp) {
+      this.stepTrace.endTimeStamp = endTimeStamp
+      this.stop.stepTrace.push(this.stepTrace)
+    },
   },
 
   watch: {
@@ -462,7 +482,18 @@ export default {
       this.stop = newVal
     },
 
-    formStepIndex(newVal) {
+    formStepIndex(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        if (oldVal > 0 && oldVal < 7) {
+          this.updateStepTrace(new Date())
+        }
+        if (newVal > 0 && newVal < 7) {
+          this.createStepTrace(newVal, new Date())
+        }
+        if (newVal === 0) {
+          this.stepTrace = null
+        }
+      }
       this.stepIndex = newVal
     },
   },
@@ -552,6 +583,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditAgencyQuestions: {
+      type: Function,
+      default: () => {},
+    },
     onEditPerson: {
       type: Function,
       default: () => {},
@@ -581,6 +616,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

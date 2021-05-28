@@ -27,6 +27,7 @@
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
+      :on-open-template="onOpenTemplate"
       :on-save-favorite="onSaveFavorite"
       :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
@@ -179,6 +180,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

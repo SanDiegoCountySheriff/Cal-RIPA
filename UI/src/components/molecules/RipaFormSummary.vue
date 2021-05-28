@@ -11,8 +11,8 @@
         </template>
       </div>
 
-      <div v-for="(item, index) in getApiStopStopSummary" :key="index">
-        <ripa-list :item="item"></ripa-list>
+      <div v-for="item in getApiStopStopSummary" :key="item.id">
+        <ripa-list :item="item.content"></ripa-list>
       </div>
 
       <div
@@ -45,12 +45,30 @@
           </template>
         </div>
 
-        <div
-          v-for="(item, index) in getApiStopPersonSummary(person.id)"
-          :key="index"
-        >
-          <ripa-list :item="item"></ripa-list>
+        <div v-for="item in getApiStopPersonSummary(person.id)" :key="item.id">
+          <ripa-list :item="item.content"></ripa-list>
         </div>
+
+        <template v-if="anyAgencyQuestions">
+          <div class="tw-my-4 tw-text-base tw-font-bold">
+            <span class="tw-text-base tw-font-bold">Agency Questions</span>
+            <template v-if="editButtons">
+              <v-btn
+                class="tw-ml-4"
+                dense
+                outlined
+                x-small
+                @click="handleEditAgencyQuestions"
+              >
+                Edit
+              </v-btn>
+            </template>
+          </div>
+
+          <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
+            <ripa-list :item="item.content"></ripa-list>
+          </div>
+        </template>
       </div>
     </v-card-text>
   </v-card>
@@ -58,7 +76,11 @@
 
 <script>
 import RipaList from '@/components/molecules/RipaList'
-import { apiStopStopSummary, apiStopPersonSummary } from '@/utilities/stop'
+import {
+  apiStopStopSummary,
+  apiStopPersonSummary,
+  apiStopAgencyQuestionsSummary,
+} from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-summary',
@@ -68,12 +90,20 @@ export default {
   },
 
   computed: {
+    anyAgencyQuestions() {
+      return apiStopAgencyQuestionsSummary().length > 0
+    },
+
     getApiStop() {
       return this.apiStop
     },
 
     getApiStopStopSummary() {
       return apiStopStopSummary(this.apiStop)
+    },
+
+    getApiStopAgencyQuestionsSummary() {
+      return apiStopAgencyQuestionsSummary(this.apiStop)
     },
   },
 
@@ -102,6 +132,13 @@ export default {
         this.onDeletePerson(id)
       }
     },
+
+    handleEditAgencyQuestions(event) {
+      event.stopPropagation()
+      if (this.onEditAgencyQuestions) {
+        this.onEditAgencyQuestions()
+      }
+    },
   },
 
   props: {
@@ -114,6 +151,10 @@ export default {
       default: false,
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditAgencyQuestions: {
       type: Function,
       default: () => {},
     },

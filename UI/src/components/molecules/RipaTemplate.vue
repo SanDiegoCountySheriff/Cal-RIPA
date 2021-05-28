@@ -55,30 +55,30 @@
 
 <script>
 export default {
-  name: 'ripa-intro',
+  name: 'ripa-template',
 
   methods: {
     handleMotorTemplate() {
-      if (this.onTemplate) {
-        this.onTemplate('motor')
+      if (this.onOpenTemplate) {
+        this.onOpenTemplate('motor')
       }
     },
 
     handleProbationTemplate() {
-      if (this.onTemplate) {
-        this.onTemplate('probation')
+      if (this.onOpenTemplate) {
+        this.onOpenTemplate('probation')
       }
     },
 
     handleDefaultTemplate() {
-      if (this.onTemplate) {
-        this.onTemplate()
+      if (this.onOpenTemplate) {
+        this.onOpenTemplate()
       }
     },
   },
 
   props: {
-    onTemplate: {
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

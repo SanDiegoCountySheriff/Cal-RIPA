@@ -66,11 +66,11 @@
             itemsPerPageOptions: [10, 25, 50, 100, 250, -1],
           }"
         >
-          <template v-slot:item.actions="{ item }">
+          <!-- <template v-slot:item.actions="{ item }">
             <v-icon small class="tw-mr-2" @click="editItem(submission)">
               mdi-pencil
             </v-icon>
-          </template>
+          </template> -->
           <template v-slot:item.errorCodes="{ item }">
             <p
               class="submissionError--wrapper"

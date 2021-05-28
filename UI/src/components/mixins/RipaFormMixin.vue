@@ -7,6 +7,7 @@ export default {
       return {
         id: newValue.id,
         template: newValue.template,
+        stepTrace: newValue.stepTrace || [],
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
