@@ -7,10 +7,16 @@
 
 <script>
 import RipaOfficerStopsTemplate from '@/components/templates/RipaOfficerStopsTemplate'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ripa-officer-stops-container',
+
+  data() {
+    return {
+      loading: true,
+    }
+  },
 
   components: {
     RipaOfficerStopsTemplate,
@@ -24,6 +30,7 @@ export default {
 
   computed: {
     ...mapState(['officerStops']),
+    ...mapGetters(['officerId']),
   },
 
   methods: {
@@ -37,7 +44,18 @@ export default {
   },
 
   created() {
-    this.getOfficerStopsData()
+    if (this.officerId) {
+      this.getOfficerStopsData()
+    }
+  },
+
+  watch: {
+    officerId(val) {
+      console.log('officer id loaded')
+      if (val) {
+        this.getOfficerStopsData()
+      }
+    },
   },
 }
 </script>

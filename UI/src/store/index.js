@@ -29,7 +29,9 @@ export default new Vuex.Store({
     adminCities: [],
     adminSchools: [],
     adminStatutes: [],
-    adminStops: [],
+    adminStops: {},
+    adminSubmissions: {},
+    adminSubmission: null,
     adminUsers: [],
     agencyQuestions: [],
     formBeats: [],
@@ -53,6 +55,12 @@ export default new Vuex.Store({
     piiDate: null,
     officerStops: [],
     gpsLocationAddress: null,
+    errorCodeAdminSearch: {
+      loading: false,
+      items: [],
+      search: null,
+      select: null,
+    },
   },
 
   getters: {
@@ -80,11 +88,14 @@ export default new Vuex.Store({
     mappedAdminStatutes: state => {
       return state.adminStatutes
     },
-    mappedAdminStops: () => {
-      return []
+    mappedAdminStops: state => {
+      return state.adminStops
     },
-    mappedAdminSubmissions: () => {
-      return []
+    mappedAdminSubmissions: state => {
+      return state.adminSubmissions
+    },
+    mappedAdminSubmission: state => {
+      return state.adminSubmission
     },
     mappedAdminUsers: state => {
       return state.adminUsers
@@ -181,9 +192,18 @@ export default new Vuex.Store({
         city: parsedCity,
       }
     },
-    mappedAgencyQuestions: () => {
-      const questions = localStorage.getItem('ripa_agency_questions')
-      return questions ? JSON.parse(questions) : []
+    mappedErrorCodeAdminSearch: state => {
+      return state.errorCodeAdminSearch
+    },
+    mappedAgencyQuestions: state => {
+      return state.apiConfig.agencyQuestions.map(item => {
+        return {
+          maxLength: item.MaxLength,
+          label: item.Prompt,
+          required: item.Required,
+          questionType: item.Type,
+        }
+      })
     },
   },
 
@@ -223,6 +243,15 @@ export default new Vuex.Store({
     },
     updateOfficerStops(state, items) {
       state.officerStops = items
+    },
+    updateAdminStops(state, items) {
+      state.adminStops = items
+    },
+    updateAdminSubmissions(state, items) {
+      state.adminSubmissions = items
+    },
+    updateAdminSubmission(state, items) {
+      state.adminSubmission = items
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
@@ -301,6 +330,13 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
       }
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
+    },
+    updateErrorCodeAdminSearch(state, value) {
+      state.errorCodeAdminSearch = {
+        loading: false,
+        ...state.errorCodeAdminSearch,
+        ...value,
+      }
     },
   },
 
@@ -902,13 +938,17 @@ export default new Vuex.Store({
     },
 
     getOfficerStops({ commit, state }) {
+      const officerId = state.user.officerId
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           const stops = response.data?.stops || []
           const data = stops.sort((x, y) => {
@@ -921,6 +961,105 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error retrieving officer stops.', error)
           commit('updateOfficerStops', [])
+        })
+    },
+
+    getAdminStops({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
+        // if you send an items per page, set it, otherwise just default to 10
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
+
+        if (queryData.filters.stopFromDate !== null) {
+          queryString = `${queryString}&StartDate=${queryData.filters.stopFromDate}`
+        }
+
+        if (queryData.filters.stopToDate !== null) {
+          queryString = `${queryString}&EndDate=${queryData.filters.stopToDate}`
+        }
+
+        if (queryData.filters.status !== null) {
+          queryString = `${queryString}&Status=${queryData.filters.status}`
+        }
+
+        if (queryData.filters.isPiiFound !== null) {
+          queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
+        }
+      }
+
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          const data = response.data.stops.sort((x, y) => {
+            const stopA = x.stopDateTime
+            const stopB = y.stopDateTime
+            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
+          })
+          commit('updateAdminStops', {
+            summary: response.data.summary,
+            stops: data,
+          })
+        })
+        .catch(error => {
+          console.log('There was an error retrieving admin stops.', error)
+          commit('updateAdminStops', {
+            summary: {},
+            stops: [],
+          })
+        })
+    },
+
+    getAdminSubmissions({ commit, state }) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}submission/GetSubmissions`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response.data)
+          commit('updateAdminSubmissions', response.data)
+        })
+        .catch(error => {
+          console.log('There was an error retrieving admin submissions.', error)
+          commit('updateAdminSubmissions', [])
+        })
+    },
+
+    getAdminSubmission({ commit, state }, submissionId) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          commit('updateAdminSubmission', response.data)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error retrieving the admin submission.',
+            error,
+          )
+          commit('updateAdminSubmission', [])
         })
     },
 
@@ -941,6 +1080,33 @@ export default new Vuex.Store({
           console.log('There was an error retrieving user.', error)
           commit('updateInvalidUser', true)
         })
+    },
+
+    getErrorCodes({ commit, state }, value) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}Stops/GetErrorCodes?search=${value}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // need to map out what the response would be
+          commit('updateErrorCodeAdminSearch', response)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('updateErrorCodeAdminSearch', {
+            items: ['new value', 'new value 2', 'new value 3'],
+          })
+        })
+    },
+
+    setAuthConfig({ commit }, value) {
+      commit('updateAuthConfig', value)
     },
 
     setUserAccountInfo({ commit }, value) {

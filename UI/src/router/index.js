@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
+import RipaAdminContainer from '@/components/features/RipaAdminContainer.vue'
+import RipaSubmission from '@/components/molecules/RipaSubmission'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
@@ -31,6 +33,35 @@ const routes = [
         next('/')
       }
     },
+    children: [
+      {
+        path: 'submissions',
+        component: RipaAdminContainer,
+        props: true,
+        children: [
+          {
+            path: ':submissionId',
+            component: RipaAdminContainer,
+            props: true,
+          },
+        ],
+      },
+      {
+        path: 'users',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'stops',
+        component: RipaAdminContainer,
+        props: true,
+      },
+      {
+        path: 'domains',
+        component: RipaAdminContainer,
+        props: true,
+      },
+    ],
   },
   {
     path: '/stops',
