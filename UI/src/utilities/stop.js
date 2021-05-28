@@ -582,7 +582,7 @@ export const getAgencyQuestionsFromLocalStorage = () => {
 export const apiStopAgencyQuestionsSummary = apiStop => {
   const items = []
   const questions = getAgencyQuestionsFromLocalStorage()
-  if (questions.length > 0) {
+  if (questions && questions.length > 0) {
     let index = 0
     for (const value of Object.entries(apiStop.agencyQuestions)) {
       if (value) {
