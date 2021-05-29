@@ -106,7 +106,9 @@
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  ::on-open-favorites="onOpenFavorites"
                   :on-open-statute="onOpenStatute"
+                  :on-save-favorite="onSaveFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-3>
@@ -484,7 +486,7 @@ export default {
 
     formStepIndex(newVal, oldVal) {
       if (newVal !== oldVal) {
-        if (oldVal > 0 && oldVal < 7) {
+        if (newVal > 0 && oldVal > 0 && oldVal < 7) {
           this.updateStepTrace(new Date())
         }
         if (newVal > 0 && newVal < 7) {

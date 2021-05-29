@@ -4,6 +4,9 @@
       v-model="model"
       :loading-pii="loadingPii"
       :statutes="getStatutes"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-statute="onOpenStatute"
+      :on-save-favorite="onSaveFavorite"
     ></ripa-stop-reason>
 
     <v-spacer></v-spacer>

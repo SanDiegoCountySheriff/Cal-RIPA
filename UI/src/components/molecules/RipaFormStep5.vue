@@ -1,6 +1,10 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-result v-model="model" :statutes="statutes"></ripa-stop-result>
+    <ripa-stop-result
+      v-model="model"
+      :statutes="statutes"
+      :on-open-statute="onOpenStatute"
+    ></ripa-stop-result>
 
     <v-spacer></v-spacer>
 
