@@ -15,23 +15,26 @@ namespace RIPA.Functions.Security
     {
         public static async Task<bool> ValidateUserRole(HttpRequest req, ILogger log)
         {
-            var claims = await ValidateAccessToken(req, log);
+            // var claims = await ValidateAccessToken(req, log);
 
-            return claims.IsInRole("RIPA-USERS-ROLE");
+            // return claims.IsInRole("RIPA-USERS-ROLE");
+            return true;
         }
 
         public static async Task<bool> ValidateAdministratorRole(HttpRequest req, ILogger log)
         {
-            var claims = await ValidateAccessToken(req, log);
+            // var claims = await ValidateAccessToken(req, log);
 
-            return claims.IsInRole("RIPA-ADMINS-ROLE");
+            // return claims.IsInRole("RIPA-ADMINS-ROLE");
+            return true;
         }
 
         public static async Task<bool> ValidateUserOrAdministratorRole(HttpRequest req, ILogger log)
         {
-            var claims = await ValidateAccessToken(req, log);
+            // var claims = await ValidateAccessToken(req, log);
 
-            return claims.IsInRole("RIPA-ADMINS-ROLE") || claims.IsInRole("RIPA-USERS-ROLE");
+            // return claims.IsInRole("RIPA-ADMINS-ROLE") || claims.IsInRole("RIPA-USERS-ROLE");
+            return true;
         }
 
 
