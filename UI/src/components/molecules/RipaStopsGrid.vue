@@ -242,7 +242,7 @@ export default {
         isPiiFound: this.isPiiFound,
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
-        currentStatusFilter: this.currentStatusFilter,
+        status: this.currentStatusFilter,
       }
     },
   },

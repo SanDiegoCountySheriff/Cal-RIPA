@@ -956,11 +956,17 @@ export default new Vuex.Store({
         }`
 
         if (queryData.filters.stopFromDate !== null) {
-          queryString = `${queryString}&StartDate=${queryData.filters.stopFromDate}`
+          const formattedFromDate = new Date(
+            `${queryData.filters.stopFromDate} 00:00:00Z`,
+          ).toISOString()
+          queryString = `${queryString}&StartDate=${formattedFromDate}`
         }
 
         if (queryData.filters.stopToDate !== null) {
-          queryString = `${queryString}&EndDate=${queryData.filters.stopToDate}`
+          const formattedToDate = new Date(
+            `${queryData.filters.stopToDate} 23:59:59Z`,
+          ).toISOString()
+          queryString = `${queryString}&EndDate=${formattedToDate}`
         }
 
         if (queryData.filters.status !== null) {
@@ -970,6 +976,9 @@ export default new Vuex.Store({
         if (queryData.filters.isPiiFound !== null) {
           queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
         }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10`
       }
 
       return axios

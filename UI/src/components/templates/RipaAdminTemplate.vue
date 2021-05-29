@@ -23,6 +23,7 @@
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
     @handleRedoItemsPerPage="handleRedoItemsPerPage"
     @handlePaginate="handlePaginate"
+    @handleAdminStopsFiltering="handleAdminStopsFiltering"
   ></ripa-admin-wrapper>
 </template>
 
