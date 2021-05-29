@@ -82,5 +82,16 @@ export default {
       return this.statutes
     },
   },
+
+  props: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
+    },
+  },
 }
 </script>

@@ -3,7 +3,9 @@
     <ripa-stop-result
       v-model="model"
       :statutes="statutes"
+      :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
+      :on-save-favorite="onSaveFavorite"
     ></ripa-stop-result>
 
     <v-spacer></v-spacer>
@@ -75,6 +77,17 @@ export default {
       } else {
         this.handleNext()
       }
+    },
+  },
+
+  props: {
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }

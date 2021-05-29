@@ -106,7 +106,7 @@
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
-                  ::on-open-favorites="onOpenFavorites"
+                  :on-open-favorites="onOpenFavorites"
                   :on-open-statute="onOpenStatute"
                   :on-save-favorite="onSaveFavorite"
                   :statutes="statutes"
@@ -149,7 +149,9 @@
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :on-open-favorites="onOpenFavorites"
                   :on-open-statute="onOpenStatute"
+                  :on-save-favorite="onSaveFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-5>
