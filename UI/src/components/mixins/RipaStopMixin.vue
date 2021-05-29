@@ -27,6 +27,16 @@ export default {
       return locations ? JSON.parse(locations) : []
     },
 
+    getFavoriteReasons() {
+      const locations = localStorage.getItem('ripa_favorite_reasons')
+      return locations ? JSON.parse(locations) : []
+    },
+
+    getFavoriteResults() {
+      const locations = localStorage.getItem('ripa_favorite_results')
+      return locations ? JSON.parse(locations) : []
+    },
+
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
       if (lastLocation) {

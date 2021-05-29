@@ -9,6 +9,27 @@
 
     <v-container>
       <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn class="tw-w-full" outlined small @click="onOpenFavorites">
+              Open Favorites
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
+              Save Location
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      </v-row>
+
+      <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-select
             v-model="model.stopReason.reasonForStop"
@@ -360,6 +381,12 @@ export default {
         }
       }
     },
+
+    handleSaveFavorite() {
+      if (this.onSaveFavorite) {
+        this.onSaveFavorite(this.viewModel.stopReason)
+      }
+    },
   },
 
   watch: {
@@ -387,6 +414,14 @@ export default {
     statutes: {
       type: Array,
       default: () => [],
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }
