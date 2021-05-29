@@ -474,8 +474,10 @@ export default {
     },
 
     updateStepTrace(endTimeStamp) {
-      this.stepTrace.endTimeStamp = endTimeStamp
-      this.stop.stepTrace.push(this.stepTrace)
+      if (this.stepTrace) {
+        this.stepTrace.endTimeStamp = endTimeStamp
+        this.stop.stepTrace.push(this.stepTrace)
+      }
     },
   },
 
