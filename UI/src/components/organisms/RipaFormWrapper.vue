@@ -1,5 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
+    {{ stop }}
     <v-card-text>
       <template v-if="stepIndex == 0">
         <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
@@ -32,7 +33,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="agencyQuestions.length > 0">
+            <template v-if="anyAgencyQuestions">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -162,7 +163,6 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
-                  :agency-questions="agencyQuestions"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
@@ -217,7 +217,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="agencyQuestions.length > 0">
+            <template v-if="anyAgencyQuestions">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -271,12 +271,17 @@ export default {
       stop: this.value,
       isEditStop: true,
       isEditPerson: true,
-      isEditAgencyQuestions: this.agencyQuestions.length > 0,
+      isEditAgencyQuestions: this.anyAgencyQuestions,
       stepTrace: null,
     }
   },
 
   computed: {
+    anyAgencyQuestions() {
+      const questions = this.stop.agencyQuestions || []
+      return questions.lenght > 0
+    },
+
     getEditPersonText() {
       const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
@@ -345,7 +350,7 @@ export default {
             }
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
+            this.isEditAgencyQuestions = this.anyAgencyQuestions
             if (this.onCancel) {
               this.onCancel()
             }
@@ -437,7 +442,7 @@ export default {
       }
       this.isEditStop = true
       this.isEditPerson = true
-      this.isEditAgencyQuestions = this.agencyQuestions.length > 0
+      this.isEditAgencyQuestions = this.anyAgencyQuestions
       if (this.onCancel) {
         this.onCancel()
       }
@@ -455,7 +460,7 @@ export default {
           if (confirm) {
             this.isEditStop = true
             this.isEditPerson = true
-            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
+            this.isEditAgencyQuestions = this.anyAgencyQuestions
             this.stepIndex = this.confirmationStepIndex
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
@@ -518,10 +523,6 @@ export default {
       default: () => [],
     },
     countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    agencyQuestions: {
       type: Array,
       default: () => [],
     },

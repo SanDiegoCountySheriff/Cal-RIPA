@@ -6,7 +6,6 @@
       v-model="stop"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
-      :agency-questions="mappedAgencyQuestions"
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"

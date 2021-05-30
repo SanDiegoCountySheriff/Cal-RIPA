@@ -4,7 +4,6 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
-      :agency-questions="agencyQuestions"
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
@@ -76,10 +75,6 @@ export default {
       default: () => [],
     },
     countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    agencyQuestions: {
       type: Array,
       default: () => [],
     },
