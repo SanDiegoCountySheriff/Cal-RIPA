@@ -589,7 +589,7 @@ const getSummaryResultOfStop = person => {
 
 export const apiStopAgencyQuestionsSummary = apiStop => {
   const items = []
-  const questions = apiStop.listAgencyQuestion
+  const questions = apiStop.listAgencyQuestion || []
 
   if (questions && questions.length > 0) {
     let index = 0

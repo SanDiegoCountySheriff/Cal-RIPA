@@ -279,7 +279,7 @@ export default {
   computed: {
     anyAgencyQuestions() {
       const questions = this.stop.agencyQuestions || []
-      return questions.lenght > 0
+      return questions.length > 0
     },
 
     getEditPersonText() {
