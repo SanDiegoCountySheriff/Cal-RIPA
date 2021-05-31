@@ -2,6 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-result
       v-model="model"
+      :last-result="lastResult"
       :statutes="statutes"
       :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
@@ -81,6 +82,10 @@ export default {
   },
 
   props: {
+    lastResult: {
+      type: Object,
+      default: () => {},
+    },
     onOpenFavorites: {
       type: Function,
       default: () => {},

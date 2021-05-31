@@ -59,7 +59,7 @@
     ></ripa-favorites-dialog>
 
     <ripa-favorites-dialog
-      :show-dialog="showResultsFavoritesDialog"
+      :show-dialog="showResultFavoritesDialog"
       :favorites="favorites"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditResultFavorite"
