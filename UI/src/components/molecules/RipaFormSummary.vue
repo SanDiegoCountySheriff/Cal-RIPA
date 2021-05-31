@@ -91,7 +91,7 @@ export default {
 
   computed: {
     anyAgencyQuestions() {
-      return apiStopAgencyQuestionsSummary().length > 0
+      return this.apiStop.listAgencyQuestion.length > 0
     },
 
     getApiStop() {

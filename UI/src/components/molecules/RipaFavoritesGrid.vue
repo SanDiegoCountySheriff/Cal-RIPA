@@ -21,7 +21,7 @@
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="tw-uppercase"
-            >Admin: Maintain Favorites</v-toolbar-title
+            >Maintain Favorites</v-toolbar-title
           >
           <v-spacer></v-spacer>
           <v-dialog

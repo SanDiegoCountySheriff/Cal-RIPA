@@ -4,12 +4,13 @@
       v-model="stop"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
-      :agency-questions="mappedAgencyQuestions"
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
+      :last-reason="lastReason"
+      :last-result="lastResult"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -24,11 +25,15 @@
       :on-delete-person="handleDeletePerson"
       :on-edit-person="handleEditPerson"
       :on-gps-location="handleGpsLocation"
-      :on-open-favorites="handleOpenFavorites"
+      :on-open-location-favorites="handleOpenLocationFavorites"
+      :on-open-reason-favorites="handleOpenReasonFavorites"
+      :on-open-result-favorites="handleOpenResultFavorites"
+      :on-save-location-favorite="handleSaveLocationFavorite"
+      :on-save-reason-favorite="handleSaveReasonFavorite"
+      :on-save-result-favorite="handleSaveResultFavorite"
       :on-open-last-location="handleOpenLastLocation"
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
-      :on-save-favorite="handleSaveFavorite"
       :on-step-index-change="handleStepIndexChange"
       :on-submit="handleSubmit"
       :on-update-user="handleUpdateUser"
@@ -36,18 +41,48 @@
     ></ripa-form-template>
 
     <ripa-favorites-dialog
-      :show-dialog="showFavoritesDialog"
+      :show-dialog="showLocationFavoritesDialog"
       :favorites="favorites"
       :on-close="handleCloseDialog"
-      :on-edit-favorite="handleEditFavorite"
-      :on-open-favorite="handleOpenFavorite"
-      :on-delete-favorite="handleDeleteFavorite"
+      :on-edit-favorite="handleEditLocationFavorite"
+      :on-open-favorite="handleOpenLocationFavorite"
+      :on-delete-favorite="handleDeleteLocationFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-favorites-dialog
+      :show-dialog="showReasonFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditReasonFavorite"
+      :on-open-favorite="handleOpenReasonFavorite"
+      :on-delete-favorite="handleDeleteReasonFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-favorites-dialog
+      :show-dialog="showResultFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditResultFavorite"
+      :on-open-favorite="handleOpenResultFavorite"
+      :on-delete-favorite="handleDeleteResultFavorite"
     ></ripa-favorites-dialog>
 
     <ripa-add-favorite-dialog
-      :show-dialog="showAddFavoriteDialog"
+      :show-dialog="showAddLocationFavoriteDialog"
       :on-close="handleCloseDialog"
-      :on-add-favorite="handleAddFavorite"
+      :on-add-favorite="handleAddLocationFavorite"
+    ></ripa-add-favorite-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddReasonFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddReasonFavorite"
+    ></ripa-add-favorite-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddResultFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddResultFavorite"
     ></ripa-add-favorite-dialog>
 
     <ripa-statute-dialog
@@ -117,7 +152,6 @@ export default {
       'mappedUser',
       'isAuthenticated',
       'displayBeatInput',
-      'mappedAgencyQuestions',
     ]),
 
     getAuthAndLocalStorageCheck() {

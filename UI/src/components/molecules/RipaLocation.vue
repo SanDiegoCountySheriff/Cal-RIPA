@@ -57,6 +57,7 @@
           </div>
         </v-col>
       </v-row>
+
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
