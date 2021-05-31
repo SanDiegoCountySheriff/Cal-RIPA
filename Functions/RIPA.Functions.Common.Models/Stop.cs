@@ -143,6 +143,7 @@ namespace RIPA.Functions.Common.Models
         public BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
         public TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
         public ResultOfStop[] ListResultOfStop { get; set; }
+        public AgencyQuestion[] ListAgencyQuestion { get; set; }
     }
 
     public class TypeOfPropertySeized
@@ -208,4 +209,11 @@ namespace RIPA.Functions.Common.Models
         public string Key { get; set; }
     }
 
+    public class AgencyQuestion
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Prompt { get; set; }
+        public string Answere { get; set; }
+    }
 }

@@ -202,6 +202,7 @@ export default new Vuex.Store({
           label: item.Prompt,
           required: item.Required,
           questionType: item.Type,
+          name: item.Name,
         }
       })
     },
@@ -270,6 +271,7 @@ export default new Vuex.Store({
             label: item.Prompt,
             required: item.Required,
             questionType: item.Type,
+            name: item.Name,
           }
         })
         if (questions.length > 0) {

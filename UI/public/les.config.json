@@ -1,0 +1,13 @@
+{
+    "Authentication": {
+        "ClientId": "732ac8b5-a320-4762-9262-41de2cbb72c4",
+        "AuthorityUrl": "https://login.microsoftonline.com/6ab62649-cbe9-460c-b26f-ff063ee0d392",
+        "TenantId": "6ab62649-cbe9-460c-b26f-ff063ee0d392",
+        "PrimaryDomain": "lesliemcwhirtergmail.onmicrosoft.com"
+    },
+    "Configuration": {
+        "ServicesBaseUrl": "http://localhost:7071/",
+        "Subscription": "f142a7cd1c0d40279ada26a42c319c94",
+        "DefaultCounty": "San Diego"
+    }
+}
