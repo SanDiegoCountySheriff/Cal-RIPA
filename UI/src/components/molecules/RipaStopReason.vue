@@ -19,7 +19,7 @@
         <v-col cols="12" sm="12" md="6">
           <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
             <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
-              Save Location
+              Save Reason
             </v-btn>
           </div>
         </v-col>
@@ -395,6 +395,13 @@ export default {
       this.viewModel = this.loadModel(newVal)
     },
 
+    lastReason(newVal) {
+      if (newVal) {
+        this.viewModel.stopReason = newVal
+        this.handleInput()
+      }
+    },
+
     'value.stopReason.reasonForStopPiiFound': {
       handler(newVal) {
         this.viewModel.stopReason.reasonForStopPiiFound = newVal
@@ -404,6 +411,10 @@ export default {
 
   props: {
     value: {
+      type: Object,
+      default: () => {},
+    },
+    lastReason: {
       type: Object,
       default: () => {},
     },

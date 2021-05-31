@@ -20,7 +20,7 @@
         <v-col cols="12" sm="12" md="6">
           <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
             <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
-              Save Location
+              Save Result
             </v-btn>
           </div>
         </v-col>
@@ -526,10 +526,21 @@ export default {
     value(newVal) {
       this.viewModel = this.loadModel(newVal)
     },
+
+    lastResult(newVal) {
+      if (newVal) {
+        this.viewModel.stopResult = newVal
+        this.handleInput()
+      }
+    },
   },
 
   props: {
     value: {
+      type: Object,
+      default: () => {},
+    },
+    lastResult: {
       type: Object,
       default: () => {},
     },

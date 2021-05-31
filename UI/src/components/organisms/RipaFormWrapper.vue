@@ -1,6 +1,5 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
-    {{ stop }}
     <v-card-text>
       <template v-if="stepIndex == 0">
         <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
@@ -62,10 +61,10 @@
                   :schools="schools"
                   :user="user"
                   :valid-last-location="validLastLocation"
-                  :on-open-favorites="onOpenFavorites"
+                  :on-open-favorites="onOpenLocationFavorites"
                   :on-open-last-location="onOpenLastLocation"
                   :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveFavorite"
+                  :on-save-favorite="onSaveLocationFavorite"
                   :on-gps-location="onGpsLocation"
                   :on-update-user="onUpdateUser"
                   @input="handleInput"
@@ -103,13 +102,14 @@
 
                 <ripa-form-step-3
                   v-model="stop"
+                  :last-reason="lastReason"
                   :loading-pii="loadingPiiStep3"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
-                  :on-open-favorites="onOpenFavorites"
+                  :on-open-favorites="onOpenReasonFavorites"
                   :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveFavorite"
+                  :on-save-favorite="onSaveReasonFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-3>
@@ -147,12 +147,13 @@
 
                 <ripa-form-step-5
                   v-model="stop"
+                  :last-result="lastResult"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
-                  :on-open-favorites="onOpenFavorites"
+                  :on-open-favorites="onOpenResultFavorites"
                   :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveFavorite"
+                  :on-save-favorite="onSaveResultFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-5>
@@ -546,6 +547,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    lastReason: {
+      type: Object,
+      default: () => {},
+    },
+    lastResult: {
+      type: Object,
+      default: () => {},
+    },
     loadingGps: {
       type: Boolean,
       default: false,
@@ -598,7 +607,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenFavorites: {
+    onOpenLocationFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenReasonFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenResultFavorites: {
       type: Function,
       default: () => {},
     },
@@ -610,7 +627,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSaveFavorite: {
+    onSaveLocationFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveReasonFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveResultFavorite: {
       type: Function,
       default: () => {},
     },

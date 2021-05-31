@@ -9,6 +9,8 @@
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
+      :last-reason="lastReason"
+      :last-result="lastResult"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -23,11 +25,15 @@
       :on-delete-person="onDeletePerson"
       :on-edit-person="onEditPerson"
       :on-gps-location="onGpsLocation"
-      :on-open-favorites="onOpenFavorites"
+      :on-open-location-favorites="onOpenLocationFavorites"
+      :on-open-reason-favorites="onOpenReasonFavorites"
+      :on-open-result-favorites="onOpenResultFavorites"
+      :on-save-location-favorite="onSaveLocationFavorite"
+      :on-save-reason-favorite="onSaveReasonFavorite"
+      :on-save-result-favorite="onSaveResultFavorite"
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
-      :on-save-favorite="onSaveFavorite"
       :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
       :on-update-user="onUpdateUser"
@@ -98,6 +104,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    lastReason: {
+      type: Object,
+      default: () => {},
+    },
+    lastResult: {
+      type: Object,
+      default: () => {},
+    },
     loadingGps: {
       type: Boolean,
       default: false,
@@ -150,7 +164,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenFavorites: {
+    onOpenLocationFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenReasonFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenResultFavorites: {
       type: Function,
       default: () => {},
     },
@@ -162,7 +184,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSaveFavorite: {
+    onSaveLocationFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveReasonFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveResultFavorite: {
       type: Function,
       default: () => {},
     },
