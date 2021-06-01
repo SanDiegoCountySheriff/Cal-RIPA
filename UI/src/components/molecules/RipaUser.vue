@@ -4,13 +4,12 @@
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
-            <ripa-text-input
+            <ripa-date-picker
               v-model="model.startDate"
               label="Start Date"
               :rules="startDateRules"
               @input="handleInput"
-            >
-            </ripa-text-input>
+            ></ripa-date-picker>
           </div>
         </v-col>
 
@@ -73,6 +72,7 @@
 </template>
 
 <script>
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
@@ -91,6 +91,7 @@ export default {
   mixins: [RipaFormMixin],
 
   components: {
+    RipaDatePicker,
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
