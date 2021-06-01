@@ -354,10 +354,37 @@ export default {
     },
 
     handleInput() {
+      this.updateSchoolModel()
+      this.updateStopReasonModel()
+      this.updateStopResultModel()
       this.updateBlockNumberModel()
       this.updateFullAddressModel()
       console.log(this.viewModel)
       this.$emit('input', this.viewModel)
+    },
+
+    updateSchoolModel() {
+      if (!this.viewModel.location.isSchool) {
+        this.viewModel.person.isStudent = false
+      }
+    },
+
+    updateStopReasonModel() {
+      if (!this.viewModel.person.isStudent) {
+        if (
+          this.viewModel.stopReason.reasonForStop === 7 ||
+          this.viewModel.stopReason.reasonForStop === 8
+        ) {
+          this.viewModel.stopReason.reasonForStop = null
+        }
+      }
+    },
+
+    updateStopResultModel() {
+      if (!this.viewModel.person.isStudent) {
+        this.viewModel.stopResult.actionsTakenDuringStop12 = false
+        this.viewModel.stopResult.actionsTakenDuringStop13 = false
+      }
     },
 
     updateFullAddressModel() {
