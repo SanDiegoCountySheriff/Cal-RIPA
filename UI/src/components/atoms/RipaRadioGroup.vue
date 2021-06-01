@@ -49,7 +49,7 @@ export default {
 
   methods: {
     handleClearSelection() {
-      this.viewModel = null
+      this.model = null
     },
   },
 
