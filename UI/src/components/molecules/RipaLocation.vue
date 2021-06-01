@@ -470,7 +470,6 @@ export default {
 
     'viewModel.location.blockNumber': {
       handler(newVal, oldVal) {
-        debugger
         if (oldVal !== newVal) {
           this.updateBlockNumberModel()
         }
