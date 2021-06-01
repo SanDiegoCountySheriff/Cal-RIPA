@@ -351,8 +351,6 @@ export default {
         },
       }
       this.$emit('handleAdminStopsFiltering', filterData)
-      // console.log(filterStatus)
-      console.log('filter')
     },
   },
 

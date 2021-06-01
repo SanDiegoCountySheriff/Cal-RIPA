@@ -23,6 +23,12 @@
           :loading="loading"
           :items="submissions"
           :currentSubmission="currentSubmission"
+          @paginate="handleAdminSubmissionPagination"
+          @redoItemsPerPage="handleAdminSubmissionRedoItemsPerPage"
+          @handleFilter="handleAdminSubmissionsFiltering"
+          @handleSubmissionDetailItemsPerPage="
+            handleSubmissionDetailItemsPerPage
+          "
         ></ripa-submissions-grid>
       </v-tab-item>
 
@@ -32,7 +38,7 @@
           :items="stops"
           :errorCodeSearch="errorCodeSearch"
           @callErrorCodeSearch="handleCallErrorCodeSearch"
-          @redoItemsPerPage="handleRedoItemsPerPage"
+          @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
           @paginate="handleAdminStopsPagination"
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
         ></ripa-stops-grid>
@@ -137,8 +143,11 @@ export default {
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
     },
-    handleRedoItemsPerPage(pageData) {
-      this.$emit('handleRedoItemsPerPage', pageData)
+    handleAdminStopsRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', {
+        type: 'stops',
+        ...pageData,
+      })
     },
     handleAdminStopsPagination(pageData) {
       this.$emit('handlePaginate', {
@@ -148,7 +157,32 @@ export default {
       })
     },
     handleAdminStopsFiltering(filterData) {
-      this.$emit('handleAdminStopsFiltering', filterData)
+      this.$emit('handleAdminFiltering', {
+        type: 'stops',
+        ...filterData,
+      })
+    },
+    handleAdminSubmissionPagination(pageData) {
+      this.$emit('handlePaginate', {
+        // add in the type in the wrapper
+        type: 'submission',
+        ...pageData,
+      })
+    },
+    handleAdminSubmissionRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', {
+        type: 'submission',
+        ...pageData,
+      })
+    },
+    handleSubmissionDetailItemsPerPage(pageData) {
+      this.$emit('handleAdminSubmissionRedoItemsPerPage', pageData)
+    },
+    handleAdminSubmissionsFiltering(filterData) {
+      this.$emit('handleAdminFiltering', {
+        type: 'submission',
+        ...filterData,
+      })
     },
   },
 

@@ -53,18 +53,9 @@
           :single-select="false"
           :items="submission.stops"
           :server-items-length="getTotalStops"
-          :items-per-page="10"
-          @update:page="handleUpdatePage"
-          @update:sortBy="handleUpdateSort"
-          @update:options="handleUpdateOptions"
-          @item-selected="handleRowSelected"
-          @toggle-select-all="handleToggleSelectAll"
           :search="search"
           sort-by="stopDateTime"
           sort-desc
-          :footer-props="{
-            itemsPerPageOptions: [10, 25, 50, 100, 250, -1],
-          }"
         >
           <template v-slot:item.actions="{ item }">
             <v-icon small class="tw-mr-2" @click="editItem(submission)">
@@ -87,6 +78,30 @@
           </template>
           <template v-slot:no-data>
             <div>No Stops Found in This Submission</div>
+          </template>
+          <template v-slot:footer>
+            <div class="paginationWrapper">
+              <p>
+                Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
+                {{ submissions.summary.total }}
+              </p>
+              <v-pagination
+                v-model="currentPage"
+                :length="getPaginationLength"
+                @next="handleNextPage"
+                @input="handleJumpToPage"
+                @previous="handlePreviousPage"
+              ></v-pagination>
+              <v-combobox
+                outlined
+                dense
+                v-model="itemsPerPage"
+                :items="itemsPerPageOptions"
+                label="Items per page"
+                @input="handleUpdateItemsPerPage"
+                class="itemsPerPageSelector"
+              ></v-combobox>
+            </div>
           </template>
         </v-data-table>
       </v-flex>
@@ -112,12 +127,70 @@ export default {
       ],
       format,
       currentSubmissionLoading: false,
+      currentPage: 1,
+      itemsPerPageOptions: [10, 25, 50, 100, 250],
+      itemsPerPage: 10,
+      currentOffset: this.currentPage * this.itemsPerPage,
     }
   },
 
   methods: {
     handleBackToSubmissions() {
       this.$router.push('/admin/submissions')
+    },
+    handleNextPage() {
+      // the pagination component updates the current page
+      // BEFORE these are called but this math is based on the
+      // current value. So need to subtract 1
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handlePreviousPage() {
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1),
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handleJumpToPage() {
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handleUpdateItemsPerPage(val) {
+      this.itemsPerPage = val
+      // calculate the page you SHOULD be on with the new items per page
+      const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.$emit('redoSubmissionDetailItemsPerPage', {
+        id: this.submissionId,
+        limit: this.itemsPerPage,
+        offset: this.itemsPerPage * (newPage - 1),
+      })
+    },
+  },
+
+  computed: {
+    getPaginationLength() {
+      return Math.ceil(this.submissions.summary.total / this.itemsPerPage)
+    },
+    calculateItemsTo() {
+      if (this.currentPage === this.getPaginationLength) {
+        return this.submissions.summary.total
+      } else {
+        return this.currentPage - 1 + this.itemsPerPage
+      }
+    },
+    calculateItemsFrom() {
+      if (this.currentPage === 1) {
+        return this.currentPage
+      } else {
+        return (this.currentPage - 1) * this.itemsPerPage + 1
+      }
     },
   },
 

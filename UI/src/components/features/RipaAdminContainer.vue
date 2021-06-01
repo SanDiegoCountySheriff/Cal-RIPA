@@ -23,13 +23,14 @@
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
     @handleRedoItemsPerPage="handleRedoItemsPerPage"
     @handlePaginate="handlePaginate"
-    @handleAdminStopsFiltering="handleAdminStopsFiltering"
+    @handleAdminFiltering="handleAdminFiltering"
+    @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
   ></ripa-admin-template>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-admin-container',
@@ -48,7 +49,6 @@ export default {
     '$route.params': {
       handler: function (params) {
         if (params.submissionId) {
-          console.log('new route with submission id')
           this.handleTabChange('/admin/submissions')
         }
       },
@@ -136,7 +136,21 @@ export default {
       if (pageData.type === 'stops') {
         await Promise.all([this.getAdminStops(pageData)])
         this.loading = false
+      } else if (pageData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(pageData)])
+        this.loading = false
       }
+    },
+
+    async handleSubmissionDetailItemsPerPage(pageData) {
+      this.loading = true
+      await Promise.all([
+        this.getAdminSubmission({
+          id: pageData.submissionId,
+          ...pageData,
+        }),
+      ])
+      this.loading = false
     },
 
     async handlePaginate(pageData) {
@@ -144,13 +158,21 @@ export default {
       if (pageData.type === 'stops') {
         await Promise.all([this.getAdminStops(pageData)])
         this.loading = false
+      } else if (pageData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(pageData)])
+        this.loading = false
       }
     },
 
-    async handleAdminStopsFiltering(filterData) {
+    async handleAdminFiltering(filterData) {
       this.loading = true
-      await Promise.all([this.getAdminStops(filterData)])
-      this.loading = false
+      if (filterData.type === 'stops') {
+        await Promise.all([this.getAdminStops(filterData)])
+        this.loading = false
+      } else if (filterData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(filterData)])
+        this.loading = false
+      }
     },
 
     async handleDeleteBeat(beat) {

@@ -1026,10 +1026,26 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminSubmission({ commit, state }, submissionId) {
+    getAdminSubmission({ commit, state }, submissionId, pageData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (pageData.offset) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          pageData.offset === null ? 0 : pageData.offset
+        }`
+      }
+      if (pageData.limit) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Limit=${
+          pageData.limit === null ? 0 : pageData.limit
+        }`
+      }
+
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1071,7 +1087,7 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}Stops/GetErrorCodes?search=${value}`,
+          `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
