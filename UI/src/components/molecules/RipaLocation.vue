@@ -92,7 +92,7 @@
           <div class="md:tw-mr-4">
             <template v-if="model.location.piiFound">
               <ripa-alert alert-outlined alert-type="warning">
-                The explanation contains personally identifying information.
+                The address may contain personally identifying information.
                 Please remove if possible.
               </ripa-alert>
             </template>
@@ -354,7 +354,9 @@ export default {
     },
 
     handleInput() {
+      this.updateBlockNumberModel()
       this.updateFullAddressModel()
+      console.log(this.viewModel)
       this.$emit('input', this.viewModel)
     },
 
@@ -442,6 +444,7 @@ export default {
 
     'viewModel.location.blockNumber': {
       handler(newVal, oldVal) {
+        debugger
         if (oldVal !== newVal) {
           this.updateBlockNumberModel()
         }
