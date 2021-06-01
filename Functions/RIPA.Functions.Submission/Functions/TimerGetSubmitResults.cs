@@ -35,7 +35,7 @@ namespace RIPA.Functions.Submission.Functions
         }
 
         [FunctionName("TimerGetSubmitResults")]
-        public async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log)
+        public async void Run([TimerTrigger("0 30 9 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
