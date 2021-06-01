@@ -363,11 +363,17 @@ export default {
         }
       }
 
-      if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)) {
+      if (
+        this.viewModel.actionsTaken.actionsTakenDuringStop &&
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)
+      ) {
         this.viewModel.actionsTaken.personSearchConsentGiven = false
       }
 
-      if (!this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)) {
+      if (
+        this.viewModel.actionsTaken.actionsTakenDuringStop &&
+        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+      ) {
         this.viewModel.actionsTaken.propertySearchConsentGiven = false
       }
 
