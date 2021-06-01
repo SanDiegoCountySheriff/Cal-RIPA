@@ -30,7 +30,7 @@ import RipaFormMixin from '@/components/mixins/RipaFormMixin'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
-  name: 'ripa-agency-question',
+  name: 'ripa-agency-questions',
 
   mixins: [RipaFormMixin],
 
