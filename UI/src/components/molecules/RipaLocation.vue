@@ -359,7 +359,6 @@ export default {
       this.updateStopResultModel()
       this.updateBlockNumberModel()
       this.updateFullAddressModel()
-      console.log(this.viewModel)
       this.$emit('input', this.viewModel)
     },
 

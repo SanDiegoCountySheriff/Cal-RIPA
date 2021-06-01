@@ -4,6 +4,11 @@ import { format } from 'date-fns'
 export default {
   methods: {
     loadModel(newValue) {
+      const updatedBlockNumber =
+        newValue.location?.blockNumber || newValue.location?.blockNumber === 0
+          ? newValue.location?.blockNumber
+          : null
+
       return {
         id: newValue.id,
         template: newValue.template,
@@ -33,7 +38,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: newValue.location?.blockNumber || null,
+          blockNumber: updatedBlockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           moreLocationOptions: newValue.location?.moreLocationOptions || false,
