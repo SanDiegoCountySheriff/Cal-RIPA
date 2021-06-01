@@ -40,7 +40,6 @@ namespace RIPA.Functions.Submission.Functions
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
             var files = _sftpService.ListAllFiles(_sftpOutputPath);
-            if (true == true) return;
             if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
             Guid correlationId = Guid.NewGuid();
