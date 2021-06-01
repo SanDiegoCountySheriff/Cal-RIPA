@@ -311,6 +311,7 @@ export default {
       this.updateActionsTakenModel()
       this.updatePropertyWasSeizedModel()
       this.updateSearchModel()
+      this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
     },
 
@@ -384,6 +385,15 @@ export default {
         this.viewModel.actionsTaken.basisForSearch = null
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
+      }
+    },
+
+    updateBasisForPropertySeizureModel() {
+      if (
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
+      ) {
+        this.viewModel.actionsTaken.anyContraband = true
       }
     },
   },
