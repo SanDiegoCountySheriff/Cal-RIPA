@@ -82,6 +82,7 @@
 
                 <ripa-form-step-2
                   v-model="stop"
+                  :disabled="isFormStep2Disabled"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
@@ -304,6 +305,10 @@ export default {
         this.schools,
         this.statutes,
       )
+    },
+
+    isFormStep2Disabled() {
+      return !this.isEditStop() && this.isEditPerson() && this.stepIndex === 2
     },
   },
 

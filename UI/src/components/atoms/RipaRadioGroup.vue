@@ -3,6 +3,7 @@
     <v-radio-group v-model="model" :rules="rules">
       <v-radio
         v-for="(item, index) in items"
+        :disabled="disabled"
         :key="index"
         :label="item.name"
         :value="item.value"
@@ -14,6 +15,7 @@
         text
         color="primary"
         x-small
+        :disabled="disabled"
         @click="handleClearSelection"
         >Clear selection</v-btn
       >
@@ -63,6 +65,10 @@ export default {
     value: {
       type: [String, Number],
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,

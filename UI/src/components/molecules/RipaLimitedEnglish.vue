@@ -13,6 +13,7 @@
           <ripa-switch
             v-model="model.person.perceivedLimitedEnglish"
             label="Limited or no English fluency"
+            :disabled="disabled"
             :max-width="300"
             @input="handleInput"
           ></ripa-switch>
@@ -67,6 +68,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }
