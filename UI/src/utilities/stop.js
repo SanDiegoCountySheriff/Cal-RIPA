@@ -32,26 +32,43 @@ const mappedAgencyQuestions = () => {
   })
 }
 
+const getLastLocation = () => {
+  const lastLocation = localStorage.getItem('ripa_last_location')
+  if (lastLocation) {
+    return JSON.parse(lastLocation)
+  }
+
+  return null
+}
+
+const defaultLocation = () => {
+  const lastLocation = getLastLocation()
+  if (lastLocation) {
+    return lastLocation
+  }
+  return {
+    isSchool: false,
+    school: null,
+    fullAddress: '',
+    blockNumber: null,
+    streetName: null,
+    intersection: null,
+    moreLocationOptions: false,
+    highwayExit: null,
+    landmark: null,
+    outOfCounty: false,
+    city: null,
+    beat: null,
+  }
+}
+
 export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: uniqueId(),
     template: null,
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -75,20 +92,7 @@ export const motorStop = () => {
     id: uniqueId(),
     template: 'motor',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -137,20 +141,7 @@ export const probationStop = () => {
     id: uniqueId(),
     template: 'probation',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,

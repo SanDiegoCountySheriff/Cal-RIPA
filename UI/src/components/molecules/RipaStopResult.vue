@@ -356,6 +356,7 @@ export default {
       const value11 = this.viewModel.stopResult.actionsTakenDuringStop11
       const value12 = this.viewModel.stopResult.actionsTakenDuringStop12
       const value13 = this.viewModel.stopResult.actionsTakenDuringStop13
+
       return [
         (checked &&
           (value2 ||

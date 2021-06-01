@@ -90,8 +90,6 @@ export default {
         },
         stopResult: {
           anyActionsTaken: newValue.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            newValue.stopResult?.actionsTakenDuringStop1 || false,
           actionsTakenDuringStop2:
             newValue.stopResult?.actionsTakenDuringStop2 || false,
           actionsTakenDuringStop3:
@@ -110,6 +108,8 @@ export default {
             newValue.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
             newValue.stopResult?.actionsTakenDuringStop10 || false,
+          actionsTakenDuringStop11:
+            newValue.stopResult?.actionsTakenDuringStop11 || false,
           actionsTakenDuringStop12:
             newValue.stopResult?.actionsTakenDuringStop12 || false,
           actionsTakenDuringStop13:
