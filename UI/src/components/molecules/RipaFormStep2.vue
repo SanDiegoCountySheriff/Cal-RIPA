@@ -10,7 +10,10 @@
     <ripa-race v-model="model" :on-open-statute="onOpenStatute"></ripa-race>
     <ripa-gender v-model="model" :on-open-statute="onOpenStatute"></ripa-gender>
     <ripa-age v-model="model" :on-open-statute="onOpenStatute"></ripa-age>
-    <ripa-limited-english v-model="model"></ripa-limited-english>
+    <ripa-limited-english
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-limited-english>
     <ripa-disability
       v-model="model"
       :on-open-statute="onOpenStatute"

@@ -3,6 +3,7 @@
     <ripa-actions-taken
       v-model="model"
       :loading-pii="loadingPii"
+      :on-open-statute="onOpenStatute"
     ></ripa-actions-taken>
     <ripa-contraband v-model="model"></ripa-contraband>
 

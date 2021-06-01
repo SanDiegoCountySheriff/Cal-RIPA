@@ -200,6 +200,7 @@ export default new Vuex.Store({
         return {
           maxLength: item.MaxLength,
           label: item.Prompt,
+          hint: item.hint,
           required: item.Required,
           questionType: item.Type,
           name: item.Name,

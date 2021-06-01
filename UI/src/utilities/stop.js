@@ -18,6 +18,20 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
+const getAgencyQuestionsFromLocalStorage = () => {
+  const questions = localStorage.getItem('ripa_agency_questions')
+  return questions ? JSON.parse(questions) : null
+}
+
+const mappedAgencyQuestions = () => {
+  return getAgencyQuestionsFromLocalStorage().map(item => {
+    return {
+      ...item,
+      answer: null,
+    }
+  })
+}
+
 export const defaultStop = () => {
   return {
     actionsTaken: {},
@@ -51,6 +65,7 @@ export const defaultStop = () => {
       anyActionsTaken: true,
       pullFromReasonCode: false,
     },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -108,10 +123,7 @@ export const motorStop = () => {
       custodialArrestCodes: [],
       pullFromReasonCode: true,
     },
-    agencyQuestions: {
-      question1: 'Red',
-      question2: 'F-150',
-    },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -156,6 +168,7 @@ export const probationStop = () => {
       anyActionsTaken: true,
       pullFromReasonCode: false,
     },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -574,27 +587,17 @@ const getSummaryResultOfStop = person => {
   }
 }
 
-export const getAgencyQuestionsFromLocalStorage = () => {
-  const questions = localStorage.getItem('ripa_agency_questions')
-  return questions ? JSON.parse(questions) : null
-}
-
 export const apiStopAgencyQuestionsSummary = apiStop => {
   const items = []
-  const questions = getAgencyQuestionsFromLocalStorage()
+  const questions = apiStop.listAgencyQuestion || []
+
   if (questions && questions.length > 0) {
     let index = 0
-    for (const value of Object.entries(apiStop.agencyQuestions)) {
-      if (value) {
-        const question = questions[index]
-        if (question) {
-          const label = question.label
-          items.push({
-            id: `C${index}`,
-            content: getSummaryAgencyQuestion(label, value[1]),
-          })
-        }
-      }
+    for (const item of questions) {
+      items.push({
+        id: `C${index}`,
+        content: getSummaryAgencyQuestion(item.label, item.answer),
+      })
       index = index + 1
     }
   }
@@ -619,7 +622,7 @@ export const apiStopToFullStop = apiStop => {
   return {
     id: apiStop.id,
     template: apiStop.telemetry?.template || null,
-    stepTrace: apiStop.telemetry?.stepTrace || [],
+    stepTrace: apiStop.telemetry?.listStepTrace || [],
     stopDate: {
       date: apiStop.date,
       time: apiStop.time,
@@ -640,7 +643,7 @@ export const apiStopToFullStop = apiStop => {
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
-    agencyQuestions: apiStop.agencyQuestions || null,
+    agencyQuestions: apiStop.listAgencyQuestion || [],
     people: getFullStopPeopleListed(apiStop),
   }
 }
@@ -865,14 +868,14 @@ export const fullStopToApiStop = (
     telemetry: {
       template: fullStop.template || null,
       formCached: formCached === '1',
-      stepTrace: fullStop.stepTrace,
+      listStepTrace: fullStop.stepTrace,
       lookupCacheDate: lookupCacheDate
         ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
         : null,
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
-    agencyQuestions: fullStop.agencyQuestions || null,
+    listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(fullStop),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {

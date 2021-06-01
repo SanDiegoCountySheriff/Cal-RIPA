@@ -1,4 +1,3 @@
-import
 <template>
   <v-form ref="stepForm" lazy-validation>
     <div>model.agencyQuestions: {{ model.agencyQuestions }}</div>

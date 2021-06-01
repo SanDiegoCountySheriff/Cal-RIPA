@@ -91,10 +91,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    agencyQuestions: {
-      type: Array,
-      default: () => [],
-    },
     loadingGps: {
       type: Boolean,
       defaeult: false,
