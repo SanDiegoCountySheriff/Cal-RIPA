@@ -56,7 +56,7 @@
               ></ripa-switch>
             </template>
 
-            <template v-if="wasSearchConducted">
+            <template v-if="wasAskedForConsent">
               <ripa-form-subheader
                 title="Basis for Search"
                 required
@@ -197,6 +197,7 @@ export default {
     actionsTakenRules() {
       const checked = this.viewModel.actionsTaken.anyActionsTaken
       const options = this.viewModel.actionsTaken.actionsTakenDuringStop
+
       return [
         (checked && options.length > 0) ||
           'At least one action taken is required',
@@ -204,8 +205,9 @@ export default {
     },
 
     basisForSearchRules() {
-      const searchConducted = this.wasSearchConducted
+      const searchConducted = this.wasAskedForConsent
       const options = this.viewModel.actionsTaken.basisForSearch
+
       return [
         (searchConducted && options.length > 0) ||
           'At least basis for search is required',
@@ -215,6 +217,7 @@ export default {
     basisForPropertySeizureRules() {
       const checked = this.viewModel.actionsTaken.propertyWasSeized
       const options = this.viewModel.actionsTaken.basisForPropertySeizure
+
       return [
         (checked && options.length > 0) ||
           'At least one basis for property seizure is required',
@@ -224,6 +227,7 @@ export default {
     typeOfPropertySeizedRules() {
       const checked = this.viewModel.actionsTaken.propertyWasSeized
       const options = this.viewModel.actionsTaken.typeOfPropertySeized
+
       return [
         (checked && options.length > 0) ||
           'At least one type of property seized is required',
@@ -271,10 +275,10 @@ export default {
       return filteredItems.filter(item => item.value !== 12)
     },
 
-    wasSearchConducted() {
+    wasAskedForConsent() {
       return (
-        this.viewModel.actionsTaken.actionsTakenDuringStop.includes(18) ||
-        this.viewModel.actionsTaken.actionsTakenDuringStop.includes(20)
+        this.viewModel.actionsTaken.personSearchConsentGiven ||
+        this.viewModel.actionsTaken.propertySearchConsentGiven
       )
     },
 
@@ -368,8 +372,8 @@ export default {
       }
 
       if (
-        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(18) &&
-        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(20)
+        !this.viewModel.actionsTaken.personSearchConsentGiven &&
+        !this.viewModel.actionsTaken.propertySearchConsentGiven
       ) {
         this.viewModel.actionsTaken.basisForSearch = null
         this.viewModel.actionsTaken.basisForSearchExplanation = null
