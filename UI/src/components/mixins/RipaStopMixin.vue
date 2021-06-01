@@ -353,6 +353,7 @@ export default {
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
+      localStorage.removeItem('ripa_edit_form_step_index')
       this.formStepIndex = 0
       this.stop = null
       this.fullStop = null
