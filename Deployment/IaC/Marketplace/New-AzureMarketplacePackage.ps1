@@ -138,7 +138,7 @@ Write-Host "Creating final marketplace offering package"
 $compress = @{
   Path = "$($workingDirectory)\*"
   CompressionLevel = "Optimal"
-  DestinationPath = "$($workingDirectory)\market-place-offering.Zip"
+  DestinationPath = "$($workingDirectory)\market-place-offering.zip"
 }
 Compress-Archive @compress -Force
 
