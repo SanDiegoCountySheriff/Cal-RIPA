@@ -98,7 +98,7 @@ namespace RIPA.Functions.Submission.Functions
                         FileName = fileLevelFatalError.FileName
                     };
 
-                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError), submissionError, fileLevelFatalError.FileName));
+                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError));
                 }
             }
         }
@@ -115,12 +115,12 @@ namespace RIPA.Functions.Submission.Functions
                     SubmissionError submissionError = new SubmissionError
                     {
                         DateReported = DateTime.UtcNow,
-                        Code = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? "RLFE" : recordLevelError.ErrorList.Split(" - ")[0], //TODO process the code
+                        Code = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? "RLFE" : recordLevelError.ErrorList.Split("::")[0], 
                         ErrorType = type,
-                        Message = recordLevelError.ErrorList,
+                        Message = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? recordLevelError.ErrorList : recordLevelError.ErrorList.Split("::")[1],
                         FileName = recordLevelError.FileName
                     };
-                    await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, type, submissionError, recordLevelError.FileName));
+                    await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, submissionError));
                 }
             }
         }

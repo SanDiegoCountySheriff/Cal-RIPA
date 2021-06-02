@@ -40,7 +40,6 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
-        //ADD SUMMARY
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Stops requested");
@@ -112,6 +111,11 @@ namespace RIPA.Functions.Stop.Functions
             }
 
             //ErrorCode TODO
+            if (!string.IsNullOrWhiteSpace(stopQuery.ErrorCode)){
+                join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
+                join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
+                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{stopQuery.ErrorCode}'");
+            }
 
             //IsSubmitted
             if (stopQuery.IsSubmitted != null)
