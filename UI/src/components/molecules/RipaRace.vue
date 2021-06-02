@@ -13,6 +13,7 @@
         <v-col cols="12" sm="12">
           <ripa-check-group
             v-model="model.person.perceivedRace"
+            :disabled="disabled"
             :items="raceItems"
             :rules="raceRules"
             @input="handleInput"
@@ -76,6 +77,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

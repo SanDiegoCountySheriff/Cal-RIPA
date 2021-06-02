@@ -1,47 +1,90 @@
 <template>
   <ripa-page-container :admin="admin">
     <vue-confirm-dialog></vue-confirm-dialog>
-    <template v-if="!isEditingForm">
-      <ripa-intro-template :on-template="handleTemplate"></ripa-intro-template>
-    </template>
 
-    <template v-if="isEditingForm">
-      <ripa-form-template
-        v-model="stop"
-        :beats="mappedFormBeats"
-        :county-cities="mappedFormCountyCities"
-        :full-stop="fullStop"
-        :last-location="lastLocation"
-        :loading-pii-step1="loadingPiiStep1"
-        :loading-pii-step3="loadingPiiStep3"
-        :loading-pii-step4="loadingPiiStep4"
-        :non-county-cities="mappedFormNonCountyCities"
-        :schools="mappedFormSchools"
-        :statutes="mappedFormStatutes"
-        :on-add-person="handleAddPerson"
-        :on-cancel="handleCancel"
-        :on-delete-person="handleDeletePerson"
-        :on-open-favorites="handleOpenFavorites"
-        :on-open-last-location="handleOpenLastLocation"
-        :on-save-favorite="handleSaveFavorite"
-        :on-submit="handleSubmit"
-        @input="handleInput"
-      ></ripa-form-template>
-    </template>
+    <ripa-form-template
+      v-model="stop"
+      :beats="mappedFormBeats"
+      :county-cities="mappedFormCountyCities"
+      :display-beat-input="displayBeatInput"
+      :form-step-index="formStepIndex"
+      :full-stop="fullStop"
+      :is-authenticated="isAuthenticated"
+      :last-location="lastLocation"
+      :last-reason="lastReason"
+      :last-result="lastResult"
+      :loading-gps="loadingGps"
+      :loading-pii-step1="loadingPiiStep1"
+      :loading-pii-step3="loadingPiiStep3"
+      :loading-pii-step4="loadingPiiStep4"
+      :non-county-cities="mappedFormNonCountyCities"
+      :schools="mappedFormSchools"
+      :statutes="mappedFormStatutes"
+      :user="mappedUser"
+      :valid-last-location="isLastLocationValid"
+      :on-add-person="handleAddPerson"
+      :on-cancel="handleCancel"
+      :on-delete-person="handleDeletePerson"
+      :on-edit-person="handleEditPerson"
+      :on-gps-location="handleGpsLocation"
+      :on-open-location-favorites="handleOpenLocationFavorites"
+      :on-open-reason-favorites="handleOpenReasonFavorites"
+      :on-open-result-favorites="handleOpenResultFavorites"
+      :on-save-location-favorite="handleSaveLocationFavorite"
+      :on-save-reason-favorite="handleSaveReasonFavorite"
+      :on-save-result-favorite="handleSaveResultFavorite"
+      :on-open-last-location="handleOpenLastLocation"
+      :on-open-statute="handleOpenStatute"
+      :on-open-template="handleOpenTemplate"
+      :on-step-index-change="handleStepIndexChange"
+      :on-submit="handleSubmit"
+      :on-update-user="handleUpdateUser"
+      @input="handleInput"
+    ></ripa-form-template>
 
     <ripa-favorites-dialog
-      :show-dialog="showFavoritesDialog"
+      :show-dialog="showLocationFavoritesDialog"
       :favorites="favorites"
       :on-close="handleCloseDialog"
-      :on-edit-favorite="handleEditFavorite"
-      :on-open-favorite="handleOpenFavorite"
-      :on-delete-favorite="handleDeleteFavorite"
+      :on-edit-favorite="handleEditLocationFavorite"
+      :on-open-favorite="handleOpenLocationFavorite"
+      :on-delete-favorite="handleDeleteLocationFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-favorites-dialog
+      :show-dialog="showReasonFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditReasonFavorite"
+      :on-open-favorite="handleOpenReasonFavorite"
+      :on-delete-favorite="handleDeleteReasonFavorite"
+    ></ripa-favorites-dialog>
+
+    <ripa-favorites-dialog
+      :show-dialog="showResultFavoritesDialog"
+      :favorites="favorites"
+      :on-close="handleCloseDialog"
+      :on-edit-favorite="handleEditResultFavorite"
+      :on-open-favorite="handleOpenResultFavorite"
+      :on-delete-favorite="handleDeleteResultFavorite"
     ></ripa-favorites-dialog>
 
     <ripa-add-favorite-dialog
-      :show-dialog="showAddFavoriteDialog"
+      :show-dialog="showAddLocationFavoriteDialog"
       :on-close="handleCloseDialog"
-      :on-add-favorite="handleAddFavorite"
+      :on-add-favorite="handleAddLocationFavorite"
+    ></ripa-add-favorite-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddReasonFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddReasonFavorite"
+    ></ripa-add-favorite-dialog>
+
+    <ripa-add-favorite-dialog
+      :show-dialog="showAddResultFavoriteDialog"
+      :on-close="handleCloseDialog"
+      :on-add-favorite="handleAddResultFavorite"
     ></ripa-add-favorite-dialog>
   </ripa-page-container>
 </template>
@@ -51,7 +94,6 @@ import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaIntroTemplate from '@/components/templates/RipaIntroTemplate'
 import RipaPageContainer from './RipaPageContainer'
 import RipaStopMixin from '@/components/mixins/RipaStopMixin'
 import {
@@ -71,7 +113,6 @@ export default {
     RipaAddFavoriteDialog,
     RipaFavoritesDialog,
     RipaFormTemplate,
-    RipaIntroTemplate,
     RipaPageContainer,
   },
 
@@ -87,7 +128,6 @@ export default {
         officerName: 'Steve Pietrek',
       },
       fullStop: {},
-      isEditingForm: false,
       isOnlineAndAuthenticated: true,
       loadingGps: false,
       loadingPiiStep1: false,

@@ -8,9 +8,17 @@ export default {
     return {
       favorites: [],
       lastLocation: null,
+      lastReason: null,
+      lastResult: null,
       savedLocation: null,
-      showAddFavoriteDialog: false,
-      showFavoritesDialog: false,
+      savedReason: null,
+      savedResult: null,
+      showAddLocationFavoriteDialog: false,
+      showAddReasonFavoriteDialog: false,
+      showAddResultFavoriteDialog: false,
+      showLocationFavoritesDialog: false,
+      showReasonFavoritesDialog: false,
+      showResultFavoritesDialog: false,
       showStatuteDialog: false,
     }
   },
@@ -27,6 +35,16 @@ export default {
       return locations ? JSON.parse(locations) : []
     },
 
+    getFavoriteReasons() {
+      const locations = localStorage.getItem('ripa_favorite_reasons')
+      return locations ? JSON.parse(locations) : []
+    },
+
+    getFavoriteResults() {
+      const locations = localStorage.getItem('ripa_favorite_results')
+      return locations ? JSON.parse(locations) : []
+    },
+
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
       if (lastLocation) {
@@ -36,7 +54,7 @@ export default {
       return null
     },
 
-    handleAddFavorite(name) {
+    handleAddLocationFavorite(name) {
       const location = {
         id: new Date().getTime(),
         name,
@@ -46,6 +64,30 @@ export default {
       const locations = this.getFavoriteLocations()
       locations.push(location)
       this.setFavoriteLocations(locations)
+    },
+
+    handleAddReasonFavorite(name) {
+      const reason = {
+        id: new Date().getTime(),
+        name,
+        reason: this.savedReason,
+        updateDate: format(new Date(), 'yyyy-MM-dd'),
+      }
+      const reasons = this.getFavoriteReasons()
+      reasons.push(reason)
+      this.setFavoriteReasons(reasons)
+    },
+
+    handleAddResultFavorite(name) {
+      const result = {
+        id: new Date().getTime(),
+        name,
+        result: this.savedResult,
+        updateDate: format(new Date(), 'yyyy-MM-dd'),
+      }
+      const results = this.getFavoriteResults()
+      results.push(result)
+      this.setFavoriteResults(results)
     },
 
     handleAddPerson() {
@@ -60,15 +102,31 @@ export default {
     },
 
     handleCloseDialog() {
-      this.showAddFavoriteDialog = false
-      this.showFavoritesDialog = false
+      this.showAddLocationFavoriteDialog = false
+      this.showAddReasonFavoriteDialog = false
+      this.showAddResultFavoriteDialog = false
+      this.showLocationFavoritesDialog = false
+      this.showReasonFavoritesDialog = false
+      this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
     },
 
-    handleDeleteFavorite(id) {
+    handleDeleteLocationFavorite(id) {
       const locations = this.getFavoriteLocations()
       const filteredLocations = locations.filter(item => item.id !== id)
       this.setFavoriteLocations(filteredLocations)
+    },
+
+    handleDeleteReasonFavorite(id) {
+      const reasons = this.getFavoriteReasons()
+      const filteredResons = reasons.filter(item => item.id !== id)
+      this.setFavoriteReasons(filteredResons)
+    },
+
+    handleDeleteResultFavorite(id) {
+      const results = this.getFavoriteResults()
+      const filteredResults = results.filter(item => item.id !== id)
+      this.setFavoriteResults(filteredResults)
     },
 
     handleDeletePerson(id) {
@@ -94,7 +152,7 @@ export default {
       }
     },
 
-    handleEditFavorite(favorite) {
+    handleEditLocationFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
       const locations = this.getFavoriteLocations()
@@ -103,6 +161,24 @@ export default {
       )
       filteredLocations.push(updatedFav)
       this.setFavoriteLocations(filteredLocations)
+    },
+
+    handleEditReasonFavorite(favorite) {
+      const updatedFav = Object.assign({}, favorite)
+      updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
+      const reasons = this.getFavoriteReasons()
+      const filteredReasons = reasons.filter(item => item.id !== updatedFav.id)
+      filteredReasons.push(updatedFav)
+      this.setFavoriteReasons(filteredReasons)
+    },
+
+    handleEditResultFavorite(favorite) {
+      const updatedFav = Object.assign({}, favorite)
+      updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
+      const results = this.getFavoriteResults()
+      const filteredResults = results.filter(item => item.id !== updatedFav.id)
+      filteredResults.push(updatedFav)
+      this.setFavoriteResults(filteredResults)
     },
 
     handleEditPerson(id) {
@@ -122,8 +198,8 @@ export default {
       this.updateFullStop()
     },
 
-    handleOpenFavorite(id) {
-      this.showFavoritesDialog = false
+    handleOpenLocationFavorite(id) {
+      this.showLocationFavoritesDialog = false
       const favorites = this.getFavoriteLocations()
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
@@ -131,9 +207,37 @@ export default {
       }
     },
 
-    handleOpenFavorites() {
+    handleOpenReasonFavorite(id) {
+      this.showReasonFavoritesDialog = false
+      const favorites = this.getFavoriteReasons()
+      const [favorite] = favorites.filter(item => item.id === id)
+      if (favorite) {
+        this.lastReason = favorite.reason
+      }
+    },
+
+    handleOpenResultFavorite(id) {
+      this.showResultFavoritesDialog = false
+      const favorites = this.getFavoriteResults()
+      const [favorite] = favorites.filter(item => item.id === id)
+      if (favorite) {
+        this.lastResult = favorite.result
+      }
+    },
+
+    handleOpenLocationFavorites() {
       this.favorites = this.getFavoriteLocations()
-      this.showFavoritesDialog = true
+      this.showLocationFavoritesDialog = true
+    },
+
+    handleOpenReasonFavorites() {
+      this.favorites = this.getFavoriteReasons()
+      this.showReasonFavoritesDialog = true
+    },
+
+    handleOpenResultFavorites() {
+      this.favorites = this.getFavoriteResults()
+      this.showResultFavoritesDialog = true
     },
 
     handleOpenLastLocation() {
@@ -149,14 +253,24 @@ export default {
       this.showStatuteDialog = true
     },
 
-    handleSaveFavorite(location) {
+    handleSaveLocationFavorite(location) {
       this.savedLocation = location
-      this.showAddFavoriteDialog = true
+      this.showAddLocationFavoriteDialog = true
     },
 
-    handleTemplate(value) {
+    handleSaveReasonFavorite(reason) {
+      this.savedReason = reason
+      this.showAddReasonFavoriteDialog = true
+    },
+
+    handleSaveResultFavorite(result) {
+      this.savedResult = result
+      this.showAddResultFavoriteDialog = true
+    },
+
+    handleOpenTemplate(value) {
       localStorage.setItem('ripa_form_editing', '1')
-      this.isEditingForm = true
+      this.formStepIndex = 1
 
       switch (value) {
         case 'motor':
@@ -179,6 +293,14 @@ export default {
       localStorage.setItem('ripa_favorite_locations', JSON.stringify(locations))
     },
 
+    setFavoriteReasons(reasons) {
+      localStorage.setItem('ripa_favorite_reasons', JSON.stringify(reasons))
+    },
+
+    setFavoriteResults(results) {
+      localStorage.setItem('ripa_favorite_results', JSON.stringify(results))
+    },
+
     setLastLocation(stop) {
       localStorage.setItem('ripa_last_location', JSON.stringify(stop.location))
     },
@@ -196,7 +318,7 @@ export default {
 
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agency = this.stop.agency
-        updatedFullStop.agencyQuestions = this.stop.agencyQuestions
+        updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
         updatedFullStop.template = this.stop.template
@@ -206,7 +328,6 @@ export default {
         updatedFullStop.officerId = this.stop.officerId
         updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
-        updatedFullStop.updated = new Date()
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)
@@ -232,7 +353,8 @@ export default {
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
-      this.isEditingForm = false
+      localStorage.removeItem('ripa_edit_form_step_index')
+      this.formStepIndex = 0
       this.stop = null
       this.fullStop = null
     },

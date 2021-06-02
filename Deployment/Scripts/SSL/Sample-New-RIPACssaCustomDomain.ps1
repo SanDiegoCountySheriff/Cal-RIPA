@@ -1,18 +1,20 @@
 ﻿Import-Module .\New-RIPACssaCustomDomain.psm1 -Force 
 
-$Subscription = "********-****-****-****-************"
-$ResourceGroupName = "cssa-shared-rg"
-$CdnProfileName = "cssa-cloud-cdn"
-$DnsRootZone = "cssa.cloud"
+# az storage blob upload-batch -d '$web' --account-name 'ripacdntestwebsa'  -s './dist'
+
+$Subscription = "1340e16e-8c9e-44b7-9b12-78ed3c74211b"
+$ResourceGroupName = "shared-keep-rg"
+$CdnProfileName = "lesmcwhirter-me-cdn"
+$DnsRootZone = "lesmcwhirter.me"
 
 $AgencyAbrieviation = "salsa"
 $ApplicationName = "green"
 
-$KeyVaultName = "cssa-shared-kv"
-$SecretName = "star-cssa-cloud"
+$KeyVaultName = "shared-keep-kv"
+$SecretName = "star-lesmcwhirter-me"
 $SecretVersion = "Latest"
 
-$WebContentUrl = "staticwebcontent.z13.web.core.windows.net"
+$WebContentUrl = "ripacdntestwebsa.z13.web.core.windows.net"
 
 New-RIPACssaCustomDomain `
     -Subscription $Subscription `

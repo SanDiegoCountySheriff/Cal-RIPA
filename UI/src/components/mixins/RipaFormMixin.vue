@@ -4,9 +4,15 @@ import { format } from 'date-fns'
 export default {
   methods: {
     loadModel(newValue) {
+      const updatedBlockNumber =
+        newValue.location?.blockNumber || newValue.location?.blockNumber === 0
+          ? newValue.location?.blockNumber
+          : null
+
       return {
         id: newValue.id,
         template: newValue.template,
+        stepTrace: newValue.stepTrace || [],
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
@@ -32,7 +38,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: newValue.location?.blockNumber || null,
+          blockNumber: updatedBlockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           moreLocationOptions: newValue.location?.moreLocationOptions || false,
@@ -84,8 +90,6 @@ export default {
         },
         stopResult: {
           anyActionsTaken: newValue.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            newValue.stopResult?.actionsTakenDuringStop1 || false,
           actionsTakenDuringStop2:
             newValue.stopResult?.actionsTakenDuringStop2 || false,
           actionsTakenDuringStop3:
@@ -104,6 +108,8 @@ export default {
             newValue.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
             newValue.stopResult?.actionsTakenDuringStop10 || false,
+          actionsTakenDuringStop11:
+            newValue.stopResult?.actionsTakenDuringStop11 || false,
           actionsTakenDuringStop12:
             newValue.stopResult?.actionsTakenDuringStop12 || false,
           actionsTakenDuringStop13:
@@ -114,17 +120,7 @@ export default {
           custodialArrestCodes: newValue.stopResult?.custodialArrestCodes || [],
           pullFromReasonCode: newValue.stopResult?.pullFromReasonCode || false,
         },
-        agencyQuestions: {
-          question1: newValue.agencyQuestions?.question1 || null,
-          question2: newValue.agencyQuestions?.question2 || null,
-          question3: newValue.agencyQuestions?.question3 || null,
-          question4: newValue.agencyQuestions?.question4 || null,
-          question5: newValue.agencyQuestions?.question5 || null,
-          question6: newValue.agencyQuestions?.question6 || null,
-          question7: newValue.agencyQuestions?.question7 || null,
-          question8: newValue.agencyQuestions?.question8 || null,
-          question9: newValue.agencyQuestions?.question9 || null,
-        },
+        agencyQuestions: newValue.agencyQuestions || [],
       }
     },
   },

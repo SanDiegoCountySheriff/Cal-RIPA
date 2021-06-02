@@ -2,8 +2,12 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
+      :last-reason="lastReason"
       :loading-pii="loadingPii"
       :statutes="getStatutes"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-statute="onOpenStatute"
+      :on-save-favorite="onSaveFavorite"
     ></ripa-stop-reason>
 
     <v-spacer></v-spacer>
@@ -56,8 +60,8 @@ export default {
       const piiFound = this.viewModel.stopReason?.reasonForStopPiiFound || false
       if (piiFound) {
         this.$confirm({
-          title: 'Confirm Cancel',
-          message: `This page contains personally identifying information. Are you sure you want to continue?`,
+          title: 'Confirm Continue',
+          message: `This page may contain personally identifying information. Are you sure you want to continue?`,
           button: {
             no: 'No',
             yes: 'Yes',
@@ -77,6 +81,21 @@ export default {
   computed: {
     getStatutes() {
       return this.statutes
+    },
+  },
+
+  props: {
+    lastReason: {
+      type: Object,
+      default: () => {},
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }

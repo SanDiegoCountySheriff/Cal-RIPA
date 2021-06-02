@@ -18,26 +18,57 @@ import {
   STOP_RESULTS,
 } from '@/constants/form'
 
+const getAgencyQuestionsFromLocalStorage = () => {
+  const questions = localStorage.getItem('ripa_agency_questions')
+  return questions ? JSON.parse(questions) : null
+}
+
+const mappedAgencyQuestions = () => {
+  return getAgencyQuestionsFromLocalStorage().map(item => {
+    return {
+      ...item,
+      answer: null,
+    }
+  })
+}
+
+const getLastLocation = () => {
+  const lastLocation = localStorage.getItem('ripa_last_location')
+  if (lastLocation) {
+    return JSON.parse(lastLocation)
+  }
+
+  return null
+}
+
+const defaultLocation = () => {
+  const lastLocation = getLastLocation()
+  if (lastLocation) {
+    return lastLocation
+  }
+  return {
+    isSchool: false,
+    school: null,
+    fullAddress: '',
+    blockNumber: null,
+    streetName: null,
+    intersection: null,
+    moreLocationOptions: false,
+    highwayExit: null,
+    landmark: null,
+    outOfCounty: false,
+    city: null,
+    beat: null,
+  }
+}
+
 export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: uniqueId(),
     template: null,
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -51,6 +82,7 @@ export const defaultStop = () => {
       anyActionsTaken: true,
       pullFromReasonCode: false,
     },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -60,20 +92,7 @@ export const motorStop = () => {
     id: uniqueId(),
     template: 'motor',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -108,10 +127,7 @@ export const motorStop = () => {
       custodialArrestCodes: [],
       pullFromReasonCode: true,
     },
-    agencyQuestions: {
-      question1: 'Red',
-      question2: 'F-150',
-    },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -125,20 +141,7 @@ export const probationStop = () => {
     id: uniqueId(),
     template: 'probation',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -156,18 +159,19 @@ export const probationStop = () => {
       anyActionsTaken: true,
       pullFromReasonCode: false,
     },
+    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
 export const apiStopStopSummary = apiStop => {
   const items = []
-  items.push(getSummaryPersonCount(apiStop))
-  items.push(getSummaryDate(apiStop))
-  items.push(getSummaryTime(apiStop))
-  items.push(getSummaryLocation(apiStop))
-  items.push(getSummaryOfficer(apiStop))
-  items.push(getSummaryDuration(apiStop))
-  items.push(getSummaryStopInResponseToCfs(apiStop))
+  items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
+  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -206,40 +210,40 @@ const getSummaryLocation = apiStop => {
     })
   }
   if (apiStop.location.blockNumber) {
-    return {
+    children.push({
       header: 'Block Number',
       detail: apiStop.location.blockNumber,
-    }
+    })
   }
   if (apiStop.location.streetName) {
-    return {
+    children.push({
       header: 'Street Name',
       detail: apiStop.location.streetName,
-    }
+    })
   }
   if (apiStop.location.intersection) {
-    return {
+    children.push({
       header: 'Intersection',
       detail: apiStop.location.intersection,
-    }
+    })
   }
   if (apiStop.location.landMark) {
-    return {
+    children.push({
       header: 'Landmark',
       detail: apiStop.location.landMark,
-    }
+    })
   }
-  if (apiStop.location.city) {
-    return {
+  if (apiStop.location.city && apiStop.location.city.codes) {
+    children.push({
       header: 'City',
-      detail: apiStop.location.beat.codes.text,
-    }
+      detail: apiStop.location.city.codes.text,
+    })
   }
-  if (apiStop.location.beat) {
-    return {
+  if (apiStop.location.beat && apiStop.location.beat.codes) {
+    children.push({
       header: 'Beat',
       detail: apiStop.location.beat.codes.text,
-    }
+    })
   }
 
   return {
@@ -298,23 +302,35 @@ export const apiStopPersonSummary = (apiStop, personId) => {
   )
   if (person) {
     const items = []
-    items.push(getSummaryStudent(person))
-    items.push(getSummaryPerceivedRace(person))
-    items.push(getSummaryPerceivedGender(person))
-    items.push(getSummaryGenderNonconforming(person))
-    items.push(getSummaryPerceivedLgbt(person))
-    items.push(getSummaryPerceivedAge(person))
-    items.push(getSummaryLimitedEnglish(person))
-    items.push(getSummaryPerceivedOrKnownDisability(person))
-    items.push(getSummaryReasonForStop(person))
-    items.push(getSummaryReasonForStopExplanation(person))
-    items.push(getSummaryActionsTaken(person))
-    items.push(getSummaryBasisForSearch(person))
-    items.push(getSummaryBasisForSearchExplanation(person))
-    items.push(getSummaryBasisForPropertySeizure(person))
-    items.push(getSummaryTypeOfPropertySeized(person))
-    items.push(getSummaryContraband(person))
-    items.push(getSummaryResultOfStop(person))
+    items.push({ id: 'B1', content: getSummaryStudent(person) })
+    items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
+    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
+    items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
+    items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
+    items.push({
+      id: 'B8',
+      content: getSummaryPerceivedOrKnownDisability(person),
+    })
+    items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    items.push({
+      id: 'B10',
+      content: getSummaryReasonForStopExplanation(person),
+    })
+    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
+    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+    items.push({
+      id: 'B13',
+      content: getSummaryBasisForSearchExplanation(person),
+    })
+    items.push({
+      id: 'B14',
+      content: getSummaryBasisForPropertySeizure(person),
+    })
+    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    items.push({ id: 'B16', content: getSummaryContraband(person) })
+    items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
     return items
   }
   return []
@@ -562,6 +578,32 @@ const getSummaryResultOfStop = person => {
   }
 }
 
+export const apiStopAgencyQuestionsSummary = apiStop => {
+  const items = []
+  const questions = apiStop.listAgencyQuestion || []
+
+  if (questions && questions.length > 0) {
+    let index = 0
+    for (const item of questions) {
+      items.push({
+        id: `C${index}`,
+        content: getSummaryAgencyQuestion(item.label, item.answer),
+      })
+      index = index + 1
+    }
+  }
+
+  return items
+}
+
+const getSummaryAgencyQuestion = (question, answer) => {
+  return {
+    level: 1,
+    header: question,
+    detail: answer,
+  }
+}
+
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location.blockNumber || null
   const schoolNumber = apiStop.location.schoolName?.codes?.code || null
@@ -571,7 +613,7 @@ export const apiStopToFullStop = apiStop => {
   return {
     id: apiStop.id,
     template: apiStop.telemetry?.template || null,
-    stepTrace: apiStop.telemetry?.stepTrace || [],
+    stepTrace: apiStop.telemetry?.listStepTrace || [],
     stopDate: {
       date: apiStop.date,
       time: apiStop.time,
@@ -592,7 +634,7 @@ export const apiStopToFullStop = apiStop => {
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
-    agencyQuestions: apiStop.agencyQuestions || null,
+    agencyQuestions: apiStop.listAgencyQuestion || [],
     people: getFullStopPeopleListed(apiStop),
   }
 }
@@ -817,14 +859,14 @@ export const fullStopToApiStop = (
     telemetry: {
       template: fullStop.template || null,
       formCached: formCached === '1',
-      stepTrace: fullStop.stepTrace,
+      listStepTrace: fullStop.stepTrace,
       lookupCacheDate: lookupCacheDate
         ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
         : null,
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
-    agencyQuestions: fullStop.agencyQuestions || null,
+    listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(fullStop),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {

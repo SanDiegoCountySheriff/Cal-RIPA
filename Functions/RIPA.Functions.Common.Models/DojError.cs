@@ -4,8 +4,9 @@ using System.Text;
 
 namespace RIPA.Functions.Common.Models
 {
-    public class ErrorCode
+    public class DojError
     {
-        public string ErrorMessage { get; set; }
+        public string Message { get; set; }
+        public string Code { get; set; }
     }
 }

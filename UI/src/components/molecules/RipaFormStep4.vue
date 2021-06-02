@@ -3,6 +3,7 @@
     <ripa-actions-taken
       v-model="model"
       :loading-pii="loadingPii"
+      :on-open-statute="onOpenStatute"
     ></ripa-actions-taken>
     <ripa-contraband v-model="model"></ripa-contraband>
 
@@ -62,8 +63,8 @@ export default {
         this.viewModel.actionsTaken?.basisForSearchPiiFound || false
       if (piiFound) {
         this.$confirm({
-          title: 'Confirm Cancel',
-          message: `This page contains personally identifying information. Are you sure you want to continue?`,
+          title: 'Confirm Continue',
+          message: `This page may contain personally identifying information. Are you sure you want to continue?`,
           button: {
             no: 'No',
             yes: 'Yes',

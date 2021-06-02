@@ -1,7 +1,11 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
     {{ model.agencyQuestions }}
-    {{ agencyQuestions }}
+
+    <ripa-agency-questions
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-agency-questions>
 
     <v-spacer></v-spacer>
 
@@ -36,6 +40,7 @@
 
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
+import RipaAgencyQuestions from '@/components/molecules/RipaAgencyQuestions'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 
 export default {
@@ -45,6 +50,7 @@ export default {
 
   components: {
     RipaAlert,
+    RipaAgencyQuestions,
   },
 
   props: {

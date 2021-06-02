@@ -1,7 +1,10 @@
 <template>
   <v-card class="mx-auto" max-width="900" outlined>
     <v-card-text>
-      <template v-if="stepIndex <= 7">
+      <template v-if="stepIndex == 0">
+        <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+      </template>
+      <template v-if="stepIndex >= 1 && stepIndex <= 7">
         <v-stepper v-model="stepIndex">
           <v-stepper-header>
             <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -29,7 +32,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="agencyQuestions.length > 0">
+            <template v-if="anyAgencyQuestions">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -50,7 +53,7 @@
                   :county-cities="countyCities"
                   :display-beat-input="displayBeatInput"
                   :is-authenticated="isAuthenticated"
-                  :is-edit-stop="isEditStop"
+                  :is-edit-stop="isEditStop()"
                   :last-location="lastLocation"
                   :loading-gps="loadingGps"
                   :loading-pii="loadingPiiStep1"
@@ -58,10 +61,10 @@
                   :schools="schools"
                   :user="user"
                   :valid-last-location="validLastLocation"
-                  :on-open-favorites="onOpenFavorites"
+                  :on-open-favorites="onOpenLocationFavorites"
                   :on-open-last-location="onOpenLastLocation"
                   :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveFavorite"
+                  :on-save-favorite="onSaveLocationFavorite"
                   :on-gps-location="onGpsLocation"
                   :on-update-user="onUpdateUser"
                   @input="handleInput"
@@ -79,6 +82,7 @@
 
                 <ripa-form-step-2
                   v-model="stop"
+                  :disabled="isFormStep2Disabled"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
@@ -99,11 +103,14 @@
 
                 <ripa-form-step-3
                   v-model="stop"
+                  :last-reason="lastReason"
                   :loading-pii="loadingPiiStep3"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :on-open-favorites="onOpenReasonFavorites"
                   :on-open-statute="onOpenStatute"
+                  :on-save-favorite="onSaveReasonFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-3>
@@ -141,10 +148,13 @@
 
                 <ripa-form-step-5
                   v-model="stop"
+                  :last-result="lastResult"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :on-open-favorites="onOpenResultFavorites"
                   :on-open-statute="onOpenStatute"
+                  :on-save-favorite="onSaveResultFavorite"
                   :statutes="statutes"
                   @input="handleInput"
                 ></ripa-form-step-5>
@@ -155,10 +165,10 @@
               <template v-if="stepIndex === 6">
                 <ripa-form-step-6
                   v-model="stop"
-                  :agency-questions="agencyQuestions"
                   :on-back="handleBack"
                   :on-next="handleNext"
                   :on-cancel="handleCancel"
+                  :back-button-visible="getFormStep6BackButtonVisible"
                   @input="handleInput"
                 ></ripa-form-step-6>
               </template>
@@ -172,6 +182,7 @@
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
                   :on-delete-person="handleDeletePerson"
+                  :on-edit-agency-questions="handleEditAgencyQuestions"
                   :on-edit-person="handleEditPerson"
                   :on-edit-stop="handleEditStop"
                   :on-submit="handleSubmit"
@@ -208,7 +219,7 @@
 
             <v-divider></v-divider>
 
-            <template v-if="agencyQuestions.length > 0">
+            <template v-if="anyAgencyQuestions">
               <v-stepper-step :complete="stepIndex > 6" step="6">
               </v-stepper-step>
 
@@ -236,6 +247,7 @@ import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
+import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { fullStopToApiStop } from '@/utilities/stop'
 
 export default {
@@ -251,6 +263,7 @@ export default {
     RipaFormStep6,
     RipaFormStep7,
     RipaSubheader,
+    RipaTemplate,
   },
 
   data() {
@@ -258,24 +271,29 @@ export default {
       stepIndex: this.formStepIndex,
       confirmationStepIndex: 8,
       stop: this.value,
-      isEditStop: true,
-      isEditPerson: true,
-      isEditAgencyQuestions: this.agencyQuestions.length > 0,
+      stepTrace: null,
     }
   },
 
   computed: {
+    anyAgencyQuestions() {
+      const questions = this.stop.agencyQuestions || []
+      return questions.length > 0
+    },
+
     getEditPersonText() {
       const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
     },
 
     getFormStep2BackButtonVisible() {
-      return this.isEditPerson && this.isEditStop
+      return this.isEditPerson() && this.isEditStop()
     },
 
     getFormStep6BackButtonVisible() {
-      return this.isEditPerson && this.isEditStop && this.isEditAgencyQuestions
+      return (
+        this.isEditPerson() && this.isEditStop() && this.isEditAgencyQuestions()
+      )
     },
 
     getApiStop() {
@@ -288,9 +306,49 @@ export default {
         this.statutes,
       )
     },
+
+    isFormStep2Disabled() {
+      return !this.isEditStop() && this.isEditPerson() && this.stepIndex === 2
+    },
   },
 
   methods: {
+    getEditFromStepIndexFromLocalStorage() {
+      return localStorage.getItem('ripa_edit_form_step_index')
+    },
+
+    isEditStop() {
+      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
+      if (editFormStepIndex) {
+        return editFormStepIndex === '1'
+      }
+
+      return true
+    },
+
+    isEditPerson() {
+      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
+      if (editFormStepIndex) {
+        return (
+          editFormStepIndex === '2' ||
+          editFormStepIndex === '3' ||
+          editFormStepIndex === '4' ||
+          editFormStepIndex === '5'
+        )
+      }
+
+      return true
+    },
+
+    isEditAgencyQuestions() {
+      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
+      if (editFormStepIndex) {
+        return editFormStepIndex === '6'
+      }
+
+      return this.anyAgencyQuestions
+    },
+
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.$emit('input', this.stop)
@@ -304,9 +362,10 @@ export default {
       if (this.onAddPerson) {
         this.onAddPerson()
       }
-      this.isEditStop = false
-      this.isEditPerson = true
-      this.isEditAgencyQuestions = false
+      localStorage.setItem(
+        'ripa_edit_form_step_index',
+        this.stepIndex.toString(),
+      )
     },
 
     handleBack() {
@@ -331,9 +390,7 @@ export default {
             if (this.onStepIndexChange) {
               this.onStepIndexChange(this.stepIndex)
             }
-            this.isEditStop = true
-            this.isEditPerson = true
-            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
+            localStorage.removeItem('ripa_edit_form_step_index')
             if (this.onCancel) {
               this.onCancel()
             }
@@ -368,9 +425,10 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      this.isEditStop = false
-      this.isEditPerson = true
-      this.isEditAgencyQuestions = false
+      localStorage.setItem(
+        'ripa_edit_form_step_index',
+        this.stepIndex.toString(),
+      )
     },
 
     handleEditStop() {
@@ -378,9 +436,10 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      this.isEditStop = true
-      this.isEditPerson = false
-      this.isEditAgencyQuestions = false
+      localStorage.setItem(
+        'ripa_edit_form_step_index',
+        this.stepIndex.toString(),
+      )
     },
 
     handleEditAgencyQuestions() {
@@ -388,21 +447,24 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      this.isEditStop = false
-      this.isEditPerson = false
-      this.isEditAgencyQuestions = true
+      localStorage.setItem(
+        'ripa_edit_form_step_index',
+        this.stepIndex.toString(),
+      )
     },
 
     getNextStepIndex() {
-      if (this.isEditStop && !this.isEditPerson) {
+      if (this.isEditStop() && !this.isEditPerson()) {
+        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
-      if (!this.isEditStop && this.isEditPerson && this.stepIndex === 5) {
+      if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
+        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
-      if (this.stepIndex === 5 && !this.isEditAgencyQuestions) {
+      if (!this.isEditAgencyQuestions() && this.stepIndex === 5) {
         return 7
       }
 
@@ -420,12 +482,10 @@ export default {
 
     handleStartNew() {
       this.stepIndex = 1
+      localStorage.removeItem('ripa_edit_form_step_index')
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      this.isEditStop = true
-      this.isEditPerson = true
-      this.isEditAgencyQuestions = this.agencyQuestions.length > 0
       if (this.onCancel) {
         this.onCancel()
       }
@@ -441,10 +501,8 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            this.isEditStop = true
-            this.isEditPerson = true
-            this.isEditAgencyQuestions = this.agencyQuestions.length > 0
             this.stepIndex = this.confirmationStepIndex
+            localStorage.removeItem('ripa_edit_form_step_index')
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
@@ -455,6 +513,20 @@ export default {
         },
       })
     },
+
+    createStepTrace(index, startTimeStamp) {
+      this.stepTrace = {
+        index,
+        startTimeStamp,
+      }
+    },
+
+    updateStepTrace(endTimeStamp) {
+      if (this.stepTrace) {
+        this.stepTrace.endTimeStamp = endTimeStamp
+        this.stop.stepTrace.push(this.stepTrace)
+      }
+    },
   },
 
   watch: {
@@ -462,7 +534,18 @@ export default {
       this.stop = newVal
     },
 
-    formStepIndex(newVal) {
+    formStepIndex(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        if (newVal > 0 && oldVal > 0 && oldVal < 7) {
+          this.updateStepTrace(new Date())
+        }
+        if (newVal > 0 && newVal < 7) {
+          this.createStepTrace(newVal, new Date())
+        }
+        if (newVal === 0) {
+          this.stepTrace = null
+        }
+      }
       this.stepIndex = newVal
     },
   },
@@ -484,10 +567,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    agencyQuestions: {
-      type: Array,
-      default: () => [],
-    },
     displayBeatInput: {
       type: Boolean,
       default: false,
@@ -505,6 +584,14 @@ export default {
       default: false,
     },
     lastLocation: {
+      type: Object,
+      default: () => {},
+    },
+    lastReason: {
+      type: Object,
+      default: () => {},
+    },
+    lastResult: {
       type: Object,
       default: () => {},
     },
@@ -552,11 +639,23 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditAgencyQuestions: {
+      type: Function,
+      default: () => {},
+    },
     onEditPerson: {
       type: Function,
       default: () => {},
     },
-    onOpenFavorites: {
+    onOpenLocationFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenReasonFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenResultFavorites: {
       type: Function,
       default: () => {},
     },
@@ -568,7 +667,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSaveFavorite: {
+    onSaveLocationFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveReasonFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveResultFavorite: {
       type: Function,
       default: () => {},
     },
@@ -581,6 +688,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

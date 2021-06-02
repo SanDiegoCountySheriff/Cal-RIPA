@@ -167,8 +167,6 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import subDays from 'date-fns/subDays'
-import { format, isAfter, isBefore } from 'date-fns'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'

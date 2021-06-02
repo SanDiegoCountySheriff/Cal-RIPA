@@ -73,10 +73,10 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-text-field
+                      <ripa-date-picker
                         v-model="editedItem.startDate"
                         label="Start Date"
-                      ></v-text-field>
+                      ></ripa-date-picker>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -118,10 +118,15 @@
 </template>
 
 <script>
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import { format } from 'date-fns'
 
 export default {
   name: 'ripa-users-grid',
+
+  components: {
+    RipaDatePicker,
+  },
 
   data() {
     return {

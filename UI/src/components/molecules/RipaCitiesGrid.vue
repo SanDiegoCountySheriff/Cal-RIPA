@@ -78,10 +78,10 @@
                       </v-combobox>
                     </v-col>
                     <v-col cols="12">
-                      <v-text-field
+                      <ripa-date-picker
                         v-model="editedItem.deactivationDate"
                         label="Deactiviation Date"
-                      ></v-text-field>
+                      ></ripa-date-picker>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -135,10 +135,15 @@
 </template>
 
 <script>
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import { STATES } from '@/constants/states'
 
 export default {
   name: 'ripa-cities-grid',
+
+  components: {
+    RipaDatePicker,
+  },
 
   data() {
     return {

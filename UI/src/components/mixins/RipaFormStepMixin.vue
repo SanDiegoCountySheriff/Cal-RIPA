@@ -91,10 +91,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    agencyQuestions: {
-      type: Array,
-      default: () => [],
-    },
     loadingGps: {
       type: Boolean,
       defaeult: false,
@@ -116,6 +112,10 @@ export default {
       default: () => {},
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditAgencyQuestions: {
       type: Function,
       default: () => {},
     },

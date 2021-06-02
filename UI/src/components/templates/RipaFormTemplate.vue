@@ -4,12 +4,13 @@
       v-model="stop"
       :beats="beats"
       :county-cities="countyCities"
-      :agency-questions="agencyQuestions"
       :display-beat-input="displayBeatInput"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
       :last-location="lastLocation"
+      :last-reason="lastReason"
+      :last-result="lastResult"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -24,10 +25,15 @@
       :on-delete-person="onDeletePerson"
       :on-edit-person="onEditPerson"
       :on-gps-location="onGpsLocation"
-      :on-open-favorites="onOpenFavorites"
+      :on-open-location-favorites="onOpenLocationFavorites"
+      :on-open-reason-favorites="onOpenReasonFavorites"
+      :on-open-result-favorites="onOpenResultFavorites"
+      :on-save-location-favorite="onSaveLocationFavorite"
+      :on-save-reason-favorite="onSaveReasonFavorite"
+      :on-save-result-favorite="onSaveResultFavorite"
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
+      :on-open-template="onOpenTemplate"
       :on-step-index-change="onStepIndexChange"
       :on-submit="onSubmit"
       :on-update-user="onUpdateUser"
@@ -78,10 +84,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    agencyQuestions: {
-      type: Array,
-      default: () => [],
-    },
     displayBeatInput: {
       type: Boolean,
       default: false,
@@ -99,6 +101,14 @@ export default {
       default: false,
     },
     lastLocation: {
+      type: Object,
+      default: () => {},
+    },
+    lastReason: {
+      type: Object,
+      default: () => {},
+    },
+    lastResult: {
       type: Object,
       default: () => {},
     },
@@ -154,7 +164,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenFavorites: {
+    onOpenLocationFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenReasonFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenResultFavorites: {
       type: Function,
       default: () => {},
     },
@@ -166,7 +184,15 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSaveFavorite: {
+    onSaveLocationFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveReasonFavorite: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveResultFavorite: {
       type: Function,
       default: () => {},
     },
@@ -179,6 +205,10 @@ export default {
       default: () => {},
     },
     onGpsLocation: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

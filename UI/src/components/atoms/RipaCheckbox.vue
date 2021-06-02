@@ -1,6 +1,7 @@
 <template>
   <v-checkbox
     v-model="model"
+    :disabled="disabled"
     :label="label"
     :rules="rules"
     :hide-details="hideDetails"
@@ -38,6 +39,10 @@ export default {
 
   props: {
     value: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

@@ -3,6 +3,7 @@
     v-model="model"
     clerable
     flat
+    :disabled="disabled"
     :item-text="itemText"
     :item-value="itemValue"
     :label="label"
@@ -45,6 +46,10 @@ export default {
     value: {
       type: [String, Number],
       default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,

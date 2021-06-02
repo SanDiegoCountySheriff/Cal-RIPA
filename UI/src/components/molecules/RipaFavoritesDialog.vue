@@ -4,7 +4,6 @@
     max-width="1000px"
     :light="getLight"
     :dark="getDark"
-    persistent
   >
     <v-card>
       <v-card-title>
@@ -25,6 +24,11 @@
           </v-row>
         </v-container>
       </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="handleClose"> Cancel </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -77,6 +81,12 @@ export default {
   methods: {
     init() {
       this.favoriteName = ''
+    },
+
+    handleClose() {
+      if (this.onClose) {
+        this.onClose()
+      }
     },
   },
 

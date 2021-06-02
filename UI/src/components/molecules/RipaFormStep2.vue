@@ -3,16 +3,34 @@
     <template v-if="isSchool">
       <ripa-student
         v-model="model"
+        :disabled="disabled"
         toggle
         :on-open-statute="onOpenStatute"
       ></ripa-student>
     </template>
-    <ripa-race v-model="model" :on-open-statute="onOpenStatute"></ripa-race>
-    <ripa-gender v-model="model" :on-open-statute="onOpenStatute"></ripa-gender>
-    <ripa-age v-model="model" :on-open-statute="onOpenStatute"></ripa-age>
-    <ripa-limited-english v-model="model"></ripa-limited-english>
+    <ripa-race
+      v-model="model"
+      :disabled="disabled"
+      :on-open-statute="onOpenStatute"
+    ></ripa-race>
+    <ripa-gender
+      v-model="model"
+      :disabled="disabled"
+      :on-open-statute="onOpenStatute"
+    ></ripa-gender>
+    <ripa-age
+      v-model="model"
+      :disabled="disabled"
+      :on-open-statute="onOpenStatute"
+    ></ripa-age>
+    <ripa-limited-english
+      v-model="model"
+      :disabled="disabled"
+      :on-open-statute="onOpenStatute"
+    ></ripa-limited-english>
     <ripa-disability
       v-model="model"
+      :disabled="disabled"
       :on-open-statute="onOpenStatute"
     ></ripa-disability>
 
@@ -82,6 +100,10 @@ export default {
     backButtonVisible: {
       type: Boolean,
       default: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

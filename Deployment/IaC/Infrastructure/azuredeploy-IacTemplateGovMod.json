@@ -512,19 +512,19 @@
         "keyvault_secret_sftp_username":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]"
     },
     "resources": [
-        {
-            "condition": "[parameters('deploy_rg')]",
-            "type": "Microsoft.AppConfiguration/configurationStores",
-            "apiVersion": "2020-07-01-preview",
-            "name": "[variables('configurationStores_ripa_ac_name')]",
-            "location": "[parameters('region')]",
-            "sku": {
-                "name": "standard"
-            },
-            "properties": {
-                "encryption": {}
-            }
-        },
+        // {
+        //     "condition": "[parameters('deploy_rg')]",
+        //     "type": "Microsoft.AppConfiguration/configurationStores",
+        //     "apiVersion": "2020-07-01-preview",
+        //     "name": "[variables('configurationStores_ripa_ac_name')]",
+        //     "location": "[parameters('region')]",
+        //     "sku": {
+        //         "name": "standard"
+        //     },
+        //     "properties": {
+        //         "encryption": {}
+        //     }
+        // },
         {
             "condition": "[parameters('deploy_rg')]",
             "type": "microsoft.insights/actionGroups",
@@ -2542,10 +2542,6 @@
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
-                        },
-                        {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
                         },
@@ -2750,10 +2746,6 @@
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
                         },
                         {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
-                        },
-                        {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
                         },
@@ -2945,10 +2937,6 @@
                         {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3157,10 +3145,6 @@
                         {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3409,10 +3393,6 @@
                         {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

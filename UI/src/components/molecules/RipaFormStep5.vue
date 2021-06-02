@@ -1,6 +1,13 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-result v-model="model" :statutes="statutes"></ripa-stop-result>
+    <ripa-stop-result
+      v-model="model"
+      :last-result="lastResult"
+      :statutes="statutes"
+      :on-open-favorites="onOpenFavorites"
+      :on-open-statute="onOpenStatute"
+      :on-save-favorite="onSaveFavorite"
+    ></ripa-stop-result>
 
     <v-spacer></v-spacer>
 
@@ -71,6 +78,21 @@ export default {
       } else {
         this.handleNext()
       }
+    },
+  },
+
+  props: {
+    lastResult: {
+      type: Object,
+      default: () => {},
+    },
+    onOpenFavorites: {
+      type: Function,
+      default: () => {},
+    },
+    onSaveFavorite: {
+      type: Function,
+      default: () => {},
     },
   },
 }
