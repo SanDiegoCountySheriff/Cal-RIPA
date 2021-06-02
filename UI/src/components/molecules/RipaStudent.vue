@@ -14,6 +14,7 @@
           <ripa-switch
             v-model="model.person.isStudent"
             label="K-12 Public School Student"
+            :disabled="disabled"
             :max-width="250"
             @input="handleInput"
           ></ripa-switch>
@@ -102,6 +103,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

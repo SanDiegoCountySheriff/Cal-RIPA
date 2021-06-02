@@ -14,6 +14,7 @@
           <ripa-switch
             v-model="model.actionsTaken.anyContraband"
             label="Any Contraband or Evidence Discovered?"
+            :disabled="isAnyContrabandDisabled"
             :max-width="350"
             @input="handleInput"
           ></ripa-switch>
@@ -73,11 +74,28 @@ export default {
           'At least one contraband is required',
       ]
     },
+
+    isAnyContrabandDisabled() {
+      return (
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
+      )
+    },
   },
 
   methods: {
     handleInput() {
+      this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
+    },
+
+    updateBasisForPropertySeizureModel() {
+      if (
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
+        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
+      ) {
+        this.viewModel.actionsTaken.anyContraband = true
+      }
     },
 
     updateContrabandOrEvidenceDiscoveredModel() {

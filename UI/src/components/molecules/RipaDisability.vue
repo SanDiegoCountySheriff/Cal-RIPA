@@ -14,6 +14,7 @@
           <ripa-switch
             v-model="model.person.anyDisabilities"
             label="Any Disabilities?"
+            :disabled="disabled"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
@@ -21,6 +22,7 @@
           <template v-if="model.person.anyDisabilities">
             <ripa-check-group
               v-model="model.person.perceivedOrKnownDisability"
+              :disabled="disabled"
               :items="getDisabilityItems"
               :rules="disabilityRules"
               @input="handleInput"
@@ -113,6 +115,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

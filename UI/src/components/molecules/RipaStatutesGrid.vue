@@ -101,14 +101,14 @@
                         v-model="editedItem.bcsHierarchyCD"
                         label="BCS Hierarchy CD"
                       ></v-text-field>
-                      <v-text-field
+                      <ripa-date-picker
                         v-model="editedItem.offenseEnacted"
                         label="Offense Enacted"
-                      ></v-text-field>
-                      <v-text-field
+                      ></ripa-date-picker>
+                      <ripa-date-picker
                         v-model="editedItem.offenseRepealed"
                         label="Offense Repealed"
-                      ></v-text-field>
+                      ></ripa-date-picker>
                       <v-text-field
                         v-model="editedItem.alpsCognizantCD"
                         label="Alps Cognizant CD"
@@ -166,8 +166,14 @@
 </template>
 
 <script>
+import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+
 export default {
   name: 'ripa-statutes-grid',
+
+  components: {
+    RipaDatePicker,
+  },
 
   data() {
     return {

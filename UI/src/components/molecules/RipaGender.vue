@@ -14,6 +14,7 @@
           <v-col cols="12" sm="12">
             <ripa-radio-group
               v-model="model.person.perceivedGender"
+              :disabled="disabled"
               :items="genderItems"
               clear-selection
               @input="handleInput"
@@ -25,6 +26,7 @@
             <ripa-switch
               v-model="model.person.genderNonconforming"
               label="Gender Nonconforming"
+              :disabled="disabled"
               :max-width="250"
               @input="handleInput"
             ></ripa-switch>
@@ -94,6 +96,7 @@ export default {
 
     isPerceivedLgbtDisabled() {
       return (
+        this.disabled ||
         this.viewModel.person.perceivedGender === 3 ||
         this.viewModel.person.perceivedGender === 4
       )
@@ -126,6 +129,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }
