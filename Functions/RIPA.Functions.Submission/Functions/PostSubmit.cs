@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
@@ -82,28 +83,35 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            List<string> failedStopIds = new List<string>();
 
             foreach (var stopId in submitRequest.StopIds)
             {
+                string fileName = string.Empty;
+                var stop = new Stop();
+                DateTime dateSubmitted = DateTime.UtcNow;
                 try
                 {
-                    var stop = await _stopCosmosDbService.GetStopAsync(stopId);
-                    DateTime dateSubmitted = DateTime.UtcNow;
-                    string fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
+                    stop = await _stopCosmosDbService.GetStopAsync(stopId);
+                    fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
                     _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                     await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                 }
                 catch (Exception ex)
                 {
+                    SubmissionError submissionError = new SubmissionError()
+                    {
+                        Code = "FTS",
+                        Message = "Failed to submit to DOJ. SFTP connection, Blob Connection, or Cast failure",
+                        DateReported = dateSubmitted,
+                        ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
+                        FileName = fileName
+                    };
+                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError));
                     log.LogError($"Failure Submitting Stop with id {stopId}: {ex.Message}");
-                    failedStopIds.Add(stopId);
-                    //TODO harden and update stop with failure to submit to DOJ
                 }
-
             }
 
-            return new OkObjectResult(new { failedStopIds });
+            return new OkObjectResult(new { submissionId });
         }
 
         public class SubmitRequest

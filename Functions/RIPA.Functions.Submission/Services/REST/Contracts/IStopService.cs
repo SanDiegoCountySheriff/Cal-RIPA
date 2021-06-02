@@ -7,7 +7,7 @@ namespace RIPA.Functions.Submission.Services.REST.Contracts
     public interface IStopService
     {
         Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName);
-        Stop ErrorSubmission(Stop stop, string errorType, SubmissionError SubmissionError, string fileName);
+        Stop ErrorSubmission(Stop stop, SubmissionError SubmissionError);
         DojStop CastToDojStop(Stop stop);
 
     }

@@ -41,7 +41,9 @@ namespace RIPA.Functions.Common.Models
         [EnumMember(Value = "RecordLevelFatalError")]
         RecordLevelFatalError,
         [EnumMember(Value = "RecordLevelError")]
-        RecordLevelError
+        RecordLevelError,
+        [EnumMember(Value = "SubmissionError")]
+        SubmissionError
     }
 
     public enum SubmissionStatus
