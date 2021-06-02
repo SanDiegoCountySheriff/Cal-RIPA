@@ -5,7 +5,7 @@
       indeterminate
       color="cyan"
     ></v-progress-linear>
-    <v-layout row>
+    <v-layout v row>
       <v-flex xs12>
         <v-toolbar flat>
           <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
@@ -17,7 +17,11 @@
         </v-toolbar>
       </v-flex>
     </v-layout>
-    <v-layout row class="submissionDetail--header">
+    <v-layout
+      v-if="!currentSubmissionLoading"
+      row
+      class="submissionDetail--header"
+    >
       <v-flex xs4>
         <span class="submissionDetail--header--label">Submission ID:</span>
         <span>{{ submission.submission.id }}</span>
@@ -36,9 +40,9 @@
         }}</span>
       </v-flex>
     </v-layout>
-    <v-layout row>
-      <v-flex v-if="submission.summary.length" xs12>
-        <div class="submissionSummary">
+    <v-layout v-if="submission" row>
+      <v-flex v-if="submission" xs12>
+        <div v-if="submission.summary.length" class="submissionSummary">
           <p v-for="(errorCode, index) in submission.summary" :key="index">
             <span class="label">{{ errorCode.code }}</span>
             <span class="count">{{ errorCode.count }}</span>
@@ -50,7 +54,7 @@
           class="submissionsStopTable"
           :loading="loading"
           :headers="headers"
-          :single-select="false"
+          :hide-default-footer="true"
           :items="submission.stops"
           :server-items-length="getTotalStops"
           :search="search"
@@ -83,7 +87,7 @@
             <div class="paginationWrapper">
               <p>
                 Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                {{ submissions.summary.total }}
+                {{ submission.summary.total }}
               </p>
               <v-pagination
                 v-model="currentPage"
@@ -111,6 +115,7 @@
 
 <script>
 import { format } from 'date-fns'
+import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 
 export default {
   name: 'ripa-submission',
@@ -130,9 +135,12 @@ export default {
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
+      search: '',
       currentOffset: this.currentPage * this.itemsPerPage,
     }
   },
+
+  mixins: [RipaEditStopMixin],
 
   methods: {
     handleBackToSubmissions() {
@@ -172,15 +180,29 @@ export default {
         offset: this.itemsPerPage * (newPage - 1),
       })
     },
+    editItem(item) {
+      this.handleEditStop(item)
+    },
   },
 
   computed: {
+    getTotalStops() {
+      if (this.submission) {
+        return this.submission.stops.length
+      } else {
+        return 0
+      }
+    },
     getPaginationLength() {
-      return Math.ceil(this.submissions.summary.total / this.itemsPerPage)
+      if (this.submission) {
+        return Math.ceil(this.submission.stops.length / this.itemsPerPage)
+      } else {
+        return 0
+      }
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
-        return this.submissions.summary.total
+        return this.submission.stops.length
       } else {
         return this.currentPage - 1 + this.itemsPerPage
       }
@@ -216,6 +238,9 @@ export default {
     },
     submission: {
       type: Object,
+    },
+    loading: {
+      type: Boolean,
     },
   },
 }

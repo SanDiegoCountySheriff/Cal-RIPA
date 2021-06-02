@@ -30,10 +30,10 @@
 
         <v-flex xs12>
           <v-data-table
-            v-model="selectedItems"
             :loading="loading"
             :headers="headers"
             :items="getSubmissions"
+            :hide-default-footer="true"
             :server-items-length="getSubmissions.length"
             :search="search"
             sort-by="submissionDateStr"
@@ -58,7 +58,7 @@
               <div class="paginationWrapper">
                 <p>
                   Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                  {{ submissions.summary.total }}
+                  {{ submissions.length }}
                 </p>
                 <v-pagination
                   v-model="currentPage"
@@ -95,6 +95,7 @@
       v-if="this.$route.params.submissionId"
       :submissionId="this.$route.params.submissionId"
       :submission="currentSubmission"
+      :loading="currentSubmissionLoading"
       @submissionDetailPaginate="handleSubmissionDetailPaginate"
       @redoSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
     ></ripa-submission>
@@ -145,11 +146,11 @@ export default {
       return format(new Date(whichDate), 'yyyy-MM-dd kk:mm')
     },
     getPaginationLength() {
-      return Math.ceil(this.submissions.summary.total / this.itemsPerPage)
+      return Math.ceil(this.submissions.length / this.itemsPerPage)
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
-        return this.submissions.summary.total
+        return this.submissions.length
       } else {
         return this.currentPage - 1 + this.itemsPerPage
       }
@@ -215,6 +216,9 @@ export default {
         filters: this.getFilterStatus,
       })
     },
+    handleSubmissionDetailPaginate(pageData) {
+      this.$emit('submissionDetailPaginate', pageData)
+    },
     submissionFromDateChange(val) {
       this.submissionFromDate = val
       this.handleFilter()
@@ -240,6 +244,7 @@ export default {
 
   watch: {
     items(val) {
+      console.log(val)
       this.submissions = val
     },
     currentSubmission(val) {
@@ -250,7 +255,7 @@ export default {
   },
 
   created() {
-    this.init()
+    // this.init()
   },
 
   props: {
@@ -272,3 +277,20 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+
+  p {
+    margin: 0;
+  }
+
+  .itemsPerPageSelector {
+    max-width: 150px;
+    margin-left: 10px;
+  }
+}
+</style>

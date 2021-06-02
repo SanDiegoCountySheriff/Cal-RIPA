@@ -30,7 +30,7 @@ export default new Vuex.Store({
     adminSchools: [],
     adminStatutes: [],
     adminStops: {},
-    adminSubmissions: {},
+    adminSubmissions: [],
     adminSubmission: null,
     adminUsers: [],
     formBeats: [],
@@ -310,9 +310,9 @@ export default new Vuex.Store({
     },
     updateErrorCodeAdminSearch(state, value) {
       state.errorCodeAdminSearch = {
-        loading: false,
         ...state.errorCodeAdminSearch,
-        ...value,
+        loading: false,
+        items: value,
       }
     },
   },
@@ -976,6 +976,10 @@ export default new Vuex.Store({
         if (queryData.filters.isPiiFound !== null) {
           queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
         }
+
+        if (queryData.filters.errorCodes !== null) {
+          queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes}`
+        }
       } else {
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
         queryString = `${queryString}?Offset=0&Limit=10`
@@ -1008,14 +1012,48 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminSubmissions({ commit, state }) {
+    getAdminSubmissions({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
+        // if you send an items per page, set it, otherwise just default to 10
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
+
+        if (queryData.filters.submissionFromDate !== null) {
+          const formattedFromDate = new Date(
+            `${queryData.filters.submissionFromDate} 00:00:00Z`,
+          ).toISOString()
+          queryString = `${queryString}&StartDate=${formattedFromDate}`
+        }
+
+        if (queryData.filters.submissionToDate !== null) {
+          const formattedToDate = new Date(
+            `${queryData.filters.submissionToDate} 23:59:59Z`,
+          ).toISOString()
+          queryString = `${queryString}&EndDate=${formattedToDate}`
+        }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10`
+      }
+
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}submission/GetSubmissions`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           console.log(response.data)
           commit('updateAdminSubmissions', response.data)
@@ -1030,17 +1068,19 @@ export default new Vuex.Store({
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
-      if (pageData.offset) {
-        // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${
-          pageData.offset === null ? 0 : pageData.offset
-        }`
-      }
-      if (pageData.limit) {
-        // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Limit=${
-          pageData.limit === null ? 0 : pageData.limit
-        }`
+      if (pageData) {
+        if (pageData.offset) {
+          // if offset is null, that means you are changing a filter so restart the paging
+          queryString = `${queryString}?Offset=${
+            pageData.offset === null ? 0 : pageData.offset
+          }`
+        }
+        if (pageData.limit) {
+          // if offset is null, that means you are changing a filter so restart the paging
+          queryString = `${queryString}?Limit=${
+            pageData.limit === null ? 0 : pageData.limit
+          }`
+        }
       }
 
       return axios
@@ -1097,7 +1137,7 @@ export default new Vuex.Store({
         )
         .then(response => {
           // need to map out what the response would be
-          commit('updateErrorCodeAdminSearch', response)
+          commit('updateErrorCodeAdminSearch', response.data)
         })
         .catch(error => {
           console.log(error)

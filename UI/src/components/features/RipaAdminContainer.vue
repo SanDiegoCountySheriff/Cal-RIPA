@@ -25,6 +25,7 @@
     @handlePaginate="handlePaginate"
     @handleAdminFiltering="handleAdminFiltering"
     @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
   ></ripa-admin-template>
 </template>
 
@@ -153,15 +154,24 @@ export default {
       this.loading = false
     },
 
+    async handleSubmissionDetailPaginate(pageData) {
+      this.loading = true
+      await Promise.all([
+        this.getAdminSubmission({
+          id: pageData.submissionId,
+          ...pageData,
+        }),
+      ])
+    },
+
     async handlePaginate(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
         await Promise.all([this.getAdminStops(pageData)])
-        this.loading = false
       } else if (pageData.type === 'submission') {
         await Promise.all([this.getAdminSubmissions(pageData)])
-        this.loading = false
       }
+      this.loading = false
     },
 
     async handleAdminFiltering(filterData) {

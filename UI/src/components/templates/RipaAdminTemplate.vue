@@ -25,6 +25,7 @@
     @handlePaginate="handlePaginate"
     @handleAdminFiltering="handleAdminFiltering"
     @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
   ></ripa-admin-wrapper>
 </template>
 
@@ -57,6 +58,9 @@ export default {
     handleSubmissionDetailItemsPerPage(pageData) {
       this.$emit('handleSubmissionDetailItemsPerPage', pageData)
     },
+    handleSubmissionDetailPaginate(pageData) {
+      this.$emit('handleSubmissionDetailPaginate', pageData)
+    },
   },
 
   props: {
@@ -85,8 +89,8 @@ export default {
       default: () => {},
     },
     submissions: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     currentSubmission: {
       type: Object,

@@ -24,6 +24,7 @@
           :items="submissions"
           :currentSubmission="currentSubmission"
           @paginate="handleAdminSubmissionPagination"
+          @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
           @redoItemsPerPage="handleAdminSubmissionRedoItemsPerPage"
           @handleFilter="handleAdminSubmissionsFiltering"
           @handleSubmissionDetailItemsPerPage="
@@ -178,6 +179,9 @@ export default {
     handleSubmissionDetailItemsPerPage(pageData) {
       this.$emit('handleAdminSubmissionRedoItemsPerPage', pageData)
     },
+    handleSubmissionDetailPaginate(pageData) {
+      this.$emit('handleSubmissionDetailPaginate', pageData)
+    },
     handleAdminSubmissionsFiltering(filterData) {
       this.$emit('handleAdminFiltering', {
         type: 'submission',
@@ -212,8 +216,8 @@ export default {
       default: () => {},
     },
     submissions: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     currentSubmission: {
       type: Object,

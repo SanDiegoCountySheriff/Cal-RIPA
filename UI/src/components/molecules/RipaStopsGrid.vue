@@ -62,8 +62,8 @@
         </div>
       </v-flex>
 
-      <v-flex v-if="stops.summary" xs12>
-        <div class="stopsSummary">
+      <v-flex xs12>
+        <div v-if="stops.summary" class="stopsSummary">
           <p>
             <span class="label">Total</span>
             <span class="count">{{ stops.summary.total }}</span>
@@ -85,6 +85,13 @@
             <span class="count">{{ stops.summary.resubmitted }}</span>
           </p>
         </div>
+        <v-progress-linear
+          v-if="loading"
+          indeterminate
+          color="cyan"
+        ></v-progress-linear>
+      </v-flex>
+      <v-flex xs12>
         <v-data-table
           class="adminStopsTable"
           :loading="loading"
@@ -119,10 +126,10 @@
             </v-icon>
           </template>
           <template v-slot:footer>
-            <div class="paginationWrapper">
+            <div v-if="items.stops" class="paginationWrapper">
               <p>
                 Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                {{ stops.summary.total }}
+                {{ items.summary.total }}
               </p>
               <v-pagination
                 v-model="currentPage"
@@ -196,6 +203,7 @@ export default {
       errorsFound: false,
       officerName: null,
       selectedItems: [],
+      selectedErrorCodes: [],
       stopFromDate: null,
       stopToDate: null,
       currentStatusFilter: null,
@@ -209,19 +217,36 @@ export default {
 
   computed: {
     getStops() {
-      return this.stops.stops
+      if (this.items.stops) {
+        return this.items.stops
+      } else {
+        return []
+      }
     },
     getTotalStops() {
-      return this.stops.stops.length
+      if (this.items.stops) {
+        return this.items.stops.length
+      } else {
+        return 0
+      }
     },
     getOfficers() {
       return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
     },
     getErrorCodeSearchItems() {
-      return this.errorCodeSearch.items
+      return this.errorCodeSearch.items.map(itemObj => {
+        return {
+          text: itemObj.code,
+          value: itemObj.code,
+        }
+      })
     },
     getPaginationLength() {
-      return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+      if (this.items.stops) {
+        return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+      } else {
+        return 0
+      }
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
@@ -319,6 +344,8 @@ export default {
     }, 400),
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
+      this.selectedErrorCodes = val
+      this.handleFilter()
       console.log(val)
     },
     fromDateChange(val) {
@@ -348,6 +375,8 @@ export default {
           stopToDate: this.stopToDate,
           status: this.currentStatusFilter,
           isPiiFound: this.isPiiFound,
+          // need to make a comma delimited string out of the error codes
+          errorCodes: this.selectedErrorCodes.join(),
         },
       }
       this.$emit('handleAdminStopsFiltering', filterData)
