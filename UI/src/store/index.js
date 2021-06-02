@@ -195,18 +195,6 @@ export default new Vuex.Store({
     mappedErrorCodeAdminSearch: state => {
       return state.errorCodeAdminSearch
     },
-    mappedAgencyQuestions: state => {
-      return state.apiConfig.agencyQuestions.map(item => {
-        return {
-          maxLength: item.MaxLength,
-          label: item.Prompt,
-          hint: item.hint,
-          required: item.Required,
-          questionType: item.Type,
-          name: item.Name,
-        }
-      })
-    },
   },
 
   mutations: {
@@ -273,7 +261,7 @@ export default new Vuex.Store({
             hint: item.Hint || null,
             required: item.Required,
             questionType: item.Type,
-            name: item.Name,
+            name: item.Name || 'N/A',
           }
         })
         if (questions.length > 0) {

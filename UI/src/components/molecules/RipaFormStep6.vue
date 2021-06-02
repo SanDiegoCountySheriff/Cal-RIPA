@@ -1,21 +1,5 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <div>model.agencyQuestions: {{ model.agencyQuestions }}</div>
-    <div>agencyQuestions: {{ agencyQuestions }}</div>
-
-    <template v-if="questions.length > 0">
-      <ripa-agency-question
-        v-for="item in questions"
-        v-bind:question="item"
-        v-bind:name="item.Name"
-        v-bind:prompt="item.Prompt"
-        v-bind:hint="item.Hint"
-        v-bind:maxLength="item.MaxLength"
-        v-bind:required="item.Required"
-        >Tacos</ripa-agency-question
-      >
-    </template>
-
     <ripa-agency-questions
       v-model="model"
       :on-open-statute="onOpenStatute"
@@ -49,8 +33,6 @@
         Next
       </v-btn>
     </div>
-
-    <div>questions: {{ questions }}</div>
   </v-form>
 </template>
 
@@ -58,7 +40,6 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAgencyQuestions from '@/components/molecules/RipaAgencyQuestions'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaAgencyQuestion from '@/components/molecules/RipaAgencyQuestion'
 
 export default {
   name: 'ripa-form-step6',
@@ -74,10 +55,6 @@ export default {
     backButtonVisible: {
       type: Boolean,
       default: true,
-    },
-    questions: {
-      type: Array,
-      default: () => [],
     },
   },
 }
