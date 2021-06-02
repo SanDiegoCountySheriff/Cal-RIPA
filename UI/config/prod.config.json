@@ -11,5 +11,21 @@
 		"Subscription": "################################",
 		"DefaultCounty": "San Diego",
 		"DisplayBeatsInput": "true"
-	}
+	},
+	"AgencyQuestions": [
+		{
+			"Name": "FavoriteColor",
+			"Type": "Text",
+			"Prompt": "What is your favorite color?",
+			"MaxLength": 250,
+			"Required": true
+		},
+		{
+			"Name": "FavoriteCar",
+			"Type": "Text",
+			"Prompt": "What is your favorite car?",
+			"MaxLength": 250,
+			"Required": true
+		}
+	]
 }

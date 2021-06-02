@@ -5,6 +5,7 @@ import { schools } from './schools'
 import { statutes } from './statutes'
 import { users } from './users'
 import { favorites } from './favorites'
+import { questions } from './questions'
 
 export const adminBeats = () => {
   return beats.sort((x, y) => {
@@ -161,4 +162,8 @@ export const favoriteLocations = () => {
     const favB = y.name.toUpperCase()
     return favA < favB ? -1 : favA > favB ? 1 : 0
   })
+}
+
+export const agencyQuestions = () => {
+  return questions
 }
