@@ -477,7 +477,6 @@ export default {
 
     updateActionsTakenModel() {
       if (!this.viewModel.stopResult.anyActionsTaken) {
-        this.viewModel.stopResult.actionsTakenDuringStop1 = false
         this.viewModel.stopResult.actionsTakenDuringStop2 = false
         this.viewModel.stopResult.actionsTakenDuringStop3 = false
         this.viewModel.stopResult.actionsTakenDuringStop4 = false
@@ -493,25 +492,25 @@ export default {
     },
 
     updateWarningCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop1) {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
         this.viewModel.stopResult.warningCodes = null
       }
     },
 
     updateCitationCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
         this.viewModel.stopResult.citationCodes = null
       }
     },
 
     updateInfieldCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop4) {
         this.viewModel.stopResult.infieldCodes = null
       }
     },
 
     updateCustodiaArrestCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop5) {
+      if (!this.viewModel.stopResult.actionsTakenDuringStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
       }
     },
