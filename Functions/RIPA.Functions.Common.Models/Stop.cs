@@ -11,12 +11,13 @@ namespace RIPA.Functions.Common.Models
         public DateTime DateSubmitted { get; set; }
         public string Status { get; set; }
         public string FileName { get; set; }
-        public SubmissionError Error { get; set; }
+        public SubmissionError[] ListSubmissionError { get; set; }
     }
     public class SubmissionError
     {
         public string ErrorType { get; set; }
-        public string Error { get; set; }
+        public string Message { get; set; }
+        public string Code { get; set; }
         public DateTime DateReported { get; set; }
         public string FileName { get; set; }
     }

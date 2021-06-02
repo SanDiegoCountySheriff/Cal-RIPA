@@ -9,7 +9,6 @@
     :disabled="disabled"
     validate-on-blur
     @input="debounceInput"
-    @paste.prevent
   ></v-text-field>
 </template>
 

@@ -8,6 +8,7 @@ import {
   onePersonFullStop,
   twoPersonFullStop,
   invalidApiStop1,
+  invalidApiStop2,
 } from '../data/formStop'
 import {
   formBeats,
@@ -151,6 +152,25 @@ export const invalidOnePerson1 = () => ({
   computed: {
     getApiStop() {
       return invalidApiStop1
+    },
+  },
+  template:
+    '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
+  created() {
+    this.$vuetify.theme.dark = true
+  },
+})
+
+export const invalidOnePerson2 = () => ({
+  components: { RipaFormSummary },
+  data() {
+    return {
+      fullStop: onePersonFullStop,
+    }
+  },
+  computed: {
+    getApiStop() {
+      return invalidApiStop2
     },
   },
   template:

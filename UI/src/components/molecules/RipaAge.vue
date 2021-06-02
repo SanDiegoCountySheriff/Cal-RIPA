@@ -14,6 +14,7 @@
           <ripa-number-input
             v-model="model.person.perceivedAge"
             label="Perceived Age"
+            :disabled="disabled"
             :min="1"
             :max="1250"
             :rules="ageRules"
@@ -80,6 +81,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

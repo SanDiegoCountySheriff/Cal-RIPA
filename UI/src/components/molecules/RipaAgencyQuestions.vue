@@ -1,22 +1,23 @@
 <template>
-  <div class="ripa-no-english tw-pb-4">
-    <ripa-form-header
-      title="Limited or No English Fluency"
-      subtitle="§999.226(a)(8)"
-      :on-open-statute="onOpenStatute"
-    >
+  <div class="ripa-agency-questions tw-pb-4">
+    <ripa-form-header title="Agency Questions" :required="isRequired">
     </ripa-form-header>
 
     <v-container>
-      <v-row no-gutters>
+      <v-row
+        no-gutters
+        v-for="(question, index) in model.agencyQuestions"
+        :key="index"
+      >
         <v-col cols="12" sm="12">
-          <ripa-switch
-            v-model="model.person.perceivedLimitedEnglish"
-            label="Limited or no English fluency"
-            :disabled="disabled"
-            :max-width="300"
+          <ripa-text-input
+            v-model="question.answer"
+            :label="question.label"
+            :hint="question.hint"
+            :rules="questionRules"
             @input="handleInput"
-          ></ripa-switch>
+          >
+          </ripa-text-input>
         </v-col>
       </v-row>
     </v-container>
@@ -26,16 +27,16 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaFormMixin from '@/components/mixins/RipaFormMixin'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
-  name: 'ripa-limited-english',
+  name: 'ripa-agency-questions',
 
   mixins: [RipaFormMixin],
 
   components: {
     RipaFormHeader,
-    RipaSwitch,
+    RipaTextInput,
   },
 
   data() {
@@ -50,11 +51,21 @@ export default {
         return this.viewModel
       },
     },
+
+    isRequired() {
+      return (
+        this.viewModel.agencyQuestions.filter(item => item.required).length > 0
+      )
+    },
+
+    questionRules() {
+      return [v => !!v || 'An answer is required']
+    },
   },
 
   methods: {
     handleInput() {
-      this.$emit('input', this.viewModel)
+      this.$emit('input', this.value)
     },
   },
 
@@ -68,10 +79,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
     },
   },
 }

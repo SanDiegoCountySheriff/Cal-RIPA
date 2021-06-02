@@ -4,6 +4,11 @@ import { format } from 'date-fns'
 export default {
   methods: {
     loadModel(newValue) {
+      const updatedBlockNumber =
+        newValue.location?.blockNumber || newValue.location?.blockNumber === 0
+          ? newValue.location?.blockNumber
+          : null
+
       return {
         id: newValue.id,
         template: newValue.template,
@@ -33,7 +38,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: newValue.location?.blockNumber || null,
+          blockNumber: updatedBlockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           moreLocationOptions: newValue.location?.moreLocationOptions || false,
@@ -85,8 +90,6 @@ export default {
         },
         stopResult: {
           anyActionsTaken: newValue.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop1:
-            newValue.stopResult?.actionsTakenDuringStop1 || false,
           actionsTakenDuringStop2:
             newValue.stopResult?.actionsTakenDuringStop2 || false,
           actionsTakenDuringStop3:
@@ -105,6 +108,8 @@ export default {
             newValue.stopResult?.actionsTakenDuringStop9 || false,
           actionsTakenDuringStop10:
             newValue.stopResult?.actionsTakenDuringStop10 || false,
+          actionsTakenDuringStop11:
+            newValue.stopResult?.actionsTakenDuringStop11 || false,
           actionsTakenDuringStop12:
             newValue.stopResult?.actionsTakenDuringStop12 || false,
           actionsTakenDuringStop13:

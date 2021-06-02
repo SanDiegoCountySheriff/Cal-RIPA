@@ -4,7 +4,7 @@
       v-for="(item, index) in items"
       :key="index"
       v-model="model"
-      :disabled="item.disabled || false"
+      :disabled="disabled || item.disabled || false"
       :label="item.name"
       :value="item.value"
       :rules="rules"
@@ -46,6 +46,10 @@ export default {
     value: {
       type: Array,
       default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,

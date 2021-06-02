@@ -8,6 +8,7 @@ using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -39,7 +40,6 @@ namespace RIPA.Functions.Submission.Functions
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now}");
 
             var files = _sftpService.ListAllFiles(_sftpOutputPath);
-
             if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
             Guid correlationId = Guid.NewGuid();
@@ -89,7 +89,16 @@ namespace RIPA.Functions.Submission.Functions
                     var fileLevelFatalError = DeserializeFileLevelFatalError(line);
                     var stopId = fileLevelFatalError.FileName.Split("_")[2].Replace(".json", string.Empty);
                     var stop = await _stopCosmosDbService.GetStopAsync(stopId);
-                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError), fileLevelFatalError.ErrorMessage, fileLevelFatalError.FileName));
+                    SubmissionError submissionError = new SubmissionError
+                    {
+                        DateReported = DateTime.UtcNow,
+                        Code = "FLFE",
+                        ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError),
+                        Message = fileLevelFatalError.ErrorMessage,
+                        FileName = fileLevelFatalError.FileName
+                    };
+
+                    await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError), submissionError, fileLevelFatalError.FileName));
                 }
             }
         }
@@ -103,7 +112,15 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     var recordLevelError = DeserializeRecordLevelError(line);
                     var stop = await _stopCosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
-                    await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, type, recordLevelError.ErrorList, recordLevelError.FileName));
+                    SubmissionError submissionError = new SubmissionError
+                    {
+                        DateReported = DateTime.UtcNow,
+                        Code = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? "RLFE" : recordLevelError.ErrorList.Split(" - ")[0], //TODO process the code
+                        ErrorType = type,
+                        Message = recordLevelError.ErrorList,
+                        FileName = recordLevelError.FileName
+                    };
+                    await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, type, submissionError, recordLevelError.FileName));
                 }
             }
         }
@@ -117,7 +134,7 @@ namespace RIPA.Functions.Submission.Functions
                 FileName = values[1],
                 DateSubmitted = values[2],
                 TimeSubmitted = values[3],
-                ErrorMessage = values[4].Replace("\"",string.Empty)
+                ErrorMessage = values[4].Replace("\"", string.Empty)
             };
             return fileLevelFatalError;
         }

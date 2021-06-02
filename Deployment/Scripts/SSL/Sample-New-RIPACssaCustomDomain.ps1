@@ -1,5 +1,7 @@
 ﻿Import-Module .\New-RIPACssaCustomDomain.psm1 -Force 
 
+# az storage blob upload-batch -d '$web' --account-name 'ripacdntestwebsa'  -s './dist'
+
 $Subscription = "1340e16e-8c9e-44b7-9b12-78ed3c74211b"
 $ResourceGroupName = "shared-keep-rg"
 $CdnProfileName = "lesmcwhirter-me-cdn"

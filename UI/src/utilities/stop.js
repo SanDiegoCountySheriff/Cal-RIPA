@@ -32,26 +32,43 @@ const mappedAgencyQuestions = () => {
   })
 }
 
+const getLastLocation = () => {
+  const lastLocation = localStorage.getItem('ripa_last_location')
+  if (lastLocation) {
+    return JSON.parse(lastLocation)
+  }
+
+  return null
+}
+
+const defaultLocation = () => {
+  const lastLocation = getLastLocation()
+  if (lastLocation) {
+    return lastLocation
+  }
+  return {
+    isSchool: false,
+    school: null,
+    fullAddress: '',
+    blockNumber: null,
+    streetName: null,
+    intersection: null,
+    moreLocationOptions: false,
+    highwayExit: null,
+    landmark: null,
+    outOfCounty: false,
+    city: null,
+    beat: null,
+  }
+}
+
 export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: uniqueId(),
     template: null,
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -75,20 +92,7 @@ export const motorStop = () => {
     id: uniqueId(),
     template: 'motor',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -137,20 +141,7 @@ export const probationStop = () => {
     id: uniqueId(),
     template: 'probation',
     stepTrace: [],
-    location: {
-      isSchool: false,
-      school: null,
-      fullAddress: '',
-      blockNumber: null,
-      streetName: null,
-      intersection: null,
-      moreLocationOptions: false,
-      highwayExit: null,
-      landmark: null,
-      outOfCounty: false,
-      city: null,
-      beat: null,
-    },
+    location: defaultLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
@@ -219,40 +210,40 @@ const getSummaryLocation = apiStop => {
     })
   }
   if (apiStop.location.blockNumber) {
-    return {
+    children.push({
       header: 'Block Number',
       detail: apiStop.location.blockNumber,
-    }
+    })
   }
   if (apiStop.location.streetName) {
-    return {
+    children.push({
       header: 'Street Name',
       detail: apiStop.location.streetName,
-    }
+    })
   }
   if (apiStop.location.intersection) {
-    return {
+    children.push({
       header: 'Intersection',
       detail: apiStop.location.intersection,
-    }
+    })
   }
   if (apiStop.location.landMark) {
-    return {
+    children.push({
       header: 'Landmark',
       detail: apiStop.location.landMark,
-    }
+    })
   }
-  if (apiStop.location.city) {
-    return {
+  if (apiStop.location.city && apiStop.location.city.codes) {
+    children.push({
       header: 'City',
-      detail: apiStop.location.beat.codes.text,
-    }
+      detail: apiStop.location.city.codes.text,
+    })
   }
-  if (apiStop.location.beat) {
-    return {
+  if (apiStop.location.beat && apiStop.location.beat.codes) {
+    children.push({
       header: 'Beat',
       detail: apiStop.location.beat.codes.text,
-    }
+    })
   }
 
   return {
@@ -301,7 +292,7 @@ const getSummaryStopInResponseToCfs = apiStop => {
   return {
     level: 1,
     header: 'Stop in Response to CFS',
-    detail: apiStop.stopInResponseToCfs,
+    detail: apiStop.stopInResponseToCfs || false,
   }
 }
 
@@ -614,10 +605,10 @@ const getSummaryAgencyQuestion = (question, answer) => {
 }
 
 export const apiStopToFullStop = apiStop => {
-  const blockNumber = apiStop.location.blockNumber || null
-  const schoolNumber = apiStop.location.schoolName?.codes?.code || null
-  const cityName = apiStop.location.city?.codes?.code || null
-  const beatNumber = apiStop.location.beat?.codes?.code || null
+  const blockNumber = apiStop.location?.blockNumber || null
+  const schoolNumber = apiStop.location?.schoolName?.codes?.code || null
+  const cityName = apiStop.location?.city?.codes?.code || null
+  const beatNumber = apiStop.location?.beat?.codes?.code || null
 
   return {
     id: apiStop.id,
@@ -630,16 +621,16 @@ export const apiStopToFullStop = apiStop => {
       stopInResponseToCfs: apiStop.stopInResponseToCfs,
     },
     location: {
-      isSchool: apiStop.location.school || false,
+      isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
       blockNumber: blockNumber ? Number(blockNumber) : null,
-      streetName: apiStop.location.streetName || null,
-      intersection: apiStop.location.intersection || null,
-      moreLocationOptions: apiStop.location.toggleLocationOptions || false,
-      highwayExit: apiStop.location.highwayExit || null,
-      landmark: apiStop.location.landMark || null,
-      piiFound: apiStop.location.piiFound || false,
-      outOfCounty: apiStop.location.outOfCounty || false,
+      streetName: apiStop.location?.streetName || null,
+      intersection: apiStop.location?.intersection || null,
+      moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
+      highwayExit: apiStop.location?.highwayExit || null,
+      landmark: apiStop.location?.landMark || null,
+      piiFound: apiStop.location?.piiFound || false,
+      outOfCounty: apiStop.location?.outOfCounty || false,
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
@@ -655,7 +646,7 @@ const getFullStopPeopleListed = apiStop => {
     return {
       id: person.id,
       index: index + 1,
-      isStudent: person.isStudent,
+      isStudent: person.isStudent || false,
       perceivedRace: getKeyArray(person.listPerceivedRace),
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: person.genderNonconforming,
