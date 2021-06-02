@@ -112,10 +112,16 @@
               <v-toolbar-title class="tw-uppercase"
                 >Admin: Stops</v-toolbar-title
               >
-              <v-btn class="submitAllBtn"> Submit All Stops to DOJ </v-btn>
+              <v-btn @click="handleSubmitAll" class="submitAllBtn">
+                Submit All Stops to DOJ
+              </v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn class="submitSelectedBtn" v-if="selectedItems.length > 0">
+              <v-btn
+                @click="handleSubmitSelected"
+                class="submitSelectedBtn"
+                v-if="selectedItems.length > 0"
+              >
                 Submit Selected Stops ({{ selectedItems.length }})
               </v-btn>
             </v-toolbar>
@@ -378,6 +384,15 @@ export default {
         },
       }
       this.$emit('handleAdminStopsFiltering', filterData)
+    },
+    handleSubmitAll() {
+      this.$emit('handleSubmit', items)
+    },
+    handleSubmitSelected() {
+      const itemIds = this.selectedItems.map(itemObj => {
+        return itemObj.id
+      })
+      this.$emit('handleSubmitStops', itemIds)
     },
   },
 

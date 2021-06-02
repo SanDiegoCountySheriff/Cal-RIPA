@@ -26,6 +26,7 @@
     @handleAdminFiltering="handleAdminFiltering"
     @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
     @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+    @handleSubmitStops="handleSubmitStops"
   ></ripa-admin-template>
 </template>
 
@@ -92,6 +93,7 @@ export default {
       'getAdminSubmissions',
       'getAdminSubmission',
       'getErrorCodes',
+      'submitStops',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -237,6 +239,13 @@ export default {
       this.loading = true
       await Promise.all([this.editUser(user)])
       this.loading = false
+    },
+    async handleSubmitStops(stops) {
+      this.loading = true
+      const submissionResults = await Promise.all([this.submitStops(stops)])
+      this.loading = false
+      // need to push user to submission screen
+      this.$router.push(`/admin/submissions/${submissionResults.id}`)
     },
   },
 }

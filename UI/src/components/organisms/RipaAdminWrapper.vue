@@ -42,6 +42,7 @@
           @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
           @paginate="handleAdminStopsPagination"
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
+          @handleSubmitStops="handleSubmitStops"
         ></ripa-stops-grid>
       </v-tab-item>
 
@@ -187,6 +188,9 @@ export default {
         type: 'submission',
         ...filterData,
       })
+    },
+    handleSubmitStops(stops) {
+      this.$emit('handleSubmitStops', stops)
     },
   },
 

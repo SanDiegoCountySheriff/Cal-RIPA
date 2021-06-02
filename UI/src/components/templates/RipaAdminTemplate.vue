@@ -26,6 +26,7 @@
     @handleAdminFiltering="handleAdminFiltering"
     @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
     @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+    @handleSubmitStops="handleSubmitStops"
   ></ripa-admin-wrapper>
 </template>
 
@@ -60,6 +61,9 @@ export default {
     },
     handleSubmissionDetailPaginate(pageData) {
       this.$emit('handleSubmissionDetailPaginate', pageData)
+    },
+    handleSubmitStops(stops) {
+      this.$emit('handleSubmitStops', stops)
     },
   },
 

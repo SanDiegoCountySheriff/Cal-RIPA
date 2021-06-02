@@ -1161,6 +1161,25 @@ export default new Vuex.Store({
         })
     },
 
+    submitStops({ commit, state }, stops) {
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
+          { stopIds: stops },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // foward user to submission details screen for newly created submission
+          return response.data
+        })
+    },
+
     setAuthConfig({ commit }, value) {
       commit('updateAuthConfig', value)
     },
