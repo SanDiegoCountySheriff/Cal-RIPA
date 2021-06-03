@@ -38,7 +38,6 @@
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
       :on-submit="handleSubmit"
-      :on-update-user="handleUpdateUser"
       @input="handleInput"
     ></ripa-form-template>
 
@@ -86,6 +85,12 @@
       :on-close="handleCloseDialog"
       :on-add-favorite="handleAddResultFavorite"
     ></ripa-add-favorite-dialog>
+
+    <ripa-statute-dialog
+      :show-dialog="showStatuteDialog"
+      :statute="statute"
+      :on-close="handleCloseDialog"
+    ></ripa-statute-dialog>
   </ripa-page-container>
 </template>
 
@@ -95,6 +100,7 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaPageContainer from './RipaPageContainer'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaStopMixin from '@/components/mixins/RipaStopMixin'
 import {
   formBeats,
@@ -114,6 +120,7 @@ export default {
     RipaFavoritesDialog,
     RipaFormTemplate,
     RipaPageContainer,
+    RipaStatuteDialog,
   },
 
   data() {
@@ -127,18 +134,12 @@ export default {
         officerId: '2021050812345',
         officerName: 'Steve Pietrek',
       },
-      fullStop: {},
       isOnlineAndAuthenticated: true,
-      loadingGps: false,
-      loadingPiiStep1: false,
-      loadingPiiStep3: false,
-      loadingPiiStep4: false,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
-      stop: {},
     }
   },
 
@@ -201,30 +202,6 @@ export default {
         this.loadingPiiStep4 = false
         this.updateFullStop()
       }
-    },
-  },
-
-  watch: {
-    'stop.location.fullAddress': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateLocationForPii(newVal)
-        }
-      },
-    },
-    'stop.stopReason.reasonForStopExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateReasonForStopForPii(newVal)
-        }
-      },
-    },
-    'stop.actionsTaken.basisForSearchExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateBasisForSearchForPii(newVal)
-        }
-      },
     },
   },
 

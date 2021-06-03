@@ -14,7 +14,7 @@
             v-model="question.answer"
             :label="question.label"
             :hint="question.hint"
-            :rules="questionRules"
+            :rules="questionRules(question)"
             @input="handleInput"
           >
           </ripa-text-input>
@@ -57,15 +57,20 @@ export default {
         this.viewModel.agencyQuestions.filter(item => item.required).length > 0
       )
     },
-
-    questionRules() {
-      return [v => !!v || 'An answer is required']
-    },
   },
 
   methods: {
     handleInput() {
       this.$emit('input', this.value)
+    },
+
+    questionRules(question) {
+      return [
+        v => !!v || 'An answer is required',
+        v =>
+          (v || '').length <= question.maxLength ||
+          `Max ${question.maxLength} characters`,
+      ]
     },
   },
 
