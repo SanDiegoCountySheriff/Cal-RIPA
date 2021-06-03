@@ -32,8 +32,9 @@ stages:
           - task: Npm@1
             displayName: "npm install"
             inputs:
-              command: "install"
+              command: "Custom"
               workingDir: "UI/"
+              customCommand: "install --legacy-peer-deps --save"
 
           - task: Npm@1
             displayName: "npm build-storybook"
