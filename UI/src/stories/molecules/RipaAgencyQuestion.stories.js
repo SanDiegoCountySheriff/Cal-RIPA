@@ -1,13 +1,13 @@
-import RipaAgencyQuestion from '@/components/molecules/RipaAgencyQuestion'
+import RipaAgencyQuestions from '@/components/molecules/RipaAgencyQuestions'
 
 export default {
-  title: 'Molecules/RipaAgencyQuestion',
-  component: RipaAgencyQuestion,
+  title: 'Molecules/RipaAgencyQuestions',
+  component: RipaAgencyQuestions,
   parameters: {},
 }
 
 export const basic = () => ({
-  components: { RipaAgencyQuestion },
+  components: { RipaAgencyQuestions },
   data() {
     return {
       agencyQuestion: {
@@ -21,11 +21,11 @@ export const basic = () => ({
     }
   },
   template:
-    '<div><ripa-agency-question v-model="agencyQuestion" :question="agencyQuestion"></ripa-agency-question>{{agencyQuestion}}</div>',
+    '<div><ripa-agency-questions v-model="agencyQuestion" :question="agencyQuestion"></ripa-agency-questions>{{agencyQuestion}}</div>',
 })
 
 export const notRequired = () => ({
-  components: { RipaAgencyQuestion },
+  components: { RipaAgencyQuestions },
   data() {
     return {
       agencyQuestion: {
@@ -39,5 +39,5 @@ export const notRequired = () => ({
     }
   },
   template:
-    '<div><ripa-agency-question v-model="agencyQuestion" :question="agencyQuestion"></ripa-agency-question>{{agencyQuestion}}</div>',
+    '<div><ripa-agency-questions v-model="agencyQuestion" :question="agencyQuestion"></ripa-agency-questions>{{agencyQuestion}}</div>',
 })
