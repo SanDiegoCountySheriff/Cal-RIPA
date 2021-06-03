@@ -243,9 +243,12 @@ export default {
     async handleSubmitStops(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
+      console.log(submissionResults)
       this.loading = false
       // need to push user to submission screen
-      this.$router.push(`/admin/submissions/${submissionResults.id}`)
+      this.$router.push(
+        `/admin/submissions/${submissionResults[0].submissionId}`,
+      )
     },
   },
 }
