@@ -96,7 +96,6 @@
 
 <script>
 import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
-import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaPageContainer from './RipaPageContainer'
@@ -113,7 +112,7 @@ import {
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaStopMixin, RipaApiStopJobMixin],
+  mixins: [RipaStopMixin],
 
   components: {
     RipaAddFavoriteDialog,
@@ -125,7 +124,8 @@ export default {
 
   data() {
     return {
-      officer: {
+      displayBeatInput: true,
+      mappedUser: {
         agency: 'Insight',
         startDate: '2010-05-18',
         yearsExperience: 11,
@@ -134,7 +134,9 @@ export default {
         officerId: '2021050812345',
         officerName: 'Steve Pietrek',
       },
-      isOnlineAndAuthenticated: true,
+      isAuthenticated: false,
+      isOnlineAndAuthenticated: false,
+      isOnline: true,
       mappedFormBeats: [],
       mappedFormCountyCities: [],
       mappedFormNonCountyCities: [],

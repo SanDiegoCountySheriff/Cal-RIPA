@@ -240,5 +240,28 @@ export default {
       this.lastLocation = newVal
     },
   },
+
+  mounted() {
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+
+      this.stop = parsedStop
+      this.fullStop = parsedFullStop
+
+      if (Object.keys(this.fullStop).length > 0) {
+        this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
+      } else {
+        localStorage.removeItem('ripa_form_admin_editing')
+        localStorage.removeItem('ripa_form_editing')
+      }
+    }
+  },
 }
 </script>
