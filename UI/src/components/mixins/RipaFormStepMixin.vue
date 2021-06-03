@@ -79,6 +79,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    adminEditing: {
+      type: Boolean,
+      default: false,
+    },
     schools: {
       type: Array,
       default: () => [],

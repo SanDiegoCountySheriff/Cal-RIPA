@@ -2,6 +2,7 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
+      :admin-editing="adminEditing"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
@@ -75,6 +76,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    adminEditing: {
+      type: Boolean,
+      default: false,
     },
     beats: {
       type: Array,

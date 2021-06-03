@@ -7,9 +7,15 @@ export default {
   data() {
     return {
       favorites: [],
+      formStepIndex: 0,
+      fullStop: {},
       lastLocation: null,
       lastReason: null,
       lastResult: null,
+      loadingGps: false,
+      loadingPiiStep1: false,
+      loadingPiiStep3: false,
+      loadingPiiStep4: false,
       savedLocation: null,
       savedReason: null,
       savedResult: null,
@@ -20,10 +26,17 @@ export default {
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
       showStatuteDialog: false,
+      statute: null,
+      stop: {},
     }
   },
 
   computed: {
+    isAdminEditing() {
+      const value = localStorage.getItem('ripa_form_admin_editing')
+      return value ? value === '1' : false
+    },
+
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
@@ -198,6 +211,12 @@ export default {
       this.updateFullStop()
     },
 
+    async handleGpsLocation() {
+      this.loadingGps = true
+      await this.checkGpsLocation()
+      this.loadingGps = false
+    },
+
     handleOpenLocationFavorite(id) {
       this.showLocationFavoritesDialog = false
       const favorites = this.getFavoriteLocations()
@@ -266,6 +285,11 @@ export default {
     handleSaveResultFavorite(result) {
       this.savedResult = result
       this.showAddResultFavoriteDialog = true
+    },
+
+    handleStepIndexChange(index) {
+      this.formStepIndex = index
+      localStorage.setItem('ripa_form_step_index', index.toString())
     },
 
     handleOpenTemplate(value) {
@@ -349,6 +373,7 @@ export default {
 
     handleCancel() {
       localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_admin_editing')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
@@ -357,6 +382,69 @@ export default {
       this.formStepIndex = 0
       this.stop = null
       this.fullStop = null
+    },
+  },
+
+  mounted() {
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+
+      this.stop = parsedStop
+      this.fullStop = parsedFullStop
+
+      if (Object.keys(this.fullStop).length > 0) {
+        this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
+      } else {
+        localStorage.removeItem('ripa_form_admin_editing')
+        localStorage.removeItem('ripa_form_editing')
+      }
+    }
+  },
+
+  watch: {
+    stop(newVal) {
+      this.stop = newVal
+    },
+
+    fullStop(newVal) {
+      this.fullStop = newVal
+      if (this.formStepIndex > 0) {
+        if (this.stop) {
+          localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        }
+        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+      }
+    },
+
+    'stop.location.fullAddress': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateLocationForPii(newVal)
+        }
+      },
+    },
+
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 }

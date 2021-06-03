@@ -178,6 +178,7 @@
               <template v-if="stepIndex === 7">
                 <ripa-form-step-7
                   v-model="stop"
+                  :admin-editing="adminEditing"
                   :api-stop="getApiStop"
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
@@ -554,6 +555,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    adminEditing: {
+      type: Boolean,
+      default: false,
     },
     schools: {
       type: Array,
