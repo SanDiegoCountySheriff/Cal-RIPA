@@ -32,7 +32,7 @@ stages:
           - task: Npm@1
             displayName: "npm install"
             inputs:
-              command: "Custom"
+              command: "custom"
               workingDir: "UI/"
               customCommand: "install --legacy-peer-deps --save"
 
