@@ -289,12 +289,16 @@ export default {
 
     handleStepIndexChange(index) {
       this.formStepIndex = index
-      localStorage.setItem('ripa_form_step_index', index.toString())
+      if (index > 0) {
+        localStorage.setItem('ripa_form_step_index', index.toString())
+      } else {
+        localStorage.removeItem('ripa_form_step_index')
+      }
     },
 
     handleOpenTemplate(value) {
+      this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
-      this.formStepIndex = 1
 
       switch (value) {
         case 'motor':
@@ -379,33 +383,10 @@ export default {
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
       localStorage.removeItem('ripa_edit_form_step_index')
-      this.formStepIndex = 0
+      this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
     },
-  },
-
-  mounted() {
-    const localFormEditing = localStorage.getItem('ripa_form_editing')
-    const localStop = localStorage.getItem('ripa_form_stop')
-    const localFullStop = localStorage.getItem('ripa_form_full_stop')
-    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
-
-    if (localFormEditing) {
-      const parsedStop = JSON.parse(localStop)
-      const parsedFullStop = JSON.parse(localFullStop)
-
-      this.stop = parsedStop
-      this.fullStop = parsedFullStop
-
-      if (Object.keys(this.fullStop).length > 0) {
-        this.formStepIndex = Number(stepIndex)
-        localStorage.setItem('ripa_form_cached', '1')
-      } else {
-        localStorage.removeItem('ripa_form_admin_editing')
-        localStorage.removeItem('ripa_form_editing')
-      }
-    }
   },
 
   watch: {

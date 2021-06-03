@@ -20,7 +20,7 @@ import {
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')
-  return questions ? JSON.parse(questions) : null
+  return questions ? JSON.parse(questions) : []
 }
 
 const mappedAgencyQuestions = () => {
