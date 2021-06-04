@@ -851,6 +851,10 @@ export const fullStopToApiStop = (
   const lookupCacheDate = localStorage.getItem('ripa_cache_date')
   const formCached = localStorage.getItem('ripa_form_cached')
 
+  if (Object.keys(fullStop).length === 0) {
+    return {}
+  }
+
   return {
     agency: officer.agency,
     date: fullStop.stopDate.date,

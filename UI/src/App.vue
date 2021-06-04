@@ -23,9 +23,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.v-menu__content {
-  max-width: 500px !important;
-}
-</style>

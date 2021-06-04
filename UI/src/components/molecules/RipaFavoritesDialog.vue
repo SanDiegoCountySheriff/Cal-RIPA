@@ -1,10 +1,5 @@
 <template>
-  <v-dialog
-    v-model="model"
-    max-width="1000px"
-    :light="getLight"
-    :dark="getDark"
-  >
+  <v-dialog v-model="model" max-width="1000px">
     <v-card>
       <v-card-title>
         <span>Favorite Locations</span>
@@ -64,15 +59,6 @@ export default {
         this.viewModel = newValue
       },
     },
-
-    getLight() {
-      return this.$vuetify.theme.dark
-    },
-
-    getDark() {
-      return !this.$vuetify.theme.dark
-    },
-
     getSaveDiabled() {
       return this.favoriteName.length === 0
     },

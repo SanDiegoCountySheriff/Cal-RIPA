@@ -6,6 +6,7 @@
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
+      :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
@@ -144,6 +145,7 @@ export default {
       'mappedUser',
       'isAuthenticated',
       'displayBeatInput',
+      'displayDebugger',
     ]),
 
     getMappedUser() {
