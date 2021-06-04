@@ -20,24 +20,26 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.TextAnalytics.Functions
 {
-    public class PostCheckPiiBeta
+    public class PostCheckPiiDeprecated
     {
         private readonly IPiiTextAnalyticsService _piiTextAnalyticsService;
-        public PostCheckPiiBeta(IPiiTextAnalyticsService piiTextAnalyticsService)
+        public PostCheckPiiDeprecated(IPiiTextAnalyticsService piiTextAnalyticsService)
         {
             _piiTextAnalyticsService = piiTextAnalyticsService;
         }
 
-        [FunctionName("PostCheckPiiBeta")]
+        [FunctionName("PostCheckPiiDeprecated")]
 
-        [OpenApiOperation(operationId: "PostCheckPiiBeta", tags: new[] { "name" })]
+        [OpenApiOperation(operationId: "PostCheckPiiDeprecated", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(PiiRequest), Deprecated = false, Description = "Document is the input string you would like to be analyzed", Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(PiiResponse), Description = "Responds with a list of Pii Entities that may be PII and a redactiedText string. Uses Beta Nuget 5.1.0-beta.5")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(EntityResponse), Description = "Responds with a list of entities that may be PII and a redactiedText string.")]
 
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -60,12 +62,12 @@ namespace RIPA.Functions.TextAnalytics.Functions
                 return new BadRequestObjectResult("Must Provide Document");
             }
 
-            var piiEntities = await _piiTextAnalyticsService.GetPiiEntities(document);
-            PiiResponse piiResponse = new PiiResponse() { RedactedText = piiEntities.RedactedText, PiiEntities = new List<PiiEntity>() };
+            var categorizedEntities = await _piiTextAnalyticsService.GetCategorizedEntities(document);
+            EntityResponse entityResponse = new EntityResponse() { Entities = new List<Entity>() };
 
-            foreach (var entity in piiEntities.Where(x => x.ConfidenceScore > .75))
+            foreach (var entity in categorizedEntities.Where(x => x.ConfidenceScore > .75))
             {
-                piiResponse.PiiEntities.Add(new PiiEntity
+                entityResponse.Entities.Add(new Entity
                 {
                     EntityText = entity.Text,
                     ConfidenceScore = $"{entity.ConfidenceScore:F2}",
@@ -73,21 +75,34 @@ namespace RIPA.Functions.TextAnalytics.Functions
                 });
             }
 
-            return new OkObjectResult(piiResponse);
+            entityResponse.RedactedText = RedactText(entityResponse.Entities, document);
+
+            return new OkObjectResult(entityResponse);
         }
 
-        public class PiiResponse
+        public class EntityResponse
         {
-            public List<PiiEntity> PiiEntities { get; set; }
+            public List<Entity> Entities { get; set; }
             public string RedactedText { get; set; }
         }
 
-        public class PiiEntity
+
+        public class Entity
         {
             public string EntityText { get; set; }
             public string ConfidenceScore { get; set; }
             public string Category { get; set; }
         }
+
+        public string RedactText(List<Entity> entityList, string document)
+        {
+            foreach (var entity in entityList)
+            {
+                document = document.Replace(entity.EntityText, new string('*', entity.EntityText.Length));
+            }
+            return document;
+        }
+
     }
 }
 
