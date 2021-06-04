@@ -97,8 +97,8 @@ export default {
       default: () => {},
     },
     submissions: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     currentSubmission: {
       type: Object,

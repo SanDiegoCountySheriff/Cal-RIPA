@@ -58,7 +58,7 @@
               <div class="paginationWrapper">
                 <p>
                   Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                  {{ submissions.length }}
+                  {{ totalSubmissions }}
                 </p>
                 <v-pagination
                   v-model="currentPage"
@@ -119,6 +119,7 @@ export default {
     return {
       search: '',
       submissions: [],
+      totalSubmissions: 0,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'Submission Date', value: 'dateSubmitted' },
@@ -146,11 +147,11 @@ export default {
       return format(new Date(whichDate), 'yyyy-MM-dd kk:mm')
     },
     getPaginationLength() {
-      return Math.ceil(this.submissions.length / this.itemsPerPage)
+      return Math.ceil(this.totalSubmissions / this.itemsPerPage)
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
-        return this.submissions.length
+        return this.totalSubmissions
       } else {
         return this.currentPage - 1 + this.itemsPerPage
       }
@@ -171,10 +172,6 @@ export default {
   },
 
   methods: {
-    init() {
-      this.submissions = this.items
-    },
-
     handleGoToSubmission(whichSubmission) {
       this.currentSubmissionLoading = true
       this.$router.push(`/admin/submissions/${whichSubmission.id}`)
@@ -184,7 +181,6 @@ export default {
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
       this.$emit('redoItemsPerPage', {
-        type: 'stops',
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
       })
@@ -244,7 +240,8 @@ export default {
 
   watch: {
     items(val) {
-      this.submissions = val
+      this.submissions = val.submissions
+      this.totalSubmissions = val.total
     },
     currentSubmission(val) {
       if (val) {
@@ -253,18 +250,14 @@ export default {
     },
   },
 
-  created() {
-    // this.init()
-  },
-
   props: {
     loading: {
       type: Boolean,
       default: false,
     },
     items: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     onEdit: {
       type: Function,

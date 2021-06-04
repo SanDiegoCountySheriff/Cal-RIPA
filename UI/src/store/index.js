@@ -30,7 +30,7 @@ export default new Vuex.Store({
     adminSchools: [],
     adminStatutes: [],
     adminStops: {},
-    adminSubmissions: [],
+    adminSubmissions: {},
     adminSubmission: null,
     adminUsers: [],
     agencyQuestions: [],
@@ -238,7 +238,10 @@ export default new Vuex.Store({
       state.adminStops = items
     },
     updateAdminSubmissions(state, items) {
-      state.adminSubmissions = items
+      state.adminSubmissions = {
+        submissions: items.submissions,
+        total: items.total,
+      }
     },
     updateAdminSubmission(state, items) {
       state.adminSubmission = items
@@ -969,30 +972,32 @@ export default new Vuex.Store({
           queryData.limit === null ? 10 : queryData.limit
         }`
 
-        if (queryData.filters.stopFromDate !== null) {
-          const formattedFromDate = new Date(
-            `${queryData.filters.stopFromDate} 00:00:00Z`,
-          ).toISOString()
-          queryString = `${queryString}&StartDate=${formattedFromDate}`
-        }
+        if (queryData.filters) {
+          if (queryData.filters.stopFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.filters.stopFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
 
-        if (queryData.filters.stopToDate !== null) {
-          const formattedToDate = new Date(
-            `${queryData.filters.stopToDate} 23:59:59Z`,
-          ).toISOString()
-          queryString = `${queryString}&EndDate=${formattedToDate}`
-        }
+          if (queryData.filters.stopToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.filters.stopToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
 
-        if (queryData.filters.status !== null) {
-          queryString = `${queryString}&Status=${queryData.filters.status}`
-        }
+          if (queryData.filters.status !== null) {
+            queryString = `${queryString}&Status=${queryData.filters.status}`
+          }
 
-        if (queryData.filters.isPiiFound !== null) {
-          queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
-        }
+          if (queryData.filters.isPiiFound !== null) {
+            queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
+          }
 
-        if (queryData.filters.errorCodes !== null) {
-          queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes}`
+          if (queryData.filters.errorCodes !== null) {
+            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes}`
+          }
         }
       } else {
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
@@ -1039,19 +1044,20 @@ export default new Vuex.Store({
         queryString = `${queryString}&Limit=${
           queryData.limit === null ? 10 : queryData.limit
         }`
+        if (queryData.filters) {
+          if (queryData.filters.submissionFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.filters.submissionFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
 
-        if (queryData.filters.submissionFromDate !== null) {
-          const formattedFromDate = new Date(
-            `${queryData.filters.submissionFromDate} 00:00:00Z`,
-          ).toISOString()
-          queryString = `${queryString}&StartDate=${formattedFromDate}`
-        }
-
-        if (queryData.filters.submissionToDate !== null) {
-          const formattedToDate = new Date(
-            `${queryData.filters.submissionToDate} 23:59:59Z`,
-          ).toISOString()
-          queryString = `${queryString}&EndDate=${formattedToDate}`
+          if (queryData.filters.submissionToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.filters.submissionToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
         }
       } else {
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
@@ -1078,28 +1084,30 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminSubmission({ commit, state }, submissionId, pageData) {
+    getAdminSubmission({ commit, state }, pageData) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
-      if (pageData) {
-        if (pageData.offset) {
-          // if offset is null, that means you are changing a filter so restart the paging
-          queryString = `${queryString}?Offset=${
-            pageData.offset === null ? 0 : pageData.offset
-          }`
-        }
-        if (pageData.limit) {
-          // if offset is null, that means you are changing a filter so restart the paging
-          queryString = `${queryString}?Limit=${
-            pageData.limit === null ? 0 : pageData.limit
-          }`
-        }
+      if (pageData.offset) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          pageData.offset === null ? 0 : pageData.offset
+        }`
+      } else {
+        queryString = `${queryString}?Offset=0`
+      }
+      if (pageData.limit) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}&Limit=${
+          pageData.limit === null ? 0 : pageData.limit
+        }`
+      } else {
+        queryString = `${queryString}&Limit=10`
       }
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,

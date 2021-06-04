@@ -115,7 +115,7 @@ export default {
         this.$route.params.submissionId
       ) {
         await Promise.all([
-          this.getAdminSubmission(this.$route.params.submissionId),
+          this.getAdminSubmission({ id: this.$route.params.submissionId }),
         ])
       }
       if (tabIndex === '/admin/stops') {
@@ -150,7 +150,7 @@ export default {
       this.loading = true
       await Promise.all([
         this.getAdminSubmission({
-          id: pageData.submissionId,
+          id: pageData.id,
           ...pageData,
         }),
       ])

@@ -179,7 +179,7 @@ export default {
       })
     },
     handleSubmissionDetailItemsPerPage(pageData) {
-      this.$emit('handleAdminSubmissionRedoItemsPerPage', pageData)
+      this.$emit('handleSubmissionDetailItemsPerPage', pageData)
     },
     handleSubmissionDetailPaginate(pageData) {
       this.$emit('handleSubmissionDetailPaginate', pageData)
@@ -224,8 +224,8 @@ export default {
       default: () => {},
     },
     submissions: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     currentSubmission: {
       type: Object,
