@@ -57,5 +57,19 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
         {
             await _container.UpsertItemAsync<Models.Submission>(submission, new PartitionKey(id));
         }
+        public async Task<int> GetSubmissionsCountAsync(string queryString)
+        {
+            var query = _container.GetItemQueryIterator<int>(new QueryDefinition(queryString));
+            List<int> results = new List<int>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+
+                results.AddRange(response.ToList());
+            }
+
+            return results.FirstOrDefault();
+        }
+
     }
 }
