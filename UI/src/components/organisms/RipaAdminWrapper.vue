@@ -43,6 +43,7 @@
           @paginate="handleAdminStopsPagination"
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
           @handleSubmitStops="handleSubmitStops"
+          @handleSubmitAll="handleSubmitAll"
         ></ripa-stops-grid>
       </v-tab-item>
 
@@ -191,6 +192,9 @@ export default {
     },
     handleSubmitStops(stops) {
       this.$emit('handleSubmitStops', stops)
+    },
+    handleSubmitAll() {
+      this.$emit('handleSubmitAll')
     },
   },
 

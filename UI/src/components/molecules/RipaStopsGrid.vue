@@ -386,7 +386,7 @@ export default {
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
-      this.$emit('handleSubmit')
+      this.$emit('handleSubmitAll')
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {
