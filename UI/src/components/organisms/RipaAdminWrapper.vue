@@ -55,7 +55,7 @@
         ></ripa-users-grid>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item value="/admin/domains" id="/admin/domains">
         <v-tabs v-model="tabLevel2" show-arrows>
           <v-tab>Beats</v-tab>
           <v-tab>Cities</v-tab>
