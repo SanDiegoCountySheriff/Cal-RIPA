@@ -6,9 +6,6 @@
           <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
-          <template v-if="displayDebugger">
-            <v-btn class="tw-mb-2" text @click="handleDebugger">Debugger</v-btn>
-          </template>
           <v-stepper v-model="stepIndex">
             <v-stepper-header>
               <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -234,6 +231,10 @@
               <v-stepper-step step="7"></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
+
+          <template v-if="displayDebugger">
+            <v-btn class="tw-mt-3" text @click="handleDebugger">Debugger</v-btn>
+          </template>
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
           <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
