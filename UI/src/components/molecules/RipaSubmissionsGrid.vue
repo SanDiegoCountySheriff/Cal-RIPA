@@ -244,7 +244,6 @@ export default {
 
   watch: {
     items(val) {
-      console.log(val)
       this.submissions = val
     },
     currentSubmission(val) {

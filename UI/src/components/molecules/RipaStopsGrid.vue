@@ -197,7 +197,6 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Stop Date', value: 'stopDateTime' },
         { text: 'Status', value: 'status' },
-        { text: 'Errors Found', value: 'errorsFound' },
         { text: 'PII Found', value: 'isPiiFound' },
         { text: 'Officer Name', value: 'officerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
@@ -233,9 +232,6 @@ export default {
       } else {
         return 0
       }
-    },
-    getOfficers() {
-      return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
     },
     getErrorCodeSearchItems() {
       return this.errorCodeSearch.items.map(itemObj => {
@@ -282,7 +278,6 @@ export default {
     },
 
     handleUpdateItemsPerPage(val) {
-      console.log(val)
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
@@ -315,7 +310,6 @@ export default {
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
-      console.log(this.currentPage)
     },
     handleRowSelected(item) {
       if (item.value) {
@@ -350,7 +344,6 @@ export default {
       // need to call getStops API here with search codes
       this.selectedErrorCodes = val
       this.handleFilter()
-      console.log(val)
     },
     fromDateChange(val) {
       this.stopFromDate = val
