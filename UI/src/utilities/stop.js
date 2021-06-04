@@ -20,7 +20,7 @@ import {
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')
-  return questions ? JSON.parse(questions) : null
+  return questions ? JSON.parse(questions) : []
 }
 
 const mappedAgencyQuestions = () => {
@@ -292,7 +292,7 @@ const getSummaryStopInResponseToCfs = apiStop => {
   return {
     level: 1,
     header: 'Stop in Response to CFS',
-    detail: apiStop.stopInResponseToCfs,
+    detail: apiStop.stopInResponseToCfs || false,
   }
 }
 
@@ -605,10 +605,10 @@ const getSummaryAgencyQuestion = (question, answer) => {
 }
 
 export const apiStopToFullStop = apiStop => {
-  const blockNumber = apiStop.location.blockNumber || null
-  const schoolNumber = apiStop.location.schoolName?.codes?.code || null
-  const cityName = apiStop.location.city?.codes?.code || null
-  const beatNumber = apiStop.location.beat?.codes?.code || null
+  const blockNumber = apiStop.location?.blockNumber || null
+  const schoolNumber = apiStop.location?.schoolName?.codes?.code || null
+  const cityName = apiStop.location?.city?.codes?.code || null
+  const beatNumber = apiStop.location?.beat?.codes?.code || null
 
   return {
     id: apiStop.id,
@@ -621,16 +621,16 @@ export const apiStopToFullStop = apiStop => {
       stopInResponseToCfs: apiStop.stopInResponseToCfs,
     },
     location: {
-      isSchool: apiStop.location.school || false,
+      isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
       blockNumber: blockNumber ? Number(blockNumber) : null,
-      streetName: apiStop.location.streetName || null,
-      intersection: apiStop.location.intersection || null,
-      moreLocationOptions: apiStop.location.toggleLocationOptions || false,
-      highwayExit: apiStop.location.highwayExit || null,
-      landmark: apiStop.location.landMark || null,
-      piiFound: apiStop.location.piiFound || false,
-      outOfCounty: apiStop.location.outOfCounty || false,
+      streetName: apiStop.location?.streetName || null,
+      intersection: apiStop.location?.intersection || null,
+      moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
+      highwayExit: apiStop.location?.highwayExit || null,
+      landmark: apiStop.location?.landMark || null,
+      piiFound: apiStop.location?.piiFound || false,
+      outOfCounty: apiStop.location?.outOfCounty || false,
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
@@ -646,7 +646,7 @@ const getFullStopPeopleListed = apiStop => {
     return {
       id: person.id,
       index: index + 1,
-      isStudent: person.isStudent,
+      isStudent: person.isStudent || false,
       perceivedRace: getKeyArray(person.listPerceivedRace),
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: person.genderNonconforming,

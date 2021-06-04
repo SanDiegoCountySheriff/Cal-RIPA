@@ -7,9 +7,15 @@ export default {
   data() {
     return {
       favorites: [],
+      formStepIndex: 0,
+      fullStop: {},
       lastLocation: null,
       lastReason: null,
       lastResult: null,
+      loadingGps: false,
+      loadingPiiStep1: false,
+      loadingPiiStep3: false,
+      loadingPiiStep4: false,
       savedLocation: null,
       savedReason: null,
       savedResult: null,
@@ -20,10 +26,17 @@ export default {
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
       showStatuteDialog: false,
+      statute: null,
+      stop: {},
     }
   },
 
   computed: {
+    isAdminEditing() {
+      const value = localStorage.getItem('ripa_form_admin_editing')
+      return value ? value === '1' : false
+    },
+
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
@@ -198,6 +211,12 @@ export default {
       this.updateFullStop()
     },
 
+    async handleGpsLocation() {
+      this.loadingGps = true
+      await this.checkGpsLocation()
+      this.loadingGps = false
+    },
+
     handleOpenLocationFavorite(id) {
       this.showLocationFavoritesDialog = false
       const favorites = this.getFavoriteLocations()
@@ -268,9 +287,18 @@ export default {
       this.showAddResultFavoriteDialog = true
     },
 
+    handleStepIndexChange(index) {
+      this.formStepIndex = index
+      if (index > 0) {
+        localStorage.setItem('ripa_form_step_index', index.toString())
+      } else {
+        localStorage.removeItem('ripa_form_step_index')
+      }
+    },
+
     handleOpenTemplate(value) {
+      this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
-      this.formStepIndex = 1
 
       switch (value) {
         case 'motor':
@@ -349,14 +377,55 @@ export default {
 
     handleCancel() {
       localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_admin_editing')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_full_stop')
       localStorage.removeItem('ripa_edit_form_step_index')
-      this.formStepIndex = 0
+      this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
+    },
+  },
+
+  watch: {
+    stop(newVal) {
+      this.stop = newVal
+    },
+
+    fullStop(newVal) {
+      this.fullStop = newVal
+      if (this.formStepIndex > 0) {
+        if (this.stop) {
+          localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+        }
+        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+      }
+    },
+
+    'stop.location.fullAddress': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateLocationForPii(newVal)
+        }
+      },
+    },
+
+    'stop.stopReason.reasonForStopExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateReasonForStopForPii(newVal)
+        }
+      },
+    },
+
+    'stop.actionsTaken.basisForSearchExplanation': {
+      handler(newVal, oldVal) {
+        if (oldVal !== newVal) {
+          this.validateBasisForSearchForPii(newVal)
+        }
+      },
     },
   },
 }

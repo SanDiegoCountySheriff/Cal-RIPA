@@ -1,7 +1,5 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    {{ model.agencyQuestions }}
-
     <ripa-agency-questions
       v-model="model"
       :on-open-statute="onOpenStatute"

@@ -178,6 +178,7 @@
               <template v-if="stepIndex === 7">
                 <ripa-form-step-7
                   v-model="stop"
+                  :admin-editing="adminEditing"
                   :api-stop="getApiStop"
                   :on-add-person="handleAddPerson"
                   :on-back="handleBack"
@@ -386,11 +387,6 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            this.stepIndex = 1
-            if (this.onStepIndexChange) {
-              this.onStepIndexChange(this.stepIndex)
-            }
-            localStorage.removeItem('ripa_edit_form_step_index')
             if (this.onCancel) {
               this.onCancel()
             }
@@ -554,6 +550,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    adminEditing: {
+      type: Boolean,
+      default: false,
     },
     schools: {
       type: Array,

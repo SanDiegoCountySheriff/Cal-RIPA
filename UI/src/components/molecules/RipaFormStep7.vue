@@ -18,12 +18,20 @@
       </ripa-alert>
     </template>
 
-    <div class="tw-flex tw-mt-4 tw-justify-center">
-      <v-btn outlined color="primary" class="tw-mr-2" @click="handleAddPerson">
-        <v-icon left> mdi-plus </v-icon>
-        Add Person
-      </v-btn>
-    </div>
+    <template v-if="!adminEditing">
+      <div class="tw-flex tw-mt-4 tw-justify-center">
+        <v-btn
+          outlined
+          color="primary"
+          class="tw-mt-2"
+          @click="handleAddPerson"
+        >
+          <v-icon left> mdi-plus </v-icon>
+          Add Person
+        </v-btn>
+      </div>
+    </template>
+
     <div class="tw-flex tw-mt-8 tw-justify-center">
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel

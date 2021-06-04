@@ -32,6 +32,9 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Models.Submission>), Description = "List of Submissions")]
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range submission query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range submission query")]
+        [OpenApiParameter(name: "Offset", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "offsets the records from 0, requires limit parameter")]
+        [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
+
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("GET - Get Submissions requested");
@@ -51,7 +54,9 @@ namespace RIPA.Functions.Submission.Functions
             SubmissionQuery submissionQuery = new SubmissionQuery()
             {
                 StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
-                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default
+                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
+                Offset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default,
+                Limit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default
             };
 
             List<string> whereStatements = new List<string>();
@@ -64,6 +69,13 @@ namespace RIPA.Functions.Submission.Functions
             if (submissionQuery.EndDate != default(DateTime))
             {
                 whereStatements.Add(Environment.NewLine + $"c.dateSubmitted < '{(DateTime)submissionQuery.EndDate:o}'");
+            }
+
+            //limit 
+            var limit = string.Empty;
+            if (submissionQuery.Limit != 0)
+            {
+                limit = Environment.NewLine + $"OFFSET {submissionQuery.Offset} LIMIT {submissionQuery.Limit}";
             }
 
             string where = string.Empty;
@@ -80,14 +92,18 @@ namespace RIPA.Functions.Submission.Functions
 
             var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
 
-            var response = await _submissionCosmosDbService.GetSubmissionsAsync("SELECT * FROM c" + where + order);
+            var response = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
 
-            return new OkObjectResult(response);
+            var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c");
+
+            return new OkObjectResult(new { submissions = response, total = count });
         }
         public class SubmissionQuery
         {
             public DateTime? StartDate { get; set; }
             public DateTime? EndDate { get; set; }
+            public int Limit { get; set; }
+            public int Offset { get; set; }
         }
     }
 }

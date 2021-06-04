@@ -170,6 +170,7 @@ export default {
       localStorage.removeItem('ripa_non_county_cities')
       localStorage.removeItem('ripa_schools')
       localStorage.removeItem('ripa_statutes')
+      localStorage.removeItem('ripa_agency_questions')
       localStorage.setItem('ripa_cache_date', new Date())
     },
 

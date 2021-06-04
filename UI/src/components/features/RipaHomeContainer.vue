@@ -2,6 +2,7 @@
   <div class="ripa-home-container">
     <ripa-form-template
       v-model="stop"
+      :admin-editing="isAdminEditing"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
@@ -126,16 +127,7 @@ export default {
 
   data() {
     return {
-      formStepIndex: 0,
-      fullStop: {},
-      loadingGps: false,
-      loadingPiiStep1: false,
-      loadingPiiStep3: false,
-      loadingPiiStep4: false,
       showUserDialog: false,
-      statute: null,
-      stop: {},
-      stopIndex: 1,
     }
   },
 
@@ -153,16 +145,6 @@ export default {
       'isAuthenticated',
       'displayBeatInput',
     ]),
-
-    getAuthAndLocalStorageCheck() {
-      // if the user is NOT authenticated AND does not have a local storage cache
-      // that means they haven't logged in and must reauthenticate
-      if (!this.isAuthenticated && !localStorage.getItem('ripa_cache_date')) {
-        return false
-      } else {
-        return true
-      }
-    },
 
     getMappedUser() {
       return {
@@ -182,19 +164,8 @@ export default {
       this.showUserDialog = false
     },
 
-    async handleGpsLocation() {
-      this.loadingGps = true
-      await this.checkGpsLocation()
-      this.loadingGps = false
-    },
-
     handleSaveUser(user) {
       this.editOfficerUser(user)
-    },
-
-    handleStepIndexChange(index) {
-      this.formStepIndex = index
-      localStorage.setItem('ripa_form_step_index', index.toString())
     },
 
     handleSubmit(apiStop) {
@@ -264,6 +235,12 @@ export default {
     },
   },
 
+  watch: {
+    mappedGpsLocationAddress(newVal) {
+      this.lastLocation = newVal
+    },
+  },
+
   mounted() {
     const localFormEditing = localStorage.getItem('ripa_form_editing')
     const localStop = localStorage.getItem('ripa_form_stop')
@@ -281,53 +258,10 @@ export default {
         this.formStepIndex = Number(stepIndex)
         localStorage.setItem('ripa_form_cached', '1')
       } else {
+        localStorage.removeItem('ripa_form_admin_editing')
         localStorage.removeItem('ripa_form_editing')
       }
     }
-  },
-
-  watch: {
-    stop(newVal) {
-      this.stop = newVal
-    },
-
-    fullStop(newVal) {
-      this.fullStop = newVal
-      if (this.formStepIndex > 0) {
-        if (this.stop) {
-          localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
-        }
-        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
-      }
-    },
-
-    'stop.location.fullAddress': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateLocationForPii(newVal)
-        }
-      },
-    },
-
-    'stop.stopReason.reasonForStopExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateReasonForStopForPii(newVal)
-        }
-      },
-    },
-
-    'stop.actionsTaken.basisForSearchExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateBasisForSearchForPii(newVal)
-        }
-      },
-    },
-
-    mappedGpsLocationAddress(newVal) {
-      this.lastLocation = newVal
-    },
   },
 }
 </script>

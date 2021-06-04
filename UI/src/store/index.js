@@ -264,6 +264,7 @@ export default new Vuex.Store({
             hint: item.Hint || null,
             required: item.Required,
             questionType: item.Type,
+            name: item.Name || 'N/A',
           }
         })
         if (questions.length > 0) {
