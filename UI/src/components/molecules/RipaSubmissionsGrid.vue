@@ -95,7 +95,7 @@
       v-if="this.$route.params.submissionId"
       :submissionId="this.$route.params.submissionId"
       :submission="currentSubmission"
-      :loading="currentSubmissionLoading"
+      :loading="loading"
       @submissionDetailPaginate="handleSubmissionDetailPaginate"
       @redoSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
     ></ripa-submission>

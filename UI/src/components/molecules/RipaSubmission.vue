@@ -1,7 +1,7 @@
 <template>
-  <v-container class="tw-mt-2" fluid>
+  <v-container class="submissionDetail--container tw-mt-2" fluid>
     <v-progress-linear
-      v-if="currentSubmissionLoading"
+      v-if="loading"
       indeterminate
       color="cyan"
     ></v-progress-linear>
@@ -17,18 +17,10 @@
         </v-toolbar>
       </v-flex>
     </v-layout>
-    <v-layout
-      v-if="!currentSubmissionLoading"
-      row
-      class="submissionDetail--header"
-    >
+    <v-layout v-if="!loading" row class="submissionDetail--header">
       <v-flex xs4>
         <span class="submissionDetail--header--label">Submission ID:</span>
         <span>{{ submission.submission.id }}</span>
-      </v-flex>
-      <v-flex xs4>
-        <span class="submissionDetail--header--label">Range:</span>
-        <span>{{ submission.submission.range }}</span>
       </v-flex>
       <v-flex xs4>
         <span class="submissionDetail--header--label">Date Submitted:</span>
@@ -87,7 +79,7 @@
             <div class="paginationWrapper">
               <p>
                 Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                {{ submission.summary.total }}
+                {{ submission.submission.recordCount }}
               </p>
               <v-pagination
                 v-model="currentPage"
@@ -218,14 +210,13 @@ export default {
 
   created() {
     if (this.submissionId) {
-      this.currentSubmissionLoading = true
       // this.$emit('loadNewSubmission', newValue)
     }
   },
 
   watch: {
     submissionId(newValue, oldValue) {
-      console.log(newValue)
+      this.currentSubmissionLoading = true
       if (newValue !== oldValue) {
         this.$emit('loadNewSubmission', newValue)
       }
@@ -247,12 +238,13 @@ export default {
 </script>
 
 <style lang="scss">
-.submissionDetail--titleBar {
+.submissionDetail--container {
   button.backToSubmissionsBtn {
     margin-left: 20px;
     border: 1px solid #666;
   }
 }
+
 .submissionDetail--header {
   padding: 16px;
   span {

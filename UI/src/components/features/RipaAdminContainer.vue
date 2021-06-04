@@ -103,7 +103,6 @@ export default {
     },
 
     async handleTabChange(tabIndex) {
-      console.log(tabIndex)
       this.loading = true
       if (
         tabIndex === '/admin/submissions' &&
@@ -245,7 +244,6 @@ export default {
     async handleSubmitStops(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
-      console.log(submissionResults)
       this.loading = false
       // need to push user to submission screen
       this.$router.push(
@@ -255,10 +253,11 @@ export default {
     async handleSubmitAll(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitAllStops()])
-      console.log(submissionResults)
       this.loading = false
       // need to push user to submission screen
-      this.$router.push(`/admin/submissions`)
+      this.$router.push(
+        `/admin/submissions/${submissionResults[0].submissionId}`,
+      )
     },
   },
 }
