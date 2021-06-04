@@ -12,5 +12,6 @@ namespace RIPA.Functions.Submission.Services.CosmosDb.Contracts
         Task AddSubmissionAsync(Models.Submission submission);
         Task UpdateSubmissionAsync(string id, Models.Submission submission);
         Task DeleteSubmissionAsync(string id);
+        Task<int> GetSubmissionsCountAsync(string queryString);
     }
 }
