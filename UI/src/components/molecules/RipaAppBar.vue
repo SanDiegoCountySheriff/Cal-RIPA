@@ -83,7 +83,7 @@
           </v-tooltip>
         </template>
 
-        <v-tooltip v-if="online" bottom>
+        <v-tooltip v-if="authenticated && online" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="tw-ml-4"
@@ -93,15 +93,15 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon>{{ authenticated ? 'mdi-logout' : 'mdi-login' }}</v-icon>
+              <v-icon>'mdi-logout'</v-icon>
             </v-btn>
           </template>
-          <span>{{ authenticated ? 'Logout' : 'Login' }}</span>
+          <span>Logout</span>
         </v-tooltip>
       </div>
     </v-app-bar>
 
-    <v-banner v-if="!authenticated" single-line :sticky="true">
+    <v-banner v-if="!authenticated && online" single-line :sticky="true">
       You are not logged in. While you can initiate a new stop, you must be
       logged in to submit it.
       <template v-slot:actions>

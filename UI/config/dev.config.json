@@ -10,7 +10,8 @@
     "ServicesBaseUrl": "https://sdsd-ripa-d-apim.azure-api.us/",
     "Subscription": "f142a7cd1c0d40279ada26a42c319c94",
     "DefaultCounty": "San Diego",
-    "DisplayBeatsInput": "true"
+    "DisplayBeatsInput": "true",
+    "DisplayDebugger": "true"
   },
   "AgencyQuestions": [
     {

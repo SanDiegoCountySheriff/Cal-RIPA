@@ -1,11 +1,5 @@
 <template>
-  <v-dialog
-    v-model="modelDialog"
-    max-width="650px"
-    :light="getLight"
-    :dark="getDark"
-    persistent
-  >
+  <v-dialog v-model="modelDialog" max-width="650px" persistent>
     <v-card>
       <v-card-title>
         <span>Manage User</span>
@@ -73,14 +67,6 @@ export default {
       set(newValue) {
         this.viewModelUser = newValue
       },
-    },
-
-    getLight() {
-      return this.$vuetify.theme.dark
-    },
-
-    getDark() {
-      return !this.$vuetify.theme.dark
     },
   },
 

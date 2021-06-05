@@ -6,6 +6,7 @@
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
+      :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
@@ -90,6 +91,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    displayDebugger: {
       type: Boolean,
       default: false,
     },

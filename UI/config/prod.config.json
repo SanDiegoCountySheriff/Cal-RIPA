@@ -1,31 +1,31 @@
 {
-	"Authentication": {
-		"ClientId": "3f47a395-5d13-4781-aa63-dc5886f05bb2",
-		"AuthorityUrl": "https://login.microsoftonline.com/",
-		"TenantId": "a44e5271-a297-4daf-a3a9-f90a3146f3f5",
-		"PrimaryDomain": "californiasheriffs.onmicrosoft.com"
-	},
-	"Configuration": {
-		"Environment": "p",
-		"ServicesBaseUrl": "https://sdsd-ripa-p-apim.azure-api.us/",
-		"Subscription": "################################",
-		"DefaultCounty": "San Diego",
-		"DisplayBeatsInput": "true"
-	},
-	"AgencyQuestions": [
-		{
-			"Name": "FavoriteColor",
-			"Type": "Text",
-			"Prompt": "What is your favorite color?",
-			"MaxLength": 250,
-			"Required": true
-		},
-		{
-			"Name": "FavoriteCar",
-			"Type": "Text",
-			"Prompt": "What is your favorite car?",
-			"MaxLength": 250,
-			"Required": true
-		}
-	]
+  "Authentication": {
+    "ClientId": "3f47a395-5d13-4781-aa63-dc5886f05bb2",
+    "AuthorityUrl": "https://login.microsoftonline.com/",
+    "TenantId": "a44e5271-a297-4daf-a3a9-f90a3146f3f5",
+    "PrimaryDomain": "californiasheriffs.onmicrosoft.com"
+  },
+  "Configuration": {
+    "Environment": "p",
+    "ServicesBaseUrl": "https://sdsd-ripa-p-apim.azure-api.us/",
+    "Subscription": "################################",
+    "DefaultCounty": "San Diego",
+    "DisplayBeatsInput": "true"
+  },
+  "AgencyQuestions": [
+    {
+      "Name": "FavoriteColor",
+      "Type": "Text",
+      "Prompt": "What is your favorite color?",
+      "MaxLength": 250,
+      "Required": true
+    },
+    {
+      "Name": "FavoriteCar",
+      "Type": "Text",
+      "Prompt": "What is your favorite car?",
+      "MaxLength": 250,
+      "Required": true
+    }
+  ]
 }

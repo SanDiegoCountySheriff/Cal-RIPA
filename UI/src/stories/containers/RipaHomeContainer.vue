@@ -7,6 +7,7 @@
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
+      :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
@@ -125,6 +126,7 @@ export default {
   data() {
     return {
       displayBeatInput: true,
+      displayDebugger: true,
       mappedUser: {
         agency: 'Insight',
         startDate: '2010-05-18',

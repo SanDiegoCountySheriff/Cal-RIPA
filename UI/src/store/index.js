@@ -139,6 +139,9 @@ export default new Vuex.Store({
     displayBeatInput: state => {
       return state.apiConfig?.displayBeatInput || false
     },
+    displayDebugger: state => {
+      return state.apiConfig?.displayDebugger || false
+    },
     displayEnvironment: state => {
       return state.apiConfig?.displayEnvironment || false
     },

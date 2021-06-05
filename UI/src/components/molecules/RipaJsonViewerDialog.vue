@@ -1,14 +1,23 @@
 <template>
-  <v-dialog v-model="model" max-width="650px" persistent>
+  <v-dialog v-model="model" max-width="800px">
     <v-card>
       <v-card-title>
-        <span>Statute {{ statuteTitle }}</span>
+        <span>JSON Viewer</span>
       </v-card-title>
 
       <v-card-text>
-        <div class="ripa-statute">
-          <ripa-tree :tree-data="statuteContent"></ripa-tree>
-        </div>
+        <v-tabs v-model="tab">
+          <v-tab>DOJ Stop</v-tab>
+          <v-tab>RIPA Stop</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <ripa-json-viewer :data="apiStop"></ripa-json-viewer>
+          </v-tab-item>
+          <v-tab-item>
+            <ripa-json-viewer :data="fullStop"></ripa-json-viewer>
+          </v-tab-item>
+        </v-tabs-items>
       </v-card-text>
 
       <v-card-actions>
@@ -20,18 +29,19 @@
 </template>
 
 <script>
-import RipaTree from '@/components/molecules/RipaTree'
+import RipaJsonViewer from '@/components/molecules/RipaJsonViewer'
 
 export default {
-  name: 'ripa-statute-dialog',
+  name: 'ripa-json-viewer-dialog',
 
   components: {
-    RipaTree,
+    RipaJsonViewer,
   },
 
   data() {
     return {
       viewModel: this.showDialog,
+      tab: 0,
     }
   },
 
@@ -48,14 +58,6 @@ export default {
         }
         this.viewModel = newValue
       },
-    },
-
-    statuteTitle() {
-      return (this.statute && this.statute.statute) || ''
-    },
-
-    statuteContent() {
-      return (this.statute && this.statute.content) || []
     },
   },
 
@@ -74,13 +76,17 @@ export default {
   },
 
   props: {
+    fullStop: {
+      type: Object,
+      default: () => {},
+    },
+    apiStop: {
+      type: Object,
+      default: () => {},
+    },
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    statute: {
-      type: Object,
-      default: () => {},
     },
     onClose: {
       type: Function,
@@ -89,9 +95,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.v-dialog:not(.v-dialog--fullscreen) {
-  max-height: 600px !important;
-}
-</style>
