@@ -387,10 +387,6 @@ export default {
       if (this.onAddPerson) {
         this.onAddPerson()
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
     },
 
     handleBack() {
@@ -438,17 +434,13 @@ export default {
     },
 
     handleEditPerson(id) {
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
       this.stepIndex = 2
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
     },
 
     handleEditStop() {
@@ -456,10 +448,6 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
     },
 
     handleEditAgencyQuestions() {
@@ -467,20 +455,14 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
     },
 
     getNextStepIndex() {
       if (this.isEditStop() && !this.isEditPerson()) {
-        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
       if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
-        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
@@ -493,7 +475,6 @@ export default {
 
     handleNext() {
       this.stepIndex = this.getNextStepIndex()
-
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -521,6 +502,9 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = this.confirmationStepIndex
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
@@ -565,6 +549,9 @@ export default {
         }
       }
       this.stepIndex = newVal
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
     },
   },
 

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RipaHomeContainer from '@/components/features/RipaHomeContainer.vue'
-import RipaAdminContainer from '@/components/features/RipaAdminContainer.vue'
+import RipaFormContainer from '@/components/features/RipaFormContainer'
+import RipaAdminContainer from '@/components/features/RipaAdminContainer'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: RipaHomeContainer,
+    component: RipaFormContainer,
     meta: {
       requiresAuthentication: true,
     },
@@ -20,7 +20,7 @@ const routes = [
     name: 'Admin',
     component: () =>
       import(
-        /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer.vue'
+        /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer'
       ),
     meta: {
       requiresAuthentication: true,
@@ -67,7 +67,7 @@ const routes = [
     name: 'Stops',
     component: () =>
       import(
-        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer.vue'
+        /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer'
       ),
     meta: {
       requiresAuthentication: true,

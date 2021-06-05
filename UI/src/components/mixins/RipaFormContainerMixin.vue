@@ -294,6 +294,10 @@ export default {
       } else {
         localStorage.removeItem('ripa_form_step_index')
       }
+
+      if (index === 7) {
+        localStorage.removeItem('ripa_edit_form_step_index')
+      }
     },
 
     handleOpenTemplate(value) {
