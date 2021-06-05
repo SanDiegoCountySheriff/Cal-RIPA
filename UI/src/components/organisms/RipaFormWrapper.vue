@@ -502,7 +502,6 @@ export default {
 
     handleStartNew() {
       this.stepIndex = 1
-      localStorage.removeItem('ripa_edit_form_step_index')
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -522,7 +521,6 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = this.confirmationStepIndex
-            localStorage.removeItem('ripa_edit_form_step_index')
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
