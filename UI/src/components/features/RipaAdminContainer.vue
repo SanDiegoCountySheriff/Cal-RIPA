@@ -23,7 +23,11 @@
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
     @handleRedoItemsPerPage="handleRedoItemsPerPage"
     @handlePaginate="handlePaginate"
-    @handleAdminStopsFiltering="handleAdminStopsFiltering"
+    @handleAdminFiltering="handleAdminFiltering"
+    @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+    @handleSubmitStops="handleSubmitStops"
+    @handleSubmitAll="handleSubmitAll"
   ></ripa-admin-template>
 </template>
 
@@ -48,7 +52,6 @@ export default {
     '$route.params': {
       handler: function (params) {
         if (params.submissionId) {
-          console.log('new route with submission id')
           this.handleTabChange('/admin/submissions')
         }
       },
@@ -91,6 +94,8 @@ export default {
       'getAdminSubmissions',
       'getAdminSubmission',
       'getErrorCodes',
+      'submitStops',
+      'submitAllStops',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -98,7 +103,6 @@ export default {
     },
 
     async handleTabChange(tabIndex) {
-      console.log(tabIndex)
       this.loading = true
       if (
         tabIndex === '/admin/submissions' &&
@@ -111,7 +115,7 @@ export default {
         this.$route.params.submissionId
       ) {
         await Promise.all([
-          this.getAdminSubmission(this.$route.params.submissionId),
+          this.getAdminSubmission({ id: this.$route.params.submissionId }),
         ])
       }
       if (tabIndex === '/admin/stops') {
@@ -136,21 +140,52 @@ export default {
       if (pageData.type === 'stops') {
         await Promise.all([this.getAdminStops(pageData)])
         this.loading = false
+      } else if (pageData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(pageData)])
+        this.loading = false
       }
+    },
+
+    async handleSubmissionDetailItemsPerPage(pageData) {
+      this.loading = true
+      await Promise.all([
+        this.getAdminSubmission({
+          id: pageData.id,
+          ...pageData,
+        }),
+      ])
+      this.loading = false
+    },
+
+    async handleSubmissionDetailPaginate(pageData) {
+      this.loading = true
+      await Promise.all([
+        this.getAdminSubmission({
+          id: pageData.submissionId,
+          ...pageData,
+        }),
+      ])
     },
 
     async handlePaginate(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
         await Promise.all([this.getAdminStops(pageData)])
-        this.loading = false
+      } else if (pageData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(pageData)])
       }
+      this.loading = false
     },
 
-    async handleAdminStopsFiltering(filterData) {
+    async handleAdminFiltering(filterData) {
       this.loading = true
-      await Promise.all([this.getAdminStops(filterData)])
-      this.loading = false
+      if (filterData.type === 'stops') {
+        await Promise.all([this.getAdminStops(filterData)])
+        this.loading = false
+      } else if (filterData.type === 'submission') {
+        await Promise.all([this.getAdminSubmissions(filterData)])
+        this.loading = false
+      }
     },
 
     async handleDeleteBeat(beat) {
@@ -205,6 +240,24 @@ export default {
       this.loading = true
       await Promise.all([this.editUser(user)])
       this.loading = false
+    },
+    async handleSubmitStops(stops) {
+      this.loading = true
+      const submissionResults = await Promise.all([this.submitStops(stops)])
+      this.loading = false
+      // need to push user to submission screen
+      this.$router.push(
+        `/admin/submissions/${submissionResults[0].submissionId}`,
+      )
+    },
+    async handleSubmitAll(stops) {
+      this.loading = true
+      const submissionResults = await Promise.all([this.submitAllStops()])
+      this.loading = false
+      // need to push user to submission screen
+      this.$router.push(
+        `/admin/submissions/${submissionResults[0].submissionId}`,
+      )
     },
   },
 }

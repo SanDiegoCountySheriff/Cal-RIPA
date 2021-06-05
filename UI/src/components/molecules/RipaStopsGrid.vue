@@ -62,8 +62,8 @@
         </div>
       </v-flex>
 
-      <v-flex v-if="stops.summary" xs12>
-        <div class="stopsSummary">
+      <v-flex xs12>
+        <div v-if="stops.summary" class="stopsSummary">
           <p>
             <span class="label">Total</span>
             <span class="count">{{ stops.summary.total }}</span>
@@ -85,6 +85,13 @@
             <span class="count">{{ stops.summary.resubmitted }}</span>
           </p>
         </div>
+        <v-progress-linear
+          v-if="loading"
+          indeterminate
+          color="cyan"
+        ></v-progress-linear>
+      </v-flex>
+      <v-flex xs12>
         <v-data-table
           class="adminStopsTable"
           :loading="loading"
@@ -105,10 +112,16 @@
               <v-toolbar-title class="tw-uppercase"
                 >Admin: Stops</v-toolbar-title
               >
-              <v-btn class="submitAllBtn"> Submit All Stops to DOJ </v-btn>
+              <v-btn @click="handleSubmitAll" class="submitAllBtn">
+                Submit All Stops to DOJ
+              </v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn class="submitSelectedBtn" v-if="selectedItems.length > 0">
+              <v-btn
+                @click="handleSubmitSelected"
+                class="submitSelectedBtn"
+                v-if="selectedItems.length > 0"
+              >
                 Submit Selected Stops ({{ selectedItems.length }})
               </v-btn>
             </v-toolbar>
@@ -119,10 +132,10 @@
             </v-icon>
           </template>
           <template v-slot:footer>
-            <div class="paginationWrapper">
+            <div v-if="items.stops" class="paginationWrapper">
               <p>
                 Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                {{ stops.summary.total }}
+                {{ items.summary.total }}
               </p>
               <v-pagination
                 v-model="currentPage"
@@ -184,7 +197,6 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Stop Date', value: 'stopDateTime' },
         { text: 'Status', value: 'status' },
-        { text: 'Errors Found', value: 'errorsFound' },
         { text: 'PII Found', value: 'isPiiFound' },
         { text: 'Officer Name', value: 'officerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
@@ -194,6 +206,7 @@ export default {
       errorsFound: false,
       officerName: null,
       selectedItems: [],
+      selectedErrorCodes: [],
       stopFromDate: null,
       stopToDate: null,
       currentStatusFilter: null,
@@ -207,19 +220,33 @@ export default {
 
   computed: {
     getStops() {
-      return this.stops.stops
+      if (this.items.stops) {
+        return this.items.stops
+      } else {
+        return []
+      }
     },
     getTotalStops() {
-      return this.stops.stops.length
-    },
-    getOfficers() {
-      return ['Bob', 'Joe', 'John', 'Sally', 'Mary', 'Jane']
+      if (this.items.stops) {
+        return this.items.stops.length
+      } else {
+        return 0
+      }
     },
     getErrorCodeSearchItems() {
-      return this.errorCodeSearch.items
+      return this.errorCodeSearch.items.map(itemObj => {
+        return {
+          text: itemObj.code,
+          value: itemObj.code,
+        }
+      })
     },
     getPaginationLength() {
-      return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+      if (this.items.stops) {
+        return Math.ceil(this.stops.summary.total / this.itemsPerPage)
+      } else {
+        return 0
+      }
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
@@ -240,7 +267,7 @@ export default {
         isPiiFound: this.isPiiFound,
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
-        currentStatusFilter: this.currentStatusFilter,
+        status: this.currentStatusFilter,
       }
     },
   },
@@ -251,7 +278,6 @@ export default {
     },
 
     handleUpdateItemsPerPage(val) {
-      console.log(val)
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
@@ -284,7 +310,6 @@ export default {
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
-      console.log(this.currentPage)
     },
     handleRowSelected(item) {
       if (item.value) {
@@ -317,7 +342,8 @@ export default {
     }, 400),
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
-      console.log(val)
+      this.selectedErrorCodes = val
+      this.handleFilter()
     },
     fromDateChange(val) {
       this.stopFromDate = val
@@ -346,11 +372,20 @@ export default {
           stopToDate: this.stopToDate,
           status: this.currentStatusFilter,
           isPiiFound: this.isPiiFound,
+          // need to make a comma delimited string out of the error codes
+          errorCodes: this.selectedErrorCodes.join(),
         },
       }
       this.$emit('handleAdminStopsFiltering', filterData)
-      // console.log(filterStatus)
-      console.log('filter')
+    },
+    handleSubmitAll() {
+      this.$emit('handleSubmitAll')
+    },
+    handleSubmitSelected() {
+      const itemIds = this.selectedItems.map(itemObj => {
+        return itemObj.id
+      })
+      this.$emit('handleSubmitStops', itemIds)
     },
   },
 
