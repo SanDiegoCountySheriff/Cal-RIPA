@@ -19,7 +19,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-dupe-keys': 'warn',
     'no-labels': 'off',
-    'no-nested-ternary': 'warn',
+    'no-nested-ternary': 'off',
     'no-prototype-builtins': 'warn',
     'no-return-await': 'warn',
     'no-sequences': 'off',
