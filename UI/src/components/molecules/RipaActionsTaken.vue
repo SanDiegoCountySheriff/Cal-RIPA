@@ -310,20 +310,20 @@ export default {
     handleInput() {
       this.updateActionsTakenModel()
       this.updatePropertyWasSeizedModel()
-      this.updateActionsSearchModel()
+      this.updateActionsTakenSearchModel()
       this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   mounted() {
-    this.updateActionsSearchModel()
+    this.updateActionsTakenSearchModel()
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.updateModel(newVal)
-      this.updateActionsSearchModel()
+      this.updateActionsTakenSearchModel()
     },
 
     'value.actionsTaken.basisForSearchPiiFound': {

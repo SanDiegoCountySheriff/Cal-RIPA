@@ -124,44 +124,19 @@ export default {
       }
     },
 
-    updateSchoolModel() {
-      if (!this.viewModel.location.isSchool) {
-        this.viewModel.person.isStudent = false
-      }
-    },
-
-    updateFullAddressModel() {
-      const streetName = this.viewModel.location?.streetName || ''
-      const highwayExit = this.viewModel.location?.highwayExit || ''
-      const intersection = this.viewModel.location?.intersection || ''
-      const landMark = this.viewModel.location?.landMark || ''
-      const fullAddress =
-        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
-      this.viewModel.location.fullAddress = fullAddress
-    },
-
-    updateBlockNumberModel() {
+    clearContrabandOrEvidenceDiscoveredModel() {
       this.$nextTick(() => {
-        let blockNumber = this.viewModel.location.blockNumber
-        blockNumber = Math.floor(blockNumber / 100) * 100
-        this.viewModel.location.blockNumber = blockNumber
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
       })
     },
 
-    updateOutOfCountyModel() {
-      this.$nextTick(() => {
-        if (this.viewModel.location.outOfCounty) {
-          this.viewModel.location.beat = 999
-          this.viewModel.location.city = null
-        }
+    clearDisabilityModel() {
+      this.viewModel.person.anyDisabilities = false
+    },
 
-        if (
-          !this.viewModel.location.outOfCounty &&
-          this.viewModel.location.beat === 999
-        ) {
-          this.viewModel.location.beat = null
-          this.viewModel.location.city = null
-        }
+    clearPerceivedOrKnownDisabilityModel() {
+      this.$nextTick(() => {
+        this.viewModel.person.perceivedOrKnownDisability = []
       })
     },
 
@@ -177,20 +152,7 @@ export default {
       }
     },
 
-    updatePropertyWasSeizedModel() {
-      if (!this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.basisForPropertySeizure = null
-        this.viewModel.actionsTaken.typeOfPropertySeized = null
-        this.viewModel.actionsTaken.anyContraband = false
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
-      }
-
-      if (this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.anyContraband = true
-      }
-    },
-
-    updateActionsSearchModel() {
+    updateActionsTakenSearchModel() {
       if (this.viewModel.stopReason) {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.isAnyActionsTakenDisabled1 = true
@@ -247,15 +209,38 @@ export default {
       }
     },
 
-    clearContrabandOrEvidenceDiscoveredModel() {
+    updateBlockNumberModel() {
       this.$nextTick(() => {
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
+        let blockNumber = this.viewModel.location.blockNumber
+        blockNumber = Math.floor(blockNumber / 100) * 100
+        this.viewModel.location.blockNumber = blockNumber
       })
     },
 
-    clearPerceivedOrKnownDisabilityModel() {
+    updateFullAddressModel() {
+      const streetName = this.viewModel.location?.streetName || ''
+      const highwayExit = this.viewModel.location?.highwayExit || ''
+      const intersection = this.viewModel.location?.intersection || ''
+      const landMark = this.viewModel.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.viewModel.location.fullAddress = fullAddress
+    },
+
+    updateOutOfCountyModel() {
       this.$nextTick(() => {
-        this.viewModel.person.perceivedOrKnownDisability = []
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
+
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
       })
     },
 
@@ -265,6 +250,25 @@ export default {
         this.viewModel.person.perceivedGender === 4
       ) {
         this.viewModel.person.perceivedLgbt = true
+      }
+    },
+
+    updatePropertyWasSeizedModel() {
+      if (!this.viewModel.actionsTaken.propertyWasSeized) {
+        this.viewModel.actionsTaken.basisForPropertySeizure = null
+        this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.anyContraband = false
+        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
+      }
+
+      if (this.viewModel.actionsTaken.propertyWasSeized) {
+        this.viewModel.actionsTaken.anyContraband = true
+      }
+    },
+
+    updateSchoolModel() {
+      if (!this.viewModel.location.isSchool) {
+        this.viewModel.person.isStudent = false
       }
     },
 
@@ -385,10 +389,6 @@ export default {
       if (!this.viewModel.stopResult.actionsTakenDuringStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
       }
-    },
-
-    clearDisabilityModel() {
-      this.viewModel.person.anyDisabilities = false
     },
   },
 
