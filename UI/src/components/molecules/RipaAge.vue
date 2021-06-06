@@ -29,14 +29,14 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import { AGES } from '@/constants/form'
 
 export default {
   name: 'ripa-age',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       ageItems: AGES,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -73,7 +73,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
   },
 

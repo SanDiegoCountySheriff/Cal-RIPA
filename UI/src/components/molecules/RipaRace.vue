@@ -27,14 +27,14 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaCheckGroup,
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       raceItems: RACES,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -69,7 +69,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
   },
 

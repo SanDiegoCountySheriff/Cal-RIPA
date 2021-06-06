@@ -162,7 +162,7 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -179,7 +179,7 @@ import {
 export default {
   name: 'ripa-stop-reason',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -207,7 +207,7 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -311,75 +311,10 @@ export default {
     },
 
     handleInput() {
-      this.updateReasonForStopModel()
-      this.updateSearchModel()
+      this.updateStopReasonModel()
+      this.updateStopReasonSearchModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
-    },
-
-    updateReasonForStopModel() {
-      if (this.viewModel.stopReason.reasonForStop === 1) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = null
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-      }
-
-      if (this.viewModel.stopReason.reasonForStop === 2) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-      }
-
-      if (this.viewModel.stopReason.reasonForStop === 7) {
-        this.viewModel.stopReason.reasonableSuspicion = null
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-      }
-    },
-
-    updateSearchModel() {
-      if (this.viewModel.stopReason.reasonForStop !== 6) {
-        this.viewModel.stopReason.searchOfPerson = false
-        this.viewModel.stopReason.searchOfProperty = false
-      }
-
-      if (this.viewModel.stopReason.reasonForStop === 6) {
-        if (this.viewModel.stopReason.searchOfPerson) {
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
-            -1
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
-          }
-        } else {
-          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop =
-              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-                item => item !== 18,
-              )
-          }
-        }
-        if (this.viewModel.stopReason.searchOfProperty) {
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
-            -1
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
-          }
-        } else {
-          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop =
-              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-                item => item !== 20,
-              )
-          }
-        }
-      }
     },
 
     handleSaveFavorite() {
@@ -392,7 +327,7 @@ export default {
   watch: {
     value(newVal) {
       this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     lastReason(newVal) {

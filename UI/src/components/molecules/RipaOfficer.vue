@@ -40,13 +40,13 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import { OFFICER_ASSIGNMENTS } from '@/constants/form'
 
 export default {
   name: 'ripa-officer',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,

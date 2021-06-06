@@ -142,7 +142,7 @@
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -158,7 +158,7 @@ import {
 export default {
   name: 'ripa-action-taken',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -183,7 +183,7 @@ export default {
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -310,102 +310,20 @@ export default {
     handleInput() {
       this.updateActionsTakenModel()
       this.updatePropertyWasSeizedModel()
-      this.updateSearchModel()
+      this.updateActionsSearchModel()
       this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateActionsTakenModel() {
-      if (!this.viewModel.actionsTaken.anyActionsTaken) {
-        this.viewModel.actionsTaken.actionsTakenDuringStop = null
-        this.viewModel.actionsTaken.propertyWasSeized = false
-        this.viewModel.actionsTaken.personSearchConsentGiven = false
-        this.viewModel.actionsTaken.propertySearchConsentGiven = false
-        this.viewModel.actionsTaken.basisForSearch = null
-        this.viewModel.actionsTaken.basisForSearchExplanation = null
-        this.viewModel.actionsTaken.basisForSearchPiiFound = false
-      }
-    },
-
-    updatePropertyWasSeizedModel() {
-      if (!this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.basisForPropertySeizure = null
-        this.viewModel.actionsTaken.typeOfPropertySeized = null
-        this.viewModel.actionsTaken.anyContraband = false
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
-      }
-
-      if (this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.anyContraband = true
-      }
-    },
-
-    updateSearchModel() {
-      if (this.viewModel.stopReason) {
-        if (this.viewModel.stopReason.searchOfPerson) {
-          this.isAnyActionsTakenDisabled1 = true
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
-            -1
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
-          }
-        }
-        if (this.viewModel.stopReason.searchOfProperty) {
-          this.isAnyActionsTakenDisabled2 = true
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
-            -1
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
-          }
-        }
-      }
-
-      if (
-        this.viewModel.actionsTaken.actionsTakenDuringStop &&
-        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)
-      ) {
-        this.viewModel.actionsTaken.personSearchConsentGiven = false
-      }
-
-      if (
-        this.viewModel.actionsTaken.actionsTakenDuringStop &&
-        !this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
-      ) {
-        this.viewModel.actionsTaken.propertySearchConsentGiven = false
-      }
-
-      if (
-        !this.viewModel.actionsTaken.personSearchConsentGiven &&
-        !this.viewModel.actionsTaken.propertySearchConsentGiven
-      ) {
-        this.viewModel.actionsTaken.basisForSearch = null
-        this.viewModel.actionsTaken.basisForSearchExplanation = null
-        this.viewModel.actionsTaken.basisForSearchPiiFound = false
-      }
-    },
-
-    updateBasisForPropertySeizureModel() {
-      if (
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
-      ) {
-        this.viewModel.actionsTaken.anyContraband = true
-      }
     },
   },
 
   mounted() {
-    this.updateSearchModel()
+    this.updateActionsSearchModel()
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
-      this.updateSearchModel()
+      this.viewModel = this.updateModel(newVal)
+      this.updateActionsSearchModel()
     },
 
     'value.actionsTaken.basisForSearchPiiFound': {

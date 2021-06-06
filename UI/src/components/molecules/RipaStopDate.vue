@@ -66,7 +66,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -77,7 +77,7 @@ import { dateWithinLastHours, dateNotInFuture } from '@/utilities/dates'
 export default {
   name: 'ripa-stop-date',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -110,7 +110,7 @@ export default {
           (v >= 1 && v <= 1440) ||
           'Duration must be between 1 and 1440 minutes',
       ],
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -140,7 +140,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
   },
 

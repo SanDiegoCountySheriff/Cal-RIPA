@@ -278,14 +278,14 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { STOP_RESULTS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -298,7 +298,7 @@ export default {
   data() {
     return {
       stopResultItems: STOP_RESULTS,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -418,11 +418,11 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateActionsTakenModel()
-      this.updateWarningCodesModel()
-      this.updateCitationCodesModel()
-      this.updateInfieldCodesModel()
-      this.updateCustodiaArrestCodesModel()
+      this.updateStopResultActionsTakenModel()
+      this.updateStopResultWarningCodesModel()
+      this.updateStopResultCitationCodesModel()
+      this.updateStopResultInfieldCodesModel()
+      this.updateStopResultCustodiaArrestCodesModel()
       this.$emit('input', this.viewModel)
     },
 
@@ -475,46 +475,6 @@ export default {
       }
     },
 
-    updateActionsTakenModel() {
-      if (!this.viewModel.stopResult.anyActionsTaken) {
-        this.viewModel.stopResult.actionsTakenDuringStop2 = false
-        this.viewModel.stopResult.actionsTakenDuringStop3 = false
-        this.viewModel.stopResult.actionsTakenDuringStop4 = false
-        this.viewModel.stopResult.actionsTakenDuringStop5 = false
-        this.viewModel.stopResult.actionsTakenDuringStop6 = false
-        this.viewModel.stopResult.actionsTakenDuringStop7 = false
-        this.viewModel.stopResult.actionsTakenDuringStop8 = false
-        this.viewModel.stopResult.actionsTakenDuringStop9 = false
-        this.viewModel.stopResult.actionsTakenDuringStop10 = false
-        this.viewModel.stopResult.actionsTakenDuringStop12 = false
-        this.viewModel.stopResult.actionsTakenDuringStop13 = false
-      }
-    },
-
-    updateWarningCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
-        this.viewModel.stopResult.warningCodes = null
-      }
-    },
-
-    updateCitationCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
-        this.viewModel.stopResult.citationCodes = null
-      }
-    },
-
-    updateInfieldCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop4) {
-        this.viewModel.stopResult.infieldCodes = null
-      }
-    },
-
-    updateCustodiaArrestCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop6) {
-        this.viewModel.stopResult.custodialArrestCodes = null
-      }
-    },
-
     handleSaveFavorite() {
       if (this.onSaveFavorite) {
         this.onSaveFavorite(this.viewModel.stopResult)
@@ -524,7 +484,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     lastResult(newVal) {
