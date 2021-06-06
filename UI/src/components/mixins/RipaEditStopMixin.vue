@@ -12,7 +12,10 @@ export default {
       localStorage.setItem('ripa_form_edit_route', route)
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))
       localStorage.setItem('ripa_form_full_stop', JSON.stringify(fullStop))
-      localStorage.setItem('ripa_form_orig_api_stop', JSON.stringify(apiStop))
+      localStorage.setItem(
+        'ripa_form_submitted_api_stop',
+        JSON.stringify(apiStop),
+      )
     },
   },
 }
