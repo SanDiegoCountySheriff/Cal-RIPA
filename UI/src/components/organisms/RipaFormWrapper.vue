@@ -330,6 +330,22 @@ export default {
   },
 
   methods: {
+    getAuditRecord() {
+      const newApiStop = this.getApiStop
+      const oldApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
+      const explanation = this.stop.editStopExplanation || null
+      const officerId = newApiStop.officerId
+
+      return {
+        id: new Date().getTime(),
+        officerId,
+        editStopExplanation: explanation,
+        submitTimestamp: new Date(),
+        oldApiStop: oldApiStop ? JSON.parse(oldApiStop) : null,
+        newApiStop,
+      }
+    },
+
     handleDebugger() {
       this.showDialog = true
     },
@@ -537,8 +553,13 @@ export default {
             if (this.onStepIndexChange) {
               this.onStepIndexChange(this.stepIndex)
             }
-            if (this.onSubmit) {
-              this.onSubmit(this.getApiStop)
+            if (this.onSubmitStop) {
+              this.onSubmitStop(this.getApiStop)
+            }
+            const route = localStorage.getItem('ripa_form_edit_route')
+            const parsedRoute = route || '/'
+            if (this.adminEditing && this.onSubmitAudit) {
+              this.onSubmitAudit(this.getAuditRecord(), parsedRoute)
             }
             if (this.onCancelForm) {
               this.onCancelForm()
@@ -736,7 +757,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onSubmitStop: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmitAudit: {
       type: Function,
       default: () => {},
     },

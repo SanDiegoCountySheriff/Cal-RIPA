@@ -416,11 +416,15 @@ export default {
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_edit_agency_questions')
       localStorage.removeItem('ripa_form_edit_person')
+      localStorage.removeItem('ripa_form_edit_route')
       localStorage.removeItem('ripa_form_edit_stop')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_full_stop')
+      localStorage.removeItem('ripa_form_saved_stop')
+      localStorage.removeItem('ripa_form_saved_full_stop')
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_submitted_api_stop')
     },
 
     handleCancelForm() {

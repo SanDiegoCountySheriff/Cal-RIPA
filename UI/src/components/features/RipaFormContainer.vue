@@ -40,7 +40,8 @@
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
-      :on-submit="handleSubmit"
+      :on-submit-stop="handleSubmitStop"
+      :on-submit-audit="handleSubmitAudit"
       :on-update-user="handleUpdateUser"
       @input="handleInput"
     ></ripa-form-template>
@@ -163,19 +164,29 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
+    ...mapActions([
+      'checkTextForPii',
+      'checkGpsLocation',
+      'putOfficerUser',
+      'putOfficerAudit',
+    ]),
 
     handleClose() {
       this.showUserDialog = false
     },
 
     handleSaveUser(user) {
-      this.editOfficerUser(user)
+      this.putOfficerUser(user)
     },
 
-    handleSubmit(apiStop) {
+    handleSubmitStop(apiStop) {
       this.addApiStop(apiStop)
       this.setLastLocation(this.stop)
+    },
+
+    async handleSubmitAudit(audit, route) {
+      await this.putOfficerAudit(audit)
+      this.$router.push(route)
     },
 
     handleUpdateUser() {

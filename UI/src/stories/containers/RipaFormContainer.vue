@@ -4,6 +4,7 @@
 
     <ripa-form-template
       v-model="stop"
+      :admin-editing="isAdminEditing"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
@@ -27,7 +28,9 @@
       :on-cancel-form="handleCancelForm"
       :on-cancel-action="handleCancelAction"
       :on-delete-person="handleDeletePerson"
+      :on-edit-agency-questions="handleEditAgencyQuestions"
       :on-edit-person="handleEditPerson"
+      :on-edit-stop="handleEditStop"
       :on-gps-location="handleGpsLocation"
       :on-open-location-favorites="handleOpenLocationFavorites"
       :on-open-reason-favorites="handleOpenReasonFavorites"
@@ -39,7 +42,8 @@
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
-      :on-submit="handleSubmit"
+      :on-submit-stop="handleSubmitStop"
+      :on-submit-audit="handleSubmitAudit"
       @input="handleInput"
     ></ripa-form-template>
 
@@ -161,9 +165,13 @@ export default {
       }, 500)
     },
 
-    handleSubmit(apiStop) {
-      this.addApiStop(apiStop)
+    handleSubmitStop(apiStop) {
       this.setLastLocation(this.stop)
+      console.log('SUBMIT STOP', apiStop)
+    },
+
+    handleSubmitAudit(audit) {
+      console.log('SUBMIT AUDIT', audit)
     },
 
     validateLocationForPii(textValue) {
@@ -212,6 +220,28 @@ export default {
 
   created() {
     this.getFormData()
+  },
+
+  mounted() {
+    const localFormEditing = localStorage.getItem('ripa_form_editing')
+    const localStop = localStorage.getItem('ripa_form_stop')
+    const localFullStop = localStorage.getItem('ripa_form_full_stop')
+    const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
+
+    if (localFormEditing) {
+      const parsedStop = JSON.parse(localStop)
+      const parsedFullStop = JSON.parse(localFullStop)
+
+      this.stop = parsedStop
+      this.fullStop = parsedFullStop
+
+      if (Object.keys(this.fullStop).length > 0) {
+        this.formStepIndex = Number(stepIndex)
+        localStorage.setItem('ripa_form_cached', '1')
+      } else {
+        this.clearLocalStorage()
+      }
+    }
   },
 
   props: {

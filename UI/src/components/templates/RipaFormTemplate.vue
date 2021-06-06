@@ -40,7 +40,8 @@
       :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
       :on-step-index-change="onStepIndexChange"
-      :on-submit="onSubmit"
+      :on-submit-stop="onSubmitStop"
+      :on-submit-audit="onSubmitAudit"
       :on-update-user="onUpdateUser"
       @input="handleInput"
     ></ripa-form-wrapper>
@@ -225,7 +226,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onSubmitStop: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmitAudit: {
       type: Function,
       default: () => {},
     },

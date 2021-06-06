@@ -606,7 +606,7 @@ export const invalidApiStop1 = {
   },
   date: '2021-05-18',
   time: '21:50',
-  stopDateTime: '2021-05-18T21:50:00',
+  stopDateTime: '2021-05-21T12:17:00.000Z',
   location: {
     toggleLocationOptions: false,
     intersection: '',
@@ -738,7 +738,7 @@ export const invalidApiStop2 = {
   },
   date: '2021-05-18',
   time: '21:38',
-  stopDateTime: '2021-05-18T21:38:00',
+  stopDateTime: '2021-05-21T12:17:00.000Z',
   location: {
     toggleLocationOptions: false,
     intersection: '',
@@ -850,4 +850,210 @@ export const invalidApiStop2 = {
   ],
   status: 'Failed',
   isPiiFound: false,
+}
+
+export const editApiStop1 = {
+  id: '202105182138',
+  ori: 'CA0370000',
+  agency: 'Insight',
+  officerId: '210518694',
+  officerName: null,
+  expYears: '12',
+  officerAssignment: {
+    key: '10',
+    type: 'Other',
+    otherType: 'New recruit training',
+  },
+  date: '2021-05-18',
+  time: '21:38',
+  stopDateTime: '2021-05-21T12:17:00.000Z',
+  location: {
+    toggleLocationOptions: false,
+    intersection: '',
+    blockNumber: '25300',
+    landMark: '',
+    streetName: 'Cedar Rd',
+    highwayExit: '',
+    city: {
+      codes: {
+        code: 'ALPINE',
+        text: 'ALPINE',
+      },
+    },
+    beat: null,
+    school: false,
+    schoolName: null,
+    outOfCounty: false,
+  },
+  stopDuration: 30,
+  stopInResponseToCFS: false,
+  listPersonStopped: [
+    {
+      id: '1',
+      isStudent: false,
+      listPerceivedRace: [
+        {
+          race: 'White',
+          key: 7,
+        },
+      ],
+      perceivedLimitedEnglish: false,
+      listPerceivedOrKnownDisability: [
+        {
+          disability: 'None',
+          key: '8',
+        },
+      ],
+      perceivedAge: 60,
+      perceivedGender: 'Female',
+      genderNonconforming: false,
+      perceivedLgbt: false,
+      reasonForStop: {
+        key: '1',
+        reason:
+          'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+        listDetail: [
+          {
+            reason: 'Moving Violation',
+            key: '1',
+          },
+        ],
+        listCodes: [
+          {
+            code: '54106',
+            text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+          },
+        ],
+      },
+      reasonForStopExplanation: 'Speeding',
+      listActionTakenDuringStop: [
+        {
+          action: 'None',
+          key: '24',
+        },
+      ],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      listContrabandOrEvidenceDiscovered: [
+        {
+          contraband: 'None',
+          key: '1',
+        },
+      ],
+      listBasisForSearch: [],
+      basisForSearchBrief: null,
+      listBasisForPropertySeizure: [],
+      listTypeOfPropertySeized: [],
+      listResultOfStop: [
+        {
+          result: 'Referral to school counselor or other support staff',
+          listCodes: [
+            {
+              code: '54106',
+              text: '22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106',
+            },
+          ],
+          key: '2',
+        },
+      ],
+    },
+  ],
+  listSubmission: [
+    {
+      id: '3586b28f-dc1b-4658-83f9-3939f550fd3c',
+      dateSubmitted: '2021-06-01T20:28:49.1649343Z',
+      status: 'Failed',
+      fileName: '20210601202849_CA0370000_202105182138.json',
+      listSubmissionError: [
+        {
+          errorType: 'RecordLevelError',
+          message:
+            'DV039_1_Gend::Perceived Gender entry is invalid. If applicable, only one choice can be selected from values 1 - 4.  * After submission, perception data is locked and cannot be changed. Please ensure your local system maps/uses the valid data values. For further assistance, contact DOJ.',
+          code: 'DV039_1_Gend::Perceived Gender entry is invalid. If applicable, only one choice can be selected from values 1',
+          dateReported: '2021-06-02T09:28:41.4057397Z',
+          fileName: '20210601202849_CA0370000_202105182138.json',
+        },
+      ],
+    },
+  ],
+  status: 'Failed',
+  isPiiFound: false,
+  telemetry: {
+    template: 'motor',
+    formCached: true,
+    listStepTrace: [
+      {
+        index: 2,
+        startTimeStamp: '2021-06-06T12:36:36.396Z',
+        endTimeStamp: '2021-06-06T12:36:42.877Z',
+      },
+      {
+        index: 3,
+        startTimeStamp: '2021-06-06T12:36:42.877Z',
+        endTimeStamp: '2021-06-06T12:36:44.226Z',
+      },
+      {
+        index: 4,
+        startTimeStamp: '2021-06-06T12:36:44.226Z',
+        endTimeStamp: '2021-06-06T12:36:45.545Z',
+      },
+      {
+        index: 5,
+        startTimeStamp: '2021-06-06T12:36:45.545Z',
+        endTimeStamp: '2021-06-06T12:36:47.174Z',
+      },
+      {
+        index: 6,
+        startTimeStamp: '2021-06-06T12:36:47.174Z',
+        endTimeStamp: '2021-06-06T12:36:54.789Z',
+      },
+      {
+        index: 6,
+        startTimeStamp: '2021-06-06T12:36:57.535Z',
+        endTimeStamp: '2021-06-06T12:36:58.963Z',
+      },
+      {
+        index: 1,
+        startTimeStamp: '2021-06-06T12:37:00.763Z',
+        endTimeStamp: '2021-06-06T12:37:04.105Z',
+      },
+      {
+        index: 2,
+        startTimeStamp: '2021-06-06T12:37:06.764Z',
+        endTimeStamp: '2021-06-06T12:37:08.875Z',
+      },
+      {
+        index: 3,
+        startTimeStamp: '2021-06-06T12:37:08.875Z',
+        endTimeStamp: '2021-06-06T12:37:10.439Z',
+      },
+      {
+        index: 4,
+        startTimeStamp: '2021-06-06T12:37:10.439Z',
+        endTimeStamp: '2021-06-06T12:37:11.913Z',
+      },
+    ],
+    lookupCacheDate: '2021-06-03 13:42',
+    pullFromReasonCode: false,
+  },
+  listAgencyQuestion: [
+    {
+      maxLength: 250,
+      label: 'What is your favorite color?',
+      hint: null,
+      required: true,
+      questionType: 'Text',
+      name: 'FavoriteColor',
+      answer: 'Green',
+    },
+    {
+      maxLength: 250,
+      label: 'What is your favorite car?',
+      hint: null,
+      required: true,
+      questionType: 'Text',
+      name: 'FavoriteCar',
+      answer: 'F150',
+    },
+  ],
 }

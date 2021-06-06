@@ -1,6 +1,5 @@
 <script>
 import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
-import router from '@/router'
 
 export default {
   methods: {
@@ -13,7 +12,10 @@ export default {
       localStorage.setItem('ripa_form_edit_route', route)
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))
       localStorage.setItem('ripa_form_full_stop', JSON.stringify(fullStop))
-      router.push('/')
+      localStorage.setItem(
+        'ripa_form_submitted_api_stop',
+        JSON.stringify(apiStop),
+      )
     },
   },
 }
