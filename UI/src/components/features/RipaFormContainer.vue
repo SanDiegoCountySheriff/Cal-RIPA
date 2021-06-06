@@ -40,7 +40,8 @@
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
-      :on-submit="handleSubmit"
+      :on-submit-stop="handleSubmitStop"
+      :on-submit-audit="handleSubmitAudit"
       :on-update-user="handleUpdateUser"
       @input="handleInput"
     ></ripa-form-template>
@@ -173,9 +174,13 @@ export default {
       this.editOfficerUser(user)
     },
 
-    handleSubmit(apiStop) {
+    handleSubmitStop(apiStop) {
       this.addApiStop(apiStop)
       this.setLastLocation(this.stop)
+    },
+
+    handleSubmitAudit(audit) {
+      console.log('submit audit', audit)
     },
 
     handleUpdateUser() {

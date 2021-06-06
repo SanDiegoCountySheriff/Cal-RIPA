@@ -537,8 +537,11 @@ export default {
             if (this.onStepIndexChange) {
               this.onStepIndexChange(this.stepIndex)
             }
-            if (this.onSubmit) {
-              this.onSubmit(this.getApiStop)
+            if (this.onSubmitStop) {
+              this.onSubmitStop(this.getApiStop)
+            }
+            if (this.adminEditing && this.onSubmitAudit) {
+              this.onSubmitAudit(this.getApiStop)
             }
             if (this.onCancelForm) {
               this.onCancelForm()
@@ -736,7 +739,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onSubmitStop: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmitAudit: {
       type: Function,
       default: () => {},
     },

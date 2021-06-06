@@ -899,9 +899,8 @@ export const fullStopToApiStop = (
     },
     officerId: officer.officerId,
     officerName: officer.officerName,
-    stopDateTime: formatDateTime(
-      fullStop.stopDate.date,
-      fullStop.stopDate.time,
+    stopDateTime: new Date(
+      formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
     stopDuration: duration ? duration.toString() : null,
     stopInResponseToCfs: fullStop.stopDate?.stopInResponseToCfs || false,
