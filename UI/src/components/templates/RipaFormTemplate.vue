@@ -23,9 +23,12 @@
       :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
-      :on-cancel="onCancel"
+      :on-cancel-form="onCancelForm"
+      :on-cancel-action="onCancelAction"
       :on-delete-person="onDeletePerson"
+      :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-person="onEditPerson"
+      :on-edit-stop="onEditStop"
       :on-gps-location="onGpsLocation"
       :on-open-location-favorites="onOpenLocationFavorites"
       :on-open-reason-favorites="onOpenReasonFavorites"
@@ -162,7 +165,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onCancelForm: {
+      type: Function,
+      default: () => {},
+    },
+    onCancelAction: {
       type: Function,
       default: () => {},
     },
@@ -170,7 +177,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditAgencyQuestions: {
+      type: Function,
+      default: () => {},
+    },
     onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
       type: Function,
       default: () => {},
     },

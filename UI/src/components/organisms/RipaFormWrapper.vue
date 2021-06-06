@@ -338,40 +338,19 @@ export default {
       this.showDialog = false
     },
 
-    getEditFromStepIndexFromLocalStorage() {
-      return localStorage.getItem('ripa_edit_form_step_index')
-    },
-
     isEditStop() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '1'
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_stop')
+      return value ? value === '1' : false
     },
 
     isEditPerson() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return (
-          editFormStepIndex === '2' ||
-          editFormStepIndex === '3' ||
-          editFormStepIndex === '4' ||
-          editFormStepIndex === '5'
-        )
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_person')
+      return value ? value === '1' : false
     },
 
     isEditAgencyQuestions() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '6'
-      }
-
-      return this.anyAgencyQuestions
+      const value = localStorage.getItem('ripa_form_edit_agency_questions')
+      return value ? value === '1' : false
     },
 
     handleInput(newVal) {
@@ -398,6 +377,18 @@ export default {
     },
 
     handleCancel() {
+      if (
+        this.isEditStop() ||
+        this.isEditPerson() ||
+        this.isEditAgencyQuestions()
+      ) {
+        this.handleCancelAction()
+      } else {
+        this.handleCancelForm()
+      }
+    },
+
+    handleCancelForm() {
       this.$confirm({
         title: 'Confirm Cancel',
         message: `Are you sure you want to cancel the form? You will lose all changes.`,
@@ -407,8 +398,26 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            if (this.onCancel) {
-              this.onCancel()
+            if (this.onCancelForm) {
+              this.onCancelForm()
+            }
+          }
+        },
+      })
+    },
+
+    handleCancelAction() {
+      this.$confirm({
+        title: 'Confirm Cancel',
+        message: `Are you sure you want to cancel the action? You will lose all changes.`,
+        button: {
+          no: 'No',
+          yes: 'Yes',
+        },
+        callback: confirm => {
+          if (confirm) {
+            if (this.onCancelAction) {
+              this.onCancelAction()
             }
           }
         },
@@ -448,12 +457,18 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
+      if (this.onEditStop) {
+        this.onEditStop()
+      }
     },
 
     handleEditAgencyQuestions() {
       this.stepIndex = 6
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
+      }
+      if (this.onEditAgencyQuestions) {
+        this.onEditAgencyQuestions()
       }
     },
 
@@ -486,8 +501,8 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCancel) {
-        this.onCancel()
+      if (this.onCancelForm) {
+        this.onCancelForm()
       }
     },
 
@@ -508,8 +523,8 @@ export default {
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
-            if (this.onCancel) {
-              this.onCancel()
+            if (this.onCancelForm) {
+              this.onCancelForm()
             }
           }
         },
@@ -644,7 +659,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onCancelForm: {
+      type: Function,
+      default: () => {},
+    },
+    onCancelAction: {
       type: Function,
       default: () => {},
     },
@@ -657,6 +676,10 @@ export default {
       default: () => {},
     },
     onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
       type: Function,
       default: () => {},
     },

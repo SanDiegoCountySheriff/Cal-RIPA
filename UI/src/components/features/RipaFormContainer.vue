@@ -23,9 +23,12 @@
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
-      :on-cancel="handleCancel"
+      :on-cancel-form="handleCancelForm"
+      :on-cancel-action="handleCancelAction"
       :on-delete-person="handleDeletePerson"
+      :on-edit-agency-questions="handleEditAgencyQuestions"
       :on-edit-person="handleEditPerson"
+      :on-edit-stop="handleEditStop"
       :on-gps-location="handleGpsLocation"
       :on-open-location-favorites="handleOpenLocationFavorites"
       :on-open-reason-favorites="handleOpenReasonFavorites"
@@ -260,8 +263,7 @@ export default {
         this.formStepIndex = Number(stepIndex)
         localStorage.setItem('ripa_form_cached', '1')
       } else {
-        localStorage.removeItem('ripa_form_admin_editing')
-        localStorage.removeItem('ripa_form_editing')
+        this.clearLocalStorage()
       }
     }
   },
