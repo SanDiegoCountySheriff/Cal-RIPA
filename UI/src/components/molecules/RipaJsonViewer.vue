@@ -1,9 +1,5 @@
 <template>
-  <vue-json-pretty
-    :data="data"
-    :show-line="false"
-    :show-double-quotes="false"
-  />
+  <vue-json-pretty :data="data" :show-line="false" />
 </template>
 
 <script>
