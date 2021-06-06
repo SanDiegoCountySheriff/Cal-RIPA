@@ -166,12 +166,11 @@ export default {
     },
 
     handleSubmitStop(apiStop) {
-      this.addApiStop(apiStop)
-      this.setLastLocation(this.stop)
+      console.log('SUBMIT STOP', apiStop)
     },
 
     handleSubmitAudit(audit) {
-      console.log(audit)
+      console.log('SUBMIT AUDIT', audit)
     },
 
     validateLocationForPii(textValue) {

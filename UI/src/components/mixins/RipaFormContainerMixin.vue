@@ -416,6 +416,7 @@ export default {
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_edit_agency_questions')
       localStorage.removeItem('ripa_form_edit_person')
+      localStorage.removeItem('ripa_form_edit_route')
       localStorage.removeItem('ripa_form_edit_stop')
       localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_full_stop')

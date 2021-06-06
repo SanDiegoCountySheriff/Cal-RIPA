@@ -89,8 +89,8 @@ export default {
 
   methods: {
     ...mapActions([
-      'editOfficerStop',
-      'editOfficerUser',
+      'putOfficerStop',
+      'putOfficerUser',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
@@ -177,7 +177,7 @@ export default {
     async runApiStopsJob(apiStops) {
       if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
-          await this.editOfficerStop(apiStops[index])
+          await this.putOfficerStop(apiStops[index])
         }
       }
     },

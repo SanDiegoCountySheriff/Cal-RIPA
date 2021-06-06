@@ -599,7 +599,7 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ dispatch, state }, stop) {
+    putOfficerStop({ dispatch, state }, stop) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -612,8 +612,28 @@ export default new Vuex.Store({
           dispatch('getOfficerStops')
         })
         .catch(error => {
-          console.log('There was an error saving the officer stop.', error)
+          console.log(
+            'There was an error saving the officer stop record.',
+            error,
+          )
           dispatch('getOfficerStops')
+        })
+    },
+
+    putOfficerAudit({ state }, audit) {
+      return axios
+        .put(`${state.apiConfig.apiBaseUrl}audit/PutAudit/${audit.id}`, audit, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .catch(error => {
+          console.log(
+            'There was an error saving the officer stop audit record.',
+            error,
+          )
         })
     },
 
@@ -1173,7 +1193,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitStops({ commit, state }, stops) {
+    submitStops({ state }, stops) {
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
@@ -1192,7 +1212,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitAllStops({ commit, state }, stops) {
+    submitAllStops({ state }) {
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,

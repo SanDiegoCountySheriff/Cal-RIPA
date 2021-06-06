@@ -12,6 +12,7 @@ export default {
       return {
         id: newValue.id,
         template: newValue.template,
+        editStopExplanation: newValue.editStopExplanation || null,
         stepTrace: newValue.stepTrace || [],
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,

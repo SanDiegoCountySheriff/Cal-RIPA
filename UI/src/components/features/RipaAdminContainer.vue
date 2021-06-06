@@ -241,6 +241,7 @@ export default {
       await Promise.all([this.editUser(user)])
       this.loading = false
     },
+
     async handleSubmitStops(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
@@ -250,6 +251,7 @@ export default {
         `/admin/submissions/${submissionResults[0].submissionId}`,
       )
     },
+
     async handleSubmitAll(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitAllStops()])
