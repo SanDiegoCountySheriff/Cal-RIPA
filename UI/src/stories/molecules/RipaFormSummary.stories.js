@@ -51,7 +51,7 @@ export const onePerson = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{getApiStop}}</div><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div><div style="margin-top:40px;">{{getStop}}</div></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
@@ -78,7 +78,7 @@ export const twoPerson = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{getApiStop}}</div><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div><div style="margin-top:40px;">{{getStop}}</div></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
@@ -110,7 +110,7 @@ export const onePersonEdit = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary edit-buttons :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{getApiStop}}</div><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div><div style="margin-top:40px;">{{getStop}}</div></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
@@ -137,7 +137,7 @@ export const twoPersonEdit = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary edit-buttons :apiStop="getApiStop"></ripa-form-summary><div style="margin-top:40px;">{{getApiStop}}</div><div style="margin-top:40px;">{{fullStop}}</div><div style="margin-top:40px;">{{getFullStop}}</div><div style="margin-top:40px;">{{getStop}}</div></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
@@ -156,7 +156,7 @@ export const invalidOnePerson1 = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
@@ -175,7 +175,7 @@ export const invalidOnePerson2 = () => ({
   },
   template:
     '<div class="tw-p-4 tw-mt-4"><ripa-form-summary :apiStop="getApiStop"></ripa-form-summary></div>',
-  created() {
+  mounted() {
     this.$vuetify.theme.dark = true
   },
 })
