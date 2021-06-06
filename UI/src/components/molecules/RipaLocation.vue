@@ -223,7 +223,7 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -232,7 +232,7 @@ import RipaTextInput from '@/components/atoms/RipaTextInput'
 export default {
   name: 'ripa-location',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -246,7 +246,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -355,45 +355,11 @@ export default {
 
     handleInput() {
       this.updateSchoolModel()
-      this.updateStopReasonModel()
-      this.updateStopResultModel()
       this.updateBlockNumberModel()
       this.updateFullAddressModel()
+      this.updateStopReasonModel()
+      this.updateStopResultModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateSchoolModel() {
-      if (!this.viewModel.location.isSchool) {
-        this.viewModel.person.isStudent = false
-      }
-    },
-
-    updateStopReasonModel() {
-      if (!this.viewModel.person.isStudent) {
-        if (
-          this.viewModel.stopReason.reasonForStop === 7 ||
-          this.viewModel.stopReason.reasonForStop === 8
-        ) {
-          this.viewModel.stopReason.reasonForStop = null
-        }
-      }
-    },
-
-    updateStopResultModel() {
-      if (!this.viewModel.person.isStudent) {
-        this.viewModel.stopResult.actionsTakenDuringStop12 = false
-        this.viewModel.stopResult.actionsTakenDuringStop13 = false
-      }
-    },
-
-    updateFullAddressModel() {
-      const streetName = this.viewModel.location?.streetName || ''
-      const highwayExit = this.viewModel.location?.highwayExit || ''
-      const intersection = this.viewModel.location?.intersection || ''
-      const landMark = this.viewModel.location?.landMark || ''
-      const fullAddress =
-        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
-      this.viewModel.location.fullAddress = fullAddress
     },
 
     handleInputOutOfCounty(newVal) {
@@ -421,36 +387,11 @@ export default {
         this.onSaveFavorite(this.viewModel.location)
       }
     },
-
-    updateBlockNumberModel() {
-      this.$nextTick(() => {
-        let blockNumber = this.viewModel.location.blockNumber
-        blockNumber = Math.floor(blockNumber / 100) * 100
-        this.viewModel.location.blockNumber = blockNumber
-      })
-    },
-
-    updateOutOfCountyModel() {
-      this.$nextTick(() => {
-        if (this.viewModel.location.outOfCounty) {
-          this.viewModel.location.beat = 999
-          this.viewModel.location.city = null
-        }
-
-        if (
-          !this.viewModel.location.outOfCounty &&
-          this.viewModel.location.beat === 999
-        ) {
-          this.viewModel.location.beat = null
-          this.viewModel.location.city = null
-        }
-      })
-    },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     lastLocation(newVal) {

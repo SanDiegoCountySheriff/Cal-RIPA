@@ -844,16 +844,20 @@ export const fullStopToApiStop = (
   schools,
   statutes,
 ) => {
+  if (!fullStop) {
+    return {}
+  }
+
+  if (fullStop && Object.keys(fullStop).length === 0) {
+    return {}
+  }
+
   const officer = getOfficerFromLocalStorage()
   const assignment = getOfficerAssignment(officer.assignment)
   const outOfCounty = fullStop.location?.outOfCounty || false
   const duration = fullStop.stopDate?.duration || null
   const lookupCacheDate = localStorage.getItem('ripa_cache_date')
   const formCached = localStorage.getItem('ripa_form_cached')
-
-  if (Object.keys(fullStop).length === 0) {
-    return {}
-  }
 
   return {
     agency: officer.agency,

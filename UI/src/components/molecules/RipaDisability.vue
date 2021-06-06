@@ -37,7 +37,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
@@ -45,7 +45,7 @@ import { DISABILITIES } from '@/constants/form'
 export default {
   name: 'ripa-disability',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       disabilityItems: DISABILITIES,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -89,23 +89,17 @@ export default {
     handleInput() {
       this.$emit('input', this.viewModel)
     },
-
-    updatePerceivedOrKnownDisabilityModel() {
-      this.$nextTick(() => {
-        this.viewModel.person.perceivedOrKnownDisability = []
-      })
-    },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     'viewModel.person.anyDisabilities': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.updatePerceivedOrKnownDisabilityModel()
+          this.clearPerceivedOrKnownDisabilityModel()
         }
       },
     },

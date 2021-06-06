@@ -343,6 +343,14 @@ export default {
       return value ? value === '1' : false
     },
 
+    isCreateForm() {
+      return (
+        !this.isEditStop() &&
+        !this.isEditPerson() &&
+        !this.isEditAgencyQuestions()
+      )
+    },
+
     isEditStop() {
       const value = localStorage.getItem('ripa_form_edit_stop')
       return value ? value === '1' : false
@@ -478,16 +486,20 @@ export default {
     },
 
     getNextStepIndex() {
-      if (this.isEditStop() && !this.isEditPerson()) {
-        return 7
+      if (!this.isCreateForm()) {
+        if (this.isEditStop() && !this.isEditPerson()) {
+          return 7
+        }
+
+        if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
+          return 7
+        }
       }
 
-      if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
-        return 7
-      }
-
-      if (!this.isEditAgencyQuestions() && this.stepIndex === 5) {
-        return 7
+      if (this.isCreateForm()) {
+        if (!this.anyAgencyQuestions && this.stepIndex === 5) {
+          return 7
+        }
       }
 
       return this.stepIndex + 1

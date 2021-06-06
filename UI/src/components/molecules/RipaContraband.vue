@@ -36,7 +36,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { CONTRABAND_TYPES } from '@/constants/form'
@@ -44,7 +44,7 @@ import { CONTRABAND_TYPES } from '@/constants/form'
 export default {
   name: 'ripa-contraband',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -88,32 +88,17 @@ export default {
       this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
     },
-
-    updateBasisForPropertySeizureModel() {
-      if (
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
-      ) {
-        this.viewModel.actionsTaken.anyContraband = true
-      }
-    },
-
-    updateContrabandOrEvidenceDiscoveredModel() {
-      this.$nextTick(() => {
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = []
-      })
-    },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     'viewModel.actionsTaken.anyContraband': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.updateContrabandOrEvidenceDiscoveredModel()
+          this.clearContrabandOrEvidenceDiscoveredModel()
         }
       },
     },
