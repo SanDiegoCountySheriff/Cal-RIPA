@@ -15,7 +15,8 @@ export default {
       set(newVal) {
         this.viewModel = Object.assign({}, newVal)
         setTimeout(() => {
-          this.isFormValid = this.$refs.stepForm.validate()
+          const form = this.$refs.stepForm
+          this.isFormValid = form ? form.validate() : false
         }, 500)
         this.$emit('input', this.viewModel)
       },
