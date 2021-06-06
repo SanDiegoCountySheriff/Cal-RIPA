@@ -325,7 +325,7 @@ export default {
     },
 
     isFormStep2Disabled() {
-      return !this.isEditStop() && this.isEditPerson() && this.stepIndex === 2
+      return this.isAdminEditing() && this.stepIndex === 2
     },
   },
 
@@ -336,6 +336,11 @@ export default {
 
     handleCloseDialog() {
       this.showDialog = false
+    },
+
+    isAdminEditing() {
+      const value = localStorage.getItem('ripa_form_admin_editing')
+      return value ? value === '1' : false
     },
 
     isEditStop() {
