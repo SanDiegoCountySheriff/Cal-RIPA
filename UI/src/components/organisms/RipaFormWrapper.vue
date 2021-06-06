@@ -325,7 +325,7 @@ export default {
     },
 
     isFormStep2Disabled() {
-      return !this.isEditStop() && this.isEditPerson() && this.stepIndex === 2
+      return this.isAdminEditing() && this.stepIndex === 2
     },
   },
 
@@ -338,40 +338,24 @@ export default {
       this.showDialog = false
     },
 
-    getEditFromStepIndexFromLocalStorage() {
-      return localStorage.getItem('ripa_edit_form_step_index')
+    isAdminEditing() {
+      const value = localStorage.getItem('ripa_form_admin_editing')
+      return value ? value === '1' : false
     },
 
     isEditStop() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '1'
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_stop')
+      return value ? value === '1' : false
     },
 
     isEditPerson() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return (
-          editFormStepIndex === '2' ||
-          editFormStepIndex === '3' ||
-          editFormStepIndex === '4' ||
-          editFormStepIndex === '5'
-        )
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_person')
+      return value ? value === '1' : false
     },
 
     isEditAgencyQuestions() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '6'
-      }
-
-      return this.anyAgencyQuestions
+      const value = localStorage.getItem('ripa_form_edit_agency_questions')
+      return value ? value === '1' : false
     },
 
     handleInput(newVal) {
@@ -387,10 +371,6 @@ export default {
       if (this.onAddPerson) {
         this.onAddPerson()
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
     },
 
     handleBack() {
@@ -402,6 +382,18 @@ export default {
     },
 
     handleCancel() {
+      if (
+        this.isEditStop() ||
+        this.isEditPerson() ||
+        this.isEditAgencyQuestions()
+      ) {
+        this.handleCancelAction()
+      } else {
+        this.handleCancelForm()
+      }
+    },
+
+    handleCancelForm() {
       this.$confirm({
         title: 'Confirm Cancel',
         message: `Are you sure you want to cancel the form? You will lose all changes.`,
@@ -411,8 +403,26 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            if (this.onCancel) {
-              this.onCancel()
+            if (this.onCancelForm) {
+              this.onCancelForm()
+            }
+          }
+        },
+      })
+    },
+
+    handleCancelAction() {
+      this.$confirm({
+        title: 'Confirm Cancel',
+        message: `Are you sure you want to cancel the action? You will lose all changes.`,
+        button: {
+          no: 'No',
+          yes: 'Yes',
+        },
+        callback: confirm => {
+          if (confirm) {
+            if (this.onCancelAction) {
+              this.onCancelAction()
             }
           }
         },
@@ -438,17 +448,13 @@ export default {
     },
 
     handleEditPerson(id) {
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
       this.stepIndex = 2
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
     },
 
     handleEditStop() {
@@ -456,10 +462,9 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditStop) {
+        this.onEditStop()
+      }
     },
 
     handleEditAgencyQuestions() {
@@ -467,20 +472,17 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditAgencyQuestions) {
+        this.onEditAgencyQuestions()
+      }
     },
 
     getNextStepIndex() {
       if (this.isEditStop() && !this.isEditPerson()) {
-        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
       if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
-        localStorage.removeItem('ripa_edit_form_step_index')
         return 7
       }
 
@@ -493,7 +495,6 @@ export default {
 
     handleNext() {
       this.stepIndex = this.getNextStepIndex()
-
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -505,8 +506,8 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCancel) {
-        this.onCancel()
+      if (this.onCancelForm) {
+        this.onCancelForm()
       }
     },
 
@@ -521,11 +522,14 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = this.confirmationStepIndex
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             if (this.onSubmit) {
               this.onSubmit(this.getApiStop)
             }
-            if (this.onCancel) {
-              this.onCancel()
+            if (this.onCancelForm) {
+              this.onCancelForm()
             }
           }
         },
@@ -565,6 +569,9 @@ export default {
         }
       }
       this.stepIndex = newVal
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
     },
   },
 
@@ -657,7 +664,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onCancelForm: {
+      type: Function,
+      default: () => {},
+    },
+    onCancelAction: {
       type: Function,
       default: () => {},
     },
@@ -670,6 +681,10 @@ export default {
       default: () => {},
     },
     onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
       type: Function,
       default: () => {},
     },

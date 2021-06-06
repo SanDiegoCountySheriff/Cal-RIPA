@@ -1,10 +1,10 @@
 import StoryRouter from 'storybook-vue-router'
-import RipaHomeContainer from './RipaHomeContainer'
+import RipaFormContainer from './RipaFormContainer'
 import { routesData } from '../data/routes'
 
 export default {
-  title: 'Pages/RipaHomeContainer',
-  component: RipaHomeContainer,
+  title: 'Pages/RipaFormContainer',
+  component: RipaFormContainer,
   parameters: {},
   decorators: [
     StoryRouter(
@@ -18,11 +18,11 @@ export default {
 }
 
 export const admin = () => ({
-  components: { RipaHomeContainer },
-  template: '<ripa-home-container admin></ripa-home-container>',
+  components: { RipaFormContainer },
+  template: '<ripa-form-container admin></ripa-form-container>',
 })
 
 export const nonAdmin = () => ({
-  components: { RipaHomeContainer },
-  template: '<ripa-home-container></ripa-home-container>',
+  components: { RipaFormContainer },
+  template: '<ripa-form-container></ripa-form-container>',
 })

@@ -23,9 +23,12 @@
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
-      :on-cancel="handleCancel"
+      :on-cancel-form="handleCancelForm"
+      :on-cancel-action="handleCancelAction"
       :on-delete-person="handleDeletePerson"
+      :on-edit-agency-questions="handleEditAgencyQuestions"
       :on-edit-person="handleEditPerson"
+      :on-edit-stop="handleEditStop"
       :on-gps-location="handleGpsLocation"
       :on-open-location-favorites="handleOpenLocationFavorites"
       :on-open-reason-favorites="handleOpenReasonFavorites"
@@ -109,14 +112,14 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
-import RipaStopMixin from '@/components/mixins/RipaStopMixin'
+import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
 
-  mixins: [RipaStopMixin, RipaApiStopJobMixin],
+  mixins: [RipaFormContainerMixin, RipaApiStopJobMixin],
 
   components: {
     RipaAddFavoriteDialog,
@@ -260,8 +263,7 @@ export default {
         this.formStepIndex = Number(stepIndex)
         localStorage.setItem('ripa_form_cached', '1')
       } else {
-        localStorage.removeItem('ripa_form_admin_editing')
-        localStorage.removeItem('ripa_form_editing')
+        this.clearLocalStorage()
       }
     }
   },

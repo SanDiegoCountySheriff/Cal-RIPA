@@ -24,7 +24,8 @@
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
-      :on-cancel="handleCancel"
+      :on-cancel-form="handleCancelForm"
+      :on-cancel-action="handleCancelAction"
       :on-delete-person="handleDeletePerson"
       :on-edit-person="handleEditPerson"
       :on-gps-location="handleGpsLocation"
@@ -101,7 +102,7 @@ import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaPageContainer from './RipaPageContainer'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
-import RipaStopMixin from '@/components/mixins/RipaStopMixin'
+import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import {
   formBeats,
   formCountyCities,
@@ -111,9 +112,9 @@ import {
 } from '../data/mappings'
 
 export default {
-  name: 'ripa-home-container',
+  name: 'ripa-form-container',
 
-  mixins: [RipaStopMixin],
+  mixins: [RipaFormContainerMixin],
 
   components: {
     RipaAddFavoriteDialog,

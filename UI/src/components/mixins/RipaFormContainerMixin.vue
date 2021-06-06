@@ -104,6 +104,12 @@ export default {
     },
 
     handleAddPerson() {
+      localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
+      localStorage.setItem(
+        'ripa_form_saved_full_stop',
+        JSON.stringify(this.fullStop),
+      )
+      localStorage.setItem('ripa_form_edit_person', '1')
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.actionsTaken = {}
@@ -194,7 +200,22 @@ export default {
       this.setFavoriteResults(filteredResults)
     },
 
+    handleEditAgencyQuestions() {
+      localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
+      localStorage.setItem(
+        'ripa_form_saved_full_stop',
+        JSON.stringify(this.fullStop),
+      )
+      localStorage.setItem('ripa_form_edit_agency_questions', '1')
+    },
+
     handleEditPerson(id) {
+      localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
+      localStorage.setItem(
+        'ripa_form_saved_full_stop',
+        JSON.stringify(this.fullStop),
+      )
+      localStorage.setItem('ripa_form_edit_person', '1')
       const [filteredPerson] = this.fullStop.people.filter(
         item => item.id === id,
       )
@@ -204,6 +225,15 @@ export default {
           person: filteredPerson,
         }
       }
+    },
+
+    handleEditStop() {
+      localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
+      localStorage.setItem(
+        'ripa_form_saved_full_stop',
+        JSON.stringify(this.fullStop),
+      )
+      localStorage.setItem('ripa_form_edit_stop', '1')
     },
 
     handleInput(newVal) {
@@ -294,6 +324,12 @@ export default {
       } else {
         localStorage.removeItem('ripa_form_step_index')
       }
+
+      if (index === 7) {
+        localStorage.removeItem('ripa_form_edit_agency_questions')
+        localStorage.removeItem('ripa_form_edit_person')
+        localStorage.removeItem('ripa_form_edit_stop')
+      }
     },
 
     handleOpenTemplate(value) {
@@ -375,17 +411,40 @@ export default {
       }
     },
 
-    handleCancel() {
-      localStorage.removeItem('ripa_form_step_index')
+    clearLocalStorage() {
       localStorage.removeItem('ripa_form_admin_editing')
-      localStorage.removeItem('ripa_form_editing')
-      localStorage.removeItem('ripa_form_stop')
       localStorage.removeItem('ripa_form_cached')
+      localStorage.removeItem('ripa_form_edit_agency_questions')
+      localStorage.removeItem('ripa_form_edit_person')
+      localStorage.removeItem('ripa_form_edit_stop')
+      localStorage.removeItem('ripa_form_editing')
       localStorage.removeItem('ripa_form_full_stop')
-      localStorage.removeItem('ripa_edit_form_step_index')
+      localStorage.removeItem('ripa_form_step_index')
+      localStorage.removeItem('ripa_form_stop')
+    },
+
+    handleCancelForm() {
+      this.clearLocalStorage()
       this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
+    },
+
+    handleCancelAction() {
+      localStorage.removeItem('ripa_form_edit_agency_questions')
+      localStorage.removeItem('ripa_form_edit_person')
+      localStorage.removeItem('ripa_form_edit_stop')
+
+      const parsedStop = localStorage.getItem('ripa_form_saved_stop')
+      const parsedFullStop = localStorage.getItem('ripa_form_saved_full_stop')
+
+      if (parsedStop && parsedFullStop) {
+        localStorage.removeItem('ripa_form_saved_stop')
+        localStorage.removeItem('ripa_form_saved_full_stop')
+        this.handleStepIndexChange(7)
+        this.stop = JSON.parse(parsedStop)
+        this.fullStop = JSON.parse(parsedFullStop)
+      }
     },
   },
 
