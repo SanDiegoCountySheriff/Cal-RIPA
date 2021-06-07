@@ -127,6 +127,9 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
       }
     },
+    officerId: state => {
+      return state.user.officerId
+    },
     user: state => {
       return state.user
     },
