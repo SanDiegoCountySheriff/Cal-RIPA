@@ -202,6 +202,10 @@ export default {
     },
 
     updateBasisForPropertySeizureModel() {
+      if (!this.viewModel.actionsTaken.basisForPropertySeizure) {
+        return
+      }
+
       if (
         this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
         this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
