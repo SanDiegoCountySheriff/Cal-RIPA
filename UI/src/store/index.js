@@ -621,14 +621,23 @@ export default new Vuex.Store({
     },
 
     putOfficerAudit({ state }, audit) {
+      const mappedAudit = {
+        ...audit,
+        adminOfficerId: state.user.officerId,
+      }
+
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}audit/PutAudit/${audit.id}`, audit, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .put(
+          `${state.apiConfig.apiBaseUrl}audit/PutAudit/${audit.id}`,
+          mappedAudit,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .catch(error => {
           console.log(
             'There was an error saving the officer stop audit record.',
