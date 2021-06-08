@@ -200,7 +200,7 @@ export default {
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
-        v => (v || '').length >= 3 || 'Min 5 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
