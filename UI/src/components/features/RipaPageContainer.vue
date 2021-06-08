@@ -12,7 +12,16 @@
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
-    <slot></slot>
+    <template v-if="!isValidCacheState">
+      <ripa-alert alert-type="error">
+        Please log into the application to submit stops.
+      </ripa-alert>
+    </template>
+
+    <template v-if="isValidCacheState">
+      <slot></slot>
+    </template>
+
     <ripa-interval
       :delay="stopInternalMs"
       @tick="checkLocalStorage"
@@ -33,6 +42,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
@@ -48,6 +58,7 @@ export default {
   mixins: [RipaApiStopJobMixin],
 
   components: {
+    RipaAlert,
     RipaInterval,
     RipaInvalidUserDialog,
     RipaPageWrapper,
@@ -84,6 +95,11 @@ export default {
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
       }
+    },
+
+    isValidCacheState() {
+      const cacheDate = localStorage.getItem('ripa_cache_date')
+      return cacheDate !== null
     },
   },
 
@@ -193,7 +209,9 @@ export default {
     if (this.isOnlineAndAuthenticated) {
       this.updateAuthenticatedData()
     } else {
-      await this.getFormData()
+      if (this.isValidCacheState) {
+        await this.getFormData()
+      }
     }
   },
 
