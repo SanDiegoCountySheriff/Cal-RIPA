@@ -829,6 +829,13 @@ export default new Vuex.Store({
           .then(response => {
             const data = response.data
               .filter(item => item.status === 'Active')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty === configCounty
+              })
               .sort((x, y) => {
                 const schoolA = x.name.toUpperCase()
                 const schoolB = y.name.toUpperCase()
