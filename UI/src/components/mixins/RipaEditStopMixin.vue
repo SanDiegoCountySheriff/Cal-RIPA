@@ -5,6 +5,11 @@ export default {
   methods: {
     handleEditStop(apiStop, route) {
       const submissions = apiStop.listSubmission || []
+      const sortedSubmissions = submissions.sort(
+        (a, b) =>
+          new Date(b.dateReported).getTime() -
+          new Date(a.dateReported).getTime(),
+      )
       const fullStop = apiStopToFullStop(apiStop)
       const stop = fullStopToStop(fullStop)
       localStorage.setItem('ripa_form_step_index', '7')
@@ -19,7 +24,7 @@ export default {
       )
       localStorage.setItem(
         'ripa_form_submitted_submissions',
-        JSON.stringify(submissions),
+        JSON.stringify(sortedSubmissions),
       )
     },
   },

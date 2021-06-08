@@ -681,6 +681,94 @@ const getSummaryTelemetryStepTrace = apiStop => {
   }
 }
 
+export const apiStopSubmissionSummary = submission => {
+  const items = []
+  if (submission) {
+    items.push({ id: 'E1', content: getSummarySubmissionId(submission) })
+    items.push({
+      id: 'E2',
+      content: getSummarySubmissionDateSubmitted(submission),
+    })
+    items.push({
+      id: 'E3',
+      content: getSummarySubmissionFileName(submission),
+    })
+    items.push({
+      id: 'E4',
+      content: getSummarySubmissionStatus(submission),
+    })
+
+    for (
+      let index = 0;
+      index < submission.listSubmissionError.length;
+      index++
+    ) {
+      const errorElement = submission.listSubmissionError[index]
+      items.push({
+        id: `E5-${index}`,
+        content: getSummarySubmissionError(errorElement, index),
+      })
+    }
+  }
+
+  return items
+}
+
+const getSummarySubmissionId = submission => {
+  return {
+    level: 1,
+    header: 'ID',
+    detail: submission.id,
+  }
+}
+
+const getSummarySubmissionDateSubmitted = submission => {
+  return {
+    level: 1,
+    header: 'Date Submitted',
+    detail: format(new Date(submission.dateSubmitted), 'yyyy-MM-dd kk:mm'),
+  }
+}
+
+const getSummarySubmissionFileName = submission => {
+  return {
+    level: 1,
+    header: 'File Name',
+    detail: submission.fileName,
+  }
+}
+
+const getSummarySubmissionStatus = submission => {
+  return {
+    level: 1,
+    header: 'Status',
+    detail: submission.status,
+  }
+}
+
+const getSummarySubmissionError = (element, index) => {
+  return {
+    marginTop: true,
+    level: 3,
+    header: `Submission Error ${index + 1}`,
+    children: [
+      {
+        header: 'Error Type',
+        detail: element.errorType,
+      },
+      {
+        header: 'Code',
+        detail: element.code,
+      },
+      {
+        header: 'Date Reported',
+        detail: format(new Date(element.dateReported), 'yyyy-MM-dd kk:mm'),
+      },
+      { header: 'Message', detail: element.message },
+    ],
+  }
+}
+
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location?.blockNumber || null
   const schoolNumber = apiStop.location?.schoolName?.codes?.code || null

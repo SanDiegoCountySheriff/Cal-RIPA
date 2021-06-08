@@ -48,46 +48,55 @@
         <div v-for="item in getApiStopPersonSummary(person.id)" :key="item.id">
           <ripa-list :item="item.content"></ripa-list>
         </div>
+      </div>
 
-        <template v-if="anyAgencyQuestions">
-          <div class="tw-my-4 tw-text-base tw-font-bold">
-            <span class="tw-text-base tw-font-bold">Agency Questions</span>
-            <template v-if="editButtons">
-              <v-btn
-                class="tw-ml-4"
-                dense
-                outlined
-                x-small
-                @click="handleEditAgencyQuestions"
-              >
-                Edit
-              </v-btn>
-            </template>
-          </div>
-
-          <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
-            <ripa-list :item="item.content"></ripa-list>
-          </div>
-        </template>
-
-        <div class="tw-mt-4 tw-mb-2">
-          <v-divider></v-divider>
+      <template v-if="anyAgencyQuestions">
+        <div class="tw-my-4 tw-text-base tw-font-bold">
+          <span class="tw-text-base tw-font-bold">Agency Questions</span>
+          <template v-if="editButtons">
+            <v-btn
+              class="tw-ml-4"
+              dense
+              outlined
+              x-small
+              @click="handleEditAgencyQuestions"
+            >
+              Edit
+            </v-btn>
+          </template>
         </div>
 
-        <template v-if="adminEditing">
+        <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
+          <ripa-list :item="item.content"></ripa-list>
+        </div>
+      </template>
+
+      <div class="tw-mt-4 tw-mb-2">
+        <v-divider></v-divider>
+      </div>
+
+      <template v-if="adminEditing">
+        <div class="tw-my-4 tw-text-base tw-font-bold">
+          <span class="tw-text-base tw-font-bold">Telemetry</span>
+        </div>
+
+        <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
+          <ripa-list :item="item.content"></ripa-list>
+        </div>
+
+        <div v-for="(submission, index) in getSubmissions" :key="submission.id">
           <div class="tw-my-4 tw-text-base tw-font-bold">
-            <span class="tw-text-base tw-font-bold">Telemetry</span>
+            Submission {{ index + 1 }}
           </div>
 
-          <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
+          <div
+            v-for="item in getApiStopSubmissionSummary(submission)"
+            :key="item.id"
+          >
             <ripa-list :item="item.content"></ripa-list>
           </div>
-
-          <div class="tw-my-4 tw-text-base tw-font-bold">
-            <span class="tw-text-base tw-font-bold">Submissions</span>
-          </div>
-        </template>
-      </div>
+        </div>
+      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -99,6 +108,7 @@ import {
   apiStopPersonSummary,
   apiStopAgencyQuestionsSummary,
   apiStopTelemetrySummary,
+  apiStopSubmissionSummary,
 } from '@/utilities/stop'
 
 export default {
@@ -129,9 +139,18 @@ export default {
     getApiStopTelemetrySummary() {
       return apiStopTelemetrySummary(this.apiStop)
     },
+
+    getSubmissions() {
+      const value = localStorage.getItem('ripa_form_submitted_submissions')
+      return value ? JSON.parse(value) : []
+    },
   },
 
   methods: {
+    getApiStopSubmissionSummary(submission) {
+      return apiStopSubmissionSummary(submission)
+    },
+
     getApiStopPersonSummary(personId) {
       return apiStopPersonSummary(this.apiStop, personId)
     },
