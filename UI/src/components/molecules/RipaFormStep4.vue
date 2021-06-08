@@ -5,7 +5,11 @@
       :loading-pii="loadingPii"
       :on-open-statute="onOpenStatute"
     ></ripa-actions-taken>
-    <ripa-contraband v-model="model"></ripa-contraband>
+
+    <ripa-contraband
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-contraband>
 
     <v-spacer></v-spacer>
 
