@@ -334,11 +334,9 @@ export default {
       const newApiStop = this.getApiStop
       const oldApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
       const explanation = this.stop.editStopExplanation || null
-      const officerId = newApiStop.officerId
 
       return {
         id: new Date().getTime(),
-        officerId,
         editStopExplanation: explanation,
         submitTimestamp: new Date(),
         oldApiStop: oldApiStop ? JSON.parse(oldApiStop) : null,

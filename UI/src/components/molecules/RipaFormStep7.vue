@@ -4,6 +4,7 @@
       v-model="model"
       edit-buttons
       :api-stop="apiStop"
+      :admin-editing="adminEditing"
       :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-stop="onEditStop"
       :on-edit-person="onEditPerson"
