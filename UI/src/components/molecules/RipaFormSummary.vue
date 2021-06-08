@@ -69,6 +69,24 @@
             <ripa-list :item="item.content"></ripa-list>
           </div>
         </template>
+
+        <div class="tw-mt-4 tw-mb-2">
+          <v-divider></v-divider>
+        </div>
+
+        <template v-if="adminEditing">
+          <div class="tw-my-4 tw-text-base tw-font-bold">
+            <span class="tw-text-base tw-font-bold">Telemetry</span>
+          </div>
+
+          <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
+            <ripa-list :item="item.content"></ripa-list>
+          </div>
+
+          <div class="tw-my-4 tw-text-base tw-font-bold">
+            <span class="tw-text-base tw-font-bold">Submissions</span>
+          </div>
+        </template>
       </div>
     </v-card-text>
   </v-card>
@@ -80,6 +98,7 @@ import {
   apiStopStopSummary,
   apiStopPersonSummary,
   apiStopAgencyQuestionsSummary,
+  apiStopTelemetrySummary,
 } from '@/utilities/stop'
 
 export default {
@@ -105,6 +124,10 @@ export default {
 
     getApiStopAgencyQuestionsSummary() {
       return apiStopAgencyQuestionsSummary(this.apiStop)
+    },
+
+    getApiStopTelemetrySummary() {
+      return apiStopTelemetrySummary(this.apiStop)
     },
   },
 
@@ -146,6 +169,10 @@ export default {
     apiStop: {
       type: Object,
       default: () => {},
+    },
+    adminEditing: {
+      type: Boolean,
+      default: false,
     },
     editButtons: {
       type: Boolean,

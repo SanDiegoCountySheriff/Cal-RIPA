@@ -604,6 +604,83 @@ const getSummaryAgencyQuestion = (question, answer) => {
   }
 }
 
+export const apiStopTelemetrySummary = apiStop => {
+  const items = []
+  if (apiStop.telemetry) {
+    items.push({ id: 'D1', content: getSummaryTelemetryTemplate(apiStop) })
+    items.push({
+      id: 'D2',
+      content: getSummaryTelemetryLookupCacheDate(apiStop),
+    })
+    items.push({
+      id: 'D3',
+      content: getSummaryTelemetryPullFromReasonCode(apiStop),
+    })
+    items.push({ id: 'D4', content: getSummaryTelemetryFormCached(apiStop) })
+    items.push({ id: 'D5', content: getSummaryTelemetryStepTrace(apiStop) })
+  }
+
+  return items
+}
+
+const getSummaryTelemetryTemplate = apiStop => {
+  return {
+    level: 1,
+    header: 'Template',
+    detail: apiStop.telemetry.template,
+  }
+}
+
+const getSummaryTelemetryLookupCacheDate = apiStop => {
+  return {
+    level: 1,
+    header: 'Lookup Cache Date',
+    detail: apiStop.telemetry.lookupCacheDate,
+  }
+}
+
+const getSummaryTelemetryPullFromReasonCode = apiStop => {
+  return {
+    level: 1,
+    header: 'Pull From Reason Code',
+    detail: apiStop.telemetry.pullFromReasonCode,
+  }
+}
+
+const getSummaryTelemetryFormCached = apiStop => {
+  return {
+    level: 1,
+    header: 'Form Cached',
+    detail: apiStop.telemetry.formCached,
+  }
+}
+
+const getSummaryTelemetryStepTrace = apiStop => {
+  const results = []
+  for (let index = 0; index < apiStop.telemetry.listStepTrace.length; index++) {
+    const item = apiStop.telemetry.listStepTrace[index]
+    const stepIndex = item.index
+    const startTimeStamp = format(
+      new Date(item.startTimeStamp),
+      'yyyy-MM-dd kk:mm:ss',
+    )
+    const endTimeStamp = format(
+      new Date(item.endTimeStamp),
+      'yyyy-MM-dd kk:mm:ss',
+    )
+
+    results.push({
+      marginLeft: true,
+      detail: `Step: ${stepIndex} / Start: ${startTimeStamp} / End: ${endTimeStamp}`,
+    })
+  }
+  return {
+    level: 2,
+    header: 'Step Track',
+    children: results,
+  }
+}
+
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location?.blockNumber || null
   const schoolNumber = apiStop.location?.schoolName?.codes?.code || null

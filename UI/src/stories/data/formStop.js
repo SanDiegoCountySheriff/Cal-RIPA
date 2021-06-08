@@ -983,6 +983,11 @@ export const editApiStop1 = {
     formCached: true,
     listStepTrace: [
       {
+        index: 1,
+        startTimeStamp: '2021-06-06T12:35:15.396Z',
+        endTimeStamp: '2021-06-06T12:36:36.877Z',
+      },
+      {
         index: 2,
         startTimeStamp: '2021-06-06T12:36:36.396Z',
         endTimeStamp: '2021-06-06T12:36:42.877Z',
