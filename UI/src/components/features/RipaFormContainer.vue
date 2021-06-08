@@ -164,12 +164,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'checkTextForPii',
-      'checkGpsLocation',
-      'putOfficerUser',
-      'putOfficerAudit',
-    ]),
+    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'putOfficerUser']),
 
     handleClose() {
       this.showUserDialog = false
@@ -184,8 +179,7 @@ export default {
       this.setLastLocation(this.stop)
     },
 
-    async handleSubmitAudit(audit, route) {
-      await this.putOfficerAudit(audit)
+    handleSubmitAudit(route) {
       this.$router.push(route)
     },
 

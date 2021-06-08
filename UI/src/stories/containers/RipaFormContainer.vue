@@ -43,7 +43,6 @@
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
-      :on-submit-audit="handleSubmitAudit"
       @input="handleInput"
     ></ripa-form-template>
 
@@ -168,10 +167,6 @@ export default {
     handleSubmitStop(apiStop) {
       this.setLastLocation(this.stop)
       console.log('SUBMIT STOP', apiStop)
-    },
-
-    handleSubmitAudit(audit) {
-      console.log('SUBMIT AUDIT', audit)
     },
 
     validateLocationForPii(textValue) {

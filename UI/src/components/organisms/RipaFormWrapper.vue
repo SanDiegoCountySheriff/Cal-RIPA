@@ -330,20 +330,6 @@ export default {
   },
 
   methods: {
-    getAuditRecord() {
-      const newApiStop = this.getApiStop
-      const oldApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
-      const explanation = this.stop.editStopExplanation || null
-
-      return {
-        id: new Date().getTime(),
-        editStopExplanation: explanation,
-        submitTimestamp: new Date(),
-        oldApiStop: oldApiStop ? JSON.parse(oldApiStop) : null,
-        newApiStop,
-      }
-    },
-
     handleDebugger() {
       this.showDialog = true
     },
@@ -557,7 +543,7 @@ export default {
             const route = localStorage.getItem('ripa_form_edit_route')
             const parsedRoute = route || '/'
             if (this.adminEditing && this.onSubmitAudit) {
-              this.onSubmitAudit(this.getAuditRecord(), parsedRoute)
+              this.onSubmitAudit(parsedRoute)
             }
             if (this.onCancelForm) {
               this.onCancelForm()
