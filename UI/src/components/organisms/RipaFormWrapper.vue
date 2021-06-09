@@ -544,6 +544,11 @@ export default {
               this.onStepIndexChange(this.stepIndex)
             }
             if (this.onSubmitStop) {
+              const apiStop = this.getApiStop
+              if (this.adminEditing) {
+                const explanation = this.stop.editStopExplanation || 'None'
+                apiStop.editStopExplanation = explanation
+              }
               this.onSubmitStop(this.getApiStop)
             }
             const route = localStorage.getItem('ripa_form_edit_route')
