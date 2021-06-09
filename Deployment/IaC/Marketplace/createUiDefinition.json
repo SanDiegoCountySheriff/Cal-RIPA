@@ -1,156 +1,453 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
-    "handler": "Microsoft.Azure.CreateUIDef",
-    "version": "0.1.2-preview",
-    "parameters": {
+	"$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+	"handler": "Microsoft.Azure.CreateUIDef",
+	"version": "0.1.2-preview",
+	"parameters": {
 		"resourceTypes": [
-            "microsoft.resources/resourcegroups"
-        ],
+			"microsoft.resources/resourcegroups"
+		],
 		"config": {
 			"isWizard": false,
 			"basics": {
-				"description": "Customized description with **markdown**, see [more](https://www.microsoft.com).",				
+				"description": "Information on this screen will define the naming used for the Azure resources created as well as the default domain name & URL if an existing private domain is not used. It is suggested that this application be deployed to US Gov Arizona region as require resources may not be available in other regions. The Agency Abbreviation and Application Name are combined to create a globally unique name & URL for this application instance.",
 				"resourceGroup": {
 					"constraints": {
-						"validations": [
-							{
-								"isValid": "[not(contains(resourceGroup().name, 'test'))]",
-								"message": "Resource group name can't contain 'test'."
-							}
-						]
+						"validations": []
 					},
 					"allowExisting": true
 				}
 			}
 		},
-        "basics": [
+		"basics": [
 			{
-                "name": "agName",
-                "type": "Microsoft.Common.TextBox",
-                "label": "Agency Name",
-                "defaultValue": "San Diego County Sheriffs Department",
-                "toolTip": "",
-                "constraints": {
-                    "required": true,
-                    "regex": "",
-                    "validationMessage": ""
-                },
-                "visible": true
-            },
-            {
-                "name": "agAbbr",
-                "type": "Microsoft.Common.TextBox",
-                "label": "Agency Abbreviation",
-                "defaultValue": "sdsd",
-                "toolTip": "",
-                "constraints": {
-                    "required": true,
-                    "regex": "^[a-z0-9-]{1,4}$",
-                    "validationMessage": "The Agency Abbreviation Name must be between 1 and 4 characters long and contain Lower case characters"
-                },
-                "visible": true
-            },
-            {
-                "name": "agapplication",
-                "type": "Microsoft.Common.TextBox",
-                "label": "Agency Application Name",
-                "defaultValue": "ripa",
-                "toolTip": "",
-                "constraints": {
-                    "required": true,
-                    "regex": "^[a-z0-9-]{1,6}$",
-                    "validationMessage": "The Agency Application Name must be between 1 and 6 characters long and contain Lower case characters"
-                },
-                "visible": true
-            }
-			
-        ],
-        "steps": [
-            {
-                "name": "Auth",
-                "label": "Authentication",
-                "elements": [
-                    
-                        {
-							"name": "appReg",
-							"type": "Microsoft.Common.TextBox",
-							"label": "AppRegistration",
-							"defaultValue": "",
-							"toolTip": "",
-							"constraints": {
-								"required": true,
-								"regex": "",
-								"validationMessage": ""
-							},
-							"visible": true
+				"name": "agency_name",
+				"type": "Microsoft.Common.TextBox",
+				"label": "Full Agency Display Name",
+				"defaultValue": "",
+				"toolTip": "",
+				"constraints": {
+					"required": true,
+					"regex": "",
+					"validationMessage": ""
+				},
+				"visible": true
+			},
+			{
+				"name": "agency_abbrv_dropdown",
+				"type": "Microsoft.Common.DropDown",
+				"label": "Agency Name",
+				"placeholder": "",
+				"defaultValue": null,
+				"toolTip": "",
+				"constraints": {
+					"allowedValues": [
+						{
+							"label": "ALAMEDA COUNTY",
+							"value": {
+								"city": "alameda",
+								"type": "so",
+								"ori": "ca001"
+							}
 						},
 						{
-							"name": "tenant",
-							"type": "Microsoft.Common.TextBox",
-							"label": "TenantId",
-							"defaultValue": "",
-							"toolTip": "",
-							"constraints": {
-								"required": true,
-								"regex": "",
-								"validationMessage": ""
-							},
-							"visible": true
+							"label": "ALPINE COUNTY",
+							"value": "alpine"
 						},
 						{
-							"name": "LogAuth",
-							"type": "Microsoft.Common.TextBox",
-							"label": "Login Authority",
-							"defaultValue": "https://login.microsoftonline.com",
-							"toolTip": "",
-							"constraints": {
-								"required": true,
-								"regex": "",
-								"validationMessage": ""
-							},
-							"visible": true
-						}     
-                    
-                ]
-            },
+							"label": "AMADOR COUNTY",
+							"value": "amador"
+						},
+						{
+							"label": "BUTTE COUNTY",
+							"value": "butte"
+						},
+						{
+							"label": "CALAVERAS COUNTY",
+							"value": "calaveras"
+						},
+						{
+							"label": "COLUSA COUNTY",
+							"value": "colusa"
+						},
+						{
+							"label": "CONTRA COSTA COUNTY",
+							"value": "contracosta"
+						},
+						{
+							"label": "DEL NORTE COUNTY",
+							"value": "delnorte"
+						},
+						{
+							"label": "EL DORADO COUNTY",
+							"value": "eldorado"
+						},
+						{
+							"label": "FRESNO COUNTY",
+							"value": "fresno"
+						},
+						{
+							"label": "GLENN COUNTY",
+							"value": "glenn"
+						},
+						{
+							"label": "HUMBOLDT COUNTY",
+							"value": "humboldt"
+						},
+						{
+							"label": "IMPERIAL COUNTY",
+							"value": "imperial"
+						},
+						{
+							"label": "INYO COUNTY",
+							"value": "inyo"
+						},
+						{
+							"label": "KERN COUNTY",
+							"value": "kern"
+						},
+						{
+							"label": "KINGS COUNTY",
+							"value": "kings"
+						},
+						{
+							"label": "LAKE COUNTY",
+							"value": "lake"
+						},
+						{
+							"label": "LASSEN COUNTY",
+							"value": "lassen"
+						},
+						{
+							"label": "LOS ANGELES COUNTY",
+							"value": "losangeles"
+						},
+						{
+							"label": "MADERA COUNTY",
+							"value": "madera"
+						},
+						{
+							"label": "MARIN COUNTY",
+							"value": "marin"
+						},
+						{
+							"label": "MARIPOSA COUNTY",
+							"value": "mariposa"
+						},
+						{
+							"label": "MENDOCINO COUNTY",
+							"value": "mendocino"
+						},
+						{
+							"label": "MERCED COUNTY",
+							"value": "merced"
+						},
+						{
+							"label": "MODOC COUNTY",
+							"value": "modoc"
+						},
+						{
+							"label": "MONO COUNTY",
+							"value": "mono"
+						},
+						{
+							"label": "MONTEREY COUNTY",
+							"value": "monterey"
+						},
+						{
+							"label": "NAPA COUNTY",
+							"value": "napa"
+						},
+						{
+							"label": "NEVADA COUNTY",
+							"value": "nevada"
+						},
+						{
+							"label": "ORANGE COUNTY",
+							"value": "orange"
+						},
+						{
+							"label": "PLACER COUNTY",
+							"value": "placer"
+						},
+						{
+							"label": "PLUMAS COUNTY",
+							"value": "plumas"
+						},
+						{
+							"label": "RIVERSIDE COUNTY",
+							"value": "riverside"
+						},
+						{
+							"label": "SACRAMENTO COUNTY",
+							"value": "sacramento"
+						},
+						{
+							"label": "SAN BENITO COUNTY",
+							"value": "sanbenito"
+						},
+						{
+							"label": "SAN BERNARDINO COUNTY",
+							"value": "sanbernardino"
+						},
+						{
+							"label": "SAN DIEGO COUNTY",
+							"value": "sandiego"
+						},
+						{
+							"label": "SAN FRANCISCO COUNTY",
+							"value": "sanfrancisco"
+						},
+						{
+							"label": "SAN JOAQUIN COUNTY",
+							"value": "sanjoaquin"
+						},
+						{
+							"label": "SAN LUIS OBISPO COUNTY",
+							"value": "sanluisobispo"
+						},
+						{
+							"label": "SAN MATEO COUNTY",
+							"value": "sanmateo"
+						},
+						{
+							"label": "SANTA BARBARA COUNTY",
+							"value": "santabarbara"
+						},
+						{
+							"label": "SANTA CLARA COUNTY",
+							"value": "santaclara"
+						},
+						{
+							"label": "SANTA CRUZ COUNTY",
+							"value": "santacruz"
+						},
+						{
+							"label": "SHASTA COUNTY",
+							"value": "shasta"
+						},
+						{
+							"label": "SIERRA COUNTY",
+							"value": "sierra"
+						},
+						{
+							"label": "SISKIYOU COUNTY",
+							"value": "siskiyou"
+						},
+						{
+							"label": "SOLANO COUNTY",
+							"value": "solano"
+						},
+						{
+							"label": "SONOMA COUNTY",
+							"value": "sonoma"
+						},
+						{
+							"label": "STANISLAUS COUNTY",
+							"value": "stanislaus"
+						},
+						{
+							"label": "SUTTER COUNTY",
+							"value": "sutter"
+						},
+						{
+							"label": "TEHAMA COUNTY",
+							"value": "tehama"
+						},
+						{
+							"label": "TRINITY COUNTY",
+							"value": "trinity"
+						},
+						{
+							"label": "TULARE COUNTY",
+							"value": "tulare"
+						},
+						{
+							"label": "TUOLUMNE COUNTY",
+							"value": "tuolumne"
+						},
+						{
+							"label": "VENTURA COUNTY",
+							"value": "ventura"
+						},
+						{
+							"label": "YOLO COUNTY",
+							"value": "yolo"
+						},
+						{
+							"label": "YUBA COUNTY",
+							"value": "yuba"
+						}
+					],
+					"required": true
+				},
+				"visible": true
+			},
 			{
-                "name": "PrvDom",
-                "label": "Application Domain",
-                "elements": [
-                    {
-						"name": "PrvDomSec",
+				"name": "agency_abbrv_length",
+				"type": "Microsoft.Common.InfoBox",
+				"visible": "[greater(length(basics('agency_abbrv_dropdown').city), 0)]",
+				"options": {
+					"icon": "Warning",
+					"text": "[concat('Due to Azure limitations your agency name (', basics('agency_abbrv_dropdown').city, ') with a length of (', string(length(basics('agency_abbrv_dropdown').city)),') the \"Application Name\" property will be limited to ', string(sub(19, length(basics('agency_abbrv_dropdown').city))) ,' characters ', basics('agency_abbrv_dropdown').type, ' - ', basics('agency_abbrv_dropdown').ori)]"
+				}
+			},
+			{
+				"name": "agency_abbrv",
+				"type": "Microsoft.Common.TextBox",
+				"label": "Agency Abbreviation",
+				"defaultValue": "",
+				"toolTip": "This value has a limit of 8 characters and is combined with the Application Name in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
+				"constraints": {
+					"required": true,
+					"regex": "^[a-z0-9-]{1,8}$",
+					"validationMessage": "The Agency Abbreviation Name must be between 1 and 8 characters long and contain Lower case characters"
+				},
+				"visible": true
+			},
+			{
+				"name": "agency_application",
+				"type": "Microsoft.Common.TextBox",
+				"label": "Application Name",
+				"defaultValue": "ripa",
+				"toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
+				"constraints": {
+					"required": true,
+					"regex": "^[a-z0-9-]{1,10}$",
+					"validationMessage": "The Application Name must be between 1 and 10 characters long and contain Lower case characters"
+				},
+				"visible": true
+			}
+		],
+		"steps": [
+			{
+				"name": "steps_authentication",
+				"label": "Authentication",
+				"subLabel": {},
+				"elements": [
+					{
+						"name": "auth_instructions",
+						"type": "Microsoft.Common.TextBlock",
+						"options": {
+							"text": "This application uses Azure Active Directory, OAuth/OpenID and RBAC. This requires an \"App Registration\" (AR) be created (or use an existing) in the Azure AD Tenant that you wish to use to for authentication & authorization. The AR needs to have several key properties and settings configured in order to work properly. Please review the link below for required settings and scripts that can be used to create a new AR in your tenant.",
+							"link": {
+								"label": "Instructions and scripts download",
+								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Deployment/Scripts/Authentication"
+							}
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_fqdn",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Azure AD FQDN",
+						"defaultValue": "",
+						"toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
+						"constraints": {
+							"required": true,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_app_id",
+						"type": "Microsoft.Common.TextBox",
+						"label": "AAD App Registration ID",
+						"defaultValue": "",
+						"toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
+						"constraints": {
+							"required": true,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_tenant_id",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Tenant ID",
+						"defaultValue": "",
+						"toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
+						"constraints": {
+							"required": true,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_authority",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Login Authority",
+						"defaultValue": "https://login.microsoftonline.com",
+						"toolTip": "This must point to a valid OAuth/OpenID authority.",
+						"constraints": {
+							"required": true,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_logout_url",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Logout URL",
+						"toolTip": "This should point to a URL that clears a users seesion.",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					}
+				]
+			},
+			{
+				"name": "steps_app_domain",
+				"label": "Application Domain",
+				"elements": [
+					{
+						"name": "steps_app_domain_desc",
+						"type": "Microsoft.Common.TextBlock",
+						"visible": true,
+						"options": {
+							"text": "*********************************************************************************"
+						}
+					},
+					{
+						"name": "app_domain_type",
 						"type": "Microsoft.Common.OptionsGroup",
-						"label": "Domain Selection",
-						"defaultValue": "[concat(basics('agapplication'),'-',basics('agAbbr'),'.cssa.cloud')]",
+						"label": "Managed or Private Domain",
+						"defaultValue": "[concat(basics('agency_application'),'-',basics('agency_abbrv'),'.cssa.cloud')]",
 						"toolTip": "",
 						"constraints": {
 							"allowedValues": [
-							{
-								"label": "[concat(basics('agapplication'),'-',basics('agAbbr'),'.cssa.cloud')]",
-								"value": "DefaultDomain"
-							},
-							{
-								"label": "Private Domain",
-								"value": "PrvDo"
-							}
+								{
+									"label": "[concat(basics('agency_application'),'-',basics('agency_abbrv'),'.cssa.cloud')]",
+									"value": "cssa_cloud_domain"
+								},
+								{
+									"label": "Private Domain (you manage dns)",
+									"value": "private_domain"
+								}
 							],
 							"required": true
 						},
 						"visible": true
 					},
 					{
-						"name": "DnsSec",
+						"name": "private_domain",
 						"type": "Microsoft.Common.Section",
-						"label": "",
+						"label": "Following details must be provided prior to beginning the deployment",
 						"elements": [
 							{
-								"name": "cert",
+								"name": "certificate_file",
 								"type": "Microsoft.Common.FileUpload",
-								"label": "Certificate",
+								"label": "Certificate (.pfx or .pem)",
 								"toolTip": "",
 								"constraints": {
 									"required": true,
-									"accept": ".doc,.docx,.xml,application/msword"
+									"accept": ".pem,.pfx"
 								},
 								"options": {
 									"multiple": false,
@@ -161,7 +458,7 @@
 								"visible": true
 							},
 							{
-								"name": "pass",
+								"name": "certificate_password",
 								"type": "Microsoft.Common.TextBox",
 								"label": "Password",
 								"defaultValue": "",
@@ -174,31 +471,70 @@
 								"visible": true
 							},
 							{
-								"name": "DomDnsZone",
+								"name": "private_domain_root",
 								"type": "Microsoft.Common.TextBox",
-								"label": "Domain DNS Zone",
-								"defaultValue": "",
-								"toolTip": "",
+								"label": "Root Domain Name",
+								"defaultValue": "lesmcwhirter.me",
+								"toolTip": "The root DNS entry of your custom domain. I.e. myorganization.gov",
+								"constraints": {
+									"required": true,
+									"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
+									"validationMessage": ""
+								},
+								"visible": true
+							},
+							{
+								"name": "private_domain_cname",
+								"type": "Microsoft.Common.TextBox",
+								"label": "Application DNS CNAME",
+								"defaultValue": "ripa",
+								"toolTip": "This value should be a short and descriptive name to complete the application URL. I.e. ripa.myorganization.gov",
 								"constraints": {
 									"required": true,
 									"regex": "",
 									"validationMessage": ""
 								},
 								"visible": true
+							},
+							{
+								"name": "private_domain_info",
+								"type": "Microsoft.Common.TextBlock",
+								"visible": true,
+								"options": {
+									"text": "[concat('This is your application URL: https://', steps('steps_app_domain').private_domain.private_domain_cname, '.', steps('steps_app_domain').private_domain.private_domain_root)]"
+								}
+							},
+							{
+								"name": "private_domain_warning",
+								"type": "Microsoft.Common.InfoBox",
+								"visible": true,
+								"options": {
+									"icon": "Warning",
+									"text": "[concat('When using a private domain you must create 2 DNS CNAME records in your DNS system. \t\t\t\t\t\t\t\t Please create the following CNAME records in your DNS system before continuing. \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"', basics('agency_application'),'-',basics('agency_abbrv'), '-cdn-ep.azureedge.us\" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"cdnverify.', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"cdnverify.', basics('agency_application'),'-',basics('agency_abbrv'), '-cdn-ep.azureedge.us\"')]"
+								}
 							}
 						],
-							"visible": "[equals(steps('PrvDom').PrvDomSec,'PrvDo')]"
-            		}
-						
-                ]
-            }
-            
-        ],
-        "outputs": {
-            "agency": "[basics('agAbbr')]",
-            "application": "[basics('agapplication')]",
-            "resourcegr_name":"[resourceGroup().name]",
-            "region":"[resourceGroup().location]"
-        }
-    }
+						"visible": "[equals(steps('steps_app_domain').app_domain_type,'private_domain')]"
+					}
+				]
+			}
+		],
+		"outputs": {
+			"agency_name": "[basics('agency_name')]",
+			"agency_abbr": "[basics('agency_abbrv')]",
+			"application": "[basics('agency_application')]",
+			"rg_name": "[resourceGroup().name]",
+			"region": "[resourceGroup().location]",
+			"app_domain_type": "[steps('steps_app_domain').app_domain_type]",
+			"primary_domain": "[steps('steps_app_domain').private_domain.private_domain_root]",
+			"certificate_file": "[steps('steps_app_domain').private_domain.certificate_file]",
+			"certificate_password": "[steps('steps_app_domain').private_domain.certificate_password]",
+			"app_cname": "[steps('steps_app_domain').private_domain.private_domain_root]",
+			"auth_fqdn": "[steps('steps_authentication').auth_fqdn]",
+			"auth_app_id": "[steps('steps_authentication').auth_app_id]",
+			"auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
+			"auth_authority": "[steps('steps_authentication').auth_authority]",
+			"auth_logout_url": "[steps('steps_authentication').auth_logout_url]"
+		}
+	}
 }

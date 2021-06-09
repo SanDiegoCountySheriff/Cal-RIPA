@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "resourcegr_name": {
+    "rg_name": {
       "defaultValue": "[resourceGroup().name]",
       "type": "string"
     },
@@ -82,7 +82,7 @@
       "type": "string"
     },
     "textanalytics_fa_name": {
-      "defaultValue": "textanalytic-fa",
+      "defaultValue": "textanalytics-fa",
       "type": "string"
     },
     "use32BitWorkerProcess": {
@@ -118,7 +118,7 @@
       "type": "string"
     },
     "serverfarms_textanalytics_ASP_name": {
-      "defaultValue": "textanalytic-fa-asp",
+      "defaultValue": "textanalytics-fa-asp",
       "type": "string"
     },
     "virtualNetworks_vnet_name": {
@@ -311,17 +311,17 @@
       "type": "string",
       "defaultValue": "http://stop.usgovcloudapp.net/api"
     },
-    "apim_apis_textAnalytic_path": {
+    "apim_apis_textAnalytics_path": {
       "type": "SecureString",
-      "defaultValue": "TextAnalytic"
+      "defaultValue": "TextAnalytics"
     },
-    "apim_apis_textAnalytic_name": {
+    "apim_apis_textAnalytics_name": {
       "type": "string",
-      "defaultValue": "textanalytic"
+      "defaultValue": "TextAnalytics"
     },
-    "apim_apis_textAnalytic_serviceurl": {
+    "apim_apis_textAnalytics_serviceurl": {
       "type": "string",
-      "defaultValue": "http://textAnalytic.usgovcloudapp.net/api"
+      "defaultValue": "http://textanalytics.usgovcloudapp.net/api"
     },
     "apim_apis_domain_path": {
       "type": "SecureString",
@@ -1209,23 +1209,23 @@
       }
     },
 
-    //TextAnalytic api
+    //TextAnalytics api
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-12-01",
-      "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytic_name'))]",
+      "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytics_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
       ],
       "properties": {
-        "displayName": "[parameters('apim_apis_textAnalytic_name')]",
+        "displayName": "[parameters('apim_apis_textAnalytics_name')]",
         "apiRevision": "1",
         "subscriptionRequired": true,
-        "serviceUrl": "[parameters('apim_apis_textAnalytic_serviceurl')]",
+        "serviceUrl": "[parameters('apim_apis_textAnalytics_serviceurl')]",
         "protocols": ["https"],
         "isCurrent": true,
-        "path": "[parameters('apim_apis_textAnalytic_path')]"
+        "path": "[parameters('apim_apis_textAnalytics_path')]"
       }
     },
 
@@ -3422,37 +3422,37 @@
         "hostNameType": "Verified"
       }
     },
-    {
-      "condition": "[parameters('deploy_rg')]",
-      "type": "microsoft.alertsmanagement/smartdetectoralertrules",
-      "apiVersion": "2019-06-01",
-      "name": "[variables('smartdetectoralertrules_failure_anomalies___ripa_ai_name')]",
-      "location": "[parameters('glocation')]",
-      "dependsOn": [
-        "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
-        "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
-      ],
-      "properties": {
-        "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
-        "state": "Enabled",
-        "severity": "Sev3",
-        "frequency": "PT1M",
-        "detector": {
-          "id": "FailureAnomaliesDetector",
-          "name": "Failure Anomalies",
-          "description": "Detects if your application experiences an abnormal rise in the rate of HTTP requests or dependency calls that are reported as failed. The anomaly detection uses machine learning algorithms and occurs in near real time, therefore there's no need to define a frequency for this signal.<br/></br/>To help you triage and diagnose the problem, an analysis of the characteristics of the failures and related telemetry is provided with the detection. This feature works for any app, hosted in the cloud or on your own servers, that generates request or dependency telemetry - for example, if you have a worker role that calls <a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/application-insights/app-insights-api-custom-events-metrics#trackrequest\\\" target=\\\"_blank\\\">TrackRequest()</a> or <a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/application-insights/app-insights-api-custom-events-metrics#trackdependency\\\" target=\\\"_blank\\\">TrackDependency()</a>.<br/><br/><a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/azure-monitor/app/proactive-failure-diagnostics\\\" target=\\\"_blank\\\">Learn more about Failure Anomalies</a><br><br><b>A note about your data privacy:</b><br><br>The service is entirely automatic and only you can see these notifications. <a class=\\\"ext-smartDetecor-link\\\" href=\\\"https://docs.microsoft.com/en-us/azure/azure-monitor/app/data-retention-privacy\\\" target=\\\"_blank\\\">Read more about data privacy</a><br><br>Smart Alerts conditions can't be edited or added for now.",
-          "supportedResourceTypes": ["ApplicationInsights"]
-        },
-        "scope": [
-          "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
-        ],
-        "actionGroups": {
-          "groupIds": [
-            "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
-          ]
-        }
-      }
-    },
+    // {
+    //   "condition": "[parameters('deploy_rg')]",
+    //   "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+    //   "apiVersion": "2019-06-01",
+    //   "name": "[variables('smartdetectoralertrules_failure_anomalies___ripa_ai_name')]",
+    //   "location": "[parameters('glocation')]",
+    //   "dependsOn": [
+    //     "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
+    //     "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+    //   ],
+    //   "properties": {
+    //     "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+    //     "state": "Enabled",
+    //     "severity": "Sev3",
+    //     "frequency": "PT1M",
+    //     "detector": {
+    //       "id": "FailureAnomaliesDetector",
+    //       "name": "Failure Anomalies",
+    //       "description": "Detects if your application experiences an abnormal rise in the rate of HTTP requests or dependency calls that are reported as failed. The anomaly detection uses machine learning algorithms and occurs in near real time, therefore there's no need to define a frequency for this signal.<br/></br/>To help you triage and diagnose the problem, an analysis of the characteristics of the failures and related telemetry is provided with the detection. This feature works for any app, hosted in the cloud or on your own servers, that generates request or dependency telemetry - for example, if you have a worker role that calls <a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/application-insights/app-insights-api-custom-events-metrics#trackrequest\\\" target=\\\"_blank\\\">TrackRequest()</a> or <a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/application-insights/app-insights-api-custom-events-metrics#trackdependency\\\" target=\\\"_blank\\\">TrackDependency()</a>.<br/><br/><a class=\"ext-smartDetecor-link\" href=\\\"https://docs.microsoft.com/azure/azure-monitor/app/proactive-failure-diagnostics\\\" target=\\\"_blank\\\">Learn more about Failure Anomalies</a><br><br><b>A note about your data privacy:</b><br><br>The service is entirely automatic and only you can see these notifications. <a class=\\\"ext-smartDetecor-link\\\" href=\\\"https://docs.microsoft.com/en-us/azure/azure-monitor/app/data-retention-privacy\\\" target=\\\"_blank\\\">Read more about data privacy</a><br><br>Smart Alerts conditions can't be edited or added for now.",
+    //       "supportedResourceTypes": ["ApplicationInsights"]
+    //     },
+    //     "scope": [
+    //       "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
+    //     ],
+    //     "actionGroups": {
+    //       "groupIds": [
+    //         "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+    //       ]
+    //     }
+    //   }
+    // },
     {
       "condition": "[and(parameters('deploy_rg'),equals(parameters('environment'),'d'))]",
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -3569,7 +3569,7 @@
     "resourcegroup_name": {
       "condition": "[parameters('deploy_rg')]",
       "type": "string",
-      "value": "[parameters('resourcegr_name')]"
+      "value": "[parameters('rg_name')]"
     },
     "key_vault_name": {
       "condition": "[parameters('deploy_rg')]",
