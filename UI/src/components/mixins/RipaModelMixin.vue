@@ -191,10 +191,9 @@ export default {
         this.viewModel.actionsTaken.propertySearchConsentGiven = false
       }
 
-      if (
-        !this.viewModel.actionsTaken.personSearchConsentGiven &&
-        !this.viewModel.actionsTaken.propertySearchConsentGiven
-      ) {
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      if (!actionsTaken.includes(18) && !actionsTaken.includes(20)) {
         this.viewModel.actionsTaken.basisForSearch = null
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false

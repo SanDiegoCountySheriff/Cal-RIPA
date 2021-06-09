@@ -40,7 +40,10 @@
                 <v-divider></v-divider>
               </template>
 
-              <v-stepper-step step="7"></v-stepper-step>
+              <v-stepper-step
+                class="ripa-form-wrapper--summary-step-top"
+                step="7"
+              ></v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
@@ -228,7 +231,10 @@
                 <v-divider></v-divider>
               </template>
 
-              <v-stepper-step step="7"></v-stepper-step>
+              <v-stepper-step
+                class="ripa-form-wrapper--summary-step-bottom"
+                step="7"
+              ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
 
@@ -566,6 +572,38 @@ export default {
         this.stop.stepTrace.push(this.stepTrace)
       }
     },
+
+    getFormSummaryStepText() {
+      console.log(this.anyAgencyQuestions)
+      return this.anyAgencyQuestions ? '7' : '6'
+    },
+  },
+
+  mounted() {
+    console.log('mounted')
+    this.$nextTick(() => {
+      const [top] = document.getElementsByClassName(
+        'ripa-form-wrapper--summary-step-top',
+      )
+      if (top) {
+        const [firstSpan] = top.getElementsByClassName('v-stepper__step__step')
+        if (firstSpan) {
+          firstSpan.innerText = this.getFormSummaryStepText()
+        }
+      }
+
+      const [bottom] = document.getElementsByClassName(
+        'ripa-form-wrapper--summary-step-bottom',
+      )
+      if (bottom) {
+        const [firstSpan] = bottom.getElementsByClassName(
+          'v-stepper__step__step',
+        )
+        if (firstSpan) {
+          firstSpan.innerText = this.getFormSummaryStepText()
+        }
+      }
+    })
   },
 
   watch: {

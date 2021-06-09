@@ -362,7 +362,7 @@ export default new Vuex.Store({
         .then(response => {
           const data = response.data
           commit('updatePiiDate')
-          return data.entities.length > 0
+          return data && data.piiEntities && data.piiEntities.length > 0
         })
         .catch(error => {
           console.log('There was an error checking for PII.', error)
@@ -602,7 +602,7 @@ export default new Vuex.Store({
         })
     },
 
-    putOfficerStop({ dispatch, state }, stop) {
+    editOfficerStop({ dispatch, state }, stop) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -829,6 +829,13 @@ export default new Vuex.Store({
           .then(response => {
             const data = response.data
               .filter(item => item.status === 'Active')
+              .filter(item => {
+                const itemCounty = item.county ? item.county.toUpperCase() : ''
+                const configCounty = state.apiConfig.defaultCounty
+                  ? state.apiConfig.defaultCounty.toUpperCase()
+                  : ''
+                return itemCounty === configCounty
+              })
               .sort((x, y) => {
                 const schoolA = x.name.toUpperCase()
                 const schoolB = y.name.toUpperCase()
