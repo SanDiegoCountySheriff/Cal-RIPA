@@ -12,9 +12,9 @@ namespace RIPA.Functions.TextAnalytics
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IPiiTextAnalyticsService>(InitializeTextAnaylityicsClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<IPiiTextAnalyticsService>(InitializeTextAnaylityicsClientInstanceAsync());
         }
-        private static async Task<PiiTextAnalyticsService> InitializeTextAnaylityicsClientInstanceAsync()
+        private static PiiTextAnalyticsService InitializeTextAnaylityicsClientInstanceAsync()
         {
             PiiTextAnalyticsService piiTextAnalytics = new PiiTextAnalyticsService();
             return piiTextAnalytics;

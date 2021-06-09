@@ -14,34 +14,36 @@ namespace RIPA.Functions.Stop.Functions
 {
     public class DeleteStop
     {
-        private readonly IStopCosmosDbService _stopCosmosDbService;
+        // NOTE: LM: I do not believe the system should allow Stops to be deleted
 
-        public DeleteStop(IStopCosmosDbService stopCosmosDbService)
-        {
-            _stopCosmosDbService = stopCosmosDbService;
-        }
+        //private readonly IStopCosmosDbService _stopCosmosDbService;
 
-        [FunctionName("DeleteStop")]
-        [OpenApiOperation(operationId: "DeleteStop", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Stop Id/ori")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Stop deleted")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop Id not found")]
+        //public DeleteStop(IStopCosmosDbService stopCosmosDbService)
+        //{
+        //    _stopCosmosDbService = stopCosmosDbService;
+        //}
 
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStop/{Id}")] HttpRequest req, string Id, ILogger log)
-        {
-            log.LogInformation("Delete - Delete Stop requested");
+        //[FunctionName("DeleteStop")]
+        //[OpenApiOperation(operationId: "DeleteStop", tags: new[] { "name" })]
+        //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        //[OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Stop Id/ori")]
+        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Stop deleted")]
+        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop Id not found")]
 
-            // NOTE: LM: I do not believe the system should allow Stops to be deleted
+        //public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteStop/{Id}")] HttpRequest req, string Id, ILogger log)
+        //{
+        //    log.LogInformation("Delete - Delete Stop requested");
 
-            //if (!string.IsNullOrEmpty(Id))
-            //{
-            //    await _stopCosmosDbService.DeleteStopAsync(Id);
-            //    return new OkObjectResult($"Deleted {Id}");
-            //}
+            
 
-            return new BadRequestObjectResult("Not found");
-        }
+        //    if (!string.IsNullOrEmpty(Id))
+        //    {
+        //        await _stopCosmosDbService.DeleteStopAsync(Id);
+        //        return new OkObjectResult($"Deleted {Id}");
+        //    }
+
+        //    return new BadRequestObjectResult("Not found");
+        //}
     }
 }
 
