@@ -388,7 +388,7 @@ export default new Vuex.Store({
 
     deleteBeat({ dispatch, state }, beat) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
+        .delete(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -405,7 +405,7 @@ export default new Vuex.Store({
 
     deleteCity({ dispatch, state }, city) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.id}`, {
+        .delete(`${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -422,12 +422,15 @@ export default new Vuex.Store({
 
     deleteSchool({ dispatch, state }, school) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .delete(
+          `${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminSchools')
         })
@@ -439,7 +442,7 @@ export default new Vuex.Store({
 
     deleteStatute({ dispatch, state }, statute) {
       return axios
-        .put(
+        .delete(
           `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.id}`,
           {
             headers: {
