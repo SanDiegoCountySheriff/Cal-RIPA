@@ -602,7 +602,7 @@ export default new Vuex.Store({
         })
     },
 
-    putOfficerStop({ dispatch, state }, stop) {
+    editOfficerStop({ dispatch, state }, stop) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
