@@ -22,13 +22,7 @@
             >Admin: Maintain Statutues</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-dialog
-            v-model="dialog"
-            max-width="1000px"
-            :light="getLight"
-            :dark="getDark"
-            persistent
-          >
+          <v-dialog v-model="dialog" max-width="1000px" persistent>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -127,13 +121,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog
-            v-model="dialogDelete"
-            max-width="500px"
-            :light="getLight"
-            :dark="getDark"
-            persistent
-          >
+          <v-dialog v-model="dialogDelete" max-width="500px" persistent>
             <v-card>
               <v-card-title
                 >Are you sure you want to delete this statute?</v-card-title
@@ -219,14 +207,6 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-    },
-
-    getLight() {
-      return this.$vuetify.theme.dark
-    },
-
-    getDark() {
-      return !this.$vuetify.theme.dark
     },
   },
 

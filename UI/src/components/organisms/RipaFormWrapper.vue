@@ -1,240 +1,254 @@
 <template>
-  <v-card class="mx-auto" max-width="900" outlined>
-    <v-card-text>
-      <template v-if="stepIndex == 0">
-        <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
-      </template>
-      <template v-if="stepIndex >= 1 && stepIndex <= 7">
-        <v-stepper v-model="stepIndex">
-          <v-stepper-header>
-            <v-stepper-step :complete="stepIndex > 1" step="1">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 2" step="2">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 3" step="3">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 4" step="4">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 5" step="5">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <template v-if="anyAgencyQuestions">
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+  <div class="ripa-form-wrapper">
+    <v-card class="mx-auto" max-width="900" outlined>
+      <v-card-text>
+        <template v-if="stepIndex == 0">
+          <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+        </template>
+        <template v-if="stepIndex >= 1 && stepIndex <= 7">
+          <v-stepper v-model="stepIndex">
+            <v-stepper-header>
+              <v-stepper-step :complete="stepIndex > 1" step="1">
               </v-stepper-step>
 
               <v-divider></v-divider>
-            </template>
 
-            <v-stepper-step step="7"></v-stepper-step>
-          </v-stepper-header>
-
-          <v-stepper-items>
-            <v-stepper-content step="1">
-              <template v-if="stepIndex === 1">
-                <ripa-form-step-1
-                  v-model="stop"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :beats="beats"
-                  :county-cities="countyCities"
-                  :display-beat-input="displayBeatInput"
-                  :is-authenticated="isAuthenticated"
-                  :is-edit-stop="isEditStop()"
-                  :last-location="lastLocation"
-                  :loading-gps="loadingGps"
-                  :loading-pii="loadingPiiStep1"
-                  :non-county-cities="nonCountyCities"
-                  :schools="schools"
-                  :user="user"
-                  :valid-last-location="validLastLocation"
-                  :on-open-favorites="onOpenLocationFavorites"
-                  :on-open-last-location="onOpenLastLocation"
-                  :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveLocationFavorite"
-                  :on-gps-location="onGpsLocation"
-                  :on-update-user="onUpdateUser"
-                  @input="handleInput"
-                ></ripa-form-step-1>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="2">
-              <template v-if="stepIndex === 2">
-                <ripa-subheader
-                  class="tw-text-right"
-                  :text="getEditPersonText"
-                  no-margins
-                ></ripa-subheader>
-
-                <ripa-form-step-2
-                  v-model="stop"
-                  :disabled="isFormStep2Disabled"
-                  :on-back="handleBack"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :on-open-statute="onOpenStatute"
-                  :back-button-visible="getFormStep2BackButtonVisible"
-                  @input="handleInput"
-                ></ripa-form-step-2>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="3">
-              <template v-if="stepIndex === 3">
-                <ripa-subheader
-                  class="tw-text-right"
-                  :text="getEditPersonText"
-                  no-margins
-                ></ripa-subheader>
-
-                <ripa-form-step-3
-                  v-model="stop"
-                  :last-reason="lastReason"
-                  :loading-pii="loadingPiiStep3"
-                  :on-back="handleBack"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :on-open-favorites="onOpenReasonFavorites"
-                  :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveReasonFavorite"
-                  :statutes="statutes"
-                  @input="handleInput"
-                ></ripa-form-step-3>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="4">
-              <template v-if="stepIndex === 4">
-                <ripa-subheader
-                  class="tw-text-right"
-                  :text="getEditPersonText"
-                  no-margins
-                ></ripa-subheader>
-
-                <ripa-form-step-4
-                  v-model="stop"
-                  :loading-pii="loadingPiiStep4"
-                  :on-back="handleBack"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :on-open-statute="onOpenStatute"
-                  :statutes="statutes"
-                  @input="handleInput"
-                ></ripa-form-step-4>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="5">
-              <template v-if="stepIndex === 5">
-                <ripa-subheader
-                  class="tw-text-right"
-                  :text="getEditPersonText"
-                  no-margins
-                ></ripa-subheader>
-
-                <ripa-form-step-5
-                  v-model="stop"
-                  :last-result="lastResult"
-                  :on-back="handleBack"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :on-open-favorites="onOpenResultFavorites"
-                  :on-open-statute="onOpenStatute"
-                  :on-save-favorite="onSaveResultFavorite"
-                  :statutes="statutes"
-                  @input="handleInput"
-                ></ripa-form-step-5>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="6">
-              <template v-if="stepIndex === 6">
-                <ripa-form-step-6
-                  v-model="stop"
-                  :on-back="handleBack"
-                  :on-next="handleNext"
-                  :on-cancel="handleCancel"
-                  :back-button-visible="getFormStep6BackButtonVisible"
-                  @input="handleInput"
-                ></ripa-form-step-6>
-              </template>
-            </v-stepper-content>
-
-            <v-stepper-content step="7">
-              <template v-if="stepIndex === 7">
-                <ripa-form-step-7
-                  v-model="stop"
-                  :api-stop="getApiStop"
-                  :on-add-person="handleAddPerson"
-                  :on-back="handleBack"
-                  :on-delete-person="handleDeletePerson"
-                  :on-edit-agency-questions="handleEditAgencyQuestions"
-                  :on-edit-person="handleEditPerson"
-                  :on-edit-stop="handleEditStop"
-                  :on-submit="handleSubmit"
-                  :on-cancel="handleCancel"
-                  @input="handleInput"
-                ></ripa-form-step-7>
-              </template>
-            </v-stepper-content>
-          </v-stepper-items>
-
-          <v-stepper-header>
-            <v-stepper-step :complete="stepIndex > 1" step="1">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 2" step="2">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 3" step="3">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 4" step="4">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="stepIndex > 5" step="5">
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <template v-if="anyAgencyQuestions">
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+              <v-stepper-step :complete="stepIndex > 2" step="2">
               </v-stepper-step>
 
               <v-divider></v-divider>
-            </template>
 
-            <v-stepper-step step="7"></v-stepper-step>
-          </v-stepper-header>
-        </v-stepper>
-      </template>
-      <template v-if="stepIndex === confirmationStepIndex">
-        <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
-      </template>
-    </v-card-text>
-  </v-card>
+              <v-stepper-step :complete="stepIndex > 3" step="3">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 4" step="4">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 5" step="5">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <template v-if="anyAgencyQuestions">
+                <v-stepper-step :complete="stepIndex > 6" step="6">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step step="7"></v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <template v-if="stepIndex === 1">
+                  <ripa-form-step-1
+                    v-model="stop"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :beats="beats"
+                    :county-cities="countyCities"
+                    :display-beat-input="displayBeatInput"
+                    :is-authenticated="isAuthenticated"
+                    :is-edit-stop="isEditStop()"
+                    :last-location="lastLocation"
+                    :loading-gps="loadingGps"
+                    :loading-pii="loadingPiiStep1"
+                    :non-county-cities="nonCountyCities"
+                    :schools="schools"
+                    :user="user"
+                    :valid-last-location="validLastLocation"
+                    :on-open-favorites="onOpenLocationFavorites"
+                    :on-open-last-location="onOpenLastLocation"
+                    :on-open-statute="onOpenStatute"
+                    :on-save-favorite="onSaveLocationFavorite"
+                    :on-gps-location="onGpsLocation"
+                    :on-update-user="onUpdateUser"
+                    @input="handleInput"
+                  ></ripa-form-step-1>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <template v-if="stepIndex === 2">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-2
+                    v-model="stop"
+                    :disabled="isFormStep2Disabled"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :on-open-statute="onOpenStatute"
+                    :back-button-visible="getFormStep2BackButtonVisible"
+                    @input="handleInput"
+                  ></ripa-form-step-2>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <template v-if="stepIndex === 3">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-3
+                    v-model="stop"
+                    :last-reason="lastReason"
+                    :loading-pii="loadingPiiStep3"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :on-open-favorites="onOpenReasonFavorites"
+                    :on-open-statute="onOpenStatute"
+                    :on-save-favorite="onSaveReasonFavorite"
+                    :statutes="statutes"
+                    @input="handleInput"
+                  ></ripa-form-step-3>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="4">
+                <template v-if="stepIndex === 4">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-4
+                    v-model="stop"
+                    :loading-pii="loadingPiiStep4"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :on-open-statute="onOpenStatute"
+                    :statutes="statutes"
+                    @input="handleInput"
+                  ></ripa-form-step-4>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="5">
+                <template v-if="stepIndex === 5">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-5
+                    v-model="stop"
+                    :last-result="lastResult"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :on-open-favorites="onOpenResultFavorites"
+                    :on-open-statute="onOpenStatute"
+                    :on-save-favorite="onSaveResultFavorite"
+                    :statutes="statutes"
+                    @input="handleInput"
+                  ></ripa-form-step-5>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="6">
+                <template v-if="stepIndex === 6">
+                  <ripa-form-step-6
+                    v-model="stop"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :back-button-visible="getFormStep6BackButtonVisible"
+                    @input="handleInput"
+                  ></ripa-form-step-6>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="7">
+                <template v-if="stepIndex === 7">
+                  <ripa-form-step-7
+                    v-model="stop"
+                    :admin-editing="adminEditing"
+                    :api-stop="getApiStop"
+                    :on-add-person="handleAddPerson"
+                    :on-back="handleBack"
+                    :on-delete-person="handleDeletePerson"
+                    :on-edit-agency-questions="handleEditAgencyQuestions"
+                    :on-edit-person="handleEditPerson"
+                    :on-edit-stop="handleEditStop"
+                    :on-submit="handleSubmit"
+                    :on-cancel="handleCancel"
+                    @input="handleInput"
+                  ></ripa-form-step-7>
+                </template>
+              </v-stepper-content>
+            </v-stepper-items>
+
+            <v-stepper-header>
+              <v-stepper-step :complete="stepIndex > 1" step="1">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 2" step="2">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 3" step="3">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 4" step="4">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 5" step="5">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <template v-if="anyAgencyQuestions">
+                <v-stepper-step :complete="stepIndex > 6" step="6">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step step="7"></v-stepper-step>
+            </v-stepper-header>
+          </v-stepper>
+
+          <template v-if="displayDebugger">
+            <v-btn class="tw-mt-3" text @click="handleDebugger">Debugger</v-btn>
+          </template>
+        </template>
+        <template v-if="stepIndex === confirmationStepIndex">
+          <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
+        </template>
+      </v-card-text>
+    </v-card>
+
+    <ripa-json-viewer-dialog
+      :full-stop="fullStop"
+      :api-stop="getApiStop"
+      :show-dialog="showDialog"
+      :on-close="handleCloseDialog"
+    ></ripa-json-viewer-dialog>
+  </div>
 </template>
 
 <script>
@@ -246,6 +260,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
+import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { fullStopToApiStop } from '@/utilities/stop'
@@ -262,6 +277,7 @@ export default {
     RipaFormStep5,
     RipaFormStep6,
     RipaFormStep7,
+    RipaJsonViewerDialog,
     RipaSubheader,
     RipaTemplate,
   },
@@ -272,6 +288,7 @@ export default {
       confirmationStepIndex: 8,
       stop: this.value,
       stepTrace: null,
+      showDialog: false,
     }
   },
 
@@ -308,45 +325,45 @@ export default {
     },
 
     isFormStep2Disabled() {
-      return !this.isEditStop() && this.isEditPerson() && this.stepIndex === 2
+      return this.isAdminEditing() && this.stepIndex === 2
     },
   },
 
   methods: {
-    getEditFromStepIndexFromLocalStorage() {
-      return localStorage.getItem('ripa_edit_form_step_index')
+    handleDebugger() {
+      this.showDialog = true
+    },
+
+    handleCloseDialog() {
+      this.showDialog = false
+    },
+
+    isAdminEditing() {
+      const value = localStorage.getItem('ripa_form_admin_editing')
+      return value ? value === '1' : false
+    },
+
+    isCreateForm() {
+      return (
+        !this.isEditStop() &&
+        !this.isEditPerson() &&
+        !this.isEditAgencyQuestions()
+      )
     },
 
     isEditStop() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '1'
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_stop')
+      return value ? value === '1' : false
     },
 
     isEditPerson() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return (
-          editFormStepIndex === '2' ||
-          editFormStepIndex === '3' ||
-          editFormStepIndex === '4' ||
-          editFormStepIndex === '5'
-        )
-      }
-
-      return true
+      const value = localStorage.getItem('ripa_form_edit_person')
+      return value ? value === '1' : false
     },
 
     isEditAgencyQuestions() {
-      const editFormStepIndex = this.getEditFromStepIndexFromLocalStorage()
-      if (editFormStepIndex) {
-        return editFormStepIndex === '6'
-      }
-
-      return this.anyAgencyQuestions
+      const value = localStorage.getItem('ripa_form_edit_agency_questions')
+      return value ? value === '1' : false
     },
 
     handleInput(newVal) {
@@ -362,10 +379,6 @@ export default {
       if (this.onAddPerson) {
         this.onAddPerson()
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
     },
 
     handleBack() {
@@ -377,6 +390,18 @@ export default {
     },
 
     handleCancel() {
+      if (
+        this.isEditStop() ||
+        this.isEditPerson() ||
+        this.isEditAgencyQuestions()
+      ) {
+        this.handleCancelAction()
+      } else {
+        this.handleCancelForm()
+      }
+    },
+
+    handleCancelForm() {
       this.$confirm({
         title: 'Confirm Cancel',
         message: `Are you sure you want to cancel the form? You will lose all changes.`,
@@ -386,13 +411,26 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            this.stepIndex = 1
-            if (this.onStepIndexChange) {
-              this.onStepIndexChange(this.stepIndex)
+            if (this.onCancelForm) {
+              this.onCancelForm()
             }
-            localStorage.removeItem('ripa_edit_form_step_index')
-            if (this.onCancel) {
-              this.onCancel()
+          }
+        },
+      })
+    },
+
+    handleCancelAction() {
+      this.$confirm({
+        title: 'Confirm Cancel',
+        message: `Are you sure you want to cancel the action? You will lose all changes.`,
+        button: {
+          no: 'No',
+          yes: 'Yes',
+        },
+        callback: confirm => {
+          if (confirm) {
+            if (this.onCancelAction) {
+              this.onCancelAction()
             }
           }
         },
@@ -418,17 +456,13 @@ export default {
     },
 
     handleEditPerson(id) {
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
       this.stepIndex = 2
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditPerson) {
+        this.onEditPerson(id)
+      }
     },
 
     handleEditStop() {
@@ -436,10 +470,9 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditStop) {
+        this.onEditStop()
+      }
     },
 
     handleEditAgencyQuestions() {
@@ -447,25 +480,26 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      localStorage.setItem(
-        'ripa_edit_form_step_index',
-        this.stepIndex.toString(),
-      )
+      if (this.onEditAgencyQuestions) {
+        this.onEditAgencyQuestions()
+      }
     },
 
     getNextStepIndex() {
-      if (this.isEditStop() && !this.isEditPerson()) {
-        localStorage.removeItem('ripa_edit_form_step_index')
-        return 7
+      if (!this.isCreateForm()) {
+        if (this.isEditStop() && !this.isEditPerson()) {
+          return 7
+        }
+
+        if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
+          return 7
+        }
       }
 
-      if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
-        localStorage.removeItem('ripa_edit_form_step_index')
-        return 7
-      }
-
-      if (!this.isEditAgencyQuestions() && this.stepIndex === 5) {
-        return 7
+      if (this.isCreateForm()) {
+        if (!this.anyAgencyQuestions && this.stepIndex === 5) {
+          return 7
+        }
       }
 
       return this.stepIndex + 1
@@ -473,7 +507,6 @@ export default {
 
     handleNext() {
       this.stepIndex = this.getNextStepIndex()
-
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -482,12 +515,11 @@ export default {
 
     handleStartNew() {
       this.stepIndex = 1
-      localStorage.removeItem('ripa_edit_form_step_index')
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCancel) {
-        this.onCancel()
+      if (this.onCancelForm) {
+        this.onCancelForm()
       }
     },
 
@@ -502,12 +534,19 @@ export default {
         callback: confirm => {
           if (confirm) {
             this.stepIndex = this.confirmationStepIndex
-            localStorage.removeItem('ripa_edit_form_step_index')
-            if (this.onSubmit) {
-              this.onSubmit(this.getApiStop)
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
             }
-            if (this.onCancel) {
-              this.onCancel()
+            if (this.onSubmitStop) {
+              this.onSubmitStop(this.getApiStop)
+            }
+            const route = localStorage.getItem('ripa_form_edit_route')
+            const parsedRoute = route || '/'
+            if (this.adminEditing && this.onSubmitAudit) {
+              this.onSubmitAudit(parsedRoute)
+            }
+            if (this.onCancelForm) {
+              this.onCancelForm()
             }
           }
         },
@@ -547,6 +586,9 @@ export default {
         }
       }
       this.stepIndex = newVal
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
     },
   },
 
@@ -554,6 +596,10 @@ export default {
     value: {
       type: Object,
       default: () => {},
+    },
+    adminEditing: {
+      type: Boolean,
+      default: false,
     },
     schools: {
       type: Array,
@@ -568,6 +614,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    displayDebugger: {
       type: Boolean,
       default: false,
     },
@@ -631,7 +681,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onCancelForm: {
+      type: Function,
+      default: () => {},
+    },
+    onCancelAction: {
       type: Function,
       default: () => {},
     },
@@ -644,6 +698,10 @@ export default {
       default: () => {},
     },
     onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
       type: Function,
       default: () => {},
     },
@@ -683,7 +741,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onSubmitStop: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmitAudit: {
       type: Function,
       default: () => {},
     },

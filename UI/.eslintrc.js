@@ -11,18 +11,19 @@ module.exports = {
     'array-callback-return': 'warn',
     eqeqeq: 'warn',
     'import/no-duplicates': 'warn',
-    'import/no-extraneous-dependencies': 'off', // always ignore warning or error
+    'import/no-extraneous-dependencies': 'off',
     'import/no-named-default': 'warn',
-    'import/no-webpack-loader-syntax': 'off', // always ignore warning or error
-    'linebreak-style': ['off', 'unix'], // always ignore warning or error
-    'no-console': 'off', // always ignore warning or error
+    'import/no-webpack-loader-syntax': 'off',
+    'linebreak-style': ['off', 'unix'],
+    'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-dupe-keys': 'warn',
-    'no-labels': 'off', // always ignore warning or error
+    'no-labels': 'off',
+    'no-nested-ternary': 'off',
     'no-prototype-builtins': 'warn',
     'no-return-await': 'warn',
-    'no-sequences': 'off', // always ignore warning or error
-    'no-throw-literal': 'off', // always ignore warning or error
+    'no-sequences': 'off',
+    'no-throw-literal': 'off',
     'no-undef': 'warn',
     'no-unreachable': 'warn',
     'no-unused-expressions': 'warn',
@@ -39,7 +40,7 @@ module.exports = {
     'quote-props': ['warn', 'as-needed'],
     'vue/experimental-script-setup-vars': 'off',
     'vue/no-dupe-keys': 'warn',
-    'vue/no-mutating-props': 'off', // always ignore warning or error
+    'vue/no-mutating-props': 'off',
     'vue/no-side-effects-in-computed-properties': 'warn',
     'vue/no-unused-components': 'warn',
     'vue/no-unused-vars': 'warn',

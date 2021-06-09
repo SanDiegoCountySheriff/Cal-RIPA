@@ -1,11 +1,11 @@
 <template>
-  <v-container class="tw-mt-2" fluid>
+  <v-container class="submissionDetail--container tw-mt-2" fluid>
     <v-progress-linear
-      v-if="currentSubmissionLoading"
+      v-if="loading"
       indeterminate
       color="cyan"
     ></v-progress-linear>
-    <v-layout row>
+    <v-layout v row>
       <v-flex xs12>
         <v-toolbar flat>
           <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
@@ -17,14 +17,10 @@
         </v-toolbar>
       </v-flex>
     </v-layout>
-    <v-layout row class="submissionDetail--header">
+    <v-layout v-if="!loading" row class="submissionDetail--header">
       <v-flex xs4>
         <span class="submissionDetail--header--label">Submission ID:</span>
         <span>{{ submission.submission.id }}</span>
-      </v-flex>
-      <v-flex xs4>
-        <span class="submissionDetail--header--label">Range:</span>
-        <span>{{ submission.submission.range }}</span>
       </v-flex>
       <v-flex xs4>
         <span class="submissionDetail--header--label">Date Submitted:</span>
@@ -36,9 +32,9 @@
         }}</span>
       </v-flex>
     </v-layout>
-    <v-layout row>
-      <v-flex v-if="submission.summary.length" xs12>
-        <div class="submissionSummary">
+    <v-layout v-if="submission" row>
+      <v-flex v-if="submission" xs12>
+        <div v-if="submission.summary.length" class="submissionSummary">
           <p v-for="(errorCode, index) in submission.summary" :key="index">
             <span class="label">{{ errorCode.code }}</span>
             <span class="count">{{ errorCode.count }}</span>
@@ -50,27 +46,18 @@
           class="submissionsStopTable"
           :loading="loading"
           :headers="headers"
-          :single-select="false"
+          :hide-default-footer="true"
           :items="submission.stops"
           :server-items-length="getTotalStops"
-          :items-per-page="10"
-          @update:page="handleUpdatePage"
-          @update:sortBy="handleUpdateSort"
-          @update:options="handleUpdateOptions"
-          @item-selected="handleRowSelected"
-          @toggle-select-all="handleToggleSelectAll"
           :search="search"
           sort-by="stopDateTime"
           sort-desc
-          :footer-props="{
-            itemsPerPageOptions: [10, 25, 50, 100, 250, -1],
-          }"
         >
-          <!-- <template v-slot:item.actions="{ item }">
-            <v-icon small class="tw-mr-2" @click="editItem(submission)">
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="tw-mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-          </template> -->
+          </template>
           <template v-slot:item.errorCodes="{ item }">
             <p
               class="submissionError--wrapper"
@@ -88,6 +75,30 @@
           <template v-slot:no-data>
             <div>No Stops Found in This Submission</div>
           </template>
+          <template v-slot:footer>
+            <div class="paginationWrapper">
+              <p>
+                Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
+                {{ submission.submission.recordCount }}
+              </p>
+              <v-pagination
+                v-model="currentPage"
+                :length="getPaginationLength"
+                @next="handleNextPage"
+                @input="handleJumpToPage"
+                @previous="handlePreviousPage"
+              ></v-pagination>
+              <v-combobox
+                outlined
+                dense
+                v-model="itemsPerPage"
+                :items="itemsPerPageOptions"
+                label="Items per page"
+                @input="handleUpdateItemsPerPage"
+                class="itemsPerPageSelector"
+              ></v-combobox>
+            </div>
+          </template>
         </v-data-table>
       </v-flex>
     </v-layout>
@@ -96,6 +107,7 @@
 
 <script>
 import { format } from 'date-fns'
+import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 
 export default {
   name: 'ripa-submission',
@@ -112,25 +124,99 @@ export default {
       ],
       format,
       currentSubmissionLoading: false,
+      currentPage: 1,
+      itemsPerPageOptions: [10, 25, 50, 100, 250],
+      itemsPerPage: 10,
+      search: '',
+      currentOffset: this.currentPage * this.itemsPerPage,
     }
   },
+
+  mixins: [RipaEditStopMixin],
 
   methods: {
     handleBackToSubmissions() {
       this.$router.push('/admin/submissions')
     },
+    handleNextPage() {
+      // the pagination component updates the current page
+      // BEFORE these are called but this math is based on the
+      // current value. So need to subtract 1
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handlePreviousPage() {
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1),
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handleJumpToPage() {
+      this.$emit('submissionDetailPaginate', {
+        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
+    handleUpdateItemsPerPage(val) {
+      this.itemsPerPage = val
+      // calculate the page you SHOULD be on with the new items per page
+      const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.$emit('redoSubmissionDetailItemsPerPage', {
+        id: this.submissionId,
+        limit: this.itemsPerPage,
+        offset: this.itemsPerPage * (newPage - 1),
+      })
+    },
+    editItem(item) {
+      this.handleEditStop(item)
+    },
+  },
+
+  computed: {
+    getTotalStops() {
+      if (this.submission) {
+        return this.submission.stops.length
+      } else {
+        return 0
+      }
+    },
+    getPaginationLength() {
+      if (this.submission) {
+        return Math.ceil(this.submission.stops.length / this.itemsPerPage)
+      } else {
+        return 0
+      }
+    },
+    calculateItemsTo() {
+      if (this.currentPage === this.getPaginationLength) {
+        return this.submission.stops.length
+      } else {
+        return this.currentPage - 1 + this.itemsPerPage
+      }
+    },
+    calculateItemsFrom() {
+      if (this.currentPage === 1) {
+        return this.currentPage
+      } else {
+        return (this.currentPage - 1) * this.itemsPerPage + 1
+      }
+    },
   },
 
   created() {
     if (this.submissionId) {
-      this.currentSubmissionLoading = true
       // this.$emit('loadNewSubmission', newValue)
     }
   },
 
   watch: {
     submissionId(newValue, oldValue) {
-      console.log(newValue)
+      this.currentSubmissionLoading = true
       if (newValue !== oldValue) {
         this.$emit('loadNewSubmission', newValue)
       }
@@ -144,17 +230,21 @@ export default {
     submission: {
       type: Object,
     },
+    loading: {
+      type: Boolean,
+    },
   },
 }
 </script>
 
 <style lang="scss">
-.submissionDetail--titleBar {
+.submissionDetail--container {
   button.backToSubmissionsBtn {
     margin-left: 20px;
     border: 1px solid #666;
   }
 }
+
 .submissionDetail--header {
   padding: 16px;
   span {

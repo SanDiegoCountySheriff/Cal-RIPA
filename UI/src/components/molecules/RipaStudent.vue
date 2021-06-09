@@ -26,13 +26,13 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaFormMixin from '@/components/mixins/RipaFormMixin'
+import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-student',
 
-  mixins: [RipaFormMixin],
+  mixins: [RipaModelMixin],
 
   components: {
     RipaSwitch,
@@ -41,7 +41,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.loadModel(this.value),
+      viewModel: this.updateModel(this.value),
     }
   },
 
@@ -56,43 +56,21 @@ export default {
   methods: {
     handleInput() {
       this.updateStopReasonModel()
-      this.updateDisabilityModel()
+      this.clearDisabilityModel()
       this.updateStopResultModel()
       this.$emit('input', this.viewModel)
-    },
-
-    updateDisabilityModel() {
-      this.viewModel.person.anyDisabilities = false
-    },
-
-    updateStopReasonModel() {
-      if (!this.viewModel.person.isStudent) {
-        if (
-          this.viewModel.stopReason.reasonForStop === 7 ||
-          this.viewModel.stopReason.reasonForStop === 8
-        ) {
-          this.viewModel.stopReason.reasonForStop = null
-        }
-      }
-    },
-
-    updateStopResultModel() {
-      if (!this.viewModel.person.isStudent) {
-        this.viewModel.stopResult.actionsTakenDuringStop12 = false
-        this.viewModel.stopResult.actionsTakenDuringStop13 = false
-      }
     },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.loadModel(newVal)
+      this.viewModel = this.updateModel(newVal)
     },
 
     'viewModel.person.isStudent': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.updateDisabilityModel()
+          this.clearDisabilityModel()
           this.updateStopResultModel()
         }
       },

@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "rg_name": {
+    "resourcegr_name": {
       "defaultValue": "[resourceGroup().name]",
       "type": "string"
     },
@@ -86,7 +86,7 @@
       "type": "string"
     },
     "textanalytics_fa_name": {
-      "defaultValue": "TextAnalytics-fa",
+      "defaultValue": "textanalytic-fa",
       "type": "string"
     },
     "use32BitWorkerProcess": {
@@ -122,7 +122,7 @@
       "type": "string"
     },
     "serverfarms_textanalytics_ASP_name": {
-      "defaultValue": "TextAnalytics-fa-asp",
+      "defaultValue": "textanalytic-fa-asp",
       "type": "string"
     },
     "virtualNetworks_vnet_name": {
@@ -315,17 +315,17 @@
       "type": "string",
       "defaultValue": "http://stop.usgovcloudapp.net/api"
     },
-    "apim_apis_textAnalytics_path": {
+    "apim_apis_textAnalytic_path": {
       "type": "SecureString",
-      "defaultValue": "TextAnalytics"
+      "defaultValue": "TextAnalytic"
     },
-    "apim_apis_textAnalytics_name": {
+    "apim_apis_textAnalytic_name": {
       "type": "string",
-      "defaultValue": "TextAnalytics"
+      "defaultValue": "textanalytic"
     },
-    "apim_apis_textAnalytics_serviceurl": {
+    "apim_apis_textAnalytic_serviceurl": {
       "type": "string",
-      "defaultValue": "http://textanalytics.usgovcloudapp.net/api"
+      "defaultValue": "http://textAnalytic.usgovcloudapp.net/api"
     },
     "apim_apis_domain_path": {
       "type": "SecureString",
@@ -492,19 +492,19 @@
     "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]"
   },
   "resources": [
-    {
-      "condition": "[parameters('deploy_rg')]",
-      "type": "Microsoft.AppConfiguration/configurationStores",
-      "apiVersion": "2020-07-01-preview",
-      "name": "[variables('configurationStores_ripa_ac_name')]",
-      "location": "[parameters('region')]",
-      "sku": {
-        "name": "standard"
-      },
-      "properties": {
-        "encryption": {}
-      }
-    },
+    // {
+    //     "condition": "[parameters('deploy_rg')]",
+    //     "type": "Microsoft.AppConfiguration/configurationStores",
+    //     "apiVersion": "2020-07-01-preview",
+    //     "name": "[variables('configurationStores_ripa_ac_name')]",
+    //     "location": "[parameters('region')]",
+    //     "sku": {
+    //         "name": "standard"
+    //     },
+    //     "properties": {
+    //         "encryption": {}
+    //     }
+    // },
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "microsoft.insights/actionGroups",
@@ -1199,23 +1199,23 @@
       }
     },
 
-    //TextAnalytics api
+    //TextAnalytic api
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-12-01",
-      "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytics_name'))]",
+      "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytic_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
       ],
       "properties": {
-        "displayName": "[parameters('apim_apis_textAnalytics_name')]",
+        "displayName": "[parameters('apim_apis_textAnalytic_name')]",
         "apiRevision": "1",
         "subscriptionRequired": true,
-        "serviceUrl": "[parameters('apim_apis_textAnalytics_serviceurl')]",
+        "serviceUrl": "[parameters('apim_apis_textAnalytic_serviceurl')]",
         "protocols": ["https"],
         "isCurrent": true,
-        "path": "[parameters('apim_apis_textAnalytics_path')]"
+        "path": "[parameters('apim_apis_textAnalytic_path')]"
       }
     },
 
@@ -2487,10 +2487,6 @@
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
             },
             {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
-            },
-            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
@@ -2692,10 +2688,6 @@
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
             },
             {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
-            },
-            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
@@ -2884,10 +2876,6 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-            },
-            {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3093,10 +3081,6 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-            },
-            {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3343,10 +3327,6 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
-            },
-            {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3640,7 +3620,7 @@
     "resourcegroup_name": {
       "condition": "[parameters('deploy_rg')]",
       "type": "string",
-      "value": "[parameters('rg_name')]"
+      "value": "[parameters('resourcegr_name')]"
     },
     "key_vault_name": {
       "condition": "[parameters('deploy_rg')]",

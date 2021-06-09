@@ -23,6 +23,13 @@
           :loading="loading"
           :items="submissions"
           :currentSubmission="currentSubmission"
+          @paginate="handleAdminSubmissionPagination"
+          @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+          @redoItemsPerPage="handleAdminSubmissionRedoItemsPerPage"
+          @handleFilter="handleAdminSubmissionsFiltering"
+          @handleSubmissionDetailItemsPerPage="
+            handleSubmissionDetailItemsPerPage
+          "
         ></ripa-submissions-grid>
       </v-tab-item>
 
@@ -32,9 +39,11 @@
           :items="stops"
           :errorCodeSearch="errorCodeSearch"
           @callErrorCodeSearch="handleCallErrorCodeSearch"
-          @redoItemsPerPage="handleRedoItemsPerPage"
+          @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
           @paginate="handleAdminStopsPagination"
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
+          @handleSubmitStops="handleSubmitStops"
+          @handleSubmitAll="handleSubmitAll"
         ></ripa-stops-grid>
       </v-tab-item>
 
@@ -46,7 +55,7 @@
         ></ripa-users-grid>
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item value="/admin/domains" id="/admin/domains">
         <v-tabs v-model="tabLevel2" show-arrows>
           <v-tab>Beats</v-tab>
           <v-tab>Cities</v-tab>
@@ -137,8 +146,11 @@ export default {
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
     },
-    handleRedoItemsPerPage(pageData) {
-      this.$emit('handleRedoItemsPerPage', pageData)
+    handleAdminStopsRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', {
+        type: 'stops',
+        ...pageData,
+      })
     },
     handleAdminStopsPagination(pageData) {
       this.$emit('handlePaginate', {
@@ -148,7 +160,41 @@ export default {
       })
     },
     handleAdminStopsFiltering(filterData) {
-      this.$emit('handleAdminStopsFiltering', filterData)
+      this.$emit('handleAdminFiltering', {
+        type: 'stops',
+        ...filterData,
+      })
+    },
+    handleAdminSubmissionPagination(pageData) {
+      this.$emit('handlePaginate', {
+        // add in the type in the wrapper
+        type: 'submission',
+        ...pageData,
+      })
+    },
+    handleAdminSubmissionRedoItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', {
+        type: 'submission',
+        ...pageData,
+      })
+    },
+    handleSubmissionDetailItemsPerPage(pageData) {
+      this.$emit('handleSubmissionDetailItemsPerPage', pageData)
+    },
+    handleSubmissionDetailPaginate(pageData) {
+      this.$emit('handleSubmissionDetailPaginate', pageData)
+    },
+    handleAdminSubmissionsFiltering(filterData) {
+      this.$emit('handleAdminFiltering', {
+        type: 'submission',
+        ...filterData,
+      })
+    },
+    handleSubmitStops(stops) {
+      this.$emit('handleSubmitStops', stops)
+    },
+    handleSubmitAll() {
+      this.$emit('handleSubmitAll')
     },
   },
 

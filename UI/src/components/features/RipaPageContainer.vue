@@ -3,8 +3,8 @@
     :admin="isAdmin"
     :display-environment="displayEnvironment"
     :environment-name="environmentName"
-    :online="isOnlineAndAuthenticated"
-    :authenticated="isOnlineAndAuthenticated"
+    :online="isOnline"
+    :authenticated="isAuthenticated"
     :dark="isDark"
     :invalidUser="invalidUser"
     :on-update-dark="handleUpdateDark"
@@ -12,7 +12,16 @@
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
-    <slot></slot>
+    <template v-if="!isValidCacheState">
+      <ripa-alert alert-type="error">
+        Please log into the application to submit stops.
+      </ripa-alert>
+    </template>
+
+    <template v-if="isValidCacheState">
+      <slot></slot>
+    </template>
+
     <ripa-interval
       :delay="stopInternalMs"
       @tick="checkLocalStorage"
@@ -33,6 +42,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
@@ -48,6 +58,7 @@ export default {
   mixins: [RipaApiStopJobMixin],
 
   components: {
+    RipaAlert,
     RipaInterval,
     RipaInvalidUserDialog,
     RipaPageWrapper,
@@ -85,12 +96,17 @@ export default {
         yearsExperience: this.mappedUser.yearsExperience,
       }
     },
+
+    isValidCacheState() {
+      const cacheDate = localStorage.getItem('ripa_cache_date')
+      return cacheDate !== null
+    },
   },
 
   methods: {
     ...mapActions([
-      'editOfficerStop',
-      'editOfficerUser',
+      'putOfficerStop',
+      'putOfficerUser',
       'getFormBeats',
       'getFormCities',
       'getFormSchools',
@@ -177,7 +193,7 @@ export default {
     async runApiStopsJob(apiStops) {
       if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
-          await this.editOfficerStop(apiStops[index])
+          await this.putOfficerStop(apiStops[index])
         }
       }
     },
@@ -193,7 +209,9 @@ export default {
     if (this.isOnlineAndAuthenticated) {
       this.updateAuthenticatedData()
     } else {
-      await this.getFormData()
+      if (this.isValidCacheState) {
+        await this.getFormData()
+      }
     }
   },
 

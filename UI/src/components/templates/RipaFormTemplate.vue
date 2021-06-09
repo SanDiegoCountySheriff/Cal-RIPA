@@ -2,9 +2,11 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
+      :admin-editing="adminEditing"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
+      :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
@@ -21,9 +23,12 @@
       :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
-      :on-cancel="onCancel"
+      :on-cancel-form="onCancelForm"
+      :on-cancel-action="onCancelAction"
       :on-delete-person="onDeletePerson"
+      :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-person="onEditPerson"
+      :on-edit-stop="onEditStop"
       :on-gps-location="onGpsLocation"
       :on-open-location-favorites="onOpenLocationFavorites"
       :on-open-reason-favorites="onOpenReasonFavorites"
@@ -35,7 +40,8 @@
       :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
       :on-step-index-change="onStepIndexChange"
-      :on-submit="onSubmit"
+      :on-submit-stop="onSubmitStop"
+      :on-submit-audit="onSubmitAudit"
       :on-update-user="onUpdateUser"
       @input="handleInput"
     ></ripa-form-wrapper>
@@ -76,6 +82,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    adminEditing: {
+      type: Boolean,
+      default: false,
+    },
     beats: {
       type: Array,
       default: () => [],
@@ -85,6 +95,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    displayDebugger: {
       type: Boolean,
       default: false,
     },
@@ -152,7 +166,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onCancel: {
+    onCancelForm: {
+      type: Function,
+      default: () => {},
+    },
+    onCancelAction: {
       type: Function,
       default: () => {},
     },
@@ -160,7 +178,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    onEditAgencyQuestions: {
+      type: Function,
+      default: () => {},
+    },
     onEditPerson: {
+      type: Function,
+      default: () => {},
+    },
+    onEditStop: {
       type: Function,
       default: () => {},
     },
@@ -200,7 +226,11 @@ export default {
       type: Function,
       default: () => {},
     },
-    onSubmit: {
+    onSubmitStop: {
+      type: Function,
+      default: () => {},
+    },
+    onSubmitAudit: {
       type: Function,
       default: () => {},
     },

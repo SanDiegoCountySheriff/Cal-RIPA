@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="650">
+  <v-card class="mx-auto" max-width="650" flat>
     <v-card-title class="tw-uppercase">Ripa Stops</v-card-title>
 
     <v-card-text>

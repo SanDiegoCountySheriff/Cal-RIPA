@@ -1,11 +1,5 @@
 <template>
-  <v-dialog
-    v-model="model"
-    max-width="400px"
-    :light="getLight"
-    :dark="getDark"
-    persistent
-  >
+  <v-dialog v-model="model" max-width="400px" persistent>
     <v-card>
       <v-card-title>
         <span>User Not Authorized</span>
@@ -45,14 +39,6 @@ export default {
         }
         this.viewModel = newValue
       },
-    },
-
-    getLight() {
-      return this.$vuetify.theme.dark
-    },
-
-    getDark() {
-      return !this.$vuetify.theme.dark
     },
   },
 

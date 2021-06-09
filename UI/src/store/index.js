@@ -127,6 +127,9 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
       }
     },
+    officerId: state => {
+      return state.user.officerId
+    },
     user: state => {
       return state.user
     },
@@ -138,6 +141,9 @@ export default new Vuex.Store({
     },
     displayBeatInput: state => {
       return state.apiConfig?.displayBeatInput || false
+    },
+    displayDebugger: state => {
+      return state.apiConfig?.displayDebugger || false
     },
     displayEnvironment: state => {
       return state.apiConfig?.displayEnvironment || false
@@ -238,7 +244,10 @@ export default new Vuex.Store({
       state.adminStops = items
     },
     updateAdminSubmissions(state, items) {
-      state.adminSubmissions = items
+      state.adminSubmissions = {
+        submissions: items.submissions,
+        total: items.total,
+      }
     },
     updateAdminSubmission(state, items) {
       state.adminSubmission = items
@@ -325,9 +334,9 @@ export default new Vuex.Store({
     },
     updateErrorCodeAdminSearch(state, value) {
       state.errorCodeAdminSearch = {
-        loading: false,
         ...state.errorCodeAdminSearch,
-        ...value,
+        loading: false,
+        items: value,
       }
     },
   },
@@ -593,7 +602,7 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ dispatch, state }, stop) {
+    putOfficerStop({ dispatch, state }, stop) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -606,7 +615,10 @@ export default new Vuex.Store({
           dispatch('getOfficerStops')
         })
         .catch(error => {
-          console.log('There was an error saving the officer stop.', error)
+          console.log(
+            'There was an error saving the officer stop record.',
+            error,
+          )
           dispatch('getOfficerStops')
         })
     },
@@ -970,21 +982,36 @@ export default new Vuex.Store({
           queryData.limit === null ? 10 : queryData.limit
         }`
 
-        if (queryData.filters.stopFromDate !== null) {
-          queryString = `${queryString}&StartDate=${queryData.filters.stopFromDate}`
-        }
+        if (queryData.filters) {
+          if (queryData.filters.stopFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.filters.stopFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
 
-        if (queryData.filters.stopToDate !== null) {
-          queryString = `${queryString}&EndDate=${queryData.filters.stopToDate}`
-        }
+          if (queryData.filters.stopToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.filters.stopToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
 
-        if (queryData.filters.status !== null) {
-          queryString = `${queryString}&Status=${queryData.filters.status}`
-        }
+          if (queryData.filters.status !== null) {
+            queryString = `${queryString}&Status=${queryData.filters.status}`
+          }
 
-        if (queryData.filters.isPiiFound !== null) {
-          queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
+          if (queryData.filters.isPiiFound !== null) {
+            queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
+          }
+
+          if (queryData.filters.errorCodes !== null) {
+            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes}`
+          }
         }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10`
       }
 
       return axios
@@ -1014,14 +1041,49 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminSubmissions({ commit, state }) {
+    getAdminSubmissions({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
+        // if you send an items per page, set it, otherwise just default to 10
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
+        if (queryData.filters) {
+          if (queryData.filters.submissionFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.filters.submissionFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
+
+          if (queryData.filters.submissionToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.filters.submissionToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
+        }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10`
+      }
+
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}submission/GetSubmissions`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           console.log(response.data)
           commit('updateAdminSubmissions', response.data)
@@ -1032,10 +1094,30 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminSubmission({ commit, state }, submissionId) {
+    getAdminSubmission({ commit, state }, pageData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (pageData.offset) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}?Offset=${
+          pageData.offset === null ? 0 : pageData.offset
+        }`
+      } else {
+        queryString = `${queryString}?Offset=0`
+      }
+      if (pageData.limit) {
+        // if offset is null, that means you are changing a filter so restart the paging
+        queryString = `${queryString}&Limit=${
+          pageData.limit === null ? 0 : pageData.limit
+        }`
+      } else {
+        queryString = `${queryString}&Limit=10`
+      }
+
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${submissionId}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1077,7 +1159,7 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}Stops/GetErrorCodes?search=${value}`,
+          `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1087,13 +1169,51 @@ export default new Vuex.Store({
         )
         .then(response => {
           // need to map out what the response would be
-          commit('updateErrorCodeAdminSearch', response)
+          commit('updateErrorCodeAdminSearch', response.data)
         })
         .catch(error => {
           console.log(error)
           commit('updateErrorCodeAdminSearch', {
             items: ['new value', 'new value 2', 'new value 3'],
           })
+        })
+    },
+
+    submitStops({ state }, stops) {
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
+          { stopIds: stops },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // foward user to submission details screen for newly created submission
+          return response.data
+        })
+    },
+
+    submitAllStops({ state }) {
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
+          null,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          // foward user to submission details screen for newly created submission
+          return response.data
         })
     },
 

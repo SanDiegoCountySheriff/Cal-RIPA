@@ -110,7 +110,7 @@ namespace RIPA.Functions.Stop.Functions
                 }
             }
 
-            //ErrorCode TODO
+            //ErrorCode
             if (!string.IsNullOrWhiteSpace(stopQuery.ErrorCode)){
                 join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
                 join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
@@ -184,19 +184,6 @@ namespace RIPA.Functions.Stop.Functions
             public int Resubmitted { get; set; }
         }
 
-        public class StopQuery
-        {
-            public DateTime? StartDate { get; set; }
-            public DateTime? EndDate { get; set; }
-            public bool? IsPII { get; set; }
-            public string ErrorCode { get; set; }
-            public string Status { get; set; }
-            public bool? IsSubmitted { get; set; }
-            public string OfficerId { get; set; }
-            public int Limit { get; set; }
-            public int Offset { get; set; }
-
-        }
     }
 }
 

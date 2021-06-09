@@ -78,6 +78,8 @@ namespace RIPA.Functions.Common.Models
         public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
         public bool IsPiiFound { get; set; }
+        public string EditStopExplanation { get; set; }
+
     }
 
 

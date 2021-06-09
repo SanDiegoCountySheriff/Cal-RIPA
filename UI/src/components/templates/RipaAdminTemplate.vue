@@ -23,6 +23,11 @@
     @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
     @handleRedoItemsPerPage="handleRedoItemsPerPage"
     @handlePaginate="handlePaginate"
+    @handleAdminFiltering="handleAdminFiltering"
+    @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+    @handleSubmitStops="handleSubmitStops"
+    @handleSubmitAll="handleSubmitAll"
   ></ripa-admin-wrapper>
 </template>
 
@@ -46,8 +51,23 @@ export default {
     handlePaginate(pageData) {
       this.$emit('handlePaginate', pageData)
     },
-    handleAdminStopsFiltering(filterData) {
-      this.$emit('handleAdminStopsFiltering', filterData)
+    handleAdminFiltering(filterData) {
+      this.$emit('handleAdminFiltering', filterData)
+    },
+    handleAdminSubmissionsItemsPerPage(pageData) {
+      this.$emit('handleRedoItemsPerPage', pageData)
+    },
+    handleSubmissionDetailItemsPerPage(pageData) {
+      this.$emit('handleSubmissionDetailItemsPerPage', pageData)
+    },
+    handleSubmissionDetailPaginate(pageData) {
+      this.$emit('handleSubmissionDetailPaginate', pageData)
+    },
+    handleSubmitStops(stops) {
+      this.$emit('handleSubmitStops', stops)
+    },
+    handleSubmitAll(stops) {
+      this.$emit('handleSubmitAll')
     },
   },
 
