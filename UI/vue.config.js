@@ -8,7 +8,7 @@ module.exports = {
     themeColor: '#42b983',
     msTileColor: '#000000',
     appleMobileWebAppCache: 'yes',
-    appleMobileWebAppStatusBarStyle: 'black',
+    appleMobileWebAppStatusBarStyle: '#000000',
     iconPaths: {
       favicon32: 'img/icons/favicon-32x32.png',
       favicon16: 'img/icons/favicon-16x16.png',
