@@ -45,7 +45,6 @@ export default {
 
   watch: {
     officerId(val) {
-      console.log('officer id loaded')
       if (val) {
         this.getOfficerStopsData()
       }

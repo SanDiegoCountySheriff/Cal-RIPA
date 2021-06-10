@@ -579,13 +579,11 @@ export default {
     },
 
     getFormSummaryStepText() {
-      console.log(this.anyAgencyQuestions)
       return this.anyAgencyQuestions ? '7' : '6'
     },
   },
 
   mounted() {
-    console.log('mounted')
     this.$nextTick(() => {
       const [top] = document.getElementsByClassName(
         'ripa-form-wrapper--summary-step-top',
