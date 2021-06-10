@@ -34,7 +34,7 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.stopResult.anyActionsTaken"
-            label="Any Actions Taken?"
+            label="Any Results of Stop?"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>

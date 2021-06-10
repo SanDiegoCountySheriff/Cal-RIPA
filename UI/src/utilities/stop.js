@@ -41,11 +41,7 @@ const getLastLocation = () => {
   return null
 }
 
-const defaultLocation = () => {
-  const lastLocation = getLastLocation()
-  if (lastLocation) {
-    return lastLocation
-  }
+const emptyLocation = () => {
   return {
     isSchool: false,
     school: null,
@@ -62,13 +58,22 @@ const defaultLocation = () => {
   }
 }
 
+const defaultLocation = () => {
+  const lastLocation = getLastLocation()
+  if (lastLocation) {
+    return lastLocation
+  }
+
+  return emptyLocation()
+}
+
 export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: uniqueId(),
     template: null,
     stepTrace: [],
-    location: defaultLocation(),
+    location: emptyLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
