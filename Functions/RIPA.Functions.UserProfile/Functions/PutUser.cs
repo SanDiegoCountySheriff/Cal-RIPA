@@ -6,8 +6,8 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
-using RIPA.Functions.UserProfile.Services.CosmosDb.Contracts;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -28,10 +28,10 @@ namespace RIPA.Functions.UserProfile.Functions
         [OpenApiOperation(operationId: "PutUser", tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The User Id")]
-        [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Services.CosmosDb.Models.UserProfile), Deprecated = false, Description = "User Profile object", Required = true)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Services.CosmosDb.Models.UserProfile), Description = "User Profile Created")]
+        [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.UserProfile), Deprecated = false, Description = "User Profile object", Required = true)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.UserProfile), Description = "User Profile Created")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "User Profile failed on insert or replace")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Services.CosmosDb.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Common.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
             try

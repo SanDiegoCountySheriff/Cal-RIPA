@@ -30,105 +30,97 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream stream = new MemoryStream(byteArray))
+            using MemoryStream stream = new MemoryStream(byteArray);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
+            try
             {
-                using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
-                try
-                {
-                    client.Connect();
-                    return client.ListDirectory(remoteDirectory);
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in listing files under [{remoteDirectory}]");
-                    return null;
-                }
-                finally
-                {
-                    client.Disconnect();
-                }
+                client.Connect();
+                return client.ListDirectory(remoteDirectory);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in listing files under [{remoteDirectory}]");
+                return null;
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
 
         public void UploadFile(string localFilePath, string remoteFilePath)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream stream = new MemoryStream(byteArray))
+            using MemoryStream stream = new MemoryStream(byteArray);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
+            try
             {
-                using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
-                try
-                {
-                    client.Connect();
-                    using var s = File.OpenRead(localFilePath);
-                    client.UploadFile(s, remoteFilePath);
-                    _logger.LogInformation($"Finished uploading file [{localFilePath}] to [{remoteFilePath}]");
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in uploading file [{localFilePath}] to [{remoteFilePath}]");
-                }
-                finally
-                {
-                    client.Disconnect();
-                }
+                client.Connect();
+                using var s = File.OpenRead(localFilePath);
+                client.UploadFile(s, remoteFilePath);
+                _logger.LogInformation($"Finished uploading file [{localFilePath}] to [{remoteFilePath}]");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in uploading file [{localFilePath}] to [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
 
         public void UploadStop(DojStop stop, string remoteFilePath, string fileName, BlobContainerClient blobContainerClient)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream keyStream = new MemoryStream(byteArray))
+            using MemoryStream keyStream = new MemoryStream(byteArray);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(keyStream, _config.Password));
+            try
             {
-                using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(keyStream, _config.Password));
-                try
+                BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+                client.Connect();
+                var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(stop, settings));
+                using (MemoryStream stream = new MemoryStream(bytes))
                 {
-                    BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
-                    client.Connect();
-                    var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
-                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(stop, settings));
-                    using (MemoryStream stream = new MemoryStream(bytes))
-                    {
-                        blobClient.UploadAsync(stream); // stream file to Azure Blob
-                    }
-                    using (MemoryStream stream = new MemoryStream(bytes))
-                    {
-                        client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
-                    }
-                    _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
+                    blobClient.UploadAsync(stream); // stream file to Azure Blob
                 }
-                catch (Exception exception)
+                using (MemoryStream stream = new MemoryStream(bytes))
                 {
-                    _logger.LogError(exception, $"Failed in uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
+                    client.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
                 }
-                finally
-                {
-                    client.Disconnect();
-                }
+                _logger.LogInformation($"Finished uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
 
         public void UploadJsonString(string jsonString, string remoteFilePath)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream keyStream = new MemoryStream(byteArray))
+            using MemoryStream keyStream = new MemoryStream(byteArray);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(keyStream, _config.Password));
+            try
             {
-                using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(keyStream, _config.Password));
-                try
-                {
-                    client.Connect();
-                    byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    client.UploadFile(stream, remoteFilePath);
-                    _logger.LogInformation($"Finished uploading stop [{jsonString}] to [{remoteFilePath}]");
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in uploading stop [{jsonString}] to [{remoteFilePath}]");
-                }
-                finally
-                {
-                    client.Disconnect();
-                }
+                client.Connect();
+                byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
+                MemoryStream stream = new MemoryStream(bytes);
+                client.UploadFile(stream, remoteFilePath);
+                _logger.LogInformation($"Finished uploading stop [{jsonString}] to [{remoteFilePath}]");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in uploading stop [{jsonString}] to [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
 
@@ -168,23 +160,21 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public void DeleteFile(string remoteFilePath)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream stream = new MemoryStream(byteArray))
+            using MemoryStream stream = new MemoryStream(byteArray);
+            using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
+            try
             {
-                using var client = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
-                try
-                {
-                    client.Connect();
-                    client.DeleteFile(remoteFilePath);
-                    _logger.LogInformation($"File [{remoteFilePath}] deleted.");
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in deleting file [{remoteFilePath}]");
-                }
-                finally
-                {
-                    client.Disconnect();
-                }
+                client.Connect();
+                client.DeleteFile(remoteFilePath);
+                _logger.LogInformation($"File [{remoteFilePath}] deleted.");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in deleting file [{remoteFilePath}]");
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
     }

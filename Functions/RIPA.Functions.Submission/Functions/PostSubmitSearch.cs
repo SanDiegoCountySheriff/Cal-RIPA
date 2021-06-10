@@ -189,9 +189,9 @@ namespace RIPA.Functions.Submission.Functions
                 DateTime dateSubmitted = DateTime.UtcNow;
                 try
                 {
-                    fileName = $"{dateSubmitted.ToString("yyyyMMddHHmmss")}_{stop.Ori}_{stop.id}.json";
+                    fileName = $"{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
                     _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
-                    await _stopCosmosDbService.UpdateStopAsync(stop.id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                    await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                 }
                 catch (Exception ex)
                 {
@@ -203,8 +203,8 @@ namespace RIPA.Functions.Submission.Functions
                         ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
                         FileName = fileName
                     };
-                    await _stopCosmosDbService.UpdateStopAsync(stop.id, _stopService.ErrorSubmission(stop, submissionError));
-                    log.LogError($"Failure Submitting Stop with id {stop.id}: {ex.Message}");
+                    await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.ErrorSubmission(stop, submissionError));
+                    log.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");
                 }
             }
 

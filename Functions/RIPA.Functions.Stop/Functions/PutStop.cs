@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
 using System.Net;
@@ -18,10 +19,12 @@ namespace RIPA.Functions.Stop.Functions
     public class PutStop
     {
         private readonly IStopCosmosDbService _stopCosmosDbService;
+        private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
 
-        public PutStop(IStopCosmosDbService stopCosmosDbService)
+        public PutStop(IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
         {
             _stopCosmosDbService = stopCosmosDbService;
+            _userProfileCosmosDbService = userProfileCosmosDbService;
         }
 
         [FunctionName("PutStop")]
@@ -35,13 +38,16 @@ namespace RIPA.Functions.Stop.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] Common.Models.Stop stop, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put Stop requested");
-
+            
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
                 {
                     return new UnauthorizedResult();
                 }
+
+                var objectId = await RIPAAuthorization.GetUserId(req, log);
+                stop.EditStopOfficerId = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId)).OfficerId;
             }
             catch (Exception ex)
             {
@@ -51,7 +57,7 @@ namespace RIPA.Functions.Stop.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
-                stop.id = Id;
+                stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
                     return new BadRequestObjectResult("Office ID must be 9 char");

@@ -56,7 +56,7 @@
               ></ripa-switch>
             </template>
 
-            <template v-if="wasAskedForConsent">
+            <template v-if="wasSearchOfPersonOrPropertyConducted">
               <ripa-form-subheader
                 title="Basis for Search"
                 required
@@ -72,7 +72,7 @@
               >
               </ripa-check-group>
 
-              <template v-if="isBasisForSearchExplanationVisible">
+              <template v-if="wasSearchOfPersonOrPropertyConducted">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
                   <ripa-alert alert-outlined alert-type="warning">
                     The explanation contains personally identifying information.
@@ -175,7 +175,7 @@ export default {
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
-        v => (v || '').length >= 3 || 'Min 5 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
@@ -205,7 +205,7 @@ export default {
     },
 
     basisForSearchRules() {
-      const searchConducted = this.wasAskedForConsent
+      const searchConducted = this.wasSearchOfPersonOrPropertyConducted
       const options = this.viewModel.actionsTaken.basisForSearch
 
       return [
@@ -273,6 +273,12 @@ export default {
       }
 
       return filteredItems.filter(item => item.value !== 12)
+    },
+
+    wasSearchOfPersonOrPropertyConducted() {
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      return actionsTaken.includes(18) || actionsTaken.includes(20)
     },
 
     wasAskedForConsent() {

@@ -173,13 +173,15 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
         public static City GetCity(DataRow row)
         {
-            City city = new City();
-            city.ETag = "*";
-            city.PartitionKey = row.ItemArray[0].ToString();
-            city.State = row.ItemArray[0].ToString();
-            city.RowKey = row.ItemArray[1].ToString();
-            city.Name = row.ItemArray[1].ToString();
-            city.County = row.ItemArray[2].ToString();
+            City city = new City
+            {
+                ETag = "*",
+                PartitionKey = row.ItemArray[0].ToString(),
+                State = row.ItemArray[0].ToString(),
+                RowKey = row.ItemArray[1].ToString(),
+                Name = row.ItemArray[1].ToString(),
+                County = row.ItemArray[2].ToString(),
+            };
             string inactiveDate = row.ItemArray[3].ToString();
             if (!string.IsNullOrEmpty(inactiveDate))
             {
@@ -190,33 +192,37 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
         public static School GetSchool(DataRow row)
         {
-            School school = new School();
-            school.ETag = "*";
-            school.PartitionKey = "CA";
-            school.RowKey = row.ItemArray[0].ToString();
-            school.CDSCode = school.RowKey;
-            school.Status = row.ItemArray[1].ToString();
-            school.County = row.ItemArray[2].ToString();
-            school.District = row.ItemArray[3].ToString();
-            school.Name = row.ItemArray[04].ToString();
+            School school = new School
+            {
+                ETag = "*",
+                PartitionKey = "CA",
+                RowKey = row.ItemArray[0].ToString(),
+                CDSCode = row.ItemArray[0].ToString(),
+                Status = row.ItemArray[1].ToString(),
+                County = row.ItemArray[2].ToString(),
+                District = row.ItemArray[3].ToString(),
+                Name = row.ItemArray[04].ToString()
+            };
             return school;
         }
 
         public static Statute GetStatute(DataRow row)
         {
-            Statute statute = new Statute();
-            statute.ETag = "*";
-            statute.PartitionKey = "CA";
-            statute.OffenseValidationCD = Convert.ToInt32(row.ItemArray[0]);
-            statute.RowKey = row.ItemArray[1].ToString();
-            statute.OffenseCode = Convert.ToInt32(statute.RowKey);
-            statute.OffenseTxnTypeCD = Convert.ToInt32(row.ItemArray[2].ToString());
-            statute.OffenseStatute = row.ItemArray[3].ToString();
-            statute.OffenseTypeOfStatuteCD = row.ItemArray[4].ToString();
-            statute.StatuteLiteral = row.ItemArray[5].ToString();
-            statute.OffenseDefaultTypeOfCharge = row.ItemArray[6].ToString();
-            statute.OffenseTypeOfCharge = row.ItemArray[7].ToString();
-            statute.OffenseLiteralIdentifierCD = row.ItemArray[8].ToString();
+            Statute statute = new Statute
+            {
+                ETag = "*",
+                PartitionKey = "CA",
+                OffenseValidationCD = Convert.ToInt32(row.ItemArray[0]),
+                RowKey = row.ItemArray[1].ToString(),
+                OffenseCode = Convert.ToInt32(row.ItemArray[1]),
+                OffenseTxnTypeCD = Convert.ToInt32(row.ItemArray[2].ToString()),
+                OffenseStatute = row.ItemArray[3].ToString(),
+                OffenseTypeOfStatuteCD = row.ItemArray[4].ToString(),
+                StatuteLiteral = row.ItemArray[5].ToString(),
+                OffenseDefaultTypeOfCharge = row.ItemArray[6].ToString(),
+                OffenseTypeOfCharge = row.ItemArray[7].ToString(),
+                OffenseLiteralIdentifierCD = row.ItemArray[8].ToString()
+            };
             statute.OffenseDegree = String.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
             statute.BCSHierarchyCD = String.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
             string offenseEnacted = row.ItemArray[11].ToString();
@@ -242,15 +248,17 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
         public static Beat GetBeat(DataRow row)
         {
-            Beat beat = new Beat();
-            beat.ETag = "*";
-            beat.PartitionKey = "CA";
-            beat.RowKey = row.ItemArray[0].ToString();
-            beat.Id = Convert.ToInt32(beat.RowKey);
-            beat.Community = row.ItemArray[1].ToString();
-            beat.Command = row.ItemArray[2].ToString();
-            beat.CommandAuditGroup = row.ItemArray[3].ToString();
-            beat.CommandAuditGroup = row.ItemArray[4].ToString();
+            Beat beat = new Beat
+            {
+                ETag = "*",
+                PartitionKey = "CA",
+                RowKey = row.ItemArray[0].ToString(),
+                Id = Convert.ToInt32(row.ItemArray[0]),
+                Community = row.ItemArray[1].ToString(),
+                Command = row.ItemArray[2].ToString(),
+                CommandAuditGroup = row.ItemArray[3].ToString(),
+                CommandAuditSize = row.ItemArray[4].ToString()
+            };
             return beat;
         }
 
