@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.Common.Services.Stop.CosmosDb;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Stop.Services;
 using RIPA.Functions.Stop.Services.Contracts;
 using System;
@@ -18,6 +20,7 @@ namespace RIPA.Functions.Stop
             builder.Services.AddLogging();
             builder.Services.AddSingleton<IStopCosmosDbService>(InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IStopAuditCosmosDbService>(InitializeStopAuditCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult());
         }
 
         private static async Task<StopCosmosDbService> InitializeStopCosmosClientInstanceAsync()
@@ -42,6 +45,20 @@ namespace RIPA.Functions.Stop
             string key = Environment.GetEnvironmentVariable("Key");
             Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
             StopAuditCosmosDbService cosmosDbService = new StopAuditCosmosDbService(client, databaseName, containerName);
+            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+
+            return cosmosDbService;
+        }
+
+        private static async Task<UserProfileCosmosDbService> InitializeUserProfileCosmosClientInstanceAsync()
+        {
+            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+            string containerName = Environment.GetEnvironmentVariable("UserProfileContainerName");
+            string account = Environment.GetEnvironmentVariable("Account");
+            string key = Environment.GetEnvironmentVariable("Key");
+            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
             Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
