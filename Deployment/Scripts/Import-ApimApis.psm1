@@ -11,7 +11,7 @@ function Import-FunctionApi()
 		$ResourceGroupName, 
         [Parameter(Mandatory = $true, HelpMessage = "Azure API Management instance name")] 
 		$ServiceName, 
-        [Parameter(Mandatory = $true, HelpMessage = "functional name of the api (domain, stop, textanalytic, etc.)")] 
+        [Parameter(Mandatory = $true, HelpMessage = "functional name of the api (domain, stop, textanalytics, etc.)")] 
 		$ApiTag
 	)
 

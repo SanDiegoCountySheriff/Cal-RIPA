@@ -60,7 +60,7 @@ namespace RIPA.Functions.Submission.Services.REST
         {
             DojStop dojStop = new DojStop
             {
-                LEARecordID = stop.id,
+                LEARecordID = stop.Id,
                 ORI = stop.Ori,
                 TX_Type = "I",
                 SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
@@ -208,22 +208,15 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojPercievedGender(string percievedGender)
         {
-            switch (percievedGender)
+            return percievedGender switch
             {
-                case "Male":
-                    return ((int)PercievedGender.Male).ToString();
-                case "Female":
-                    return ((int)PercievedGender.Female).ToString();
-                case "Transgender man/boy":
-                    return ((int)PercievedGender.TransgenderManBoy).ToString();
-                case "Transgender woman/girl":
-                    return ((int)PercievedGender.TransgenderWomanGirl).ToString();
-            }
-
-            return "";
+                "Male" => ((int)PercievedGender.Male).ToString(),
+                "Female" => ((int)PercievedGender.Female).ToString(),
+                "Transgender man/boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+                "Transgender woman/girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+                _ => "",
+            };
         }
-
-
 
     }
 }

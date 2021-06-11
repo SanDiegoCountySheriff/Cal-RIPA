@@ -30,8 +30,14 @@ namespace RIPA.Functions.Security
         public static async Task<bool> ValidateUserOrAdministratorRole(HttpRequest req, ILogger log)
         {
             var claims = await ValidateAccessToken(req, log);
-
+            
             return claims.IsInRole("RIPA-ADMINS-ROLE") || claims.IsInRole("RIPA-USERS-ROLE");
+        }
+
+        public static async Task<string> GetUserId(HttpRequest req, ILogger log)
+        {
+            var claims = await ValidateAccessToken(req, log);
+            return claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
         }
 
 
@@ -45,11 +51,10 @@ namespace RIPA.Functions.Security
                 Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 #endif
 
-                SecurityToken securityToken;
                 ISecurityTokenValidator tokenValidator = new JwtSecurityTokenHandler();
                 TokenValidationParameters validationParameters = await ConfigureTokenValidationParameters();
 
-                var claimsPrincipal = tokenValidator.ValidateToken(accessToken, validationParameters, out securityToken);
+                var claimsPrincipal = tokenValidator.ValidateToken(accessToken, validationParameters, out SecurityToken securityToken);
 
                 if (!claimsPrincipal.Identity.IsAuthenticated)
                 {
@@ -100,8 +105,7 @@ namespace RIPA.Functions.Security
                     $"{authority}/.well-known/openid-configuration",
                     new OpenIdConnectConfigurationRetriever());
 
-            OpenIdConnectConfiguration config = null;
-            config = await configManager.GetConfigurationAsync();
+            OpenIdConnectConfiguration config = await configManager.GetConfigurationAsync();
 
             TokenValidationParameters validationParameters = new TokenValidationParameters
             {

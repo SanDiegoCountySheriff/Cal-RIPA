@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
@@ -61,7 +62,8 @@ namespace RIPA.Functions.Common.Models
     public class Stop
 
     {
-        public string id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
         public string Ori { get; set; }
         public string Agency { get; set; }
         public string OfficerId { get; set; }
@@ -79,6 +81,7 @@ namespace RIPA.Functions.Common.Models
         public string Status { get; set; }
         public bool IsPiiFound { get; set; }
         public string EditStopExplanation { get; set; }
+        public string EditStopOfficerId { get; set; }
 
     }
 

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.UserProfile.Services.CosmosDb.Contracts
+namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts
 {
     public interface IUserProfileCosmosDbService
     {

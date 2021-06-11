@@ -7,6 +7,7 @@ trigger:
   branches:
     include:
       - main
+      - dev
   paths:
     include:
       - UI/*
@@ -61,9 +62,9 @@ stages:
 
           - task: CopyFiles@2
             inputs:
-              SourceFolder: '$(Build.SourcesDirectory)/UI'
-              Contents: '*.config.json'
-              TargetFolder: '$(Build.SourcesDirectory)/UI/dist'
+              SourceFolder: "$(Build.SourcesDirectory)/UI"
+              Contents: "*.config.json"
+              TargetFolder: "$(Build.SourcesDirectory)/UI/dist"
 
           - task: ArchiveFiles@2
             displayName: "Archive UI Files"
