@@ -10,6 +10,7 @@
     :currentSubmission="currentSubmission"
     :users="users"
     :errorCodeSearch="errorCodeSearch"
+    :display-beat-input="displayBeatInput"
     :on-delete-beat="onDeleteBeat"
     :on-delete-city="onDeleteCity"
     :on-delete-school="onDeleteSchool"
@@ -66,7 +67,7 @@ export default {
     handleSubmitStops(stops) {
       this.$emit('handleSubmitStops', stops)
     },
-    handleSubmitAll(stops) {
+    handleSubmitAll() {
       this.$emit('handleSubmitAll')
     },
   },
@@ -83,6 +84,10 @@ export default {
     cities: {
       type: Array,
       default: () => [],
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
     },
     schools: {
       type: Array,

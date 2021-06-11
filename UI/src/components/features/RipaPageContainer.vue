@@ -76,6 +76,7 @@ export default {
 
   computed: {
     ...mapGetters([
+      'displayBeatInput',
       'displayEnvironment',
       'environmentName',
       'isAdmin',
@@ -120,8 +121,10 @@ export default {
 
     async getFormData() {
       this.loading = true
+      if (this.displayBeatInput) {
+        await Promise.all([this.getFormBeats()])
+      }
       await Promise.all([
-        this.getFormBeats(),
         this.getFormCities(),
         this.getFormSchools(),
         this.getFormStatutes(),

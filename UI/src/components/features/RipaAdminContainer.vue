@@ -10,6 +10,7 @@
     :currentSubmission="mappedAdminSubmission"
     :users="mappedAdminUsers"
     :errorCodeSearch="mappedErrorCodeAdminSearch"
+    :display-beat-input="displayBeatInput"
     :on-delete-beat="handleDeleteBeat"
     :on-delete-city="handleDeleteCity"
     :on-delete-school="handleDeleteSchool"
@@ -71,6 +72,7 @@ export default {
       'mappedAdminSubmission',
       'mappedAdminUsers',
       'mappedErrorCodeAdminSearch',
+      'displayBeatInput',
     ]),
   },
 
@@ -125,8 +127,10 @@ export default {
         await Promise.all([this.getAdminUsers()])
       }
       if (tabIndex === '/admin/domains') {
+        if (this.displayBeatInput) {
+          await Promise.all([this.getAdminBeats()])
+        }
         await Promise.all([
-          this.getAdminBeats(),
           this.getAdminCities(),
           this.getAdminSchools(),
           this.getAdminStatutes(),

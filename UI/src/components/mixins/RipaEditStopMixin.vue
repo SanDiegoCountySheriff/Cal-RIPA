@@ -1,5 +1,6 @@
 <script>
 import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
+import router from '@/router'
 
 export default {
   methods: {
@@ -22,6 +23,7 @@ export default {
         'ripa_form_submitted_submissions',
         JSON.stringify(sortedSubmissions),
       )
+      router.push('/')
     },
   },
 }

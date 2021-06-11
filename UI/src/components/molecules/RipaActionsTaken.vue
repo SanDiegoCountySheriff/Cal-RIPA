@@ -210,7 +210,7 @@ export default {
 
       return [
         (searchConducted && options.length > 0) ||
-          'At least basis for search is required',
+          'At least one basis for search is required',
       ]
     },
 

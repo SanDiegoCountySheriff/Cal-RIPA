@@ -1,7 +1,6 @@
 <template>
   <v-card>
     <v-tabs v-model="tabLevel1" show-arrows>
-      <v-tab to="/admin">Introduction</v-tab>
       <v-tab to="/admin/submissions">Submissions</v-tab>
       <v-tab to="/admin/stops">Stops</v-tab>
       <v-tab to="/admin/users">Users</v-tab>
@@ -9,15 +8,6 @@
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
-      <v-tab-item id="/">
-        <v-card-text>
-          <div>
-            This screen allows you to manage Submissions, Stops, Users, and
-            Domain lists
-          </div>
-        </v-card-text>
-      </v-tab-item>
-
       <v-tab-item value="/admin/submissions" id="/admin/submissions">
         <ripa-submissions-grid
           :loading="loading"
@@ -57,21 +47,25 @@
 
       <v-tab-item value="/admin/domains" id="/admin/domains">
         <v-tabs v-model="tabLevel2" show-arrows>
-          <v-tab>Beats</v-tab>
+          <template v-if="displayBeatInput">
+            <v-tab>Beats</v-tab>
+          </template>
           <v-tab>Cities</v-tab>
           <v-tab>Schools</v-tab>
           <v-tab>Statutes</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tabLevel2">
-          <v-tab-item>
-            <ripa-beats-grid
-              :loading="loading"
-              :items="beats"
-              :on-delete-beat="onDeleteBeat"
-              :on-edit-beat="onEditBeat"
-            ></ripa-beats-grid>
-          </v-tab-item>
+          <template v-if="displayBeatInput">
+            <v-tab-item>
+              <ripa-beats-grid
+                :loading="loading"
+                :items="beats"
+                :on-delete-beat="onDeleteBeat"
+                :on-edit-beat="onEditBeat"
+              ></ripa-beats-grid>
+            </v-tab-item>
+          </template>
           <v-tab-item>
             <ripa-cities-grid
               :loading="loading"
@@ -210,6 +204,10 @@ export default {
     cities: {
       type: Array,
       default: () => [],
+    },
+    displayBeatInput: {
+      type: Boolean,
+      default: false,
     },
     schools: {
       type: Array,

@@ -242,7 +242,8 @@ export default {
       const checked2 = this.viewModel.stopReason.educationViolation === 1
       const code = this.viewModel.stopReason.educationViolationCode
       return [
-        (checked1 && checked2 && code !== null) || 'A offense code is required',
+        (checked1 && checked2 && code !== null) ||
+          'An offense code is required',
       ]
     },
 
@@ -257,7 +258,7 @@ export default {
     trafficViolationCodeRules() {
       const checked = this.viewModel.stopReason.reasonForStop === 1
       const code = this.viewModel.stopReason.trafficViolationCode
-      return [(checked && code !== null) || 'A offense code is required']
+      return [(checked && code !== null) || 'An offense code is required']
     },
 
     reasonableSuspicionRules() {

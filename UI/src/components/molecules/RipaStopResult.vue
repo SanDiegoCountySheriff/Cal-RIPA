@@ -33,22 +33,22 @@
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
-            v-model="model.stopResult.anyActionsTaken"
-            label="Any Actions Taken?"
+            v-model="model.stopResult.anyResultsOfStop"
+            label="Any Results of Stop?"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
 
-          <template v-if="model.stopResult.anyActionsTaken">
+          <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop2"
+              v-model="model.stopResult.resultsOfStop2"
               label="Warning (verbal or written)"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop2">
+            <template v-if="model.stopResult.resultsOfStop2">
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -80,14 +80,14 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop3"
+              v-model="model.stopResult.resultsOfStop3"
               label="Citation for infraction"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop3">
+            <template v-if="model.stopResult.resultsOfStop3">
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -119,14 +119,14 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop4"
+              v-model="model.stopResult.resultsOfStop4"
               label="In-field cite and release"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop4">
+            <template v-if="model.stopResult.resultsOfStop4">
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -158,7 +158,7 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop5"
+              v-model="model.stopResult.resultsOfStop5"
               label="Custodial arrest pursurant to outstanding warrant"
               :rules="actionsTakenRules"
               hide-details
@@ -166,14 +166,14 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop6"
+              v-model="model.stopResult.resultsOfStop6"
               label="Custodial arrest without warrant"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop6">
+            <template v-if="model.stopResult.resultsOfStop6">
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -205,7 +205,7 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop7"
+              v-model="model.stopResult.resultsOfStop7"
               label="Field interview card completed"
               :rules="actionsTakenRules"
               hide-details
@@ -213,7 +213,7 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop8"
+              v-model="model.stopResult.resultsOfStop8"
               label="Noncriminal transport or caretaking transport"
               :rules="actionsTakenRules"
               hide-details
@@ -221,7 +221,7 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop9"
+              v-model="model.stopResult.resultsOfStop9"
               label="Contacted parent/legal guardian or other person responsible for the minor"
               :rules="actionsTakenRules"
               hide-details
@@ -229,7 +229,7 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop10"
+              v-model="model.stopResult.resultsOfStop10"
               label="Psychiatric hold"
               :rules="actionsTakenRules"
               hide-details
@@ -237,13 +237,13 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
-              v-model="model.stopResult.actionsTakenDuringStop11"
+              v-model="model.stopResult.resultsOfStop11"
               label="Contacted U.S. Department of Homeland Security"
               :rules="actionsTakenRules"
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.actionsTakenDuringStop11">
+            <template v-if="model.stopResult.resultsOfStop11">
               <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
@@ -252,14 +252,14 @@
 
             <template v-if="model.person.isStudent">
               <ripa-checkbox
-                v-model="model.stopResult.actionsTakenDuringStop12"
+                v-model="model.stopResult.resultsOfStop12"
                 label="Referral to school administrator"
                 :rules="actionsTakenRules"
                 hide-details
                 @input="handleInput"
               ></ripa-checkbox>
               <ripa-checkbox
-                v-model="model.stopResult.actionsTakenDuringStop13"
+                v-model="model.stopResult.resultsOfStop13"
                 label="Referral to school counselor or other support staff"
                 :rules="actionsTakenRules"
                 hide-details
@@ -310,7 +310,7 @@ export default {
     },
 
     isHomelandSecuritySelected() {
-      return this.viewModel.stopResult.actionsTakenDuringStop10
+      return this.viewModel.stopResult.resultsOfStop10
     },
 
     isPullReasonCodeValid() {
@@ -343,19 +343,19 @@ export default {
     },
 
     actionsTakenRules() {
-      const checked = this.viewModel.stopResult.anyActionsTaken
-      const value2 = this.viewModel.stopResult.actionsTakenDuringStop2
-      const value3 = this.viewModel.stopResult.actionsTakenDuringStop3
-      const value4 = this.viewModel.stopResult.actionsTakenDuringStop4
-      const value5 = this.viewModel.stopResult.actionsTakenDuringStop5
-      const value6 = this.viewModel.stopResult.actionsTakenDuringStop6
-      const value7 = this.viewModel.stopResult.actionsTakenDuringStop7
-      const value8 = this.viewModel.stopResult.actionsTakenDuringStop8
-      const value9 = this.viewModel.stopResult.actionsTakenDuringStop9
-      const value10 = this.viewModel.stopResult.actionsTakenDuringStop10
-      const value11 = this.viewModel.stopResult.actionsTakenDuringStop11
-      const value12 = this.viewModel.stopResult.actionsTakenDuringStop12
-      const value13 = this.viewModel.stopResult.actionsTakenDuringStop13
+      const checked = this.viewModel.stopResult.anyResultsOfStop
+      const value2 = this.viewModel.stopResult.resultsOfStop2
+      const value3 = this.viewModel.stopResult.resultsOfStop3
+      const value4 = this.viewModel.stopResult.resultsOfStop4
+      const value5 = this.viewModel.stopResult.resultsOfStop5
+      const value6 = this.viewModel.stopResult.resultsOfStop6
+      const value7 = this.viewModel.stopResult.resultsOfStop7
+      const value8 = this.viewModel.stopResult.resultsOfStop8
+      const value9 = this.viewModel.stopResult.resultsOfStop9
+      const value10 = this.viewModel.stopResult.resultsOfStop10
+      const value11 = this.viewModel.stopResult.resultsOfStop11
+      const value12 = this.viewModel.stopResult.resultsOfStop12
+      const value13 = this.viewModel.stopResult.resultsOfStop13
 
       return [
         (checked &&
@@ -376,8 +376,8 @@ export default {
     },
 
     warningRules() {
-      const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop2
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop2
       const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -386,8 +386,8 @@ export default {
     },
 
     citationRules() {
-      const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop3
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop3
       const options = this.viewModel.stopResult.citationCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -396,8 +396,8 @@ export default {
     },
 
     infieldRules() {
-      const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop4
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop4
       const options = this.viewModel.stopResult.infieldCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -406,8 +406,8 @@ export default {
     },
 
     custodialArrestRules() {
-      const checked1 = this.viewModel.stopResult.anyActionsTaken
-      const checked2 = this.viewModel.stopResult.actionsTakenDuringStop6
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop6
       const options = this.viewModel.stopResult.custodialArrestCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -418,7 +418,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopResultActionsTakenModel()
+      this.updateStopResultModel()
       this.updateStopResultWarningCodesModel()
       this.updateStopResultCitationCodesModel()
       this.updateStopResultInfieldCodesModel()

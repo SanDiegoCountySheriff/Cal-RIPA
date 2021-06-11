@@ -310,7 +310,7 @@ export default {
       return [
         this.isLocationOptionsFilled ||
           (checked && highwayExit && highwayExit.length > 0) ||
-          'A highway and closet exit is required',
+          'A highway and closest exit is required',
       ]
     },
 
