@@ -59,11 +59,11 @@ export default {
 
   methods: {
     handleStep5Next() {
-      const anyActionsTaken =
-        this.viewModel.stopResult?.anyActionsTaken || false
-      if (!anyActionsTaken) {
+      const anyResultsOfStop =
+        this.viewModel.stopResult?.anyResultsOfStop || false
+      if (!anyResultsOfStop) {
         this.$confirm({
-          title: 'Confirm Cancel',
+          title: 'Confirm Continue',
           message: `This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?`,
           button: {
             no: 'No',

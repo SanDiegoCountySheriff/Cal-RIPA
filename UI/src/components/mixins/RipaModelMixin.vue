@@ -90,31 +90,19 @@ export default {
             newValue.stopReason?.reasonForStopPiiFound || false,
         },
         stopResult: {
-          anyActionsTaken: newValue.stopResult?.anyActionsTaken || false,
-          actionsTakenDuringStop2:
-            newValue.stopResult?.actionsTakenDuringStop2 || false,
-          actionsTakenDuringStop3:
-            newValue.stopResult?.actionsTakenDuringStop3 || false,
-          actionsTakenDuringStop4:
-            newValue.stopResult?.actionsTakenDuringStop4 || false,
-          actionsTakenDuringStop5:
-            newValue.stopResult?.actionsTakenDuringStop5 || false,
-          actionsTakenDuringStop6:
-            newValue.stopResult?.actionsTakenDuringStop6 || false,
-          actionsTakenDuringStop7:
-            newValue.stopResult?.actionsTakenDuringStop7 || false,
-          actionsTakenDuringStop8:
-            newValue.stopResult?.actionsTakenDuringStop8 || false,
-          actionsTakenDuringStop9:
-            newValue.stopResult?.actionsTakenDuringStop9 || false,
-          actionsTakenDuringStop10:
-            newValue.stopResult?.actionsTakenDuringStop10 || false,
-          actionsTakenDuringStop11:
-            newValue.stopResult?.actionsTakenDuringStop11 || false,
-          actionsTakenDuringStop12:
-            newValue.stopResult?.actionsTakenDuringStop12 || false,
-          actionsTakenDuringStop13:
-            newValue.stopResult?.actionsTakenDuringStop13 || false,
+          anyResultsOfStop: newValue.stopResult?.anyResultsOfStop || false,
+          resultsOfStop2: newValue.stopResult?.resultsOfStop2 || false,
+          resultsOfStop3: newValue.stopResult?.resultsOfStop3 || false,
+          resultsOfStop4: newValue.stopResult?.resultsOfStop4 || false,
+          resultsOfStop5: newValue.stopResult?.resultsOfStop5 || false,
+          resultsOfStop6: newValue.stopResult?.resultsOfStop6 || false,
+          resultsOfStop7: newValue.stopResult?.resultsOfStop7 || false,
+          resultsOfStop8: newValue.stopResult?.resultsOfStop8 || false,
+          resultsOfStop9: newValue.stopResult?.resultsOfStop9 || false,
+          resultsOfStop10: newValue.stopResult?.resultsOfStop10 || false,
+          resultsOfStop11: newValue.stopResult?.resultsOfStop11 || false,
+          resultsOfStop12: newValue.stopResult?.resultsOfStop12 || false,
+          resultsOfStop13: newValue.stopResult?.resultsOfStop13 || false,
           warningCodes: newValue.stopResult?.warningCodes || [],
           citationCodes: newValue.stopResult?.citationCodes || [],
           infieldCodes: newValue.stopResult?.infieldCodes || [],
@@ -352,45 +340,45 @@ export default {
 
     updateStopResultModel() {
       if (!this.viewModel.person.isStudent) {
-        this.viewModel.stopResult.actionsTakenDuringStop12 = false
-        this.viewModel.stopResult.actionsTakenDuringStop13 = false
+        this.viewModel.stopResult.resultsOfStop12 = false
+        this.viewModel.stopResult.resultsOfStop13 = false
       }
 
-      if (!this.viewModel.stopResult.anyActionsTaken) {
-        this.viewModel.stopResult.actionsTakenDuringStop2 = false
-        this.viewModel.stopResult.actionsTakenDuringStop3 = false
-        this.viewModel.stopResult.actionsTakenDuringStop4 = false
-        this.viewModel.stopResult.actionsTakenDuringStop5 = false
-        this.viewModel.stopResult.actionsTakenDuringStop6 = false
-        this.viewModel.stopResult.actionsTakenDuringStop7 = false
-        this.viewModel.stopResult.actionsTakenDuringStop8 = false
-        this.viewModel.stopResult.actionsTakenDuringStop9 = false
-        this.viewModel.stopResult.actionsTakenDuringStop10 = false
-        this.viewModel.stopResult.actionsTakenDuringStop12 = false
-        this.viewModel.stopResult.actionsTakenDuringStop13 = false
+      if (!this.viewModel.stopResult.anyResultsOfStop) {
+        this.viewModel.stopResult.resultsOfStop2 = false
+        this.viewModel.stopResult.resultsOfStop3 = false
+        this.viewModel.stopResult.resultsOfStop4 = false
+        this.viewModel.stopResult.resultsOfStop5 = false
+        this.viewModel.stopResult.resultsOfStop6 = false
+        this.viewModel.stopResult.resultsOfStop7 = false
+        this.viewModel.stopResult.resultsOfStop8 = false
+        this.viewModel.stopResult.resultsOfStop9 = false
+        this.viewModel.stopResult.resultsOfStop10 = false
+        this.viewModel.stopResult.resultsOfStop12 = false
+        this.viewModel.stopResult.resultsOfStop13 = false
       }
     },
 
     updateStopResultWarningCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop2) {
+      if (!this.viewModel.stopResult.resultsOfStop2) {
         this.viewModel.stopResult.warningCodes = null
       }
     },
 
     updateStopResultCitationCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop3) {
+      if (!this.viewModel.stopResult.resultsOfStop3) {
         this.viewModel.stopResult.citationCodes = null
       }
     },
 
     updateStopResultInfieldCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop4) {
+      if (!this.viewModel.stopResult.resultsOfStop4) {
         this.viewModel.stopResult.infieldCodes = null
       }
     },
 
     updateStopResultCustodiaArrestCodesModel() {
-      if (!this.viewModel.stopResult.actionsTakenDuringStop6) {
+      if (!this.viewModel.stopResult.resultsOfStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
       }
     },

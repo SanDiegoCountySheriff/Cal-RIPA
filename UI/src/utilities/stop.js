@@ -84,7 +84,7 @@ export const defaultStop = () => {
     },
     stopReason: {},
     stopResult: {
-      anyActionsTaken: true,
+      anyResultsOfStop: true,
       pullFromReasonCode: false,
     },
     agencyQuestions: mappedAgencyQuestions(),
@@ -113,19 +113,19 @@ export const motorStop = () => {
       reasonForStopExplanation: 'Speeding',
     },
     stopResult: {
-      anyActionsTaken: true,
-      actionsTakenDuringStop2: false,
-      actionsTakenDuringStop3: true,
-      actionsTakenDuringStop4: false,
-      actionsTakenDuringStop5: false,
-      actionsTakenDuringStop6: false,
-      actionsTakenDuringStop7: false,
-      actionsTakenDuringStop8: false,
-      actionsTakenDuringStop9: false,
-      actionsTakenDuringStop10: false,
-      actionsTakenDuringStop11: false,
-      actionsTakenDuringStop12: false,
-      actionsTakenDuringStop13: false,
+      anyResultsOfStop: true,
+      resultsOfStop2: false,
+      resultsOfStop3: true,
+      resultsOfStop4: false,
+      resultsOfStop5: false,
+      resultsOfStop6: false,
+      resultsOfStop7: false,
+      resultsOfStop8: false,
+      resultsOfStop9: false,
+      resultsOfStop10: false,
+      resultsOfStop11: false,
+      resultsOfStop12: false,
+      resultsOfStop13: false,
       warningCodes: [],
       citationCodes: [54106],
       infieldCodes: [],
@@ -161,7 +161,7 @@ export const probationStop = () => {
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
     },
     stopResult: {
-      anyActionsTaken: true,
+      anyResultsOfStop: true,
       pullFromReasonCode: false,
     },
     agencyQuestions: mappedAgencyQuestions(),
@@ -849,31 +849,19 @@ const getFullStopPeopleListed = apiStop => {
         reasonForStopPiiFound: person.reasonForStopPiiFound,
       },
       stopResult: {
-        anyActionsTaken: person.listResultOfStop.length > 0,
-        actionsTakenDuringStop2: getKeyFoundInArray(person.listResultOfStop, 2),
-        actionsTakenDuringStop3: getKeyFoundInArray(person.listResultOfStop, 3),
-        actionsTakenDuringStop4: getKeyFoundInArray(person.listResultOfStop, 4),
-        actionsTakenDuringStop5: getKeyFoundInArray(person.listResultOfStop, 5),
-        actionsTakenDuringStop6: getKeyFoundInArray(person.listResultOfStop, 6),
-        actionsTakenDuringStop7: getKeyFoundInArray(person.listResultOfStop, 7),
-        actionsTakenDuringStop8: getKeyFoundInArray(person.listResultOfStop, 8),
-        actionsTakenDuringStop9: getKeyFoundInArray(person.listResultOfStop, 9),
-        actionsTakenDuringStop10: getKeyFoundInArray(
-          person.listResultOfStop,
-          10,
-        ),
-        actionsTakenDuringStop11: getKeyFoundInArray(
-          person.listResultOfStop,
-          11,
-        ),
-        actionsTakenDuringStop12: getKeyFoundInArray(
-          person.listResultOfStop,
-          12,
-        ),
-        actionsTakenDuringStop13: getKeyFoundInArray(
-          person.listResultOfStop,
-          13,
-        ),
+        anyResultsOfStop: person.listResultOfStop.length > 0,
+        resultsOfStop2: getKeyFoundInArray(person.listResultOfStop, 2),
+        resultsOfStop3: getKeyFoundInArray(person.listResultOfStop, 3),
+        resultsOfStop4: getKeyFoundInArray(person.listResultOfStop, 4),
+        resultsOfStop5: getKeyFoundInArray(person.listResultOfStop, 5),
+        resultsOfStop6: getKeyFoundInArray(person.listResultOfStop, 6),
+        resultsOfStop7: getKeyFoundInArray(person.listResultOfStop, 7),
+        resultsOfStop8: getKeyFoundInArray(person.listResultOfStop, 8),
+        resultsOfStop9: getKeyFoundInArray(person.listResultOfStop, 9),
+        resultsOfStop10: getKeyFoundInArray(person.listResultOfStop, 10),
+        resultsOfStop11: getKeyFoundInArray(person.listResultOfStop, 11),
+        resultsOfStop12: getKeyFoundInArray(person.listResultOfStop, 12),
+        resultsOfStop13: getKeyFoundInArray(person.listResultOfStop, 13),
         warningCodes: getCodePropValueGivenKeyInArray(
           person.listResultOfStop,
           2,
@@ -1504,65 +1492,53 @@ const getContrabandOrEvidenceDiscovered = person => {
 
 const getResultOfStop = (person, statutes) => {
   const types = []
-  const actionsTakenDuringStop2 =
-    person.stopResult?.actionsTakenDuringStop2 || false
-  const actionsTakenDuringStop3 =
-    person.stopResult?.actionsTakenDuringStop3 || false
-  const actionsTakenDuringStop4 =
-    person.stopResult?.actionsTakenDuringStop4 || false
-  const actionsTakenDuringStop5 =
-    person.stopResult?.actionsTakenDuringStop5 || false
-  const actionsTakenDuringStop6 =
-    person.stopResult?.actionsTakenDuringStop6 || false
-  const actionsTakenDuringStop7 =
-    person.stopResult?.actionsTakenDuringStop7 || false
-  const actionsTakenDuringStop8 =
-    person.stopResult?.actionsTakenDuringStop8 || false
-  const actionsTakenDuringStop9 =
-    person.stopResult?.actionsTakenDuringStop9 || false
-  const actionsTakenDuringStop10 =
-    person.stopResult?.actionsTakenDuringStop10 || false
-  const actionsTakenDuringStop11 =
-    person.stopResult?.actionsTakenDuringStop11 || false
-  const actionsTakenDuringStop12 =
-    person.stopResult?.actionsTakenDuringStop12 || false
-  const actionsTakenDuringStop13 =
-    person.stopResult?.actionsTakenDuringStop13 || false
+  const resultsOfStop2 = person.stopResult?.resultsOfStop2 || false
+  const resultsOfStop3 = person.stopResult?.resultsOfStop3 || false
+  const resultsOfStop4 = person.stopResult?.resultsOfStop4 || false
+  const resultsOfStop5 = person.stopResult?.resultsOfStop5 || false
+  const resultsOfStop6 = person.stopResult?.resultsOfStop6 || false
+  const resultsOfStop7 = person.stopResult?.resultsOfStop7 || false
+  const resultsOfStop8 = person.stopResult?.resultsOfStop8 || false
+  const resultsOfStop9 = person.stopResult?.resultsOfStop9 || false
+  const resultsOfStop10 = person.stopResult?.resultsOfStop10 || false
+  const resultsOfStop11 = person.stopResult?.resultsOfStop11 || false
+  const resultsOfStop12 = person.stopResult?.resultsOfStop12 || false
+  const resultsOfStop13 = person.stopResult?.resultsOfStop13 || false
 
-  if (actionsTakenDuringStop2) {
+  if (resultsOfStop2) {
     types.push(2)
   }
-  if (actionsTakenDuringStop3) {
+  if (resultsOfStop3) {
     types.push(3)
   }
-  if (actionsTakenDuringStop4) {
+  if (resultsOfStop4) {
     types.push(4)
   }
-  if (actionsTakenDuringStop5) {
+  if (resultsOfStop5) {
     types.push(5)
   }
-  if (actionsTakenDuringStop6) {
+  if (resultsOfStop6) {
     types.push(6)
   }
-  if (actionsTakenDuringStop7) {
+  if (resultsOfStop7) {
     types.push(7)
   }
-  if (actionsTakenDuringStop8) {
+  if (resultsOfStop8) {
     types.push(8)
   }
-  if (actionsTakenDuringStop9) {
+  if (resultsOfStop9) {
     types.push(9)
   }
-  if (actionsTakenDuringStop10) {
+  if (resultsOfStop10) {
     types.push(10)
   }
-  if (actionsTakenDuringStop11) {
+  if (resultsOfStop11) {
     types.push(11)
   }
-  if (actionsTakenDuringStop12) {
+  if (resultsOfStop12) {
     types.push(12)
   }
-  if (actionsTakenDuringStop13) {
+  if (resultsOfStop13) {
     types.push(13)
   }
 
