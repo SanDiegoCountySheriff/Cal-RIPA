@@ -418,7 +418,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopResultActionsTakenModel()
+      this.updateStopResultModel()
       this.updateStopResultWarningCodesModel()
       this.updateStopResultCitationCodesModel()
       this.updateStopResultInfieldCodesModel()
