@@ -164,14 +164,14 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'putOfficerUser']),
+    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
 
     handleClose() {
       this.showUserDialog = false
     },
 
     handleSaveUser(user) {
-      this.putOfficerUser(user)
+      this.editOfficerUser(user)
     },
 
     handleSubmitStop(apiStop) {

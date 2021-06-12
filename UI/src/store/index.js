@@ -330,6 +330,7 @@ export default new Vuex.Store({
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
       }
+      debugger
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
     },
     updateErrorCodeAdminSearch(state, value) {

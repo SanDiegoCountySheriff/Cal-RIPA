@@ -381,16 +381,11 @@ export default {
         }
 
         let updatedFullStop = Object.assign({}, this.fullStop)
-        updatedFullStop.agency = this.stop.agency
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
-        updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
-        updatedFullStop.officer = this.stop.officer
-        updatedFullStop.officerId = this.stop.officerId
-        updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
