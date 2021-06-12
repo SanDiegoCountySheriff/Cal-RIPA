@@ -419,6 +419,7 @@ export default {
       localStorage.removeItem('ripa_form_saved_full_stop')
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_submitted_api_stop')
       localStorage.removeItem('ripa_form_submitted_submissions')
     },
 
