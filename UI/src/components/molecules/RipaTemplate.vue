@@ -45,7 +45,7 @@
         The AG’s Office has adopted
         <a href="https://oag.ca.gov/ab953/regulations">these regulations</a>
         on November 7, 2017. For more information please see the
-        <a href="https://oag.ca.gov/ab953/regulations">AG's Website</a>.
+        <a href="https://oag.ca.gov/">AG's Website</a>.
       </p>
       <v-divider></v-divider>
     </v-card-text>
