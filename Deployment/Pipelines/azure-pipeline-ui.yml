@@ -30,6 +30,10 @@ stages:
               versionSpec: "12.x"
             displayName: "Install Node.js"
 
+          - script: rm -rf "UI/node_modules"
+            displayName: "purge node packages"
+            continueOnError: true
+            workingDirectory: $(Build.SourcesDirectory)
           - task: Npm@1
             displayName: "npm install"
             inputs:
