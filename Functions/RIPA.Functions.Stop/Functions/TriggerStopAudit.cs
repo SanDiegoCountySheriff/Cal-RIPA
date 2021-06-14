@@ -29,7 +29,7 @@ namespace RIPA.Functions.Stop.Functions
                 foreach (Document document in input)
                 {
                     Common.Models.Stop stop = JsonConvert.DeserializeObject<Common.Models.Stop>(document.ToString());
-                    stop.Id = $"{stop.Id}-{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}";
+                    stop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
                     await _stopAuditCosmosDbService.UpdateStopAuditAsync(stop.Id, stop);
                     log.LogInformation($"archived stop id: {document.Id}");
                 }
