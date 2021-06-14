@@ -503,7 +503,7 @@ export default new Vuex.Store({
     editSchool({ dispatch, state }, school) {
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}domain/PutCity/${school.rowKey}`,
+          `${state.apiConfig.apiBaseUrl}domain/PutSchool/${school.rowKey}`,
           school,
           {
             headers: {
