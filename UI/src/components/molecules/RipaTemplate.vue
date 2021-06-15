@@ -45,10 +45,14 @@
         The AG’s Office has adopted
         <a
           href="https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf"
-          >these regulations</a
+          target="_blank"
         >
+          these regulations
+        </a>
         on November 7, 2017. For more information please see the
-        <a href="https://oag.ca.gov/ab953/regulations">AG's Website</a>.
+        <a href="https://oag.ca.gov/ab953/regulations" target="_blank">
+          AG's Website </a
+        >.
       </p>
       <v-divider></v-divider>
     </v-card-text>

@@ -93,6 +93,7 @@ export default {
       'isAuthenticated',
       'apiConfig',
       'mappedUser',
+      'stopSubmissionStatus',
     ]),
 
     getMappedUser() {
@@ -120,6 +121,7 @@ export default {
       'getFormSchools',
       'getFormStatutes',
       'getUser',
+      'resetStopSubmissionStatus',
     ]),
 
     async getUserData() {
@@ -201,12 +203,21 @@ export default {
     },
 
     async runApiStopsJob(apiStops) {
+      this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
           await this.editOfficerStop(apiStops[index])
         }
 
-        this.snackbarText = `4 stops were submitted and no errors`
+        const totalStops = this.stopSubmissionStatus.total
+        const totalStopsText =
+          totalStops.length === 1 ? `${totalStops} stop` : `${totalStops} stops`
+        const errorStops = this.stopSubmissionStatus.error
+        const errorStopsText =
+          errorStops.length === 1
+            ? `${errorStops} error`
+            : `${errorStops} errors`
+        this.snackbarText = `${totalStopsText} were submitted and ${errorStopsText}`
         this.snackbarVisible = true
       }
     },

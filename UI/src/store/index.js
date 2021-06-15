@@ -61,6 +61,10 @@ export default new Vuex.Store({
       search: null,
       select: null,
     },
+    stopSubmissionStatus: {
+      total: 0,
+      error: 0,
+    },
   },
 
   getters: {
@@ -339,6 +343,12 @@ export default new Vuex.Store({
         items: value,
       }
     },
+    resetStopSubmissionStatus(state, counts) {
+      state.stopSubmissionStatus = {
+        total: counts.total,
+        error: counts.error,
+      }
+    },
   },
 
   actions: {
@@ -606,7 +616,6 @@ export default new Vuex.Store({
     },
 
     editOfficerStop({ dispatch, state }, stop) {
-      console.log('submit officer stop', stop)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -1239,6 +1248,10 @@ export default new Vuex.Store({
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
       commit('updateAgencyQuestions', value)
+    },
+
+    resetStopSubmissionStatus({ commit }) {
+      commit('updateStopSubmissionStatus', { total: 0, error: 0 })
     },
   },
 
