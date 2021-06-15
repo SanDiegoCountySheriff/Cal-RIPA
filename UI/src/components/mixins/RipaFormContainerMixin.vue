@@ -152,7 +152,9 @@ export default {
 
     handleDeletePerson(id) {
       // update fullStop
-      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
+      const filteredPeople = this.fullStop.people.filter(
+        item => item.id !== id.toString(),
+      )
       const updatedFullStop = {
         ...this.fullStop,
         people: filteredPeople.map((person, index) => {

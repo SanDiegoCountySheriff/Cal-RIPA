@@ -173,7 +173,7 @@ export default {
       })
     },
     editItem(item) {
-      this.handleEditStop(item)
+      this.handleEditStop(item, window.location.pathname)
     },
   },
 
