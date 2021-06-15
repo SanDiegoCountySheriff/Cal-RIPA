@@ -1,20 +1,17 @@
 <template>
   <v-text-field
     ref="ripaTextInput"
-    :value="viewModel"
+    v-model="viewModel"
     :label="label"
     :loading="loading"
     :hint="hint"
     :rules="rules"
     :disabled="disabled"
-    validate-on-blur
-    @input="debounceInput"
+    @blur="handleBlur"
   ></v-text-field>
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   name: 'ripa-text-input',
 
@@ -25,9 +22,10 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function (e) {
-      this.parseText(e)
-    }, 1000),
+    handleBlur(event) {
+      this.viewModel = this.parseText(event.target.value)
+      this.handleInput(this.viewModel)
+    },
 
     parseText(newVal) {
       const currentText = newVal || ''
@@ -37,7 +35,7 @@ export default {
           '',
         )
         .trim()
-      this.handleInput(parsedText)
+      return parsedText
     },
 
     handleInput(newVal) {
