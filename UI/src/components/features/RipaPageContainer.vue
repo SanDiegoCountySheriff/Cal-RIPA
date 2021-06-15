@@ -38,6 +38,9 @@
     <ripa-invalid-user-dialog
       :show-dialog="showInvalidUserDialog"
     ></ripa-invalid-user-dialog>
+
+    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
+    </ripa-snackbar>
   </ripa-page-wrapper>
 </template>
 
@@ -47,6 +50,7 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
@@ -62,6 +66,7 @@ export default {
     RipaInterval,
     RipaInvalidUserDialog,
     RipaPageWrapper,
+    RipaSnackbar,
     RipaUserDialog,
   },
 
@@ -71,6 +76,8 @@ export default {
       stopInternalMs: 5000,
       showInvalidUserDialog: false,
       showUserDialog: false,
+      snackbarText: '',
+      snackbarVisible: false,
     }
   },
 
@@ -198,6 +205,9 @@ export default {
         for (let index = 0; index < apiStops.length; index++) {
           await this.editOfficerStop(apiStops[index])
         }
+
+        this.snackbarText = `4 stops were submitted and no errors`
+        this.snackbarVisible = true
       }
     },
 

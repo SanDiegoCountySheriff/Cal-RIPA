@@ -26,6 +26,7 @@ export default {
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
       showStatuteDialog: false,
+      showUserDialog: false,
       statute: null,
       stop: {},
     }
@@ -128,6 +129,7 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
+      this.showUserDialog = false
     },
 
     handleDeleteLocationFavorite(id) {

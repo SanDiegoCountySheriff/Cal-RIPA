@@ -101,9 +101,15 @@
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :user="getMappedUser"
       :show-dialog="showUserDialog"
-      :on-close="handleClose"
+      :on-close="handleCloseDialog"
       :on-save="handleSaveUser"
     ></ripa-user-dialog>
+
+    <ripa-snackbar
+      text="Stops will be submitted once you are online and authenticated"
+      v-model="snackbarVisible"
+    >
+    </ripa-snackbar>
   </div>
 </template>
 
@@ -111,9 +117,10 @@
 import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
-import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
-import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
+import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
+import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -126,13 +133,14 @@ export default {
     RipaAddFavoriteDialog,
     RipaFavoritesDialog,
     RipaFormTemplate,
+    RipaSnackbar,
     RipaStatuteDialog,
     RipaUserDialog,
   },
 
   data() {
     return {
-      showUserDialog: false,
+      snackbarVisible: false,
     }
   },
 
@@ -166,10 +174,6 @@ export default {
   methods: {
     ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
 
-    handleClose() {
-      this.showUserDialog = false
-    },
-
     handleSaveUser(user) {
       this.editOfficerUser(user)
     },
@@ -177,6 +181,9 @@ export default {
     handleSubmitStop(apiStop) {
       this.addApiStop(apiStop)
       this.setLastLocation(this.stop)
+      if (!this.isOnlineAndAuthenticated) {
+        this.snackbarVisible = true
+      }
     },
 
     handleSubmitAudit(route) {
