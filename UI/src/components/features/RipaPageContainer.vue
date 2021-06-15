@@ -10,8 +10,22 @@
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     @handleLogOut="handleLogOut"
-    @handleLogIn="handleLogIn"
   >
+    <v-banner v-if="!isAuthenticated && isOnline" single-line :sticky="true">
+      You are not logged in. While you can initiate a new stop, you must be
+      logged in to submit it.
+      <template v-slot:actions>
+        <v-btn
+          small
+          outlined
+          color="primary"
+          @click="handleLogIn"
+          class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
+          >Login</v-btn
+        >
+      </template>
+    </v-banner>
+
     <template v-if="!isValidCacheState">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
@@ -21,11 +35,6 @@
     <template v-if="isValidCacheState">
       <slot></slot>
     </template>
-
-    <ripa-interval
-      :delay="stopInternalMs"
-      @tick="checkLocalStorage"
-    ></ripa-interval>
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
@@ -41,6 +50,16 @@
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
     </ripa-snackbar>
+
+    <ripa-interval
+      :delay="stopInternalMsApi"
+      @tick="checkLocalStorage"
+    ></ripa-interval>
+
+    <ripa-interval
+      :delay="stopInternalMsAuth"
+      @tick="checkAuthentication"
+    ></ripa-interval>
   </ripa-page-wrapper>
 </template>
 
@@ -73,7 +92,8 @@ export default {
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
-      stopInternalMs: 5000,
+      stopInternalMsApi: 5000,
+      stopInternalMsAuth: 60000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -88,9 +108,9 @@ export default {
       'environmentName',
       'isAdmin',
       'invalidUser',
+      'isAuthenticated',
       'isOnline',
       'isOnlineAndAuthenticated',
-      'isAuthenticated',
       'apiConfig',
       'mappedUser',
       'stopSubmissionStatus',
@@ -219,6 +239,20 @@ export default {
       await this.getUserData()
       await this.getFormData()
     },
+
+    checkAuthentication() {
+      const _that = this
+      if (this.isOnline) {
+        console.log('Acquire Token')
+        authentication.acquireToken().then(() => {
+          console.log('Check If Authenticated')
+          if (!authentication.isAuthenticated()) {
+            console.log('Log out')
+            _that.handleLogOut()
+          }
+        })
+      }
+    },
   },
 
   async created() {
@@ -233,7 +267,7 @@ export default {
 
   watch: {
     invalidUser(newVal) {
-      if (newVal && this.isOnline && this.isAuthenticated) {
+      if (newVal && this.isOnlineAndAuthenticated) {
         this.showUserDialog = true
       }
     },

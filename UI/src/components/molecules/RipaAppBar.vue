@@ -156,21 +156,6 @@
         </div>
       </template>
     </v-app-bar>
-
-    <v-banner v-if="!authenticated && online" single-line :sticky="true">
-      You are not logged in. While you can initiate a new stop, you must be
-      logged in to submit it.
-      <template v-slot:actions>
-        <v-btn
-          small
-          outlined
-          color="primary"
-          @click="handleLogIn"
-          class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
-          >Login</v-btn
-        >
-      </template>
-    </v-banner>
   </div>
 </template>
 
@@ -219,6 +204,7 @@ export default {
         this.onUpdateDark(this.$vuetify.theme.dark)
       }
     },
+
     handleAuth() {
       if (this.authenticated) {
         this.handleLogOut()
@@ -226,11 +212,9 @@ export default {
         this.handleLogIn()
       }
     },
+
     handleLogOut() {
       this.$emit('handleLogOut')
-    },
-    handleLogIn() {
-      this.$emit('handleLogIn')
     },
 
     handleUserChange() {

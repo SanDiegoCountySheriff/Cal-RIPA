@@ -147,6 +147,7 @@ export default {
   computed: {
     ...mapGetters([
       'invalidUser',
+      'isAuthenticated',
       'isOnlineAndAuthenticated',
       'mappedFormBeats',
       'mappedFormCountyCities',
@@ -155,7 +156,6 @@ export default {
       'mappedFormStatutes',
       'mappedGpsLocationAddress',
       'mappedUser',
-      'isAuthenticated',
       'displayBeatInput',
       'displayDebugger',
     ]),
