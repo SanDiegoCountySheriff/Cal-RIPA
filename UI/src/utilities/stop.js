@@ -814,7 +814,7 @@ const getFullStopPeopleListed = apiStop => {
   const people = apiStop.listPersonStopped
   return people.map((person, index) => {
     return {
-      id: person.id,
+      id: Number(person.id),
       index: index + 1,
       isStudent: person.isStudent || false,
       perceivedRace: getKeyArray(person.listPerceivedRace),
@@ -985,7 +985,21 @@ export const fullStopToStop = fullStop => {
     stopDate: fullStop.stopDate,
     location: fullStop.location,
     agencyQuestions: fullStop.agencyQuestions,
-    ...person,
+    actionsTaken: person.actionsTaken || {},
+    person: {
+      anyDisabilities: person.anyDisabilities || false,
+      genderNonconforming: person.genderNonconforming || false,
+      id: person.id,
+      isStudent: person.isStudent || false,
+      perceivedAge: person.perceivedAge || null,
+      perceivedGender: person.perceivedGender || null,
+      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
+      perceivedRace: person.perceivedOrKnownDisability || [],
+    },
+    stopReason: person.stopReason || {},
+    stopResult: person.stopResult || {},
   }
 }
 

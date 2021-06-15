@@ -206,10 +206,10 @@ export default new Vuex.Store({
     stopSubmissionStatus: state => {
       const totalStops = state.stopSubmissionStatusTotal
       const totalStopsText =
-        totalStops.length === 1 ? `${totalStops} stop` : `${totalStops} stops`
+        totalStops === 1 ? `${totalStops} stop` : `${totalStops} stops`
       const errorStops = state.stopSubmissionStatusError
       const errorStopsText =
-        errorStops.length === 1 ? `${errorStops} error` : `${errorStops} errors`
+        errorStops === 1 ? `${errorStops} error` : `${errorStops} errors`
       return `${totalStopsText} were submitted and ${errorStopsText}`
     },
   },
