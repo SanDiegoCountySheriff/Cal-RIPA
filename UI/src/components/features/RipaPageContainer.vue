@@ -209,15 +209,7 @@ export default {
           await this.editOfficerStop(apiStops[index])
         }
 
-        const totalStops = this.stopSubmissionStatus.total
-        const totalStopsText =
-          totalStops.length === 1 ? `${totalStops} stop` : `${totalStops} stops`
-        const errorStops = this.stopSubmissionStatus.error
-        const errorStopsText =
-          errorStops.length === 1
-            ? `${errorStops} error`
-            : `${errorStops} errors`
-        this.snackbarText = `${totalStopsText} were submitted and ${errorStopsText}`
+        this.snackbarText = this.stopSubmissionStatus
         this.snackbarVisible = true
       }
     },
