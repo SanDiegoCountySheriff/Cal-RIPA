@@ -34,7 +34,6 @@ export const onePerson = () => ({
   computed: {
     getApiStop() {
       return fullStopToApiStop(
-        false,
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -62,7 +61,6 @@ export const twoPerson = () => ({
   computed: {
     getApiStop() {
       return fullStopToApiStop(
-        false,
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -95,7 +93,6 @@ export const onePersonEdit = () => ({
   computed: {
     getApiStop() {
       return fullStopToApiStop(
-        false,
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -123,7 +120,6 @@ export const twoPersonEdit = () => ({
   computed: {
     getApiStop() {
       return fullStopToApiStop(
-        false,
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),

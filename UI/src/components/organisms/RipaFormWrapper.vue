@@ -324,7 +324,6 @@ export default {
 
     getApiStop() {
       return fullStopToApiStop(
-        this.adminEditing,
         this.fullStop,
         this.beats,
         this.countyCities,
