@@ -156,7 +156,7 @@ namespace RIPA.Functions.Stop.Functions
             {
                 Total = summary.Sum(x => x.Count),
                 Submitted = summary.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
-                Unsubmitted = summary.Where(x => x.Status == null).Select(x => x.Count).FirstOrDefault(),
+                Unsubmitted = summary.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
                 Resubmitted = summary.Where(x => x.Status == "Resubmitted").Select(x => x.Count).FirstOrDefault(),
                 Failed = summary.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
             };
