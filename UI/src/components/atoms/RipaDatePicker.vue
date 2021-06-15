@@ -16,6 +16,7 @@
         v-bind="attrs"
         v-on="on"
         :rules="rules"
+        clearable
       ></v-text-field>
     </template>
     <v-date-picker v-model="model" no-title scrollable>

@@ -268,6 +268,7 @@ export default {
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
         status: this.currentStatusFilter,
+        errorCodes: this.selectedErrorCodes,
       }
     },
   },
