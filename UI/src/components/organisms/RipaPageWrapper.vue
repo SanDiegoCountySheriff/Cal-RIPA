@@ -10,6 +10,7 @@
       :dark="dark"
       :on-update-dark="onUpdateDark"
       @handleLogOut="handleLogOut"
+      @handleLogIn="handleLogIn"
       :on-update-user="onUpdateUser"
     ></ripa-app-bar>
     <ripa-content-wrapper>
@@ -41,6 +42,9 @@ export default {
   methods: {
     handleLogOut() {
       this.$emit('handleLogOut')
+    },
+    handleLogIn() {
+      this.$emit('handleLogIn')
     },
   },
 

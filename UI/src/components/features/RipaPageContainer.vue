@@ -10,22 +10,8 @@
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     @handleLogOut="handleLogOut"
+    @handleLogIn="handleLogIn"
   >
-    <v-banner v-if="!isAuthenticated && isOnline" single-line :sticky="true">
-      You are not logged in. While you can initiate a new stop, you must be
-      logged in to submit it.
-      <template v-slot:actions>
-        <v-btn
-          small
-          outlined
-          color="primary"
-          @click="handleLogIn"
-          class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
-          >Login</v-btn
-        >
-      </template>
-    </v-banner>
-
     <template v-if="!isValidCacheState">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
@@ -93,7 +79,7 @@ export default {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMsApi: 5000,
-      stopInternalMsAuth: 60000,
+      stopInternalMsAuth: 30000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -241,16 +227,15 @@ export default {
     },
 
     checkAuthentication() {
-      const _that = this
-      if (this.isOnline) {
+      if (this.isOnlineAndAuthenticated) {
         console.log('Acquire Token')
-        authentication.acquireToken().then(() => {
-          console.log('Check If Authenticated')
-          if (!authentication.isAuthenticated()) {
-            console.log('Log out')
-            _that.handleLogOut()
-          }
-        })
+        try {
+          authentication.acquireToken()
+        } catch (error) {
+          console.log(error)
+          console.log('Log out')
+          this.handleLogOut()
+        }
       }
     },
   },
