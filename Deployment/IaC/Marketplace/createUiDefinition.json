@@ -20,262 +20,546 @@
 		},
 		"basics": [
 			{
-				"name": "agency_name",
+				"name": "agency_full_name",
 				"type": "Microsoft.Common.TextBox",
-				"label": "Full Agency Display Name",
-				"defaultValue": "",
+				"label": "Agency full display name",
+				"defaultValue": "Not used at this time",
 				"toolTip": "",
 				"constraints": {
 					"required": true,
 					"regex": "",
 					"validationMessage": ""
 				},
-				"visible": true
+				"visible": false
 			},
 			{
-				"name": "agency_abbrv_dropdown",
+				"name": "agency_dropdown",
 				"type": "Microsoft.Common.DropDown",
-				"label": "Agency Name",
-				"placeholder": "",
-				"defaultValue": null,
-				"toolTip": "",
+				"label": "Agency",
+				"toolTip": "Select the agnecy that you are deploying this application for.",
 				"constraints": {
 					"allowedValues": [
 						{
 							"label": "ALAMEDA COUNTY",
 							"value": {
-								"city": "alameda",
-								"type": "so",
-								"ori": "ca001"
+								"county": "Alameda",
+								"abbreviation": "alameda",
+								"type": "sd",
+								"ori": "CA0010000"
 							}
 						},
 						{
 							"label": "ALPINE COUNTY",
-							"value": "alpine"
+							"value": {
+								"county": "Alpine",
+								"abbreviation": "alpine",
+								"type": "sd",
+								"ori": "CA0020000"
+							}
 						},
 						{
 							"label": "AMADOR COUNTY",
-							"value": "amador"
+							"value": {
+								"county": "Amador",
+								"abbreviation": "amador",
+								"type": "sd",
+								"ori": "CA0030000"
+							}
 						},
 						{
 							"label": "BUTTE COUNTY",
-							"value": "butte"
+							"value": {
+								"county": "Butte",
+								"abbreviation": "butte",
+								"type": "sd",
+								"ori": "CA0040000"
+							}
 						},
 						{
 							"label": "CALAVERAS COUNTY",
-							"value": "calaveras"
+							"value": {
+								"county": "Calaveras",
+								"abbreviation": "calaveras",
+								"type": "sd",
+								"ori": "CA0050000"
+							}
 						},
 						{
 							"label": "COLUSA COUNTY",
-							"value": "colusa"
+							"value": {
+								"county": "Colusa",
+								"abbreviation": "colusa",
+								"type": "sd",
+								"ori": "CA0060000"
+							}
 						},
 						{
 							"label": "CONTRA COSTA COUNTY",
-							"value": "contracosta"
+							"value": {
+								"county": "Contra Costa",
+								"abbreviation": "contracosta",
+								"type": "sd",
+								"ori": "CA0070000"
+							}
 						},
 						{
 							"label": "DEL NORTE COUNTY",
-							"value": "delnorte"
+							"value": {
+								"county": "Del Norte",
+								"abbreviation": "delnorte",
+								"type": "sd",
+								"ori": "CA0080000"
+							}
 						},
 						{
 							"label": "EL DORADO COUNTY",
-							"value": "eldorado"
+							"value": {
+								"county": "El Dorado",
+								"abbreviation": "eldorado",
+								"type": "sd",
+								"ori": "CA0090000"
+							}
 						},
 						{
 							"label": "FRESNO COUNTY",
-							"value": "fresno"
+							"value": {
+								"county": "Fresno",
+								"abbreviation": "fresno",
+								"type": "sd",
+								"ori": "CA0100000"
+							}
 						},
 						{
 							"label": "GLENN COUNTY",
-							"value": "glenn"
+							"value": {
+								"county": "Glenn",
+								"abbreviation": "glenn",
+								"type": "sd",
+								"ori": "CA0110000"
+							}
 						},
 						{
 							"label": "HUMBOLDT COUNTY",
-							"value": "humboldt"
+							"value": {
+								"county": "Humboldt",
+								"abbreviation": "humboldt",
+								"type": "sd",
+								"ori": "CA0120000"
+							}
 						},
 						{
 							"label": "IMPERIAL COUNTY",
-							"value": "imperial"
+							"value": {
+								"county": "Imperial",
+								"abbreviation": "imperial",
+								"type": "sd",
+								"ori": "CA0130000"
+							}
 						},
 						{
 							"label": "INYO COUNTY",
-							"value": "inyo"
+							"value": {
+								"county": "Inyo",
+								"abbreviation": "inyo",
+								"type": "sd",
+								"ori": "CA0140000"
+							}
 						},
 						{
 							"label": "KERN COUNTY",
-							"value": "kern"
+							"value": {
+								"county": "Kern",
+								"abbreviation": "kern",
+								"type": "sd",
+								"ori": "CA0150000"
+							}
 						},
 						{
 							"label": "KINGS COUNTY",
-							"value": "kings"
+							"value": {
+								"county": "Kings",
+								"abbreviation": "kings",
+								"type": "sd",
+								"ori": "CA0160000"
+							}
 						},
 						{
 							"label": "LAKE COUNTY",
-							"value": "lake"
+							"value": {
+								"county": "Lake",
+								"abbreviation": "lake",
+								"type": "sd",
+								"ori": "CA0170000"
+							}
 						},
 						{
 							"label": "LASSEN COUNTY",
-							"value": "lassen"
+							"value": {
+								"county": "Lassen",
+								"abbreviation": "lassen",
+								"type": "sd",
+								"ori": "CA0180000"
+							}
 						},
 						{
 							"label": "LOS ANGELES COUNTY",
-							"value": "losangeles"
+							"value": {
+								"county": "Los Angeles",
+								"abbreviation": "la",
+								"type": "sd",
+								"ori": "CA0190000"
+							}
 						},
 						{
 							"label": "MADERA COUNTY",
-							"value": "madera"
+							"value": {
+								"county": "Madera",
+								"abbreviation": "madera",
+								"type": "sd",
+								"ori": "CA0200000"
+							}
 						},
 						{
 							"label": "MARIN COUNTY",
-							"value": "marin"
+							"value": {
+								"county": "Marin",
+								"abbreviation": "marin",
+								"type": "sd",
+								"ori": "CA0210000"
+							}
 						},
 						{
 							"label": "MARIPOSA COUNTY",
-							"value": "mariposa"
+							"value": {
+								"county": "Mariposa",
+								"abbreviation": "mariposa",
+								"type": "sd",
+								"ori": "CA0220000"
+							}
 						},
 						{
 							"label": "MENDOCINO COUNTY",
-							"value": "mendocino"
+							"value": {
+								"county": "Mendocino",
+								"abbreviation": "mendocino",
+								"type": "sd",
+								"ori": "CA0230000"
+							}
 						},
 						{
 							"label": "MERCED COUNTY",
-							"value": "merced"
+							"value": {
+								"county": "Merced",
+								"abbreviation": "merced",
+								"type": "sd",
+								"ori": "CA0240000"
+							}
 						},
 						{
 							"label": "MODOC COUNTY",
-							"value": "modoc"
+							"value": {
+								"county": "Modoc",
+								"abbreviation": "modoc",
+								"type": "sd",
+								"ori": "CA0250000"
+							}
 						},
 						{
 							"label": "MONO COUNTY",
-							"value": "mono"
+							"value": {
+								"county": "Mono",
+								"abbreviation": "mono",
+								"type": "sd",
+								"ori": "CA0260000"
+							}
 						},
 						{
 							"label": "MONTEREY COUNTY",
-							"value": "monterey"
+							"value": {
+								"county": "Monterey",
+								"abbreviation": "monterey",
+								"type": "sd",
+								"ori": "CA0270000"
+							}
 						},
 						{
 							"label": "NAPA COUNTY",
-							"value": "napa"
+							"value": {
+								"county": "Napa",
+								"abbreviation": "napa",
+								"type": "sd",
+								"ori": "CA0280000"
+							}
 						},
 						{
 							"label": "NEVADA COUNTY",
-							"value": "nevada"
+							"value": {
+								"county": "Nevada",
+								"abbreviation": "nevada",
+								"type": "sd",
+								"ori": "CA0290000"
+							}
 						},
 						{
 							"label": "ORANGE COUNTY",
-							"value": "orange"
+							"value": {
+								"county": "Orange",
+								"abbreviation": "orange",
+								"type": "sd",
+								"ori": "CA0300000"
+							}
 						},
 						{
 							"label": "PLACER COUNTY",
-							"value": "placer"
+							"value": {
+								"county": "Placer",
+								"abbreviation": "placer",
+								"type": "sd",
+								"ori": "CA0310000"
+							}
 						},
 						{
 							"label": "PLUMAS COUNTY",
-							"value": "plumas"
+							"value": {
+								"county": "Plumas",
+								"abbreviation": "plumas",
+								"type": "sd",
+								"ori": "CA0320000"
+							}
 						},
 						{
 							"label": "RIVERSIDE COUNTY",
-							"value": "riverside"
+							"value": {
+								"county": "Riverside",
+								"abbreviation": "riverside",
+								"type": "sd",
+								"ori": "CA0330000"
+							}
 						},
 						{
 							"label": "SACRAMENTO COUNTY",
-							"value": "sacramento"
+							"value": {
+								"county": "Sacramento",
+								"abbreviation": "sacramento",
+								"type": "sd",
+								"ori": "CA0340000"
+							}
 						},
 						{
 							"label": "SAN BENITO COUNTY",
-							"value": "sanbenito"
+							"value": {
+								"county": "San Benito",
+								"abbreviation": "sanbenito",
+								"type": "sd",
+								"ori": "CA0350000"
+							}
 						},
 						{
 							"label": "SAN BERNARDINO COUNTY",
-							"value": "sanbernardino"
+							"value": {
+								"county": "San Bernardino",
+								"abbreviation": "sanbernardino",
+								"type": "sd",
+								"ori": "CA0360000"
+							}
 						},
 						{
 							"label": "SAN DIEGO COUNTY",
-							"value": "sandiego"
+							"value": {
+								"county": "San Diego",
+								"abbreviation": "sd",
+								"type": "sd",
+								"ori": "CA0370000"
+							}
 						},
 						{
 							"label": "SAN FRANCISCO COUNTY",
-							"value": "sanfrancisco"
+							"value": {
+								"county": "San Francisco",
+								"abbreviation": "sf",
+								"type": "sd",
+								"ori": "CA0380000"
+							}
 						},
 						{
 							"label": "SAN JOAQUIN COUNTY",
-							"value": "sanjoaquin"
+							"value": {
+								"county": "San Joaquin",
+								"abbreviation": "sanjoaquin",
+								"type": "sd",
+								"ori": "CA0390000"
+							}
 						},
 						{
 							"label": "SAN LUIS OBISPO COUNTY",
-							"value": "sanluisobispo"
+							"value": {
+								"county": "San Luis Obispo",
+								"abbreviation": "slo",
+								"type": "sd",
+								"ori": "CA0400000"
+							}
 						},
 						{
 							"label": "SAN MATEO COUNTY",
-							"value": "sanmateo"
+							"value": {
+								"county": "San Mateo",
+								"abbreviation": "sm",
+								"type": "sd",
+								"ori": "CA0410000"
+							}
 						},
 						{
 							"label": "SANTA BARBARA COUNTY",
-							"value": "santabarbara"
+							"value": {
+								"county": "Santa Barbara",
+								"abbreviation": "santabarbara",
+								"type": "sd",
+								"ori": "CA0420000"
+							}
 						},
 						{
 							"label": "SANTA CLARA COUNTY",
-							"value": "santaclara"
+							"value": {
+								"county": "Santa Clara",
+								"abbreviation": "santaclara",
+								"type": "sd",
+								"ori": "CA0430000"
+							}
 						},
 						{
 							"label": "SANTA CRUZ COUNTY",
-							"value": "santacruz"
+							"value": {
+								"county": "Santa Cruz",
+								"abbreviation": "santacruz",
+								"type": "sd",
+								"ori": "CA0440000"
+							}
 						},
 						{
 							"label": "SHASTA COUNTY",
-							"value": "shasta"
+							"value": {
+								"county": "Shasta",
+								"abbreviation": "shasta",
+								"type": "sd",
+								"ori": "CA0450000"
+							}
 						},
 						{
 							"label": "SIERRA COUNTY",
-							"value": "sierra"
+							"value": {
+								"county": "Sierra",
+								"abbreviation": "sierra",
+								"type": "sd",
+								"ori": "CA0460000"
+							}
 						},
 						{
 							"label": "SISKIYOU COUNTY",
-							"value": "siskiyou"
+							"value": {
+								"county": "Siskiyou",
+								"abbreviation": "siskiyou",
+								"type": "sd",
+								"ori": "CA0470000"
+							}
 						},
 						{
 							"label": "SOLANO COUNTY",
-							"value": "solano"
+							"value": {
+								"county": "Solano",
+								"abbreviation": "solano",
+								"type": "sd",
+								"ori": "CA0480000"
+							}
 						},
 						{
 							"label": "SONOMA COUNTY",
-							"value": "sonoma"
+							"value": {
+								"county": "Sonoma",
+								"abbreviation": "sonoma",
+								"type": "sd",
+								"ori": "CA0490000"
+							}
 						},
 						{
 							"label": "STANISLAUS COUNTY",
-							"value": "stanislaus"
+							"value": {
+								"county": "Stanislaus",
+								"abbreviation": "stanislaus",
+								"type": "sd",
+								"ori": "CA0500000"
+							}
 						},
 						{
 							"label": "SUTTER COUNTY",
-							"value": "sutter"
+							"value": {
+								"county": "Sutter",
+								"abbreviation": "sutter",
+								"type": "sd",
+								"ori": "CA0510000"
+							}
 						},
 						{
 							"label": "TEHAMA COUNTY",
-							"value": "tehama"
+							"value": {
+								"county": "Tehama",
+								"abbreviation": "tehama",
+								"type": "sd",
+								"ori": "CA0520000"
+							}
 						},
 						{
 							"label": "TRINITY COUNTY",
-							"value": "trinity"
+							"value": {
+								"county": "Trinity",
+								"abbreviation": "trinity",
+								"type": "sd",
+								"ori": "CA0530000"
+							}
 						},
 						{
 							"label": "TULARE COUNTY",
-							"value": "tulare"
+							"value": {
+								"county": "Tulare",
+								"abbreviation": "tulare",
+								"type": "sd",
+								"ori": "CA0540000"
+							}
 						},
 						{
 							"label": "TUOLUMNE COUNTY",
-							"value": "tuolumne"
+							"value": {
+								"county": "Tuolumne",
+								"abbreviation": "tuolumne",
+								"type": "sd",
+								"ori": "CA0550000"
+							}
 						},
 						{
 							"label": "VENTURA COUNTY",
-							"value": "ventura"
+							"value": {
+								"county": "Ventura",
+								"abbreviation": "ventura",
+								"type": "sd",
+								"ori": "CA0560000"
+							}
 						},
 						{
 							"label": "YOLO COUNTY",
-							"value": "yolo"
+							"value": {
+								"county": "Yolo",
+								"abbreviation": "yolo",
+								"type": "sd",
+								"ori": "CA0570000"
+							}
 						},
 						{
 							"label": "YUBA COUNTY",
-							"value": "yuba"
+							"value": {
+								"county": "Yuba",
+								"abbreviation": "yuba",
+								"type": "sd",
+								"ori": "CA0580000"
+							}
 						}
 					],
 					"required": true
@@ -283,37 +567,24 @@
 				"visible": true
 			},
 			{
-				"name": "agency_abbrv_length",
+				"name": "agency_abbreviation_length",
 				"type": "Microsoft.Common.InfoBox",
-				"visible": "[greater(length(basics('agency_abbrv_dropdown').city), 0)]",
+				"visible": "[greater(length(basics('agency_dropdown').abbreviation), 0)]",
 				"options": {
 					"icon": "Warning",
-					"text": "[concat('Due to Azure limitations your agency name (', basics('agency_abbrv_dropdown').city, ') with a length of (', string(length(basics('agency_abbrv_dropdown').city)),') the \"Application Name\" property will be limited to ', string(sub(19, length(basics('agency_abbrv_dropdown').city))) ,' characters ', basics('agency_abbrv_dropdown').type, ' - ', basics('agency_abbrv_dropdown').ori)]"
+					"text": "[concat('Due to Azure storage account name limitations, your agency short name (', basics('agency_dropdown').abbreviation, ') that has a character length of (', string(length(basics('agency_dropdown').abbreviation)),') the \"Application name\" property below will be limited to ', string(sub(17, length(basics('agency_dropdown').abbreviation))) ,' characters.')]"
 				}
-			},
-			{
-				"name": "agency_abbrv",
-				"type": "Microsoft.Common.TextBox",
-				"label": "Agency Abbreviation",
-				"defaultValue": "",
-				"toolTip": "This value has a limit of 8 characters and is combined with the Application Name in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
-				"constraints": {
-					"required": true,
-					"regex": "^[a-z0-9-]{1,8}$",
-					"validationMessage": "The Agency Abbreviation Name must be between 1 and 8 characters long and contain Lower case characters"
-				},
-				"visible": true
 			},
 			{
 				"name": "agency_application",
 				"type": "Microsoft.Common.TextBox",
-				"label": "Application Name",
+				"label": "Application name",
 				"defaultValue": "ripa",
 				"toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
 				"constraints": {
 					"required": true,
-					"regex": "^[a-z0-9-]{1,10}$",
-					"validationMessage": "The Application Name must be between 1 and 10 characters long and contain Lower case characters"
+					"regex": "[concat('^[a-z0-9-]{1,', string(sub(17, length(basics('agency_dropdown').abbreviation))), '}$')]",
+					"validationMessage": "[concat('The Application Name must be between 1 and ', string(sub(17, length(basics('agency_dropdown').abbreviation))), ' characters long and contain Lower case characters')]"
 				},
 				"visible": true
 			}
@@ -340,11 +611,11 @@
 						"name": "auth_fqdn",
 						"type": "Microsoft.Common.TextBox",
 						"label": "Azure AD FQDN",
-						"defaultValue": "",
+						"placeholder": "sample.gov",
 						"toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
 						"constraints": {
 							"required": true,
-							"regex": "",
+							"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
 							"validationMessage": ""
 						},
 						"visible": true
@@ -353,12 +624,12 @@
 						"name": "auth_app_id",
 						"type": "Microsoft.Common.TextBox",
 						"label": "AAD App Registration ID",
-						"defaultValue": "",
+						"placeholder": "********-****-****-****-************",
 						"toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
 						"constraints": {
 							"required": true,
-							"regex": "",
-							"validationMessage": ""
+							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
 						},
 						"visible": true
 					},
@@ -366,12 +637,12 @@
 						"name": "auth_tenant_id",
 						"type": "Microsoft.Common.TextBox",
 						"label": "Tenant ID",
-						"defaultValue": "",
+						"placeholder": "********-****-****-****-************",
 						"toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
 						"constraints": {
 							"required": true,
-							"regex": "",
-							"validationMessage": ""
+							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
 						},
 						"visible": true
 					},
@@ -418,16 +689,16 @@
 						"name": "app_domain_type",
 						"type": "Microsoft.Common.OptionsGroup",
 						"label": "Managed or Private Domain",
-						"defaultValue": "[concat(basics('agency_application'),'-',basics('agency_abbrv'),'.cssa.cloud')]",
-						"toolTip": "",
+						"defaultValue": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
+						"toolTip": "[basics('agency_dropdown').type]",
 						"constraints": {
 							"allowedValues": [
 								{
-									"label": "[concat(basics('agency_application'),'-',basics('agency_abbrv'),'.cssa.cloud')]",
+									"label": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
 									"value": "cssa_cloud_domain"
 								},
 								{
-									"label": "Private Domain (you manage dns)",
+									"label": "Private Domain (you manage dns and certificate)",
 									"value": "private_domain"
 								}
 							],
@@ -438,37 +709,23 @@
 					{
 						"name": "private_domain",
 						"type": "Microsoft.Common.Section",
-						"label": "Following details must be provided prior to beginning the deployment",
+						"label": "Following details must be provided prior to beginning the deployment.",
 						"elements": [
 							{
-								"name": "certificate_file",
-								"type": "Microsoft.Common.FileUpload",
-								"label": "Certificate (.pfx or .pem)",
-								"toolTip": "",
-								"constraints": {
-									"required": true,
-									"accept": ".pem,.pfx"
-								},
-								"options": {
-									"multiple": false,
-									"uploadMode": "file",
-									"openMode": "text",
-									"encoding": "UTF-8"
-								},
-								"visible": true
+								"name": "private_domain_kv",
+								"type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
+								"visible": true,
+								"toolTip": "Select a certificate from an existing key vault. Or, you can upload a new certificate here too.",
+								"label": "KeyVault certificates selection"
 							},
 							{
-								"name": "certificate_password",
-								"type": "Microsoft.Common.TextBox",
-								"label": "Password",
-								"defaultValue": "",
-								"toolTip": "",
-								"constraints": {
-									"required": true,
-									"regex": "",
-									"validationMessage": ""
-								},
-								"visible": true
+								"name": "private_domain_warning",
+								"type": "Microsoft.Common.InfoBox",
+								"visible": true,
+								"options": {
+									"icon": "Warning",
+									"text": "[concat('When using a private certificate (BYOC) you must ')]"
+								}
 							},
 							{
 								"name": "private_domain_root",
@@ -501,7 +758,7 @@
 								"type": "Microsoft.Common.TextBlock",
 								"visible": true,
 								"options": {
-									"text": "[concat('This is your application URL: https://', steps('steps_app_domain').private_domain.private_domain_cname, '.', steps('steps_app_domain').private_domain.private_domain_root)]"
+									"text": "[concat('Your application will be URL: https://', steps('steps_app_domain').private_domain.private_domain_cname, '.', steps('steps_app_domain').private_domain.private_domain_root)]"
 								}
 							},
 							{
@@ -510,31 +767,105 @@
 								"visible": true,
 								"options": {
 									"icon": "Warning",
-									"text": "[concat('When using a private domain you must create 2 DNS CNAME records in your DNS system. \t\t\t\t\t\t\t\t Please create the following CNAME records in your DNS system before continuing. \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"', basics('agency_application'),'-',basics('agency_abbrv'), '-cdn-ep.azureedge.us\" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"cdnverify.', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"cdnverify.', basics('agency_application'),'-',basics('agency_abbrv'), '-cdn-ep.azureedge.us\"')]"
+									"text": "[concat('When using a private domain you must create 2 DNS CNAME records in your DNS system. \t\t\t\t\t\t\t\t Please create the following CNAME records in your DNS system BEFORE CONTINUING. \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"cdnverify.', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"cdnverify.', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\"')]"
 								}
 							}
 						],
 						"visible": "[equals(steps('steps_app_domain').app_domain_type,'private_domain')]"
 					}
 				]
+			},
+			{
+				"name": "steps_doj",
+				"label": "DOJ SFTP",
+				"subLabel": {},
+				"elements": [
+					{
+						"name": "doj_sftp_message",
+						"type": "Microsoft.Common.TextBlock",
+						"visible": true,
+						"options": {
+							"text": "This system implements the SFTP push of STOP data to the DOJ hosted interface. If you have this information available today, please enter the details below. If you do not, you can review the steps required to configure this information at a later day here https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission",
+							"link": {
+								"label": "Learn more",
+								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission"
+							}
+						}
+					},
+					{
+						"name": "doj_sftp_server",
+						"type": "Microsoft.Common.TextBox",
+						"label": "SFTP server host name",
+						"toolTip": "This can be a valid IP Address or a DNS host name provided by the DOJ IT",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "doj_sftp_server_key",
+						"type": "Microsoft.Common.TextBox",
+						"label": "SFTP server key",
+						"toolTip": "This is a security key for base access to the SFTP server provided by the DOJ IT",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "doj_sftp_username",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Username",
+						"toolTip": "This is the user credentials provided by the DOJ IT",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "doj_sftp_password",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Password",
+						"toolTip": "This is the user credentials provided by the DOJ IT",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					}
+				]
 			}
 		],
 		"outputs": {
-			"agency_name": "[basics('agency_name')]",
-			"agency_abbr": "[basics('agency_abbrv')]",
+			"agency_full_name": "[basics('agency_full_name')]",
+			"agency_county": "[basics('agency_dropdown').county]",
+			"agency_abbreviation": "[concat(basics('agency_dropdown').abbreviation, basics('agency_dropdown').type)]",
+			"agency_type": "[basics('agency_dropdown').type]",
+			"agency_ori": "[basics('agency_dropdown').ori]",
 			"application": "[basics('agency_application')]",
 			"rg_name": "[resourceGroup().name]",
 			"region": "[resourceGroup().location]",
 			"app_domain_type": "[steps('steps_app_domain').app_domain_type]",
+			"certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
+			"certificate_secret_name": "[steps('steps_app_domain').private_domain.private_domain_kv.certificateName]",
 			"primary_domain": "[steps('steps_app_domain').private_domain.private_domain_root]",
-			"certificate_file": "[steps('steps_app_domain').private_domain.certificate_file]",
-			"certificate_password": "[steps('steps_app_domain').private_domain.certificate_password]",
-			"app_cname": "[steps('steps_app_domain').private_domain.private_domain_root]",
+			"app_cname_alias": "[steps('steps_app_domain').private_domain.private_domain_cname]",
 			"auth_fqdn": "[steps('steps_authentication').auth_fqdn]",
 			"auth_app_id": "[steps('steps_authentication').auth_app_id]",
 			"auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
 			"auth_authority": "[steps('steps_authentication').auth_authority]",
-			"auth_logout_url": "[steps('steps_authentication').auth_logout_url]"
+			"auth_logout_url": "[steps('steps_authentication').auth_logout_url]",
+			"doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
+			"doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
+			"doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
+			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]"
 		}
 	}
 }
