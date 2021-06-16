@@ -228,14 +228,10 @@ export default {
 
     checkAuthentication() {
       if (this.isOnlineAndAuthenticated) {
-        console.log('Acquire Token')
-        try {
-          authentication.acquireToken()
-        } catch (error) {
-          console.log(error)
-          console.log('Log out')
+        authentication.acquireToken().catch(error => {
+          console.log(`acquireToken error: ${error}`)
           this.handleLogOut()
-        }
+        })
       }
     },
   },

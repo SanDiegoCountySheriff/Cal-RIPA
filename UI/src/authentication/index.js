@@ -14,6 +14,7 @@ export default {
         postLogoutRedirectUri: window.location.origin,
         redirectUri: window.location.origin,
         cacheLocation: 'localStorage',
+        loadFrameTimeout: 60000,
       }
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
