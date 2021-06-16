@@ -46,6 +46,7 @@
                       <v-text-field
                         v-model="editedItem.rowKey"
                         label="ID"
+                        :disabled="isRowKeyDisabled"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -90,7 +91,14 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  :disabled="isDuplicateKey"
+                  @click="save"
+                >
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -148,11 +156,13 @@ export default {
       ],
       editedIndex: -1,
       editedItem: {
+        rowKey: '',
         name: '',
         district: '',
         county: '',
       },
       defaultItem: {
+        rowKey: '',
         name: '',
         district: '',
         county: '',
@@ -163,6 +173,22 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+
+    isRowKeyDisabled() {
+      return this.editedIndex > -1
+    },
+
+    isDuplicateKey() {
+      const filteredItems = this.cities.filter(
+        item => item.rowKey === this.editedItem.rowKey,
+      )
+
+      if (this.editedIndex === -1) {
+        return filteredItems.length > 0 || this.editedItem.rowKey === ''
+      }
+
+      return false
     },
   },
 

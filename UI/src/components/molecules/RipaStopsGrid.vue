@@ -335,7 +335,7 @@ export default {
     },
 
     editItem(item) {
-      this.handleEditStop(item)
+      this.handleEditStop(item, window.location.pathname)
     },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true

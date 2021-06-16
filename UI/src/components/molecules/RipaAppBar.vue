@@ -219,6 +219,7 @@ export default {
         this.onUpdateDark(this.$vuetify.theme.dark)
       }
     },
+
     handleAuth() {
       if (this.authenticated) {
         this.handleLogOut()
@@ -226,9 +227,11 @@ export default {
         this.handleLogIn()
       }
     },
+
     handleLogOut() {
       this.$emit('handleLogOut')
     },
+
     handleLogIn() {
       this.$emit('handleLogIn')
     },
