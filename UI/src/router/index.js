@@ -11,9 +11,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaFormContainer,
-    meta: {
-      requiresAuthentication: true,
-    },
   },
   {
     path: '/admin',
@@ -22,9 +19,6 @@ const routes = [
       import(
         /* webpackChunkName: "ripa-admin" */ '@/components/features/RipaAdminContainer'
       ),
-    meta: {
-      requiresAuthentication: true,
-    },
     beforeEnter(to, from, next) {
       if (store.getters.isOnlineAndAuthenticated && store.state.user.isAdmin) {
         next()
@@ -69,9 +63,6 @@ const routes = [
       import(
         /* webpackChunkName: "ripa-stops" */ '@/components/features/RipaOfficerStopsContainer'
       ),
-    meta: {
-      requiresAuthentication: true,
-    },
     beforeEnter(to, from, next) {
       if (store.getters.isOnlineAndAuthenticated) {
         next()

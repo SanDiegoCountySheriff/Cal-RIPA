@@ -15,6 +15,7 @@
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="0.5.1-preview" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj" />
 	  <ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
 	</ItemGroup>
 	<ItemGroup>

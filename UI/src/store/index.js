@@ -61,6 +61,8 @@ export default new Vuex.Store({
       search: null,
       select: null,
     },
+    stopSubmissionStatusTotal: 0,
+    stopSubmissionStatusError: 0,
   },
 
   getters: {
@@ -201,6 +203,15 @@ export default new Vuex.Store({
     mappedErrorCodeAdminSearch: state => {
       return state.errorCodeAdminSearch
     },
+    stopSubmissionStatus: state => {
+      const totalStops = state.stopSubmissionStatusTotal
+      const totalStopsText =
+        totalStops === 1 ? `${totalStops} stop` : `${totalStops} stops`
+      const errorStops = state.stopSubmissionStatusError
+      const errorStopsText =
+        errorStops === 1 ? `${errorStops} error` : `${errorStops} errors`
+      return `${totalStopsText} were submitted and ${errorStopsText}`
+    },
   },
 
   mutations: {
@@ -338,6 +349,14 @@ export default new Vuex.Store({
         loading: false,
         items: value,
       }
+    },
+    updateStopSubmissionStatusTotal(state, count) {
+      state.stopSubmissionStatusTotal =
+        count === null ? 0 : state.stopSubmissionStatusTotal + count
+    },
+    updateStopSubmissionStatusError(state, count) {
+      state.stopSubmissionStatusError =
+        count === null ? 0 : state.stopSubmissionStatusError + count
     },
   },
 
@@ -503,7 +522,7 @@ export default new Vuex.Store({
     editSchool({ dispatch, state }, school) {
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}domain/PutCity/${school.rowKey}`,
+          `${state.apiConfig.apiBaseUrl}domain/PutSchool/${school.rowKey}`,
           school,
           {
             headers: {
@@ -605,8 +624,8 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ dispatch, state }, stop) {
-      console.log('submit officer stop', stop)
+    editOfficerStop({ commit, dispatch, state }, stop) {
+      commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
@@ -619,6 +638,7 @@ export default new Vuex.Store({
           dispatch('getOfficerStops')
         })
         .catch(error => {
+          commit('updateStopSubmissionStatusError', 1)
           console.log(
             'There was an error saving the officer stop record.',
             error,
@@ -1241,6 +1261,11 @@ export default new Vuex.Store({
     setApiConfig({ commit }, value) {
       commit('updateApiConfig', value)
       commit('updateAgencyQuestions', value)
+    },
+
+    resetStopSubmissionStatus({ commit }) {
+      commit('updateStopSubmissionStatusTotal', null)
+      commit('updateStopSubmissionStatusError', null)
     },
   },
 

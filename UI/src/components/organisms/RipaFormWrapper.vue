@@ -55,6 +55,7 @@
                     :on-cancel="handleCancel"
                     :beats="beats"
                     :county-cities="countyCities"
+                    :display-user-edit="displayUserEdit"
                     :display-beat-input="displayBeatInput"
                     :is-authenticated="isAuthenticated"
                     :is-edit-stop="isEditStop()"
@@ -304,19 +305,21 @@ export default {
       return questions.length > 0
     },
 
+    displayUserEdit() {
+      return !this.adminEditing
+    },
+
     getEditPersonText() {
       const personIndex = this.stop.person?.index || 1
       return `Person: ${personIndex}`
     },
 
     getFormStep2BackButtonVisible() {
-      return this.isEditPerson() && this.isEditStop()
+      return this.isCreateForm()
     },
 
     getFormStep6BackButtonVisible() {
-      return (
-        this.isEditPerson() && this.isEditStop() && this.isEditAgencyQuestions()
-      )
+      return this.isCreateForm()
     },
 
     getApiStop() {
