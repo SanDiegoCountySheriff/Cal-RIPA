@@ -199,7 +199,7 @@ namespace RIPA.Functions.Submission.Services.REST
                 Result result = new Result
                 {
                     ResCD = ros.Key,
-                    Res_O_CD = ros.ListCodes.Select(x => x.Code).ToArray()
+                    Res_O_CD = ros.ListCodes?.Select(x => x.Code).ToArray()
                 };
                 listResults.Add(result);
             }
