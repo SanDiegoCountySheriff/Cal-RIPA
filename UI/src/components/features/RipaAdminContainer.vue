@@ -1,39 +1,45 @@
 <template>
-  <ripa-admin-template
-    :loading="loading"
-    :beats="mappedAdminBeats"
-    :cities="mappedAdminCities"
-    :schools="mappedAdminSchools"
-    :statutes="mappedAdminStatutes"
-    :stops="mappedAdminStops"
-    :submissions="mappedAdminSubmissions"
-    :currentSubmission="mappedAdminSubmission"
-    :users="mappedAdminUsers"
-    :errorCodeSearch="mappedErrorCodeAdminSearch"
-    :display-beat-input="displayBeatInput"
-    :on-delete-beat="handleDeleteBeat"
-    :on-delete-city="handleDeleteCity"
-    :on-delete-school="handleDeleteSchool"
-    :on-delete-statute="handleDeleteStatute"
-    :on-edit-beat="handleEditBeat"
-    :on-edit-city="handleEditCity"
-    :on-edit-school="handleEditSchool"
-    :on-edit-statute="handleEditStatute"
-    :on-edit-user="handleEditUser"
-    :on-tab-change="handleTabChange"
-    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
-    @handleRedoItemsPerPage="handleRedoItemsPerPage"
-    @handlePaginate="handlePaginate"
-    @handleAdminFiltering="handleAdminFiltering"
-    @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
-    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
-    @handleSubmitStops="handleSubmitStops"
-    @handleSubmitAll="handleSubmitAll"
-  ></ripa-admin-template>
+  <div>
+    <ripa-admin-template
+      :loading="loading"
+      :beats="mappedAdminBeats"
+      :cities="mappedAdminCities"
+      :schools="mappedAdminSchools"
+      :statutes="mappedAdminStatutes"
+      :stops="mappedAdminStops"
+      :submissions="mappedAdminSubmissions"
+      :currentSubmission="mappedAdminSubmission"
+      :users="mappedAdminUsers"
+      :errorCodeSearch="mappedErrorCodeAdminSearch"
+      :display-beat-input="displayBeatInput"
+      :on-delete-beat="handleDeleteBeat"
+      :on-delete-city="handleDeleteCity"
+      :on-delete-school="handleDeleteSchool"
+      :on-delete-statute="handleDeleteStatute"
+      :on-edit-beat="handleEditBeat"
+      :on-edit-city="handleEditCity"
+      :on-edit-school="handleEditSchool"
+      :on-edit-statute="handleEditStatute"
+      :on-edit-user="handleEditUser"
+      :on-tab-change="handleTabChange"
+      @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+      @handleRedoItemsPerPage="handleRedoItemsPerPage"
+      @handlePaginate="handlePaginate"
+      @handleAdminFiltering="handleAdminFiltering"
+      @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+      @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+      @handleSubmitStops="handleSubmitStops"
+      @handleSubmitAll="handleSubmitAll"
+    ></ripa-admin-template>
+
+    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
+    </ripa-snackbar>
+  </div>
 </template>
 
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -41,11 +47,14 @@ export default {
 
   components: {
     RipaAdminTemplate,
+    RipaSnackbar,
   },
 
   data() {
     return {
       loading: false,
+      snackbarText: null,
+      snackbarVisible: false,
     }
   },
 
@@ -250,20 +259,33 @@ export default {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
       this.loading = false
-      // need to push user to submission screen
-      this.$router.push(
-        `/admin/submissions/${submissionResults[0].submissionId}`,
-      )
+      const notificationText =
+        stops.length > 1
+          ? `${stops.length} stops were submitted`
+          : '1 stop was submitted'
+      this.snackbarText = notificationText
+      this.snackbarVisible = true
+      setTimeout(() => {
+        // need to push user to submission screen
+        this.$router.push(
+          `/admin/submissions/${submissionResults[0].submissionId}`,
+        )
+      }, 2000)
     },
 
     async handleSubmitAll(stops) {
       this.loading = true
       const submissionResults = await Promise.all([this.submitAllStops()])
       this.loading = false
+      this.snackbarText = 'All stops were submitted'
+      this.snackbarVisible = true
       // need to push user to submission screen
-      this.$router.push(
-        `/admin/submissions/${submissionResults[0].submissionId}`,
-      )
+      setTimeout(() => {
+        // need to push user to submission screen
+        this.$router.push(
+          `/admin/submissions/${submissionResults[0].submissionId}`,
+        )
+      }, 2000)
     },
   },
 }
