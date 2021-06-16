@@ -198,7 +198,7 @@ export default {
       if (this.currentPage === this.getPaginationLength) {
         return this.submission.submission.recordCount
       } else {
-        return this.currentPage - 1 + this.itemsPerPage
+        return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {

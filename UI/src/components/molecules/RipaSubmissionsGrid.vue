@@ -36,8 +36,8 @@
             :hide-default-footer="true"
             :server-items-length="getSubmissions.length"
             :search="search"
-            sort-by="submissionDateStr"
-            sort-desc
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:top>
               <v-toolbar flat>
@@ -132,6 +132,8 @@ export default {
       submissionToDate: null,
       currentSubmissionLoading: false,
       format,
+      sortBy: 'dateSubmitted',
+      sortDesc: false,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
@@ -153,7 +155,7 @@ export default {
       if (this.currentPage === this.getPaginationLength) {
         return this.totalSubmissions
       } else {
-        return this.currentPage - 1 + this.itemsPerPage
+        return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {

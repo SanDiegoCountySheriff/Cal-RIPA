@@ -252,7 +252,7 @@ export default {
       if (this.currentPage === this.getPaginationLength) {
         return this.stops.summary.total
       } else {
-        return this.currentPage - 1 + this.itemsPerPage
+        return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {
