@@ -1030,9 +1030,11 @@ export const fullStopToApiStop = (
   const duration = fullStop.stopDate?.duration || null
   const lookupCacheDate = localStorage.getItem('ripa_cache_date')
   const formCached = localStorage.getItem('ripa_form_cached')
+  const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
+  const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
 
   return {
-    agency: officer.agency,
+    agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
     expYears: officer.yearsExperience?.toString() || '',
     id: fullStop.id,
@@ -1040,9 +1042,12 @@ export const fullStopToApiStop = (
       template: fullStop.template || null,
       formCached: formCached === '1',
       listStepTrace: fullStop.stepTrace,
-      lookupCacheDate: lookupCacheDate
-        ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
-        : null,
+      lookupCacheDate:
+        parsedApiStop && parsedApiStop.telemetry
+          ? parsedApiStop.telemetry.lookupCacheDate
+          : lookupCacheDate
+          ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
+          : null,
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
@@ -1065,12 +1070,20 @@ export const fullStopToApiStop = (
       toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
     },
     officerAssignment: {
-      key: assignment.code.toString(),
-      otherType: officer?.otherType || '',
-      type: assignment.text,
+      key: parsedApiStop
+        ? parsedApiStop.officerAssignment.key
+        : assignment.code.toString(),
+      otherType: parsedApiStop
+        ? parsedApiStop.officerAssignment.otherType
+        : officer?.otherType || '',
+      type: parsedApiStop
+        ? parsedApiStop.officerAssignment.type
+        : assignment.text,
     },
-    officerId: officer.officerId,
-    officerName: officer.officerName,
+    officerId: parsedApiStop ? parsedApiStop.officerId : officer.officerId,
+    officerName: parsedApiStop
+      ? parsedApiStop.officerName
+      : officer.officerName,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
