@@ -49,7 +49,6 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiParameter(name: "IsSubmitted", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Return Submitted OR UnSubmitted stops, defaults to false")]
         [OpenApiParameter(name: "Status", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String Status: Unsubmitted, Submitted, Resubmitted, Failed")]
         [OpenApiParameter(name: "IsPII", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have been flagged for PII")]
         [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String ErrorCode: Error code must exist on stop submission to return")]
@@ -112,14 +111,7 @@ namespace RIPA.Functions.Submission.Functions
             //Status
             if (!string.IsNullOrWhiteSpace(stopQuery.Status))
             {
-                if (stopQuery.Status == SubmissionStatus.Unsubmitted.ToString())
-                {
-                    whereStatements.Add(Environment.NewLine + $"c.Status = null");
-                }
-                else
-                {
-                    whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
-                }
+                whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
             }
 
             //ErrorCode

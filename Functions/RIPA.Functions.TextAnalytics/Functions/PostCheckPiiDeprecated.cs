@@ -31,7 +31,8 @@ namespace RIPA.Functions.TextAnalytics.Functions
         [FunctionName("PostCheckPiiDeprecated")]
 
         [OpenApiOperation(operationId: "PostCheckPiiDeprecated", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
+        [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
         [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(PiiRequest), Deprecated = false, Description = "Document is the input string you would like to be analyzed", Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(EntityResponse), Description = "Responds with a list of entities that may be PII and a redactiedText string.")]
 
@@ -56,11 +57,11 @@ namespace RIPA.Functions.TextAnalytics.Functions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string document = data?.Document;
-
             if (string.IsNullOrEmpty(document))
-            {
+                document = data?.document;
+            if (string.IsNullOrEmpty(document))
                 return new BadRequestObjectResult("Must Provide Document");
-            }
+
 
             var categorizedEntities = await _piiTextAnalyticsService.GetCategorizedEntities(document);
             EntityResponse entityResponse = new EntityResponse() { Entities = new List<Entity>() };

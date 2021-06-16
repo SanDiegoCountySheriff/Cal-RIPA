@@ -44,7 +44,9 @@ namespace RIPA.Functions.Submission.Functions
 
         [FunctionName("PostSubmit")]
         [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
+        [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
+        [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(SubmitRequest), Deprecated = false, Description = "list of stop ids to submit to DOJ", Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of stops that failed submission")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, HttpRequest req, ILogger log)
@@ -61,6 +63,11 @@ namespace RIPA.Functions.Submission.Functions
             {
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
+            }
+
+            if (submitRequest?.StopIds == null || submitRequest.StopIds.Count == 0)
+            {
+                return new BadRequestObjectResult("stop ids are required");
             }
 
             Guid submissionId = Guid.NewGuid();

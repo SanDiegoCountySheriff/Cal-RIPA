@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
@@ -29,7 +30,8 @@ namespace RIPA.Functions.Stop.Functions
 
         [FunctionName("PutStop")]
         [OpenApiOperation(operationId: "PutStop", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
+        [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
         [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Stop Id/ori")]
         [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.Stop), Deprecated = false, Description = "Stop object", Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Created")]
@@ -63,6 +65,7 @@ namespace RIPA.Functions.Stop.Functions
                     return new BadRequestObjectResult("Office ID must be 9 char");
                 }
                 stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
+                if (stop.Status == null) stop.Status = SubmissionStatus.Unsubmitted.ToString();
                 await _stopCosmosDbService.UpdateStopAsync(Id, stop);
                 return new OkObjectResult(stop);
             }

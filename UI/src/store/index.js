@@ -1036,8 +1036,10 @@ export default new Vuex.Store({
             queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
           }
 
-          if (queryData.filters.errorCodes !== null) {
-            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes}`
+          if (queryData.filters.errorCodes.length) {
+            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.split(
+              ',',
+            )}`
           }
         }
       } else {

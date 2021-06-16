@@ -30,6 +30,16 @@ stages:
               versionSpec: "12.x"
             displayName: "Install Node.js"
 
+          - script: rm -rf "UI/node_modules"
+            displayName: "Purge node packages"
+            continueOnError: true
+            workingDirectory: $(Build.SourcesDirectory)
+
+          - script: rm -rf "UI/package-lock.json"
+            displayName: "Purge node package-lock file"
+            continueOnError: true
+            workingDirectory: $(Build.SourcesDirectory)
+
           - task: Npm@1
             displayName: "npm install"
             inputs:
