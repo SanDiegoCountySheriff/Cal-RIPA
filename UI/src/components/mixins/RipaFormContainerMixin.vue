@@ -26,6 +26,7 @@ export default {
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
       showStatuteDialog: false,
+      showUserDialog: false,
       statute: null,
       stop: {},
     }
@@ -128,6 +129,7 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
+      this.showUserDialog = false
     },
 
     handleDeleteLocationFavorite(id) {
@@ -150,7 +152,9 @@ export default {
 
     handleDeletePerson(id) {
       // update fullStop
-      const filteredPeople = this.fullStop.people.filter(item => item.id !== id)
+      const filteredPeople = this.fullStop.people.filter(
+        item => item.id !== id.toString(),
+      )
       const updatedFullStop = {
         ...this.fullStop,
         people: filteredPeople.map((person, index) => {
@@ -381,16 +385,11 @@ export default {
         }
 
         let updatedFullStop = Object.assign({}, this.fullStop)
-        updatedFullStop.agency = this.stop.agency
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
-        updatedFullStop.created = this.stop.created
         updatedFullStop.id = this.stop.id
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
-        updatedFullStop.officer = this.stop.officer
-        updatedFullStop.officerId = this.stop.officerId
-        updatedFullStop.officerName = this.stop.officerName
         updatedFullStop.stopDate = this.stop.stopDate
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
@@ -424,14 +423,19 @@ export default {
       localStorage.removeItem('ripa_form_saved_full_stop')
       localStorage.removeItem('ripa_form_step_index')
       localStorage.removeItem('ripa_form_stop')
+      localStorage.removeItem('ripa_form_submitted_api_stop')
       localStorage.removeItem('ripa_form_submitted_submissions')
     },
 
     handleCancelForm() {
+      const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
       this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
+      if (route) {
+        this.$router.push(route)
+      }
     },
 
     handleCancelAction() {

@@ -294,6 +294,12 @@ export default {
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
       }
+
+      if (this.viewModel.stopReason.reasonForStop === 7) {
+        if (this.viewModel.stopReason.educationViolation !== 1) {
+          this.viewModel.stopReason.educationViolationCode = null
+        }
+      }
     },
 
     updateStopReasonSearchModel() {

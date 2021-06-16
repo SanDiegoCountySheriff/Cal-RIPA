@@ -22,11 +22,6 @@
       <slot></slot>
     </template>
 
-    <ripa-interval
-      :delay="stopInternalMs"
-      @tick="checkLocalStorage"
-    ></ripa-interval>
-
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :user="getMappedUser"
@@ -38,6 +33,19 @@
     <ripa-invalid-user-dialog
       :show-dialog="showInvalidUserDialog"
     ></ripa-invalid-user-dialog>
+
+    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
+    </ripa-snackbar>
+
+    <ripa-interval
+      :delay="stopInternalMsApi"
+      @tick="checkLocalStorage"
+    ></ripa-interval>
+
+    <ripa-interval
+      :delay="stopInternalMsAuth"
+      @tick="checkAuthentication"
+    ></ripa-interval>
   </ripa-page-wrapper>
 </template>
 
@@ -47,6 +55,7 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
@@ -62,15 +71,19 @@ export default {
     RipaInterval,
     RipaInvalidUserDialog,
     RipaPageWrapper,
+    RipaSnackbar,
     RipaUserDialog,
   },
 
   data() {
     return {
       isDark: this.getDarkFromLocalStorage(),
-      stopInternalMs: 5000,
+      stopInternalMsApi: 5000,
+      stopInternalMsAuth: 30000,
       showInvalidUserDialog: false,
       showUserDialog: false,
+      snackbarText: '',
+      snackbarVisible: false,
     }
   },
 
@@ -81,11 +94,12 @@ export default {
       'environmentName',
       'isAdmin',
       'invalidUser',
+      'isAuthenticated',
       'isOnline',
       'isOnlineAndAuthenticated',
-      'isAuthenticated',
       'apiConfig',
       'mappedUser',
+      'stopSubmissionStatus',
     ]),
 
     getMappedUser() {
@@ -113,6 +127,7 @@ export default {
       'getFormSchools',
       'getFormStatutes',
       'getUser',
+      'resetStopSubmissionStatus',
     ]),
 
     async getUserData() {
@@ -194,10 +209,14 @@ export default {
     },
 
     async runApiStopsJob(apiStops) {
+      this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
         for (let index = 0; index < apiStops.length; index++) {
           await this.editOfficerStop(apiStops[index])
         }
+
+        this.snackbarText = this.stopSubmissionStatus
+        this.snackbarVisible = true
       }
     },
 
@@ -205,6 +224,15 @@ export default {
       this.checkCache()
       await this.getUserData()
       await this.getFormData()
+    },
+
+    checkAuthentication() {
+      if (this.isOnlineAndAuthenticated) {
+        authentication.acquireToken().catch(error => {
+          console.log(`acquireToken error: ${error}`)
+          this.handleLogOut()
+        })
+      }
     },
   },
 
@@ -220,7 +248,7 @@ export default {
 
   watch: {
     invalidUser(newVal) {
-      if (newVal && this.isOnline && this.isAuthenticated) {
+      if (newVal && this.isOnlineAndAuthenticated) {
         this.showUserDialog = true
       }
     },

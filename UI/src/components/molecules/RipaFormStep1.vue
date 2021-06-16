@@ -9,11 +9,13 @@
         :on-update-user="onUpdateUser"
       ></ripa-officer>
     </template>
+
     <ripa-stop-date
       v-model="model"
       :is-edit-stop="isEditStop"
       :on-open-statute="onOpenStatute"
     ></ripa-stop-date>
+
     <ripa-location
       v-model="model"
       :schools="schools"

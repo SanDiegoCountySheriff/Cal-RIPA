@@ -814,7 +814,7 @@ const getFullStopPeopleListed = apiStop => {
   const people = apiStop.listPersonStopped
   return people.map((person, index) => {
     return {
-      id: person.id,
+      id: Number(person.id),
       index: index + 1,
       isStudent: person.isStudent || false,
       perceivedRace: getKeyArray(person.listPerceivedRace),
@@ -985,7 +985,21 @@ export const fullStopToStop = fullStop => {
     stopDate: fullStop.stopDate,
     location: fullStop.location,
     agencyQuestions: fullStop.agencyQuestions,
-    ...person,
+    actionsTaken: person.actionsTaken || {},
+    person: {
+      anyDisabilities: person.anyDisabilities || false,
+      genderNonconforming: person.genderNonconforming || false,
+      id: person.id,
+      isStudent: person.isStudent || false,
+      perceivedAge: person.perceivedAge || null,
+      perceivedGender: person.perceivedGender || null,
+      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
+      perceivedRace: person.perceivedOrKnownDisability || [],
+    },
+    stopReason: person.stopReason || {},
+    stopResult: person.stopResult || {},
   }
 }
 
@@ -1016,9 +1030,11 @@ export const fullStopToApiStop = (
   const duration = fullStop.stopDate?.duration || null
   const lookupCacheDate = localStorage.getItem('ripa_cache_date')
   const formCached = localStorage.getItem('ripa_form_cached')
+  const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
+  const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
 
   return {
-    agency: officer.agency,
+    agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
     expYears: officer.yearsExperience?.toString() || '',
     id: fullStop.id,
@@ -1026,9 +1042,12 @@ export const fullStopToApiStop = (
       template: fullStop.template || null,
       formCached: formCached === '1',
       listStepTrace: fullStop.stepTrace,
-      lookupCacheDate: lookupCacheDate
-        ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
-        : null,
+      lookupCacheDate:
+        parsedApiStop && parsedApiStop.telemetry
+          ? parsedApiStop.telemetry.lookupCacheDate
+          : lookupCacheDate
+          ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
+          : null,
       pullFromReasonCode:
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
@@ -1051,12 +1070,20 @@ export const fullStopToApiStop = (
       toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
     },
     officerAssignment: {
-      key: assignment.code.toString(),
-      otherType: officer?.otherType || '',
-      type: assignment.text,
+      key: parsedApiStop
+        ? parsedApiStop.officerAssignment.key
+        : assignment.code.toString(),
+      otherType: parsedApiStop
+        ? parsedApiStop.officerAssignment.otherType
+        : officer?.otherType || '',
+      type: parsedApiStop
+        ? parsedApiStop.officerAssignment.type
+        : assignment.text,
     },
-    officerId: officer.officerId,
-    officerName: officer.officerName,
+    officerId: parsedApiStop ? parsedApiStop.officerId : officer.officerId,
+    officerName: parsedApiStop
+      ? parsedApiStop.officerName
+      : officer.officerName,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
@@ -1279,7 +1306,11 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
     return [getReasonableSuspicionCode(person, statutes)]
   }
   if (reasonKey === 7) {
-    return [getEducationViolationCode(person)]
+    if (person.educationViolationCode) {
+      return [getEducationViolationCode(person)]
+    } else {
+      return []
+    }
   }
 
   return []

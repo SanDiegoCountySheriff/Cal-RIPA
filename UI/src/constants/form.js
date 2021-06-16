@@ -192,8 +192,7 @@ export const CONTRABAND_TYPES = [
   { name: 'Drug paraphernalia', value: 8 },
   { name: 'Suspected stolen property', value: 9 },
   { name: 'Cell phone(s) or electronic device(s)', value: 10 },
-  { name: 'Vehicle', value: 11 },
-  { name: 'Other contraband or evidence', value: 12 },
+  { name: 'Other contraband or evidence', value: 11 },
 ]
 
 export const SEIZED_PROPERTY_TYPES = [
