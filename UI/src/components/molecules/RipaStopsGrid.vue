@@ -73,7 +73,7 @@
             <span class="count">{{ stops.summary.submitted }}</span>
           </p>
           <p>
-            <span class="label">Not Submitted</span>
+            <span class="label">Unsubmitted</span>
             <span class="count">{{ stops.summary.unsubmitted }}</span>
           </p>
           <p>
@@ -293,7 +293,7 @@ export default {
       // BEFORE these are called but this math is based on the
       // current value. So need to subtract 1
       this.$emit('paginate', {
-        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -307,7 +307,7 @@ export default {
     },
     handleJumpToPage() {
       this.$emit('paginate', {
-        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
