@@ -143,7 +143,7 @@ export default {
       // BEFORE these are called but this math is based on the
       // current value. So need to subtract 1
       this.$emit('submissionDetailPaginate', {
-        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -157,7 +157,7 @@ export default {
     },
     handleJumpToPage() {
       this.$emit('submissionDetailPaginate', {
-        offset: this.itemsPerPage * (this.currentPage - 1) + 1,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -180,21 +180,23 @@ export default {
   computed: {
     getTotalStops() {
       if (this.submission) {
-        return this.submission.stops.length
+        return this.submission.submission.recordCount
       } else {
         return 0
       }
     },
     getPaginationLength() {
       if (this.submission) {
-        return Math.ceil(this.submission.stops.length / this.itemsPerPage)
+        return Math.ceil(
+          this.submission.submission.recordCount / this.itemsPerPage,
+        )
       } else {
         return 0
       }
     },
     calculateItemsTo() {
       if (this.currentPage === this.getPaginationLength) {
-        return this.submission.stops.length
+        return this.submission.submission.recordCount
       } else {
         return this.currentPage - 1 + this.itemsPerPage
       }
