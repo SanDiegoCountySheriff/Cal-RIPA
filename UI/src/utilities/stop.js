@@ -1293,7 +1293,11 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
     return [getReasonableSuspicionCode(person, statutes)]
   }
   if (reasonKey === 7) {
-    return [getEducationViolationCode(person)]
+    if (person.educationViolationCode) {
+      return [getEducationViolationCode(person)]
+    } else {
+      return []
+    }
   }
 
   return []
