@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 
 namespace RIPA.Functions.Common.Models
@@ -27,9 +26,11 @@ namespace RIPA.Functions.Common.Models
             get { return FirstName + " " + LastName; }
         }
 
-        [JsonRequired]
         [JsonProperty(PropertyName = "startDate")]
         public DateTime StartDate { get; set; }
+
+        [JsonProperty(PropertyName = "yearsExperience")]
+        public int YearsExperience { get; set; }
 
         [JsonRequired]
         [JsonProperty(PropertyName = "agency")]
