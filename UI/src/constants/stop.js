@@ -12,7 +12,7 @@ export const SUBMISSION_STATUSES = [
     value: 'Submitted',
   },
   {
-    text: 'Not Submitted',
-    value: 'Not Submitted',
+    text: 'Unsubmitted',
+    value: 'Unsubmitted',
   },
 ]
