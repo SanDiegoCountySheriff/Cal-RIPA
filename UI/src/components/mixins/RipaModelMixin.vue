@@ -261,6 +261,9 @@ export default {
     updateSchoolModel() {
       if (!this.viewModel.location.isSchool) {
         this.viewModel.person.isStudent = false
+        this.viewModel.stopResult.resultsOfStop12 = false
+        this.viewModel.stopResult.resultsOfStop13 = false
+        this.updateStopReasonModel()
       }
     },
 
@@ -271,6 +274,8 @@ export default {
           this.viewModel.stopReason.reasonForStop === 8
         ) {
           this.viewModel.stopReason.reasonForStop = null
+          this.viewModel.stopReason.educationViolation = null
+          this.viewModel.stopReason.educationViolationCode = null
         }
       }
 

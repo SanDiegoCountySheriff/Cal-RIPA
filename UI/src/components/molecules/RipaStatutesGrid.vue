@@ -224,7 +224,7 @@ export default {
     },
 
     isDuplicateKey() {
-      const filteredItems = this.cities.filter(
+      const filteredItems = this.statutes.filter(
         item => item.rowKey === this.editedItem.rowKey,
       )
 

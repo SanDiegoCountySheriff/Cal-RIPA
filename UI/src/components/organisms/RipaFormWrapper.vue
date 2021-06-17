@@ -497,7 +497,15 @@ export default {
     getNextStepIndex() {
       if (!this.isCreateForm()) {
         if (this.isEditStop() && !this.isEditPerson()) {
-          return 7
+          const stopReason = this.stop?.stopReason?.reasonForStop || null
+          const validReason = stopReason !== null
+          if (!validReason) {
+            localStorage.removeItem('ripa_form_edit_stop')
+            localStorage.setItem('ripa_form_edit_person', '1')
+            return 3
+          } else {
+            return 7
+          }
         }
 
         if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {

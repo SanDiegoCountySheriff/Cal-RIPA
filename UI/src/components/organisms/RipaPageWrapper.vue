@@ -13,6 +13,7 @@
       @handleLogIn="handleLogIn"
       :on-update-user="onUpdateUser"
     ></ripa-app-bar>
+
     <ripa-content-wrapper>
       <slot></slot>
     </ripa-content-wrapper>
@@ -22,6 +23,12 @@
         !invalidUser && authenticated && $route.path.indexOf('/admin') === -1
       "
     ></ripa-speed-dial>
+
+    <v-footer padless fixed>
+      <v-col class="text-center" cols="12">
+        © {{ new Date().getFullYear() }} — RIPA — {{ getVersion }}
+      </v-col>
+    </v-footer>
   </div>
 </template>
 
@@ -29,6 +36,7 @@
 import RipaAppBar from '@/components/molecules/RipaAppBar'
 import RipaContentWrapper from '@/components/organisms/RipaContentWrapper'
 import RipaSpeedDial from '@/components/molecules/RipaSpeedDial'
+import { VERSION } from '@/constants/app'
 
 export default {
   name: 'ripa-page-wrapper',
@@ -37,6 +45,12 @@ export default {
     RipaAppBar,
     RipaContentWrapper,
     RipaSpeedDial,
+  },
+
+  computed: {
+    getVersion() {
+      return VERSION
+    },
   },
 
   methods: {
