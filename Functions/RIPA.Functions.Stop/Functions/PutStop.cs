@@ -47,14 +47,22 @@ namespace RIPA.Functions.Stop.Functions
                 {
                     return new UnauthorizedResult();
                 }
-
-                var objectId = await RIPAAuthorization.GetUserId(req, log);
-                stop.EditStopOfficerId = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId)).OfficerId;
             }
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
+            }
+            
+            try
+            {
+                var objectId = await RIPAAuthorization.GetUserId(req, log);
+                stop.EditStopOfficerId = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId)).OfficerId;
+            }
+            catch(Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new BadRequestObjectResult("User profile was not found");
             }
 
             if (!string.IsNullOrEmpty(Id))
