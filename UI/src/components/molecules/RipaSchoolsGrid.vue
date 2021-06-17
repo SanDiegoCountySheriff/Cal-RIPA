@@ -180,7 +180,7 @@ export default {
     },
 
     isDuplicateKey() {
-      const filteredItems = this.cities.filter(
+      const filteredItems = this.schools.filter(
         item => item.rowKey === this.editedItem.rowKey,
       )
 
