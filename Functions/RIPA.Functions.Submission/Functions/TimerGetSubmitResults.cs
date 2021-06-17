@@ -39,7 +39,16 @@ namespace RIPA.Functions.Submission.Functions
         {
             log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
 
-            var files = _sftpService.ListAllFiles(_sftpOutputPath);
+            IEnumerable<Renci.SshNet.Sftp.SftpFile> files = null;
+            try
+            {
+                files = _sftpService.ListAllFiles(_sftpOutputPath);
+            }
+            catch (Exception e)
+            {
+                log.LogError($"Unable to connect to SFTP {e.Message}");
+                return; 
+            }
             if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
             Guid correlationId = Guid.NewGuid();
@@ -60,9 +69,6 @@ namespace RIPA.Functions.Submission.Functions
                 catch (Exception e)
                 {
                     log.LogError($"an error occured processing doj sftp result {e.Message}");
-                    //move file to Deadletter directory on DOJ sftp if they allow us to create a directory
-                    //if we cant do this on SFTP, Consider creating AZURE blob container to house these files. 
-                    //and remove the blob from the results cotnainer 
                 }
             }
         }
