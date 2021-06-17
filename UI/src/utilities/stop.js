@@ -422,10 +422,11 @@ const getSummaryPerceivedOrKnownDisability = person => {
 const getSummaryReasonForStop = person => {
   const reasons = []
   reasons.push({
-    detail: person.reasonForStop.reason,
+    detail: person.reasonForStop?.reason || null,
   })
 
-  const keys = person.reasonForStop.listDetail.map(item => {
+  const listDetail = person.reasonForStop?.listDetail || []
+  const keys = listDetail.map(item => {
     return {
       marginLeft: true,
       detail: item.reason,
@@ -433,7 +434,8 @@ const getSummaryReasonForStop = person => {
   })
   reasons.push(...keys)
 
-  const codes = person.reasonForStop.listCodes.map(item => {
+  const listCodes = person.reasonForStop?.listCodes || []
+  const codes = listCodes.map(item => {
     return {
       marginLeft: true,
       detail: item.text,
@@ -703,16 +705,18 @@ export const apiStopSubmissionSummary = submission => {
       content: getSummarySubmissionStatus(submission),
     })
 
-    for (
-      let index = 0;
-      index < submission.listSubmissionError.length;
-      index++
-    ) {
-      const errorElement = submission.listSubmissionError[index]
-      items.push({
-        id: `E5-${index}`,
-        content: getSummarySubmissionError(errorElement, index),
-      })
+    if (submission.listSubmissionError) {
+      for (
+        let index = 0;
+        index < submission.listSubmissionError.length;
+        index++
+      ) {
+        const errorElement = submission.listSubmissionError[index]
+        items.push({
+          id: `E5-${index}`,
+          content: getSummarySubmissionError(errorElement, index),
+        })
+      }
     }
   }
 
