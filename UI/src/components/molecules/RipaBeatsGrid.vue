@@ -173,7 +173,7 @@ export default {
 
     isDuplicateKey() {
       const filteredItems = this.beats.filter(
-        item => item.id === Number(this.editedItem.id),
+        item => item.id.toString() === this.editedItem.id,
       )
 
       if (this.editedIndex === -1) {
