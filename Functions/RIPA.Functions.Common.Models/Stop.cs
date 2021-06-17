@@ -82,6 +82,8 @@ namespace RIPA.Functions.Common.Models
         public bool IsPiiFound { get; set; }
         public string EditStopExplanation { get; set; }
         public string EditStopOfficerId { get; set; }
+        [JsonProperty(PropertyName = "telemetry")]
+        public Telemetry Telemetry { get; set; }
 
     }
 
