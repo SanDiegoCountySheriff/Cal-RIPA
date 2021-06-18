@@ -148,7 +148,7 @@ export const ACTIONS_TAKEN = [
   { name: 'Chemical spray used', value: 14 },
   { name: 'Physical or vehicle contact', value: 15 },
   { name: 'Personal photographed', value: 16 },
-  { name: 'Asked for consent to search another person', value: 17 },
+  { name: 'Asked for consent to search person', value: 17 },
   { name: 'Search of person was conducted', value: 18 },
   { name: 'Asked for consent to search property', value: 19 },
   { name: 'Search of property was conducted', value: 20 },
