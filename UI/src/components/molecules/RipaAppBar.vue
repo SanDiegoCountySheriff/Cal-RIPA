@@ -76,7 +76,7 @@
               <v-list-item>
                 <v-list-item-title>
                   <v-btn small text @click="handleAuth">
-                    <v-icon class="tw-mr-4"> mdi-logout </v-icon>
+                    <v-icon class="tw-mr-4"> mdi-logout-variant </v-icon>
                     Logout
                   </v-btn>
                 </v-list-item-title>
@@ -148,7 +148,7 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon>mdi-logout</v-icon>
+                <v-icon>mdi-logout-variant</v-icon>
               </v-btn>
             </template>
             <span>Logout</span>
