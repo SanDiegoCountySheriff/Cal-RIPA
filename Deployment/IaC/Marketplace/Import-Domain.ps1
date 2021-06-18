@@ -1,7 +1,33 @@
-$path = ''
-$filename = 'sdcs-look-up-table-2021.xlsx'
-$rg = 'rgTableEntities'
-$storageAccountName = 'storagelwptest'
+<#
+.SYNOPSIS
+  <Import .csv file(s) data into Azure Storage Table(s)>
+.DESCRIPTION
+  <Imports Beats, Cities, Statutes, Schools to Azure Storage Table for RIPA Content>
+.PARAMETER <RESOURCE_GROUP_NAME>
+    <Resource Group of content storage account is required>
+.PARAMETER <STORAGE_ACCOUNT_NAME>
+    <RIPA Content Storage Account name is required>
+.PARAMETER <CSSA_SP_APP_ID>
+    <Service Account username used for Authentication with Azure is required>
+.PARAMETER <CSSA_SP_SECRET>
+    <Service Account secret used for Authentication with Azure is required>
+.PARAMETER <CSSA_TENANT_ID>
+    <Service Account tenant used for Authentication with Azure is required>
+.PARAMETER <tableNames>
+    <Can be used to limit the tables used for import: 'Beats','Cities','Statutes','Schools'>
+.NOTES
+  Version:        1.0
+  Author:         <Logan Pope>
+  Creation Date:  <06/2021>
+  Purpose/Change: Initial script development
+  
+.EXAMPLE
+  <Run script with CSV files relative to script location>
+#>
+
+$tableNames = @('Beats','Cities','Statutes','Schools')
+
+$stopWatch = [system.diagnostics.stopwatch]::StartNew()
 
 #region functions
 function Get-BeatEntity {
@@ -11,16 +37,16 @@ function Get-BeatEntity {
 
     $entity =  New-Object -TypeName Microsoft.Azure.Cosmos.Table.DynamicTableEntity;
     $entity.PartitionKey = "CA";
-    $entity.RowKey = ($row.Value2[1,1]);
-    $entity.Properties.Add("Id",([int]$row.Value2[1,1]));
-    $entity.Properties.Add("Community",($row.Value2[1,2]));
-    $entity.Properties.Add("Command",($row.Value2[1,3]));
+    $entity.RowKey = $row.Beat;
+    $entity.Properties.Add("Id",[int]$row.Beat);
+    $entity.Properties.Add("Community",$row.Community);
+    $entity.Properties.Add("Command",$row.Command);
         
-    if(![string]::IsNullOrWhiteSpace(($row.Value2[1,4]))) {
-        $entity.Properties.Add("CommandAuditGroup",($row.Value2[1,4]));
+    if(![string]::IsNullOrWhiteSpace($row.CommandAuditGroup)) {
+        $entity.Properties.Add("CommandAuditGroup",$row.CommandAuditGroup);
     }
-    if(![string]::IsNullOrWhiteSpace(($row.Value2[1,5]))) {
-        $entity.Properties.Add("CommandAuditSize",($row.Value2[1,5]));
+    if(![string]::IsNullOrWhiteSpace($row.CommandAuditSize)) {
+        $entity.Properties.Add("CommandAuditSize",$row.CommandAuditSize);
     }
 
     return $entity;
@@ -33,13 +59,13 @@ function Get-CityEntity {
 
     $entity =  New-Object -TypeName Microsoft.Azure.Cosmos.Table.DynamicTableEntity;
     $entity.PartitionKey = "CA";
-    $entity.RowKey = $row.Value2[1,2];
-    $entity.Properties.Add("State",($row.Value2[1,1]));
-    $entity.Properties.Add("Name",($row.Value2[1,2]));
-    $entity.Properties.Add("County",($row.Value2[1,3]));
+    $entity.RowKey = $row.City;
+    $entity.Properties.Add("State",$row.State);
+    $entity.Properties.Add("Name",$row.City);
+    $entity.Properties.Add("County",$row.County);
 
-    if(![string]::IsNullOrWhiteSpace(($row.Value2[1,4]))) {
-        $entity.Properties.Add("DeactivationDate",[DateTime]::FromOADate(($row.Value2[1,4])))
+    if(![string]::IsNullOrWhiteSpace($row.'Inactive Date')) {
+        $entity.Properties.Add("DeactivationDate",[DateTime]::Parse($row.'Inactive Date'))
     }
 
     return $entity;
@@ -52,53 +78,53 @@ function Get-StatuteEntity {
 
     $entity =  New-Object -TypeName Microsoft.Azure.Cosmos.Table.DynamicTableEntity;
     $entity.PartitionKey = "CA";
-    $entity.RowKey = $row.Value2[1,2];
-    $entity.Properties.Add("OffenseValidationCD",($row.Value2[1,1]));
-    $entity.Properties.Add("OffenseCode",($row.Value2[1,2]));
-    $entity.Properties.Add("OffenseTxnTypeCD",($row.Value2[1,3]));
-    $entity.Properties.Add("OffenseStatute",($row.Value2[1,4]));
-    $entity.Properties.Add("StatuteLiteral",($row.Value2[1,6]));
-    $entity.Properties.Add("OffenseTypeOfCharge",($row.Value2[1,8]));
-    $entity.Properties.Add("ALPSCognizantCD",($row.Value2[1,14]));
+    $entity.RowKey = $row.'Offense Code';
+    $entity.Properties.Add("OffenseValidationCD",$row.'Offense Validation CD');
+    $entity.Properties.Add("OffenseCode",$row.'Offense Code');
+    $entity.Properties.Add("OffenseTxnTypeCD",$row.'Offense Txn Type CD');
+    $entity.Properties.Add("OffenseStatute",$row.'Offense Statute');
+    $entity.Properties.Add("StatuteLiteral",$row.'Statute Literal 25');
+    $entity.Properties.Add("OffenseTypeOfCharge",$row.'Offense Type of Charge');
+    $entity.Properties.Add("ALPSCognizantCD",$row.'ALPS Cognizant CD');
     
 
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,5]))) {
-        $entity.Properties.Add("OffenseLiteralIdentifierCD",($row.Value2[1,5]));
+    if (![string]::IsNullOrWhiteSpace($row.'Offense Literal Identifier CD')) {
+        $entity.Properties.Add("OffenseLiteralIdentifierCD",$row.'Offense Literal Identifier CD');
     }
 
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,7]))) {
-        $entity.Properties.Add("OffenseDefaultTypeOfCharge",($row.Value2[1,7]));
+    if (![string]::IsNullOrWhiteSpace($row.'Offense Default Type of Charge')) {
+        $entity.Properties.Add("OffenseDefaultTypeOfCharge",$row.'Offense Default Type of Charge');
     }
 
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,10]))) {
-        $entity.Properties.Add("OffenseDegree",([int]$row.Value2[1,10]));
+    if (![string]::IsNullOrWhiteSpace($row.'Offense Degree')) {
+        $entity.Properties.Add("OffenseDegree",[int]$row.'Offense Degree');
     }
 
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,11]))) {
-        $entity.Properties.Add("BCSHierarchyCD", ([int]$row.Value2[1,11]));
+    if (![string]::IsNullOrWhiteSpace($row.'BCS Hierarchy CD')) {
+        $entity.Properties.Add("BCSHierarchyCD", [int]$row.'BCS Hierarchy CD');
     }
 
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,12]))) {
-        if (($row.Value2[1,12]).Length -eq 10) {
-            $entity.Properties.Add("OffenseEnacted", [DateTime]::ParseExact(($row.Value2[1,12]),"yyyy-MM-dd", [CultureInfo]::InvariantCulture));
+    if (![string]::IsNullOrWhiteSpace($row.'Offense Enacted')) {
+        if ($row.'Offense Enacted'.Length -eq 10) {
+            $entity.Properties.Add("OffenseEnacted", [DateTime]::ParseExact($row.'Offense Enacted', "yyyy-MM-dd", [CultureInfo]::InvariantCulture));
         }
-        elseif (($row.Value2[1,12]).ToString().Length -eq 8) {
-            $entity.Properties.Add("OffenseEnacted", [DateTime]::ParseExact(($row.Value2[1,12]),"yyyyMMdd", [CultureInfo]::InvariantCulture));
-        }
-        else {
-            $entity.Properties.Add("OffenseEnacted", [DateTime]::FromOADate(($row.Value2[1,12])));
-        }
-    }
-
-    if (![string]::IsNullOrWhiteSpace(($row.Value2[1,13]))) {
-        if (($row.Value2[1,13]).Length -eq 10) {
-            $entity.Properties.Add("OffenseRepealed", [DateTime]::ParseExact(($row.Value2[1,13]),"yyyy-MM-dd", [CultureInfo]::InvariantCulture));
-        }
-        elseif (($row.Value2[1,13]).ToString().Length -eq 8) {
-            $entity.Properties.Add("OffenseRepealed", [DateTime]::ParseExact(($row.Value2[1,13]),"yyyyMMdd", [CultureInfo]::InvariantCulture));
+        elseif ($row.'Offense Enacted'.ToString().Length -eq 8) {
+            $entity.Properties.Add("OffenseEnacted", [DateTime]::ParseExact($row.'Offense Enacted',"yyyyMMdd", [CultureInfo]::InvariantCulture));
         }
         else {
-            $entity.Properties.Add("OffenseRepealed", [DateTime]::FromOADate(($row.Value2[1,13])));
+            $entity.Properties.Add("OffenseEnacted", [DateTime]::FromOADate($row.'Offense Enacted'));
+        }
+    }
+
+    if (![string]::IsNullOrWhiteSpace($row.'Offense Repealed')) {
+        if ($row.'Offense Repealed'.Length -eq 10) {
+            $entity.Properties.Add("OffenseRepealed", [DateTime]::ParseExact($row.'Offense Repealed',"yyyy-MM-dd", [CultureInfo]::InvariantCulture));
+        }
+        elseif ($row.'Offense Repealed'.ToString().Length -eq 8) {
+            $entity.Properties.Add("OffenseRepealed", [DateTime]::ParseExact($row.'Offense Repealed',"yyyyMMdd", [CultureInfo]::InvariantCulture));
+        }
+        else {
+            $entity.Properties.Add("OffenseRepealed", [DateTime]::FromOADate($row.'Offense Repealed'));
         }
     }
 
@@ -112,53 +138,68 @@ function Get-SchoolEntity {
 
     $entity =  New-Object -TypeName Microsoft.Azure.Cosmos.Table.DynamicTableEntity;
     $entity.PartitionKey = "CA";
-    $entity.RowKey = $row.Value2[1,1];
-    $entity.Properties.Add("CDSCode",($row.Value2[1,1]));
-    $entity.Properties.Add("Status",($row.Value2[1,2]));
-    $entity.Properties.Add("County",($row.Value2[1,3]));
-    $entity.Properties.Add("District",($row.Value2[1,4]));
-    $entity.Properties.Add("Name",($row.Value2[1,5]));
+    $entity.RowKey = $row.CDS_Code;
+    $entity.Properties.Add("CDSCode",$row.CDS_Code);
+    $entity.Properties.Add("Status",$row.Status);
+    $entity.Properties.Add("County",$row.County);
+    $entity.Properties.Add("District",$row.District);
+    $entity.Properties.Add("Name",$row.schoolname);
 
     return $entity;
 }
 
 #endregion
 
-Install-Module AzTable -Force
-Install-Module Az.Storage -Force
-Import-Module AzTable -Force
-Import-module Az.Storage -Force
-Add-AzAccount #Interactive login
+#region modules
+Write-Host "Checking for available AzTable Module"
+if (-not(Get-Module -ListAvailable -Name AzTable)){
+    Write-Host "Installing and Importing AzTable Module"
+    Install-Module AzTable -Force
+    Import-Module AzTable -Force
+}
+Write-Host "Checking for available Az.Storage Module"
+if (-not(Get-Module -ListAvailable -Name Az.Storage)){
+Write-Host "Installing and Importing Az.Storage Module"
+    Install-Module Az.Storage -Force
+    Import-module Az.Storage -Force
+}
+#endregion
 
-$ctx = (Get-AzStorageAccount -ResourceGroupName $rg -Name $storageAccountName).Context
+#region Azure Login
+Write-Host "Logging into Azure"
 
-$excel = New-Object -Com Excel.Application
-$wb = $excel.Workbooks.Open($path + '\' + $filename)
+[string]$userName = $CSSA_SP_APP_ID
+[string]$userPassword = $CSSA_SP_SECRET
+[securestring]$secStringPassword = ConvertTo-SecureString $userPassword -AsPlainText -Force
+[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($userName, $secStringPassword)
+Connect-AzAccount -Environment AzureUsGovernment -Tenant $CSSA_TENANT_ID -ServicePrincipal -Credential $credObject
 
-$tableNames = @('Beats','Cities','Statutes','Schools')
+#Add-AzAccount #Interactive login
+#endregion
 
+$ctx = (Get-AzStorageAccount -ResourceGroupName $RESOURCE_GROUP_NAME -Name $STORAGE_ACCOUNT_NAME).Context
 
 foreach ($tableName in $tableNames){
-    #Cloud Table 
+    Write-Host "Importing $tableName..." 
     if($null -eq (Get-AzStorageTable –Context $ctx | Where-Object { $_.Name -eq $tableName })) {
-        New-AzStorageTable –Name $tableName –Context $ctx
+        $null = New-AzStorageTable –Name $tableName –Context $ctx
     }
     $table = Get-AzStorageTable –Name $tableName –Context $ctx;
     switch ($tableName) {
         'Beats' {
-            $workSheet = $wb.Sheets["Beat_Table"];
+            $csv = Import-Csv -Path (Join-Path -Path (Get-Location) -ChildPath "Beat_Table.csv")
             break;
         }
         'Cities' {
-            $workSheet = $wb.Sheets["City_Table"];
+            $csv = Import-Csv -Path (Join-Path -Path (Get-Location) -ChildPath "City_Table.csv")
             break;
         }
         'Statutes' {
-            $workSheet = $wb.Sheets["Offense_Table"];
+            $csv = Import-Csv -Path (Join-Path -Path (Get-Location) -ChildPath "Offense_Table.csv")
             break;
         }
         'Schools' {
-            $workSheet = $wb.Sheets["School_Table"];
+            $csv = Import-Csv -Path (Join-Path -Path (Get-Location) -ChildPath "School_Table.csv")
             break;
         }
     }
@@ -166,7 +207,7 @@ foreach ($tableName in $tableNames){
     [Microsoft.Azure.Cosmos.Table.TableBatchOperation]$batchOperation = New-Object -TypeName Microsoft.Azure.Cosmos.Table.TableBatchOperation
     [int]$rowCount = 0;
 
-    foreach ($row in $workSheet.UsedRange.Rows | Select-Object -skip 1 ) {
+    foreach ($row in $csv) {
         $rowCount++;
         try{
             $entity = $null;
@@ -194,7 +235,7 @@ foreach ($tableName in $tableNames){
                 $batchOperation.InsertOrReplace($entity);
             }
             else {
-                $result = $table.CloudTable.ExecuteBatch($batchOperation, $null, $null)
+                $null = $table.CloudTable.ExecuteBatch($batchOperation, $null, $null)
 	            [Microsoft.Azure.Cosmos.Table.TableBatchOperation]$batchOperation = New-Object -TypeName Microsoft.Azure.Cosmos.Table.TableBatchOperation
 	            $batchOperation.InsertOrReplace($entity) 
 	            $rowCount = 1
@@ -212,7 +253,12 @@ foreach ($tableName in $tableNames){
     }
 
     if ($batchOperation.Count -ne 0) {
-        $result = $table.CloudTable.ExecuteBatch($batchOperation, $null, $null)
+        $null = $table.CloudTable.ExecuteBatch($batchOperation, $null, $null)
     }
 }
-$excel.Workbooks.Close()
+
+Write-Host "Import Script Completed..."
+$stopWatch.Stop()
+[Timespan] $ts = $stopWatch.Elapsed;
+$elapsedTime = [String]::Format("{0:00}:{1:00}:{2:00}.{3:00}", $ts.Hours, $ts.Minutes, $ts.Seconds, $ts.Milliseconds / 10);
+Write-Host "RunTime $elapsedTime    --> Format == Hours : Minutes : Seconds : Milliseconds"
