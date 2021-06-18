@@ -225,7 +225,8 @@ export default {
 
     isDuplicateKey() {
       const filteredItems = this.statutes.filter(
-        item => item.rowKey === this.editedItem.rowKey,
+        item =>
+          item.rowKey.toLowerCase() === this.editedItem.rowKey.toLowerCase(),
       )
 
       if (this.editedIndex === -1) {
