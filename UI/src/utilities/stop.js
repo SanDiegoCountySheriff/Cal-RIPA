@@ -780,6 +780,7 @@ const getSummarySubmissionError = (element, index) => {
 
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location?.blockNumber || null
+  const streetName = apiStop.location?.streetName || null
   const schoolNumber = apiStop.location?.schoolName?.codes?.code || null
   const cityName = apiStop.location?.city?.codes?.code || null
   const beatNumber = apiStop.location?.beat?.codes?.code || null
@@ -797,8 +798,8 @@ export const apiStopToFullStop = apiStop => {
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
-      blockNumber: blockNumber ? Number(blockNumber) : null,
-      streetName: apiStop.location?.streetName || null,
+      blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
+      streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
       moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
@@ -1036,6 +1037,8 @@ export const fullStopToApiStop = (
   const formCached = localStorage.getItem('ripa_form_cached')
   const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
   const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
+  const blockNumber = fullStop.location?.blockNumber || null
+  const streetName = fullStop.location?.streetName || null
 
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
@@ -1060,7 +1063,7 @@ export const fullStopToApiStop = (
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
-      blockNumber: fullStop.location?.blockNumber?.toString() || '',
+      blockNumber: blockNumber && streetName ? blockNumber?.toString() : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
@@ -1070,7 +1073,7 @@ export const fullStopToApiStop = (
       piiFound: fullStop.location?.piiFound || false,
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
-      streetName: fullStop.location?.streetName || '',
+      streetName: blockNumber && streetName ? streetName : '',
       toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
     },
     officerAssignment: {
