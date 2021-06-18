@@ -17,6 +17,7 @@
               :disabled="disabled"
               :items="genderItems"
               clear-selection
+              :rules="genderRules"
               @input="handleInput"
             >
             </ripa-radio-group>
@@ -92,6 +93,10 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    genderRules() {
+      return [v => !!v || 'A gender is required']
     },
 
     isPerceivedLgbtDisabled() {
