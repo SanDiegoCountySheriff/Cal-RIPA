@@ -420,6 +420,10 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
+            this.stepIndex = 0
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             if (this.onCancelForm) {
               this.onCancelForm()
             }
@@ -531,7 +535,7 @@ export default {
     },
 
     handleStartNew() {
-      this.stepIndex = 1
+      this.stepIndex = 0
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
