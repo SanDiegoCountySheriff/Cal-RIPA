@@ -420,6 +420,10 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
+            this.stepIndex = 0
+            if (this.onStepIndexChange) {
+              this.onStepIndexChange(this.stepIndex)
+            }
             if (this.onCancelForm) {
               this.onCancelForm()
             }
@@ -531,7 +535,7 @@ export default {
     },
 
     handleStartNew() {
-      this.stepIndex = 1
+      this.stepIndex = 0
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -562,9 +566,9 @@ export default {
               }
               this.onSubmitStop(this.getApiStop)
             }
-            const route = localStorage.getItem('ripa_form_edit_route')
-            const parsedRoute = route || '/'
             if (this.adminEditing && this.onSubmitAudit) {
+              const route = localStorage.getItem('ripa_form_edit_route')
+              const parsedRoute = route || '/'
               this.onSubmitAudit(parsedRoute)
             }
             if (this.onCancelForm) {
