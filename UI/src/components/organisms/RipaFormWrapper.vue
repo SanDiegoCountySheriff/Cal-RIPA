@@ -562,9 +562,9 @@ export default {
               }
               this.onSubmitStop(this.getApiStop)
             }
-            const route = localStorage.getItem('ripa_form_edit_route')
-            const parsedRoute = route || '/'
             if (this.adminEditing && this.onSubmitAudit) {
+              const route = localStorage.getItem('ripa_form_edit_route')
+              const parsedRoute = route || '/'
               this.onSubmitAudit(parsedRoute)
             }
             if (this.onCancelForm) {

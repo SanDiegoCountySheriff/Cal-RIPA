@@ -430,7 +430,6 @@ export default {
     handleCancelForm() {
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
-      this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
       if (route) {
