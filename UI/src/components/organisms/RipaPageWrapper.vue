@@ -18,12 +18,6 @@
       <slot></slot>
     </ripa-content-wrapper>
 
-    <ripa-speed-dial
-      v-if="
-        !invalidUser && authenticated && $route.path.indexOf('/admin') === -1
-      "
-    ></ripa-speed-dial>
-
     <v-footer padless fixed>
       <v-col class="text-center" cols="12">
         © {{ new Date().getFullYear() }} — RIPA — {{ getVersion }}
@@ -35,7 +29,6 @@
 <script>
 import RipaAppBar from '@/components/molecules/RipaAppBar'
 import RipaContentWrapper from '@/components/organisms/RipaContentWrapper'
-import RipaSpeedDial from '@/components/molecules/RipaSpeedDial'
 import { VERSION } from '@/constants/app'
 
 export default {
@@ -44,7 +37,6 @@ export default {
   components: {
     RipaAppBar,
     RipaContentWrapper,
-    RipaSpeedDial,
   },
 
   computed: {
