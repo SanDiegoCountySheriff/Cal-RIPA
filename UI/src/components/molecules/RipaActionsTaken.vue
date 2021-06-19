@@ -231,9 +231,13 @@ export default {
       const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
       const consentGiven = basisForSearch.includes(1)
 
+      if (!consentGiven) {
+        return []
+      }
+
       return [
         (checked && consentGiven) ||
-          'Basis for Search" indicates "Consent Given" but Person search consent has not been selected',
+          '"Basis for Search" indicates "Consent Given" but Person search consent has not been selected',
       ]
     },
 
@@ -242,9 +246,13 @@ export default {
       const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
       const consentGiven = basisForSearch.includes(1)
 
+      if (!consentGiven) {
+        return []
+      }
+
       return [
         (checked && consentGiven) ||
-          'Basis for Search" indicates "Consent Given" but Property search consent has not been selected',
+          '"Basis for Search" indicates "Consent Given" but Property search consent has not been selected',
       ]
     },
 
