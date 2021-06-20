@@ -429,12 +429,15 @@ export default new Vuex.Store({
 
     deleteCity({ dispatch, state }, city) {
       return axios
-        .delete(`${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .delete(
+          `${state.apiConfig.apiBaseUrl}domain/DeleteCity/${city.rowKey}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminCities')
         })
@@ -447,7 +450,7 @@ export default new Vuex.Store({
     deleteSchool({ dispatch, state }, school) {
       return axios
         .delete(
-          `${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.id}`,
+          `${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.rowKey}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -467,7 +470,7 @@ export default new Vuex.Store({
     deleteStatute({ dispatch, state }, statute) {
       return axios
         .delete(
-          `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.id}`,
+          `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.rowKey}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
