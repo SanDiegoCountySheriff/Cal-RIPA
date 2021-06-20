@@ -263,22 +263,26 @@ export default {
 
     getCities() {
       const checked = this.viewModel.location.outOfCounty
+
       return checked ? this.nonCountyCities : this.countyCities
     },
 
     schoolRules() {
       const checked = this.viewModel.location.isSchool
       const school = this.viewModel.location.school
+
       return [(checked && school !== null) || 'A school is required']
     },
 
     cityRules() {
       const city = this.viewModel.location.city
+
       return [city !== null || 'A city is required']
     },
 
     blockNumberRules() {
       const blockNumber = this.viewModel.location.blockNumber
+
       return [
         this.isLocationOptionsFilled ||
           blockNumber !== null ||
@@ -288,6 +292,7 @@ export default {
 
     streetNameRules() {
       const streetName = this.viewModel.location.streetName
+
       return [
         this.isLocationOptionsFilled ||
           (streetName && streetName.length > 0) ||
@@ -297,6 +302,7 @@ export default {
 
     intersectionRules() {
       const intersection = this.viewModel.location.intersection
+
       return [
         this.isLocationOptionsFilled ||
           (intersection && intersection.length > 0) ||
@@ -307,6 +313,7 @@ export default {
     highwayRules() {
       const checked = this.viewModel.location.moreLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
+
       return [
         this.isLocationOptionsFilled ||
           (checked && highwayExit && highwayExit.length > 0) ||
@@ -317,6 +324,7 @@ export default {
     landmarkRules() {
       const checked = this.viewModel.location.moreLocationOptions
       const landmark = this.viewModel.location.landmark
+
       return [
         this.isLocationOptionsFilled ||
           (checked && landmark && landmark.length > 0) ||
