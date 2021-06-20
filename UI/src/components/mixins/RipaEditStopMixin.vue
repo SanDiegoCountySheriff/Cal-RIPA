@@ -11,11 +11,8 @@ export default {
           new Date(b.dateReported).getTime() -
           new Date(a.dateReported).getTime(),
       )
-      console.log('apiStop', apiStop)
       const fullStop = apiStopToFullStop(apiStop)
-      console.log('fullStop', fullStop)
       const stop = fullStopToStop(fullStop)
-      console.log('stop', stop)
       localStorage.setItem('ripa_form_step_index', '7')
       localStorage.setItem('ripa_form_admin_editing', '1')
       localStorage.setItem('ripa_form_editing', '1')
