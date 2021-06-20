@@ -1,11 +1,17 @@
 <script>
-import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
+import {
+  defaultStop,
+  motorStop,
+  probationStop,
+  fullStopToApiStop,
+} from '@/utilities/stop'
 import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
   data() {
     return {
+      apiStop: null,
       favorites: [],
       formStepIndex: 0,
       fullStop: {},
@@ -407,11 +413,20 @@ export default {
             }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
+        this.apiStop = fullStopToApiStop(
+          this.fullStop,
+          this.mappedFormBeats,
+          this.mappedFormCountyCities,
+          this.mappedFormNonCountyCities,
+          this.mappedFormSchools,
+          this.mappedFormStatutes,
+        )
       }
     },
 
     clearLocalStorage() {
       localStorage.removeItem('ripa_form_admin_editing')
+      localStorage.removeItem('ripa_form_api_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_edit_agency_questions')
       localStorage.removeItem('ripa_form_edit_person')
@@ -465,8 +480,12 @@ export default {
       if (this.formStepIndex > 0) {
         if (this.stop) {
           localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+          localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+          localStorage.setItem(
+            'ripa_form_api_stop',
+            JSON.stringify(this.apiStop),
+          )
         }
-        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
       }
     },
 

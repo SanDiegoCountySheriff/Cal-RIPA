@@ -16,6 +16,7 @@
               v-model="model.person.perceivedGender"
               :disabled="disabled"
               :items="genderItems"
+              :rules="genderRules"
               clear-selection
               @input="handleInput"
             >
@@ -28,6 +29,7 @@
               label="Gender Nonconforming"
               :disabled="disabled"
               :max-width="250"
+              :rules="genderRules"
               @input="handleInput"
             ></ripa-switch>
           </v-col>
@@ -92,6 +94,16 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    genderRules() {
+      const gender = this.viewModel.person.perceivedGender
+      const checked = this.viewModel.person.genderNonconforming
+      const valid = gender || checked
+
+      return [
+        valid || 'A gender is required or Gender Nonconforming must be checked',
+      ]
     },
 
     isPerceivedLgbtDisabled() {
