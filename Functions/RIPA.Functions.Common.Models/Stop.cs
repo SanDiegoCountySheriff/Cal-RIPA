@@ -224,6 +224,6 @@ namespace RIPA.Functions.Common.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public string Prompt { get; set; }
-        public string Answere { get; set; }
+        public string Answer { get; set; }
     }
 }
