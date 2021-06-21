@@ -181,6 +181,13 @@ export default {
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
+
+      if (
+        this.viewModel.actionsTaken.personSearchConsentGiven ||
+        this.viewModel.actionsTaken.propertySearchConsentGiven
+      ) {
+        this.viewModel.actionsTaken.basisForSearch.push(1)
+      }
     },
 
     updateBasisForPropertySeizureModel() {
