@@ -58,7 +58,7 @@
                     :display-user-edit="displayUserEdit"
                     :display-beat-input="displayBeatInput"
                     :is-authenticated="isAuthenticated"
-                    :is-edit-stop="isEditStop()"
+                    :is-admin-editing="isAdminEditing()"
                     :last-location="lastLocation"
                     :loading-gps="loadingGps"
                     :loading-pii="loadingPiiStep1"
