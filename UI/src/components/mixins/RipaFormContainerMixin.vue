@@ -163,7 +163,7 @@ export default {
     handleDeletePerson(id) {
       // update fullStop
       const filteredPeople = this.fullStop.people.filter(
-        item => item.id !== id.toString(),
+        item => item.id.toString() !== id.toString(),
       )
       const updatedFullStop = {
         ...this.fullStop,
