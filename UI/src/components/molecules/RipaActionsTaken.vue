@@ -340,7 +340,7 @@ export default {
         return false
       }
 
-      return true
+      return this.wasSearchOfPersonOrPropertyConducted
     },
   },
 

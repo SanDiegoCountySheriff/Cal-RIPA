@@ -82,11 +82,8 @@ export const defaultStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {},
-    stopResult: {
-      anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
+    stopReason: stopReasonGivenTemplate(),
+    stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -106,32 +103,8 @@ export const motorStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
-      reasonForStop: 1,
-      trafficViolation: 1,
-      trafficViolationCode: 54106,
-      reasonForStopExplanation: 'Speeding',
-    },
-    stopResult: {
-      anyResultsOfStop: true,
-      resultsOfStop2: false,
-      resultsOfStop3: true,
-      resultsOfStop4: false,
-      resultsOfStop5: false,
-      resultsOfStop6: false,
-      resultsOfStop7: false,
-      resultsOfStop8: false,
-      resultsOfStop9: false,
-      resultsOfStop10: false,
-      resultsOfStop11: false,
-      resultsOfStop12: false,
-      resultsOfStop13: false,
-      warningCodes: [],
-      citationCodes: [54106],
-      infieldCodes: [],
-      custodialArrestCodes: [],
-      pullFromReasonCode: true,
-    },
+    stopReason: stopReasonGivenTemplate('motor'),
+    stopResult: stopResultGivenTemplate('motor'),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -155,16 +128,60 @@ export const probationStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
+    stopReason: stopReasonGivenTemplate('probation'),
+    stopResult: stopResultGivenTemplate(),
+    agencyQuestions: mappedAgencyQuestions(),
+  }
+}
+
+export const stopReasonGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
+      reasonForStop: 1,
+      trafficViolation: 1,
+      trafficViolationCode: 54106,
+      reasonForStopExplanation: 'Speeding',
+    }
+  }
+
+  if (template === 'probation') {
+    return {
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-    },
-    stopResult: {
+    }
+  }
+
+  return {}
+}
+
+export const stopResultGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
       anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
-    agencyQuestions: mappedAgencyQuestions(),
+      resultsOfStop2: false,
+      resultsOfStop3: true,
+      resultsOfStop4: false,
+      resultsOfStop5: false,
+      resultsOfStop6: false,
+      resultsOfStop7: false,
+      resultsOfStop8: false,
+      resultsOfStop9: false,
+      resultsOfStop10: false,
+      resultsOfStop11: false,
+      resultsOfStop12: false,
+      resultsOfStop13: false,
+      warningCodes: [],
+      citationCodes: [54106],
+      infieldCodes: [],
+      custodialArrestCodes: [],
+      pullFromReasonCode: true,
+    }
+  }
+
+  return {
+    anyResultsOfStop: true,
+    pullFromReasonCode: false,
   }
 }
 
