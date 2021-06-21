@@ -124,6 +124,11 @@ export default {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
       }
+      this.stop.stopReason = {}
+      this.stop.stopResult = {
+        anyResultsOfStop: true,
+        pullFromReasonCode: false,
+      }
       this.updateFullStop()
     },
 
