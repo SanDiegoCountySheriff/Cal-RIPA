@@ -4,11 +4,6 @@ import { format } from 'date-fns'
 export default {
   methods: {
     updateModel(newValue) {
-      const updatedBlockNumber =
-        newValue.location?.blockNumber || newValue.location?.blockNumber === 0
-          ? newValue.location?.blockNumber
-          : null
-
       return {
         id: newValue.id,
         template: newValue.template,
@@ -39,7 +34,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: updatedBlockNumber,
+          blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           moreLocationOptions: newValue.location?.moreLocationOptions || false,
@@ -202,11 +197,9 @@ export default {
     },
 
     updateBlockNumberModel() {
-      this.$nextTick(() => {
-        let blockNumber = this.viewModel.location.blockNumber
-        blockNumber = Math.floor(blockNumber / 100) * 100
-        this.viewModel.location.blockNumber = blockNumber
-      })
+      let blockNumber = this.viewModel.location.blockNumber
+      blockNumber = Math.floor(blockNumber / 100) * 100
+      this.viewModel.location.blockNumber = blockNumber
     },
 
     updateFullAddressModel() {
