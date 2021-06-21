@@ -99,11 +99,9 @@ export default {
     genderRules() {
       const gender = this.viewModel.person.perceivedGender
       const checked = this.viewModel.person.genderNonconforming
-      const valid = gender || checked
+      const isValid = gender !== null || checked
 
-      return [
-        valid || 'A gender is required or Gender Nonconforming must be checked',
-      ]
+      return [isValid !== false || 'A gender is required']
     },
 
     isPerceivedLgbtDisabled() {
