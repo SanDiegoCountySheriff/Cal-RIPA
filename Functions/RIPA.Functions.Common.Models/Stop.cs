@@ -53,8 +53,6 @@ namespace RIPA.Functions.Common.Models
         Unsubmitted,
         [EnumMember(Value = "Submitted")]
         Submitted,
-        [EnumMember(Value = "Resubmitted")]
-        Resubmitted,
         [EnumMember(Value = "Failed")]
         Failed
     }
@@ -82,6 +80,7 @@ namespace RIPA.Functions.Common.Models
         public bool IsPiiFound { get; set; }
         public string EditStopExplanation { get; set; }
         public string EditStopOfficerId { get; set; }
+        public bool IsEdited { get; set; }
         [JsonProperty(PropertyName = "telemetry")]
         public Telemetry Telemetry { get; set; }
 
