@@ -864,7 +864,7 @@ const getFullStopPeopleListed = apiStop => {
       ? person.listContrabandOrEvidenceDiscovered
       : []
 
-    const resultsOfStop = anyResultsOfStop ? person.listResultsOfStop : []
+    const resultsOfStop = anyResultsOfStop ? person.listResultOfStop : []
 
     return {
       anyDisabilities,
