@@ -88,6 +88,10 @@ namespace RIPA.Functions.Submission.Functions
             {
                 stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
             }
+            if (!string.IsNullOrWhiteSpace(req.Query["IsEdited"]))
+            {
+                stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
+            }
 
             List<string> whereStatements = new List<string>();
             string join = string.Empty;
@@ -106,6 +110,12 @@ namespace RIPA.Functions.Submission.Functions
             if (stopQuery.IsPII != null)
             {
                 whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
+            }
+
+            //IsEdited
+            if (stopQuery.IsEdited != null)
+            {
+                whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
             }
 
             //Status

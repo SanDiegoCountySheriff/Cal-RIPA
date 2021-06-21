@@ -33,6 +33,7 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "Status", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String Status: Unsubmitted, Submitted, Failed")]
+        [OpenApiParameter(name: "IsEdited", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns stops that have isEdited")]
         [OpenApiParameter(name: "IsPII", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have been flagged for PII")]
         [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String ErrorCode: Error code must exist on stop submission to return")]
         [OpenApiParameter(name: "OfficerId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Returns Submitted Stops where officer id")]
@@ -81,6 +82,11 @@ namespace RIPA.Functions.Stop.Functions
             {
                 stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
             }
+            if (!string.IsNullOrWhiteSpace(req.Query["IsEdited"]))
+            {
+                stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
+            }
+
 
             List<string> whereStatements = new List<string>();
             string join = string.Empty;
@@ -99,6 +105,12 @@ namespace RIPA.Functions.Stop.Functions
             if (stopQuery.IsPII != null)
             {
                 whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
+            }
+
+            //IsEdited
+            if (stopQuery.IsEdited != null)
+            {
+                whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
             }
 
             //Status

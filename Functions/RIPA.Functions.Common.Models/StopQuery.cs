@@ -14,5 +14,6 @@ namespace RIPA.Functions.Common.Models
         public int Offset { get; set; }
         public string OrderBy { get; set; }
         public string Order { get; set; }
+        public bool? IsEdited { get; set; }
     }
 }
