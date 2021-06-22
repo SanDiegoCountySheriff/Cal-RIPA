@@ -16,7 +16,6 @@
               v-model="model.stopDate.date"
               label="Date of Stop"
               :rules="dateRules"
-              :disabled="isStopDateDisabled"
               @input="handleInput"
             >
             </ripa-date-picker>
@@ -29,7 +28,6 @@
               v-model="model.stopDate.time"
               label="Time of Stop"
               :rules="timeRules"
-              :disabled="isStopDateDisabled"
               @input="handleInput"
             >
             </ripa-time-picker>
@@ -123,18 +121,18 @@ export default {
       },
     },
 
-    isStopDateDisabled() {
-      return this.adminEditing
-    },
-
     isValidDateTime() {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
 
-      return (
-        dateWithinLastHours(dateStr, timeStr, 24) &&
-        dateNotInFuture(dateStr, timeStr)
-      )
+      if (!this.adminEditing) {
+        return (
+          dateWithinLastHours(dateStr, timeStr, 24) &&
+          dateNotInFuture(dateStr, timeStr)
+        )
+      }
+
+      return dateNotInFuture(dateStr, timeStr)
     },
   },
 

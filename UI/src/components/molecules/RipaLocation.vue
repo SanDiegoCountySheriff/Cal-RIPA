@@ -140,13 +140,13 @@
           </ripa-text-input>
 
           <ripa-switch
-            v-model="model.location.moreLocationOptions"
+            v-model="model.location.toggleLocationOptions"
             label="More Location Options"
             :max-width="225"
             @input="handleInput"
           ></ripa-switch>
 
-          <template v-if="model.location.moreLocationOptions">
+          <template v-if="model.location.toggleLocationOptions">
             <ripa-subheader text="-- or --"></ripa-subheader>
 
             <ripa-text-input
@@ -311,7 +311,7 @@ export default {
     },
 
     highwayRules() {
-      const checked = this.viewModel.location.moreLocationOptions
+      const checked = this.viewModel.location.toggleLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
 
       return [
@@ -322,7 +322,7 @@ export default {
     },
 
     landmarkRules() {
-      const checked = this.viewModel.location.moreLocationOptions
+      const checked = this.viewModel.location.toggleLocationOptions
       const landmark = this.viewModel.location.landmark
 
       return [
@@ -336,7 +336,7 @@ export default {
       const blockNumber = this.viewModel.location.blockNumber
       const streetName = this.viewModel.location.streetName
       const intersection = this.viewModel.location.intersection
-      const checked = this.viewModel.location.moreLocationOptions
+      const checked = this.viewModel.location.toggleLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
       const landmark = this.viewModel.location.landmark
 

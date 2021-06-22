@@ -49,7 +49,7 @@ const emptyLocation = () => {
     blockNumber: null,
     streetName: null,
     intersection: null,
-    moreLocationOptions: false,
+    toggleLocationOptions: false,
     highwayExit: null,
     landmark: null,
     outOfCounty: false,
@@ -225,7 +225,7 @@ const getSummaryTime = apiStop => {
 const getSummaryLocation = apiStop => {
   const children = []
 
-  if (apiStop.school && apiStop.location.schoolName) {
+  if (apiStop.location.school && apiStop.location.schoolName.codes) {
     children.push({
       header: 'School Name',
       detail: apiStop.location.schoolName.codes.text,
@@ -813,7 +813,7 @@ export const apiStopToFullStop = apiStop => {
       blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
-      moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
+      toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
       landmark: apiStop.location?.landMark || null,
       piiFound: apiStop.location?.piiFound || false,
@@ -881,16 +881,8 @@ const getFullStopPeopleListed = apiStop => {
       actionsTaken: {
         anyActionsTaken,
         actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
-        personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          actionTakenDuringStop,
-          17,
-          'personSearchConsentGiven',
-        ),
-        propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          actionTakenDuringStop,
-          19,
-          'propertySearchConsentGiven',
-        ),
+        personSearchConsentGiven: person.personSearchConsentGiven,
+        propertySearchConsentGiven: person.propertySearchConsentGiven,
         basisForSearch: getKeyArray(person.listBasisForSearch),
         basisForSearchExplanation: person.basisForSearchBrief,
         basisForSearchPiiFound: person.basisForSearchPiiFound || false,
@@ -924,8 +916,6 @@ const getFullStopPeopleListed = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
-        searchOfPerson: person.searchOfPerson,
-        searchOfProperty: person.searchOfProperty,
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
       },
@@ -1010,11 +1000,6 @@ const getCodePropValueGivenKeyInArray = (items, key) => {
   return filteredItem
     ? filteredItem.listCodes.map(item => Number(item.code))
     : null
-}
-
-const getBooleanPropValueGivenKeyInArray = (items, key, prop) => {
-  const [filteredItem] = items.filter(item => Number(item.key) === key)
-  return filteredItem ? filteredItem[prop] : false
 }
 
 const getKeyArray = items => {
@@ -1115,7 +1100,7 @@ export const fullStopToApiStop = (
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
       streetName: blockNumber && streetName ? streetName : '',
-      toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
+      toggleLocationOptions: fullStop.location?.toggleLocationOptions || false,
     },
     officerAssignment: {
       key: parsedApiStop
@@ -1165,6 +1150,10 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      personSearchConsentGiven:
+        person.actionsTaken?.personSearchConsentGiven || false,
+      propertySearchConsentGiven:
+        person.actionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStop(person, statutes),
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
@@ -1206,7 +1195,9 @@ const getSchool = (fullStop, schools) => {
   const school = fullStop.location?.school || null
 
   if (school) {
-    const [filteredSchool] = schools.filter(item => item.cdsCode === school)
+    const [filteredSchool] = schools.filter(
+      item => item.cdsCode.toString() === school.toString(),
+    )
     return {
       codes: {
         code: school.toString(),
@@ -1222,7 +1213,9 @@ const getCity = (fullStop, cities) => {
   const city = fullStop.location?.city || null
 
   if (city) {
-    const [filteredCity] = cities.filter(item => item.id === city)
+    const [filteredCity] = cities.filter(
+      item => item.id.toString() === city.toString(),
+    )
     return {
       codes: {
         code: city.toString(),
@@ -1238,7 +1231,9 @@ const getBeat = (fullStop, beats) => {
   const beat = fullStop.location?.beat || null
 
   if (beat) {
-    const [filteredBeat] = beats.filter(item => item.id === beat)
+    const [filteredBeat] = beats.filter(
+      item => item.id.toString() === beat.toString(),
+    )
     return {
       codes: {
         code: beat.toString(),
@@ -1473,14 +1468,6 @@ const getActionsTakenDuringStop = person => {
     const action = {
       key: item.toString(),
       action: filteredAction ? filteredAction.name : 'N/A',
-    }
-    if (item === 17) {
-      action.personSearchConsentGiven =
-        person.actionsTaken?.personSearchConsentGiven || false
-    }
-    if (item === 19) {
-      action.propertySearchConsentGiven =
-        person.actionsTaken?.propertySearchConsentGiven || false
     }
 
     return action

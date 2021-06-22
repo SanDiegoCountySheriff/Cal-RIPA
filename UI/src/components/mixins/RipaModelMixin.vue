@@ -37,7 +37,8 @@ export default {
           blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
-          moreLocationOptions: newValue.location?.moreLocationOptions || false,
+          toggleLocationOptions:
+            newValue.location?.toggleLocationOptions || false,
           highwayExit: newValue.location?.highwayExit || null,
           landmark: newValue.location?.landmark || null,
           piiFound: newValue.location?.piiFound || false,
@@ -187,6 +188,16 @@ export default {
         this.viewModel.actionsTaken.propertySearchConsentGiven
       ) {
         this.viewModel.actionsTaken.basisForSearch.push(1)
+      }
+    },
+
+    updateBasisForSearchModel() {
+      if (
+        this.viewModel.actionsTaken.basisForSearch.length === 1 &&
+        this.viewModel.actionsTaken.basisForSearch.includes(4)
+      ) {
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
     },
 

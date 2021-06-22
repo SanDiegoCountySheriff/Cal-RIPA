@@ -7,7 +7,7 @@
 
       <v-card-text>
         <v-tabs v-model="tab">
-          <v-tab>DOJ Stop</v-tab>
+          <v-tab>API Stop</v-tab>
           <v-tab>RIPA Stop</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
