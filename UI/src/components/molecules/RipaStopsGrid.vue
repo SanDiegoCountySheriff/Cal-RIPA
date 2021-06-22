@@ -387,6 +387,7 @@ export default {
           order: this.sortDesc ? 'Desc' : 'Asc',
         },
       }
+      this.currentPage = 1
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
