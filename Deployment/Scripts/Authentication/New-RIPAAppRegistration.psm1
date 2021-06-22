@@ -31,7 +31,8 @@
 
     $appId = $adApplication.appId
 
-    Write-Host "Assigning app ownership to current user"
+    sleep $waitTime
+    Write-Host "Assigning app $adApplication ownership to current user"
     $currentUserObjectId = (az ad signed-in-user show | ConvertFrom-Json).objectId
     az ad app owner add --id $appId --owner-object-id $currentUserObjectId
 

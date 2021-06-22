@@ -40,16 +40,13 @@ namespace RIPA.Functions.Stop.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] Common.Models.Stop stop, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put Stop requested");
-            
+
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
                 {
                     return new UnauthorizedResult();
                 }
-
-                var objectId = await RIPAAuthorization.GetUserId(req, log);
-                stop.EditStopOfficerId = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId)).OfficerId;
             }
             catch (Exception ex)
             {
@@ -57,8 +54,23 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
+            try
+            {
+                var objectId = await RIPAAuthorization.GetUserId(req, log);
+                stop.EditStopOfficerId = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId)).OfficerId;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new BadRequestObjectResult("User profile was not found");
+            }
+
             if (!string.IsNullOrEmpty(Id))
             {
+                stop.IsEdited = false;
+                if (_stopCosmosDbService.GetStopAsync(Id) != null)
+                    stop.IsEdited = true;
+
                 stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {

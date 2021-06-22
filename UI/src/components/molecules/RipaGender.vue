@@ -16,8 +16,9 @@
               v-model="model.person.perceivedGender"
               :disabled="disabled"
               :items="genderItems"
+              :rules="genderRules"
               clear-selection
-              @input="handleInput"
+              @input="handleGenderInput"
             >
             </ripa-radio-group>
           </v-col>
@@ -28,6 +29,7 @@
               label="Gender Nonconforming"
               :disabled="disabled"
               :max-width="250"
+              :rules="genderRules"
               @input="handleInput"
             ></ripa-switch>
           </v-col>
@@ -94,6 +96,14 @@ export default {
       },
     },
 
+    genderRules() {
+      const gender = this.viewModel.person.perceivedGender
+      const checked = this.viewModel.person.genderNonconforming
+      const isValid = gender !== null || checked
+
+      return [isValid !== false || 'A gender is required']
+    },
+
     isPerceivedLgbtDisabled() {
       return (
         this.disabled ||
@@ -104,6 +114,16 @@ export default {
   },
 
   methods: {
+    handleGenderInput() {
+      if (
+        this.viewModel.person.perceivedGender === 1 ||
+        this.viewModel.person.perceivedGender === 2
+      ) {
+        this.viewModel.person.perceivedLgbt = false
+      }
+      this.handleInput()
+    },
+
     handleInput() {
       this.updatePerceivedLgbtModel()
       this.$emit('input', this.viewModel)

@@ -45,6 +45,7 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.id"
+                        :disabled="isRowKeyDisabled"
                         label="ID"
                       ></v-text-field>
                     </v-col>
@@ -74,6 +75,12 @@
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
+                        v-model="editedItem.yearsExperience"
+                        label="Years Experience"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
                         v-model="editedItem.assignment"
                         label="Assignment"
                       ></v-text-field>
@@ -93,7 +100,14 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  :disabled="isDuplicateKey"
+                  @click="save"
+                >
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -137,16 +151,19 @@ export default {
         { text: 'Officer ID', value: 'officerId' },
         { text: 'Assignment', value: 'assignment' },
         { text: 'Other Type', value: 'otherType' },
+        { text: 'Exp Years', value: 'yearsExperience' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       editedItem: {
+        id: '',
         firstName: '',
         lastName: '',
         startDate: '',
         agency: '',
       },
       defaultItem: {
+        id: '',
         firstName: '',
         lastName: '',
         startDate: '',
@@ -158,6 +175,22 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+
+    isRowKeyDisabled() {
+      return this.editedIndex > -1
+    },
+
+    isDuplicateKey() {
+      const filteredItems = this.users.filter(
+        item => item.id.toLowerCase() === this.editedItem.id.toLowerCase(),
+      )
+
+      if (this.editedIndex === -1) {
+        return filteredItems.length > 0 || this.editedItem.id === ''
+      }
+
+      return false
     },
   },
 

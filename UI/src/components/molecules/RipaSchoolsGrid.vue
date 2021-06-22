@@ -180,8 +180,9 @@ export default {
     },
 
     isDuplicateKey() {
-      const filteredItems = this.cities.filter(
-        item => item.rowKey === this.editedItem.rowKey,
+      const filteredItems = this.schools.filter(
+        item =>
+          item.rowKey.toLowerCase() === this.editedItem.rowKey.toLowerCase(),
       )
 
       if (this.editedIndex === -1) {

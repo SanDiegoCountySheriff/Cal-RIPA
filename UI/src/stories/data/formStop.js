@@ -339,7 +339,7 @@ export const apiStops = [
           },
           {
             key: '17',
-            action: 'Asked for consent to search another person',
+            action: 'Asked for consent to search person',
             personSearchConsentGiven: true,
           },
           {
@@ -456,7 +456,7 @@ export const apiStops = [
           },
           {
             key: '17',
-            action: 'Asked for consent to search another person',
+            action: 'Asked for consent to search person',
             personSearchConsentGiven: true,
           },
           {

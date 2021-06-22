@@ -172,8 +172,8 @@ export default {
     },
 
     isDuplicateKey() {
-      const filteredItems = this.cities.filter(
-        item => item.id === this.editedItem.id,
+      const filteredItems = this.beats.filter(
+        item => item.id.toString() === this.editedItem.id,
       )
 
       if (this.editedIndex === -1) {

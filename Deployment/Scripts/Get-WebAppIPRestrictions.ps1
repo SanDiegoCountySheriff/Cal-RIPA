@@ -8,11 +8,11 @@
     $APIVersion = ((Get-AzResourceProvider -ProviderNamespace Microsoft.Web).ResourceTypes | Where-Object ResourceTypeName -eq sites).ApiVersions[0]
     $WebApps = Get-AzFunctionApp
 
-    foreach ($webApp in $WebApps) {
+    foreach ($WebApp in $WebApps) {
  
         $WebAppName = $WebApp.Name
-        $WebAppRGName = $WEbApp.ResourceGroup
-        $WebAppConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -Name  $WebAppName -ResourceGroupName $WebAppRGName -ApiVersion $APIVersion)
+        $WebAppRGName = $WebApp.ResourceGroup
+        $WebAppConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName $WebAppRGName -ApiVersion $APIVersion -Name $WebAppName)
 
         $IpSecurityRestrictions = $WebAppConfig.Properties.ipsecurityrestrictions | ConvertTo-Json
         if ($IpSecurityRestrictions -eq $null) {

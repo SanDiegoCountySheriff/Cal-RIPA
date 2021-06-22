@@ -4,11 +4,6 @@ import { format } from 'date-fns'
 export default {
   methods: {
     updateModel(newValue) {
-      const updatedBlockNumber =
-        newValue.location?.blockNumber || newValue.location?.blockNumber === 0
-          ? newValue.location?.blockNumber
-          : null
-
       return {
         id: newValue.id,
         template: newValue.template,
@@ -39,7 +34,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: updatedBlockNumber,
+          blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           moreLocationOptions: newValue.location?.moreLocationOptions || false,
@@ -186,6 +181,13 @@ export default {
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
+
+      if (
+        this.viewModel.actionsTaken.personSearchConsentGiven ||
+        this.viewModel.actionsTaken.propertySearchConsentGiven
+      ) {
+        this.viewModel.actionsTaken.basisForSearch.push(1)
+      }
     },
 
     updateBasisForPropertySeizureModel() {
@@ -202,11 +204,9 @@ export default {
     },
 
     updateBlockNumberModel() {
-      this.$nextTick(() => {
-        let blockNumber = this.viewModel.location.blockNumber
-        blockNumber = Math.floor(blockNumber / 100) * 100
-        this.viewModel.location.blockNumber = blockNumber
-      })
+      let blockNumber = this.viewModel.location.blockNumber
+      blockNumber = Math.floor(blockNumber / 100) * 100
+      this.viewModel.location.blockNumber = blockNumber
     },
 
     updateFullAddressModel() {
@@ -261,6 +261,9 @@ export default {
     updateSchoolModel() {
       if (!this.viewModel.location.isSchool) {
         this.viewModel.person.isStudent = false
+        this.viewModel.stopResult.resultsOfStop12 = false
+        this.viewModel.stopResult.resultsOfStop13 = false
+        this.updateStopReasonModel()
       }
     },
 
@@ -271,6 +274,8 @@ export default {
           this.viewModel.stopReason.reasonForStop === 8
         ) {
           this.viewModel.stopReason.reasonForStop = null
+          this.viewModel.stopReason.educationViolation = null
+          this.viewModel.stopReason.educationViolationCode = null
         }
       }
 

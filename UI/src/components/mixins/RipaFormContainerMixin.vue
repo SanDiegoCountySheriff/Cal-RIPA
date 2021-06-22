@@ -1,11 +1,19 @@
 <script>
-import { defaultStop, motorStop, probationStop } from '@/utilities/stop'
+import {
+  defaultStop,
+  motorStop,
+  probationStop,
+  fullStopToApiStop,
+  stopReasonGivenTemplate,
+  stopResultGivenTemplate,
+} from '@/utilities/stop'
 import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
   data() {
     return {
+      apiStop: null,
       favorites: [],
       formStepIndex: 0,
       fullStop: {},
@@ -118,6 +126,8 @@ export default {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
       }
+      this.stop.stopReason = stopReasonGivenTemplate(this.stop.template)
+      this.stop.stopResult = stopResultGivenTemplate(this.stop.template)
       this.updateFullStop()
     },
 
@@ -153,7 +163,7 @@ export default {
     handleDeletePerson(id) {
       // update fullStop
       const filteredPeople = this.fullStop.people.filter(
-        item => item.id !== id.toString(),
+        item => item.id.toString() !== id.toString(),
       )
       const updatedFullStop = {
         ...this.fullStop,
@@ -407,11 +417,20 @@ export default {
             }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
+        this.apiStop = fullStopToApiStop(
+          this.fullStop,
+          this.mappedFormBeats,
+          this.mappedFormCountyCities,
+          this.mappedFormNonCountyCities,
+          this.mappedFormSchools,
+          this.mappedFormStatutes,
+        )
       }
     },
 
     clearLocalStorage() {
       localStorage.removeItem('ripa_form_admin_editing')
+      localStorage.removeItem('ripa_form_api_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_edit_agency_questions')
       localStorage.removeItem('ripa_form_edit_person')
@@ -430,7 +449,6 @@ export default {
     handleCancelForm() {
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
-      this.handleStepIndexChange(0)
       this.stop = null
       this.fullStop = null
       if (route) {
@@ -466,8 +484,12 @@ export default {
       if (this.formStepIndex > 0) {
         if (this.stop) {
           localStorage.setItem('ripa_form_stop', JSON.stringify(this.stop))
+          localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
+          localStorage.setItem(
+            'ripa_form_api_stop',
+            JSON.stringify(this.apiStop),
+          )
         }
-        localStorage.setItem('ripa_form_full_stop', JSON.stringify(newVal))
       }
     },
 

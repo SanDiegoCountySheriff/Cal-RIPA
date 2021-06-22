@@ -82,11 +82,8 @@ export const defaultStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {},
-    stopResult: {
-      anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
+    stopReason: stopReasonGivenTemplate(),
+    stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -106,32 +103,8 @@ export const motorStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
-      reasonForStop: 1,
-      trafficViolation: 1,
-      trafficViolationCode: 54106,
-      reasonForStopExplanation: 'Speeding',
-    },
-    stopResult: {
-      anyResultsOfStop: true,
-      resultsOfStop2: false,
-      resultsOfStop3: true,
-      resultsOfStop4: false,
-      resultsOfStop5: false,
-      resultsOfStop6: false,
-      resultsOfStop7: false,
-      resultsOfStop8: false,
-      resultsOfStop9: false,
-      resultsOfStop10: false,
-      resultsOfStop11: false,
-      resultsOfStop12: false,
-      resultsOfStop13: false,
-      warningCodes: [],
-      citationCodes: [54106],
-      infieldCodes: [],
-      custodialArrestCodes: [],
-      pullFromReasonCode: true,
-    },
+    stopReason: stopReasonGivenTemplate('motor'),
+    stopResult: stopResultGivenTemplate('motor'),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -155,16 +128,60 @@ export const probationStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
+    stopReason: stopReasonGivenTemplate('probation'),
+    stopResult: stopResultGivenTemplate(),
+    agencyQuestions: mappedAgencyQuestions(),
+  }
+}
+
+export const stopReasonGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
+      reasonForStop: 1,
+      trafficViolation: 1,
+      trafficViolationCode: 54106,
+      reasonForStopExplanation: 'Speeding',
+    }
+  }
+
+  if (template === 'probation') {
+    return {
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-    },
-    stopResult: {
+    }
+  }
+
+  return {}
+}
+
+export const stopResultGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
       anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
-    agencyQuestions: mappedAgencyQuestions(),
+      resultsOfStop2: false,
+      resultsOfStop3: true,
+      resultsOfStop4: false,
+      resultsOfStop5: false,
+      resultsOfStop6: false,
+      resultsOfStop7: false,
+      resultsOfStop8: false,
+      resultsOfStop9: false,
+      resultsOfStop10: false,
+      resultsOfStop11: false,
+      resultsOfStop12: false,
+      resultsOfStop13: false,
+      warningCodes: [],
+      citationCodes: [54106],
+      infieldCodes: [],
+      custodialArrestCodes: [],
+      pullFromReasonCode: true,
+    }
+  }
+
+  return {
+    anyResultsOfStop: true,
+    pullFromReasonCode: false,
   }
 }
 
@@ -422,10 +439,11 @@ const getSummaryPerceivedOrKnownDisability = person => {
 const getSummaryReasonForStop = person => {
   const reasons = []
   reasons.push({
-    detail: person.reasonForStop.reason,
+    detail: person.reasonForStop?.reason || null,
   })
 
-  const keys = person.reasonForStop.listDetail.map(item => {
+  const listDetail = person.reasonForStop?.listDetail || []
+  const keys = listDetail.map(item => {
     return {
       marginLeft: true,
       detail: item.reason,
@@ -433,7 +451,8 @@ const getSummaryReasonForStop = person => {
   })
   reasons.push(...keys)
 
-  const codes = person.reasonForStop.listCodes.map(item => {
+  const listCodes = person.reasonForStop?.listCodes || []
+  const codes = listCodes.map(item => {
     return {
       marginLeft: true,
       detail: item.text,
@@ -703,16 +722,18 @@ export const apiStopSubmissionSummary = submission => {
       content: getSummarySubmissionStatus(submission),
     })
 
-    for (
-      let index = 0;
-      index < submission.listSubmissionError.length;
-      index++
-    ) {
-      const errorElement = submission.listSubmissionError[index]
-      items.push({
-        id: `E5-${index}`,
-        content: getSummarySubmissionError(errorElement, index),
-      })
+    if (submission.listSubmissionError) {
+      for (
+        let index = 0;
+        index < submission.listSubmissionError.length;
+        index++
+      ) {
+        const errorElement = submission.listSubmissionError[index]
+        items.push({
+          id: `E5-${index}`,
+          content: getSummarySubmissionError(errorElement, index),
+        })
+      }
     }
   }
 
@@ -776,25 +797,21 @@ const getSummarySubmissionError = (element, index) => {
 
 export const apiStopToFullStop = apiStop => {
   const blockNumber = apiStop.location?.blockNumber || null
+  const streetName = apiStop.location?.streetName || null
   const schoolNumber = apiStop.location?.schoolName?.codes?.code || null
   const cityName = apiStop.location?.city?.codes?.code || null
   const beatNumber = apiStop.location?.beat?.codes?.code || null
 
   return {
+    agencyQuestions: apiStop.listAgencyQuestion || [],
     id: apiStop.id,
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
-    stopDate: {
-      date: apiStop.date,
-      time: apiStop.time,
-      duration: Number(apiStop.stopDuration),
-      stopInResponseToCfs: apiStop.stopInResponseToCfs,
-    },
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
-      blockNumber: blockNumber ? Number(blockNumber) : null,
-      streetName: apiStop.location?.streetName || null,
+      blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
+      streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
       moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
@@ -804,7 +821,12 @@ export const apiStopToFullStop = apiStop => {
       city: cityName || null,
       beat: beatNumber ? Number(beatNumber) : null,
     },
-    agencyQuestions: apiStop.listAgencyQuestion || [],
+    stopDate: {
+      date: apiStop.date,
+      time: apiStop.time,
+      duration: Number(apiStop.stopDuration),
+      stopInResponseToCfs: apiStop.stopInResponseToCfs || false,
+    },
     people: getFullStopPeopleListed(apiStop),
   }
 }
@@ -812,23 +834,86 @@ export const apiStopToFullStop = apiStop => {
 const getFullStopPeopleListed = apiStop => {
   const telemetry = apiStop.telemetry || null
   const people = apiStop.listPersonStopped
+
   return people.map((person, index) => {
+    const anyDisabilities =
+      person.listPerceivedOrKnownDisability.length > 0 &&
+      person.listPerceivedOrKnownDisability[0].key !== '8'
+
+    const anyActionsTaken =
+      person.listActionTakenDuringStop.length > 0 &&
+      person.listActionTakenDuringStop[0].key !== '24'
+
+    const anyContraband =
+      person.listContrabandOrEvidenceDiscovered.length > 0 &&
+      person.listContrabandOrEvidenceDiscovered[0].key !== '1'
+
+    const anyResultsOfStop =
+      person.listResultOfStop.length > 0 &&
+      person.listResultOfStop[0].key !== '1'
+
+    const perceivedOrKnownDisability = anyDisabilities
+      ? person.listPerceivedOrKnownDisability
+      : []
+
+    const actionTakenDuringStop = anyActionsTaken
+      ? person.listActionTakenDuringStop
+      : []
+
+    const contrabandOrEvidenceDiscovered = anyContraband
+      ? person.listContrabandOrEvidenceDiscovered
+      : []
+
+    const resultsOfStop = anyResultsOfStop ? person.listResultOfStop : []
+
     return {
+      anyDisabilities,
       id: Number(person.id),
       index: index + 1,
       isStudent: person.isStudent || false,
-      perceivedRace: getKeyArray(person.listPerceivedRace),
+      perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: person.genderNonconforming,
-      perceivedLgbt: person.perceivedLgbt,
-      perceivedAge: Number(person.perceivedAge),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
-      anyDisabilities: person.listPerceivedOrKnownDisability.length > 0,
-      perceivedOrKnownDisability: getKeyArray(
-        person.listPerceivedOrKnownDisability,
-      ),
+      perceivedLgbt: person.perceivedLgbt,
+      perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
+      perceivedRace: getKeyArray(person.listPerceivedRace),
+      actionsTaken: {
+        anyActionsTaken,
+        actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
+        personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
+          actionTakenDuringStop,
+          17,
+          'personSearchConsentGiven',
+        ),
+        propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
+          actionTakenDuringStop,
+          19,
+          'propertySearchConsentGiven',
+        ),
+        basisForSearch: getKeyArray(person.listBasisForSearch),
+        basisForSearchExplanation: person.basisForSearchBrief,
+        basisForSearchPiiFound: person.basisForSearchPiiFound || false,
+        propertyWasSeized:
+          person.listBasisForPropertySeizure.length > 0 ||
+          person.listTypeOfPropertySeized.length > 0,
+        basisForPropertySeizure: getKeyArray(
+          person.listBasisForPropertySeizure,
+        ),
+        typeOfPropertySeized: getKeyArray(person.listTypeOfPropertySeized),
+        anyContraband,
+        contrabandOrEvidenceDiscovered: getKeyArray(
+          contrabandOrEvidenceDiscovered,
+        ),
+      },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
+        educationViolation: getEducationViolationDetailKey(
+          person.reasonForStop,
+        ),
+        educationViolationCode: getEducationViolationDetailCode(
+          person.reasonForStop,
+        ),
         trafficViolation: getTrafficViolationDetailKey(person.reasonForStop),
         trafficViolationCode: getTrafficViolationDetailCode(
           person.reasonForStop,
@@ -839,70 +924,30 @@ const getFullStopPeopleListed = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
-        educationViolation: getEducationViolationDetailKey(
-          person.reasonForStop,
-        ),
-        educationViolationCode: getEducationViolationDetailCode(
-          person.reasonForStop,
-        ),
+        searchOfPerson: person.searchOfPerson,
+        searchOfProperty: person.searchOfProperty,
         reasonForStopExplanation: person.reasonForStopExplanation,
-        reasonForStopPiiFound: person.reasonForStopPiiFound,
+        reasonForStopPiiFound: person.reasonForStopPiiFound || false,
       },
       stopResult: {
-        anyResultsOfStop: person.listResultOfStop.length > 0,
-        resultsOfStop2: getKeyFoundInArray(person.listResultOfStop, 2),
-        resultsOfStop3: getKeyFoundInArray(person.listResultOfStop, 3),
-        resultsOfStop4: getKeyFoundInArray(person.listResultOfStop, 4),
-        resultsOfStop5: getKeyFoundInArray(person.listResultOfStop, 5),
-        resultsOfStop6: getKeyFoundInArray(person.listResultOfStop, 6),
-        resultsOfStop7: getKeyFoundInArray(person.listResultOfStop, 7),
-        resultsOfStop8: getKeyFoundInArray(person.listResultOfStop, 8),
-        resultsOfStop9: getKeyFoundInArray(person.listResultOfStop, 9),
-        resultsOfStop10: getKeyFoundInArray(person.listResultOfStop, 10),
-        resultsOfStop11: getKeyFoundInArray(person.listResultOfStop, 11),
-        resultsOfStop12: getKeyFoundInArray(person.listResultOfStop, 12),
-        resultsOfStop13: getKeyFoundInArray(person.listResultOfStop, 13),
-        warningCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          2,
-        ),
-        citationCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          3,
-        ),
-        infieldCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          4,
-        ),
-        custodialArrestCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          6,
-        ),
+        anyResultsOfStop,
+        resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
+        resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
+        resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
+        resultsOfStop5: getKeyFoundInArray(resultsOfStop, 5),
+        resultsOfStop6: getKeyFoundInArray(resultsOfStop, 6),
+        resultsOfStop7: getKeyFoundInArray(resultsOfStop, 7),
+        resultsOfStop8: getKeyFoundInArray(resultsOfStop, 8),
+        resultsOfStop9: getKeyFoundInArray(resultsOfStop, 9),
+        resultsOfStop10: getKeyFoundInArray(resultsOfStop, 10),
+        resultsOfStop11: getKeyFoundInArray(resultsOfStop, 11),
+        resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
+        resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
+        warningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
+        citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
+        infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
+        custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 6),
         pullFromReasonCode: telemetry?.pullFromReasonCode || false,
-      },
-      actionsTaken: {
-        anyActionsTaken: person.listActionTakenDuringStop.length > 0,
-        actionsTakenDuringStop: getKeyArray(person.listActionTakenDuringStop),
-        personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          person.listActionTakenDuringStop,
-          17,
-          'personSearchConsentGiven',
-        ),
-        propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          person.listActionTakenDuringStop,
-          19,
-          'propertySearchConsentGiven',
-        ),
-        basisForSearch: getKeyArray(person.listBasisForSearch),
-        basisForSearchExplanation: person.basisForSearchBrief,
-        basisForSearchPiiFound: person.basisForSearchPiiFound,
-        propertyWasSeized:
-          person.listBasisForPropertySeizure.length > 0 ||
-          person.listTypeOfPropertySeized.length > 0,
-        basisForPropertySeizure: getKeyArray(
-          person.listBasisForPropertySeizure,
-        ),
-        typeOfPropertySeized: getKeyArray(person.listTypeOfPropertySeized),
       },
     }
   })
@@ -981,11 +1026,10 @@ export const fullStopToStop = fullStop => {
   return {
     id: fullStop.id,
     template: fullStop.template,
+    editStopExplanation: null,
     stepTrace: fullStop.stepTrace,
-    stopDate: fullStop.stopDate,
-    location: fullStop.location,
-    agencyQuestions: fullStop.agencyQuestions,
     actionsTaken: person.actionsTaken || {},
+    location: fullStop.location,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,
@@ -996,10 +1040,12 @@ export const fullStopToStop = fullStop => {
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
-      perceivedRace: person.perceivedOrKnownDisability || [],
+      perceivedRace: person.perceivedRace || [],
     },
+    stopDate: fullStop.stopDate,
     stopReason: person.stopReason || {},
     stopResult: person.stopResult || {},
+    agencyQuestions: fullStop.agencyQuestions,
   }
 }
 
@@ -1032,6 +1078,8 @@ export const fullStopToApiStop = (
   const formCached = localStorage.getItem('ripa_form_cached')
   const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
   const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
+  const blockNumber = fullStop.location?.blockNumber || null
+  const streetName = fullStop.location?.streetName || null
 
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
@@ -1056,7 +1104,7 @@ export const fullStopToApiStop = (
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
-      blockNumber: fullStop.location?.blockNumber?.toString() || '',
+      blockNumber: blockNumber && streetName ? blockNumber?.toString() : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
@@ -1066,7 +1114,7 @@ export const fullStopToApiStop = (
       piiFound: fullStop.location?.piiFound || false,
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
-      streetName: fullStop.location?.streetName || '',
+      streetName: blockNumber && streetName ? streetName : '',
       toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
     },
     officerAssignment: {
@@ -1432,7 +1480,7 @@ const getActionsTakenDuringStop = person => {
     }
     if (item === 19) {
       action.propertySearchConsentGiven =
-        person.actionsTaken.propertySearchConsentGiven || false
+        person.actionsTaken?.propertySearchConsentGiven || false
     }
 
     return action

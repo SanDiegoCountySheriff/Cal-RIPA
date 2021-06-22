@@ -1,6 +1,7 @@
 .v-menu__content {
   max-width: 500px !important;
 }
+
 .v-overlay--active {
   opacity: 0.85 !important;
   background-color: rgb(60, 60, 60) !important;

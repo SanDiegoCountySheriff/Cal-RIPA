@@ -32,12 +32,15 @@ namespace RIPA.Functions.Stop.Functions
         [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
         [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiParameter(name: "Status", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String Status: Unsubmitted, Submitted, Resubmitted, Failed")]
+        [OpenApiParameter(name: "Status", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String Status: Unsubmitted, Submitted, Failed")]
+        [OpenApiParameter(name: "IsEdited", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns stops that have isEdited")]
         [OpenApiParameter(name: "IsPII", In = ParameterLocation.Query, Required = false, Type = typeof(bool), Description = "Returns Submitted Stops that have been flagged for PII")]
         [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String ErrorCode: Error code must exist on stop submission to return")]
         [OpenApiParameter(name: "OfficerId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Returns Submitted Stops where officer id")]
         [OpenApiParameter(name: "Offset", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "offsets the records from 0, requires limit parameter")]
         [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
+        [OpenApiParameter(name: "OrderBy", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Column name to order the results")]
+        [OpenApiParameter(name: "Order", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "ASC or DESC order")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
 
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
@@ -65,8 +68,10 @@ namespace RIPA.Functions.Stop.Functions
                 ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
                 Status = !string.IsNullOrWhiteSpace(req.Query["Status"]) ? req.Query["Status"] : default,
                 OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
-                Offset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default,
-                Limit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default
+                Offset = !string.IsNullOrWhiteSpace(req.Query["Offset"]) ? Convert.ToInt32(req.Query["Offset"]) : default,
+                Limit = !string.IsNullOrWhiteSpace(req.Query["Limit"]) ? Convert.ToInt32(req.Query["Limit"]) : default,
+                OrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default,
+                Order = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default,
             };
 
             if (!string.IsNullOrWhiteSpace(req.Query["isPii"]))
@@ -77,6 +82,11 @@ namespace RIPA.Functions.Stop.Functions
             {
                 stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
             }
+            if (!string.IsNullOrWhiteSpace(req.Query["IsEdited"]))
+            {
+                stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
+            }
+
 
             List<string> whereStatements = new List<string>();
             string join = string.Empty;
@@ -95,6 +105,12 @@ namespace RIPA.Functions.Stop.Functions
             if (stopQuery.IsPII != null)
             {
                 whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
+            }
+
+            //IsEdited
+            if (stopQuery.IsEdited != null)
+            {
+                whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
             }
 
             //Status
@@ -147,6 +163,15 @@ namespace RIPA.Functions.Stop.Functions
             }
 
             var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
+            if (!string.IsNullOrWhiteSpace(stopQuery.OrderBy))
+            {
+                order = Environment.NewLine + $"ORDER BY c.{stopQuery.OrderBy} ";
+                if (!string.IsNullOrWhiteSpace(stopQuery.Order))
+                {
+                    if (stopQuery.Order.ToUpperInvariant() == "DESC" || stopQuery.Order.ToUpperInvariant() == "ASC")
+                        order += stopQuery.Order;
+                }
+            }
 
             var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order} {limit}");
 
@@ -157,7 +182,6 @@ namespace RIPA.Functions.Stop.Functions
                 Total = summary.Sum(x => x.Count),
                 Submitted = summary.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
                 Unsubmitted = summary.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
-                Resubmitted = summary.Where(x => x.Status == "Resubmitted").Select(x => x.Count).FirstOrDefault(),
                 Failed = summary.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
             };
 
@@ -175,7 +199,6 @@ namespace RIPA.Functions.Stop.Functions
             public int Submitted { get; set; }
             public int Unsubmitted { get; set; }
             public int Failed { get; set; }
-            public int Resubmitted { get; set; }
         }
 
     }

@@ -100,8 +100,8 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     stop = await _stopCosmosDbService.GetStopAsync(stopId);
                     fileName = $"{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
-                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                     await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                 }
                 catch (Exception ex)
                 {

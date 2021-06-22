@@ -5,12 +5,12 @@ Import-Module Az.Resources -Force
 function Import-FunctionApi()
 {
 	param (
-        [Parameter(Mandatory = $true, HelpMessage = "Resource environment (d,q,p, etc.)")] 
-        $Environment, 
         [Parameter(Mandatory = $true, HelpMessage = "Azure resource group")] 
 		$ResourceGroupName, 
         [Parameter(Mandatory = $true, HelpMessage = "Azure API Management instance name")] 
-		$ServiceName, 
+		$ServiceName,
+        [Parameter(Mandatory = $true, HelpMessage = "Azure API Management instance name")] 
+		$FunctionName, 
         [Parameter(Mandatory = $true, HelpMessage = "functional name of the api (domain, stop, textanalytics, etc.)")] 
 		$ApiTag
 	)
@@ -18,21 +18,21 @@ function Import-FunctionApi()
 	Write-Host "Starting ${apiTag} import"
 
     $ApimCntx = New-AzApiManagementContext -ResourceGroupName $ResourceGroupName -ServiceName $ServiceName
-    $functionApp = "sdsd-ripa-$($Environment)-$($ApiTag)-fa"
+    $functionApp = $FunctionName
 
     Write-Host "Getting function key code"
-    $functionCode = ((az functionapp function keys list -g "sdsd-ripa-$($Environment)-rg" -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
+    $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
-	  $swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
+	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
 
 	Write-Host "Updating ${serviceUrl}"
 
 	# import the latest swagger
-	Write-Host "Importing api $ApiTag from $swaggerUrl"
+	Write-Host "Importing api $ApiTag from $serviceUrl"
 	Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag
 
-    Write-Host "* ************************** Checking for backend configuration ****************************"
+    Write-Host "**************************** Checking for backend configuration ****************************"
     Write-Host "******************************** Ignore any onscreen errors ********************************"
     $oldErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continuie"
@@ -50,10 +50,10 @@ function Import-FunctionApi()
     Set-AzApiManagementPolicy -Context $ApimCntx -ApiId $ApiTag -Policy $backendPolicy 
 
 	# reset the protocol (import modifies this for some reason)
-	Write-Host "Updating protocol for $($api.Name) at $serviceUrl"
+	Write-Host "Updating protocol for $api.Name at $serviceUrl"
 	Set-AzApiManagementApi -Context $ApimCntx -ApiId $ApiTag -Protocols @('https') -Name $ApiTag -ServiceUrl $serviceUrl
 
-	Write-Host "Finished ${apiTag} import"
+	Write-Host "Finished $apiTag import"
 }
 
 Export-ModuleMember -Function Import-FunctionApi

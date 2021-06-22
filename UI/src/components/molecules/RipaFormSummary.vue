@@ -31,7 +31,9 @@
             >
               Edit
             </v-btn>
-            <template v-if="apiStop.listPersonStopped.length > 1">
+            <template
+              v-if="apiStop.listPersonStopped.length > 1 && !adminEditing"
+            >
               <v-btn
                 class="tw-ml-2"
                 dense

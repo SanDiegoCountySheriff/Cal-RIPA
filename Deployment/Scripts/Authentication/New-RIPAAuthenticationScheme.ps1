@@ -6,14 +6,14 @@ $waitTime = 30
 
 Write-Host "Creating App Registration & Service Princpal"
 $ripaAppRegistration = New-RIPAAppRegistration `
-    -DisplayName "TACO-EXAMPLE" `
+    -DisplayName "RIPA-AUTH-TEST" `
     -Description "The App Registration that provides login and authorization to RIPA application users." `
-    -ReplyUri "http://localhost:4000" `
+    -ReplyUri "http://localhost:4000" -Debug `
     | ConvertFrom-Json
 
 Write-Host "Create AAD Groups"
-$adminGroupId = New-RIPAAADGroup -GroupName "TACO-ADMINS" -Description "Some test admin group"
-$userGroupId = New-RIPAAADGroup -GroupName "TACO-USERS" -Description "Some test admin group"
+$adminGroupId = New-RIPAAADGroup -GroupName "RIPA-ADMINS" -Description "RIPA test admin group"
+$userGroupId = New-RIPAAADGroup -GroupName "RIPA-USERS" -Description "RIPA test admin group"
 
 Write-Host "Waiting $waitTime seconds for AAD Groups propogate..."
 Start-Sleep -Seconds $waitTime

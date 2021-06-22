@@ -18,7 +18,6 @@
             <ripa-number-input
               v-model="model.yearsExperience"
               label="Years of Experience"
-              disabled
               :rules="yearsExperienceRules"
             >
             </ripa-number-input>
@@ -81,7 +80,6 @@ import { OFFICER_ASSIGNMENTS } from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
-  differenceInYears,
   formatShortDate,
 } from '@/utilities/dates'
 
@@ -159,7 +157,6 @@ export default {
 
       if (isValid) {
         this.viewModel.startDate = formatShortDate(startDate)
-        this.viewModel.yearsExperience = differenceInYears(startDate)
       }
     },
 

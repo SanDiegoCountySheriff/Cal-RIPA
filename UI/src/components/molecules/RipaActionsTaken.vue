@@ -43,6 +43,7 @@
                 v-model="model.actionsTaken.personSearchConsentGiven"
                 label="Person Search Consent Given"
                 :max-width="300"
+                :rules="personSearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -52,6 +53,7 @@
                 v-model="model.actionsTaken.propertySearchConsentGiven"
                 label="Property Search Consent Given"
                 :max-width="300"
+                :rules="propertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -72,7 +74,7 @@
               >
               </ripa-check-group>
 
-              <template v-if="wasSearchOfPersonOrPropertyConducted">
+              <template v-if="isBasisForSearchExplanationVisible">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
                   <ripa-alert alert-outlined alert-type="warning">
                     The explanation contains personally identifying information.
@@ -224,6 +226,36 @@ export default {
       ]
     },
 
+    personSearchConsentGivenRules() {
+      const checked = this.viewModel.actionsTaken.personSearchConsentGiven
+      const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
+      const consentGiven = basisForSearch.includes(1)
+
+      if (!consentGiven) {
+        return []
+      }
+
+      return [
+        (checked && consentGiven) ||
+          '"Basis for Search" indicates "Consent Given" but Person search consent has not been selected',
+      ]
+    },
+
+    propertySearchConsentGivenRules() {
+      const checked = this.viewModel.actionsTaken.propertySearchConsentGiven
+      const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
+      const consentGiven = basisForSearch.includes(1)
+
+      if (!consentGiven) {
+        return []
+      }
+
+      return [
+        (checked && consentGiven) ||
+          '"Basis for Search" indicates "Consent Given" but Property search consent has not been selected',
+      ]
+    },
+
     typeOfPropertySeizedRules() {
       const checked = this.viewModel.actionsTaken.propertyWasSeized
       const options = this.viewModel.actionsTaken.typeOfPropertySeized
@@ -308,7 +340,7 @@ export default {
         return false
       }
 
-      return true
+      return this.wasSearchOfPersonOrPropertyConducted
     },
   },
 
