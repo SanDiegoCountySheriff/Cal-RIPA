@@ -559,7 +559,8 @@ export default {
                 const explanation = this.stop.editStopExplanation || 'None'
                 apiStop.editStopExplanation = explanation
               }
-              this.onSubmitStop(this.getApiStop)
+              console.log('Submitted Stop', apiStop)
+              this.onSubmitStop(apiStop)
             }
             if (this.adminEditing && this.onSubmitAudit) {
               const route = localStorage.getItem('ripa_form_edit_route')
