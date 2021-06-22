@@ -58,7 +58,7 @@
                     :display-user-edit="displayUserEdit"
                     :display-beat-input="displayBeatInput"
                     :is-authenticated="isAuthenticated"
-                    :is-admin-editing="isAdminEditing()"
+                    :admin-editing="adminEditing"
                     :last-location="lastLocation"
                     :loading-gps="loadingGps"
                     :loading-pii="loadingPiiStep1"
@@ -334,7 +334,7 @@ export default {
     },
 
     isFormStep2Disabled() {
-      return this.isAdminEditing() && this.stepIndex === 2
+      return this.adminEditing && this.stepIndex === 2
     },
   },
 
@@ -345,11 +345,6 @@ export default {
 
     handleCloseDialog() {
       this.showDialog = false
-    },
-
-    isAdminEditing() {
-      const value = localStorage.getItem('ripa_form_admin_editing')
-      return value ? value === '1' : false
     },
 
     isCreateForm() {
@@ -564,7 +559,8 @@ export default {
                 const explanation = this.stop.editStopExplanation || 'None'
                 apiStop.editStopExplanation = explanation
               }
-              this.onSubmitStop(this.getApiStop)
+              console.log('Submitted Stop', apiStop)
+              this.onSubmitStop(apiStop)
             }
             if (this.adminEditing && this.onSubmitAudit) {
               const route = localStorage.getItem('ripa_form_edit_route')
@@ -822,6 +818,18 @@ export default {
 </script>
 
 <style lang="scss">
+@media only screen and (max-width: 370px) {
+  .v-stepper__step {
+    padding: 16px !important;
+
+    .v-stepper__step__step {
+      height: 16px !important;
+      min-width: 16px !important;
+      width: 16px !important;
+    }
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .v-stepper__content {
     padding: 16px 16px 8px;

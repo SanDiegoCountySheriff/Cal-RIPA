@@ -95,14 +95,14 @@ export default {
       dateRules: [
         v => !!v || 'A date is required',
         v =>
-          this.isAdminEditing ||
+          this.adminEditing ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       timeRules: [
         v => !!v || 'A time is required',
         v =>
-          this.isAdminEditing ||
+          this.adminEditing ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
@@ -124,7 +124,7 @@ export default {
     },
 
     isStopDateDisabled() {
-      return this.isAdminEditing
+      return this.adminEditing
     },
 
     isValidDateTime() {
@@ -155,7 +155,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    isAdminEditing: {
+    adminEditing: {
       type: Boolean,
       default: false,
     },
