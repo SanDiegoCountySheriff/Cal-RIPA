@@ -202,7 +202,7 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isPiiFound: false,
+      isPiiFound: null,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
@@ -363,7 +363,11 @@ export default {
       this.handleFilter()
     },
     piiChange(val) {
-      this.isPiiFound = val
+      if (!val) {
+        this.isPiiFound = null
+      } else {
+        this.isPiiFound = true
+      }
       this.handleFilter()
     },
     handleFilter() {

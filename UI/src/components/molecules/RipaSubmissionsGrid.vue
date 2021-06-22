@@ -127,7 +127,7 @@ export default {
           value: 'dateSubmitted',
           sortName: 'dateSubmitted',
         },
-        { text: 'Total Stops', value: 'recordCount', sortName: 'TotalStops' },
+        { text: 'Total Stops', value: 'recordCount', sortName: 'recordCount' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
