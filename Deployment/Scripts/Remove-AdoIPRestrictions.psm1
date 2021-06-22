@@ -28,7 +28,7 @@
 
     # Reset to base IPAddress restrictions
     $FunctionNameConfig.properties.ipSecurityRestrictions = $baseIpRestrictions
-    $FunctionNameConfig | Set-AzResource  -ApiVersion $APIVersion -Force | Out-Null
+    $FunctionNameConfig | Set-AzResource -ApiVersion $APIVersion -Force | Out-Null
 
     Write-Host "Removed restricted IP address $IPAddress from Function $FunctionName"
     

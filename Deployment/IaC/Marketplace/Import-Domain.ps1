@@ -151,40 +151,52 @@ function Get-SchoolEntity {
 #endregion
 
 #region modules
-Write-Host "Checking for available AzTable Module"
-if (-not(Get-Module -ListAvailable -Name AzTable)){
-    Write-Host "Installing and Importing AzTable Module"
-    Install-Module AzTable -Force
-    Import-Module AzTable -Force
-}
-Write-Host "Checking for available Az.Storage Module"
-if (-not(Get-Module -ListAvailable -Name Az.Storage)){
+
+$ErrorActionPreference="Stop"
+
+Write-Host "Installing and Importing Az.Resources Module"
+Write-Host "Installing Az.Resources Module"
+Install-Module Az.Resources -Force
+Write-Host "Importing Az.Resources Module"
+Import-module Az.Resources -Force
+
 Write-Host "Installing and Importing Az.Storage Module"
-    Install-Module Az.Storage -Force
-    Import-module Az.Storage -Force
-}
+Write-Host "Installing Az.Storage Module"
+Install-Module Az.Storage -Force
+Write-Host "Importing Az.Storage Module"
+Import-module Az.Storage -Force
+
+Write-Host "Installing and Importing AzTable Module"
+Write-Host "Installing AzTable Module"
+Install-Module AzTable -Force
+Write-Host "Importing AzTable Module"
+Import-Module AzTable -Force
+
 #endregion
 
 #region Azure Login
 Write-Host "Logging into Azure"
-
-[string]$userName = $CSSA_SP_APP_ID
-[string]$userPassword = $CSSA_SP_SECRET
+[string]$userName = $env:CSSA_SP_APP_ID
+[string]$userPassword = $env:CSSA_SP_SECRET
 [securestring]$secStringPassword = ConvertTo-SecureString $userPassword -AsPlainText -Force
 [pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($userName, $secStringPassword)
-Connect-AzAccount -Environment AzureUsGovernment -Tenant $CSSA_TENANT_ID -ServicePrincipal -Credential $credObject
+Connect-AzAccount -Environment AzureUsGovernment -Tenant $env:CSSA_TENANT_ID -ServicePrincipal -Credential $credObject
+
+Write-Host "Checking login context"
+Get-AzContext
 
 #Add-AzAccount #Interactive login
 #endregion
 
-$ctx = (Get-AzStorageAccount -ResourceGroupName $RESOURCE_GROUP_NAME -Name $STORAGE_ACCOUNT_NAME).Context
+Write-Host "Getting storage account context"
+$ctx = (Get-AzStorageAccount -ResourceGroupName $env:RESOURCE_GROUP_NAME -Name $env:STORAGE_ACCOUNT_NAME).Context
 
-foreach ($tableName in $tableNames){
+foreach ($tableName in $tableNames) {
     Write-Host "Importing $tableName..." 
-    if($null -eq (Get-AzStorageTable –Context $ctx | Where-Object { $_.Name -eq $tableName })) {
-        $null = New-AzStorageTable –Name $tableName –Context $ctx
+    if($null -eq (Get-AzStorageTable -Context $ctx | Where-Object { $_.Name -eq $tableName })) {
+        $null = New-AzStorageTable -Name $tableName -Context $ctx
     }
-    $table = Get-AzStorageTable –Name $tableName –Context $ctx;
+    $table = Get-AzStorageTable -Name $tableName -Context $ctx;
     switch ($tableName) {
         'Beats' {
             $csv = Import-Csv -Path (Join-Path -Path (Get-Location) -ChildPath "Beat_Table.csv")

@@ -678,14 +678,6 @@
 				"label": "Application Domain",
 				"elements": [
 					{
-						"name": "steps_app_domain_desc",
-						"type": "Microsoft.Common.TextBlock",
-						"visible": true,
-						"options": {
-							"text": "*********************************************************************************"
-						}
-					},
-					{
 						"name": "app_domain_type",
 						"type": "Microsoft.Common.OptionsGroup",
 						"label": "Managed or Private Domain",
@@ -782,14 +774,12 @@
 				"elements": [
 					{
 						"name": "doj_sftp_message",
-						"type": "Microsoft.Common.TextBlock",
+						"type": "Microsoft.Common.InfoBox",
 						"visible": true,
 						"options": {
+							"icon": "Info",
 							"text": "This system implements the SFTP push of STOP data to the DOJ hosted interface. If you have this information available today, please enter the details below. If you do not, you can review the steps required to configure this information at a later day here https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission",
-							"link": {
-								"label": "Learn more",
-								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission"
-							}
+							"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission"
 						}
 					},
 					{
@@ -841,6 +831,76 @@
 						"visible": true
 					}
 				]
+			},
+			{
+				"name": "steps_tags",
+				"label": "Tags",
+				"elements": [
+					{
+						"name": "tagsInstructions",
+						"type": "Microsoft.Common.TextBlock",
+						"visible": true,
+						"options": {
+							"text": "Provide a list of tags and values for your application. (Optional)",
+							"link": {
+								"label": "Learn more",
+								"uri": "https://docs.microsoft.com/en-us/azure/templates/microsoft.resources/tags?tabs=json"
+							}
+						}
+					},
+					{
+						"name": "user_tags",
+						"type": "Microsoft.Common.EditableGrid",
+						"ariaLabel": "Enter your deployment specific tags",
+						"label": "People",
+						"constraints": {
+							"width": "Full",
+							"rows": {
+								"count": {
+									"min": 0,
+									"max": 10
+								}
+							},
+							"columns": [
+								{
+									"id": "colTag",
+									"header": "Name",
+									"width": "1fr",
+									"element": {
+										"type": "Microsoft.Common.TextBox",
+										"toolTip": "This is a test",
+										"constraints": {
+											"required": true,
+											"validations": [
+												{
+													"regex": "^[a-z0-9A-Z-_]{1,128}$",
+													"message": "Only alphanumeric characters and \"-\" or \"_\" are allowed, and the value must be 1-128 characters long."
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": "colValue",
+									"header": "Value",
+									"width": "1fr",
+									"element": {
+										"type": "Microsoft.Common.TextBox",
+										"constraints": {
+											"required": true,
+											"validations": [
+												{
+													"regex": "^[a-z0-9A-Z-_]{1,30}$",
+													"message": "Only alphanumeric characters and \"-\" or \"_\" are allowed, and the value must be 1-256 characters long."
+												}
+											]
+										}
+									}
+								}
+							]
+						}
+					}
+				]
 			}
 		],
 		"outputs": {
@@ -865,7 +925,8 @@
 			"doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
 			"doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
 			"doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
-			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]"
+			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]",
+			"user_tags": "[steps('steps_tags').user_tags]"
 		}
 	}
 }
