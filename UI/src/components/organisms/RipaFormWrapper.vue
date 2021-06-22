@@ -576,14 +576,16 @@ export default {
     },
 
     createStepTrace(index, startTimeStamp) {
-      this.stepTrace = {
-        index,
-        startTimeStamp,
+      if (!this.adminEditing) {
+        this.stepTrace = {
+          index,
+          startTimeStamp,
+        }
       }
     },
 
     updateStepTrace(endTimeStamp) {
-      if (this.stepTrace) {
+      if (!this.adminEditing && this.stepTrace) {
         this.stepTrace.endTimeStamp = endTimeStamp
         this.stop.stepTrace.push(this.stepTrace)
       }
