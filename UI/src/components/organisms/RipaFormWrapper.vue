@@ -818,6 +818,18 @@ export default {
 </script>
 
 <style lang="scss">
+@media only screen and (max-width: 370px) {
+  .v-stepper__step {
+    padding: 16px !important;
+
+    .v-stepper__step__step {
+      height: 16px !important;
+      min-width: 16px !important;
+      width: 16px !important;
+    }
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .v-stepper__content {
     padding: 16px 16px 8px;
