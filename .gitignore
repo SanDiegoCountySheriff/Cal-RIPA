@@ -376,3 +376,4 @@ yarn-error.log*
 
 /UI/public/config.json
 Functions/RIPA.Functions.Stop/Properties/launchSettings.json
+UI/package-lock.json

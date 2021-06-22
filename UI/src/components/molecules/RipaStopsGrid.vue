@@ -103,9 +103,9 @@
           :server-items-length="getTotalStops"
           @item-selected="handleRowSelected"
           @toggle-select-all="handleToggleSelectAll"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
           :search="search"
-          sort-by="stopDateStr"
-          sort-desc
         >
           <template v-slot:top>
             <v-toolbar flat>
@@ -194,15 +194,15 @@ export default {
       errorCodesLoading: false,
       stops: [],
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'Stop Date', value: 'stopDateTime' },
-        { text: 'Status', value: 'status' },
-        { text: 'PII Found', value: 'isPiiFound' },
-        { text: 'Officer Name', value: 'officerName' },
+        { text: 'ID', value: 'id', sortName: 'id' },
+        { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
+        { text: 'Status', value: 'status', sortName: 'Status' },
+        { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
+        { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isPiiFound: false,
+      isPiiFound: null,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
@@ -215,6 +215,8 @@ export default {
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
       currentOffset: this.currentPage * this.itemsPerPage,
+      sortBy: 'StopDateTime',
+      sortDesc: true,
     }
   },
 
@@ -252,7 +254,7 @@ export default {
       if (this.currentPage === this.getPaginationLength) {
         return this.stops.summary.total
       } else {
-        return this.currentPage - 1 + this.itemsPerPage
+        return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {
@@ -269,6 +271,8 @@ export default {
         stopToDate: this.stopToDate,
         status: this.currentStatusFilter,
         errorCodes: this.selectedErrorCodes,
+        orderBy: this.getColumnSortName(),
+        order: this.sortDesc ? 'Desc' : 'Asc',
       }
     },
   },
@@ -359,7 +363,11 @@ export default {
       this.handleFilter()
     },
     piiChange(val) {
-      this.isPiiFound = val
+      if (!val) {
+        this.isPiiFound = null
+      } else {
+        this.isPiiFound = true
+      }
       this.handleFilter()
     },
     handleFilter() {
@@ -375,8 +383,15 @@ export default {
           isPiiFound: this.isPiiFound,
           // need to make a comma delimited string out of the error codes
           errorCodes: this.selectedErrorCodes.join(),
+          orderBy:
+            // if the column sort name is null, default to sorting by the stop date
+            this.getColumnSortName() === null
+              ? 'StopDateTime'
+              : this.getColumnSortName(),
+          order: this.sortDesc ? 'Desc' : 'Asc',
         },
       }
+      this.currentPage = 1
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
@@ -387,6 +402,16 @@ export default {
         return itemObj.id
       })
       this.$emit('handleSubmitStops', itemIds)
+    },
+    getColumnSortName() {
+      const columnToSort = this.headers.filter(headerObj => {
+        return headerObj.value === this.sortBy
+      })
+      if (columnToSort.length) {
+        return columnToSort[0].sortName
+      } else {
+        return null
+      }
     },
   },
 
@@ -402,6 +427,18 @@ export default {
     },
     errorCodeSearch(val) {
       this.errorCodesLoading = false
+    },
+    sortDesc: function (newValue, oldValue) {
+      if (newValue === undefined) {
+        // this means you're removing the sort on this column
+        this.handleFilter()
+      } else {
+        if (newValue !== oldValue) {
+          this.handleFilter()
+        }
+      }
+      console.log('sortDesc' + newValue)
+      console.log('sortDesc' + oldValue)
     },
   },
 

@@ -1053,10 +1053,15 @@ export default new Vuex.Store({
               ',',
             )}`
           }
+
+          if (queryData.filters.orderBy) {
+            queryString = `${queryString}&OrderBy=${queryData.filters.orderBy}`
+            queryString = `${queryString}&Order=${queryData.filters.order}`
+          }
         }
       } else {
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
-        queryString = `${queryString}?Offset=0&Limit=10`
+        queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
 
       return axios
@@ -1067,14 +1072,9 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data.stops.sort((x, y) => {
-            const stopA = x.stopDateTime
-            const stopB = y.stopDateTime
-            return stopA < stopB ? 1 : stopA > stopB ? -1 : 0
-          })
           commit('updateAdminStops', {
             summary: response.data.summary,
-            stops: data,
+            stops: response.data.stops,
           })
         })
         .catch(error => {
@@ -1113,6 +1113,11 @@ export default new Vuex.Store({
             ).toISOString()
             queryString = `${queryString}&EndDate=${formattedToDate}`
           }
+
+          if (queryData.filters.orderBy) {
+            queryString = `${queryString}&OrderBy=${queryData.filters.orderBy}`
+            queryString = `${queryString}&Order=${queryData.filters.order}`
+          }
         }
       } else {
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
@@ -1130,7 +1135,6 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          console.log(response.data)
           commit('updateAdminSubmissions', response.data)
         })
         .catch(error => {

@@ -36,8 +36,8 @@
             :hide-default-footer="true"
             :server-items-length="getSubmissions.length"
             :search="search"
-            sort-by="submissionDateStr"
-            sort-desc
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
           >
             <template v-slot:top>
               <v-toolbar flat>
@@ -121,9 +121,13 @@ export default {
       submissions: [],
       totalSubmissions: 0,
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'Submission Date', value: 'dateSubmitted' },
-        { text: 'Total Stops', value: 'recordCount' },
+        { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
+        {
+          text: 'Submission Date',
+          value: 'dateSubmitted',
+          sortName: 'dateSubmitted',
+        },
+        { text: 'Total Stops', value: 'recordCount', sortName: 'recordCount' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -136,6 +140,8 @@ export default {
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
       currentOffset: this.currentPage * this.itemsPerPage,
+      sortBy: 'dateSubmitted',
+      sortDesc: true,
     }
   },
 
@@ -153,7 +159,7 @@ export default {
       if (this.currentPage === this.getPaginationLength) {
         return this.totalSubmissions
       } else {
-        return this.currentPage - 1 + this.itemsPerPage
+        return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {
@@ -213,7 +219,7 @@ export default {
       })
     },
     handleSubmissionDetailPaginate(pageData) {
-      this.$emit('submissionDetailPaginate', pageData)
+      this.$emit('handleSubmissionDetailPaginate', pageData)
     },
     submissionFromDateChange(val) {
       this.submissionFromDate = val
@@ -232,9 +238,26 @@ export default {
         filters: {
           submissionFromDate: this.submissionFromDate,
           submissionToDate: this.submissionToDate,
+          orderBy:
+            // if the column sort name is null, default to sorting by the stop date
+            this.getColumnSortName() === null
+              ? 'dateSubmitted'
+              : this.getColumnSortName(),
+          order: this.sortDesc ? 'Desc' : 'Asc',
         },
       }
+      this.currentPage = 1
       this.$emit('handleFilter', filterData)
+    },
+    getColumnSortName() {
+      const columnToSort = this.headers.filter(headerObj => {
+        return headerObj.value === this.sortBy
+      })
+      if (columnToSort.length) {
+        return columnToSort[0].sortName
+      } else {
+        return null
+      }
     },
   },
 
@@ -246,6 +269,16 @@ export default {
     currentSubmission(val) {
       if (val) {
         this.currentSubmissionLoading = false
+      }
+    },
+    sortDesc: function (newValue, oldValue) {
+      if (newValue === undefined) {
+        // this means you're removing the sort on this column
+        this.handleFilter()
+      } else {
+        if (newValue !== oldValue) {
+          this.handleFilter()
+        }
       }
     },
   },

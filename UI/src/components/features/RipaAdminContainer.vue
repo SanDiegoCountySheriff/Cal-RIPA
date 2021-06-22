@@ -178,6 +178,7 @@ export default {
           ...pageData,
         }),
       ])
+      this.loading = false
     },
 
     async handlePaginate(pageData) {
