@@ -94,3 +94,16 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+@media only screen and (max-width: 600px) {
+  .v-footer {
+    max-height: 20px !important;
+
+    .text-center {
+      padding: 4px !important;
+      font-size: 14px !important;
+    }
+  }
+}
+</style>
