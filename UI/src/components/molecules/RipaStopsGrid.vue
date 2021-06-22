@@ -6,7 +6,7 @@
           <ripa-date-picker
             v-model="stopFromDate"
             class="tw-ml-2"
-            label="Stop From Date"
+            label="From Date"
             @input="fromDateChange"
           ></ripa-date-picker>
         </div>
@@ -17,7 +17,7 @@
           <ripa-date-picker
             v-model="stopToDate"
             class="tw-ml-2"
-            label="Stop To Date"
+            label="To Date"
             @input="toDateChange"
           ></ripa-date-picker>
         </div>
@@ -33,13 +33,24 @@
         ></v-select>
       </v-flex>
 
-      <v-flex xs12 md2>
+      <v-flex xs12 md1>
         <div class="tw-flex tw-justify-center">
           <v-switch
             v-model="isPiiFound"
             class="tw-ml-2"
             label="PII Found"
             @change="piiChange"
+          ></v-switch>
+        </div>
+      </v-flex>
+
+      <v-flex xs12 md1>
+        <div class="tw-flex tw-justify-center">
+          <v-switch
+            v-model="isEdited"
+            class="tw-ml-2"
+            label="Edited"
+            @change="isEditedChange"
           ></v-switch>
         </div>
       </v-flex>
@@ -158,6 +169,9 @@
           <template v-slot:no-data>
             <div>No Data</div>
           </template>
+          <template v-slot:item.isEdited="{ item }">
+            {{ item.isEdited ? 'Yes' : 'No' }}
+          </template>
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
@@ -197,12 +211,14 @@ export default {
         { text: 'ID', value: 'id', sortName: 'id' },
         { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
         { text: 'Status', value: 'status', sortName: 'Status' },
+        { text: 'Edited', value: 'isEdited', sortName: 'isEdited' },
         { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
         { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       isPiiFound: null,
+      isEdited: null,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
@@ -267,6 +283,7 @@ export default {
     getFilterStatus() {
       return {
         isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
         status: this.currentStatusFilter,
@@ -367,6 +384,14 @@ export default {
         this.isPiiFound = null
       } else {
         this.isPiiFound = true
+      }
+      this.handleFilter()
+    },
+    isEditedChange(val) {
+      if (!val) {
+        this.isEdited = null
+      } else {
+        this.isEdited = true
       }
       this.handleFilter()
     },

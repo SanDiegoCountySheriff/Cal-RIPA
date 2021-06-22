@@ -1084,6 +1084,10 @@ export default new Vuex.Store({
             queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
           }
 
+          if (queryData.filters.isEdited !== null) {
+            queryString = `${queryString}&IsEdited=${queryData.filters.isEdited}`
+          }
+
           if (queryData.filters.errorCodes.length) {
             queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.split(
               ',',

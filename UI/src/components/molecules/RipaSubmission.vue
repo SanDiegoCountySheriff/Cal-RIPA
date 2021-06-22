@@ -128,7 +128,7 @@ export default {
         { text: 'Stop', value: 'id' },
         { text: 'Status', value: 'status', width: 100 },
         { text: 'Edited', value: 'edited', width: 100 },
-        { text: 'Error', value: 'error' },
+        { text: 'Error', value: 'error', sortable: false },
         { text: 'Actions', value: 'actions' },
       ],
       format,
