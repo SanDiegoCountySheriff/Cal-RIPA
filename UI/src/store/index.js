@@ -1263,7 +1263,7 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error)
           commit('updateErrorCodeAdminSearch', {
-            items: ['new value', 'new value 2', 'new value 3'],
+            items: [],
           })
         })
     },

@@ -254,7 +254,7 @@ export default {
     getErrorCodeSearchItems() {
       return this.errorCodeSearch.items.map(itemObj => {
         return {
-          text: itemObj.code,
+          text: `${itemObj.code}: ${itemObj.message.substr(0, 100)}...`,
           value: itemObj.code,
         }
       })
