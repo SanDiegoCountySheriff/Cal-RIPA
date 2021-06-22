@@ -193,6 +193,7 @@ export default {
 
     updateBasisForSearchModel() {
       if (
+        this.viewModel.actionsTaken.basisForSearch !== null &&
         this.viewModel.actionsTaken.basisForSearch.length === 1 &&
         this.viewModel.actionsTaken.basisForSearch.includes(4)
       ) {
