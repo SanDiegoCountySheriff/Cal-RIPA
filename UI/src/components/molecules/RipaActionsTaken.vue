@@ -43,7 +43,7 @@
                 v-model="model.actionsTaken.personSearchConsentGiven"
                 label="Person Search Consent Given"
                 :max-width="300"
-                :rules="personSearchConsentGivenRules"
+                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -53,7 +53,7 @@
                 v-model="model.actionsTaken.propertySearchConsentGiven"
                 label="Property Search Consent Given"
                 :max-width="300"
-                :rules="propertySearchConsentGivenRules"
+                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -226,8 +226,10 @@ export default {
       ]
     },
 
-    personSearchConsentGivenRules() {
-      const checked = this.viewModel.actionsTaken.personSearchConsentGiven
+    personPropertySearchConsentGivenRules() {
+      const checked =
+        this.viewModel.actionsTaken.personSearchConsentGiven ||
+        this.viewModel.actionsTaken.propertySearchConsentGiven
       const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
       const consentGiven = basisForSearch.includes(1)
 
@@ -237,22 +239,7 @@ export default {
 
       return [
         (checked && consentGiven) ||
-          '"Basis for Search" indicates "Consent Given" but Person search consent has not been selected',
-      ]
-    },
-
-    propertySearchConsentGivenRules() {
-      const checked = this.viewModel.actionsTaken.propertySearchConsentGiven
-      const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
-      const consentGiven = basisForSearch.includes(1)
-
-      if (!consentGiven) {
-        return []
-      }
-
-      return [
-        (checked && consentGiven) ||
-          '"Basis for Search" indicates "Consent Given" but Property search consent has not been selected',
+          '"Basis for Search" indicates "Consent Given" but Person search consent or Property search consent has not been selected',
       ]
     },
 
