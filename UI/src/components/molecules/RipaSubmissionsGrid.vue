@@ -125,7 +125,7 @@ export default {
         {
           text: 'Submission Date',
           value: 'dateSubmitted',
-          sortName: 'SubmissionDate',
+          sortName: 'dateSubmitted',
         },
         { text: 'Total Stops', value: 'recordCount', sortName: 'TotalStops' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
@@ -140,7 +140,7 @@ export default {
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
       currentOffset: this.currentPage * this.itemsPerPage,
-      sortBy: 'SubmissionDate',
+      sortBy: 'dateSubmitted',
       sortDesc: true,
     }
   },
@@ -241,7 +241,7 @@ export default {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
-              ? 'SubmissionDate'
+              ? 'dateSubmitted'
               : this.getColumnSortName(),
           order: this.sortDesc ? 'Desc' : 'Asc',
         },
