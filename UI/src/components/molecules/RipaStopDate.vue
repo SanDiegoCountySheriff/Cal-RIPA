@@ -90,26 +90,6 @@ export default {
   data() {
     return {
       durationItems: DURATIONS,
-      dateRules: [
-        v => !!v || 'A date is required',
-        v =>
-          this.adminEditing ||
-          (v && this.isValidDateTime) ||
-          'Date and Time must be within the past 24 hours',
-      ],
-      timeRules: [
-        v => !!v || 'A time is required',
-        v =>
-          this.adminEditing ||
-          (v && this.isValidDateTime) ||
-          'Date and Time must be within the past 24 hours',
-      ],
-      durationRules: [
-        v => !!v || 'A duration is required',
-        v =>
-          (v >= 1 && v <= 1440) ||
-          'Duration must be between 1 and 1440 minutes',
-      ],
       viewModel: this.updateModel(this.value),
     }
   },
@@ -119,6 +99,33 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    dateRules() {
+      return [
+        v => !!v || 'A date is required',
+        v =>
+          (v && this.isValidDateTime) ||
+          'Date and Time must be within the past 24 hours',
+      ]
+    },
+
+    timeRules() {
+      return [
+        v => !!v || 'A time is required',
+        v =>
+          (v && this.isValidDateTime) ||
+          'Date and Time must be within the past 24 hours',
+      ]
+    },
+
+    durationRules() {
+      return [
+        v => !!v || 'A duration is required',
+        v =>
+          (v >= 1 && v <= 1440) ||
+          'Duration must be between 1 and 1440 minutes',
+      ]
     },
 
     isValidDateTime() {
