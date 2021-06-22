@@ -881,16 +881,8 @@ const getFullStopPeopleListed = apiStop => {
       actionsTaken: {
         anyActionsTaken,
         actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
-        personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          actionTakenDuringStop,
-          17,
-          'personSearchConsentGiven',
-        ),
-        propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          actionTakenDuringStop,
-          19,
-          'propertySearchConsentGiven',
-        ),
+        personSearchConsentGiven: person.personSearchConsentGiven,
+        propertySearchConsentGiven: person.propertySearchConsentGiven,
         basisForSearch: getKeyArray(person.listBasisForSearch),
         basisForSearchExplanation: person.basisForSearchBrief,
         basisForSearchPiiFound: person.basisForSearchPiiFound || false,
@@ -924,8 +916,6 @@ const getFullStopPeopleListed = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
-        searchOfPerson: person.searchOfPerson,
-        searchOfProperty: person.searchOfProperty,
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
       },
@@ -1010,11 +1000,6 @@ const getCodePropValueGivenKeyInArray = (items, key) => {
   return filteredItem
     ? filteredItem.listCodes.map(item => Number(item.code))
     : null
-}
-
-const getBooleanPropValueGivenKeyInArray = (items, key, prop) => {
-  const [filteredItem] = items.filter(item => Number(item.key) === key)
-  return filteredItem ? filteredItem[prop] : false
 }
 
 const getKeyArray = items => {
@@ -1165,6 +1150,10 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      personSearchConsentGiven:
+        person.actionsTaken?.personSearchConsentGiven || false,
+      propertySearchConsentGiven:
+        person.actionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStop(person, statutes),
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
@@ -1473,14 +1462,6 @@ const getActionsTakenDuringStop = person => {
     const action = {
       key: item.toString(),
       action: filteredAction ? filteredAction.name : 'N/A',
-    }
-    if (item === 17) {
-      action.personSearchConsentGiven =
-        person.actionsTaken?.personSearchConsentGiven || false
-    }
-    if (item === 19) {
-      action.propertySearchConsentGiven =
-        person.actionsTaken?.propertySearchConsentGiven || false
     }
 
     return action
