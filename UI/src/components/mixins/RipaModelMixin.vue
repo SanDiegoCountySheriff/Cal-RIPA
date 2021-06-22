@@ -190,6 +190,16 @@ export default {
       }
     },
 
+    updateBasisForSearchModel() {
+      if (
+        this.viewModel.actionsTaken.basisForSearch.length === 1 &&
+        this.viewModel.actionsTaken.basisForSearch.includes(4)
+      ) {
+        this.viewModel.actionsTaken.basisForSearchExplanation = null
+        this.viewModel.actionsTaken.basisForSearchPiiFound = false
+      }
+    },
+
     updateBasisForPropertySeizureModel() {
       if (!this.viewModel.actionsTaken.basisForPropertySeizure) {
         return

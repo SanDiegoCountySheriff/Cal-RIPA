@@ -349,6 +349,7 @@ export default {
       this.updateActionsTakenModel()
       this.updatePropertyWasSeizedModel()
       this.updateActionsTakenSearchModel()
+      this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
     },
