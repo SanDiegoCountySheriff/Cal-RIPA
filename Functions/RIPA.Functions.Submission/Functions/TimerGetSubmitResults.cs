@@ -53,15 +53,15 @@ namespace RIPA.Functions.Submission.Functions
 
             Guid correlationId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = _storageContainerNamePrefix + correlationId.ToString();
-
-            BlobContainerClient blobContainerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
+            string containerName = _storageContainerNamePrefix;
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            await blobContainerClient.CreateIfNotExistsAsync();
 
             foreach (var file in files.Where(x => x.IsDirectory == false))
             {
                 try
                 {
-                    var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, file.Name, blobContainerClient);
+                    var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{correlationId}/{file.Name}", blobContainerClient);
                     ProcessDojResponse(fileText);
                     _sftpService.DeleteFile(file.FullName);
 

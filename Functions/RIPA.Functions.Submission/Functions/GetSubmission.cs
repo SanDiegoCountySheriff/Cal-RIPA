@@ -71,12 +71,13 @@ namespace RIPA.Functions.Submission.Functions
                 if (submissionResponse != null)
                 {
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {limit}");
+                    var stopSummaryResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}'");
                     var response = new
                     {
                         submission = submissionResponse,
                         stops = stopResponse,
-                        summary =  from g in 
-                                       stopResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.ListSubmissionError != null).SelectMany(x=>x.ListSubmissionError).GroupBy(x => x.Code) 
+                        summary =  from g in
+                                       stopSummaryResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.ListSubmissionError != null).SelectMany(x=>x.ListSubmissionError).GroupBy(x => x.Code) 
                                    select new { Code = g.Key, Count = g.Count() }
                     };
                    
