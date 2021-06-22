@@ -1069,7 +1069,9 @@ export const fullStopToApiStop = (
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
-    expYears: officer.yearsExperience?.toString() || '',
+    expYears: parsedApiStop
+      ? parsedApiStop.expYears
+      : officer.yearsExperience?.toString() || '',
     id: fullStop.id,
     telemetry: {
       template: fullStop.template || null,
