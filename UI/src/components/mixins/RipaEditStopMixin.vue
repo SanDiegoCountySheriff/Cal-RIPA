@@ -29,6 +29,9 @@ export default {
         JSON.stringify(sortedSubmissions),
       )
       router.push('/')
+      console.log('Edit API Stop', apiStop)
+      console.log('Edit Full Stop', fullStop)
+      console.log('Edit Stop', stop)
     },
   },
 }

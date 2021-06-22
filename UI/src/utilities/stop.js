@@ -49,7 +49,7 @@ const emptyLocation = () => {
     blockNumber: null,
     streetName: null,
     intersection: null,
-    moreLocationOptions: false,
+    toggleLocationOptions: false,
     highwayExit: null,
     landmark: null,
     outOfCounty: false,
@@ -225,7 +225,7 @@ const getSummaryTime = apiStop => {
 const getSummaryLocation = apiStop => {
   const children = []
 
-  if (apiStop.school && apiStop.location.schoolName) {
+  if (apiStop.location.school && apiStop.location.schoolName.codes) {
     children.push({
       header: 'School Name',
       detail: apiStop.location.schoolName.codes.text,
@@ -813,7 +813,7 @@ export const apiStopToFullStop = apiStop => {
       blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
-      moreLocationOptions: apiStop.location?.toggleLocationOptions || false,
+      toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
       landmark: apiStop.location?.landMark || null,
       piiFound: apiStop.location?.piiFound || false,
@@ -1100,7 +1100,7 @@ export const fullStopToApiStop = (
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
       streetName: blockNumber && streetName ? streetName : '',
-      toggleLocationOptions: fullStop.location?.moreLocationOptions || false,
+      toggleLocationOptions: fullStop.location?.toggleLocationOptions || false,
     },
     officerAssignment: {
       key: parsedApiStop
@@ -1195,7 +1195,9 @@ const getSchool = (fullStop, schools) => {
   const school = fullStop.location?.school || null
 
   if (school) {
-    const [filteredSchool] = schools.filter(item => item.cdsCode === school)
+    const [filteredSchool] = schools.filter(
+      item => item.cdsCode.toString() === school.toString(),
+    )
     return {
       codes: {
         code: school.toString(),
@@ -1211,7 +1213,9 @@ const getCity = (fullStop, cities) => {
   const city = fullStop.location?.city || null
 
   if (city) {
-    const [filteredCity] = cities.filter(item => item.id === city)
+    const [filteredCity] = cities.filter(
+      item => item.id.toString() === city.toString(),
+    )
     return {
       codes: {
         code: city.toString(),
@@ -1227,7 +1231,9 @@ const getBeat = (fullStop, beats) => {
   const beat = fullStop.location?.beat || null
 
   if (beat) {
-    const [filteredBeat] = beats.filter(item => item.id === beat)
+    const [filteredBeat] = beats.filter(
+      item => item.id.toString() === beat.toString(),
+    )
     return {
       codes: {
         code: beat.toString(),

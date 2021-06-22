@@ -37,7 +37,8 @@ export default {
           blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
-          moreLocationOptions: newValue.location?.moreLocationOptions || false,
+          toggleLocationOptions:
+            newValue.location?.toggleLocationOptions || false,
           highwayExit: newValue.location?.highwayExit || null,
           landmark: newValue.location?.landmark || null,
           piiFound: newValue.location?.piiFound || false,
