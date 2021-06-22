@@ -180,7 +180,9 @@ export default {
 
     handleSubmitStop(apiStop) {
       this.addApiStop(apiStop)
-      this.setLastLocation(this.stop)
+      if (!this.isAdminEditing()) {
+        this.setLastLocation(this.stop)
+      }
       if (!this.isOnlineAndAuthenticated) {
         this.snackbarVisible = true
       }

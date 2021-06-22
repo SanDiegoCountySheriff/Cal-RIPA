@@ -233,11 +233,26 @@ export default {
       const [filteredPerson] = this.fullStop.people.filter(
         item => item.index.toString() === index.toString(),
       )
-      if (filteredPerson) {
-        this.stop = {
-          ...this.stop,
-          person: filteredPerson,
-        }
+      this.stop = {
+        ...this.stop,
+        actionsTaken: filteredPerson.actionsTaken,
+        person: {
+          anyDisabilities: filteredPerson.anyDisabilities || false,
+          genderNonconforming: filteredPerson.genderNonconforming || false,
+          id: filteredPerson.id,
+          index: filteredPerson.index,
+          isStudent: filteredPerson.isStudent || false,
+          perceivedAge: filteredPerson.perceivedAge || null,
+          perceivedGender: filteredPerson.perceivedGender || null,
+          perceivedLgbt: filteredPerson.perceivedLgbt || false,
+          perceivedLimitedEnglish:
+            filteredPerson.perceivedLimitedEnglish || false,
+          perceivedOrKnownDisability:
+            filteredPerson.perceivedOrKnownDisability || [],
+          perceivedRace: filteredPerson.perceivedRace || [],
+        },
+        stopReason: filteredPerson.stopReason || {},
+        stopResult: filteredPerson.stopResult || {},
       }
     },
 
