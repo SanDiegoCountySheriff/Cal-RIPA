@@ -18,12 +18,30 @@
       </v-flex>
     </v-layout>
     <v-layout v-if="!loading" row class="submissionDetail--header">
-      <v-flex xs4>
+      <v-flex xs3>
         <span class="submissionDetail--header--label">Submission ID:</span>
         <span>{{ submission.submission.id }}</span>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs3>
         <span class="submissionDetail--header--label">Date Submitted:</span>
+        <span>{{
+          format(
+            new Date(submission.submission.dateSubmitted),
+            'yyyy-MM-dd kk:mm',
+          )
+        }}</span>
+      </v-flex>
+      <v-flex xs2>
+        <span class="submissionDetail--header--label">Stop Date Start:</span>
+        <span>{{
+          format(
+            new Date(submission.submission.dateSubmitted),
+            'yyyy-MM-dd kk:mm',
+          )
+        }}</span>
+      </v-flex>
+      <v-flex xs2>
+        <span class="submissionDetail--header--label">Stop Date End:</span>
         <span>{{
           format(
             new Date(submission.submission.dateSubmitted),
@@ -58,16 +76,8 @@
               mdi-pencil
             </v-icon>
           </template>
-          <template v-slot:item.errorCodes="{ item }">
-            <p
-              class="submissionError--wrapper"
-              v-for="(submissionObj, index) in item.listSubmission"
-              :key="index"
-            >
-              <span v-if="submissionObj.error && submissionObj.error != null">
-                {{ submissionObj.error.error }}
-              </span>
-            </p>
+          <template :item-class="stopError" v-slot:item.error="{ item }">
+            <div class="stopError" v-html="item.error"></div>
           </template>
           <template v-slot:item.edited="{ item }">
             {{ item.listSubmission.length ? 'Yes' : 'No' }}
@@ -116,10 +126,9 @@ export default {
     return {
       headers: [
         { text: 'Stop', value: 'id' },
-        { text: 'Status', value: 'status' },
-        { text: 'Error Codes', value: 'errorCodes' },
-        { text: 'Edited', value: 'edited' },
-        { text: 'Message', value: 'isPiiFound' },
+        { text: 'Status', value: 'status', width: 100 },
+        { text: 'Edited', value: 'edited', width: 100 },
+        { text: 'Error', value: 'error' },
         { text: 'Actions', value: 'actions' },
       ],
       format,
@@ -290,6 +299,10 @@ export default {
   .submissionError--wrapper {
     margin: 0;
     max-width: 400px;
+  }
+
+  .stopError p {
+    margin: 0px;
   }
 }
 </style>

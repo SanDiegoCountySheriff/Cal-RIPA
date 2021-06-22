@@ -97,7 +97,43 @@ export default new Vuex.Store({
       return state.adminSubmissions
     },
     mappedAdminSubmission: state => {
-      return state.adminSubmission
+      if (state.adminSubmission) {
+        const mappedAdminSubmissionStops = state.adminSubmission.stops.map(
+          stopObj => {
+            const mappedErrors = stopObj.listSubmission.map(
+              stopSubmissionObj => {
+                const errorArray = []
+                if (
+                  stopSubmissionObj.listSubmissionError &&
+                  stopSubmissionObj.listSubmissionError.length
+                ) {
+                  stopSubmissionObj.listSubmissionError.forEach(errorObj => {
+                    errorArray.push(
+                      `<p>${errorObj.code}: ${errorObj.message.substr(
+                        0,
+                        200,
+                      )} ...</p>`,
+                    )
+                  })
+                  return errorArray.join('')
+                } else {
+                  return ''
+                }
+              },
+            )
+            return {
+              ...stopObj,
+              error: mappedErrors.join(''),
+            }
+          },
+        )
+        return {
+          ...state.adminSubmission,
+          stops: mappedAdminSubmissionStops,
+        }
+      } else {
+        return null
+      }
     },
     mappedAdminUsers: state => {
       return state.adminUsers
