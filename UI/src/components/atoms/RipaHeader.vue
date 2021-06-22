@@ -1,6 +1,6 @@
 <template>
   <div class="ripa-header">
-    <span class="tw-text-xl tw-uppercase">{{ value }}</span>
+    <span class="tw-text-base md:tw-text-lg tw-uppercase">{{ value }}</span>
   </div>
 </template>
 
