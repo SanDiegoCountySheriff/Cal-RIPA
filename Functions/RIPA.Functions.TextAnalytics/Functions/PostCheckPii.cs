@@ -26,7 +26,7 @@ namespace RIPA.Functions.TextAnalytics.Functions
         private readonly IPiiTextAnalyticsService _piiTextAnalyticsService;
         private readonly double _minimumConfidenceScore;
         private const double minimumConfidenceScore = .80;
-        private readonly string[] allowedCategories = new string[] { "Address","Age","Email","Person","PhoneNumber" };
+        private readonly string[] allowedCategories = new string[] { "Address","Age","Email","Person","PhoneNumber","Organization" };
         private readonly string[] _allowedCategories;
         public PostCheckPii(IPiiTextAnalyticsService piiTextAnalyticsService)
         {
@@ -89,7 +89,7 @@ namespace RIPA.Functions.TextAnalytics.Functions
                 AllowedCategories = _allowedCategories
             };
 
-            foreach (var entity in piiEntities.Where(x => x.ConfidenceScore > _minimumConfidenceScore && _allowedCategories.Any(x.Category.ToString().Contains) ))
+            foreach (var entity in piiEntities.Where(x => (x.ConfidenceScore > _minimumConfidenceScore) && _allowedCategories.Any(x.Category.ToString().Equals) ))
             {
                 piiResponse.PiiEntities.Add(new PiiEntity
                 {
