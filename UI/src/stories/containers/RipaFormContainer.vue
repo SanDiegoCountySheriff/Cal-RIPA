@@ -165,7 +165,9 @@ export default {
     },
 
     handleSubmitStop(apiStop) {
-      this.setLastLocation(this.stop)
+      if (!this.isAdminEditing()) {
+        this.setLastLocation(this.stop)
+      }
       console.log('SUBMIT STOP', apiStop)
     },
 
