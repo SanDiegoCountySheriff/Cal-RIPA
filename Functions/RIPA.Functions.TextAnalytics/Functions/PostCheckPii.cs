@@ -11,6 +11,7 @@ using RIPA.Functions.Security;
 using RIPA.Functions.TextAnalytics.Models;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,9 +24,29 @@ namespace RIPA.Functions.TextAnalytics.Functions
     public class PostCheckPii
     {
         private readonly IPiiTextAnalyticsService _piiTextAnalyticsService;
+        private readonly double _minimumConfidenceScore;
+        private const double minimumConfidenceScore = .80;
+        private readonly string[] allowedCategories = new string[] { "Address","Age","Email","Person","PhoneNumber" };
+        private readonly string[] _allowedCategories;
         public PostCheckPii(IPiiTextAnalyticsService piiTextAnalyticsService)
         {
             _piiTextAnalyticsService = piiTextAnalyticsService;
+            try
+            {
+                _minimumConfidenceScore = double.Parse(Environment.GetEnvironmentVariable("MinimumConfidenceScore")) / 100;
+            }
+            catch
+            {
+                _minimumConfidenceScore = minimumConfidenceScore;
+            }
+            try
+            {
+                _allowedCategories = ((IEnumerable)Environment.GetEnvironmentVariable("AllowedCategories").Split(",")).Cast<object>().Select(x => x.ToString()).ToArray();
+            }
+            catch 
+            {
+                _allowedCategories = allowedCategories;
+            }
         }
 
         [FunctionName("PostCheckPii")]
@@ -61,9 +82,14 @@ namespace RIPA.Functions.TextAnalytics.Functions
                 return new BadRequestObjectResult("Must Provide Document");
 
             var piiEntities = await _piiTextAnalyticsService.GetPiiEntities(document);
-            PiiResponse piiResponse = new PiiResponse() { RedactedText = piiEntities.RedactedText, PiiEntities = new List<PiiEntity>() };
+            PiiResponse piiResponse = new PiiResponse() {
+                RedactedText = piiEntities.RedactedText,
+                PiiEntities = new List<PiiEntity>(),
+                MinimumConfidenceScore = _minimumConfidenceScore,
+                AllowedCategories = _allowedCategories
+            };
 
-            foreach (var entity in piiEntities.Where(x => x.ConfidenceScore > .75))
+            foreach (var entity in piiEntities.Where(x => x.ConfidenceScore > _minimumConfidenceScore && _allowedCategories.Any(x.Category.ToString().Contains) ))
             {
                 piiResponse.PiiEntities.Add(new PiiEntity
                 {
@@ -80,6 +106,8 @@ namespace RIPA.Functions.TextAnalytics.Functions
         {
             public List<PiiEntity> PiiEntities { get; set; }
             public string RedactedText { get; set; }
+            public double MinimumConfidenceScore { get; set; }
+            public string[] AllowedCategories { get; set; }
         }
 
         public class PiiEntity

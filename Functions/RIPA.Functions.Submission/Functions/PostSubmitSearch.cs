@@ -168,7 +168,8 @@ namespace RIPA.Functions.Submission.Functions
             Guid submissionId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
             string containerName = _storageContainerNamePrefix + submissionId.ToString();
-            BlobContainerClient blobContainerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            await blobContainerClient.CreateIfNotExistsAsync();
             try
             {
                 Models.Submission submission = new Models.Submission
@@ -191,7 +192,7 @@ namespace RIPA.Functions.Submission.Functions
                 DateTime dateSubmitted = DateTime.UtcNow;
                 try
                 {
-                    fileName = $"{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
+                    fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
                     _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                     await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                 }
