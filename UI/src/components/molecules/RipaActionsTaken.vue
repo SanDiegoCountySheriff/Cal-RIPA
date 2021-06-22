@@ -74,7 +74,7 @@
               >
               </ripa-check-group>
 
-              <template v-if="wasSearchOfPersonOrPropertyConducted">
+              <template v-if="isBasisForSearchExplanationVisible">
                 <template v-if="model.actionsTaken.basisForSearchPiiFound">
                   <ripa-alert alert-outlined alert-type="warning">
                     The explanation contains personally identifying information.
@@ -340,7 +340,7 @@ export default {
         return false
       }
 
-      return true
+      return this.wasSearchOfPersonOrPropertyConducted
     },
   },
 

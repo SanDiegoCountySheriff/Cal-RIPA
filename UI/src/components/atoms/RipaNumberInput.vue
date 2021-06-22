@@ -9,14 +9,12 @@
     :min="1"
     validate-on-blur
     :disabled="disabled"
-    @input="debounceInput"
+    @blur="handleBlur"
     @keypress="handleKeyPress"
   ></v-text-field>
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   name: 'ripa-number-input',
 
@@ -36,12 +34,9 @@ export default {
       }
     },
 
-    debounceInput: _.debounce(function (e) {
-      this.parseNumber(e)
-    }, 1000),
-
-    parseNumber(newVal) {
-      this.handleInput(newVal)
+    handleBlur(event) {
+      this.viewModel = event.target.value
+      this.handleInput(this.viewModel)
     },
 
     handleInput(newVal) {

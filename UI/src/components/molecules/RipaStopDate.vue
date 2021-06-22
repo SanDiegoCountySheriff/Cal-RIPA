@@ -16,6 +16,7 @@
               v-model="model.stopDate.date"
               label="Date of Stop"
               :rules="dateRules"
+              :disabled="isStopDateDisabled"
               @input="handleInput"
             >
             </ripa-date-picker>
@@ -28,6 +29,7 @@
               v-model="model.stopDate.time"
               label="Time of Stop"
               :rules="timeRules"
+              :disabled="isStopDateDisabled"
               @input="handleInput"
             >
             </ripa-time-picker>
@@ -93,14 +95,14 @@ export default {
       dateRules: [
         v => !!v || 'A date is required',
         v =>
-          this.isEditStop ||
+          this.isAdminEditing ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
       timeRules: [
         v => !!v || 'A time is required',
         v =>
-          this.isEditStop ||
+          this.isAdminEditing ||
           (v && this.isValidDateTime) ||
           'Date and Time must be within the past 24 hours',
       ],
@@ -119,6 +121,10 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    isStopDateDisabled() {
+      return this.isAdminEditing
     },
 
     isValidDateTime() {
@@ -149,7 +155,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    isEditStop: {
+    isAdminEditing: {
       type: Boolean,
       default: false,
     },

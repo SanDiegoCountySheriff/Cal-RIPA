@@ -82,11 +82,8 @@ export const defaultStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {},
-    stopResult: {
-      anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
+    stopReason: stopReasonGivenTemplate(),
+    stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -106,32 +103,8 @@ export const motorStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
-      reasonForStop: 1,
-      trafficViolation: 1,
-      trafficViolationCode: 54106,
-      reasonForStopExplanation: 'Speeding',
-    },
-    stopResult: {
-      anyResultsOfStop: true,
-      resultsOfStop2: false,
-      resultsOfStop3: true,
-      resultsOfStop4: false,
-      resultsOfStop5: false,
-      resultsOfStop6: false,
-      resultsOfStop7: false,
-      resultsOfStop8: false,
-      resultsOfStop9: false,
-      resultsOfStop10: false,
-      resultsOfStop11: false,
-      resultsOfStop12: false,
-      resultsOfStop13: false,
-      warningCodes: [],
-      citationCodes: [54106],
-      infieldCodes: [],
-      custodialArrestCodes: [],
-      pullFromReasonCode: true,
-    },
+    stopReason: stopReasonGivenTemplate('motor'),
+    stopResult: stopResultGivenTemplate('motor'),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -155,16 +128,60 @@ export const probationStop = () => {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
     },
-    stopReason: {
+    stopReason: stopReasonGivenTemplate('probation'),
+    stopResult: stopResultGivenTemplate(),
+    agencyQuestions: mappedAgencyQuestions(),
+  }
+}
+
+export const stopReasonGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
+      reasonForStop: 1,
+      trafficViolation: 1,
+      trafficViolationCode: 54106,
+      reasonForStopExplanation: 'Speeding',
+    }
+  }
+
+  if (template === 'probation') {
+    return {
       reasonForStop: 3,
       reasonForStopExplanation:
         'Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision',
-    },
-    stopResult: {
+    }
+  }
+
+  return {}
+}
+
+export const stopResultGivenTemplate = template => {
+  if (template === 'motor') {
+    return {
       anyResultsOfStop: true,
-      pullFromReasonCode: false,
-    },
-    agencyQuestions: mappedAgencyQuestions(),
+      resultsOfStop2: false,
+      resultsOfStop3: true,
+      resultsOfStop4: false,
+      resultsOfStop5: false,
+      resultsOfStop6: false,
+      resultsOfStop7: false,
+      resultsOfStop8: false,
+      resultsOfStop9: false,
+      resultsOfStop10: false,
+      resultsOfStop11: false,
+      resultsOfStop12: false,
+      resultsOfStop13: false,
+      warningCodes: [],
+      citationCodes: [54106],
+      infieldCodes: [],
+      custodialArrestCodes: [],
+      pullFromReasonCode: true,
+    }
+  }
+
+  return {
+    anyResultsOfStop: true,
+    pullFromReasonCode: false,
   }
 }
 
@@ -821,19 +838,33 @@ const getFullStopPeopleListed = apiStop => {
   return people.map((person, index) => {
     const anyDisabilities =
       person.listPerceivedOrKnownDisability.length > 0 &&
-      !person.listPerceivedOrKnownDisability[0].key !== 8
+      person.listPerceivedOrKnownDisability[0].key !== '8'
 
     const anyActionsTaken =
       person.listActionTakenDuringStop.length > 0 &&
-      !person.listActionTakenDuringStop[0].key !== 24
+      person.listActionTakenDuringStop[0].key !== '24'
 
     const anyContraband =
       person.listContrabandOrEvidenceDiscovered.length > 0 &&
-      !person.listContrabandOrEvidenceDiscovered[0].key !== 1
+      person.listContrabandOrEvidenceDiscovered[0].key !== '1'
 
     const anyResultsOfStop =
       person.listResultOfStop.length > 0 &&
-      !person.listResultOfStop[0].key !== 1
+      person.listResultOfStop[0].key !== '1'
+
+    const perceivedOrKnownDisability = anyDisabilities
+      ? person.listPerceivedOrKnownDisability
+      : []
+
+    const actionTakenDuringStop = anyActionsTaken
+      ? person.listActionTakenDuringStop
+      : []
+
+    const contrabandOrEvidenceDiscovered = anyContraband
+      ? person.listContrabandOrEvidenceDiscovered
+      : []
+
+    const resultsOfStop = anyResultsOfStop ? person.listResultOfStop : []
 
     return {
       anyDisabilities,
@@ -845,20 +876,18 @@ const getFullStopPeopleListed = apiStop => {
       genderNonconforming: person.genderNonconforming,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedLgbt: person.perceivedLgbt,
-      perceivedOrKnownDisability: getKeyArray(
-        person.listPerceivedOrKnownDisability,
-      ),
+      perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
         anyActionsTaken,
-        actionsTakenDuringStop: getKeyArray(person.listActionTakenDuringStop),
+        actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
         personSearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          person.listActionTakenDuringStop,
+          actionTakenDuringStop,
           17,
           'personSearchConsentGiven',
         ),
         propertySearchConsentGiven: getBooleanPropValueGivenKeyInArray(
-          person.listActionTakenDuringStop,
+          actionTakenDuringStop,
           19,
           'propertySearchConsentGiven',
         ),
@@ -874,7 +903,7 @@ const getFullStopPeopleListed = apiStop => {
         typeOfPropertySeized: getKeyArray(person.listTypeOfPropertySeized),
         anyContraband,
         contrabandOrEvidenceDiscovered: getKeyArray(
-          person.listContrabandOrEvidenceDiscovered,
+          contrabandOrEvidenceDiscovered,
         ),
       },
       stopReason: {
@@ -902,34 +931,22 @@ const getFullStopPeopleListed = apiStop => {
       },
       stopResult: {
         anyResultsOfStop,
-        resultsOfStop2: getKeyFoundInArray(person.listResultOfStop, 2),
-        resultsOfStop3: getKeyFoundInArray(person.listResultOfStop, 3),
-        resultsOfStop4: getKeyFoundInArray(person.listResultOfStop, 4),
-        resultsOfStop5: getKeyFoundInArray(person.listResultOfStop, 5),
-        resultsOfStop6: getKeyFoundInArray(person.listResultOfStop, 6),
-        resultsOfStop7: getKeyFoundInArray(person.listResultOfStop, 7),
-        resultsOfStop8: getKeyFoundInArray(person.listResultOfStop, 8),
-        resultsOfStop9: getKeyFoundInArray(person.listResultOfStop, 9),
-        resultsOfStop10: getKeyFoundInArray(person.listResultOfStop, 10),
-        resultsOfStop11: getKeyFoundInArray(person.listResultOfStop, 11),
-        resultsOfStop12: getKeyFoundInArray(person.listResultOfStop, 12),
-        resultsOfStop13: getKeyFoundInArray(person.listResultOfStop, 13),
-        warningCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          2,
-        ),
-        citationCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          3,
-        ),
-        infieldCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          4,
-        ),
-        custodialArrestCodes: getCodePropValueGivenKeyInArray(
-          person.listResultOfStop,
-          6,
-        ),
+        resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
+        resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
+        resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
+        resultsOfStop5: getKeyFoundInArray(resultsOfStop, 5),
+        resultsOfStop6: getKeyFoundInArray(resultsOfStop, 6),
+        resultsOfStop7: getKeyFoundInArray(resultsOfStop, 7),
+        resultsOfStop8: getKeyFoundInArray(resultsOfStop, 8),
+        resultsOfStop9: getKeyFoundInArray(resultsOfStop, 9),
+        resultsOfStop10: getKeyFoundInArray(resultsOfStop, 10),
+        resultsOfStop11: getKeyFoundInArray(resultsOfStop, 11),
+        resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
+        resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
+        warningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
+        citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
+        infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
+        custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 6),
         pullFromReasonCode: telemetry?.pullFromReasonCode || false,
       },
     }

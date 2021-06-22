@@ -12,7 +12,7 @@
 
     <ripa-stop-date
       v-model="model"
-      :is-edit-stop="isEditStop"
+      :is-admin-editing="isAdminEditing"
       :on-open-statute="onOpenStatute"
     ></ripa-stop-date>
 
@@ -112,7 +112,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isEditStop: {
+    isAdminEditing: {
       type: Boolean,
       default: false,
     },

@@ -4,6 +4,8 @@ import {
   motorStop,
   probationStop,
   fullStopToApiStop,
+  stopReasonGivenTemplate,
+  stopResultGivenTemplate,
 } from '@/utilities/stop'
 import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
@@ -124,6 +126,8 @@ export default {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
       }
+      this.stop.stopReason = stopReasonGivenTemplate(this.stop.template)
+      this.stop.stopResult = stopResultGivenTemplate(this.stop.template)
       this.updateFullStop()
     },
 
@@ -159,7 +163,7 @@ export default {
     handleDeletePerson(id) {
       // update fullStop
       const filteredPeople = this.fullStop.people.filter(
-        item => item.id !== id.toString(),
+        item => item.id.toString() !== id.toString(),
       )
       const updatedFullStop = {
         ...this.fullStop,

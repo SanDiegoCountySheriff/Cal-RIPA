@@ -34,6 +34,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
             stop.ListSubmission = submissions.ToArray();
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+            stop.IsEdited = false;
             return stop;
         }
 
