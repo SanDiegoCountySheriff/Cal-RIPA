@@ -246,6 +246,7 @@ export default {
           order: this.sortDesc ? 'Desc' : 'Asc',
         },
       }
+      this.currentPage = 1
       this.$emit('handleFilter', filterData)
     },
     getColumnSortName() {
