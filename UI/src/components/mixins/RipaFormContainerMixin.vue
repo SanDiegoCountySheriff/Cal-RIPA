@@ -160,10 +160,10 @@ export default {
       this.setFavoriteResults(filteredResults)
     },
 
-    handleDeletePerson(id) {
+    handleDeletePerson(index) {
       // update fullStop
       const filteredPeople = this.fullStop.people.filter(
-        item => item.id.toString() !== id.toString(),
+        item => item.index.toString() !== index.toString(),
       )
       const updatedFullStop = {
         ...this.fullStop,
@@ -223,7 +223,7 @@ export default {
       localStorage.setItem('ripa_form_edit_agency_questions', '1')
     },
 
-    handleEditPerson(id) {
+    handleEditPerson(index) {
       localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
       localStorage.setItem(
         'ripa_form_saved_full_stop',
@@ -231,7 +231,7 @@ export default {
       )
       localStorage.setItem('ripa_form_edit_person', '1')
       const [filteredPerson] = this.fullStop.people.filter(
-        item => item.id === id,
+        item => item.index.toString() === index.toString(),
       )
       if (filteredPerson) {
         this.stop = {
