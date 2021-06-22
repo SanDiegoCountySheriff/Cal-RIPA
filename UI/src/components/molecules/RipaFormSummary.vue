@@ -27,7 +27,7 @@
               dense
               outlined
               x-small
-              @click="handleEditPerson($event, person.id)"
+              @click="handleEditPerson($event, person.index)"
             >
               Edit
             </v-btn>
@@ -39,7 +39,7 @@
                 dense
                 outlined
                 x-small
-                @click="handleDeletePerson($event, person.id)"
+                @click="handleDeletePerson($event, person.index)"
               >
                 Delete
               </v-btn>
