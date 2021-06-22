@@ -121,9 +121,13 @@ export default {
       submissions: [],
       totalSubmissions: 0,
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'Submission Date', value: 'dateSubmitted' },
-        { text: 'Total Stops', value: 'recordCount' },
+        { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
+        {
+          text: 'Submission Date',
+          value: 'dateSubmitted',
+          sortName: 'SubmissionDate',
+        },
+        { text: 'Total Stops', value: 'recordCount', sortName: 'TotalStops' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -132,12 +136,12 @@ export default {
       submissionToDate: null,
       currentSubmissionLoading: false,
       format,
-      sortBy: 'dateSubmitted',
-      sortDesc: false,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
       currentOffset: this.currentPage * this.itemsPerPage,
+      sortBy: 'SubmissionDate',
+      sortDesc: true,
     }
   },
 
@@ -215,7 +219,7 @@ export default {
       })
     },
     handleSubmissionDetailPaginate(pageData) {
-      this.$emit('submissionDetailPaginate', pageData)
+      this.$emit('handleSubmissionDetailPaginate', pageData)
     },
     submissionFromDateChange(val) {
       this.submissionFromDate = val
@@ -234,9 +238,25 @@ export default {
         filters: {
           submissionFromDate: this.submissionFromDate,
           submissionToDate: this.submissionToDate,
+          orderBy:
+            // if the column sort name is null, default to sorting by the stop date
+            this.getColumnSortName() === null
+              ? 'SubmissionDate'
+              : this.getColumnSortName(),
+          order: this.sortDesc ? 'Desc' : 'Asc',
         },
       }
       this.$emit('handleFilter', filterData)
+    },
+    getColumnSortName() {
+      const columnToSort = this.headers.filter(headerObj => {
+        return headerObj.value === this.sortBy
+      })
+      if (columnToSort.length) {
+        return columnToSort[0].sortName
+      } else {
+        return null
+      }
     },
   },
 
@@ -248,6 +268,16 @@ export default {
     currentSubmission(val) {
       if (val) {
         this.currentSubmissionLoading = false
+      }
+    },
+    sortDesc: function (newValue, oldValue) {
+      if (newValue === undefined) {
+        // this means you're removing the sort on this column
+        this.handleFilter()
+      } else {
+        if (newValue !== oldValue) {
+          this.handleFilter()
+        }
       }
     },
   },
