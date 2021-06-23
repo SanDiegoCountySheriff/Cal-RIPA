@@ -1069,6 +1069,7 @@ export const fullStopToApiStop = (
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
+    editStopOfficerId: parsedApiStop ? officer.officerId : null,
     expYears: parsedApiStop
       ? parsedApiStop.expYears
       : officer.yearsExperience?.toString() || '',
