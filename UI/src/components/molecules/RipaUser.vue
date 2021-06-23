@@ -125,7 +125,7 @@ export default {
       return [
         (startDate && startDate.length > 0) || 'Start date is required',
         isValid || 'Start date is not a valid date',
-        !isNotFuture || 'Start date is in the future',
+        isNotFuture || 'Start date is in the future',
       ]
     },
 

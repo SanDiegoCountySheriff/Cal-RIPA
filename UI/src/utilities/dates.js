@@ -25,7 +25,7 @@ const parseDate = (dateStr, timeStr) => {
 }
 
 export const dateNotInFuture = (dateStr, timeStr) => {
-  const date = parseDate(dateStr, timeStr)
+  const date = parseDate(dateStr, timeStr || '00:00')
   return new Date().getTime() >= date.getTime()
 }
 
