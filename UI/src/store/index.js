@@ -396,17 +396,27 @@ export default new Vuex.Store({
 
     checkGpsLocation({ commit }) {
       return new Promise(resolve => {
-        navigator.geolocation.getCurrentPosition(position => {
-          const latLong = `${position.coords.longitude},${position.coords.latitude}`
-          const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const latLong = `${position.coords.longitude},${position.coords.latitude}`
+            const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
 
-          fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              commit('updateGpsLocationAddress', data)
-              resolve()
-            })
-        })
+            fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                commit('updateGpsLocationAddress', data)
+                resolve()
+              })
+          },
+          error => {
+            console.error(`There was an error checking GPS location. ${error}`)
+          },
+          {
+            timeout: 10000,
+            maximumAge: 10000,
+            enableHighAccuracy: false,
+          },
+        )
       })
     },
 
