@@ -58,6 +58,7 @@
       <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
+            v-model="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
             :loading="errorCodesLoading"
             @input="handleChangeSearchCodes"
@@ -75,8 +76,7 @@
                 v-bind="data.attrs"
                 :input-value="data.selected"
                 close
-                @click="data.select"
-                @click:close="remove(data.item)"
+                @click:close="removeErrorCode(data.item)"
               >
                 {{ data.item.value }}
               </v-chip>
@@ -377,6 +377,12 @@ export default {
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
       this.selectedErrorCodes = val
+      this.handleFilter()
+    },
+    removeErrorCode(val) {
+      this.selectedErrorCodes = this.selectedErrorCodes.filter(errorCode => {
+        return errorCode !== val.value
+      })
       this.handleFilter()
     },
     fromDateChange(val) {
