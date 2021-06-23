@@ -69,7 +69,19 @@
             deletable-chips
             small-chips
             label="Error Codes"
-          ></v-autocomplete>
+          >
+            <template v-slot:selection="data">
+              <v-chip
+                v-bind="data.attrs"
+                :input-value="data.selected"
+                close
+                @click="data.select"
+                @click:close="remove(data.item)"
+              >
+                {{ data.item.value }}
+              </v-chip>
+            </template>
+          </v-autocomplete>
         </div>
       </v-flex>
 
