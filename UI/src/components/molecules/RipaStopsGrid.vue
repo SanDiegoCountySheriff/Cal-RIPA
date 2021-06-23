@@ -103,10 +103,6 @@
             <span class="label">Errors</span>
             <span class="count">{{ stops.summary.failed }}</span>
           </p>
-          <p>
-            <span class="label">Resubmit</span>
-            <span class="count">{{ stops.summary.resubmitted }}</span>
-          </p>
         </div>
         <v-progress-linear
           v-if="loading"
@@ -544,6 +540,10 @@ export default {
       span.label {
         font-size: 1.2rem;
         font-weight: bold;
+      }
+
+      span.count {
+        color: #2196f3;
       }
     }
   }
