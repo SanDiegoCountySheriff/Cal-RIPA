@@ -406,6 +406,7 @@ export default {
           stopToDate: this.stopToDate,
           status: this.currentStatusFilter,
           isPiiFound: this.isPiiFound,
+          isEdited: this.isEdited,
           // need to make a comma delimited string out of the error codes
           errorCodes: this.selectedErrorCodes.join(),
           orderBy:
@@ -462,8 +463,6 @@ export default {
           this.handleFilter()
         }
       }
-      console.log('sortDesc' + newValue)
-      console.log('sortDesc' + oldValue)
     },
   },
 
