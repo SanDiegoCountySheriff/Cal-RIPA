@@ -8,6 +8,7 @@
               v-model="model.startDate"
               label="Start Date"
               :rules="startDateRules"
+              :max="getMaxDate"
               @input="handleInput"
             ></ripa-date-picker>
           </div>
@@ -81,6 +82,7 @@ import {
   isValidDate,
   dateNotInFuture,
   formatShortDate,
+  formatToIsoCurrentDate,
 } from '@/utilities/dates'
 
 export default {
@@ -141,6 +143,10 @@ export default {
         v => (v || '').length <= 60 || 'Max 60 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ]
+    },
+
+    getMaxDate() {
+      return formatToIsoCurrentDate()
     },
   },
 

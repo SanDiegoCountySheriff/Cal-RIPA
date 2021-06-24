@@ -15,6 +15,37 @@
     "agency_ori": {
       "type": "string"
     },
+    "application": {
+      "defaultValue": "ripa",
+      "type": "string"
+    },
+    "auth_tenant_id": {
+      "type": "string"
+    },
+    "auth_authority": {
+      "type": "string"
+    },
+    "auth_logout_url": {
+      "type": "string"
+    },
+    "doj_sftp_server": {
+      "type": "string"
+    },
+    "doj_sftp_server_key": {
+      "type": "string"
+    },
+    "doj_sftp_username": {
+      "type": "string"
+    },
+    "doj_sftp_password": {
+      "type": "string"
+    },
+    "auth_app_id": {
+      "type": "string"
+    },
+    "auth_fqdn": {
+      "type": "string"
+    },
     "user_tags": {
       "type": "Object",
       "defaultValue": {}
@@ -34,20 +65,6 @@
     "certificate_secret_name": {
       "type": "string"
     },
-    "apim_policy_env": {
-      "defaultValue": "p",
-      "allowedValues": ["d", "q", "p"],
-      "type": "string"
-    },
-    "application": {
-      "defaultValue": "ripa",
-      "type": "string"
-    },
-    "environment": {
-      "defaultValue": "p",
-      "type": "string",
-      "allowedValues": ["d", "q", "p"]
-    },
     "glocation": {
       "defaultValue": "Global",
       "type": "string"
@@ -66,18 +83,6 @@
     },
     "fa_hostnamessl_scm_ep_suff": {
       "defaultValue": ".scm.azurewebsites.us",
-      "type": "string"
-    },
-    "fa_config_ripa_tenant_name": {
-      "defaultValue": "sdsheriff.gov",
-      "type": "string"
-    },
-    "fa_config_ripa_tenant_id": {
-      "defaultValue": "7832cdfd-b337-4d07-af7e-9de082e16b31",
-      "type": "string"
-    },
-    "fa_config_ripa_app_id": {
-      "defaultValue": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6",
       "type": "string"
     },
     "domain_fa_name": {
@@ -252,6 +257,10 @@
       "type": "string",
       "defaultValue": "SftpUsername"
     },
+    "vaults_kv_secrets_key10": {
+      "type": "string",
+      "defaultValue": "CosmosConnectionString"
+    },
     "submission_fa_config_storage_container_prefix_results": {
       "type": "string",
       "defaultValue": "result"
@@ -348,6 +357,10 @@
       "type": "string",
       "defaultValue": "stop"
     },
+    "dbaccount_sqlDb_stop_audit_container_name": {
+      "type": "string",
+      "defaultValue": "stopaudit"
+    },
     "dbaccount_sqlDb_submission_container_name": {
       "type": "string",
       "defaultValue": "submission"
@@ -360,21 +373,25 @@
       "defaultValue": "vnetlink",
       "type": "string"
     },
-    "policyCont1_a": {
+    "policyCont_a": {
       "type": "string",
-      "defaultValue": "<policies>\r\n  <inbound>\r\n    <cors allow-credentials=\"true\">\r\n      <allowed-origins>\r\n        <origin>http://localhost:4000</origin>\r\n        <origin>https://localhost:4000</origin>\r\n        <origin>https://"
+      "defaultValue": "<policies><inbound><cors allow-credentials=\"true\"><allowed-origins><origin>"
     },
-    "policyCont1_b": {
+    "policyCont_b": {
       "type": "string",
-      "defaultValue": ".z3.web.core.usgovcloudapi.net</origin>\r\n      </allowed-origins>\r\n      <allowed-methods>\r\n        <method>GET</method>\r\n        <method>PUT</method>\r\n        <method>POST</method>\r\n        <method>DELETE</method>\r\n      </allowed-methods>\r\n      <allowed-headers>\r\n        <header>Cache-Control</header>\r\n        <header>Ocp-Apim-Trace</header>\r\n        <header>Authorization</header>\r\n        <header>Content-Type</header>\r\n      </allowed-headers>\r\n    </cors>\r\n  </inbound>\r\n  <backend>\r\n    <forward-request />\r\n  </backend>\r\n  <outbound />\r\n  <on-error />\r\n</policies>"
+      "defaultValue": "</origin><origin>"
     },
-    "policyCont2_a": {
+    "policyCont_c": {
       "type": "string",
-      "defaultValue": "<policies>\r\n  <inbound>\r\n    <cors allow-credentials=\"true\">\r\n      <allowed-origins>\r\n  <origin>https://"
+      "defaultValue": "</origin></allowed-origins><allowed-methods><method>GET</method><method>PUT</method><method>POST</method><method>DELETE</method></allowed-methods><allowed-headers><header>Cache-Control</header><header>Ocp-Apim-Trace</header><header>Authorization</header><header>Content-Type</header></allowed-headers></cors><validate-jwt header-name=\"Authorization\" failed-validation-httpcode=\"401\" failed-validation-error-message=\"Unauthorized. Access token is missing or invalid.\" require-expiration-time=\"true\" require-scheme=\"Bearer\" require-signed-tokens=\"true\" clock-skew=\"240\" output-token-variable-name=\"openid_token\"><openid-config url=\""
     },
-    "policyCont2_b": {
+    "policyCont_d": {
       "type": "string",
-      "defaultValue": ".z3.web.core.usgovcloudapi.net</origin>\r\n      </allowed-origins>\r\n      <allowed-methods>\r\n        <method>GET</method>\r\n        <method>PUT</method>\r\n        <method>POST</method>\r\n        <method>DELETE</method>\r\n      </allowed-methods>\r\n      <allowed-headers>\r\n        <header>Cache-Control</header>\r\n        <header>Ocp-Apim-Trace</header>\r\n        <header>Authorization</header>\r\n        <header>Content-Type</header>\r\n      </allowed-headers>\r\n    </cors>\r\n  </inbound>\r\n  <backend>\r\n    <forward-request />\r\n  </backend>\r\n  <outbound />\r\n  <on-error />\r\n</policies>"
+      "defaultValue": "/.well-known/openid-configuration\" /><audiences><audience>"
+    },
+    "policyCont_e": {
+      "type": "string",
+      "defaultValue": "</audience></audiences><required-claims><claim name=\"roles\" match=\"any\"><value>RIPA-ADMINS-ROLE</value><value>RIPA-USERS-ROLE</value></claim></required-claims></validate-jwt></inbound><backend><forward-request/></backend><outbound/><on-error/></policies>"
     },
     "apim_subnet_name": {
       "type": "string",
@@ -411,22 +428,6 @@
     "cdb_private_ipaddress2": {
       "defaultValue": "172.16.1.5",
       "type": "string"
-    },
-    "doj_sftp_server_key": {
-      "defaultValue": "SFTP KEY",
-      "type": "string"
-    },
-    "doj_sftp_server": {
-      "defaultValue": "SFTP HOST",
-      "type": "string"
-    },
-    "doj_sftp_password": {
-      "defaultValue": "SFTP PASSWORD",
-      "type": "string"
-    },
-    "doj_sftp_username": {
-      "defaultValue": "SFTP USERNAME",
-      "type": "string"
     }
   },
   "variables": {
@@ -440,11 +441,11 @@
     "serverfarms_submission_ASP_riparg_af76_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('serverfarms_submission_ASP_name'))]",
     "serverfarms_textanalytics_ASP_riparg_af76_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('serverfarms_textanalytics_ASP_name'))]",
     "service_ripa_apim_wus2_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('service_apim_name'))]",
-    "sites_ripa_user_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('sites_user_fa_name'))]",
     "sites_ripa_domain_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('domain_fa_name'))]",
     "sites_ripa_stop_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('stop_fa_name'))]",
     "sites_ripa_submission_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('submission_fa_name'))]",
     "sites_ripa_textanalytics_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('textanalytics_fa_name'))]",
+    "sites_ripa_user_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('sites_user_fa_name'))]",
     "storageAccounts_ripactsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_ctsa_name'))]",
     "storageAccounts_ripafnsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_functionssa_name'))]",
     "storageAccounts_ripansgflsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_nsgflowlogssa_name'))]",
@@ -459,14 +460,16 @@
     "user_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
     "keyvault_secret_ripa_storage": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key3'),')')]",
     "textanalytics_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key4'),')')]",
-    "apim_policy_value1": "[concat(parameters('policyCont1_a'),variables('storageAccounts_ripauisa_name'),parameters('policyCont1_b'))]",
-    "apim_policy_value2": "[concat(parameters('policyCont2_a'),variables('storageAccounts_ripauisa_name'),parameters('policyCont2_b'))]",
+    "cssa_domain_url": "[concat('https://', parameters('application'), '-', parameters('agency_abbreviation'),'.cssa.coud')]",
+    "custom_domain_url": "[concat('https://', parameters('app_cname_alias'), '.', parameters('auth_fqdn'))]",
+    "public_ui_url": "[if(equals(parameters('app_domain_type'), 'private_domain'), variables('custom_domain_url'), variables('cssa_domain_url'))]",
     "keyvault_secret_sftp_key": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key6'),')')]",
     "keyvault_secret_sftp_host": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key7'),')')]",
     "keyvault_secret_sftp_password": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key8'),')')]",
     "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]",
-    "template_version": "v2021.06.17.1",
-    // "template_version": "__template_version__",
+    "keyvault_secret_cosmos_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key10'),')')]",
+    // "template_version": "v2021.06.17.1",
+    "template_version": "#{TEMPLATE_VERSION}#",
     "default_tags": {
       "application": "ripa",
       "agency": "[parameters('agency_abbreviation')]",
@@ -766,7 +769,6 @@
         "publicNetworkAccessForQuery": "Enabled"
       }
     },
-
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
@@ -1111,7 +1113,6 @@
         "path": "[parameters('apim_apis_userprofile_path')]"
       }
     },
-
     //stop api
     {
       "type": "Microsoft.ApiManagement/service/apis",
@@ -1130,7 +1131,6 @@
         "path": "[parameters('apim_apis_stop_path')]"
       }
     },
-
     //TextAnalytics api
     {
       "type": "Microsoft.ApiManagement/service/apis",
@@ -1149,7 +1149,6 @@
         "path": "[parameters('apim_apis_textAnalytics_path')]"
       }
     },
-
     //Domain api
     {
       "type": "Microsoft.ApiManagement/service/apis",
@@ -1168,7 +1167,6 @@
         "path": "[parameters('apim_apis_domain_path')]"
       }
     },
-
     //submission api
     {
       "type": "Microsoft.ApiManagement/service/apis",
@@ -1195,12 +1193,10 @@
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
       ],
       "properties": {
-        //"value": "[parameters('policyCont1')]",
-        "value": "[if(equals(parameters('environment'), parameters('apim_policy_env')), variables('apim_policy_value1'), variables('apim_policy_value2'))]",
+        "value": "[concat(parameters('policyCont_a'), reference(concat('Microsoft.Storage/storageAccounts/',  variables('storageAccounts_ripauisa_name')), '2019-06-01','Full').properties.primaryEndpoints.web, parameters('policyCont_b'), variables('public_ui_url'), parameters('policyCont_c'), parameters('auth_authority'), parameters('auth_tenant_id'), parameters('policyCont_d'), parameters('auth_app_id'), parameters('policyCont_e'))]",
         "format": "xml"
       }
     },
-
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2020-09-01",
@@ -1274,7 +1270,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
       "apiVersion": "2020-09-01",
@@ -1443,7 +1438,6 @@
         "publicNetworkAccessForQuery": "Enabled"
       }
     },
-
     //SecurityRule for Internet-Vnet-443
     {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
@@ -1977,7 +1971,6 @@
         ]
       }
     },
-
     //CosmosDB userprofile container
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
@@ -2085,7 +2078,7 @@
             ]
           },
           "partitionKey": {
-            "paths": ["/submissionId"],
+            "paths": ["/id"],
             "kind": "Hash"
           },
           "uniqueKeyPolicy": {
@@ -2248,6 +2241,10 @@
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
             {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
+            },
+            {
               "name": "Account",
               "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
             },
@@ -2265,15 +2262,15 @@
             },
             {
               "name": "ripa_app_id",
-              "value": "[parameters('fa_config_ripa_app_id')]"
+              "value": "[parameters('auth_app_id')]"
             },
             {
               "name": "ripa_tenant_id",
-              "value": "[parameters('fa_config_ripa_tenant_id')]"
+              "value": "[parameters('auth_tenant_id')]"
             },
             {
               "name": "ripa_tenant_name",
-              "value": "[parameters('fa_config_ripa_tenant_name')]"
+              "value": "[parameters('auth_fqdn')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -2430,20 +2427,24 @@
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
             {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
+            },
+            {
               "name": "RipaStorage",
               "value": "[variables('keyvault_secret_ripa_storage')]"
             },
             {
               "name": "ripa_app_id",
-              "value": "[parameters('fa_config_ripa_app_id')]"
+              "value": "[parameters('auth_app_id')]"
             },
             {
               "name": "ripa_tenant_id",
-              "value": "[parameters('fa_config_ripa_tenant_id')]"
+              "value": "[parameters('auth_tenant_id')]"
             },
             {
               "name": "ripa_tenant_name",
-              "value": "[parameters('fa_config_ripa_tenant_name')]"
+              "value": "[parameters('auth_fqdn')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -2601,12 +2602,28 @@
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
             {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
+            },
+            {
               "name": "Account",
               "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
             },
             {
-              "name": "ContainerName",
+              "name": "StopContainerName",
               "value": "[parameters('dbaccount_sqlDb_stop_container_name')]"
+            },
+            {
+              "name": "StopAuditContainerName",
+              "value": "[parameters('dbaccount_sqlDb_stop_audit_container_name')]"
+            },
+            {
+              "name": "UserProfileContainerName",
+              "value": "[parameters('dbaccount_sqlDb_user_container_name')]"
+            },
+            {
+              "name": "CosmosConnectionString",
+              "value": "[variables('keyvault_secret_cosmos_connection_string')]"
             },
             {
               "name": "DatabaseName",
@@ -2622,15 +2639,15 @@
             },
             {
               "name": "ripa_app_id",
-              "value": "[parameters('fa_config_ripa_app_id')]"
+              "value": "[parameters('auth_app_id')]"
             },
             {
               "name": "ripa_tenant_id",
-              "value": "[parameters('fa_config_ripa_tenant_id')]"
+              "value": "[parameters('auth_tenant_id')]"
             },
             {
               "name": "ripa_tenant_name",
-              "value": "[parameters('fa_config_ripa_tenant_name')]"
+              "value": "[parameters('auth_fqdn')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -2787,6 +2804,10 @@
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
             {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
+            },
+            {
               "name": "Account",
               "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
             },
@@ -2848,15 +2869,15 @@
             },
             {
               "name": "ripa_app_id",
-              "value": "[parameters('fa_config_ripa_app_id')]"
+              "value": "[parameters('auth_app_id')]"
             },
             {
               "name": "ripa_tenant_id",
-              "value": "[parameters('fa_config_ripa_tenant_id')]"
+              "value": "[parameters('auth_tenant_id')]"
             },
             {
               "name": "ripa_tenant_name",
-              "value": "[parameters('fa_config_ripa_tenant_name')]"
+              "value": "[parameters('auth_fqdn')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -3014,6 +3035,10 @@
               "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).InstrumentationKey]"
             },
             {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('components_ripa_ai_name'))).ConnectionString]"
+            },
+            {
               "name": "TextAnalyticsEndpoint",
               "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('TA_Name'))).endpoint]"
             },
@@ -3022,16 +3047,24 @@
               "value": "[variables('textanalytics_fa_keyvault_referencestring')]"
             },
             {
+              "name": "AllowedCategories",
+              "value": "Address,Age,Email,Person,PhoneNumber,Organization"
+            },
+            {
+              "name": "MinimumConfidenceScore",
+              "value": "80"
+            },
+            {
               "name": "ripa_app_id",
-              "value": "[parameters('fa_config_ripa_app_id')]"
+              "value": "[parameters('auth_app_id')]"
             },
             {
               "name": "ripa_tenant_id",
-              "value": "[parameters('fa_config_ripa_tenant_id')]"
+              "value": "[parameters('auth_tenant_id')]"
             },
             {
               "name": "ripa_tenant_name",
-              "value": "[parameters('fa_config_ripa_tenant_name')]"
+              "value": "[parameters('auth_fqdn')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -3227,14 +3260,14 @@
       }
     },
     {
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]"
-      ],
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
       "name": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzureCLI",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]"
+      ],
       "tags": "[variables('all_tags')]",
       "properties": {
         "forceUpdateTag": "newGuid()",
@@ -3242,8 +3275,8 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "cssagenpdeploymentsa",
-          "storageAccountKey": "rpfhWbF+27VOX3eQY0r7By1oaXhHQiabwREmvXckct7c11f5/Ly0nH96bPOx4VX220cIlpJH1HLYewjpz60HlQ=="
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azCliVersion": "2.23.0",
         "environmentVariables": [
@@ -3253,57 +3286,47 @@
           },
           {
             "name": "CSSA_SP_APP_ID",
-            //"secureValue": "__CSSA_SP_APP_ID__"
-            "secureValue": "be959af2-bda9-4eb1-abb2-4c2776d8acd3"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "ni3Ro2U.gbxg5J.-8uz2t_iV-fBg_A2b7k"
-            // "secureValue": "__CSSA_SP_SECRET__"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "bbfa7b1d-b413-4c37-8a47-6044c982b892"
-            // "value": "__CSSA_TENANT_ID__"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "CSSA_SUBSCRIPTION_ID",
-            "value": "4ca69e40-b890-4fce-86b8-a8c35c085b45"
-            // "value": "__CSSA_SUBSCRIPTION_ID__"
+            "value": "#{CSSA_SUBSCRIPTION_ID}#"
           },
           {
             "name": "CSSA_RESOURCE_GROUP_NAME",
-            "value": "lesmcwhirter-global-rg"
-            // "value": "__CSSA_RESOURCE_GROUP_NAME__"
+            "value": "#{CSSA_RESOURCE_GROUP_NAME}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_RG",
-            "value": "lesmcwhirter-global-rg"
-            // "value": "__CSSA_CERT_KEY_VAULT_RG__"
+            "value": "#{CSSA_CERT_KEY_VAULT_RG}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_NAME",
-            // "value": "__CSSA_CERT_KEY_VAULT_NAME__"
-            "value": "lesmcwhirter-global-kv"
+            "value": "#{CSSA_CERT_KEY_VAULT_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_NAME",
-            // "value": "__CSSA_CERT_SECRET_NAME__"
-            "value": "star-lesmcwhirter-me"
+            "value": "#{CSSA_CERT_SECRET_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_VERSION",
-            "value": "Latest"
+            "value": "#{CSSA_CERT_SECRET_VERSION}#"
           },
           {
             "name": "CSSA_CDN_PROFILE_NAME",
-            "value": "lesmcwhirter-global-cdn"
-            // "value": "__CSSA_CDN_PROFILE_NAME__"
+            "value": "#{CSSA_CDN_PROFILE_NAME}#"
           },
           {
             "name": "CSSA_DNS_ROOT_ZONE",
-            "value": "lesmcwhirter.me"
-            // "value": "__CSSA_DNS_ROOT_ZONE__"
+            "value": "#{CSSA_DNS_ROOT_ZONE}#"
           },
           {
             "name": "AGENCY_ORI",
@@ -3346,7 +3369,7 @@
             "value": "[parameters('certificate_secret_name')]"
           }
         ],
-        "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/new-ripa-cssa-sub-domain.sh?sp=r&st=2021-06-20T03:02:51Z&se=2022-06-20T11:02:51Z&spr=https&sv=2020-02-10&sr=b&sig=UkspdLMoiY4J3avvyBnRxrNtOoLQtr%2FPojGP714jzXw%3D",
+        "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/new-ripa-cssa-sub-domain.sh?sp=r&st=2021-06-22T23:15:35Z&se=2022-06-23T07:15:35Z&spr=https&sv=2020-02-10&sr=b&sig=IkQPq72z2eA3mhbvst4WlyzX1G0KTjnvMTc%2FHW3AtDQ%3D",
         "supportingScriptUris": [],
         "timeout": "PT10M",
         "cleanupPreference": "OnExpiration",
@@ -3354,14 +3377,14 @@
       }
     },
     {
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
-      ],
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
       "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
+      ],
       "tags": "[variables('all_tags')]",
       "properties": {
         "forceUpdateTag": "newGuid()",
@@ -3369,27 +3392,22 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "cssagenpdeploymentsa",
-          //"storageAccountName": "__STORAGE_ACCOUNT_NAME__",
-          "storageAccountKey": "rpfhWbF+27VOX3eQY0r7By1oaXhHQiabwREmvXckct7c11f5/Ly0nH96bPOx4VX220cIlpJH1HLYewjpz60HlQ=="
-          // "storageAccountKey": "__STORAGE_ACCOUNT_KEY__"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azPowerShellVersion": "3.0",
         "environmentVariables": [
           {
             "name": "CSSA_SP_APP_ID",
-            //"secureValue": "__CSSA_SP_APP_ID__"
-            "secureValue": "be959af2-bda9-4eb1-abb2-4c2776d8acd3"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "ni3Ro2U.gbxg5J.-8uz2t_iV-fBg_A2b7k"
-            // "secureValue": "__CSSA_SP_SECRET__"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "bbfa7b1d-b413-4c37-8a47-6044c982b892"
-            // "value": "__CSSA_TENANT_ID__"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "RESOURCE_GROUP_NAME",
@@ -3400,12 +3418,119 @@
             "value": "[variables('storageAccounts_ripactsa_name')]"
           }
         ],
-        "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Import-Domain.ps1?sp=r&st=2021-06-20T04:55:59Z&se=2022-06-20T12:55:59Z&spr=https&sv=2020-02-10&sr=b&sig=ygcIy4dQ7nVTwRpYkDF%2B6FpSNMUwRm3Dgo%2Blbx5rrGk%3D",
+        "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Import-Domain.ps1?sp=r&st=2021-06-22T23:20:57Z&se=2022-06-23T07:20:57Z&spr=https&sv=2020-02-10&sr=b&sig=Fm9XRa%2FXkOGEi30o2%2FW7%2BfIhCdh6KI2d4tfOnlqCwZg%3D",
         "supportingScriptUris": [
-          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Beat_Table.csv?sp=r&st=2021-06-18T22:36:22Z&se=2022-06-19T06:36:22Z&spr=https&sv=2020-02-10&sr=b&sig=tCykF%2FO7kkMAREp1qPLu59INLTFai99LtBJwleT0kYU%3D",
-          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/City_Table.csv?sp=r&st=2021-06-18T22:37:02Z&se=2022-06-19T06:37:02Z&spr=https&sv=2020-02-10&sr=b&sig=2af6rEQCT0U7lr%2FgqDzmMieZOcAooY1tm%2FN65Oir38A%3D",
-          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Offense_Table.csv?sp=r&st=2021-06-18T22:37:34Z&se=2022-06-19T06:37:34Z&spr=https&sv=2020-02-10&sr=b&sig=g7b0A%2BLeAwu6B3ar2ujJsaA5qE83MUU%2BTN9mC6Y8oV0%3D",
-          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/School_Table.csv?sp=r&st=2021-06-18T22:37:57Z&se=2022-06-19T06:37:57Z&spr=https&sv=2020-02-10&sr=b&sig=fW0Oi0YSK2Q7BAg%2Bvd7Np%2FLr3HuBNFMCY4QVwGvR0FE%3D"
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Beat_Table.csv?sp=r&st=2021-06-22T23:16:39Z&se=2022-06-23T07:16:39Z&spr=https&sv=2020-02-10&sr=b&sig=9cdbAVXQgRLco397i660uLiVvWF4dHakjHBCg1KYpck%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/City_Table.csv?sp=r&st=2021-06-22T23:17:33Z&se=2022-06-23T07:17:33Z&spr=https&sv=2020-02-10&sr=b&sig=gffhex6qhqWqol08Ym7a1Mys%2BONAlJGNnOHS878%2FB%2FY%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Offense_Table.csv?sp=r&st=2021-06-22T23:19:34Z&se=2022-06-23T07:19:34Z&spr=https&sv=2020-02-10&sr=b&sig=5ioL5zTOmSYOwKjswGJXVuCw9oxWrjFa%2BspjWqXR8o0%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/School_Table.csv?sp=r&st=2021-06-22T23:19:59Z&se=2022-06-23T07:19:59Z&spr=https&sv=2020-02-10&sr=b&sig=fWi2V1Y4i3xUYt0m%2F5FwQRGA0i8wD3P4cswRwUj3dDc%3D"
+        ],
+        "timeout": "PT10M",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT1H"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]",
+      "location": "[resourceGroup().location]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_domain_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_stop_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_submission_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_textanalytics_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_user_fa_name'), 'web')]",
+
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_domain_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_stop_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_submission_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytics_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]"
+      ],
+      "tags": "[variables('all_tags')]",
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]"
+        },
+        "storageAccountSettings": {
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
+        },
+        "azPowerShellVersion": "3.0",
+        "environmentVariables": [
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "RESOURCE_GROUP_NAME",
+            "value": "[resourceGroup().name]"
+          },
+          {
+            "name": "APIM_INSTANCE_NAME",
+            "value": "[variables('service_ripa_apim_wus2_name')]"
+          },
+          {
+            "name": "AUTH_SP_APP_ID",
+            "value": "[parameters('auth_app_id')]"
+          },
+          {
+            "name": "AUTH_TENANT_ID",
+            "value": "[parameters('auth_tenant_id')]"
+          },
+          {
+            "name": "AUTH_AUTHORITY",
+            "value": "[parameters('auth_authority')]"
+          },
+          {
+            "name": "AUTH_PRIMARY_DOMAIN",
+            "value": "[parameters('auth_fqdn')]"
+          },
+          {
+            "name": "APIM_INSTANCE_URL",
+            "value": "[reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.gatewayUrl]"
+          },
+          {
+            "name": "AGENCY_ABBREVIATION",
+            "value": "[parameters('agency_abbreviation')]"
+          },
+          {
+            "name": "APPLICATION_NAME",
+            "value": "[parameters('application')]"
+          },
+          {
+            "name": "STORAGE_ACCOUNT_NAME",
+            "value": "[variables('storageAccounts_ripauisa_name')]"
+          },
+          {
+            "name": "DEFAULT_COUNTY",
+            "value": "[parameters('agency_county')]"
+          }
+        ],
+        "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Import-AllRIPAApplications.ps1?sp=r&st=2021-06-22T23:21:26Z&se=2022-06-23T07:21:26Z&spr=https&sv=2020-02-10&sr=b&sig=XptCm7skb90g8QRfCoYDgKLtBt1xio4XJ2K7lqfgvWs%3D",
+        "supportingScriptUris": [
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/Import-ApimApis.psm1?sp=r&st=2021-06-22T23:21:45Z&se=2022-06-23T07:21:45Z&spr=https&sv=2020-02-10&sr=b&sig=Kg29hOfqceCnCOvPNYpisfg0mWYlrbkIDAgsOwlZvok%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/New-FunctionHostKey.psm1?sp=r&st=2021-06-22T23:22:08Z&se=2022-06-23T07:22:08Z&spr=https&sv=2020-02-10&sr=b&sig=T1zM08xKASEDBVLpsvRNuXY6Ox8xXIzP6nHq30jZQuY%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/New-RIPAApimBackend.psm1?sp=r&st=2021-06-22T23:22:41Z&se=2022-06-23T07:22:41Z&spr=https&sv=2020-02-10&sr=b&sig=leLkXxmqL6W0qAsR7jbnFPCxZW0tDZ3x3StmfiJuVmU%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/config.json?sp=r&st=2021-06-22T23:23:10Z&se=2022-06-23T07:23:10Z&spr=https&sv=2020-02-10&sr=b&sig=mrCJmMz8WEwXagQx4ERUnBarBFlKYbGrNGTfnwduZus%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/domain.zip?sp=r&st=2021-06-22T23:23:32Z&se=2022-06-23T07:23:32Z&spr=https&sv=2020-02-10&sr=b&sig=dBqDgo%2Bgfwos4gkFBRyvxIuON9tftMb%2BaYYEV9adJFk%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/stop.zip?sp=r&st=2021-06-22T23:23:56Z&se=2022-06-23T07:23:56Z&spr=https&sv=2020-02-10&sr=b&sig=j0Yid1svrzeQMB8eySz4bJvJDgU%2FP9PQTjVcakJCUsc%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/submission.zip?sp=r&st=2021-06-22T23:24:20Z&se=2022-06-23T07:24:20Z&spr=https&sv=2020-02-10&sr=b&sig=xwfB5Yzk2bvBj08XZlm6nwnnNLUGQoaOkdFD1KuR3Wc%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/textanalytics.zip?sp=r&st=2021-06-22T23:24:48Z&se=2022-06-23T07:24:48Z&spr=https&sv=2020-02-10&sr=b&sig=RecbLwj6KAPKFuKCpvddGEtH98r3JMKzfHfIJFY1JuY%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/userprofile.zip?sp=r&st=2021-06-22T23:25:09Z&se=2022-06-23T07:25:09Z&spr=https&sv=2020-02-10&sr=b&sig=80kOZYwC18ao%2BGz8L4%2B%2FBRtQzT5%2BIByFy4ozYphNqFk%3D",
+          "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/deployment-scripts/ui.zip?sp=r&st=2021-06-22T23:25:30Z&se=2022-06-23T07:25:30Z&spr=https&sv=2020-02-10&sr=b&sig=pAIAgDaYd%2FkC1vjXqnT6%2BKPpYTNZYBQHQiX98WHGGWw%3D"
         ],
         "timeout": "PT10M",
         "cleanupPreference": "OnExpiration",

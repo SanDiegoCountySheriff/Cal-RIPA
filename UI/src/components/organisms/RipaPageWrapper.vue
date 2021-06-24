@@ -101,7 +101,7 @@ export default {
     max-height: 20px !important;
 
     .text-center {
-      padding: 4px !important;
+      padding: 2px !important;
       font-size: 14px !important;
     }
   }
