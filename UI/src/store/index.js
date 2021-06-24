@@ -97,7 +97,43 @@ export default new Vuex.Store({
       return state.adminSubmissions
     },
     mappedAdminSubmission: state => {
-      return state.adminSubmission
+      if (state.adminSubmission) {
+        const mappedAdminSubmissionStops = state.adminSubmission.stops.map(
+          stopObj => {
+            const mappedErrors = stopObj.listSubmission.map(
+              stopSubmissionObj => {
+                const errorArray = []
+                if (
+                  stopSubmissionObj.listSubmissionError &&
+                  stopSubmissionObj.listSubmissionError.length
+                ) {
+                  stopSubmissionObj.listSubmissionError.forEach(errorObj => {
+                    errorArray.push(
+                      `<p>${errorObj.code}: ${errorObj.message.substr(
+                        0,
+                        200,
+                      )} ...</p>`,
+                    )
+                  })
+                  return errorArray.join('')
+                } else {
+                  return ''
+                }
+              },
+            )
+            return {
+              ...stopObj,
+              error: mappedErrors.join(''),
+            }
+          },
+        )
+        return {
+          ...state.adminSubmission,
+          stops: mappedAdminSubmissionStops,
+        }
+      } else {
+        return null
+      }
     },
     mappedAdminUsers: state => {
       return state.adminUsers
@@ -1063,6 +1099,10 @@ export default new Vuex.Store({
             queryString = `${queryString}&IsPII=${queryData.filters.isPiiFound}`
           }
 
+          if (queryData.filters.isEdited !== null) {
+            queryString = `${queryString}&IsEdited=${queryData.filters.isEdited}`
+          }
+
           if (queryData.filters.errorCodes.length) {
             queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.split(
               ',',
@@ -1238,7 +1278,7 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error)
           commit('updateErrorCodeAdminSearch', {
-            items: ['new value', 'new value 2', 'new value 3'],
+            items: [],
           })
         })
     },
