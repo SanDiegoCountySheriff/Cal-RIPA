@@ -71,7 +71,7 @@ namespace RIPA.Functions.Submission.Functions
             var queryOrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default;
             var queryOrder = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default;
 
-            var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
+            var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
             if (!string.IsNullOrWhiteSpace(queryOrderBy))
             {
                 order = Environment.NewLine + $"ORDER BY c.{queryOrderBy} ";
