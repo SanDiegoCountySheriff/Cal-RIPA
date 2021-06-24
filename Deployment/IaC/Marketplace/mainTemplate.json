@@ -469,7 +469,7 @@
     "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]",
     "keyvault_secret_cosmos_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key10'),')')]",
     // "template_version": "v2021.06.17.1",
-    "template_version": "{TEMPLATE_VERSION}",
+    "template_version": "#{TEMPLATE_VERSION}#",
     "default_tags": {
       "application": "ripa",
       "agency": "[parameters('agency_abbreviation')]",
@@ -3275,8 +3275,8 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "{CSSA_STORAGE_ACCOUNT_NAME}}",
-          "storageAccountKey": "{CSSA_STORAGE_ACCOUNT_KEY}"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azCliVersion": "2.23.0",
         "environmentVariables": [
@@ -3286,47 +3286,47 @@
           },
           {
             "name": "CSSA_SP_APP_ID",
-            "secureValue": "{CSSA_SP_APP_ID}"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "{CSSA_SP_SECRET}"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "{CSSA_TENANT_ID}"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "CSSA_SUBSCRIPTION_ID",
-            "value": "{CSSA_SUBSCRIPTION_ID}"
+            "value": "#{CSSA_SUBSCRIPTION_ID}#"
           },
           {
             "name": "CSSA_RESOURCE_GROUP_NAME",
-            "value": "{CSSA_RESOURCE_GROUP_NAME}"
+            "value": "#{CSSA_RESOURCE_GROUP_NAME}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_RG",
-            "value": "{CSSA_CERT_KEY_VAULT_RG}"
+            "value": "#{CSSA_CERT_KEY_VAULT_RG}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_NAME",
-            "value": "{CSSA_CERT_KEY_VAULT_NAME}"
+            "value": "#{CSSA_CERT_KEY_VAULT_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_NAME",
-            "value": "{CSSA_CERT_SECRET_NAME}"
+            "value": "#{CSSA_CERT_SECRET_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_VERSION",
-            "value": "{CSSA_CERT_SECRET_VERSION}"
+            "value": "#{CSSA_CERT_SECRET_VERSION}#"
           },
           {
             "name": "CSSA_CDN_PROFILE_NAME",
-            "value": "{CSSA_CDN_PROFILE_NAME}"
+            "value": "#{CSSA_CDN_PROFILE_NAME}#"
           },
           {
             "name": "CSSA_DNS_ROOT_ZONE",
-            "value": "{CSSA_DNS_ROOT_ZONE}"
+            "value": "#{CSSA_DNS_ROOT_ZONE}#"
           },
           {
             "name": "AGENCY_ORI",
@@ -3392,22 +3392,22 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "{CSSA_STORAGE_ACCOUNT_NAME}}",
-          "storageAccountKey": "{CSSA_STORAGE_ACCOUNT_KEY}"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azPowerShellVersion": "3.0",
         "environmentVariables": [
           {
             "name": "CSSA_SP_APP_ID",
-            "secureValue": "{CSSA_SP_APP_ID}"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "{CSSA_SP_SECRET}"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "{CSSA_TENANT_ID}"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "RESOURCE_GROUP_NAME",
@@ -3457,22 +3457,22 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "{CSSA_STORAGE_ACCOUNT_NAME}}",
-          "storageAccountKey": "{CSSA_STORAGE_ACCOUNT_KEY}"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azPowerShellVersion": "3.0",
         "environmentVariables": [
           {
             "name": "CSSA_SP_APP_ID",
-            "secureValue": "{CSSA_SP_APP_ID}"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "{CSSA_SP_SECRET}"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "{CSSA_TENANT_ID}"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "RESOURCE_GROUP_NAME",
