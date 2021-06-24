@@ -19,7 +19,7 @@
         clearable
       ></v-text-field>
     </template>
-    <v-date-picker v-model="model" no-title scrollable>
+    <v-date-picker v-model="model" no-title scrollable :min="min" :max="max">
       <v-spacer></v-spacer>
       <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
       <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
@@ -73,6 +73,14 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    min: {
+      type: String,
+      default: '',
+    },
+    max: {
+      type: String,
+      default: '',
     },
   },
 }
