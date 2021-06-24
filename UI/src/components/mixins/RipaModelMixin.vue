@@ -188,16 +188,6 @@ export default {
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
-
-      if (
-        this.viewModel.actionsTaken.personSearchConsentGiven ||
-        this.viewModel.actionsTaken.propertySearchConsentGiven
-      ) {
-        if (this.viewModel.actionsTaken.basisForSearch === null) {
-          this.viewModel.actionsTaken.basisForSearch = []
-        }
-        this.viewModel.actionsTaken.basisForSearch.push(1)
-      }
     },
 
     updateBasisForSearchModel() {
