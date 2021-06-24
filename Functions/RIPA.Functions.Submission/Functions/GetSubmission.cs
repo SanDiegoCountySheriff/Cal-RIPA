@@ -91,7 +91,13 @@ namespace RIPA.Functions.Submission.Functions
                     var stopSummaryResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}'");
                     var response = new
                     {
-                        submission = submissionResponse,
+                        submission = new {
+                            submissionResponse.Id,
+                            submissionResponse.DateSubmitted,
+                            submissionResponse.RecordCount,
+                            MinStopDate = stopSummaryResponse.OrderBy(x=>x.StopDateTime).FirstOrDefault().StopDateTime,
+                            MaxStopDate = stopSummaryResponse.OrderByDescending(x=>x.StopDateTime).FirstOrDefault().StopDateTime
+                        },
                         stops = stopResponse,
                         summary =  from g in
                                        stopSummaryResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.ListSubmissionError != null).SelectMany(x=>x.ListSubmissionError).GroupBy(x => x.Code) 
