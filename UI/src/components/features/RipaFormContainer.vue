@@ -107,7 +107,13 @@
 
     <ripa-snackbar
       text="Stops will be submitted once you are online and authenticated"
-      v-model="snackbarVisible"
+      v-model="snackbarNotOnlineVisible"
+    >
+    </ripa-snackbar>
+
+    <ripa-snackbar
+      text="There was an error checking GPS location."
+      v-model="snackbarGpsVisible"
     >
     </ripa-snackbar>
   </div>
@@ -140,7 +146,8 @@ export default {
 
   data() {
     return {
-      snackbarVisible: false,
+      snackbarNotOnlineVisible: false,
+      snackbarGpsVisible: false,
     }
   },
 
@@ -180,11 +187,11 @@ export default {
 
     handleSubmitStop(apiStop) {
       this.addApiStop(apiStop)
-      if (!this.isAdminEditing()) {
+      if (!this.isAdminEditing) {
         this.setLastLocation(this.stop)
       }
       if (!this.isOnlineAndAuthenticated) {
-        this.snackbarVisible = true
+        this.snackbarNotOnlineVisible = true
       }
     },
 

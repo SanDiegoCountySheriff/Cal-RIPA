@@ -431,7 +431,7 @@ export default new Vuex.Store({
     },
 
     checkGpsLocation({ commit }) {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         navigator.geolocation.getCurrentPosition(
           position => {
             const latLong = `${position.coords.longitude},${position.coords.latitude}`
@@ -444,13 +444,15 @@ export default new Vuex.Store({
                 resolve(data)
               })
               .catch(error => {
+                console.log('There was an error checking GPS location.', error)
                 commit('updateGpsLocationAddress', null)
-                reject(error)
+                resolve(null)
               })
           },
           error => {
-            console.error(`There was an error checking GPS location. ${error}`)
-            reject(error)
+            console.log('There was an error checking GPS location.', error)
+            commit('updateGpsLocationAddress', null)
+            resolve(null)
           },
           {
             timeout: 10000,
