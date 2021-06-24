@@ -292,6 +292,9 @@ export default {
       font-size: 1.2rem;
       font-weight: bold;
     }
+    span.count {
+      color: #2196f3;
+    }
   }
 }
 

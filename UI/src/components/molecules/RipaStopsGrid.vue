@@ -219,7 +219,7 @@ export default {
         { text: 'ID', value: 'id', sortName: 'id' },
         { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
         { text: 'Status', value: 'status', sortName: 'Status' },
-        { text: 'Edited', value: 'isEdited', sortName: 'isEdited' },
+        { text: 'Edited', value: 'isEdited', sortName: 'IsEdited' },
         { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
         { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
@@ -444,8 +444,11 @@ export default {
       this.$emit('handleSubmitStops', itemIds)
     },
     getColumnSortName() {
+      const columnName = Array.isArray(this.sortBy)
+        ? this.sortBy[0]
+        : this.sortBy
       const columnToSort = this.headers.filter(headerObj => {
-        return headerObj.value === this.sortBy
+        return headerObj.value === columnName
       })
       if (columnToSort.length) {
         return columnToSort[0].sortName
