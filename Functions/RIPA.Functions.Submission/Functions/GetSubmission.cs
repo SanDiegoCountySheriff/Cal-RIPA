@@ -39,6 +39,9 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiParameter(name: "Limit", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "limits the records")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Models.Submission), Description = "Subission Object")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
+        [OpenApiParameter(name: "OrderBy", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Column name to order the results")]
+        [OpenApiParameter(name: "Order", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "ASC or DESC order")]
+
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
         {
@@ -65,12 +68,26 @@ namespace RIPA.Functions.Submission.Functions
                 limit = Environment.NewLine + $"OFFSET {queryOffset} LIMIT {queryLimit}";
             }
 
+            var queryOrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default;
+            var queryOrder = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default;
+
+            var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
+            if (!string.IsNullOrWhiteSpace(queryOrderBy))
+            {
+                order = Environment.NewLine + $"ORDER BY c.{queryOrderBy} ";
+                if (!string.IsNullOrWhiteSpace(queryOrder))
+                {
+                    if (queryOrder.ToString().ToUpperInvariant() == "DESC" || queryOrder.ToString().ToUpperInvariant() == "ASC")
+                        order += queryOrder;
+                }
+            }
+
             if (!string.IsNullOrEmpty(Id))
             {
                 var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
                 if (submissionResponse != null)
                 {
-                    var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {limit}");
+                    var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {order} {limit}");
                     var stopSummaryResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}'");
                     var response = new
                     {
