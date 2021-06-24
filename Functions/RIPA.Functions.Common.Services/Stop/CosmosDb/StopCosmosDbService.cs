@@ -71,6 +71,33 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
+        public async Task<IEnumerable<Common.Models.SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id)
+        {
+            var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' GROUP BY ListSubmissionError.Code";
+            var query = _container.GetItemQueryIterator<Common.Models.SubmissionErrorSummary>(new QueryDefinition(queryString));
+            List<Common.Models.SubmissionErrorSummary> results = new List<Common.Models.SubmissionErrorSummary>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+            return results;
+        }
+
+        public async Task<IEnumerable<Common.Models.SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id) 
+        {
+            var queryString = $"Select Max(c.StopDateTime) AS MaxStopDateTime, Min(c.StopDateTime) AS MinStopDateTime FROM c JOIN ListSubmission IN c.ListSubmission WHERE ListSubmission.Id = '{id}'";
+            var query = _container.GetItemQueryIterator<Common.Models.SubmissionStopDateTimeSummary>(new QueryDefinition(queryString));
+            List<Common.Models.SubmissionStopDateTimeSummary> results = new List<Common.Models.SubmissionStopDateTimeSummary>();
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+            return results;
+        }
+
+
         public async Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText)
         {
             var queryString = $"SELECT ListSubmissionError.Code Code, ListSubmissionError.Message Message FROM Code JOIN ListSubmission IN Code.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE CONTAINS(ListSubmissionError.Code, '{inputText}')";

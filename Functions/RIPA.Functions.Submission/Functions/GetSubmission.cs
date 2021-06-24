@@ -88,20 +88,19 @@ namespace RIPA.Functions.Submission.Functions
                 if (submissionResponse != null)
                 {
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {order} {limit}");
-                    var stopSummaryResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}'");
+                    var getSubmissionStopDateTimeSummaryResponse = await _stopCosmosDbService.GetSubmissionStopDateTimeSummaries(Id);
+                    var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
                     var response = new
                     {
                         submission = new {
                             submissionResponse.Id,
                             submissionResponse.DateSubmitted,
                             submissionResponse.RecordCount,
-                            MinStopDate = stopSummaryResponse.OrderBy(x=>x.StopDateTime).FirstOrDefault().StopDateTime,
-                            MaxStopDate = stopSummaryResponse.OrderByDescending(x=>x.StopDateTime).FirstOrDefault().StopDateTime
+                            MaxStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MaxStopDateTime,
+                            MinStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MinStopDateTime
                         },
                         stops = stopResponse,
-                        summary =  from g in
-                                       stopSummaryResponse.SelectMany(x => x.ListSubmission).Where(x => x.Id.ToString() == Id && x.ListSubmissionError != null).SelectMany(x=>x.ListSubmissionError).GroupBy(x => x.Code) 
-                                   select new { Code = g.Key, Count = g.Count() }
+                        summary = getSubmissionErrorSummariesResponse
                     };
                    
                     return new OkObjectResult(response);
