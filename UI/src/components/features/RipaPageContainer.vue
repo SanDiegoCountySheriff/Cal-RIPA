@@ -77,9 +77,10 @@ export default {
 
   data() {
     return {
+      loading: false,
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMsApi: 5000,
-      stopInternalMsAuth: 600000,
+      stopInternalMsAuth: 120000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -135,7 +136,6 @@ export default {
     },
 
     async getFormData() {
-      this.loading = true
       if (this.displayBeatInput) {
         await Promise.all([this.getFormBeats()])
       }
@@ -144,7 +144,6 @@ export default {
         this.getFormSchools(),
         this.getFormStatutes(),
       ])
-      this.loading = false
     },
 
     getDarkFromLocalStorage() {
@@ -221,9 +220,11 @@ export default {
     },
 
     async updateAuthenticatedData() {
+      this.loading = true
       this.checkCache()
       await this.getUserData()
       await this.getFormData()
+      this.loading = false
     },
 
     checkAuthentication() {
@@ -241,7 +242,9 @@ export default {
       this.updateAuthenticatedData()
     } else {
       if (this.isValidCacheState) {
+        this.loading = true
         await this.getFormData()
+        this.loading = false
       }
     }
   },

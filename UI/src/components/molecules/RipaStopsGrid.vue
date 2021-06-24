@@ -6,7 +6,7 @@
           <ripa-date-picker
             v-model="stopFromDate"
             class="tw-ml-2"
-            label="Stop From Date"
+            label="From Date"
             @input="fromDateChange"
           ></ripa-date-picker>
         </div>
@@ -17,7 +17,7 @@
           <ripa-date-picker
             v-model="stopToDate"
             class="tw-ml-2"
-            label="Stop To Date"
+            label="To Date"
             @input="toDateChange"
           ></ripa-date-picker>
         </div>
@@ -33,7 +33,7 @@
         ></v-select>
       </v-flex>
 
-      <v-flex xs12 md2>
+      <v-flex xs12 md1>
         <div class="tw-flex tw-justify-center">
           <v-switch
             v-model="isPiiFound"
@@ -44,9 +44,21 @@
         </div>
       </v-flex>
 
+      <v-flex xs12 md1>
+        <div class="tw-flex tw-justify-center">
+          <v-switch
+            v-model="isEdited"
+            class="tw-ml-2"
+            label="Edited"
+            @change="isEditedChange"
+          ></v-switch>
+        </div>
+      </v-flex>
+
       <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
+            v-model="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
             :loading="errorCodesLoading"
             @input="handleChangeSearchCodes"
@@ -58,7 +70,18 @@
             deletable-chips
             small-chips
             label="Error Codes"
-          ></v-autocomplete>
+          >
+            <template v-slot:selection="data">
+              <v-chip
+                v-bind="data.attrs"
+                :input-value="data.selected"
+                close
+                @click:close="removeErrorCode(data.item)"
+              >
+                {{ data.item.value }}
+              </v-chip>
+            </template>
+          </v-autocomplete>
         </div>
       </v-flex>
 
@@ -79,10 +102,6 @@
           <p>
             <span class="label">Errors</span>
             <span class="count">{{ stops.summary.failed }}</span>
-          </p>
-          <p>
-            <span class="label">Resubmit</span>
-            <span class="count">{{ stops.summary.resubmitted }}</span>
           </p>
         </div>
         <v-progress-linear
@@ -158,6 +177,9 @@
           <template v-slot:no-data>
             <div>No Data</div>
           </template>
+          <template v-slot:item.isEdited="{ item }">
+            {{ item.isEdited ? 'Yes' : 'No' }}
+          </template>
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
@@ -197,12 +219,14 @@ export default {
         { text: 'ID', value: 'id', sortName: 'id' },
         { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
         { text: 'Status', value: 'status', sortName: 'Status' },
+        { text: 'Edited', value: 'isEdited', sortName: 'IsEdited' },
         { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
         { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
       isPiiFound: null,
+      isEdited: null,
       errorsFound: false,
       officerName: null,
       selectedItems: [],
@@ -238,7 +262,7 @@ export default {
     getErrorCodeSearchItems() {
       return this.errorCodeSearch.items.map(itemObj => {
         return {
-          text: itemObj.code,
+          text: `${itemObj.code}: ${itemObj.message.substr(0, 100)}...`,
           value: itemObj.code,
         }
       })
@@ -267,6 +291,7 @@ export default {
     getFilterStatus() {
       return {
         isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
         status: this.currentStatusFilter,
@@ -350,6 +375,12 @@ export default {
       this.selectedErrorCodes = val
       this.handleFilter()
     },
+    removeErrorCode(val) {
+      this.selectedErrorCodes = this.selectedErrorCodes.filter(errorCode => {
+        return errorCode !== val.value
+      })
+      this.handleFilter()
+    },
     fromDateChange(val) {
       this.stopFromDate = val
       this.handleFilter()
@@ -370,6 +401,14 @@ export default {
       }
       this.handleFilter()
     },
+    isEditedChange(val) {
+      if (!val) {
+        this.isEdited = null
+      } else {
+        this.isEdited = true
+      }
+      this.handleFilter()
+    },
     handleFilter() {
       // whenever you change a filter, you're going to
       // reset the paging because it would all change with new settings
@@ -381,6 +420,7 @@ export default {
           stopToDate: this.stopToDate,
           status: this.currentStatusFilter,
           isPiiFound: this.isPiiFound,
+          isEdited: this.isEdited,
           // need to make a comma delimited string out of the error codes
           errorCodes: this.selectedErrorCodes.join(),
           orderBy:
@@ -404,8 +444,11 @@ export default {
       this.$emit('handleSubmitStops', itemIds)
     },
     getColumnSortName() {
+      const columnName = Array.isArray(this.sortBy)
+        ? this.sortBy[0]
+        : this.sortBy
       const columnToSort = this.headers.filter(headerObj => {
-        return headerObj.value === this.sortBy
+        return headerObj.value === columnName
       })
       if (columnToSort.length) {
         return columnToSort[0].sortName
@@ -437,8 +480,6 @@ export default {
           this.handleFilter()
         }
       }
-      console.log('sortDesc' + newValue)
-      console.log('sortDesc' + oldValue)
     },
   },
 
@@ -502,6 +543,10 @@ export default {
       span.label {
         font-size: 1.2rem;
         font-weight: bold;
+      }
+
+      span.count {
+        color: #2196f3;
       }
     }
   }

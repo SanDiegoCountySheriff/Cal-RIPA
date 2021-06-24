@@ -272,7 +272,10 @@ export default {
 
     async handleGpsLocation() {
       this.loadingGps = true
-      await this.checkGpsLocation()
+      const result = await this.checkGpsLocation()
+      if (result === null) {
+        this.snackbarGpsVisible = true
+      }
       this.loadingGps = false
     },
 

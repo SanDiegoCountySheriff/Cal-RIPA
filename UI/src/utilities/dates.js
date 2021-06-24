@@ -2,6 +2,7 @@ import differenceInHours from 'date-fns/differenceInHours'
 import { differenceInYears as diffInYears } from 'date-fns'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
+import endOfDay from 'date-fns/endOfDay'
 
 export const formatDate = dateStr => {
   if (dateStr && dateStr.length > 0) {
@@ -51,4 +52,12 @@ export const formatShortDate = dateStr => {
 
 export const uniqueId = () => {
   return format(new Date(), 'yyyyMMddkkmm')
+}
+
+export const formatToIsoCurrentDate = () => {
+  return format(endOfDay(new Date()), `yyyy-MM-dd'T'HH:mm:ss.SSSxxx`)
+}
+
+export const formatToIsoDate = date => {
+  return format(endOfDay(date), `yyyy-MM-dd'T'HH:mm:ss.SSSxxx`)
 }
