@@ -250,8 +250,11 @@ export default {
       this.$emit('handleFilter', filterData)
     },
     getColumnSortName() {
+      const columnName = Array.isArray(this.sortBy)
+        ? this.sortBy[0]
+        : this.sortBy
       const columnToSort = this.headers.filter(headerObj => {
-        return headerObj.value === this.sortBy
+        return headerObj.value === columnName
       })
       if (columnToSort.length) {
         return columnToSort[0].sortName
