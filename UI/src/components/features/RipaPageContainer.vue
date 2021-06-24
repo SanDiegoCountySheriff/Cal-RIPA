@@ -79,7 +79,7 @@ export default {
     return {
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMsApi: 5000,
-      stopInternalMsAuth: 600000,
+      stopInternalMsAuth: 120000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',

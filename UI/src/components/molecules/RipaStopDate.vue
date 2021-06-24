@@ -16,6 +16,8 @@
               v-model="model.stopDate.date"
               label="Date of Stop"
               :rules="dateRules"
+              :min="getMinDate"
+              :max="getMaxDate"
               @input="handleInput"
             >
             </ripa-date-picker>
@@ -72,7 +74,12 @@ import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
 import { DURATIONS } from '@/constants/form'
-import { dateWithinLastHours, dateNotInFuture } from '@/utilities/dates'
+import {
+  dateWithinLastHours,
+  dateNotInFuture,
+  formatToIsoCurrentDate,
+  formatToIsoDate,
+} from '@/utilities/dates'
 
 export default {
   name: 'ripa-stop-date',
@@ -140,6 +147,14 @@ export default {
       }
 
       return dateNotInFuture(dateStr, timeStr)
+    },
+
+    getMinDate() {
+      return formatToIsoDate(new Date(2018, 1, 1, 0, 0, 0))
+    },
+
+    getMaxDate() {
+      return formatToIsoCurrentDate()
     },
   },
 
