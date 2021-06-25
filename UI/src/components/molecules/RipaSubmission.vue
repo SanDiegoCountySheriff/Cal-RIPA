@@ -35,7 +35,7 @@
         <span class="submissionDetail--header--label">Stop Date Start:</span>
         <span>{{
           format(
-            new Date(submission.submission.dateSubmitted),
+            new Date(submission.submission.minStopDate),
             'yyyy-MM-dd kk:mm',
           )
         }}</span>
@@ -44,7 +44,7 @@
         <span class="submissionDetail--header--label">Stop Date End:</span>
         <span>{{
           format(
-            new Date(submission.submission.dateSubmitted),
+            new Date(submission.submission.maxStopDate),
             'yyyy-MM-dd kk:mm',
           )
         }}</span>
@@ -68,8 +68,8 @@
           :items="submission.stops"
           :server-items-length="getTotalStops"
           :search="search"
-          sort-by="stopDateTime"
-          sort-desc
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
         >
           <template v-slot:item.actions="{ item }">
             <v-icon small class="tw-mr-2" @click="editItem(item)">
@@ -125,11 +125,11 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'Stop', value: 'id' },
-        { text: 'Status', value: 'status', width: 100 },
-        { text: 'Edited', value: 'edited', width: 100 },
+        { text: 'Stop', value: 'id', sortName: 'id' },
+        { text: 'Status', value: 'status', width: 100, sortName: 'status' },
+        { text: 'Edited', value: 'edited', width: 100, sortName: 'edited' },
         { text: 'Error', value: 'error', sortable: false },
-        { text: 'Actions', value: 'actions' },
+        { text: 'Actions', value: 'actions', sortable: false },
       ],
       format,
       currentSubmissionLoading: false,
@@ -138,6 +138,8 @@ export default {
       itemsPerPage: 10,
       search: '',
       currentOffset: this.currentPage * this.itemsPerPage,
+      sortBy: null,
+      sortDesc: true,
     }
   },
 
@@ -187,6 +189,19 @@ export default {
     editItem(item) {
       this.handleEditStop(item, window.location.pathname)
     },
+    getColumnSortName() {
+      const columnName = Array.isArray(this.sortBy)
+        ? this.sortBy[0]
+        : this.sortBy
+      const columnToSort = this.headers.filter(headerObj => {
+        return headerObj.value === columnName
+      })
+      if (columnToSort.length) {
+        return columnToSort[0].sortName
+      } else {
+        return null
+      }
+    },
   },
 
   computed: {
@@ -218,6 +233,16 @@ export default {
         return this.currentPage
       } else {
         return (this.currentPage - 1) * this.itemsPerPage + 1
+      }
+    },
+    getFilterStatus() {
+      return {
+        orderBy:
+          // if the column sort name is null, default to sorting by the stop date
+          this.getColumnSortName() === null
+            ? 'dateSubmitted'
+            : this.getColumnSortName(),
+        order: this.sortDesc ? 'Desc' : 'Asc',
       }
     },
   },
