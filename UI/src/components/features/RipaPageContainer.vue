@@ -1,12 +1,13 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
-    :display-environment="displayEnvironment"
-    :environment-name="environmentName"
-    :online="isOnline"
     :authenticated="isAuthenticated"
     :dark="isDark"
+    :display-environment="displayEnvironment"
+    :environment-name="environmentName"
     :invalidUser="invalidUser"
+    :loading="loading"
+    :online="isOnline"
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     @handleLogOut="handleLogOut"
