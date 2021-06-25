@@ -11,6 +11,9 @@ trigger:
   paths:
     include:
       - Functions/RIPA.Functions.Stop/*
+      - Functions/RIPA.Functions.Common.Models/*
+      - Functions/RIPA.Functions.Common.Services/*
+      - Functions/RIPA.Functions.Security/*
       - Deployment/Pipelines/azure-pipeline-stop.yml
 
 pool:

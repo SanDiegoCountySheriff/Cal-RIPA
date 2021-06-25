@@ -11,8 +11,11 @@ trigger:
   paths:
     include:
       - Functions/RIPA.Functions.UserProfile/*
+      - Functions/RIPA.Functions.Common.Models/*
+      - Functions/RIPA.Functions.Common.Services/*
+      - Functions/RIPA.Functions.Security/*
       - Deployment/Pipelines/azure-pipeline-userprofile.yml
-
+      
 pool:
   vmImage: "ubuntu-latest"
 
