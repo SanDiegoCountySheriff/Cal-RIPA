@@ -9,18 +9,22 @@ Vue.use(Vuex)
 
 // Setup Axios Response Interceptors
 // to add the authentication token to each header
-axios.interceptors.request.use(req => {
-  if (req.url === '/config.json') {
-    // no need to append access token for local config file
-    return req
-  } else {
-    authentication.acquireToken().then(token => {
-      req.headers.Authorization = `Bearer ${token}`
+axios.interceptors.request.use(
+  req => {
+    if (req.url === '/config.json') {
       return req
-    })
-  }
-  return req
-})
+    } else {
+      authentication.acquireToken().then(token => {
+        req.headers.Authorization = `Bearer ${token}`
+        return req
+      })
+    }
+    return req
+  },
+  function (error) {
+    return Promise.reject(error)
+  },
+)
 
 export default new Vuex.Store({
   state: {
