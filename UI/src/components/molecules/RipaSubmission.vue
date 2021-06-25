@@ -168,10 +168,18 @@ export default {
         filters: this.getFilterStatus,
       })
     },
+    handleSort() {
+      this.$emit('submissionDetailPaginate', {
+        id: this.submissionId,
+        offset: this.currentOffset,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
     handleJumpToPage() {
       this.$emit('submissionDetailPaginate', {
         id: this.submissionId,
-        offset: this.itemsPerPage * (this.currentPage - 1),
+        offset: this.currentOffset,
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -258,6 +266,16 @@ export default {
       this.currentSubmissionLoading = true
       if (newValue !== oldValue) {
         this.$emit('loadNewSubmission', newValue)
+      }
+    },
+    sortDesc: function (newValue, oldValue) {
+      if (newValue === undefined) {
+        // this means you're removing the sort on this column
+        this.handleSort()
+      } else {
+        if (newValue !== oldValue) {
+          this.handleSort()
+        }
       }
     },
   },
