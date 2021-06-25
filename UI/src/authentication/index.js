@@ -32,17 +32,23 @@ export default {
       this.authenticationContext = new AuthenticationContext(config)
 
       return new Promise((resolve, reject) => {
-        if (
-          this.authenticationContext.isCallback(window.location.hash) ||
-          window.self !== window.top
-        ) {
-          // redirect to the location specified in the url params.
-          this.authenticationContext.handleWindowCallback()
-        } else {
-          // try pull the user out of local storage
-          const user = this.authenticationContext.getCachedUser()
-          store.dispatch('setUserAccountInfo', user)
-          resolve()
+        try {
+          if (
+            this.authenticationContext.isCallback(window.location.hash) ||
+            window.self !== window.top
+          ) {
+            // redirect to the location specified in the url params.
+            this.authenticationContext.handleWindowCallback()
+          } else {
+            // try pull the user out of local storage
+            const user = this.authenticationContext.getCachedUser()
+            store.dispatch('setUserAccountInfo', user)
+            localStorage.setItem('ripa_adal_user', JSON.stringify(user))
+            resolve()
+          }
+        } catch (error) {
+          localStorage.removeItem('ripa_adal_user')
+          reject(error)
         }
       })
     })
@@ -82,6 +88,7 @@ export default {
   },
 
   signOut() {
+    localStorage.removeItem('ripa_adal_user')
     this.authenticationContext.logOut()
   },
 }

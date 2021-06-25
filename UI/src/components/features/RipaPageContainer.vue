@@ -150,10 +150,7 @@ export default {
 
     getDarkFromLocalStorage() {
       const value = localStorage.getItem('ripa_dark_theme')
-      if (value === null) {
-        return true
-      }
-      return value === '1'
+      return value === null ? true : value === '1'
     },
 
     handleClose() {
@@ -233,7 +230,7 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         authentication.acquireToken().catch(error => {
           console.log(`acquireToken error: ${error}`)
-          this.handleLogOut()
+          this.handleLogIn()
         })
       }
     },
