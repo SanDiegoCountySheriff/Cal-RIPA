@@ -43,7 +43,9 @@ export default {
             // try pull the user out of local storage
             const user = this.authenticationContext.getCachedUser()
             store.dispatch('setUserAccountInfo', user)
-            localStorage.setItem('ripa_adal_user', JSON.stringify(user))
+            if (user !== null) {
+              localStorage.setItem('ripa_adal_user', JSON.stringify(user))
+            }
             resolve()
           }
         } catch (error) {
