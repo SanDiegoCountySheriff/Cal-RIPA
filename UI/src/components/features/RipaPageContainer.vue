@@ -24,6 +24,7 @@
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :loading="loading"
       :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleClose"

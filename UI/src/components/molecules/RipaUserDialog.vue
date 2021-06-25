@@ -7,21 +7,35 @@
 
       <v-card-text>
         <v-form ref="dialogForm" lazy-validation>
-          <ripa-user
-            v-model="modelUser"
-            :is-invalid-user="isInvalidUser"
-          ></ripa-user>
+          <template v-if="loading">
+            <div class="text-center">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+                :size="70"
+                :width="7"
+              ></v-progress-circular>
+            </div>
+          </template>
+          <template v-if="!loading">
+            <ripa-user
+              v-model="modelUser"
+              :is-invalid-user="isInvalidUser"
+            ></ripa-user>
+          </template>
         </v-form>
       </v-card-text>
 
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <template v-if="!isInvalidUser">
-          <v-btn color="blue darken-1" text @click="handleClose">
-            Cancel
-          </v-btn>
+        <template v-if="!loading">
+          <v-spacer></v-spacer>
+          <template v-if="!isInvalidUser">
+            <v-btn color="blue darken-1" text @click="handleClose">
+              Cancel
+            </v-btn>
+          </template>
+          <v-btn color="blue darken-1" text @click="handleSave"> Save </v-btn>
         </template>
-        <v-btn color="blue darken-1" text @click="handleSave"> Save </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -114,6 +128,10 @@ export default {
     user: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     onClose: {
       type: Function,
