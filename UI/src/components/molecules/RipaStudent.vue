@@ -56,6 +56,7 @@ export default {
     handleInput() {
       this.updateStopReasonModel()
       this.clearDisabilityModel()
+      this.updateActionsTakenModel()
       this.updateStopResultModel()
       this.$emit('input', this.viewModel)
     },

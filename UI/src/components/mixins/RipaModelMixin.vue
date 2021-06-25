@@ -135,6 +135,15 @@ export default {
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
+
+      if (!this.viewModel.person.isStudent) {
+        if (this.viewModel.actionsTaken.actionsTakenDuringStop !== null) {
+          this.viewModel.actionsTaken.actionsTakenDuringStop =
+            this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 23,
+            )
+        }
+      }
     },
 
     updateActionsTakenSearchModel() {
@@ -275,6 +284,7 @@ export default {
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
         this.updateStopReasonModel()
+        this.updateActionsTakenModel()
       }
     },
 
