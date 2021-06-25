@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
   </ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj" />
 		<ProjectReference Include="..\RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj" />
 		<ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
 	</ItemGroup>

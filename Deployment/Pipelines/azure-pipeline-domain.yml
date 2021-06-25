@@ -11,6 +11,8 @@ trigger:
   paths:
     include:
       - Functions/RIPA.Functions.Domain/*
+      - Functions/RIPA.Functions.Common.Models/*
+      - Functions/RIPA.Functions.Security/*
       - Deployment/Pipelines/azure-pipeline-domain.yml
 
 pool:

@@ -11,6 +11,7 @@ trigger:
   paths:
     include:
       - Functions/RIPA.Functions.TextAnalytics/*
+      - Functions/RIPA.Functions.Security/*
       - Deployment/Pipelines/azure-pipeline-TextAnalytics.yml
 
 pool:
