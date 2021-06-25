@@ -16,6 +16,7 @@ export default {
         cacheLocation: 'localStorage',
         loadFrameTimeout: 60000,
       }
+
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
         apiSubscription: res.data.Configuration.Subscription,
@@ -26,6 +27,7 @@ export default {
         environmentName: res.data.Configuration.Environment,
         displayEnvironment: res.data.Configuration.Environment !== 'p',
       })
+
       this.clientId = config.clientId
       this.authenticationContext = new AuthenticationContext(config)
 

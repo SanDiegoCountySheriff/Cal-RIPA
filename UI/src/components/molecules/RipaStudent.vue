@@ -14,7 +14,6 @@
           <ripa-switch
             v-model="model.person.isStudent"
             label="K-12 Public School Student"
-            :disabled="disabled"
             :max-width="250"
             @input="handleInput"
           ></ripa-switch>
@@ -57,6 +56,7 @@ export default {
     handleInput() {
       this.updateStopReasonModel()
       this.clearDisabilityModel()
+      this.updateActionsTakenModel()
       this.updateStopResultModel()
       this.$emit('input', this.viewModel)
     },
