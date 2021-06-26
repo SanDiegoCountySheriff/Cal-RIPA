@@ -1243,6 +1243,9 @@
         ],
         "ipRules": [
           {
+            "ipAddressOrRange": "0.0.0.0"
+          },
+          {
             "ipAddressOrRange": "104.42.195.92"
           },
           {
@@ -2763,7 +2766,8 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_submission_ASP_riparg_af76_name'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafnsa_name'))]",
-        "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
+        "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]",
+        "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
       "kind": "functionapp,linux",
       "tags": "[variables('all_tags')]",
