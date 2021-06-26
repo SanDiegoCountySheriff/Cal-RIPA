@@ -555,10 +555,6 @@ export default {
             }
             if (this.onSubmitStop) {
               const apiStop = this.getApiStop
-              if (this.adminEditing) {
-                const explanation = this.stop.editStopExplanation || 'None'
-                apiStop.editStopExplanation = explanation
-              }
               console.log('Submitted Stop', apiStop)
               this.onSubmitStop(apiStop)
             }

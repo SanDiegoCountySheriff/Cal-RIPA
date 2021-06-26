@@ -15,6 +15,10 @@
 
     <template v-if="adminEditing">
       <ripa-edit-stop-explanation v-model="model"></ripa-edit-stop-explanation>
+      <ripa-override-pii
+        :api-stop="apiStop"
+        v-model="model"
+      ></ripa-override-pii>
     </template>
 
     <v-spacer></v-spacer>
@@ -54,6 +58,7 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 import RipaEditStopExplanation from '@/components/molecules/RipaEditStopExplanation'
+import RipaOverridePii from '@/components/molecules/RipaOverridePii'
 
 export default {
   name: 'ripa-form-step7',
@@ -64,6 +69,7 @@ export default {
     RipaAlert,
     RipaFormSummary,
     RipaEditStopExplanation,
+    RipaOverridePii,
   },
 
   props: {

@@ -419,6 +419,9 @@ export default {
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
         updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.editStopExplanation =
+          this.stop.editStopExplanation || null
+        updatedFullStop.overridePii = this.stop.overridePii || false
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)
