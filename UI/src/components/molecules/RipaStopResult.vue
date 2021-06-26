@@ -71,6 +71,7 @@
                     x-small
                     outlined
                     color="primary"
+                    :disabled="isPullReasonCodeWarningDisabled"
                     @click="handlePullReasonCodeWarning"
                   >
                     Pull from Reason Code
@@ -110,6 +111,7 @@
                     x-small
                     outlined
                     color="primary"
+                    :disabled="isPullReasonCodeCitationDisabled"
                     @click="handlePullReasonCodeCitation"
                   >
                     Pull from Reason Code
@@ -149,6 +151,7 @@
                     x-small
                     outlined
                     color="primary"
+                    :disabled="isPullReasonCodeInfieldDisable"
                     @click="handlePullReasonCodeInfield"
                   >
                     Pull from Reason Code
@@ -196,6 +199,7 @@
                     x-small
                     outlined
                     color="primary"
+                    :disabled="isPullReasonCodeCustodialArrestDisabled"
                     @click="handlePullReasonCodeCustodialArrest"
                   >
                     Pull from Reason Code
@@ -340,6 +344,22 @@ export default {
       const codes = this.viewModel.stopResult?.custodialArrestCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeWarningDisabled() {
+      return this.viewModel.stopResult?.warningCodes.length >= 5
+    },
+
+    isPullReasonCodeCitationDisabled() {
+      return this.viewModel.stopResult?.citationCodes.length >= 5
+    },
+
+    isPullReasonCodeInfieldDisable() {
+      return this.viewModel.stopResult?.infieldCodes.length >= 5
+    },
+
+    isPullReasonCodeCustodialArrestDisabled() {
+      return this.viewModel.stopResult?.custodialArrestCodes.length >= 5
     },
 
     actionsTakenRules() {
