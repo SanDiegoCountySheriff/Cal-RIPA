@@ -21,7 +21,7 @@ function UploadAndCreateKey
     
     $LowerCaseFileName = $FileName.ToLower()
 
-    $expires = (Get-Date).AddYears($CSSA_SAS_EXPIRY_YEARS).AddMonths($CSSA_SAS_EXPIRY_MONTHS).AddDays($CSSA_SAS_EXPIRY_DAYS).ToString('yyyy-MM-dd')
+    $expires = (Get-Date).AddYears($CSSA_SAS_EXPIRY_YEARS).AddMonths($CSSA_SAS_EXPIRY_MONTHS).AddDays($CSSA_SAS_EXPIRY_DAYS).ToString('yyyy-MM-dd') + "T00:00:00Z"
     Write-Host "Expiry date:" $expires
 
     Rename-Item -Path $FileName -NewName $FileName.ToLower()

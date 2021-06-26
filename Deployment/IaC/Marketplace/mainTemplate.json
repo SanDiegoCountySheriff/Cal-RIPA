@@ -6,8 +6,7 @@
       "type": "string"
     },
     "agency_abbreviation": {
-      "type": "string",
-      "defaultValue": "[concat('l', utcNow('HHmm'))]"
+      "type": "string"
     },
     "agency_type": {
       "type": "string"
