@@ -37,11 +37,12 @@ function UploadAndCreateKey
 
     $itemSasUrl = "$($url)?$($sas)".Replace('"?"', '?')
     
-    $itemSecretKey = "MP-" + $FileName.ToUpper().Replace('.', '-') + "-SAS-URL"
+    $itemSecretKey = "MP-" + $FileName.ToUpper().Replace('.', '-').Replace('_', '-') + "-SAS-URL"
     Write-Host "Using secret key:" $itemSecretKey
 
     Write-Host "Storing key in KV:" $itemSecretKey
-    az keyvault secret set --vault-name $CSSA_CERT_KEY_VAULT_NAME -n $itemSecretKey --value $itemSasUrl
+    $secret = (az keyvault secret set --vault-name $CSSA_CERT_KEY_VAULT_NAME -n $itemSecretKey --value $itemSasUrl -o tsv).id
+    Write-Host "Created secret:" $secret
 
     Write-Host "Finished processing:" $FileName
 }
