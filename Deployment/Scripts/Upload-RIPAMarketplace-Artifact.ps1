@@ -1,6 +1,10 @@
 ﻿
 param (
-    $BaseFolder
+    $BaseFolder,
+    $CSSA_STORAGE_ACCOUNT_NAME,
+    $CSSA_STORAGE_ACCOUNT_KEY,
+    $CSSA_MP_DEPLOYMENT_CONTAINER,
+    $CSSA_CERT_KEY_VAULT_NAME
 )
 
 
@@ -23,13 +27,13 @@ function UploadAndCreateKey
     Rename-Item -Path $FileName -NewName $FileName.ToLower()
 
     Write-Host "Uploading API package"
-    az storage blob upload --account-name $(CSSA_STORAGE_ACCOUNT_NAME) --account-key $(CSSA_STORAGE_ACCOUNT_KEY) -c "$(CSSA_MP_DEPLOYMENT_CONTAINER)" -n $LowerCaseFileName  -f $LowerCaseFileName 
+    az storage blob upload --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName  -f $LowerCaseFileName 
 
     Write-Host "Requesting URL"
-    $url = (az storage blob url --account-name $(CSSA_STORAGE_ACCOUNT_NAME) --account-key $(CSSA_STORAGE_ACCOUNT_KEY) -c "$(CSSA_MP_DEPLOYMENT_CONTAINER)" -n $LowerCaseFileName).ToString()
+    $url = (az storage blob url --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName).ToString()
 
     Write-Host "Requesting SAS"
-    $sas = (az storage blob generate-sas --account-name $(CSSA_STORAGE_ACCOUNT_NAME) --account-key $(CSSA_STORAGE_ACCOUNT_KEY) -c "$(CSSA_MP_DEPLOYMENT_CONTAINER)" -n $LowerCaseFileName --permissions r --expiry $expires)
+    $sas = (az storage blob generate-sas --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName --permissions r --expiry $expires)
 
     $itemSasUrl = "$($url)?$($sas)".Replace('"?"', '?')
     
@@ -37,7 +41,7 @@ function UploadAndCreateKey
     Write-Host "Using secret key:" $itemSecretKey
 
     Write-Host "Storing key in KV:" $itemSecretKey
-    az keyvault secret set --vault-name $(CSSA_CERT_KEY_VAULT_NAME) -n $itemSecretKey --value $itemSasUrl
+    az keyvault secret set --vault-name $CSSA_CERT_KEY_VAULT_NAME -n $itemSecretKey --value $itemSasUrl
 
     Write-Host "Finished processing:" $FileName
 }
