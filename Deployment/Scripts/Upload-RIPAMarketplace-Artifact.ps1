@@ -1,4 +1,10 @@
-﻿function UploadAndCreateKey
+﻿
+param (
+    $BaseFolder
+)
+
+
+function UploadAndCreateKey
 {
     param (
         $FileName,
@@ -37,32 +43,34 @@
 }
 
 Write-Host "Starting upload & SaS key processing"
+Write-Host "Using base directory:" $BaseFolder
 
 Write-Host "Processing DNS/SSL/CDN configurations"
-UploadAndCreateKey new-ripa-cssa-sub-domain.sh "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/SSL"
+UploadAndCreateKey new-ripa-cssa-sub-domain.sh "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/SSL"
 
 Write-Host "Processing domain data configurations"
-UploadAndCreateKey Import-DomainData.ps1 "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
-UploadAndCreateKey Beat_Table.csv "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
-UploadAndCreateKey City_Table.csv "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
-UploadAndCreateKey Offense_Table.csv "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
-UploadAndCreateKey School_Table.csv "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
+UploadAndCreateKey Import-DomainData.ps1 "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
+UploadAndCreateKey Beat_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
+UploadAndCreateKey City_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
+UploadAndCreateKey Offense_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
+UploadAndCreateKey School_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
 
 Write-Host "Processing application publishing configurations"
 Rename-Item -Path mp-config.json -NewName config.json
-$UiPackagePath = "$(System.DefaultWorkingDirectory)/_RIPA-UI/drop"
+$UiPackagePath = "$BaseFolder/_RIPA-UI/drop"
 Get-ChildItem -Path $UiPackagePath | Where-Object { $_.Name -match '^[0-9]*\.zip' } | Rename-Item -NewName ui.zip
 
-UploadAndCreateKey Import-AllRIPAApplications.ps1 "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
-UploadAndCreateKey Import-ApimApis.psm1 "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
-UploadAndCreateKey New-FunctionHostKey.psm1 "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
-UploadAndCreateKey New-RIPAApimBackend.psm1 "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
-UploadAndCreateKey config.json "$(System.DefaultWorkingDirectory)/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
-UploadAndCreateKey domain.zip "$(System.DefaultWorkingDirectory)/_RIPA-Domain/drop"
-UploadAndCreateKey stop.zip "$(System.DefaultWorkingDirectory)/_RIPA-Stop/drop"
-UploadAndCreateKey submission.zip "$(System.DefaultWorkingDirectory)/_RIPA-Submission/drop"
-UploadAndCreateKey textanalytics.zip "$(System.DefaultWorkingDirectory)/_RIPA-TextAnalytics/drop"
-UploadAndCreateKey userprofile.zip "$(System.DefaultWorkingDirectory)/_RIPA-UserProfile/drop"
-UploadAndCreateKey ui.zip "$(System.DefaultWorkingDirectory)/_RIPA-UI/drop"
+UploadAndCreateKey Import-AllRIPAApplications.ps1 "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
+UploadAndCreateKey Import-ApimApis.psm1 "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
+UploadAndCreateKey New-FunctionHostKey.psm1 "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
+UploadAndCreateKey New-RIPAApimBackend.psm1 "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
+UploadAndCreateKey config.json "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts"
+UploadAndCreateKey domain.zip "$BaseFolder/_RIPA-Domain/drop"
+UploadAndCreateKey stop.zip "$BaseFolder/_RIPA-Stop/drop"
+UploadAndCreateKey submission.zip "$BaseFolder/_RIPA-Submission/drop"
+UploadAndCreateKey textanalytics.zip "$BaseFolder/_RIPA-TextAnalytics/drop"
+UploadAndCreateKey userprofile.zip "$BaseFolder/_RIPA-UserProfile/drop"
+
+UploadAndCreateKey ui.zip $UiPackagePath
 
 Write-Host "Finished upload & SaS key processing"
