@@ -61,7 +61,7 @@ UploadAndCreateKey Offense_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIP
 UploadAndCreateKey School_Table.csv "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/IaC/Marketplace"
 
 Write-Host "Processing application publishing configurations"
-Rename-Item -Path mp-config.json -NewName config.json
+Rename-Item -Path "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/mp-config.json" -NewName config.json -Force
 $UiPackagePath = "$BaseFolder/_RIPA-UI/drop"
 Get-ChildItem -Path $UiPackagePath | Where-Object { $_.Name -match '^[0-9]*\.zip' } | Rename-Item -NewName ui.zip
 
