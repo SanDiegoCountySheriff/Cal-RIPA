@@ -1012,6 +1012,7 @@ export const fullStopToStop = fullStop => {
     id: fullStop.id,
     template: fullStop.template,
     editStopExplanation: null,
+    overridePii: false,
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
@@ -1069,6 +1070,7 @@ export const fullStopToApiStop = (
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
+    editStopExplanation: parsedApiStop ? fullStop.editStopExplanation : null,
     editStopOfficerId: parsedApiStop ? officer.officerId : null,
     expYears: parsedApiStop
       ? parsedApiStop.expYears
@@ -1088,7 +1090,7 @@ export const fullStopToApiStop = (
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
-    isPiiFound: getPiiFound(fullStop),
+    isPiiFound: getPiiFound(parsedApiStop, fullStop),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
@@ -1165,7 +1167,11 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
   })
 }
 
-const getPiiFound = fullStop => {
+const getPiiFound = (parsedApiStop, fullStop) => {
+  if (parsedApiStop && fullStop.overridePii) {
+    return false
+  }
+
   const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false

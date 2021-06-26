@@ -1,12 +1,13 @@
 <template>
   <ripa-page-wrapper
     :admin="isAdmin"
-    :display-environment="displayEnvironment"
-    :environment-name="environmentName"
-    :online="isOnline"
     :authenticated="isAuthenticated"
     :dark="isDark"
+    :display-environment="displayEnvironment"
+    :environment-name="environmentName"
     :invalidUser="invalidUser"
+    :loading="loading"
+    :online="isOnline"
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     @handleLogOut="handleLogOut"
@@ -24,6 +25,7 @@
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
+      :loading="loading"
       :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleClose"
@@ -34,7 +36,7 @@
       :show-dialog="showInvalidUserDialog"
     ></ripa-invalid-user-dialog>
 
-    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
+    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible" multi-line>
     </ripa-snackbar>
 
     <ripa-interval
@@ -80,7 +82,7 @@ export default {
       loading: false,
       isDark: this.getDarkFromLocalStorage(),
       stopInternalMsApi: 5000,
-      stopInternalMsAuth: 120000,
+      stopInternalMsAuth: 600000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -148,10 +150,7 @@ export default {
 
     getDarkFromLocalStorage() {
       const value = localStorage.getItem('ripa_dark_theme')
-      if (value === null) {
-        return true
-      }
-      return value === '1'
+      return value === null ? true : value === '1'
     },
 
     handleClose() {
@@ -210,11 +209,18 @@ export default {
     async runApiStopsJob(apiStops) {
       this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
+        const stopIds = []
+
         for (let index = 0; index < apiStops.length; index++) {
-          await this.editOfficerStop(apiStops[index])
+          const apiStop = apiStops[index]
+          const id = apiStop.id
+          stopIds.push(id)
+          await this.editOfficerStop(apiStop)
         }
 
-        this.snackbarText = this.stopSubmissionStatus
+        const stopIdsStr = stopIds.join(', ')
+        this.snackbarText = `${this.stopSubmissionStatus}. Stop ID(s): ${stopIdsStr}.`
+        console.log(this.snackbarText)
         this.snackbarVisible = true
       }
     },
@@ -231,7 +237,7 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         authentication.acquireToken().catch(error => {
           console.log(`acquireToken error: ${error}`)
-          this.handleLogOut()
+          this.handleLogIn()
         })
       }
     },

@@ -15,7 +15,19 @@
     ></ripa-app-bar>
 
     <ripa-content-wrapper>
-      <slot></slot>
+      <template v-if="loading">
+        <div class="text-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            :size="70"
+            :width="7"
+          ></v-progress-circular>
+        </div>
+      </template>
+      <template v-if="!loading">
+        <slot></slot>
+      </template>
     </ripa-content-wrapper>
 
     <v-footer padless fixed>
@@ -70,6 +82,10 @@ export default {
     environmentName: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     online: {
       type: Boolean,

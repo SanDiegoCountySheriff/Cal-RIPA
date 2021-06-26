@@ -1,19 +1,16 @@
 <template>
-  <div class="ripa-student tw-pb-4">
-    <ripa-form-header
-      title="Student"
-      required
-      subtitle="§999.224(a)(16)"
-      :on-open-statute="onOpenStatute"
-    >
-    </ripa-form-header>
+  <div class="ripa-override-pii tw-pb-4">
+    <ripa-form-header title="Override PII"> </ripa-form-header>
 
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
+          Is PII Found: {{ apiStop.isPiiFound }}
+        </v-col>
+        <v-col cols="12" sm="12">
           <ripa-switch
-            v-model="model.person.isStudent"
-            label="K-12 Public School Student"
+            v-model="model.overridePii"
+            label="Override"
             :max-width="250"
             @input="handleInput"
           ></ripa-switch>
@@ -29,7 +26,7 @@ import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
-  name: 'ripa-student',
+  name: 'ripa-override-pii',
 
   mixins: [RipaModelMixin],
 
@@ -54,10 +51,6 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopReasonModel()
-      this.clearDisabilityModel()
-      this.updateActionsTakenModel()
-      this.updateStopResultModel()
       this.$emit('input', this.viewModel)
     },
   },
@@ -66,14 +59,6 @@ export default {
     value(newVal) {
       this.viewModel = this.updateModel(newVal)
     },
-
-    'viewModel.person.isStudent': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.handleInput()
-        }
-      },
-    },
   },
 
   props: {
@@ -81,9 +66,9 @@ export default {
       type: Object,
       default: () => {},
     },
-    disabled: {
-      type: Boolean,
-      default: false,
+    apiStop: {
+      type: Object,
+      default: () => {},
     },
   },
 }

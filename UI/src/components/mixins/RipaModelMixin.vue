@@ -8,6 +8,7 @@ export default {
         id: newValue.id,
         template: newValue.template,
         editStopExplanation: newValue.editStopExplanation || null,
+        overridePii: newValue.overridePii || false,
         stepTrace: newValue.stepTrace || [],
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,

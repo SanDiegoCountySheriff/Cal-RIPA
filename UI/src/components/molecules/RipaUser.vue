@@ -184,6 +184,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     isInvalidUser: {
       type: Boolean,
       default: false,
