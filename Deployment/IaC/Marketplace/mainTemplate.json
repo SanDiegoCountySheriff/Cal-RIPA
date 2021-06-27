@@ -3517,7 +3517,7 @@
           "#{MP-USERPROFILE-ZIP-SAS-URL}#",
           "#{MP-UI-ZIP-SAS-URL}#"
         ],
-        "timeout": "PT10M",
+        "timeout": "PT1H",
         "cleanupPreference": "OnExpiration",
         "retentionInterval": "PT1H"
       }

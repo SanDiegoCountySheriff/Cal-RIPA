@@ -23,7 +23,7 @@ function Import-FunctionApi()
     Write-Host "Getting function key code"
     for ($i = 0; $i -le 5; $i++)
     {
-        Write-Host "Attempt:" $i
+        Write-Host "Function key attempt:" $i
         $functionCode = $null
         $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name 'RenderOpenApiDocument') | ConvertFrom-Json | Select-Object default).default
         if($functionCode)
@@ -32,7 +32,7 @@ function Import-FunctionApi()
         }
 
         Write-Host "List keys failed. Sleeping 15 seconds"
-        sleep -Seconds 15
+        Start-Sleep -Seconds 15
     }
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
@@ -42,7 +42,19 @@ function Import-FunctionApi()
 
 	# import the latest swagger
 	Write-Host "Importing api $ApiTag from $serviceUrl"
-	Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag
+    for ($i = 0; $i -le 5; $i++)
+	{
+        Write-Host "APIM import attempt:" $i
+        $importSuccess = (Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag)
+        if($importSuccess)
+        {
+            Write-Host "importSuccess:" $importSuccess
+            break;
+        }
+
+        Write-Host "APIM import failed. Sleeping 15 seconds"
+        Start-Sleep -Seconds 15
+    }
 
     Write-Host "**************************** Checking for backend configuration ****************************"
     Write-Host "******************************** Ignore any onscreen errors ********************************"
