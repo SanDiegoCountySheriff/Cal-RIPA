@@ -30,7 +30,7 @@ function UploadAndCreateKey
     Rename-Item -Path $FileName -NewName $FileName.ToLower()
 
     Write-Host "Uploading API package"
-    az storage blob upload --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName  -f $LowerCaseFileName 
+    az storage blob upload --timeout 300 --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName -f $LowerCaseFileName 
 
     Write-Host "Requesting URL"
     $url = (az storage blob url --account-name $CSSA_STORAGE_ACCOUNT_NAME --account-key $CSSA_STORAGE_ACCOUNT_KEY -c $CSSA_MP_DEPLOYMENT_CONTAINER -n $LowerCaseFileName).ToString()

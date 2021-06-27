@@ -119,7 +119,7 @@ $apimPrimaryKey = $apimMasterKeys.PrimaryKey
 
 Write-Host "Publishing UI package"
 Expand-Archive -Path "./ui.zip" -DestinationPath "./" -Force
-az storage blob upload-batch -d '$web' --account-name $env:STORAGE_ACCOUNT_NAME -s './dist'
+az storage blob upload-batch --timeout 300 -d '$web' --account-name $env:STORAGE_ACCOUNT_NAME -s './dist'
 
 Write-Host "Creating config.json"
 $configFilePath = "./config.json"
@@ -136,6 +136,6 @@ Write-Host "Saving config.json"
 Set-Content -Path $configFilePath -Value $configJson -Force
 
 Write-Host "Uploading config.json"
-az storage blob upload --account-name $env:STORAGE_ACCOUNT_NAME -n "config.json" -c '$web' -f './config.json' 
+az storage blob upload --timeout 300 --account-name $env:STORAGE_ACCOUNT_NAME -n "config.json" -c '$web' -f './config.json' 
 
 Write-Host "Finished deploying & importing applications"
