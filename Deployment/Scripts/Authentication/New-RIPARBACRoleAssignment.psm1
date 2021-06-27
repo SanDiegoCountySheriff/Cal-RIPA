@@ -31,7 +31,7 @@
         Authorization = "Bearer $($token)" 
         "x-ms-client-request-id" = $requestId 
     }
-    $url = "https://main.iam.ad.ext.azure.com/api/ManagedApplications/$($EnterpriseAppObjectId)/AppRoleAssignments"
+    $url = "https://main.iam.ad.ext.azure.us/api/ManagedApplications/$($EnterpriseAppObjectId)/AppRoleAssignments"
 
     Invoke-RestMethod -Method POST -Uri $url -Headers $authorization -ContentType "application/json" -Body $body
 
