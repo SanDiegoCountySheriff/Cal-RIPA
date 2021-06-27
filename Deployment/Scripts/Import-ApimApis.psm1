@@ -21,7 +21,19 @@ function Import-FunctionApi()
     $functionApp = $FunctionName
 
     Write-Host "Getting function key code"
-    $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
+    for ($i = 0; $i -le 5; $i++)
+    {
+        Write-Host "Attempt:" $i
+        $functionCode = $null
+        $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name 'RenderOpenApiDocument') | ConvertFrom-Json | Select-Object default).default
+        if($functionCode)
+        {
+            break;
+        }
+
+        Write-Host "List keys failed. Sleeping 15 seconds"
+        sleep -Seconds 15
+    }
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
 	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
