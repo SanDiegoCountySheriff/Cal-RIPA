@@ -21,10 +21,11 @@
     Write-Host "Creating RBAC Role assignment for role" $AppRoleId
 
     # ************************************ DO NOT MODIFY ************************************ 
-    # resourceId 74658136-14ec-4630-ad9b-26e160ff0fc6 is a well known id for https://main.iam.ad.ext.azure.com which
-    # is a backplain endpoint for the Azure environment & portal 
-    $token=$(az account get-access-token --resource "74658136-14ec-4630-ad9b-26e160ff0fc6" --query accessToken --output tsv)
-
+    # resourceId 74658136-14ec-4630-ad9b-26e160ff0fc6 is a well known id for https://main.iam.ad.ext.azure.com 
+    # resourceId ee62de39-b9b0-4886-aa58-08b89c4e3db3 is a well known id for https://main.iam.ad.ext.azure.us ## AzureUsGovernment 
+    # which is a backplain endpoint for the Azure environment & portal 
+    #$token=$(az account get-access-token --resource "74658136-14ec-4630-ad9b-26e160ff0fc6" --query accessToken --output tsv)
+    $token=$(az account get-access-token --resource "ee62de39-b9b0-4886-aa58-08b89c4e3db3" --query accessToken --output tsv)
     $requestId = (New-Guid).Guid
     $body = "{'objectId':'$($EnterpriseAppObjectId)','applicationRoleId':'$($AppRoleId)','userId':null,'groupId':'$($ADGroupId)','passwordSSOCredentials':null}"
     $authorization = @{ 
