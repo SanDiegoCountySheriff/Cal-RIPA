@@ -42,5 +42,13 @@ namespace RIPA.Functions.Common.Models
         [JsonProperty(PropertyName = "otherType")]
         public string OtherType { get; set; }
 
+        [JsonProperty(PropertyName = "favoriteLocations")]
+        public string FavoriteLocations { get; set; }
+        
+        [JsonProperty(PropertyName = "favoriteReasons")]
+        public string FavoriteReasons { get; set; }
+
+        [JsonProperty(PropertyName = "favoriteResults")]
+        public string FavoriteResults { get; set; }
     }
 }
