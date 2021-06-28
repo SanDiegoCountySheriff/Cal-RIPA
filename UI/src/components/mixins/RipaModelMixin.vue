@@ -222,6 +222,15 @@ export default {
       ) {
         this.viewModel.actionsTaken.anyContraband = true
       }
+
+      if (!this.viewModel.person.isStudent) {
+        this.viewModel.actionsTaken.basisForSearch =
+          this.viewModel.actionsTaken.basisForSearch.filter(item => item !== 13)
+        this.viewModel.actionsTaken.basisForPropertySeizure =
+          this.viewModel.actionsTaken.basisForPropertySeizure.filter(
+            item => item !== 6,
+          )
+      }
     },
 
     updateBlockNumberModel() {
