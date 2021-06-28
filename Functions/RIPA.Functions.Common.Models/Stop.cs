@@ -83,10 +83,6 @@ namespace RIPA.Functions.Common.Models
         public bool IsEdited { get; set; }
         [JsonProperty(PropertyName = "telemetry")]
         public Telemetry Telemetry { get; set; }
-
-        public string FavoriteLocations { get; set; }
-        public string FavoriteReasons { get; set; }
-        public string FavoriteResults { get; set; }
     }
 
 
