@@ -341,7 +341,9 @@ export default new Vuex.Store({
     },
     updateUserAccount(state, value) {
       if (value && value.profile) {
-        const isAnAdmin = value.profile.roles.filter(roleObj => {
+        let isAnAdmin = false
+        const roles = value.profile?.roles || []
+        isAnAdmin = roles.filter(roleObj => {
           return roleObj === 'RIPA-ADMINS-ROLE'
         })
         const firstName = value.profile.given_name
