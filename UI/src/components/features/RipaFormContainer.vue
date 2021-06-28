@@ -10,6 +10,7 @@
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
@@ -49,6 +50,7 @@
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
       :favorites="favorites"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditLocationFavorite"
       :on-open-favorite="handleOpenLocationFavorite"
@@ -58,6 +60,7 @@
     <ripa-favorites-dialog
       :show-dialog="showReasonFavoritesDialog"
       :favorites="favorites"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditReasonFavorite"
       :on-open-favorite="handleOpenReasonFavorite"
@@ -67,6 +70,7 @@
     <ripa-favorites-dialog
       :show-dialog="showResultFavoritesDialog"
       :favorites="favorites"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditResultFavorite"
       :on-open-favorite="handleOpenResultFavorite"
@@ -179,7 +183,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'checkGpsLocation', 'editOfficerUser']),
+    ...mapActions([
+      'checkTextForPii',
+      'checkGpsLocation',
+      'editOfficerUser',
+      'editUser',
+    ]),
 
     handleSaveUser(user) {
       this.editOfficerUser(user)

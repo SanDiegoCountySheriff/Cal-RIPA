@@ -49,7 +49,9 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <template v-if="isOnlineAndAuthenticated">
+                  <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                </template>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -73,10 +75,12 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="tw-mr-2" @click="editItem($event, item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
+        <template v-if="isOnlineAndAuthenticated">
+          <v-icon small class="tw-mr-2" @click="editItem($event, item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
+        </template>
       </template>
       <template v-slot:no-data>
         <div>No Data</div>
@@ -207,6 +211,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     onDeleteFavorite: {
       type: Function,
