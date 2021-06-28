@@ -459,7 +459,7 @@
     "user_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
     "keyvault_secret_ripa_storage": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key3'),')')]",
     "textanalytics_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key4'),')')]",
-    "cssa_domain_url": "[concat('https://', parameters('application'), '-', parameters('agency_abbreviation'),'.cssa.coud')]",
+    "cssa_domain_url": "[concat('https://', parameters('application'), '-', parameters('agency_abbreviation'),'.cssa.cloud')]",
     "custom_domain_url": "[concat('https://', parameters('app_cname_alias'), '.', parameters('auth_fqdn'))]",
     "public_ui_url": "[if(equals(parameters('app_domain_type'), 'private_domain'), variables('custom_domain_url'), variables('cssa_domain_url'))]",
     "keyvault_secret_sftp_key": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key6'),')')]",

@@ -7,7 +7,7 @@
     },
     "Configuration": {
         "Environment": "p",
-        "ServicesBaseUrl": "__APIM_INSTANCE_URL__",
+        "ServicesBaseUrl": "__APIM_INSTANCE_URL__/",
         "Subscription": "__APIM_MASTER_SUBSCRIPTION_KEY__",
         "DefaultCounty": "__DEFAULT_COUNTY__",
         "DisplayBeatsInput": "false",
