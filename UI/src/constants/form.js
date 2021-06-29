@@ -180,7 +180,7 @@ export const BASIS_FOR_PROPERTY_SEIZURE = [
   { name: 'Evidence', value: 3 },
   { name: 'Impound of vehicle', value: 4 },
   { name: 'Abandoned property', value: 5 },
-  { name: 'Suspected of violation of school policy', value: 6 },
+  { name: 'Suspected violation of school policy', value: 6 },
 ]
 
 export const CONTRABAND_TYPES = [

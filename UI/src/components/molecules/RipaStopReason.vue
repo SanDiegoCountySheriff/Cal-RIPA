@@ -320,6 +320,7 @@ export default {
     handleInput() {
       this.updateStopReasonModel()
       this.updateStopReasonSearchModel()
+      this.updateBasisForSearchModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
