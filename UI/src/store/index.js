@@ -1253,6 +1253,11 @@ export default new Vuex.Store({
         queryString = `${queryString}&Limit=10`
       }
 
+      if (pageData.filters) {
+        queryString = `${queryString}&OrderBy=${pageData.filters.orderBy}`
+        queryString = `${queryString}&Order=${pageData.filters.order}`
+      }
+
       return axios
         .get(
           `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
