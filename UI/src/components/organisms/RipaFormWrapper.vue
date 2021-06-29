@@ -57,7 +57,7 @@
                     :county-cities="countyCities"
                     :display-user-edit="displayUserEdit"
                     :display-beat-input="displayBeatInput"
-                    :is-authenticated="isAuthenticated"
+                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :admin-editing="adminEditing"
                     :last-location="lastLocation"
                     :loading-gps="loadingGps"
@@ -108,6 +108,7 @@
 
                   <ripa-form-step-3
                     v-model="stop"
+                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-reason="lastReason"
                     :loading-pii="loadingPiiStep3"
                     :on-back="handleBack"
@@ -153,6 +154,7 @@
 
                   <ripa-form-step-5
                     v-model="stop"
+                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-result="lastResult"
                     :on-back="handleBack"
                     :on-next="handleNext"
@@ -680,6 +682,10 @@ export default {
       default: () => {},
     },
     isAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,
     },

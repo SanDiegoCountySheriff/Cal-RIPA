@@ -9,6 +9,7 @@ import {
 } from '@/utilities/stop'
 import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
+import store from '@/store/index'
 
 export default {
   data() {
@@ -386,15 +387,30 @@ export default {
     },
 
     setFavoriteLocations(locations) {
-      localStorage.setItem('ripa_favorite_locations', JSON.stringify(locations))
+      if (this.isOnlineAndAuthenticated) {
+        const strLocations = JSON.stringify(locations)
+        localStorage.setItem('ripa_favorite_locations', strLocations)
+        store.dispatch('setUserFavoriteLocations', strLocations)
+        this.editUser(this.mappedUser)
+      }
     },
 
     setFavoriteReasons(reasons) {
-      localStorage.setItem('ripa_favorite_reasons', JSON.stringify(reasons))
+      if (this.isOnlineAndAuthenticated) {
+        const strReasons = JSON.stringify(reasons)
+        localStorage.setItem('ripa_favorite_reasons', strReasons)
+        store.dispatch('setUserFavoriteReasons', strReasons)
+        this.editUser(this.mappedUser)
+      }
     },
 
     setFavoriteResults(results) {
-      localStorage.setItem('ripa_favorite_results', JSON.stringify(results))
+      if (this.isOnlineAndAuthenticated) {
+        const strResults = JSON.stringify(results)
+        localStorage.setItem('ripa_favorite_results', strResults)
+        store.dispatch('setUserFavoriteResults', strResults)
+        this.editUser(this.mappedUser)
+      }
     },
 
     setLastLocation(stop) {

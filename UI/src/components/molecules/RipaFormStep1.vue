@@ -1,9 +1,8 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <template v-if="isAuthenticated">
+    <template v-if="isOnlineAndAuthenticated">
       <ripa-officer
         v-model="model"
-        :is-authenticated="isAuthenticated"
         :user="user"
         :on-open-statute="onOpenStatute"
         :on-update-user="onUpdateUser"
@@ -22,6 +21,7 @@
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii="loadingPii"
@@ -108,7 +108,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isAuthenticated: {
+    isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,
     },

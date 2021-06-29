@@ -10,6 +10,7 @@
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
+      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
@@ -111,6 +112,10 @@ export default {
       default: () => {},
     },
     isAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,
     },
