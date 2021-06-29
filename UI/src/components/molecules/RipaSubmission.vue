@@ -126,8 +126,8 @@ export default {
     return {
       headers: [
         { text: 'Stop', value: 'id', sortName: 'id' },
-        { text: 'Status', value: 'status', width: 100, sortName: 'status' },
-        { text: 'Edited', value: 'edited', width: 100, sortName: 'edited' },
+        { text: 'Status', value: 'status', width: 100, sortName: 'Status' },
+        { text: 'Edited', value: 'edited', width: 100, sortName: 'IsEdited' },
         { text: 'Error', value: 'error', sortable: false },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
@@ -171,7 +171,7 @@ export default {
     handleSort() {
       this.$emit('submissionDetailPaginate', {
         id: this.submissionId,
-        offset: this.currentOffset,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -179,7 +179,7 @@ export default {
     handleJumpToPage() {
       this.$emit('submissionDetailPaginate', {
         id: this.submissionId,
-        offset: this.currentOffset,
+        offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
       })
@@ -244,7 +244,7 @@ export default {
       }
     },
     getFilterStatus() {
-      if (this.getColumnSortName !== null) {
+      if (this.getColumnSortName() !== null) {
         return {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
