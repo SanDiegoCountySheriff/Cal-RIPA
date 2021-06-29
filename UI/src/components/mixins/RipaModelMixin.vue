@@ -209,6 +209,15 @@ export default {
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
+
+      if (
+        this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) === -1 &&
+        this.viewModel.actionsTaken.basisForSearch !== null &&
+        this.viewModel.actionsTaken.basisForSearch.length > 0
+      ) {
+        this.viewModel.actionsTaken.basisForSearch =
+          this.viewModel.actionsTaken.basisForSearch.filter(item => item !== 12)
+      }
     },
 
     updateBasisForPropertySeizureModel() {
@@ -295,6 +304,9 @@ export default {
         this.viewModel.stopResult.resultsOfStop13 = false
         this.updateStopReasonModel()
         this.updateActionsTakenModel()
+        this.clearDisabilityModel()
+        this.updateStopResultModel()
+        this.updateBasisForPropertySeizureModel()
       }
     },
 

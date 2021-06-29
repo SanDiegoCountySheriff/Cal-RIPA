@@ -58,6 +58,7 @@ export default {
       this.clearDisabilityModel()
       this.updateActionsTakenModel()
       this.updateStopResultModel()
+      this.updateBasisForPropertySeizureModel()
       this.$emit('input', this.viewModel)
     },
   },
