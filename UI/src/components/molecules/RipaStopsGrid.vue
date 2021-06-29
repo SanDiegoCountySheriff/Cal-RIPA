@@ -131,9 +131,23 @@
               <v-toolbar-title class="tw-uppercase"
                 >Admin: Stops</v-toolbar-title
               >
-              <v-btn @click="handleSubmitAll" class="submitAllBtn">
-                Submit All Stops to DOJ
-              </v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="handleSubmitAll"
+                    class="submitAllBtn"
+                  >
+                    Submit All Stops to DOJ
+                  </v-btn>
+                </template>
+                <span
+                  >Submit all the stops to the DOJ. Stops with PII or that are
+                  in an error state will not be resubmitted.</span
+                >
+              </v-tooltip>
+
               <v-spacer></v-spacer>
 
               <v-btn
@@ -141,7 +155,7 @@
                 class="submitSelectedBtn"
                 v-if="selectedItems.length > 0"
               >
-                Submit Selected Stops ({{ selectedItems.length }})
+                Submit Selected Stops to DOJ ({{ selectedItems.length }})
               </v-btn>
             </v-toolbar>
           </template>

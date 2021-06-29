@@ -244,13 +244,17 @@ export default {
       }
     },
     getFilterStatus() {
-      return {
-        orderBy:
-          // if the column sort name is null, default to sorting by the stop date
-          this.getColumnSortName() === null
-            ? 'dateSubmitted'
-            : this.getColumnSortName(),
-        order: this.sortDesc ? 'Desc' : 'Asc',
+      if (this.getColumnSortName !== null) {
+        return {
+          orderBy:
+            // if the column sort name is null, default to sorting by the stop date
+            this.getColumnSortName() === null
+              ? 'dateSubmitted'
+              : this.getColumnSortName(),
+          order: this.sortDesc ? 'Desc' : 'Asc',
+        }
+      } else {
+        return null
       }
     },
   },
