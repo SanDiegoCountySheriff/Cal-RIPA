@@ -152,10 +152,9 @@ export default {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.isAnyActionsTakenDisabled1 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
-            -1
-          ) {
+          const actionsTaken =
+            this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+          if (!actionsTaken.includes(18)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
@@ -165,10 +164,9 @@ export default {
         if (this.viewModel.stopReason.searchOfProperty) {
           this.isAnyActionsTakenDisabled2 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
-            -1
-          ) {
+          const actionsTaken =
+            this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+          if (!actionsTaken.includes(20)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
@@ -210,8 +208,10 @@ export default {
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
       }
 
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
       if (
-        this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) === -1 &&
+        actionsTaken.includes(20) &&
         this.viewModel.actionsTaken.basisForSearch !== null &&
         this.viewModel.actionsTaken.basisForSearch.length > 0
       ) {
@@ -359,10 +359,9 @@ export default {
       if (this.viewModel.stopReason.reasonForStop === 6) {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(18) ===
-            -1
-          ) {
+          const actionsTaken =
+            this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+          if (!actionsTaken.includes(18)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
@@ -378,10 +377,9 @@ export default {
         }
         if (this.viewModel.stopReason.searchOfProperty) {
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop.indexOf(20) ===
-            -1
-          ) {
+          const actionsTaken =
+            this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+          if (!actionsTaken.includes(20)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
