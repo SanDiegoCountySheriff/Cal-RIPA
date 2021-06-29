@@ -11,6 +11,7 @@
             <v-col cols="12">
               <ripa-favorites-grid
                 :items="favorites"
+                :is-online-and-authenticated="isOnlineAndAuthenticated"
                 :on-delete-favorite="onDeleteFavorite"
                 :on-edit-favorite="onEditFavorite"
                 :on-open-favorite="onOpenFavorite"
@@ -90,6 +91,10 @@ export default {
     favorites: {
       type: Array,
       default: () => [],
+    },
+    isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
     },
     showDialog: {
       type: Boolean,

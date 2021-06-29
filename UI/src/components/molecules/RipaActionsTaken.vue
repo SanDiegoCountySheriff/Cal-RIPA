@@ -113,7 +113,7 @@
 
               <ripa-check-group
                 v-model="model.actionsTaken.basisForPropertySeizure"
-                :items="basisForPropertySeizureItems"
+                :items="getBasisForPropertySeizureItems"
                 :rules="basisForPropertySeizureRules"
                 @input="handleInput"
               >
@@ -292,6 +292,16 @@ export default {
       }
 
       return filteredItems.filter(item => item.value !== 12)
+    },
+
+    getBasisForPropertySeizureItems() {
+      let filteredItems = this.basisForPropertySeizureItems
+
+      if (!this.viewModel.person.isStudent) {
+        filteredItems = filteredItems.filter(item => item.value !== 6)
+      }
+
+      return filteredItems
     },
 
     wasSearchOfPersonOrPropertyConducted() {

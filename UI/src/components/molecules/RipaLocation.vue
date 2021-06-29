@@ -51,7 +51,13 @@
         </v-col>
         <v-col cols="12" sm="12" md="3">
           <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
-            <v-btn class="tw-w-full" outlined small @click="handleSaveFavorite">
+            <v-btn
+              class="tw-w-full"
+              outlined
+              small
+              @click="handleSaveFavorite"
+              :disabled="!isOnlineAndAuthenticated"
+            >
               Save Location
             </v-btn>
           </div>
@@ -444,6 +450,10 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
+      type: Boolean,
+      default: false,
+    },
+    isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,
     },

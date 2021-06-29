@@ -161,6 +161,13 @@ export default new Vuex.Store({
       return {
         agency: state.user.agency,
         assignment: state.user.assignment,
+        favoriteLocations: state.user.favoriteLocations,
+        favoriteReasons: state.user.favoriteReasons,
+        favoriteResults: state.user.favoriteResults,
+        firstName: state.user.firstName,
+        id: state.user.oid,
+        lastName: state.user.lastName,
+        name: state.user.name,
         officerId: state.user.officerId,
         officerName: state.user.officerName,
         oid: state.user.oid,
@@ -373,6 +380,9 @@ export default new Vuex.Store({
         id: state.user.oid,
         agency: value.agency,
         assignment: value.assignment ? Number(value.assignment) : null,
+        favoriteLocations: value.favoriteLocations || '',
+        favoriteReasons: value.favoriteReasons || '',
+        favoriteResults: value.favoriteResults || '',
         officerId: value.officerId,
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
@@ -388,7 +398,23 @@ export default new Vuex.Store({
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
       }
+
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
+      localStorage.setItem(
+        'ripa_favorite_locations',
+        state.user.favoriteLocations,
+      )
+      localStorage.setItem('ripa_favorite_reasons', state.user.favoriteReasons)
+      localStorage.setItem('ripa_favorite_results', state.user.favoriteResults)
+    },
+    updateUserFavoriteLocations(state, locations) {
+      state.user.favoriteLocations = locations
+    },
+    updateUserFavoriteReasons(state, reasons) {
+      state.user.favoriteReasons = reasons
+    },
+    updateUserFavoriteResults(state, results) {
+      state.user.favoriteResults = results
     },
     updateErrorCodeAdminSearch(state, value) {
       state.errorCodeAdminSearch = {
@@ -1335,6 +1361,18 @@ export default new Vuex.Store({
 
     setUserAccountInfo({ commit }, value) {
       commit('updateUserAccount', value)
+    },
+
+    setUserFavoriteLocations({ commit }, locations) {
+      commit('updateUserFavoriteLocations', locations)
+    },
+
+    setUserFavoriteReasons({ commit }, reasons) {
+      commit('updateUserFavoriteReasons', reasons)
+    },
+
+    setUserFavoriteResults({ commit }, results) {
+      commit('updateUserFavoriteResults', results)
     },
 
     setApiConfig({ commit }, value) {
