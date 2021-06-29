@@ -138,7 +138,10 @@ export default {
       }
 
       if (!this.viewModel.person.isStudent) {
-        if (this.viewModel.actionsTaken.actionsTakenDuringStop !== null) {
+        if (
+          this.viewModel.actionsTaken.actionsTakenDuringStop !== null &&
+          this.viewModel.actionsTaken.actionsTakenDuringStop.length > 0
+        ) {
           this.viewModel.actionsTaken.actionsTakenDuringStop =
             this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
               item => item !== 23,
@@ -224,12 +227,24 @@ export default {
       }
 
       if (!this.viewModel.person.isStudent) {
-        this.viewModel.actionsTaken.basisForSearch =
-          this.viewModel.actionsTaken.basisForSearch.filter(item => item !== 13)
-        this.viewModel.actionsTaken.basisForPropertySeizure =
-          this.viewModel.actionsTaken.basisForPropertySeizure.filter(
-            item => item !== 6,
-          )
+        if (
+          this.viewModel.actionsTaken.basisForSearch !== null &&
+          this.viewModel.actionsTaken.basisForSearch.length > 0
+        ) {
+          this.viewModel.actionsTaken.basisForSearch =
+            this.viewModel.actionsTaken.basisForSearch.filter(
+              item => item !== 13,
+            )
+        }
+        if (
+          this.viewModel.actionsTaken.basisForPropertySeizure !== null &&
+          this.viewModel.actionsTaken.basisForPropertySeizure.length > 0
+        ) {
+          this.viewModel.actionsTaken.basisForPropertySeizure =
+            this.viewModel.actionsTaken.basisForPropertySeizure.filter(
+              item => item !== 6,
+            )
+        }
       }
     },
 
@@ -359,7 +374,10 @@ export default {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
           }
         } else {
-          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop !== null &&
+            this.viewModel.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop =
               this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
                 item => item !== 18,
@@ -375,7 +393,10 @@ export default {
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
           }
         } else {
-          if (this.viewModel.actionsTaken.actionsTakenDuringStop) {
+          if (
+            this.viewModel.actionsTaken.actionsTakenDuringStop !== null &&
+            this.viewModel.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
             this.viewModel.actionsTaken.actionsTakenDuringStop =
               this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
                 item => item !== 20,
