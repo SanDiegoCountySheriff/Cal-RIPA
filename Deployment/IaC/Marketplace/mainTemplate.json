@@ -1309,7 +1309,7 @@
         "attributes": {
           "enabled": true
         },
-        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripactsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafnsa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripactsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripactsa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
       }
     },
     {
