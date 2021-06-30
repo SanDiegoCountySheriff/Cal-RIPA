@@ -129,7 +129,7 @@ export const probationStop = () => {
       time: format(new Date(), 'kk:mm'),
     },
     stopReason: stopReasonGivenTemplate('probation'),
-    stopResult: stopResultGivenTemplate(),
+    stopResult: stopResultGivenTemplate('probation'),
     agencyQuestions: mappedAgencyQuestions(),
   }
 }
@@ -176,6 +176,13 @@ export const stopResultGivenTemplate = template => {
       infieldCodes: [],
       custodialArrestCodes: [],
       pullFromReasonCode: true,
+    }
+  }
+
+  if (template === 'probation') {
+    return {
+      anyResultsOfStop: false,
+      pullFromReasonCode: false,
     }
   }
 
