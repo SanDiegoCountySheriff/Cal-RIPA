@@ -18,17 +18,18 @@
           </div>
         </v-col>
         <v-col cols="12" sm="12" md="6">
-          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              outlined
-              small
-              @click="handleSaveFavorite"
-              :disabled="isOnlineAndAuthenticated"
-            >
-              Save Result
-            </v-btn>
-          </div>
+          <template v-if="isOnlineAndAuthenticated">
+            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+              <v-btn
+                class="tw-w-full"
+                outlined
+                small
+                @click="handleSaveFavorite"
+              >
+                Save Result
+              </v-btn>
+            </div>
+          </template>
         </v-col>
       </v-row>
 
