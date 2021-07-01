@@ -680,10 +680,6 @@ export default new Vuex.Store({
     },
 
     editOfficerUser({ dispatch, state }, mappedUser) {
-      const officerId =
-        state.user.officerId ||
-        format(new Date(), 'yyMMdd') +
-          (Math.floor(Math.random() * 999) + 100).toString()
       const userId = state.user.oid
       const user = {
         id: state.user.oid,
@@ -692,7 +688,7 @@ export default new Vuex.Store({
         name: state.user.fullName,
         agency: mappedUser.agency,
         startDate: mappedUser.startDate,
-        officerId,
+        officerId: state.user.officerId,
         assignment: mappedUser.assignment,
         otherType: mappedUser.otherType,
         yearsExperience: mappedUser.yearsExperience,

@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -49,18 +51,32 @@ namespace RIPA.Functions.UserProfile.Functions
                 return new UnauthorizedResult();
             }
 
-            if (!string.IsNullOrEmpty(userProfile.OfficerId) || userProfile.OfficerId.Length != 9)
+            if (userProfile.OfficerId.Length != 9)
             {
-                if (!string.IsNullOrEmpty(userProfile.OfficerId))
-                    if (userProfile.OfficerId.Length != 9)
-                        return new BadRequestObjectResult("officer must be 9 chars");
-
-                userProfile.Id = Id;
-                await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
-                return new OkObjectResult(userProfile);
+                return new BadRequestObjectResult("OfficerId must be 9 chars");
             }
 
-            return new BadRequestObjectResult("Bad Request");
+            if (string.IsNullOrEmpty(userProfile.OfficerId))
+            {
+                string query = "SELECT TOP 1 c FROM c ORDER BY c.officerId DESC";
+                IEnumerable<Common.Models.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
+                
+                int officerId = 100000000;
+
+                Common.Models.UserProfile maxId = maxOfficer.FirstOrDefault();
+                if (maxId != null)
+                {
+                    officerId = int.Parse(maxId.OfficerId);
+                    officerId++;
+                }
+
+                userProfile.OfficerId = officerId.ToString();
+            }
+
+            userProfile.Id = Id;
+            await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
+
+            return new OkObjectResult(userProfile);
         }
     }
 }
