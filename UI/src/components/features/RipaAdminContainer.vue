@@ -271,7 +271,7 @@ export default {
         this.$router.push(
           `/admin/submissions/${submissionResults[0].submissionId}`,
         )
-      }, 2000)
+      }, 4000)
     },
 
     async handleSubmitAll(stops) {

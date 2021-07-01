@@ -12,7 +12,7 @@
         <v-col cols="12" sm="12">
           <ripa-text-input
             v-model="question.answer"
-            :label="question.label"
+            :label="question.prompt"
             :hint="question.hint"
             :rules="questionRules(question)"
             @input="handleInput"

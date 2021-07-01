@@ -618,7 +618,7 @@ export const apiStopAgencyQuestionsSummary = apiStop => {
     for (const item of questions) {
       items.push({
         id: `C${index}`,
-        content: getSummaryAgencyQuestion(item.label, item.answer),
+        content: getSummaryAgencyQuestion(item.prompt, item.answer),
       })
       index = index + 1
     }

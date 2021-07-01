@@ -106,17 +106,23 @@ export default new Vuex.Store({
           stopObj => {
             const mappedErrors = stopObj.listSubmission.map(
               stopSubmissionObj => {
+                const stopSubmissionId = stopSubmissionObj.id
                 const errorArray = []
                 if (
                   stopSubmissionObj.listSubmissionError &&
                   stopSubmissionObj.listSubmissionError.length
                 ) {
                   stopSubmissionObj.listSubmissionError.forEach(errorObj => {
+                    // add a class if the submission error came from the current submission
+                    // so these will be colored differently
+                    const className =
+                      stopSubmissionId === state.adminSubmission.submission.id
+                        ? 'currentSubmission'
+                        : ''
                     errorArray.push(
-                      `<p>${errorObj.code}: ${errorObj.message.substr(
-                        0,
-                        200,
-                      )} ...</p>`,
+                      `<p class="${className}">${
+                        errorObj.code
+                      }: ${errorObj.message.substr(0, 200)} ...</p>`,
                     )
                   })
                   return errorArray.join('')
@@ -323,12 +329,12 @@ export default new Vuex.Store({
       if (agencyQuestions) {
         const questions = value.agencyQuestions.map(item => {
           return {
-            maxLength: item.MaxLength,
-            label: item.Prompt,
-            hint: item.Hint || null,
-            required: item.Required,
-            questionType: item.Type,
             name: item.Name || 'N/A',
+            type: item.Type,
+            prompt: item.Prompt,
+            hint: item.Hint || null,
+            maxLength: item.MaxLength,
+            required: item.Required,
           }
         })
         if (questions.length > 0) {
@@ -680,10 +686,6 @@ export default new Vuex.Store({
     },
 
     editOfficerUser({ dispatch, state }, mappedUser) {
-      const officerId =
-        state.user.officerId ||
-        format(new Date(), 'yyMMdd') +
-          (Math.floor(Math.random() * 999) + 100).toString()
       const userId = state.user.oid
       const user = {
         id: state.user.oid,
@@ -692,7 +694,7 @@ export default new Vuex.Store({
         name: state.user.fullName,
         agency: mappedUser.agency,
         startDate: mappedUser.startDate,
-        officerId,
+        officerId: state.user.officerId,
         assignment: mappedUser.assignment,
         otherType: mappedUser.otherType,
         yearsExperience: mappedUser.yearsExperience,

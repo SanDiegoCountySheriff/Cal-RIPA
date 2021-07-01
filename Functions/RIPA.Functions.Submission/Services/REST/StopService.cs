@@ -63,7 +63,7 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 LEARecordID = stop.Id,
                 ORI = stop.Ori,
-                TX_Type = "I",
+                TX_Type = stop.ListSubmission?.Length > 0 ? "U" : "I",
                 SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
                 STime = stop.Time,
                 SDur = stop.StopDuration.ToString(),

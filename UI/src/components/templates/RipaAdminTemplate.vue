@@ -1,35 +1,69 @@
 <template>
-  <ripa-admin-wrapper
-    :loading="loading"
-    :beats="beats"
-    :cities="cities"
-    :schools="schools"
-    :statutes="statutes"
-    :stops="stops"
-    :submissions="submissions"
-    :currentSubmission="currentSubmission"
-    :users="users"
-    :errorCodeSearch="errorCodeSearch"
-    :display-beat-input="displayBeatInput"
-    :on-delete-beat="onDeleteBeat"
-    :on-delete-city="onDeleteCity"
-    :on-delete-school="onDeleteSchool"
-    :on-delete-statute="onDeleteStatute"
-    :on-edit-beat="onEditBeat"
-    :on-edit-city="onEditCity"
-    :on-edit-school="onEditSchool"
-    :on-edit-statute="onEditStatute"
-    :on-edit-user="onEditUser"
-    :on-tab-change="onTabChange"
-    @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
-    @handleRedoItemsPerPage="handleRedoItemsPerPage"
-    @handlePaginate="handlePaginate"
-    @handleAdminFiltering="handleAdminFiltering"
-    @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
-    @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
-    @handleSubmitStops="handleSubmitStops"
-    @handleSubmitAll="handleSubmitAll"
-  ></ripa-admin-wrapper>
+  <div>
+    <ripa-admin-wrapper
+      :loading="loading"
+      :beats="beats"
+      :cities="cities"
+      :schools="schools"
+      :statutes="statutes"
+      :stops="stops"
+      :submissions="submissions"
+      :currentSubmission="currentSubmission"
+      :users="users"
+      :errorCodeSearch="errorCodeSearch"
+      :display-beat-input="displayBeatInput"
+      :on-delete-beat="onDeleteBeat"
+      :on-delete-city="onDeleteCity"
+      :on-delete-school="onDeleteSchool"
+      :on-delete-statute="onDeleteStatute"
+      :on-edit-beat="onEditBeat"
+      :on-edit-city="onEditCity"
+      :on-edit-school="onEditSchool"
+      :on-edit-statute="onEditStatute"
+      :on-edit-user="onEditUser"
+      :on-tab-change="onTabChange"
+      @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
+      @handleRedoItemsPerPage="handleRedoItemsPerPage"
+      @handlePaginate="handlePaginate"
+      @handleAdminFiltering="handleAdminFiltering"
+      @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
+      @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
+      @handleSubmitStops="handleSubmitStops"
+      @handleSubmitAll="handleSubmitAll"
+    ></ripa-admin-wrapper>
+    <v-dialog v-model="submitDialog" max-width="400">
+      <v-card>
+        <v-card-title class="text-h5">
+          <span v-if="submitSelected">Submit selected stops?</span>
+          <span v-if="!submitSelected">Submit all stops?</span>
+        </v-card-title>
+
+        <v-card-text>
+          <span v-if="submitSelected"
+            >This will only submit the stops you have selected to the DOJ.</span
+          >
+          <span v-if="!submitSelected"
+            >This will submit all the stops (regardless of what is selected or
+            any active filters) to the DOJ.</span
+          >
+          <br /><br />Note: Stops that are in an error state will not be
+          re-submitted.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="darken-1" text @click="handleCloseSubmitDialog">
+            Cancel
+          </v-btn>
+
+          <v-btn color="darken-1" text @click="handleSubmitDialogConfirm">
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -40,6 +74,14 @@ export default {
 
   components: {
     RipaAdminWrapper,
+  },
+
+  data: function () {
+    return {
+      submitDialog: false,
+      submitSelected: false,
+      selectedStops: [],
+    }
   },
 
   methods: {
@@ -65,10 +107,25 @@ export default {
       this.$emit('handleSubmissionDetailPaginate', pageData)
     },
     handleSubmitStops(stops) {
-      this.$emit('handleSubmitStops', stops)
+      this.selectedStops = stops
+      this.submitSelected = true
+      this.submitDialog = true
     },
     handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+      this.submitSelected = false
+      this.submitDialog = true
+    },
+    handleCloseSubmitDialog() {
+      this.submitDialog = false
+    },
+    handleSubmitDialogConfirm() {
+      if (this.submitSelected && this.selectedStops.length > 0) {
+        this.$emit('handleSubmitStops', this.selectedStops)
+      } else {
+        this.$emit('handleSubmitAll')
+      }
+      this.submitDialog = false
+      this.selectedStops = []
     },
   },
 
