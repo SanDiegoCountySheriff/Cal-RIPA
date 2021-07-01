@@ -22,14 +22,17 @@
         <span class="submissionDetail--header--label">Submission ID:</span>
         <span>{{ submission.submission.id }}</span>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs4>
         <span class="submissionDetail--header--label">Date Submitted:</span>
-        <span>{{
-          format(
-            new Date(submission.submission.dateSubmitted),
-            'yyyy-MM-dd kk:mm',
-          )
-        }}</span>
+        <span
+          >{{
+            format(
+              new Date(submission.submission.dateSubmitted),
+              'yyyy-MM-dd kk:mm',
+            )
+          }}<br />Note: It can take up to 48 hours for stop statuses to update
+          below.</span
+        >
       </v-flex>
       <v-flex xs2>
         <span class="submissionDetail--header--label">Stop Date Start:</span>
