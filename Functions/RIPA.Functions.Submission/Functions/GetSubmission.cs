@@ -87,7 +87,7 @@ namespace RIPA.Functions.Submission.Functions
                 var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
                 if (submissionResponse != null)
                 {
-                    string query = $"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.id = '{Id}' {order} {limit}";
+                    string query = $"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {order} {limit}";
 
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
                     var getSubmissionStopDateTimeSummaryResponse = await _stopCosmosDbService.GetSubmissionStopDateTimeSummaries(Id);
