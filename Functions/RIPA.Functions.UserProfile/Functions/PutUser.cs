@@ -38,30 +38,30 @@ namespace RIPA.Functions.UserProfile.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Common.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
-            try
-            {
-                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
-                {
-                    return new UnauthorizedResult();
-                }
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex.Message);
-                return new UnauthorizedResult();
-            }
+            //try
+            //{
+            //    if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+            //    {
+            //        return new UnauthorizedResult();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.LogError(ex.Message);
+            //    return new UnauthorizedResult();
+            //}
 
-            if (userProfile.OfficerId.Length != 9)
+            if (!string.IsNullOrEmpty(userProfile.OfficerId) && userProfile.OfficerId.Length != 9)
             {
                 return new BadRequestObjectResult("OfficerId must be 9 chars");
             }
 
             if (string.IsNullOrEmpty(userProfile.OfficerId))
             {
-                string query = "SELECT TOP 1 c FROM c ORDER BY c.officerId DESC";
-                IEnumerable<Common.Models.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
-                
                 int officerId = 100000000;
+                
+                string query = "SELECT VALUE c FROM c ORDER BY c.officerId DESC OFFSET 0 LIMIT 1";
+                IEnumerable<Common.Models.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
 
                 Common.Models.UserProfile maxId = maxOfficer.FirstOrDefault();
                 if (maxId != null)
