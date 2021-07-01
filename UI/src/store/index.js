@@ -106,17 +106,23 @@ export default new Vuex.Store({
           stopObj => {
             const mappedErrors = stopObj.listSubmission.map(
               stopSubmissionObj => {
+                const stopSubmissionId = stopSubmissionObj.id
                 const errorArray = []
                 if (
                   stopSubmissionObj.listSubmissionError &&
                   stopSubmissionObj.listSubmissionError.length
                 ) {
                   stopSubmissionObj.listSubmissionError.forEach(errorObj => {
+                    // add a class if the submission error came from the current submission
+                    // so these will be colored differently
+                    const className =
+                      stopSubmissionId === state.adminSubmission.submission.id
+                        ? 'currentSubmission'
+                        : ''
                     errorArray.push(
-                      `<p>${errorObj.code}: ${errorObj.message.substr(
-                        0,
-                        200,
-                      )} ...</p>`,
+                      `<p class="${className}">${
+                        errorObj.code
+                      }: ${errorObj.message.substr(0, 200)} ...</p>`,
                     )
                   })
                   return errorArray.join('')
