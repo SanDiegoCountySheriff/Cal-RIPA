@@ -2,7 +2,9 @@ module.exports = {
   transpileDependencies: ['vuetify'],
 
   publicPath: './',
-
+  configureWebpack: {
+    devtool: 'source-map',
+  },
   pwa: {
     name: 'RIPA Stops',
     themeColor: '#42b983',
