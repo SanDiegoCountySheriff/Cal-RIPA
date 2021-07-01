@@ -323,12 +323,12 @@ export default new Vuex.Store({
       if (agencyQuestions) {
         const questions = value.agencyQuestions.map(item => {
           return {
-            maxLength: item.MaxLength,
-            label: item.Prompt,
-            hint: item.Hint || null,
-            required: item.Required,
-            questionType: item.Type,
             name: item.Name || 'N/A',
+            type: item.Type,
+            prompt: item.Prompt,
+            hint: item.Hint || null,
+            maxLength: item.MaxLength,
+            required: item.Required,
           }
         })
         if (questions.length > 0) {
