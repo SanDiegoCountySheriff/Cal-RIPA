@@ -72,7 +72,12 @@
           :sort-desc.sync="sortDesc"
         >
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="tw-mr-2" @click="editItem(item)">
+            <v-icon
+              v-if="item.status !== 'Submitted'"
+              small
+              class="tw-mr-2"
+              @click="editItem(item)"
+            >
               mdi-pencil
             </v-icon>
           </template>
@@ -128,7 +133,11 @@ export default {
         { text: 'Stop', value: 'id', sortName: 'id' },
         { text: 'Status', value: 'status', width: 100, sortName: 'Status' },
         { text: 'Edited', value: 'edited', width: 100, sortName: 'IsEdited' },
-        { text: 'Error', value: 'error', sortable: false },
+        {
+          text: 'Error (errors from this submission are highlighted)',
+          value: 'error',
+          sortable: false,
+        },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       format,
@@ -353,6 +362,10 @@ export default {
 
   .stopError p {
     margin: 0px;
+
+    &.currentSubmission {
+      color: #2196f3;
+    }
   }
 }
 </style>
