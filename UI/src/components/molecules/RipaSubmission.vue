@@ -30,8 +30,8 @@
               new Date(submission.submission.dateSubmitted),
               'yyyy-MM-dd kk:mm',
             )
-          }}<br />Note: It can take up to 48 hours for stop statuses to update
-          below.</span
+          }}<br />(Note: It can take up to 48 hours for stop statuses to update
+          below.)</span
         >
       </v-flex>
       <v-flex xs2>
