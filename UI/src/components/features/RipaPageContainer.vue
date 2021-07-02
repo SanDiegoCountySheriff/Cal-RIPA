@@ -102,7 +102,9 @@ export default {
       'isOnlineAndAuthenticated',
       'apiConfig',
       'mappedUser',
-      'stopSubmissionStatus',
+      'mappedStopSubmissionStatus',
+      'mappedStopSubmissionPassedIds',
+      'mappedStopSubmissionFailedIds',
     ]),
 
     getMappedUser() {
@@ -204,25 +206,6 @@ export default {
       localStorage.removeItem('ripa_statutes')
       localStorage.removeItem('ripa_agency_questions')
       localStorage.setItem('ripa_cache_date', new Date())
-    },
-
-    async runApiStopsJob(apiStops) {
-      this.resetStopSubmissionStatus()
-      if (this.isOnlineAndAuthenticated) {
-        const stopIds = []
-
-        for (let index = 0; index < apiStops.length; index++) {
-          const apiStop = apiStops[index]
-          const id = apiStop.id
-          stopIds.push(id)
-          await this.editOfficerStop(apiStop)
-        }
-
-        const stopIdsStr = stopIds.join(', ')
-        this.snackbarText = `${this.stopSubmissionStatus}. Stop ID(s): ${stopIdsStr}.`
-        console.log(this.snackbarText)
-        this.snackbarVisible = true
-      }
     },
 
     async updateAuthenticatedData() {
