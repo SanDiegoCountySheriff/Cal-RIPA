@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 
 export default {
   methods: {
-    updateModel(newValue) {
+    syncModel(newValue) {
       return {
         id: newValue.id,
         template: newValue.template,

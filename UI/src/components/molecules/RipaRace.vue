@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       raceItems: RACES,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -69,7 +69,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
   },
 

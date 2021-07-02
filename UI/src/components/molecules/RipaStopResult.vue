@@ -309,7 +309,7 @@ export default {
   data() {
     return {
       stopResultItems: STOP_RESULTS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -511,7 +511,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
 
     lastResult(newVal) {

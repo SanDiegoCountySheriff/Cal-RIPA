@@ -214,7 +214,7 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -336,7 +336,7 @@ export default {
   watch: {
     value(newVal) {
       this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
 
     lastReason(newVal) {

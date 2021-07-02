@@ -185,7 +185,7 @@ export default {
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -358,7 +358,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
       this.updateActionsTakenSearchModel()
     },
 

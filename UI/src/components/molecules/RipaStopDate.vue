@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       durationItems: DURATIONS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -166,7 +166,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
   },
 
