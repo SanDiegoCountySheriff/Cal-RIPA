@@ -119,6 +119,7 @@ export default {
         'ripa_form_saved_full_stop',
         JSON.stringify(this.fullStop),
       )
+      localStorage.setItem('ripa_form_add_person', '1')
       localStorage.setItem('ripa_form_edit_person', '1')
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
@@ -359,6 +360,7 @@ export default {
       }
 
       if (index === 7) {
+        localStorage.removeItem('ripa_form_add_person')
         localStorage.removeItem('ripa_form_edit_agency_questions')
         localStorage.removeItem('ripa_form_edit_person')
         localStorage.removeItem('ripa_form_edit_stop')
@@ -466,6 +468,7 @@ export default {
     },
 
     clearLocalStorage() {
+      localStorage.removeItem('ripa_form_add_person')
       localStorage.removeItem('ripa_form_admin_editing')
       localStorage.removeItem('ripa_form_api_stop')
       localStorage.removeItem('ripa_form_cached')
@@ -494,6 +497,7 @@ export default {
     },
 
     handleCancelAction() {
+      localStorage.removeItem('ripa_form_add_person')
       localStorage.removeItem('ripa_form_edit_agency_questions')
       localStorage.removeItem('ripa_form_edit_person')
       localStorage.removeItem('ripa_form_edit_stop')

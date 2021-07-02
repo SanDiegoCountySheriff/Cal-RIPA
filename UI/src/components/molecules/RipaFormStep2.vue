@@ -1,5 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
+    Is Add Person: {{ isAddPerson }}
     <template v-if="isSchool">
       <ripa-student
         v-model="model"
@@ -107,6 +108,10 @@ export default {
       default: true,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    isAddPerson: {
       type: Boolean,
       default: false,
     },
