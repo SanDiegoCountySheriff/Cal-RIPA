@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate, differenceInYears } from '@/utilities/dates'
-import { format } from 'date-fns'
 import authentication from '@/authentication'
 
 Vue.use(Vuex)
