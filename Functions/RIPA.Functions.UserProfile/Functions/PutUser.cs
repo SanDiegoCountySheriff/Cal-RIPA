@@ -38,18 +38,18 @@ namespace RIPA.Functions.UserProfile.Functions
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Common.Models.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
         {
             log.LogInformation("PUT - Put User requested");
-            //try
-            //{
-            //    if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
-            //    {
-            //        return new UnauthorizedResult();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex.Message);
-            //    return new UnauthorizedResult();
-            //}
+            try
+            {
+                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new UnauthorizedResult();
+            }
 
             if (!string.IsNullOrEmpty(userProfile.OfficerId) && userProfile.OfficerId.Length != 9)
             {

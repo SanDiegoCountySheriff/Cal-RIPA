@@ -40,6 +40,23 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             }
         }
 
+        public async Task<bool> CheckForDuplicateStop(string stopId, string ori, string officerId, string date, string time)
+        {
+            string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
+            var queryDefinition = new QueryDefinition(queryString);
+            
+            var results = _container.GetItemQueryIterator<Common.Models.Stop>(queryDefinition);
+
+            List<Common.Models.Stop> matchingStops = new List<Common.Models.Stop>();
+            while (results.HasMoreResults)
+            {
+                var response = await results.ReadNextAsync();
+                matchingStops.AddRange(response.ToList());
+            }
+
+            return matchingStops.Count > 0;
+        }
+
         public async Task<IEnumerable<Common.Models.Stop>> GetStopsAsync(string queryString)
         {
             var query = _container.GetItemQueryIterator<Common.Models.Stop>(new QueryDefinition(queryString));
@@ -84,7 +101,7 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
-        public async Task<IEnumerable<Common.Models.SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id) 
+        public async Task<IEnumerable<Common.Models.SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id)
         {
             var queryString = $"Select Max(c.StopDateTime) AS MaxStopDateTime, Min(c.StopDateTime) AS MinStopDateTime FROM c JOIN ListSubmission IN c.ListSubmission WHERE ListSubmission.Id = '{id}'";
             var query = _container.GetItemQueryIterator<Common.Models.SubmissionStopDateTimeSummary>(new QueryDefinition(queryString));
