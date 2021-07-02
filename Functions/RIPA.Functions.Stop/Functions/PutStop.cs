@@ -51,6 +51,7 @@ namespace RIPA.Functions.Stop.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
+
                 return new UnauthorizedResult();
             }
 
@@ -62,23 +63,39 @@ namespace RIPA.Functions.Stop.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
+
                 return new BadRequestObjectResult("User profile was not found");
             }
 
             if (!string.IsNullOrEmpty(Id))
             {
+                stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
+                
+                bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
+                if (isDuplicate)
+                { 
+                    return new BadRequestObjectResult("This appears to be a duplicate Stop");
+                }
+
                 stop.IsEdited = false;
                 if (_stopCosmosDbService.GetStopAsync(Id) != null)
+                {
                     stop.IsEdited = true;
+                }
 
                 stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
                     return new BadRequestObjectResult("Office ID must be 9 char");
                 }
-                stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
-                if (stop.Status == null) stop.Status = SubmissionStatus.Unsubmitted.ToString();
+
+                if (stop.Status == null)
+                {
+                    stop.Status = SubmissionStatus.Unsubmitted.ToString();
+                }
+
                 await _stopCosmosDbService.UpdateStopAsync(Id, stop);
+                
                 return new OkObjectResult(stop);
             }
 
