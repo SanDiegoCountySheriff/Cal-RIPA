@@ -54,11 +54,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopReasonModel()
-      this.clearDisabilityModel()
-      this.updateActionsTakenModel()
-      this.updateStopResultModel()
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
@@ -66,14 +62,6 @@ export default {
   watch: {
     value(newVal) {
       this.viewModel = this.syncModel(newVal)
-    },
-
-    'viewModel.person.isStudent': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.handleInput()
-        }
-      },
     },
   },
 

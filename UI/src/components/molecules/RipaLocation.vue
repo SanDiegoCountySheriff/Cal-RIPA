@@ -181,7 +181,7 @@
               v-model="model.location.outOfCounty"
               label="City Out of County?"
               :max-width="200"
-              @input="handleInput"
+              @input="handleOutOfCountyToggle"
             ></ripa-switch>
           </div>
         </v-col>
@@ -369,18 +369,13 @@ export default {
     },
 
     handleInput() {
-      this.updateSchoolModel()
-      this.updateBlockNumberModel()
-      this.updateFullAddressModel()
-      this.updateStopReasonModel()
-      this.updateStopResultModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
 
     handleInputOutOfCounty(newVal) {
       const currentVal = this.viewModel.location.outOfCounty
       if (newVal !== currentVal) {
-        this.updateOutOfCountyModel()
         this.handleInput()
       }
     },
@@ -402,6 +397,25 @@ export default {
         this.onSaveFavorite(this.viewModel.location)
       }
     },
+
+    handleOutOfCountyToggle() {
+      this.$nextTick(() => {
+        if (this.viewModel.location.outOfCounty) {
+          this.viewModel.location.beat = 999
+          this.viewModel.location.city = null
+        }
+
+        if (
+          !this.viewModel.location.outOfCounty &&
+          this.viewModel.location.beat === 999
+        ) {
+          this.viewModel.location.beat = null
+          this.viewModel.location.city = null
+        }
+      })
+
+      this.handleInput()
+    },
   },
 
   watch: {
@@ -414,22 +428,6 @@ export default {
         this.viewModel.location = newVal
         this.handleInput()
       }
-    },
-
-    'viewModel.location.outOfCounty': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.updateOutOfCountyModel()
-        }
-      },
-    },
-
-    'viewModel.location.blockNumber': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.updateBlockNumberModel()
-        }
-      },
     },
   },
 

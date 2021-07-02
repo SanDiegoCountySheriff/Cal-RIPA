@@ -85,7 +85,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },

@@ -126,6 +126,21 @@ export default {
       })
     },
 
+    updateModel() {
+      this.updateSchoolModel()
+      this.updateActionsTakenModel()
+      this.updateActionsTakenSearchModel()
+      this.updateBasisForSearchModel()
+      this.updateBasisForPropertySeizureModel()
+      this.updateBlockNumberModel()
+      this.updateFullAddressModel()
+      this.updatePerceivedLgbtModel()
+      this.updatePropertyWasSeizedModel()
+      this.updateStopReasonModel()
+      this.updateStopReasonSearchModel()
+      this.updateStopResultModel()
+    },
+
     updateActionsTakenModel() {
       if (!this.viewModel.actionsTaken.anyActionsTaken) {
         this.viewModel.actionsTaken.actionsTakenDuringStop = null
@@ -264,23 +279,6 @@ export default {
       this.viewModel.location.fullAddress = fullAddress
     },
 
-    updateOutOfCountyModel() {
-      this.$nextTick(() => {
-        if (this.viewModel.location.outOfCounty) {
-          this.viewModel.location.beat = 999
-          this.viewModel.location.city = null
-        }
-
-        if (
-          !this.viewModel.location.outOfCounty &&
-          this.viewModel.location.beat === 999
-        ) {
-          this.viewModel.location.beat = null
-          this.viewModel.location.city = null
-        }
-      })
-    },
-
     updatePerceivedLgbtModel() {
       if (
         this.viewModel.person.perceivedGender === 3 ||
@@ -308,11 +306,7 @@ export default {
         this.viewModel.person.isStudent = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
-        this.updateStopReasonModel()
-        this.updateActionsTakenModel()
         this.clearDisabilityModel()
-        this.updateStopResultModel()
-        this.updateBasisForPropertySeizureModel()
       }
     },
 
@@ -425,27 +419,19 @@ export default {
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
       }
-    },
 
-    updateStopResultWarningCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop2) {
         this.viewModel.stopResult.warningCodes = null
       }
-    },
 
-    updateStopResultCitationCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop3) {
         this.viewModel.stopResult.citationCodes = null
       }
-    },
 
-    updateStopResultInfieldCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop4) {
         this.viewModel.stopResult.infieldCodes = null
       }
-    },
 
-    updateStopResultCustodiaArrestCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
       }

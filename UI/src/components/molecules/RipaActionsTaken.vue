@@ -343,29 +343,19 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateActionsTakenModel()
-      this.updatePropertyWasSeizedModel()
-      this.updateActionsTakenSearchModel()
-      this.updateBasisForSearchModel()
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   mounted() {
-    this.updateActionsTakenSearchModel()
+    this.updateModel()
   },
 
   watch: {
     value(newVal) {
       this.viewModel = this.syncModel(newVal)
-      this.updateActionsTakenSearchModel()
-    },
-
-    'value.actionsTaken.basisForSearchPiiFound': {
-      handler(newVal) {
-        this.viewModel.actionsTaken.basisForSearchPiiFound = newVal
-      },
+      this.updateModel()
     },
   },
 

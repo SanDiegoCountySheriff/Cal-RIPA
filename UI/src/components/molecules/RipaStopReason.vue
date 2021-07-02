@@ -319,9 +319,7 @@ export default {
     },
 
     handleInput() {
-      this.updateStopReasonModel()
-      this.updateStopReasonSearchModel()
-      this.updateBasisForSearchModel()
+      this.updateModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
@@ -344,12 +342,6 @@ export default {
         this.viewModel.stopReason = newVal
         this.handleInput()
       }
-    },
-
-    'value.stopReason.reasonForStopPiiFound': {
-      handler(newVal) {
-        this.viewModel.stopReason.reasonForStopPiiFound = newVal
-      },
     },
   },
 

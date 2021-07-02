@@ -125,7 +125,7 @@ export default {
     },
 
     handleInput() {
-      this.updatePerceivedLgbtModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },

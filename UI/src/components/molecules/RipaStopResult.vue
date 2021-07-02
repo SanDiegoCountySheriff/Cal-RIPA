@@ -445,11 +445,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopResultModel()
-      this.updateStopResultWarningCodesModel()
-      this.updateStopResultCitationCodesModel()
-      this.updateStopResultInfieldCodesModel()
-      this.updateStopResultCustodiaArrestCodesModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
 
