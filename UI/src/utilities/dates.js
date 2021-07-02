@@ -51,7 +51,7 @@ export const formatShortDate = dateStr => {
 }
 
 export const uniqueId = () => {
-  return format(new Date(), 'yyyyMMddkkmm')
+  return format(new Date(), 'yyMMddkkmmss')
 }
 
 export const formatToIsoCurrentDate = () => {
