@@ -129,6 +129,7 @@ export default {
       'getFormCities',
       'getFormSchools',
       'getFormStatutes',
+      'getFormTemplates',
       'getUser',
       'resetStopSubmissionStatus',
     ]),
@@ -145,6 +146,7 @@ export default {
         this.getFormCities(),
         this.getFormSchools(),
         this.getFormStatutes(),
+        this.getFormTemplates(),
       ])
     },
 
