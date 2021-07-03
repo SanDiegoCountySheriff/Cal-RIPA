@@ -12,6 +12,7 @@ using RIPA.Functions.Domain.Functions.Templates.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -52,7 +53,9 @@ namespace RIPA.Functions.Domain.Functions.Templates
                 var request = await templates.ExecuteQuerySegmentedAsync(new TableQuery<Template>(), continuationToken);
                 continuationToken = request.ContinuationToken;
 
-                foreach (Template entity in request)
+                var orderedRequest = request.Results.OrderBy(e => e.Id);
+
+                foreach (Template entity in orderedRequest)
                 {
                     if(entity?.DeactivationDate <= DateTime.Now)
                     {
