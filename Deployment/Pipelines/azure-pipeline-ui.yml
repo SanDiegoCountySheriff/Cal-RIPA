@@ -7,6 +7,7 @@ trigger:
   branches:
     include:
       - main
+      - dev
   paths:
     include:
       - UI/*
@@ -33,11 +34,29 @@ stages:
               versionSpec: "12.x"
             displayName: "Install Node.js"
 
+          - script: rm -rf "UI/node_modules"
+            displayName: "Purge node packages"
+            continueOnError: true
+            workingDirectory: $(Build.SourcesDirectory)
+
+          - script: rm -rf "UI/package-lock.json"
+            displayName: "Purge node package-lock file"
+            continueOnError: true
+            workingDirectory: $(Build.SourcesDirectory)
+
           - task: Npm@1
             displayName: "npm install"
             inputs:
-              command: "install"
+              command: "custom"
               workingDir: "UI/"
+              customCommand: "install --legacy-peer-deps --save"
+
+          - task: Npm@1
+            displayName: "npm build-storybook"
+            inputs:
+              command: "custom"
+              workingDir: "UI/"
+              customCommand: "run build-storybook"
 
           - task: replacetokens@3
             displayName: "Replace UI Version #"
@@ -53,13 +72,6 @@ stages:
               useLegacyPattern: false
               enableTransforms: false
               enableTelemetry: true
-
-          - task: Npm@1
-            displayName: "npm build-storybook"
-            inputs:
-              command: "custom"
-              workingDir: "UI/"
-              customCommand: "run build-storybook"
 
           - task: Npm@1
             displayName: "npm build"
