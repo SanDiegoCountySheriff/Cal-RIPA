@@ -45,6 +45,7 @@ stages:
               enableTelemetry: true
           
           - script: cat "$(Build.SourcesDirectory)/UI/src/constants/app.js"
+            displayName: "Review app version"
           
           - task: NodeTool@0
             inputs:
