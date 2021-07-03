@@ -7,11 +7,14 @@ trigger:
   branches:
     include:
       - main
-      - dev
   paths:
     include:
       - UI/*
       - Deployment/Pipelines/azure-pipeline-ui.yml
+
+variables:
+  DATE_COUNTER: $[counter(format('UI{0:yyyy}{0:MM}{0:dd}', pipeline.startTime), 1)]
+  TEMPLATE_VERSION: $[format('v{0:yyyy}.{0:MM}.{0:dd}.{1}', pipeline.startTime, variables['DATE_COUNTER'])]
 
 pool:
   vmImage: ubuntu-latest
@@ -30,22 +33,26 @@ stages:
               versionSpec: "12.x"
             displayName: "Install Node.js"
 
-          - script: rm -rf "UI/node_modules"
-            displayName: "Purge node packages"
-            continueOnError: true
-            workingDirectory: $(Build.SourcesDirectory)
-
-          - script: rm -rf "UI/package-lock.json"
-            displayName: "Purge node package-lock file"
-            continueOnError: true
-            workingDirectory: $(Build.SourcesDirectory)
-
           - task: Npm@1
             displayName: "npm install"
             inputs:
-              command: "custom"
+              command: "install"
               workingDir: "UI/"
-              customCommand: "install --legacy-peer-deps --save"
+
+          - task: replacetokens@3
+            displayName: "Replace UI Version #"
+            inputs:
+              rootDirectory: "/UI/src/constants"
+              targetFiles: "app.js"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "#{"
+              tokenSuffix: "}#"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
 
           - task: Npm@1
             displayName: "npm build-storybook"
