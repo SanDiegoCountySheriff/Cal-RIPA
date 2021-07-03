@@ -29,6 +29,23 @@ stages:
         displayName: "Building UI Project"
 
         steps:
+          - task: replacetokens@3
+            displayName: "Replace UI Version #"
+            inputs:
+              rootDirectory: "$(Build.SourcesDirectory)/UI/src/constants"
+              targetFiles: "app.js"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "#{"
+              tokenSuffix: "}#"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
+          
+          - script: cat "$(Build.SourcesDirectory)/UI/src/constants/app.js"
+          
           - task: NodeTool@0
             inputs:
               versionSpec: "12.x"
@@ -61,7 +78,7 @@ stages:
           - task: replacetokens@3
             displayName: "Replace UI Version #"
             inputs:
-              rootDirectory: "/UI/src/constants"
+              rootDirectory: "$(Build.SourcesDirectory)/UI/src/constants"
               targetFiles: "app.js"
               encoding: "auto"
               writeBOM: true
