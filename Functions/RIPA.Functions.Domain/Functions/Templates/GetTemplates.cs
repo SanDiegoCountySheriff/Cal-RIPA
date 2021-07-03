@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 using RIPA.Functions.Domain.Functions.Templates.Models;
 using RIPA.Functions.Security;
 using System;
@@ -44,7 +45,7 @@ namespace RIPA.Functions.Domain.Functions.Templates
                 return new UnauthorizedResult();
             }
 
-            List<Template> response = new List<Template>();
+            List<object> response = new List<object>();
             TableContinuationToken continuationToken = null;
             do
             {
@@ -53,7 +54,18 @@ namespace RIPA.Functions.Domain.Functions.Templates
 
                 foreach (Template entity in request)
                 {
-                    response.Add(entity);
+                    if(entity?.DeactivationDate <= DateTime.Now)
+                    {
+                        continue;
+                    }
+
+                    response.Add(new
+                    {
+                        id = entity.Id,
+                        displayName = entity.DisplayName,
+                        deactivationDate = entity.DeactivationDate,
+                        stop = JsonConvert.DeserializeObject(entity.StopTemplate)
+                    });
                 }
             }
             while (continuationToken != null);
