@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ripa-person-grid',
+  name: 'ripa-stop-errors-grid',
 
   data() {
     return {

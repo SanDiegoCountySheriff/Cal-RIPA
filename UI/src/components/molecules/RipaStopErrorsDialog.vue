@@ -2,17 +2,17 @@
   <v-dialog v-model="model" max-width="1000px">
     <v-card>
       <v-card-title>
-        <span>Copy Person</span>
+        <span>Stop Errors</span>
       </v-card-title>
 
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">
-              <ripa-person-grid
+              <ripa-stop-errors-grid
                 :items="persons"
                 :on-open-person="onOpenPerson"
-              ></ripa-person-grid>
+              ></ripa-stop-errors-grid>
             </v-col>
           </v-row>
         </v-container>
@@ -27,13 +27,13 @@
 </template>
 
 <script>
-import RipaPersonGrid from '@/components/molecules/RipaPersonGrid'
+import RipaStopErrorsGrid from '@/components/molecules/RipaStopErrorsGrid'
 
 export default {
-  name: 'ripa-person-dialog',
+  name: 'ripa-stop-error-dialog',
 
   components: {
-    RipaPersonGrid,
+    RipaStopErrorsGrid,
   },
 
   data() {
