@@ -88,7 +88,6 @@
                   <ripa-form-step-2
                     v-model="stop"
                     :disabled="isFormStep2Disabled"
-                    :is-add-person="isAddPerson()"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
@@ -361,11 +360,6 @@ export default {
 
     isEditStop() {
       const value = localStorage.getItem('ripa_form_edit_stop')
-      return value ? value === '1' : false
-    },
-
-    isAddPerson() {
-      const value = localStorage.getItem('ripa_form_add_person')
       return value ? value === '1' : false
     },
 
