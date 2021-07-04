@@ -7,10 +7,12 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 using RIPA.Functions.Domain.Functions.Templates.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -44,16 +46,29 @@ namespace RIPA.Functions.Domain.Functions.Templates
                 return new UnauthorizedResult();
             }
 
-            List<Template> response = new List<Template>();
+            List<object> response = new List<object>();
             TableContinuationToken continuationToken = null;
             do
             {
                 var request = await templates.ExecuteQuerySegmentedAsync(new TableQuery<Template>(), continuationToken);
                 continuationToken = request.ContinuationToken;
 
-                foreach (Template entity in request)
+                var orderedRequest = request.Results.OrderBy(e => e.Id);
+
+                foreach (Template entity in orderedRequest)
                 {
-                    response.Add(entity);
+                    if(entity?.DeactivationDate <= DateTime.Now)
+                    {
+                        continue;
+                    }
+
+                    response.Add(new
+                    {
+                        id = entity.Id,
+                        displayName = entity.DisplayName,
+                        deactivationDate = entity.DeactivationDate,
+                        stop = JsonConvert.DeserializeObject(entity.StopTemplate)
+                    });
                 }
             }
             while (continuationToken != null);

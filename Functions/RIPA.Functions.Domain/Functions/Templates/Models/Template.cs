@@ -15,7 +15,7 @@ namespace RIPA.Functions.Domain.Functions.Templates.Models
         public string DisplayName { get; set; }
         
         [JsonProperty(PropertyName = "stop")]
-        public Stop Stop { get; set; }
+        public string StopTemplate { get; set; }
 
         [JsonProperty(PropertyName = "deactivationDate")]
         public DateTime? DeactivationDate { get; set; }

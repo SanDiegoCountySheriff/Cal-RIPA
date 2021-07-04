@@ -13,6 +13,10 @@ trigger:
       - UI/*
       - Deployment/Pipelines/azure-pipeline-ui.yml
 
+variables:
+  DATE_COUNTER: $[counter(format('UI{0:yyyy}{0:MM}{0:dd}', pipeline.startTime), 1)]
+  TEMPLATE_VERSION: $[format('v{0:yyyy}.{0:MM}.{0:dd}.{1}', pipeline.startTime, variables['DATE_COUNTER'])]
+
 pool:
   vmImage: ubuntu-latest
 
@@ -25,6 +29,24 @@ stages:
         displayName: "Building UI Project"
 
         steps:
+          - task: replacetokens@3
+            displayName: "Replace UI Version #"
+            inputs:
+              rootDirectory: "$(Build.SourcesDirectory)/UI/src/constants"
+              targetFiles: "app.js"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "#{"
+              tokenSuffix: "}#"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
+          
+          - script: cat "$(Build.SourcesDirectory)/UI/src/constants/app.js"
+            displayName: "Review app version"
+          
           - task: NodeTool@0
             inputs:
               versionSpec: "12.x"
@@ -53,6 +75,21 @@ stages:
               command: "custom"
               workingDir: "UI/"
               customCommand: "run build-storybook"
+
+          - task: replacetokens@3
+            displayName: "Replace UI Version #"
+            inputs:
+              rootDirectory: "$(Build.SourcesDirectory)/UI/src/constants"
+              targetFiles: "app.js"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "#{"
+              tokenSuffix: "}#"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
 
           - task: Npm@1
             displayName: "npm build"

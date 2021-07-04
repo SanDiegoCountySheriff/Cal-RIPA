@@ -9,7 +9,7 @@
           <v-row no-gutters dense>
             <v-col cols="12" sm="6" class="tw-text-center">
               <v-btn outlined color="primary" @click="handleMotorTemplate"
-                >Motor/Traffic Template</v-btn
+                >Motor/Traffic</v-btn
               >
             </v-col>
             <v-col cols="12" sm="6" class="tw-text-center">
@@ -18,7 +18,7 @@
                 color="primary"
                 @click="handleProbationTemplate"
                 class="tw-mt-4 sm:tw-mt-0"
-                >Probation Contact Template</v-btn
+                >Probation Contact</v-btn
               >
             </v-col>
           </v-row>
@@ -26,7 +26,7 @@
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
               <v-btn color="primary" @click="handleDefaultTemplate"
-                >Default Template</v-btn
+                >BASIC STOP</v-btn
               >
             </v-col>
           </v-row>
