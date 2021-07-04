@@ -17,7 +17,7 @@
 
       <div
         v-for="(person, index) in apiStop.listPersonStopped"
-        :key="person.id"
+        :key="person.index"
       >
         <div class="tw-my-4 tw-text-base tw-font-bold">
           Person {{ index + 1 }}
@@ -30,6 +30,15 @@
               @click="handleEditPerson($event, person.index)"
             >
               Edit
+            </v-btn>
+            <v-btn
+              class="tw-ml-2"
+              dense
+              outlined
+              x-small
+              @click="handleCopyPerson($event, person.index)"
+            >
+              Copy
             </v-btn>
             <template
               v-if="apiStop.listPersonStopped.length > 1 && !adminEditing"
@@ -171,6 +180,13 @@ export default {
       }
     },
 
+    handleCopyPerson(event, id) {
+      event.stopPropagation()
+      if (this.onCopyPerson) {
+        this.onCopyPerson(id)
+      }
+    },
+
     handleDeletePerson(event, id) {
       event.stopPropagation()
       if (this.onDeletePerson) {
@@ -200,6 +216,10 @@ export default {
       default: false,
     },
     onDeletePerson: {
+      type: Function,
+      default: () => {},
+    },
+    onCopyPerson: {
       type: Function,
       default: () => {},
     },

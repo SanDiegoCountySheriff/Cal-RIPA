@@ -190,6 +190,7 @@
                     :api-stop="getApiStop"
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
+                    :on-copy-person="handleCopyPerson"
                     :on-delete-person="handleDeletePerson"
                     :on-edit-agency-questions="handleEditAgencyQuestions"
                     :on-edit-person="handleEditPerson"
@@ -451,6 +452,16 @@ export default {
           }
         },
       })
+    },
+
+    handleCopyPerson(id) {
+      this.stepIndex = 2
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+      if (this.onCopyPerson) {
+        this.onCopyPerson(id)
+      }
     },
 
     handleDeletePerson(id) {
@@ -748,6 +759,10 @@ export default {
       default: () => {},
     },
     onCancelAction: {
+      type: Function,
+      default: () => {},
+    },
+    onCopyPerson: {
       type: Function,
       default: () => {},
     },
