@@ -42,7 +42,6 @@ export default {
   data() {
     return {
       viewModel: this.showDialog,
-      favoriteName: '',
     }
   },
 
@@ -60,25 +59,14 @@ export default {
         this.viewModel = newValue
       },
     },
-    getSaveDiabled() {
-      return this.favoriteName.length === 0
-    },
   },
 
   methods: {
-    init() {
-      this.favoriteName = ''
-    },
-
     handleClose() {
       if (this.onClose) {
         this.onClose()
       }
     },
-  },
-
-  created() {
-    this.init()
   },
 
   watch: {

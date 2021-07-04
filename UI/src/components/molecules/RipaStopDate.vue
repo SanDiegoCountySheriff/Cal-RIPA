@@ -73,7 +73,6 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
-import { DURATIONS } from '@/constants/form'
 import {
   dateWithinLastHours,
   dateNotInFuture,
@@ -96,7 +95,6 @@ export default {
 
   data() {
     return {
-      durationItems: DURATIONS,
       viewModel: this.syncModel(this.value),
     }
   },

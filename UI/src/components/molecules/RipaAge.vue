@@ -31,7 +31,6 @@
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
-import { AGES } from '@/constants/form'
 
 export default {
   name: 'ripa-age',
@@ -45,7 +44,6 @@ export default {
 
   data() {
     return {
-      ageItems: AGES,
       viewModel: this.syncModel(this.value),
     }
   },
