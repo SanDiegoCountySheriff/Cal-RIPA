@@ -44,6 +44,7 @@ export default new Vuex.Store({
     formSchools: [],
     formStatutes: [],
     formStops: [],
+    formTemplates: [],
     user: {
       agency: '',
       oid: '',
@@ -297,6 +298,9 @@ export default new Vuex.Store({
     },
     updateFormStatutes(state, items) {
       state.formStatutes = items
+    },
+    updateFormTemplates(state, items) {
+      state.formTemplates = items
     },
     updateGpsLocationAddress(state, data) {
       state.gpsLocationAddress = data
@@ -1041,6 +1045,33 @@ export default new Vuex.Store({
           .catch(error => {
             console.log('There was an error retrieving statutes.', error)
             commit('updateFormStatutes', [])
+          })
+      }
+    },
+
+    getFormTemplates({ commit, state }) {
+      const items = localStorage.getItem('ripa_templates')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('updateFormTemplates', JSON.parse(items))
+          resolve()
+        })
+      } else {
+        return axios
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetTemplates`, {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            const data = response.data
+            commit('updateFormTemplates', data)
+            localStorage.setItem('ripa_templates', JSON.stringify(data))
+          })
+          .catch(error => {
+            console.log('There was an error retrieving templates.', error)
+            commit('updateFormTemplates', [])
           })
       }
     },
