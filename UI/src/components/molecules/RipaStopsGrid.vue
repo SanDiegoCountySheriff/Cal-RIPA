@@ -463,7 +463,16 @@ export default {
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+      const filterData = {
+        stopFromDate: this.stopFromDate,
+        stopToDate: this.stopToDate,
+        status: this.currentStatusFilter,
+        isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
+        // need to make a comma delimited string out of the error codes
+        errorCodes: this.selectedErrorCodes.join(),
+      }
+      this.$emit('handleSubmitAll', filterData)
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {

@@ -1397,11 +1397,49 @@ export default new Vuex.Store({
         })
     },
 
-    submitAllStops({ state }) {
+    submitAllStops({ state }, filterData) {
+      let filterParams = {}
+      if (filterData.stopFromDate !== null) {
+        filterParams = {
+          ...filterParams,
+          StartDate: filterData.stopFromDate,
+        }
+      }
+      if (filterData.stopToDate !== null) {
+        filterParams = {
+          ...filterParams,
+          EndDate: filterData.stopToDate,
+        }
+      }
+      if (filterData.status !== null) {
+        filterParams = {
+          ...filterParams,
+          Status: filterData.status,
+        }
+      }
+      if (filterData.isPiiFound !== null) {
+        filterParams = {
+          ...filterParams,
+          IsPII: filterData.isPiiFound,
+        }
+      }
+      if (filterData.isEdited !== null) {
+        filterParams = {
+          ...filterParams,
+          IsEdited: filterData.isEdited,
+        }
+      }
+      if (filterData.errorCodes !== '') {
+        filterParams = {
+          ...filterParams,
+          ErrorCode: filterData.errorCodes,
+        }
+      }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
-          null,
+          filterParams,
           {
             headers: {
               'Content-Type': 'application/json',

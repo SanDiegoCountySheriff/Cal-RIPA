@@ -274,9 +274,11 @@ export default {
       }, 4000)
     },
 
-    async handleSubmitAll(stops) {
+    async handleSubmitAll(filterData) {
       this.loading = true
-      const submissionResults = await Promise.all([this.submitAllStops()])
+      const submissionResults = await Promise.all([
+        this.submitAllStops(filterData),
+      ])
       this.loading = false
       this.snackbarText = 'All stops were submitted'
       this.snackbarVisible = true
