@@ -58,7 +58,18 @@
         <div v-if="submission.summary.length" class="submissionSummary">
           <p v-for="(errorCode, index) in submission.summary" :key="index">
             <span class="label">{{ errorCode.code }}</span>
-            <span class="count">{{ errorCode.count }}</span>
+            <v-btn
+              :class="{
+                activeFilter: currentErrorCodeFilter === errorCode.code,
+              }"
+              @click="handleChangeErrorCodeFilter(errorCode.code)"
+              v-if="submission.summary.length > 1"
+              text
+              >{{ errorCode.count }}</v-btn
+            >
+            <span class="count" v-if="submission.summary.length === 1">{{
+              errorCode.count
+            }}</span>
           </p>
         </div>
       </v-flex>
@@ -152,6 +163,7 @@ export default {
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: null,
       sortDesc: true,
+      currentErrorCodeFilter: null,
     }
   },
 
@@ -221,6 +233,13 @@ export default {
         return columnToSort[0].sortName
       } else {
         return null
+      }
+    },
+    handleChangeErrorCodeFilter(whichCode) {
+      if (whichCode !== this.currentErrorCodeFilter) {
+        this.currentErrorCodeFilter = whichCode
+      } else {
+        this.currentErrorCodeFilter = null
       }
     },
   },
@@ -346,6 +365,21 @@ export default {
   > p {
     flex: 1;
     margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .v-btn {
+      font-size: 1.1rem;
+      font-weight: normal;
+      color: #2196f3;
+      max-width: 100px;
+
+      &.activeFilter {
+        background: #e3e3e3;
+        font-weight: bold;
+      }
+    }
 
     span {
       display: block;
