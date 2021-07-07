@@ -6,7 +6,7 @@
     :label="label"
     :hint="hint"
     :rules="rules"
-    :min="1"
+    :min="0"
     validate-on-blur
     :disabled="disabled"
     @blur="handleBlur"

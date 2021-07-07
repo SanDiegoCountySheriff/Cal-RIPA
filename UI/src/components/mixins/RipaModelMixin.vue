@@ -264,9 +264,13 @@ export default {
     },
 
     updateBlockNumberModel() {
-      let blockNumber = this.viewModel.location.blockNumber
-      blockNumber = Math.floor(blockNumber / 100) * 100
-      this.viewModel.location.blockNumber = blockNumber
+      this.$nextTick(() => {
+        let blockNumber = this.viewModel.location.blockNumber
+        if (blockNumber !== null && blockNumber > 0) {
+          blockNumber = Math.floor(blockNumber / 100) * 100
+        }
+        this.viewModel.location.blockNumber = blockNumber
+      })
     },
 
     updateFullAddressModel() {
