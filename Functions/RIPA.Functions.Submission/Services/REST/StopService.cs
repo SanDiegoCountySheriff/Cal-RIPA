@@ -78,12 +78,12 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.Codes.Code,
+                    City = stop.Location.City?.Codes?.Code,
                     K12_Flag = stop.Location.School ? "Y" : string.Empty,
                     K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School)
+                ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School) : null
             };
             return dojStop;
         }
@@ -144,7 +144,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
         {
-            var stopReasonKey = personStopped.ReasonForStop.Key;
+            var stopReasonKey = personStopped.ReasonForStop?.Key;
             Primaryreason primaryReason = new Primaryreason
             {
                 StReas = stopReasonKey,
@@ -154,17 +154,17 @@ namespace RIPA.Functions.Submission.Services.REST
             switch (stopReasonKey)
             {
                 case "1": //Traffic Violation
-                    primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
-                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
+                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 case "2": //Reasonable Suspicion
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToArray() };
-                    primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     break;
                 case "7": //Education Code
-                    primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
-                    primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
+                    primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 default: //All other stop reason keys
