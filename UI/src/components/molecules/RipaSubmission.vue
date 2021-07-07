@@ -257,13 +257,17 @@ export default {
     },
     getFilterStatus() {
       if (this.getColumnSortName() !== null) {
+        let sortOrder = this.sortDesc
+        if (Array.isArray(this.sortDesc)) {
+          sortOrder = this.sortDesc[0]
+        }
         return {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
               ? 'dateSubmitted'
               : this.getColumnSortName(),
-          order: this.sortDesc ? 'Desc' : 'Asc',
+          order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         }
       } else {
         return null

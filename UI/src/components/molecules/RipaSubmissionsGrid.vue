@@ -126,8 +126,14 @@ export default {
           text: 'Submission Date',
           value: 'dateSubmitted',
           sortName: 'dateSubmitted',
+          sortable: true,
         },
-        { text: 'Total Stops', value: 'recordCount', sortName: 'recordCount' },
+        {
+          text: 'Total Stops',
+          value: 'recordCount',
+          sortable: true,
+          sortName: 'recordCount',
+        },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -232,6 +238,10 @@ export default {
     handleFilter() {
       // whenever you change a filter, you're going to
       // reset the paging because it would all change with new settings
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       const filterData = {
         offset: null,
         limit: this.itemsPerPage,
@@ -243,7 +253,7 @@ export default {
             this.getColumnSortName() === null
               ? 'dateSubmitted'
               : this.getColumnSortName(),
-          order: this.sortDesc ? 'Desc' : 'Asc',
+          order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
       this.currentPage = 1
