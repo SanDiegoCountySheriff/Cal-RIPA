@@ -168,7 +168,7 @@ namespace RIPA.Functions.Submission.Functions
 
             Guid submissionId = Guid.NewGuid();
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = _storageContainerNamePrefix + submissionId.ToString();
+            string containerName = _storageContainerNamePrefix;
             BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             await blobContainerClient.CreateIfNotExistsAsync();
             try
