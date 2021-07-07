@@ -16,6 +16,6 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts
         Task<IEnumerable<Common.Models.StopStatusCount>> GetStopStatusCounts(string queryString);
         Task<IEnumerable<Common.Models.SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id);
         Task<IEnumerable<Common.Models.SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id);
-        Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText);
+        Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText, string submissionId);
     }
 }
