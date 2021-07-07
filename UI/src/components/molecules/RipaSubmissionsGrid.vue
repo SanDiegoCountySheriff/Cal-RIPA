@@ -192,6 +192,7 @@ export default {
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.currentPage = newPage
       this.$emit('redoItemsPerPage', {
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
