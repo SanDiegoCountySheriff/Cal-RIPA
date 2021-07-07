@@ -278,8 +278,7 @@ export default {
         blockNumber = calcBlockNumber
       }
 
-      console.log('parseBlockNumber', blockNumber)
-      return blockNumber.toString()
+      return typeof blockNumber === 'string' ? blockNumber.toString() : null
     },
 
     updateBlockNumberModel() {
