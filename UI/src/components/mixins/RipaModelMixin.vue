@@ -278,7 +278,9 @@ export default {
         blockNumber = calcBlockNumber
       }
 
-      return typeof blockNumber === 'string' ? blockNumber.toString() : null
+      return typeof blockNumber === 'string' || typeof blockNumber === 'number'
+        ? blockNumber.toString()
+        : null
     },
 
     updateBlockNumberModel() {
