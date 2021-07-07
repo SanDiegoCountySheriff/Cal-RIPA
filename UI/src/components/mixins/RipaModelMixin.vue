@@ -4,7 +4,11 @@ import { format } from 'date-fns'
 export default {
   methods: {
     syncModel(newValue) {
-      return {
+      const blockNumber = this.parseBlockNumber(
+        newValue.location?.blockNumber || null,
+      )
+
+      const syncedModel = {
         id: newValue.id,
         template: newValue.template,
         editStopExplanation: newValue.editStopExplanation || null,
@@ -35,7 +39,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: newValue.location?.blockNumber || null,
+          blockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           toggleLocationOptions:
@@ -108,6 +112,8 @@ export default {
         },
         agencyQuestions: newValue.agencyQuestions || [],
       }
+
+      return syncedModel
     },
 
     clearContrabandOrEvidenceDiscoveredModel() {
@@ -117,7 +123,9 @@ export default {
     },
 
     clearDisabilityModel() {
-      this.viewModel.person.anyDisabilities = false
+      this.$nextTick(() => {
+        this.viewModel.person.anyDisabilities = false
+      })
     },
 
     clearPerceivedOrKnownDisabilityModel() {
@@ -263,13 +271,22 @@ export default {
       }
     },
 
+    parseBlockNumber(value) {
+      let blockNumber = value
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
+        blockNumber = calcBlockNumber
+      }
+
+      console.log('parseBlockNumber', blockNumber)
+      return blockNumber.toString()
+    },
+
     updateBlockNumberModel() {
       this.$nextTick(() => {
-        let blockNumber = this.viewModel.location.blockNumber
-        if (blockNumber !== null && blockNumber > 0) {
-          blockNumber = Math.floor(blockNumber / 100) * 100
-        }
-        this.viewModel.location.blockNumber = blockNumber
+        this.viewModel.location.blockNumber = this.parseBlockNumber(
+          this.viewModel.location.blockNumber,
+        )
       })
     },
 
