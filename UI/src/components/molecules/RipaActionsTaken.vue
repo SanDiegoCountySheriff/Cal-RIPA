@@ -185,7 +185,7 @@ export default {
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -207,12 +207,18 @@ export default {
     },
 
     basisForSearchRules() {
+      const consentGiven = this.wasAskedForConsent
       const searchConducted = this.wasSearchOfPersonOrPropertyConducted
       const options = this.viewModel.actionsTaken.basisForSearch
 
       return [
         (searchConducted && options.length > 0) ||
           'At least one basis for search is required',
+        (consentGiven &&
+          this.viewModel.actionsTaken.basisForSearch !== null &&
+          this.viewModel.actionsTaken.basisForSearch.length > 0 &&
+          this.viewModel.actionsTaken.basisForSearch.includes(1)) ||
+          'Consent given must be selected if person or property consent was given.',
       ]
     },
 
@@ -343,29 +349,19 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateActionsTakenModel()
-      this.updatePropertyWasSeizedModel()
-      this.updateActionsTakenSearchModel()
-      this.updateBasisForSearchModel()
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   mounted() {
-    this.updateActionsTakenSearchModel()
+    this.updateModel()
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
-      this.updateActionsTakenSearchModel()
-    },
-
-    'value.actionsTaken.basisForSearchPiiFound': {
-      handler(newVal) {
-        this.viewModel.actionsTaken.basisForSearchPiiFound = newVal
-      },
+      this.viewModel = this.syncModel(newVal)
+      this.updateModel()
     },
   },
 

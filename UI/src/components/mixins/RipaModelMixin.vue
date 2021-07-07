@@ -3,8 +3,12 @@ import { format } from 'date-fns'
 
 export default {
   methods: {
-    updateModel(newValue) {
-      return {
+    syncModel(newValue) {
+      const blockNumber = this.parseBlockNumber(
+        newValue.location?.blockNumber || null,
+      )
+
+      const syncedModel = {
         id: newValue.id,
         template: newValue.template,
         editStopExplanation: newValue.editStopExplanation || null,
@@ -35,7 +39,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: newValue.location?.blockNumber || null,
+          blockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           toggleLocationOptions:
@@ -108,6 +112,8 @@ export default {
         },
         agencyQuestions: newValue.agencyQuestions || [],
       }
+
+      return syncedModel
     },
 
     clearContrabandOrEvidenceDiscoveredModel() {
@@ -117,13 +123,30 @@ export default {
     },
 
     clearDisabilityModel() {
-      this.viewModel.person.anyDisabilities = false
+      this.$nextTick(() => {
+        this.viewModel.person.anyDisabilities = false
+      })
     },
 
     clearPerceivedOrKnownDisabilityModel() {
       this.$nextTick(() => {
         this.viewModel.person.perceivedOrKnownDisability = []
       })
+    },
+
+    updateModel() {
+      this.updateSchoolModel()
+      this.updateActionsTakenModel()
+      this.updateActionsTakenSearchModel()
+      this.updateBasisForSearchModel()
+      this.updateBasisForPropertySeizureModel()
+      this.updateBlockNumberModel()
+      this.updateFullAddressModel()
+      this.updatePerceivedLgbtModel()
+      this.updatePropertyWasSeizedModel()
+      this.updateStopReasonModel()
+      this.updateStopReasonSearchModel()
+      this.updateStopResultModel()
     },
 
     updateActionsTakenModel() {
@@ -248,10 +271,23 @@ export default {
       }
     },
 
+    parseBlockNumber(value) {
+      let blockNumber = value
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
+        blockNumber = calcBlockNumber
+      }
+
+      console.log('parseBlockNumber', blockNumber)
+      return blockNumber.toString()
+    },
+
     updateBlockNumberModel() {
-      let blockNumber = this.viewModel.location.blockNumber
-      blockNumber = Math.floor(blockNumber / 100) * 100
-      this.viewModel.location.blockNumber = blockNumber
+      this.$nextTick(() => {
+        this.viewModel.location.blockNumber = this.parseBlockNumber(
+          this.viewModel.location.blockNumber,
+        )
+      })
     },
 
     updateFullAddressModel() {
@@ -262,23 +298,6 @@ export default {
       const fullAddress =
         streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
       this.viewModel.location.fullAddress = fullAddress
-    },
-
-    updateOutOfCountyModel() {
-      this.$nextTick(() => {
-        if (this.viewModel.location.outOfCounty) {
-          this.viewModel.location.beat = 999
-          this.viewModel.location.city = null
-        }
-
-        if (
-          !this.viewModel.location.outOfCounty &&
-          this.viewModel.location.beat === 999
-        ) {
-          this.viewModel.location.beat = null
-          this.viewModel.location.city = null
-        }
-      })
     },
 
     updatePerceivedLgbtModel() {
@@ -308,11 +327,7 @@ export default {
         this.viewModel.person.isStudent = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
-        this.updateStopReasonModel()
-        this.updateActionsTakenModel()
         this.clearDisabilityModel()
-        this.updateStopResultModel()
-        this.updateBasisForPropertySeizureModel()
       }
     },
 
@@ -425,27 +440,19 @@ export default {
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
       }
-    },
 
-    updateStopResultWarningCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop2) {
         this.viewModel.stopResult.warningCodes = null
       }
-    },
 
-    updateStopResultCitationCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop3) {
         this.viewModel.stopResult.citationCodes = null
       }
-    },
 
-    updateStopResultInfieldCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop4) {
         this.viewModel.stopResult.infieldCodes = null
       }
-    },
 
-    updateStopResultCustodiaArrestCodesModel() {
       if (!this.viewModel.stopResult.resultsOfStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
       }

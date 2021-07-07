@@ -1062,3 +1062,30 @@ export const editApiStop1 = {
     },
   ],
 }
+
+export const stopPersonsContent = [
+  {
+    id: 1,
+    index: 1,
+    isStudent: false,
+    perceivedRace: ['Black/African American', 'White'],
+    perceivedGender: null,
+    genderNonconforming: true,
+    perceivedLgbt: true,
+    perceivedAge: 30,
+    perceivedLimitedEnglish: true,
+    anyDisabilities: true,
+  },
+  {
+    id: 2,
+    index: 2,
+    isStudent: true,
+    perceivedRace: ['Hispanic/Latino(a)'],
+    perceivedGender: 'Male',
+    genderNonconforming: false,
+    perceivedLgbt: false,
+    perceivedAge: 18,
+    perceivedLimitedEnglish: true,
+    anyDisabilities: true,
+  },
+]

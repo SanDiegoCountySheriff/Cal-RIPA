@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -85,14 +85,14 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
 
     'viewModel.actionsTaken.anyContraband': {

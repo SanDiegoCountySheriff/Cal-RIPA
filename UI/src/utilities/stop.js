@@ -817,7 +817,7 @@ export const apiStopToFullStop = apiStop => {
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
-      blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
+      blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
@@ -1101,7 +1101,7 @@ export const fullStopToApiStop = (
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
-      blockNumber: blockNumber && streetName ? blockNumber?.toString() : '',
+      blockNumber: blockNumber && streetName ? blockNumber : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
