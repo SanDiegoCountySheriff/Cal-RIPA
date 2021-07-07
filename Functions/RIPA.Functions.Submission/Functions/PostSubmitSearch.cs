@@ -196,6 +196,7 @@ namespace RIPA.Functions.Submission.Functions
                     fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
                     _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
                     await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                    log.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionId}");
                 }
                 catch (Exception ex)
                 {

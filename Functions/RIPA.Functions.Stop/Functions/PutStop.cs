@@ -55,6 +55,7 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
+
             try
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
@@ -86,7 +87,12 @@ namespace RIPA.Functions.Stop.Functions
                 stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
-                    return new BadRequestObjectResult("Office ID must be 9 char");
+                    return new BadRequestObjectResult("Officer ID must be 9 char");
+                }
+
+                if (stop.Location.City == null)
+                {
+                    return new BadRequestObjectResult("City is required");
                 }
 
                 if (stop.Status == null)
