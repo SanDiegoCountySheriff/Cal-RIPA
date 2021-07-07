@@ -308,6 +308,10 @@ export default {
       }
     },
     getFilterStatus() {
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       return {
         isPiiFound: this.isPiiFound,
         isEdited: this.isEdited,
@@ -316,7 +320,7 @@ export default {
         status: this.currentStatusFilter,
         errorCodes: this.selectedErrorCodes,
         orderBy: this.getColumnSortName(),
-        order: this.sortDesc ? 'Desc' : 'Asc',
+        order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
       }
     },
   },
@@ -330,6 +334,7 @@ export default {
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.currentPage = newPage
       this.$emit('redoItemsPerPage', {
         type: 'stops',
         limit: this.itemsPerPage,
@@ -431,6 +436,10 @@ export default {
     handleFilter() {
       // whenever you change a filter, you're going to
       // reset the paging because it would all change with new settings
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       const filterData = {
         offset: null,
         limit: this.itemsPerPage,
@@ -447,7 +456,7 @@ export default {
             this.getColumnSortName() === null
               ? 'StopDateTime'
               : this.getColumnSortName(),
-          order: this.sortDesc ? 'Desc' : 'Asc',
+          order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
       this.currentPage = 1
