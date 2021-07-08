@@ -63,7 +63,7 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 LEARecordID = stop.Id,
                 ORI = stop.Ori,
-                TX_Type = stop.ListSubmission?.Length > 0 ? "U" : "I",
+                TX_Type = CastToDojTXType(stop),
                 SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
                 STime = stop.Time,
                 SDur = stop.StopDuration.ToString(),
@@ -217,6 +217,25 @@ namespace RIPA.Functions.Submission.Services.REST
                 "Transgender woman/girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
                 _ => "",
             };
+        }
+
+        public static string CastToDojTXType(Stop stop)
+        {
+            if (stop.ListSubmission.Length == 0) return "I"; // no prior submissions
+            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS") return "U"; // previous submission is error but not a FTS (Fail to submit)
+            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS")
+            {
+                if (stop.ListSubmission.Where(x=>x.ListSubmissionError.Any(y=>y.Code != "FTS")).Any()) 
+                {
+                    // the code is currently FTS but is has been submitted in prior to FTS and was not an FTS error
+                    return "U";
+                }
+                else
+                {
+                    return "I";
+                }
+            } 
+            return "I";
         }
 
     }
