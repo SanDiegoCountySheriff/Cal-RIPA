@@ -11,6 +11,8 @@ using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -70,6 +72,23 @@ namespace RIPA.Functions.Stop.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
+                if (Id == "0")
+                {
+                    int stopId = 100000000;
+
+                    string query = "SELECT VALUE c FROM c ORDER BY c.id DESC OFFSET 0 LIMIT 1";
+                    IEnumerable<Common.Models.Stop> maxStop = await _stopCosmosDbService.GetStopsAsync(query);
+
+                    Common.Models.Stop maxId = maxStop.FirstOrDefault();
+                    if (maxId != null)
+                    {
+                        stopId = int.Parse(maxId.Id);
+                        stopId++;
+                    }
+
+                    stop.Id = stopId.ToString();
+                }
+
                 stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
                 
                 bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
