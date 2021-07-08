@@ -15,6 +15,7 @@ using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -68,6 +69,20 @@ namespace RIPA.Functions.Submission.Functions
             if (submitRequest?.StopIds == null || submitRequest.StopIds.Count == 0)
             {
                 return new BadRequestObjectResult("stop ids are required");
+            }
+
+            IEnumerable<Stop> stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT * FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')");
+
+            var currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
+            var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
+            if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
+            {
+                CutoffDate = new DateTime(currentPST.Year, 1, 1); //beginning this year
+            }
+
+            if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
+            {
+                return new BadRequestObjectResult("Stop request contains stops from previous submission year.");
             }
 
             Guid submissionId = Guid.NewGuid();
