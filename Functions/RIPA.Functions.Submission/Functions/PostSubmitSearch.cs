@@ -168,6 +168,7 @@ namespace RIPA.Functions.Submission.Functions
             try
             {
                 var currentPST = DateTime.UtcNow;
+
                 try
                 {
                     currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "America/Los_Angeles");
