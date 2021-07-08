@@ -219,6 +219,8 @@ import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 
 import _ from 'lodash'
+import { isAfter, getYear } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 
 export default {
   name: 'ripa-stops-grid',
@@ -328,6 +330,18 @@ export default {
   methods: {
     init() {
       this.stops = this.items
+      const currentDateInUTC = zonedTimeToUtc(new Date())
+      const currentYear = getYear(new Date())
+      const deadlineDateInUTC = zonedTimeToUtc(
+        new Date(`${currentYear}-04-01T00:00:00`),
+      )
+      // if the current date is after the April 1st deadline, set the start date
+      // filter to Jan 1 of current year
+      const isDateAfterDeadline = isAfter(currentDateInUTC, deadlineDateInUTC)
+      if (isDateAfterDeadline) {
+        this.stopFromDate = `${currentYear}-01-01`
+        this.handleFilter()
+      }
     },
 
     handleUpdateItemsPerPage(val) {
@@ -463,7 +477,16 @@ export default {
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+      const filterData = {
+        stopFromDate: this.stopFromDate,
+        stopToDate: this.stopToDate,
+        status: this.currentStatusFilter,
+        isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
+        // need to make a comma delimited string out of the error codes
+        errorCodes: this.selectedErrorCodes.join(),
+      }
+      this.$emit('handleSubmitAll', filterData)
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {

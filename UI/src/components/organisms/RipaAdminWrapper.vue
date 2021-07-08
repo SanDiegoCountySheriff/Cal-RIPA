@@ -187,8 +187,8 @@ export default {
     handleSubmitStops(stops) {
       this.$emit('handleSubmitStops', stops)
     },
-    handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+    handleSubmitAll(filterData) {
+      this.$emit('handleSubmitAll', filterData)
     },
   },
 

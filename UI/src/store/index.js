@@ -1395,13 +1395,58 @@ export default new Vuex.Store({
           // foward user to submission details screen for newly created submission
           return response.data
         })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
+        })
     },
 
-    submitAllStops({ state }) {
+    submitAllStops({ commit, state }, filterData) {
+      let filterParams = {}
+      if (filterData.stopFromDate !== null) {
+        filterParams = {
+          ...filterParams,
+          StartDate: filterData.stopFromDate,
+        }
+      }
+      if (filterData.stopToDate !== null) {
+        filterParams = {
+          ...filterParams,
+          EndDate: filterData.stopToDate,
+        }
+      }
+      if (filterData.status !== null) {
+        filterParams = {
+          ...filterParams,
+          Status: filterData.status,
+        }
+      }
+      if (filterData.isPiiFound !== null) {
+        filterParams = {
+          ...filterParams,
+          IsPII: filterData.isPiiFound,
+        }
+      }
+      if (filterData.isEdited !== null) {
+        filterParams = {
+          ...filterParams,
+          IsEdited: filterData.isEdited,
+        }
+      }
+      if (filterData.errorCodes !== '') {
+        filterParams = {
+          ...filterParams,
+          ErrorCode: filterData.errorCodes,
+        }
+      }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
-          null,
+          filterParams,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -1413,6 +1458,13 @@ export default new Vuex.Store({
         .then(response => {
           // foward user to submission details screen for newly created submission
           return response.data
+        })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
         })
     },
 
