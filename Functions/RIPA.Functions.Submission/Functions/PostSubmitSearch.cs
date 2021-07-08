@@ -167,7 +167,15 @@ namespace RIPA.Functions.Submission.Functions
 
             try
             {
-                var currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
+                ar currentPST = DateTime.UtcNow;
+                try
+                {
+                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "America/Los_Angeles");
+                }
+                catch
+                {
+                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "Pacific Standard Time");
+                }
                 var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
                 if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
                 {
