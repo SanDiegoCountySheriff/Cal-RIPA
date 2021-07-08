@@ -82,7 +82,12 @@ namespace RIPA.Functions.Submission.Functions
 
             if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
             {
-                return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again?");
+                return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again.");
+            }
+
+            if (stopResponse.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
+            {
+                return new BadRequestObjectResult("Stop request contains stops that are in Error state and require edit to submit. Please adjust your filter criteria and try again.");
             }
 
             Guid submissionId = Guid.NewGuid();
