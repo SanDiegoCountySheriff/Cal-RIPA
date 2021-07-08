@@ -1365,7 +1365,9 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
     return [getReasonableSuspicionCode(person, statutes)]
   }
   if (reasonKey === 7) {
-    if (person.educationViolationCode) {
+    const educationViolationCode =
+      person.stopReason?.educationViolationCode || null
+    if (educationViolationCode) {
       return [getEducationViolationCode(person)]
     } else {
       return []
