@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
@@ -29,16 +30,18 @@ namespace RIPA.Functions.Submission.Functions
         private readonly IStopService _stopService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
         private readonly IStopCosmosDbService _stopCosmosDbService;
+        private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
         private readonly string _sftpInputPath;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
 
-        public PostSubmitSearch(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
+        public PostSubmitSearch(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
             _submissionCosmosDbService = submissionCosmosDbService;
             _stopCosmosDbService = stopCosmosDbService;
+            _userProfileCosmosDbService = userProfileCosmosDbService;
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
@@ -69,6 +72,19 @@ namespace RIPA.Functions.Submission.Functions
             {
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
+            }
+            
+            var userProfile = new UserProfile();
+            try
+            {
+                var objectId = await RIPAAuthorization.GetUserId(req, log);
+                userProfile = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId));
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+
+                return new BadRequestObjectResult("User profile was not found");
             }
 
             //Get the query
@@ -210,7 +226,9 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     DateSubmitted = DateTime.UtcNow,
                     Id = submissionId,
-                    RecordCount = stopResponse.Count()
+                    RecordCount = stopResponse.Count(),
+                    OfficerId = userProfile.OfficerId,
+                    OfficerName = userProfile.Name
                 };
                 await _submissionCosmosDbService.AddSubmissionAsync(submission);
             }
