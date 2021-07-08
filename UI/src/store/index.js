@@ -1395,9 +1395,12 @@ export default new Vuex.Store({
           // foward user to submission details screen for newly created submission
           return response.data
         })
+        .catch(err => {
+          return err.response.statusText
+        })
     },
 
-    submitAllStops({ state }, filterData) {
+    submitAllStops({ commit, state }, filterData) {
       let filterParams = {}
       if (filterData.stopFromDate !== null) {
         filterParams = {
@@ -1451,6 +1454,9 @@ export default new Vuex.Store({
         .then(response => {
           // foward user to submission details screen for newly created submission
           return response.data
+        })
+        .catch(err => {
+          return err.response.statusText
         })
     },
 
