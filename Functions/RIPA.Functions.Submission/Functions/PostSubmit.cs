@@ -71,23 +71,40 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult("stop ids are required");
             }
 
-            IEnumerable<Stop> stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT * FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')");
-
-            var currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
-            var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
-            if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
+            IEnumerable<Stop> stopResponse;
+            try
             {
-                CutoffDate = new DateTime(currentPST.Year, 1, 1); //beginning this year
+                stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT * FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')");
+            }
+            catch(Exception ex)
+            {
+                log.LogError(ex, "An error occured getting stops requested.");
+                return new BadRequestObjectResult("An error occured getting stops requested. Please try again.");
             }
 
-            if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
+            try
             {
-                return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again.");
-            }
+                var currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pacific Standard Time");
+                var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
+                if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
+                {
+                    CutoffDate = new DateTime(currentPST.Year, 1, 1); //beginning this year
+                }
 
-            if (stopResponse.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
+                if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
+                {
+                    return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again.");
+                }
+
+                if (stopResponse.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
+                {
+                    return new BadRequestObjectResult("Stop request contains stops that are in Error state and require edit to submit. Please adjust your filter criteria and try again.");
+                }
+            }
+            catch(Exception ex)
             {
-                return new BadRequestObjectResult("Stop request contains stops that are in Error state and require edit to submit. Please adjust your filter criteria and try again.");
+                log.LogError(ex, "An error occured validating stops.");
+                return new BadRequestObjectResult("An error validating stops requested. Please try again.");
             }
 
             Guid submissionId = Guid.NewGuid();
