@@ -260,7 +260,7 @@ export default {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
       this.loading = false
-      if (submissionResults) {
+      if (!submissionResults[0].submissionId) {
         // show the error message, no redirec
         this.snackbarText = `Submission error: ${submissionResults[0]}`
         this.snackbarVisible = true
@@ -288,7 +288,7 @@ export default {
         this.submitAllStops(filterData),
       ])
       this.loading = false
-      if (submissionResults) {
+      if (!submissionResults[0].submissionId) {
         this.snackbarText = `Submission error: ${submissionResults[0]}`
         this.snackbarVisible = true
       } else {
