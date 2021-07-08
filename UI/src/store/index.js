@@ -1396,7 +1396,11 @@ export default new Vuex.Store({
           return response.data
         })
         .catch(err => {
-          return err.response.statusText
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
         })
     },
 
@@ -1456,7 +1460,11 @@ export default new Vuex.Store({
           return response.data
         })
         .catch(err => {
-          return err.response.statusText
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
         })
     },
 
