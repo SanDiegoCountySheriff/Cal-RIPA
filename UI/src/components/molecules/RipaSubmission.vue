@@ -241,6 +241,11 @@ export default {
       } else {
         this.currentErrorCodeFilter = null
       }
+      this.$emit('submissionDetailPaginate', {
+        id: this.submissionId,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
     },
   },
 
@@ -276,12 +281,13 @@ export default {
       }
     },
     getFilterStatus() {
+      let filters = null
       if (this.getColumnSortName() !== null) {
         let sortOrder = this.sortDesc
         if (Array.isArray(this.sortDesc)) {
           sortOrder = this.sortDesc[0]
         }
-        return {
+        filters = {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
@@ -289,9 +295,14 @@ export default {
               : this.getColumnSortName(),
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         }
-      } else {
-        return null
       }
+      if (this.currentErrorCodeFilter !== null) {
+        filters = {
+          ...filters,
+          errorCode: this.currentErrorCodeFilter,
+        }
+      }
+      return filters
     },
   },
 
