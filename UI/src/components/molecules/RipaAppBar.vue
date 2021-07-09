@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="['ripa-app-bar', getAppBarBackgroundClass]">
     <v-app-bar app dense flat>
       <v-toolbar-title class="tw-cursor-pointer" @click="$router.push('/')">{{
         getAppTitle
@@ -196,10 +196,6 @@ export default {
     },
 
     getAppTitle() {
-      if (this.displayEnvironment) {
-        return `RIPA (${this.environmentName})`
-      }
-
       return 'RIPA'
     },
 
@@ -209,6 +205,22 @@ export default {
 
     getOnlineIcon() {
       return this.online ? 'mdi-wifi' : 'mdi-wifi-strength-off'
+    },
+
+    getAppBarBackgroundClass() {
+      switch (this.environmentName) {
+        case 'DEV':
+          return this.$vuetify.theme.dark
+            ? 'ripa-app-bar--dev-dark'
+            : 'ripa-app-bar--dev-light'
+        case 'QA':
+          return this.$vuetify.theme.dark
+            ? 'ripa-app-bar--qa-dark'
+            : 'ripa-app-bar--qa-light'
+
+        default:
+          return ''
+      }
     },
   },
 
@@ -269,10 +281,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    displayEnvironment: {
-      type: Boolean,
-      default: false,
-    },
     environmentName: {
       type: String,
       default: '',
@@ -302,7 +310,30 @@ export default {
 </script>
 
 <style lang="scss">
-.v-btn:before {
-  background-color: inherit !important;
+.ripa-app-bar {
+  .v-btn:before {
+    background-color: inherit !important;
+  }
+}
+
+.ripa-app-bar--dev-dark {
+  .theme--dark.v-app-bar.v-toolbar.v-sheet {
+    background-color: #006600;
+  }
+}
+.ripa-app-bar--dev-light {
+  .theme--light.v-app-bar.v-toolbar.v-sheet {
+    background-color: #90ee90;
+  }
+}
+.ripa-app-bar--qa-dark {
+  .theme--dark.v-app-bar.v-toolbar.v-sheet {
+    background-color: #1976d2;
+  }
+}
+.ripa-app-bar--qa-light {
+  .theme--light.v-app-bar.v-toolbar.v-sheet {
+    background-color: #90caf9;
+  }
 }
 </style>

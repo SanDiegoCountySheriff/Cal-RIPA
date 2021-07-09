@@ -94,6 +94,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             catch (Exception exception)
             {
                 _logger.LogError(exception, $"Failed in uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
+                throw new Exception($"Failed in uploading stop [{stop.LEARecordID}] to [{remoteFilePath}]");
             }
             finally
             {

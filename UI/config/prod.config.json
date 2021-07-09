@@ -6,7 +6,7 @@
     "PrimaryDomain": "californiasheriffs.onmicrosoft.com"
   },
   "Configuration": {
-    "Environment": "p",
+    "Environment": "PROD",
     "ServicesBaseUrl": "https://sdsd-ripa-p-apim.azure-api.us/",
     "Subscription": "################################",
     "DefaultCounty": "San Diego",

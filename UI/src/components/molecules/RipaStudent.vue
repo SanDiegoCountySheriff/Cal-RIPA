@@ -40,7 +40,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -54,26 +54,14 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopReasonModel()
-      this.clearDisabilityModel()
-      this.updateActionsTakenModel()
-      this.updateStopResultModel()
-      this.updateBasisForPropertySeizureModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
-    },
-
-    'viewModel.person.isStudent': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.handleInput()
-        }
-      },
+      this.viewModel = this.syncModel(newVal)
     },
   },
 

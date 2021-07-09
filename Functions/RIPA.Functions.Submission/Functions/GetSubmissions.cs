@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 
@@ -20,10 +22,12 @@ namespace RIPA.Functions.Submission.Functions
     public class GetSubmissions
     {
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
+        private readonly IStopCosmosDbService _stopCosmosDbService;
 
-        public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService)
+        public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
         {
             _submissionCosmosDbService = submissionCosmosDbService;
+            _stopCosmosDbService = stopCosmosDbService;
         }
 
         [FunctionName("GetSubmissions")]
@@ -106,11 +110,32 @@ namespace RIPA.Functions.Submission.Functions
                 }
             }
 
-            var response = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
+            var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
 
-            var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c");
+            var submissionCount = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c");
 
-            return new OkObjectResult(new { submissions = response, total = count });
+            List<object> list = new List<object>(){};
+
+            foreach (var submission in submissions)
+            {
+                list.Add(new
+                {
+                    submission.Id,
+                    submission.DateSubmitted,
+                    submission.RecordCount,
+                    submission.OfficerName,
+                    submission.OfficerId,
+                    summary = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString()))
+                });
+            }
+
+            var response = new
+            {
+                submissions = list,
+                total = submissionCount
+            };
+
+            return new OkObjectResult(response);
         }
         public class SubmissionQuery
         {

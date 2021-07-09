@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { formatDate, differenceInYears } from '@/utilities/dates'
-import { format } from 'date-fns'
 import authentication from '@/authentication'
 
 Vue.use(Vuex)
@@ -68,6 +67,8 @@ export default new Vuex.Store({
     },
     stopSubmissionStatusTotal: 0,
     stopSubmissionStatusError: 0,
+    stopSubmissionPassedIds: [],
+    stopSubmissionFailedIds: [],
   },
 
   getters: {
@@ -201,19 +202,14 @@ export default new Vuex.Store({
     displayDebugger: state => {
       return state.apiConfig?.displayDebugger || false
     },
-    displayEnvironment: state => {
-      return state.apiConfig?.displayEnvironment || false
-    },
     environmentName: state => {
       switch (state.apiConfig.environmentName) {
-        case 'p':
+        case 'PROD':
           return 'PROD'
-        case 'd':
+        case 'DEV':
           return 'DEV'
-        case 'q':
+        case 'QA':
           return 'QA'
-        case 'u':
-          return 'UAT'
 
         default:
           return ''
@@ -257,7 +253,7 @@ export default new Vuex.Store({
     mappedErrorCodeAdminSearch: state => {
       return state.errorCodeAdminSearch
     },
-    stopSubmissionStatus: state => {
+    mappedStopSubmissionStatus: state => {
       const totalStops = state.stopSubmissionStatusTotal
       const totalStopsText =
         totalStops === 1 ? `${totalStops} stop` : `${totalStops} stops`
@@ -265,6 +261,12 @@ export default new Vuex.Store({
       const errorStopsText =
         errorStops === 1 ? `${errorStops} error` : `${errorStops} errors`
       return `${totalStopsText} were submitted and ${errorStopsText}`
+    },
+    mappedStopSubmissionPassedIds: state => {
+      return state.stopSubmissionPassedIds
+    },
+    mappedStopSubmissionFailedIds: state => {
+      return state.stopSubmissionFailedIds
     },
   },
 
@@ -440,6 +442,20 @@ export default new Vuex.Store({
     updateStopSubmissionStatusError(state, count) {
       state.stopSubmissionStatusError =
         count === null ? 0 : state.stopSubmissionStatusError + count
+    },
+    updateStopSubmissionPassedIds(state, id) {
+      if (id === null) {
+        state.stopSubmissionPassedIds = []
+      } else {
+        state.stopSubmissionPassedIds.push(id)
+      }
+    },
+    updateStopSubmissionFailedIds(state, id) {
+      if (id === null) {
+        state.stopSubmissionFailedIds = []
+      } else {
+        state.stopSubmissionFailedIds.push(id)
+      }
     },
   },
 
@@ -736,10 +752,12 @@ export default new Vuex.Store({
           },
         })
         .then(() => {
+          commit('updateStopSubmissionPassedIds', stop.id)
           dispatch('getOfficerStops')
         })
         .catch(error => {
           commit('updateStopSubmissionStatusError', 1)
+          commit('updateStopSubmissionFailedIds', stop.id)
           console.log(
             'There was an error saving the officer stop record.',
             error,
@@ -1372,13 +1390,58 @@ export default new Vuex.Store({
           // foward user to submission details screen for newly created submission
           return response.data
         })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
+        })
     },
 
-    submitAllStops({ state }) {
+    submitAllStops({ commit, state }, filterData) {
+      let filterParams = {}
+      if (filterData.stopFromDate !== null) {
+        filterParams = {
+          ...filterParams,
+          StartDate: filterData.stopFromDate,
+        }
+      }
+      if (filterData.stopToDate !== null) {
+        filterParams = {
+          ...filterParams,
+          EndDate: filterData.stopToDate,
+        }
+      }
+      if (filterData.status !== null) {
+        filterParams = {
+          ...filterParams,
+          Status: filterData.status,
+        }
+      }
+      if (filterData.isPiiFound !== null) {
+        filterParams = {
+          ...filterParams,
+          IsPII: filterData.isPiiFound,
+        }
+      }
+      if (filterData.isEdited !== null) {
+        filterParams = {
+          ...filterParams,
+          IsEdited: filterData.isEdited,
+        }
+      }
+      if (filterData.errorCodes !== '') {
+        filterParams = {
+          ...filterParams,
+          ErrorCode: filterData.errorCodes,
+        }
+      }
+
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
-          null,
+          filterParams,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -1390,6 +1453,13 @@ export default new Vuex.Store({
         .then(response => {
           // foward user to submission details screen for newly created submission
           return response.data
+        })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
         })
     },
 
@@ -1421,6 +1491,8 @@ export default new Vuex.Store({
     resetStopSubmissionStatus({ commit }) {
       commit('updateStopSubmissionStatusTotal', null)
       commit('updateStopSubmissionStatusError', null)
+      commit('updateStopSubmissionPassedIds', null)
+      commit('updateStopSubmissionFailedIds', null)
     },
   },
 

@@ -11,22 +11,6 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Other', value: 10 },
 ]
 
-export const DURATIONS = [
-  { name: '0 - 10', value: 1 },
-  { name: '11 - 20', value: 2 },
-  { name: '21 - 30', value: 3 },
-  { name: '31 - 60', value: 4 },
-  { name: '60+', value: 5 },
-]
-
-export const AGES = [
-  { name: '0 - 10', value: 1 },
-  { name: '11 - 20', value: 2 },
-  { name: '21 - 30', value: 3 },
-  { name: '31 - 60', value: 4 },
-  { name: '60+', value: 5 },
-]
-
 export const DISABILITIES = [
   {
     name: 'Disability related to hyperactivity or impulsive behavior',
@@ -147,7 +131,7 @@ export const ACTIONS_TAKEN = [
   { name: 'Baton or other impact weapon used', value: 13 },
   { name: 'Chemical spray used', value: 14 },
   { name: 'Physical or vehicle contact', value: 15 },
-  { name: 'Personal photographed', value: 16 },
+  { name: 'Person photographed', value: 16 },
   { name: 'Asked for consent to search person', value: 17 },
   { name: 'Search of person was conducted', value: 18 },
   { name: 'Asked for consent to search property', value: 19 },

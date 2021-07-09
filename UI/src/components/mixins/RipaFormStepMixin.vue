@@ -116,6 +116,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onCopyPerson: {
+      type: Function,
+      default: () => {},
+    },
     onDeletePerson: {
       type: Function,
       default: () => {},

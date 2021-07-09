@@ -309,7 +309,7 @@ export default {
   data() {
     return {
       stopResultItems: STOP_RESULTS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -445,11 +445,7 @@ export default {
 
   methods: {
     handleInput() {
-      this.updateStopResultModel()
-      this.updateStopResultWarningCodesModel()
-      this.updateStopResultCitationCodesModel()
-      this.updateStopResultInfieldCodesModel()
-      this.updateStopResultCustodiaArrestCodesModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
 
@@ -511,7 +507,7 @@ export default {
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
 
     lastResult(newVal) {

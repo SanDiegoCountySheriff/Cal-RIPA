@@ -143,6 +143,29 @@ export default {
       this.showUserDialog = false
     },
 
+    handleCopyPerson(index) {
+      localStorage.setItem('ripa_form_saved_stop', JSON.stringify(this.stop))
+      localStorage.setItem(
+        'ripa_form_saved_full_stop',
+        JSON.stringify(this.fullStop),
+      )
+      localStorage.setItem('ripa_form_edit_person', '1')
+      const [filteredPerson] = this.fullStop.people.filter(
+        item => item.index.toString() === index.toString(),
+      )
+      const updatedStop = this.stop
+      this.stop = Object.assign({}, updatedStop)
+      this.stop.actionsTaken = filteredPerson?.actionsTaken || {}
+      this.stop.person = {
+        id: new Date().getTime(),
+        index: this.fullStop.people.length + 1,
+        isStudent: filteredPerson?.isStudent || false,
+      }
+      this.stop.stopReason = filteredPerson?.stopReason || {}
+      this.stop.stopResult = filteredPerson?.stopResult || {}
+      this.updateFullStop()
+    },
+
     handleDeleteLocationFavorite(id) {
       const locations = this.getFavoriteLocations()
       const filteredLocations = locations.filter(item => item.id !== id)
@@ -236,24 +259,24 @@ export default {
       )
       this.stop = {
         ...this.stop,
-        actionsTaken: filteredPerson.actionsTaken,
+        actionsTaken: filteredPerson?.actionsTaken || {},
         person: {
-          anyDisabilities: filteredPerson.anyDisabilities || false,
-          genderNonconforming: filteredPerson.genderNonconforming || false,
-          id: filteredPerson.id,
-          index: filteredPerson.index,
-          isStudent: filteredPerson.isStudent || false,
-          perceivedAge: filteredPerson.perceivedAge || null,
-          perceivedGender: filteredPerson.perceivedGender || null,
-          perceivedLgbt: filteredPerson.perceivedLgbt || false,
+          anyDisabilities: filteredPerson?.anyDisabilities || false,
+          genderNonconforming: filteredPerson?.genderNonconforming || false,
+          id: filteredPerson?.id,
+          index: filteredPerson?.index,
+          isStudent: filteredPerson?.isStudent || false,
+          perceivedAge: filteredPerson?.perceivedAge || null,
+          perceivedGender: filteredPerson?.perceivedGender || null,
+          perceivedLgbt: filteredPerson?.perceivedLgbt || false,
           perceivedLimitedEnglish:
-            filteredPerson.perceivedLimitedEnglish || false,
+            filteredPerson?.perceivedLimitedEnglish || false,
           perceivedOrKnownDisability:
-            filteredPerson.perceivedOrKnownDisability || [],
-          perceivedRace: filteredPerson.perceivedRace || [],
+            filteredPerson?.perceivedOrKnownDisability || [],
+          perceivedRace: filteredPerson?.perceivedRace || [],
         },
-        stopReason: filteredPerson.stopReason || {},
-        stopResult: filteredPerson.stopResult || {},
+        stopReason: filteredPerson?.stopReason || {},
+        stopResult: filteredPerson?.stopResult || {},
       }
     },
 

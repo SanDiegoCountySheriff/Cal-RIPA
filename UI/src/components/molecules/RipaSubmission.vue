@@ -200,6 +200,7 @@ export default {
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.currentPage = newPage
       this.$emit('redoSubmissionDetailItemsPerPage', {
         id: this.submissionId,
         limit: this.itemsPerPage,
@@ -257,13 +258,17 @@ export default {
     },
     getFilterStatus() {
       if (this.getColumnSortName() !== null) {
+        let sortOrder = this.sortDesc
+        if (Array.isArray(this.sortDesc)) {
+          sortOrder = this.sortDesc[0]
+        }
         return {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
               ? 'dateSubmitted'
               : this.getColumnSortName(),
-          order: this.sortDesc ? 'Desc' : 'Asc',
+          order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         }
       } else {
         return null

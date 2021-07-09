@@ -6,7 +6,7 @@
     "PrimaryDomain": "__PRIMARY_AUTH_DOMAIN__"
   },
   "Configuration": {
-    "Environment": "p",
+    "Environment": "PROD",
     "ServicesBaseUrl": "__SERVICES_BASE_URL__",
     "Subscription": "__SUBCRIPTION__",
     "DefaultCounty": "__DEFUALT_COUNTY__",

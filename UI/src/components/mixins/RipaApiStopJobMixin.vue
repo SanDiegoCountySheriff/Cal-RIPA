@@ -19,10 +19,50 @@ export default {
         const apiStops = this.getApiStopsFromLocalStorage()
         if (apiStops.length > 0) {
           this.runApiStopsJob(apiStops)
-          this.removeApiStopsFromLocalStorage()
         }
         this.isLocked = false
       }
+    },
+
+    async runApiStopsJob(apiStops) {
+      this.resetStopSubmissionStatus()
+      if (this.isOnlineAndAuthenticated) {
+        for (let index = 0; index < apiStops.length; index++) {
+          const apiStop = apiStops[index]
+          await this.editOfficerStop(apiStop)
+        }
+
+        const stopIdsPassedStr = `Stop ID(s) Passed: ${this.mappedStopSubmissionPassedIds.join(
+          ', ',
+        )}.`
+        const stopIdsFailedStr = `Stop ID(s) Failed: ${this.mappedStopSubmissionFailedIds.join(
+          ', ',
+        )}.`
+        this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr} ${stopIdsFailedStr}`
+        this.snackbarVisible = true
+
+        this.updateApiStopsLocalStorage()
+      }
+    },
+
+    updateApiStopsLocalStorage() {
+      // if no failed ids, everything worked so cleear local storage
+      if (this.mappedStopSubmissionFailedIds.length === 0) {
+        this.removeApiStopsFromLocalStorage()
+      }
+
+      // if there are failed ids, filter all failed apiStop ids and reset to local storage
+      if (this.mappedStopSubmissionFailedIds.length > 0) {
+        const apiStops = this.getApiStopsFromLocalStorage()
+        const filteredApiStops = apiStops.filter(item =>
+          this.mappedStopSubmissionFailedIds.includes(item),
+        )
+        this.setApiStopsToLocalStorage(filteredApiStops)
+      }
+    },
+
+    removeApiStopsFromLocalStorage() {
+      localStorage.removeItem('ripa_submitted_api_stops')
     },
 
     getApiStopsFromLocalStorage() {
@@ -32,10 +72,6 @@ export default {
 
     setApiStopsToLocalStorage(apiStops) {
       localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
-    },
-
-    removeApiStopsFromLocalStorage() {
-      localStorage.removeItem('ripa_submitted_api_stops')
     },
   },
 

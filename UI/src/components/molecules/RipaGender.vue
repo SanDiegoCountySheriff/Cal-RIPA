@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       genderItems: GENDERS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -125,14 +125,14 @@ export default {
     },
 
     handleInput() {
-      this.updatePerceivedLgbtModel()
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
 
   watch: {
     value(newVal) {
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
   },
 

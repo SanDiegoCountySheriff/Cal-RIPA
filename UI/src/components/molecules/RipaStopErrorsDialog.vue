@@ -2,20 +2,17 @@
   <v-dialog v-model="model" max-width="1000px">
     <v-card>
       <v-card-title>
-        <span>Favorite Locations</span>
+        <span>Stop Errors</span>
       </v-card-title>
 
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">
-              <ripa-favorites-grid
-                :items="favorites"
-                :is-online-and-authenticated="isOnlineAndAuthenticated"
-                :on-delete-favorite="onDeleteFavorite"
-                :on-edit-favorite="onEditFavorite"
-                :on-open-favorite="onOpenFavorite"
-              ></ripa-favorites-grid>
+              <ripa-stop-errors-grid
+                :items="persons"
+                :on-open-person="onOpenPerson"
+              ></ripa-stop-errors-grid>
             </v-col>
           </v-row>
         </v-container>
@@ -30,13 +27,13 @@
 </template>
 
 <script>
-import RipaFavoritesGrid from '@/components/molecules/RipaFavoritesGrid'
+import RipaStopErrorsGrid from '@/components/molecules/RipaStopErrorsGrid'
 
 export default {
-  name: 'ripa-favorites-dialog',
+  name: 'ripa-stop-error-dialog',
 
   components: {
-    RipaFavoritesGrid,
+    RipaStopErrorsGrid,
   },
 
   data() {
@@ -76,13 +73,9 @@ export default {
   },
 
   props: {
-    favorites: {
+    persons: {
       type: Array,
       default: () => [],
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
     },
     showDialog: {
       type: Boolean,
@@ -92,19 +85,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onDeleteFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onEditFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
+    onOpenPerson: {
       type: Function,
       default: () => {},
     },

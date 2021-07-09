@@ -2,7 +2,6 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
-      :display-environment="displayEnvironment"
       :environment-name="environmentName"
       :online="online"
       :authenticated="authenticated"
@@ -72,10 +71,6 @@ export default {
       default: false,
     },
     dark: {
-      type: Boolean,
-      default: false,
-    },
-    displayEnvironment: {
       type: Boolean,
       default: false,
     },

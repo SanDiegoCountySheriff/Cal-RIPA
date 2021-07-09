@@ -219,6 +219,8 @@ import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 
 import _ from 'lodash'
+import { isAfter, getYear } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 
 export default {
   name: 'ripa-stops-grid',
@@ -308,6 +310,10 @@ export default {
       }
     },
     getFilterStatus() {
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       return {
         isPiiFound: this.isPiiFound,
         isEdited: this.isEdited,
@@ -316,7 +322,7 @@ export default {
         status: this.currentStatusFilter,
         errorCodes: this.selectedErrorCodes,
         orderBy: this.getColumnSortName(),
-        order: this.sortDesc ? 'Desc' : 'Asc',
+        order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
       }
     },
   },
@@ -324,12 +330,25 @@ export default {
   methods: {
     init() {
       this.stops = this.items
+      const currentDateInUTC = zonedTimeToUtc(new Date())
+      const currentYear = getYear(new Date())
+      const deadlineDateInUTC = zonedTimeToUtc(
+        new Date(`${currentYear}-04-01T00:00:00`),
+      )
+      // if the current date is after the April 1st deadline, set the start date
+      // filter to Jan 1 of current year
+      const isDateAfterDeadline = isAfter(currentDateInUTC, deadlineDateInUTC)
+      if (isDateAfterDeadline) {
+        this.stopFromDate = `${currentYear}-01-01`
+        this.handleFilter()
+      }
     },
 
     handleUpdateItemsPerPage(val) {
       this.itemsPerPage = val
       // calculate the page you SHOULD be on with the new items per page
       const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
+      this.currentPage = newPage
       this.$emit('redoItemsPerPage', {
         type: 'stops',
         limit: this.itemsPerPage,
@@ -431,6 +450,10 @@ export default {
     handleFilter() {
       // whenever you change a filter, you're going to
       // reset the paging because it would all change with new settings
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       const filterData = {
         offset: null,
         limit: this.itemsPerPage,
@@ -447,14 +470,23 @@ export default {
             this.getColumnSortName() === null
               ? 'StopDateTime'
               : this.getColumnSortName(),
-          order: this.sortDesc ? 'Desc' : 'Asc',
+          order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
       this.currentPage = 1
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+      const filterData = {
+        stopFromDate: this.stopFromDate,
+        stopToDate: this.stopToDate,
+        status: this.currentStatusFilter,
+        isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
+        // need to make a comma delimited string out of the error codes
+        errorCodes: this.selectedErrorCodes.join(),
+      }
+      this.$emit('handleSubmitAll', filterData)
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {

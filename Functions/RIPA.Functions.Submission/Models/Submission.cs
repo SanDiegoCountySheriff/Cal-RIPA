@@ -17,5 +17,12 @@ namespace RIPA.Functions.Submission.Models
 
         [JsonProperty(PropertyName = "recordCount")]
         public int RecordCount { get; set; }
+
+        [JsonProperty(PropertyName = "officerName")]
+        public string OfficerName { get; set; }
+
+        [JsonProperty(PropertyName = "officerId")]
+        public string OfficerId { get; set; }
+
     }
 }

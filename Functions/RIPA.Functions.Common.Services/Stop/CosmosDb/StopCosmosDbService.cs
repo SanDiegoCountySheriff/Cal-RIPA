@@ -115,9 +115,13 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
         }
 
 
-        public async Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText)
+        public async Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText, string submissionId)
         {
             var queryString = $"SELECT ListSubmissionError.Code Code, ListSubmissionError.Message Message FROM Code JOIN ListSubmission IN Code.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE CONTAINS(ListSubmissionError.Code, '{inputText}')";
+            if (!String.IsNullOrWhiteSpace(submissionId))
+            {
+                queryString += $" AND ListSubmission.Id = '{submissionId}'";
+            }
             var query = _container.GetItemQueryIterator<Common.Models.DojError>(new QueryDefinition(queryString));
             List<Common.Models.DojError> results = new List<Common.Models.DojError>();
             while (query.HasMoreResults)

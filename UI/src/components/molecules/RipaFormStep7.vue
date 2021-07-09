@@ -5,6 +5,7 @@
       edit-buttons
       :api-stop="apiStop"
       :admin-editing="adminEditing"
+      :on-copy-person="onCopyPerson"
       :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-stop="onEditStop"
       :on-edit-person="onEditPerson"

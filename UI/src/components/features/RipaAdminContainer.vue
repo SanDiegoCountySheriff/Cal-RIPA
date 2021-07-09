@@ -260,33 +260,48 @@ export default {
       this.loading = true
       const submissionResults = await Promise.all([this.submitStops(stops)])
       this.loading = false
-      const notificationText =
-        stops.length > 1
-          ? `${stops.length} stops were submitted`
-          : '1 stop was submitted'
-      this.snackbarText = notificationText
-      this.snackbarVisible = true
-      setTimeout(() => {
-        // need to push user to submission screen
-        this.$router.push(
-          `/admin/submissions/${submissionResults[0].submissionId}`,
-        )
-      }, 4000)
+      if (!submissionResults[0].submissionId) {
+        // show the error message, no redirec
+        this.snackbarText = `Submission error: ${submissionResults[0]}`
+        this.snackbarVisible = true
+      } else {
+        // if the submissiong goes through (meaning no message was sent back),
+        // set the toast text and automatically redirect
+        const notificationText =
+          stops.length > 1
+            ? `${stops.length} stops were submitted`
+            : '1 stop was submitted'
+        this.snackbarText = notificationText
+        this.snackbarVisible = true
+        setTimeout(() => {
+          // need to push user to submission screen
+          this.$router.push(
+            `/admin/submissions/${submissionResults[0].submissionId}`,
+          )
+        }, 4000)
+      }
     },
 
-    async handleSubmitAll(stops) {
+    async handleSubmitAll(filterData) {
       this.loading = true
-      const submissionResults = await Promise.all([this.submitAllStops()])
+      const submissionResults = await Promise.all([
+        this.submitAllStops(filterData),
+      ])
       this.loading = false
-      this.snackbarText = 'All stops were submitted'
-      this.snackbarVisible = true
-      // need to push user to submission screen
-      setTimeout(() => {
+      if (!submissionResults[0].submissionId) {
+        this.snackbarText = `Submission error: ${submissionResults[0]}`
+        this.snackbarVisible = true
+      } else {
+        this.snackbarText = 'All stops were submitted'
+        this.snackbarVisible = true
         // need to push user to submission screen
-        this.$router.push(
-          `/admin/submissions/${submissionResults[0].submissionId}`,
-        )
-      }, 2000)
+        setTimeout(() => {
+          // need to push user to submission screen
+          this.$router.push(
+            `/admin/submissions/${submissionResults[0].submissionId}`,
+          )
+        }, 2000)
+      }
     },
   },
 }

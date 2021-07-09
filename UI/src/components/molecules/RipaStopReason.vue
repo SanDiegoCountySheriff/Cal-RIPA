@@ -214,7 +214,7 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: this.updateModel(this.value),
+      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -319,9 +319,7 @@ export default {
     },
 
     handleInput() {
-      this.updateStopReasonModel()
-      this.updateStopReasonSearchModel()
-      this.updateBasisForSearchModel()
+      this.updateModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
@@ -336,7 +334,7 @@ export default {
   watch: {
     value(newVal) {
       this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
-      this.viewModel = this.updateModel(newVal)
+      this.viewModel = this.syncModel(newVal)
     },
 
     lastReason(newVal) {
@@ -344,12 +342,6 @@ export default {
         this.viewModel.stopReason = newVal
         this.handleInput()
       }
-    },
-
-    'value.stopReason.reasonForStopPiiFound': {
-      handler(newVal) {
-        this.viewModel.stopReason.reasonForStopPiiFound = newVal
-      },
     },
   },
 

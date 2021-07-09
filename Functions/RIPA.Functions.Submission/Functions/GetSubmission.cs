@@ -98,6 +98,8 @@ namespace RIPA.Functions.Submission.Functions
                             submissionResponse.Id,
                             submissionResponse.DateSubmitted,
                             submissionResponse.RecordCount,
+                            submissionResponse.OfficerId,
+                            submissionResponse.OfficerName,
                             MaxStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MaxStopDateTime,
                             MinStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MinStopDateTime
                         },

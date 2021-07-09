@@ -26,6 +26,7 @@
       :on-add-person="onAddPerson"
       :on-cancel-form="onCancelForm"
       :on-cancel-action="onCancelAction"
+      :on-copy-person="onCopyPerson"
       :on-delete-person="onDeletePerson"
       :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-person="onEditPerson"
@@ -176,6 +177,10 @@ export default {
       default: () => {},
     },
     onCancelAction: {
+      type: Function,
+      default: () => {},
+    },
+    onCopyPerson: {
       type: Function,
       default: () => {},
     },

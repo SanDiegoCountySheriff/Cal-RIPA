@@ -9,12 +9,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,19 +29,22 @@ namespace RIPA.Functions.Submission.Functions
         private readonly IStopService _stopService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
         private readonly IStopCosmosDbService _stopCosmosDbService;
+        private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
         private readonly string _sftpInputPath;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
 
-        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
+        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
             _submissionCosmosDbService = submissionCosmosDbService;
             _stopCosmosDbService = stopCosmosDbService;
+            _userProfileCosmosDbService = userProfileCosmosDbService;
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
+
         }
 
         [FunctionName("PostSubmit")]
@@ -65,9 +70,66 @@ namespace RIPA.Functions.Submission.Functions
                 return new UnauthorizedResult();
             }
 
+            var userProfile = new UserProfile(); 
+            try
+            {
+                var objectId = await RIPAAuthorization.GetUserId(req, log);
+                userProfile = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId));
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+
+                return new BadRequestObjectResult("User profile was not found");
+            }
+
             if (submitRequest?.StopIds == null || submitRequest.StopIds.Count == 0)
             {
                 return new BadRequestObjectResult("stop ids are required");
+            }
+
+            IEnumerable<Stop> stopResponse;
+            try
+            {
+                stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT * FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')");
+            }
+            catch(Exception ex)
+            {
+                log.LogError(ex, "An error occured getting stops requested.");
+                return new BadRequestObjectResult("An error occured getting stops requested. Please try again.");
+            }
+
+            try
+            {
+                var currentPST = DateTime.UtcNow;
+                try
+                {
+                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "America/Los_Angeles");
+                }
+                catch
+                {
+                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "Pacific Standard Time");
+                }
+                var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
+                if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
+                {
+                    CutoffDate = new DateTime(currentPST.Year, 1, 1); //beginning this year
+                }
+
+                if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
+                {
+                    return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again.");
+                }
+
+                if (stopResponse.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
+                {
+                    return new BadRequestObjectResult("Stop request contains stops that are in Error state and require edit to submit. Please adjust your filter criteria and try again.");
+                }
+            }
+            catch(Exception ex)
+            {
+                log.LogError(ex, "An error occured validating stops.");
+                return new BadRequestObjectResult("An error validating stops requested. Please try again.");
             }
 
             Guid submissionId = Guid.NewGuid();
@@ -82,7 +144,9 @@ namespace RIPA.Functions.Submission.Functions
                 {
                     DateSubmitted = DateTime.UtcNow,
                     Id = submissionId,
-                    RecordCount = submitRequest.StopIds.Count
+                    RecordCount = submitRequest.StopIds.Count,
+                    OfficerId = userProfile.OfficerId,
+                    OfficerName = userProfile.Name
                 };
                 await _submissionCosmosDbService.AddSubmissionAsync(submission);
             }
@@ -103,7 +167,7 @@ namespace RIPA.Functions.Submission.Functions
                     stop = await _stopCosmosDbService.GetStopAsync(stopId);
                     fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
                     await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
-                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName}", fileName, blobContainerClient);
+                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, blobContainerClient);
                 }
                 catch (Exception ex)
                 {

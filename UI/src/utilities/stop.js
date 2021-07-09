@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { formatDateTime, uniqueId } from '@/utilities/dates'
+import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
   RACES,
@@ -70,7 +70,7 @@ const defaultLocation = () => {
 export const defaultStop = () => {
   return {
     actionsTaken: {},
-    id: uniqueId(),
+    id: 0,
     template: null,
     stepTrace: [],
     location: emptyLocation(),
@@ -91,7 +91,7 @@ export const defaultStop = () => {
 export const motorStop = () => {
   return {
     actionsTaken: {},
-    id: uniqueId(),
+    id: 0,
     template: 'motor',
     stepTrace: [],
     location: defaultLocation(),
@@ -116,7 +116,7 @@ export const probationStop = () => {
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
-    id: uniqueId(),
+    id: 0,
     template: 'probation',
     stepTrace: [],
     location: defaultLocation(),
@@ -817,7 +817,7 @@ export const apiStopToFullStop = apiStop => {
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
-      blockNumber: blockNumber && streetName ? Number(blockNumber) : null,
+      blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
@@ -1101,7 +1101,7 @@ export const fullStopToApiStop = (
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
-      blockNumber: blockNumber && streetName ? blockNumber?.toString() : '',
+      blockNumber: blockNumber && streetName ? blockNumber : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
@@ -1365,7 +1365,9 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
     return [getReasonableSuspicionCode(person, statutes)]
   }
   if (reasonKey === 7) {
-    if (person.educationViolationCode) {
+    const educationViolationCode =
+      person.stopReason?.educationViolationCode || null
+    if (educationViolationCode) {
       return [getEducationViolationCode(person)]
     } else {
       return []

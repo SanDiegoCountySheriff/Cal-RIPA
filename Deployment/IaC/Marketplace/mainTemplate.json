@@ -45,10 +45,10 @@
     "auth_fqdn": {
       "type": "string"
     },
-    "user_tags": {
-      "type": "Object",
-      "defaultValue": {}
-    },
+    // "user_tags": {
+    //   "type": "Object",
+    //   "defaultValue": {}
+    // },
     "app_domain_type": {
       "type": "string"
     },
@@ -475,7 +475,7 @@
       "agency_ori": "[parameters('agency_ori')]",
       "template_version": "[variables('template_version')]"
     },
-    "all_tags": "[union(variables('default_tags'), parameters('user_tags'))]"
+    "all_tags": "[variables('default_tags')]"
   },
   "resources": [
     {
