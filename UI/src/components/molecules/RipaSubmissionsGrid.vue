@@ -134,6 +134,12 @@ export default {
           sortable: true,
           sortName: 'recordCount',
         },
+        {
+          text: 'Officer Name',
+          value: 'officerName',
+          sortName: 'officerName',
+          sortable: true,
+        },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
@@ -176,9 +182,19 @@ export default {
       }
     },
     getFilterStatus() {
+      let sortOrder = this.sortDesc
+      if (Array.isArray(this.sortDesc)) {
+        sortOrder = this.sortDesc[0]
+      }
       return {
         submissionFromDate: this.submissionFromDate,
         submissionToDate: this.submissionToDate,
+        orderBy:
+          // if the column sort name is null, default to sorting by the stop date
+          this.getColumnSortName() === null
+            ? 'dateSubmitted'
+            : this.getColumnSortName(),
+        order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
       }
     },
   },
