@@ -3,7 +3,6 @@
     :admin="isAdmin"
     :authenticated="isAuthenticated"
     :dark="isDark"
-    :display-environment="displayEnvironment"
     :environment-name="environmentName"
     :invalidUser="invalidUser"
     :loading="loading"
@@ -93,7 +92,6 @@ export default {
   computed: {
     ...mapGetters([
       'displayBeatInput',
-      'displayEnvironment',
       'environmentName',
       'isAdmin',
       'invalidUser',
