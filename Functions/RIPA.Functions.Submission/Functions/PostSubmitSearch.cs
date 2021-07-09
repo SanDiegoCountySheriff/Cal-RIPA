@@ -21,6 +21,7 @@ using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
+using RIPA.Functions.Submission.Utility;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -73,8 +74,8 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
-            
-            var userProfile = new UserProfile();
+
+            UserProfile userProfile;
             try
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
@@ -179,34 +180,32 @@ namespace RIPA.Functions.Submission.Functions
 
             var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
 
-            IEnumerable<Stop> stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order}");
+            IEnumerable<Stop> stopResponse;
+            try
+            {
+                stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order}");
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "An error occured getting stops requested.");
+                return new BadRequestObjectResult("An error occured getting stops requested. Please try again.");
+            }
+
+            SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, _stopService, log);
+            Guid submissionId;
+
+            if (!submissionUtilities.IsValidSFTPConnection())
+            {
+                return new BadRequestObjectResult("An error occured connecting to DOJ SFTP service.");
+            }
 
             try
             {
-                var currentPST = DateTime.UtcNow;
-
-                try
+                List<string> errorList = submissionUtilities.ValidateStops(stopResponse);
+                if (errorList.Any())
                 {
-                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "America/Los_Angeles");
-                }
-                catch
-                {
-                    currentPST = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(currentPST, "Pacific Standard Time");
-                }
-                var CutoffDate = new DateTime(currentPST.Year - 1, 1, 1); //beginning of last year
-                if (currentPST > new DateTime(currentPST.Year, 3, 31, 23, 59, 59)) // 03/31 11:59:59 PM
-                {
-                    CutoffDate = new DateTime(currentPST.Year, 1, 1); //beginning this year
-                }
-
-                if (stopResponse.Where(x => x.StopDateTime < CutoffDate).Any())
-                {
-                    return new BadRequestObjectResult("Stop request contains stops from previous submission year. Please adjust your filter criteria and try again.");
-                }
-
-                if (stopResponse.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
-                {
-                    return new BadRequestObjectResult("Stop request contains stops that are in Error state and require edit to submit. Please adjust your filter criteria and try again.");
+                    errorList.Add("Please adjust your filter criteria and try again.");
+                    return new BadRequestObjectResult(string.Join(Environment.NewLine, errorList));
                 }
             }
             catch (Exception ex)
@@ -215,22 +214,9 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult("An error validating stops requested. Please try again.");
             }
 
-            Guid submissionId = Guid.NewGuid();
-            BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = _storageContainerNamePrefix;
-            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            await blobContainerClient.CreateIfNotExistsAsync();
             try
             {
-                Models.Submission submission = new Models.Submission
-                {
-                    DateSubmitted = DateTime.UtcNow,
-                    Id = submissionId,
-                    RecordCount = stopResponse.Count(),
-                    OfficerId = userProfile.OfficerId,
-                    OfficerName = userProfile.Name
-                };
-                await _submissionCosmosDbService.AddSubmissionAsync(submission);
+                submissionId = await submissionUtilities.NewSubmission(stopResponse, userProfile);
             }
             catch (Exception ex)
             {
@@ -238,31 +224,7 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            foreach (var stop in stopResponse)
-            {
-                string fileName = string.Empty;
-                DateTime dateSubmitted = DateTime.UtcNow;
-                try
-                {
-                    fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
-                    _sftpService.UploadStop(_stopService.CastToDojStop(stop), $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, blobContainerClient);
-                    await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
-                    log.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionId}");
-                }
-                catch (Exception ex)
-                {
-                    SubmissionError submissionError = new SubmissionError()
-                    {
-                        Code = "FTS",
-                        Message = "Failed to submit to DOJ. SFTP connection, Blob Connection, or Cast failure",
-                        DateReported = dateSubmitted,
-                        ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                        FileName = fileName
-                    };
-                    await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.ErrorSubmission(stop, submissionError));
-                    log.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");
-                }
-            }
+            await submissionUtilities.SubmitStops(stopResponse, submissionId);
 
             return new OkObjectResult(new { submissionId });
 

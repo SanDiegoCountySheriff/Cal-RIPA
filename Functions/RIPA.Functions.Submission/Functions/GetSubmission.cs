@@ -90,7 +90,6 @@ namespace RIPA.Functions.Submission.Functions
                     string query = $"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {order} {limit}";
 
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
-                    var getSubmissionStopDateTimeSummaryResponse = await _stopCosmosDbService.GetSubmissionStopDateTimeSummaries(Id);
                     var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
                     var response = new
                     {
@@ -100,8 +99,8 @@ namespace RIPA.Functions.Submission.Functions
                             submissionResponse.RecordCount,
                             submissionResponse.OfficerId,
                             submissionResponse.OfficerName,
-                            MaxStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MaxStopDateTime,
-                            MinStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MinStopDateTime
+                            submissionResponse.MaxStopDate,
+                            submissionResponse.MinStopDate
                         },
                         stops = stopResponse,
                         summary = getSubmissionErrorSummariesResponse
