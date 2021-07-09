@@ -74,7 +74,7 @@ namespace RIPA.Functions.Stop.Functions
             {
                 if (Id == "0")
                 {
-                    int stopId = 100000000;
+                    long stopId = 100000000;
 
                     string query = "SELECT VALUE c FROM c ORDER BY c.id DESC OFFSET 0 LIMIT 1";
                     IEnumerable<Common.Models.Stop> maxStop = await _stopCosmosDbService.GetStopsAsync(query);
@@ -82,7 +82,7 @@ namespace RIPA.Functions.Stop.Functions
                     Common.Models.Stop maxId = maxStop.FirstOrDefault();
                     if (maxId != null)
                     {
-                        stopId = int.Parse(maxId.Id);
+                        stopId = long.Parse(maxId.Id);
                         stopId++;
                     }
 
