@@ -6,10 +6,11 @@ import Vuetify from 'vuetify'
 
 describe('Ripa Stop Date', () => {
   let vuetify
-  const stop = defaultStop()
+  let stop
 
   beforeEach(() => {
     vuetify = new Vuetify()
+    stop = defaultStop()
   })
 
   it('should match snapshot', () => {

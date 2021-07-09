@@ -69,6 +69,7 @@
           :headers="headers"
           :hide-default-footer="true"
           :items="submission.stops"
+          show-expand
           :server-items-length="getTotalStops"
           :search="search"
           :sort-by.sync="sortBy"
@@ -83,6 +84,11 @@
             >
               mdi-pencil
             </v-icon>
+          </template>
+          <template v-slot:expanded-item="{ item }">
+            <td :colspan="headers.length">
+              {{ item.error }}
+            </td>
           </template>
           <template :item-class="stopError" v-slot:item.error="{ item }">
             <div class="stopError" v-html="item.error"></div>
@@ -132,7 +138,10 @@ export default {
 
   data() {
     return {
+      expanded: [],
+      singleExpand: false,
       headers: [
+        { text: '', value: 'data-table-expand' },
         { text: 'Stop', value: 'id', sortName: 'id' },
         { text: 'Status', value: 'status', width: 100, sortName: 'Status' },
         { text: 'Edited', value: 'edited', width: 100, sortName: 'IsEdited' },
