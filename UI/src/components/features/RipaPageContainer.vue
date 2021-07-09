@@ -5,7 +5,6 @@
     :dark="isDark"
     :environment-name="environmentName"
     :invalidUser="invalidUser"
-    :is-production="isProduction"
     :loading="loading"
     :online="isOnline"
     :on-update-dark="handleUpdateDark"
@@ -99,7 +98,6 @@ export default {
       'isAuthenticated',
       'isOnline',
       'isOnlineAndAuthenticated',
-      'isProduction',
       'apiConfig',
       'mappedUser',
       'mappedStopSubmissionStatus',

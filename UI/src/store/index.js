@@ -202,9 +202,6 @@ export default new Vuex.Store({
     displayDebugger: state => {
       return state.apiConfig?.displayDebugger || false
     },
-    isProduction: state => {
-      return state.apiConfig?.environmentName === 'PROD'
-    },
     environmentName: state => {
       switch (state.apiConfig.environmentName) {
         case 'PROD':

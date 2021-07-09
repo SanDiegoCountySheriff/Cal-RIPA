@@ -281,10 +281,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isProduction: {
-      type: Boolean,
-      default: false,
-    },
     environmentName: {
       type: String,
       default: '',
