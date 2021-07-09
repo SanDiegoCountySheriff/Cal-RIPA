@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { formatDateTime, uniqueId } from '@/utilities/dates'
+import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
   RACES,
@@ -70,7 +70,7 @@ const defaultLocation = () => {
 export const defaultStop = () => {
   return {
     actionsTaken: {},
-    id: uniqueId(),
+    id: 0,
     template: null,
     stepTrace: [],
     location: emptyLocation(),
@@ -91,7 +91,7 @@ export const defaultStop = () => {
 export const motorStop = () => {
   return {
     actionsTaken: {},
-    id: uniqueId(),
+    id: 0,
     template: 'motor',
     stepTrace: [],
     location: defaultLocation(),
@@ -116,7 +116,7 @@ export const probationStop = () => {
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
-    id: uniqueId(),
+    id: 0,
     template: 'probation',
     stepTrace: [],
     location: defaultLocation(),
