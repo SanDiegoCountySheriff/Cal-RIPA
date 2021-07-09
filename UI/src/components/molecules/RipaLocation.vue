@@ -423,7 +423,15 @@ export default {
 
     lastLocation(newVal) {
       if (newVal) {
+        // save off school and school
+        const isSchool = this.viewModel.location?.isSchool || false
+        const school = this.viewModel.location?.school || null
+        // assign new location
         this.viewModel.location = newVal
+        // add back school and school
+        this.viewModel.location.isSchool = isSchool
+        this.viewModel.location.school = school
+        // call handleInput
         this.handleInput()
       }
     },
