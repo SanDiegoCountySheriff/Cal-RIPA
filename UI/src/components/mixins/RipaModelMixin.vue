@@ -314,8 +314,6 @@ export default {
       if (!this.viewModel.actionsTaken.propertyWasSeized) {
         this.viewModel.actionsTaken.basisForPropertySeizure = null
         this.viewModel.actionsTaken.typeOfPropertySeized = null
-        this.viewModel.actionsTaken.anyContraband = false
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
       }
 
       if (this.viewModel.actionsTaken.propertyWasSeized) {
