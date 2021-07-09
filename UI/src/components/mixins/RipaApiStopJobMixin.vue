@@ -35,7 +35,7 @@ export default {
         const stopIdsPassedStr = `Stop ID(s) Passed: ${this.mappedStopSubmissionPassedIds.join(
           ', ',
         )}.`
-        const stopIdsFailedStr = `Stop ID(s) Passed: ${this.mappedStopSubmissionFailedIds.join(
+        const stopIdsFailedStr = `Stop ID(s) Failed: ${this.mappedStopSubmissionFailedIds.join(
           ', ',
         )}.`
         this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr} ${stopIdsFailedStr}`
