@@ -3,9 +3,9 @@
     :admin="isAdmin"
     :authenticated="isAuthenticated"
     :dark="isDark"
-    :display-environment="displayEnvironment"
     :environment-name="environmentName"
     :invalidUser="invalidUser"
+    :is-production="isProduction"
     :loading="loading"
     :online="isOnline"
     :on-update-dark="handleUpdateDark"
@@ -93,13 +93,13 @@ export default {
   computed: {
     ...mapGetters([
       'displayBeatInput',
-      'displayEnvironment',
       'environmentName',
       'isAdmin',
       'invalidUser',
       'isAuthenticated',
       'isOnline',
       'isOnlineAndAuthenticated',
+      'isProduction',
       'apiConfig',
       'mappedUser',
       'mappedStopSubmissionStatus',

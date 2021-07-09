@@ -25,7 +25,6 @@ export default {
         displayDebugger: res.data.Configuration.DisplayDebugger === 'true',
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: res.data.Configuration.Environment,
-        displayEnvironment: res.data.Configuration.Environment !== 'p',
       })
 
       this.clientId = config.clientId

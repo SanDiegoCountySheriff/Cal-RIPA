@@ -2,7 +2,7 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       :admin="admin"
-      :display-environment="displayEnvironment"
+      :is-production="isProduction"
       :environment-name="environmentName"
       :online="online"
       :authenticated="authenticated"
@@ -75,7 +75,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    displayEnvironment: {
+    isProduction: {
       type: Boolean,
       default: false,
     },
