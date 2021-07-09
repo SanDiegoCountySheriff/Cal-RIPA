@@ -430,7 +430,6 @@ export default {
         this.viewModel.location = newVal.newLocation
         // add back school and school - only if isSchool was true
         if (newVal.persistSchool && isSchool) {
-          debugger
           this.viewModel.location.isSchool = isSchool
           this.viewModel.location.school = school
         }
