@@ -904,7 +904,6 @@
 			}
 		],
 		"outputs": {
-			"agency_full_name": "[basics('agency_full_name')]",
 			"agency_county": "[basics('agency_dropdown').county]",
 			"agency_abbreviation": "[concat(basics('agency_dropdown').abbreviation, basics('agency_dropdown').type)]",
 			"agency_type": "[basics('agency_dropdown').type]",
@@ -923,8 +922,7 @@
 			"doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
 			"doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
 			"doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
-			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]",
-			"user_tags": "[steps('steps_tags').user_tags]"
+			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]"
 		}
 	}
 }
