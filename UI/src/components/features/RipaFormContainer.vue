@@ -273,7 +273,10 @@ export default {
 
   watch: {
     mappedGpsLocationAddress(newVal) {
-      this.lastLocation = newVal
+      this.lastLocation = {
+        newLocation: newVal,
+        persistSchool: true,
+      }
     },
   },
 

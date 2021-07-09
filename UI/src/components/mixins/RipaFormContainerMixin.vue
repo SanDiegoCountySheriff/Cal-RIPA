@@ -308,7 +308,13 @@ export default {
       const favorites = this.getFavoriteLocations()
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
-        this.lastLocation = favorite.location
+        this.stop.location.isSchool = false
+        this.stop.location.school = null
+        this.updateFullStop()
+        this.lastLocation = {
+          newLocation: favorite.location,
+          persistSchool: false,
+        }
       }
     },
 
@@ -347,7 +353,10 @@ export default {
 
     handleOpenLastLocation() {
       const location = this.getLastLocation()
-      this.lastLocation = location
+      this.lastLocation = {
+        newLocation: location,
+        persistSchool: true,
+      }
     },
 
     handleOpenStatute(statute) {
