@@ -69,13 +69,13 @@
           :headers="headers"
           :hide-default-footer="true"
           :items="submission.stops"
-          show-expand
           :server-items-length="getTotalStops"
           :search="search"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
+          show-expand
         >
-          <template v-slot:item.actions="{ item }">
+          <template v-slot:[`item.actions`]="{ item }">
             <v-icon
               v-if="item.status !== 'Submitted'"
               small
@@ -85,15 +85,18 @@
               mdi-pencil
             </v-icon>
           </template>
-          <template v-slot:expanded-item="{ item }">
+          <template :item-class="stopError" v-slot:expanded-item="{ item }">
             <td :colspan="headers.length">
-              {{ item.error }}
+              <div class="text-h6">
+                Errors (errors from this submission are highlighted)
+              </div>
+              <div class="stopError" v-html="item.error"></div>
             </td>
           </template>
-          <template :item-class="stopError" v-slot:item.error="{ item }">
+          <!-- <template :item-class="stopError" v-slot:item.error="{ item }">
             <div class="stopError" v-html="item.error"></div>
-          </template>
-          <template v-slot:item.edited="{ item }">
+          </template> -->
+          <template v-slot:[`item.edited`]="{ item }">
             {{ item.listSubmission.length ? 'Yes' : 'No' }}
           </template>
           <template v-slot:no-data>
@@ -141,15 +144,15 @@ export default {
       expanded: [],
       singleExpand: false,
       headers: [
-        { text: '', value: 'data-table-expand' },
+        { text: 'View Errors', value: 'data-table-expand' },
         { text: 'Stop', value: 'id', sortName: 'id' },
-        { text: 'Status', value: 'status', width: 100, sortName: 'Status' },
-        { text: 'Edited', value: 'edited', width: 100, sortName: 'IsEdited' },
-        {
-          text: 'Error (errors from this submission are highlighted)',
-          value: 'error',
-          sortable: false,
-        },
+        { text: 'Status', value: 'status', sortName: 'Status' },
+        { text: 'Edited', value: 'edited', sortName: 'IsEdited' },
+        // {
+        //   text: 'Error (errors from this submission are highlighted)',
+        //   value: 'error',
+        //   sortable: false,
+        // },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       format,
