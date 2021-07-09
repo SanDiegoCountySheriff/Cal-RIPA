@@ -1,0 +1,331 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Stop Date should match snapshot 1`] = `
+<div
+  class="ripa-stop-date tw-pb-4"
+>
+  <div
+    class="ripa-form-header"
+  >
+    <div
+      class="ripa-header"
+    >
+      <span
+        class="tw-text-base md:tw-text-lg tw-uppercase"
+      >
+        Date of Stop
+      </span>
+    </div>
+     
+    <div
+      class="tw-flex"
+    >
+      <span
+        class="tw-mt-1 tw-mr-2 v-chip theme--light v-size--small red white--text"
+      >
+        <span
+          class="v-chip__content"
+        >
+          
+        required
+      
+        </span>
+      </span>
+       
+      <span
+        class="tw-mt-1 v-chip v-chip--clickable v-chip--outlined v-chip--pill theme--light v-size--small primary primary--text"
+      >
+        <span
+          class="v-chip__content"
+        >
+          <i
+            aria-hidden="true"
+            class="v-icon notranslate v-icon--left mdi mdi-scale-balance theme--light"
+            style="font-size: 16px;"
+          />
+          
+        §999.226(a)(2)
+      
+        </span>
+      </span>
+    </div>
+  </div>
+   
+  <div
+    class="container"
+  >
+    <div
+      class="row no-gutters"
+    >
+      <div
+        class="col-sm-12 col-md-4 col-12"
+      >
+        <div
+          class="md:tw-mr-4"
+        >
+          <div
+            class="v-dialog__container"
+            role="dialog"
+          >
+            <div
+              class="v-input v-input--is-label-active v-input--is-dirty v-input--is-readonly theme--light v-text-field"
+            >
+              <div
+                class="v-input__control"
+              >
+                <div
+                  class="v-input__slot"
+                >
+                  <div
+                    class="v-text-field__slot"
+                  >
+                    <label
+                      class="v-label v-label--active theme--light"
+                      for="input-9"
+                      style="left: 0px; position: absolute;"
+                    >
+                      Date of Stop
+                    </label>
+                    <input
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      id="input-9"
+                      readonly="readonly"
+                      role="button"
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    class="v-input__append-inner"
+                  >
+                    <div
+                      class="v-input__icon v-input__icon--clear"
+                    >
+                      <button
+                        aria-label="clear icon"
+                        class="v-icon notranslate v-icon--link mdi mdi-close theme--light"
+                        type="button"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="v-input__append-inner"
+                  >
+                    <div
+                      class="v-input__icon v-input__icon--append"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="v-icon notranslate mdi mdi-calendar theme--light"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="v-text-field__details"
+                >
+                  <div
+                    class="v-messages theme--light"
+                  >
+                    <transition-group-stub
+                      class="v-messages__wrapper"
+                      name="message-transition"
+                      tag="div"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!---->
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="col-sm-12 col-md-4 col-12"
+      >
+        <div
+          class="md:tw-mr-4"
+        >
+          <div
+            class="v-dialog__container"
+            role="dialog"
+          >
+            <div
+              class="v-input v-input--is-label-active v-input--is-dirty v-input--is-readonly theme--light v-text-field"
+            >
+              <div
+                class="v-input__control"
+              >
+                <div
+                  class="v-input__slot"
+                >
+                  <div
+                    class="v-text-field__slot"
+                  >
+                    <label
+                      class="v-label v-label--active theme--light"
+                      for="input-16"
+                      style="left: 0px; position: absolute;"
+                    >
+                      Time of Stop
+                    </label>
+                    <input
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      id="input-16"
+                      readonly="readonly"
+                      role="button"
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    class="v-input__append-inner"
+                  >
+                    <div
+                      class="v-input__icon v-input__icon--append"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="v-icon notranslate mdi mdi-clock-time-four-outline theme--light"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="v-text-field__details"
+                >
+                  <div
+                    class="v-messages theme--light"
+                  >
+                    <transition-group-stub
+                      class="v-messages__wrapper"
+                      name="message-transition"
+                      tag="div"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!---->
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="col-sm-12 col-md-4 col-12"
+      >
+        <div
+          class="md:tw-mr-4"
+        >
+          <div
+            class="v-input theme--light v-text-field"
+            max="1440"
+            min="1"
+          >
+            <div
+              class="v-input__control"
+            >
+              <div
+                class="v-input__slot"
+              >
+                <div
+                  class="v-text-field__slot"
+                >
+                  <label
+                    class="v-label theme--light"
+                    for="input-21"
+                    style="left: 0px; position: absolute;"
+                  >
+                    Stop Duration
+                  </label>
+                  <input
+                    id="input-21"
+                    inputmode="numeric"
+                    min="0"
+                    type="number"
+                  />
+                </div>
+              </div>
+              <div
+                class="v-text-field__details"
+              >
+                <div
+                  class="v-messages theme--light"
+                >
+                  <transition-group-stub
+                    class="v-messages__wrapper"
+                    name="message-transition"
+                    tag="div"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="row no-gutters"
+    >
+      <div
+        class="col-sm-12 col-12"
+      >
+        <div
+          class="ripa-switch"
+          style="max-width: 300px;"
+        >
+          <div
+            class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch"
+          >
+            <div
+              class="v-input__control"
+            >
+              <div
+                class="v-input__slot"
+              >
+                <div
+                  class="v-input--selection-controls__input"
+                >
+                  <input
+                    aria-checked="false"
+                    aria-disabled="false"
+                    id="input-25"
+                    role="switch"
+                    type="checkbox"
+                    value=""
+                  />
+                  <div
+                    class="v-input--selection-controls__ripple"
+                  />
+                  <div
+                    class="v-input--switch__track theme--light"
+                  />
+                  <div
+                    class="v-input--switch__thumb theme--light"
+                  >
+                    <transition-stub
+                      mode="out-in"
+                      name="fab-transition"
+                    />
+                  </div>
+                </div>
+                <label
+                  class="v-label theme--light"
+                  for="input-25"
+                  style="left: 0px; position: relative;"
+                >
+                  
+      Stop in response to Call for Service
+    
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

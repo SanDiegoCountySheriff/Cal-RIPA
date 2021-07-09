@@ -1,13 +1,22 @@
 import { mount } from '@vue/test-utils'
 import RipaStopDate from './../../src/components/molecules/RipaStopDate.vue'
 import RipaModelMixin from './../../src/components/mixins/RipaModelMixin.vue'
+import { defaultStop } from './../../src/utilities/stop.js'
+import Vuetify from 'vuetify'
 
-describe('Ripa Stop Date tests', () => {
+describe('Ripa Stop Date', () => {
+  let vuetify
+  const stop = defaultStop()
+
+  beforeEach(() => {
+    vuetify = new Vuetify()
+  })
 
   it('should match snapshot', () => {
     const wrapper = mount(RipaStopDate, {
+      vuetify,
       propsData: {
-        adminEditing: true,
+        value: stop,
       },
       mixins: [RipaModelMixin],
     })
