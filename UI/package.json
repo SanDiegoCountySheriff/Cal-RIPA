@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve --host localhost --port 4000",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:unit-update": "vue-cli-service test:unit -u",
     "lint": "vue-cli-service lint",
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6007",
