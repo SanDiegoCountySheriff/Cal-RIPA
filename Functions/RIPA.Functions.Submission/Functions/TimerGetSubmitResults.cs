@@ -68,7 +68,7 @@ namespace RIPA.Functions.Submission.Functions
                 }
                 catch (Exception e)
                 {
-                    log.LogError($"an error occured processing doj sftp result {e.Message}");
+                    log.LogError($"an error occurred processing doj sftp result {e.Message}");
                 }
             }
         }
