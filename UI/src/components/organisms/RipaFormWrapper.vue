@@ -606,7 +606,7 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
+    setTimeout(() => {
       const [top] = document.getElementsByClassName(
         'ripa-form-wrapper--summary-step-top',
       )
@@ -628,7 +628,7 @@ export default {
           firstSpan.innerText = this.getFormSummaryStepText()
         }
       }
-    })
+    }, 100)
   },
 
   watch: {
