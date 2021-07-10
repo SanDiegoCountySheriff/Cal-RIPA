@@ -187,8 +187,8 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An error occured getting stops requested.");
-                return new BadRequestObjectResult("An error occured getting stops requested. Please try again.");
+                log.LogError(ex, "An error occurred getting stops requested.");
+                return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
 
             SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, _stopService, log);
@@ -196,7 +196,7 @@ namespace RIPA.Functions.Submission.Functions
 
             if (!submissionUtilities.IsValidSFTPConnection())
             {
-                return new BadRequestObjectResult("An error occured connecting to DOJ SFTP service.");
+                return new BadRequestObjectResult("An error occurred connecting to DOJ SFTP service.");
             }
 
             try
@@ -210,7 +210,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An error occured validating stops.");
+                log.LogError(ex, "An error occurred validating stops.");
                 return new BadRequestObjectResult("An error validating stops requested. Please try again.");
             }
 

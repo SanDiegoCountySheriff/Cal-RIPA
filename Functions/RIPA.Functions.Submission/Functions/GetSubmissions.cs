@@ -60,8 +60,8 @@ namespace RIPA.Functions.Submission.Functions
 
             SubmissionQuery submissionQuery = new SubmissionQuery()
             {
-                StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
-                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
+                StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : DateTime.MinValue,
+                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : DateTime.MaxValue,
                 Offset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default,
                 Limit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default,
                 OrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default,
@@ -71,21 +71,14 @@ namespace RIPA.Functions.Submission.Functions
             List<string> whereStatements = new List<string>();
 
             //Date Range
-            if (submissionQuery.StartDate != default(DateTime))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.dateSubmitted > '{(DateTime)submissionQuery.StartDate:o}'");
-            }
-            if (submissionQuery.EndDate != default(DateTime))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.dateSubmitted < '{(DateTime)submissionQuery.EndDate:o}'");
-            }
-
-            //limit 
-            var limit = string.Empty;
-            if (submissionQuery.Limit != 0)
-            {
-                limit = Environment.NewLine + $"OFFSET {submissionQuery.Offset} LIMIT {submissionQuery.Limit}";
-            }
+            //min stop date is less than start and the max stop is greater and start
+            whereStatements.Add(Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}')");
+            //min stop is less than the end and the max stop is greater than the end
+            whereStatements.Add(Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.EndDate:o}')");
+            //min stop date is greater than start and less than end
+            whereStatements.Add(Environment.NewLine + $"(c.MinStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}')");
+            //max stop date is greater than start and less than end
+            whereStatements.Add(Environment.NewLine + $"(c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate <= '{(DateTime)submissionQuery.EndDate:o}')");
 
             string where = string.Empty;
             if (whereStatements.Count > 0)
@@ -94,10 +87,17 @@ namespace RIPA.Functions.Submission.Functions
                 foreach (var whereStatement in whereStatements)
                 {
                     where += Environment.NewLine + whereStatement;
-                    where += Environment.NewLine + "AND";
+                    where += Environment.NewLine + "OR";
                 }
-                where = where.Remove(where.Length - 3);
+                where = where.Remove(where.Length - 2);
             }
+
+            //limit 
+            var limit = string.Empty;
+            if (submissionQuery.Limit != 0)
+            {
+                limit = Environment.NewLine + $"OFFSET {submissionQuery.Offset} LIMIT {submissionQuery.Limit}";
+            }            
 
             var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
             if (!string.IsNullOrWhiteSpace(submissionQuery.OrderBy))
@@ -112,9 +112,7 @@ namespace RIPA.Functions.Submission.Functions
 
             var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
 
-            var submissionCount = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c");
-
-            List<object> list = new List<object>(){};
+            List<object> list = new List<object>() { };
 
             foreach (var submission in submissions)
             {
@@ -134,7 +132,7 @@ namespace RIPA.Functions.Submission.Functions
             var response = new
             {
                 submissions = list,
-                total = submissionCount
+                total = submissions.Count()
             };
 
             return new OkObjectResult(response);
