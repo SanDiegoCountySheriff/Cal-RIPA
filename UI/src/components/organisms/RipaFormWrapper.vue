@@ -628,7 +628,7 @@ export default {
           firstSpan.innerText = this.getFormSummaryStepText()
         }
       }
-    }, 50)
+    }, 100)
   },
 
   watch: {
