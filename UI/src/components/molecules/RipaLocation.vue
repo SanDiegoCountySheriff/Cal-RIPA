@@ -113,6 +113,7 @@
               label="Block Number"
               :loading="loadingPii"
               :rules="blockNumberRules"
+              numbers-only
               @input="handleInput"
             >
             </ripa-text-input>
