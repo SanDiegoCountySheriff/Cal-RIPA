@@ -33,7 +33,7 @@ export default {
         }
       }
 
-      event.preventDefault()
+      return true
     },
 
     handleBlur(event) {
