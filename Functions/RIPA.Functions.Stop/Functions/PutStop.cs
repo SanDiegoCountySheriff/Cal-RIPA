@@ -72,6 +72,7 @@ namespace RIPA.Functions.Stop.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
+                stop.Id = Id;
                 if (Id == "0")
                 {
                     long stopId = 100000000;
@@ -98,7 +99,7 @@ namespace RIPA.Functions.Stop.Functions
                 }
 
                 stop.IsEdited = false;
-                if (_stopCosmosDbService.GetStopAsync(Id) != null)
+                if (_stopCosmosDbService.GetStopAsync(stop.Id) != null)
                 {
                     stop.IsEdited = true;
                 }
@@ -118,7 +119,7 @@ namespace RIPA.Functions.Stop.Functions
                     stop.Status = SubmissionStatus.Unsubmitted.ToString();
                 }
 
-                await _stopCosmosDbService.UpdateStopAsync(Id, stop);
+                await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
                 
                 return new OkObjectResult(stop);
             }
