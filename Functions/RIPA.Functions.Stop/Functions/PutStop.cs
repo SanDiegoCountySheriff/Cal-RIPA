@@ -103,7 +103,6 @@ namespace RIPA.Functions.Stop.Functions
                     stop.IsEdited = true;
                 }
 
-                stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
                     return new BadRequestObjectResult("Officer ID must be 9 char");
