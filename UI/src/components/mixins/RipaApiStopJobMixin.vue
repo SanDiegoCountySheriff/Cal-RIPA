@@ -70,10 +70,30 @@ export default {
     },
 
     setApiStopsWithErrorsToLocalStorage(apiStops) {
-      localStorage.setItem(
+      // get current array from local storage
+      const currentApiStops = localStorage.getItem(
         'ripa_submitted_api_stops_with_errors',
-        JSON.stringify(apiStops),
       )
+      // parse ite
+      const parsedApiStops = currentApiStops ? JSON.parse(currentApiStops) : []
+      const updatedApiStops = parsedApiStops
+
+      for (let index = 0; index < apiStops.length; index++) {
+        const apiStop = apiStops[index]
+        const updatedApiStops = parsedApiStops.filter(
+          item => item.internalId !== apiStop.internalId,
+        )
+        updatedApiStops.push(apiStop)
+      }
+
+      if (updatedApiStops.length === 0) {
+        localStorage.removeItem('ripa_submitted_api_stops_with_errors')
+      } else {
+        localStorage.setItem(
+          'ripa_submitted_api_stops_with_errors',
+          JSON.stringify(updatedApiStops),
+        )
+      }
     },
   },
 
