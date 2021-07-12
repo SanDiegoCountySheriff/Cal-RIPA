@@ -140,6 +140,12 @@ export default {
           sortName: 'officerName',
           sortable: true,
         },
+        {
+          text: 'Error Count',
+          value: '',
+          sortName: 'errorCount',
+          sortable: false,
+        },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
