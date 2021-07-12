@@ -41,6 +41,7 @@
       :on-open-last-location="handleOpenLastLocation"
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
+      :on-open-stop-errors="handleOpenStopErrors"
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
       :on-submit-audit="handleSubmitAudit"

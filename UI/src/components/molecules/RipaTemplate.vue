@@ -22,13 +22,28 @@
 
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="primary" @click="handleDefaultTemplate"
-                >BASIC STOP</v-btn
-              >
+              <v-btn color="primary" @click="handleDefaultTemplate">
+                BASIC STOP
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>
       </div>
+
+      <v-divider></v-divider>
+
+      <div class="tw-mb-4">
+        <v-container fluid>
+          <v-row no-gutters dense>
+            <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
+              <v-btn color="error" @click="handleOpenStopErrors">
+                STOP ERRORS
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+
       <v-divider></v-divider>
       <div class="tw-mt-4">About this App:</div>
       <p>
@@ -78,10 +93,20 @@ export default {
         this.onOpenTemplate()
       }
     },
+
+    handleOpenStopErrors() {
+      if (this.onOpenStopErrors) {
+        this.onOpenStopErrors()
+      }
+    },
   },
 
   props: {
     onOpenTemplate: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStopErrors: {
       type: Function,
       default: () => {},
     },

@@ -41,6 +41,7 @@
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
+      :on-open-stop-errors="onOpenStopErrors"
       :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
       :on-submit-audit="onSubmitAudit"
@@ -249,6 +250,10 @@ export default {
       default: () => {},
     },
     onOpenTemplate: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStopErrors: {
       type: Function,
       default: () => {},
     },

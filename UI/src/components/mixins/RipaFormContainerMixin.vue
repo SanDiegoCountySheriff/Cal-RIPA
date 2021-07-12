@@ -418,6 +418,10 @@ export default {
       this.updateFullStop()
     },
 
+    handleOpenStopErrors() {
+      alert('OPEN STOP ERRORS DIALOG')
+    },
+
     setFavoriteLocations(locations) {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)

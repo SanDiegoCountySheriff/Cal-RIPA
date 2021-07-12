@@ -27,6 +27,13 @@ export default {
     async runApiStopsJob(apiStops) {
       this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
+        debugger
+        // clear api stops key since all api stops were handled -
+        // either submitted successfully or moved to new key in local storage
+        this.removeApiStopsFromLocalStorage()
+        debugger
+
+        // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
           await this.editOfficerStop(apiStop)
@@ -36,31 +43,19 @@ export default {
           ', ',
         )}`
 
-        if (this.mappedStopSubmittionFailedStops.length === 0) {
+        if (this.mappedStopSubmissionFailedStops.length === 0) {
           this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}.`
           this.snackbarVisible = true
         } else {
-          alert('display stop error dialog')
+          this.snackbarText = `${this.mappedStopSubmissionStatus}.`
+          this.snackbarVisible = true
+
+          // if there are failed ids, update error stops key
+          this.setApiStopsWithErrorsToLocalStorage(
+            this.mappedStopSubmissionFailedStops,
+          )
         }
-
-        this.updateApiStopsLocalStorage()
       }
-    },
-
-    updateApiStopsLocalStorage() {
-      // if there are failed ids, filter all failed apiStop ids
-      // and move to errors key in local storage
-      if (this.mappedStopSubmissionFailedStops.length > 0) {
-        const apiStops = this.getApiStopsFromLocalStorage()
-        const filteredApiStops = apiStops.filter(item =>
-          this.mappedStopSubmissionFailedStops.includes(item),
-        )
-        this.setApiStopsWithErrorsToLocalStorage(filteredApiStops)
-      }
-
-      // clear api stops key since all api stops were handled -
-      // either submitted successfully or moved to new key in local storage
-      this.removeApiStopsFromLocalStorage()
     },
 
     removeApiStopsFromLocalStorage() {

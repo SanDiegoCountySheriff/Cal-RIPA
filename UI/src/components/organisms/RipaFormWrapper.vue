@@ -3,7 +3,10 @@
     <v-card class="mx-auto" max-width="900" outlined>
       <v-card-text>
         <template v-if="stepIndex == 0">
-          <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+          <ripa-template
+            :on-open-template="onOpenTemplate"
+            :on-open-stop-errors="onOpenStopErrors"
+          ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
           <v-stepper v-model="stepIndex">
@@ -830,6 +833,10 @@ export default {
       default: () => {},
     },
     onOpenTemplate: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStopErrors: {
       type: Function,
       default: () => {},
     },
