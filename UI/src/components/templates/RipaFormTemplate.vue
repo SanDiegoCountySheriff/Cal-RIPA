@@ -21,6 +21,7 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
+      :stops-with-errors="stopsWithErrors"
       :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
@@ -158,6 +159,10 @@ export default {
       default: () => [],
     },
     statutes: {
+      type: Array,
+      default: () => [],
+    },
+    stopsWithErrors: {
       type: Array,
       default: () => [],
     },

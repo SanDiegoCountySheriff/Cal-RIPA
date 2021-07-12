@@ -4,6 +4,7 @@
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
+            :stops-with-errors="stopsWithErrors"
             :on-open-template="onOpenTemplate"
             :on-open-stops-with-errors="onOpenStopsWithErrors"
           ></ripa-template>
@@ -741,6 +742,10 @@ export default {
       default: () => [],
     },
     statutes: {
+      type: Array,
+      default: () => [],
+    },
+    stopsWithErrors: {
       type: Array,
       default: () => [],
     },

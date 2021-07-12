@@ -27,11 +27,9 @@ export default {
     async runApiStopsJob(apiStops) {
       this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
-        debugger
         // clear api stops key since all api stops were handled -
         // either submitted successfully or moved to new key in local storage
         this.removeApiStopsFromLocalStorage()
-        debugger
 
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {

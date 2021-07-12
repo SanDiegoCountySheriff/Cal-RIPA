@@ -23,6 +23,7 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
+      :stops-with-errors="stopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -98,16 +99,37 @@
       :statute="statute"
       :on-close="handleCloseDialog"
     ></ripa-statute-dialog>
+
+    <ripa-stops-with-errors-dialog
+      :stops-with-errors="stopsWithErrors"
+      :show-dialog="showStopsWithErrorsDialog"
+      :on-close="handleCloseDialog"
+      :on-edit-stop="handleOpenStopWithError"
+    ></ripa-stops-with-errors-dialog>
+
+    <ripa-snackbar
+      text="Stop was stored locally and will be submitted to the server once you are online and authenticated."
+      v-model="snackbarNotOnlineVisible"
+    >
+    </ripa-snackbar>
+
+    <ripa-snackbar
+      text="There was an error checking GPS location."
+      v-model="snackbarGpsVisible"
+    >
+    </ripa-snackbar>
   </ripa-page-container>
 </template>
 
 <script>
 import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
 import RipaFavoritesDialog from '@/components/molecules/RipaFavoritesDialog'
+import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaPageContainer from './RipaPageContainer'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
-import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
+import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import {
   formBeats,
   formCountyCities,
@@ -126,7 +148,9 @@ export default {
     RipaFavoritesDialog,
     RipaFormTemplate,
     RipaPageContainer,
+    RipaSnackbar,
     RipaStatuteDialog,
+    RipaStopsWithErrorsDialog,
   },
 
   data() {

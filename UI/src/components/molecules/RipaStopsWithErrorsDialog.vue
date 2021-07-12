@@ -10,8 +10,8 @@
           <v-row>
             <v-col cols="12">
               <ripa-stops-with-errors-grid
-                :items="persons"
-                :on-open-person="onOpenPerson"
+                :items="stopsWithErrors"
+                :on-edit-stop="handleEditStop"
               ></ripa-stops-with-errors-grid>
             </v-col>
           </v-row>
@@ -64,6 +64,11 @@ export default {
         this.onClose()
       }
     },
+    handleEditStop(internalId) {
+      if (this.onEditStop) {
+        this.onEditStop(internalId)
+      }
+    },
   },
 
   watch: {
@@ -73,7 +78,7 @@ export default {
   },
 
   props: {
-    persons: {
+    stopsWithErrors: {
       type: Array,
       default: () => [],
     },
@@ -85,7 +90,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenPerson: {
+    onEditStop: {
       type: Function,
       default: () => {},
     },

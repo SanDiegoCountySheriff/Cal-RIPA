@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-person-grid">
+  <div class="ripa-stops-with-errors-grid">
     <v-card-title>
       <v-text-field
         v-model="search"
@@ -10,9 +10,8 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
-      :loading="loading"
       :headers="headers"
-      :items="persons"
+      :items="stopsWithErrors"
       :search="search"
       @click:row="handleRowClick"
       sort-by="id"
@@ -34,35 +33,40 @@ export default {
       search: '',
       persons: [],
       headers: [
-        { text: 'ID', value: 'id', width: '70' },
-        { text: 'Student', value: 'isStudent', width: '100' },
-        { text: 'Race', value: 'perceivedRace', width: '150' },
-        { text: 'Gender', value: 'perceivedGender', width: '150' },
-        { text: 'Gender Nonconforming', value: 'genderNonconforming' },
-        { text: 'LGBT', value: 'perceivedLgbt' },
-        { text: 'Age', value: 'perceivedAge' },
-        { text: 'Limited English', value: 'perceivedLimitedEnglish' },
-        { text: 'Disabilities', value: 'anyDisabilities' },
+        { text: 'Stop Date', value: 'stopDate', width: '120' },
+        { text: 'Stop Time', value: 'stopTime', width: '120' },
+        { text: 'Error Code', value: 'errorCode', width: '120' },
+        { text: 'Error Text', value: 'errorText' },
       ],
     }
   },
 
   methods: {
     init() {
-      this.persons = this.items
+      this.stopsWithErrors = this.items.map(item => {
+        return {
+          internalId: item.internalId || 'Missing Internal Id',
+          stopDate: item.apiStop?.date || 'N/A',
+          stopTime: item.apiStop.time || 'N/A',
+          errorCode: item.statusCode,
+          errorText: item.statusError.message
+            ? item.statusError.message
+            : item.statusError,
+        }
+      })
     },
 
     handleRowClick(item, row) {
       row.select(true)
-      if (this.onOpenPerson) {
-        this.onOpenPerson(item.id)
+      if (this.onEditStop) {
+        this.onEditStop(item.internalId)
       }
     },
   },
 
   watch: {
     items(val) {
-      this.persons = val
+      this.stopsWithErrors = val
     },
   },
 
@@ -71,15 +75,11 @@ export default {
   },
 
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     items: {
       type: Array,
       default: () => [],
     },
-    onOpenPerson: {
+    onEditStop: {
       type: Function,
       default: () => {},
     },
@@ -88,7 +88,7 @@ export default {
 </script>
 
 <style lang="scss">
-.ripa-person-grid {
+.ripa-stops-with-errors-grid {
   .v-data-table__wrapper {
     tr:hover {
       cursor: pointer !important;

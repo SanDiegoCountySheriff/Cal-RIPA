@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { nanoid } from 'nanoid'
 import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
@@ -71,6 +72,7 @@ export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: 0,
+    internalId: nanoid(),
     template: null,
     stepTrace: [],
     location: emptyLocation(),
@@ -92,6 +94,7 @@ export const motorStop = () => {
   return {
     actionsTaken: {},
     id: 0,
+    internalId: nanoid(),
     template: 'motor',
     stepTrace: [],
     location: defaultLocation(),
@@ -117,6 +120,7 @@ export const probationStop = () => {
       basisForSearch: [4],
     },
     id: 0,
+    internalId: nanoid(),
     template: 'probation',
     stepTrace: [],
     location: defaultLocation(),
@@ -812,6 +816,7 @@ export const apiStopToFullStop = apiStop => {
   return {
     agencyQuestions: apiStop.listAgencyQuestion || [],
     id: apiStop.id,
+    internalId: nanoid(),
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     location: {
@@ -1017,6 +1022,7 @@ export const fullStopToStop = fullStop => {
   const person = fullStop.people.length > 0 ? fullStop.people[0] : null
   return {
     id: fullStop.id,
+    internalId: fullStop.id,
     template: fullStop.template,
     editStopExplanation: null,
     overridePii: false,

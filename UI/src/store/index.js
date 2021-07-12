@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import authentication from '@/authentication'
 
@@ -767,6 +768,7 @@ export default new Vuex.Store({
           }
           if (response.status !== 200) {
             const errorStop = {
+              internalId: nanoid(),
               apiStop: stop,
               statusCode: response.status,
               statusError: response.statusText,
@@ -783,9 +785,10 @@ export default new Vuex.Store({
         .catch(error => {
           debugger
           const errorStop = {
+            internalId: nanoid(),
             apiStop: stop,
             statusCode: 'N/A',
-            statusError: error,
+            statusError: error.message || error,
           }
           commit('updateStopSubmissionStatusError', 1)
           commit('updateStopSubmissionFailedStops', errorStop)

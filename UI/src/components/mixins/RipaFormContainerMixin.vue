@@ -51,9 +51,20 @@ export default {
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
+
+    stopsWithErrors() {
+      const apiStops = localStorage.getItem(
+        'ripa_submitted_api_stops_with_errors',
+      )
+      return apiStops ? JSON.parse(apiStops) : []
+    },
   },
 
   methods: {
+    handleOpenStopWithError(internalId) {
+      alert('open stop with error ' + internalId)
+    },
+
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -469,6 +480,7 @@ export default {
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
+        updatedFullStop.internalId = this.stop.internalId
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location

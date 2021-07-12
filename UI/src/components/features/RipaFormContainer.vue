@@ -21,6 +21,7 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
+      :stops-with-errors="stopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -112,9 +113,10 @@
     ></ripa-user-dialog>
 
     <ripa-stops-with-errors-dialog
+      :stops-with-errors="stopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
-      :on-open="handleOpenStopWithError"
+      :on-edit-stop="handleOpenStopWithError"
     ></ripa-stops-with-errors-dialog>
 
     <ripa-snackbar
@@ -202,10 +204,6 @@ export default {
 
     handleSaveUser(user) {
       this.editOfficerUser(user)
-    },
-
-    handleOpenStopWithError() {
-      alert('open stop with error')
     },
 
     handleSubmitStop(apiStop) {
