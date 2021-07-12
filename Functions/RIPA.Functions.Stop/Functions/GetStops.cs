@@ -94,11 +94,11 @@ namespace RIPA.Functions.Stop.Functions
             //Date Range
             if (stopQuery.StartDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime > '{(DateTime)stopQuery.StartDate:o}'");
+                whereStatements.Add(Environment.NewLine + $"c.Date >= '{(DateTime)stopQuery.StartDate:o}'");
             }
             if (stopQuery.EndDate != default(DateTime))
             {
-                whereStatements.Add(Environment.NewLine + $"c.StopDateTime < '{(DateTime)stopQuery.EndDate:o}'");
+                whereStatements.Add(Environment.NewLine + $"c.Date <= '{(DateTime)stopQuery.EndDate:o}'");
             }
 
             //IsPII
