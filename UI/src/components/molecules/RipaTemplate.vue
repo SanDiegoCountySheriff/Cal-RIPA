@@ -60,11 +60,16 @@
         <a
           href="https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf"
           target="_blank"
+          rel="noopener noreferrer"
         >
           these regulations
         </a>
         on November 7, 2017. For more information please see the
-        <a href="https://oag.ca.gov/ab953/regulations" target="_blank">
+        <a
+          href="https://oag.ca.gov/ab953/regulations"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           AG's Website </a
         >.
       </p>
