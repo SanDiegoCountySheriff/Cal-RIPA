@@ -102,7 +102,7 @@ export default {
       'mappedUser',
       'mappedStopSubmissionStatus',
       'mappedStopSubmissionPassedIds',
-      'mappedStopSubmissionFailedIds',
+      'mappedStopSubmissionFailedStops',
     ]),
 
     getMappedUser() {

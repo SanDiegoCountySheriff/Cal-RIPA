@@ -32,14 +32,16 @@ export default {
           await this.editOfficerStop(apiStop)
         }
 
-        const stopIdsPassedStr = `Stop ID(s) Passed: ${this.mappedStopSubmissionPassedIds.join(
+        const stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
           ', ',
-        )}.`
-        const stopIdsFailedStr = `Stop ID(s) Failed: ${this.mappedStopSubmissionFailedIds.join(
-          ', ',
-        )}.`
-        this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr} ${stopIdsFailedStr}`
-        this.snackbarVisible = true
+        )}`
+
+        if (this.mappedStopSubmittionFailedStops.length === 0) {
+          this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}.`
+          this.snackbarVisible = true
+        } else {
+          alert('display stop error dialog')
+        }
 
         this.updateApiStopsLocalStorage()
       }
@@ -48,10 +50,10 @@ export default {
     updateApiStopsLocalStorage() {
       // if there are failed ids, filter all failed apiStop ids
       // and move to errors key in local storage
-      if (this.mappedStopSubmissionFailedIds.length > 0) {
+      if (this.mappedStopSubmissionFailedStops.length > 0) {
         const apiStops = this.getApiStopsFromLocalStorage()
         const filteredApiStops = apiStops.filter(item =>
-          this.mappedStopSubmissionFailedIds.includes(item),
+          this.mappedStopSubmissionFailedStops.includes(item),
         )
         this.setApiStopsWithErrorsToLocalStorage(filteredApiStops)
       }
