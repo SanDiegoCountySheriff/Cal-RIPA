@@ -54,6 +54,12 @@
             <template v-slot:item.dateSubmitted="{ item }">
               {{ format(new Date(item.dateSubmitted), 'yyyy-MM-dd kk:mm') }}
             </template>
+            <template v-slot:item.minStopDate="{ item }">
+              {{ format(new Date(item.minStopDate), 'yyyy-MM-dd kk:mm') }}
+            </template>
+            <template v-slot:item.maxStopDate="{ item }">
+              {{ format(new Date(item.maxStopDate), 'yyyy-MM-dd kk:mm') }}
+            </template>
             <template v-slot:footer>
               <div class="paginationWrapper">
                 <p>
@@ -121,11 +127,23 @@ export default {
       submissions: [],
       totalSubmissions: 0,
       headers: [
-        { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
+        // { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
         {
           text: 'Submission Date',
           value: 'dateSubmitted',
           sortName: 'dateSubmitted',
+          sortable: true,
+        },
+        {
+          text: 'First Stop Date',
+          value: 'minStopDate',
+          sortName: 'minStopDate',
+          sortable: true,
+        },
+        {
+          text: 'Last Stop Date',
+          value: 'maxStopDate',
+          sortName: 'maxStopDate',
           sortable: true,
         },
         {
