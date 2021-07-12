@@ -5,7 +5,7 @@
         <template v-if="stepIndex == 0">
           <ripa-template
             :on-open-template="onOpenTemplate"
-            :on-open-stop-errors="onOpenStopErrors"
+            :on-open-stops-with-errors="onOpenStopsWithErrors"
           ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
@@ -836,7 +836,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenStopErrors: {
+    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

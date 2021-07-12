@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ripa-stop-errors-grid',
+  name: 'ripa-stops-with-errors-grid',
 
   data() {
     return {

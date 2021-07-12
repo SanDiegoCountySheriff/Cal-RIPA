@@ -36,8 +36,8 @@
         <v-container fluid>
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="error" @click="handleOpenStopErrors">
-                STOP ERRORS
+              <v-btn color="error" @click="handleOpenStopsWithErrors">
+                STOP WITH ERRORS
               </v-btn>
             </v-col>
           </v-row>
@@ -94,9 +94,9 @@ export default {
       }
     },
 
-    handleOpenStopErrors() {
-      if (this.onOpenStopErrors) {
-        this.onOpenStopErrors()
+    handleOpenStopsWithErrors() {
+      if (this.onOpenStopsWithErrors) {
+        this.onOpenStopsWithErrors()
       }
     },
   },
@@ -106,7 +106,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenStopErrors: {
+    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

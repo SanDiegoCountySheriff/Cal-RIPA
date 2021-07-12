@@ -41,7 +41,7 @@
       :on-open-last-location="handleOpenLastLocation"
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
-      :on-open-stop-errors="handleOpenStopErrors"
+      :on-open-stops-with-errors="handleOpenStopsWithErrors"
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
       :on-submit-audit="handleSubmitAudit"
@@ -111,8 +111,14 @@
       :on-save="handleSaveUser"
     ></ripa-user-dialog>
 
+    <ripa-stops-with-errors-dialog
+      :show-dialog="showStopsWithErrorsDialog"
+      :on-close="handleCloseDialog"
+      :on-open="handleOpenStopWithError"
+    ></ripa-stops-with-errors-dialog>
+
     <ripa-snackbar
-      text="Stop was cached and all cached stops will be submitted once you are online and authenticated"
+      text="Stop was stored locally and will be submitted to the server once you are online and authenticated."
       v-model="snackbarNotOnlineVisible"
     >
     </ripa-snackbar>
@@ -133,6 +139,7 @@ import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
+import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -147,6 +154,7 @@ export default {
     RipaFormTemplate,
     RipaSnackbar,
     RipaStatuteDialog,
+    RipaStopsWithErrorsDialog,
     RipaUserDialog,
   },
 
@@ -194,6 +202,10 @@ export default {
 
     handleSaveUser(user) {
       this.editOfficerUser(user)
+    },
+
+    handleOpenStopWithError() {
+      alert('open stop with error')
     },
 
     handleSubmitStop(apiStop) {

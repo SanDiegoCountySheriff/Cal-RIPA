@@ -34,6 +34,7 @@ export default {
       showLocationFavoritesDialog: false,
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
+      showStopsWithErrorsDialog: false,
       showStatuteDialog: false,
       showUserDialog: false,
       statute: null,
@@ -140,6 +141,7 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
+      this.showStopsWithErrorsDialog = false
       this.showUserDialog = false
     },
 
@@ -418,8 +420,8 @@ export default {
       this.updateFullStop()
     },
 
-    handleOpenStopErrors() {
-      alert('OPEN STOP ERRORS DIALOG')
+    handleOpenStopsWithErrors() {
+      this.showStopsWithErrorsDialog = true
     },
 
     setFavoriteLocations(locations) {
