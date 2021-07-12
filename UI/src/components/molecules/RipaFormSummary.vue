@@ -31,15 +31,17 @@
             >
               Edit
             </v-btn>
-            <v-btn
-              class="tw-ml-2"
-              dense
-              outlined
-              x-small
-              @click="handleCopyPerson($event, person.index)"
-            >
-              Copy
-            </v-btn>
+            <template v-if="!adminEditing">
+              <v-btn
+                class="tw-ml-2"
+                dense
+                outlined
+                x-small
+                @click="handleCopyPerson($event, person.index)"
+              >
+                Copy
+              </v-btn>
+            </template>
             <template
               v-if="apiStop.listPersonStopped.length > 1 && !adminEditing"
             >
