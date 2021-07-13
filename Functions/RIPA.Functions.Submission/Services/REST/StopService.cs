@@ -221,7 +221,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojTXType(Stop stop)
         {
-            if (stop.ListSubmission.Length == 0) return "I"; // no prior submissions
+            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I"; // no prior submissions
             if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS") return "U"; // previous submission is error but not a FTS (Fail to submit)
             if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS")
             {

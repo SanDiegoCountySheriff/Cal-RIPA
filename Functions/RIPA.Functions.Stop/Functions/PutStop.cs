@@ -73,7 +73,7 @@ namespace RIPA.Functions.Stop.Functions
             if (!string.IsNullOrEmpty(Id))
             {
                 stop.Id = Id;
-                if (Id == "0")
+                if (stop.Id == "0")
                 {
                     long stopId = 100000000;
 
@@ -99,7 +99,7 @@ namespace RIPA.Functions.Stop.Functions
                 }
 
                 stop.IsEdited = false;
-                if (_stopCosmosDbService.GetStopAsync(stop.Id) != null)
+                if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
                 {
                     stop.IsEdited = true;
                 }
