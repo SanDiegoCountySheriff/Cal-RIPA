@@ -22,10 +22,12 @@
       :on-edit-statute="handleEditStatute"
       :on-edit-user="handleEditUser"
       :on-tab-change="handleTabChange"
+      :savedFilters="savedFilterState"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
       @handleAdminFiltering="handleAdminFiltering"
+      @handleUpdateSavedFilter="handleUpdateSavedFilter"
       @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
@@ -42,6 +44,8 @@ import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import { mapGetters, mapActions } from 'vuex'
 
+import _ from 'lodash'
+
 export default {
   name: 'ripa-admin-container',
 
@@ -55,6 +59,7 @@ export default {
       loading: false,
       snackbarText: null,
       snackbarVisible: false,
+      savedFilterState: null,
     }
   },
 
@@ -119,6 +124,7 @@ export default {
         tabIndex === '/admin/submissions' &&
         !this.$route.params.submissionId
       ) {
+        this.handleRetrieveSavedFilters()
         await Promise.all([this.getAdminSubmissions()])
       }
       if (
@@ -130,6 +136,7 @@ export default {
         ])
       }
       if (tabIndex === '/admin/stops') {
+        this.handleRetrieveSavedFilters()
         await Promise.all([this.getAdminStops()])
       }
       if (tabIndex === '/admin/users') {
@@ -145,7 +152,36 @@ export default {
           this.getAdminStatutes(),
         ])
       }
+
       this.loading = false
+    },
+
+    handleUpdateSavedFilter(val) {
+      let updatedFilters
+      const sessionStorageFilters = sessionStorage.getItem('ripa_saved_filters')
+      if (sessionStorageFilters) {
+        updatedFilters = {
+          ...JSON.parse(sessionStorageFilters),
+          ...val,
+        }
+      } else {
+        updatedFilters = val
+      }
+      // if no filters in session storage, set new ones
+      sessionStorage.setItem(
+        'ripa_saved_filters',
+        JSON.stringify(updatedFilters),
+      )
+    },
+
+    handleRetrieveSavedFilters() {
+      if (sessionStorage.getItem('ripa_saved_filters')) {
+        // omit null values from the filters
+        this.savedFilterState = _.omitBy(
+          JSON.parse(sessionStorage.getItem('ripa_saved_filters')),
+          _.isNull,
+        )
+      }
     },
 
     async handleRedoItemsPerPage(pageData) {

@@ -248,9 +248,15 @@ export default {
     },
     submissionFromDateChange(val) {
       this.submissionFromDate = val
+      this.$emit('handleUpdateSavedFilter', {
+        fromDate: val,
+      })
       this.handleFilter()
     },
     submissionToDateChange(val) {
+      this.$emit('handleUpdateSavedFilter', {
+        toDate: val,
+      })
       this.submissionToDate = val
       this.handleFilter()
     },
@@ -330,6 +336,10 @@ export default {
     },
     currentSubmission: {
       type: Object,
+    },
+    savedFilters: {
+      type: Object,
+      default: () => {},
     },
   },
 }
