@@ -258,7 +258,7 @@ export default {
       selectedItems: [],
       selectedErrorCodes: this.savedFilters.errorCodes
         ? this.savedFilters.errorCodes
-        : null,
+        : [],
       stopFromDate: null,
       stopToDate: this.savedFilters.toDate ? this.savedFilters.toDate : null,
       currentStatusFilter: this.savedFilters.status

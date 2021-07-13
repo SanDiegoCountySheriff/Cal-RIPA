@@ -59,7 +59,7 @@ export default {
       loading: false,
       snackbarText: null,
       snackbarVisible: false,
-      savedFilterState: null,
+      savedFilterState: {},
     }
   },
 

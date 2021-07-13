@@ -113,6 +113,8 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaSubmission from '@/components/molecules/RipaSubmission'
 import { format } from 'date-fns'
 
+import _ from 'lodash'
+
 export default {
   name: 'ripa-submissions-grid',
 
@@ -156,8 +158,12 @@ export default {
       ],
       editedIndex: -1,
       selectedItems: [],
-      submissionFromDate: null,
-      submissionToDate: null,
+      submissionFromDate: this.savedFilters.fromDate
+        ? this.savedFilters.fromDate
+        : null,
+      submissionToDate: this.savedFilters.toDate
+        ? this.savedFilters.toDate
+        : null,
       currentSubmissionLoading: false,
       format,
       currentPage: 1,
@@ -202,6 +208,11 @@ export default {
   },
 
   methods: {
+    init() {
+      if (!_.isEmpty(this.savedFilters)) {
+        this.handleFilter()
+      }
+    },
     handleGoToSubmission(whichSubmission) {
       this.currentSubmissionLoading = true
       this.$router.push(`/admin/submissions/${whichSubmission.id}`)
@@ -319,6 +330,10 @@ export default {
         }
       }
     },
+  },
+
+  created() {
+    this.init()
   },
 
   props: {
