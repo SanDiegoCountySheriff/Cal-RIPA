@@ -378,6 +378,7 @@ export default {
         type: 'stops',
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
+        filters: this.getFilterStatus,
       })
       this.$emit('handleUpdateSavedFilter', {
         itemsPerPage: val,
