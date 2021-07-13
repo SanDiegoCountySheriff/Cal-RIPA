@@ -315,10 +315,6 @@ export default {
         this.viewModel.actionsTaken.basisForPropertySeizure = null
         this.viewModel.actionsTaken.typeOfPropertySeized = null
       }
-
-      if (this.viewModel.actionsTaken.propertyWasSeized) {
-        this.viewModel.actionsTaken.anyContraband = true
-      }
     },
 
     updateSchoolModel() {
