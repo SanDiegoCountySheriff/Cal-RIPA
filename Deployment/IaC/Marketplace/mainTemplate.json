@@ -66,9 +66,11 @@
       "type": "string"
     },
     "certificate_key_vault_rid": {
+      "defaultValue": "/subscriptions/c74e04b6-0cd7-4778-863e-34654eb49270/resourceGroups/sdsd-gen-p-rg/providers/Microsoft.KeyVault/vaults/sdsd-gen-p-kv",
       "type": "string"
     },
     "certificate_secret_name": {
+      "defaultValue": "star-cssa-cloud",
       "type": "string"
     },
     "glocation": {
