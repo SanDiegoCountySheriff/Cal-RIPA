@@ -227,6 +227,7 @@ export default {
       this.$emit('redoItemsPerPage', {
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
+        filters: this.getFilterStatus,
       })
     },
     handleSubmissionDetailItemsPerPage(pageData) {

@@ -205,6 +205,7 @@ export default {
         id: this.submissionId,
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
+        filters: this.getFilterStatus,
       })
     },
     editItem(item) {
