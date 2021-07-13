@@ -137,13 +137,13 @@ export default {
         {
           text: 'First Stop Date',
           value: 'minStopDate',
-          sortName: 'minStopDate',
+          sortName: 'MinStopDate',
           sortable: true,
         },
         {
           text: 'Last Stop Date',
           value: 'maxStopDate',
-          sortName: 'maxStopDate',
+          sortName: 'MaxStopDate',
           sortable: true,
         },
         {
