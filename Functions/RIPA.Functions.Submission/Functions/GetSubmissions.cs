@@ -125,7 +125,7 @@ namespace RIPA.Functions.Submission.Functions
                     submission.OfficerId,
                     submission.MaxStopDate,
                     submission.MinStopDate,
-                    summary = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString()))
+                    ErrorCount = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString())).Sum(x=>x.Count)
                 });
             }
 
