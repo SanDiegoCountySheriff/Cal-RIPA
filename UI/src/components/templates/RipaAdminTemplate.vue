@@ -22,10 +22,12 @@
       :on-edit-statute="onEditStatute"
       :on-edit-user="onEditUser"
       :on-tab-change="onTabChange"
+      :savedFilters="savedFilters"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
       @handleAdminFiltering="handleAdminFiltering"
+      @handleUpdateSavedFilter="handleUpdateSavedFilter"
       @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
@@ -97,6 +99,9 @@ export default {
     },
     handleAdminFiltering(filterData) {
       this.$emit('handleAdminFiltering', filterData)
+    },
+    handleUpdateSavedFilter(val) {
+      this.$emit('handleUpdateSavedFilter', val)
     },
     handleAdminSubmissionsItemsPerPage(pageData) {
       this.$emit('handleRedoItemsPerPage', pageData)
@@ -215,6 +220,10 @@ export default {
     },
     onTabChange: {
       type: Function,
+      default: () => {},
+    },
+    savedFilters: {
+      type: Object,
       default: () => {},
     },
   },

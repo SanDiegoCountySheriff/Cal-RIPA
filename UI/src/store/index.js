@@ -1432,49 +1432,53 @@ export default new Vuex.Store({
         })
     },
 
-    submitAllStops({ commit, state }, filterData) {
-      let filterParams = {}
-      if (filterData.stopFromDate !== null) {
-        filterParams = {
-          ...filterParams,
-          StartDate: filterData.stopFromDate,
+    submitAllStops({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        if (queryData) {
+          if (queryData.stopFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.stopFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
+
+          if (queryData.stopToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.stopToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
+
+          if (queryData.status !== null) {
+            queryString = `${queryString}&Status=${queryData.status}`
+          }
+
+          if (queryData.isPiiFound !== null) {
+            queryString = `${queryString}&IsPII=${queryData.isPiiFound}`
+          }
+
+          if (queryData.isEdited !== null) {
+            queryString = `${queryString}&IsEdited=${queryData.isEdited}`
+          }
+
+          if (queryData.errorCodes.length) {
+            queryString = `${queryString}&ErrorCode=${queryData.errorCodes.split(
+              ',',
+            )}`
+          }
         }
-      }
-      if (filterData.stopToDate !== null) {
-        filterParams = {
-          ...filterParams,
-          EndDate: filterData.stopToDate,
-        }
-      }
-      if (filterData.status !== null) {
-        filterParams = {
-          ...filterParams,
-          Status: filterData.status,
-        }
-      }
-      if (filterData.isPiiFound !== null) {
-        filterParams = {
-          ...filterParams,
-          IsPII: filterData.isPiiFound,
-        }
-      }
-      if (filterData.isEdited !== null) {
-        filterParams = {
-          ...filterParams,
-          IsEdited: filterData.isEdited,
-        }
-      }
-      if (filterData.errorCodes !== '') {
-        filterParams = {
-          ...filterParams,
-          ErrorCode: filterData.errorCodes,
-        }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
-          filterParams,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
+          null,
           {
             headers: {
               'Content-Type': 'application/json',

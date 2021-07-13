@@ -54,6 +54,13 @@ namespace RIPA.Functions.Submission.Utility
         public List<string> ValidateStops(IEnumerable<Stop> stops)
         {
             List<string> errorList = new List<string>();
+
+            if (stops.Count() == 0)
+            {
+                errorList.Add("No stops found with given filters.");
+                return errorList;
+            }
+
             var currentPST = DateTime.UtcNow;
 
             try
