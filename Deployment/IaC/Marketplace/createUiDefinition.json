@@ -748,7 +748,7 @@
 						"toolTip": "This must point to a valid OAuth/OpenID authority.",
 						"constraints": {
 							"required": true,
-							"regex": "",
+							"regex": "^(https:\/\/[a-z0-9]+.)[a-z0-9]+.[a-z]+(\/[a-zA-Z0-9#]+\/?)*\/$",
 							"validationMessage": ""
 						},
 						"visible": true
