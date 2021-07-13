@@ -38,7 +38,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return stop;
         }
 
-        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError)
+        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
         {
             var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == submissionError.FileName);
             foreach (var submission in pendingSubmissions)
@@ -53,7 +53,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             }
-            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
+            stop.Status = stopStatus;
             return stop;
         }
 
