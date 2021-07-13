@@ -168,7 +168,9 @@ export default {
       format,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
-      itemsPerPage: 10,
+      itemsPerPage: this.savedFilters.itemsPerPage
+        ? this.savedFilters.itemsPerPage
+        : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'dateSubmitted',
       sortDesc: true,
