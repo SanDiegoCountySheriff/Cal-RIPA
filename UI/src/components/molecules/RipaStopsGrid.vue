@@ -113,6 +113,7 @@
       </v-flex>
       <v-flex xs12>
         <v-data-table
+          v-model="selectedItems"
           class="adminStopsTable"
           :loading="loading"
           :headers="headers"
@@ -507,6 +508,8 @@ export default {
       if (Array.isArray(this.sortDesc)) {
         sortOrder = this.sortDesc[0]
       }
+      // reset any selections
+      this.selectedItems = []
       const filterData = {
         offset: null,
         limit: this.itemsPerPage,
