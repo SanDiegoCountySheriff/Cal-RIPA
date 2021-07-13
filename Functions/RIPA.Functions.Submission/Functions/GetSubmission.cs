@@ -103,7 +103,7 @@ namespace RIPA.Functions.Submission.Functions
                     where += Environment.NewLine + whereStatement;
                     where += Environment.NewLine + "AND";
                 }
-                where = where.Remove(where.Length - 2);
+                where = where.Remove(where.Length - 3);
             }
 
             if (!string.IsNullOrEmpty(Id))
