@@ -591,89 +591,6 @@
 		],
 		"steps": [
 			{
-				"name": "steps_authentication",
-				"label": "Authentication",
-				"subLabel": {},
-				"elements": [
-					{
-						"name": "auth_instructions",
-						"type": "Microsoft.Common.TextBlock",
-						"options": {
-							"text": "This application uses Azure Active Directory, OAuth/OpenID and RBAC. This requires an \"App Registration\" (AR) be created (or use an existing) in the Azure AD Tenant that you wish to use to for authentication & authorization. The AR needs to have several key properties and settings configured in order to work properly. Please review the link below for required settings and scripts that can be used to create a new AR in your tenant.",
-							"link": {
-								"label": "Instructions and scripts download",
-								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Deployment/Scripts/Authentication"
-							}
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_fqdn",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Azure AD FQDN",
-						"placeholder": "sample.gov",
-						"toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
-						"constraints": {
-							"required": true,
-							"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_app_id",
-						"type": "Microsoft.Common.TextBox",
-						"label": "AAD App Registration ID",
-						"placeholder": "********-****-****-****-************",
-						"toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
-						"constraints": {
-							"required": true,
-							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_tenant_id",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Tenant ID",
-						"placeholder": "********-****-****-****-************",
-						"toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
-						"constraints": {
-							"required": true,
-							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_authority",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Login Authority",
-						"defaultValue": "https://login.microsoftonline.com",
-						"toolTip": "This must point to a valid OAuth/OpenID authority.",
-						"constraints": {
-							"required": true,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_logout_url",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Logout URL",
-						"toolTip": "This should point to a URL that clears a users seesion.",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					}
-				]
-			},
-			{
 				"name": "steps_app_domain",
 				"label": "Application Domain",
 				"elements": [
@@ -764,6 +681,89 @@
 							}
 						],
 						"visible": "[equals(steps('steps_app_domain').app_domain_type,'private_domain')]"
+					}
+				]
+			},
+			{
+				"name": "steps_authentication",
+				"label": "Authentication",
+				"subLabel": {},
+				"elements": [
+					{
+						"name": "auth_instructions",
+						"type": "Microsoft.Common.TextBlock",
+						"options": {
+							"text": "This application uses Azure Active Directory, OAuth/OpenID and RBAC. This requires an \"App Registration\" (AR) be created (or use an existing) in the Azure AD Tenant that you wish to use to for authentication & authorization. The AR needs to have several key properties and settings configured in order to work properly. Please review the link below for required settings and scripts that can be used to create a new AR in your tenant.",
+							"link": {
+								"label": "Instructions and scripts download",
+								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Deployment/Scripts/Authentication"
+							}
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_fqdn",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Azure AD FQDN",
+						"placeholder": "sample.gov",
+						"toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
+						"constraints": {
+							"required": true,
+							"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_app_id",
+						"type": "Microsoft.Common.TextBox",
+						"label": "AAD App Registration ID",
+						"placeholder": "********-****-****-****-************",
+						"toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
+						"constraints": {
+							"required": true,
+							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_tenant_id",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Tenant ID",
+						"placeholder": "********-****-****-****-************",
+						"toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
+						"constraints": {
+							"required": true,
+							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_authority",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Login Authority",
+						"defaultValue": "https://login.microsoftonline.com",
+						"toolTip": "This must point to a valid OAuth/OpenID authority.",
+						"constraints": {
+							"required": true,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
+					},
+					{
+						"name": "auth_logout_url",
+						"type": "Microsoft.Common.TextBox",
+						"label": "Logout URL",
+						"toolTip": "This should point to a URL that clears a users seesion.",
+						"constraints": {
+							"required": false,
+							"regex": "",
+							"validationMessage": ""
+						},
+						"visible": true
 					}
 				]
 			},

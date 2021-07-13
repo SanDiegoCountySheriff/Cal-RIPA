@@ -46,19 +46,19 @@ export default {
     },
 
     updateApiStopsLocalStorage() {
-      // if no failed ids, everything worked so cleear local storage
-      if (this.mappedStopSubmissionFailedIds.length === 0) {
-        this.removeApiStopsFromLocalStorage()
-      }
-
-      // if there are failed ids, filter all failed apiStop ids and reset to local storage
+      // if there are failed ids, filter all failed apiStop ids
+      // and move to errors key in local storage
       if (this.mappedStopSubmissionFailedIds.length > 0) {
         const apiStops = this.getApiStopsFromLocalStorage()
         const filteredApiStops = apiStops.filter(item =>
           this.mappedStopSubmissionFailedIds.includes(item),
         )
-        this.setApiStopsToLocalStorage(filteredApiStops)
+        this.setApiStopsWithErrorsToLocalStorage(filteredApiStops)
       }
+
+      // clear api stops key since all api stops were handled -
+      // either submitted successfully or moved to new key in local storage
+      this.removeApiStopsFromLocalStorage()
     },
 
     removeApiStopsFromLocalStorage() {
@@ -72,6 +72,13 @@ export default {
 
     setApiStopsToLocalStorage(apiStops) {
       localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
+    },
+
+    setApiStopsWithErrorsToLocalStorage(apiStops) {
+      localStorage.setItem(
+        'ripa_submitted_api_stops_with_errors',
+        JSON.stringify(apiStops),
+      )
     },
   },
 

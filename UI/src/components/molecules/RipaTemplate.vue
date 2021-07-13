@@ -1,9 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="500" flat>
-    <v-card-title class="tw-uppercase">RIPA Stops</v-card-title>
-
     <v-card-text>
-      <div>Initiate a new Stop:</div>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
           <v-row no-gutters dense>

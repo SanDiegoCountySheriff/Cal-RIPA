@@ -41,6 +41,7 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id not found")]
         [OpenApiParameter(name: "OrderBy", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Column name to order the results")]
         [OpenApiParameter(name: "Order", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "ASC or DESC order")]
+        [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The full text error code to filter the submissions stops by")]
 
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
@@ -82,15 +83,37 @@ namespace RIPA.Functions.Submission.Functions
                 }
             }
 
+            List<string> whereStatements = new List<string>();
+            string join = string.Empty;
+            join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
+            whereStatements.Add(Environment.NewLine + $"ListSubmission.Id = '{Id}'");
+
+            if (!string.IsNullOrWhiteSpace(req.Query["ErrorCode"]))
+            {
+                join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
+                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{req.Query["ErrorCode"]}'");
+            }
+
+            string where = string.Empty;
+            if (whereStatements.Count > 0)
+            {
+                where = " WHERE ";
+                foreach (var whereStatement in whereStatements)
+                {
+                    where += Environment.NewLine + whereStatement;
+                    where += Environment.NewLine + "AND";
+                }
+                where = where.Remove(where.Length - 3);
+            }
+
             if (!string.IsNullOrEmpty(Id))
             {
                 var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
                 if (submissionResponse != null)
                 {
-                    string query = $"SELECT VALUE c FROM c JOIN Submission IN c.ListSubmission WHERE Submission.Id = '{Id}' {order} {limit}";
+                    string query = $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
 
                     var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
-                    var getSubmissionStopDateTimeSummaryResponse = await _stopCosmosDbService.GetSubmissionStopDateTimeSummaries(Id);
                     var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
                     var response = new
                     {
@@ -100,8 +123,8 @@ namespace RIPA.Functions.Submission.Functions
                             submissionResponse.RecordCount,
                             submissionResponse.OfficerId,
                             submissionResponse.OfficerName,
-                            MaxStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MaxStopDateTime,
-                            MinStopDate = getSubmissionStopDateTimeSummaryResponse.FirstOrDefault().MinStopDateTime
+                            submissionResponse.MaxStopDate,
+                            submissionResponse.MinStopDate
                         },
                         stops = stopResponse,
                         summary = getSubmissionErrorSummariesResponse

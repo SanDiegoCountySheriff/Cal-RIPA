@@ -54,6 +54,12 @@
             <template v-slot:item.dateSubmitted="{ item }">
               {{ format(new Date(item.dateSubmitted), 'yyyy-MM-dd kk:mm') }}
             </template>
+            <template v-slot:item.minStopDate="{ item }">
+              {{ format(new Date(item.minStopDate), 'yyyy-MM-dd kk:mm') }}
+            </template>
+            <template v-slot:item.maxStopDate="{ item }">
+              {{ format(new Date(item.maxStopDate), 'yyyy-MM-dd kk:mm') }}
+            </template>
             <template v-slot:footer>
               <div class="paginationWrapper">
                 <p>
@@ -107,6 +113,8 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaSubmission from '@/components/molecules/RipaSubmission'
 import { format } from 'date-fns'
 
+import _ from 'lodash'
+
 export default {
   name: 'ripa-submissions-grid',
 
@@ -121,11 +129,23 @@ export default {
       submissions: [],
       totalSubmissions: 0,
       headers: [
-        { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
+        // { text: 'ID', value: 'id', sortable: true, sortName: 'id' },
         {
           text: 'Submission Date',
           value: 'dateSubmitted',
           sortName: 'dateSubmitted',
+          sortable: true,
+        },
+        {
+          text: 'First Stop Date',
+          value: 'minStopDate',
+          sortName: 'MinStopDate',
+          sortable: true,
+        },
+        {
+          text: 'Last Stop Date',
+          value: 'maxStopDate',
+          sortName: 'MaxStopDate',
           sortable: true,
         },
         {
@@ -138,13 +158,19 @@ export default {
       ],
       editedIndex: -1,
       selectedItems: [],
-      submissionFromDate: null,
-      submissionToDate: null,
+      submissionFromDate: this.savedFilters.fromDate
+        ? this.savedFilters.fromDate
+        : null,
+      submissionToDate: this.savedFilters.toDate
+        ? this.savedFilters.toDate
+        : null,
       currentSubmissionLoading: false,
       format,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
-      itemsPerPage: 10,
+      itemsPerPage: this.savedFilters.itemsPerPage
+        ? this.savedFilters.itemsPerPage
+        : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'dateSubmitted',
       sortDesc: true,
@@ -184,6 +210,11 @@ export default {
   },
 
   methods: {
+    init() {
+      if (!_.isEmpty(this.savedFilters)) {
+        this.handleFilter()
+      }
+    },
     handleGoToSubmission(whichSubmission) {
       this.currentSubmissionLoading = true
       this.$router.push(`/admin/submissions/${whichSubmission.id}`)
@@ -196,6 +227,7 @@ export default {
       this.$emit('redoItemsPerPage', {
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
+        filters: this.getFilterStatus,
       })
     },
     handleSubmissionDetailItemsPerPage(pageData) {
@@ -230,9 +262,15 @@ export default {
     },
     submissionFromDateChange(val) {
       this.submissionFromDate = val
+      this.$emit('handleUpdateSavedFilter', {
+        fromDate: val,
+      })
       this.handleFilter()
     },
     submissionToDateChange(val) {
+      this.$emit('handleUpdateSavedFilter', {
+        toDate: val,
+      })
       this.submissionToDate = val
       this.handleFilter()
     },
@@ -297,6 +335,10 @@ export default {
     },
   },
 
+  created() {
+    this.init()
+  },
+
   props: {
     loading: {
       type: Boolean,
@@ -312,6 +354,10 @@ export default {
     },
     currentSubmission: {
       type: Object,
+    },
+    savedFilters: {
+      type: Object,
+      default: () => {},
     },
   },
 }

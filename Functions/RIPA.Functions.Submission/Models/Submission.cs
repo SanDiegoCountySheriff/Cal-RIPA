@@ -24,5 +24,11 @@ namespace RIPA.Functions.Submission.Models
         [JsonProperty(PropertyName = "officerId")]
         public string OfficerId { get; set; }
 
+        [JsonProperty(PropertyName = "MinStopDate")]
+        public DateTime MinStopDate { get; set; }
+
+        [JsonProperty(PropertyName = "MaxStopDate")]
+        public DateTime MaxStopDate { get; set; }
+
     }
 }

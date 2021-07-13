@@ -196,7 +196,15 @@ export default {
     },
 
     getAppTitle() {
-      return 'RIPA'
+      switch (this.environmentName) {
+        case 'DEV':
+          return 'RIPA (DEV)'
+        case 'QA':
+          return 'RIPA (QA)'
+
+        default:
+          return ''
+      }
     },
 
     getAdmin() {

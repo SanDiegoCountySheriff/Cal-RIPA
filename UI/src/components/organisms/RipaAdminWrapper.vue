@@ -13,10 +13,12 @@
           :loading="loading"
           :items="submissions"
           :currentSubmission="currentSubmission"
+          :savedFilters="savedFilters"
           @paginate="handleAdminSubmissionPagination"
           @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
           @redoItemsPerPage="handleAdminSubmissionRedoItemsPerPage"
           @handleFilter="handleAdminSubmissionsFiltering"
+          @handleUpdateSavedFilter="handleUpdateSavedFilter"
           @handleSubmissionDetailItemsPerPage="
             handleSubmissionDetailItemsPerPage
           "
@@ -28,10 +30,12 @@
           :loading="loading"
           :items="stops"
           :errorCodeSearch="errorCodeSearch"
+          :savedFilters="savedFilters"
           @callErrorCodeSearch="handleCallErrorCodeSearch"
           @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
           @paginate="handleAdminStopsPagination"
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
+          @handleUpdateSavedFilter="handleUpdateSavedFilter"
           @handleSubmitStops="handleSubmitStops"
           @handleSubmitAll="handleSubmitAll"
         ></ripa-stops-grid>
@@ -172,6 +176,9 @@ export default {
         ...pageData,
       })
     },
+    handleUpdateSavedFilter(val) {
+      this.$emit('handleUpdateSavedFilter', val)
+    },
     handleSubmissionDetailItemsPerPage(pageData) {
       this.$emit('handleSubmissionDetailItemsPerPage', pageData)
     },
@@ -274,6 +281,10 @@ export default {
     },
     onTabChange: {
       type: Function,
+      default: () => {},
+    },
+    savedFilters: {
+      type: Object,
       default: () => {},
     },
   },

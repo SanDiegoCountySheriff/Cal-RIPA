@@ -8,6 +8,7 @@
     :rules="rules"
     :disabled="disabled"
     @blur="handleBlur"
+    @keypress="handleKeyPress"
   ></v-text-field>
 </template>
 
@@ -22,6 +23,19 @@ export default {
   },
 
   methods: {
+    handleKeyPress(event) {
+      if (this.numbersOnly) {
+        const charCode = event.which ? event.which : event.keyCode
+        if (charCode < 48 || charCode > 57) {
+          event.preventDefault()
+        } else {
+          return true
+        }
+      }
+
+      return true
+    },
+
     handleBlur(event) {
       this.viewModel = this.parseText(event.target.value)
       this.handleInput(this.viewModel)
@@ -74,6 +88,10 @@ export default {
       default: () => [],
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    numbersOnly: {
       type: Boolean,
       default: false,
     },

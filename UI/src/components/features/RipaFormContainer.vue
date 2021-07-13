@@ -111,7 +111,7 @@
     ></ripa-user-dialog>
 
     <ripa-snackbar
-      text="Stops will be submitted once you are online and authenticated"
+      text="Stop was cached and all cached stops will be submitted once you are online and authenticated"
       v-model="snackbarNotOnlineVisible"
     >
     </ripa-snackbar>
@@ -273,7 +273,10 @@ export default {
 
   watch: {
     mappedGpsLocationAddress(newVal) {
-      this.lastLocation = newVal
+      this.lastLocation = {
+        newLocation: newVal,
+        persistSchool: true,
+      }
     },
   },
 

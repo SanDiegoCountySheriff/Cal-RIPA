@@ -25,18 +25,23 @@
       "type": "string"
     },
     "auth_logout_url": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_server": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_server_key": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_username": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_password": {
+      "defaultValue": "",
       "type": "string"
     },
     "auth_app_id": {
@@ -53,15 +58,19 @@
       "type": "string"
     },
     "primary_domain": {
+      "defaultValue": "cssa.cloud",
       "type": "string"
     },
     "app_cname_alias": {
+      "defaultValue": "ripa",
       "type": "string"
     },
     "certificate_key_vault_rid": {
+      "defaultValue": "/subscriptions/c74e04b6-0cd7-4778-863e-34654eb49270/resourceGroups/sdsd-gen-p-rg/providers/Microsoft.KeyVault/vaults/sdsd-gen-p-kv",
       "type": "string"
     },
     "certificate_secret_name": {
+      "defaultValue": "star-cssa-cloud",
       "type": "string"
     },
     "glocation": {

@@ -72,9 +72,10 @@ namespace RIPA.Functions.Stop.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
-                if (Id == "0")
+                stop.Id = Id;
+                if (stop.Id == "0")
                 {
-                    int stopId = 100000000;
+                    long stopId = 100000000;
 
                     string query = "SELECT VALUE c FROM c ORDER BY c.id DESC OFFSET 0 LIMIT 1";
                     IEnumerable<Common.Models.Stop> maxStop = await _stopCosmosDbService.GetStopsAsync(query);
@@ -82,7 +83,7 @@ namespace RIPA.Functions.Stop.Functions
                     Common.Models.Stop maxId = maxStop.FirstOrDefault();
                     if (maxId != null)
                     {
-                        stopId = int.Parse(maxId.Id);
+                        stopId = long.Parse(maxId.Id);
                         stopId++;
                     }
 
@@ -98,12 +99,11 @@ namespace RIPA.Functions.Stop.Functions
                 }
 
                 stop.IsEdited = false;
-                if (_stopCosmosDbService.GetStopAsync(Id) != null)
+                if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
                 {
                     stop.IsEdited = true;
                 }
 
-                stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
                     return new BadRequestObjectResult("Officer ID must be 9 char");
@@ -119,7 +119,7 @@ namespace RIPA.Functions.Stop.Functions
                     stop.Status = SubmissionStatus.Unsubmitted.ToString();
                 }
 
-                await _stopCosmosDbService.UpdateStopAsync(Id, stop);
+                await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
                 
                 return new OkObjectResult(stop);
             }

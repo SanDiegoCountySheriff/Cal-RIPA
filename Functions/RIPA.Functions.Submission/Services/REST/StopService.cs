@@ -38,7 +38,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return stop;
         }
 
-        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError)
+        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
         {
             var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == submissionError.FileName);
             foreach (var submission in pendingSubmissions)
@@ -53,7 +53,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             }
-            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
+            stop.Status = stopStatus;
             return stop;
         }
 
@@ -221,7 +221,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojTXType(Stop stop)
         {
-            if (stop.ListSubmission.Length == 0) return "I"; // no prior submissions
+            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I"; // no prior submissions
             if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS") return "U"; // previous submission is error but not a FTS (Fail to submit)
             if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS")
             {
