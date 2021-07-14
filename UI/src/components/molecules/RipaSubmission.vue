@@ -63,13 +63,9 @@
                 activeFilter: currentErrorCodeFilter === errorCode.code,
               }"
               @click="handleChangeErrorCodeFilter(errorCode.code)"
-              v-if="submission.summary.length > 1"
               text
               >{{ errorCode.count }}</v-btn
             >
-            <span class="count" v-if="submission.summary.length === 1">{{
-              errorCode.count
-            }}</span>
           </p>
         </div>
       </v-flex>
