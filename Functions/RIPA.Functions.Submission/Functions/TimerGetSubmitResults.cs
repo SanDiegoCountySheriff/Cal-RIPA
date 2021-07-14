@@ -61,9 +61,13 @@ namespace RIPA.Functions.Submission.Functions
             {
                 try
                 {
+                    log.LogInformation($"processing file {file.Name}");
                     var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{correlationId}/{file.Name}", blobContainerClient);
+                    log.LogInformation($"file text: {fileText}");
                     ProcessDojResponse(fileText);
+                    log.LogInformation("processed DOJ Response");
                     _sftpService.DeleteFile(file.FullName);
+                    log.LogInformation($"deleted sftp file {file.Name}");
 
                 }
                 catch (Exception e)
