@@ -1305,8 +1305,13 @@ export default new Vuex.Store({
       }
 
       if (pageData.filters) {
-        queryString = `${queryString}&OrderBy=${pageData.filters.orderBy}`
-        queryString = `${queryString}&Order=${pageData.filters.order}`
+        if (pageData.filters.orderBy) {
+          queryString = `${queryString}&OrderBy=${pageData.filters.orderBy}`
+          queryString = `${queryString}&Order=${pageData.filters.order}`
+        }
+        if (pageData.filters.errorCode) {
+          queryString = `${queryString}&ErrorCode=${pageData.filters.errorCode}`
+        }
       }
 
       return axios
