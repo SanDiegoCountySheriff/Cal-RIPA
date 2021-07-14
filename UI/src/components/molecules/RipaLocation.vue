@@ -113,6 +113,7 @@
               label="Block Number"
               :loading="loadingPii"
               :rules="blockNumberRules"
+              numbers-only
               @input="handleInput"
             >
             </ripa-text-input>
@@ -423,7 +424,17 @@ export default {
 
     lastLocation(newVal) {
       if (newVal) {
-        this.viewModel.location = newVal
+        // save off school and school if isSchool is true
+        const isSchool = this.viewModel.location?.isSchool || false
+        const school = this.viewModel.location?.school || null
+        // assign new location
+        this.viewModel.location = newVal.newLocation
+        // add back school and school - only if isSchool was true
+        if (newVal.persistSchool && isSchool) {
+          this.viewModel.location.isSchool = isSchool
+          this.viewModel.location.school = school
+        }
+        // call handleInput
         this.handleInput()
       }
     },

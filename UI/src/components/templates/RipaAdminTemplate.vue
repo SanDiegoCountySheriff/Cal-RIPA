@@ -22,10 +22,12 @@
       :on-edit-statute="onEditStatute"
       :on-edit-user="onEditUser"
       :on-tab-change="onTabChange"
+      :savedFilters="savedFilters"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
       @handleAdminFiltering="handleAdminFiltering"
+      @handleUpdateSavedFilter="handleUpdateSavedFilter"
       @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
@@ -43,8 +45,8 @@
             >This will only submit the stops you have selected to the DOJ.</span
           >
           <span v-if="!submitSelected"
-            >This will submit all the stops (regardless of what is selected or
-            any active filters) to the DOJ.</span
+            >This will submit all the stops to the DOJ based on the current
+            filters you have set.</span
           >
           <br /><br />Note: Stops that are in an error state will not be
           re-submitted.
@@ -81,6 +83,7 @@ export default {
       submitDialog: false,
       submitSelected: false,
       selectedStops: [],
+      submitAllFilterData: null,
     }
   },
 
@@ -97,6 +100,9 @@ export default {
     handleAdminFiltering(filterData) {
       this.$emit('handleAdminFiltering', filterData)
     },
+    handleUpdateSavedFilter(val) {
+      this.$emit('handleUpdateSavedFilter', val)
+    },
     handleAdminSubmissionsItemsPerPage(pageData) {
       this.$emit('handleRedoItemsPerPage', pageData)
     },
@@ -111,21 +117,24 @@ export default {
       this.submitSelected = true
       this.submitDialog = true
     },
-    handleSubmitAll() {
+    handleSubmitAll(filterData) {
+      this.submitAllFilterData = filterData
       this.submitSelected = false
       this.submitDialog = true
     },
     handleCloseSubmitDialog() {
+      this.submitAllFilterData = null
       this.submitDialog = false
     },
     handleSubmitDialogConfirm() {
       if (this.submitSelected && this.selectedStops.length > 0) {
         this.$emit('handleSubmitStops', this.selectedStops)
       } else {
-        this.$emit('handleSubmitAll')
+        this.$emit('handleSubmitAll', this.submitAllFilterData)
       }
       this.submitDialog = false
       this.selectedStops = []
+      this.submitAllFilterData = null
     },
   },
 
@@ -211,6 +220,10 @@ export default {
     },
     onTabChange: {
       type: Function,
+      default: () => {},
+    },
+    savedFilters: {
+      type: Object,
       default: () => {},
     },
   },

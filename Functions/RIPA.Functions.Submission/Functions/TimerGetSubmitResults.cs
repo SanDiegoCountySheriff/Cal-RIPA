@@ -68,7 +68,7 @@ namespace RIPA.Functions.Submission.Functions
                 }
                 catch (Exception e)
                 {
-                    log.LogError($"an error occured processing doj sftp result {e.Message}");
+                    log.LogError($"an error occurred processing doj sftp result {e.Message}");
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace RIPA.Functions.Submission.Functions
                     FileName = fileLevelFatalError.FileName
                 };
 
-                await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError));
+                await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
             }
         }
 
@@ -123,7 +123,7 @@ namespace RIPA.Functions.Submission.Functions
                     Message = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? recordLevelError.ErrorList : recordLevelError.ErrorList.Split("::")[1],
                     FileName = recordLevelError.FileName
                 };
-                await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, submissionError));
+                await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
             }
         }
 

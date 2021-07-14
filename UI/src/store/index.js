@@ -202,19 +202,14 @@ export default new Vuex.Store({
     displayDebugger: state => {
       return state.apiConfig?.displayDebugger || false
     },
-    displayEnvironment: state => {
-      return state.apiConfig?.displayEnvironment || false
-    },
     environmentName: state => {
       switch (state.apiConfig.environmentName) {
-        case 'p':
+        case 'PROD':
           return 'PROD'
-        case 'd':
+        case 'DEV':
           return 'DEV'
-        case 'q':
+        case 'QA':
           return 'QA'
-        case 'u':
-          return 'UAT'
 
         default:
           return ''
@@ -690,7 +685,7 @@ export default new Vuex.Store({
     editUser({ dispatch, state }, user) {
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${user.id}`,
           user,
           {
             headers: {
@@ -727,7 +722,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1101,7 +1096,7 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUsers`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
@@ -1344,7 +1339,7 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -1400,12 +1395,61 @@ export default new Vuex.Store({
           // foward user to submission details screen for newly created submission
           return response.data
         })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
+        })
     },
 
-    submitAllStops({ state }) {
+    submitAllStops({ commit, state }, queryData) {
+      let queryString = ''
+      // if you send no parameter that would mean to just get everything
+      // this is typically when you first load the grid.
+      if (queryData) {
+        if (queryData) {
+          if (queryData.stopFromDate !== null) {
+            const formattedFromDate = new Date(
+              `${queryData.stopFromDate} 00:00:00Z`,
+            ).toISOString()
+            queryString = `${queryString}&StartDate=${formattedFromDate}`
+          }
+
+          if (queryData.stopToDate !== null) {
+            const formattedToDate = new Date(
+              `${queryData.stopToDate} 23:59:59Z`,
+            ).toISOString()
+            queryString = `${queryString}&EndDate=${formattedToDate}`
+          }
+
+          if (queryData.status !== null) {
+            queryString = `${queryString}&Status=${queryData.status}`
+          }
+
+          if (queryData.isPiiFound !== null) {
+            queryString = `${queryString}&IsPII=${queryData.isPiiFound}`
+          }
+
+          if (queryData.isEdited !== null) {
+            queryString = `${queryString}&IsEdited=${queryData.isEdited}`
+          }
+
+          if (queryData.errorCodes.length) {
+            queryString = `${queryString}&ErrorCode=${queryData.errorCodes.split(
+              ',',
+            )}`
+          }
+        }
+      } else {
+        // if no parameters, just set offset to 0 and limit to 10 (default page size)
+        queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
+      }
+
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {
@@ -1418,6 +1462,13 @@ export default new Vuex.Store({
         .then(response => {
           // foward user to submission details screen for newly created submission
           return response.data
+        })
+        .catch(err => {
+          if (err.response.status === 400) {
+            return err.response.data
+          } else {
+            return 'There was an unknown error with your submission. Your stops were not submitted'
+          }
         })
     },
 

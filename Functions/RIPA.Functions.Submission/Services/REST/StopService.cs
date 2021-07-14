@@ -38,7 +38,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return stop;
         }
 
-        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError)
+        public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
         {
             var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == submissionError.FileName);
             foreach (var submission in pendingSubmissions)
@@ -53,7 +53,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             }
-            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
+            stop.Status = stopStatus;
             return stop;
         }
 
@@ -63,7 +63,7 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 LEARecordID = stop.Id,
                 ORI = stop.Ori,
-                TX_Type = stop.ListSubmission?.Length > 0 ? "U" : "I",
+                TX_Type = CastToDojTXType(stop),
                 SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
                 STime = stop.Time,
                 SDur = stop.StopDuration.ToString(),
@@ -78,12 +78,12 @@ namespace RIPA.Functions.Submission.Services.REST
                 Location = new RIPA.Functions.Submission.Models.Location
                 {
                     Loc = CastToDojLocation(stop.Location),
-                    City = stop.Location.City.Codes.Code,
+                    City = stop.Location.City?.Codes?.Code,
                     K12_Flag = stop.Location.School ? "Y" : string.Empty,
                     K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
                 },
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-                ListPerson_Stopped = CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School)
+                ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School) : null
             };
             return dojStop;
         }
@@ -144,7 +144,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
         {
-            var stopReasonKey = personStopped.ReasonForStop.Key;
+            var stopReasonKey = personStopped.ReasonForStop?.Key;
             Primaryreason primaryReason = new Primaryreason
             {
                 StReas = stopReasonKey,
@@ -154,17 +154,17 @@ namespace RIPA.Functions.Submission.Services.REST
             switch (stopReasonKey)
             {
                 case "1": //Traffic Violation
-                    primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
-                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
+                    primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 case "2": //Reasonable Suspicion
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToArray() };
-                    primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     break;
                 case "7": //Education Code
-                    primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key;
-                    primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code;
+                    primaryReason.EDU_Sec_CD = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
+                    primaryReason.EDU_SecDiv_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                     primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                     break;
                 default: //All other stop reason keys
@@ -217,6 +217,25 @@ namespace RIPA.Functions.Submission.Services.REST
                 "Transgender woman/girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
                 _ => "",
             };
+        }
+
+        public static string CastToDojTXType(Stop stop)
+        {
+            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I"; // no prior submissions
+            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS") return "U"; // previous submission is error but not a FTS (Fail to submit)
+            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS")
+            {
+                if (stop.ListSubmission.Where(x=>x.ListSubmissionError.Any(y=>y.Code != "FTS")).Any()) 
+                {
+                    // the code is currently FTS but is has been submitted in prior to FTS and was not an FTS error
+                    return "U";
+                }
+                else
+                {
+                    return "I";
+                }
+            } 
+            return "I";
         }
 
     }

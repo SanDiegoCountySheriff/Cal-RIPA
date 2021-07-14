@@ -25,18 +25,23 @@
       "type": "string"
     },
     "auth_logout_url": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_server": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_server_key": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_username": {
+      "defaultValue": "",
       "type": "string"
     },
     "doj_sftp_password": {
+      "defaultValue": "",
       "type": "string"
     },
     "auth_app_id": {
@@ -45,23 +50,27 @@
     "auth_fqdn": {
       "type": "string"
     },
-    "user_tags": {
-      "type": "Object",
-      "defaultValue": {}
-    },
+    // "user_tags": {
+    //   "type": "Object",
+    //   "defaultValue": {}
+    // },
     "app_domain_type": {
       "type": "string"
     },
     "primary_domain": {
+      "defaultValue": "cssa.cloud",
       "type": "string"
     },
     "app_cname_alias": {
+      "defaultValue": "ripa",
       "type": "string"
     },
     "certificate_key_vault_rid": {
+      "defaultValue": "/subscriptions/c74e04b6-0cd7-4778-863e-34654eb49270/resourceGroups/sdsd-gen-p-rg/providers/Microsoft.KeyVault/vaults/sdsd-gen-p-kv",
       "type": "string"
     },
     "certificate_secret_name": {
+      "defaultValue": "star-cssa-cloud",
       "type": "string"
     },
     "glocation": {
@@ -286,7 +295,7 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
@@ -475,7 +484,7 @@
       "agency_ori": "[parameters('agency_ori')]",
       "template_version": "[variables('template_version')]"
     },
-    "all_tags": "[union(variables('default_tags'), parameters('user_tags'))]"
+    "all_tags": "[variables('default_tags')]"
   },
   "resources": [
     {
@@ -921,7 +930,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2018-02-01",
@@ -2813,12 +2822,16 @@
               "value": "[parameters('dbaccount_sqlDb_stop_container_name')]"
             },
             {
-              "name": "ContainerNamePrefixSubmissions",
+              "name": "ContainerPrefixSubmissions",
               "value": "[parameters('submission_fa_config_storage_container_prefix_submissions')]"
             },
             {
-              "name": "ContainerNamePrefixResults",
+              "name": "ContainerPrefixResults",
               "value": "[parameters('submission_fa_config_storage_container_prefix_results')]"
+            },
+            {
+              "name":"UserProfileContainerName",
+              "value": "[parameters('dbaccount_sqlDb_user_container_name')]"
             },
             {
               "name": "RipaStorage",
@@ -3356,7 +3369,7 @@
         ],
         "primaryScriptUri": "#{MP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
-        "timeout": "PT10M",
+        "timeout": "PT1H",
         "cleanupPreference": "OnExpiration",
         "retentionInterval": "PT1H"
       }
@@ -3410,7 +3423,7 @@
           "#{MP-OFFENSE-TABLE-CSV-SAS-URL}#",
           "#{MP-SCHOOL-TABLE-CSV-SAS-URL}#"
         ],
-        "timeout": "PT10M",
+        "timeout": "PT1H",
         "cleanupPreference": "OnExpiration",
         "retentionInterval": "PT1H"
       }

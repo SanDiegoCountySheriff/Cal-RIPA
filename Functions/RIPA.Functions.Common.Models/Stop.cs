@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
@@ -70,7 +71,21 @@ namespace RIPA.Functions.Common.Models
         public OfficerAssignment OfficerAssignment { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public DateTime StopDateTime { get { return DateTime.Parse(Date + " " + Time); } set { } }
+        public DateTime StopDateTime
+        {
+            get
+            {
+                if (Date != null && Time != null)
+                {
+                    return DateTime.Parse(Date + " " + Time);
+                }
+                else
+                {
+                    return DateTime.MinValue;
+                }
+            }
+            set { }
+        }
         public Location Location { get; set; }
         public int StopDuration { get; set; }
         public bool StopInResponseToCFS { get; set; }

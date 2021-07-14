@@ -11,6 +11,8 @@ using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -55,6 +57,7 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
+
             try
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
@@ -69,6 +72,24 @@ namespace RIPA.Functions.Stop.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
+                stop.Id = Id;
+                if (stop.Id == "0")
+                {
+                    long stopId = 100000000;
+
+                    string query = "SELECT VALUE c FROM c ORDER BY c.id DESC OFFSET 0 LIMIT 1";
+                    IEnumerable<Common.Models.Stop> maxStop = await _stopCosmosDbService.GetStopsAsync(query);
+
+                    Common.Models.Stop maxId = maxStop.FirstOrDefault();
+                    if (maxId != null)
+                    {
+                        stopId = long.Parse(maxId.Id);
+                        stopId++;
+                    }
+
+                    stop.Id = stopId.ToString();
+                }
+
                 stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
                 
                 bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
@@ -78,15 +99,19 @@ namespace RIPA.Functions.Stop.Functions
                 }
 
                 stop.IsEdited = false;
-                if (_stopCosmosDbService.GetStopAsync(Id) != null)
+                if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
                 {
                     stop.IsEdited = true;
                 }
 
-                stop.Id = Id;
                 if (stop.OfficerId.Length != 9)
                 {
-                    return new BadRequestObjectResult("Office ID must be 9 char");
+                    return new BadRequestObjectResult("Officer ID must be 9 char");
+                }
+
+                if (stop.Location.City == null)
+                {
+                    return new BadRequestObjectResult("City is required");
                 }
 
                 if (stop.Status == null)
@@ -94,7 +119,7 @@ namespace RIPA.Functions.Stop.Functions
                     stop.Status = SubmissionStatus.Unsubmitted.ToString();
                 }
 
-                await _stopCosmosDbService.UpdateStopAsync(Id, stop);
+                await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
                 
                 return new OkObjectResult(stop);
             }

@@ -214,10 +214,11 @@ export default {
       return [
         (searchConducted && options.length > 0) ||
           'At least one basis for search is required',
-        (consentGiven &&
-          this.viewModel.actionsTaken.basisForSearch !== null &&
-          this.viewModel.actionsTaken.basisForSearch.length > 0 &&
-          this.viewModel.actionsTaken.basisForSearch.includes(1)) ||
+        !consentGiven ||
+          (consentGiven &&
+            this.viewModel.actionsTaken.basisForSearch !== null &&
+            this.viewModel.actionsTaken.basisForSearch.length > 0 &&
+            this.viewModel.actionsTaken.basisForSearch.includes(1)) ||
           'Consent given must be selected if person or property consent was given.',
       ]
     },

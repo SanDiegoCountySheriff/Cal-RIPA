@@ -603,32 +603,36 @@ export default {
     getFormSummaryStepText() {
       return this.anyAgencyQuestions ? '7' : '6'
     },
-  },
 
-  mounted() {
-    this.$nextTick(() => {
-      const [top] = document.getElementsByClassName(
-        'ripa-form-wrapper--summary-step-top',
-      )
-      if (top) {
-        const [firstSpan] = top.getElementsByClassName('v-stepper__step__step')
-        if (firstSpan) {
-          firstSpan.innerText = this.getFormSummaryStepText()
-        }
-      }
-
-      const [bottom] = document.getElementsByClassName(
-        'ripa-form-wrapper--summary-step-bottom',
-      )
-      if (bottom) {
-        const [firstSpan] = bottom.getElementsByClassName(
-          'v-stepper__step__step',
+    updateFormStepNumbers() {
+      this.$nextTick(() => {
+        const [top] = document.getElementsByClassName(
+          'ripa-form-wrapper--summary-step-top',
         )
-        if (firstSpan) {
-          firstSpan.innerText = this.getFormSummaryStepText()
+
+        if (top) {
+          const [firstSpan] = top.getElementsByClassName(
+            'v-stepper__step__step',
+          )
+          if (firstSpan) {
+            firstSpan.innerText = this.getFormSummaryStepText()
+          }
         }
-      }
-    })
+
+        const [bottom] = document.getElementsByClassName(
+          'ripa-form-wrapper--summary-step-bottom',
+        )
+
+        if (bottom) {
+          const [firstSpan] = bottom.getElementsByClassName(
+            'v-stepper__step__step',
+          )
+          if (firstSpan) {
+            firstSpan.innerText = this.getFormSummaryStepText()
+          }
+        }
+      })
+    },
   },
 
   watch: {
@@ -637,6 +641,7 @@ export default {
     },
 
     formStepIndex(newVal, oldVal) {
+      this.updateFormStepNumbers()
       if (newVal !== oldVal) {
         if (newVal > 0 && oldVal > 0 && oldVal < 7) {
           this.updateStepTrace(new Date())

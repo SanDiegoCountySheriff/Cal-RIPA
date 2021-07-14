@@ -25,6 +25,7 @@
 
       <v-flex xs12 md2>
         <v-select
+          v-model="currentStatusFilter"
           class="tw-ml-2"
           :items="statuses"
           label="Status"
@@ -112,6 +113,7 @@
       </v-flex>
       <v-flex xs12>
         <v-data-table
+          v-model="selectedItems"
           class="adminStopsTable"
           :loading="loading"
           :headers="headers"
@@ -219,6 +221,8 @@ import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 
 import _ from 'lodash'
+import { isAfter, getYear } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 
 export default {
   name: 'ripa-stops-grid',
@@ -244,19 +248,29 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isPiiFound: null,
-      isEdited: null,
-      errorsFound: false,
+      isPiiFound: this.savedFilters.isPiiFound
+        ? this.savedFilters.isPiiFound
+        : null,
+      isEdited: this.savedFilters.isEdited ? this.savedFilters.isEdited : null,
+      errorsFound: this.savedFilters.isEdited
+        ? this.savedFilters.isEdited
+        : null,
       officerName: null,
       selectedItems: [],
-      selectedErrorCodes: [],
+      selectedErrorCodes: this.savedFilters.errorCodes
+        ? this.savedFilters.errorCodes
+        : [],
       stopFromDate: null,
-      stopToDate: null,
-      currentStatusFilter: null,
+      stopToDate: this.savedFilters.toDate ? this.savedFilters.toDate : null,
+      currentStatusFilter: this.savedFilters.status
+        ? this.savedFilters.status
+        : null,
       statuses: SUBMISSION_STATUSES,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250],
-      itemsPerPage: 10,
+      itemsPerPage: this.savedFilters.itemsPerPage
+        ? this.savedFilters.itemsPerPage
+        : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
       sortDesc: true,
@@ -328,6 +342,32 @@ export default {
   methods: {
     init() {
       this.stops = this.items
+      // if the user has a from date saved in session storage
+      // this overrides any date checking
+      if (this.savedFilters.stopFromDate) {
+        this.stopFromDate = this.savedFilters.fromDate
+      } else {
+        const currentDateInUTC = zonedTimeToUtc(new Date())
+        const currentYear = getYear(new Date())
+        const deadlineDateInUTC = zonedTimeToUtc(
+          new Date(`${currentYear}-04-01T00:00:00`),
+        )
+        // if the current date is after the April 1st deadline, set the start date
+        // filter to Jan 1 of current year
+        const isDateAfterDeadline = isAfter(currentDateInUTC, deadlineDateInUTC)
+        if (isDateAfterDeadline) {
+          this.stopFromDate = `${currentYear}-01-01`
+          this.handleFilter()
+        }
+      }
+      if (!_.isEmpty(this.savedFilters)) {
+        if (this.savedFilters.errorCodes) {
+          this.savedFilters.errorCodes.forEach(errorCodeVal => {
+            this.callErrorCodeSearch(errorCodeVal)
+          })
+        }
+        this.handleFilter()
+      }
     },
 
     handleUpdateItemsPerPage(val) {
@@ -339,6 +379,10 @@ export default {
         type: 'stops',
         limit: this.itemsPerPage,
         offset: this.itemsPerPage * (newPage - 1),
+        filters: this.getFilterStatus,
+      })
+      this.$emit('handleUpdateSavedFilter', {
+        itemsPerPage: val,
       })
     },
     handleNextPage() {
@@ -397,6 +441,9 @@ export default {
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
       this.selectedErrorCodes = val
+      this.$emit('handleUpdateSavedFilter', {
+        errorCodes: val,
+      })
       this.handleFilter()
     },
     removeErrorCode(val) {
@@ -407,29 +454,50 @@ export default {
     },
     fromDateChange(val) {
       this.stopFromDate = val
+      this.$emit('handleUpdateSavedFilter', {
+        fromDate: val,
+      })
       this.handleFilter()
     },
     toDateChange(val) {
       this.stopToDate = val
+      this.$emit('handleUpdateSavedFilter', {
+        toDate: val,
+      })
       this.handleFilter()
     },
     statusChange(val) {
       this.currentStatusFilter = val
+      this.$emit('handleUpdateSavedFilter', {
+        status: val,
+      })
       this.handleFilter()
     },
     piiChange(val) {
       if (!val) {
         this.isPiiFound = null
+        this.$emit('handleUpdateSavedFilter', {
+          isPiiFound: null,
+        })
       } else {
         this.isPiiFound = true
+        this.$emit('handleUpdateSavedFilter', {
+          isPiiFound: true,
+        })
       }
       this.handleFilter()
     },
     isEditedChange(val) {
       if (!val) {
         this.isEdited = null
+        this.$emit('handleUpdateSavedFilter', {
+          isEdited: null,
+        })
       } else {
         this.isEdited = true
+        this.$emit('handleUpdateSavedFilter', {
+          isEdited: true,
+        })
       }
       this.handleFilter()
     },
@@ -440,6 +508,8 @@ export default {
       if (Array.isArray(this.sortDesc)) {
         sortOrder = this.sortDesc[0]
       }
+      // reset any selections
+      this.selectedItems = []
       const filterData = {
         offset: null,
         limit: this.itemsPerPage,
@@ -463,7 +533,16 @@ export default {
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
-      this.$emit('handleSubmitAll')
+      const filterData = {
+        stopFromDate: this.stopFromDate,
+        stopToDate: this.stopToDate,
+        status: this.currentStatusFilter,
+        isPiiFound: this.isPiiFound,
+        isEdited: this.isEdited,
+        // need to make a comma delimited string out of the error codes
+        errorCodes: this.selectedErrorCodes.join(),
+      }
+      this.$emit('handleSubmitAll', filterData)
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {
@@ -529,6 +608,10 @@ export default {
       default: () => {},
     },
     errorCodeSearch: {
+      type: Object,
+      default: () => {},
+    },
+    savedFilters: {
       type: Object,
       default: () => {},
     },
