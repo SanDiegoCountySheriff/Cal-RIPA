@@ -58,7 +58,14 @@
         <div v-if="submission.summary.length" class="submissionSummary">
           <p v-for="(errorCode, index) in submission.summary" :key="index">
             <span class="label">{{ errorCode.code }}</span>
-            <span class="count">{{ errorCode.count }}</span>
+            <v-btn
+              :class="{
+                activeFilter: currentErrorCodeFilter === errorCode.code,
+              }"
+              @click="handleChangeErrorCodeFilter(errorCode.code)"
+              text
+              >{{ errorCode.count }}</v-btn
+            >
           </p>
         </div>
       </v-flex>
@@ -152,6 +159,7 @@ export default {
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: null,
       sortDesc: true,
+      currentErrorCodeFilter: null,
     }
   },
 
@@ -224,6 +232,18 @@ export default {
         return null
       }
     },
+    handleChangeErrorCodeFilter(whichCode) {
+      if (whichCode !== this.currentErrorCodeFilter) {
+        this.currentErrorCodeFilter = whichCode
+      } else {
+        this.currentErrorCodeFilter = null
+      }
+      this.$emit('submissionDetailPaginate', {
+        id: this.submissionId,
+        limit: this.itemsPerPage,
+        filters: this.getFilterStatus,
+      })
+    },
   },
 
   computed: {
@@ -258,12 +278,13 @@ export default {
       }
     },
     getFilterStatus() {
+      let filters = null
       if (this.getColumnSortName() !== null) {
         let sortOrder = this.sortDesc
         if (Array.isArray(this.sortDesc)) {
           sortOrder = this.sortDesc[0]
         }
-        return {
+        filters = {
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
@@ -271,9 +292,14 @@ export default {
               : this.getColumnSortName(),
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         }
-      } else {
-        return null
       }
+      if (this.currentErrorCodeFilter !== null) {
+        filters = {
+          ...filters,
+          errorCode: this.currentErrorCodeFilter,
+        }
+      }
+      return filters
     },
   },
 
@@ -347,6 +373,21 @@ export default {
   > p {
     flex: 1;
     margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .v-btn {
+      font-size: 1.1rem;
+      font-weight: normal;
+      color: #2196f3;
+      max-width: 100px;
+
+      &.activeFilter {
+        background: #e3e3e3;
+        font-weight: bold;
+      }
+    }
 
     span {
       display: block;
