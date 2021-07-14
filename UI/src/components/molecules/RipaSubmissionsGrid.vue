@@ -142,7 +142,7 @@ export default {
         },
         {
           text: 'Error Count',
-          value: '',
+          value: 'errorCount',
           sortName: 'errorCount',
           sortable: false,
         },
