@@ -124,10 +124,12 @@ namespace RIPA.Functions.Submission.Functions
                             submissionResponse.OfficerId,
                             submissionResponse.OfficerName,
                             submissionResponse.MaxStopDate,
-                            submissionResponse.MinStopDate
+                            submissionResponse.MinStopDate,
+                            ErrorCount = getSubmissionErrorSummariesResponse.Sum(x=>x.Count)
                         },
                         stops = stopResponse,
                         summary = getSubmissionErrorSummariesResponse
+                        
                     };
                    
                     return new OkObjectResult(response);
