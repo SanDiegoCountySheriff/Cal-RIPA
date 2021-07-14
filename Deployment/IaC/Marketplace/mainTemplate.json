@@ -295,7 +295,7 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
@@ -930,7 +930,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2018-02-01",
@@ -3365,7 +3365,7 @@
         ],
         "primaryScriptUri": "#{MP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
-        "timeout": "PT10M",
+        "timeout": "PT1H",
         "cleanupPreference": "OnExpiration",
         "retentionInterval": "PT1H"
       }
@@ -3419,7 +3419,7 @@
           "#{MP-OFFENSE-TABLE-CSV-SAS-URL}#",
           "#{MP-SCHOOL-TABLE-CSV-SAS-URL}#"
         ],
-        "timeout": "PT10M",
+        "timeout": "PT1H",
         "cleanupPreference": "OnExpiration",
         "retentionInterval": "PT1H"
       }

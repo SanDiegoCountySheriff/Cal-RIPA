@@ -744,11 +744,11 @@
 						"name": "auth_authority",
 						"type": "Microsoft.Common.TextBox",
 						"label": "Login Authority",
-						"defaultValue": "https://login.microsoftonline.com",
+						"defaultValue": "https://login.microsoftonline.com/",
 						"toolTip": "This must point to a valid OAuth/OpenID authority.",
 						"constraints": {
 							"required": true,
-							"regex": "",
+							"regex": "^(https:\/\/[a-z0-9]+.)[a-z0-9]+.[a-z]+(\/[a-zA-Z0-9#]+\/?)*\/$",
 							"validationMessage": ""
 						},
 						"visible": true

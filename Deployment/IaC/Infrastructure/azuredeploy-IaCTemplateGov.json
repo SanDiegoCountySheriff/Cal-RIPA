@@ -278,11 +278,11 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_serviceurl": {
       "type": "SecureString",
@@ -840,7 +840,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.Web/serverfarms",

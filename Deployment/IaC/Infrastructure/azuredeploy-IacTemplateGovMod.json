@@ -263,8 +263,8 @@
       "type": "string",
       "defaultValue": "SftpUsername"
     },
-    "vaults_kv_secrets_key10":{
-      "type":"string",
+    "vaults_kv_secrets_key10": {
+      "type": "string",
       "defaultValue": "CosmosConnectionString"
     },
     "submission_fa_config_storage_container_prefix_results": {
@@ -297,7 +297,7 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
@@ -498,7 +498,7 @@
     "keyvault_secret_sftp_host": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key7'),')')]",
     "keyvault_secret_sftp_password": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key8'),')')]",
     "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]",
-    "keyvault_secret_cosmos_connection_string":"[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key10'),')')]"
+    "keyvault_secret_cosmos_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key10'),')')]"
   },
   "resources": [
     // {
@@ -995,7 +995,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.Web/serverfarms",
@@ -1567,12 +1567,12 @@
       "name": "[concat(variables('vaults_ripa_kv_name'), '/',parameters('vaults_kv_secrets_key10'))]",
       "location": "[parameters('region')]",
       "dependsOn": [
-          "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
+        "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
       ],
       "properties": {
-          "value": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').connectionStrings[0].connectionString]"
+        "value": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').connectionStrings[0].connectionString]"
       }
-  },
+    },
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "microsoft.insights/components",
