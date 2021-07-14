@@ -103,7 +103,7 @@ namespace RIPA.Functions.Submission.Functions
                     FileName = fileLevelFatalError.FileName
                 };
 
-                await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+                await _stopCosmosDbService.UpdateStopAsync(stopId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
             }
         }
 
@@ -123,7 +123,7 @@ namespace RIPA.Functions.Submission.Functions
                     Message = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? recordLevelError.ErrorList : recordLevelError.ErrorList.Split("::")[1],
                     FileName = recordLevelError.FileName
                 };
-                await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted)));
+                await _stopCosmosDbService.UpdateStopAsync(recordLevelError.LeaRecordId, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
             }
         }
 
