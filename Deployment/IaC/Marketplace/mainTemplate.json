@@ -359,7 +359,7 @@
     },
     "dbaccount_sqlDb_user_container_name": {
       "type": "string",
-      "defaultValue": "userprofile"
+      "defaultValue": "userProfile"
     },
     "dbaccount_sqlDb_stop_container_name": {
       "type": "string",
@@ -2822,12 +2822,16 @@
               "value": "[parameters('dbaccount_sqlDb_stop_container_name')]"
             },
             {
-              "name": "ContainerNamePrefixSubmissions",
+              "name": "ContainerPrefixSubmissions",
               "value": "[parameters('submission_fa_config_storage_container_prefix_submissions')]"
             },
             {
-              "name": "ContainerNamePrefixResults",
+              "name": "ContainerPrefixResults",
               "value": "[parameters('submission_fa_config_storage_container_prefix_results')]"
+            },
+            {
+              "name":"UserProfileContainerName",
+              "value": "[parameters('dbaccount_sqlDb_user_container_name')]"
             },
             {
               "name": "RipaStorage",
