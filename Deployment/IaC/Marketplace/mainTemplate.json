@@ -359,7 +359,7 @@
     },
     "dbaccount_sqlDb_user_container_name": {
       "type": "string",
-      "defaultValue": "userProfile"
+      "defaultValue": "userprofile"
     },
     "dbaccount_sqlDb_stop_container_name": {
       "type": "string",
