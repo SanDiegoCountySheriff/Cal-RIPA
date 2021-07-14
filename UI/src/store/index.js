@@ -685,7 +685,7 @@ export default new Vuex.Store({
     editUser({ dispatch, state }, user) {
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${user.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${user.id}`,
           user,
           {
             headers: {
@@ -722,7 +722,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userProfile/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1096,7 +1096,7 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUsers`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
@@ -1334,7 +1334,7 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userProfile/GetUser/${id}`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',

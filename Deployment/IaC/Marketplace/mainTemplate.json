@@ -295,7 +295,7 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
@@ -930,7 +930,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2018-02-01",

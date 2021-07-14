@@ -212,11 +212,11 @@
     },
     "apim_apis_userprofile_path": {
       "type": "SecureString",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_userprofile_name": {
       "type": "string",
-      "defaultValue": "UserProfile"
+      "defaultValue": "userprofile"
     },
     "apim_apis_stop_path": {
       "type": "SecureString",
@@ -272,7 +272,7 @@
     },
     "dbaccount_sqlDb_user_container_name": {
       "type": "string",
-      "defaultValue": "userProfile"
+      "defaultValue": "userprofile"
     },
     "dbaccount_sqlDb_stop_container_name": {
       "type": "string",
@@ -797,7 +797,7 @@
         "accessTier": "Hot"
       }
     },
-    // userProfile Serverfarms
+    // userprofile Serverfarms
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.Web/serverfarms",
