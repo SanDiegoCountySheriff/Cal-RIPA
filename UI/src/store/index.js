@@ -842,7 +842,7 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   id: item.id,
-                  fullName: `${item.command} ${item.id}`,
+                  fullName: `${item.id} ${item.community} (${item.command})`,
                 }
               })
             commit('updateFormBeats', data)
