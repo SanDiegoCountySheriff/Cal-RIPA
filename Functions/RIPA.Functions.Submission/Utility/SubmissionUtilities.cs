@@ -89,6 +89,11 @@ namespace RIPA.Functions.Submission.Utility
                 errorList.Add("Stop request contains stops that are in Error state and require edit to submit.");
             }
 
+            if (stops.Where(x => x.Status == SubmissionStatus.Submitted.ToString() && x.IsEdited == false).Any())
+            {
+                errorList.Add("Stop request contains stops that are in Submitted state and require edit to submit.");
+            }
+
             return errorList;
         }
 
