@@ -76,6 +76,10 @@ namespace RIPA.Functions.Submission.Functions
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
                 userProfile = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId));
+                if (userProfile == null)
+                {
+                    throw new Exception($"User profile not found for {objectId}");
+                }
             }
             catch (Exception ex)
             {
