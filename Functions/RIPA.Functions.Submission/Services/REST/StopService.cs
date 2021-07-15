@@ -40,7 +40,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
         {
-            var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName == submissionError.FileName);
+            var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
             foreach (var submission in pendingSubmissions)
             {
                 List<SubmissionError> listSubmissionError = new List<SubmissionError>();
