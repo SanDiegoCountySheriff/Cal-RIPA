@@ -37,17 +37,17 @@ export default {
           await this.editOfficerStop(apiStop)
         }
 
-        const stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
-          ', ',
-        )}`
+        let stopIdsPassedStr = ''
+        if (this.mappedStopSubmissionPassedIds.length > 0) {
+          stopIdsPassedStr = ` Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+            ', ',
+          )}.`
+        }
 
-        if (this.mappedStopSubmissionFailedStops.length === 0) {
-          this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}.`
-          this.snackbarVisible = true
-        } else {
-          this.snackbarText = `${this.mappedStopSubmissionStatus}.`
-          this.snackbarVisible = true
+        this.snackbarText = `${this.mappedStopSubmissionStatus}.${stopIdsPassedStr}`
+        this.snackbarVisible = true
 
+        if (this.mappedStopSubmissionFailedStops.length > 0) {
           // if there are failed ids, update error stops key
           this.setApiStopsWithErrorsToLocalStorage(
             this.mappedStopSubmissionFailedStops,
@@ -76,11 +76,11 @@ export default {
       )
       // parse ite
       const parsedApiStops = currentApiStops ? JSON.parse(currentApiStops) : []
-      const updatedApiStops = parsedApiStops
+      let updatedApiStops = parsedApiStops
 
       for (let index = 0; index < apiStops.length; index++) {
         const apiStop = apiStops[index]
-        const updatedApiStops = parsedApiStops.filter(
+        updatedApiStops = parsedApiStops.filter(
           item => item.internalId !== apiStop.internalId,
         )
         updatedApiStops.push(apiStop)

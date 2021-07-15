@@ -758,11 +758,8 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          debugger
-          console.log(response)
           if (response.status === 200) {
-            const data = response.data
-            const apiStop = JSON.parse(data)
+            const apiStop = response.data
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
           }
@@ -783,7 +780,6 @@ export default new Vuex.Store({
           dispatch('getOfficerStops')
         })
         .catch(error => {
-          debugger
           const errorStop = {
             internalId: nanoid(),
             apiStop: stop,

@@ -53,6 +53,7 @@ export default {
     },
 
     stopsWithErrors() {
+      console.log('stopsWithErrors')
       const apiStops = localStorage.getItem(
         'ripa_submitted_api_stops_with_errors',
       )

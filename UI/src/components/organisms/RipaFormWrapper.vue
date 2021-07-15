@@ -251,7 +251,11 @@
           </template>
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
-          <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
+          <ripa-confirmation
+            :on-start-new="handleStartNew"
+            :stops-with-errors="stopsWithErrors"
+            :on-open-stops-with-errors="onOpenStopsWithErrors"
+          ></ripa-confirmation>
         </template>
       </v-card-text>
     </v-card>

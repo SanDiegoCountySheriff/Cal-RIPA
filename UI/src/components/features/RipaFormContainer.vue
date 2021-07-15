@@ -1,5 +1,6 @@
 <template>
-  <div class="ripa-home-container">
+  <div class="ripa-form-container">
+    FC{{ stopsWithErrors.length }}
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"
