@@ -86,14 +86,11 @@ describe('Ripa Stop Date', () => {
 
   dateTestCases.forEach(test => {
     it(`should validate date: ${test.date} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      // arrange
       const wrapper = factory({ value: stop })
 
-      // act
       stop.stopDate.date = test.date
       wrapper.vm._data.viewModel = stop
 
-      // assert
       expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
         test.expectedFirstCase,
       )
@@ -104,15 +101,12 @@ describe('Ripa Stop Date', () => {
   })
 
   it('should validate admin date', () => {
-    // arrange
     const wrapper = factory({ value: stop, adminEditing: true })
     const inputDate = createDate(-2, 0, 0)
 
-    // act
     stop.stopDate.date = inputDate
     wrapper.vm._data.viewModel = stop
 
-    // assert
     wrapper.vm.dateRules.forEach(x =>
       expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
     )
@@ -120,14 +114,11 @@ describe('Ripa Stop Date', () => {
 
   timeTestCases.forEach(test => {
     it(`should validate time: ${test.time} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      // arrange
       const wrapper = factory({ value: stop })
 
-      // act
       stop.stopDate.time = test.time
       wrapper.vm._data.viewModel = stop
 
-      // assert
       expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
         test.expectedFirstCase,
       )
@@ -139,14 +130,11 @@ describe('Ripa Stop Date', () => {
 
   durationTestCases.forEach(test => {
     it(`should validate duration: ${test.duration} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      // arrange
       const wrapper = factory({ value: stop })
 
-      // act
       stop.stopDate.duration = test.duration
       wrapper.vm._data.viewModel = stop
 
-      // assert
       expect(
         wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
       ).toBe(test.expectedFirstCase)
@@ -286,6 +274,7 @@ describe('Ripa Location', () => {
 
     expect(wrapper.vm.landmarkRules).toStrictEqual([true])
   })
+
   it('should handle input', () => {
     const wrapper = factory({ value: stop })
 
@@ -293,6 +282,7 @@ describe('Ripa Location', () => {
 
     expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm._data.viewModel)
   })
+
   it('should handle input out of county', () => {
     const wrapper = factory({ value: stop })
   })
