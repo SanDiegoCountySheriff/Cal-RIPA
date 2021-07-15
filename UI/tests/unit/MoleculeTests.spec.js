@@ -25,104 +25,135 @@ describe('Ripa Stop Date', () => {
     })
   }
 
-  it('should validate date', () => {
-    const wrapper = factory({ value: stop })
-    const inputDate = format(createDate(-2, 0, 0), 'yyyy-MM-dd')
+  const dateTestCases = [
+    {
+      date: createDate(0, 0, 0),
+      expectedFirstCase: true,
+      expectedSecondCase: true,
+    },
+    {
+      date: createDate(-2, 0, 0),
+      expectedFirstCase: true,
+      expectedSecondCase: 'Date and Time must be within the past 24 hours',
+    },
+    {
+      date: null,
+      expectedFirstCase: 'A date is required',
+      expectedSecondCase: 'Date and Time must be within the past 24 hours',
+    },
+  ]
 
-    wrapper.vm.dateRules.forEach(x =>
-      expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
-    )
+  const timeTestCases = [
+    {
+      time: createTime(0, 0),
+      expectedFirstCase: true,
+      expectedSecondCase: true,
+    },
+    {
+      time: createTime(2, 0),
+      expectedFirstCase: true,
+      expectedSecondCase: 'Date and Time must be within the past 24 hours',
+    },
+    {
+      time: null,
+      expectedFirstCase: 'A time is required',
+      expectedSecondCase: 'Date and Time must be within the past 24 hours',
+    },
+  ]
 
-    stop.stopDate.date = inputDate
-    wrapper.vm._data.viewModel = stop
+  const durationTestCases = [
+    {
+      duration: 15,
+      expectedFirstCase: true,
+      expectedSecondCase: true,
+    },
+    {
+      duration: 0,
+      expectedFirstCase: 'A duration is required',
+      expectedSecondCase: 'Duration must be between 1 and 1440 minutes',
+    },
+    {
+      duration: 1441,
+      expectedFirstCase: true,
+      expectedSecondCase: 'Duration must be between 1 and 1440 minutes',
+    },
+    {
+      duration: null,
+      expectedFirstCase: 'A duration is required',
+      expectedSecondCase: 'Duration must be between 1 and 1440 minutes',
+    },
+  ]
 
-    expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
-      true,
-    )
-    expect(wrapper.vm.dateRules[1](wrapper.vm.viewModel.stopDate.date)).toBe(
-      'Date and Time must be within the past 24 hours',
-    )
+  dateTestCases.forEach(test => {
+    it(`should validate date: ${test.date} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
+      // arrange
+      const wrapper = factory({ value: stop })
 
-    stop.stopDate.date = null
-    wrapper.vm._data.viewModel = stop
+      // act
+      stop.stopDate.date = test.date
+      wrapper.vm._data.viewModel = stop
 
-    expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
-      'A date is required',
-    )
+      // assert
+      expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
+        test.expectedFirstCase,
+      )
+      expect(wrapper.vm.dateRules[1](wrapper.vm.viewModel.stopDate.date)).toBe(
+        test.expectedSecondCase,
+      )
+    })
   })
 
   it('should validate admin date', () => {
+    // arrange
     const wrapper = factory({ value: stop, adminEditing: true })
-    const inputDate = format(createDate(-2, 0, 0), 'yyyy-MM-dd')
-    stop.stopDate.date = inputDate
+    const inputDate = createDate(-2, 0, 0)
 
+    // act
+    stop.stopDate.date = inputDate
     wrapper.vm._data.viewModel = stop
+
+    // assert
     wrapper.vm.dateRules.forEach(x =>
       expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
     )
   })
 
-  it('should validate time', () => {
-    const wrapper = factory({ value: stop })
-    const inputTime = format(createTime(2, 0), 'kk:mm')
+  timeTestCases.forEach(test => {
+    it(`should validate time: ${test.time} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
+      // arrange
+      const wrapper = factory({ value: stop })
 
-    wrapper.vm.timeRules.forEach(x =>
-      expect(x(wrapper.vm.viewModel.stopDate.time)).toBe(true),
-    )
+      // act
+      stop.stopDate.time = test.time
+      wrapper.vm._data.viewModel = stop
 
-    stop.stopDate.time = inputTime
-    wrapper.vm._data.viewModel = stop
-
-    expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
-      true,
-    )
-    expect(wrapper.vm.timeRules[1](wrapper.vm.viewModel.stopDate.time)).toBe(
-      'Date and Time must be within the past 24 hours',
-    )
-
-    stop.stopDate.time = null
-    wrapper.vm._data.viewModel = stop
-
-    expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
-      'A time is required',
-    )
+      // assert
+      expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
+        test.expectedFirstCase,
+      )
+      expect(wrapper.vm.timeRules[1](wrapper.vm.viewModel.stopDate.time)).toBe(
+        test.expectedSecondCase,
+      )
+    })
   })
 
-  it('should validate duration', () => {
-    const wrapper = factory({ value: stop })
-    stop.stopDate.duration = 15
-    wrapper.vm._data.viewModel = stop
+  durationTestCases.forEach(test => {
+    it(`should validate duration: ${test.duration} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
+      // arrange
+      const wrapper = factory({ value: stop })
 
-    wrapper.vm.durationRules.forEach(x =>
-      expect(x(wrapper.vm.viewModel.stopDate.duration)).toBe(true),
-    )
+      // act
+      stop.stopDate.duration = test.duration
+      wrapper.vm._data.viewModel = stop
 
-    stop.stopDate.duration = 0
-    wrapper.vm._data.viewModel = stop
-
-    expect(
-      wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
-    ).toBe('A duration is required')
-    expect(
-      wrapper.vm.durationRules[1](wrapper.vm.viewModel.stopDate.duration),
-    ).toBe('Duration must be between 1 and 1440 minutes')
-
-    stop.stopDate.duration = 1441
-    wrapper.vm._data.viewModel = stop
-
-    expect(
-      wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
-    ).toBe(true)
-    expect(
-      wrapper.vm.durationRules[1](wrapper.vm.viewModel.stopDate.duration),
-    ).toBe('Duration must be between 1 and 1440 minutes')
-
-    stop.stopDate.duration = null
-    wrapper.vm._data.viewModel = stop
-
-    expect(
-      wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
-    ).toBe('A duration is required')
+      // assert
+      expect(
+        wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
+      ).toBe(test.expectedFirstCase)
+      expect(
+        wrapper.vm.durationRules[1](wrapper.vm.viewModel.stopDate.duration),
+      ).toBe(test.expectedSecondCase)
+    })
   })
 
   it('should handle input', () => {
@@ -264,8 +295,6 @@ describe('Ripa Location', () => {
   })
   it('should handle input out of county', () => {
     const wrapper = factory({ value: stop })
-
-    
   })
   it.todo('should handle out of county toggle')
 })
@@ -275,12 +304,12 @@ function createDate(days, months, years) {
   date.setDate(date.getDate() + days)
   date.setMonth(date.getMonth() + months)
   date.setFullYear(date.getFullYear() + years)
-  return date
+  return format(date, 'yyyy-MM-dd')
 }
 
 function createTime(hours, minutes) {
   const time = new Date()
   time.setHours(time.getHours() + hours)
   time.setMinutes(time.getMinutes() + minutes)
-  return time
+  return format(time, 'kk:mm')
 }
