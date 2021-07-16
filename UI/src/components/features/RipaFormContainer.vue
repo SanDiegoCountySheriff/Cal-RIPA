@@ -1,6 +1,6 @@
 <template>
   <div class="ripa-form-container">
-    FC{{ stopsWithErrors.length }}
+    FC{{ getStopsWithErrors.length }}
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"
@@ -22,7 +22,7 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
-      :stops-with-errors="stopsWithErrors"
+      :stops-with-errors="getStopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -114,7 +114,7 @@
     ></ripa-user-dialog>
 
     <ripa-stops-with-errors-dialog
-      :stops-with-errors="stopsWithErrors"
+      :stops-with-errors="getStopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
       :on-edit-stop="handleOpenStopWithError"
@@ -165,6 +165,7 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
+      stopsWithErrors: this.getStopsWithErrors,
     }
   },
 
@@ -192,6 +193,14 @@ export default {
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
       }
+    },
+
+    getStopsWithErrors() {
+      console.log('getStopsWithErrors')
+      const apiStops = localStorage.getItem(
+        'ripa_submitted_api_stops_with_errors',
+      )
+      return apiStops ? JSON.parse(apiStops) : []
     },
   },
 

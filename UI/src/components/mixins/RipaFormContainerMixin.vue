@@ -51,14 +51,6 @@ export default {
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
-
-    stopsWithErrors() {
-      console.log('stopsWithErrors')
-      const apiStops = localStorage.getItem(
-        'ripa_submitted_api_stops_with_errors',
-      )
-      return apiStops ? JSON.parse(apiStops) : []
-    },
   },
 
   methods: {
