@@ -5,9 +5,9 @@
         <v-container fluid>
           <v-row no-gutters dense>
             <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn outlined color="primary" @click="handleMotorTemplate"
-                >Motor/Traffic</v-btn
-              >
+              <v-btn outlined color="primary" @click="handleMotorTemplate">
+                Motor/Traffic
+              </v-btn>
             </v-col>
             <v-col cols="12" sm="6" class="tw-text-center">
               <v-btn
