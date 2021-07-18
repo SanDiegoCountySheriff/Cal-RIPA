@@ -120,7 +120,7 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <div>No Data</div>
+        <div>No Beats Data</div>
       </template>
     </v-data-table>
   </div>
@@ -142,7 +142,13 @@ export default {
         { text: 'Command', value: 'command' },
         { text: 'Command Audit Group', value: 'commandAuditGroup' },
         { text: 'Command Audit Size', value: 'commandAuditSize' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '80',
+          align: 'center',
+        },
       ],
       editedIndex: -1,
       editedItem: {

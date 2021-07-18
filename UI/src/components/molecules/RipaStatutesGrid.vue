@@ -196,7 +196,13 @@ export default {
         { text: 'Offense Enacted', value: 'offenseEnacted', width: '110' },
         { text: 'Offense Repealed', value: 'offenseRepealed', width: '110' },
         { text: 'Alps Cognizant CD', value: 'alpsCognizantCD' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '80',
+          align: 'center',
+        },
       ],
       editedIndex: -1,
       editedItem: {

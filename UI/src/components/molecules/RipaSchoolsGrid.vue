@@ -128,7 +128,7 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <div>No Data</div>
+        <div>No Schools Data</div>
       </template>
     </v-data-table>
   </div>
@@ -152,7 +152,13 @@ export default {
         { text: 'County', value: 'county' },
         { text: 'CDS Code', value: 'cdsCode' },
         { text: 'Status', value: 'status' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '80',
+          align: 'center',
+        },
       ],
       editedIndex: -1,
       editedItem: {
