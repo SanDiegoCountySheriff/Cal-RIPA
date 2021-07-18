@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -13,9 +11,9 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
@@ -92,102 +90,23 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult("User profile was not found");
             }
 
-            //Get the query
-            StopQuery stopQuery = new StopQuery
+            string stopQueryString = String.Empty;
+            try
             {
-                StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
-                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
-                ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
-                Status = !string.IsNullOrWhiteSpace(req.Query["Status"]) ? req.Query["Status"] : default,
-                OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
-            };
-
-            if (!string.IsNullOrWhiteSpace(req.Query["isPii"]))
-            {
-                stopQuery.IsPII = bool.Parse(req.Query["isPii"]);
+                StopQueryUtility stopQueryUtility = new StopQueryUtility();
+                StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
+                stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false);
             }
-            if (!string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]))
+            catch(Exception ex)
             {
-                stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
+                log.LogError("An error occured while evaluating the stop query.",  ex);
+                return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
             }
-            if (!string.IsNullOrWhiteSpace(req.Query["IsEdited"]))
-            {
-                stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
-            }
-
-            List<string> whereStatements = new List<string>();
-            string join = string.Empty;
-
-            //Date Range
-            if (stopQuery.StartDate != default(DateTime))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.Date >= '{(DateTime)stopQuery.StartDate:yyyy-MM-dd}'");
-            }
-            if (stopQuery.EndDate != default(DateTime))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.Date <= '{(DateTime)stopQuery.EndDate:yyyy-MM-dd}'");
-            }
-
-            //IsPII
-            if (stopQuery.IsPII != null)
-            {
-                whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
-            }
-
-            //IsEdited
-            if (stopQuery.IsEdited != null)
-            {
-                whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
-            }
-
-            //Status
-            if (!string.IsNullOrWhiteSpace(stopQuery.Status))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
-            }
-
-            //ErrorCode
-            if (!string.IsNullOrWhiteSpace(stopQuery.ErrorCode))
-            {
-                join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
-                join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
-                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{stopQuery.ErrorCode}'");
-            }
-
-            //IsSubmitted
-            if (stopQuery.IsSubmitted != null)
-            {
-                if (!bool.Parse(stopQuery.IsSubmitted.ToString()))
-                    whereStatements.Add(Environment.NewLine + $"c.Status = null");
-                else
-                    whereStatements.Add(Environment.NewLine + $"c.Status != null");
-            }
-
-            //OfficerId
-            if (!string.IsNullOrWhiteSpace(stopQuery.OfficerId))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
-            }
-
-            string where = string.Empty;
-            if (whereStatements.Count > 0)
-            {
-                where = " WHERE ";
-
-                foreach (var whereStatement in whereStatements)
-                {
-                    where += Environment.NewLine + whereStatement;
-                    where += Environment.NewLine + "AND";
-                }
-                where = where.Remove(where.Length - 3);
-            }
-
-            var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
 
             IEnumerable<Stop> stopResponse;
             try
             {
-                stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order}");
+                stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
             }
             catch (Exception ex)
             {
