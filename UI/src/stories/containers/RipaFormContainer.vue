@@ -105,6 +105,7 @@
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
       :on-edit-stop="handleOpenStopWithError"
+      :on-delete-stop="handleDeleteStopWithError"
     ></ripa-stops-with-errors-dialog>
 
     <ripa-snackbar

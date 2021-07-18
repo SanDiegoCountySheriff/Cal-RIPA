@@ -1,24 +1,34 @@
 <template>
   <div class="ripa-stops-with-errors-grid">
-    <v-card-title>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
     <v-data-table
       :headers="headers"
       :items="stopsWithErrors"
-      :search="search"
       @click:row="handleRowClick"
       sort-by="id"
       single-select
     >
+      <template v-slot:top>
+        <v-dialog v-model="dialogDelete" max-width="500px" persistent>
+          <v-card>
+            <v-card-title>
+              Are you sure you want to delete this stop?
+            </v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDelete">No</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm">
+                Yes
+              </v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
+      </template>
       <template v-slot:no-data>
-        <div>No Data</div>
+        <div>No Stops with Errors Data</div>
       </template>
     </v-data-table>
   </div>
@@ -30,30 +40,56 @@ export default {
 
   data() {
     return {
-      search: '',
-      persons: [],
+      dialogDelete: false,
+      stopsWithErrors: [],
       headers: [
         { text: 'Stop Date', value: 'stopDate', width: '120' },
         { text: 'Stop Time', value: 'stopTime', width: '120' },
         { text: 'Error Code', value: 'errorCode', width: '120' },
         { text: 'Error Text', value: 'errorText' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '60',
+          align: 'center',
+        },
       ],
+      editedIndex: -1,
+      editedItem: {},
     }
   },
 
   methods: {
     init() {
-      this.stopsWithErrors = this.items.map(item => {
-        return {
-          internalId: item.internalId || 'Missing Internal Id',
-          stopDate: item.apiStop?.date || 'N/A',
-          stopTime: item.apiStop.time || 'N/A',
-          errorCode: item.statusCode,
-          errorText: item.statusError.message
-            ? item.statusError.message
-            : item.statusError,
-        }
-      })
+      this.stopsWithErrors = this.items
+        .filter(item => item.internalId)
+        .map(item => {
+          return {
+            internalId: item.internalId,
+            stopDate: item.apiStop?.date || 'N/A',
+            stopTime: item.apiStop.time || 'N/A',
+            errorCode: item.statusCode,
+            errorText: item.statusError.message
+              ? item.statusError.message
+              : item.statusError,
+          }
+        })
+    },
+
+    deleteItem(event, item) {
+      event.stopPropagation()
+      this.editedIndex = this.stopsWithErrors.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm() {
+      this.stopsWithErrors.splice(this.editedIndex, 1)
+      if (this.onDeleteStop) {
+        this.onDeleteStop(this.editedItem.internalId)
+      }
+      this.closeDelete()
     },
 
     handleRowClick(item, row) {
@@ -62,11 +98,23 @@ export default {
         this.onEditStop(item.internalId)
       }
     },
+
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
   },
 
   watch: {
     items(val) {
       this.stopsWithErrors = val
+    },
+
+    dialogDelete(val) {
+      val || this.closeDelete()
     },
   },
 
@@ -80,6 +128,10 @@ export default {
       default: () => [],
     },
     onEditStop: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteStop: {
       type: Function,
       default: () => {},
     },

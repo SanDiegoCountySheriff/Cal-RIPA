@@ -58,6 +58,10 @@ export default {
       alert('open stop with error ' + internalId)
     },
 
+    handleDeleteStopWithError(internalId) {
+      alert('delete stop with error ' + internalId)
+    },
+
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
