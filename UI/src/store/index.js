@@ -746,17 +746,13 @@ export default new Vuex.Store({
     editOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
-        .put(
-          `${state.apiConfig.apiBaseUrl}stop/PutStopBREAK/${stop.id}`,
-          stop,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           if (response.status === 200) {
             const apiStop = response.data
