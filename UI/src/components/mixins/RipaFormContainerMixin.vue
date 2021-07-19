@@ -34,6 +34,7 @@ export default {
       showLocationFavoritesDialog: false,
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
+      showStopsWithErrorsDialog: false,
       showStatuteDialog: false,
       showUserDialog: false,
       statute: null,
@@ -53,6 +54,14 @@ export default {
   },
 
   methods: {
+    handleOpenStopWithError(internalId) {
+      alert('open stop with error ' + internalId)
+    },
+
+    handleDeleteStopWithError(internalId) {
+      alert('delete stop with error ' + internalId)
+    },
+
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -140,6 +149,7 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
+      this.showStopsWithErrorsDialog = false
       this.showUserDialog = false
     },
 
@@ -418,6 +428,10 @@ export default {
       this.updateFullStop()
     },
 
+    handleOpenStopsWithErrors() {
+      this.showStopsWithErrorsDialog = true
+    },
+
     setFavoriteLocations(locations) {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)
@@ -463,6 +477,7 @@ export default {
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
+        updatedFullStop.internalId = this.stop.internalId
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location

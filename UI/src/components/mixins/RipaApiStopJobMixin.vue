@@ -27,38 +27,33 @@ export default {
     async runApiStopsJob(apiStops) {
       this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
+        // clear api stops key since all api stops were handled -
+        // either submitted successfully or moved to new key in local storage
+        this.removeApiStopsFromLocalStorage()
+
+        // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
           await this.editOfficerStop(apiStop)
         }
 
-        const stopIdsPassedStr = `Stop ID(s) Passed: ${this.mappedStopSubmissionPassedIds.join(
-          ', ',
-        )}.`
-        const stopIdsFailedStr = `Stop ID(s) Failed: ${this.mappedStopSubmissionFailedIds.join(
-          ', ',
-        )}.`
-        this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr} ${stopIdsFailedStr}`
+        let stopIdsPassedStr = ''
+        if (this.mappedStopSubmissionPassedIds.length > 0) {
+          stopIdsPassedStr = ` Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+            ', ',
+          )}.`
+        }
+
+        this.snackbarText = `${this.mappedStopSubmissionStatus}.${stopIdsPassedStr}`
         this.snackbarVisible = true
 
-        this.updateApiStopsLocalStorage()
+        if (this.mappedStopSubmissionFailedStops.length > 0) {
+          // if there are failed ids, update error stops key
+          this.setApiStopsWithErrorsToLocalStorage(
+            this.mappedStopSubmissionFailedStops,
+          )
+        }
       }
-    },
-
-    updateApiStopsLocalStorage() {
-      // if there are failed ids, filter all failed apiStop ids
-      // and move to errors key in local storage
-      if (this.mappedStopSubmissionFailedIds.length > 0) {
-        const apiStops = this.getApiStopsFromLocalStorage()
-        const filteredApiStops = apiStops.filter(item =>
-          this.mappedStopSubmissionFailedIds.includes(item),
-        )
-        this.setApiStopsWithErrorsToLocalStorage(filteredApiStops)
-      }
-
-      // clear api stops key since all api stops were handled -
-      // either submitted successfully or moved to new key in local storage
-      this.removeApiStopsFromLocalStorage()
     },
 
     removeApiStopsFromLocalStorage() {
@@ -75,10 +70,30 @@ export default {
     },
 
     setApiStopsWithErrorsToLocalStorage(apiStops) {
-      localStorage.setItem(
+      // get current array from local storage
+      const currentApiStops = localStorage.getItem(
         'ripa_submitted_api_stops_with_errors',
-        JSON.stringify(apiStops),
       )
+      // parse ite
+      const parsedApiStops = currentApiStops ? JSON.parse(currentApiStops) : []
+      let updatedApiStops = parsedApiStops
+
+      for (let index = 0; index < apiStops.length; index++) {
+        const apiStop = apiStops[index]
+        updatedApiStops = parsedApiStops.filter(
+          item => item.internalId !== apiStop.internalId,
+        )
+        updatedApiStops.push(apiStop)
+      }
+
+      if (updatedApiStops.length === 0) {
+        localStorage.removeItem('ripa_submitted_api_stops_with_errors')
+      } else {
+        localStorage.setItem(
+          'ripa_submitted_api_stops_with_errors',
+          JSON.stringify(updatedApiStops),
+        )
+      }
     },
   },
 

@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { nanoid } from 'nanoid'
 import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
@@ -71,6 +72,7 @@ export const defaultStop = () => {
   return {
     actionsTaken: {},
     id: 0,
+    internalId: nanoid(),
     template: null,
     stepTrace: [],
     location: emptyLocation(),
@@ -92,6 +94,7 @@ export const motorStop = () => {
   return {
     actionsTaken: {},
     id: 0,
+    internalId: nanoid(),
     template: 'motor',
     stepTrace: [],
     location: defaultLocation(),
@@ -117,6 +120,7 @@ export const probationStop = () => {
       basisForSearch: [4],
     },
     id: 0,
+    internalId: nanoid(),
     template: 'probation',
     stepTrace: [],
     location: defaultLocation(),
@@ -812,6 +816,7 @@ export const apiStopToFullStop = apiStop => {
   return {
     agencyQuestions: apiStop.listAgencyQuestion || [],
     id: apiStop.id,
+    internalId: nanoid(),
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     location: {
@@ -910,9 +915,7 @@ const getFullStopPeopleListed = apiStop => {
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
-        educationViolationCode: getEducationViolationDetailCode(
-          person.reasonForStop,
-        ),
+        educationViolationCode: [],
         trafficViolation: getTrafficViolationDetailKey(person.reasonForStop),
         trafficViolationCode: getTrafficViolationDetailCode(
           person.reasonForStop,
@@ -990,14 +993,6 @@ const getEducationViolationDetailKey = stopReason => {
   return null
 }
 
-const getEducationViolationDetailCode = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 7) {
-    return Number(stopReason.listCodes[0].code)
-  }
-
-  return null
-}
-
 const getKeyFoundInArray = (items, key) => {
   return items.filter(item => Number(item.key) === key).length > 0
 }
@@ -1017,6 +1012,7 @@ export const fullStopToStop = fullStop => {
   const person = fullStop.people.length > 0 ? fullStop.people[0] : null
   return {
     id: fullStop.id,
+    internalId: fullStop.id,
     template: fullStop.template,
     editStopExplanation: null,
     overridePii: false,
@@ -1203,7 +1199,7 @@ const getOfficerAssignment = assignment => {
 
   return {
     code: assignment.toString(),
-    text: filteredAssignment ? filteredAssignment.name : 'N/A',
+    text: filteredAssignment?.name || '',
   }
 }
 
@@ -1217,7 +1213,7 @@ const getSchool = (fullStop, schools) => {
     return {
       codes: {
         code: school.toString(),
-        text: filteredSchool ? filteredSchool.fullName : 'N/A',
+        text: filteredSchool?.fullName || '',
       },
     }
   }
@@ -1235,7 +1231,7 @@ const getCity = (fullStop, cities) => {
     return {
       codes: {
         code: city.toString(),
-        text: filteredCity ? filteredCity.fullName : 'N/A',
+        text: filteredCity?.fullName || '',
       },
     }
   }
@@ -1253,7 +1249,7 @@ const getBeat = (fullStop, beats) => {
     return {
       codes: {
         code: beat.toString(),
-        text: filteredBeat ? filteredBeat.fullName : 'N/A',
+        text: filteredBeat?.fullName || '',
       },
     }
   }
@@ -1269,7 +1265,7 @@ const getPerceivedRace = person => {
 
     return {
       key: item.toString(),
-      race: filteredRace ? filteredRace.name : 'N/A',
+      race: filteredRace?.name || '',
     }
   })
 }
@@ -1282,8 +1278,8 @@ const getPerceivedGender = person => {
     const filteredGender = filteredGenderValue || filteredGenderName
 
     return {
-      code: filteredGender ? filteredGender.value : null,
-      text: filteredGender ? filteredGender.name : 'N/A',
+      code: filteredGender?.value || null,
+      text: filteredGender?.name || '',
     }
   }
 
@@ -1292,12 +1288,12 @@ const getPerceivedGender = person => {
 
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
-  return gender ? gender.code : null
+  return gender?.code || null
 }
 
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
-  return gender ? gender.text : ''
+  return gender?.text || ''
 }
 
 const getPerceivedOrKnownDisability = person => {
@@ -1310,7 +1306,7 @@ const getPerceivedOrKnownDisability = person => {
 
     return {
       key: item.toString(),
-      disability: filteredDisability ? filteredDisability.name : 'N/A',
+      disability: filteredDisability?.name || '',
     }
   })
 
@@ -1334,7 +1330,7 @@ const getReasonForStop = (person, statutes) => {
 
     return {
       key: reason.toString(),
-      reason: filteredReason ? filteredReason.name : 'N/A',
+      reason: filteredReason?.name || '',
       listDetail: getReasonForStopDetails(reason, person),
       listCodes: getReasonForStopCodes(reason, person, statutes),
     }
@@ -1386,7 +1382,7 @@ const getEducationViolation = person => {
 
     return {
       key: violation.toString(),
-      reason: filteredViolation ? filteredViolation.name : 'N/A',
+      reason: filteredViolation?.name || '',
     }
   }
 
@@ -1402,7 +1398,7 @@ const getTrafficViolation = person => {
 
     return {
       key: violation.toString(),
-      reason: filteredViolation ? filteredViolation.name : 'N/A',
+      reason: filteredViolation?.name || '',
     }
   }
 
@@ -1415,7 +1411,7 @@ const getStatute = (code, statutes) => {
 
     return {
       code: code.toString(),
-      text: filteredStatute ? filteredStatute.fullName : 'N/A',
+      text: filteredStatute?.fullName || '',
     }
   }
 
@@ -1429,7 +1425,7 @@ const getEducationCodeSection = code => {
     )
     return {
       code: code.toString(),
-      text: filteredSubsection ? filteredSubsection.fullName : 'N/A',
+      text: filteredSubsection?.fullName || '',
     }
   }
 
@@ -1463,7 +1459,7 @@ const getReasonableSuspicion = person => {
 
     return {
       key: item.toString(),
-      reason: filteredSuspicion ? filteredSuspicion.name : 'N/A',
+      reason: filteredSuspicion?.name || '',
     }
   })
 }
@@ -1485,7 +1481,7 @@ const getActionsTakenDuringStop = person => {
 
     const action = {
       key: item.toString(),
-      action: filteredAction ? filteredAction.name : 'N/A',
+      action: filteredAction?.name || '',
     }
 
     return action
@@ -1513,7 +1509,7 @@ const getBasisForSearch = person => {
 
     return {
       key: item.toString(),
-      basis: filteredBasis ? filteredBasis.name : 'N/A',
+      basis: filteredBasis?.name || '',
     }
   })
 }
@@ -1528,7 +1524,7 @@ const getBasisForPropertySeizure = person => {
 
     return {
       key: item.toString(),
-      basis: filteredBasis ? filteredBasis.name : 'N/A',
+      basis: filteredBasis?.name || '',
     }
   })
 }
@@ -1543,7 +1539,7 @@ const getTypeOfPropertySeized = person => {
 
     return {
       key: item.toString(),
-      type: filteredType ? filteredType.name : 'N/A',
+      type: filteredType?.name || '',
     }
   })
 }
@@ -1558,7 +1554,7 @@ const getContrabandOrEvidenceDiscovered = person => {
 
     return {
       key: item.toString(),
-      contraband: filteredType ? filteredType.name : 'N/A',
+      contraband: filteredType?.name || '',
     }
   })
 
@@ -1633,7 +1629,7 @@ const getResultOfStop = (person, statutes) => {
 
     const stopResult = {
       key: item.toString(),
-      result: filteredStopResult ? filteredStopResult.name : 'N/A',
+      result: filteredStopResult?.name || '',
     }
     if (item === 2) {
       stopResult.listCodes = getWarningCodes(person, statutes)

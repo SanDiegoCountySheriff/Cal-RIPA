@@ -17,6 +17,8 @@ export default {
         loadFrameTimeout: 60000,
       }
 
+      const environmentName = res.data.Configuration?.Environment || 'DEV'
+
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
         apiSubscription: res.data.Configuration.Subscription,
@@ -24,7 +26,7 @@ export default {
         displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
         displayDebugger: res.data.Configuration.DisplayDebugger === 'true',
         agencyQuestions: res.data.AgencyQuestions || [],
-        environmentName: res.data.Configuration.Environment,
+        environmentName: environmentName.toUpperCase(),
       })
 
       this.clientId = config.clientId
