@@ -9,7 +9,6 @@ using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Utility
@@ -87,6 +86,11 @@ namespace RIPA.Functions.Submission.Utility
             if (stops.Where(x => x.Status == SubmissionStatus.Failed.ToString() && x.IsEdited == false).Any())
             {
                 errorList.Add("Stop request contains stops that are in Error state and require edit to submit.");
+            }
+
+            if (stops.Where(x => x.Status == SubmissionStatus.Submitted.ToString() && x.IsEdited == false).Any())
+            {
+                errorList.Add("Stop request contains stops that are in Submitted state and require edit to submit.");
             }
 
             return errorList;

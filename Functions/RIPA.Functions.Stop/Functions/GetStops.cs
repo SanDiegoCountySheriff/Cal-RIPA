@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
@@ -60,136 +61,46 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
-            //Get the query
-            StopQuery stopQuery = new StopQuery
+            string stopQueryString = String.Empty;
+            string stopSummaryQueryString = String.Empty;
+            try
             {
-                StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
-                EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
-                ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
-                Status = !string.IsNullOrWhiteSpace(req.Query["Status"]) ? req.Query["Status"] : default,
-                OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
-                Offset = !string.IsNullOrWhiteSpace(req.Query["Offset"]) ? Convert.ToInt32(req.Query["Offset"]) : default,
-                Limit = !string.IsNullOrWhiteSpace(req.Query["Limit"]) ? Convert.ToInt32(req.Query["Limit"]) : default,
-                OrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default,
-                Order = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default,
-            };
-
-            if (!string.IsNullOrWhiteSpace(req.Query["isPii"]))
-            {
-                stopQuery.IsPII = bool.Parse(req.Query["isPii"]);
+                StopQueryUtility stopQueryUtility = new StopQueryUtility();
+                StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
+                stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false);
+                stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
             }
-            if (!string.IsNullOrWhiteSpace(req.Query["IsSubmitted"]))
+            catch (Exception ex)
             {
-                stopQuery.IsSubmitted = bool.Parse(req.Query["IsSubmitted"]);
-            }
-            if (!string.IsNullOrWhiteSpace(req.Query["IsEdited"]))
-            {
-                stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
+                log.LogError("An error occured while evaluating the stop query.", ex);
+                return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
             }
 
-
-            List<string> whereStatements = new List<string>();
-            string join = string.Empty;
-
-            //Date Range
-            if (stopQuery.StartDate != default(DateTime))
+            IEnumerable<Common.Models.Stop> stopResponse;
+            IEnumerable<Common.Models.StopStatusCount> stopStatusCounts;
+            try
             {
-                whereStatements.Add(Environment.NewLine + $"c.Date >= '{(DateTime)stopQuery.StartDate:yyyy-MM-dd}'");
+                stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
+                stopStatusCounts = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
             }
-            if (stopQuery.EndDate != default(DateTime))
+            catch (Exception ex)
             {
-                whereStatements.Add(Environment.NewLine + $"c.Date <= '{(DateTime)stopQuery.EndDate:yyyy-MM-dd}'");
+                log.LogError(ex, "An error occurred getting stops requested.");
+                return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
-
-            //IsPII
-            if (stopQuery.IsPII != null)
-            {
-                whereStatements.Add(Environment.NewLine + $"c.IsPiiFound = {stopQuery.IsPII.ToString().ToLowerInvariant()}");
-            }
-
-            //IsEdited
-            if (stopQuery.IsEdited != null)
-            {
-                whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
-            }
-
-            //Status
-            if (!string.IsNullOrWhiteSpace(stopQuery.Status))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
-            }
-
-            //ErrorCode
-            if (!string.IsNullOrWhiteSpace(stopQuery.ErrorCode))
-            {
-                join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
-                join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
-                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{stopQuery.ErrorCode}'");
-            }
-
-            //IsSubmitted
-            if (stopQuery.IsSubmitted != null)
-            {
-                if (!bool.Parse(stopQuery.IsSubmitted.ToString()))
-                    whereStatements.Add(Environment.NewLine + $"c.Status = null");
-                else
-                    whereStatements.Add(Environment.NewLine + $"c.Status != null");
-            }
-
-            //OfficerId
-            if (!string.IsNullOrWhiteSpace(stopQuery.OfficerId))
-            {
-                whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
-            }
-
-            //limit 
-            var limit = string.Empty;
-            if (stopQuery.Limit != 0)
-            {
-                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
-            }
-
-            string where = string.Empty;
-            if (whereStatements.Count > 0)
-            {
-                where = " WHERE ";
-
-                foreach (var whereStatement in whereStatements)
-                {
-                    where += Environment.NewLine + whereStatement;
-                    where += Environment.NewLine + "AND";
-                }
-                where = where.Remove(where.Length - 3);
-            }
-
-            var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
-            if (!string.IsNullOrWhiteSpace(stopQuery.OrderBy))
-            {
-                order = Environment.NewLine + $"ORDER BY c.{stopQuery.OrderBy} ";
-                if (!string.IsNullOrWhiteSpace(stopQuery.Order))
-                {
-                    if (stopQuery.Order.ToUpperInvariant() == "DESC" || stopQuery.Order.ToUpperInvariant() == "ASC")
-                        order += stopQuery.Order;
-                }
-            }
-
-            var stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {join} {where} {order} {limit}");
-
-            var summary = await _stopCosmosDbService.GetStopStatusCounts($"SELECT COUNT(c.id) AS Count, c.Status AS Status FROM c {join} {where} GROUP BY c.Status");
-
-            SummaryResponse summaryResponse = new SummaryResponse()
-            {
-                Total = summary.Sum(x => x.Count),
-                Submitted = summary.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
-                Unsubmitted = summary.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
-                Failed = summary.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
-            };
 
             var response = new
             {
                 stops = stopResponse,
-                summary = summaryResponse
+                summary = new SummaryResponse()
+                {
+                    Total = stopStatusCounts.Sum(x => x.Count),
+                    Submitted = stopStatusCounts.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
+                    Unsubmitted = stopStatusCounts.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
+                    Failed = stopStatusCounts.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
+                }
             };
+
             return new OkObjectResult(response);
         }
 
