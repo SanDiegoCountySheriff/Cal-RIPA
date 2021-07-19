@@ -24,6 +24,10 @@ export default {
       }
     },
 
+    timeout(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    },
+
     async runApiStopsJob(apiStops) {
       this.resetStopSubmissionStatus()
       if (this.isOnlineAndAuthenticated) {
@@ -35,6 +39,7 @@ export default {
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
           await this.editOfficerStop(apiStop)
+          await this.timeout(3000)
         }
 
         let stopIdsPassedStr = ''
