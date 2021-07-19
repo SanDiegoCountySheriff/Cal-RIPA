@@ -89,7 +89,7 @@ describe('Ripa Stop Date', () => {
       const wrapper = factory({ value: stop })
 
       stop.stopDate.date = test.date
-      wrapper.vm._data.viewModel = stop
+      wrapper.vm.$data.viewModel = stop
 
       expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
         test.expectedFirstCase,
@@ -105,7 +105,7 @@ describe('Ripa Stop Date', () => {
     const inputDate = createDate(-2, 0, 0)
 
     stop.stopDate.date = inputDate
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     wrapper.vm.dateRules.forEach(x =>
       expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
@@ -117,7 +117,7 @@ describe('Ripa Stop Date', () => {
       const wrapper = factory({ value: stop })
 
       stop.stopDate.time = test.time
-      wrapper.vm._data.viewModel = stop
+      wrapper.vm.$data.viewModel = stop
 
       expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
         test.expectedFirstCase,
@@ -133,7 +133,7 @@ describe('Ripa Stop Date', () => {
       const wrapper = factory({ value: stop })
 
       stop.stopDate.duration = test.duration
-      wrapper.vm._data.viewModel = stop
+      wrapper.vm.$data.viewModel = stop
 
       expect(
         wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
@@ -149,7 +149,7 @@ describe('Ripa Stop Date', () => {
 
     wrapper.vm.handleInput()
 
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm._data.viewModel)
+    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
   })
 })
 
@@ -179,20 +179,30 @@ describe('Ripa Location', () => {
     })
   }
 
-  it('should validate school', () => {
-    const wrapper = factory({
-      value: stop,
-      schools: schoolsList,
+  const schoolTestCases = [
+    {
+      school: null,
+      expected: ['A school is required'],
+    },
+    {
+      school: '1',
+      expected: [true],
+    },
+  ]
+
+  schoolTestCases.forEach(test => {
+    it(`should validate school: ${test.school} as: ${test.expected}`, () => {
+      const wrapper = factory({
+        value: stop,
+        schools: schoolsList,
+      })
+
+      stop.location.isSchool = true
+      stop.location.school = test.school
+      wrapper.vm.$data.viewModel = stop
+
+      expect(wrapper.vm.schoolRules).toEqual(test.expected)
     })
-    stop.location.isSchool = true
-    wrapper.vm._data.viewModel = stop
-
-    expect(wrapper.vm.schoolRules).toEqual(['A school is required'])
-
-    stop.location.school = '1'
-    wrapper.vm._data.viewModel = stop
-
-    expect(wrapper.vm.schoolRules).toStrictEqual([true])
   })
 
   it('should validate block number', () => {
@@ -201,7 +211,7 @@ describe('Ripa Location', () => {
     expect(wrapper.vm.blockNumberRules).toEqual(['A block number is required'])
 
     stop.location.blockNumber = '1000'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.blockNumberRules).toStrictEqual([true])
   })
@@ -212,7 +222,7 @@ describe('Ripa Location', () => {
     expect(wrapper.vm.streetNameRules).toEqual(['A street name is required'])
 
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true])
   })
@@ -225,26 +235,26 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.intersection = ''
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.intersectionRules).toEqual([
       'An intersection is required',
     ])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true])
 
     stop.location.intersection = null
     stop.location.blockNumber = '1000'
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true])
   })
@@ -257,7 +267,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.highwayExit = 'Exit 1A'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.highwayRules).toStrictEqual([true])
   })
@@ -270,7 +280,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.landmark = 'Exit 1A'
-    wrapper.vm._data.viewModel = stop
+    wrapper.vm.$data.viewModel = stop
 
     expect(wrapper.vm.landmarkRules).toStrictEqual([true])
   })
@@ -280,12 +290,10 @@ describe('Ripa Location', () => {
 
     wrapper.vm.handleInput()
 
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm._data.viewModel)
+    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
   })
 
-  it('should handle input out of county', () => {
-    const wrapper = factory({ value: stop })
-  })
+  it.todo('should handle input out of county')
   it.todo('should handle out of county toggle')
 })
 
