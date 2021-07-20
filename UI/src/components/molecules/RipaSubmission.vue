@@ -35,7 +35,9 @@
         >
       </v-flex>
       <v-flex xs2>
-        <span class="submissionDetail--header--label">Stop Date Start:</span>
+        <span class="submissionDetail--header--label"
+          >Submission Stops From Date:</span
+        >
         <span>{{
           format(
             new Date(submission.submission.minStopDate),
@@ -44,7 +46,9 @@
         }}</span>
       </v-flex>
       <v-flex xs2>
-        <span class="submissionDetail--header--label">Stop Date End:</span>
+        <span class="submissionDetail--header--label"
+          >Submission Stops To Date:</span
+        >
         <span>{{
           format(
             new Date(submission.submission.maxStopDate),
