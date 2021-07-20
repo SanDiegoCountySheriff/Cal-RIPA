@@ -363,9 +363,11 @@ export default {
 
     handleOpenLastLocation() {
       const location = this.getLastLocation()
-      this.lastLocation = {
-        newLocation: location,
-        persistSchool: true,
+      if (location !== null) {
+        this.lastLocation = {
+          newLocation: location,
+          persistSchool: true,
+        }
       }
     },
 
