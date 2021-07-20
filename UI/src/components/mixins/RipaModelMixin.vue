@@ -311,9 +311,21 @@ export default {
     },
 
     updatePropertyWasSeizedModel() {
+      const actionsTaken =
+        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+
       if (!this.viewModel.actionsTaken.propertyWasSeized) {
         this.viewModel.actionsTaken.basisForPropertySeizure = null
         this.viewModel.actionsTaken.typeOfPropertySeized = null
+        this.viewModel.actionsTaken.actionsTakenDuringStop =
+          actionsTaken.filter(item => item !== 21)
+      } else {
+        if (!actionsTaken.includes(21)) {
+          if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
+            this.viewModel.actionsTaken.actionsTakenDuringStop = []
+          }
+          this.viewModel.actionsTaken.actionsTakenDuringStop.push(21)
+        }
       }
     },
 

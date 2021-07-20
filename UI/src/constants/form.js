@@ -136,6 +136,7 @@ export const ACTIONS_TAKEN = [
   { name: 'Search of person was conducted', value: 18 },
   { name: 'Asked for consent to search property', value: 19 },
   { name: 'Search of property was conducted', value: 20 },
+  { name: 'Property was seized', value: 21 },
   { name: 'Vehicle impounded', value: 22 },
 ]
 
