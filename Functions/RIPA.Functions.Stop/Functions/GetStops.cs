@@ -67,7 +67,7 @@ namespace RIPA.Functions.Stop.Functions
             {
                 StopQueryUtility stopQueryUtility = new StopQueryUtility();
                 StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-                stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false);
+                stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true);
                 stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
             }
             catch (Exception ex)
