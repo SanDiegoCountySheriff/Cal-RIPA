@@ -143,7 +143,7 @@ namespace RIPA.Functions.Submission.Utility
                             ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
                             FileName = fileName
                         };
-                        await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
                         _logger.LogError($"Failure Casting Stop with id {stop.Id}: {ex.Message}");
                         throw new Exception(ex.Message);
                     }
@@ -151,7 +151,7 @@ namespace RIPA.Functions.Submission.Utility
                     try
                     {
                         _sftpService.UploadStop(dojStop, $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, _blobContainerClient);
-                        await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
+                        await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
                         _logger.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionId}");
                     }
                     catch (Exception ex)
@@ -164,7 +164,7 @@ namespace RIPA.Functions.Submission.Utility
                             ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
                             FileName = fileName
                         };
-                        await _stopCosmosDbService.UpdateStopAsync(stop.Id, _stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
                         _logger.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");
                         throw new Exception(ex.Message);
                     }
