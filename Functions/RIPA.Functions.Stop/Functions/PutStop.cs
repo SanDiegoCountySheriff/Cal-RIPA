@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -23,6 +24,7 @@ namespace RIPA.Functions.Stop.Functions
     {
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+        private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         public PutStop(IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
         {
@@ -57,7 +59,6 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
-
             try
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
@@ -70,61 +71,60 @@ namespace RIPA.Functions.Stop.Functions
                 return new BadRequestObjectResult("User profile was not found");
             }
 
-            if (!string.IsNullOrEmpty(Id))
+            if (string.IsNullOrEmpty(Id))
             {
-                stop.Id = Id;
-                if (stop.Id == "0")
-                {
-                    long stopId = 100000000;
-
-                    string query = "SELECT VALUE c FROM c ORDER BY c.id DESC OFFSET 0 LIMIT 1";
-                    IEnumerable<Common.Models.Stop> maxStop = await _stopCosmosDbService.GetStopsAsync(query);
-
-                    Common.Models.Stop maxId = maxStop.FirstOrDefault();
-                    if (maxId != null)
-                    {
-                        stopId = long.Parse(maxId.Id);
-                        stopId++;
-                    }
-
-                    stop.Id = stopId.ToString();
-                }
-
-                stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
-                
-                bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
-                if (isDuplicate)
-                { 
-                    return new BadRequestObjectResult("This appears to be a duplicate Stop");
-                }
-
-                stop.IsEdited = false;
-                if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
-                {
-                    stop.IsEdited = true;
-                }
-
-                if (stop.OfficerId.Length != 9)
-                {
-                    return new BadRequestObjectResult("Officer ID must be 9 char");
-                }
-
-                if (stop.Location.City == null)
-                {
-                    return new BadRequestObjectResult("City is required");
-                }
-
-                if (stop.Status == null)
-                {
-                    stop.Status = SubmissionStatus.Unsubmitted.ToString();
-                }
-
-                await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
-                
-                return new OkObjectResult(stop);
+                return new BadRequestObjectResult("Stop Id cannot be empty or null");
             }
 
-            return new BadRequestObjectResult("Bad Request");
+            if (stop.OfficerId.Length != 9)
+            {
+                return new BadRequestObjectResult("Officer ID must be 9 char");
+            }
+
+            if (stop.Location.City == null)
+            {
+                return new BadRequestObjectResult("City is required");
+            }
+
+            if (stop.Status == null)
+            {
+                stop.Status = SubmissionStatus.Unsubmitted.ToString();
+            }
+
+
+            stop.Id = Id;
+            if (stop.Id == "0")
+            {
+                DateTime now = DateTime.Now;
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append(stop.OfficerId.Substring(6, 3));
+                sb.Append(BASE36_CHARS[now.Year - 2000]);
+                sb.Append(BASE36_CHARS[now.Month]);
+                sb.Append(BASE36_CHARS[now.Day]);
+                sb.Append(BASE36_CHARS[now.Hour]);
+                sb.Append(now.ToString("mmssf"));
+
+                stop.Id = sb.ToString();
+            }
+
+            stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
+
+            bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
+            if (isDuplicate)
+            {
+                return new BadRequestObjectResult("This appears to be a duplicate Stop");
+            }
+
+            stop.IsEdited = false;
+            if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
+            {
+                stop.IsEdited = true;
+            }
+
+            await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
+
+            return new OkObjectResult(stop);
         }
     }
 }
