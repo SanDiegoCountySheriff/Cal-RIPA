@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-form-container">
-    FC{{ getStopsWithErrors.length }}
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"
