@@ -93,6 +93,7 @@ namespace RIPA.Functions.Common.Models
         public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
         public bool IsPiiFound { get; set; }
+        public bool OverridePii { get; set; }
         public string EditStopExplanation { get; set; }
         public string EditStopOfficerId { get; set; }
         public bool IsEdited { get; set; }

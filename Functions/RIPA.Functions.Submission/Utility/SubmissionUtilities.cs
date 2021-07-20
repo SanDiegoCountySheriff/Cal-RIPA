@@ -93,6 +93,10 @@ namespace RIPA.Functions.Submission.Utility
                 errorList.Add("Stop request contains stops that are in Submitted state and require edit to submit.");
             }
 
+            if (stops.Where(x => x.IsPiiFound && !x.OverridePii).Any()) 
+            { 
+                errorList.Add("Stop request contains stops that contain PII and require edit or override PII to submit.");
+            }
             return errorList;
         }
 
