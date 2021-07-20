@@ -11,6 +11,7 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
     public class StopCosmosDbService : IStopCosmosDbService
     {
         private readonly Container _container;
+        private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         public StopCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
         {
@@ -19,7 +20,24 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
 
         public async Task AddStopAsync(Common.Models.Stop stop)
         {
+            DateTime now = DateTime.Now;
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(stop.OfficerId.Substring(5, 4));
+            sb.Append(BASE36_CHARS[now.Year - 2021]);
+            sb.Append(BASE36_CHARS[now.Month]);
+            sb.Append(BASE36_CHARS[now.Day]);
+            sb.Append(BASE36_CHARS[now.Hour]);
+            sb.Append(now.ToString("mmss"));
+
+            stop.Id = sb.ToString();
+
             await _container.CreateItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Ori));
+        }
+
+        public async Task UpdateStopAsync(Common.Models.Stop stop)
+        {
+            await _container.UpsertItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Id));
         }
 
         public async Task DeleteStopAsync(string id)
@@ -69,11 +87,6 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             }
 
             return results;
-        }
-
-        public async Task UpdateStopAsync(string id, Common.Models.Stop stop)
-        {
-            await _container.UpsertItemAsync<Common.Models.Stop>(stop, new PartitionKey(id));
         }
 
         public async Task<IEnumerable<Common.Models.StopStatusCount>> GetStopStatusCounts(string queryString)
