@@ -29,6 +29,7 @@ axios.interceptors.request.use(
 export default new Vuex.Store({
   state: {
     isDark: true,
+    isOnline: false,
     adminBeats: [],
     adminCities: [],
     adminSchools: [],
@@ -79,11 +80,11 @@ export default new Vuex.Store({
     isAuthenticated: () => {
       return authentication.isAuthenticated()
     },
-    isOnline: () => {
-      return navigator.onLine
+    isOnline: state => {
+      return state.isOnline
     },
-    isOnlineAndAuthenticated: () => {
-      return navigator.onLine && authentication.isAuthenticated()
+    isOnlineAndAuthenticated: state => {
+      return state.isOnline && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -287,6 +288,9 @@ export default new Vuex.Store({
     },
     updateAdminUsers(state, items) {
       state.adminUsers = items
+    },
+    updateConnectionStatus(state, online) {
+      state.isOnline = online
     },
     updateFormBeats(state, items) {
       state.formBeats = items
@@ -773,7 +777,6 @@ export default new Vuex.Store({
               response.statusText,
             )
           }
-          dispatch('getOfficerStops')
         })
         .catch(error => {
           const errorStop = {

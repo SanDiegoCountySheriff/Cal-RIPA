@@ -915,7 +915,9 @@ const getFullStopPeopleListed = apiStop => {
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
-        educationViolationCode: [],
+        educationViolationCode: getEducationViolationDetailCode(
+          person.reasonForStop,
+        ),
         trafficViolation: getTrafficViolationDetailKey(person.reasonForStop),
         trafficViolationCode: getTrafficViolationDetailCode(
           person.reasonForStop,
@@ -991,6 +993,17 @@ const getEducationViolationDetailKey = stopReason => {
   }
 
   return null
+}
+
+const getEducationViolationDetailCode = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 7) {
+    const listCodes = stopReason.listCodes || []
+    if (listCodes.length > 0) {
+      return Number(stopReason.listCodes[0].code)
+    }
+  }
+
+  return []
 }
 
 const getKeyFoundInArray = (items, key) => {

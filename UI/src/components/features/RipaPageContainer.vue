@@ -39,12 +39,12 @@
     </ripa-snackbar>
 
     <ripa-interval
-      :delay="stopInternalMsApi"
+      :delay="stopIntervalMsApi"
       @tick="checkLocalStorage"
     ></ripa-interval>
 
     <ripa-interval
-      :delay="stopInternalMsAuth"
+      :delay="stopIntervalMsAuth"
       @tick="checkAuthentication"
     ></ripa-interval>
   </ripa-page-wrapper>
@@ -58,7 +58,7 @@ import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import authentication from '@/authentication'
 
@@ -80,8 +80,8 @@ export default {
     return {
       loading: false,
       isDark: this.getDarkFromLocalStorage(),
-      stopInternalMsApi: 5000,
-      stopInternalMsAuth: 600000,
+      stopIntervalMsApi: 5000,
+      stopIntervalMsAuth: 600000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -133,6 +133,8 @@ export default {
       'getUser',
       'resetStopSubmissionStatus',
     ]),
+
+    ...mapMutations(['updateConnectionStatus']),
 
     async getUserData() {
       await Promise.all([this.getUser()])
@@ -224,6 +226,33 @@ export default {
         })
       }
     },
+
+    updateConnectionStatusInStore() {
+      if (navigator.onLine) {
+        const _that = this
+        this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
+          _that.updateConnectionStatus(online)
+        })
+      } else {
+        // handle offline status
+        this.updateConnectionStatus(false)
+      }
+      this.updateConnectionStatus(navigator.onLine)
+    },
+
+    getServerUrl() {
+      return window.location.origin
+    },
+
+    isWebsiteReachable(url) {
+      return fetch(url, { method: 'HEAD', mode: 'no-cors' })
+        .then(function (resp) {
+          return resp && (resp.ok || resp.type === 'opaque')
+        })
+        .catch(function (err) {
+          console.warn('[conn test failure]:', err)
+        })
+    },
   },
 
   async created() {
@@ -236,6 +265,17 @@ export default {
         this.loading = false
       }
     }
+  },
+
+  mounted() {
+    this.updateConnectionStatusInStore()
+    window.addEventListener('online', this.updateConnectionStatusInStore)
+    window.addEventListener('offline', this.updateConnectionStatusInStore)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('online', this.updateConnectionStatusInStore)
+    window.removeEventListener('offline', this.updateConnectionStatusInStore)
   },
 
   watch: {

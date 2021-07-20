@@ -2,7 +2,7 @@
   <ripa-page-wrapper :admin="admin">
     <slot></slot>
     <ripa-interval
-      :delay="stopInternalMs"
+      :delay="stopIntervalMs"
       @tick="checkLocalStorage"
     ></ripa-interval>
   </ripa-page-wrapper>
@@ -25,7 +25,7 @@ export default {
 
   data() {
     return {
-      stopInternalMs: 5000,
+      stopIntervalMs: 5000,
       isOnlineAndAuthenticated: true,
     }
   },
