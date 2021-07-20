@@ -98,7 +98,7 @@ namespace RIPA.Functions.Stop.Functions
                 DateTime now = DateTime.Now;
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append(stop.OfficerId.Substring(7, 3));
+                sb.Append(stop.OfficerId.Substring(6, 3));
                 sb.Append(BASE36_CHARS[now.Year - 2000]);
                 sb.Append(BASE36_CHARS[now.Month]);
                 sb.Append(BASE36_CHARS[now.Day]);
