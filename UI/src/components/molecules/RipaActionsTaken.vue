@@ -179,7 +179,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      actionsTakenItems: ACTIONS_TAKEN,
+      actionsTakenItems: this.getActionsTakenItems,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled1: false,
@@ -194,6 +194,10 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    getActionsTakenItems() {
+      return ACTIONS_TAKEN.filter(item => item.value !== 21)
     },
 
     actionsTakenRules() {
