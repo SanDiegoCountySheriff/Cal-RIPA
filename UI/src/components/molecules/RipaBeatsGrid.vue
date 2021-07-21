@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ripa-beats-grid">
     <v-card-title>
       <v-text-field
         v-model="search"
