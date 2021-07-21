@@ -13,6 +13,7 @@ using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
+using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
 using System;
@@ -34,8 +35,9 @@ namespace RIPA.Functions.Submission.Functions
         private readonly string _sftpInputPath;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
+        private readonly IServiceBusService _serviceBusService;
 
-        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
+        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService, IServiceBusService serviceBusService)
         {
             _sftpService = sftpService;
             _stopService = stopService;
@@ -45,7 +47,7 @@ namespace RIPA.Functions.Submission.Functions
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
-
+            _serviceBusService = serviceBusService;
         }
 
         [FunctionName("PostSubmit")]
@@ -107,7 +109,7 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
 
-            SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, _stopService, log);
+            SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, log);
             Guid submissionId;
 
             if (!submissionUtilities.IsValidSFTPConnection())
@@ -140,7 +142,7 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            await submissionUtilities.SubmitStops(stopResponse, submissionId);
+            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x=>x.Id).ToList(), submissionId );
 
             return new OkObjectResult(new { submissionId });
         }
