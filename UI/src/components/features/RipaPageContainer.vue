@@ -12,13 +12,13 @@
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
-    <template v-if="!isValidCacheState">
+    <template v-if="!isValidCache">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
       </ripa-alert>
     </template>
 
-    <template v-if="isValidCacheState">
+    <template v-if="isValidCache">
       <slot></slot>
     </template>
 
@@ -80,6 +80,7 @@ export default {
     return {
       loading: false,
       isDark: this.getDarkFromLocalStorage(),
+      isValidCache: false,
       stopIntervalMsApi: 5000,
       stopIntervalMsAuth: 600000,
       showInvalidUserDialog: false,
@@ -113,11 +114,6 @@ export default {
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
       }
-    },
-
-    isValidCacheState() {
-      const cacheDate = localStorage.getItem('ripa_cache_date')
-      return cacheDate !== null
     },
   },
 
@@ -215,6 +211,7 @@ export default {
       this.checkCache()
       await this.getUserData()
       await this.getFormData()
+      this.isValidCache = true
       this.loading = false
     },
 
@@ -232,12 +229,12 @@ export default {
         const _that = this
         this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
           _that.updateConnectionStatus(online)
+          _that.initPage()
         })
       } else {
         // handle offline status
         this.updateConnectionStatus(false)
       }
-      this.updateConnectionStatus(navigator.onLine)
     },
 
     getServerUrl() {
@@ -253,18 +250,25 @@ export default {
           console.warn('[conn test failure]:', err)
         })
     },
-  },
 
-  async created() {
-    if (this.isOnlineAndAuthenticated) {
-      this.updateAuthenticatedData()
-    } else {
-      if (this.isValidCacheState) {
-        this.loading = true
-        await this.getFormData()
-        this.loading = false
+    isValidCacheState() {
+      const cacheDate = localStorage.getItem('ripa_cache_date')
+      const isValid = cacheDate !== null
+      this.isValidCache = isValid
+      return isValid
+    },
+
+    async initPage() {
+      if (this.isOnlineAndAuthenticated) {
+        this.updateAuthenticatedData()
+      } else {
+        if (this.isValidCacheState()) {
+          this.loading = true
+          await this.getFormData()
+          this.loading = false
+        }
       }
-    }
+    },
   },
 
   mounted() {
