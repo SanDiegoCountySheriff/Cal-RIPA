@@ -179,7 +179,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      actionsTakenItems: this.getActionsTakenItems,
+      actionsTakenItems: ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled1: false,
@@ -194,10 +194,6 @@ export default {
       get() {
         return this.viewModel
       },
-    },
-
-    getActionsTakenItems() {
-      return ACTIONS_TAKEN.filter(item => item.value !== 21)
     },
 
     actionsTakenRules() {
@@ -266,7 +262,7 @@ export default {
 
     getActionsTakenGeneralItems() {
       const filteredItems = this.actionsTakenItems.filter(
-        item => ![17, 18, 19, 20].includes(item.value),
+        item => ![17, 18, 19, 20, 21].includes(item.value),
       )
 
       if (!this.viewModel.person.isStudent) {
@@ -278,7 +274,7 @@ export default {
 
     getActionsTakenSearchItems() {
       return this.actionsTakenItems
-        .filter(item => [17, 18, 19, 20].includes(item.value))
+        .filter(item => [17, 18, 19, 20, 21].includes(item.value))
         .map(item => {
           return {
             ...item,
