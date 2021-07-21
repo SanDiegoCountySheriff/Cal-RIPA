@@ -18,18 +18,16 @@ namespace RIPA.Functions.Submission.Utility
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
         private readonly ISftpService _sftpService;
-        private readonly IStopService _stopService;
         private readonly string _sftpInputPath;
         private readonly ILogger _logger;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
         private readonly BlobContainerClient _blobContainerClient;
-        public SubmissionUtilities(IStopCosmosDbService stopCosmosDbService, ISubmissionCosmosDbService submissionCosmosDbService,  ISftpService sftpService, IStopService stopService, ILogger logger)
+        public SubmissionUtilities(IStopCosmosDbService stopCosmosDbService, ISubmissionCosmosDbService submissionCosmosDbService,  ISftpService sftpService, ILogger logger)
         {
             _stopCosmosDbService = stopCosmosDbService;
             _submissionCosmosDbService = submissionCosmosDbService;
             _sftpService = sftpService;
-            _stopService = stopService;
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
             _logger = logger;
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
@@ -102,6 +100,7 @@ namespace RIPA.Functions.Submission.Utility
 
         public async Task<Guid> NewSubmission(IEnumerable<Stop> stops, UserProfile userProfile)
         {
+            InitializeBlobContainer();
             Guid submissionId = Guid.NewGuid();
             Models.Submission submission = new Models.Submission
             {
@@ -115,65 +114,6 @@ namespace RIPA.Functions.Submission.Utility
             };
             await _submissionCosmosDbService.AddSubmissionAsync(submission);
             return submissionId;
-        }
-
-        public async Task SubmitStops(IEnumerable<Stop> stops, Guid submissionId)
-        {
-            InitializeBlobContainer();
-
-            foreach (var stop in stops)
-            {
-                string fileName = string.Empty;
-                DateTime dateSubmitted = DateTime.UtcNow;
-                try
-                {
-                    DojStop dojStop = new DojStop();
-                    try
-                    {
-                        fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
-                        dojStop = _stopService.CastToDojStop(stop);
-                    }
-                    catch (Exception ex)
-                    {
-                        SubmissionError submissionError = new SubmissionError()
-                        {
-                            Code = "FTS",
-                            Message = "Failed to submit to DOJ. Stop to DOJ Cast failure",
-                            DateReported = dateSubmitted,
-                            ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName
-                        };
-                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
-                        _logger.LogError($"Failure Casting Stop with id {stop.Id}: {ex.Message}");
-                        throw new Exception(ex.Message);
-                    }
-
-                    try
-                    {
-                        _sftpService.UploadStop(dojStop, $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, _blobContainerClient);
-                        await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionId, fileName));
-                        _logger.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionId}");
-                    }
-                    catch (Exception ex)
-                    {
-                        SubmissionError submissionError = new SubmissionError()
-                        {
-                            Code = "FTS",
-                            Message = "Failed to submit to DOJ. SFTP connection, Blob Connection failure",
-                            DateReported = dateSubmitted,
-                            ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName
-                        };
-                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
-                        _logger.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");
-                        throw new Exception(ex.Message);
-                    }
-                }
-                catch
-                {
-                    //swallow and continue to next stop submission
-                }
-            }
         }
 
         public BlobContainerClient GetBlobContainerClient()
