@@ -24,7 +24,6 @@ namespace RIPA.Functions.Stop.Functions
     {
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
-        private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         public PutStop(IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
         {
@@ -91,23 +90,6 @@ namespace RIPA.Functions.Stop.Functions
                 stop.Status = SubmissionStatus.Unsubmitted.ToString();
             }
 
-
-            stop.Id = Id;
-            if (stop.Id == "0")
-            {
-                DateTime now = DateTime.Now;
-                StringBuilder sb = new StringBuilder();
-
-                sb.Append(stop.OfficerId.Substring(6, 3));
-                sb.Append(BASE36_CHARS[now.Year - 2000]);
-                sb.Append(BASE36_CHARS[now.Month]);
-                sb.Append(BASE36_CHARS[now.Day]);
-                sb.Append(BASE36_CHARS[now.Hour]);
-                sb.Append(now.ToString("mmssf"));
-
-                stop.Id = sb.ToString();
-            }
-
             stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...
 
             bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
@@ -116,16 +98,51 @@ namespace RIPA.Functions.Stop.Functions
                 return new BadRequestObjectResult("This appears to be a duplicate Stop");
             }
 
-            stop.IsEdited = false;
-            if (await _stopCosmosDbService.GetStopAsync(stop.Id) != null)
+            stop.IsEdited = Id == "0" ? false : true;
+
+            int retryAttemps = GetRetrySetting("RetryAttemps", 3);
+            int retrywait = GetRetrySetting("RetryWait", 1000);
+
+            while (retryAttemps > 0)
             {
-                stop.IsEdited = true;
+                try
+                {
+                    stop.Id = Id;
+                    if (stop.Id == "0")
+                    {
+                        await _stopCosmosDbService.AddStopAsync(stop);
+                    }
+                    else
+                    {
+                        await _stopCosmosDbService.UpdateStopAsync(stop);
+                    }
+
+                    return new OkObjectResult(stop);
+                }
+                catch (Exception exception)
+                {
+                    log.LogError($"Failed to insert/update stop, attempt counter: {retryAttemps}", exception.GetBaseException());
+                }
+
+                await Task.Delay(retrywait);
+
+                retryAttemps--;
             }
 
-            await _stopCosmosDbService.UpdateStopAsync(stop.Id, stop);
+            return new BadRequestObjectResult("The maximum number of attemps to save the STOP was exceeded");
+        }
 
-            return new OkObjectResult(stop);
+        private static int GetRetrySetting(string settingName, int defaultValue)
+        {
+            int settingValue = defaultValue;
+
+            string settingString = Environment.GetEnvironmentVariable(settingName);
+            if (!string.IsNullOrEmpty(settingString))
+            {
+                int.TryParse(settingString, out settingValue);
+            }
+
+            return settingValue;
         }
     }
 }
-
