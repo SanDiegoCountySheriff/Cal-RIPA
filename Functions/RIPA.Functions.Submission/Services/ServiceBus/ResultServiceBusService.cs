@@ -10,40 +10,39 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.ServiceBus
 {
-    public class ServiceBusService : IServiceBusService
+    public class ResultServiceBusService : IResultServiceBusService
     {
         private readonly ServiceBusClient _serviceBusClient;
         private readonly ServiceBusSender _serviceBusSender;
         private const int batchMessageCountLimit = 1000;
         private readonly ILogger _log;
-        public ServiceBusService(string serviceBusConnection, string queueName, ILogger log)
+        public ResultServiceBusService(string serviceBusConnection, string queueName, ILogger log)
         {
             _serviceBusClient = new ServiceBusClient(serviceBusConnection);
             _serviceBusSender = _serviceBusClient.CreateSender(queueName);
             _log = log;
         }
 
-        public class SubmissionMessage
+        public class ResultMessage
         {
-            public string StopId { get; set; }
-            public Guid SubmissionId { get; set; }
+            public string Error { get; set; }
+            public string ErrorType { get; set; }
         }
 
-        public async Task SendServiceBusMessagesAsync(List<string> listStopId, Guid submissionId)
+        public async Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessages)
         {
             try
             {
                 ServiceBusMessageBatch messageBatch = await _serviceBusSender.CreateMessageBatchAsync();
                 int batchMessageCount = 0;
-                foreach (string stopId in listStopId)
+                foreach (ServiceBusMessage serviceBusMessage in listServiceBusMessages)
                 {
 
-                    string messageBody = JsonConvert.SerializeObject(new SubmissionMessage() { StopId = stopId, SubmissionId = submissionId});
-                    if (!messageBatch.TryAddMessage(new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody))))
+                    if (!messageBatch.TryAddMessage(serviceBusMessage))
                     {
                         // if it is too large for the batch
                         _log.LogError("$The message { i} is too large to fit in the batch.");
-                        throw new Exception($"The message {stopId} is too large to fit in the batch.");
+                        throw new Exception($"The message {serviceBusMessage.Body} is too large to fit in the batch.");
                     }
                     batchMessageCount++;
 

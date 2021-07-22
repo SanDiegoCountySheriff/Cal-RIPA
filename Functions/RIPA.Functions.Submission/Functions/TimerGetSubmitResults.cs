@@ -1,37 +1,36 @@
+using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
-using RIPA.Functions.Security;
-using RIPA.Functions.Submission.Services.REST.Contracts;
-using RIPA.Functions.Submission.Services.SFTP;
+using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using static RIPA.Functions.Submission.Services.ServiceBus.ResultServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
 {
     public class TimerGetSubmitResults
     {
         private readonly ISftpService _sftpService;
-        private readonly IStopService _stopService;
-        private readonly IStopCosmosDbService _stopCosmosDbService;
+        private readonly IResultServiceBusService _resultServiceBusService;
         private readonly string _sftpOutputPath;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
 
-        public TimerGetSubmitResults(ISftpService sftpService, IStopService stopService, IStopCosmosDbService stopCosmosDbService)
+        public TimerGetSubmitResults(ISftpService sftpService, IResultServiceBusService resultServiceBusService)
         {
             _sftpService = sftpService;
-            _stopService = stopService;
-            _stopCosmosDbService = stopCosmosDbService;
             _sftpOutputPath = Environment.GetEnvironmentVariable("SftpOutputPath");
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixResults");
+            _resultServiceBusService = resultServiceBusService;
         }
 
         [FunctionName("TimerGetSubmitResults")]
@@ -47,7 +46,7 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception e)
             {
                 log.LogError($"Unable to connect to SFTP {e.Message}");
-                return; 
+                return;
             }
             if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0) return; //Nothing to process --> exit
 
@@ -68,7 +67,6 @@ namespace RIPA.Functions.Submission.Functions
                     log.LogInformation("processed DOJ Response");
                     _sftpService.DeleteFile(file.FullName);
                     log.LogInformation($"deleted sftp file {file.Name}");
-
                 }
                 catch (Exception e)
                 {
@@ -84,97 +82,21 @@ namespace RIPA.Functions.Submission.Functions
             var fileLevelFatalErrors = split2[0].Replace("Record Level Fatal Errors:", string.Empty).Trim();
             var recordLevelFatalErrors = split2[1].Replace("Record Level Errors:", string.Empty).Trim();
             var recordLevelErrors = split2[2].Trim();
-            await ProcessFileLevelFatalErrors(fileLevelFatalErrors);
-            await ProcessRecordLevelErrors(recordLevelFatalErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError));
-            await ProcessRecordLevelErrors(recordLevelErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError));
+            await ProcessDojErrors(fileLevelFatalErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError));
+            await ProcessDojErrors(recordLevelFatalErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError));
+            await ProcessDojErrors(recordLevelErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError));
         }
 
-        public async Task ProcessFileLevelFatalErrors(string fileLevelFatalErrors)
+        public async Task ProcessDojErrors(string errorLines, string errorType)
         {
-            using StringReader reader = new StringReader(fileLevelFatalErrors);
+            List<ServiceBusMessage> listServiceBusMessage = new List<ServiceBusMessage>();
+            using StringReader reader = new StringReader(errorLines);
             string line;
             while ((line = reader.ReadLine()) != null)
             {
-                var fileLevelFatalError = DeserializeFileLevelFatalError(line);
-                var stopId = fileLevelFatalError.FileName.Split("_")[2].Replace(".json", string.Empty);
-                var stop = await _stopCosmosDbService.GetStopAsync(stopId);
-                SubmissionError submissionError = new SubmissionError
-                {
-                    DateReported = DateTime.UtcNow,
-                    Code = "FLFE",
-                    ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError),
-                    Message = fileLevelFatalError.ErrorMessage,
-                    FileName = fileLevelFatalError.FileName
-                };
-
-                await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+                listServiceBusMessage.Add(new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new ResultMessage() { Error = line, ErrorType = errorType }))));
             }
+            await _resultServiceBusService.SendServiceBusMessagesAsync(listServiceBusMessage);
         }
-
-        public async Task ProcessRecordLevelErrors(string recordLevelErrors, string type)
-        {
-            using StringReader reader = new StringReader(recordLevelErrors);
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                var recordLevelError = DeserializeRecordLevelError(line);
-                var stop = await _stopCosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
-                SubmissionError submissionError = new SubmissionError
-                {
-                    DateReported = DateTime.UtcNow,
-                    Code = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? "RLFE" : recordLevelError.ErrorList.Split("::")[0],
-                    ErrorType = type,
-                    Message = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? recordLevelError.ErrorList : recordLevelError.ErrorList.Split("::")[1],
-                    FileName = recordLevelError.FileName
-                };
-                await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
-            }
-        }
-
-        public static FileLevelFatalError DeserializeFileLevelFatalError(string fileLevelFatalErrorString)
-        {
-            string[] values = fileLevelFatalErrorString.Split("|");
-            FileLevelFatalError fileLevelFatalError = new FileLevelFatalError
-            {
-                AgencyOri = values[0],
-                FileName = values[1],
-                DateSubmitted = values[2],
-                TimeSubmitted = values[3],
-                ErrorMessage = values[4].Replace("\"", string.Empty)
-            };
-            return fileLevelFatalError;
-        }
-
-        public class FileLevelFatalError
-        {
-            public string AgencyOri { get; set; }
-            public string FileName { get; set; }
-            public string DateSubmitted { get; set; }
-            public string TimeSubmitted { get; set; }
-            public string ErrorMessage { get; set; }
-        }
-
-        public static RecordLevelError DeserializeRecordLevelError(string recordLevelErrorString)
-        {
-            string[] values = recordLevelErrorString.Split("|");
-            RecordLevelError recordLevelError = new RecordLevelError
-            {
-                AgencyOri = values[0],
-                FileName = values[1],
-                LeaRecordId = values[2],
-                ErrorList = values[3].Replace("\"", string.Empty)
-            };
-            return recordLevelError;
-        }
-
-        public class RecordLevelError
-        {
-            public string AgencyOri { get; set; }
-            public string FileName { get; set; }
-            public string LeaRecordId { get; set; }
-            public string ErrorList { get; set; }
-
-        }
-
     }
 }

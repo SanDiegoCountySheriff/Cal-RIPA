@@ -1,7 +1,6 @@
 using System;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
@@ -9,7 +8,7 @@ using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
-using static RIPA.Functions.Submission.Services.ServiceBus.ServiceBusService;
+using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -36,7 +35,7 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("ServiceBusSubmissionConsumer")]
         public async void Run(
             [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")] string myQueueItem,
-            [ServiceBus("submission/$DeadLetterQueue", Connection = "ServiceBusConnection", EntityType = Microsoft.Azure.WebJobs.ServiceBus.EntityType.Queue)] IAsyncCollector<SubmissionMessage> listSubmissionMessage,
+            [ServiceBus("submission/$DeadLetterQueue", Connection = "ServiceBusConnection", EntityType = Microsoft.Azure.WebJobs.ServiceBus.EntityType.Queue)] IAsyncCollector<SubmissionMessage> submissionDeadletterQueue,
             ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
@@ -108,8 +107,8 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch(Exception ex)
             {
-                log.LogError($"Failed to process submission message: {myQueueItem}");
-                await listSubmissionMessage.AddAsync(JsonConvert.DeserializeObject<SubmissionMessage>(myQueueItem));
+                log.LogError($"Failed to process submission message: {myQueueItem}, {ex}");
+                await submissionDeadletterQueue.AddAsync(JsonConvert.DeserializeObject<SubmissionMessage>(myQueueItem));
             }
         }
 
