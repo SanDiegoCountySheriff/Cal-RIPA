@@ -80,7 +80,7 @@ export default {
     return {
       loading: false,
       isDark: this.getDarkFromLocalStorage(),
-      isValidCache: false,
+      isValidCache: true,
       stopIntervalMsApi: 5000,
       stopIntervalMsAuth: 600000,
       showInvalidUserDialog: false,
