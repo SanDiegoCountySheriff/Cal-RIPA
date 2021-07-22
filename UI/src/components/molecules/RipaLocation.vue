@@ -216,6 +216,7 @@
                 item-value="id"
                 label="Beat"
                 :items="beats"
+                :rules="beatRules"
                 :disabled="model.location.outOfCounty"
                 @input="handleInput"
               ></ripa-autocomplete>
@@ -284,6 +285,16 @@ export default {
       const city = this.viewModel.location.city
 
       return [city !== null || 'A city is required']
+    },
+
+    beatRules() {
+      const beat = this.viewModel.location.beat
+
+      return [
+        !this.displayBeatInput ||
+          (this.displayBeatInput && beat !== null) ||
+          'A beat is required',
+      ]
     },
 
     blockNumberRules() {
