@@ -33,7 +33,8 @@ namespace RIPA.Functions.Submission
             builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeSubmissionCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IStopCosmosDbService>(InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult());
-            builder.Services.AddSingleton<IServiceBusService>(InitializeServiceBusService());
+            builder.Services.AddSingleton<ISubmissionServiceBusService>(InitializeSubmissionServiceBusService());
+            builder.Services.AddSingleton<IResultServiceBusService>(InitializeResultServiceBusService());
         }
 
         private static StopService InitializeStopService()
@@ -100,11 +101,16 @@ namespace RIPA.Functions.Submission
             return cosmosDbService;
         }
 
-        private static ServiceBusService InitializeServiceBusService()
+        private static SubmissionServiceBusService InitializeSubmissionServiceBusService()
         {
             LoggerFactory loggerFactory = new LoggerFactory();
-            return new ServiceBusService(Environment.GetEnvironmentVariable("ServiceBusConnection"), "submission", loggerFactory.CreateLogger(typeof(SftpService)));
+            return new SubmissionServiceBusService(Environment.GetEnvironmentVariable("ServiceBusConnection"), "submission", loggerFactory.CreateLogger(typeof(SubmissionServiceBusService)));
         }
 
+        private static ResultServiceBusService InitializeResultServiceBusService()
+        {
+            LoggerFactory loggerFactory = new LoggerFactory();
+            return new ResultServiceBusService(Environment.GetEnvironmentVariable("ServiceBusConnection"), "result", loggerFactory.CreateLogger(typeof(ResultServiceBusService)));
+        }
     }
 }
