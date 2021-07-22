@@ -1,5 +1,16 @@
 <template>
-  <div>
+  <div class="ripa-cities-grid">
+    <p class="ripa-cities-grid--info">
+      Data in this table is provided by CA DOJ and maintained periodically on
+      CLEW (<a
+        href="https://clew.doj.ca.gov/sd-ab953"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        https://clew.doj.ca.gov/sd-ab953 </a
+      >). Exercise caution when manually updating data. Any mismatches will
+      produce errors upon submission to CA DOJ.
+    </p>
     <v-card-title>
       <v-text-field
         v-model="search"
@@ -306,3 +317,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.ripa-cities-grid {
+  .ripa-cities-grid--info {
+    margin: 16px 16px 0 16px;
+  }
+}
+</style>

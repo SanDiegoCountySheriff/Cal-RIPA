@@ -32,7 +32,7 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
 
             stop.Id = sb.ToString();
 
-            await _container.CreateItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Ori));
+            await _container.CreateItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Id));
         }
 
         public async Task UpdateStopAsync(Common.Models.Stop stop)
