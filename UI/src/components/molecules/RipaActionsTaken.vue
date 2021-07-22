@@ -198,7 +198,9 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.actionsTaken.anyActionsTaken
-      const options = this.viewModel.actionsTaken.actionsTakenDuringStop
+      const options = this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+        item => item !== 21,
+      )
 
       return [
         (checked && options.length > 0) ||
