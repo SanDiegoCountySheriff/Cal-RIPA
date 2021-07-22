@@ -227,6 +227,10 @@
         "description": "Specifies the permissions to keys in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
       }
     },
+    "vaults_kv_secrets_key0": {
+      "type": "string",
+      "defaultValue": "ServiceBusConnection"
+    },
     "vaults_kv_secrets_key1": {
       "type": "string",
       "defaultValue": "dbkey1"
@@ -454,66 +458,105 @@
     "secret_username": {
       "defaultValue": "SFTP USERNAME",
       "type": "string"
+    },
+    "namespaces_sdsd_ripa_d_sbn_name": {
+      "defaultValue": "-sbn",
+      "type": "String"
     }
   },
   "variables": {
-    "components_ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('components_ai_name'))]",
-    "configurationStores_ripa_ac_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('configurationStores_ac_name'))]",
-    "databaseAccounts_ripa_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('databaseAccounts_cdb_name'))]",
-    "networkSecurityGroups_ripa_apim_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_apim_nsg_name'))]",
-    "networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkSecurityGroups_vnet_cdb_subnet_nsg_name'))]",
-    "serverfarms_userprofile_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_userprofile_ASP_name'))]",
-    "serverfarms_domain_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_domain_ASP_name'))]",
-    "serverfarms_stop_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_stop_ASP_name'))]",
-    "serverfarms_submission_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_submission_ASP_name'))]",
-    "serverfarms_textanalytics_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('serverfarms_textanalytics_ASP_name'))]",
-    "service_ripa_apim_wus2_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('service_apim_name'))]",
+    "components_ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('components_ai_name'))]",
+    "servicebus_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('namespaces_sdsd_ripa_d_sbn_name'))]",
+    "databaseAccounts_ripa_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('databaseAccounts_cdb_name'))]",
+    "networkSecurityGroups_ripa_apim_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('networkSecurityGroups_apim_nsg_name'))]",
+    "networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('networkSecurityGroups_vnet_cdb_subnet_nsg_name'))]",
+    "serverfarms_userprofile_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('serverfarms_userprofile_ASP_name'))]",
+    "serverfarms_domain_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('serverfarms_domain_ASP_name'))]",
+    "serverfarms_stop_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('serverfarms_stop_ASP_name'))]",
+    "serverfarms_submission_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('serverfarms_submission_ASP_name'))]",
+    "serverfarms_textanalytics_ASP_riparg_af76_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('serverfarms_textanalytics_ASP_name'))]",
+    "service_ripa_apim_wus2_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('service_apim_name'))]",
     "sites_ripa_user_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('sites_user_fa_name'))]",
     "sites_ripa_domain_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('domain_fa_name'))]",
     "sites_ripa_stop_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('stop_fa_name'))]",
     "sites_ripa_submission_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('submission_fa_name'))]",
     "sites_ripa_textanalytics_fa_name": "[concat(parameters('agency'),'-', parameters('application'),'-', parameters('environment'),'-', parameters('textanalytics_fa_name'))]",
-    "smartdetectoralertrules_failure_anomalies___ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('smartdetectoralertrules_failure_anomalies___name'))]",
+    "smartdetectoralertrules_failure_anomalies___ripa_ai_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('smartdetectoralertrules_failure_anomalies___name'))]",
     "storageAccounts_ripacontentsa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_contentsa_name'))]",
     "storageAccounts_ripafunctionssa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_functionssa_name'))]",
     "storageAccounts_ripansgflowlogssa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_nsgflowlogssa_name'))]",
     "storageAccounts_ripawebsa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_websa_name'))]",
     "storageAccounts_ripadsbsa_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('storageAccounts_sbsa_name'))]",
-    "vaults_ripa_kv_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'), '-', parameters('vaults_kv_name'))]",
-    "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('virtualNetworks_vnet_name'))]",
-    "workspaces_ripa_laws_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('workspaces_laws_name'))]",
-    "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
+    "vaults_ripa_kv_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'), '-', parameters('vaults_kv_name'))]",
+    "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('virtualNetworks_vnet_name'))]",
+    "workspaces_ripa_laws_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('workspaces_laws_name'))]",
+    "TA_Name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('accounts_ripaTA_name'))]",
     "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency'), parameters('application'), parameters('environment'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
-    "privatednszones_a_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-',parameters('region'))]",
-    "networkInt_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('networkInterface_cdb_pe_nic_name'))]",
+    "privatednszones_a_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('region'))]",
+    "networkInt_cdb_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('networkInterface_cdb_pe_nic_name'))]",
     "networkInt_ipconfig1_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('networkinterface_ipconfig1_name'))]",
     "networkInt_ipconfig2_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', parameters('networkinterface_ipconfig2_name'))]",
-    "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-',parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
-    "user_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key1'),')')]",
-    "keyvault_secret_ripa_storage": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key3'),')')]",
-    "textanalytics_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key4'),')')]",
+    "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency'),'-', parameters('application'), '-', parameters('environment'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
+    "user_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key1'),')')]",
+    "keyvault_secret_ripa_storage": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key3'),')')]",
+    "textanalytics_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key4'),')')]",
     "apim_policy_value1": "[concat(parameters('policyCont1_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont1_b'))]",
     "apim_policy_value2": "[concat(parameters('policyCont2_a'),variables('storageAccounts_ripawebsa_name'),parameters('policyCont2_b'))]",
-    "keyvault_secret_sftp_key": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key6'),')')]",
-    "keyvault_secret_sftp_host": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key7'),')')]",
-    "keyvault_secret_sftp_password": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key8'),')')]",
-    "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]",
-    "keyvault_secret_cosmos_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key10'),')')]"
+    "keyvault_secret_sftp_key": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key6'),')')]",
+    "keyvault_secret_sftp_host": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key7'),')')]",
+    "keyvault_secret_sftp_password": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key8'),')')]",
+    "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key9'),')')]",
+    "keyvault_secret_cosmos_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key10'),')')]"
   },
   "resources": [
-    // {
-    //     "condition": "[parameters('deploy_rg')]",
-    //     "type": "Microsoft.AppConfiguration/configurationStores",
-    //     "apiVersion": "2020-07-01-preview",
-    //     "name": "[variables('configurationStores_ripa_ac_name')]",
-    //     "location": "[parameters('region')]",
-    //     "sku": {
-    //         "name": "standard"
-    //     },
-    //     "properties": {
-    //         "encryption": {}
-    //     }
-    // },
+    {
+      "type": "Microsoft.ServiceBus/namespaces",
+      "apiVersion": "2018-01-01-preview",
+      "name": "[variables('servicebus_name')]",
+      "location": "USGov Arizona",
+      "sku": {
+        "name": "Basic",
+        "tier": "Basic"
+      },
+      "properties": {
+        "zoneRedundant": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/AuthorizationRules",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('servicebus_name'), '/RootManageSharedAccessKey')]",
+      "location": "USGov Arizona",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
+      ],
+      "properties": {
+        "rights": ["Listen", "Manage", "Send"]
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('servicebus_name'), '/submission')]",
+      "location": "USGov Arizona",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
+      ],
+      "properties": {
+        "lockDuration": "PT30S",
+        "maxSizeInMegabytes": 5120,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": true,
+        "enableBatchedOperations": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "enablePartitioning": true,
+        "enableExpress": false
+      }
+    },
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "microsoft.insights/actionGroups",
@@ -1407,7 +1450,7 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
       "apiVersion": "2020-09-01",
-      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'))]",
+      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', parameters('dbaccount_sqlDb_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
@@ -1422,7 +1465,21 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2016-10-01",
-      "name": "[concat(variables('vaults_ripa_kv_name'), '/',parameters('vaults_kv_secrets_key1'))]",
+      "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key0'))]",
+      "location": "[parameters('region')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces/AuthorizationRules', variables('servicebus_name'), 'RootManageSharedAccessKey')]"
+      ],
+      "properties": {
+        "value": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/AuthorizationRules', variables('servicebus_name'), 'RootManageSharedAccessKey'), '2017-04-01').primaryConnectionString]"
+      }
+    },
+    {
+      "condition": "[parameters('deploy_rg')]",
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2016-10-01",
+      "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key1'))]",
       "location": "[parameters('region')]",
       "dependsOn": [
         "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
@@ -1461,7 +1518,7 @@
         "attributes": {
           "enabled": true
         },
-        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripacontentsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripacontentsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
       }
     },
     {
@@ -1564,7 +1621,7 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2016-10-01",
-      "name": "[concat(variables('vaults_ripa_kv_name'), '/',parameters('vaults_kv_secrets_key10'))]",
+      "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key10'))]",
       "location": "[parameters('region')]",
       "dependsOn": [
         "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]"
@@ -2242,7 +2299,7 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
       "apiVersion": "2020-09-01",
-      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_user_container_name'))]",
+      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', parameters('dbaccount_sqlDb_name'),'/', parameters('dbaccount_sqlDb_user_container_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
@@ -2283,7 +2340,7 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
       "apiVersion": "2020-09-01",
-      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_stop_container_name'))]",
+      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', parameters('dbaccount_sqlDb_name'),'/', parameters('dbaccount_sqlDb_stop_container_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
@@ -2324,7 +2381,7 @@
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
       "apiVersion": "2020-09-01",
-      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/',parameters('dbaccount_sqlDb_name'),'/',parameters('dbaccount_sqlDb_submission_container_name'))]",
+      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', parameters('dbaccount_sqlDb_name'),'/', parameters('dbaccount_sqlDb_submission_container_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
@@ -2506,7 +2563,7 @@
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2707,7 +2764,7 @@
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2897,7 +2954,7 @@
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -2947,6 +3004,14 @@
             {
               "name": "ripa_tenant_name",
               "value": "[parameters('fa_config_ripa_tenant_name')]"
+            },
+            {
+              "name": "RetryAttemps",
+              "value": "3"
+            },
+            {
+              "name": "RetryWait",
+              "value": "1000"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
@@ -3115,7 +3180,7 @@
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -3361,7 +3426,7 @@
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=',parameters('storage_ep_suff'))]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafunctionssa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafunctionssa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
