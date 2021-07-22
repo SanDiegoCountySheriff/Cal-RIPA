@@ -274,7 +274,7 @@ export default {
 
     getActionsTakenSearchItems() {
       return this.actionsTakenItems
-        .filter(item => [17, 18, 19, 20, 21].includes(item.value))
+        .filter(item => [17, 18, 19, 20].includes(item.value))
         .map(item => {
           return {
             ...item,
