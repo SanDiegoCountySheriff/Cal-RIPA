@@ -21,7 +21,8 @@
             color="primary"
             :size="100"
             :width="3"
-            >Initializing
+          >
+            Initializing
           </v-progress-circular>
         </div>
       </template>
