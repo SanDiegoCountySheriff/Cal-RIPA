@@ -198,7 +198,9 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.actionsTaken.anyActionsTaken
-      const options = this.viewModel.actionsTaken.actionsTakenDuringStop
+      const options = this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+        item => item !== 21,
+      )
 
       return [
         (checked && options.length > 0) ||
@@ -274,7 +276,7 @@ export default {
 
     getActionsTakenSearchItems() {
       return this.actionsTakenItems
-        .filter(item => [17, 18, 19, 20, 21].includes(item.value))
+        .filter(item => [17, 18, 19, 20].includes(item.value))
         .map(item => {
           return {
             ...item,
