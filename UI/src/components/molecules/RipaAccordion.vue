@@ -42,7 +42,7 @@ export default {
 
   methods: {
     formatStopDate(date) {
-      return format(new Date(date), 'MM-dd-yyyy')
+      return format(new Date(date), 'MM-dd-yyyy HH:mm')
     },
   },
 }
