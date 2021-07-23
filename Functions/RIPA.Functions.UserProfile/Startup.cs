@@ -14,7 +14,7 @@ namespace RIPA.Functions.UserProfile
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            // builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
         }
 
         private static async Task<UserProfileCosmosDbService> InitializeCosmosClientInstanceAsync()
@@ -30,6 +30,5 @@ namespace RIPA.Functions.UserProfile
 
             return cosmosDbService;
         }
-
     }
 }
