@@ -57,10 +57,13 @@ export default {
         'ripa_form_submitted_submissions',
         JSON.stringify(sortedSubmissions),
       )
-      router.push('/')
-      console.log('Edit API Stop With Error', apiStop)
-      console.log('Edit Full Stop With Error', fullStop)
-      console.log('Edit Stop With Error', stop)
+      router.push('/initializing')
+      setTimeout(() => {
+        router.push('/')
+      }, 2000)
+      console.log('Edit API Stop with Error', apiStop)
+      console.log('Edit Full Stop with Error', fullStop)
+      console.log('Edit Stop with Error', stop)
     },
   },
 }
