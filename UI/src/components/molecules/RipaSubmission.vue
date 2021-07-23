@@ -221,7 +221,7 @@ export default {
       })
     },
     editItem(item) {
-      this.handleEditStop(item, window.location.pathname)
+      this.handleEditStopByAdmin(item, window.location.pathname)
     },
     getColumnSortName() {
       const columnName = Array.isArray(this.sortBy)

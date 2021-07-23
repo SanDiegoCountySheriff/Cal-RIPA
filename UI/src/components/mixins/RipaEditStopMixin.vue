@@ -4,7 +4,7 @@ import router from '@/router'
 
 export default {
   methods: {
-    handleEditStop(apiStop, route) {
+    handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
       const sortedSubmissions = submissions.sort(
         (a, b) =>

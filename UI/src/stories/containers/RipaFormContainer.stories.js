@@ -38,7 +38,7 @@ export const editAdmin = () => ({
   },
   methods: {
     handleEdit() {
-      this.handleEditStop(this.apiStop, 'https://www.google.com')
+      this.handleEditStopByAdmin(this.apiStop, 'https://www.google.com')
       window.location.reload()
     },
   },
