@@ -21,6 +21,7 @@
       :on-edit-school="handleEditSchool"
       :on-edit-statute="handleEditStatute"
       :on-edit-user="handleEditUser"
+      :on-upload-users="handleUploadUsers"
       :on-tab-change="handleTabChange"
       :savedFilters="savedFilterState"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
@@ -101,6 +102,7 @@ export default {
       'editSchool',
       'editStatute',
       'editUser',
+      'uploadUsers',
       'getAdminBeats',
       'getAdminCities',
       'getAdminSchools',
@@ -289,6 +291,12 @@ export default {
     async handleEditUser(user) {
       this.loading = true
       await Promise.all([this.editUser(user)])
+      this.loading = false
+    },
+
+    async handleUploadUsers(usersFile) {
+      this.loading = true
+      await Promise.all([this.uploadUsers(usersFile)])
       this.loading = false
     },
 

@@ -21,7 +21,60 @@
           <v-toolbar-title class="tw-uppercase"
             >Admin: Maintain Users</v-toolbar-title
           >
+
           <v-spacer></v-spacer>
+
+          <v-dialog v-model="fileDialog" max-width="500px" persistent>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                class="tw-mb-2 mr-4"
+                v-bind="attrs"
+                v-on="on"
+              >
+                Upload Users
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span>Upload Users File</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-file-input
+                        :rules="fileRules"
+                        v-model="usersFile"
+                        prepend-icon="mdi-paperclip"
+                        label="Upload users file"
+                        accept=".csv"
+                      >
+                      </v-file-input>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeFileDialog">
+                  Cancel
+                </v-btn>
+                <v-btn
+                  :disabled="isInvalidFile"
+                  color="blue darken-1"
+                  text
+                  @click="uploadUsers"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
           <v-dialog v-model="dialog" max-width="500px" persistent>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -141,6 +194,8 @@ export default {
       search: '',
       users: [],
       dialog: false,
+      fileDialog: false,
+      usersFile: null,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'First Name', value: 'firstName' },
@@ -192,6 +247,21 @@ export default {
 
       return false
     },
+
+    isInvalidFile() {
+      console.log(this.usersFile?.name.split('.').pop())
+      return (
+        this.usersFile === null &&
+        this.usersFile?.name.split('.').pop() === 'csv'
+      )
+    },
+
+    fileRules() {
+      return [
+        v => !!v || 'A file is required',
+        v => v.name.split('.').pop() === 'csv' || 'File must be .csv',
+      ]
+    },
   },
 
   methods: {
@@ -205,12 +275,30 @@ export default {
       this.dialog = true
     },
 
+    uploadUsers() {
+      if (this.usersFile) {
+        this.onUploadUsers(this.usersFile)
+        this.usersFile = null
+      }
+
+      // return list of users?
+      // for user in users
+      //     this.users.push(user)
+
+      this.closeFileDialog()
+    },
+
     close() {
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+    },
+
+    closeFileDialog() {
+      this.fileDialog = false
+      this.usersFile = null
     },
 
     save() {
@@ -239,6 +327,9 @@ export default {
     dialog(val) {
       val || this.close()
     },
+    fileDialog(val) {
+      val || this.closeFileDialog()
+    },
   },
 
   created() {
@@ -255,6 +346,10 @@ export default {
       default: () => [],
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onUploadUsers: {
       type: Function,
       default: () => {},
     },
