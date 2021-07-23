@@ -171,8 +171,7 @@ export default {
       })
     },
 
-    handleRowClick(item, row) {
-      row.select(true)
+    handleRowClick(item) {
       if (this.onOpenFavorite) {
         this.onOpenFavorite(item.id)
       }

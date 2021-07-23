@@ -47,6 +47,19 @@
           </template>
 
           <v-list>
+            <v-list-item>
+              <v-list-item-title>
+                <v-btn
+                  aria-label="View stops with errors"
+                  small
+                  text
+                  @click="handleViewStopsWithErrors"
+                >
+                  <v-icon class="tw-mr-4"> mdi-alert </v-icon>
+                  View stops with errors
+                </v-btn>
+              </v-list-item-title>
+            </v-list-item>
             <template v-if="authenticated && online">
               <v-list-item>
                 <v-list-item-title>
@@ -111,6 +124,22 @@
 
       <template v-if="!isMobile">
         <div v-if="!invalidUser">
+          <v-tooltip v-if="stopsWithErrors.length > 0" bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="tw-ml-4"
+                icon
+                small
+                @click="handleViewStopsWithErrors"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-alert</v-icon>
+              </v-btn>
+            </template>
+            <span>View stops with errors</span>
+          </v-tooltip>
+
           <v-tooltip v-if="authenticated && online" bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -256,6 +285,12 @@ export default {
   },
 
   methods: {
+    handleViewStopsWithErrors() {
+      if (this.onViewStopsWithErrors) {
+        this.onViewStopsWithErrors()
+      }
+    },
+
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       if (this.onUpdateDark) {
@@ -328,6 +363,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onViewStopsWithErrors: {
+      type: Function,
+      default: () => {},
+    },
     invalidUser: {
       type: Boolean,
       default: false,
@@ -335,6 +374,10 @@ export default {
     authenticated: {
       type: Boolean,
       default: false,
+    },
+    stopsWithErrors: {
+      type: Array,
+      default: () => [],
     },
   },
 }

@@ -92,8 +92,7 @@ export default {
       this.closeDelete()
     },
 
-    handleRowClick(item, row) {
-      row.select(true)
+    handleRowClick(item) {
       if (this.onEditStop) {
         this.onEditStop(item.internalId)
       }
@@ -110,7 +109,8 @@ export default {
 
   watch: {
     items(val) {
-      this.stopsWithErrors = val
+      this.items = val
+      this.init()
     },
 
     dialogDelete(val) {

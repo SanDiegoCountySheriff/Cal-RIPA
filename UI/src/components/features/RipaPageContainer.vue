@@ -9,6 +9,8 @@
     :online="isOnline"
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
+    :on-view-stops-with-errors="handleViewStopsWithErrors"
+    :stops-with-errors="mappedStopsWithErrors"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
@@ -27,7 +29,7 @@
       :loading="loading"
       :user="getMappedUser"
       :show-dialog="showUserDialog"
-      :on-close="handleClose"
+      :on-close="handleCloseDialog"
       :on-save="handleSaveUser"
     ></ripa-user-dialog>
 
@@ -47,6 +49,14 @@
       :delay="stopIntervalMsAuth"
       @tick="checkAuthentication"
     ></ripa-interval>
+
+    <ripa-stops-with-errors-dialog
+      :stops-with-errors="mappedStopsWithErrors"
+      :show-dialog="showStopsWithErrorsDialog"
+      :on-close="handleCloseDialog"
+      :on-edit-stop="handleOpenStopWithError"
+      :on-delete-stop="handleDeleteStopWithError"
+    ></ripa-stops-with-errors-dialog>
   </ripa-page-wrapper>
 </template>
 
@@ -57,6 +67,7 @@ import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
+import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
@@ -73,6 +84,7 @@ export default {
     RipaInvalidUserDialog,
     RipaPageWrapper,
     RipaSnackbar,
+    RipaStopsWithErrorsDialog,
     RipaUserDialog,
   },
 
@@ -84,6 +96,7 @@ export default {
       stopIntervalMsApi: 5000,
       stopIntervalMsAuth: 600000,
       showInvalidUserDialog: false,
+      showStopsWithErrorsDialog: false,
       showUserDialog: false,
       snackbarText: '',
       snackbarVisible: false,
@@ -104,6 +117,7 @@ export default {
       'mappedStopSubmissionStatus',
       'mappedStopSubmissionPassedIds',
       'mappedStopSubmissionFailedStops',
+      'mappedStopsWithErrors',
     ]),
 
     getMappedUser() {
@@ -130,7 +144,7 @@ export default {
       'resetStopSubmissionStatus',
     ]),
 
-    ...mapMutations(['updateConnectionStatus']),
+    ...mapMutations(['updateConnectionStatus', 'updateStopsWithErrors']),
 
     async getUserData() {
       await Promise.all([this.getUser()])
@@ -153,7 +167,8 @@ export default {
       return value === null ? true : value === '1'
     },
 
-    handleClose() {
+    handleCloseDialog() {
+      this.showStopsWithErrorsDialog = false
       this.showUserDialog = false
     },
 
@@ -176,6 +191,19 @@ export default {
 
     handleUpdateUser() {
       this.showUserDialog = true
+    },
+
+    handleViewStopsWithErrors() {
+      this.showStopsWithErrorsDialog = true
+    },
+
+    handleOpenStopWithError(internalId) {
+      this.showStopsWithErrorsDialog = false
+      alert('open stop with error ' + internalId)
+    },
+
+    handleDeleteStopWithError(internalId) {
+      alert('delete stop with error ' + internalId)
     },
 
     setDarkToLocalStorage() {

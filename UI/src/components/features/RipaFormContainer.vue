@@ -21,7 +21,7 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
-      :stops-with-errors="getStopsWithErrors"
+      :stops-with-errors="mappedStopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -113,7 +113,7 @@
     ></ripa-user-dialog>
 
     <ripa-stops-with-errors-dialog
-      :stops-with-errors="getStopsWithErrors"
+      :stops-with-errors="mappedStopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
       :on-edit-stop="handleOpenStopWithError"
@@ -165,7 +165,6 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
-      stopsWithErrors: this.getStopsWithErrors,
     }
   },
 
@@ -183,6 +182,7 @@ export default {
       'mappedUser',
       'displayBeatInput',
       'displayDebugger',
+      'mappedStopsWithErrors',
     ]),
 
     getMappedUser() {

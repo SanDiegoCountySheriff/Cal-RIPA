@@ -23,7 +23,7 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
-      :stops-with-errors="stopsWithErrors"
+      :stops-with-errors="mappedStopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -101,7 +101,7 @@
     ></ripa-statute-dialog>
 
     <ripa-stops-with-errors-dialog
-      :stops-with-errors="stopsWithErrors"
+      :stops-with-errors="mappedStopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
       :on-edit-stop="handleOpenStopWithError"
@@ -175,6 +175,7 @@ export default {
       mappedFormNonCountyCities: [],
       mappedFormSchools: [],
       mappedFormStatutes: [],
+      mappedStopsWithErrors: [],
     }
   },
 

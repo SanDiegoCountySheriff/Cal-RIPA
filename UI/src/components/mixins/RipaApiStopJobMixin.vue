@@ -20,6 +20,8 @@ export default {
         if (apiStops.length > 0) {
           this.runApiStopsJob(apiStops)
         }
+        const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+        this.updateStopsWithErrors(apiStopsWithErrors)
         this.isLocked = false
       }
     },
@@ -70,22 +72,26 @@ export default {
       return apiStops ? JSON.parse(apiStops) : []
     },
 
+    getApiStopsWithErrorsFromLocalStorage() {
+      const apiStops = localStorage.getItem(
+        'ripa_submitted_api_stops_with_errors',
+      )
+      const parsedApiStops = apiStops ? JSON.parse(apiStops) : []
+
+      return parsedApiStops
+    },
+
     setApiStopsToLocalStorage(apiStops) {
       localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
     },
 
     setApiStopsWithErrorsToLocalStorage(apiStops) {
-      // get current array from local storage
-      const currentApiStops = localStorage.getItem(
-        'ripa_submitted_api_stops_with_errors',
-      )
-      // parse ite
-      const parsedApiStops = currentApiStops ? JSON.parse(currentApiStops) : []
-      let updatedApiStops = parsedApiStops
+      const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+      let updatedApiStops = apiStopsWithErrors
 
       for (let index = 0; index < apiStops.length; index++) {
         const apiStop = apiStops[index]
-        updatedApiStops = parsedApiStops.filter(
+        updatedApiStops = apiStopsWithErrors.filter(
           item => item.internalId !== apiStop.internalId,
         )
         updatedApiStops.push(apiStop)
