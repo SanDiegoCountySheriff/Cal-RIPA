@@ -63,6 +63,7 @@
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
+import RipaEditStopMixin from '@/components/mixins/RipaEditStopMixin'
 import RipaInterval from '@/components/atoms/RipaInterval'
 import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
@@ -76,7 +77,7 @@ import authentication from '@/authentication'
 export default {
   name: 'ripa-page-container',
 
-  mixins: [RipaApiStopJobMixin],
+  mixins: [RipaApiStopJobMixin, RipaEditStopMixin],
 
   components: {
     RipaAlert,
@@ -199,7 +200,11 @@ export default {
 
     handleOpenStopWithError(internalId) {
       this.showStopsWithErrorsDialog = false
-      alert('open stop with error ' + internalId)
+      const apiStop = this.getStopWithErrorGivenInternalId(internalId)
+      if (apiStop) {
+        this.deleteStopWithError(internalId)
+        this.handleEditStopWithError(apiStop)
+      }
     },
 
     handleDeleteStopWithError(internalId) {

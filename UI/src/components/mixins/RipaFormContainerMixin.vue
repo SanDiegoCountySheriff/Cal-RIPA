@@ -509,6 +509,7 @@ export default {
       localStorage.removeItem('ripa_form_edit_route')
       localStorage.removeItem('ripa_form_edit_stop')
       localStorage.removeItem('ripa_form_editing')
+      localStorage.removeItem('ripa_form_editing_stop_with_error')
       localStorage.removeItem('ripa_form_full_stop')
       localStorage.removeItem('ripa_form_saved_stop')
       localStorage.removeItem('ripa_form_saved_full_stop')

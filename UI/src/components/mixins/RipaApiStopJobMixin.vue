@@ -118,6 +118,14 @@ export default {
       this.setApiStopsWithErrorsToLocalStorage(updatedApiStopsWithErrors)
       this.updateStopsWithErrors(apiStopsWithErrors)
     },
+
+    getStopWithErrorGivenInternalId(internalId) {
+      const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+      const [filteredApiStopWithStop] = apiStopsWithErrors.filter(
+        item => item.internalId === internalId,
+      )
+      return filteredApiStopWithStop?.apiStop || null
+    },
   },
 
   props: {
