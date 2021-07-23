@@ -21,7 +21,6 @@
       :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
-      :stops-with-errors="stopsWithErrors"
       :user="user"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
@@ -42,7 +41,6 @@
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
-      :on-open-stops-with-errors="onOpenStopsWithErrors"
       :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
       :on-submit-audit="onSubmitAudit"
@@ -162,10 +160,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
     user: {
       type: Object,
       default: () => {},
@@ -255,10 +249,6 @@ export default {
       default: () => {},
     },
     onOpenTemplate: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

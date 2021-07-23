@@ -34,7 +34,6 @@ export default {
       showLocationFavoritesDialog: false,
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
-      showStopsWithErrorsDialog: false,
       showStatuteDialog: false,
       showUserDialog: false,
       statute: null,
@@ -54,14 +53,6 @@ export default {
   },
 
   methods: {
-    handleOpenStopWithError(internalId) {
-      alert('open stop with error ' + internalId)
-    },
-
-    handleDeleteStopWithError(internalId) {
-      alert('delete stop with error ' + internalId)
-    },
-
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -149,7 +140,6 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
-      this.showStopsWithErrorsDialog = false
       this.showUserDialog = false
     },
 
@@ -428,10 +418,6 @@ export default {
       }
 
       this.updateFullStop()
-    },
-
-    handleOpenStopsWithErrors() {
-      this.showStopsWithErrorsDialog = true
     },
 
     setFavoriteLocations(locations) {

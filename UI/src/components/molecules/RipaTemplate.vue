@@ -30,21 +30,6 @@
         </v-container>
       </div>
 
-      <template v-if="anyStopsWithErrors">
-        <v-divider></v-divider>
-        <div class="tw-mb-4">
-          <v-container fluid>
-            <v-row no-gutters dense>
-              <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-                <v-btn color="error" @click="handleOpenStopsWithErrors">
-                  STOPS WITH ERRORS
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </div>
-      </template>
-
       <v-divider></v-divider>
 
       <div class="tw-mt-4">About this App:</div>
@@ -82,12 +67,6 @@
 export default {
   name: 'ripa-template',
 
-  computed: {
-    anyStopsWithErrors() {
-      return this.stopsWithErrors.length > 0
-    },
-  },
-
   methods: {
     handleMotorTemplate() {
       if (this.onOpenTemplate) {
@@ -106,24 +85,10 @@ export default {
         this.onOpenTemplate()
       }
     },
-
-    handleOpenStopsWithErrors() {
-      if (this.onOpenStopsWithErrors) {
-        this.onOpenStopsWithErrors()
-      }
-    },
   },
 
   props: {
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
     onOpenTemplate: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },
