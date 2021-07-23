@@ -203,7 +203,7 @@ export default {
     },
 
     handleDeleteStopWithError(internalId) {
-      alert('delete stop with error ' + internalId)
+      this.deleteStopWithError(internalId)
     },
 
     setDarkToLocalStorage() {

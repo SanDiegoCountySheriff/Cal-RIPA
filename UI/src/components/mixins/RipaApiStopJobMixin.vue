@@ -56,9 +56,7 @@ export default {
 
         if (this.mappedStopSubmissionFailedStops.length > 0) {
           // if there are failed ids, update error stops key
-          this.setApiStopsWithErrorsToLocalStorage(
-            this.mappedStopSubmissionFailedStops,
-          )
+          this.validateApiStopsWithErrors(this.mappedStopSubmissionFailedStops)
         }
       }
     },
@@ -85,10 +83,11 @@ export default {
       localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
     },
 
-    setApiStopsWithErrorsToLocalStorage(apiStops) {
+    validateApiStopsWithErrors(apiStops) {
       const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
       let updatedApiStops = apiStopsWithErrors
 
+      // validate stopsWithErrors
       for (let index = 0; index < apiStops.length; index++) {
         const apiStop = apiStops[index]
         updatedApiStops = apiStopsWithErrors.filter(
@@ -97,14 +96,27 @@ export default {
         updatedApiStops.push(apiStop)
       }
 
-      if (updatedApiStops.length === 0) {
+      this.setApiStopsWithErrorsToLocalStorage(updatedApiStops)
+    },
+
+    setApiStopsWithErrorsToLocalStorage(apiStops) {
+      if (apiStops.length === 0) {
         localStorage.removeItem('ripa_submitted_api_stops_with_errors')
       } else {
         localStorage.setItem(
           'ripa_submitted_api_stops_with_errors',
-          JSON.stringify(updatedApiStops),
+          JSON.stringify(apiStops),
         )
       }
+    },
+
+    deleteStopWithError(internalId) {
+      const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+      const updatedApiStopsWithErrors = apiStopsWithErrors.filter(
+        item => item.internalId !== internalId,
+      )
+      this.setApiStopsWithErrorsToLocalStorage(updatedApiStopsWithErrors)
+      this.updateStopsWithErrors(apiStopsWithErrors)
     },
   },
 
