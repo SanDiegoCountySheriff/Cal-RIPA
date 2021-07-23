@@ -3,7 +3,7 @@
     <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
     <v-card-text>
       <div class="tw-mb-2">
-        <span class="tw-text-base tw-font-bold">Stop</span>
+        <span class="tw-text-base tw-font-bold">{{ getApiStopId }}</span>
         <template v-if="editButtons">
           <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
             Edit
@@ -139,6 +139,10 @@ export default {
 
     getApiStop() {
       return this.apiStop
+    },
+
+    getApiStopId() {
+      return this.apiStop.id === 0 ? 'Unsaved Stop' : this.apiStop.id
     },
 
     getApiStopStopSummary() {
