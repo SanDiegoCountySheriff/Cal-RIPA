@@ -5,9 +5,9 @@
         <v-container fluid>
           <v-row no-gutters dense>
             <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn outlined color="primary" @click="handleMotorTemplate"
-                >Motor/Traffic</v-btn
-              >
+              <v-btn outlined color="primary" @click="handleMotorTemplate">
+                Motor/Traffic
+              </v-btn>
             </v-col>
             <v-col cols="12" sm="6" class="tw-text-center">
               <v-btn
@@ -22,14 +22,31 @@
 
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="primary" @click="handleDefaultTemplate"
-                >BASIC STOP</v-btn
-              >
+              <v-btn color="primary" @click="handleDefaultTemplate">
+                BASIC STOP
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>
       </div>
+
+      <template v-if="anyStopsWithErrors">
+        <v-divider></v-divider>
+        <div class="tw-mb-4">
+          <v-container fluid>
+            <v-row no-gutters dense>
+              <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
+                <v-btn color="error" @click="handleOpenStopsWithErrors">
+                  STOPS WITH ERRORS
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
+      </template>
+
       <v-divider></v-divider>
+
       <div class="tw-mt-4">About this App:</div>
       <p>
         The Racial and Identity Profiling Act of 2015 (AB 953) requires state
@@ -43,11 +60,16 @@
         <a
           href="https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf"
           target="_blank"
+          rel="noopener noreferrer"
         >
           these regulations
         </a>
         on November 7, 2017. For more information please see the
-        <a href="https://oag.ca.gov/ab953/regulations" target="_blank">
+        <a
+          href="https://oag.ca.gov/ab953/regulations"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           AG's Website </a
         >.
       </p>
@@ -59,6 +81,12 @@
 <script>
 export default {
   name: 'ripa-template',
+
+  computed: {
+    anyStopsWithErrors() {
+      return this.stopsWithErrors.length > 0
+    },
+  },
 
   methods: {
     handleMotorTemplate() {
@@ -78,10 +106,24 @@ export default {
         this.onOpenTemplate()
       }
     },
+
+    handleOpenStopsWithErrors() {
+      if (this.onOpenStopsWithErrors) {
+        this.onOpenStopsWithErrors()
+      }
+    },
   },
 
   props: {
+    stopsWithErrors: {
+      type: Array,
+      default: () => [],
+    },
     onOpenTemplate: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

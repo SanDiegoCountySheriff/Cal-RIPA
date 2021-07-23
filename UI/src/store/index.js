@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import authentication from '@/authentication'
 
@@ -28,6 +29,7 @@ axios.interceptors.request.use(
 export default new Vuex.Store({
   state: {
     isDark: true,
+    isOnline: false,
     adminBeats: [],
     adminCities: [],
     adminSchools: [],
@@ -68,7 +70,7 @@ export default new Vuex.Store({
     stopSubmissionStatusTotal: 0,
     stopSubmissionStatusError: 0,
     stopSubmissionPassedIds: [],
-    stopSubmissionFailedIds: [],
+    stopSubmissionFailedStops: [],
   },
 
   getters: {
@@ -78,11 +80,11 @@ export default new Vuex.Store({
     isAuthenticated: () => {
       return authentication.isAuthenticated()
     },
-    isOnline: () => {
-      return navigator.onLine
+    isOnline: state => {
+      return state.isOnline
     },
-    isOnlineAndAuthenticated: () => {
-      return navigator.onLine && authentication.isAuthenticated()
+    isOnlineAndAuthenticated: state => {
+      return state.isOnline && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -260,13 +262,14 @@ export default new Vuex.Store({
       const errorStops = state.stopSubmissionStatusError
       const errorStopsText =
         errorStops === 1 ? `${errorStops} error` : `${errorStops} errors`
-      return `${totalStopsText} were submitted and ${errorStopsText}`
+      const wereWasText = totalStops === 1 ? 'was' : 'were'
+      return `${totalStopsText} ${wereWasText} submitted and ${errorStopsText}`
     },
     mappedStopSubmissionPassedIds: state => {
       return state.stopSubmissionPassedIds
     },
-    mappedStopSubmissionFailedIds: state => {
-      return state.stopSubmissionFailedIds
+    mappedStopSubmissionFailedStops: state => {
+      return state.stopSubmissionFailedStops
     },
   },
 
@@ -285,6 +288,9 @@ export default new Vuex.Store({
     },
     updateAdminUsers(state, items) {
       state.adminUsers = items
+    },
+    updateConnectionStatus(state, online) {
+      state.isOnline = online
     },
     updateFormBeats(state, items) {
       state.formBeats = items
@@ -450,11 +456,11 @@ export default new Vuex.Store({
         state.stopSubmissionPassedIds.push(id)
       }
     },
-    updateStopSubmissionFailedIds(state, id) {
-      if (id === null) {
-        state.stopSubmissionFailedIds = []
+    updateStopSubmissionFailedStops(state, errorStop) {
+      if (errorStop === null) {
+        state.stopSubmissionFailedStops = []
       } else {
-        state.stopSubmissionFailedIds.push(id)
+        state.stopSubmissionFailedStops.push(errorStop)
       }
     },
   },
@@ -773,18 +779,40 @@ export default new Vuex.Store({
             'Cache-Control': 'no-cache',
           },
         })
-        .then(() => {
-          commit('updateStopSubmissionPassedIds', stop.id)
-          dispatch('getOfficerStops')
+        .then(response => {
+          if (response.status === 200) {
+            const apiStop = response.data
+            const apiStopId = apiStop.id
+            commit('updateStopSubmissionPassedIds', apiStopId)
+          }
+          if (response.status !== 200) {
+            const errorStop = {
+              internalId: nanoid(),
+              apiStop: stop,
+              statusCode: response.status,
+              statusError: response.statusText,
+            }
+            commit('updateStopSubmissionStatusError', 1)
+            commit('updateStopSubmissionFailedStops', errorStop)
+            console.log(
+              'There was an error saving the officer stop record.',
+              response.statusText,
+            )
+          }
         })
         .catch(error => {
+          const errorStop = {
+            internalId: nanoid(),
+            apiStop: stop,
+            statusCode: 'N/A',
+            statusError: error.message || error,
+          }
           commit('updateStopSubmissionStatusError', 1)
-          commit('updateStopSubmissionFailedIds', stop.id)
+          commit('updateStopSubmissionFailedStops', errorStop)
           console.log(
             'There was an error saving the officer stop record.',
             error,
           )
-          dispatch('getOfficerStops')
         })
     },
 
@@ -835,7 +863,7 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   id: item.id,
-                  fullName: `${item.command} ${item.id}`,
+                  fullName: `${item.id} ${item.community} (${item.command})`,
                 }
               })
             commit('updateFormBeats', data)
@@ -1523,7 +1551,7 @@ export default new Vuex.Store({
       commit('updateStopSubmissionStatusTotal', null)
       commit('updateStopSubmissionStatusError', null)
       commit('updateStopSubmissionPassedIds', null)
-      commit('updateStopSubmissionFailedIds', null)
+      commit('updateStopSubmissionFailedStops', null)
     },
   },
 

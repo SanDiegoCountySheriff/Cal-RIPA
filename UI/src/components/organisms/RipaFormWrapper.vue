@@ -3,7 +3,11 @@
     <v-card class="mx-auto" max-width="900" outlined>
       <v-card-text>
         <template v-if="stepIndex == 0">
-          <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+          <ripa-template
+            :stops-with-errors="stopsWithErrors"
+            :on-open-template="onOpenTemplate"
+            :on-open-stops-with-errors="onOpenStopsWithErrors"
+          ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
           <v-stepper v-model="stepIndex">
@@ -247,7 +251,11 @@
           </template>
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
-          <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
+          <ripa-confirmation
+            :on-start-new="handleStartNew"
+            :stops-with-errors="stopsWithErrors"
+            :on-open-stops-with-errors="onOpenStopsWithErrors"
+          ></ripa-confirmation>
         </template>
       </v-card-text>
     </v-card>
@@ -741,6 +749,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    stopsWithErrors: {
+      type: Array,
+      default: () => [],
+    },
     user: {
       type: Object,
       default: () => {},
@@ -830,6 +842,10 @@ export default {
       default: () => {},
     },
     onOpenTemplate: {
+      type: Function,
+      default: () => {},
+    },
+    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

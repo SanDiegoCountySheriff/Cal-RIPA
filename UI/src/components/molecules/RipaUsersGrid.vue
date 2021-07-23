@@ -172,7 +172,7 @@
         </v-icon>
       </template>
       <template v-slot:no-data>
-        <div>No Data</div>
+        <div>No Users Data</div>
       </template>
     </v-data-table>
   </div>
@@ -207,7 +207,13 @@ export default {
         { text: 'Assignment', value: 'assignment' },
         { text: 'Other Type', value: 'otherType' },
         { text: 'Exp Years', value: 'yearsExperience' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '80',
+          align: 'center',
+        },
       ],
       editedIndex: -1,
       editedItem: {

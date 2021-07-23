@@ -9,6 +9,8 @@ using RIPA.Functions.Submission.Services.CosmosDb;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST;
 using RIPA.Functions.Submission.Services.REST.Contracts;
+using RIPA.Functions.Submission.Services.ServiceBus;
+using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
@@ -31,6 +33,8 @@ namespace RIPA.Functions.Submission
             builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeSubmissionCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IStopCosmosDbService>(InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<ISubmissionServiceBusService>(InitializeSubmissionServiceBusService());
+            builder.Services.AddSingleton<IResultServiceBusService>(InitializeResultServiceBusService());
         }
 
         private static StopService InitializeStopService()
@@ -97,5 +101,16 @@ namespace RIPA.Functions.Submission
             return cosmosDbService;
         }
 
+        private static SubmissionServiceBusService InitializeSubmissionServiceBusService()
+        {
+            LoggerFactory loggerFactory = new LoggerFactory();
+            return new SubmissionServiceBusService(Environment.GetEnvironmentVariable("ServiceBusConnection"), "submission", loggerFactory.CreateLogger(typeof(SubmissionServiceBusService)));
+        }
+
+        private static ResultServiceBusService InitializeResultServiceBusService()
+        {
+            LoggerFactory loggerFactory = new LoggerFactory();
+            return new ResultServiceBusService(Environment.GetEnvironmentVariable("ServiceBusConnection"), "result", loggerFactory.CreateLogger(typeof(ResultServiceBusService)));
+        }
     }
 }

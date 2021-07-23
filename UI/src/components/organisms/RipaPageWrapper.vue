@@ -19,9 +19,11 @@
           <v-progress-circular
             indeterminate
             color="primary"
-            :size="70"
-            :width="7"
-          ></v-progress-circular>
+            :size="100"
+            :width="3"
+          >
+            Initializing
+          </v-progress-circular>
         </div>
       </template>
       <template v-if="!loading">

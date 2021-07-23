@@ -83,7 +83,7 @@
         </template>
       </template>
       <template v-slot:no-data>
-        <div>No Data</div>
+        <div>No Favorites Data</div>
       </template>
     </v-data-table>
   </div>
@@ -104,7 +104,13 @@ export default {
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Update Date', value: 'updateDate', width: '150' },
-        { text: 'Actions', value: 'actions', sortable: false, width: '100' },
+        {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false,
+          width: '80',
+          align: 'center',
+        },
       ],
       editedIndex: -1,
       editedItem: {

@@ -45,7 +45,7 @@
             label="Reason"
             :items="getReasonItems"
             :rules="reasonRules"
-            @input="handleReasonForStopInput"
+            @input="handleInput"
           ></ripa-select>
 
           <template v-if="model.stopReason.reasonForStop === 7">
@@ -300,24 +300,6 @@ export default {
   },
 
   methods: {
-    handleReasonForStopInput() {
-      if (this.reasonForStopValue !== this.viewModel.stopReason.reasonForStop) {
-        this.viewModel.actionsTaken.anyActionsTaken = false
-        this.viewModel.actionsTaken.actionsTakenDuringStop = null
-        this.viewModel.actionsTaken.personSearchConsentGiven = false
-        this.viewModel.actionsTaken.propertySearchConsentGiven = false
-        this.viewModel.actionsTaken.basisForSearch = null
-        this.viewModel.actionsTaken.basisForSearchExplanation = null
-        this.viewModel.actionsTaken.basisForSearchPiiFound = false
-        this.viewModel.actionsTaken.propertyWasSeized = false
-        this.viewModel.actionsTaken.basisForPropertySeizure = null
-        this.viewModel.actionsTaken.typeOfPropertySeized = null
-        this.viewModel.actionsTaken.anyContraband = false
-        this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered = null
-      }
-      this.handleInput()
-    },
-
     handleInput() {
       this.updateModel()
       this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null

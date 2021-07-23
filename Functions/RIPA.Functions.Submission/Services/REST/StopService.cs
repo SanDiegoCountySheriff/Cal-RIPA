@@ -213,8 +213,8 @@ namespace RIPA.Functions.Submission.Services.REST
             {
                 "Male" => ((int)PercievedGender.Male).ToString(),
                 "Female" => ((int)PercievedGender.Female).ToString(),
-                "Transgender man/boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
-                "Transgender woman/girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+                "Transgender Male" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+                "Transgender Female" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
                 _ => "",
             };
         }

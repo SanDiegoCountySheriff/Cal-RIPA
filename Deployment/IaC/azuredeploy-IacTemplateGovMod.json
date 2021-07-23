@@ -490,6 +490,7 @@
     "keyvault_secret_sftp_host": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key7'),')')]",
     "keyvault_secret_sftp_password": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key8'),')')]",
     "keyvault_secret_sftp_username": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/',parameters('vaults_kv_secrets_key9'),')')]"
+    "keyvault_secret_servicebus_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key0'),')')]",
   },
   "resources": [
     // {
@@ -3157,6 +3158,10 @@
             {
               "name": "ripa_tenant_name",
               "value": "[parameters('fa_config_ripa_tenant_name')]"
+            },
+            {
+              "name": "ServiceBusConnection",
+              "value": "[variables('keyvault_secret_servicebus_connection_string')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",

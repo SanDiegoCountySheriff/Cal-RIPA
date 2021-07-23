@@ -7,9 +7,14 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-icon class="tw-ml-4" size="22" v-bind="attrs" v-on="on">{{
-            getOnlineIcon
-          }}</v-icon>
+          <v-icon
+            aria-label="Online indicator"
+            class="tw-ml-4"
+            size="22"
+            v-bind="attrs"
+            v-on="on"
+            >{{ getOnlineIcon }}</v-icon
+          >
         </template>
         <span>Online Status</span>
       </v-tooltip>
@@ -17,6 +22,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            aria-label="Change dark/light mode"
             class="tw-ml-4"
             icon
             small
@@ -44,7 +50,12 @@
             <template v-if="authenticated && online">
               <v-list-item>
                 <v-list-item-title>
-                  <v-btn small text to="/stops">
+                  <v-btn
+                    aria-label="View last 10 officer stops"
+                    small
+                    text
+                    to="/stops"
+                  >
                     <v-icon class="tw-mr-4">
                       mdi-numeric-10-box-multiple-outline
                     </v-icon>
@@ -55,7 +66,12 @@
 
               <v-list-item>
                 <v-list-item-title>
-                  <v-btn small text @click="handleUserChange">
+                  <v-btn
+                    aria-label="View user profile"
+                    small
+                    text
+                    @click="handleUserChange"
+                  >
                     <v-icon class="tw-mr-4"> mdi-account-edit </v-icon>
                     View user profile
                   </v-btn>
@@ -66,7 +82,9 @@
                 <v-list-item>
                   <v-list-item-title>
                     <v-btn small text to="/admin">
-                      <v-icon class="tw-mr-4"> mdi-cog </v-icon>
+                      <v-icon aria-label="Manage admin tables" class="tw-mr-4">
+                        mdi-cog
+                      </v-icon>
                       Manage admin tables
                     </v-btn>
                   </v-list-item-title>
@@ -75,7 +93,12 @@
 
               <v-list-item>
                 <v-list-item-title>
-                  <v-btn small text @click="handleAuth">
+                  <v-btn
+                    aria-label="Logout of application"
+                    small
+                    text
+                    @click="handleAuth"
+                  >
                     <v-icon class="tw-mr-4"> mdi-logout-variant </v-icon>
                     Logout
                   </v-btn>

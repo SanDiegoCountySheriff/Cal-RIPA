@@ -1,19 +1,19 @@
-import RipaStopErrorsDialog from '@/components/molecules/RipaStopErrorsDialog'
+import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import { stopPersonsContent } from '@/stories/data/formStop'
 
 export default {
-  title: 'Molecules/RipaStopErrorsDialog',
-  component: RipaStopErrorsDialog,
+  title: 'Molecules/RipaStopsWithErrorsDialog',
+  component: RipaStopsWithErrorsDialog,
   parameters: {},
 }
 
 export const basic = () => ({
-  components: { RipaStopErrorsDialog },
+  components: { RipaStopsWithErrorsDialog },
   computed: {
     getPersons() {
       return stopPersonsContent
     },
   },
   template:
-    '<ripa-stop-errors-dialog show-dialog :persons="getPersons"></ripa-stop-errors-dialog>',
+    '<ripa-stops-with-errors-dialog show-dialog :persons="getPersons"></ripa-stops-with-errors-dialog>',
 })

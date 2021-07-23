@@ -12,13 +12,13 @@
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
-    <template v-if="!isValidCacheState">
+    <template v-if="!isValidCache">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
       </ripa-alert>
     </template>
 
-    <template v-if="isValidCacheState">
+    <template v-if="isValidCache">
       <slot></slot>
     </template>
 
@@ -39,12 +39,12 @@
     </ripa-snackbar>
 
     <ripa-interval
-      :delay="stopInternalMsApi"
+      :delay="stopIntervalMsApi"
       @tick="checkLocalStorage"
     ></ripa-interval>
 
     <ripa-interval
-      :delay="stopInternalMsAuth"
+      :delay="stopIntervalMsAuth"
       @tick="checkAuthentication"
     ></ripa-interval>
   </ripa-page-wrapper>
@@ -58,7 +58,7 @@ import RipaInvalidUserDialog from '@/components/molecules/RipaInvalidUserDialog'
 import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import authentication from '@/authentication'
 
@@ -80,8 +80,9 @@ export default {
     return {
       loading: false,
       isDark: this.getDarkFromLocalStorage(),
-      stopInternalMsApi: 5000,
-      stopInternalMsAuth: 600000,
+      isValidCache: true,
+      stopIntervalMsApi: 5000,
+      stopIntervalMsAuth: 600000,
       showInvalidUserDialog: false,
       showUserDialog: false,
       snackbarText: '',
@@ -102,7 +103,7 @@ export default {
       'mappedUser',
       'mappedStopSubmissionStatus',
       'mappedStopSubmissionPassedIds',
-      'mappedStopSubmissionFailedIds',
+      'mappedStopSubmissionFailedStops',
     ]),
 
     getMappedUser() {
@@ -113,11 +114,6 @@ export default {
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
       }
-    },
-
-    isValidCacheState() {
-      const cacheDate = localStorage.getItem('ripa_cache_date')
-      return cacheDate !== null
     },
   },
 
@@ -133,6 +129,8 @@ export default {
       'getUser',
       'resetStopSubmissionStatus',
     ]),
+
+    ...mapMutations(['updateConnectionStatus']),
 
     async getUserData() {
       await Promise.all([this.getUser()])
@@ -213,6 +211,7 @@ export default {
       this.checkCache()
       await this.getUserData()
       await this.getFormData()
+      this.isValidCache = true
       this.loading = false
     },
 
@@ -224,18 +223,63 @@ export default {
         })
       }
     },
+
+    updateConnectionStatusInStore() {
+      if (navigator.onLine) {
+        const _that = this
+        this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
+          _that.updateConnectionStatus(online)
+          _that.initPage()
+        })
+      } else {
+        // handle offline status
+        this.updateConnectionStatus(false)
+      }
+    },
+
+    getServerUrl() {
+      return window.location.origin
+    },
+
+    isWebsiteReachable(url) {
+      return fetch(url, { method: 'HEAD', mode: 'no-cors' })
+        .then(function (resp) {
+          return resp && (resp.ok || resp.type === 'opaque')
+        })
+        .catch(function (err) {
+          console.warn('[conn test failure]:', err)
+        })
+    },
+
+    isValidCacheState() {
+      const cacheDate = localStorage.getItem('ripa_cache_date')
+      const isValid = cacheDate !== null
+      this.isValidCache = isValid
+      return isValid
+    },
+
+    async initPage() {
+      if (this.isOnlineAndAuthenticated) {
+        this.updateAuthenticatedData()
+      } else {
+        if (this.isValidCacheState()) {
+          this.loading = true
+          await this.getFormData()
+          this.loading = false
+        }
+      }
+    },
   },
 
-  async created() {
-    if (this.isOnlineAndAuthenticated) {
-      this.updateAuthenticatedData()
-    } else {
-      if (this.isValidCacheState) {
-        this.loading = true
-        await this.getFormData()
-        this.loading = false
-      }
-    }
+  mounted() {
+    this.updateConnectionStatusInStore()
+    window.addEventListener('online', this.updateConnectionStatusInStore)
+    window.addEventListener('offline', this.updateConnectionStatusInStore)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('online', this.updateConnectionStatusInStore)
+    window.removeEventListener('offline', this.updateConnectionStatusInStore)
   },
 
   watch: {
