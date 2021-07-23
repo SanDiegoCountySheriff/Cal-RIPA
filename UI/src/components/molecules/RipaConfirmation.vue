@@ -10,23 +10,6 @@
           >Start New</v-btn
         >
       </div>
-
-      <v-divider></v-divider>
-
-      <template v-if="anyStopsWithErrors">
-        <v-divider></v-divider>
-        <div class="tw-mb-4">
-          <v-container fluid>
-            <v-row no-gutters dense>
-              <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-                <v-btn color="error" @click="handleOpenStopsWithErrors">
-                  STOPS WITH ERRORS
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </div>
-      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -35,30 +18,8 @@
 export default {
   name: 'ripa-confirmation',
 
-  computed: {
-    anyStopsWithErrors() {
-      return this.stopsWithErrors.length > 0
-    },
-  },
-
-  methods: {
-    handleOpenStopsWithErrors() {
-      if (this.onOpenStopsWithErrors) {
-        this.onOpenStopsWithErrors()
-      }
-    },
-  },
-
   props: {
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
     onStartNew: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStopsWithErrors: {
       type: Function,
       default: () => {},
     },

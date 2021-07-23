@@ -8,9 +8,11 @@
       :invalidUser="invalidUser"
       :dark="dark"
       :on-update-dark="onUpdateDark"
+      :on-update-user="onUpdateUser"
+      :on-view-stops-with-errors="onViewStopsWithErrors"
+      :stops-with-errors="stopsWithErrors"
       @handleLogOut="handleLogOut"
       @handleLogIn="handleLogIn"
-      :on-update-user="onUpdateUser"
     ></ripa-app-bar>
 
     <ripa-content-wrapper>
@@ -62,6 +64,7 @@ export default {
     handleLogOut() {
       this.$emit('handleLogOut')
     },
+
     handleLogIn() {
       this.$emit('handleLogIn')
     },
@@ -96,6 +99,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onViewStopsWithErrors: {
+      type: Function,
+      default: () => {},
+    },
     invalidUser: {
       type: Boolean,
       default: false,
@@ -103,6 +110,10 @@ export default {
     authenticated: {
       type: Boolean,
       default: false,
+    },
+    stopsWithErrors: {
+      type: Array,
+      default: () => [],
     },
   },
 }

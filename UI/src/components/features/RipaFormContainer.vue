@@ -21,7 +21,6 @@
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
-      :stops-with-errors="getStopsWithErrors"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :on-add-person="handleAddPerson"
@@ -42,7 +41,6 @@
       :on-open-last-location="handleOpenLastLocation"
       :on-open-statute="handleOpenStatute"
       :on-open-template="handleOpenTemplate"
-      :on-open-stops-with-errors="handleOpenStopsWithErrors"
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
       :on-submit-audit="handleSubmitAudit"
@@ -112,14 +110,6 @@
       :on-save="handleSaveUser"
     ></ripa-user-dialog>
 
-    <ripa-stops-with-errors-dialog
-      :stops-with-errors="getStopsWithErrors"
-      :show-dialog="showStopsWithErrorsDialog"
-      :on-close="handleCloseDialog"
-      :on-edit-stop="handleOpenStopWithError"
-      :on-delete-stop="handleDeleteStopWithError"
-    ></ripa-stops-with-errors-dialog>
-
     <ripa-snackbar
       text="Stop was stored locally and will be submitted to the server once you are online and authenticated."
       v-model="snackbarNotOnlineVisible"
@@ -142,7 +132,6 @@ import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
-import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -157,7 +146,6 @@ export default {
     RipaFormTemplate,
     RipaSnackbar,
     RipaStatuteDialog,
-    RipaStopsWithErrorsDialog,
     RipaUserDialog,
   },
 
@@ -165,7 +153,6 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
-      stopsWithErrors: this.getStopsWithErrors,
     }
   },
 
@@ -193,14 +180,6 @@ export default {
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
       }
-    },
-
-    getStopsWithErrors() {
-      console.log('getStopsWithErrors')
-      const apiStops = localStorage.getItem(
-        'ripa_submitted_api_stops_with_errors',
-      )
-      return apiStops ? JSON.parse(apiStops) : []
     },
   },
 

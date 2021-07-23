@@ -12,6 +12,7 @@
               <ripa-stops-with-errors-grid
                 :items="stopsWithErrors"
                 :on-edit-stop="handleEditStop"
+                :on-delete-stop="handleDeleteStop"
               ></ripa-stops-with-errors-grid>
             </v-col>
           </v-row>
@@ -64,9 +65,16 @@ export default {
         this.onClose()
       }
     },
+
     handleEditStop(internalId) {
       if (this.onEditStop) {
         this.onEditStop(internalId)
+      }
+    },
+
+    handleDeleteStop(internalId) {
+      if (this.onDeleteStop) {
+        this.onDeleteStop(internalId)
       }
     },
   },
@@ -91,6 +99,10 @@ export default {
       default: () => {},
     },
     onEditStop: {
+      type: Function,
+      default: () => {},
+    },
+    onDeleteStop: {
       type: Function,
       default: () => {},
     },

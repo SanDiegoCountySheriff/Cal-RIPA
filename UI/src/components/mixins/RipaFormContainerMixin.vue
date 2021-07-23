@@ -34,7 +34,6 @@ export default {
       showLocationFavoritesDialog: false,
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
-      showStopsWithErrorsDialog: false,
       showStatuteDialog: false,
       showUserDialog: false,
       statute: null,
@@ -54,14 +53,6 @@ export default {
   },
 
   methods: {
-    handleOpenStopWithError(internalId) {
-      alert('open stop with error ' + internalId)
-    },
-
-    handleDeleteStopWithError(internalId) {
-      alert('delete stop with error ' + internalId)
-    },
-
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations ? JSON.parse(locations) : []
@@ -149,7 +140,6 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
-      this.showStopsWithErrorsDialog = false
       this.showUserDialog = false
     },
 
@@ -430,10 +420,6 @@ export default {
       this.updateFullStop()
     },
 
-    handleOpenStopsWithErrors() {
-      this.showStopsWithErrorsDialog = true
-    },
-
     setFavoriteLocations(locations) {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)
@@ -523,6 +509,7 @@ export default {
       localStorage.removeItem('ripa_form_edit_route')
       localStorage.removeItem('ripa_form_edit_stop')
       localStorage.removeItem('ripa_form_editing')
+      localStorage.removeItem('ripa_form_editing_stop_with_error')
       localStorage.removeItem('ripa_form_full_stop')
       localStorage.removeItem('ripa_form_saved_stop')
       localStorage.removeItem('ripa_form_saved_full_stop')

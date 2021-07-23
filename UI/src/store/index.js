@@ -71,6 +71,7 @@ export default new Vuex.Store({
     stopSubmissionStatusError: 0,
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
+    stopsWithErrors: [],
   },
 
   getters: {
@@ -271,6 +272,9 @@ export default new Vuex.Store({
     mappedStopSubmissionFailedStops: state => {
       return state.stopSubmissionFailedStops
     },
+    mappedStopsWithErrors: state => {
+      return state.stopsWithErrors
+    },
   },
 
   mutations: {
@@ -462,6 +466,9 @@ export default new Vuex.Store({
       } else {
         state.stopSubmissionFailedStops.push(errorStop)
       }
+    },
+    updateStopsWithErrors(state, stopsWithErrors) {
+      state.stopsWithErrors = stopsWithErrors
     },
   },
 
@@ -1432,7 +1439,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitAllStops({ commit, state }, queryData) {
+    submitAllStops({ state }, queryData) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.

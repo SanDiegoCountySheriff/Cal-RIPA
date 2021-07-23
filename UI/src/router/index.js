@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RipaFormContainer from '@/components/features/RipaFormContainer'
 import RipaAdminContainer from '@/components/features/RipaAdminContainer'
+import RipaInitContainer from '@/components/features/RipaInitContainer'
 import store from '@/store/index'
 
 Vue.use(VueRouter)
@@ -11,6 +12,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: RipaFormContainer,
+  },
+  {
+    path: '/initializing',
+    name: 'Initializing',
+    component: RipaInitContainer,
   },
   {
     path: '/admin',
