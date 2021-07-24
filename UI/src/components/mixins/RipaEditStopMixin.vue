@@ -60,7 +60,7 @@ export default {
       router.push('/initializing')
       setTimeout(() => {
         router.push('/')
-      }, 2000)
+      }, 500)
       console.log('Edit API Stop with Error', apiStop)
       console.log('Edit Full Stop with Error', fullStop)
       console.log('Edit Stop with Error', stop)
