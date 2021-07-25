@@ -124,7 +124,7 @@ namespace RIPA.Functions.Submission.Services.REST
                         },
                         Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
                         LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
-                        GenNC = personStopped.GenderNonconforming ? "5" : string.Empty
+                        GendNC = personStopped.GenderNonconforming ? Boolean.TrueString : string.Empty
                     },
                     Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
@@ -221,22 +221,16 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojTXType(Stop stop)
         {
-            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I"; // no prior submissions
-            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS") return "U"; // previous submission is error but not a FTS (Fail to submit)
-            if (stop.Status == SubmissionStatus.Failed.ToString() && stop.ListSubmission.OrderBy(x => x.DateSubmitted).FirstOrDefault().ListSubmissionError.FirstOrDefault().Code == "FTS")
+            List<string> listErrorCodes = new List<string>()
             {
-                if (stop.ListSubmission.Where(x=>x.ListSubmissionError.Any(y=>y.Code != "FTS")).Any()) 
-                {
-                    // the code is currently FTS but is has been submitted in prior to FTS and was not an FTS error
-                    return "U";
-                }
-                else
-                {
-                    return "I";
-                }
-            } 
-            return "I";
-        }
+                "FTS",
+                "RLFE",
+                "FLFE",
+            };
 
+            if (stop.ListSubmission.Any(x => x.ListSubmissionError.Any(y => !listErrorCodes.Contains(y.Code)) || x.ListSubmissionError == null || x.ListSubmissionError.Length == 0))
+                return "U"; // has successful submission(s) to the doj, submission(s) that were not Fatal Errors
+            return "I"; // no successful submissions to doj
+        }
     }
 }
