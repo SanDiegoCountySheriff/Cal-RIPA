@@ -70,7 +70,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadStop(DojStop stop, string remoteFilePath, string fileName, BlobContainerClient blobContainerClient)
+        public async Task UploadStop(DojStop stop, string remoteFilePath, string fileName, BlobContainerClient blobContainerClient)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
             using MemoryStream keyStream = new MemoryStream(byteArray);
@@ -83,7 +83,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(stop, settings));
                 using (MemoryStream stream = new MemoryStream(bytes))
                 {
-                    blobClient.UploadAsync(stream); // stream file to Azure Blob
+                    await blobClient.UploadAsync(stream); // stream file to Azure Blob
                 }
                 using (MemoryStream stream = new MemoryStream(bytes))
                 {
