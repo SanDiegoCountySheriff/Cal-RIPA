@@ -33,8 +33,13 @@ namespace RIPA.Functions.Submission.Services.REST
             submissions.Add(submission);
 
             stop.ListSubmission = submissions.ToArray();
+            
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
-            stop.IsEdited = false;
+            if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+            {// this is same logic as TXType for DOJ? 
+                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
+            }
+
             return stop;
         }
 
@@ -221,14 +226,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojTXType(Stop stop)
         {
-            List<string> listErrorCodes = new List<string>()
-            {
-                "FTS",
-                "RLFE",
-                "FLFE",
-            };
-
-            if (stop.ListSubmission.Any(x => x.ListSubmissionError.Any(y => !listErrorCodes.Contains(y.Code)) || x.ListSubmissionError == null || x.ListSubmissionError.Length == 0))
+            if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
                 return "U"; // has successful submission(s) to the doj, submission(s) that were not Fatal Errors
             return "I"; // no successful submissions to doj
         }
