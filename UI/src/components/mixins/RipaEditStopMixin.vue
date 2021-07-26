@@ -56,7 +56,7 @@ export default {
         'ripa_form_submitted_submissions',
         JSON.stringify(sortedSubmissions),
       )
-      this.$router.push('initializing')
+      this.$router.push('/initializing')
       setTimeout(() => {
         this.$router.push('/')
       }, 500)
