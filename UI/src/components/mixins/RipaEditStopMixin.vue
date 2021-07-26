@@ -1,6 +1,5 @@
 <script>
 import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
-import router from '@/router'
 
 export default {
   methods: {
@@ -28,7 +27,7 @@ export default {
         'ripa_form_submitted_submissions',
         JSON.stringify(sortedSubmissions),
       )
-      router.push('/')
+      this.$router.push('/')
       console.log('Edit API Stop', apiStop)
       console.log('Edit Full Stop', fullStop)
       console.log('Edit Stop', stop)
@@ -57,9 +56,9 @@ export default {
         'ripa_form_submitted_submissions',
         JSON.stringify(sortedSubmissions),
       )
-      router.push('/initializing')
+      this.$router.push('initializing')
       setTimeout(() => {
-        router.push('/')
+        this.$router.push('/')
       }, 500)
       console.log('Edit API Stop with Error', apiStop)
       console.log('Edit Full Stop with Error', fullStop)
