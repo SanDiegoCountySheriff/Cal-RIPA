@@ -96,28 +96,11 @@
               mdi-pencil
             </v-icon>
           </template>
-          <template :item-class="stopError" v-slot:expanded-item="{ item }">
-            <td :colspan="headers.length">
-              <div class="text-h6">
-                Errors (errors from this submission are highlighted)
-              </div>
-              <div class="stopError" v-html="item.error"></div>
-            </td>
-          </template>
-<<<<<<< HEAD
-          <!-- <template :item-class="stopError" v-slot:item.error="{ item }">
+          <template :item-class="stopError" v-slot:item.error="{ item }">
             <div class="stopError" v-html="item.error"></div>
-          </template> -->
+          </template>
           <template v-slot:item.edited="{ item }">
-            {{ item.IsEdited ? 'Yes' : 'No' }}
-=======
-          <template v-slot:item.edited="{ item }">
-<<<<<<< HEAD
-            {{ item.IsEdited ? 'Yes' : 'No' }}
->>>>>>> dev
-=======
             {{ item.isEdited ? 'Yes' : 'No' }}
->>>>>>> dev
           </template>
           <template v-slot:no-data>
             <div>No Stops Found in This Submission</div>
