@@ -112,7 +112,11 @@
             {{ item.IsEdited ? 'Yes' : 'No' }}
 =======
           <template v-slot:item.edited="{ item }">
+<<<<<<< HEAD
             {{ item.IsEdited ? 'Yes' : 'No' }}
+>>>>>>> dev
+=======
+            {{ item.isEdited ? 'Yes' : 'No' }}
 >>>>>>> dev
           </template>
           <template v-slot:no-data>
