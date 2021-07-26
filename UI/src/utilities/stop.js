@@ -821,7 +821,7 @@ export const apiStopToFullStop = apiStop => {
       piiFound: apiStop.location?.piiFound || false,
       outOfCounty: apiStop.location?.outOfCounty || false,
       city: cityName || null,
-      beat: beatNumber ? Number(beatNumber) : null,
+      beat: beatNumber ? beatNumber.toString() : null,
     },
     stopDate: {
       date: apiStop.date,
