@@ -154,7 +154,12 @@ export default new Vuex.Store({
       return state.adminUsers
     },
     mappedFormBeats: state => {
-      return state.formBeats
+      return state.formBeats.map(item => {
+        return {
+          fullName: item.fullName,
+          id: item.id.toString(),
+        }
+      })
     },
     mappedFormCountyCities: state => {
       return state.formCountyCities
@@ -847,7 +852,7 @@ export default new Vuex.Store({
               })
               .map(item => {
                 return {
-                  id: item.id,
+                  id: item.id ? item.id.toString() : null,
                   fullName: `${item.id} ${item.community} (${item.command})`,
                 }
               })
