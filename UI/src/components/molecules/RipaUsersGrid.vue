@@ -46,11 +46,11 @@
                   <v-row>
                     <v-col cols="12">
                       <v-file-input
-                        :rules="fileRules"
                         v-model="usersFile"
                         prepend-icon="mdi-paperclip"
                         label="Upload users file"
                         accept=".csv"
+                        :rules="fileRules"
                       >
                       </v-file-input>
                     </v-col>
@@ -255,7 +255,6 @@ export default {
     },
 
     isInvalidFile() {
-      console.log(this.usersFile?.name.split('.').pop())
       return (
         this.usersFile === null &&
         this.usersFile?.name.split('.').pop() === 'csv'
@@ -265,7 +264,7 @@ export default {
     fileRules() {
       return [
         v => !!v || 'A file is required',
-        v => v.name.split('.').pop() === 'csv' || 'File must be .csv',
+        v => (v && v.name.split('.').pop() === 'csv') || 'File must be .csv',
       ]
     },
   },

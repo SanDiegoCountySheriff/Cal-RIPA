@@ -48,7 +48,12 @@ module.exports = {
     'vue/require-v-for-key': 'warn',
     'vue/return-in-computed-property': 'warn',
     'vue/valid-v-for': 'warn',
-    'vue/valid-v-slot': 'off',
+    'vue/valid-v-slot': [
+      'error',
+      {
+        allowModifiers: true,
+      },
+    ],
   },
   overrides: [
     {
