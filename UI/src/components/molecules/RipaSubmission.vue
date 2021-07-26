@@ -99,7 +99,7 @@
             <div class="stopError" v-html="item.error"></div>
           </template>
           <template v-slot:item.edited="{ item }">
-            {{ item.IsEdited ? 'Yes' : 'No' }}
+            {{ item.isEdited ? 'Yes' : 'No' }}
           </template>
           <template v-slot:no-data>
             <div>No Stops Found in This Submission</div>
