@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
@@ -14,7 +15,7 @@ namespace RIPA.Functions.UserProfile
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            // builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
         }
 
         private static async Task<UserProfileCosmosDbService> InitializeCosmosClientInstanceAsync()
@@ -23,9 +24,9 @@ namespace RIPA.Functions.UserProfile
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            CosmosClient client = new CosmosClient(account, key);
             UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
-            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return cosmosDbService;
