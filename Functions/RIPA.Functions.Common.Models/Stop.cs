@@ -48,12 +48,24 @@ namespace RIPA.Functions.Common.Models
         SubmissionError
     }
 
+    public enum SubmissionErrorCode
+    {
+        [EnumMember(Value = "FTS")] // Failed to submit
+        FTS,
+        [EnumMember(Value = "RLFE")]
+        RLFE,
+        [EnumMember(Value = "FLFE")]
+        FLFE
+    }
+
     public enum SubmissionStatus
     {
         [EnumMember(Value = "Unsubmitted")]
         Unsubmitted,
         [EnumMember(Value = "Submitted")]
         Submitted,
+        [EnumMember(Value = "Resubmitted")]
+        Resubmitted,
         [EnumMember(Value = "Failed")]
         Failed
     }
