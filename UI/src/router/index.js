@@ -13,6 +13,14 @@ const routes = [
     component: RipaFormContainer,
   },
   {
+    path: '/initializing',
+    name: 'Initializing',
+    component: () =>
+      import(
+        /* webpackChunkName: "ripa-init" */ '@/components/features/RipaInitContainer'
+      ),
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () =>

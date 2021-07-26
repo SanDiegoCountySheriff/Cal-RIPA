@@ -79,7 +79,7 @@ namespace RIPA.Functions.Submission.Functions
 
                 try
                 {
-                    _sftpService.UploadStop(dojStop, $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, _blobContainerClient);
+                    await _sftpService.UploadStop(dojStop, $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, _blobContainerClient);
                     await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionMessage.SubmissionId, fileName));
                     log.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionMessage.SubmissionId}");
                 }

@@ -104,11 +104,16 @@
               <div class="stopError" v-html="item.error"></div>
             </td>
           </template>
+<<<<<<< HEAD
           <!-- <template :item-class="stopError" v-slot:item.error="{ item }">
             <div class="stopError" v-html="item.error"></div>
           </template> -->
-          <template v-slot:[`item.edited`]="{ item }">
-            {{ item.listSubmission.length ? 'Yes' : 'No' }}
+          <template v-slot:item.edited="{ item }">
+            {{ item.IsEdited ? 'Yes' : 'No' }}
+=======
+          <template v-slot:item.edited="{ item }">
+            {{ item.IsEdited ? 'Yes' : 'No' }}
+>>>>>>> dev
           </template>
           <template v-slot:no-data>
             <div>No Stops Found in This Submission</div>
@@ -233,7 +238,7 @@ export default {
       })
     },
     editItem(item) {
-      this.handleEditStop(item, window.location.pathname)
+      this.handleEditStopByAdmin(item, window.location.pathname)
     },
     getColumnSortName() {
       const columnName = Array.isArray(this.sortBy)

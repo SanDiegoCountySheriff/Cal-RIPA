@@ -71,6 +71,7 @@ export default new Vuex.Store({
     stopSubmissionStatusError: 0,
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
+    stopsWithErrors: [],
   },
 
   getters: {
@@ -153,7 +154,12 @@ export default new Vuex.Store({
       return state.adminUsers
     },
     mappedFormBeats: state => {
-      return state.formBeats
+      return state.formBeats.map(item => {
+        return {
+          fullName: item.fullName,
+          id: item.id.toString(),
+        }
+      })
     },
     mappedFormCountyCities: state => {
       return state.formCountyCities
@@ -270,6 +276,9 @@ export default new Vuex.Store({
     },
     mappedStopSubmissionFailedStops: state => {
       return state.stopSubmissionFailedStops
+    },
+    mappedStopsWithErrors: state => {
+      return state.stopsWithErrors
     },
   },
 
@@ -462,6 +471,9 @@ export default new Vuex.Store({
       } else {
         state.stopSubmissionFailedStops.push(errorStop)
       }
+    },
+    updateStopsWithErrors(state, stopsWithErrors) {
+      state.stopsWithErrors = stopsWithErrors
     },
   },
 
@@ -862,7 +874,7 @@ export default new Vuex.Store({
               })
               .map(item => {
                 return {
-                  id: item.id,
+                  id: item.id ? item.id.toString() : null,
                   fullName: `${item.id} ${item.community} (${item.command})`,
                 }
               })
@@ -1454,7 +1466,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitAllStops({ commit, state }, queryData) {
+    submitAllStops({ state }, queryData) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.

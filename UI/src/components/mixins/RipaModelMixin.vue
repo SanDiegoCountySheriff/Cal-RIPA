@@ -49,7 +49,9 @@ export default {
           piiFound: newValue.location?.piiFound || false,
           outOfCounty: newValue.location?.outOfCounty || false,
           city: newValue.location?.city || null,
-          beat: newValue.location?.beat || null,
+          beat: newValue.location?.beat
+            ? newValue.location.beat.toString()
+            : null,
         },
         person: {
           anyDisabilities: newValue.person?.anyDisabilities || false,

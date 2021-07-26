@@ -217,9 +217,7 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
-
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
-
 import _ from 'lodash'
 import { isAfter, getYear } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
@@ -432,7 +430,7 @@ export default {
     },
 
     editItem(item) {
-      this.handleEditStop(item, window.location.pathname)
+      this.handleEditStopByAdmin(item, window.location.pathname)
     },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true

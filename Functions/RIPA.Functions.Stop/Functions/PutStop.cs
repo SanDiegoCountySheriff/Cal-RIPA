@@ -100,6 +100,21 @@ namespace RIPA.Functions.Stop.Functions
 
             stop.IsEdited = Id == "0" ? false : true;
 
+            try
+            {
+                if (Id != "0")
+                {
+                    //Protect the submission history
+                    Common.Models.Stop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
+                    stop.ListSubmission = editingStop.ListSubmission;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Failed getting stop to protect submission history", ex);
+                return new BadRequestObjectResult("Failed getting stop submission history");
+            }
+
             int retryAttemps = GetRetrySetting("RetryAttemps", 3);
             int retrywait = GetRetrySetting("RetryWait", 1000);
 

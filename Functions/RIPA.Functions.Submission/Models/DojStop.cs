@@ -65,7 +65,7 @@ namespace RIPA.Functions.Submission.Models
         public string Is_LimEng { get; set; }
         public Listdisb ListDisb { get; set; }
         public string Gend { get; set; }
-        public string GenNC { get; set; }
+        public string GendNC { get; set; }
         public string LGBT { get; set; }
     }
 

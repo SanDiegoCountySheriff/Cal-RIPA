@@ -494,16 +494,6 @@ const getSummaryActionsTaken = person => {
         detail: item,
       }
     })
-  if (
-    person.listBasisForPropertySeizure &&
-    person.listTypeOfPropertySeized &&
-    (person.listBasisForPropertySeizure.length > 0 ||
-      person.listTypeOfPropertySeized.length > 0)
-  ) {
-    actions.push({
-      detail: 'Property was seized',
-    })
-  }
 
   return {
     level: 2,
@@ -831,7 +821,7 @@ export const apiStopToFullStop = apiStop => {
       piiFound: apiStop.location?.piiFound || false,
       outOfCounty: apiStop.location?.outOfCounty || false,
       city: cityName || null,
-      beat: beatNumber ? Number(beatNumber) : null,
+      beat: beatNumber ? beatNumber.toString() : null,
     },
     stopDate: {
       date: apiStop.date,
