@@ -494,16 +494,6 @@ const getSummaryActionsTaken = person => {
         detail: item,
       }
     })
-  if (
-    person.listBasisForPropertySeizure &&
-    person.listTypeOfPropertySeized &&
-    (person.listBasisForPropertySeizure.length > 0 ||
-      person.listTypeOfPropertySeized.length > 0)
-  ) {
-    actions.push({
-      detail: 'Property was seized',
-    })
-  }
 
   return {
     level: 2,
