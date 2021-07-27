@@ -22,6 +22,8 @@
             >Admin: Maintain Users</v-toolbar-title
           >
           <v-spacer></v-spacer>
+          <!--
+            For now I don't think we need this ability
           <v-btn
             color="primary"
             dark
@@ -30,6 +32,7 @@
           >
             New User
           </v-btn>
+          -->
 
           <ripa-user-dialog
             :admin="true"
