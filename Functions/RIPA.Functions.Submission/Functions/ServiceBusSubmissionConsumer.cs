@@ -65,7 +65,8 @@ namespace RIPA.Functions.Submission.Functions
                             Message = "Failed to submit to DOJ. Stop to DOJ Cast failure",
                             DateReported = dateSubmitted,
                             ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName
+                            FileName = fileName,
+                            SubmissionId= submissionMessage.SubmissionId
                         };
                         await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
                         log.LogError($"Failure Casting Stop with id {stop.Id}: {ex.Message}");
@@ -93,7 +94,8 @@ namespace RIPA.Functions.Submission.Functions
                             Message = "Failed to submit to DOJ. SFTP connection, Blob Connection failure",
                             DateReported = dateSubmitted,
                             ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName
+                            FileName = fileName,
+                            SubmissionId = submissionMessage.SubmissionId
                         };
                         await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
                         log.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");

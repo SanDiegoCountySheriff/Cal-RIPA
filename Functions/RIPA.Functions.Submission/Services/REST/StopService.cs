@@ -45,6 +45,21 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
         {
+            if (stop.ListSubmission == null)
+            {
+                stop.ListSubmission = new Common.Models.Submission[0];
+                Common.Models.Submission submission = new Common.Models.Submission
+                {
+                    DateSubmitted = submissionError.DateReported,
+                    Id = submissionError.SubmissionId,
+                    Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted),
+                    FileName = submissionError.FileName
+                };
+                var submissions = stop.ListSubmission.ToList();
+                submissions.Add(submission);
+                stop.ListSubmission = submissions.ToArray();
+            }
+
             var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
             foreach (var submission in pendingSubmissions)
             {
