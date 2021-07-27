@@ -108,10 +108,6 @@ export default {
       }
       this.handleClose()
     },
-
-    handleInput() {
-      console.log(this.viewModelUser)
-    },
   },
 
   watch: {
