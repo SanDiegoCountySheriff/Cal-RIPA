@@ -84,9 +84,8 @@
           :search="search"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          show-expand
         >
-          <template v-slot:[`item.actions`]="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon
               v-if="item.status !== 'Submitted'"
               small
@@ -144,18 +143,15 @@ export default {
 
   data() {
     return {
-      expanded: [],
-      singleExpand: false,
       headers: [
-        { text: 'View Errors', value: 'data-table-expand' },
         { text: 'Stop', value: 'id', sortName: 'id' },
-        { text: 'Status', value: 'status', sortName: 'Status' },
-        { text: 'Edited', value: 'edited', sortName: 'IsEdited' },
-        // {
-        //   text: 'Error (errors from this submission are highlighted)',
-        //   value: 'error',
-        //   sortable: false,
-        // },
+        { text: 'Status', value: 'status', width: 100, sortName: 'Status' },
+        { text: 'Edited', value: 'edited', width: 100, sortName: 'IsEdited' },
+        {
+          text: 'Error (errors from this submission are highlighted)',
+          value: 'error',
+          sortable: false,
+        },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       format,
