@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.UserProfile.Startup))]
@@ -24,7 +25,14 @@ namespace RIPA.Functions.UserProfile
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClient client = new CosmosClient(account, key);
+#if DEBUG
+            CosmosClientOptions clientOptions = new CosmosClientOptions()
+            {
+                WebProxy = new WebProxy("http://proxy_cgw.sdsheriff.com:8080/", true),
+                ConnectionMode = ConnectionMode.Gateway
+            };
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
             UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
             DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");

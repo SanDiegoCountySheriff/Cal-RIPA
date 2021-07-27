@@ -1,5 +1,6 @@
 using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -37,7 +38,7 @@ namespace RIPA.Functions.UserProfile.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Upload Complete")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.csv")]
 
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -67,13 +68,17 @@ namespace RIPA.Functions.UserProfile.Functions
                     count = records.Count();
                     foreach (var record in records)
                     {
-                        var jsonRecord = JsonConvert.SerializeObject(record, Formatting.Indented);
-                        log.LogInformation(jsonRecord);
+                        record.StartDate = DateTime.Now.AddYears(-record.YearsExperience);
+                        if (string.IsNullOrEmpty(record.Agency))
+                        {
+                            record.Agency = Environment.GetEnvironmentVariable("agency");
+                        }
+                        await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
                     }
                 }
 
-                string responseMessage = $"Upload Complete: {count} records uploaded";
-
+                string responseMessage = $"Upload Complete: {count} record(s) uploaded";
+                log.LogInformation(responseMessage);
                 return new OkObjectResult(responseMessage);
             }
             catch (Exception ex)
@@ -92,15 +97,32 @@ namespace RIPA.Functions.UserProfile.Functions
             Map(u => u.OfficerId);
             Map(u => u.FirstName).Optional();
             Map(u => u.LastName).Optional();
-            Map(u => u.YearsExperience).Optional();
+            Map(u => u.YearsExperience).Optional().TypeConverter<YearsConverter>();
             Map(u => u.Assignment).Optional();
             Map(u => u.OtherType).Optional();
             Map(u => u.Agency).Optional();
             Map(u => u.Name).Optional();
-            Map(u => u.StartDate).Optional();
             Map(u => u.FavoriteLocations).Ignore();
             Map(u => u.FavoriteReasons).Ignore();
             Map(u => u.FavoriteResults).Ignore();
+        }
+    }
+
+    public class YearsConverter : DefaultTypeConverter
+    {
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 1;
+            }
+
+            if (!int.TryParse(text, out int yearsExperience) || yearsExperience < 0 || yearsExperience > 50)
+            {
+                yearsExperience = 1;
+            }
+
+            return yearsExperience;
         }
     }
 }
