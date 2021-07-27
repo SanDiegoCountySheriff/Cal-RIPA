@@ -57,7 +57,6 @@
 
 <script>
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { format } from 'date-fns'
 
 export default {
   name: 'ripa-users-grid',
