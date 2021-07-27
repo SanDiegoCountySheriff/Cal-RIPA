@@ -22,6 +22,7 @@ namespace RIPA.Functions.Common.Models
         public string Code { get; set; }
         public DateTime DateReported { get; set; }
         public string FileName { get; set; }
+        public Guid SubmissionId { get; set; }
     }
 
     public enum PercievedGender
