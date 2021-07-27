@@ -241,7 +241,8 @@ namespace RIPA.Functions.Submission.Services.REST
 
         public static string CastToDojTXType(Stop stop)
         {
-            if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I";
+            if (stop.ListSubmission.Any(x => x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code)) || x.ListSubmissionError == null || x.ListSubmissionError.Length == 0))
                 return "U"; // has successful submission(s) to the doj, submission(s) that were not Fatal Errors
             return "I"; // no successful submissions to doj
         }
