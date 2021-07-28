@@ -796,9 +796,18 @@ export default new Vuex.Store({
           const errorStop = {
             internalId: nanoid(),
             apiStop: stop,
-            statusCode: 'N/A',
-            statusError: error.message || error,
           }
+          if (error.response) {
+            errorStop.statusCode = error.response.status
+            errorStop.statusError = error.response.statusText
+          } else if (error.request) {
+            errorStop.statusCode = error.request.status
+            errorStop.statusError = error.request.statusText
+          } else {
+            errorStop.statusCode = 'N/A'
+            errorStop.statusError = error.message || error
+          }
+
           commit('updateStopSubmissionStatusError', 1)
           commit('updateStopSubmissionFailedStops', errorStop)
           console.log(
