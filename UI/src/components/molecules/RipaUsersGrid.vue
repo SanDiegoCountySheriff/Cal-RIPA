@@ -22,95 +22,28 @@
             >Admin: Maintain Users</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px" persistent>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="tw-mb-2"
-                v-bind="attrs"
-                v-on="on"
-              >
-                New Item
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span>{{ formTitle }}</span>
-              </v-card-title>
+          <!--
+            For now I don't think we need this ability
+          <v-btn
+            color="primary"
+            dark
+            class="tw-mb-2"
+            @click="editItem(defaultItem)"
+          >
+            New User
+          </v-btn>
+          -->
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.id"
-                        :disabled="isRowKeyDisabled"
-                        label="ID"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.firstName"
-                        label="First Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.lastName"
-                        label="Last Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.agency"
-                        label="Agency"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <ripa-date-picker
-                        v-model="editedItem.startDate"
-                        label="Start Date"
-                      ></ripa-date-picker>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.yearsExperience"
-                        label="Years Experience"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.assignment"
-                        label="Assignment"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.otherType"
-                        label="Other Type"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  :disabled="isDuplicateKey"
-                  @click="save"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <ripa-user-dialog
+            :admin="true"
+            :user="editedItem"
+            :showDialog="dialog"
+            :on-close="close"
+            :on-save="save"
+            :is-row-key-disabled="isRowKeyDisabled"
+            :form-title="formTitle"
+          >
+          </ripa-user-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -126,14 +59,13 @@
 </template>
 
 <script>
-import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import { format } from 'date-fns'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 
 export default {
   name: 'ripa-users-grid',
 
   components: {
-    RipaDatePicker,
+    RipaUserDialog,
   },
 
   data() {
@@ -167,6 +99,8 @@ export default {
         lastName: '',
         startDate: '',
         agency: '',
+        assignment: 0,
+        yearsExperience: '',
       },
       defaultItem: {
         id: '',
@@ -174,13 +108,15 @@ export default {
         lastName: '',
         startDate: '',
         agency: '',
+        assignment: 0,
+        yearsExperience: '',
       },
     }
   },
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'New User' : 'Edit User'
     },
 
     isRowKeyDisabled() {
@@ -208,6 +144,7 @@ export default {
     editItem(item) {
       this.editedIndex = this.users.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.editedItem.assignment = Number(this.editedItem.assignment)
       this.dialog = true
     },
 
@@ -222,11 +159,9 @@ export default {
     save() {
       this.editedName = `${this.editedItem.fullName} ${this.editedItem.lastName}`
       if (this.editedIndex > -1) {
+        this.editedItem.assignment = Number(this.editedItem.assignment)
         Object.assign(this.users[this.editedIndex], this.editedItem)
       } else {
-        this.editedItem.officerId =
-          format(new Date(), 'yyMMdd') +
-          (Math.floor(Math.random() * 999) + 100).toString()
         this.users.push(this.editedItem)
       }
 

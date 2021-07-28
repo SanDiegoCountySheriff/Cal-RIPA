@@ -1,6 +1,43 @@
 <template>
   <div class="ripa-user">
     <v-container>
+      <template v-if="admin">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-text-input
+              v-model="model.id"
+              label="ID"
+              :disabled="isRowKeyDisabled"
+            >
+            </ripa-text-input>
+          </v-col>
+        </v-row>
+
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6">
+            <div class="md:tw-mr-4">
+              <ripa-text-input
+                v-model="model.firstName"
+                label="First Name"
+                :rules="firstNameRules"
+              >
+              </ripa-text-input>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-text-input
+                v-model="model.lastName"
+                label="Last Name"
+                :rules="lastNameRules"
+              >
+              </ripa-text-input>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
@@ -20,6 +57,7 @@
               v-model="model.yearsExperience"
               label="Years of Experience"
               :rules="yearsExperienceRules"
+              @input="handleInput"
             >
             </ripa-number-input>
           </div>
@@ -32,7 +70,7 @@
             <ripa-text-input
               v-model="model.agency"
               label="Agency"
-              :disabled="!isInvalidUser"
+              :disabled="!admin"
               :rules="agencyRules"
               @input="handleInput"
             >
@@ -107,6 +145,8 @@ export default {
       ],
       agencyRules: [v => !!v || 'An agency is required'],
       assignmentRules: [v => !!v || 'An assignment is required'],
+      firstNameRules: [v => !!v || 'A first name is required'],
+      lastNameRules: [v => !!v || 'A last name is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
       viewModel: this.value,
     }
@@ -188,9 +228,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    isInvalidUser: {
+    admin: {
       type: Boolean,
       default: false,
+    },
+    isRowKeyDisabled: {
+      type: Boolean,
+      default: true,
     },
   },
 }
