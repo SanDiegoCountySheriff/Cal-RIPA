@@ -65,6 +65,7 @@ namespace RIPA.Functions.UserProfile.Functions
                     csv.Context.RegisterClassMap<UserProfileMap>();
                     var records = csv.GetRecords<Common.Models.UserProfile>().ToList();
                     count = records.Count();
+
                     foreach (var record in records)
                     {
                         record.StartDate = DateTime.Now.AddYears(-record.YearsExperience);
@@ -77,6 +78,7 @@ namespace RIPA.Functions.UserProfile.Functions
                 }
 
                 string responseMessage = $"Upload Complete: {count} record(s) uploaded";
+                
                 log.LogInformation(responseMessage);
                 return new OkObjectResult(responseMessage);
             }

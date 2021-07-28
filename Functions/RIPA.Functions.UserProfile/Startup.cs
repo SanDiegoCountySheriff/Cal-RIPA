@@ -28,8 +28,7 @@ namespace RIPA.Functions.UserProfile
 #if DEBUG
             CosmosClientOptions clientOptions = new CosmosClientOptions()
             {
-                WebProxy = new WebProxy("http://proxy_cgw.sdsheriff.com:8080/", true),
-                ConnectionMode = ConnectionMode.Gateway
+                ConnectionMode = ConnectionMode.Gateway,
             };
 #endif
             CosmosClient client = new CosmosClient(account, key, clientOptions);

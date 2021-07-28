@@ -47,9 +47,6 @@
       :on-update-user="handleUpdateUser"
       @input="handleInput"
     ></ripa-form-template>
-    <div>
-      <pre>{{ this.fullStop }}</pre>
-    </div>
 
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
