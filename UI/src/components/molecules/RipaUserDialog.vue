@@ -23,7 +23,6 @@
               :is-invalid-user="isInvalidUser"
               :admin="admin"
               :is-row-key-disabled="isRowKeyDisabled"
-              @input="handleInput"
             ></ripa-user>
           </template>
         </v-form>
