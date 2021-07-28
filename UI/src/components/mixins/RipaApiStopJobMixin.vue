@@ -39,7 +39,7 @@ export default {
         // either submitted successfully or moved to new key in local storage
         this.removeApiStopsFromLocalStorage()
 
-        console.log(`Api Stops Job Called with '${apiStops.length}' found.`)
+        console.log(`Api Stops Job Submitted: ${apiStops.length} stops`)
 
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
@@ -49,10 +49,10 @@ export default {
         }
 
         console.log(
-          `Api Stops Submitted Successfully: '${this.mappedStopSubmissionPassedIds.length}'`,
+          `Api Stops Submitted Successfully: ${this.mappedStopSubmissionPassedIds.length} stops`,
         )
         console.log(
-          `Api Stops Submitted with Errors: '${this.mappedStopSubmissionFailedStops.length}'`,
+          `Api Stops Submitted with Errors: ${this.mappedStopSubmissionFailedStops.length} stops`,
         )
 
         let stopIdsPassedStr = ''
