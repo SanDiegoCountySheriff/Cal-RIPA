@@ -192,8 +192,8 @@ export default {
 
     isInvalidFile() {
       return (
-        this.usersFile === null &&
-        this.usersFile?.name.split('.').pop() === 'csv'
+        this.usersFile === null ||
+        this.usersFile?.name.split('.').pop() !== 'csv'
       )
     },
 
@@ -222,10 +222,6 @@ export default {
         this.onUploadUsers(this.usersFile)
         this.usersFile = null
       }
-
-      // return list of users?
-      // for user in users
-      //     this.users.push(user)
 
       this.closeFileDialog()
     },
