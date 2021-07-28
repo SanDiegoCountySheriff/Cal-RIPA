@@ -4,8 +4,8 @@ export const SUBMISSION_STATUSES = [
     value: 'Failed',
   },
   {
-    text: 'Resubmit',
-    value: 'Resubmit',
+    text: 'Resubmitted',
+    value: 'Resubmitted',
   },
   {
     text: 'Submitted',
