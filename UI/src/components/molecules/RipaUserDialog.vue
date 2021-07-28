@@ -2,7 +2,7 @@
   <v-dialog v-model="modelDialog" max-width="650px" persistent>
     <v-card>
       <v-card-title>
-        <span>Manage User</span>
+        <span>{{ this.formTitle }}</span>
       </v-card-title>
 
       <v-card-text>
@@ -21,6 +21,9 @@
             <ripa-user
               v-model="modelUser"
               :is-invalid-user="isInvalidUser"
+              :admin="admin"
+              :is-row-key-disabled="isRowKeyDisabled"
+              @input="handleInput"
             ></ripa-user>
           </template>
         </v-form>
@@ -87,7 +90,7 @@ export default {
   methods: {
     handleClose() {
       this.isFormValid = this.$refs.dialogForm.validate()
-      if (!this.isFormValid) {
+      if (!this.isFormValid && !this.admin) {
         return
       }
       if (this.onClose) {
@@ -140,6 +143,18 @@ export default {
     onSave: {
       type: Function,
       default: () => {},
+    },
+    admin: {
+      type: Boolean,
+      default: false,
+    },
+    isRowKeyDisabled: {
+      type: Boolean,
+      default: true,
+    },
+    formTitle: {
+      type: String,
+      default: 'Manage User',
     },
   },
 }
