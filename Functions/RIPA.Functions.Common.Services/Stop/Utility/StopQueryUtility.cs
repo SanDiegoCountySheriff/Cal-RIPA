@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using RIPA.Functions.Common.Models;
 
@@ -77,7 +78,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             {
                 join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
                 join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
-                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{stopQuery.ErrorCode}'");
+                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code IN ({string.Join(",", stopQuery.ErrorCode.Split(",").Select(x => string.Format("'{0}'", x)).ToList())})");
             }
 
             //IsSubmitted
@@ -176,7 +177,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             {
                 join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
                 join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
-                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{stopQuery.ErrorCode}'");
+                whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code IN ({string.Join(",", stopQuery.ErrorCode.Split(",").Select(x => string.Format("'{0}'", x)).ToList())})");
             }
 
             //IsSubmitted
