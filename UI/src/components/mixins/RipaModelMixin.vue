@@ -124,20 +124,10 @@ export default {
       })
     },
 
-    clearDisabilityModel() {
-      this.$nextTick(() => {
-        this.viewModel.person.anyDisabilities = false
-      })
-    },
-
-    clearPerceivedOrKnownDisabilityModel() {
-      this.$nextTick(() => {
-        this.viewModel.person.perceivedOrKnownDisability = []
-      })
-    },
-
     updateModel() {
       this.updateSchoolModel()
+      this.updateStudentModel()
+      this.updatePerceivedDisabilityModel()
       this.updateActionsTakenModel()
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
@@ -336,7 +326,29 @@ export default {
         this.viewModel.person.isStudent = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
-        this.clearDisabilityModel()
+      }
+    },
+
+    updateStudentModel() {
+      if (!this.viewModel.location.isStudent) {
+        this.viewModel.stopResult.resultsOfStop12 = false
+        this.viewModel.stopResult.resultsOfStop13 = false
+      }
+    },
+
+    updatePerceivedDisabilityModel() {
+      if (!this.viewModel.location.isStudent) {
+        const options = this.viewModel.person?.perceivedOrKnownDisability || []
+        const studentOptionFound = options.includes(7)
+        if (studentOptionFound) {
+          this.viewModel.person.perceivedOrKnownDisability = options.filter(
+            item => item !== 7,
+          )
+        }
+      }
+
+      if (this.viewModel.person.perceivedOrKnownDisability.length === 0) {
+        this.viewModel.person.anyDisabilities = false
       }
     },
 
