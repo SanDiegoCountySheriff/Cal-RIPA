@@ -16,6 +16,20 @@ namespace RIPA.Functions.Submission.Services.REST
     {
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
         {
+            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+            if (stop.ListSubmission == null)
+            {
+                stop.ListSubmission = new Common.Models.Submission[0];
+            }
+            else
+            {
+                if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+                {// this is same logic as TXType for DOJ? 
+                    stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
+                }
+            }
+
+            var submissions = stop.ListSubmission.ToList();
             Common.Models.Submission submission = new Common.Models.Submission
             {
                 DateSubmitted = dateSubmitted,
@@ -23,23 +37,10 @@ namespace RIPA.Functions.Submission.Services.REST
                 Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted),
                 FileName = fileName
             };
-
-            if (stop.ListSubmission == null)
-            {
-                stop.ListSubmission = new Common.Models.Submission[0];
-            }
-
-            var submissions = stop.ListSubmission.ToList();
             submissions.Add(submission);
 
             stop.ListSubmission = submissions.ToArray();
             
-            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
-            if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
-            {// this is same logic as TXType for DOJ? 
-                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
-            }
-
             return stop;
         }
 
