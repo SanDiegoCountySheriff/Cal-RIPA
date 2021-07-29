@@ -44,7 +44,7 @@ export default {
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
-          await this.editOfficerStop(apiStop)
+          await this.submitOfficerStop(apiStop)
           await this.timeout(3000)
         }
 

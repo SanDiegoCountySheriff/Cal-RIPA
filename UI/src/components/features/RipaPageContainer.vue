@@ -149,7 +149,7 @@ export default {
 
   methods: {
     ...mapActions([
-      'editOfficerStop',
+      'submitOfficerStop',
       'editOfficerUser',
       'getFormBeats',
       'getFormCities',
