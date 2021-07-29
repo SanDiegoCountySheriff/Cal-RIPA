@@ -108,61 +108,6 @@
         </template>
       </template>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-date-picker
-              v-model="model.startDate"
-              label="Start Date"
-              :rules="startDateRules"
-              :max="getMaxDate"
-              @input="handleInput"
-            ></ripa-date-picker>
-          </div>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <div>
-            <ripa-number-input
-              v-model="model.yearsExperience"
-              label="Years of Experience"
-              :rules="yearsExperienceRules"
-              @input="handleInput"
-            >
-            </ripa-number-input>
-          </div>
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-text-input
-              v-model="model.agency"
-              label="Agency"
-              :disabled="!admin && !isInvalidUser"
-              :rules="agencyRules"
-              @input="handleInput"
-            >
-            </ripa-text-input>
-          </div>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <ripa-select
-            v-model="model.assignment"
-            label="Officer Assignment"
-            :items="assignmentItems"
-            itemText="name"
-            itemValue="value"
-            :rules="assignmentRules"
-            @input="handleInput"
-          >
-          </ripa-select>
-        </v-col>
-      </v-row>
-
-      <template v-if="model.assignment === 10">
       <template v-if="adminEditing">
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
@@ -336,11 +281,7 @@ export default {
       type: Boolean,
       default: false,
     },
-<<<<<<< HEAD
-    isInvalidUser: {
-=======
     adminEditing: {
->>>>>>> dev
       type: Boolean,
       default: false,
     },

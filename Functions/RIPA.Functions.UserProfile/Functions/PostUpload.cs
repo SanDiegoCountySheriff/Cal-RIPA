@@ -73,13 +73,14 @@ namespace RIPA.Functions.UserProfile.Functions
                         {
                             record.Agency = Environment.GetEnvironmentVariable("agency");
                         }
-                        //await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
+                        await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
+                        log.LogInformation($"OfficerId: {record.OfficerId} added to database");
                     }
                 }
 
                 string responseMessage = $"Upload Complete: {count} record(s) uploaded";
 
-                await _userProfileCosmosDbService.DeleteUserProfileAsync("19c48f15-ae59-4aeb-a5be-f9f97198f835");
+                //await _userProfileCosmosDbService.DeleteUserProfileAsync("19c48f15-ae59-4aeb-a5be-f9f97198f835");
                 log.LogInformation(responseMessage);
                 return new OkObjectResult(responseMessage);
             }
