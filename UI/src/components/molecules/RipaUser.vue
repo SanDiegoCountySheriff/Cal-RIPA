@@ -108,7 +108,6 @@
         </template>
       </template>
 
-<<<<<<< HEAD
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
@@ -164,9 +163,7 @@
       </v-row>
 
       <template v-if="model.assignment === 10">
-=======
       <template v-if="adminEditing">
->>>>>>> dev
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
             <div class="md:tw-mr-4">
