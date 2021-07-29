@@ -208,7 +208,6 @@ export const STOP_RESULTS = [
     value: 9,
   },
   { name: 'Psychiatric hold', value: 10 },
-
   { name: 'Contacted U.S. Department of Homeland Security', value: 11 },
   { name: 'Referral to school administrator', value: 12 },
   { name: 'Referral to school counselor or other support staff', value: 13 },
