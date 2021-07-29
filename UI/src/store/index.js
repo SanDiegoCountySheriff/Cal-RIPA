@@ -728,15 +728,18 @@ export default new Vuex.Store({
     editOfficerUser({ dispatch, state }, mappedUser) {
       const userId = state.user.oid
       const user = {
-        id: state.user.oid,
+        agency: mappedUser.agency,
+        assignment: mappedUser.assignment,
+        favoriteLocations: state.user.favoriteLocations,
+        favoriteReasons: state.user.favoriteReasons,
+        favoriteResults: state.user.favoriteResults,
         firstName: state.user.firstName,
+        id: state.user.oid,
         lastName: state.user.lastName,
         name: state.user.fullName,
-        agency: mappedUser.agency,
-        startDate: mappedUser.startDate,
         officerId: state.user.officerId,
-        assignment: mappedUser.assignment,
         otherType: mappedUser.otherType,
+        startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
       }
 
