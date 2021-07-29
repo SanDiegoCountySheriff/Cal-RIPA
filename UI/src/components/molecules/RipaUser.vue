@@ -70,7 +70,7 @@
             <ripa-text-input
               v-model="model.agency"
               label="Agency"
-              :disabled="!admin"
+              :disabled="!admin && !isInvalidUser"
               :rules="agencyRules"
               @input="handleInput"
             >
@@ -229,6 +229,10 @@ export default {
       default: false,
     },
     admin: {
+      type: Boolean,
+      default: false,
+    },
+    isInvalidUser: {
       type: Boolean,
       default: false,
     },
