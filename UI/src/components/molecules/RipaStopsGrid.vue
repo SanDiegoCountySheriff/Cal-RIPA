@@ -164,7 +164,8 @@
           <template v-slot:item.actions="{ item }">
             <v-icon
               v-if="
-                item.status !== 'Submitted' && item.status !== 'Resubmitted'
+                item.status !== statuses.Submitted &&
+                item.status !== statuses.Resubmitted
               "
               small
               class="tw-mr-2"
