@@ -761,7 +761,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitOfficerStop({ commit, dispatch, state }, stop) {
+    submitOfficerStop({ commit, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
