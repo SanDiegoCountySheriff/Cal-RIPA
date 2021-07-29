@@ -247,20 +247,6 @@
               @input="handleInput"
             ></ripa-checkbox>
 
-            <ripa-checkbox
-              v-model="model.stopResult.resultsOfStop11"
-              label="Contacted U.S. Department of Homeland Security"
-              :rules="actionsTakenRules"
-              @input="handleInput"
-            ></ripa-checkbox>
-
-            <template v-if="model.stopResult.resultsOfStop11">
-              <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
-                Are you sure you want to select 'Contacted U.S. Department of
-                Homeland Security?'
-              </ripa-alert>
-            </template>
-
             <template v-if="model.person.isStudent">
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop12"
@@ -276,6 +262,20 @@
                 hide-details
                 @input="handleInput"
               ></ripa-checkbox>
+            </template>
+
+            <ripa-checkbox
+              v-model="model.stopResult.resultsOfStop11"
+              label="Contacted U.S. Department of Homeland Security"
+              :rules="actionsTakenRules"
+              @input="handleInput"
+            ></ripa-checkbox>
+
+            <template v-if="model.stopResult.resultsOfStop11">
+              <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
+                Are you sure you want to select 'Contacted U.S. Department of
+                Homeland Security?'
+              </ripa-alert>
             </template>
           </template>
         </v-col>
