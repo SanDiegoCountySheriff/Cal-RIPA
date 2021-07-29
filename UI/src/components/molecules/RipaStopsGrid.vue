@@ -163,10 +163,7 @@
           </template>
           <template v-slot:item.actions="{ item }">
             <v-icon
-              v-if="
-                item.status !== statuses.Submitted &&
-                item.status !== statuses.Resubmitted
-              "
+              v-if="statuses.find(s => s.text === item.status).isEditable"
               small
               class="tw-mr-2"
               @click="editItem(item)"
