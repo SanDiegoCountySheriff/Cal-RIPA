@@ -1,8 +1,24 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <template v-if="isOnlineAndAuthenticated">
+    <template v-if="adminEditing">
       <ripa-officer
-        v-model="model"
+        :user="getApiStopUser"
+        :on-open-statute="onOpenStatute"
+        :on-update-user="handleUpdateStopUser"
+      ></ripa-officer>
+
+      <ripa-user-dialog
+        admin-editing
+        :is-invalid-user="false"
+        :user="getApiStopUser"
+        :show-dialog="showUserDialog"
+        :on-close="handleCloseDialog"
+        :on-save="handleSaveUser"
+      ></ripa-user-dialog>
+    </template>
+
+    <template v-if="!adminEditing && isOnlineAndAuthenticated">
+      <ripa-officer
         :user="user"
         :on-open-statute="onOpenStatute"
         :on-update-user="onUpdateUser"
@@ -64,13 +80,48 @@ import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
+import { getOfficerAssignment } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-step1',
 
   mixins: [RipaFormStepMixin],
 
-  components: { RipaAlert, RipaOfficer, RipaStopDate, RipaLocation },
+  components: {
+    RipaAlert,
+    RipaOfficer,
+    RipaStopDate,
+    RipaLocation,
+    RipaUserDialog,
+  },
+
+  data() {
+    return {
+      showUserDialog: false,
+    }
+  },
+
+  computed: {
+    getApiStopUser() {
+      const submittedApiStop = localStorage.getItem(
+        'ripa_form_submitted_api_stop',
+      )
+      const parsedApiStop = submittedApiStop
+        ? JSON.parse(submittedApiStop)
+        : null
+
+      if (parsedApiStop) {
+        return {
+          assignment: Number(parsedApiStop.officerAssignment.key),
+          otherType: parsedApiStop.officerAssignment.otherType,
+          yearsExperience: Number(parsedApiStop.expYears),
+        }
+      }
+
+      return null
+    },
+  },
 
   methods: {
     handleStep1Next() {
@@ -92,6 +143,39 @@ export default {
       } else {
         this.handleNext()
       }
+    },
+
+    handleUpdateStopUser() {
+      this.showUserDialog = true
+    },
+
+    handleCloseDialog() {
+      this.showUserDialog = false
+    },
+
+    handleSaveUser(user) {
+      // get submitted api stop
+      const submittedApiStop = localStorage.getItem(
+        'ripa_form_submitted_api_stop',
+      )
+      const parsedApiStop = submittedApiStop
+        ? JSON.parse(submittedApiStop)
+        : null
+
+      // update assignment and assign parsed api stop
+      const assignment = getOfficerAssignment(user.assignment)
+      parsedApiStop.officerAssignment = {
+        key: assignment.code.toString(),
+        otherType: user.otherType || '',
+        type: assignment.text,
+      }
+      parsedApiStop.expYears = user.yearsExperience
+
+      // update submitted api stop
+      localStorage.setItem(
+        'ripa_form_submitted_api_stop',
+        JSON.stringify(parsedApiStop),
+      )
     },
   },
 

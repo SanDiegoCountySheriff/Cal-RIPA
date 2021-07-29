@@ -3,6 +3,11 @@
     {{ text }}
 
     <template v-slot:action="{ attrs }">
+      <template v-if="viewButtonVisible">
+        <v-btn color="blue" text v-bind="attrs" @click="handleViewClick">
+          View
+        </v-btn>
+      </template>
       <v-btn color="blue" text v-bind="attrs" @click="model = false">
         Close
       </v-btn>
@@ -30,6 +35,19 @@ export default {
         this.$emit('input', newVal)
       },
     },
+
+    getTimeout() {
+      return this.autoClose ? this.timeout : null
+    },
+  },
+
+  methods: {
+    handleViewClick() {
+      if (this.onView) {
+        this.onView()
+      }
+      this.model = false
+    },
   },
 
   watch: {
@@ -50,6 +68,18 @@ export default {
     timeout: {
       type: Number,
       default: 6000,
+    },
+    autoClose: {
+      type: Boolean,
+      default: true,
+    },
+    viewButtonVisible: {
+      type: Boolean,
+      default: false,
+    },
+    onView: {
+      type: Function,
+      default: () => {},
     },
   },
 }

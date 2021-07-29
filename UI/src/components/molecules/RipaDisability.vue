@@ -95,14 +95,6 @@ export default {
     value(newVal) {
       this.viewModel = this.syncModel(newVal)
     },
-
-    'viewModel.person.anyDisabilities': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.clearPerceivedOrKnownDisabilityModel()
-        }
-      },
-    },
   },
 
   props: {

@@ -1195,7 +1195,7 @@ const getPiiFound = (parsedApiStop, fullStop) => {
   return locationPiiFound || reasonForStopPiiFound || basisForSearchPiiFound
 }
 
-const getOfficerAssignment = assignment => {
+export const getOfficerAssignment = assignment => {
   const [filteredAssignment] = OFFICER_ASSIGNMENTS.filter(
     item => item.value === assignment,
   )

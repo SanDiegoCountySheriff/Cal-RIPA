@@ -761,7 +761,7 @@ export default new Vuex.Store({
         })
     },
 
-    editOfficerStop({ commit, dispatch, state }, stop) {
+    submitOfficerStop({ commit, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
@@ -782,7 +782,7 @@ export default new Vuex.Store({
               internalId: nanoid(),
               apiStop: stop,
               statusCode: response.status,
-              statusError: response.statusText,
+              statusError: response.data,
             }
             commit('updateStopSubmissionStatusError', 1)
             commit('updateStopSubmissionFailedStops', errorStop)
@@ -796,9 +796,20 @@ export default new Vuex.Store({
           const errorStop = {
             internalId: nanoid(),
             apiStop: stop,
-            statusCode: 'N/A',
-            statusError: error.message || error,
           }
+          if (error.response) {
+            errorStop.statusCode = error.response.status
+            errorStop.statusError =
+              error.response.data || error.response.statusText
+          } else if (error.request) {
+            errorStop.statusCode = error.request.status
+            errorStop.statusError =
+              error.request.data || error.request.statusText
+          } else {
+            errorStop.statusCode = 'N/A'
+            errorStop.statusError = error.message || error
+          }
+
           commit('updateStopSubmissionStatusError', 1)
           commit('updateStopSubmissionFailedStops', errorStop)
           console.log(
