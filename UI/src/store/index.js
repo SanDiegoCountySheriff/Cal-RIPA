@@ -703,9 +703,15 @@ export default new Vuex.Store({
     },
 
     editUser({ dispatch, state }, user) {
+      const updatedUser = {
+        ...user,
+        favoriteLocations: state.user.favoriteLocations,
+        favoriteReasons: state.user.favoriteReasons,
+        favoriteResults: state.user.favoriteResults,
+      }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${user.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
