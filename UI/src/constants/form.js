@@ -12,10 +12,6 @@ export const OFFICER_ASSIGNMENTS = [
 ]
 
 export const DISABILITIES = [
-  {
-    name: 'Disability related to hyperactivity or impulsive behavior',
-    value: 7,
-  },
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },
   { name: 'Blind or limited vision', value: 3 },
@@ -25,6 +21,10 @@ export const DISABILITIES = [
     value: 5,
   },
   { name: 'Other disability', value: 6 },
+  {
+    name: 'Disability related to hyperactivity or impulsive behavior',
+    value: 7,
+  },
 ]
 
 export const GENDERS = [
@@ -45,11 +45,6 @@ export const RACES = [
 ]
 
 export const STOP_REASONS = [
-  {
-    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
-    value: 7,
-  },
-  { name: 'Determine whether the student violated school policy', value: 8 },
   { name: 'Traffic Violation', value: 1 },
   { name: 'Reasonable Suspicion', value: 2 },
   {
@@ -65,6 +60,11 @@ export const STOP_REASONS = [
     value: 5,
   },
   { name: 'Consensual Encounter resulting in a search', value: 6 },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+    value: 7,
+  },
+  { name: 'Determine whether the student violated school policy', value: 8 },
 ]
 
 export const EDUCATION_VIOLATIONS = [
@@ -115,7 +115,6 @@ export const REASONABLE_SUSPICIONS = [
 ]
 
 export const ACTIONS_TAKEN = [
-  { name: 'Admission or written statement obtained from student', value: 23 },
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Person removed from vehicle by physical contact', value: 2 },
   { name: 'Field sobriety test conducted', value: 3 },
@@ -138,10 +137,10 @@ export const ACTIONS_TAKEN = [
   { name: 'Search of property was conducted', value: 20 },
   { name: 'Property was seized', value: 21 },
   { name: 'Vehicle impounded', value: 22 },
+  { name: 'Admission or written statement obtained from student', value: 23 },
 ]
 
 export const BASIS_FOR_SEARCH = [
-  { name: 'Suspected violation of school policy', value: 13 },
   { name: 'Consent given', value: 1 },
   { name: 'Officer safety/safety of others', value: 2 },
   { name: 'Search warrant', value: 3 },
@@ -157,6 +156,7 @@ export const BASIS_FOR_SEARCH = [
   { name: 'Incident to arrest', value: 10 },
   { name: 'Exigent circumstances/emergency', value: 11 },
   { name: 'Vehicle inventory', value: 12 },
+  { name: 'Suspected violation of school policy', value: 13 },
 ]
 
 export const BASIS_FOR_PROPERTY_SEIZURE = [

@@ -22,8 +22,8 @@
               v-model="modelUser"
               :is-invalid-user="isInvalidUser"
               :admin="admin"
+              :admin-editing="adminEditing"
               :is-row-key-disabled="isRowKeyDisabled"
-              @input="handleInput"
             ></ripa-user>
           </template>
         </v-form>
@@ -145,6 +145,10 @@ export default {
       default: () => {},
     },
     admin: {
+      type: Boolean,
+      default: false,
+    },
+    adminEditing: {
       type: Boolean,
       default: false,
     },

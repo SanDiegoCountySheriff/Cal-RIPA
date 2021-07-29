@@ -37,7 +37,21 @@
       :show-dialog="showInvalidUserDialog"
     ></ripa-invalid-user-dialog>
 
-    <ripa-snackbar :text="snackbarText" v-model="snackbarVisible" multi-line>
+    <ripa-snackbar
+      :text="snackbarText"
+      v-model="snackbarNoErrorsVisible"
+      multi-line
+    >
+    </ripa-snackbar>
+
+    <ripa-snackbar
+      :text="snackbarText"
+      v-model="snackbarErrorsVisible"
+      multi-line
+      :auto-close="false"
+      view-button-visible
+      :on-view="handleViewStopsWithErrors"
+    >
     </ripa-snackbar>
 
     <ripa-interval
@@ -100,7 +114,8 @@ export default {
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
       snackbarText: '',
-      snackbarVisible: false,
+      snackbarNoErrorsVisible: false,
+      snackbarErrorsVisible: false,
     }
   },
 
@@ -134,7 +149,7 @@ export default {
 
   methods: {
     ...mapActions([
-      'editOfficerStop',
+      'submitOfficerStop',
       'editOfficerUser',
       'getFormBeats',
       'getFormCities',
