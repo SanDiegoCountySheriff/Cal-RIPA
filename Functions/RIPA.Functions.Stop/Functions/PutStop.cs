@@ -42,7 +42,7 @@ namespace RIPA.Functions.Stop.Functions
 
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutStop/{Id}")] Common.Models.Stop stop, HttpRequest req, string Id, ILogger log)
         {
-            log.LogInformation("PUT - Put Stop requested");
+            log.LogInformation($"PUT - Put Stop requested, ID: {Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
 
             try
             {
@@ -95,6 +95,8 @@ namespace RIPA.Functions.Stop.Functions
             bool isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stop.Id, stop.Ori, stop.OfficerId, stop.Date, stop.Time);
             if (isDuplicate)
             {
+                log.LogError($"This appears to be a duplicate Stop: ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
+
                 return new BadRequestObjectResult("This appears to be a duplicate Stop");
             }
 
@@ -111,7 +113,8 @@ namespace RIPA.Functions.Stop.Functions
             }
             catch (Exception ex)
             {
-                log.LogError($"Failed getting stop to protect submission history", ex);
+                log.LogError($"Failed getting stop to protect submission history, ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
+
                 return new BadRequestObjectResult("Failed getting stop submission history");
             }
 
@@ -132,11 +135,13 @@ namespace RIPA.Functions.Stop.Functions
                         await _stopCosmosDbService.UpdateStopAsync(stop);
                     }
 
+                    log.LogInformation($"PUT - saved stop, ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
+
                     return new OkObjectResult(stop);
                 }
                 catch (Exception exception)
                 {
-                    log.LogError($"Failed to insert/update stop, attempt counter: {retryAttemps}", exception.GetBaseException());
+                    log.LogError($"Failed to insert/update stop, attempt counter: {retryAttemps}, ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}", exception.GetBaseException());
                 }
 
                 await Task.Delay(retrywait);
