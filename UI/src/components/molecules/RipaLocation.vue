@@ -114,6 +114,7 @@
               :loading="loadingPii"
               :rules="blockNumberRules"
               numbers-only
+              prevent-paste
               @input="handleInput"
             >
             </ripa-text-input>
