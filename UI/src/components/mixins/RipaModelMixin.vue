@@ -270,9 +270,13 @@ export default {
         blockNumber = calcBlockNumber
       }
 
-      return typeof blockNumber === 'string' || typeof blockNumber === 'number'
-        ? blockNumber.toString()
-        : null
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
     },
 
     updateBlockNumberModel() {
