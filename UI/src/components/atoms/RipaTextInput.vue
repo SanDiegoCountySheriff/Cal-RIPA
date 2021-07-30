@@ -12,6 +12,7 @@
         @blur="handleBlur"
         @keypress="handleKeyPress"
         @paste.prevent
+        @drop="handleDrop($event)"
       ></v-text-field>
     </template>
 
@@ -42,6 +43,10 @@ export default {
   },
 
   methods: {
+    handleDrop(event) {
+      event.preventDefault()
+    },
+
     handleKeyPress(event) {
       if (this.numbersOnly) {
         const charCode = event.which ? event.which : event.keyCode
