@@ -266,12 +266,6 @@ const getSummaryLocation = apiStop => {
       detail: apiStop.location.intersection,
     })
   }
-  if (apiStop.location.highwayExit) {
-    children.push({
-      header: 'Closest Highway Exist',
-      detail: apiStop.location.highwayExit,
-    })
-  }
   if (apiStop.location.landMark) {
     children.push({
       header: 'Landmark',
