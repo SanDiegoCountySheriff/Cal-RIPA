@@ -920,6 +920,8 @@ const getFullStopPeopleListed = apiStop => {
         ),
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
+        searchOfPerson: getStopReasonSearchOfPerson(person),
+        searchOfProperty: getStopReasonSearchOfProperty(person),
       },
       stopResult: {
         anyResultsOfStop,
@@ -943,6 +945,44 @@ const getFullStopPeopleListed = apiStop => {
       },
     }
   })
+}
+
+const getStopReasonSearchOfPerson = person => {
+  const reasonForStop = Number(person.reasonForStop.key)
+  const anyActionsTaken =
+    person.listActionTakenDuringStop.length > 0 &&
+    person.listActionTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listActionTakenDuringStop || []
+  const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+
+  if (reasonForStop === 6) {
+    if (anyActionsTaken) {
+      if (mappedActionsTaken.includes(18)) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+const getStopReasonSearchOfProperty = person => {
+  const reasonForStop = Number(person.reasonForStop.key)
+  const anyActionsTaken =
+    person.listActionTakenDuringStop.length > 0 &&
+    person.listActionTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listActionTakenDuringStop || []
+  const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+
+  if (reasonForStop === 6) {
+    if (anyActionsTaken) {
+      if (mappedActionsTaken.includes(20)) {
+        return true
+      }
+    }
+  }
+
+  return false
 }
 
 const getTrafficViolationDetailKey = stopReason => {
