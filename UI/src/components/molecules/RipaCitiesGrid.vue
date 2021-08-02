@@ -322,6 +322,7 @@ export default {
 .ripa-cities-grid {
   .ripa-cities-grid--info {
     margin: 16px 16px 0 16px;
+    color: red;
   }
 }
 </style>
