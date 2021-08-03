@@ -316,6 +316,7 @@ export default {
 .ripa-schools-grid {
   .ripa-schools-grid--info {
     margin: 16px 16px 0 16px;
+    color: red;
   }
 }
 </style>

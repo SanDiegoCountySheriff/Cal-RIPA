@@ -2,21 +2,21 @@ export const SUBMISSION_STATUSES = [
   {
     text: 'Failed',
     value: 'Failed',
-    editable: true,
-  },
-  {
-    text: 'Submitted',
-    value: 'Submitted',
-    editable: false,
-  },
-  {
-    text: 'Unsubmitted',
-    value: 'Unsubmitted',
-    editable: true,
+    isEditable: true,
   },
   {
     text: 'Resubmitted',
     value: 'Resubmitted',
-    editable: false,
+    isEditable: false,
+  },
+  {
+    text: 'Submitted',
+    value: 'Submitted',
+    isEditable: false,
+  },
+  {
+    text: 'Unsubmitted',
+    value: 'Unsubmitted',
+    isEditable: true,
   },
 ]

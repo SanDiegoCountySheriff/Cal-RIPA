@@ -114,6 +114,7 @@
               :loading="loadingPii"
               :rules="blockNumberRules"
               numbers-only
+              prevent-paste
               @input="handleInput"
             >
             </ripa-text-input>
@@ -330,21 +331,31 @@ export default {
     highwayRules() {
       const checked = this.viewModel.location.toggleLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
+      const landmark = this.viewModel.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && highwayExit && highwayExit.length > 0) ||
+          (checked &&
+            highwayExit &&
+            highwayExit.length >= 5 &&
+            highwayExit.length <= 250 &&
+            landmark == null) ||
           'A highway and closest exit is required',
       ]
     },
 
     landmarkRules() {
       const checked = this.viewModel.location.toggleLocationOptions
+      const highwayExit = this.viewModel.location.highwayExit
       const landmark = this.viewModel.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && landmark && landmark.length > 0) ||
+          (checked &&
+            landmark &&
+            landmark.length >= 5 &&
+            landmark.length <= 250 &&
+            highwayExit == null) ||
           'A road marker, landmark, or other description is required',
       ]
     },
@@ -360,8 +371,16 @@ export default {
       const isValid =
         (blockNumber !== null && streetName && streetName.length > 0) ||
         (intersection && intersection.length > 0) ||
-        (checked && highwayExit && highwayExit.length > 0) ||
-        (checked && landmark && landmark.length > 0)
+        (checked &&
+          highwayExit &&
+          highwayExit.length >= 5 &&
+          highwayExit.length <= 250 &&
+          landmark == null) ||
+        (checked &&
+          landmark &&
+          landmark.length >= 5 &&
+          landmark.length <= 250 &&
+          highwayExit == null)
 
       return isValid
     },

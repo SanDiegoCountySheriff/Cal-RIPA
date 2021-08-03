@@ -87,7 +87,7 @@
         >
           <template v-slot:item.actions="{ item }">
             <v-icon
-              v-if="item.status !== 'Submitted'"
+              v-if="statuses.find(s => s.text === item.status).isEditable"
               small
               class="tw-mr-2"
               @click="editItem(item)"
@@ -137,6 +137,7 @@
 <script>
 import { format } from 'date-fns'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
+import { SUBMISSION_STATUSES } from '../../constants/stop'
 
 export default {
   name: 'ripa-submission',
@@ -160,6 +161,7 @@ export default {
       itemsPerPageOptions: [10, 25, 50, 100, 250],
       itemsPerPage: 10,
       search: '',
+      statuses: SUBMISSION_STATUSES,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: null,
       sortDesc: true,

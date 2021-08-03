@@ -351,6 +351,7 @@ export default {
 .ripa-statutes-grid {
   .ripa-statutes-grid--info {
     margin: 16px 16px 0 16px;
+    color: red;
   }
 }
 </style>

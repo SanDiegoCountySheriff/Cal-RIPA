@@ -270,9 +270,13 @@ export default {
         blockNumber = calcBlockNumber
       }
 
-      return typeof blockNumber === 'string' || typeof blockNumber === 'number'
-        ? blockNumber.toString()
-        : null
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
     },
 
     updateBlockNumberModel() {
@@ -330,14 +334,14 @@ export default {
     },
 
     updateStudentModel() {
-      if (!this.viewModel.location.isStudent) {
+      if (!this.viewModel.person.isStudent) {
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
       }
     },
 
     updatePerceivedDisabilityModel() {
-      if (!this.viewModel.location.isStudent) {
+      if (!this.viewModel.person.isStudent) {
         const options = this.viewModel.person?.perceivedOrKnownDisability || []
         const studentOptionFound = options.includes(7)
         if (studentOptionFound) {
@@ -443,11 +447,6 @@ export default {
     },
 
     updateStopResultModel() {
-      if (!this.viewModel.person.isStudent) {
-        this.viewModel.stopResult.resultsOfStop12 = false
-        this.viewModel.stopResult.resultsOfStop13 = false
-      }
-
       if (!this.viewModel.stopResult.anyResultsOfStop) {
         this.viewModel.stopResult.resultsOfStop2 = false
         this.viewModel.stopResult.resultsOfStop3 = false
