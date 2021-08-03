@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.UserProfile.Startup))]

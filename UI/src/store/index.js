@@ -725,17 +725,21 @@ export default new Vuex.Store({
         })
     },
 
-    uploadUsers({ dispatch, state }, usersFile) {
+    uploadUsers({ dispatch, state }, { usersFile, usersAgency }) {
       const formData = new FormData()
       formData.append('file', usersFile)
       return axios
-        .post('http://localhost:7071/api/PostUpload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .post(
+          `http://localhost:7071/api/PostUpload?agency=${usersAgency}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           console.log(response)
           dispatch('getAdminUsers')
