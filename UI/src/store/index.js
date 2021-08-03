@@ -730,7 +730,7 @@ export default new Vuex.Store({
       formData.append('file', usersFile)
       return axios
         .post(
-          `http://localhost:7071/api/PostUpload?agency=${usersAgency}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PostUpload?agency=${usersAgency}`,
           formData,
           {
             headers: {

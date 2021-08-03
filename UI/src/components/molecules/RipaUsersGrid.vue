@@ -105,18 +105,6 @@
             </v-card>
           </v-dialog>
 
-          <!--
-            For now I don't think we need this ability
-          <v-btn
-            color="primary"
-            dark
-            class="tw-mb-2"
-            @click="editItem(defaultItem)"
-          >
-            New User
-          </v-btn>
-          -->
-
           <ripa-user-dialog
             :admin="true"
             :user="editedItem"
