@@ -21,6 +21,7 @@
       :on-edit-school="onEditSchool"
       :on-edit-statute="onEditStatute"
       :on-edit-user="onEditUser"
+      :on-upload-users="onUploadUsers"
       :on-tab-change="onTabChange"
       :savedFilters="savedFilters"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
@@ -215,6 +216,10 @@ export default {
       default: () => {},
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onUploadUsers: {
       type: Function,
       default: () => {},
     },

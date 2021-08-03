@@ -731,6 +731,32 @@ export default new Vuex.Store({
         })
     },
 
+    uploadUsers({ dispatch, state }, { usersFile, usersAgency }) {
+      const formData = new FormData()
+      formData.append('file', usersFile)
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}userprofile/PostUpload?agency=${usersAgency}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          console.log(response)
+          dispatch('getAdminUsers')
+          dispatch('getUser')
+        })
+        .catch(error => {
+          console.log('There was an error uploading the users', error)
+          dispatch('getAdminUsers')
+        })
+    },
+
     editOfficerUser({ dispatch, state }, mappedUser) {
       const userId = state.user.oid
       const user = {

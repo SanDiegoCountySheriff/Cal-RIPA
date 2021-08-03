@@ -21,18 +21,89 @@
           <v-toolbar-title class="tw-uppercase"
             >Admin: Maintain Users</v-toolbar-title
           >
+
           <v-spacer></v-spacer>
-          <!--
-            For now I don't think we need this ability
-          <v-btn
-            color="primary"
-            dark
-            class="tw-mb-2"
-            @click="editItem(defaultItem)"
-          >
-            New User
-          </v-btn>
-          -->
+
+          <v-dialog v-model="fileDialog" max-width="500px" persistent>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                class="tw-mb-2 mr-4"
+                v-bind="attrs"
+                v-on="on"
+              >
+                Upload Users
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span>Upload Users File</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <p>Required Columns:</p>
+                      <ul>
+                        <li>'Id' (Object ID from AAD)</li>
+                        <li>'OfficerId' (From current RIPA application)</li>
+                      </ul>
+                      <br />
+                      <p>Optional Columns:</p>
+                      <ul>
+                        <li>'FirstName'</li>
+                        <li>'LastName'</li>
+                        <li>'YearsExperience'</li>
+                        <li>'Assignment'</li>
+                        <li>'OtherType'</li>
+                        <li>'Agency'</li>
+                      </ul>
+                      <br />
+                      <ripa-checkbox
+                        v-model="agencyIncluded"
+                        label="Agency included on .csv"
+                      ></ripa-checkbox>
+                      <template v-if="!agencyIncluded">
+                        <p>Enter your agency name or abbreviation.</p>
+                        <ripa-text-input
+                          v-model="usersAgency"
+                          single-line
+                          :rules="agencyRules"
+                          label="Agency"
+                        >
+                        </ripa-text-input>
+                      </template>
+                      <v-file-input
+                        v-model="usersFile"
+                        prepend-icon="mdi-paperclip"
+                        label="Upload users file"
+                        accept=".csv"
+                        :rules="fileRules"
+                      >
+                      </v-file-input>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeFileDialog">
+                  Cancel
+                </v-btn>
+                <v-btn
+                  :disabled="isInvalidUploadForm"
+                  color="blue darken-1"
+                  text
+                  @click="uploadUsers"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
           <ripa-user-dialog
             :admin="true"
@@ -60,12 +131,16 @@
 
 <script>
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
+import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 
 export default {
   name: 'ripa-users-grid',
 
   components: {
     RipaUserDialog,
+    RipaTextInput,
+    RipaCheckbox,
   },
 
   data() {
@@ -73,6 +148,10 @@ export default {
       search: '',
       users: [],
       dialog: false,
+      fileDialog: false,
+      usersFile: null,
+      usersAgency: '',
+      agencyIncluded: false,
       headers: [
         { text: 'ID', value: 'id' },
         { text: 'First Name', value: 'firstName' },
@@ -134,6 +213,36 @@ export default {
 
       return false
     },
+
+    isInvalidUploadForm() {
+      return this.isInvalidFile || this.isInvalidAgency
+    },
+
+    isInvalidFile() {
+      return (
+        this.usersFile === null ||
+        this.usersFile?.name.split('.').pop() !== 'csv'
+      )
+    },
+
+    isInvalidAgency() {
+      if (this.agencyIncluded) {
+        return false
+      } else {
+        return this.usersAgency === ''
+      }
+    },
+
+    fileRules() {
+      return [
+        v => !!v || 'A file is required',
+        v => (v && v.name.split('.').pop() === 'csv') || 'File must be .csv',
+      ]
+    },
+
+    agencyRules() {
+      return [v => (!!v && !this.agencyIncluded) || 'An agency is required']
+    },
   },
 
   methods: {
@@ -148,12 +257,27 @@ export default {
       this.dialog = true
     },
 
+    uploadUsers() {
+      if (this.usersFile) {
+        this.onUploadUsers(this.usersFile, this.usersAgency)
+        this.usersFile = null
+        this.usersAgency = ''
+      }
+
+      this.closeFileDialog()
+    },
+
     close() {
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+    },
+
+    closeFileDialog() {
+      this.fileDialog = false
+      this.usersFile = null
     },
 
     save() {
@@ -180,6 +304,9 @@ export default {
     dialog(val) {
       val || this.close()
     },
+    fileDialog(val) {
+      val || this.closeFileDialog()
+    },
   },
 
   created() {
@@ -199,6 +326,16 @@ export default {
       type: Function,
       default: () => {},
     },
+    onUploadUsers: {
+      type: Function,
+      default: () => {},
+    },
   },
 }
 </script>
+
+<style scoped="true">
+* >>> .v-dialog {
+  overflow-y: visible;
+}
+</style>
