@@ -258,11 +258,21 @@
       :show-dialog="showDialog"
       :on-close="handleCloseDialog"
     ></ripa-json-viewer-dialog>
+
+    <ripa-confirm-dialog
+      :show-dialog="showConfirmDialog"
+      title="Confirm Submission"
+      subtitle="Are you sure you want to submit the form?"
+      :on-close="handleCloseDialog"
+      :on-confirm="handleConfirmSubmit"
+    >
+    </ripa-confirm-dialog>
   </div>
 </template>
 
 <script>
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
+import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1'
 import RipaFormStep2 from '@/components/molecules/RipaFormStep2'
 import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
@@ -280,6 +290,7 @@ export default {
 
   components: {
     RipaConfirmation,
+    RipaConfirmDialog,
     RipaFormStep1,
     RipaFormStep2,
     RipaFormStep3,
@@ -299,6 +310,7 @@ export default {
       stop: this.value,
       stepTrace: null,
       showDialog: false,
+      showConfirmDialog: false,
     }
   },
 
@@ -348,6 +360,7 @@ export default {
 
     handleCloseDialog() {
       this.showDialog = false
+      this.showConfirmDialog = false
     },
 
     isCreateForm() {
@@ -553,35 +566,27 @@ export default {
     },
 
     handleSubmit() {
-      this.$confirm({
-        title: 'Confirm Submission',
-        message: `Are you sure you want to submit the form?`,
-        button: {
-          no: 'No',
-          yes: 'Yes',
-        },
-        callback: confirm => {
-          if (confirm) {
-            this.stepIndex = this.confirmationStepIndex
-            if (this.onStepIndexChange) {
-              this.onStepIndexChange(this.stepIndex)
-            }
-            if (this.onSubmitStop) {
-              const apiStop = this.getApiStop
-              console.log('Submitted Stop', apiStop)
-              this.onSubmitStop(apiStop)
-            }
-            if (this.adminEditing && this.onSubmitAudit) {
-              const route = localStorage.getItem('ripa_form_edit_route')
-              const parsedRoute = route || '/'
-              this.onSubmitAudit(parsedRoute)
-            }
-            if (this.onCancelForm) {
-              this.onCancelForm()
-            }
-          }
-        },
-      })
+      this.showConfirmDialog = true
+    },
+
+    handleConfirmSubmit() {
+      this.stepIndex = this.confirmationStepIndex
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+      if (this.onSubmitStop) {
+        const apiStop = this.getApiStop
+        console.log('Submitted Stop', apiStop)
+        this.onSubmitStop(apiStop)
+      }
+      if (this.adminEditing && this.onSubmitAudit) {
+        const route = localStorage.getItem('ripa_form_edit_route')
+        const parsedRoute = route || '/'
+        this.onSubmitAudit(parsedRoute)
+      }
+      if (this.onCancelForm) {
+        this.onCancelForm()
+      }
     },
 
     createStepTrace(index, startTimeStamp) {
