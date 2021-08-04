@@ -24,13 +24,7 @@ namespace RIPA.Functions.UserProfile
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-#if DEBUG
-            CosmosClientOptions clientOptions = new CosmosClientOptions()
-            {
-                ConnectionMode = ConnectionMode.Gateway,
-            };
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
+            CosmosClient client = new CosmosClient(account, key);
             UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
             DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
