@@ -8,6 +8,7 @@
     <Content Remove="C:\Users\LPOPE\.nuget\packages\microsoft.azure.cosmos\3.17.0\contentFiles\any\netstandard2.0\ThirdPartyNotice.txt" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.AzureKeyVault.HostingStartup" Version="2.0.4" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.17.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

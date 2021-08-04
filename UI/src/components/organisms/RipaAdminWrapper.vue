@@ -46,6 +46,7 @@
           :loading="loading"
           :items="users"
           :on-edit-user="onEditUser"
+          :on-upload-users="onUploadUsers"
         ></ripa-users-grid>
       </v-tab-item>
 
@@ -276,6 +277,10 @@ export default {
       default: () => {},
     },
     onEditUser: {
+      type: Function,
+      default: () => {},
+    },
+    onUploadUsers: {
       type: Function,
       default: () => {},
     },

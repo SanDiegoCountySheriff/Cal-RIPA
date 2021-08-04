@@ -24,5 +24,5 @@
     <ProjectReference Include="..\RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj" />
 		<ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
   </ItemGroup>
-  <ProjectExtensions><VisualStudio><UserProperties local_1settings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>
