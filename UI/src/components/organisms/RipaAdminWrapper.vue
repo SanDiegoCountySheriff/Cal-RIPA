@@ -75,8 +75,6 @@
             <ripa-cities-grid
               :loading="loading"
               :items="cities"
-              :on-delete-city="onDeleteCity"
-              :on-edit-city="onEditCity"
             ></ripa-cities-grid>
           </v-tab-item>
           <v-tab-item>
@@ -248,10 +246,6 @@ export default {
       type: Function,
       default: () => {},
     },
-    onDeleteCity: {
-      type: Function,
-      default: () => {},
-    },
     onDeleteSchool: {
       type: Function,
       default: () => {},
@@ -261,10 +255,6 @@ export default {
       default: () => {},
     },
     onEditBeat: {
-      type: Function,
-      default: () => {},
-    },
-    onEditCity: {
       type: Function,
       default: () => {},
     },

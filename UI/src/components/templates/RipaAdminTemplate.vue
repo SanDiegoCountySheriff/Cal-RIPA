@@ -13,11 +13,9 @@
       :errorCodeSearch="errorCodeSearch"
       :display-beat-input="displayBeatInput"
       :on-delete-beat="onDeleteBeat"
-      :on-delete-city="onDeleteCity"
       :on-delete-school="onDeleteSchool"
       :on-delete-statute="onDeleteStatute"
       :on-edit-beat="onEditBeat"
-      :on-edit-city="onEditCity"
       :on-edit-school="onEditSchool"
       :on-edit-statute="onEditStatute"
       :on-edit-user="onEditUser"
@@ -187,10 +185,6 @@ export default {
       type: Function,
       default: () => {},
     },
-    onDeleteCity: {
-      type: Function,
-      default: () => {},
-    },
     onDeleteSchool: {
       type: Function,
       default: () => {},
@@ -200,10 +194,6 @@ export default {
       default: () => {},
     },
     onEditBeat: {
-      type: Function,
-      default: () => {},
-    },
-    onEditCity: {
       type: Function,
       default: () => {},
     },
