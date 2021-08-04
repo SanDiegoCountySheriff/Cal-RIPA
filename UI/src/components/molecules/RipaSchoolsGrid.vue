@@ -39,7 +39,6 @@ export default {
     return {
       search: '',
       schools: [],
-      mappedCounties: [],
       headers: [
         { text: 'ID', value: 'rowKey' },
         { text: 'School', value: 'name' },
@@ -61,9 +60,6 @@ export default {
   methods: {
     init() {
       this.schools = this.items
-      this.mappedCounties = this.items
-        .map(item => item.county.toUpperCase())
-        .sort()
     },
   },
 

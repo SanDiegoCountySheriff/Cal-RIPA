@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import { STATES } from '@/constants/states'
-
 export default {
   name: 'ripa-cities-grid',
 
@@ -41,8 +39,6 @@ export default {
     return {
       search: '',
       cities: [],
-      mappedCounties: [],
-      mappedStates: [],
       headers: [
         { text: 'ID', value: 'rowKey' },
         { text: 'City', value: 'name' },
@@ -63,10 +59,6 @@ export default {
   methods: {
     init() {
       this.cities = this.items
-      this.mappedStates = STATES.map(item => item.abbreviation)
-      this.mappedCounties = this.items
-        .map(item => item.county.toUpperCase())
-        .sort()
     },
   },
 
