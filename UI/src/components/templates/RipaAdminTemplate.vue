@@ -13,11 +13,7 @@
       :errorCodeSearch="errorCodeSearch"
       :display-beat-input="displayBeatInput"
       :on-delete-beat="onDeleteBeat"
-      :on-delete-school="onDeleteSchool"
-      :on-delete-statute="onDeleteStatute"
       :on-edit-beat="onEditBeat"
-      :on-edit-school="onEditSchool"
-      :on-edit-statute="onEditStatute"
       :on-edit-user="onEditUser"
       :on-upload-users="onUploadUsers"
       :on-tab-change="onTabChange"
@@ -185,23 +181,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onDeleteSchool: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteStatute: {
-      type: Function,
-      default: () => {},
-    },
     onEditBeat: {
-      type: Function,
-      default: () => {},
-    },
-    onEditSchool: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStatute: {
       type: Function,
       default: () => {},
     },

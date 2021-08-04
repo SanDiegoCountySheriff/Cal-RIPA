@@ -558,46 +558,6 @@ export default new Vuex.Store({
         })
     },
 
-    deleteSchool({ dispatch, state }, school) {
-      return axios
-        .delete(
-          `${state.apiConfig.apiBaseUrl}domain/DeleteSchool/${school.rowKey}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(() => {
-          dispatch('getAdminSchools')
-        })
-        .catch(error => {
-          console.log('There was an error deleting the school.', error)
-          dispatch('getAdminSchools')
-        })
-    },
-
-    deleteStatute({ dispatch, state }, statute) {
-      return axios
-        .delete(
-          `${state.apiConfig.apiBaseUrl}domain/DeleteStatute/${statute.rowKey}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(() => {
-          dispatch('getAdminStatutes')
-        })
-        .catch(error => {
-          console.log('There was an error deleting the statute.', error)
-          dispatch('getAdminStatutes')
-        })
-    },
-
     editBeat({ dispatch, state }, beat) {
       return axios
         .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
@@ -613,50 +573,6 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error saving the beat.', error)
           dispatch('getAdminBeats')
-        })
-    },
-
-    editSchool({ dispatch, state }, school) {
-      return axios
-        .put(
-          `${state.apiConfig.apiBaseUrl}domain/PutSchool/${school.rowKey}`,
-          school,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(() => {
-          dispatch('getAdminSchools')
-        })
-        .catch(error => {
-          console.log('There was an error saving the school.', error)
-          dispatch('getAdminSchools')
-        })
-    },
-
-    editStatute({ dispatch, state }, statute) {
-      return axios
-        .put(
-          `${state.apiConfig.apiBaseUrl}domain/PutStatute/${statute.rowKey}`,
-          statute,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
-          },
-        )
-        .then(() => {
-          dispatch('getAdminStatutes')
-        })
-        .catch(error => {
-          console.log('There was an error saving the statute.', error)
-          dispatch('getAdminStatutes')
         })
     },
 

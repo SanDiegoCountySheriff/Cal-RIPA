@@ -81,16 +81,12 @@
             <ripa-schools-grid
               :loading="loading"
               :items="schools"
-              :on-delete-school="onDeleteSchool"
-              :on-edit-school="onEditSchool"
             ></ripa-schools-grid>
           </v-tab-item>
           <v-tab-item>
             <ripa-statutes-grid
               :loading="loading"
               :items="statutes"
-              :on-delete-statute="onDeleteStatute"
-              :on-edit-statute="onEditStatute"
             ></ripa-statutes-grid>
           </v-tab-item>
         </v-tabs-items>
@@ -246,23 +242,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onDeleteSchool: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteStatute: {
-      type: Function,
-      default: () => {},
-    },
     onEditBeat: {
-      type: Function,
-      default: () => {},
-    },
-    onEditSchool: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStatute: {
       type: Function,
       default: () => {},
     },

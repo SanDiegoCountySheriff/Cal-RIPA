@@ -23,6 +23,7 @@
           >
         </v-toolbar>
       </template>
+
       <template v-slot:no-data>
         <div>No City Data</div>
       </template>
