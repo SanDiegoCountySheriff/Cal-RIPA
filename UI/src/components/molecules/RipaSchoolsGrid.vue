@@ -46,13 +46,6 @@ export default {
         { text: 'County', value: 'county' },
         { text: 'CDS Code', value: 'cdsCode' },
         { text: 'Status', value: 'status' },
-        {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false,
-          width: '80',
-          align: 'center',
-        },
       ],
     }
   },

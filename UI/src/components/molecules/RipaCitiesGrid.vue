@@ -45,13 +45,6 @@ export default {
         { text: 'County', value: 'county' },
         { text: 'State', value: 'state' },
         { text: 'Deactivation Date', value: 'deactivationDate' },
-        {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false,
-          width: '80',
-          align: 'center',
-        },
       ],
     }
   },
