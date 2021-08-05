@@ -16,6 +16,7 @@
       :on-edit-beat="handleEditBeat"
       :on-edit-user="handleEditUser"
       :on-upload-users="handleUploadUsers"
+      :on-upload-domain="handleUploadDomain"
       :on-tab-change="handleTabChange"
       :savedFilters="savedFilterState"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
@@ -91,6 +92,7 @@ export default {
       'editBeat',
       'editUser',
       'uploadUsers',
+      'uploadDomain',
       'getAdminBeats',
       'getAdminCities',
       'getAdminSchools',
@@ -249,6 +251,12 @@ export default {
     async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
       await Promise.all([this.uploadUsers({ usersFile, usersAgency })])
+      this.loading = false
+    },
+
+    async handleUploadDomain(domainFile) {
+      this.loading = true
+      await Promise.all([this.uploadDomain(domainFile)])
       this.loading = false
     },
 

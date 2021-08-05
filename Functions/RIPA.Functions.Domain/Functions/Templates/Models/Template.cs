@@ -1,6 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
-using RIPA.Functions.Common.Models;
 using System;
 
 namespace RIPA.Functions.Domain.Functions.Templates.Models
@@ -10,10 +9,10 @@ namespace RIPA.Functions.Domain.Functions.Templates.Models
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        
+
         [JsonProperty(PropertyName = "displayName")]
         public string DisplayName { get; set; }
-        
+
         [JsonProperty(PropertyName = "stop")]
         public string StopTemplate { get; set; }
 

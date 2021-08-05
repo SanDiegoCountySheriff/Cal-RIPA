@@ -1,14 +1,13 @@
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using RIPA.Functions.Domain.Functions.Beats.Models;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Domain.Functions.Schools.Models;
@@ -64,13 +63,23 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
                 DataSet dataSet = RunExcelDataReader(file);
 
-                await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
+                if (dataSet.Tables["Beat_Table"] != null)
+                {
+                    await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
+                }
 
                 await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
 
                 await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
 
-                await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
+                if (dataSet.Tables["Offense_Table"] != null)
+                {
+                    await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
+                }
+                else if (dataSet.Tables["Offense Table"] != null)
+                {
+                    await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
+                }
 
                 string responseMessage = $"Upload Complete";
 
@@ -111,7 +120,6 @@ namespace RIPA.Functions.Domain.Functions.Upload
             if (batchCount == _batchLimit)
                 return true;
             return false;
-
         }
 
         public static void DeduplicateBatch(TableEntity obj)
@@ -140,7 +148,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
                 try
                 {
-                    var entity = new TableEntity();
+                    TableEntity entity = new TableEntity();
                     switch (table.Name)
                     {
                         case "Cities":
@@ -202,7 +210,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 Status = row.ItemArray[1].ToString(),
                 County = row.ItemArray[2].ToString(),
                 District = row.ItemArray[3].ToString(),
-                Name = row.ItemArray[04].ToString()
+                Name = row.ItemArray[6].ToString()
             };
             return school;
         }

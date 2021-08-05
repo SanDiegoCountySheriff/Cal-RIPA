@@ -58,6 +58,57 @@
           <v-tab>Cities</v-tab>
           <v-tab>Schools</v-tab>
           <v-tab>Statutes</v-tab>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="fileDialog" max-width="500px" persistent>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                class="tw-mb-2 mr-4"
+                v-bind="attrs"
+                v-on="on"
+              >
+                Upload CLEW Data
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span>Upload CLEW Data</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-file-input
+                        v-model="domainFile"
+                        prepend-icon="mdi-paperclip"
+                        label="Upload CLEW file"
+                        accept=".xlsx"
+                        :rules="fileRules"
+                      >
+                      </v-file-input>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeFileDialog">
+                  Cancel
+                </v-btn>
+                <v-btn
+                  :disabled="isInvalidUploadForm"
+                  color="blue darken-1"
+                  text
+                  @click="uploadClew"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-tabs>
 
         <v-tabs-items v-model="tabLevel2">
@@ -121,6 +172,8 @@ export default {
     return {
       tabLevel1: 0,
       tabLevel2: 0,
+      fileDialog: false,
+      domainFile: null,
     }
   },
 
@@ -132,6 +185,24 @@ export default {
           this.onTabChange(newValue)
         }
       }
+    },
+    fileDialog(val) {
+      val || this.closeFileDialog()
+    },
+  },
+
+  computed: {
+    fileRules() {
+      return [
+        v => !!v || 'A CLEW file is required',
+        v => (v && v.name.split('.').pop() === 'xlsx') || 'File must be .xlsx',
+      ]
+    },
+    isInvalidUploadForm() {
+      return (
+        this.domainFile === null ||
+        this.domainFile.name.split('.').pop() !== 'xlsx'
+      )
     },
   },
 
@@ -191,6 +262,18 @@ export default {
     },
     handleSubmitAll(filterData) {
       this.$emit('handleSubmitAll', filterData)
+    },
+    closeFileDialog() {
+      this.fileDialog = false
+      this.domainFile = null
+    },
+    uploadClew() {
+      if (this.domainFile) {
+        this.onUploadDomain(this.domainFile)
+        this.domainFile = null
+      }
+
+      this.closeFileDialog()
     },
   },
 
@@ -260,6 +343,10 @@ export default {
     },
     savedFilters: {
       type: Object,
+      default: () => {},
+    },
+    onUploadDomain: {
+      type: Function,
       default: () => {},
     },
   },

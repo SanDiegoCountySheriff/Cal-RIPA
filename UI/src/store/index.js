@@ -631,6 +631,31 @@ export default new Vuex.Store({
         })
     },
 
+    uploadDomain({ dispatch, state }, domainFile) {
+      const formData = new FormData()
+      formData.append('file', domainFile)
+      return axios
+        .post(`http://localhost:7071/api/PostUpload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          console.log(response)
+          dispatch('getAdminSchools')
+          dispatch('getAdminCities')
+          dispatch('getAdminStatutes')
+        })
+        .catch(error => {
+          console.log('There was an error uploading the domain file', error)
+          dispatch('getAdminSchools')
+          dispatch('getAdminCities')
+          dispatch('getAdminStatutes')
+        })
+    },
+
     editOfficerUser({ dispatch, state }, mappedUser) {
       const userId = state.user.oid
       const user = {
