@@ -13,13 +13,7 @@
       :errorCodeSearch="mappedErrorCodeAdminSearch"
       :display-beat-input="displayBeatInput"
       :on-delete-beat="handleDeleteBeat"
-      :on-delete-city="handleDeleteCity"
-      :on-delete-school="handleDeleteSchool"
-      :on-delete-statute="handleDeleteStatute"
       :on-edit-beat="handleEditBeat"
-      :on-edit-city="handleEditCity"
-      :on-edit-school="handleEditSchool"
-      :on-edit-statute="handleEditStatute"
       :on-edit-user="handleEditUser"
       :on-upload-users="handleUploadUsers"
       :on-tab-change="handleTabChange"
@@ -94,13 +88,7 @@ export default {
   methods: {
     ...mapActions([
       'deleteBeat',
-      'deleteCity',
-      'deleteSchool',
-      'deleteStatute',
       'editBeat',
-      'editCity',
-      'editSchool',
-      'editStatute',
       'editUser',
       'uploadUsers',
       'getAdminBeats',
@@ -246,45 +234,9 @@ export default {
       this.loading = false
     },
 
-    async handleDeleteCity(city) {
-      this.loading = true
-      await Promise.all([this.deleteCity(city)])
-      this.loading = false
-    },
-
-    async handleDeleteSchool(school) {
-      this.loading = true
-      await Promise.all([this.deleteSchool(school)])
-      this.loading = false
-    },
-
-    async handleDeleteStatute(statute) {
-      this.loading = true
-      await Promise.all([this.deleteStatute(statute)])
-      this.loading = false
-    },
-
     async handleEditBeat(beat) {
       this.loading = true
       await Promise.all([this.editBeat(beat)])
-      this.loading = false
-    },
-
-    async handleEditCity(city) {
-      this.loading = true
-      await Promise.all([this.editCity(city)])
-      this.loading = false
-    },
-
-    async handleEditSchool(school) {
-      this.loading = true
-      await Promise.all([this.editSchool(school)])
-      this.loading = false
-    },
-
-    async handleEditStatute(statute) {
-      this.loading = true
-      await Promise.all([this.editStatute(statute)])
       this.loading = false
     },
 
