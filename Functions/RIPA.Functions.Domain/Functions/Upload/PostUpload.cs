@@ -54,6 +54,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
             try
             {
+                int recordCount = 0;
                 _log = log;
                 var formData = await req.ReadFormAsync();
                 var file = req.Form.Files["file"];
@@ -65,25 +66,23 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
                 if (dataSet.Tables["Beat_Table"] != null)
                 {
-                    await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
                 }
 
-                await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
+                recordCount += await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
 
-                await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
+                recordCount += await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
 
                 if (dataSet.Tables["Offense_Table"] != null)
                 {
-                    await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
                 }
                 else if (dataSet.Tables["Offense Table"] != null)
                 {
-                    await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
                 }
 
-                string responseMessage = $"Upload Complete";
-
-                return new OkObjectResult(responseMessage);
+                return new OkObjectResult(recordCount);
             }
             catch (Exception ex)
             {
@@ -130,10 +129,11 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
         }
 
-        public async static Task<bool> ProcessEntities(DataTable dataTable, CloudTable table)
+        public async static Task<int> ProcessEntities(DataTable dataTable, CloudTable table)
         {
             int batchCount = 0;
             int totalRows = dataTable.Rows.Count - 1;
+            int returnTotalRows = totalRows;
             _operations = new TableBatchOperation();
             foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Skip(1))
             {
@@ -177,7 +177,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
 
             await ExecuteBatch(table);
-            return true;
+            return returnTotalRows;
         }
 
         public static City GetCity(DataRow row)
@@ -207,9 +207,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 PartitionKey = "CA",
                 RowKey = row.ItemArray[0].ToString(),
                 CDSCode = row.ItemArray[0].ToString(),
-                Status = row.ItemArray[1].ToString(),
-                County = row.ItemArray[2].ToString(),
-                District = row.ItemArray[3].ToString(),
+                Status = row.ItemArray[3].ToString(),
+                County = row.ItemArray[4].ToString(),
+                District = row.ItemArray[5].ToString(),
                 Name = row.ItemArray[6].ToString()
             };
             return school;

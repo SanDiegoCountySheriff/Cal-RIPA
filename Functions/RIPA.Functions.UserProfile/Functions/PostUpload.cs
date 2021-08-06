@@ -82,7 +82,7 @@ namespace RIPA.Functions.UserProfile.Functions
                 string responseMessage = $"Upload Complete: {count} record(s) uploaded";
 
                 log.LogInformation(responseMessage);
-                return new OkObjectResult(responseMessage);
+                return new OkObjectResult(count);
             }
             catch (Exception ex)
             {

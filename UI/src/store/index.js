@@ -643,16 +643,16 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          console.log(response)
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
           dispatch('getAdminStatutes')
+          return response.data
         })
         .catch(error => {
-          console.log('There was an error uploading the domain file', error)
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
           dispatch('getAdminStatutes')
+          return error
         })
     },
 

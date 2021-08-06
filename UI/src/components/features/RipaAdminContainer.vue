@@ -250,14 +250,20 @@ export default {
 
     async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
-      await Promise.all([this.uploadUsers({ usersFile, usersAgency })])
+      const recordCount = await Promise.all([
+        this.uploadUsers({ usersFile, usersAgency }),
+      ])
       this.loading = false
+      this.snackbarText = `Upload complete: ${recordCount} users updated`
+      this.snackbarVisible = true
     },
 
     async handleUploadDomain(domainFile) {
       this.loading = true
-      await Promise.all([this.uploadDomain(domainFile)])
+      const recordCount = await Promise.all([this.uploadDomain(domainFile)])
       this.loading = false
+      this.snackbarText = `Upload complete: ${recordCount} records updated`
+      this.snackbarVisible = true
     },
 
     async handleSubmitStops(stops) {
@@ -269,7 +275,7 @@ export default {
         this.snackbarText = `Submission error: ${submissionResults[0]}`
         this.snackbarVisible = true
       } else {
-        // if the submissiong goes through (meaning no message was sent back),
+        // if the submission goes through (meaning no message was sent back),
         // set the toast text and automatically redirect
         const notificationText =
           stops.length > 1
