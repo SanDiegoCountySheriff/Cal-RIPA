@@ -190,7 +190,7 @@
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
                     :on-copy-person="handleCopyPerson"
-                    :on-delete-person="handleDeletePerson"
+                    :on-delete-person="handleCallDeletePerson"
                     :on-edit-agency-questions="handleEditAgencyQuestions"
                     :on-edit-person="handleEditPerson"
                     :on-edit-stop="handleEditStop"
@@ -278,6 +278,15 @@
     </ripa-confirm-dialog>
 
     <ripa-confirm-dialog
+      :show-dialog="showDeletePersonDialog"
+      title="Confirm Delete"
+      subtitle="Are you sure you want to delete the person?"
+      :on-close="handleCloseDialog"
+      :on-confirm="handleDeletePerson"
+    >
+    </ripa-confirm-dialog>
+
+    <ripa-confirm-dialog
       :show-dialog="showConfirmDialog"
       title="Confirm Submission"
       subtitle="Are you sure you want to submit the form?"
@@ -331,6 +340,8 @@ export default {
       showCancelFormDialog: false,
       showCancelActionDialog: false,
       showConfirmDialog: false,
+      showDeletePersonDialog: false,
+      deletePersonId: null,
     }
   },
 
@@ -383,6 +394,7 @@ export default {
       this.showConfirmDialog = false
       this.showCancelFormDialog = false
       this.showCancelActionDialog = false
+      this.showDeletePersonDialog = false
     },
 
     isCreateForm() {
@@ -469,22 +481,15 @@ export default {
       }
     },
 
-    handleDeletePerson(id) {
-      this.$confirm({
-        title: 'Confirm Delete',
-        message: `Are you sure you want to delete the person?`,
-        button: {
-          no: 'No',
-          yes: 'Yes',
-        },
-        callback: confirm => {
-          if (confirm) {
-            if (this.onDeletePerson) {
-              this.onDeletePerson(id)
-            }
-          }
-        },
-      })
+    handleCallDeletePerson(id) {
+      this.deletePersonId = id
+      this.showDeletePersonDialog = true
+    },
+
+    handleDeletePerson() {
+      if (this.deletePersonId && this.onDeletePerson) {
+        this.onDeletePerson(this.deletePersonId)
+      }
     },
 
     handleEditPerson(id) {
