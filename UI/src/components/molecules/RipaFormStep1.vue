@@ -71,11 +71,21 @@
         Next
       </v-btn>
     </div>
+
+    <ripa-confirm-dialog
+      :show-dialog="showConfirmDialog"
+      title="Confirm Continue"
+      subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
+      :on-close="handleCloseDialog"
+      :on-confirm="handleConfirm"
+    >
+    </ripa-confirm-dialog>
   </v-form>
 </template>
 
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
+import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
@@ -90,6 +100,7 @@ export default {
 
   components: {
     RipaAlert,
+    RipaConfirmDialog,
     RipaOfficer,
     RipaStopDate,
     RipaLocation,
@@ -127,19 +138,7 @@ export default {
     handleStep1Next() {
       const piiFound = this.viewModel.location?.piiFound || false
       if (piiFound) {
-        this.$confirm({
-          title: 'Confirm Continue',
-          message: `This page may contain personally identifying information. Are you sure you want to continue?`,
-          button: {
-            no: 'No',
-            yes: 'Yes',
-          },
-          callback: confirm => {
-            if (confirm) {
-              this.handleNext()
-            }
-          },
-        })
+        this.showConfirmDialog = true
       } else {
         this.handleNext()
       }
@@ -151,6 +150,7 @@ export default {
 
     handleCloseDialog() {
       this.showUserDialog = false
+      this.showConfirmDialog = false
     },
 
     handleSaveUser(user) {

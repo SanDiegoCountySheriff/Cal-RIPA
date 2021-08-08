@@ -40,11 +40,21 @@
         Next
       </v-btn>
     </div>
+
+    <ripa-confirm-dialog
+      :show-dialog="showConfirmDialog"
+      title="Confirm Continue"
+      subtitle="This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?"
+      :on-close="handleCloseDialog"
+      :on-confirm="handleConfirm"
+    >
+    </ripa-confirm-dialog>
   </v-form>
 </template>
 
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
+import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaStopResult from '@/components/molecules/RipaStopResult'
 
@@ -55,6 +65,7 @@ export default {
 
   components: {
     RipaAlert,
+    RipaConfirmDialog,
     RipaStopResult,
   },
 
@@ -63,22 +74,14 @@ export default {
       const anyResultsOfStop =
         this.viewModel.stopResult?.anyResultsOfStop || false
       if (!anyResultsOfStop) {
-        this.$confirm({
-          title: 'Confirm Continue',
-          message: `This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?`,
-          button: {
-            no: 'No',
-            yes: 'Yes',
-          },
-          callback: confirm => {
-            if (confirm) {
-              this.handleNext()
-            }
-          },
-        })
+        this.showConfirmDialog = true
       } else {
         this.handleNext()
       }
+    },
+
+    handleCloseDialog() {
+      this.showConfirmDialog = false
     },
   },
 
