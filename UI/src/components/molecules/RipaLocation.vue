@@ -433,13 +433,13 @@ export default {
 
     handleOutOfCountyToggle() {
       if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
+        this.viewModel.location.beat = '999'
         this.viewModel.location.city = null
       }
 
       if (
         !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
+        this.viewModel.location.beat === '999'
       ) {
         this.viewModel.location.beat = null
         this.viewModel.location.city = null
