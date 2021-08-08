@@ -127,6 +127,7 @@ export default {
     updateModel() {
       this.updateSchoolModel()
       this.updateStudentModel()
+      this.updateMoreLocationOptionsModel()
       this.updatePerceivedDisabilityModel()
       this.updateActionsTakenModel()
       this.updateActionsTakenSearchModel()
@@ -139,6 +140,13 @@ export default {
       this.updateStopReasonModel()
       this.updateStopReasonSearchModel()
       this.updateStopResultModel()
+    },
+
+    updateMoreLocationOptionsModel() {
+      if (!this.viewModel.location.toggleLocationOptions) {
+        this.viewModel.location.highwayExit = null
+        this.viewModel.location.landmark = null
+      }
     },
 
     updateActionsTakenModel() {
@@ -327,6 +335,7 @@ export default {
 
     updateSchoolModel() {
       if (!this.viewModel.location.isSchool) {
+        this.viewModel.location.school = null
         this.viewModel.person.isStudent = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
@@ -351,8 +360,8 @@ export default {
         }
       }
 
-      if (this.viewModel.person.perceivedOrKnownDisability.length === 0) {
-        this.viewModel.person.anyDisabilities = false
+      if (!this.viewModel.person.anyDisabilities) {
+        this.viewModel.person.perceivedOrKnownDisability = []
       }
     },
 
@@ -457,6 +466,7 @@ export default {
         this.viewModel.stopResult.resultsOfStop8 = false
         this.viewModel.stopResult.resultsOfStop9 = false
         this.viewModel.stopResult.resultsOfStop10 = false
+        this.viewModel.stopResult.resultsOfStop11 = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
       }

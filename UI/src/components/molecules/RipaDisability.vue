@@ -87,6 +87,7 @@ export default {
 
   methods: {
     handleInput() {
+      this.updateModel()
       this.$emit('input', this.viewModel)
     },
   },
