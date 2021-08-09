@@ -36,7 +36,7 @@
 				"name": "agency_dropdown",
 				"type": "Microsoft.Common.DropDown",
 				"label": "Agency",
-				"toolTip": "Select the agnecy that you are deploying this application for.",
+				"toolTip": "Select the agency that you are deploying this application for.",
 				"constraints": {
 					"allowedValues": [
 						{
