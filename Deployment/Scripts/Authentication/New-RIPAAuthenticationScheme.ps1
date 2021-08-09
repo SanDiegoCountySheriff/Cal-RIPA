@@ -1,4 +1,15 @@
-﻿Import-Module .\New-RIPAAADGroup.psm1 -Force
+﻿param (
+    [Parameter(Mandatory = $true, HelpMessage = "The name of the App Registration that should be created")]
+    $DisplayName, 
+    [Parameter(Mandatory = $true, HelpMessage = "The web application reply URI for post authentication")]
+    $ReplyUri,
+    [Parameter(Mandatory = $true, HelpMessage = "The name of the AAD Group that will implement the application user role")]
+    $UserGroupName,
+    [Parameter(Mandatory = $true, HelpMessage = "The name of the AAD Group that will implement the application administor role")]
+    $AdminGroupName
+ )
+
+Import-Module .\New-RIPAAADGroup.psm1 -Force
 Import-Module .\New-RIPAAppRegistration.psm1 -Force
 Import-Module .\New-RIPARBACRoleAssignment.psm1 -Force
 
@@ -6,14 +17,14 @@ $waitTime = 30
 
 Write-Host "Creating App Registration & Service Princpal"
 $ripaAppRegistration = New-RIPAAppRegistration `
-    -DisplayName "RIPA-AUTH-TEST" `
+    -DisplayName $DisplayName `
     -Description "The App Registration that provides login and authorization to RIPA application users." `
-    -ReplyUri "http://localhost:4000" -Debug `
+    -ReplyUri $ReplyUri `
     | ConvertFrom-Json
 
 Write-Host "Create AAD Groups"
-$adminGroupId = New-RIPAAADGroup -GroupName "RIPA-ADMINS" -Description "RIPA test admin group"
-$userGroupId = New-RIPAAADGroup -GroupName "RIPA-USERS" -Description "RIPA test admin group"
+$adminGroupId = New-RIPAAADGroup -GroupName $AdminGroupName -Description "RIPA admin group"
+$userGroupId = New-RIPAAADGroup -GroupName $UserGroupName -Description "RIPA user group"
 
 Write-Host "Waiting $waitTime seconds for AAD Groups propogate..."
 Start-Sleep -Seconds $waitTime
