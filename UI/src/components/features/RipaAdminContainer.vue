@@ -246,9 +246,9 @@ export default {
       this.loading = false
     },
 
-    async handleUploadUsers(usersFile, usersAgency) {
+    async handleUploadUsers(usersFile) {
       this.loading = true
-      await Promise.all([this.uploadUsers({ usersFile, usersAgency })])
+      await Promise.all([this.uploadUsers(usersFile)])
       this.loading = false
     },
 
