@@ -15,7 +15,6 @@ using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 
@@ -79,7 +78,7 @@ namespace RIPA.Functions.Submission
             string containerName = Environment.GetEnvironmentVariable("ContainerNameStops");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key, new Microsoft.Azure.Cosmos.CosmosClientOptions() { RequestTimeout = TimeSpan.FromMinutes(2), ApplicationName = "RIPA.Functions.Submission" });
             StopCosmosDbService cosmosDbService = new StopCosmosDbService(client, databaseName, containerName);
             Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
