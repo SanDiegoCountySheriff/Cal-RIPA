@@ -190,7 +190,7 @@
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
                     :on-copy-person="handleCopyPerson"
-                    :on-delete-person="handleDeletePerson"
+                    :on-delete-person="handleCallDeletePerson"
                     :on-edit-agency-questions="handleEditAgencyQuestions"
                     :on-edit-person="handleEditPerson"
                     :on-edit-stop="handleEditStop"
@@ -260,6 +260,33 @@
     ></ripa-json-viewer-dialog>
 
     <ripa-confirm-dialog
+      :show-dialog="showCancelFormDialog"
+      title="Confirm Cancel"
+      subtitle="Are you sure you want to cancel the form? You will lose all changes."
+      :on-close="handleCloseDialog"
+      :on-confirm="handleCancelForm"
+    >
+    </ripa-confirm-dialog>
+
+    <ripa-confirm-dialog
+      :show-dialog="showCancelActionDialog"
+      title="Confirm Cancel"
+      subtitle="Are you sure you want to cancel the action? You will lose all changes."
+      :on-close="handleCloseDialog"
+      :on-confirm="handleCancelAction"
+    >
+    </ripa-confirm-dialog>
+
+    <ripa-confirm-dialog
+      :show-dialog="showDeletePersonDialog"
+      title="Confirm Delete"
+      subtitle="Are you sure you want to delete the person?"
+      :on-close="handleCloseDialog"
+      :on-confirm="handleDeletePerson"
+    >
+    </ripa-confirm-dialog>
+
+    <ripa-confirm-dialog
       :show-dialog="showConfirmDialog"
       title="Confirm Submission"
       subtitle="Are you sure you want to submit the form?"
@@ -310,7 +337,11 @@ export default {
       stop: this.value,
       stepTrace: null,
       showDialog: false,
+      showCancelFormDialog: false,
+      showCancelActionDialog: false,
       showConfirmDialog: false,
+      showDeletePersonDialog: false,
+      deletePersonId: null,
     }
   },
 
@@ -361,6 +392,9 @@ export default {
     handleCloseDialog() {
       this.showDialog = false
       this.showConfirmDialog = false
+      this.showCancelFormDialog = false
+      this.showCancelActionDialog = false
+      this.showDeletePersonDialog = false
     },
 
     isCreateForm() {
@@ -415,50 +449,26 @@ export default {
         this.isEditPerson() ||
         this.isEditAgencyQuestions()
       ) {
-        this.handleCancelAction()
+        this.showCancelActionDialog = true
       } else {
-        this.handleCancelForm()
+        this.showCancelFormDialog = true
       }
     },
 
     handleCancelForm() {
-      this.$confirm({
-        title: 'Confirm Cancel',
-        message: `Are you sure you want to cancel the form? You will lose all changes.`,
-        button: {
-          no: 'No',
-          yes: 'Yes',
-        },
-        callback: confirm => {
-          if (confirm) {
-            this.stepIndex = 0
-            if (this.onStepIndexChange) {
-              this.onStepIndexChange(this.stepIndex)
-            }
-            if (this.onCancelForm) {
-              this.onCancelForm()
-            }
-          }
-        },
-      })
+      this.stepIndex = 0
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+      if (this.onCancelForm) {
+        this.onCancelForm()
+      }
     },
 
     handleCancelAction() {
-      this.$confirm({
-        title: 'Confirm Cancel',
-        message: `Are you sure you want to cancel the action? You will lose all changes.`,
-        button: {
-          no: 'No',
-          yes: 'Yes',
-        },
-        callback: confirm => {
-          if (confirm) {
-            if (this.onCancelAction) {
-              this.onCancelAction()
-            }
-          }
-        },
-      })
+      if (this.onCancelAction) {
+        this.onCancelAction()
+      }
     },
 
     handleCopyPerson(id) {
@@ -471,22 +481,15 @@ export default {
       }
     },
 
-    handleDeletePerson(id) {
-      this.$confirm({
-        title: 'Confirm Delete',
-        message: `Are you sure you want to delete the person?`,
-        button: {
-          no: 'No',
-          yes: 'Yes',
-        },
-        callback: confirm => {
-          if (confirm) {
-            if (this.onDeletePerson) {
-              this.onDeletePerson(id)
-            }
-          }
-        },
-      })
+    handleCallDeletePerson(id) {
+      this.deletePersonId = id
+      this.showDeletePersonDialog = true
+    },
+
+    handleDeletePerson() {
+      if (this.deletePersonId && this.onDeletePerson) {
+        this.onDeletePerson(this.deletePersonId)
+      }
     },
 
     handleEditPerson(id) {

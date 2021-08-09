@@ -335,12 +335,15 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
+          (checked && highwayExit !== null) ||
+          'A highway and closest exit is required',
+        this.isLocationOptionsFilled ||
           (checked &&
             highwayExit &&
             highwayExit.length >= 5 &&
             highwayExit.length <= 250 &&
-            landmark == null) ||
-          'A highway and closest exit is required',
+            landmark !== null) ||
+          'Highway and closest exit must be between 5 and 250 characters',
       ]
     },
 
@@ -351,12 +354,15 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
+          (checked && landmark !== null) ||
+          'A road marker, landmark, or other description is required',
+        this.isLocationOptionsFilled ||
           (checked &&
             landmark &&
             landmark.length >= 5 &&
             landmark.length <= 250 &&
-            highwayExit == null) ||
-          'A road marker, landmark, or other description is required',
+            highwayExit !== null) ||
+          'Road marker, landmark or other description must be between 5 and 250 characters',
       ]
     },
 
@@ -372,15 +378,13 @@ export default {
         (blockNumber !== null && streetName && streetName.length > 0) ||
         (intersection && intersection.length > 0) ||
         (checked &&
-          highwayExit &&
+          highwayExit !== null &&
           highwayExit.length >= 5 &&
-          highwayExit.length <= 250 &&
-          landmark == null) ||
+          highwayExit.length <= 250) ||
         (checked &&
-          landmark &&
+          landmark !== null &&
           landmark.length >= 5 &&
-          landmark.length <= 250 &&
-          highwayExit == null)
+          landmark.length <= 250)
 
       return isValid
     },
@@ -429,13 +433,13 @@ export default {
 
     handleOutOfCountyToggle() {
       if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = 999
+        this.viewModel.location.beat = '999'
         this.viewModel.location.city = null
       }
 
       if (
         !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === 999
+        this.viewModel.location.beat === '999'
       ) {
         this.viewModel.location.beat = null
         this.viewModel.location.city = null

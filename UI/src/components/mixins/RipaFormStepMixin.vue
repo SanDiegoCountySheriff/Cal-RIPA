@@ -4,6 +4,7 @@ export default {
     return {
       isFormValid: true,
       viewModel: this.value || {},
+      showConfirmDialog: false,
     }
   },
 
@@ -28,6 +29,10 @@ export default {
   },
 
   methods: {
+    handleConfirm() {
+      this.handleNext()
+    },
+
     handleAddPerson() {
       if (this.onAddPerson) {
         this.onAddPerson()
