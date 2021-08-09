@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,9 @@ using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
+using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
+using RIPA.Functions.Submission.Utility;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
@@ -21,6 +24,8 @@ namespace RIPA.Functions.Submission.Functions
         private readonly string _storageContainerNamePrefix;
         private readonly string _sftpInputPath;
         private readonly BlobContainerClient _blobContainerClient;
+        private readonly BlobUtilities blobUtilities = new BlobUtilities();
+
         public ServiceBusSubmissionConsumer(IStopCosmosDbService stopCosmosDbService, ISftpService sftpService, IStopService stopService)
         {
             _stopCosmosDbService = stopCosmosDbService;
@@ -35,7 +40,6 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("ServiceBusSubmissionConsumer")]
         public async void Run(
             [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")] string myQueueItem,
-            [ServiceBus("submission/$DeadLetterQueue", Connection = "ServiceBusConnection", EntityType = Microsoft.Azure.WebJobs.ServiceBus.EntityType.Queue)] IAsyncCollector<SubmissionMessage> submissionDeadletterQueue,
             ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
@@ -66,7 +70,7 @@ namespace RIPA.Functions.Submission.Functions
                             DateReported = dateSubmitted,
                             ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
                             FileName = fileName,
-                            SubmissionId= submissionMessage.SubmissionId
+                            SubmissionId = submissionMessage.SubmissionId
                         };
                         await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
                         log.LogError($"Failure Casting Stop with id {stop.Id}: {ex.Message}");
@@ -80,7 +84,15 @@ namespace RIPA.Functions.Submission.Functions
 
                 try
                 {
-                    await _sftpService.UploadStop(dojStop, $"{_sftpInputPath}{fileName.Split("/")[2]}", fileName, _blobContainerClient);
+                    var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
+                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dojStop, settings));
+
+                    //1 
+                    await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient); //Upload json as Blob to Azure Storage Container 
+                    //2 
+                    //_sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}"); //Upload json to SFTP
+                    _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}"); //Upload json to SFTP
+                    //3
                     await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionMessage.SubmissionId, fileName));
                     log.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionMessage.SubmissionId}");
                 }
@@ -107,10 +119,9 @@ namespace RIPA.Functions.Submission.Functions
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.LogError($"Failed to process submission message: {myQueueItem}, {ex}");
-                await submissionDeadletterQueue.AddAsync(JsonConvert.DeserializeObject<SubmissionMessage>(myQueueItem));
             }
         }
 
