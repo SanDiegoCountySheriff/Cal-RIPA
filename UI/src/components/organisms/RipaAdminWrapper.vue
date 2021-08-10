@@ -80,6 +80,16 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
+                      <p>
+                        This data is provided by CA DOJ and maintained
+                        periodically on CLEW (<a
+                          href="https://clew.doj.ca.gov/sd-ab953"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          https://clew.doj.ca.gov/sd-ab953 </a
+                        >). The .xlsx file should include the tables
+                      </p>
                       <v-file-input
                         v-model="domainFile"
                         prepend-icon="mdi-paperclip"
