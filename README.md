@@ -1,6 +1,6 @@
 # Cal-RIPA
 
-## By CSSA & Insight Digital Inovation
+## By CSSA & Insight Digital Innovation
 
 The CSSA RIPA Azure Marketplace offering is a cost effective, turnkey option for close to 700 law enforcement agencies in the State of California to effectively and transparently comply with the California Racial and Identity Profiling Act of 2015 (RIPA).
 
@@ -42,7 +42,7 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 18. Various "Favorites" that allow for rapid selection of items each user uses the most
 19. Ability to create and maintain additional agency specific questions that go beyond the AB#953 requirements
 20. Ability to create and maintain predefined STOP templates
-    1. These are Json documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
+    1. These are JSON documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
 21. Links to the RIPA statutes in specific sections of the STOP screens
 22. PII dectection using Azure Cognitive Services
 23. GEO location detection for ease of location entry
