@@ -342,7 +342,7 @@ export default {
       this.stops = this.items
       // if the user has a from date saved in session storage
       // this overrides any date checking
-      if (this.savedFilters.stopFromDate) {
+      if (this.savedFilters.fromDate) {
         this.stopFromDate = this.savedFilters.fromDate
       } else {
         const currentDateInUTC = zonedTimeToUtc(new Date())
