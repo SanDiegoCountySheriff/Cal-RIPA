@@ -2963,7 +2963,8 @@
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
           "linuxFxVersion": "[parameters('linuxFxVersion')]",
-          "scmIpSecurityRestrictionsUseMain": true
+          "scmIpSecurityRestrictionsUseMain": true,
+          "numberOfWorkers": 1
         },
         "scmSiteAlsoStopped": false,
         "clientAffinityEnabled": false,
