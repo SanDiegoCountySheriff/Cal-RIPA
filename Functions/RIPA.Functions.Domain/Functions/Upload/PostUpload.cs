@@ -73,6 +73,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
                 recordCount += await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
 
+                // CA DOJ currently has the table name as "Offense Table" which does not follow the conventions of the other tables
                 if (dataSet.Tables["Offense_Table"] != null)
                 {
                     recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
@@ -82,12 +83,22 @@ namespace RIPA.Functions.Domain.Functions.Upload
                     recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
                 }
 
-                return new OkObjectResult(recordCount);
+                string responseMessage;
+                if (recordCount >= 1)
+                {
+                    responseMessage = $"Upload complete: {recordCount} {(recordCount > 1 ? "records" : "record")} updated.";
+                }
+                else
+                {
+                    responseMessage = "No records found";
+                }
+
+                return new OkObjectResult(responseMessage);
             }
             catch (Exception ex)
             {
                 _log.LogError(ex.Message);
-                return new BadRequestObjectResult("File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;");
+                return new BadRequestObjectResult("File Format Error.  Sheets should be included: City_Table, School_Table, and Offense_Table");
             }
         }
 

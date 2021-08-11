@@ -621,13 +621,14 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          console.log(response)
           dispatch('getAdminUsers')
           dispatch('getUser')
+          return response.data
         })
         .catch(error => {
-          console.log('There was an error uploading the users', error)
           dispatch('getAdminUsers')
+          console.log('There was an error uploading users', error)
+          return error.response.data
         })
     },
 
@@ -635,7 +636,7 @@ export default new Vuex.Store({
       const formData = new FormData()
       formData.append('file', domainFile)
       return axios
-        .post(`http://localhost:7071/api/PostUpload`, formData, {
+        .post(`${state.apiConfig.apiBaseUrl}domain/PostUpload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -652,7 +653,8 @@ export default new Vuex.Store({
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
           dispatch('getAdminStatutes')
-          return error
+          console.log('There was an error uploading domain data', error)
+          return error.response.data
         })
     },
 

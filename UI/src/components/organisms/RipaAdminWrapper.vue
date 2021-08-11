@@ -88,8 +88,27 @@
                           rel="noopener noreferrer"
                         >
                           https://clew.doj.ca.gov/sd-ab953 </a
-                        >). The .xlsx file should include the tables
+                        >) and can be downloaded in the form of an .xlsx file.
+                        Do not modify the default sheets.
                       </p>
+                      <div class="text-h6">Optional</div>
+                      <p>
+                        A sheet named 'Beat_Table' may be added to include your
+                        agency's beats with the following columns in this
+                        <u>exact</u>
+                        order.
+                      </p>
+                      <p>Required Columns:</p>
+                      <ul class="mb-6">
+                        <li>'Id'</li>
+                        <li>'Community'</li>
+                        <li>'Command'</li>
+                      </ul>
+                      <p>Optional Columns:</p>
+                      <ul>
+                        <li>'CommandAuditGroup'</li>
+                        <li>'CommandAuditSize'</li>
+                      </ul>
                       <v-file-input
                         v-model="domainFile"
                         prepend-icon="mdi-paperclip"
@@ -362,3 +381,9 @@ export default {
   },
 }
 </script>
+
+<style scoped="true">
+* >>> .v-dialog {
+  overflow-y: visible;
+}
+</style>

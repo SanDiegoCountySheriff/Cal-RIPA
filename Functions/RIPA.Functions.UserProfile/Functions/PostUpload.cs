@@ -75,19 +75,25 @@ namespace RIPA.Functions.UserProfile.Functions
                             record.Agency = agency;
                         }
                         await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
-                        log.LogInformation($"OfficerId: {record.OfficerId} added to database");
                     }
                 }
 
-                string responseMessage = $"Upload Complete: {count} record(s) uploaded";
+                string responseMessage;
+                if (count >= 0)
+                {
+                    responseMessage = $"Upload Complete: {count} {(count > 1 ? "records" : "record")} uploaded";
+                }
+                else
+                {
+                    responseMessage = "No records found";
+                }
 
-                log.LogInformation(responseMessage);
-                return new OkObjectResult(count);
+                return new OkObjectResult(responseMessage);
             }
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
-                return new BadRequestObjectResult("File Format Error; Please pass form-data with key: 'file' value: filepath.csv");
+                return new BadRequestObjectResult("There was an error with the file format.  Please verify data and try again.");
             }
         }
     }

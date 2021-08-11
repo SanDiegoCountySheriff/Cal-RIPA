@@ -250,19 +250,19 @@ export default {
 
     async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
-      const recordCount = await Promise.all([
+      const result = await Promise.all([
         this.uploadUsers({ usersFile, usersAgency }),
       ])
       this.loading = false
-      this.snackbarText = `Upload complete: ${recordCount} users updated`
+      this.snackbarText = result[0]
       this.snackbarVisible = true
     },
 
     async handleUploadDomain(domainFile) {
       this.loading = true
-      const recordCount = await Promise.all([this.uploadDomain(domainFile)])
+      const result = await Promise.all([this.uploadDomain(domainFile)])
       this.loading = false
-      this.snackbarText = `Upload complete: ${recordCount} records updated`
+      this.snackbarText = result[0]
       this.snackbarVisible = true
     },
 
@@ -271,7 +271,7 @@ export default {
       const submissionResults = await Promise.all([this.submitStops(stops)])
       this.loading = false
       if (!submissionResults[0].submissionId) {
-        // show the error message, no redirec
+        // show the error message, no redirect
         this.snackbarText = `Submission error: ${submissionResults[0]}`
         this.snackbarVisible = true
       } else {
