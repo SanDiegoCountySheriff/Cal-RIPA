@@ -61,9 +61,25 @@
                           application)
                         </li>
                         <li>'OtherType'</li>
+                        <li>'Agency'</li>
                       </ul>
 
                       <br />
+
+                      <ripa-checkbox
+                        v-model="agencyIncluded"
+                        label="Agency included on .csv"
+                      ></ripa-checkbox>
+                      <template v-if="!agencyIncluded">
+                        <p>Enter your agency name or abbreviation.</p>
+                        <ripa-text-input
+                          v-model="usersAgency"
+                          single-line
+                          :rules="agencyRules"
+                          label="Agency"
+                        >
+                        </ripa-text-input>
+                      </template>
 
                       <v-file-input
                         v-model="usersFile"
@@ -84,7 +100,7 @@
                   Cancel
                 </v-btn>
                 <v-btn
-                  :disabled="isInvalidFile"
+                  :disabled="isInvalidUploadForm"
                   color="blue darken-1"
                   text
                   @click="uploadUsers"
@@ -121,12 +137,16 @@
 
 <script>
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
+import RipaTextInput from '@/components/atoms/RipaTextInput'
+import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 
 export default {
   name: 'ripa-users-grid',
 
   components: {
     RipaUserDialog,
+    RipaTextInput,
+    RipaCheckbox,
   },
 
   data() {
@@ -136,6 +156,7 @@ export default {
       dialog: false,
       fileDialog: false,
       usersFile: null,
+      usersAgency: '',
       agencyIncluded: false,
       headers: [
         { text: 'ID', value: 'id' },
@@ -199,6 +220,10 @@ export default {
       return false
     },
 
+    isInvalidUploadForm() {
+      return this.isInvalidFile || this.isInvalidAgency
+    },
+
     isInvalidFile() {
       return (
         this.usersFile === null ||
@@ -206,11 +231,19 @@ export default {
       )
     },
 
+    isInvalidAgency() {
+      return !this.agencyIncluded && this.usersAgency === ''
+    },
+
     fileRules() {
       return [
         v => !!v || 'A file is required',
         v => (v && v.name.split('.').pop() === 'csv') || 'File must be .csv',
       ]
+    },
+
+    agencyRules() {
+      return [v => (!!v && !this.agencyIncluded) || 'An agency is required']
     },
   },
 
@@ -228,8 +261,9 @@ export default {
 
     uploadUsers() {
       if (this.usersFile) {
-        this.onUploadUsers(this.usersFile)
+        this.onUploadUsers(this.usersFile, this.usersAgency)
         this.usersFile = null
+        this.usersAgency = ''
       }
 
       this.closeFileDialog()
@@ -274,6 +308,9 @@ export default {
     },
     fileDialog(val) {
       val || this.closeFileDialog()
+    },
+    agencyIncluded() {
+      this.usersAgency = ''
     },
   },
 

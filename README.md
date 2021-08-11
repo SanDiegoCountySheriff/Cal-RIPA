@@ -1,6 +1,6 @@
 # Cal-RIPA
 
-## By CSSA & Insight Digital Inovation
+## By CSSA & Insight Digital Innovation
 
 The CSSA RIPA Azure Marketplace offering is a cost effective, turnkey option for close to 700 law enforcement agencies in the State of California to effectively and transparently comply with the California Racial and Identity Profiling Act of 2015 (RIPA).
 
@@ -16,7 +16,7 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 
 1. Open source community project that can be extended and maintained by the law enforcement community at large
 2. Simple installation via Azure Marketplace (Contact CSSA to get installtion instructions)
-   1. Can be manually installed and mantianed using Azure ARM templates and Azure DevOps if desired
+   1. Can be manually installed and maintained using Azure ARM templates and Azure DevOps if desired
 3. Cloud First design using Azure services like Azure Active Directory (AAD), Key Vault, Functions, API Management, Cosmos database and Azure Cognitive Services
 4. Automated deployments from centralized Azure Dev Ops under the CSSA Azure Tenant
 5. Single Sign On (SSO) with AAD of your choice
@@ -27,12 +27,12 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 10. Offline operation for STOP entry
     1. Users can create and capture STOP events even when internet/networking is not available
     2. The system implements offline functionality by storing all critical data in local browser storage
-    3. The application automatically synchronizes the data the to cloud as soon as it is reconected to the internet
+    3. The application automatically synchronizes the data the to cloud as soon as it is reconnected to the internet
 11. Preloaded domain lists provided by the DoJ
     1. Cities
     2. Schools
-    3. Statutes
-    4. Beats (optional)
+    3. Statutes   
+12. Agency Beat collection (optional)      
 12. Domain list maintence screens
 13. User maintence screens
 14. STOP maintence screens
@@ -42,7 +42,7 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 18. Various "Favorites" that allow for rapid selection of items each user uses the most
 19. Ability to create and maintain additional agency specific questions that go beyond the AB#953 requirements
 20. Ability to create and maintain predefined STOP templates
-    1. These are Json documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
+    1. These are JSON documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
 21. Links to the RIPA statutes in specific sections of the STOP screens
 22. PII dectection using Azure Cognitive Services
 23. GEO location detection for ease of location entry

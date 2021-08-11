@@ -248,7 +248,7 @@ export default {
       this.loading = false
     },
 
-    async handleUploadUsers(usersFile) {
+    async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
       const recordCount = await Promise.all([this.uploadUsers(usersFile)])
       this.loading = false

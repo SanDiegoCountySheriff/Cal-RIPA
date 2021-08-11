@@ -71,7 +71,6 @@
               <ripa-text-input
                 v-model="model.agency"
                 label="Agency"
-                :disabled="!isInvalidUser && !admin"
                 :rules="agencyRules"
                 @input="handleInput"
               >
@@ -270,10 +269,6 @@ export default {
       default: () => {},
     },
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    isInvalidUser: {
       type: Boolean,
       default: false,
     },
