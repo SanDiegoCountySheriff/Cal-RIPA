@@ -182,6 +182,7 @@
                 :length="getPaginationLength"
                 @next="handleNextPage"
                 @input="handleJumpToPage"
+                :total-visible="30"
                 @previous="handlePreviousPage"
               ></v-pagination>
               <v-combobox
@@ -342,7 +343,7 @@ export default {
       this.stops = this.items
       // if the user has a from date saved in session storage
       // this overrides any date checking
-      if (this.savedFilters.stopFromDate) {
+      if (this.savedFilters.fromDate) {
         this.stopFromDate = this.savedFilters.fromDate
       } else {
         const currentDateInUTC = zonedTimeToUtc(new Date())
@@ -439,9 +440,6 @@ export default {
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
       this.selectedErrorCodes = val
-      this.$emit('handleUpdateSavedFilter', {
-        errorCodes: val,
-      })
       this.handleFilter()
     },
     removeErrorCode(val) {
@@ -586,6 +584,11 @@ export default {
         }
       }
     },
+    selectedErrorCodes(newValue) {
+      this.$emit('handleUpdateSavedFilter', {
+        errorCodes: newValue,
+      })
+    },
   },
 
   created() {
@@ -664,6 +667,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: baseline;
+    flex-wrap: wrap;
 
     p {
       margin: 0;
@@ -672,6 +676,7 @@ export default {
     .itemsPerPageSelector {
       max-width: 150px;
       margin-left: 10px;
+      margin-top: 10px;
     }
   }
 }
