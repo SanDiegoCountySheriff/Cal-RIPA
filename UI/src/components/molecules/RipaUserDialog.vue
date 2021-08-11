@@ -20,7 +20,6 @@
           <template v-if="!loading">
             <ripa-user
               v-model="modelUser"
-              :is-invalid-user="isInvalidUser"
               :admin="admin"
               :admin-editing="adminEditing"
               :is-row-key-disabled="isRowKeyDisabled"
