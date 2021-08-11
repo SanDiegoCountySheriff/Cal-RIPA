@@ -182,6 +182,7 @@
                 :length="getPaginationLength"
                 @next="handleNextPage"
                 @input="handleJumpToPage"
+                :total-visible="30"
                 @previous="handlePreviousPage"
               ></v-pagination>
               <v-combobox
@@ -664,6 +665,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: baseline;
+    flex-wrap: wrap;
 
     p {
       margin: 0;
@@ -672,6 +674,7 @@ export default {
     .itemsPerPageSelector {
       max-width: 150px;
       margin-left: 10px;
+      margin-top: 10px;
     }
   }
 }

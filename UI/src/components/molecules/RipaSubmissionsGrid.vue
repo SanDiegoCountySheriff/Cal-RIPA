@@ -70,6 +70,7 @@
                   v-model="currentPage"
                   :length="getPaginationLength"
                   @next="handleNextPage"
+                  :total-visible="30"
                   @input="handleJumpToPage"
                   @previous="handlePreviousPage"
                 ></v-pagination>
@@ -390,6 +391,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: baseline;
+  flex-wrap: wrap;
 
   p {
     margin: 0;
@@ -398,6 +400,7 @@ export default {
   .itemsPerPageSelector {
     max-width: 150px;
     margin-left: 10px;
+    margin-top: 10px;
   }
 }
 </style>
