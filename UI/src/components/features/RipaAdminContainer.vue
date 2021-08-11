@@ -250,7 +250,9 @@ export default {
 
     async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
-      const recordCount = await Promise.all([this.uploadUsers(usersFile)])
+      const recordCount = await Promise.all([
+        this.uploadUsers({ usersFile, usersAgency }),
+      ])
       this.loading = false
       this.snackbarText = `Upload complete: ${recordCount} users updated`
       this.snackbarVisible = true
