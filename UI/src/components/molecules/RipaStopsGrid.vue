@@ -440,9 +440,6 @@ export default {
     handleChangeSearchCodes(val) {
       // need to call getStops API here with search codes
       this.selectedErrorCodes = val
-      this.$emit('handleUpdateSavedFilter', {
-        errorCodes: val,
-      })
       this.handleFilter()
     },
     removeErrorCode(val) {
@@ -586,6 +583,11 @@ export default {
           this.handleFilter()
         }
       }
+    },
+    selectedErrorCodes(newValue) {
+      this.$emit('handleUpdateSavedFilter', {
+        errorCodes: newValue,
+      })
     },
   },
 
