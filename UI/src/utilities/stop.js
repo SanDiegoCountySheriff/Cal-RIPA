@@ -70,7 +70,9 @@ const defaultLocation = () => {
 
 export const defaultStop = () => {
   return {
-    actionsTaken: {},
+    actionsTaken: {
+      anyActionsTaken: true,
+    },
     id: 0,
     internalId: nanoid(),
     template: null,
@@ -92,7 +94,9 @@ export const defaultStop = () => {
 
 export const motorStop = () => {
   return {
-    actionsTaken: {},
+    actionsTaken: {
+      anyActionsTaken: true,
+    },
     id: 0,
     internalId: nanoid(),
     template: 'motor',
