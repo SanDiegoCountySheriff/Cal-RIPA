@@ -62,6 +62,7 @@ namespace RIPA.Functions.UserProfile.Functions
                 using (var reader = new StreamReader(req.Form.Files[0].OpenReadStream()))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
+                    var agency = req.Query["agency"];
                     csv.Context.RegisterClassMap<UserProfileMap>();
                     var records = csv.GetRecords<Common.Models.UserProfile>().ToList();
                     count = records.Count();
@@ -69,7 +70,10 @@ namespace RIPA.Functions.UserProfile.Functions
                     foreach (var record in records)
                     {
                         record.StartDate = DateTime.Now.AddYears(-record.YearsExperience);
-                        record.Agency = Environment.GetEnvironmentVariable("Agency");
+                        if (string.IsNullOrEmpty(record.Agency))
+                        {
+                            record.Agency = agency;
+                        }
                         await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
                         log.LogInformation($"OfficerId: {record.OfficerId} added to database");
                     }
@@ -99,6 +103,7 @@ namespace RIPA.Functions.UserProfile.Functions
             Map(u => u.YearsExperience).Optional().TypeConverter<YearsConverter>();
             Map(u => u.Assignment).Optional();
             Map(u => u.OtherType).Optional();
+            Map(u => u.Agency).Optional();
             Map(u => u.FavoriteLocations).Ignore();
             Map(u => u.FavoriteReasons).Ignore();
             Map(u => u.FavoriteResults).Ignore();
