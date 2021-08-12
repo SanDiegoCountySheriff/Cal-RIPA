@@ -29,11 +29,13 @@ export const onePerson = () => ({
   data() {
     return {
       fullStop: onePersonFullStop,
+      onlineAndAuthenticated: true,
     }
   },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -58,9 +60,15 @@ export const onePerson = () => ({
 
 export const twoPerson = () => ({
   components: { RipaFormSummary },
+  data() {
+    return {
+      onlineAndAuthenticated: true,
+    }
+  },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -88,11 +96,13 @@ export const onePersonEdit = () => ({
   data() {
     return {
       fullStop: onePersonFullStop,
+      onlineAndAuthenticated: true,
     }
   },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -117,9 +127,15 @@ export const onePersonEdit = () => ({
 
 export const twoPersonEdit = () => ({
   components: { RipaFormSummary },
+  data() {
+    return {
+      onlineAndAuthenticated: true,
+    }
+  },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),

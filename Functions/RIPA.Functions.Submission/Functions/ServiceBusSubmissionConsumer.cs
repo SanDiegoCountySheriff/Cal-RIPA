@@ -290,6 +290,7 @@ namespace RIPA.Functions.Submission.Functions
                 return false;
             }
         }
+
         private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName)
         {
             try
