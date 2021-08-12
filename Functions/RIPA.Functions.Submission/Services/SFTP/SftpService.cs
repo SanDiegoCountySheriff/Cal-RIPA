@@ -79,21 +79,6 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
         }
 
-        public void UploadFile(string localFilePath, string remoteFilePath)
-        {
-            try
-            {
-                Connect();
-                using var s = File.OpenRead(localFilePath);
-                _sftpClient.UploadFile(s, remoteFilePath);
-                _logger.LogInformation($"Finished uploading file [{localFilePath}] to [{remoteFilePath}]");
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed in uploading file [{localFilePath}] to [{remoteFilePath}]");
-            }
-        }
-
         public void UploadStop(byte[] bytes, string remoteFilePath)
         {
             try
@@ -107,26 +92,10 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
-                throw new Exception($"Failed in uploading stop to [{remoteFilePath}]");
+                throw new Exception($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
             }
         }
 
-        public void UploadJsonString(string jsonString, string remoteFilePath)
-        {
-            try
-            {
-                Connect();
-                byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
-                MemoryStream stream = new MemoryStream(bytes);
-                _sftpClient.UploadFile(stream, remoteFilePath);
-                _logger.LogInformation($"Finished uploading stop [{jsonString}] to [{remoteFilePath}]");
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed in uploading stop [{jsonString}] to [{remoteFilePath}]");
-            }
-        }
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
