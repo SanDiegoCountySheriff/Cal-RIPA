@@ -69,7 +69,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             try
             {
-                _sftpClient.Connect();
+                Connect();
                 return _sftpClient.ListDirectory(remoteDirectory);
             }
             catch (Exception exception)
@@ -116,7 +116,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             try
             {
-                _sftpClient.Connect();
+                Connect();
                 byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
                 MemoryStream stream = new MemoryStream(bytes);
                 _sftpClient.UploadFile(stream, remoteFilePath);
@@ -130,28 +130,26 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream stream = new MemoryStream(byteArray))
+
+            try
             {
-                try
+                BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
+                Connect();
+                var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
+                var download = await blobClient.DownloadAsync(); //Download blob
+                string text;
+                using (StreamReader streamReader = new StreamReader(download.Value.Content))
                 {
-                    BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-                    _sftpClient.Connect();
-                    var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
-                    var download = await blobClient.DownloadAsync(); //Download blob
-                    string text;
-                    using (StreamReader streamReader = new StreamReader(download.Value.Content))
-                    {
-                        text = streamReader.ReadToEnd(); //get file content
-                    }
-                    _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
-                    return text;
+                    text = streamReader.ReadToEnd(); //get file content
                 }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
-                }
+                _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
+                return text;
             }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
+            }
+
 
             return null;
         }
@@ -160,7 +158,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             try
             {
-                _sftpClient.Connect();
+                Connect();
                 _sftpClient.DeleteFile(remoteFilePath);
                 _logger.LogInformation($"File [{remoteFilePath}] deleted.");
             }
