@@ -370,6 +370,7 @@ export default {
 
     getApiStop() {
       return fullStopToApiStop(
+        this.isOnlineAndAuthenticated,
         this.fullStop,
         this.beats,
         this.countyCities,

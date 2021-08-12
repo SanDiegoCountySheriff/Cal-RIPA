@@ -33,6 +33,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
         {
             try
             {
+                _log.LogInformation($"Sending {listServiceBusMessages.Count} messages");
                 ServiceBusMessageBatch messageBatch = await _serviceBusSender.CreateMessageBatchAsync();
                 int batchMessageCount = 0;
                 foreach (ServiceBusMessage serviceBusMessage in listServiceBusMessages)
@@ -50,7 +51,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
                     {
                         // Use the producer client to send the batch of messages to the Service Bus queue
                         await _serviceBusSender.SendMessagesAsync(messageBatch);
-                        Console.WriteLine($"A batch of {messageBatch.Count} messages has been published to the queue.");
+                        _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
                         messageBatch.Dispose();
                         messageBatch = await _serviceBusSender.CreateMessageBatchAsync();
                         batchMessageCount = 0;
@@ -58,7 +59,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
                 }
                 await _serviceBusSender.SendMessagesAsync(messageBatch);
                 messageBatch.Dispose();
-                Console.WriteLine($"A batch of {messageBatch.Count} messages has been published to the queue.");
+                _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
 
             }
             catch (Exception ex)

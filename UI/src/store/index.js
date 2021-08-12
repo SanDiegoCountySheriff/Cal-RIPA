@@ -624,13 +624,40 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          console.log(response)
           dispatch('getAdminUsers')
           dispatch('getUser')
+          return response.data
         })
         .catch(error => {
-          console.log('There was an error uploading the users', error)
           dispatch('getAdminUsers')
+          console.log('There was an error uploading users', error)
+          return error.response.data
+        })
+    },
+
+    uploadDomain({ dispatch, state }, domainFile) {
+      const formData = new FormData()
+      formData.append('file', domainFile)
+      return axios
+        .post(`${state.apiConfig.apiBaseUrl}domain/PostUpload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          dispatch('getAdminSchools')
+          dispatch('getAdminCities')
+          dispatch('getAdminStatutes')
+          return response.data
+        })
+        .catch(error => {
+          dispatch('getAdminSchools')
+          dispatch('getAdminCities')
+          dispatch('getAdminStatutes')
+          console.log('There was an error uploading domain data', error)
+          return error.response.data
         })
     },
 

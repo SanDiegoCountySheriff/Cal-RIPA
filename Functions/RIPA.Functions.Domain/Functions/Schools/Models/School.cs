@@ -1,4 +1,4 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 
 namespace RIPA.Functions.Domain.Functions.Schools.Models

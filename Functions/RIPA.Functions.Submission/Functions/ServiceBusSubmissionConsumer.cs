@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -39,90 +41,100 @@ namespace RIPA.Functions.Submission.Functions
 
         [FunctionName("ServiceBusSubmissionConsumer")]
         public async void Run(
-            [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")] string myQueueItem,
+            [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")] string myQueueItem, int deliveryCount,
+            MessageReceiver messageReceiver, string lockToken,
             ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
 
+            SubmissionMessage submissionMessage = DeserializeQueueItem(log, myQueueItem);
+
+            if (submissionMessage == null)
+            {
+                await messageReceiver.DeadLetterAsync(lockToken);
+
+                return;
+            }
+
+            //Get Stop
+            Stop stop = await GetStop(log, submissionMessage.StopId);
+
+            if (stop == null)
+            {
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+
+                return;
+            }
+
             DateTime dateSubmitted = DateTime.UtcNow;
-            string fileName = string.Empty;
-            DojStop dojStop = new DojStop();
-            try
+
+            //Get File Name
+            string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id);
+
+            if (fileName == null)
             {
-                SubmissionMessage submissionMessage = JsonConvert.DeserializeObject<SubmissionMessage>(myQueueItem);
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
 
-                Stop stop = await _stopCosmosDbService.GetStopAsync(submissionMessage.StopId);
+                return;
+            }
 
-                try
+            //Get Doj Stop
+            DojStop dojStop = GetDojStop(log, stop);
+
+            if (dojStop == null)
+            {
+                //if the cast error fails report, retry the message
+                if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId))
                 {
+                    await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
 
-                    fileName = $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{submissionMessage.SubmissionId}/{dateSubmitted:yyyyMMddHHmmss}_{stop.Ori}_{stop.Id}.json";
-                    dojStop = _stopService.CastToDojStop(stop);
+                    return;
                 }
-                catch (Exception ex)
+                else
                 {
-                    try
-                    {
-                        SubmissionError submissionError = new SubmissionError()
-                        {
-                            Code = "FTS",
-                            Message = "Failed to submit to DOJ. Stop to DOJ Cast failure",
-                            DateReported = dateSubmitted,
-                            ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName,
-                            SubmissionId = submissionMessage.SubmissionId
-                        };
-                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
-                        log.LogError($"Failure Casting Stop with id {stop.Id}: {ex.Message}");
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Failed to update stop submission error");
-                    }
-                }
+                    await messageReceiver.CompleteAsync(lockToken); // message complete
 
-                try
-                {
-                    var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
-                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dojStop, settings));
-
-                    //1 
-                    await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient); //Upload json as Blob to Azure Storage Container 
-                    //2 
-                    //_sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}"); //Upload json to SFTP
-                    _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}"); //Upload json to SFTP
-                    //3
-                    await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, dateSubmitted, submissionMessage.SubmissionId, fileName));
-                    log.LogInformation($"submitted stop with id: {stop.Id} for submission with id: {submissionMessage.SubmissionId}");
-                }
-                catch (Exception ex)
-                {
-                    try
-                    {
-                        SubmissionError submissionError = new SubmissionError()
-                        {
-                            Code = "FTS",
-                            Message = "Failed to submit to DOJ. SFTP connection, Blob Connection failure",
-                            DateReported = dateSubmitted,
-                            ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                            FileName = fileName,
-                            SubmissionId = submissionMessage.SubmissionId
-                        };
-                        await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
-                        log.LogError($"Failure Submitting Stop with id {stop.Id}: {ex.Message}");
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Failed to update stop submission error");
-                    }
+                    return;
                 }
             }
-            catch (Exception ex)
+
+            //Get File Bytes
+            byte[] bytes = GetFileBytes(log, dojStop);
+
+            if (bytes == null)
             {
-                log.LogError($"Failed to process submission message: {myQueueItem}, {ex}");
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+
+                return;
             }
+
+            //Upload Blob
+            if (!await UploadBlob(log, bytes, fileName, stop.Id))
+            {
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+
+                return;
+            }
+
+            if (!UploadSftpFile(log, bytes, fileName, stop.Id))
+            {
+                await RemoveBlob(log, fileName, stop.Id); //delete the blob to clean up the failed run
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+
+                return;
+
+            }
+
+            if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName))
+            {
+                RemoveSftpFile(log, fileName, stop.Id); //remove the file from the SFTP server so it doesnt get duplicated. 
+                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+
+                return;
+            }
+
+            await messageReceiver.CompleteAsync(lockToken);
+                      
         }
 
 
@@ -134,6 +146,186 @@ namespace RIPA.Functions.Submission.Functions
             return blobContainerClient;
         }
 
+        private static SubmissionMessage DeserializeQueueItem(ILogger log, string myQueueItem)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<SubmissionMessage>(myQueueItem);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during deserializing myQueueItem. Sent to Deadletter queue message: {myQueueItem} ");
+                return null;
+            }
+        }
+
+        private async Task<Stop> GetStop(ILogger log, string id)
+        {
+            try
+            {
+                return await _stopCosmosDbService.GetStopAsync(id);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during GetStop with id {id}");
+                return null;
+            }
+        }
+
+        private static string GetFileName(ILogger log, Guid submissionId, DateTime date, string ori, string stopId)
+        {
+            try
+            {
+                return $"{date.ToString("yyyyMMdd")}/{submissionId}/{date:yyyyMMddHHmmss}_{ori}_{stopId}.json";
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during GetFileName with id {stopId}");
+                return null;
+            }
+        }
+
+        private DojStop GetDojStop(ILogger log, Stop stop)
+        {
+            try
+            {
+                return _stopService.CastToDojStop(stop);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during GetDojStop with id {stop.Id}");
+                return null;
+            }
+        }
+
+        private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId)
+        {
+            try
+            {
+                SubmissionError submissionError = new SubmissionError()
+                {
+                    Code = "FTS",
+                    Message = "Failed to submit to DOJ. Stop to DOJ Cast failure",
+                    DateReported = date,
+                    ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
+                    FileName = fileName,
+                    SubmissionId = submissionId
+                };
+                await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during HandleDojCastError with stop id {stop.Id}");
+                return false;
+            }
+        }
+
+        private static byte[] GetFileBytes(ILogger log, DojStop dojStop)
+        {
+            try
+            {
+                var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
+                return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dojStop, settings));
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during GetFileBytes with stop id {dojStop.LEARecordID}");
+                return null;
+            }
+        }
+
+        private async Task<bool> UploadBlob(ILogger log, byte[] bytes, string fileName, string stopId)
+        {
+            try
+            {
+                await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient); //Upload json as Blob to Azure Storage Container 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during UploadBlob with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private async Task<bool> RemoveBlob(ILogger log, string fileName, string stopId)
+        {
+            try
+            {
+                await blobUtilities.DeleteBlobJson(fileName, _blobContainerClient); 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during DeleteBlob with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private bool UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId)
+        {
+            try
+            {
+                _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private bool RemoveSftpFile(ILogger log, string fileName, string stopId)
+        {
+            try
+            {
+                _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during DeleteSftpFile with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName)
+        {
+            try
+            {
+                await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, date, submissionId, fileName));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stop.Id}");
+                return false;
+            }
+        }
+
+        private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Stop stop)
+        {
+            try
+            {
+                SubmissionError submissionError = new SubmissionError()
+                {
+                    Code = "FTS",
+                    Message = "Failed to submit to DOJ. SFTP connection, Blob Connection failure",
+                    DateReported = date,
+                    ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
+                    FileName = fileName,
+                    SubmissionId = submissionId
+                };
+                await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+                return;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Failed to update stop submission error");
+            }
+        }
 
     }
 }

@@ -7,11 +7,11 @@
 	<ItemGroup>
 		<PackageReference Include="ExcelDataReader" Version="3.6.0" />
 		<PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+		<PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />
-		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="4.0.4" />
+		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.13" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
-		<PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="0.5.1-preview" />
 	</ItemGroup>
 	<ItemGroup>

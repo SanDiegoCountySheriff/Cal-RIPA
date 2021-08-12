@@ -16,6 +16,7 @@
       :on-edit-beat="onEditBeat"
       :on-edit-user="onEditUser"
       :on-upload-users="onUploadUsers"
+      :on-upload-domain="onUploadDomain"
       :on-tab-change="onTabChange"
       :savedFilters="savedFilters"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
@@ -199,6 +200,10 @@ export default {
     },
     savedFilters: {
       type: Object,
+      default: () => {},
+    },
+    onUploadDomain: {
+      type: Function,
       default: () => {},
     },
   },

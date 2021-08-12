@@ -497,6 +497,7 @@ export default {
         }
         this.fullStop = Object.assign({}, updatedFullStop)
         this.apiStop = fullStopToApiStop(
+          this.isOnlineAndAuthenticated,
           this.fullStop,
           this.mappedFormBeats,
           this.mappedFormCountyCities,

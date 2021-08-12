@@ -69,28 +69,13 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             try
             {
-                _sftpClient.Connect();
+                Connect();
                 return _sftpClient.ListDirectory(remoteDirectory);
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, $"Failed in listing files under [{remoteDirectory}]");
                 return null;
-            }
-        }
-
-        public void UploadFile(string localFilePath, string remoteFilePath)
-        {
-            try
-            {
-                Connect();
-                using var s = File.OpenRead(localFilePath);
-                _sftpClient.UploadFile(s, remoteFilePath);
-                _logger.LogInformation($"Finished uploading file [{localFilePath}] to [{remoteFilePath}]");
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed in uploading file [{localFilePath}] to [{remoteFilePath}]");
             }
         }
 
@@ -107,51 +92,33 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Failed in uploading stop to [{remoteFilePath}]");
-                throw new Exception($"Failed in uploading stop to [{remoteFilePath}]");
+                throw new Exception($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
             }
         }
 
-        public void UploadJsonString(string jsonString, string remoteFilePath)
-        {
-            try
-            {
-                _sftpClient.Connect();
-                byte[] bytes = Encoding.ASCII.GetBytes(jsonString);
-                MemoryStream stream = new MemoryStream(bytes);
-                _sftpClient.UploadFile(stream, remoteFilePath);
-                _logger.LogInformation($"Finished uploading stop [{jsonString}] to [{remoteFilePath}]");
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, $"Failed in uploading stop [{jsonString}] to [{remoteFilePath}]");
-            }
-        }
 
         public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using (MemoryStream stream = new MemoryStream(byteArray))
+
+            try
             {
-                try
+                BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
+                Connect();
+                var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
+                var download = await blobClient.DownloadAsync(); //Download blob
+                string text;
+                using (StreamReader streamReader = new StreamReader(download.Value.Content))
                 {
-                    BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-                    _sftpClient.Connect();
-                    var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
-                    var download = await blobClient.DownloadAsync(); //Download blob
-                    string text;
-                    using (StreamReader streamReader = new StreamReader(download.Value.Content))
-                    {
-                        text = streamReader.ReadToEnd(); //get file content
-                    }
-                    _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
-                    return text;
+                    text = streamReader.ReadToEnd(); //get file content
                 }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
-                }
+                _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
+                return text;
             }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
+            }
+
 
             return null;
         }
@@ -160,7 +127,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             try
             {
-                _sftpClient.Connect();
+                Connect();
                 _sftpClient.DeleteFile(remoteFilePath);
                 _logger.LogInformation($"File [{remoteFilePath}] deleted.");
             }
