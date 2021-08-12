@@ -118,7 +118,7 @@ namespace RIPA.Functions.Submission.Functions
 
             if (!UploadSftpFile(log, bytes, fileName, stop.Id))
             {
-                //TODO Delete the file from Blob to clean up because it will reupload to blob on its retry. 
+                await RemoveBlob(log, fileName, stop.Id); //delete the blob to clean up the failed run
                 await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
 
                 return;
@@ -127,7 +127,7 @@ namespace RIPA.Functions.Submission.Functions
 
             if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName))
             {
-                //TODO remove the file from SFTP because it will be reuploaded on its retry
+                RemoveSftpFile(log, fileName, stop.Id); //remove the file from the SFTP server so it doesnt get duplicated. 
                 await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
 
                 return;
@@ -239,12 +239,26 @@ namespace RIPA.Functions.Submission.Functions
         {
             try
             {
-                await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient, log); //Upload json as Blob to Azure Storage Container 
+                await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient); //Upload json as Blob to Azure Storage Container 
                 return true;
             }
             catch (Exception ex)
             {
                 log.LogError($"Exception: {ex} --> occurred during UploadBlob with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private async Task<bool> RemoveBlob(ILogger log, string fileName, string stopId)
+        {
+            try
+            {
+                await blobUtilities.DeleteBlobJson(fileName, _blobContainerClient); 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during DeleteBlob with stop id {stopId}");
                 return false;
             }
         }
@@ -259,6 +273,20 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId}");
+                return false;
+            }
+        }
+
+        private bool RemoveSftpFile(ILogger log, string fileName, string stopId)
+        {
+            try
+            {
+                _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception: {ex} --> occurred during DeleteSftpFile with stop id {stopId}");
                 return false;
             }
         }

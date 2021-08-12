@@ -22,5 +22,12 @@ namespace RIPA.Functions.Submission.Utility
             }
         }
 
+        public async Task DeleteBlobJson(string fileName, BlobContainerClient blobContainerClient)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            await blobClient.DeleteIfExistsAsync();
+        }
+
+
     }
 }
