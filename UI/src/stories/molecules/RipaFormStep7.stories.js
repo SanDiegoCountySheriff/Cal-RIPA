@@ -20,11 +20,13 @@ export const onePerson = () => ({
   data() {
     return {
       stop: {},
+      onlineAndAuthenticated: true,
     }
   },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         onePersonFullStop,
         formBeats(),
         formCountyCities(),
@@ -48,11 +50,13 @@ export const twoPerson = () => ({
   data() {
     return {
       stop: {},
+      onlineAndAuthenticated: true,
     }
   },
   computed: {
     getApiStop() {
       return fullStopToApiStop(
+        this.onlineAndAuthenticated,
         twoPersonFullStop,
         formBeats(),
         formCountyCities(),

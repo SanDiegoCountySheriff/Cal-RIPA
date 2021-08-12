@@ -1097,6 +1097,7 @@ export const getOfficerFromLocalStorage = () => {
 }
 
 export const fullStopToApiStop = (
+  onlineAndAuthenticated,
   fullStop,
   beats,
   countyCities,
@@ -1146,7 +1147,7 @@ export const fullStopToApiStop = (
         fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
-    isPiiFound: getPiiFound(parsedApiStop, fullStop),
+    isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
@@ -1223,9 +1224,13 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
   })
 }
 
-const getPiiFound = (parsedApiStop, fullStop) => {
+const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
   if (parsedApiStop && fullStop.overridePii) {
     return false
+  }
+
+  if (!parsedApiStop && !onlineAndAuthenticated) {
+    return true
   }
 
   const locationPiiFound = fullStop.location?.piiFound || false
