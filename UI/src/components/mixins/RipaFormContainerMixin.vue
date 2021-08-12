@@ -77,6 +77,15 @@ export default {
       return null
     },
 
+    getCustomTemplates() {
+      const templates = localStorage.getItem('ripa_templates')
+      if (templates) {
+        return JSON.parse(templates)
+      }
+
+      return null
+    },
+
     handleAddLocationFavorite(name) {
       const location = {
         id: new Date().getTime(),
@@ -402,19 +411,17 @@ export default {
     handleOpenTemplate(value) {
       this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
+      const templates = localStorage.getCustomTemplates()
 
-      switch (value) {
-        case 'motor':
-          this.stop = motorStop()
-          break
+      // Start with default template
+      this.stop = defaultStop()
 
-        case 'probation':
-          this.stop = probationStop()
-          break
+      const template = templates.filter(tplt => {
+        return tplt.id === value
+      })
 
-        default:
-          this.stop = defaultStop()
-          break
+      if (template) {
+        this.stop = template
       }
 
       this.updateFullStop()

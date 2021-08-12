@@ -194,6 +194,9 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
       }
     },
+    stopTemplates: state => {
+      return state.formTemplates
+    },
     officerId: state => {
       return state.user.officerId
     },
