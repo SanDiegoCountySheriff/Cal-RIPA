@@ -12,7 +12,7 @@ namespace RIPA.Functions.Submission.Utility
 {
     public class BlobUtilities
     {
-        public async Task UploadBlobJson(byte[] bytes, string fileName, BlobContainerClient blobContainerClient, ILogger _log)
+        public async Task UploadBlobJson(byte[] bytes, string fileName, BlobContainerClient blobContainerClient)
         {
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
