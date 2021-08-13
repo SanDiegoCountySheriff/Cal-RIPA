@@ -4,26 +4,26 @@
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
           <v-row no-gutters dense>
-            <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn outlined color="primary" @click="handleMotorTemplate">
-                Motor/Traffic
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" class="tw-text-center">
-              <v-btn
-                outlined
-                color="primary"
-                @click="handleProbationTemplate"
-                class="tw-mt-4 sm:tw-mt-0"
-                >Probation Contact</v-btn
-              >
-            </v-col>
-          </v-row>
-
-          <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
               <v-btn color="primary" @click="handleDefaultTemplate">
                 BASIC STOP
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col
+              cols="12"
+              sm="6"
+              class="tw-text-center"
+              v-for="template in stopTemplates"
+            >
+              <v-btn
+                outlined
+                color="primary"
+                @click="handleDynamicTemplates(template.id)"
+              >
+                {{ template.displayName }}
               </v-btn>
             </v-col>
           </v-row>
@@ -68,15 +68,9 @@ export default {
   name: 'ripa-template',
 
   methods: {
-    handleMotorTemplate() {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate('motor')
-      }
-    },
-
-    handleProbationTemplate() {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate('probation')
+    handleDynamicTemplates(item) {
+      if (this.onOpenTemplate(item)) {
+        this.onOpenTemplate(item)
       }
     },
 
@@ -88,6 +82,10 @@ export default {
   },
 
   props: {
+    stopTemplates: {
+      type: Array,
+      default: () => [],
+    },
     onOpenTemplate: {
       type: Function,
       default: () => {},

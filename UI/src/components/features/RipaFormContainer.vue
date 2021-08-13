@@ -23,6 +23,7 @@
       :statutes="mappedFormStatutes"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
+      :stopTemplates="stopTemplates"
       :on-add-person="handleAddPerson"
       :on-cancel-form="handleCancelForm"
       :on-cancel-action="handleCancelAction"
@@ -50,6 +51,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
+      :title="Locations"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
@@ -60,6 +62,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showReasonFavoritesDialog"
+      :title="Reasons"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
@@ -70,6 +73,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showResultFavoritesDialog"
+      :title="Results"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
@@ -170,6 +174,7 @@ export default {
       'mappedUser',
       'displayBeatInput',
       'displayDebugger',
+      'stopTemplates',
     ]),
 
     getMappedUser() {

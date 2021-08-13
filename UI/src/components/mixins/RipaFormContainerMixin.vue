@@ -411,7 +411,7 @@ export default {
     handleOpenTemplate(value) {
       this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
-      const templates = localStorage.getCustomTemplates()
+      const templates = this.getCustomTemplates()
 
       // Start with default template
       this.stop = defaultStop()
@@ -421,7 +421,7 @@ export default {
       })
 
       if (template) {
-        this.stop = template
+        this.stop = template.stop
       }
 
       this.updateFullStop()

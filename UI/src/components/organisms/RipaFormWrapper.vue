@@ -3,7 +3,10 @@
     <v-card class="mx-auto" max-width="900" outlined>
       <v-card-text>
         <template v-if="stepIndex == 0">
-          <ripa-template :on-open-template="onOpenTemplate"></ripa-template>
+          <ripa-template
+            :on-open-template="onOpenTemplate"
+            :stopTemplates="stopTemplates"
+          ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
           <v-stepper v-model="stepIndex">
@@ -757,6 +760,10 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    stopTemplates: {
+      type: Array,
+      default: () => [],
     },
     onAddPerson: {
       type: Function,

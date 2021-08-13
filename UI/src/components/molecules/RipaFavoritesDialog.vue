@@ -2,7 +2,7 @@
   <v-dialog v-model="model" max-width="1000px">
     <v-card>
       <v-card-title>
-        <span>Favorite Locations</span>
+        <span>{{ getTitle() }}</span>
       </v-card-title>
 
       <v-card-text>
@@ -67,6 +67,9 @@ export default {
         this.onClose()
       }
     },
+    getTitle() {
+      return 'Favorite ' + this.title
+    },
   },
 
   watch: {
@@ -76,6 +79,10 @@ export default {
   },
 
   props: {
+    title: {
+      type: String,
+      default: '',
+    },
     favorites: {
       type: Array,
       default: () => [],

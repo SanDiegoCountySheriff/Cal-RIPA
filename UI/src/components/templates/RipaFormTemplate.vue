@@ -22,6 +22,7 @@
       :schools="schools"
       :statutes="statutes"
       :user="user"
+      :stopTemplates="stopTemplates"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel-form="onCancelForm"
@@ -167,6 +168,10 @@ export default {
     validLastLocation: {
       type: Boolean,
       default: false,
+    },
+    stopTemplates: {
+      type: Array,
+      default: () => [],
     },
     onAddPerson: {
       type: Function,
