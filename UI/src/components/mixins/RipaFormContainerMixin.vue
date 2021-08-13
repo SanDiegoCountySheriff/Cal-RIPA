@@ -420,8 +420,8 @@ export default {
         return tplt.id === value
       })
 
-      if (template) {
-        this.stop = template.stop
+      if (template && template.length > 0) {
+        this.stop = template[0].stop
       }
 
       this.updateFullStop()
