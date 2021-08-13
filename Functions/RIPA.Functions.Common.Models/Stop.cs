@@ -137,6 +137,14 @@ namespace RIPA.Functions.Common.Models
         public SchoolName SchoolName { get; set; }
         public bool OutOfCounty { get; set; }
         public bool PiiFound { get; set; }
+
+        public GeoLocation GeoLocation { get; set; }
+    }
+
+    public class GeoLocation
+    {
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
     }
 
     public class City
