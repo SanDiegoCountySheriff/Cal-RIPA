@@ -51,7 +51,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
-      :title="Locations"
+      title="Locations"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
@@ -62,7 +62,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showReasonFavoritesDialog"
-      :title="Reasons"
+      title="Reasons"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
@@ -73,7 +73,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showResultFavoritesDialog"
-      :title="Results"
+      title="Results"
       :favorites="favorites"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"

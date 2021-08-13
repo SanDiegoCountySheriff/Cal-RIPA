@@ -50,7 +50,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
-      :title="Locations"
+      title="Locations"
       :favorites="favorites"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditLocationFavorite"
@@ -60,7 +60,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showReasonFavoritesDialog"
-      :title="Reasons"
+      title="Reasons"
       :favorites="favorites"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditReasonFavorite"
@@ -70,7 +70,7 @@
 
     <ripa-favorites-dialog
       :show-dialog="showResultFavoritesDialog"
-      :title="Results"
+      title="Results"
       :favorites="favorites"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditResultFavorite"
