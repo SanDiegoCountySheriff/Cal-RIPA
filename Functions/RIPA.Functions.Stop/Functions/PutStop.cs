@@ -132,6 +132,11 @@ namespace RIPA.Functions.Stop.Functions
                     }
                     else
                     {
+                        if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
+                        {
+                            return new UnauthorizedResult();
+                        }
+
                         await _stopCosmosDbService.UpdateStopAsync(stop);
                     }
 
