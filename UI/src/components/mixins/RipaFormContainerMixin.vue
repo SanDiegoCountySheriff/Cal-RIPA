@@ -1,13 +1,12 @@
 <script>
 import {
   defaultStop,
-  motorStop,
-  probationStop,
   fullStopToApiStop,
   stopReasonGivenTemplate,
   stopResultGivenTemplate,
 } from '@/utilities/stop'
 import { format } from 'date-fns'
+import { nanoid } from 'nanoid'
 import { getStatuteContent } from '@/utilities/statutes'
 import store from '@/store/index'
 
@@ -423,6 +422,20 @@ export default {
       if (template && template.length > 0) {
         this.stop = template[0].stop
       }
+
+      this.stop.id = 0
+      this.stop.internalId = nanoid()
+      this.stop.person = {
+        id: new Date().getTime(),
+        index: 1,
+      }
+      this.stop.stepTrace = []
+      this.stop.stopDate = {
+        date: format(new Date(), 'yyyy-MM-dd'),
+        time: format(new Date(), 'kk:mm'),
+      }
+      // need to update location. If basic, use empty location, if not basis, use last submitted location
+      // this.stop.location = ??????
 
       this.updateFullStop()
     },
