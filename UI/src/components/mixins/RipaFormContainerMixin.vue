@@ -420,7 +420,7 @@ export default {
 
       if (template && template.length > 0) {
         // TODO: rather than replacing stop, the following code should only update the properties specific to the template
-        this.stop = template[0].stop
+        // this.stop = template[0].stop
       }
 
       this.updateFullStop()
