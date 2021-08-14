@@ -16,7 +16,8 @@
               cols="12"
               sm="6"
               class="tw-text-center"
-              v-for="template in stopTemplates"
+              v-for="(template, index) in stopTemplates"
+              :key="index"
             >
               <v-btn
                 outlined
