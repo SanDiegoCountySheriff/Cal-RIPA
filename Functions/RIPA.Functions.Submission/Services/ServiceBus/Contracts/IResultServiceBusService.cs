@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.ServiceBus.Contracts
 {
-    public interface ISubmissionServiceBusService
+    public interface IResultServiceBusService
     {
         public Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessage);
     }
