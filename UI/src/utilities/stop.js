@@ -56,6 +56,8 @@ const emptyLocation = () => {
     outOfCounty: false,
     city: null,
     beat: null,
+    latitude: null,
+    longitude: null,
   }
 }
 
@@ -286,6 +288,16 @@ const getSummaryLocation = apiStop => {
     children.push({
       header: 'Beat',
       detail: apiStop.location.beat.codes.text,
+    })
+  }
+  if (apiStop.location.latitude && apiStop.location.longitude) {
+    children.push({
+      header: 'Latitude',
+      detail: apiStop.location.latitude,
+    })
+    children.push({
+      header: 'Longitude',
+      detail: apiStop.location.longitude,
     })
   }
 
@@ -832,6 +844,8 @@ export const apiStopToFullStop = apiStop => {
       outOfCounty: apiStop.location?.outOfCounty || false,
       city: cityName || null,
       beat: beatNumber ? beatNumber.toString() : null,
+      latitude: apiStop.location?.geoLocation?.latitude || null,
+      longitude: apiStop.location?.geoLocation?.longitude || null,
     },
     stopDate: {
       date: apiStop.date,
@@ -1163,6 +1177,10 @@ export const fullStopToApiStop = (
       schoolName: getSchool(fullStop, schools),
       streetName: blockNumber && streetName ? streetName : '',
       toggleLocationOptions: fullStop.location?.toggleLocationOptions || false,
+      geoLocation: {
+        latitude: fullStop.location?.latitude || null,
+        longitude: fullStop.location?.longitude || null,
+      },
     },
     officerAssignment: {
       key: parsedApiStop

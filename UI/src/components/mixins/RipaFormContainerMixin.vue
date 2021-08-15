@@ -1,8 +1,6 @@
 <script>
 import {
   defaultStop,
-  motorStop,
-  probationStop,
   fullStopToApiStop,
   stopReasonGivenTemplate,
   stopResultGivenTemplate,
@@ -421,7 +419,30 @@ export default {
       })
 
       if (template && template.length > 0) {
-        this.stop = template[0].stop
+        // TODO: rather than replacing stop, the following code should only update the properties specific to the template
+        // TODO: see motorStop and probationStop in the stop.js file for examples of what should be included
+        // TODO: below is an example of the motorStop that should be set in the template database
+        // this.stop = {
+        //   ...defaultStop(),
+        //   actionsTaken: {
+        //     anyActionsTaken: true,
+        //   },
+        //   template: 'motor',
+        //   location: defaultLocation(), // NOTE: THIS WILL NEED TO BE SET IF NOT BASIC STOP
+        //   stopReason: stopReasonGivenTemplate('motor'),
+        //   stopResult: stopResultGivenTemplate('motor'),
+        //   agencyQuestions: mappedAgencyQuestions(),
+        // }
+        // TODO: end result should look like the following.
+        // TODO: this adds the defaultStop, template, and updates location if not 'basic' template
+        // this.stop = {
+        //   ...defaultStop(),
+        //   ...template,
+        // }
+        // if (template.name !== 'basic') {
+        //   this.stop.location = defaultLocation()
+        // }
+        // this.stop = template[0].stop
       }
 
       this.updateFullStop()

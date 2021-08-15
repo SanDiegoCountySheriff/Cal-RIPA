@@ -256,11 +256,15 @@ export default new Vuex.Store({
           .length > 0
       const parsedCity =
         countyCityFound || nonCountyCityFound ? upperCaseCity : null
+      const latitude = state.gpsLocationAddress?.latitude || null
+      const longitude = state.gpsLocationAddress?.longitude || null
 
       return {
         blockNumber: parsedBlockNumber,
         streetName: parsedStreetName,
         city: parsedCity,
+        latitude,
+        longitude,
       }
     },
     mappedErrorCodeAdminSearch: state => {
@@ -521,7 +525,12 @@ export default new Vuex.Store({
             fetch(url)
               .then(response => response.json())
               .then(data => {
-                commit('updateGpsLocationAddress', data)
+                const dataIncludingLatLong = {
+                  ...data,
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                }
+                commit('updateGpsLocationAddress', dataIncludingLatLong)
                 resolve(data)
               })
               .catch(error => {
