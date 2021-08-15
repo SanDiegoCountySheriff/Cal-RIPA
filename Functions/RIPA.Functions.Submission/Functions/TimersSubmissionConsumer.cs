@@ -1,142 +1,144 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
-using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
-using RIPA.Functions.Submission.Services.SFTP;
+using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
 {
-    public class ServiceBusSubmissionConsumer
+    public class TimersSubmissionConsumer
     {
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly ISftpService _sftpService;
         private readonly IStopService _stopService;
+        ISubmissionServiceBusService _submissionServiceBusService;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
         private readonly string _sftpInputPath;
         private readonly BlobContainerClient _blobContainerClient;
         private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-        public ServiceBusSubmissionConsumer(IStopCosmosDbService stopCosmosDbService, ISftpService sftpService, IStopService stopService)
+        public TimersSubmissionConsumer(IStopCosmosDbService stopCosmosDbService, ISftpService sftpService, IStopService stopService, ISubmissionServiceBusService submissionServiceBusService)
         {
             _stopCosmosDbService = stopCosmosDbService;
             _sftpService = sftpService;
             _stopService = stopService;
+            _submissionServiceBusService = submissionServiceBusService;
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
             _blobContainerClient = GetBlobContainerClient();
         }
 
-        [FunctionName("ServiceBusSubmissionConsumer")]
-        public async void Run(
-            [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")] string myQueueItem, int deliveryCount,
-            MessageReceiver messageReceiver, string lockToken,
-            ILogger log)
+        [FunctionName("TimersSubmissionConsumer")]
+        public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
-            SubmissionMessage submissionMessage = DeserializeQueueItem(log, myQueueItem);
-
-            if (submissionMessage == null)
+            ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
+            foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
             {
-                await messageReceiver.DeadLetterAsync(lockToken);
+                SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
 
-                return;
-            }
-
-            //Get Stop
-            Stop stop = await GetStop(log, submissionMessage.StopId);
-
-            if (stop == null)
-            {
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-            }
-
-            DateTime dateSubmitted = DateTime.UtcNow;
-
-            //Get File Name
-            string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id);
-
-            if (fileName == null)
-            {
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-            }
-
-            //Get Doj Stop
-            DojStop dojStop = GetDojStop(log, stop);
-
-            if (dojStop == null)
-            {
-                //if the cast error fails report, retry the message
-                if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId))
+                if (submissionMessage == null)
                 {
-                    await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
+                    await serviceBusReceiver.DeadLetterMessageAsync(m);
 
-                    return;
+                    continue;
                 }
-                else
+
+                //Get Stop
+                Stop stop = await GetStop(log, submissionMessage.StopId);
+
+                if (stop == null)
                 {
-                    await messageReceiver.CompleteAsync(lockToken); // message complete
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
-                    return;
+                    continue;
                 }
+
+                DateTime dateSubmitted = DateTime.UtcNow;
+
+                //Get File Name
+                string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id);
+
+                if (fileName == null)
+                {
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                    continue;
+                }
+
+                //Get Doj Stop
+                DojStop dojStop = GetDojStop(log, stop);
+
+                if (dojStop == null)
+                {
+                    //if the cast error fails report, retry the message
+                    if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId))
+                    {
+                        await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                        continue;
+                    }
+                    else
+                    {
+                        await serviceBusReceiver.CompleteMessageAsync(m); // message complete
+
+                        continue;
+                    }
+                }
+
+                //Get File Bytes
+                byte[] bytes = GetFileBytes(log, dojStop);
+
+                if (bytes == null)
+                {
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                    continue;
+                }
+
+                //Upload Blob
+                if (!await UploadBlob(log, bytes, fileName, stop.Id))
+                {
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                    continue;
+                }
+
+                if (!UploadSftpFile(log, bytes, fileName, stop.Id))
+                {
+                    await RemoveBlob(log, fileName, stop.Id); //delete the blob to clean up the failed run
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                    continue;
+
+                }
+
+                if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName))
+                {
+                    RemoveSftpFile(log, fileName, stop.Id); //remove the file from the SFTP server so it doesnt get duplicated. 
+                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+
+                    continue;
+                }
+             
+                await serviceBusReceiver.CompleteMessageAsync(m); // message complete
             }
-
-            //Get File Bytes
-            byte[] bytes = GetFileBytes(log, dojStop);
-
-            if (bytes == null)
-            {
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-            }
-
-            //Upload Blob
-            if (!await UploadBlob(log, bytes, fileName, stop.Id))
-            {
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-            }
-
-            if (!UploadSftpFile(log, bytes, fileName, stop.Id))
-            {
-                await RemoveBlob(log, fileName, stop.Id); //delete the blob to clean up the failed run
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-
-            }
-
-            if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName))
-            {
-                RemoveSftpFile(log, fileName, stop.Id); //remove the file from the SFTP server so it doesnt get duplicated. 
-                await messageReceiver.AbandonAsync(lockToken); // allows for retry to occur. 
-
-                return;
-            }
-
-            await messageReceiver.CompleteAsync(lockToken);
-                      
         }
-
 
         public BlobContainerClient GetBlobContainerClient()
         {
@@ -253,7 +255,7 @@ namespace RIPA.Functions.Submission.Functions
         {
             try
             {
-                await blobUtilities.DeleteBlobJson(fileName, _blobContainerClient); 
+                await blobUtilities.DeleteBlobJson(fileName, _blobContainerClient);
                 return true;
             }
             catch (Exception ex)
