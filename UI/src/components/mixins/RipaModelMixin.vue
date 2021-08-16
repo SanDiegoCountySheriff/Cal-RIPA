@@ -52,6 +52,8 @@ export default {
           beat: newValue.location?.beat
             ? newValue.location.beat.toString()
             : null,
+          latitude: newValue.location?.latitude || null,
+          longitude: newValue.location?.longitude || null,
         },
         person: {
           anyDisabilities: newValue.person?.anyDisabilities || false,
