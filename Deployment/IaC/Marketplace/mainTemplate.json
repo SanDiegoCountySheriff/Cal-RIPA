@@ -1,6 +1,8 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "functions": [
+  ],
   "parameters": {
     "agency_county": {
       "type": "string"
@@ -50,10 +52,10 @@
     "auth_fqdn": {
       "type": "string"
     },
-    // "user_tags": {
-    //   "type": "Object",
-    //   "defaultValue": {}
-    // },
+    "user_tags": {
+      "type": "Array",
+      "defaultValue": {}
+    },
     "app_domain_type": {
       "type": "string"
     },
@@ -210,21 +212,21 @@
     },
     "kv_secretsPermissions": {
       "type": "array",
-      "defaultValue": ["Get", "List"],
+      "defaultValue": [ "Get", "List" ],
       "metadata": {
         "description": "Specifies the permissions to secrets in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
       }
     },
     "kv_keysPermissions": {
       "type": "array",
-      "defaultValue": ["Get", "List"],
+      "defaultValue": [ "Get", "List" ],
       "metadata": {
         "description": "Specifies the permissions to keys in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
       }
     },
     "kv_CertPermissions": {
       "type": "array",
-      "defaultValue": ["Get", "List"],
+      "defaultValue": [ "Get", "List" ],
       "metadata": {
         "description": "Specifies the permissions to keys in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
       }
@@ -423,7 +425,7 @@
     },
     "Vnet_addressprefixes": {
       "type": "array",
-      "defaultValue": ["172.16.0.0/16"]
+      "defaultValue": [ "172.16.0.0/16" ]
     },
     "apim_subnet_addressprefix": {
       "defaultValue": "172.16.0.0/24",
@@ -494,7 +496,15 @@
       "agency_ori": "[parameters('agency_ori')]",
       "template_version": "[variables('template_version')]"
     },
-    "all_tags": "[variables('default_tags')]"
+    "copy": [
+      {
+        "name": "tags",
+        "count": "[length(parameters('user_tags').value)]",
+        "input": "[concat(parameters('user_tags').value[copyIndex('tags')].colValue, '\":\"', parameters('user_tags').value[copyIndex('tags')].colValue)]"
+      }
+    ],
+    "userTags": "[variables('tags')]",
+    "all_tags": "[concat(variables('default_tags'), variables('userTags'))]"
   },
   "resources": [
     {
@@ -519,7 +529,7 @@
         "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
       ],
       "properties": {
-        "rights": ["Listen", "Manage", "Send"]
+        "rights": [ "Listen", "Manage", "Send" ]
       }
     },
     {
@@ -750,7 +760,7 @@
               "priority": 230,
               "direction": "Outbound",
               "sourcePortRanges": [],
-              "destinationPortRanges": ["443", "12000"],
+              "destinationPortRanges": [ "443", "12000" ],
               "sourceAddressPrefixes": [],
               "destinationAddressPrefixes": []
             }
@@ -766,7 +776,7 @@
               "priority": 240,
               "direction": "Outbound",
               "sourcePortRanges": [],
-              "destinationPortRanges": ["443", "1886"],
+              "destinationPortRanges": [ "443", "1886" ],
               "sourceAddressPrefixes": [],
               "destinationAddressPrefixes": []
             }
@@ -1174,7 +1184,7 @@
         "apiRevision": "1",
         "subscriptionRequired": true,
         "serviceUrl": "[parameters('apim_apis_userprofile_serviceurl')]",
-        "protocols": ["https"],
+        "protocols": [ "https" ],
         "isCurrent": true,
         "path": "[parameters('apim_apis_userprofile_path')]"
       }
@@ -1192,7 +1202,7 @@
         "apiRevision": "1",
         "subscriptionRequired": true,
         "serviceUrl": "[parameters('apim_apis_stop_serviceurl')]",
-        "protocols": ["https"],
+        "protocols": [ "https" ],
         "isCurrent": true,
         "path": "[parameters('apim_apis_stop_path')]"
       }
@@ -1210,7 +1220,7 @@
         "apiRevision": "1",
         "subscriptionRequired": true,
         "serviceUrl": "[parameters('apim_apis_textAnalytics_serviceurl')]",
-        "protocols": ["https"],
+        "protocols": [ "https" ],
         "isCurrent": true,
         "path": "[parameters('apim_apis_textAnalytics_path')]"
       }
@@ -1228,7 +1238,7 @@
         "apiRevision": "1",
         "subscriptionRequired": true,
         "serviceUrl": "[parameters('apim_apis_domain_serviceurl')]",
-        "protocols": ["https"],
+        "protocols": [ "https" ],
         "isCurrent": true,
         "path": "[parameters('apim_apis_domain_path')]"
       }
@@ -1246,7 +1256,7 @@
         "apiRevision": "1",
         "subscriptionRequired": true,
         "serviceUrl": "[parameters('apim_apis_submission_serviceurl')]",
-        "protocols": ["https"],
+        "protocols": [ "https" ],
         "isCurrent": true,
         "path": "[parameters('apim_apis_submission_path')]"
       }
@@ -1612,7 +1622,7 @@
         "priority": 230,
         "direction": "Outbound",
         "sourcePortRanges": [],
-        "destinationPortRanges": ["443", "12000"],
+        "destinationPortRanges": [ "443", "12000" ],
         "sourceAddressPrefixes": [],
         "destinationAddressPrefixes": []
       }
@@ -1657,7 +1667,7 @@
         "priority": 240,
         "direction": "Outbound",
         "sourcePortRanges": [],
-        "destinationPortRanges": ["443", "1886"],
+        "destinationPortRanges": [ "443", "1886" ],
         "sourceAddressPrefixes": [],
         "destinationAddressPrefixes": []
       }
@@ -1996,7 +2006,7 @@
             "name": "[variables('privateEndpoints_ripa_cdb_pe_name')]",
             "properties": {
               "privateLinkServiceId": "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
-              "groupIds": ["Sql"],
+              "groupIds": [ "Sql" ],
               "privateLinkServiceConnectionState": {
                 "status": "Approved",
                 "actionsRequired": "None"
@@ -2062,7 +2072,7 @@
             ]
           },
           "partitionKey": {
-            "paths": ["/id"],
+            "paths": [ "/id" ],
             "kind": "Hash"
           },
           "uniqueKeyPolicy": {
@@ -2102,7 +2112,7 @@
             ]
           },
           "partitionKey": {
-            "paths": ["/id"],
+            "paths": [ "/id" ],
             "kind": "Hash"
           },
           "uniqueKeyPolicy": {
@@ -2142,7 +2152,7 @@
             ]
           },
           "partitionKey": {
-            "paths": ["/id"],
+            "paths": [ "/id" ],
             "kind": "Hash"
           },
           "uniqueKeyPolicy": {
@@ -2390,7 +2400,7 @@
         },
         "autoHealEnabled": false,
         "cors": {
-          "allowedOrigins": ["*"],
+          "allowedOrigins": [ "*" ],
           "supportCredentials": false
         },
         "localMySqlEnabled": false,
@@ -2564,7 +2574,7 @@
         },
         "autoHealEnabled": false,
         "cors": {
-          "allowedOrigins": ["*"],
+          "allowedOrigins": [ "*" ],
           "supportCredentials": false
         },
         "localMySqlEnabled": false,
@@ -2775,7 +2785,7 @@
         },
         "autoHealEnabled": false,
         "cors": {
-          "allowedOrigins": ["*"],
+          "allowedOrigins": [ "*" ],
           "supportCredentials": false
         },
         "localMySqlEnabled": false,
@@ -3015,7 +3025,7 @@
         },
         "autoHealEnabled": false,
         "cors": {
-          "allowedOrigins": ["*"],
+          "allowedOrigins": [ "*" ],
           "supportCredentials": false
         },
         "localMySqlEnabled": false,
@@ -3202,7 +3212,7 @@
         },
         "autoHealEnabled": false,
         "cors": {
-          "allowedOrigins": ["*"],
+          "allowedOrigins": [ "*" ],
           "supportCredentials": false
         },
         "localMySqlEnabled": false,
