@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -25,8 +26,7 @@ namespace RIPA.Functions.Submission.Functions
 
         [FunctionName("ServiceBusResultConsumer")]
         public async void Run(
-            [ServiceBusTrigger("result", Connection = "ServiceBusConnection")] string myQueueItem,
-            [ServiceBus("result/$DeadLetterQueue", Connection = "ServiceBusConnection", EntityType = Microsoft.Azure.WebJobs.ServiceBus.EntityType.Queue)] IAsyncCollector<ResultMessage> resultDeadletterQueue,
+            [ServiceBusTrigger("result", Connection = "ServiceBusConnection")] string myQueueItem, MessageReceiver messageReciever, string lockToken,
             ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
@@ -46,8 +46,9 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
-                await resultDeadletterQueue.AddAsync(JsonConvert.DeserializeObject<ResultMessage>(myQueueItem));
+                await messageReciever.DeadLetterAsync(lockToken);
             }
+            await messageReciever.CompleteAsync(lockToken);
         }
 
         public async Task ProcessFileLevelFatalErrors(string fileLevelFatalErrors)
