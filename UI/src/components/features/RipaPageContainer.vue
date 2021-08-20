@@ -166,6 +166,10 @@ export default {
       await Promise.all([this.getUser()])
     },
 
+    async getTemplates() {
+      await Promise.all([this.getFormTemplates()])
+    },
+
     async getFormData() {
       if (this.displayBeatInput) {
         await Promise.all([this.getFormBeats()])
@@ -174,7 +178,6 @@ export default {
         this.getFormCities(),
         this.getFormSchools(),
         this.getFormStatutes(),
-        this.getFormTemplates(),
       ])
     },
 
@@ -258,6 +261,7 @@ export default {
       this.loading = true
       this.checkCache()
       await this.getUserData()
+      await this.getTemplates()
       await this.getFormData()
       this.isValidCache = true
       this.loading = false
