@@ -829,6 +829,27 @@
 							"validationMessage": ""
 						},
 						"visible": true
+					},
+					{
+						"name": "doj_environment",
+						"type": "Microsoft.Common.OptionsGroup",
+						"label": "DoJ Test or Production configuration",
+						"defaultValue": "doj_production",
+						"toolTip": "Choose the DoJ sFTP environment configuration you would like to set up for this deployment",
+						"constraints": {
+							"allowedValues": [
+								{
+									"label": "Production",
+									"value": "PROD"
+								},
+								{
+									"label": "Test (non-production)",
+									"value": "TEST"
+								}
+							],
+							"required": false
+						},
+						"visible": true
 					}
 				]
 			},
@@ -922,7 +943,9 @@
 			"doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
 			"doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
 			"doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
-			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]"
+			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]",
+			"doj_environment": "[steps('steps_doj').doj_environment]",
+			"user_tags": "[steps('steps_tags').user_tags]"
 		}
 	}
 }

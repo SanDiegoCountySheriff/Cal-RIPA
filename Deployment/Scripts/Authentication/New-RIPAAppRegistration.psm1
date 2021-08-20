@@ -73,9 +73,14 @@
 
     Write-Host "Setting the Enterprise Application flag"
     az ad sp update --id $appId --add tags WindowsAzureActiveDirectoryIntegratedApp
-		
-    Write-Host "Apply admin consent for app permissions"
-    az ad app permission admin-consent --id $appId
+	
+    $cloud = (az cloud show) | ConvertFrom-Json
+    Write-Host $cloud
+    if($cloud.name -eq "AzureCloud")
+    {
+        Write-Host "Apply admin consent for app permissions"
+        az ad app permission admin-consent --id $appId
+    }
 
     Write-Host "Get final app details"
     $adApplication = az ad app list --display-name $DisplayName | ConvertFrom-Json
