@@ -871,55 +871,26 @@
 					},
 					{
 						"name": "user_tags",
-						"type": "Microsoft.Common.EditableGrid",
-						"ariaLabel": "Enter your deployment specific tags",
-						"label": "Tags",
-						"constraints": {
-							"width": "Full",
-							"rows": {
-								"count": {
-									"min": 0,
-									"max": 20
-								}
-							},
-							"columns": [
-								{
-									"id": "colTag",
-									"header": "Name",
-									"width": "1fr",
-									"element": {
-										"type": "Microsoft.Common.TextBox",
-										"toolTip": "This is a test",
-										"constraints": {
-											"required": true,
-											"validations": [
-												{
-													"regex": "^[a-z0-9A-Z-_]{1,128}$",
-													"message": "Only alphanumeric characters and \"-\" or \"_\" are allowed, and the value must be 1-128 characters long."
-												}
-											]
-										}
-									}
-								},
-								{
-									"id": "colValue",
-									"header": "Value",
-									"width": "1fr",
-									"element": {
-										"type": "Microsoft.Common.TextBox",
-										"constraints": {
-											"required": true,
-											"validations": [
-												{
-													"regex": "^[a-z0-9A-Z-_]{1,30}$",
-													"message": "Only alphanumeric characters and \"-\" or \"_\" are allowed, and the value must be 1-256 characters long."
-												}
-											]
-										}
-									}
-								}
-							]
-						}
+						"type": "Microsoft.Common.TagsByResource",
+						"resources": [
+							"Microsoft.ApiManagement/service",
+							"Microsoft.CognitiveServices/accounts",
+							"Microsoft.Compute/virtualMachines",
+							"Microsoft.DocumentDB/databaseAccounts",
+							"Microsoft.Insights/components",
+							"Microsoft.Insights/actionGroups",
+							"Microsoft.KeyVault/vaults",
+							"Microsoft.Network/networkSecurityGroups",
+							"Microsoft.Network/privateDnsZones",
+							"Microsoft.Network/privateEndpoints",
+							"Microsoft.Network/virtualNetworks",
+							"Microsoft.OperationalInsights/workspaces",
+							"Microsoft.Resources/deploymentScripts",
+							"Microsoft.ServiceBus/namespaces",
+							"Microsoft.Storage/storageAccounts",
+							"Microsoft.Web/serverfarms",
+							"Microsoft.Web/sites"
+						]
 					}
 				]
 			}

@@ -53,7 +53,7 @@
       "type": "string"
     },
     "user_tags": {
-      "type": "Array",
+      "type": "Object",
       "defaultValue": {}
     },
     "app_domain_type": {
@@ -501,23 +501,15 @@
       "agency": "[parameters('agency_abbreviation')]",
       "agency_ori": "[parameters('agency_ori')]",
       "template_version": "[variables('template_version')]"
-    },
-    "copy": [
-      {
-        "name": "tags",
-        "count": "[length(parameters('user_tags').value)]",
-        "input": "[concat(parameters('user_tags').value[copyIndex('tags')].colValue, '\":\"', parameters('user_tags').value[copyIndex('tags')].colValue)]"
-      }
-    ],
-    "userTags": "[variables('tags')]",
-    "all_tags": "[concat(variables('default_tags'), variables('userTags'))]"
+    }
   },
   "resources": [
     {
       "type": "Microsoft.ServiceBus/namespaces",
       "apiVersion": "2018-01-01-preview",
       "name": "[variables('servicebus_name')]",
-      "location": "USGov Arizona",
+      "location": "[parameters('glocation')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.ServiceBus/namespaces'), parameters('user_tags')['Microsoft.ServiceBus/namespaces'], json('{}')))]",
       "sku": {
         "name": "Basic",
         "tier": "Basic"
@@ -530,7 +522,7 @@
       "type": "Microsoft.ServiceBus/namespaces/AuthorizationRules",
       "apiVersion": "2017-04-01",
       "name": "[concat(variables('servicebus_name'), '/RootManageSharedAccessKey')]",
-      "location": "USGov Arizona",
+      "location": "[parameters('glocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
       ],
@@ -542,7 +534,7 @@
       "type": "Microsoft.ServiceBus/namespaces/queues",
       "apiVersion": "2017-04-01",
       "name": "[concat(variables('servicebus_name'), '/submission')]",
-      "location": "USGov Arizona",
+      "location": "[parameters('glocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
       ],
@@ -562,11 +554,11 @@
       }
     },
     {
-      "type": "microsoft.insights/actionGroups",
+      "type": "Microsoft.Insights/actionGroups",
       "apiVersion": "2019-06-01",
       "name": "[parameters('actionGroups_Application_Insights_Smart_Detection_name')]",
       "location": "[parameters('glocation')]",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Insights/actionGroups'), parameters('user_tags')['Microsoft.Insights/actionGroups'], json('{}')))]",
       "properties": {
         "groupShortName": "SmartDetect",
         "enabled": true,
@@ -594,14 +586,14 @@
       }
     },
     {
-      "apiVersion": "2016-10-01",
-      "location": "[resourceGroup().location]",
-      "name": "[variables('vaults_ripa_kv_name')]",
       "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2016-10-01",
+      "name": "[variables('vaults_ripa_kv_name')]",
+      "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('sites_ripa_user_fa_name'))]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.KeyVault/vaults'), parameters('user_tags')['Microsoft.KeyVault/vaults'], json('{}')))]",
       "properties": {
         "sku": {
           "family": "A",
@@ -666,7 +658,7 @@
       "apiVersion": "2020-08-01",
       "name": "[variables('networkSecurityGroups_ripa_apim_nsg_name')]",
       "location": "[resourceGroup().location]",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/networkSecurityGroups'), parameters('user_tags')['Microsoft.Network/networkSecurityGroups'], json('{}')))]",
       "properties": {
         "securityRules": [
           {
@@ -812,7 +804,7 @@
       "apiVersion": "2020-08-01",
       "name": "[variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name')]",
       "location": "[resourceGroup().location]",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/networkSecurityGroups'), parameters('user_tags')['Microsoft.Network/networkSecurityGroups'], json('{}')))]",
       "properties": {
         "securityRules": []
       }
@@ -822,7 +814,7 @@
       "apiVersion": "2018-09-01",
       "name": "[variables('privateDnsZones_privatelink_documents_azure_com_name')]",
       "location": "[parameters('glocation')]",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/privateDnsZones'), parameters('user_tags')['Microsoft.Network/privateDnsZones'], json('{}')))]",
       "properties": {
         "maxNumberOfRecordSets": 25000,
         "maxNumberOfVirtualNetworkLinks": 1000,
@@ -834,11 +826,11 @@
       }
     },
     {
-      "type": "microsoft.operationalinsights/workspaces",
+      "type": "Microsoft.OperationalInsights/workspaces",
       "apiVersion": "2020-10-01",
       "name": "[variables('workspaces_ripa_laws_name')]",
       "location": "[resourceGroup().location]",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.OperationalInsights/workspaces'), parameters('user_tags')['Microsoft.OperationalInsights/workspaces'], json('{}')))]",
       "properties": {
         "sku": {
           "name": "pergb2018"
@@ -861,7 +853,7 @@
         "tier": "Standard"
       },
       "kind": "StorageV2",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Storage/storageAccounts'), parameters('user_tags')['Microsoft.Storage/storageAccounts'], json('{}')))]",
       "properties": {
         "minimumTlsVersion": "TLS1_2",
         "allowBlobPublicAccess": true,
@@ -899,7 +891,7 @@
         "tier": "Standard"
       },
       "kind": "Storage",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Storage/storageAccounts'), parameters('user_tags')['Microsoft.Storage/storageAccounts'], json('{}')))]",
       "properties": {
         "minimumTlsVersion": "TLS1_2",
         "networkAcls": {
@@ -935,7 +927,7 @@
         "tier": "Standard"
       },
       "kind": "StorageV2",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Storage/storageAccounts'), parameters('user_tags')['Microsoft.Storage/storageAccounts'], json('{}')))]",
       "properties": {
         "minimumTlsVersion": "TLS1_2",
         "allowBlobPublicAccess": true,
@@ -973,7 +965,7 @@
         "tier": "Standard"
       },
       "kind": "StorageV2",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Storage/storageAccounts'), parameters('user_tags')['Microsoft.Storage/storageAccounts'], json('{}')))]",
       "properties": {
         "azureFilesIdentityBasedAuthentication": {
           "directoryServiceOptions": "None"
@@ -1018,7 +1010,7 @@
         "capacity": 0
       },
       "kind": "functionapp",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/serverfarms'), parameters('user_tags')['Microsoft.Web/serverfarms'], json('{}')))]",
       "properties": {
         "perSiteScaling": false,
         "maximumElasticWorkerCount": 1,
@@ -1044,7 +1036,7 @@
         "capacity": 0
       },
       "kind": "functionapp",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/serverfarms'), parameters('user_tags')['Microsoft.Web/serverfarms'], json('{}')))]",
       "properties": {
         "perSiteScaling": false,
         "maximumElasticWorkerCount": 1,
@@ -1070,7 +1062,7 @@
         "capacity": 0
       },
       "kind": "functionapp",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/serverfarms'), parameters('user_tags')['Microsoft.Web/serverfarms'], json('{}')))]",
       "properties": {
         "perSiteScaling": false,
         "maximumElasticWorkerCount": 1,
@@ -1096,7 +1088,7 @@
         "capacity": 0
       },
       "kind": "functionapp",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/serverfarms'), parameters('user_tags')['Microsoft.Web/serverfarms'], json('{}')))]",
       "properties": {
         "perSiteScaling": false,
         "maximumElasticWorkerCount": 1,
@@ -1122,7 +1114,7 @@
         "capacity": 0
       },
       "kind": "functionapp",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/serverfarms'), parameters('user_tags')['Microsoft.Web/serverfarms'], json('{}')))]",
       "properties": {
         "perSiteScaling": false,
         "maximumElasticWorkerCount": 1,
@@ -1146,7 +1138,7 @@
         "name": "Developer",
         "capacity": 1
       },
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.ApiManagement/service'), parameters('user_tags')['Microsoft.ApiManagement/service'], json('{}')))]",
       "properties": {
         "publisherEmail": "[parameters('apim_publisherEmail')]",
         "publisherName": "[parameters('apim_publisherName')]",
@@ -1288,7 +1280,7 @@
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
       ],
       "kind": "GlobalDocumentDB",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.DocumentDB/databaseAccounts'), parameters('user_tags')['Microsoft.DocumentDB/databaseAccounts'], json('{}')))]",
       "properties": {
         "publicNetworkAccess": "Enabled",
         "enableAutomaticFailover": false,
@@ -1344,7 +1336,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases'), parameters('user_tags')['Microsoft.DocumentDB/databaseAccounts/sqlDatabases'], json('{}')))]",
       "properties": {
         "resource": {
           "id": "[parameters('dbaccount_sqlDb_name')]"
@@ -1499,7 +1491,7 @@
       }
     },
     {
-      "type": "microsoft.insights/components",
+      "type": "Microsoft.Insights/components",
       "apiVersion": "2020-02-02-preview",
       "location": "[resourceGroup().location]",
       "name": "[variables('components_ripa_ai_name')]",
@@ -1507,7 +1499,7 @@
         "[resourceId('microsoft.operationalinsights/workspaces', variables('workspaces_ripa_laws_name'))]"
       ],
       "kind": "web",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Insights/components'), parameters('user_tags')['Microsoft.Insights/components'], json('{}')))]",
       "properties": {
         "Application_Type": "web",
         "Flow_Type": "Redfield",
@@ -2005,7 +1997,7 @@
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/privateEndpoints'), parameters('user_tags')['Microsoft.Network/privateEndpoints'], json('{}')))]",
       "properties": {
         "privateLinkServiceConnections": [
           {
@@ -2196,7 +2188,7 @@
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_vnet_cdb_subnet_nsg_name'))]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/virtualNetworks'), parameters('user_tags')['Microsoft.Network/virtualNetworks'], json('{}')))]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": "[parameters('Vnet_addressprefixes')]"
@@ -2283,7 +2275,7 @@
         "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
       "kind": "functionapp,linux",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/sites'), parameters('user_tags')['Microsoft.Web/sites'], json('{}')))]",
       "properties": {
         "enabled": true,
         "hostNameSslStates": [
@@ -2469,7 +2461,7 @@
         "[resourceId('microsoft.insights/components', variables('components_ripa_ai_name'))]"
       ],
       "kind": "functionapp,linux",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/sites'), parameters('user_tags')['Microsoft.Web/sites'], json('{}')))]",
       "properties": {
         "enabled": true,
         "hostNameSslStates": [
@@ -2644,7 +2636,7 @@
         "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
       "kind": "functionapp,linux",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/sites'), parameters('user_tags')['Microsoft.Web/sites'], json('{}')))]",
       "properties": {
         "enabled": true,
         "hostNameSslStates": [
@@ -2855,7 +2847,7 @@
         "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
       ],
       "kind": "functionapp,linux",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/sites'), parameters('user_tags')['Microsoft.Web/sites'], json('{}')))]",
       "properties": {
         "enabled": true,
         "hostNameSslStates": [
@@ -3095,7 +3087,7 @@
         "[resourceId('Microsoft.CognitiveServices/accounts', variables('TA_Name'))]"
       ],
       "kind": "functionapp,linux",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Web/sites'), parameters('user_tags')['Microsoft.Web/sites'], json('{}')))]",
       "properties": {
         "enabled": true,
         "hostNameSslStates": [
@@ -3345,7 +3337,7 @@
         "name": "S"
       },
       "kind": "TextAnalytics",
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.CognitiveServices/accounts'), parameters('user_tags')['Microsoft.CognitiveServices/accounts'], json('{}')))]",
       "properties": {
         "customSubDomainName": "[variables('TA_Name')]",
         "networkAcls": {
@@ -3366,7 +3358,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
@@ -3483,7 +3475,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
@@ -3548,7 +3540,7 @@
         "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytics_name'))]",
         "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]"
       ],
-      "tags": "[variables('all_tags')]",
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
