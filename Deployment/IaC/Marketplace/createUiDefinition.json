@@ -640,7 +640,8 @@
 								"name": "private_domain_root",
 								"type": "Microsoft.Common.TextBox",
 								"label": "Root Domain Name",
-								"defaultValue": "lesmcwhirter.me",
+								"defaultValue": "",
+								"placeholder": "youragencydomain.gov",
 								"toolTip": "The root DNS entry of your custom domain. I.e. myorganization.gov",
 								"constraints": {
 									"required": true,
@@ -653,7 +654,8 @@
 								"name": "private_domain_cname",
 								"type": "Microsoft.Common.TextBox",
 								"label": "Application DNS CNAME",
-								"defaultValue": "ripa",
+								"defaultValue": "",
+								"placeholder": "Choose your subdomain (Example: ripa)",
 								"toolTip": "This value should be a short and descriptive name to complete the application URL. I.e. ripa.myorganization.gov",
 								"constraints": {
 									"required": true,
@@ -834,7 +836,7 @@
 						"name": "doj_environment",
 						"type": "Microsoft.Common.OptionsGroup",
 						"label": "DoJ Test or Production configuration",
-						"defaultValue": "doj_production",
+						"defaultValue": "Production",
 						"toolTip": "Choose the DoJ sFTP environment configuration you would like to set up for this deployment",
 						"constraints": {
 							"allowedValues": [
