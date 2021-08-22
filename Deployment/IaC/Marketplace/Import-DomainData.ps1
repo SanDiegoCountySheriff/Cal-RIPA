@@ -13,6 +13,8 @@
     <Service Account secret used for Authentication with Azure is required>
 .PARAMETER <CSSA_TENANT_ID>
     <Service Account tenant used for Authentication with Azure is required>
+.PARAMETER <APP_SUBSCRIPTION_ID>
+    <Subcription used for RIPA application deployment>
 .PARAMETER <tableNames>
     <Can be used to limit the tables used for import: 'Beats','Cities','Statutes','Schools'>
 .NOTES
@@ -180,7 +182,7 @@ Write-Host "Logging into Azure"
 [string]$userPassword = $env:CSSA_SP_SECRET
 [securestring]$secStringPassword = ConvertTo-SecureString $userPassword -AsPlainText -Force
 [pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($userName, $secStringPassword)
-Connect-AzAccount -Environment AzureUsGovernment -Tenant $env:CSSA_TENANT_ID -ServicePrincipal -Credential $credObject
+Connect-AzAccount -Environment AzureUsGovernment -Tenant $env:CSSA_TENANT_ID -Subscription $env:APP_SUBSCRIPTION_ID -ServicePrincipal -Credential $credObject
 
 Write-Host "Checking login context"
 Get-AzContext

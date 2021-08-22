@@ -3500,6 +3500,10 @@
             "value": "#{CSSA_TENANT_ID}#"
           },
           {
+            "name": "APP_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
             "name": "RESOURCE_GROUP_NAME",
             "value": "[resourceGroup().name]"
           },
