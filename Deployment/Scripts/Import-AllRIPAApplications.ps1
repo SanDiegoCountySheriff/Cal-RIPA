@@ -25,6 +25,7 @@ Import-Module .\Import-ApimApis.psm1 -Force
 # $env:CSSA_TENANT_ID="bbfa7b1d-b413-4c37-8a47-6044c982b892"
 # $env:RESOURCE_GROUP_NAME="test2-rg"
 # $env:APIM_INSTANCE_NAME="l0103-ripa-apim"
+# $env:APP_SUBSCRIPTION_ID="[subscription().subscriptionId]"
 
 # $env:AUTH_SP_APP_ID="affa6f37-ebea-4197-9998-17334ea94587"
 # $env:AUTH_TENANT_ID="bbfa7b1d-b413-4c37-8a47-6044c982b892"
@@ -44,21 +45,22 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 $apiAppNames =  @('domain','stop','submission','textanalytics','userprofile')
 $webAppName = "$env:AGENCY_ABBREVIATION$env:APPLICATION_NAME" + "uisa"
 
-write-host "logging into azure powershell"
+Write-Host "logging into azure powershell"
 [string]$username = $env:CSSA_SP_APP_ID
 [string]$userpassword = $env:CSSA_SP_SECRET
 [securestring]$secstringpassword = convertto-securestring $userpassword -asplaintext -force
 [pscredential]$credobject = new-object system.management.automation.pscredential ($username, $secstringpassword)
-connect-azaccount -environment azureusgovernment -tenant $env:CSSA_TENANT_ID -serviceprincipal -credential $credobject
+Connect-AzAccount -environment azureusgovernment -Tenant $env:CSSA_TENANT_ID -Subscription $env:APP_SUBSCRIPTION_ID -ServicePrincipal -Credential $credobject
 
-write-host "checking login context"
-get-azcontext
+Write-Host "checking login context"
+Get-AzContext
 
-write-host "logging into azure cli"
+Write-Host "logging into azure cli"
 az cloud set -n azureusgovernment 
 az login --service-principal --tenant $env:CSSA_TENANT_ID -u $env:CSSA_SP_APP_ID -p $env:CSSA_SP_SECRET
+az account set -s $env:APP_SUBSCRIPTION_ID
 
-write-host "checking cli login context"
+Write-Host "checking cli login context"
 az account show
 
 Write-Host "CSSA_SP_APP_ID: $env:CSSA_SP_APP_ID"
