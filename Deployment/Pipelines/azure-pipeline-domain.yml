@@ -7,7 +7,6 @@ trigger:
   branches:
     include:
       - main
-      - dev
   paths:
     include:
       - Functions/RIPA.Functions.Domain/*
