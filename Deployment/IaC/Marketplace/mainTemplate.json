@@ -813,7 +813,7 @@
       "type": "Microsoft.Network/privateDnsZones",
       "apiVersion": "2018-09-01",
       "name": "[variables('privateDnsZones_privatelink_documents_azure_com_name')]",
-      "location": "[resourceGroup().location]",
+      "location": "global",
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/privateDnsZones'), parameters('user_tags')['Microsoft.Network/privateDnsZones'], json('{}')))]",
       "properties": {
         "maxNumberOfRecordSets": 25000,
