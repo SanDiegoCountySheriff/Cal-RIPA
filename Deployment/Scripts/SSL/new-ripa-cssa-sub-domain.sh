@@ -1,26 +1,3 @@
-CLOUD_TYPE="AzureUSGovernment"
-CSSA_TENANT_ID="a44e5271-a297-4daf-a3a9-f90a3146f3f5"
-CSSA_SP_APP_ID="5ff48213-da14-4ac7-85fb-a21bb91d8eb3"
-
-CSSA_SP_SECRET="yZ1gmjFTJX--hRLOIgVHJOt0CLlu0~bWGV"
-CSSA_SUBSCRIPTION_ID="c74e04b6-0cd7-4778-863e-34654eb49270"
-CSSA_RESOURCE_GROUP_NAME="sdsd-gen-p-rg"
-CSSA_CDN_PROFILE_NAME="cssa-global-cdn"
-CSSA_DNS_ROOT_ZONE="cssa.cloud"
-AGENCY_ORI="CA0520000"
-AGENCY_ABBREVIATION="tehamasd"
-APPLICATION_RESOURCE_GROUP_NAME="RIPA"
-APPLICATION_NAME="test555"
-APPLICATION_UI_SA_NAME="tehamasdtest555uisa"
-CSSA_CERT_KEY_VAULT_RG="sdsd-gen-p-rg"
-CSSA_CERT_KEY_VAULT_NAME="sdsd-gen-p-kv"
-CSSA_CERT_SECRET_NAME="star-cssa-cloud"
-APP_DOMAIN_TYPE="cssa_cloud_domain"
-CUSTOM_PRIMARY_DOMAIN="cssa.cloud"
-CUSTOM_APP_CNAME_ALIAS="ripa"
-CUSTOM_CERT_KEY_VAULT_RID="/subscriptions/c74e04b6-0cd7-4778-863e-34654eb49270/resourceGroups/sdsd-gen-p-rg/providers/Microsoft.KeyVault/vaults/sdsd-gen-p-kv"
-CUSTOM_CERT_SECRET_NAME="star-cssa-cloud"
-
 # Creates DNS & CDN Endpoints and configures custom DNS for cssa.cloud based URLs
 echo
 echo
