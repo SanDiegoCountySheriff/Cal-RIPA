@@ -40,7 +40,7 @@
 				"constraints": {
 					"allowedValues": [
 						{
-							"label": "ALAMEDA COUNTY",
+							"label": "ALAMEDA SHERIFF",
 							"value": {
 								"county": "Alameda",
 								"abbreviation": "alameda",
@@ -49,7 +49,7 @@
 							}
 						},
 						{
-							"label": "ALPINE COUNTY",
+							"label": "ALPINE SHERIFF",
 							"value": {
 								"county": "Alpine",
 								"abbreviation": "alpine",
@@ -58,7 +58,7 @@
 							}
 						},
 						{
-							"label": "AMADOR COUNTY",
+							"label": "AMADOR SHERIFF",
 							"value": {
 								"county": "Amador",
 								"abbreviation": "amador",
@@ -67,7 +67,7 @@
 							}
 						},
 						{
-							"label": "BUTTE COUNTY",
+							"label": "BUTTE SHERIFF",
 							"value": {
 								"county": "Butte",
 								"abbreviation": "butte",
@@ -76,7 +76,7 @@
 							}
 						},
 						{
-							"label": "CALAVERAS COUNTY",
+							"label": "CALAVERAS SHERIFF",
 							"value": {
 								"county": "Calaveras",
 								"abbreviation": "calaveras",
@@ -85,7 +85,16 @@
 							}
 						},
 						{
-							"label": "COLUSA COUNTY",
+							"label": "CAMPBELL POLICE",
+							"value": {
+								"county": "Santa Clara",
+								"abbreviation": "campbell",
+								"type": "pd",
+								"ori": "CA0430200"
+							}
+						},
+						{
+							"label": "COLUSA SHERIFF",
 							"value": {
 								"county": "Colusa",
 								"abbreviation": "colusa",
@@ -94,7 +103,7 @@
 							}
 						},
 						{
-							"label": "CONTRA COSTA COUNTY",
+							"label": "CONTRA COSTA SHERIFF",
 							"value": {
 								"county": "Contra Costa",
 								"abbreviation": "contracosta",
@@ -103,7 +112,7 @@
 							}
 						},
 						{
-							"label": "DEL NORTE COUNTY",
+							"label": "DEL NORTE SHERIFF",
 							"value": {
 								"county": "Del Norte",
 								"abbreviation": "delnorte",
@@ -112,7 +121,16 @@
 							}
 						},
 						{
-							"label": "EL DORADO COUNTY",
+							"label": "EL CAJON POLICE",
+							"value": {
+								"county": "San Diego",
+								"abbreviation": "elcajon",
+								"type": "pd",
+								"ori": "CA0370500"
+							}
+						},
+						{
+							"label": "EL DORADO SHERIFF",
 							"value": {
 								"county": "El Dorado",
 								"abbreviation": "eldorado",
@@ -121,7 +139,7 @@
 							}
 						},
 						{
-							"label": "FRESNO COUNTY",
+							"label": "FRESNO SHERIFF",
 							"value": {
 								"county": "Fresno",
 								"abbreviation": "fresno",
@@ -130,7 +148,7 @@
 							}
 						},
 						{
-							"label": "GLENN COUNTY",
+							"label": "GLENN SHERIFF",
 							"value": {
 								"county": "Glenn",
 								"abbreviation": "glenn",
@@ -139,7 +157,7 @@
 							}
 						},
 						{
-							"label": "HUMBOLDT COUNTY",
+							"label": "HUMBOLDT SHERIFF",
 							"value": {
 								"county": "Humboldt",
 								"abbreviation": "humboldt",
@@ -148,7 +166,7 @@
 							}
 						},
 						{
-							"label": "IMPERIAL COUNTY",
+							"label": "IMPERIAL SHERIFF",
 							"value": {
 								"county": "Imperial",
 								"abbreviation": "imperial",
@@ -157,7 +175,7 @@
 							}
 						},
 						{
-							"label": "INYO COUNTY",
+							"label": "INYO SHERIFF",
 							"value": {
 								"county": "Inyo",
 								"abbreviation": "inyo",
@@ -166,7 +184,7 @@
 							}
 						},
 						{
-							"label": "KERN COUNTY",
+							"label": "KERN SHERIFF",
 							"value": {
 								"county": "Kern",
 								"abbreviation": "kern",
@@ -175,7 +193,7 @@
 							}
 						},
 						{
-							"label": "KINGS COUNTY",
+							"label": "KINGS SHERIFF",
 							"value": {
 								"county": "Kings",
 								"abbreviation": "kings",
@@ -184,7 +202,7 @@
 							}
 						},
 						{
-							"label": "LAKE COUNTY",
+							"label": "LAKE SHERIFF",
 							"value": {
 								"county": "Lake",
 								"abbreviation": "lake",
@@ -193,7 +211,7 @@
 							}
 						},
 						{
-							"label": "LASSEN COUNTY",
+							"label": "LASSEN SHERIFF",
 							"value": {
 								"county": "Lassen",
 								"abbreviation": "lassen",
@@ -202,7 +220,16 @@
 							}
 						},
 						{
-							"label": "LOS ANGELES COUNTY",
+							"label": "LOS ALTOS POLICE",
+							"value": {
+								"county": "Sanata CLara",
+								"abbreviation": "sccla",
+								"type": "pd",
+								"ori": "CA0430500"
+							}
+						},
+						{
+							"label": "LOS ANGELES SHERIFF",
 							"value": {
 								"county": "Los Angeles",
 								"abbreviation": "la",
@@ -211,7 +238,7 @@
 							}
 						},
 						{
-							"label": "MADERA COUNTY",
+							"label": "MADERA SHERIFF",
 							"value": {
 								"county": "Madera",
 								"abbreviation": "madera",
@@ -220,7 +247,7 @@
 							}
 						},
 						{
-							"label": "MARIN COUNTY",
+							"label": "MARIN SHERIFF",
 							"value": {
 								"county": "Marin",
 								"abbreviation": "marin",
@@ -229,7 +256,7 @@
 							}
 						},
 						{
-							"label": "MARIPOSA COUNTY",
+							"label": "MARIPOSA SHERIFF",
 							"value": {
 								"county": "Mariposa",
 								"abbreviation": "mariposa",
@@ -238,7 +265,7 @@
 							}
 						},
 						{
-							"label": "MENDOCINO COUNTY",
+							"label": "MENDOCINO SHERIFF",
 							"value": {
 								"county": "Mendocino",
 								"abbreviation": "mendocino",
@@ -247,7 +274,7 @@
 							}
 						},
 						{
-							"label": "MERCED COUNTY",
+							"label": "MERCED SHERIFF",
 							"value": {
 								"county": "Merced",
 								"abbreviation": "merced",
@@ -256,7 +283,7 @@
 							}
 						},
 						{
-							"label": "MODOC COUNTY",
+							"label": "MODOC SHERIFF",
 							"value": {
 								"county": "Modoc",
 								"abbreviation": "modoc",
@@ -265,7 +292,7 @@
 							}
 						},
 						{
-							"label": "MONO COUNTY",
+							"label": "MONO SHERIFF",
 							"value": {
 								"county": "Mono",
 								"abbreviation": "mono",
@@ -274,7 +301,7 @@
 							}
 						},
 						{
-							"label": "MONTEREY COUNTY",
+							"label": "MONTEREY SHERIFF",
 							"value": {
 								"county": "Monterey",
 								"abbreviation": "monterey",
@@ -283,7 +310,7 @@
 							}
 						},
 						{
-							"label": "NAPA COUNTY",
+							"label": "NAPA SHERIFF",
 							"value": {
 								"county": "Napa",
 								"abbreviation": "napa",
@@ -292,7 +319,7 @@
 							}
 						},
 						{
-							"label": "NEVADA COUNTY",
+							"label": "NEVADA SHERIFF",
 							"value": {
 								"county": "Nevada",
 								"abbreviation": "nevada",
@@ -301,7 +328,7 @@
 							}
 						},
 						{
-							"label": "ORANGE COUNTY",
+							"label": "ORANGE SHERIFF",
 							"value": {
 								"county": "Orange",
 								"abbreviation": "orange",
@@ -310,7 +337,7 @@
 							}
 						},
 						{
-							"label": "PLACER COUNTY",
+							"label": "PLACER SHERIFF",
 							"value": {
 								"county": "Placer",
 								"abbreviation": "placer",
@@ -319,7 +346,7 @@
 							}
 						},
 						{
-							"label": "PLUMAS COUNTY",
+							"label": "PLUMAS SHERIFF",
 							"value": {
 								"county": "Plumas",
 								"abbreviation": "plumas",
@@ -328,7 +355,7 @@
 							}
 						},
 						{
-							"label": "RIVERSIDE COUNTY",
+							"label": "RIVERSIDE SHERIFF",
 							"value": {
 								"county": "Riverside",
 								"abbreviation": "riverside",
@@ -337,7 +364,7 @@
 							}
 						},
 						{
-							"label": "SACRAMENTO COUNTY",
+							"label": "SACRAMENTO SHERIFF",
 							"value": {
 								"county": "Sacramento",
 								"abbreviation": "sacramento",
@@ -346,7 +373,7 @@
 							}
 						},
 						{
-							"label": "SAN BENITO COUNTY",
+							"label": "SAN BENITO SHERIFF",
 							"value": {
 								"county": "San Benito",
 								"abbreviation": "sanbenito",
@@ -355,7 +382,7 @@
 							}
 						},
 						{
-							"label": "SAN BERNARDINO COUNTY",
+							"label": "SAN BERNARDINO SHERIFF",
 							"value": {
 								"county": "San Bernardino",
 								"abbreviation": "sanbernardino",
@@ -364,7 +391,7 @@
 							}
 						},
 						{
-							"label": "SAN DIEGO COUNTY",
+							"label": "SAN DIEGO SHERIFF",
 							"value": {
 								"county": "San Diego",
 								"abbreviation": "sd",
@@ -373,7 +400,7 @@
 							}
 						},
 						{
-							"label": "SAN FRANCISCO COUNTY",
+							"label": "SAN FRANCISCO SHERIFF",
 							"value": {
 								"county": "San Francisco",
 								"abbreviation": "sf",
@@ -382,7 +409,7 @@
 							}
 						},
 						{
-							"label": "SAN JOAQUIN COUNTY",
+							"label": "SAN JOAQUIN SHERIFF",
 							"value": {
 								"county": "San Joaquin",
 								"abbreviation": "sanjoaquin",
@@ -391,7 +418,7 @@
 							}
 						},
 						{
-							"label": "SAN LUIS OBISPO COUNTY",
+							"label": "SAN LUIS OBISPO SHERIFF",
 							"value": {
 								"county": "San Luis Obispo",
 								"abbreviation": "slo",
@@ -400,7 +427,7 @@
 							}
 						},
 						{
-							"label": "SAN MATEO COUNTY",
+							"label": "SAN MATEO SHERIFF",
 							"value": {
 								"county": "San Mateo",
 								"abbreviation": "sm",
@@ -409,7 +436,7 @@
 							}
 						},
 						{
-							"label": "SANTA BARBARA COUNTY",
+							"label": "SANTA BARBARA SHERIFF",
 							"value": {
 								"county": "Santa Barbara",
 								"abbreviation": "santabarbara",
@@ -418,7 +445,7 @@
 							}
 						},
 						{
-							"label": "SANTA CLARA COUNTY",
+							"label": "SANTA CLARA SHERIFF",
 							"value": {
 								"county": "Santa Clara",
 								"abbreviation": "santaclara",
@@ -427,7 +454,7 @@
 							}
 						},
 						{
-							"label": "SANTA CRUZ COUNTY",
+							"label": "SANTA CRUZ SHERIFF",
 							"value": {
 								"county": "Santa Cruz",
 								"abbreviation": "santacruz",
@@ -436,7 +463,7 @@
 							}
 						},
 						{
-							"label": "SHASTA COUNTY",
+							"label": "SHASTA SHERIFF",
 							"value": {
 								"county": "Shasta",
 								"abbreviation": "shasta",
@@ -445,7 +472,7 @@
 							}
 						},
 						{
-							"label": "SIERRA COUNTY",
+							"label": "SIERRA SHERIFF",
 							"value": {
 								"county": "Sierra",
 								"abbreviation": "sierra",
@@ -454,7 +481,7 @@
 							}
 						},
 						{
-							"label": "SISKIYOU COUNTY",
+							"label": "SISKIYOU SHERIFF",
 							"value": {
 								"county": "Siskiyou",
 								"abbreviation": "siskiyou",
@@ -463,7 +490,7 @@
 							}
 						},
 						{
-							"label": "SOLANO COUNTY",
+							"label": "SOLANO SHERIFF",
 							"value": {
 								"county": "Solano",
 								"abbreviation": "solano",
@@ -472,7 +499,7 @@
 							}
 						},
 						{
-							"label": "SONOMA COUNTY",
+							"label": "SONOMA SHERIFF",
 							"value": {
 								"county": "Sonoma",
 								"abbreviation": "sonoma",
@@ -481,7 +508,7 @@
 							}
 						},
 						{
-							"label": "STANISLAUS COUNTY",
+							"label": "STANISLAUS SHERIFF",
 							"value": {
 								"county": "Stanislaus",
 								"abbreviation": "stanislaus",
@@ -490,7 +517,7 @@
 							}
 						},
 						{
-							"label": "SUTTER COUNTY",
+							"label": "SUTTER SHERIFF",
 							"value": {
 								"county": "Sutter",
 								"abbreviation": "sutter",
@@ -499,7 +526,7 @@
 							}
 						},
 						{
-							"label": "TEHAMA COUNTY",
+							"label": "TEHAMA SHERIFF",
 							"value": {
 								"county": "Tehama",
 								"abbreviation": "tehama",
@@ -508,7 +535,7 @@
 							}
 						},
 						{
-							"label": "TRINITY COUNTY",
+							"label": "TRINITY SHERIFF",
 							"value": {
 								"county": "Trinity",
 								"abbreviation": "trinity",
@@ -517,7 +544,7 @@
 							}
 						},
 						{
-							"label": "TULARE COUNTY",
+							"label": "TULARE SHERIFF",
 							"value": {
 								"county": "Tulare",
 								"abbreviation": "tulare",
@@ -526,7 +553,7 @@
 							}
 						},
 						{
-							"label": "TUOLUMNE COUNTY",
+							"label": "TUOLUMNE SHERIFF",
 							"value": {
 								"county": "Tuolumne",
 								"abbreviation": "tuolumne",
@@ -535,7 +562,7 @@
 							}
 						},
 						{
-							"label": "VENTURA COUNTY",
+							"label": "VENTURA SHERIFF",
 							"value": {
 								"county": "Ventura",
 								"abbreviation": "ventura",
@@ -544,7 +571,7 @@
 							}
 						},
 						{
-							"label": "YOLO COUNTY",
+							"label": "YOLO SHERIFF",
 							"value": {
 								"county": "Yolo",
 								"abbreviation": "yolo",
@@ -553,7 +580,7 @@
 							}
 						},
 						{
-							"label": "YUBA COUNTY",
+							"label": "YUBA SHERIFF",
 							"value": {
 								"county": "Yuba",
 								"abbreviation": "yuba",

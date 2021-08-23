@@ -557,7 +557,7 @@
       "type": "Microsoft.Insights/actionGroups",
       "apiVersion": "2019-06-01",
       "name": "[parameters('actionGroups_Application_Insights_Smart_Detection_name')]",
-      "location": "global",
+      "location": "[parameters('glocation')]",
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Insights/actionGroups'), parameters('user_tags')['Microsoft.Insights/actionGroups'], json('{}')))]",
       "properties": {
         "groupShortName": "SmartDetect",
@@ -813,7 +813,7 @@
       "type": "Microsoft.Network/privateDnsZones",
       "apiVersion": "2018-09-01",
       "name": "[variables('privateDnsZones_privatelink_documents_azure_com_name')]",
-      "location": "global",
+      "location": "[parameters('glocation')]",
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Network/privateDnsZones'), parameters('user_tags')['Microsoft.Network/privateDnsZones'], json('{}')))]",
       "properties": {
         "maxNumberOfRecordSets": 25000,
@@ -2167,7 +2167,7 @@
       "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
       "apiVersion": "2018-09-01",
       "name": "[concat(variables('privateDnsZones_privatelink_documents_azure_com_name'), '/', parameters('privateDnsZones_vnetlink_name'))]",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('glocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZones_privatelink_documents_azure_com_name'))]",
         "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_ripa_vnet_name'))]"
