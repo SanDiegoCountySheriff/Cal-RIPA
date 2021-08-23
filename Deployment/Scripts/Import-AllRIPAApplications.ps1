@@ -1,46 +1,52 @@
+Write-Host "Installing Az"
+Install-Module Az -Repository PSGallery -AllowClobber -Force
 
-Write-Host "Installing Az.ApiManagement"
-Install-Module Az.ApiManagement -Repository PSGallery -AllowClobber -Force
+# Write-Host "Installing Az.ApiManagement"
+# Install-Module Az.ApiManagement -Repository PSGallery -AllowClobber -Force
 
-Write-Host "Installing Az.Resources"
-Install-Module Az.Resources -Repository PSGallery -AllowClobber -Force
+# Write-Host "Installing Az.Accounts"
+# Install-Module Az.Accounts -Repository PSGallery -AllowClobber -Force
 
-Write-Host "Installing Az.Accounts"
-Install-Module Az.Accounts -Repository PSGallery -AllowClobber -Force
+# Write-Host "Installing Az.Resources"
+# Install-Module Az.Resources -Repository PSGallery -AllowClobber -Force
 
-Write-Host "Importing Az.ApiManagement"
-Import-Module Az.ApiManagement -Force
+Write-Host "Importing Az"
+Import-Module Az -Force
 
-Write-Host "Importing Az.Resources"
-Import-Module Az.Resources -Force
+# Write-Host "Importing Az.ApiManagement"
+# Import-Module Az.ApiManagement -Force
 
-Write-Host "Importing Az.Accounts"
-Import-Module Az.Accounts -Force
+# Write-Host "Importing Az.Accounts"
+# Import-Module Az.Accounts -Force
+
+# Write-Host "Importing Az.Resources"
+# Import-Module Az.Resources -Force
 
 Write-Host "Importing Import-ApimApis.psm1"
 Import-Module .\Import-ApimApis.psm1 -Force
-
-# $env:CSSA_SP_APP_ID="be959af2-bda9-4eb1-abb2-4c2776d8acd3"
-# $env:CSSA_SP_SECRET="WD9~MZaI3Q0x4g_~930mARvmqq2S-U~YbU"
-# $env:CSSA_TENANT_ID="bbfa7b1d-b413-4c37-8a47-6044c982b892"
-# $env:RESOURCE_GROUP_NAME="test2-rg"
-# $env:APIM_INSTANCE_NAME="l0103-ripa-apim"
-# $env:APP_SUBSCRIPTION_ID="[subscription().subscriptionId]"
-
-# $env:AUTH_SP_APP_ID="affa6f37-ebea-4197-9998-17334ea94587"
-# $env:AUTH_TENANT_ID="bbfa7b1d-b413-4c37-8a47-6044c982b892"
-# $env:AUTH_AUTHORITY="https://login.microsoftonline.com/$env:AUTH_TENANT_ID"
-# $env:AUTH_PRIMARY_DOMAIN="cssaripatest.onmicrosoft.us"
-# $env:APIM_INSTANCE_URL="https://l0103-ripa-apim.azure-api.us"
-# $env:DEFAULT_COUNTY="San Diego"
-
-# $env:AGENCY_ABBREVIATION="l0103"
-# $env:APPLICATION_NAME="ripa"
 
 apt-get update
 apt-get --yes upgrade
 apt install curl
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+# $env:CSSA_SP_APP_ID="12341234-1234-1234-1234-123412341234"
+# $env:CSSA_SP_SECRET="*****************************"
+# $env:CSSA_TENANT_ID="12341234-1234-1234-1234-123412341234"
+# $env:APP_RESOURCE_GROUP_NAME="some-rg"
+# $env:APIM_INSTANCE_NAME="someinstance-apim"
+# $env:APP_SUBSCRIPTION_ID="12341234-1234-1234-1234-123412341234"
+
+# $env:AUTH_SP_APP_ID="12341234-1234-1234-1234-123412341234"
+# $env:AUTH_TENANT_ID="12341234-1234-1234-1234-123412341234"
+# $env:AUTH_AUTHORITY="https://login.microsoftonline.com/$env:AUTH_TENANT_ID"
+# $env:AUTH_PRIMARY_DOMAIN="somedomain.gov"
+# $env:APIM_INSTANCE_URL="https://someinstance-apim.azure-api.us"
+# $env:DEFAULT_COUNTY="Some County"
+
+# $env:AGENCY_ABBREVIATION="sdsd"
+# $env:APPLICATION_NAME="ripa-test"
+# $env:STORAGE_ACCOUNT_NAME="ripatestuisa"
 
 $apiAppNames =  @('domain','stop','submission','textanalytics','userprofile')
 $webAppName = "$env:AGENCY_ABBREVIATION$env:APPLICATION_NAME" + "uisa"
@@ -65,7 +71,7 @@ az account show
 
 Write-Host "CSSA_SP_APP_ID: $env:CSSA_SP_APP_ID"
 Write-Host "CSSA_TENANT_ID: $env:CSSA_TENANT_ID"
-Write-Host "RESOURCE_GROUP_NAME: $env:RESOURCE_GROUP_NAME"
+Write-Host "APP_RESOURCE_GROUP_NAME: $env:APP_RESOURCE_GROUP_NAME"
 Write-Host "APIM_INSTANCE_NAME: $env:APIM_INSTANCE_NAME"
 
 Write-Host "AUTH_SP_APP_ID: $env:AUTH_SP_APP_ID"
@@ -91,7 +97,7 @@ foreach ($appName in $apiAppNames) {
     Write-Host "APIVersion: $APIVersion"
 
     Write-Host "Getting existing IP restrictions"
-    $WebAppConfig = (Get-AzResource -ResourceType "Microsoft.Web/sites/config" -ResourceGroupName $env:RESOURCE_GROUP_NAME -ApiVersion $APIVersion -Name $apiApplication)
+    $WebAppConfig = (Get-AzResource -ResourceType "Microsoft.Web/sites/config" -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ApiVersion $APIVersion -Name $apiApplication)
     Write-Host "Web app config found"
     $existingIpSecurityRestrictions = $WebAppConfig.Properties.ipSecurityRestrictions
     Write-Host "Existing Ip restrictions"
@@ -103,19 +109,19 @@ foreach ($appName in $apiAppNames) {
     $WebAppConfig | Set-AzResource -ApiVersion $APIVersion -Force | Out-Null
 
     Write-Host "Deploying function $apiApplication"
-    az functionapp deployment source config-zip -g $env:RESOURCE_GROUP_NAME --src "./$appName.zip" -n $apiApplication
+    az functionapp deployment source config-zip -g $env:APP_RESOURCE_GROUP_NAME --src "./$appName.zip" -n $apiApplication
 
     Write-Host "Importing $appName OpenAPI into APIM"
-    Import-FunctionApi -ResourceGroupName $env:RESOURCE_GROUP_NAME -ServiceName $env:APIM_INSTANCE_NAME -FunctionName $apiApplication -ApiTag $appName
+    Import-FunctionApi -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ServiceName $env:APIM_INSTANCE_NAME -FunctionName $apiApplication -ApiTag $appName
 
     Write-Host "Resetting IP restriction"
-    $WebAppConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName $env:RESOURCE_GROUP_NAME -ApiVersion $APIVersion -Name $apiApplication)
+    $WebAppConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ApiVersion $APIVersion -Name $apiApplication)
     $WebAppConfig.properties.ipSecurityRestrictions = $existingIpSecurityRestrictions
     $WebAppConfig | Set-AzResource -ApiVersion $APIVersion -Force | Out-Null
 }
 
 # Get the APIM Context & primary access key
-$apimContext = New-AzApiManagementContext -ResourceGroupName $env:RESOURCE_GROUP_NAME -ServiceName $env:APIM_INSTANCE_NAME -ErrorAction Stop
+$apimContext = New-AzApiManagementContext -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ServiceName $env:APIM_INSTANCE_NAME -ErrorAction Stop
 $apimMasterKeys = Get-AzApiManagementSubscriptionKey -Context $apimContext -SubscriptionId "Master"
 $apimPrimaryKey = $apimMasterKeys.PrimaryKey
 
