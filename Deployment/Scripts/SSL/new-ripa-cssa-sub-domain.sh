@@ -198,4 +198,3 @@ echo
 
 echo "Finished DNS/Custom Host/Certificate deployment"
 
-pause
