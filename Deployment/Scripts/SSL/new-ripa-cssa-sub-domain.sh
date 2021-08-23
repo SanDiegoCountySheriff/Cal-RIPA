@@ -1,7 +1,6 @@
 # Creates DNS & CDN Endpoints and configures custom DNS for cssa.cloud based URLs
 echo
 echo
-
 echo "Starting DNS/Custom Host/Certificate deployment"
 echo
 
