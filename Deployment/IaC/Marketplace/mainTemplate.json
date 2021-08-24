@@ -3573,7 +3573,7 @@
             "value": "[subscription().subscriptionId]"
           },
           {
-            "name": "RESOURCE_GROUP_NAME",
+            "name": "APP_RESOURCE_GROUP_NAME",
             "value": "[resourceGroup().name]"
           },
           {
