@@ -20,6 +20,10 @@
       "defaultValue": "ripa",
       "type": "string"
     },
+    "environment_type": {
+      "type": "string",
+      "defaultValue": "PROD"
+    },
     "auth_tenant_id": {
       "type": "string"
     },
@@ -469,15 +473,15 @@
     "sites_ripa_submission_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('submission_fa_name'))]",
     "sites_ripa_textanalytics_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('textanalytics_fa_name'))]",
     "sites_ripa_user_fa_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('sites_user_fa_name'))]",
-    "storageAccounts_ripactsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_ctsa_name'))]",
-    "storageAccounts_ripafnsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_functionssa_name'))]",
-    "storageAccounts_ripansgflsa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_nsgflowlogssa_name'))]",
-    "storageAccounts_ripauisa_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('storageAccounts_uisa_name'))]",
+    "storageAccounts_ripactsa_name": "[concat(parameters('agency_abbreviation'), replace(parameters('application'), '-', ''), parameters('storageAccounts_ctsa_name'))]",
+    "storageAccounts_ripafnsa_name": "[concat(parameters('agency_abbreviation'), replace(parameters('application'), '-', ''), parameters('storageAccounts_functionssa_name'))]",
+    "storageAccounts_ripansgflsa_name": "[concat(parameters('agency_abbreviation'), replace(parameters('application'), '-', ''), parameters('storageAccounts_nsgflowlogssa_name'))]",
+    "storageAccounts_ripauisa_name": "[concat(parameters('agency_abbreviation'), replace(parameters('application'), '-', ''), parameters('storageAccounts_uisa_name'))]",
     "vaults_ripa_kv_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'), '-', parameters('vaults_kv_name'))]",
     "virtualNetworks_ripa_vnet_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('virtualNetworks_vnet_name'))]",
     "workspaces_ripa_laws_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('workspaces_laws_name'))]",
     "TA_Name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('accounts_ripaTA_name'))]",
-    "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency_abbreviation'), parameters('application'), parameters('privateDnsZones_privatelink_azure_com_name'))]",
+    "privateDnsZones_privatelink_documents_azure_com_name": "[concat(parameters('agency_abbreviation'), replace(parameters('application'), '-',''), parameters('privateDnsZones_privatelink_azure_com_name'))]",
     "privatednszones_a_name": "[concat(variables('databaseAccounts_ripa_cdb_name'),'-', resourceGroup().location)]",
     "privateEndpoints_ripa_cdb_pe_name": "[concat(parameters('agency_abbreviation'),'-', parameters('application'),'-', parameters('privateEndpoints_cdb_pe_name'))]",
     "user_fa_keyvault_referencestring": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key1'),')')]",
@@ -3427,6 +3431,10 @@
             "value": "[parameters('agency_abbreviation')]"
           },
           {
+            "name": "APPLICATION_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
             "name": "APPLICATION_RESOURCE_GROUP_NAME",
             "value": "[resourceGroup().Name]"
           },
@@ -3615,6 +3623,10 @@
           {
             "name": "DEFAULT_COUNTY",
             "value": "[parameters('agency_county')]"
+          },
+          {
+            "name": "ENVIRONMENT_TYPE",
+            "value": "[parameters('environment_type')]"
           }
         ],
         "primaryScriptUri": "#{MP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",

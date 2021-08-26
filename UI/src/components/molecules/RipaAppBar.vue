@@ -255,7 +255,7 @@ export default {
           return 'RIPA (QA)'
 
         default:
-          return ''
+          return 'RIPA'
       }
     },
 

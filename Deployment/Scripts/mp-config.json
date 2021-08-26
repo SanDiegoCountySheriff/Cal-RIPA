@@ -6,7 +6,7 @@
         "PrimaryDomain": "__AUTH_PRIMARY_DOMAIN__"
     },
     "Configuration": {
-        "Environment": "p",
+        "Environment": "__ENVIRONMENT_TYPE__",
         "ServicesBaseUrl": "__APIM_INSTANCE_URL__/",
         "Subscription": "__APIM_MASTER_SUBSCRIPTION_KEY__",
         "DefaultCounty": "__DEFAULT_COUNTY__",

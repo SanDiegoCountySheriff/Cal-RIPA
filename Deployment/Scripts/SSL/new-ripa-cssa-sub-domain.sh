@@ -13,6 +13,7 @@ echo
 # CSSA_CDN_PROFILE_NAME: This is the CSSA global DNS Zone resource name (cssa.cloud)
 # CSSA_DNS_ROOT_ZONE: This is the root DNS entry for the CSSA DNS ZOne (cssa.cloud)
 # AGENCY_ABBREVIATION: This is the deploying agencies identified abbreviation 
+# APPLICATION_SUBSCRIPTION_ID: This is the subscription where the application is being deployed to
 # APPLICATION_RESOURCE_GROUP_NAME: This is the agncies Azure resource group where the application is deployed
 # APPLICATION_NAME: This is the name of the deployed application (ripa)
 # APPLICATION_UI_SA_NAME: This is the name os the UI storage account where the application is deployed (ripasdsduisa)
@@ -56,6 +57,7 @@ echo "CSSA_CDN_PROFILE_NAME: " $CSSA_CDN_PROFILE_NAME
 echo "CSSA_DNS_ROOT_ZONE: " $CSSA_DNS_ROOT_ZONE
 echo "AGENCY_ORI: " $AGENCY_ORI
 echo "AGENCY_ABBREVIATION: " $AGENCY_ABBREVIATION
+echo "APPLICATION_SUBSCRIPTION_ID: " $APPLICATION_SUBSCRIPTION_ID
 echo "APPLICATION_RESOURCE_GROUP_NAME: " $APPLICATION_RESOURCE_GROUP_NAME
 echo "APPLICATION_NAME: " $APPLICATION_NAME
 echo "APPLICATION_UI_SA_NAME: " $APPLICATION_UI_SA_NAME
@@ -81,8 +83,8 @@ az account show
 echo
 
 echo "Configuring storage account static website:" $APPLICATION_RESOURCE_GROUP_NAME"/"$APPLICATION_UI_SA_NAME
-result=$(az storage blob service-properties update --account-name $APPLICATION_UI_SA_NAME --index-document index.html --static-website true)
-WEB_CONTENT_URL1=$(az storage account show -g $APPLICATION_RESOURCE_GROUP_NAME -n $APPLICATION_UI_SA_NAME --query "primaryEndpoints.web" --output tsv)
+result=$(az storage blob service-properties update --subscription $APPLICATION_SUBSCRIPTION_ID --account-name $APPLICATION_UI_SA_NAME --index-document index.html --static-website true)
+WEB_CONTENT_URL1=$(az storage account show --subscription $APPLICATION_SUBSCRIPTION_ID -g $APPLICATION_RESOURCE_GROUP_NAME -n $APPLICATION_UI_SA_NAME --query "primaryEndpoints.web" --output tsv)
 echo "WEB_CONTENT_URL1: " $WEB_CONTENT_URL1
 WEB_CONTENT_URL2="${WEB_CONTENT_URL1///$''}"
 echo "WEB_CONTENT_URL2: " $WEB_CONTENT_URL2

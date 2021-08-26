@@ -1,26 +1,8 @@
 Write-Host "Installing Az"
 Install-Module Az -Repository PSGallery -AllowClobber -Force
 
-# Write-Host "Installing Az.ApiManagement"
-# Install-Module Az.ApiManagement -Repository PSGallery -AllowClobber -Force
-
-# Write-Host "Installing Az.Accounts"
-# Install-Module Az.Accounts -Repository PSGallery -AllowClobber -Force
-
-# Write-Host "Installing Az.Resources"
-# Install-Module Az.Resources -Repository PSGallery -AllowClobber -Force
-
 Write-Host "Importing Az"
 Import-Module Az -Force
-
-# Write-Host "Importing Az.ApiManagement"
-# Import-Module Az.ApiManagement -Force
-
-# Write-Host "Importing Az.Accounts"
-# Import-Module Az.Accounts -Force
-
-# Write-Host "Importing Az.Resources"
-# Import-Module Az.Resources -Force
 
 Write-Host "Importing Import-ApimApis.psm1"
 Import-Module .\Import-ApimApis.psm1 -Force
@@ -47,6 +29,7 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # $env:AGENCY_ABBREVIATION="sdsd"
 # $env:APPLICATION_NAME="ripa-test"
 # $env:STORAGE_ACCOUNT_NAME="ripatestuisa"
+# $env:ENVIRONMENT_TYPE="PROD"
 
 $apiAppNames =  @('domain','stop','submission','textanalytics','userprofile')
 $webAppName = "$env:AGENCY_ABBREVIATION$env:APPLICATION_NAME" + "uisa"
@@ -84,6 +67,7 @@ Write-Host "DEFAULT_COUNTY: $env:DEFAULT_COUNTY"
 Write-Host "AGENCY_ABBREVIATION: $env:AGENCY_ABBREVIATION"
 Write-Host "APPLICATION_NAME: $env:APPLICATION_NAME"
 Write-Host "STORAGE_ACCOUNT_NAME: $env:STORAGE_ACCOUNT_NAME"
+Write-Host "ENVIRONMENT_TYPE: $env:ENVIRONMENT_TYPE"
 
 foreach ($appName in $apiAppNames) {
 
@@ -132,6 +116,7 @@ az storage blob upload-batch --timeout 300 -d '$web' --account-name $env:STORAGE
 Write-Host "Creating config.json"
 $configFilePath = "./config.json"
 $configJson = Get-Content -Path $configFilePath
+$configJson = $configJson.Replace("__ENVIRONMENT_TYPE__", $env:ENVIRONMENT_TYPE)
 $configJson = $configJson.Replace("__AUTH_SP_APP_ID__", $env:AUTH_SP_APP_ID)
 $configJson = $configJson.Replace("__AUTH_AUTHORITY__", $env:AUTH_AUTHORITY)
 $configJson = $configJson.Replace("__AUTH_TENANT_ID__", $env:AUTH_TENANT_ID)
