@@ -10,7 +10,7 @@
         "ServicesBaseUrl": "__APIM_INSTANCE_URL__/",
         "Subscription": "__APIM_MASTER_SUBSCRIPTION_KEY__",
         "DefaultCounty": "__DEFAULT_COUNTY__",
-        "DisplayBeatsInput": "false",
-        "DisplayDebugger": "false"
+        "DisplayBeatsInput": "__ENABLE_BEATS__",
+        "DisplayDebugger": "__ENABLE_STOP_DEBUGGER__"
     }
 }
