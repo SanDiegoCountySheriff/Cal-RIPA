@@ -435,13 +435,14 @@ export default {
         // }
         // TODO: end result should look like the following.
         // TODO: this adds the defaultStop, template, and updates location if not 'basic' template
-        // this.stop = {
-        //   ...defaultStop(),
-        //   ...template,
-        // }
-        // if (template.name !== 'basic') {
-        //   this.stop.location = defaultLocation()
-        // }
+
+        if (template.name !== 'basic') {
+          // this.stop.location = defaultLocation()
+          this.stop = {
+            ...defaultStop(),
+            ...template,
+          }
+        }
         // this.stop = template[0].stop
       }
 
