@@ -59,8 +59,8 @@
       "type": "string"
     },
     "doj_sftp_disabled": {
-      "type": "bool",
-      "defaultValue": false
+      "type": "string",
+      "defaultValue": "false"
     },
     "auth_app_id": {
       "type": "string"
