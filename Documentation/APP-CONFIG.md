@@ -6,7 +6,8 @@
 2. Navigate to the Resource Group where you installed RIPA
 3. Search for the storage account that ends with the characters “uisa”
 
-   ![Step 1](/Documentation/assets/RIPA-App-Config-Step-01.png)
+   | ![Step 1](/Documentation/assets/RIPA-App-Config-Step-01.png) |
+   |-
 
 4. Select that storage account
 5. Select “Containers” from the left-hand Blades
