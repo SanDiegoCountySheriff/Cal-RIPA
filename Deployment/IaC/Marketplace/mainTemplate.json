@@ -25,12 +25,12 @@
       "defaultValue": "PROD"
     },
     "enable_beats": {
-      "type": "bool",
-      "defaultValue": false
+      "type": "string",
+      "defaultValue": "false"
     },
     "enable_stop_debugger": {
-      "type": "bool",
-      "defaultValue": false
+      "type": "string",
+      "defaultValue": "false"
     },
     "auth_tenant_id": {
       "type": "string"
