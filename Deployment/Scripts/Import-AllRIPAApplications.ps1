@@ -30,6 +30,8 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # $env:APPLICATION_NAME="ripa-test"
 # $env:STORAGE_ACCOUNT_NAME="ripatestuisa"
 # $env:ENVIRONMENT_TYPE="PROD"
+# $env:ENABLE_BEATS="false"
+# $env:ENABLE_STOP_DEBUGGER="false"
 
 $apiAppNames =  @('domain','stop','submission','textanalytics','userprofile')
 $webAppName = "$env:AGENCY_ABBREVIATION$env:APPLICATION_NAME" + "uisa"
@@ -68,6 +70,8 @@ Write-Host "AGENCY_ABBREVIATION: $env:AGENCY_ABBREVIATION"
 Write-Host "APPLICATION_NAME: $env:APPLICATION_NAME"
 Write-Host "STORAGE_ACCOUNT_NAME: $env:STORAGE_ACCOUNT_NAME"
 Write-Host "ENVIRONMENT_TYPE: $env:ENVIRONMENT_TYPE"
+Write-Host "ENABLE_BEATS: $env:ENABLE_BEATS"
+Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
 
 foreach ($appName in $apiAppNames) {
 
@@ -124,6 +128,8 @@ $configJson = $configJson.Replace("__AUTH_PRIMARY_DOMAIN__", $env:AUTH_PRIMARY_D
 $configJson = $configJson.Replace("__APIM_INSTANCE_URL__", $env:APIM_INSTANCE_URL)
 $configJson = $configJson.Replace("__APIM_MASTER_SUBSCRIPTION_KEY__", $apimPrimaryKey)
 $configJson = $configJson.Replace("__DEFAULT_COUNTY__", $env:DEFAULT_COUNTY)
+$configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
+$configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
 
 Write-Host "Saving config.json"
 Set-Content -Path $configFilePath -Value $configJson -Force

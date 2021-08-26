@@ -24,6 +24,14 @@
       "type": "string",
       "defaultValue": "PROD"
     },
+    "enable_beats": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "enable_stop_debugger": {
+      "type": "bool",
+      "defaultValue": false
+    },
     "auth_tenant_id": {
       "type": "string"
     },
@@ -49,6 +57,10 @@
     "doj_sftp_password": {
       "defaultValue": "",
       "type": "string"
+    },
+    "doj_sftp_disabled": {
+      "type": "bool",
+      "defaultValue": false
     },
     "auth_app_id": {
       "type": "string"
@@ -2957,6 +2969,10 @@
               "value": "[variables('keyvault_secret_sftp_key')]"
             },
             {
+              "name": "SftpDisabled",
+              "value": "[parameters('doj_sftp_disabled')]"
+            },
+            {
               "name": "ripa_app_id",
               "value": "[parameters('auth_app_id')]"
             },
@@ -3627,6 +3643,14 @@
           {
             "name": "ENVIRONMENT_TYPE",
             "value": "[parameters('environment_type')]"
+          },
+          {
+            "name": "ENABLE_BEATS",
+            "value": "[parameters('enable_beats')]"
+          },
+          {
+            "name": "ENABLE_STOP_DEBUGGER",
+            "value": "[parameters('enable_stop_debugger')]"
           }
         ],
         "primaryScriptUri": "#{MP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
