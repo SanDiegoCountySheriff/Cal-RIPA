@@ -25,12 +25,12 @@
       "defaultValue": "PROD"
     },
     "enable_beats": {
-      "type": "string",
-      "defaultValue": "false"
+      "type": "bool",
+      "defaultValue": false
     },
     "enable_stop_debugger": {
-      "type": "string",
-      "defaultValue": "false"
+      "type": "bool",
+      "defaultValue": false
     },
     "auth_tenant_id": {
       "type": "string"
@@ -59,8 +59,8 @@
       "type": "string"
     },
     "doj_sftp_disabled": {
-      "type": "bool",
-      "defaultValue": false
+      "type": "string",
+      "defaultValue": "false"
     },
     "auth_app_id": {
       "type": "string"
