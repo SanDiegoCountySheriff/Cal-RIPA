@@ -31,3 +31,34 @@
    |-
 
 9. Modify the file as desired and click “Save” at the top of the screen
+
+## Application Configuration File Layout
+
+### The config.json file found in the root folder of the UI content container must meet these criteria & layout
+
+    {
+    "Authentication": {
+        "ClientId": "{Application (Client) ID in GUID format}",
+        "AuthorityUrl": "https://login.microsoftonline.com/7832cdfd-b337-4d07-af7e-9de082e16b31",
+        "TenantId": "{Azure Tenant ID in GUID format}",
+        "PrimaryDomain": "{Your agencies Fully Qualified Domain Name, example myagency.gov}"
+    },
+    "Configuration": {
+        "Environment": "{DEV, QA or PROD}",
+        "ServicesBaseUrl": "{Base URI to your APIM instance}",
+        "Subscription": "{Your APIM subscription key}",
+        "DefaultCounty": "{The county in which your agency has jurisdiction}",
+        "DisplayBeatsInput": "{true or false}",
+        "DisplayDebugger": "{true or false}"
+    },
+    "AgencyQuestions": [ // An array of extra questions to be presented in the STOP form
+            {
+            "Name": "{A simple nae for identifying this question}",
+            "Type": "{Currently only supports 'Text'}",
+            "Prompt": "{The prompting question you wish the user to answer}",
+            "Hint": "{A tool tip displayed when hovered}",
+            "MaxLength": 250,
+            "Required": {true or false}
+            }
+        ]
+    }
