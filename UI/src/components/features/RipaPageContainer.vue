@@ -166,9 +166,9 @@ export default {
       await Promise.all([this.getUser()])
     },
 
-    async getTemplates() {
-      await Promise.all([this.getFormTemplates()])
-    },
+    // async getTemplates() {
+    //   await Promise.all([this.getFormTemplates()])
+    // },
 
     async getFormData() {
       if (this.displayBeatInput) {
@@ -178,6 +178,7 @@ export default {
         this.getFormCities(),
         this.getFormSchools(),
         this.getFormStatutes(),
+        this.getFormTemplates(),
       ])
     },
 
@@ -237,7 +238,7 @@ export default {
       const cacheDate = localStorage.getItem('ripa_cache_date')
       if (this.isOnlineAndAuthenticated && cacheDate !== null) {
         const hours = differenceInHours(new Date(), new Date(cacheDate))
-        if (hours > 23) {
+        if (hours > 1) {
           this.clearLocalStorage()
         }
       }
@@ -254,6 +255,7 @@ export default {
       localStorage.removeItem('ripa_schools')
       localStorage.removeItem('ripa_statutes')
       localStorage.removeItem('ripa_agency_questions')
+      localStorage.removeItem('ripa_templates')
       localStorage.setItem('ripa_cache_date', new Date())
     },
 
@@ -261,7 +263,7 @@ export default {
       this.loading = true
       this.checkCache()
       await this.getUserData()
-      await this.getTemplates()
+      // await this.getTemplates()
       await this.getFormData()
       this.isValidCache = true
       this.loading = false

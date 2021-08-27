@@ -1148,6 +1148,7 @@ export const fullStopToApiStop = (
       : officer.yearsExperience?.toString() || '',
     id: fullStop.id,
     telemetry: {
+      offline: !onlineAndAuthenticated,
       template: fullStop.template || null,
       formCached: formCached === '1',
       listStepTrace: fullStop.stepTrace,
