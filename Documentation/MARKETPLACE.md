@@ -6,21 +6,25 @@ First, you must work with the CSSA team to get an Azure subscription setup for y
 
 1. Use the in [Create Authentication Scheme](./AUTHENTICATION.md) instructions to create your authentication & authorization resource.
 2. Navigate to the Azure US Government portal [https://portal.azure.us]https://portal.azure.us
-3. Useing the main search bar, search for and select "Marketplace"
-   | ![Step 3](./assets/RIPA-Installation-Step-03.png) |
-   |-
+3. Using the main search bar, search for and select "Marketplace"
+
+| ![Step 3](./assets/RIPA-Installation-Step-03.png) |
+|-
 
 4. Now you can select the "Private products" blade on the left-hand side menu.
-   | ![Step 4](./assets/RIPA-Installation-Step-04.png) |
-   !-
+
+| ![Step 4](./assets/RIPA-Installation-Step-04.png) |
+!-
 
 5. Select the "RIPA by California State Sheriff Association" Marketplace offering and click the create button.
-   | ![Step 5](./assets/RIPA-Installation-Step-05.png) |
-   |-
+
+| ![Step 5](./assets/RIPA-Installation-Step-05.png) |
+|-
 
 6. In the next step make sure you select the following details as the relate to the installation you are currently executing.
-   | ![Step 6](./assets/RIPA-Installation-Step-06.png) |
-   |-
+
+| ![Step 6](./assets/RIPA-Installation-Step-06.png) |
+|-
 
    1. Be sure to select the correct Subscription.
    2. Create a new or select an existing Resource Group.
@@ -42,13 +46,14 @@ First, you must work with the CSSA team to get an Azure subscription setup for y
 
    1. Be sure to provide at least the first 3 fields, FQDN, AppId & TenantId.
    2. Logout URL is not required but helpful if youwish your end users to log out of everywhere from the applcation. This is unusual.
-      | ![Step 8](./assets/RIPA-Installation-Step-08.png) |
-      |-
+
+| ![Step 8](./assets/RIPA-Installation-Step-08.png) |
+|-
 
 9. The "DOJ SFTP" tab is **NOT** required to install the application, however, you will need to configure this later if you do not have the details onhand. You can find instructions [DoJ sFTP Configuration](./DOJ-CONFIGURATION.md)
 
-   | ![Step 9](./assets/RIPA-Installation-Step-09.png) |
-   |-
+| ![Step 9](./assets/RIPA-Installation-Step-09.png) |
+|-
 
 10. The last important tab is the "Tags". The application will automatically generate a few tags and apply them to your installation. Youo can use this section to add your specific tags (name/value pairs).
 
