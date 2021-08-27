@@ -8,6 +8,7 @@ namespace RIPA.Functions.Common.Models
     {
         public object Template { get; set; }
         public bool FormCached { get; set; }
+        public bool Offline { get; set; }
         public Liststeptrace[] ListStepTrace { get; set; }
         public string LookupCacheDate { get; set; }
         public bool PullFromReasonCode { get; set; }
@@ -19,6 +20,4 @@ namespace RIPA.Functions.Common.Models
         public DateTime StartTimeStamp { get; set; }
         public DateTime EndTimeStamp { get; set; }
     }
-
-
 }
