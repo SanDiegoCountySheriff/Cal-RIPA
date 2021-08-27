@@ -439,8 +439,8 @@
 							"label": "SANTA BARBARA SHERIFF",
 							"value": {
 								"county": "Santa Barbara",
-								"abbreviation": "santabarbara",
-								"type": "sd",
+								"abbreviation": "sb",
+								"type": "so",
 								"ori": "CA0420000"
 							}
 						},

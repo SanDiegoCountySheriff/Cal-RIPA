@@ -225,7 +225,7 @@ export default new Vuex.Store({
           return 'QA'
 
         default:
-          return ''
+          return 'PROD'
       }
     },
     mappedGpsLocationAddress: state => {
