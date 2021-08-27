@@ -39,7 +39,7 @@
     {
     "Authentication": {
         "ClientId": "{Application (Client) ID in GUID format}",
-        "AuthorityUrl": "https://login.microsoftonline.com/{Azure Tenant ID in GUID format",
+        "AuthorityUrl": "https://login.microsoftonline.com/{Azure Tenant ID in GUID format}",
         "TenantId": "{Azure Tenant ID in GUID format}",
         "PrimaryDomain": "{Your agencies Fully Qualified Domain Name, example myagency.gov}"
     },
