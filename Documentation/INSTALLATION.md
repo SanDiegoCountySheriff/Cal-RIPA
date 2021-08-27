@@ -12,7 +12,7 @@ Then go to the Azure US Government portal to install RIPA from your "Private" Ma
 
 There are a few services/resources in Azure that do not fully "delete" when you delete them. Why would this be? In order to allow users to recover certain critical resources in the event that they are deleted by "accident".
 
-# Instruction on how to completely remove resources that get "Soft deleted"
+### Instruction on how to completely remove resources that get "Soft deleted"
 
     az cloud set -n AzureUSGovernment
     az login --tenant {your tenant id}
