@@ -31,37 +31,40 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 11. Preloaded domain lists provided by the DoJ
     1. Cities
     2. Schools
-    3. Statutes   
-12. Agency Beat collection (optional)      
-12. Domain list maintence screens
-13. User maintence screens
-14. STOP maintence screens
-15. DoJ Submission maintence screens
-16. Officers last 10 STOPs screens
-17. User profile maintenance screens
-18. Various "Favorites" that allow for rapid selection of items each user uses the most
-19. Ability to create and maintain additional agency specific questions that go beyond the AB#953 requirements
-20. Ability to create and maintain predefined STOP templates
+    3. Statutes
+12. Agency Beat collection (optional)
+13. Domain list maintence screens
+14. User maintence screens
+15. STOP maintence screens
+16. DoJ Submission maintence screens
+17. Officers last 10 STOPs screens
+18. User profile maintenance screens
+19. Various "Favorites" that allow for rapid selection of items each user uses the most
+20. Ability to create and maintain additional agency specific questions that go beyond the AB#953 requirements
+21. Ability to create and maintain predefined STOP templates
     1. These are JSON documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
-21. Links to the RIPA statutes in specific sections of the STOP screens
-22. PII dectection using Azure Cognitive Services
-23. GEO location detection for ease of location entry
-24. A debugger option that displays the internal details of a STOP record to help the angency find issues when required
-25. CSSA integrated domain names & certificates
+22. Links to the RIPA statutes in specific sections of the STOP screens
+23. PII dectection using Azure Cognitive Services
+24. GEO location detection for ease of location entry
+25. A debugger option that displays the internal details of a STOP record to help the angency find issues when required
+26. CSSA integrated domain names & certificates
     1. Or you can provide your own DNS & Certificate (BYOC)
 
 ## How do I?
 
 In this section you will find links & tips to help you get the most out of your RIPA deployment(s)
 
-1. [Application Architecture](/Documentation/ARCHITECTURE.md)
-2. [Authentication](/Documentation/AUTHENTICATION.md)
-3. [DoJ sFTP interface configuration](/Documentation/DOJ-CONFIGURATION.md)
-4. [Domain list maintenance](/Documentation/DOMAIN-LISTS.md)
-5. [Import existing users](/Documentation/USER-IMPORT.md)
-6. [Turn on/off Beats](/Documentation/BEATS.md)
-7. [Agency custom questions](/Documentation/AGENCY-QUESTIONS.md)
-8. [Turn STOP debugger on/off](/Documentation/STOP-DEBUGGER.md)
-9. [Override default PII detection settings](/Documentation/PII-CONFIGURATION.md)
-10. [Application "Environment"](/Documentation/APP-ENVIRONMENT.md)
-11. [Custom STOP templates](/Documentation/STOP-TEMPLATES.md)
+1. [Installation](./Documentation/INSTALLATION.md)
+2. [Marketplace](./Documentation/MARKETPLACE.md)
+3. [Application Architecture](/Documentation/ARCHITECTURE.md)
+4. [Authentication](/Documentation/AUTHENTICATION.md)
+5. [Application Configuration](./Documentation/APP-CONFIG.md)
+6. [DoJ sFTP interface configuration](/Documentation/DOJ-CONFIGURATION.md)
+7. [Domain list maintenance](/Documentation/DOMAIN-LISTS.md)
+8. [Import existing users](/Documentation/USER-IMPORT.md)
+9. [Turn on/off Beats](/Documentation/BEATS.md)
+10. [Agency custom questions](/Documentation/AGENCY-QUESTIONS.md)
+11. [Turn STOP debugger on/off](/Documentation/STOP-DEBUGGER.md)
+12. [Override default PII detection settings](/Documentation/PII-CONFIGURATION.md)
+13. [Application "Environment"](/Documentation/APP-ENVIRONMENT.md)
+14. [Custom STOP templates](/Documentation/STOP-TEMPLATES.md)
