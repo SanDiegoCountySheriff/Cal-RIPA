@@ -885,7 +885,7 @@ export default new Vuex.Store({
                 const configCounty = state.apiConfig.defaultCounty
                   ? state.apiConfig.defaultCounty.toUpperCase()
                   : ''
-                return itemCounty === configCounty
+                return itemCounty.toUpperCase() === configCounty.toUpperCase()
               })
               .map(item => {
                 return {
@@ -899,7 +899,7 @@ export default new Vuex.Store({
                 const configCounty = state.apiConfig.defaultCounty
                   ? state.apiConfig.defaultCounty.toUpperCase()
                   : ''
-                return itemCounty !== configCounty
+                return itemCounty.toUpperCase() !== configCounty.toUpperCase()
               })
               .map(item => {
                 return {
@@ -978,7 +978,7 @@ export default new Vuex.Store({
                 const configCounty = state.apiConfig.defaultCounty
                   ? state.apiConfig.defaultCounty.toUpperCase()
                   : ''
-                return itemCounty === configCounty
+                return itemCounty.toUpperCase() === configCounty.toUpperCase()
               })
               .sort((x, y) => {
                 const schoolA = x.name.toUpperCase()
