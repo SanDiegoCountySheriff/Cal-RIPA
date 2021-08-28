@@ -115,6 +115,7 @@
                 :length="getPaginationLength"
                 @next="handleNextPage"
                 @input="handleJumpToPage"
+                :total-visible="20"
                 @previous="handlePreviousPage"
               ></v-pagination>
               <v-combobox
@@ -158,7 +159,7 @@ export default {
       format,
       currentSubmissionLoading: false,
       currentPage: 1,
-      itemsPerPageOptions: [10, 25, 50, 100, 250],
+      itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
       itemsPerPage: 10,
       search: '',
       statuses: SUBMISSION_STATUSES,
