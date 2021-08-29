@@ -256,6 +256,7 @@
     </v-card>
 
     <ripa-json-viewer-dialog
+      :stop="stop"
       :full-stop="fullStop"
       :api-stop="getApiStop"
       :show-dialog="showDialog"

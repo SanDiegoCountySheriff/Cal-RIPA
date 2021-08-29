@@ -8,6 +8,7 @@
       <v-card-text>
         <v-tabs v-model="tab">
           <v-tab>API Stop</v-tab>
+          <v-tab>RIPA Full Stop</v-tab>
           <v-tab>RIPA Stop</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -16,6 +17,9 @@
           </v-tab-item>
           <v-tab-item>
             <ripa-json-viewer :data="fullStop"></ripa-json-viewer>
+          </v-tab-item>
+          <v-tab-item>
+            <ripa-json-viewer :data="stop"></ripa-json-viewer>
           </v-tab-item>
         </v-tabs-items>
       </v-card-text>
@@ -76,6 +80,10 @@ export default {
   },
 
   props: {
+    stop: {
+      type: Object,
+      default: () => {},
+    },
     fullStop: {
       type: Object,
       default: () => {},

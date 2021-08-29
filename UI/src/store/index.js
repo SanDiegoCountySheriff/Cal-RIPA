@@ -1069,22 +1069,30 @@ export default new Vuex.Store({
     },
 
     getFormTemplates({ commit, state }) {
-      return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetTemplates`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
-          },
+      const items = localStorage.getItem('ripa_templates')
+      if (items !== null) {
+        return new Promise(resolve => {
+          commit('updateFormTemplates', JSON.parse(items))
+          resolve()
         })
-        .then(response => {
-          const data = response.data
-          commit('updateFormTemplates', data)
-          localStorage.setItem('ripa_templates', JSON.stringify(data))
-        })
-        .catch(error => {
-          console.log('There was an error retrieving templates.', error)
-          commit('updateFormTemplates', [])
-        })
+      } else {
+        return axios
+          .get(`${state.apiConfig.apiBaseUrl}domain/GetTemplates`, {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          })
+          .then(response => {
+            const data = response.data
+            commit('updateFormTemplates', data)
+            localStorage.setItem('ripa_templates', JSON.stringify(data))
+          })
+          .catch(error => {
+            console.log('There was an error retrieving templates.', error)
+            commit('updateFormTemplates', [])
+          })
+      }
     },
 
     getAdminUsers({ commit, state }) {
