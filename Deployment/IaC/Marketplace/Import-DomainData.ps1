@@ -77,7 +77,7 @@ function Get-StatuteEntity {
     param (
         $row
     )
-
+    
     $entity =  New-Object -TypeName Microsoft.Azure.Cosmos.Table.DynamicTableEntity;
     $entity.PartitionKey = "CA";
     $entity.RowKey = $row.'Offense Code';
@@ -85,11 +85,11 @@ function Get-StatuteEntity {
     $entity.Properties.Add("OffenseCode",$row.'Offense Code');
     $entity.Properties.Add("OffenseTxnTypeCD",$row.'Offense Txn Type CD');
     $entity.Properties.Add("OffenseStatute",$row.'Offense Statute');
+    $entity.Properties.Add("OffenseTypeOfStatuteCD",$row.'Offense Type of Statute CD');
     $entity.Properties.Add("StatuteLiteral",$row.'Statute Literal 25');
     $entity.Properties.Add("OffenseTypeOfCharge",$row.'Offense Type of Charge');
     $entity.Properties.Add("ALPSCognizantCD",$row.'ALPS Cognizant CD');
     
-
     if (![string]::IsNullOrWhiteSpace($row.'Offense Literal Identifier CD')) {
         $entity.Properties.Add("OffenseLiteralIdentifierCD",$row.'Offense Literal Identifier CD');
     }
