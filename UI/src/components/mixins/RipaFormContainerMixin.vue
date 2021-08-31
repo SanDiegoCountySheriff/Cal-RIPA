@@ -414,7 +414,7 @@ export default {
       const templates = this.getCustomTemplates()
 
       const [template] = templates.filter(tplt => {
-        return tplt.id === value
+        return tplt.displayName === value
       })
 
       // assign defaultStop to this.stop
