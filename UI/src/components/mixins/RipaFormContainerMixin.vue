@@ -1,5 +1,6 @@
 <script>
 import {
+  defaultLocation,
   defaultStop,
   fullStopToApiStop,
   stopReasonGivenTemplate,
@@ -409,41 +410,29 @@ export default {
     handleOpenTemplate(value) {
       this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
+
       const templates = this.getCustomTemplates()
 
-      // Start with default template
-      this.stop = defaultStop()
-
-      const template = templates.filter(tplt => {
+      const [template] = templates.filter(tplt => {
         return tplt.id === value
       })
 
-      if (template && template.length > 0) {
-        // TODO: rather than replacing stop, the following code should only update the properties specific to the template
-        // TODO: see motorStop and probationStop in the stop.js file for examples of what should be included
-        // TODO: below is an example of the motorStop that should be set in the template database
-        // this.stop = {
-        //   ...defaultStop(),
-        //   actionsTaken: {
-        //     anyActionsTaken: true,
-        //   },
-        //   template: 'motor',
-        //   location: defaultLocation(), // NOTE: THIS WILL NEED TO BE SET IF NOT BASIC STOP
-        //   stopReason: stopReasonGivenTemplate('motor'),
-        //   stopResult: stopResultGivenTemplate('motor'),
-        //   agencyQuestions: mappedAgencyQuestions(),
-        // }
-        // TODO: end result should look like the following.
-        // TODO: this adds the defaultStop, template, and updates location if not 'basic' template
+      // assign defaultStop to this.stop
+      this.stop = {
+        ...defaultStop(),
+      }
 
-        if (template.name !== 'basic') {
-          // this.stop.location = defaultLocation()
-          this.stop = {
-            ...defaultStop(),
-            ...template,
-          }
+      // reassign this.stop with defaultStop plus template details
+      if (template) {
+        this.stop = {
+          ...defaultStop(),
+          ...template.options,
+          template: template.displayName,
         }
-        // this.stop = template[0].stop
+
+        if (template.loadLastLocation) {
+          this.stop.location = defaultLocation()
+        }
       }
 
       this.updateFullStop()

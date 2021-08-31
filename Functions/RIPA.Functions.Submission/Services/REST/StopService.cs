@@ -40,7 +40,7 @@ namespace RIPA.Functions.Submission.Services.REST
             submissions.Add(submission);
 
             stop.ListSubmission = submissions.ToArray();
-            
+
             return stop;
         }
 
@@ -109,7 +109,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return dojStop;
         }
 
-        public static string CastToDojLocation(RIPA.Functions.Common.Models.Location location)
+        public string CastToDojLocation(RIPA.Functions.Common.Models.Location location)
         {
             string dojLocation = location.Intersection;
             if (location.BlockNumber != "")
@@ -123,7 +123,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return dojLocation;
         }
 
-        public static Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
+        public  Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
         {
             var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
@@ -163,7 +163,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
-        public static Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
+        public  Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
         {
             var stopReasonKey = personStopped.ReasonForStop?.Key;
             Primaryreason primaryReason = new Primaryreason
@@ -194,7 +194,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return primaryReason;
         }
 
-        public static Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
+        public  Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
         {
             var listActionsTaken = new List<Acttak>();
             foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
@@ -213,7 +213,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listacttak { ActTak = listActionsTaken.ToArray() };
         }
 
-        public static Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
+        public  Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
         {
             var listResults = new List<Result>();
             foreach (ResultOfStop ros in listResultOfStop)
@@ -228,7 +228,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listresult { Result = listResults.ToArray() };
         }
 
-        public static string CastToDojPercievedGender(string percievedGender)
+        public  string CastToDojPercievedGender(string percievedGender)
         {
             return percievedGender switch
             {
@@ -240,10 +240,11 @@ namespace RIPA.Functions.Submission.Services.REST
             };
         }
 
-        public static string CastToDojTXType(Stop stop)
+        public  string CastToDojTXType(Stop stop)
         {
-            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0) return "I";
-            if (stop.ListSubmission.Any(x => x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code)) || x.ListSubmissionError == null || x.ListSubmissionError.Length == 0))
+            if (stop.ListSubmission == null || stop.ListSubmission.Length == 0)
+                return "I"; // no submissions 
+            if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
                 return "U"; // has successful submission(s) to the doj, submission(s) that were not Fatal Errors
             return "I"; // no successful submissions to doj
         }

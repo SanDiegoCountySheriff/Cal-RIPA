@@ -27,18 +27,13 @@ namespace RIPA.Functions.Submission
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IStopService>(InitializeStopService());
+            builder.Services.AddTransient<IStopService, StopService>();
             builder.Services.AddSingleton<ISftpService>(InitializeSftpService());
             builder.Services.AddSingleton<ISubmissionCosmosDbService>(InitializeSubmissionCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IStopCosmosDbService>(InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<ISubmissionServiceBusService>(InitializeSubmissionServiceBusService());
             builder.Services.AddSingleton<IResultServiceBusService>(InitializeResultServiceBusService());
-        }
-
-        private static StopService InitializeStopService()
-        {
-            return new StopService();
         }
 
         private static SftpService InitializeSftpService()

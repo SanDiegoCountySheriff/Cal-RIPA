@@ -61,7 +61,7 @@ const emptyLocation = () => {
   }
 }
 
-const defaultLocation = () => {
+export const defaultLocation = () => {
   const lastLocation = getLastLocation()
   if (lastLocation) {
     return lastLocation
@@ -99,22 +99,8 @@ export const motorStop = () => {
     actionsTaken: {
       anyActionsTaken: true,
     },
-    id: 0,
-    internalId: nanoid(),
-    template: 'motor',
-    stepTrace: [],
-    location: defaultLocation(),
-    person: {
-      id: new Date().getTime(),
-      index: 1,
-    },
-    stopDate: {
-      date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'kk:mm'),
-    },
     stopReason: stopReasonGivenTemplate('motor'),
     stopResult: stopResultGivenTemplate('motor'),
-    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
@@ -125,22 +111,8 @@ export const probationStop = () => {
       actionsTakenDuringStop: [4, 18, 20],
       basisForSearch: [4],
     },
-    id: 0,
-    internalId: nanoid(),
-    template: 'probation',
-    stepTrace: [],
-    location: defaultLocation(),
-    person: {
-      id: new Date().getTime(),
-      index: 1,
-    },
-    stopDate: {
-      date: format(new Date(), 'yyyy-MM-dd'),
-      time: format(new Date(), 'kk:mm'),
-    },
     stopReason: stopReasonGivenTemplate('probation'),
     stopResult: stopResultGivenTemplate('probation'),
-    agencyQuestions: mappedAgencyQuestions(),
   }
 }
 
