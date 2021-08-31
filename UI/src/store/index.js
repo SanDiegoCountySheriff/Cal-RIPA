@@ -1084,7 +1084,15 @@ export default new Vuex.Store({
             },
           })
           .then(response => {
-            const data = response.data
+            const data = response.data.map(item => {
+              const displayName = item.displayName
+              const options = item.stop
+              return {
+                displayName,
+                ...options,
+              }
+            })
+
             commit('updateFormTemplates', data)
             localStorage.setItem('ripa_templates', JSON.stringify(data))
           })

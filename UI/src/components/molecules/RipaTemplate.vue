@@ -22,7 +22,7 @@
               <v-btn
                 outlined
                 color="primary"
-                @click="handleDynamicTemplates(template.id)"
+                @click="handleDynamicTemplates(template.displayName)"
               >
                 {{ template.displayName }}
               </v-btn>
@@ -69,9 +69,9 @@ export default {
   name: 'ripa-template',
 
   methods: {
-    handleDynamicTemplates(item) {
-      if (this.onOpenTemplate(item)) {
-        this.onOpenTemplate(item)
+    handleDynamicTemplates(name) {
+      if (this.onOpenTemplate) {
+        this.onOpenTemplate(name)
       }
     },
 
