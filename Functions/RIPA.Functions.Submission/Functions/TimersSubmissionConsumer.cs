@@ -45,7 +45,7 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("TimersSubmissionConsumer")]
         public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            log.LogInformation($"TimersSubmissionConsumer function executed at: {DateTime.Now}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
             foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
@@ -142,6 +142,8 @@ namespace RIPA.Functions.Submission.Functions
                 }
              
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
+
+                log.LogInformation($"Finished processing STOP : {stop.Id}");
             }
         }
 

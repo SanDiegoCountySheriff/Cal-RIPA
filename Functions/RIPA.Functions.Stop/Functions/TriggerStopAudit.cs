@@ -31,7 +31,7 @@ namespace RIPA.Functions.Stop.Functions
                     Common.Models.Stop stop = JsonConvert.DeserializeObject<Common.Models.Stop>(document.ToString());
                     stop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
                     await _stopAuditCosmosDbService.UpdateStopAuditAsync(stop.Id, stop);
-                    log.LogInformation($"archived stop id: {document.Id}");
+                    log.LogInformation($"Archived stop id: {document.Id}");
                 }
             }
         }
