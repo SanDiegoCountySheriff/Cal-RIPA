@@ -45,7 +45,10 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("TimersSubmissionConsumer")]
         public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            Guid run = Guid.NewGuid();
+            DateTime start = DateTime.Now;
+
+            log.LogInformation($"TimersSubmissionConsumer function executed at: {start} : {run.ToString()}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
             foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
@@ -142,7 +145,11 @@ namespace RIPA.Functions.Submission.Functions
                 }
              
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
+
+                log.LogInformation($"Finished processing STOP : {stop.Id}");
             }
+
+            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(start).TotalMilliseconds} : {run.ToString()}");
         }
 
         public BlobContainerClient GetBlobContainerClient()
