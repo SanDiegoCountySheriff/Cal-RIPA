@@ -302,7 +302,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stop.Id}");
+                log.LogError($"Exception: {ex} --> occurred during update stop status stop id {stop.Id}");
                 return false;
             }
         }
