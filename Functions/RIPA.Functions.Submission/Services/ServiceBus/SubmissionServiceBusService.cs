@@ -32,7 +32,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
 
         public async Task<IReadOnlyList<ServiceBusReceivedMessage>> ReceiveMessagesAsync(ServiceBusReceiver serviceBusReceiver)
         {
-            return await serviceBusReceiver.ReceiveMessagesAsync(batchMessageCountLimit);
+            return await serviceBusReceiver.ReceiveMessagesAsync(batchMessageCountLimit, new TimeSpan(0, 0, 5));
         }
 
         public async Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessages)
