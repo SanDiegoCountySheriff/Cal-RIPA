@@ -54,6 +54,8 @@ namespace RIPA.Functions.Submission.Functions
             foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
             {
                 DateTime stopStart = DateTime.Now;
+                
+                await serviceBusReceiver.RenewMessageLockAsync(m);
 
                 SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
 
@@ -145,7 +147,7 @@ namespace RIPA.Functions.Submission.Functions
 
                     continue;
                 }
-             
+
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
 
                 log.LogInformation($"Finished processing STOP : {stop.Id} : {runId} : {DateTime.Now.Subtract( stopStart).TotalMilliseconds}");
