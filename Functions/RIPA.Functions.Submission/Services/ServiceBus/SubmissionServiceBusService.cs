@@ -13,7 +13,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
     public class SubmissionServiceBusService : ISubmissionServiceBusService
     {
         private readonly ServiceBusClient _serviceBusClient;
-        private const int batchMessageCountLimit = 100;
+        private const int batchMessageCountLimit = 250;
         private readonly ILogger _log;
 
         ServiceBusClient ISubmissionServiceBusService.SubmissionServiceBusClient { get { return _serviceBusClient; } }
