@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
@@ -45,16 +46,23 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("TimersSubmissionConsumer")]
         public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
+            Stopwatch runStopwatch = new Stopwatch();
+            runStopwatch.Start();
+
             string runId = Guid.NewGuid().ToString();
-            DateTime runStart = DateTime.Now;
             
             log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
-            foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
+            var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver);
+
+            log.LogInformation($"Received message count: {messages.Count} : {runId}");
+
+            foreach (var m in messages)
             {
-                DateTime stopStart = DateTime.Now;
-                
+                Stopwatch stopStopwatch = new Stopwatch();
+                stopStopwatch.Start();
+
                 await serviceBusReceiver.RenewMessageLockAsync(m);
 
                 SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
@@ -150,10 +158,12 @@ namespace RIPA.Functions.Submission.Functions
 
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
 
-                log.LogInformation($"Finished processing STOP : {stop.Id} : {runId} : {DateTime.Now.Subtract( stopStart).TotalMilliseconds}");
+                stopStopwatch.Stop();
+                log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
             }
 
-            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(runStart).TotalMilliseconds} : {runId}");
+            runStopwatch.Stop();
+            log.LogInformation($"TimersSubmissionConsumer finished: {runStopwatch.ElapsedMilliseconds} : {runId}");
         }
 
         public BlobContainerClient GetBlobContainerClient()
