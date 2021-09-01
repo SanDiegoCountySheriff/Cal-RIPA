@@ -1,6 +1,15 @@
+# Usage
+# 
+# Azure-Resource-Providers-Registration tenantId  subscriptionId
+# 
+# Example:
+# Azure-Resource-Providers-Registration 00000000-0000-0000-0000-000000000000 00000000-0000-0000-0000-000000000000
+
 az cloud set -n AzureUSGovernment
 az login --tenant %1
 az account set -s %2
+
+az role assignment create --role Contributor --assignee 5ff48213-da14-4ac7-85fb-a21bb91d8eb3 --subscription %2
 
 az provider register --namespace Microsoft.ADHybridHealthService --accept-terms 
 az provider register --namespace Microsoft.Advisor --accept-terms 
