@@ -46,7 +46,7 @@ namespace RIPA.Functions.Submission.Functions
         public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
             string runId = Guid.NewGuid().ToString();
-            DateTime start = DateTime.Now;
+            DateTime runStart = DateTime.Now;
             
             log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
@@ -65,11 +65,11 @@ namespace RIPA.Functions.Submission.Functions
                 }
                 
                 //Get Stop
-                Stop stop = await GetStop(log, submissionMessage.StopId);
+                Stop stop = await GetStop(log, submissionMessage.StopId, runId);
 
                 if (stop == null)
                 {
-                    log.LogWarning($"Failed to find stop: {submissionMessage.StopId}");
+                    log.LogWarning($"Failed to find stop: {submissionMessage.StopId} : {runId}");
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
                     continue;
@@ -78,8 +78,8 @@ namespace RIPA.Functions.Submission.Functions
                 DateTime dateSubmitted = DateTime.UtcNow;
 
                 //Get File Name
-                string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id);
-                log.LogInformation($"Using filename: {fileName}");
+                string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id, runId);
+                log.LogInformation($"Using filename: {fileName} : {runId}");
                 if (fileName == null)
                 {
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
@@ -88,12 +88,12 @@ namespace RIPA.Functions.Submission.Functions
                 }
 
                 //Get Doj Stop
-                DojStop dojStop = GetDojStop(log, stop);
+                DojStop dojStop = GetDojStop(log, stop, runId);
 
                 if (dojStop == null)
                 {
                     //if the cast error fails report, retry the message
-                    if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId))
+                    if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId, runId))
                     {
                         await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
@@ -108,39 +108,39 @@ namespace RIPA.Functions.Submission.Functions
                 }
 
                 //Get File Bytes
-                byte[] bytes = GetFileBytes(log, dojStop);
+                byte[] bytes = GetFileBytes(log, dojStop, runId);
 
                 if (bytes == null)
                 {
-                    log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID}");
+                    log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID} : {runId}");
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
                     continue;
                 }
 
                 //Upload Blob
-                if (!await UploadBlob(log, bytes, fileName, stop.Id))
+                if (!await UploadBlob(log, bytes, fileName, stop.Id, runId))
                 {
-                    log.LogWarning($"Failed to upload blob: {stop.Id}");
+                    log.LogWarning($"Failed to upload blob: {stop.Id} : {runId}");
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
                     continue;
                 }
 
-                if (!UploadSftpFile(log, bytes, fileName, stop.Id))
+                if (!UploadSftpFile(log, bytes, fileName, stop.Id, runId))
                 {
-                    log.LogWarning($"Failed to upload to FTP: {stop.Id}");
-                    await RemoveBlob(log, fileName, stop.Id); //delete the blob to clean up the failed run
+                    log.LogWarning($"Failed to upload to FTP: {stop.Id} : {runId}");
+                    await RemoveBlob(log, fileName, stop.Id, runId); //delete the blob to clean up the failed run
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
                     continue;
 
                 }
 
-                if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName))
+                if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
                 {
-                    log.LogWarning($"Failed to handle doj submit success: {stop.Id}");
-                    RemoveSftpFile(log, fileName, stop.Id); //remove the file from the SFTP server so it doesnt get duplicated. 
+                    log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
+                    RemoveSftpFile(log, fileName, stop.Id, runId); //remove the file from the SFTP server so it doesnt get duplicated. 
                     await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
 
                     continue;
@@ -151,7 +151,7 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogInformation($"Finished processing STOP : {stop.Id} : {runId} : {DateTime.Now.Subtract( stopStart).TotalMilliseconds}");
             }
 
-            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(start).TotalMilliseconds} : {runId}");
+            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(runStart).TotalMilliseconds} : {runId}");
         }
 
         public BlobContainerClient GetBlobContainerClient()
@@ -175,21 +175,21 @@ namespace RIPA.Functions.Submission.Functions
             }
         }
 
-        private async Task<Stop> GetStop(ILogger log, string id)
+        private async Task<Stop> GetStop(ILogger log, string id, string runId)
         {
             try
             {
-                log.LogInformation($"GetStop: {id}");
+                log.LogInformation($"GetStop: {id} : {runId}");
                 return await _stopCosmosDbService.GetStopAsync(id);
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during GetStop with id {id}");
+                log.LogError($"Exception: {ex} --> occurred during GetStop with id {id} : {runId}");
                 return null;
             }
         }
 
-        private static string GetFileName(ILogger log, Guid submissionId, DateTime date, string ori, string stopId)
+        private static string GetFileName(ILogger log, Guid submissionId, DateTime date, string ori, string stopId, string runId)
         {
             try
             {
@@ -197,30 +197,30 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during GetFileName with id {stopId}");
+                log.LogError($"Exception: {ex} --> occurred during GetFileName with id {stopId} : {runId}");
                 return null;
             }
         }
 
-        private DojStop GetDojStop(ILogger log, Stop stop)
+        private DojStop GetDojStop(ILogger log, Stop stop, string runId)
         {
             try
             {
-                log.LogInformation($"Casting Stop to DoJStop: {stop.Id}");
+                log.LogInformation($"Casting Stop to DoJStop: {stop.Id} : {runId}");
                 return _stopService.CastToDojStop(stop);
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during GetDojStop with id {stop.Id}");
+                log.LogError($"Exception: {ex} --> occurred during GetDojStop with id {stop.Id} : {runId}");
                 return null;
             }
         }
 
-        private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId)
+        private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
         {
             try
             {
-                log.LogWarning($"Handling DoJ Cast Error: {stop.Id}");
+                log.LogWarning($"Handling DoJ Cast Error: {stop.Id} : {runId}");
                 SubmissionError submissionError = new SubmissionError()
                 {
                     Code = "FTS",
@@ -240,90 +240,92 @@ namespace RIPA.Functions.Submission.Functions
             }
         }
 
-        private static byte[] GetFileBytes(ILogger log, DojStop dojStop)
+        private static byte[] GetFileBytes(ILogger log, DojStop dojStop, string runId)
         {
             try
             {
-                log.LogInformation($"Getting file contents: {dojStop.LEARecordID}");
+                log.LogInformation($"Getting file contents: {dojStop.LEARecordID} : {runId}");
                 var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
                 return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dojStop, settings));
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during GetFileBytes with stop id {dojStop.LEARecordID}");
+                log.LogError($"Exception: {ex} --> occurred during GetFileBytes with stop id {dojStop.LEARecordID} : {runId}");
                 return null;
             }
         }
 
-        private async Task<bool> UploadBlob(ILogger log, byte[] bytes, string fileName, string stopId)
+        private async Task<bool> UploadBlob(ILogger log, byte[] bytes, string fileName, string stopId, string runId)
         {
             try
             {
-                log.LogInformation($"Uploading to blob: {stopId}");
+                log.LogInformation($"Uploading to blob: {stopId} : {runId}");
                 await blobUtilities.UploadBlobJson(bytes, fileName, _blobContainerClient); //Upload json as Blob to Azure Storage Container 
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during UploadBlob with stop id {stopId}");
+                log.LogError($"Exception: {ex} --> occurred during UploadBlob with stop id {stopId} : {runId}");
                 return false;
             }
         }
 
-        private async Task<bool> RemoveBlob(ILogger log, string fileName, string stopId)
+        private async Task<bool> RemoveBlob(ILogger log, string fileName, string stopId, string runId)
         {
             try
             {
+                log.LogInformation($"Removing blob: {stopId} : {runId}");
                 await blobUtilities.DeleteBlobJson(fileName, _blobContainerClient);
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during DeleteBlob with stop id {stopId}");
+                log.LogError($"Exception: {ex} --> occurred during DeleteBlob with stop id {stopId} : {runId}");
                 return false;
             }
         }
 
-        private bool UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId)
+        private bool UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId)
         {
             try
             {
-                log.LogInformation($"Uploading to FTP: {stopId}");
+                log.LogInformation($"Uploading to FTP: {stopId} : {runId}");
                 _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId}");
+                log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId} : {runId}");
                 return false;
             }
         }
 
-        private bool RemoveSftpFile(ILogger log, string fileName, string stopId)
+        private bool RemoveSftpFile(ILogger log, string fileName, string stopId, string runId)
         {
             try
             {
+                log.LogInformation($"Remving from FTP: {stopId} : {runId}");
                 _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during DeleteSftpFile with stop id {stopId}");
+                log.LogError($"Exception: {ex} --> occurred during DeleteSftpFile with stop id {stopId} : {runId}");
                 return false;
             }
         }
 
-        private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName)
+        private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
         {
             try
             {
-                log.LogInformation($"Handling DoJ submission success: {stop.Id}");
+                log.LogInformation($"Handling DoJ submission success: {stop.Id} : {runId}");
                 await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, date, submissionId, fileName));
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogError($"Exception: {ex} --> occurred during update stop status stop id {stop.Id}");
+                log.LogError($"Exception: {ex} --> occurred during update stop status stop id {stop.Id} : {runId}");
                 return false;
             }
         }
