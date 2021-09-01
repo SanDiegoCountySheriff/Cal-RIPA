@@ -53,6 +53,8 @@ namespace RIPA.Functions.Submission.Functions
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
             foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
             {
+                await serviceBusReceiver.RenewMessageLockAsync(m);
+
                 SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
 
                 if (submissionMessage == null)
@@ -143,7 +145,7 @@ namespace RIPA.Functions.Submission.Functions
 
                     continue;
                 }
-             
+
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
 
                 log.LogInformation($"Finished processing STOP : {stop.Id}");
