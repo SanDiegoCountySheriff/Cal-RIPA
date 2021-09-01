@@ -1,6 +1,7 @@
 # Usage
 # 
 # Azure-Resource-Providers-Registration tenantId  subscriptionId
+# 
 # Example:
 # Azure-Resource-Providers-Registration 00000000-0000-0000-0000-000000000000 00000000-0000-0000-0000-000000000000
 
