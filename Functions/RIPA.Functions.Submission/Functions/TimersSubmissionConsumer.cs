@@ -45,14 +45,16 @@ namespace RIPA.Functions.Submission.Functions
         [FunctionName("TimersSubmissionConsumer")]
         public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
         {
-            Guid run = Guid.NewGuid();
+            string runId = Guid.NewGuid().ToString();
             DateTime start = DateTime.Now;
-
-            log.LogInformation($"TimersSubmissionConsumer function executed at: {start} : {run.ToString()}");
+            
+            log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
             foreach (var m in await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver))
             {
+                DateTime stopStart = DateTime.Now;
+
                 SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
 
                 if (submissionMessage == null)
@@ -61,7 +63,7 @@ namespace RIPA.Functions.Submission.Functions
 
                     continue;
                 }
-
+                
                 //Get Stop
                 Stop stop = await GetStop(log, submissionMessage.StopId);
 
@@ -146,10 +148,10 @@ namespace RIPA.Functions.Submission.Functions
              
                 await serviceBusReceiver.CompleteMessageAsync(m); // message complete
 
-                log.LogInformation($"Finished processing STOP : {stop.Id}");
+                log.LogInformation($"Finished processing STOP : {stop.Id} : {runId} : {DateTime.Now.Subtract( stopStart).TotalMilliseconds}");
             }
 
-            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(start).TotalMilliseconds} : {run.ToString()}");
+            log.LogInformation($"TimersSubmissionConsumer finished: {DateTime.Now.Subtract(start).TotalMilliseconds} : {runId}");
         }
 
         public BlobContainerClient GetBlobContainerClient()
