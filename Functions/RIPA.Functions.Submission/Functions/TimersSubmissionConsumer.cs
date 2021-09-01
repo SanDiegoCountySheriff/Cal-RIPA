@@ -54,7 +54,7 @@ namespace RIPA.Functions.Submission.Functions
             log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
-            var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver);
+            var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver); 
 
             log.LogInformation($"Received message count: {messages.Count} : {runId}");
 
