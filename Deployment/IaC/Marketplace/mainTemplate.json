@@ -559,7 +559,7 @@
         "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
       ],
       "properties": {
-        "lockDuration": "PT30S",
+        "lockDuration": "PT5M",
         "maxSizeInMegabytes": 5120,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
