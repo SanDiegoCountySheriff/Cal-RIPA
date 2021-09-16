@@ -16,7 +16,6 @@
       ></v-text-field>
     </template>
 
-    <!-- test comment -->
     <template v-if="!preventPaste">
       <v-text-field
         ref="ripaTextInput"
