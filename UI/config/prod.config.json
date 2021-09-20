@@ -1,31 +1,19 @@
 {
   "Authentication": {
-    "ClientId": "3f47a395-5d13-4781-aa63-dc5886f05bb2",
-    "AuthorityUrl": "https://login.microsoftonline.com/",
-    "TenantId": "a44e5271-a297-4daf-a3a9-f90a3146f3f5",
-    "PrimaryDomain": "californiasheriffs.onmicrosoft.com"
+      "ClientId": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6",
+      "AuthorityUrl": "https://login.microsoftonline.com//7832cdfd-b337-4d07-af7e-9de082e16b31",
+      "TenantId": "7832cdfd-b337-4d07-af7e-9de082e16b31",
+      "PrimaryDomain": "sdsheriff.gov"
   },
   "Configuration": {
-    "Environment": "PROD",
-    "ServicesBaseUrl": "https://sdsd-ripa-p-apim.azure-api.us/",
-    "Subscription": "################################",
-    "DefaultCounty": "San Diego",
-    "DisplayBeatsInput": "true"
-  },
-  "AgencyQuestions": [
-    {
-      "Name": "FavoriteColor",
-      "Type": "Text",
-      "Prompt": "What is your favorite color?",
-      "MaxLength": 250,
-      "Required": true
-    },
-    {
-      "Name": "FavoriteCar",
-      "Type": "Text",
-      "Prompt": "What is your favorite car?",
-      "MaxLength": 250,
-      "Required": true
-    }
-  ]
+      "Environment": "PROD",
+      "ServicesBaseUrl": "https://sdsd-ripa-prod-apim.azure-api.us/",
+      "Subscription": "96675deacb8c49d1b0bdc2f7e8827cef",
+      "DefaultCounty": "San Diego",
+      "DisplayBeatsInput": "true",
+      "DisplayDebugger": "true"
+  }
 }
+
+
+
