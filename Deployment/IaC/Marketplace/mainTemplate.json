@@ -1511,6 +1511,24 @@
       }
     },
     {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2016-10-01",
+      "name": "[concat(variables('vaults_ripa_kv_name'), '/', parameters('vaults_kv_secrets_key10'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+      ],
+      "properties": {
+        "attributes": {
+          "enabled": true
+        },
+        "value": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').connectionStrings[0].connectionString]"
+        // "value": "[parameters('doj_sftp_password')]"
+
+      }
+    },
+    {
       "type": "Microsoft.Insights/components",
       "apiVersion": "2020-02-02-preview",
       "location": "[resourceGroup().location]",
