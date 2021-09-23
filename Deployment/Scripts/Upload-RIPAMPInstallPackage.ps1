@@ -1,4 +1,4 @@
-﻿Import-Module .\Upload-RIPAMPArtifact -Force
+Import-Module .\Upload-RIPAMPArtifact.psm1 -Force
 
 param (
         $BaseFolder,
@@ -38,12 +38,12 @@ UploadAndCreateKey -FileName submission.zip -WorkingFolder "$BaseFolder/_RIPA-Su
 UploadAndCreateKey -FileName textanalytics.zip -WorkingFolder "$BaseFolder/_RIPA-TextAnalytics/drop" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 UploadAndCreateKey -FileName userprofile.zip -WorkingFolder "$BaseFolder/_RIPA-UserProfile/drop" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 
-
 Rename-Item -Path "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/mp-config.json" -NewName config.json -Force
 UploadAndCreateKey -FileName config.json -WorkingFolder "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 
 $UiPackagePath = "$BaseFolder/_RIPA-UI/drop"
 Get-ChildItem -Path $UiPackagePath | Where-Object { $_.Name -match '^[0-9]*\.zip' } | Rename-Item -NewName ui.zip
 UploadAndCreateKey -FileName ui.zip -WorkingFolder $UiPackagePath -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
+
 
 Write-Host "Finished upload & SaS key processing"
