@@ -1,4 +1,4 @@
-﻿Import-Module .\Upload-RIPAMPArtifact -Force
+﻿Import-Module .\Upload-RIPAMPArtifact.psm1 -Force
 
 param (
         $BaseFolder,
