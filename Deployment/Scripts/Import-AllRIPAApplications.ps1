@@ -32,6 +32,7 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # $env:ENVIRONMENT_TYPE="PROD"
 # $env:ENABLE_BEATS="false"
 # $env:ENABLE_STOP_DEBUGGER="false"
+# $env:DEPLOY_WEB_CONFIG_JSON="false"
 
 $apiAppNames =  @('domain','stop','submission','textanalytics','userprofile')
 $webAppName = "$env:AGENCY_ABBREVIATION$env:APPLICATION_NAME" + "uisa"
@@ -72,6 +73,7 @@ Write-Host "STORAGE_ACCOUNT_NAME: $env:STORAGE_ACCOUNT_NAME"
 Write-Host "ENVIRONMENT_TYPE: $env:ENVIRONMENT_TYPE"
 Write-Host "ENABLE_BEATS: $env:ENABLE_BEATS"
 Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
+Write-Host "DEPLOY_WEB_CONFIG_JSON: $env:DEPLOY_WEB_CONFIG_JSON"
 
 foreach ($appName in $apiAppNames) {
 
@@ -117,24 +119,27 @@ Write-Host "Publishing UI package"
 Expand-Archive -Path "./ui.zip" -DestinationPath "./" -Force
 az storage blob upload-batch --timeout 300 -d '$web' --account-name $env:STORAGE_ACCOUNT_NAME -s './dist'
 
-Write-Host "Creating config.json"
-$configFilePath = "./config.json"
-$configJson = Get-Content -Path $configFilePath
-$configJson = $configJson.Replace("__ENVIRONMENT_TYPE__", $env:ENVIRONMENT_TYPE)
-$configJson = $configJson.Replace("__AUTH_SP_APP_ID__", $env:AUTH_SP_APP_ID)
-$configJson = $configJson.Replace("__AUTH_AUTHORITY__", $env:AUTH_AUTHORITY)
-$configJson = $configJson.Replace("__AUTH_TENANT_ID__", $env:AUTH_TENANT_ID)
-$configJson = $configJson.Replace("__AUTH_PRIMARY_DOMAIN__", $env:AUTH_PRIMARY_DOMAIN)
-$configJson = $configJson.Replace("__APIM_INSTANCE_URL__", $env:APIM_INSTANCE_URL)
-$configJson = $configJson.Replace("__APIM_MASTER_SUBSCRIPTION_KEY__", $apimPrimaryKey)
-$configJson = $configJson.Replace("__DEFAULT_COUNTY__", $env:DEFAULT_COUNTY)
-$configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
-$configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
+if($env:DEPLOY_WEB_CONFIG_JSON)
+{
+    Write-Host "Creating config.json"
+    $configFilePath = "./config.json"
+    $configJson = Get-Content -Path $configFilePath
+    $configJson = $configJson.Replace("__ENVIRONMENT_TYPE__", $env:ENVIRONMENT_TYPE)
+    $configJson = $configJson.Replace("__AUTH_SP_APP_ID__", $env:AUTH_SP_APP_ID)
+    $configJson = $configJson.Replace("__AUTH_AUTHORITY__", $env:AUTH_AUTHORITY)
+    $configJson = $configJson.Replace("__AUTH_TENANT_ID__", $env:AUTH_TENANT_ID)
+    $configJson = $configJson.Replace("__AUTH_PRIMARY_DOMAIN__", $env:AUTH_PRIMARY_DOMAIN)
+    $configJson = $configJson.Replace("__APIM_INSTANCE_URL__", $env:APIM_INSTANCE_URL)
+    $configJson = $configJson.Replace("__APIM_MASTER_SUBSCRIPTION_KEY__", $apimPrimaryKey)
+    $configJson = $configJson.Replace("__DEFAULT_COUNTY__", $env:DEFAULT_COUNTY)
+    $configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
+    $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
 
-Write-Host "Saving config.json"
-Set-Content -Path $configFilePath -Value $configJson -Force
+    Write-Host "Saving config.json"
+    Set-Content -Path $configFilePath -Value $configJson -Force
 
-Write-Host "Uploading config.json"
-az storage blob upload --timeout 300 --account-name $env:STORAGE_ACCOUNT_NAME -n "config.json" -c '$web' -f './config.json' 
+    Write-Host "Uploading config.json"
+    az storage blob upload --timeout 300 --account-name $env:STORAGE_ACCOUNT_NAME -n "config.json" -c '$web' -f './config.json' 
+}
 
 Write-Host "Finished deploying & importing applications"
