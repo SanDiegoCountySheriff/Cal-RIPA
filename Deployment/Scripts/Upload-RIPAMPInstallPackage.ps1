@@ -1,5 +1,3 @@
-Import-Module .\Upload-RIPAMPArtifact.psm1 -Force
-
 param (
         $BaseFolder,
         $CSSA_STORAGE_ACCOUNT_NAME,
@@ -14,8 +12,10 @@ param (
 Write-Host "Starting upload & SaS key processing"
 Write-Host "Using base directory:" $BaseFolder
 
-Set-Location $BaseFolder
 Get-ChildItem
+Import-Module .\Upload-RIPAMPArtifact.psm1 -Force
+
+Set-Location $BaseFolder
 
 Write-Host "Processing DNS/SSL/CDN configurations"
 UploadAndCreateKey -FileName new-ripa-cssa-sub-domain.sh -WorkingFolder "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/SSL" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
