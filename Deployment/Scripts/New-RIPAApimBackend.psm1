@@ -38,12 +38,13 @@
         {
             Write-Host "Creating new APIM host key for:" $FunctionName
 
+            Get-ChildItem -Filter "*New-FunctionHostKey.psm1" | Rename-Item -NewName "New-FunctionHostKey.psm1"
             Import-Module .\New-FunctionHostKey.psm1
             $newFunctionHostKey = New-FunctionHostKey -ResourceId $functionResourceId -KeyName "apim-$($ServiceName)"
         }
 
         Write-Host "Creating named value"
-        $newNamedValue = New-AzApiManagementNamedValue -Context $apimContext -NamedValueId $functionNvPairName -Name $functionNvPairName -Value $newFunctionHostKey -Secret -Tag @("key", "function", "auto")
+        New-AzApiManagementNamedValue -Context $apimContext -NamedValueId $functionNvPairName -Name $functionNvPairName -Value $newFunctionHostKey -Secret -Tag @("key", "function", "auto")
     }
 
     $credentials = New-AzApiManagementBackendCredential -AuthorizationHeaderParameter "x-functions-key" -Header @{"x-functions-key" = @("{{$($functionNvPairName)}}")} 

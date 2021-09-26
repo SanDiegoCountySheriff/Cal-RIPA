@@ -65,6 +65,7 @@ function Import-FunctionApi()
 
     if(!$backend)
     {
+        Get-ChildItem -Filter "*New-RIPAApimBackend.psm1" | Rename-Item -NewName "New-RIPAApimBackend.psm1"
         Import-Module .\New-RIPAApimBackend.psm1 -Force
         New-RIPAApimBackend -ResourceGroupName $ResourceGroupName -ServiceName $ServiceName -FunctionName $functionApp
     }
