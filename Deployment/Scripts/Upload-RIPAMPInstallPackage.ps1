@@ -1,4 +1,4 @@
-param (
+Param (
         $BaseFolder,
         $CSSA_STORAGE_ACCOUNT_NAME,
         $CSSA_STORAGE_ACCOUNT_KEY,
