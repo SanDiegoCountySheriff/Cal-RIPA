@@ -38,7 +38,7 @@ Upload-RIPAMPArtifact -FileName submission.zip -WorkingFolder "$BaseFolder/_RIPA
 Upload-RIPAMPArtifact -FileName textanalytics.zip -WorkingFolder "$BaseFolder/_RIPA-TextAnalytics/drop" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 Upload-RIPAMPArtifact -FileName userprofile.zip -WorkingFolder "$BaseFolder/_RIPA-UserProfile/drop" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 
-Rename-Item -Path "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/mp-config.json" -NewName config.json -Force
+Rename-Item -Path "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts/mp-config.json" -NewName "config.json" -Force
 Upload-RIPAMPArtifact -FileName config.json -WorkingFolder "$BaseFolder/_SanDiegoCountySheriff_Cal-RIPA/Deployment/Scripts" -StorageAccountName $CSSA_STORAGE_ACCOUNT_NAME -StorageAccountKey $CSSA_STORAGE_ACCOUNT_KEY -StorageAccountContainer $CSSA_MP_DEPLOYMENT_CONTAINER -KeyVaultName $CSSA_CERT_KEY_VAULT_NAME -ExpiryYears $CSSA_SAS_EXPIRY_YEARS -ExpiryMonths $CSSA_SAS_EXPIRY_MONTHS -ExpiryDays $CSSA_SAS_EXPIRY_DAYS
 
 $UiPackagePath = "$BaseFolder/_RIPA-UI/drop"

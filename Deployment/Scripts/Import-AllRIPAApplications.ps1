@@ -5,6 +5,7 @@ Write-Host "Importing Az"
 Import-Module Az -Force
 
 Write-Host "Importing Import-ApimApis.psm1"
+Get-ChildItem -Filter "*Import-ApimApis.psm1" | Rename-Item -NewName "Import-ApimApis.psm1"
 Import-Module .\Import-ApimApis.psm1 -Force
 
 apt-get update
