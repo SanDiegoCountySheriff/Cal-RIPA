@@ -1,4 +1,4 @@
-# Cal-RIPA
+# Cal-RIPA STOP Debugger
 
 ## STOP Data Debugger
 
@@ -11,14 +11,19 @@ Follow the [application configuration](./APP-CONFIG.md) instruction to edit the 
 
 ### What do I see?
 
-The STOP Data Debugger has 2 sections (tabs). The "RIPA STOP" tab shows the json data that is used internally to the UI. This json structure never leaves the UI as it is translated to the "API STOP" json object before being sent to the backend STOP API. The "API STOP" is as it sounds the contract between the user interface and the STOP Azure Function APIs.
-
-### RIPA STOP
-
-| ![RIPA STOP](./assets/RIPA-STOP-Data-Debugger-02.png) |
-|-
+The STOP Data Debugger has 3 sections (tabs). The "RIPA FULL STOP" tab shows the json data that is used internally to the UI. This json structure never leaves the UI as it is translated to the "API STOP" json object before being sent to the backend STOP API. The "API STOP" is as it sounds the contract between the user interface and the STOP Azure Function APIs. The "RIPA STOP" is the base template used to instantiate the RIPA FULL STOP object. This could be the "Basic STOP" that all RIPA applications have
 
 ### API STOP
 
-| ![API STOP](./assets/RIPA-STOP-Data-Debugger-03.png) |
+| ![API STOP](./assets/RIPA-STOP-Data-Debugger-02.png) |
+|-
+
+### RIPA FULL STOP
+
+| ![RIPA FULL STOP](./assets/RIPA-STOP-Data-Debugger-03.png) |
+|-
+
+### RIPA STOP
+
+| ![RIPA STOP](./assets/RIPA-STOP-Data-Debugger-04.png) |
 |-

@@ -1,6 +1,6 @@
-# Cal-RIPA
+# Cal-RIPA Azure Active Directory
 
-## Authentication & Authorization
+## Creating AAD Authentication & Authorization
 
 CSSA RIPA uses Azure Active Directory (AAD) OAuth w/OpenID Connect (OIDC) & Role Based Access Control (RBAC) for authentication and authorization. Each deployment of CSSA RIPA requires an authentication configuration in order to ensure users abillities & access. Click [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/auth-oidc) to learn more about OAuth & OIDC in Azure.
 
