@@ -1,4 +1,4 @@
-# Cal-RIPA
+# Cal-RIPA Beats
 
 ## STOP Beats
 

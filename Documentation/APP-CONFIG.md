@@ -1,4 +1,4 @@
-# RIPA Application Configuration File
+# Cal-RIPA Application Configuration File
 
 ## How to locate and edit the config.json file
 

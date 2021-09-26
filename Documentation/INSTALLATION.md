@@ -1,4 +1,4 @@
-# RIPA Installation Instructions
+# Cal-RIPA Installation
 
 ## How to install and configure your RIPA application instance
 
