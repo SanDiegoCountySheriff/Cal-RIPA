@@ -3507,9 +3507,9 @@
         ],
         "primaryScriptUri": "#{MP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
-        "timeout": "PT1H",
+        "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
-        "retentionInterval": "PT1H"
+        "retentionInterval": "PT4H"
       }
     },
     {
@@ -3565,9 +3565,9 @@
           "#{MP-OFFENSE-TABLE-CSV-SAS-URL}#",
           "#{MP-SCHOOL-TABLE-CSV-SAS-URL}#"
         ],
-        "timeout": "PT1H",
+        "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
-        "retentionInterval": "PT1H"
+        "retentionInterval": "PT4H"
       }
     },
     {
@@ -3622,10 +3622,10 @@
             "name": "APP_RESOURCE_GROUP_NAME",
             "value": "[resourceGroup().name]"
           },
-          {
-            "name": "APIM_INSTANCE_NAME",
-            "value": "[variables('service_ripa_apim_wus2_name')]"
-          },
+          // {
+          //   "name": "APIM_INSTANCE_NAME",
+          //   "value": "[variables('service_ripa_apim_wus2_name')]"
+          // },
           {
             "name": "AUTH_SP_APP_ID",
             "value": "[parameters('auth_app_id')]"
@@ -3642,10 +3642,10 @@
             "name": "AUTH_PRIMARY_DOMAIN",
             "value": "[parameters('auth_fqdn')]"
           },
-          {
-            "name": "APIM_INSTANCE_URL",
-            "value": "[reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.gatewayUrl]"
-          },
+          // {
+          //   "name": "APIM_INSTANCE_URL",
+          //   "value": "[reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.gatewayUrl]"
+          // },
           {
             "name": "AGENCY_ABBREVIATION",
             "value": "[parameters('agency_abbreviation')]"
@@ -3654,10 +3654,10 @@
             "name": "APPLICATION_NAME",
             "value": "[parameters('application')]"
           },
-          {
-            "name": "STORAGE_ACCOUNT_NAME",
-            "value": "[variables('storageAccounts_ripauisa_name')]"
-          },
+          // {
+          //   "name": "STORAGE_ACCOUNT_NAME",
+          //   "value": "[variables('storageAccounts_ripauisa_name')]"
+          // },
           {
             "name": "DEFAULT_COUNTY",
             "value": "[parameters('agency_county')]"
@@ -3688,9 +3688,9 @@
           "#{MP-USERPROFILE-ZIP-SAS-URL}#",
           "#{MP-UI-ZIP-SAS-URL}#"
         ],
-        "timeout": "PT1H",
+        "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
-        "retentionInterval": "PT1H"
+        "retentionInterval": "PT4H"
       }
     }
   ],

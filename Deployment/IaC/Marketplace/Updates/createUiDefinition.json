@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+	"handler": "Microsoft.Azure.CreateUIDef",
+	"version": "0.1.2-preview",
+	"parameters": {
+		"resourceTypes": [
+			"microsoft.resources/resourcegroups"
+		],
+		"config": {
+			"isWizard": false,
+			"basics": {
+				"description": "Information on this screen will define the naming used for the Azure resources created as well as the default domain name & URL if an existing private domain is not used. It is suggested that this application be deployed to US Gov Arizona region as require resources may not be available in other regions. The Agency Abbreviation and Application Name are combined to create a globally unique name & URL for this application instance.",
+				"resourceGroup": {
+					"constraints": {
+						"validations": []
+					},
+					"allowExisting": true
+				}
+			}
+		},
+		"basics": [],
+		"steps": [],
+		"outputs": {}
+	}
+}

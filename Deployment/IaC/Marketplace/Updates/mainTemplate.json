@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "functions": [
+  ],
+  "parameters": {},
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "cssa-app-update-runonce-deleteme-ifucme-dps",
+      "location": "[resourceGroup().location]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [],
+      "tags": {},
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "cssa-app-update-runonce-deleteme-ifucme-dps"
+        },
+        "storageAccountSettings": {
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
+        },
+        "azPowerShellVersion": "3.0",
+        "environmentVariables": [
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "APP_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
+            "name": "APP_RESOURCE_GROUP_NAME",
+            "value": "[resourceGroup().name]"
+          },
+          {
+            "name": "DEPLOY_WEB_CONFIG_JSON",
+            "value": "False"
+          }
+        ],
+        "primaryScriptUri": "#{MP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
+        "supportingScriptUris": [
+          "#{MP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{MP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{MP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{MP-CONFIG-JSON-SAS-URL}#",
+          "#{MP-DOMAIN-ZIP-SAS-URL}#",
+          "#{MP-STOP-ZIP-SAS-URL}#",
+          "#{MP-SUBMISSION-ZIP-SAS-URL}#",
+          "#{MP-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{MP-USERPROFILE-ZIP-SAS-URL}#",
+          "#{MP-UI-ZIP-SAS-URL}#"
+        ],
+        "timeout": "PT4H",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT4H"
+      }
+    }
+  ],
+  "outputs": {
+  }
+}

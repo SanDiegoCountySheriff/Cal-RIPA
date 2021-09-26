@@ -74,7 +74,7 @@ function Import-FunctionApi()
     Set-AzApiManagementPolicy -Context $ApimCntx -ApiId $ApiTag -Policy $backendPolicy 
 
 	# reset the protocol (import modifies this for some reason)
-	Write-Host "Updating protocol for $api.Name at $serviceUrl"
+	Write-Host "Updating protocol for $ApiTag at $serviceUrl"
 	Set-AzApiManagementApi -Context $ApimCntx -ApiId $ApiTag -Protocols @('https') -Name $ApiTag -ServiceUrl $serviceUrl
 
 	Write-Host "Finished $apiTag import"
