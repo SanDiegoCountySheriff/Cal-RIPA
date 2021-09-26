@@ -14,6 +14,7 @@ function Upload-RIPAMPArtifact
         $ExpiryDays
     )
 
+    Write-Host "**************************************************************************************"
     Write-Host "Processing file:" $FileName
     
     Set-Location $WorkingFolder
@@ -34,13 +35,13 @@ function Upload-RIPAMPArtifact
 
     Rename-Item -Path $FileName -NewName $LowerCaseFileName
 
-    Write-Host "Uploading API package"
+    Write-Host "Uploading API package:" $LowerCaseFileName
     az storage blob upload --timeout 300 --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName -f $LowerCaseFileName 
 
-    Write-Host "Requesting URL"
+    Write-Host "Requesting URL:" $LowerCaseFileName
     $url = (az storage blob url --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName).ToString()
 
-    Write-Host "Requesting SAS"
+    Write-Host "Requesting SAS:" $LowerCaseFileName
     $sas = (az storage blob generate-sas --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName --permissions r --expiry $expires)
 
     $itemSasUrl = "$($url)?$($sas)".Replace('"?"', '?')
@@ -53,6 +54,8 @@ function Upload-RIPAMPArtifact
     Write-Host "Created secret:" $secret
 
     Write-Host "Finished processing:" $FileName
+    Write-Host ""
+    Write-Host ""
 }
 
 Export-ModuleMember Upload-RIPAMPArtifact
