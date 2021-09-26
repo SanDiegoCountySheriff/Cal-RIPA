@@ -85,7 +85,7 @@ foreach ($functionName in $functionNames) {
     $WebAppConfig | Set-AzResource -ApiVersion $APIVersion -Force | Out-Null
 
     Write-Host "Deploying function:" $functionName.Name
-    $fileName = (Get-ChildItem -Path "./" -Filter "*$appName.zip").Name
+    $fileName = (Get-ChildItem -Filter "*$appName.zip").Name
     Write-Host "Deploying package:" $fileName
     az functionapp deployment source config-zip -g $env:APP_RESOURCE_GROUP_NAME --src "./$fileName" -n $functionName.Name
 
