@@ -3505,7 +3505,7 @@
             "value": "[parameters('certificate_secret_name')]"
           }
         ],
-        "primaryScriptUri": "#{MP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
+        "primaryScriptUri": "#{ZMP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
@@ -3558,12 +3558,12 @@
             "value": "[variables('storageAccounts_ripactsa_name')]"
           }
         ],
-        "primaryScriptUri": "#{MP-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
+        "primaryScriptUri": "#{ZMP-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{MP-BEAT-TABLE-CSV-SAS-URL}#",
-          "#{MP-CITY-TABLE-CSV-SAS-URL}#",
-          "#{MP-OFFENSE-TABLE-CSV-SAS-URL}#",
-          "#{MP-SCHOOL-TABLE-CSV-SAS-URL}#"
+          "#{ZMP-BEAT-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-CITY-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-OFFENSE-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-SCHOOL-TABLE-CSV-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
@@ -3675,18 +3675,18 @@
             "value": "[parameters('enable_stop_debugger')]"
           }
         ],
-        "primaryScriptUri": "#{MP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
+        "primaryScriptUri": "#{ZMP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{MP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
-          "#{MP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
-          "#{MP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
-          "#{MP-CONFIG-JSON-SAS-URL}#",
-          "#{MP-DOMAIN-ZIP-SAS-URL}#",
-          "#{MP-STOP-ZIP-SAS-URL}#",
-          "#{MP-SUBMISSION-ZIP-SAS-URL}#",
-          "#{MP-TEXTANALYTICS-ZIP-SAS-URL}#",
-          "#{MP-USERPROFILE-ZIP-SAS-URL}#",
-          "#{MP-UI-ZIP-SAS-URL}#"
+          "#{ZMP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{ZMP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{ZMP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{ZMP-CONFIG-JSON-SAS-URL}#",
+          "#{ZMP-DOMAIN-ZIP-SAS-URL}#",
+          "#{ZMP-STOP-ZIP-SAS-URL}#",
+          "#{ZMP-SUBMISSION-ZIP-SAS-URL}#",
+          "#{ZMP-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{ZMP-USERPROFILE-ZIP-SAS-URL}#",
+          "#{ZMP-UI-ZIP-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",

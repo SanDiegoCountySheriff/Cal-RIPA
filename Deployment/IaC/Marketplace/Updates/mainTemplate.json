@@ -50,18 +50,18 @@
             "value": "False"
           }
         ],
-        "primaryScriptUri": "#{MP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
+        "primaryScriptUri": "#{ZMP-__TEMPLATE_VERSION__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{MP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
-          "#{MP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
-          "#{MP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
-          "#{MP-CONFIG-JSON-SAS-URL}#",
-          "#{MP-DOMAIN-ZIP-SAS-URL}#",
-          "#{MP-STOP-ZIP-SAS-URL}#",
-          "#{MP-SUBMISSION-ZIP-SAS-URL}#",
-          "#{MP-TEXTANALYTICS-ZIP-SAS-URL}#",
-          "#{MP-USERPROFILE-ZIP-SAS-URL}#",
-          "#{MP-UI-ZIP-SAS-URL}#"
+          "#{ZMP-__TEMPLATE_VERSION__-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-CONFIG-JSON-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-DOMAIN-ZIP-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-STOP-ZIP-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-SUBMISSION-ZIP-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-USERPROFILE-ZIP-SAS-URL}#",
+          "#{ZMP-__TEMPLATE_VERSION__-UI-ZIP-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
