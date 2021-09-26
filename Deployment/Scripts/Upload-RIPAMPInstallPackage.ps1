@@ -1,4 +1,3 @@
-
 Param (
         $BaseFolder,
         $CSSA_STORAGE_ACCOUNT_NAME,
