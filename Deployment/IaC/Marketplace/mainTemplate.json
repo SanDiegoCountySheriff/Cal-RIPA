@@ -2915,6 +2915,10 @@
               "value": "dotnet"
             },
             {
+              "name": "AzureWebJobs.ServiceBusSubmissionConsumer.Disabled",
+              "value": "true"
+            },
+            {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafnsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafnsa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
