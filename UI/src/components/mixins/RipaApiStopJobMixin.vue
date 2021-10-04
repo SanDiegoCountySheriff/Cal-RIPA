@@ -1,10 +1,14 @@
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data() {
     return { isLocked: false }
   },
 
   methods: {
+    ...mapActions(['checkTextForPii']),
+
     addApiStop(apiStop) {
       this.isLocked = true
       const apiStops = this.getApiStopsFromLocalStorage()
@@ -44,6 +48,55 @@ export default {
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
+          if (apiStop.telemetry.offline) {
+            for (const person of apiStop.listPersonStopped) {
+              console.log(person)
+              let trimmedTextValue = person.basisForSearchBrief
+                ? person.basisForSearchBrief.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const isFound = await this.checkTextForPii(trimmedTextValue)
+                person.basisForSearchPiiFound = isFound
+                apiStop.isPiiFound = apiStop.isPiiFound
+                  ? apiStop.isPiiFound
+                  : isFound
+              }
+
+              trimmedTextValue = person.reasonForStopExplanation
+                ? person.reasonForStopExplanation.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const isFound = await this.checkTextForPii(trimmedTextValue)
+                person.reasonForStopPiiFound = isFound
+                apiStop.isPiiFound = apiStop.isPiiFound
+                  ? apiStop.isPiiFound
+                  : isFound
+              }
+            }
+            const trimmedTextValue = apiStop.location.fullAddress
+              ? apiStop.location.fullAddress.trim()
+              : ''
+            if (
+              this.isOnlineAndAuthenticated &&
+              !this.invalidUser &&
+              trimmedTextValue.length > 0
+            ) {
+              const isFound = await this.checkTextForPii(trimmedTextValue)
+              apiStop.location.piiFound = isFound
+              apiStop.isPiiFound = apiStop.isPiiFound
+                ? apiStop.isPiiFound
+                : isFound
+            }
+            console.log(apiStop)
+          }
           await this.timeout(1500)
           await this.submitOfficerStop(apiStop)
           await this.timeout(1500)
