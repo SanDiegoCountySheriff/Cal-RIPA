@@ -805,7 +805,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     location: {
       isSchool: apiStop.location?.school || false,
-      school: schoolNumber ? Number(schoolNumber) : null,
+      school: schoolNumber,
       blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
