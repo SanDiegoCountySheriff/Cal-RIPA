@@ -225,11 +225,10 @@ export default {
         !this.invalidUser &&
         trimmedTextValue.length > 0
       ) {
-        console.log('Called Validate Location For PII!!')
         this.loadingPiiStep1 = true
+        // let isFound = false
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-        console.log(this.stop)
         if (this.stop.location) {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
@@ -238,15 +237,14 @@ export default {
             : this.stop.location.piiFound
         }
         if (response.piiEntities.length > 0) {
-          console.log(this.stop.piiEntities)
-          this.stop.piiEntities =
-            this.stop.piiEntities?.length > 0 ? this.stop.piiEntities : []
-          console.log(this.stop.piiEntities)
+          const piiEntities = this.stop.piiEntities
+            ? Array.from(this.stop.piiEntities)
+            : []
           for (const entity of response.piiEntities) {
-            this.stop.piiEntities.push(entity)
+            piiEntities.push(entity)
           }
+          this.stop.piiEntities = { ...piiEntities }
         }
-        console.log(this.stop)
         this.loadingPiiStep1 = false
         this.updateFullStop()
       }
@@ -270,15 +268,14 @@ export default {
             : this.stop.location.piiFound
         }
         if (response.piiEntities.length > 0) {
-          console.log(this.stop.piiEntities)
-          this.stop.piiEntities =
-            this.stop.piiEntities?.length > 0 ? this.stop.piiEntities : []
-          console.log(this.stop.piiEntities)
+          const piiEntities = this.stop.piiEntities
+            ? Array.from(this.stop.piiEntities)
+            : []
           for (const entity of response.piiEntities) {
-            this.stop.piiEntities.push(entity)
+            piiEntities.push(entity)
           }
+          this.stop.piiEntities = { ...piiEntities }
         }
-        console.log(this.stop)
         this.loadingPiiStep3 = false
         this.updateFullStop()
       }
@@ -302,11 +299,13 @@ export default {
             : this.stop.location.piiFound
         }
         if (response.piiEntities.length > 0) {
-          // this.stop.piiEntities =
-          //  this.stop.piiEntities?.length > 0 ? this.stop.piiEntities : []
+          const piiEntities = this.stop.piiEntities
+            ? Array.from(this.stop.piiEntities)
+            : []
           for (const entity of response.piiEntities) {
-            this.stop.piiEntities.push(entity)
+            piiEntities.push(entity)
           }
+          this.stop.piiEntities = { ...piiEntities }
         }
         console.log(this.stop)
         this.loadingPiiStep4 = false
