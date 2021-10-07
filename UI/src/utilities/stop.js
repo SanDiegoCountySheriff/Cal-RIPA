@@ -1135,6 +1135,7 @@ export const fullStopToApiStop = (
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
+    piiEntities: fullStop.piiEntities,
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
