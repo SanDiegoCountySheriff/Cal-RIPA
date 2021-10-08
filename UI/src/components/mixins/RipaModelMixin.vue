@@ -13,6 +13,7 @@ export default {
         template: newValue.template,
         editStopExplanation: newValue.editStopExplanation || null,
         overridePii: newValue.overridePii || false,
+        piiEntities: newValue.piiEntities,
         stepTrace: newValue.stepTrace || [],
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,

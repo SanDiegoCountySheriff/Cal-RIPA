@@ -47,6 +47,7 @@
       :on-submit-audit="handleSubmitAudit"
       :on-update-user="handleUpdateUser"
       @input="handleInput"
+      @pii-check="handlePiiCheck"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -218,6 +219,23 @@ export default {
       this.showUserDialog = true
     },
 
+    async handlePiiCheck({ source, value }) {
+      switch (source) {
+        case 'location':
+          await this.validateLocationForPii(value)
+          break
+        case 'reason':
+          await this.validateReasonForStopForPii(value)
+          break
+        case 'search':
+          await this.validateBasisForSearchForPii(value)
+          break
+        default:
+          console.log('Error handling PII check')
+          break
+      }
+    },
+
     async validateLocationForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
       if (
@@ -226,24 +244,25 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep1 = true
-        // let isFound = false
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         if (this.stop.location) {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
-          this.stop.isPiiFound = this.stop.isPiiFound
-            ? this.stop.isPiiFound
-            : this.stop.location.piiFound
+          this.stop.isPiiFound =
+            this.stop.isPiiFound || this.stop.location.piiFound
+        }
+        if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== 'location',
+          )
         }
         if (response.piiEntities.length > 0) {
-          const piiEntities = this.stop.piiEntities
-            ? Array.from(this.stop.piiEntities)
-            : []
+          this.stop.piiEntities = this.stop.piiEntities || []
           for (const entity of response.piiEntities) {
-            piiEntities.push(entity)
+            entity.source = 'location'
+            this.stop.piiEntities.push(entity)
           }
-          this.stop.piiEntities = { ...piiEntities }
         }
         this.loadingPiiStep1 = false
         this.updateFullStop()
@@ -263,18 +282,23 @@ export default {
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
-          this.stop.isPiiFound = this.stop.isPiiFound
-            ? this.stop.isPiiFound
-            : this.stop.location.piiFound
+          this.stop.isPiiFound =
+            this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
+        }
+        if (
+          !this.stop.stopReason.reasonForStopPiiFound &&
+          this.stop.piiEntities?.length > 0
+        ) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== 'stopReason',
+          )
         }
         if (response.piiEntities.length > 0) {
-          const piiEntities = this.stop.piiEntities
-            ? Array.from(this.stop.piiEntities)
-            : []
+          this.stop.piiEntities = this.stop.piiEntities || []
           for (const entity of response.piiEntities) {
-            piiEntities.push(entity)
+            entity.source = 'stopReason'
+            this.stop.piiEntities.push(entity)
           }
-          this.stop.piiEntities = { ...piiEntities }
         }
         this.loadingPiiStep3 = false
         this.updateFullStop()
@@ -294,20 +318,25 @@ export default {
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
-          this.stop.isPiiFound = this.stop.isPiiFound
-            ? this.stop.isPiiFound
-            : this.stop.location.piiFound
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
+        }
+        if (
+          !this.stop.actionsTaken.basisForSearchPiiFound &&
+          this.stop.piiEntities?.length > 0
+        ) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== 'basisForSearch',
+          )
         }
         if (response.piiEntities.length > 0) {
-          const piiEntities = this.stop.piiEntities
-            ? Array.from(this.stop.piiEntities)
-            : []
+          this.stop.piiEntities = this.stop.piiEntities || []
           for (const entity of response.piiEntities) {
-            piiEntities.push(entity)
+            entity.source = 'basisForSearch'
+            this.stop.piiEntities.push(entity)
           }
-          this.stop.piiEntities = { ...piiEntities }
         }
-        console.log(this.stop)
         this.loadingPiiStep4 = false
         this.updateFullStop()
       }

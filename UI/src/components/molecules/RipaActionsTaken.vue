@@ -89,7 +89,7 @@
                   label="Brief Explanation"
                   :loading="loadingPii"
                   :rules="explanationRules"
-                  @input="handleInput"
+                  @input="handleInput($event), handlePiiCheck($event)"
                 ></ripa-text-input>
               </template>
             </template>
@@ -354,6 +354,10 @@ export default {
     handleInput() {
       this.updateModel()
       this.$emit('input', this.viewModel)
+    },
+
+    handlePiiCheck(textValue) {
+      this.$emit('pii-check', { source: 'search', value: textValue })
     },
   },
 

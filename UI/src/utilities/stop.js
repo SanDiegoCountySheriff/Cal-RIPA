@@ -803,6 +803,7 @@ export const apiStopToFullStop = apiStop => {
     internalId: nanoid(),
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
+    piiEntities: apiStop.piiEntities,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber ? Number(schoolNumber) : null,
@@ -1055,6 +1056,7 @@ export const fullStopToStop = fullStop => {
     template: fullStop.template,
     editStopExplanation: null,
     overridePii: false,
+    piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,

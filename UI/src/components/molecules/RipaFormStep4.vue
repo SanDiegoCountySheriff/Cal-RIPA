@@ -4,6 +4,7 @@
       v-model="model"
       :loading-pii="loadingPii"
       :on-open-statute="onOpenStatute"
+      @pii-check="handlePiiCheck"
     ></ripa-actions-taken>
 
     <ripa-contraband
@@ -85,6 +86,10 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
+    },
+
+    handlePiiCheck({ source, value }) {
+      this.$emit('pii-check', { source, value })
     },
   },
 }
