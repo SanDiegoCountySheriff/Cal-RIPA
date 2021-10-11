@@ -18,7 +18,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in apiStop.piiEntities" :key="item.entityText">
+                <tr v-for="(item, index) in apiStop.piiEntities" :key="index">
                   <td>{{ item.entityText }}</td>
                   <td>{{ item.category }}</td>
                   <td>{{ item.source }}</td>

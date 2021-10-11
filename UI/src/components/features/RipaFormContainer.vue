@@ -158,6 +158,9 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
+      locationSource: 'Location',
+      basisForSearchSource: 'Basis for Search',
+      stopReasonSource: 'Stop Reason',
     }
   },
 
@@ -246,21 +249,29 @@ export default {
         this.loadingPiiStep1 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.location) {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
             this.stop.isPiiFound || this.stop.location.piiFound
         }
+
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
-            e => e.source !== 'location',
+            e => e.source !== this.locationSource,
           )
         }
+
         if (response.piiEntities.length > 0) {
-          this.stop.piiEntities = this.stop.piiEntities || []
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.locationSource,
+              )
+            : []
+
           for (const entity of response.piiEntities) {
-            entity.source = 'location'
+            entity.source = this.locationSource
             this.stop.piiEntities.push(entity)
           }
         }
@@ -279,24 +290,31 @@ export default {
         this.loadingPiiStep3 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
             this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
         }
+
         if (
           !this.stop.stopReason.reasonForStopPiiFound &&
           this.stop.piiEntities?.length > 0
         ) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
-            e => e.source !== 'stopReason',
+            e => e.source !== this.stopReasonSource,
           )
         }
+
         if (response.piiEntities.length > 0) {
-          this.stop.piiEntities = this.stop.piiEntities || []
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.stopReasonSource,
+              )
+            : []
           for (const entity of response.piiEntities) {
-            entity.source = 'stopReason'
+            entity.source = this.stopReasonSource
             this.stop.piiEntities.push(entity)
           }
         }
@@ -315,6 +333,7 @@ export default {
         this.loadingPiiStep4 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
@@ -322,18 +341,24 @@ export default {
             this.stop.isPiiFound ||
             this.stop.actionsTaken.basisForSearchPiiFound
         }
+
         if (
           !this.stop.actionsTaken.basisForSearchPiiFound &&
           this.stop.piiEntities?.length > 0
         ) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
-            e => e.source !== 'basisForSearch',
+            e => e.source !== this.basisForSearchSource,
           )
         }
+
         if (response.piiEntities.length > 0) {
-          this.stop.piiEntities = this.stop.piiEntities || []
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.basisForSearchSource,
+              )
+            : []
           for (const entity of response.piiEntities) {
-            entity.source = 'basisForSearch'
+            entity.source = this.basisForSearchSource
             this.stop.piiEntities.push(entity)
           }
         }
