@@ -1222,6 +1222,7 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
+          console.log(response.data.stops)
           commit('updateAdminStops', {
             summary: response.data.summary,
             stops: response.data.stops,
