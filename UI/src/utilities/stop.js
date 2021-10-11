@@ -1223,10 +1223,6 @@ const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
     return false
   }
 
-  if (!parsedApiStop && !onlineAndAuthenticated) {
-    return true
-  }
-
   const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false
