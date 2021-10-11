@@ -806,7 +806,7 @@ export const apiStopToFullStop = apiStop => {
     piiEntities: apiStop.piiEntities,
     location: {
       isSchool: apiStop.location?.school || false,
-      school: schoolNumber ? Number(schoolNumber) : null,
+      school: schoolNumber,
       blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
@@ -1137,7 +1137,6 @@ export const fullStopToApiStop = (
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
-    piiEntities: fullStop.piiEntities,
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
