@@ -9,6 +9,7 @@
       :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
+      @pii-check="handlePiiCheck"
     ></ripa-stop-reason>
 
     <v-spacer></v-spacer>
@@ -78,6 +79,10 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
+    },
+
+    handlePiiCheck({ source, value }) {
+      this.$emit('pii-check', { source, value })
     },
   },
 

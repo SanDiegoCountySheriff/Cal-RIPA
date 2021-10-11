@@ -156,7 +156,7 @@
             label="Brief Explanation"
             :loading="loadingPii"
             :rules="explanationRules"
-            @input="handleInput"
+            @input="handleInput($event), handlePiiCheck($event)"
           ></ripa-text-input>
         </v-col>
       </v-row>
@@ -310,6 +310,10 @@ export default {
       if (this.onSaveFavorite) {
         this.onSaveFavorite(this.viewModel.stopReason)
       }
+    },
+
+    handlePiiCheck(textValue) {
+      this.$emit('pii-check', { source: 'reason', value: textValue })
     },
   },
 

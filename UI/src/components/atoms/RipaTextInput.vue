@@ -61,8 +61,9 @@ export default {
     },
 
     handleBlur(event) {
+      const oldVal = this.value
       this.viewModel = this.parseText(event.target.value)
-      this.handleInput(this.viewModel)
+      this.handleInput(this.viewModel, oldVal)
     },
 
     parseText(newVal) {
@@ -76,10 +77,12 @@ export default {
       return parsedText
     },
 
-    handleInput(newVal) {
+    handleInput(newVal, oldVal) {
       this.$nextTick(() => {
         this.viewModel = newVal
-        this.$emit('input', this.viewModel)
+        if (oldVal !== newVal) {
+          this.$emit('input', this.viewModel)
+        }
       })
     },
   },

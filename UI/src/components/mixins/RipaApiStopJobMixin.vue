@@ -50,7 +50,6 @@ export default {
           const apiStop = apiStops[index]
           if (apiStop.telemetry.offline) {
             for (const person of apiStop.listPersonStopped) {
-              console.log(person)
               let trimmedTextValue = person.basisForSearchBrief
                 ? person.basisForSearchBrief.trim()
                 : ''
