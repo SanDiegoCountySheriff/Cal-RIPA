@@ -560,7 +560,30 @@
       ],
       "properties": {
         "lockDuration": "PT5M",
-        "maxSizeInMegabytes": 5120,
+        "maxSizeInMegabytes": 20480,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": true,
+        "enableBatchedOperations": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "enablePartitioning": true,
+        "enableExpress": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('servicebus_name'), '/result')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
+      ],
+      "properties": {
+        "lockDuration": "PT5M",
+        "maxSizeInMegabytes": 20480,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
         "defaultMessageTimeToLive": "P14D",
@@ -1178,7 +1201,7 @@
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
       ],
       "sku": {
-        "name": "Developer",
+        "name": "Basic",
         "capacity": 1
       },
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.ApiManagement/service'), parameters('user_tags')['Microsoft.ApiManagement/service'], json('{}')))]",
@@ -3207,7 +3230,7 @@
             },
             {
               "name": "AllowedCategories",
-              "value": "Address,Age,Email,Person,PhoneNumber,Organization"
+              "value": "Age,Email,Person,PhoneNumber,Organization"
             },
             {
               "name": "MinimumConfidenceScore",
