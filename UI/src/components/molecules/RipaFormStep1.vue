@@ -48,6 +48,7 @@
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
       :on-gps-location="onGpsLocation"
+      @pii-check="handlePiiCheck"
     ></ripa-location>
 
     <v-spacer></v-spacer>
@@ -176,6 +177,10 @@ export default {
         'ripa_form_submitted_api_stop',
         JSON.stringify(parsedApiStop),
       )
+    },
+
+    handlePiiCheck({ source, value }) {
+      this.$emit('pii-check', { source, value })
     },
   },
 

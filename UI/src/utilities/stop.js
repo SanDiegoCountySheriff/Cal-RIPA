@@ -803,9 +803,10 @@ export const apiStopToFullStop = apiStop => {
     internalId: nanoid(),
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
+    piiEntities: apiStop.piiEntities,
     location: {
       isSchool: apiStop.location?.school || false,
-      school: schoolNumber ? Number(schoolNumber) : null,
+      school: schoolNumber,
       blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
       intersection: apiStop.location?.intersection || null,
@@ -1055,6 +1056,7 @@ export const fullStopToStop = fullStop => {
     template: fullStop.template,
     editStopExplanation: null,
     overridePii: false,
+    piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
@@ -1135,6 +1137,7 @@ export const fullStopToApiStop = (
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
+    piiEntities: fullStop.piiEntities,
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
@@ -1218,10 +1221,6 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
 const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
   if (parsedApiStop && fullStop.overridePii) {
     return false
-  }
-
-  if (!parsedApiStop && !onlineAndAuthenticated) {
-    return true
   }
 
   const locationPiiFound = fullStop.location?.piiFound || false

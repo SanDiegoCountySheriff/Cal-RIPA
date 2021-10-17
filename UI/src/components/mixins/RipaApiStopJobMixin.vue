@@ -1,10 +1,19 @@
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data() {
-    return { isLocked: false }
+    return {
+      isLocked: false,
+      locationSource: 'Location',
+      basisForSearchSource: 'Basis for Search',
+      stopReasonSource: 'Stop Reason',
+    }
   },
 
   methods: {
+    ...mapActions(['checkTextForPii']),
+
     addApiStop(apiStop) {
       this.isLocked = true
       const apiStops = this.getApiStopsFromLocalStorage()
@@ -44,6 +53,129 @@ export default {
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
+          if (apiStop.telemetry.offline) {
+            for (const person of apiStop.listPersonStopped) {
+              // check basisForSearch
+              let trimmedTextValue = person.basisForSearchBrief
+                ? person.basisForSearchBrief.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const response = await this.checkTextForPii(trimmedTextValue)
+
+                person.basisForSearchPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.basisForSearchPiiFound
+
+                if (
+                  !person.basisForSearchPiiFound &&
+                  apiStop.piiEntities?.length > 0
+                ) {
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.basisForSearchSource,
+                  )
+                }
+
+                if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e => e.source !== this.basisForSearchSource,
+                      )
+                    : []
+                  for (const entity of response.piiEntities) {
+                    entity.source = this.basisForSearchSource
+                    apiStop.piiEntities.push(entity)
+                  }
+                }
+              }
+
+              // check reasonForStopExplanation
+              trimmedTextValue = person.reasonForStopExplanation
+                ? person.reasonForStopExplanation.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const response = await this.checkTextForPii(trimmedTextValue)
+
+                person.reasonForStopPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.reasonForStopPiiFound
+
+                if (
+                  !person.reasonForStopPiiFound &&
+                  apiStop.piiEntities?.length > 0
+                ) {
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.stopReasonSource,
+                  )
+                }
+
+                if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e => e.source !== this.stopReasonSource,
+                      )
+                    : []
+                  for (const entity of response.piiEntities) {
+                    entity.source = this.stopReasonSource
+                    apiStop.piiEntities.push(entity)
+                  }
+                }
+              }
+            }
+
+            // check location
+            const trimmedTextValue = apiStop.location.fullAddress
+              ? apiStop.location.fullAddress.trim()
+              : ''
+            if (
+              this.isOnlineAndAuthenticated &&
+              !this.invalidUser &&
+              trimmedTextValue.length > 0
+            ) {
+              const response = await this.checkTextForPii(trimmedTextValue)
+              apiStop.location.piiFound =
+                response &&
+                response.piiEntities &&
+                response.piiEntities.length > 0
+              apiStop.isPiiFound =
+                apiStop.isPiiFound || apiStop.location.piiFound
+
+              if (
+                !apiStop.location.piiFound &&
+                apiStop.piiEntities?.length > 0
+              ) {
+                apiStop.piiEntities = apiStop.piiEntities.filter(
+                  e => e.source !== this.locationSource,
+                )
+              }
+
+              if (response.piiEntities.length > 0) {
+                apiStop.piiEntities = apiStop.piiEntities
+                  ? apiStop.piiEntities.filter(
+                      e => e.source !== this.locationSource,
+                    )
+                  : []
+                for (const entity of response.piiEntities) {
+                  entity.source = this.locationSource
+                  apiStop.piiEntities.push(entity)
+                }
+              }
+            }
+          }
+
           await this.timeout(1500)
           await this.submitOfficerStop(apiStop)
           await this.timeout(1500)

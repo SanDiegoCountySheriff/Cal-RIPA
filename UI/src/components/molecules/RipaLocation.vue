@@ -128,7 +128,7 @@
               label="Street Name"
               :loading="loadingPii"
               :rules="streetNameRules"
-              @input="handleInput"
+              @input="handleInput($event), handlePiiCheck($event)"
             >
             </ripa-text-input>
           </div>
@@ -144,7 +144,7 @@
             label="Closest Intersection"
             :loading="loadingPii"
             :rules="intersectionRules"
-            @input="handleInput"
+            @input="handleInput($event), handlePiiCheck($event)"
           >
           </ripa-text-input>
 
@@ -163,7 +163,7 @@
               label="Highway and closest exit"
               :loading="loadingPii"
               :rules="highwayRules"
-              @input="handleInput"
+              @input="handleInput($event), handlePiiCheck($event)"
             >
             </ripa-text-input>
 
@@ -173,7 +173,7 @@
               v-model="model.location.landmark"
               label="Road marker, landmark, or other"
               :rules="landmarkRules"
-              @input="handleInput"
+              @input="handleInput($event), handlePiiCheck($event)"
             >
             </ripa-text-input>
           </template>
@@ -404,6 +404,10 @@ export default {
     handleInput() {
       this.updateModel()
       this.$emit('input', this.viewModel)
+    },
+
+    handlePiiCheck(textValue) {
+      this.$emit('pii-check', { source: 'location', value: textValue })
     },
 
     handleInputOutOfCounty(newVal) {

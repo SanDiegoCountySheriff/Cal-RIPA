@@ -488,6 +488,7 @@ export default {
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
         updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.piiEntities = this.stop.piiEntities
         updatedFullStop.editStopExplanation =
           this.stop.editStopExplanation || null
         updatedFullStop.overridePii = this.stop.overridePii || false
@@ -583,30 +584,6 @@ export default {
           )
         }
       }
-    },
-
-    'stop.location.fullAddress': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateLocationForPii(newVal)
-        }
-      },
-    },
-
-    'stop.stopReason.reasonForStopExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateReasonForStopForPii(newVal)
-        }
-      },
-    },
-
-    'stop.actionsTaken.basisForSearchExplanation': {
-      handler(newVal, oldVal) {
-        if (oldVal !== newVal) {
-          this.validateBasisForSearchForPii(newVal)
-        }
-      },
     },
   },
 }

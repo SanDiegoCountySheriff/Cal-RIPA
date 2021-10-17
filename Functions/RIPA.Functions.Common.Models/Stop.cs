@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
@@ -106,6 +105,7 @@ namespace RIPA.Functions.Common.Models
         public Submission[] ListSubmission { get; set; }
         public string Status { get; set; }
         public bool IsPiiFound { get; set; }
+        public PiiEntity[] PiiEntities { get; set; }
         public bool OverridePii { get; set; }
         public string EditStopExplanation { get; set; }
         public string EditStopOfficerId { get; set; }
@@ -265,5 +265,13 @@ namespace RIPA.Functions.Common.Models
         public string Hint { get; set; }
         public int MaxLength { get; set; }
         public bool Required { get; set; }
+    }
+
+    public class PiiEntity
+    {
+        public string EntityText { get; set; }
+        public string ConfidenceScore { get; set; }
+        public string Category { get; set; }
+        public string Source { get; set; }
     }
 }

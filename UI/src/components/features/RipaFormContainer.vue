@@ -47,6 +47,7 @@
       :on-submit-audit="handleSubmitAudit"
       :on-update-user="handleUpdateUser"
       @input="handleInput"
+      @pii-check="handlePiiCheck"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -157,6 +158,9 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
+      locationSource: 'Location',
+      basisForSearchSource: 'Basis for Search',
+      stopReasonSource: 'Stop Reason',
     }
   },
 
@@ -218,6 +222,23 @@ export default {
       this.showUserDialog = true
     },
 
+    async handlePiiCheck({ source, value }) {
+      switch (source) {
+        case 'location':
+          await this.validateLocationForPii(value)
+          break
+        case 'reason':
+          await this.validateReasonForStopForPii(value)
+          break
+        case 'search':
+          await this.validateBasisForSearchForPii(value)
+          break
+        default:
+          console.log('Error handling PII check')
+          break
+      }
+    },
+
     async validateLocationForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
       if (
@@ -226,11 +247,33 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep1 = true
-        let isFound = false
-        isFound = await this.checkTextForPii(trimmedTextValue)
+        const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.location) {
-          this.stop.location.piiFound = isFound
+          this.stop.location.piiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound || this.stop.location.piiFound
+        }
+
+        if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== this.locationSource,
+          )
+        }
+
+        if (response.piiEntities.length > 0) {
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.locationSource,
+              )
+            : []
+
+          for (const entity of response.piiEntities) {
+            entity.source = this.locationSource
+            this.stop.piiEntities.push(entity)
+          }
         }
         this.loadingPiiStep1 = false
         this.updateFullStop()
@@ -245,11 +288,35 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep3 = true
-        let isFound = false
-        isFound = await this.checkTextForPii(trimmedTextValue)
+        const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.stopReason) {
-          this.stop.stopReason.reasonForStopPiiFound = isFound
+          this.stop.stopReason.reasonForStopPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
+        }
+
+        if (
+          !this.stop.stopReason.reasonForStopPiiFound &&
+          this.stop.piiEntities?.length > 0
+        ) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== this.stopReasonSource,
+          )
+        }
+
+        if (response.piiEntities.length > 0) {
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.stopReasonSource,
+              )
+            : []
+          for (const entity of response.piiEntities) {
+            entity.source = this.stopReasonSource
+            this.stop.piiEntities.push(entity)
+          }
         }
         this.loadingPiiStep3 = false
         this.updateFullStop()
@@ -264,11 +331,36 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep4 = true
-        let isFound = false
-        isFound = await this.checkTextForPii(trimmedTextValue)
+        const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
+
         if (this.stop.actionsTaken) {
-          this.stop.actionsTaken.basisForSearchPiiFound = isFound
+          this.stop.actionsTaken.basisForSearchPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
+        }
+
+        if (
+          !this.stop.actionsTaken.basisForSearchPiiFound &&
+          this.stop.piiEntities?.length > 0
+        ) {
+          this.stop.piiEntities = this.stop.piiEntities.filter(
+            e => e.source !== this.basisForSearchSource,
+          )
+        }
+
+        if (response.piiEntities.length > 0) {
+          this.stop.piiEntities = this.stop.piiEntities
+            ? this.stop.piiEntities.filter(
+                e => e.source !== this.basisForSearchSource,
+              )
+            : []
+          for (const entity of response.piiEntities) {
+            entity.source = this.basisForSearchSource
+            this.stop.piiEntities.push(entity)
+          }
         }
         this.loadingPiiStep4 = false
         this.updateFullStop()
