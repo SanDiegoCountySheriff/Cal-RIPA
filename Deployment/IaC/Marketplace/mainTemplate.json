@@ -560,30 +560,7 @@
       ],
       "properties": {
         "lockDuration": "PT5M",
-        "maxSizeInMegabytes": 20480,
-        "requiresDuplicateDetection": false,
-        "requiresSession": false,
-        "defaultMessageTimeToLive": "P14D",
-        "deadLetteringOnMessageExpiration": true,
-        "enableBatchedOperations": true,
-        "duplicateDetectionHistoryTimeWindow": "PT10M",
-        "maxDeliveryCount": 10,
-        "status": "Active",
-        "enablePartitioning": true,
-        "enableExpress": false
-      }
-    },
-    {
-      "type": "Microsoft.ServiceBus/namespaces/queues",
-      "apiVersion": "2017-04-01",
-      "name": "[concat(variables('servicebus_name'), '/result')]",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
-      ],
-      "properties": {
-        "lockDuration": "PT5M",
-        "maxSizeInMegabytes": 20480,
+        "maxSizeInMegabytes": 5120,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
         "defaultMessageTimeToLive": "P14D",
@@ -1194,9 +1171,9 @@
             "defaultSslBinding": true
           }
         ],
-        "virtualNetworkConfiguration": {
-          "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
-        },
+        // "virtualNetworkConfiguration": {
+        //   // "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
+        // },
         "customProperties": {
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168": "false",
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": "false",
@@ -1207,7 +1184,7 @@
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": "false",
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": "false"
         },
-        "virtualNetworkType": "External",
+        // "virtualNetworkType": "External",
         "disableGateway": false,
         "apiVersionConstraint": {}
       }
