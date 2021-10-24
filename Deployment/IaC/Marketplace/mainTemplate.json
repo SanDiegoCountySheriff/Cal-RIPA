@@ -560,7 +560,7 @@
       ],
       "properties": {
         "lockDuration": "PT5M",
-        "maxSizeInMegabytes": 20480,
+        "maxSizeInMegabytes": 5120,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
         "defaultMessageTimeToLive": "P14D",
@@ -583,7 +583,7 @@
       ],
       "properties": {
         "lockDuration": "PT5M",
-        "maxSizeInMegabytes": 20480,
+        "maxSizeInMegabytes": 5120,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
         "defaultMessageTimeToLive": "P14D",
@@ -1194,9 +1194,9 @@
             "defaultSslBinding": true
           }
         ],
-        "virtualNetworkConfiguration": {
-          "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
-        },
+        // "virtualNetworkConfiguration": {
+        //   // "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
+        // },
         "customProperties": {
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168": "false",
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": "false",
@@ -1207,7 +1207,7 @@
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": "false",
           "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": "false"
         },
-        "virtualNetworkType": "External",
+        // "virtualNetworkType": "External",
         "disableGateway": false,
         "apiVersionConstraint": {}
       }
