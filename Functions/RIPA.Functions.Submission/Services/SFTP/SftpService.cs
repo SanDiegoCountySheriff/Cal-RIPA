@@ -64,10 +64,13 @@ namespace RIPA.Functions.Submission.Services.SFTP
 
         public void Dispose()
         {
-            if (_sftpClient?.IsConnected)
-                _sftpClient.Disconnect();
-            
-            _sftpClient?.Dispose();
+            if (_sftpClient != null)
+            {
+                if (_sftpClient.IsConnected)
+                    _sftpClient.Disconnect();
+
+                _sftpClient?.Dispose();
+            }
         }
 
         public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
