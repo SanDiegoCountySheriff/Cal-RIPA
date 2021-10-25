@@ -42,6 +42,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             _config = sftpConfig;
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
             using MemoryStream stream = new MemoryStream(byteArray);
+            
             _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
             
             //_sftpClient.KeepAliveInterval = TimeSpan.FromSeconds(60);
