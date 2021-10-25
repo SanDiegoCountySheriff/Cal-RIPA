@@ -26,24 +26,23 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public SftpService(ILogger logger, SftpConfig sftpConfig)
         {
             _logger = logger;
-            _config = sftpConfig;
-            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using MemoryStream stream = new MemoryStream(byteArray);
-            var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
 
             if (!String.IsNullOrEmpty(sftpDisabled))
             {
                 if (bool.Parse(sftpDisabled))
                 {
                     _disabled = true;
+
+                    return;
                 }
             }
 
-            if (!_disabled)
-            {
-                _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
-            }
-
+            _config = sftpConfig;
+            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
+            using MemoryStream stream = new MemoryStream(byteArray);
+            var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
+            _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
+            
             //_sftpClient.KeepAliveInterval = TimeSpan.FromSeconds(60);
             //_sftpClient.ConnectionInfo.Timeout = TimeSpan.FromMinutes(180);
             //_sftpClient.OperationTimeout = TimeSpan.FromMinutes(180);
@@ -53,16 +52,27 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public void Connect()
         {
             if (_disabled)
+            {
                 throw new Exception("sftp client disabled");
-            if (!_sftpClient.IsConnected)
+            }
+            
+            if (_sftpClient != null && !_sftpClient.IsConnected)
+            {
                 _sftpClient.Connect();
+            }
         }
 
         public void Dispose()
         {
-            if (_sftpClient.IsConnected)
-                _sftpClient.Disconnect();
-            _sftpClient.Dispose();
+            if (_sftpClient != null)
+            {
+                if (_sftpClient.IsConnected)
+                {
+                    _sftpClient.Disconnect();
+                }
+
+                _sftpClient.Dispose();
+            }
         }
 
         public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
