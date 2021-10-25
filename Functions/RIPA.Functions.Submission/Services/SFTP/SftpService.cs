@@ -27,6 +27,8 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             _logger = logger;
 
+            var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
+
             if (!String.IsNullOrEmpty(sftpDisabled))
             {
                 if (bool.Parse(sftpDisabled))
@@ -40,7 +42,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             _config = sftpConfig;
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
             using MemoryStream stream = new MemoryStream(byteArray);
-            var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
+            
             _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
             
             //_sftpClient.KeepAliveInterval = TimeSpan.FromSeconds(60);
