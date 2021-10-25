@@ -26,21 +26,24 @@ namespace RIPA.Functions.Submission.Services.SFTP
         public SftpService(ILogger logger, SftpConfig sftpConfig)
         {
             _logger = logger;
-            _config = sftpConfig;
-            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-            using MemoryStream stream = new MemoryStream(byteArray);
             var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
 
             if (!String.IsNullOrEmpty(sftpDisabled))
             {
                 if (bool.Parse(sftpDisabled))
                 {
+                    _logger.LogWarning("Sftp is disabled by configuration");
                     _disabled = true;
+                    
+                    return;
                 }
             }
 
             if (!_disabled)
             {
+                _config = sftpConfig;
+                byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
+                using MemoryStream stream = new MemoryStream(byteArray);
                 _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
             }
 
@@ -54,15 +57,17 @@ namespace RIPA.Functions.Submission.Services.SFTP
         {
             if (_disabled)
                 throw new Exception("sftp client disabled");
+
             if (!_sftpClient.IsConnected)
                 _sftpClient.Connect();
         }
 
         public void Dispose()
         {
-            if (_sftpClient.IsConnected)
+            if (_sftpClient?.IsConnected)
                 _sftpClient.Disconnect();
-            _sftpClient.Dispose();
+            
+            _sftpClient?.Dispose();
         }
 
         public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
@@ -70,6 +75,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             try
             {
                 Connect();
+
                 return _sftpClient.ListDirectory(remoteDirectory);
             }
             catch (Exception exception)
@@ -88,6 +94,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 {
                     _sftpClient.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
                 }
+
                 _logger.LogInformation($"Finished uploading stop to [{remoteFilePath}]");
             }
             catch (Exception exception)
@@ -107,11 +114,14 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
                 var download = await blobClient.DownloadAsync(); //Download blob
                 string text;
+
                 using (StreamReader streamReader = new StreamReader(download.Value.Content))
                 {
                     text = streamReader.ReadToEnd(); //get file content
                 }
+
                 _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
+
                 return text;
             }
             catch (Exception exception)
