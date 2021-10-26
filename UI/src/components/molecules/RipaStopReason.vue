@@ -218,6 +218,12 @@ export default {
     }
   },
 
+  created() {
+    if (this.viewModel.stopReason.reasonForStopExplanation) {
+      this.handlePiiCheck(this.viewModel.stopReason.reasonForStopExplanation)
+    }
+  },
+
   computed: {
     model: {
       get() {
