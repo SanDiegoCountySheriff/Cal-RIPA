@@ -159,8 +159,8 @@ export default {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
       locationSource: 'Location',
-      basisForSearchSource: 'Basis for Search',
-      stopReasonSource: 'Stop Reason',
+      basisForSearchSource: 'Basis for Search Person: ',
+      stopReasonSource: 'Stop Reason Person: ',
     }
   },
 
@@ -303,18 +303,19 @@ export default {
           this.stop.piiEntities?.length > 0
         ) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
-            e => e.source !== this.stopReasonSource,
+            e => e.source !== this.stopReasonSource + this.stop.person.index,
           )
         }
 
         if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
-                e => e.source !== this.stopReasonSource,
+                e =>
+                  e.source !== this.stopReasonSource + this.stop.person.index,
               )
             : []
           for (const entity of response.piiEntities) {
-            entity.source = this.stopReasonSource
+            entity.source = this.stopReasonSource + this.stop.person.index
             this.stop.piiEntities.push(entity)
           }
         }
@@ -347,18 +348,21 @@ export default {
           this.stop.piiEntities?.length > 0
         ) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
-            e => e.source !== this.basisForSearchSource,
+            e =>
+              e.source !== this.basisForSearchSource + this.stop.person.index,
           )
         }
 
         if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
-                e => e.source !== this.basisForSearchSource,
+                e =>
+                  e.source !==
+                  this.basisForSearchSource + this.stop.person.index,
               )
             : []
           for (const entity of response.piiEntities) {
-            entity.source = this.basisForSearchSource
+            entity.source = this.basisForSearchSource + this.stop.person.index
             this.stop.piiEntities.push(entity)
           }
         }

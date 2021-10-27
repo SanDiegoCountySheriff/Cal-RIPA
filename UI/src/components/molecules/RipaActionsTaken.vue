@@ -189,6 +189,12 @@ export default {
     }
   },
 
+  created() {
+    if (this.viewModel.actionsTaken.basisForSearchExplanation) {
+      this.handlePiiCheck(this.viewModel.actionsTaken.basisForSearchExplanation)
+    }
+  },
+
   computed: {
     model: {
       get() {
