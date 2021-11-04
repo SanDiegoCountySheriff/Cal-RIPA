@@ -34,32 +34,28 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 {
                     _logger.LogWarning("Sftp is disabled by configuration");
                     _disabled = true;
-                    
                     return;
                 }
             }
 
-            if (!_disabled)
-            {
-                _config = sftpConfig;
-                byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-                using MemoryStream stream = new MemoryStream(byteArray);
-                _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
-            }
-
-            //_sftpClient.KeepAliveInterval = TimeSpan.FromSeconds(60);
-            //_sftpClient.ConnectionInfo.Timeout = TimeSpan.FromMinutes(180);
-            //_sftpClient.OperationTimeout = TimeSpan.FromMinutes(180);
-
+            _config = sftpConfig;
+            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
+            using MemoryStream stream = new MemoryStream(byteArray);
+            
+            _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
         }
 
         public void Connect()
         {
             if (_disabled)
+            {
                 throw new Exception("sftp client disabled");
-
-            if (!_sftpClient.IsConnected)
+            }
+            
+            if (_sftpClient != null && !_sftpClient.IsConnected)
+            {
                 _sftpClient.Connect();
+            }
         }
 
         public void Dispose()
@@ -67,9 +63,11 @@ namespace RIPA.Functions.Submission.Services.SFTP
             if (_sftpClient != null)
             {
                 if (_sftpClient.IsConnected)
+                {
                     _sftpClient.Disconnect();
-
-                _sftpClient?.Dispose();
+                }
+                
+                _sftpClient.Dispose();
             }
         }
 

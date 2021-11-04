@@ -3700,6 +3700,10 @@
           {
             "name": "ENABLE_STOP_DEBUGGER",
             "value": "[parameters('enable_stop_debugger')]"
+          },
+          {
+            "name": "DEPLOY_WEB_CONFIG_JSON",
+            "value": "True"
           }
         ],
         "primaryScriptUri": "#{ZMP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
