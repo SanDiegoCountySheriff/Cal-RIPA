@@ -974,6 +974,7 @@
 			"agency_ori": "[basics('agency_dropdown').ori]",
 			"application": "[basics('agency_application')]",
 			"environment_type": "[basics('environment_type')]",
+			"apim_sku": "[if(equals(basics('environment_type'), 'PROD'), 'Basic', 'Developer')]",
 			"enable_beats": "[basics('enable_beats')]",
 			"enable_stop_debugger": "[basics('enable_stop_debugger')]",
 			"app_domain_type": "[steps('steps_app_domain').app_domain_type]",

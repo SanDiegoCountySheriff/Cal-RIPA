@@ -24,6 +24,10 @@
       "type": "string",
       "defaultValue": "PROD"
     },
+    "apim_sku" : {
+      "type": "string",
+      "defaultValue": "Developer"
+    },
     "enable_beats": {
       "type": "bool",
       "defaultValue": false
@@ -1178,7 +1182,7 @@
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
       ],
       "sku": {
-        "name": "Basic",
+        "name": "[parameters('apim_sku')]",
         "capacity": 1
       },
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.ApiManagement/service'), parameters('user_tags')['Microsoft.ApiManagement/service'], json('{}')))]",
