@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using RIPA.Functions.Common.Services.Stop.CosmosDb;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
@@ -29,9 +30,13 @@ namespace RIPA.Functions.Stop
             string containerName = Environment.GetEnvironmentVariable("StopContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
             StopCosmosDbService cosmosDbService = new StopCosmosDbService(client, databaseName, containerName);
-            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return cosmosDbService;
@@ -43,9 +48,13 @@ namespace RIPA.Functions.Stop
             string containerName = Environment.GetEnvironmentVariable("StopAuditContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
             StopAuditCosmosDbService cosmosDbService = new StopAuditCosmosDbService(client, databaseName, containerName);
-            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return cosmosDbService;
@@ -57,9 +66,13 @@ namespace RIPA.Functions.Stop
             string containerName = Environment.GetEnvironmentVariable("UserProfileContainerName");
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
             UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
-            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return cosmosDbService;
