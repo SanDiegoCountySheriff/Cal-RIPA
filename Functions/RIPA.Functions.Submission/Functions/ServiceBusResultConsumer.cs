@@ -1,14 +1,13 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.ResultServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
