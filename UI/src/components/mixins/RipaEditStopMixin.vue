@@ -3,7 +3,7 @@ import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
 
 export default {
   methods: {
-    handleEditStopByAdmin(apiStop, route) {
+    async handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
       const sortedSubmissions = submissions.sort(
         (a, b) =>
@@ -12,6 +12,7 @@ export default {
       )
       const fullStop = apiStopToFullStop(apiStop)
       const stop = fullStopToStop(fullStop)
+
       localStorage.setItem('ripa_form_step_index', '7')
       localStorage.setItem('ripa_form_admin_editing', '1')
       localStorage.setItem('ripa_form_editing', '1')
