@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace RIPA.Functions.Submission
 {
-    public class OpenApiConfigurationOptions : DefaultOpenApiConfigurationOptions
+    public class OpenApiConfigurationOptions : IOpenApiConfigurationOptions
     {
-        public override OpenApiInfo Info { get; set; } = new OpenApiInfo()
+        public OpenApiInfo Info { get; set; } = new OpenApiInfo()
         {
             Version = "1.0.0",
             Title = "Submission",
@@ -26,6 +26,6 @@ namespace RIPA.Functions.Submission
             }
         };
 
-        public override List<OpenApiServer> Servers { get; set; } = new List<OpenApiServer>();
+        public List<OpenApiServer> Servers { get; set; } = new List<OpenApiServer>();
     }
 }
