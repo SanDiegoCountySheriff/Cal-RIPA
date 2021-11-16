@@ -1,49 +1,25 @@
 <template>
   <div>
-    <!-- <div v-if="adminEditing"> -->
-    <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
-      <v-tabs>
-        <v-tab>Current State</v-tab>
-        <v-tab>Next State</v-tab>
-      </v-tabs>
-      <!-- <div v-if="this.hasStopAudits">
-          <v-tab v-for="(stopAudit, index) in this.stopAudits" :key="index">{{
-            index
+    <div v-if="adminEditing">
+      <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
+        <v-tabs>
+          <v-tab>Current State</v-tab>
+          <v-tab-item>
+            <ripa-form-summary-detail
+              :apiStop="apiStop"
+              :adminEditing="adminEditing"
+              :editButtons="editButtons"
+              :onDeletePerson="onDeletePerson"
+              :onCopyPerson="onCopyPerson"
+              :onEditAgencyQuestions="onEditAgencyQuestions"
+              :onEditStop="onEditStop"
+              :onEditPerson="onEditPerson"
+            ></ripa-form-summary-detail>
+          </v-tab-item>
+          <v-tab v-for="stopAudit of this.stopAudits" :key="stopAudit.id">{{
+            stopAudit.id
           }}</v-tab>
-        </div> -->
-      <!-- <v-tab-item> -->
-      <v-tab-items>
-        <v-tab-item>
-          <ripa-form-summary-detail
-            :apiStop="apiStop"
-            :adminEditing="adminEditing"
-            :editButtons="editButtons"
-            :onDeletePerson="onDeletePerson"
-            :onCopyPerson="onCopyPerson"
-            :onEditAgencyQuestions="onEditAgencyQuestions"
-            :onEditStop="onEditStop"
-            :onEditPerson="onEditPerson"
-          ></ripa-form-summary-detail>
-        </v-tab-item>
-        <v-tab-item>
-          <ripa-form-summary-detail
-            :apiStop="apiStop"
-            :adminEditing="adminEditing"
-            :editButtons="editButtons"
-            :onDeletePerson="onDeletePerson"
-            :onCopyPerson="onCopyPerson"
-            :onEditAgencyQuestions="onEditAgencyQuestions"
-            :onEditStop="onEditStop"
-            :onEditPerson="onEditPerson"
-          ></ripa-form-summary-detail>
-        </v-tab-item>
-      </v-tab-items>
-      <!-- </v-tab-item> -->
-      <!-- <div v-if="this.hasStopAudits">
-          <v-tab-item
-            v-for="(stopAudit, index) in this.stopAudits"
-            :key="index"
-          >
+          <v-tab-item v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
             <ripa-form-summary-detail
               :apiStop="stopAudit"
               :adminEditing="adminEditing"
@@ -55,9 +31,9 @@
               :onEditPerson="onEditPerson"
             ></ripa-form-summary-detail>
           </v-tab-item>
-        </div> -->
-    </v-card>
-    <!-- </div> -->
+        </v-tabs>
+      </v-card>
+    </div>
     <div v-if="!adminEditing">
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <ripa-form-summary-detail
@@ -96,7 +72,6 @@ export default {
 
   data() {
     return {
-      tabLevel1: 0,
       loading: false,
       stopAudits: [],
       hasStopAudits: false,
