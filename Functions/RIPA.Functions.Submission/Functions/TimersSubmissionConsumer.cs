@@ -40,7 +40,7 @@ namespace RIPA.Functions.Submission.Functions
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
             _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
             _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
-            _blobContainerClient = null; // GetBlobContainerClient();
+            _blobContainerClient = GetBlobContainerClient();
         }
 
         [FunctionName("TimersSubmissionConsumer")]
