@@ -3,7 +3,7 @@ import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
 
 export default {
   methods: {
-    async handleEditStopByAdmin(apiStop, route) {
+    handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
       const sortedSubmissions = submissions.sort(
         (a, b) =>
