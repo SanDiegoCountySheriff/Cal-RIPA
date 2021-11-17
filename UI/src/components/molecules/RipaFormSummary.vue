@@ -47,14 +47,6 @@
 
 <script>
 import RipaFormSummaryDetail from '@/components/molecules/RipaFormSummaryDetail'
-
-import {
-  apiStopStopSummary,
-  apiStopPersonSummary,
-  apiStopAgencyQuestionsSummary,
-  apiStopTelemetrySummary,
-  apiStopSubmissionSummary,
-} from '@/utilities/stop'
 import { mapActions } from 'vuex'
 
 export default {
@@ -68,39 +60,11 @@ export default {
     return {
       loading: false,
       stopAudits: [],
-      hasStopAudits: false,
     }
   },
 
   created() {
     this.getStopAudits()
-  },
-
-  computed: {
-    getApiStop() {
-      return this.apiStop
-    },
-
-    getApiStopId() {
-      return this.apiStop.id === 0 ? 'Unsaved Stop' : this.apiStop.id
-    },
-
-    getApiStopStopSummary() {
-      return apiStopStopSummary(this.apiStop)
-    },
-
-    getApiStopAgencyQuestionsSummary() {
-      return apiStopAgencyQuestionsSummary(this.apiStop)
-    },
-
-    getApiStopTelemetrySummary() {
-      return apiStopTelemetrySummary(this.apiStop)
-    },
-
-    getSubmissions() {
-      const value = localStorage.getItem('ripa_form_submitted_submissions')
-      return value ? JSON.parse(value) : []
-    },
   },
 
   methods: {
@@ -109,61 +73,7 @@ export default {
     async getStopAudits() {
       this.loading = true
       this.stopAudits = await this.getAdminStopAudits(this.apiStop.id)
-      if (this.stopAudits.length > 0) {
-        this.hasStopAudits = true
-      }
       this.loading = false
-    },
-
-    getApiStopSubmissionSummary(submission) {
-      return apiStopSubmissionSummary(submission)
-    },
-
-    getApiStopPersonSummary(personId) {
-      return apiStopPersonSummary(this.apiStop, personId)
-    },
-
-    handleEditStop(event) {
-      event.stopPropagation()
-      if (this.onEditStop) {
-        this.onEditStop()
-      }
-    },
-
-    handleEditPerson(event, id) {
-      event.stopPropagation()
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
-    },
-
-    handleCopyPerson(event, id) {
-      event.stopPropagation()
-      if (this.onCopyPerson) {
-        this.onCopyPerson(id)
-      }
-    },
-
-    handleDeletePerson(event, id) {
-      event.stopPropagation()
-      if (this.onDeletePerson) {
-        this.onDeletePerson(id)
-      }
-    },
-
-    handleEditAgencyQuestions(event) {
-      event.stopPropagation()
-      if (this.onEditAgencyQuestions) {
-        this.onEditAgencyQuestions()
-      }
-    },
-  },
-
-  watch: {
-    stopAudits(value) {
-      if (value.length > 0) {
-        this.hasStopAudits = true
-      }
     },
   },
 
