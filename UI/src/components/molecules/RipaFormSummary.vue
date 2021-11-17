@@ -23,12 +23,6 @@
             <ripa-form-summary-detail
               :apiStop="stopAudit"
               :adminEditing="adminEditing"
-              :editButtons="editButtons"
-              :onDeletePerson="onDeletePerson"
-              :onCopyPerson="onCopyPerson"
-              :onEditAgencyQuestions="onEditAgencyQuestions"
-              :onEditStop="onEditStop"
-              :onEditPerson="onEditPerson"
             ></ripa-form-summary-detail>
           </v-tab-item>
         </v-tabs>
