@@ -24,6 +24,10 @@
       "type": "string",
       "defaultValue": "PROD"
     },
+    "apim_sku" : {
+      "type": "string",
+      "defaultValue": "Developer"
+    },
     "enable_beats": {
       "type": "bool",
       "defaultValue": false
@@ -554,6 +558,29 @@
       "type": "Microsoft.ServiceBus/namespaces/queues",
       "apiVersion": "2017-04-01",
       "name": "[concat(variables('servicebus_name'), '/submission')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
+      ],
+      "properties": {
+        "lockDuration": "PT5M",
+        "maxSizeInMegabytes": 5120,
+        "requiresDuplicateDetection": false,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": true,
+        "enableBatchedOperations": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "enablePartitioning": true,
+        "enableExpress": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2017-04-01",
+      "name": "[concat(variables('servicebus_name'), '/result')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.ServiceBus/namespaces', variables('servicebus_name'))]"
@@ -1155,7 +1182,7 @@
         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('apim_subnet_name')))]"
       ],
       "sku": {
-        "name": "Basic",
+        "name": "[parameters('apim_sku')]",
         "capacity": 1
       },
       "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.ApiManagement/service'), parameters('user_tags')['Microsoft.ApiManagement/service'], json('{}')))]",
