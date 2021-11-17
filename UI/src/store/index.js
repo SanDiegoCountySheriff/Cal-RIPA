@@ -1237,13 +1237,16 @@ export default new Vuex.Store({
 
     getAdminStopAudits({ state }, stopId) {
       return axios
-        .get(`http://localhost:7071/api/GetStopAudits?id=${stopId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetStopAudits?id=${stopId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           return response.data
         })

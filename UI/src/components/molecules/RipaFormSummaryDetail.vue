@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
+    <v-card-title class="tw-uppercase">{{ title }}</v-card-title>
     <v-card-text>
       <div class="tw-mb-3">
         <span class="tw-text-base tw-font-bold">{{ getApiStopId }}</span>
@@ -240,6 +240,10 @@ export default {
     onEditPerson: {
       type: Function,
       default: () => {},
+    },
+    title: {
+      type: String,
+      default: 'Review and Submit',
     },
   },
 }
