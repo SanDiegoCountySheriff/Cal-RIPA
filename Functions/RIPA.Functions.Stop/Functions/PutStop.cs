@@ -10,11 +10,9 @@ using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
+using RIPA.Functions.Stop.Services.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 
@@ -23,12 +21,16 @@ namespace RIPA.Functions.Stop.Functions
     public class PutStop
     {
         private readonly IStopCosmosDbService _stopCosmosDbService;
+        private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
         private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
 
-        public PutStop(IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService)
+        public PutStop(IStopCosmosDbService stopCosmosDbService,
+            IUserProfileCosmosDbService userProfileCosmosDbService,
+            IStopAuditCosmosDbService stopAuditCosmosDbService)
         {
             _stopCosmosDbService = stopCosmosDbService;
             _userProfileCosmosDbService = userProfileCosmosDbService;
+            _stopAuditCosmosDbService = stopAuditCosmosDbService;
         }
 
         [FunctionName("PutStop")]
@@ -108,6 +110,9 @@ namespace RIPA.Functions.Stop.Functions
                 {
                     //Protect the submission history
                     Common.Models.Stop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
+                    editingStop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
+                    await _stopAuditCosmosDbService.UpdateStopAuditAsync(editingStop.Id, editingStop);
+                    log.LogInformation($"Saving stop audit ID: {editingStop.Id}");
                     stop.ListSubmission = editingStop.ListSubmission;
                 }
             }

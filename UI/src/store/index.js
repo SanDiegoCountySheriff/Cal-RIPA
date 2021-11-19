@@ -1235,6 +1235,26 @@ export default new Vuex.Store({
         })
     },
 
+    getAdminStopAudits({ state }, stopId) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetStopAudits?id=${stopId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          console.log('There was an error retrieving stop audits', error)
+        })
+    },
+
     getAdminSubmissions({ commit, state }, queryData) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
