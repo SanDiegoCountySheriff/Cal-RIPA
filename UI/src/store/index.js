@@ -1238,7 +1238,7 @@ export default new Vuex.Store({
     getAdminStopAudits({ state }, stopId) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetStopAudits?id=${stopId}`,
+          `${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`,
           {
             headers: {
               'Content-Type': 'application/json',
