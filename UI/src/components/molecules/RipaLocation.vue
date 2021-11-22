@@ -299,22 +299,30 @@ export default {
     },
 
     blockNumberRules() {
+      const streetName = this.viewModel.location.streetName
       const blockNumber = this.viewModel.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
           blockNumber !== null ||
           'A block number is required',
+        this.isLocationOptionsFilled ||
+          (streetName + blockNumber).length >= 5 ||
+          'Block number plus street name must be between 5 and 250 characters',
       ]
     },
 
     streetNameRules() {
       const streetName = this.viewModel.location.streetName
+      const blockNumber = this.viewModel.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
           (streetName && streetName.length > 0) ||
           'A street name is required',
+        this.isLocationOptionsFilled ||
+          (streetName + blockNumber).length >= 5 ||
+          'Block number plus street name must be between 5 and 250 characters',
       ]
     },
 
@@ -325,6 +333,9 @@ export default {
         this.isLocationOptionsFilled ||
           (intersection && intersection.length > 0) ||
           'An intersection is required',
+        this.isLocationOptionsFilled ||
+          (intersection && intersection.length >= 5) ||
+          'Intersection must be between 5 and 250 characters',
       ]
     },
 
@@ -373,10 +384,13 @@ export default {
       const checked = this.viewModel.location.toggleLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
       const landmark = this.viewModel.location.landmark
-
+      console.log((blockNumber + streetName).length >= 5)
       const isValid =
-        (blockNumber !== null && streetName && streetName.length > 0) ||
-        (intersection && intersection.length > 0) ||
+        (blockNumber !== null &&
+          streetName &&
+          streetName.length > 0 &&
+          (blockNumber + streetName).length >= 5) ||
+        (intersection && intersection.length >= 5) ||
         (checked &&
           highwayExit !== null &&
           highwayExit.length >= 5 &&
