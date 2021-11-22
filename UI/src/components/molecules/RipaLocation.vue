@@ -384,7 +384,7 @@ export default {
       const checked = this.viewModel.location.toggleLocationOptions
       const highwayExit = this.viewModel.location.highwayExit
       const landmark = this.viewModel.location.landmark
-      console.log((blockNumber + streetName).length >= 5)
+
       const isValid =
         (blockNumber !== null &&
           streetName &&
