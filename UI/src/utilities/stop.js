@@ -804,6 +804,7 @@ export const apiStopToFullStop = apiStop => {
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     piiEntities: apiStop.piiEntities,
+    editStopExplanation: apiStop.editStopExplanation,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1054,7 +1055,7 @@ export const fullStopToStop = fullStop => {
     id: fullStop.id,
     internalId: fullStop.id,
     template: fullStop.template,
-    editStopExplanation: null,
+    editStopExplanation: fullStop.editStopExplanation,
     overridePii: false,
     piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,
