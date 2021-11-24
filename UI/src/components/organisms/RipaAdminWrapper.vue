@@ -1,13 +1,29 @@
 <template>
   <v-card>
     <v-tabs v-model="tabLevel1" show-arrows>
-      <v-tab to="/admin/submissions">Submissions</v-tab>
       <v-tab to="/admin/stops">Stops</v-tab>
+      <v-tab to="/admin/submissions">Submissions</v-tab>
       <v-tab to="/admin/users">Users</v-tab>
       <v-tab to="/admin/domains">Domains</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
+      <v-tab-item value="/admin/stops" id="/admin/stops">
+        <ripa-stops-grid
+          :loading="loading"
+          :items="stops"
+          :errorCodeSearch="errorCodeSearch"
+          :savedFilters="savedFilters"
+          @callErrorCodeSearch="handleCallErrorCodeSearch"
+          @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
+          @paginate="handleAdminStopsPagination"
+          @handleAdminStopsFiltering="handleAdminStopsFiltering"
+          @handleUpdateSavedFilter="handleUpdateSavedFilter"
+          @handleSubmitStops="handleSubmitStops"
+          @handleSubmitAll="handleSubmitAll"
+        ></ripa-stops-grid>
+      </v-tab-item>
+
       <v-tab-item value="/admin/submissions" id="/admin/submissions">
         <ripa-submissions-grid
           :loading="loading"
@@ -23,22 +39,6 @@
             handleSubmissionDetailItemsPerPage
           "
         ></ripa-submissions-grid>
-      </v-tab-item>
-
-      <v-tab-item value="/admin/stops" id="/admin/stops">
-        <ripa-stops-grid
-          :loading="loading"
-          :items="stops"
-          :errorCodeSearch="errorCodeSearch"
-          :savedFilters="savedFilters"
-          @callErrorCodeSearch="handleCallErrorCodeSearch"
-          @redoItemsPerPage="handleAdminStopsRedoItemsPerPage"
-          @paginate="handleAdminStopsPagination"
-          @handleAdminStopsFiltering="handleAdminStopsFiltering"
-          @handleUpdateSavedFilter="handleUpdateSavedFilter"
-          @handleSubmitStops="handleSubmitStops"
-          @handleSubmitAll="handleSubmitAll"
-        ></ripa-stops-grid>
       </v-tab-item>
 
       <v-tab-item value="/admin/users" id="/admin/users">
