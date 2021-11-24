@@ -93,6 +93,8 @@
           <span class="tw-text-base tw-font-bold">Telemetry</span>
         </div>
 
+        <ripa-list :item="getApiStopEditExplanation"></ripa-list>
+
         <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
           <ripa-list :item="item.content"></ripa-list>
         </div>
@@ -122,6 +124,7 @@ import {
   apiStopAgencyQuestionsSummary,
   apiStopTelemetrySummary,
   apiStopSubmissionSummary,
+  apiStopEditExplanationSummary,
 } from '@/utilities/stop'
 
 export default {
@@ -160,6 +163,10 @@ export default {
     getSubmissions() {
       const value = localStorage.getItem('ripa_form_submitted_submissions')
       return value ? JSON.parse(value) : []
+    },
+
+    getApiStopEditExplanation() {
+      return apiStopEditExplanationSummary(this.apiStop)
     },
   },
 
