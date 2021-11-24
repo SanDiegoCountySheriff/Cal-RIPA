@@ -186,6 +186,25 @@ export const apiStopStopSummary = apiStop => {
   return items
 }
 
+export const apiStopEditExplanationSummary = apiStop => {
+  return {
+    level: 1,
+    header: 'Reason for Edit',
+    detail: getStopEditExplanation(apiStop),
+  }
+}
+
+const getStopEditExplanation = apiStop => {
+  if (apiStop.id.length <= 12) {
+    const submittedApiStop = JSON.parse(
+      localStorage.getItem('ripa_form_submitted_api_stop'),
+    )
+    return submittedApiStop.editStopExplanation
+  } else {
+    return apiStop.editStopExplanation
+  }
+}
+
 const getSummaryPersonCount = apiStop => {
   return {
     level: 1,
@@ -804,7 +823,6 @@ export const apiStopToFullStop = apiStop => {
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     piiEntities: apiStop.piiEntities,
-    editStopExplanation: apiStop.editStopExplanation,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1055,7 +1073,7 @@ export const fullStopToStop = fullStop => {
     id: fullStop.id,
     internalId: fullStop.id,
     template: fullStop.template,
-    editStopExplanation: fullStop.editStopExplanation,
+    editStopExplanation: null,
     overridePii: false,
     piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,

@@ -93,10 +93,7 @@
           <span class="tw-text-base tw-font-bold">Telemetry</span>
         </div>
 
-        <ripa-list
-          v-if="this.apiStop.editStopExplanation"
-          :item="getApiStopEditExplanation"
-        ></ripa-list>
+        <ripa-list :item="getApiStopEditExplanation"></ripa-list>
 
         <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
           <ripa-list :item="item.content"></ripa-list>
@@ -127,6 +124,7 @@ import {
   apiStopAgencyQuestionsSummary,
   apiStopTelemetrySummary,
   apiStopSubmissionSummary,
+  apiStopEditExplanationSummary,
 } from '@/utilities/stop'
 
 export default {
@@ -168,11 +166,7 @@ export default {
     },
 
     getApiStopEditExplanation() {
-      return {
-        level: 1,
-        header: 'Reason for Edit',
-        detail: this.apiStop.editStopExplanation,
-      }
+      return apiStopEditExplanationSummary(this.apiStop)
     },
   },
 
