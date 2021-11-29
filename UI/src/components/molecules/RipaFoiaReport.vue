@@ -40,14 +40,14 @@
     >
       <v-card-title>FOIA Report</v-card-title>
       <v-card-text>
-        <div v-for="(item, index) in foiaReportStats.items" :key="index">
+        <div v-for="(item, index) in foiaReportStats.cpraItems" :key="index">
           <ripa-list :item="item"></ripa-list>
         </div>
       </v-card-text>
       <div class="tw-ml-4 tw-mb-4">
         <v-btn
           @click="downloadReport"
-          v-show="foiaReportStats.reportLink"
+          v-show="foiaReportStats.fileName"
           small
           color="primary"
           >Download Report</v-btn
@@ -102,6 +102,7 @@ export default {
   },
 
   methods: {
+    // TODO: move to top-level component
     ...mapActions(['resetFoiaReportStats']),
 
     fromDateChange(val) {
@@ -117,7 +118,8 @@ export default {
     },
 
     downloadReport() {
-      alert(this.foiaReportStats.reportLink)
+      // TODO: emit event with filename to download file
+      alert(this.foiaReportStats.fileName)
     },
   },
 
@@ -129,6 +131,7 @@ export default {
   },
 
   destroyed() {
+    // TODO: emit event to reset stats
     this.resetFoiaReportStats()
   },
 }

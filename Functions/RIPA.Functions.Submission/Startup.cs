@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Files.Shares;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,8 +14,6 @@ using RIPA.Functions.Submission.Services.ServiceBus;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
-using RIPA.Functions.Submission.Services.ShareClientService;
-using RIPA.Functions.Submission.Services.ShareClientService.Contracts;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -38,7 +35,6 @@ namespace RIPA.Functions.Submission
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult());
             builder.Services.AddSingleton<ISubmissionServiceBusService>(InitializeSubmissionServiceBusService());
             builder.Services.AddSingleton<IResultServiceBusService>(InitializeResultServiceBusService());
-            builder.Services.AddSingleton<ICpraShareClientService>(InitializeCpraShareClientServiceAsync().GetAwaiter().GetResult());
         }
 
         private static SftpService InitializeSftpService()
@@ -114,17 +110,6 @@ namespace RIPA.Functions.Submission
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return cosmosDbService;
-        }
-
-        private static async Task<CpraShareClientService> InitializeCpraShareClientServiceAsync()
-        {
-            string connectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            string shareName = Environment.GetEnvironmentVariable("RipaShareClient");
-            ShareClient shareClient = new ShareClient(connectionString, shareName);
-            CpraShareClientService cpraShareClientService = new CpraShareClientService(shareClient);
-            await shareClient.CreateIfNotExistsAsync();
-
-            return cpraShareClientService;
         }
 
         private static SubmissionServiceBusService InitializeSubmissionServiceBusService()

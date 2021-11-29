@@ -1,11 +1,7 @@
 ﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using RIPA.Functions.Common.Models;
-using System;
-using System.Collections.Generic;
+using Azure.Storage.Blobs.Models;
+using Azure;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Utility
@@ -28,6 +24,12 @@ namespace RIPA.Functions.Submission.Utility
             await blobClient.DeleteIfExistsAsync();
         }
 
+        public async Task<Response<BlobDownloadResult>> GetBlob(string fileName, BlobContainerClient blobContainerClient)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            var file = await blobClient.DownloadContentAsync();
+            return file;
+        }
 
     }
 }

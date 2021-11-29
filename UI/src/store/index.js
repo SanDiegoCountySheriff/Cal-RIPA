@@ -72,7 +72,7 @@ export default new Vuex.Store({
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
     stopsWithErrors: [],
-    foiaReportStats: [],
+    foiaReportStats: {},
   },
 
   getters: {
@@ -680,24 +680,53 @@ export default new Vuex.Store({
         })
     },
 
-    async createFoiaReport({ commit, state }, reportDates) {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      const reportStats = {
-        items: [
-          {
-            level: 1,
-            header: 'Stop Count',
-            detail: 20,
+    createFoiaReport({ commit, state }, reportDates) {
+      const formattedFromDate = new Date(
+        `${reportDates.fromDate} 00:00:00Z`,
+      ).toISOString()
+      const formattedToDate = new Date(
+        `${reportDates.toDate} 23:59:59Z`,
+      ).toISOString()
+      const queryString = `FromDate=${formattedFromDate}&ToDate=${formattedToDate}`
+
+      return axios
+        .post(`http://localhost:7071/api/GenerateCpraReport?${queryString}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-          {
-            level: 1,
-            header: 'Officer Count',
-            detail: 10,
+        })
+        .then(response => {
+          console.log(response.data)
+          commit('updateFoiaReportStats', response.data)
+        })
+        .catch(error => {
+          console.log('There was an error generating the CPRA report', error)
+          return error.response.data
+        })
+    },
+
+    downloadFoiaReport({ state }, fileName) {
+      return axios
+        .get('http://localhost:7071/api/GetCpraReport', fileName, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        ],
-        reportLink: 'Report Url',
-      }
-      commit('updateFoiaReportStats', reportStats)
+        })
+        .then(response => {
+          const fileURL = window.URL.createObjectURL(new Blob([response.data]))
+          const fileLink = document.createElement('a')
+          fileLink.href = fileURL
+          fileLink.setAttribute('download', 'CPRAReport.csv')
+          document.body.appendChild(fileLink)
+          fileLink.click()
+        })
+        .catch(error => {
+          console.log('There was an error downloading the CPRA report', error)
+          return error.response.data
+        })
     },
 
     resetFoiaReportStats({ commit }) {
