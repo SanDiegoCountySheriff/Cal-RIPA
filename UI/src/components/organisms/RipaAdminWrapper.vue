@@ -5,6 +5,7 @@
       <v-tab to="/admin/submissions">Submissions</v-tab>
       <v-tab to="/admin/users">Users</v-tab>
       <v-tab to="/admin/domains">Domains</v-tab>
+      <v-tab to="/admin/foia">FOIA Report</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
@@ -48,6 +49,13 @@
           :on-edit-user="onEditUser"
           :on-upload-users="onUploadUsers"
         ></ripa-users-grid>
+      </v-tab-item>
+
+      <v-tab-item value="/admin/foia" id="/admin/foia">
+        <ripa-foia-report
+          @handleCreateFoiaReport="handleCreateFoiaReport"
+          :loading="loading"
+        ></ripa-foia-report>
       </v-tab-item>
 
       <v-tab-item value="/admin/domains" id="/admin/domains">
@@ -183,6 +191,7 @@ import RipaStatutesGrid from '@/components/molecules/RipaStatutesGrid'
 import RipaStopsGrid from '@/components/molecules/RipaStopsGrid'
 import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid'
 import RipaUsersGrid from '@/components/molecules/RipaUsersGrid'
+import RipaFoiaReport from '@/components/molecules/RipaFoiaReport'
 
 export default {
   name: 'ripa-admin-wrapper',
@@ -195,6 +204,7 @@ export default {
     RipaStopsGrid,
     RipaSubmissionsGrid,
     RipaUsersGrid,
+    RipaFoiaReport,
   },
 
   data() {
@@ -303,6 +313,9 @@ export default {
       }
 
       this.closeFileDialog()
+    },
+    handleCreateFoiaReport(reportDates) {
+      this.$emit('handleCreateFoiaReport', reportDates)
     },
   },
 

@@ -72,6 +72,7 @@ export default new Vuex.Store({
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
     stopsWithErrors: [],
+    foiaReportStats: [],
   },
 
   getters: {
@@ -125,7 +126,8 @@ export default new Vuex.Store({
                         ? 'currentSubmission'
                         : ''
                     errorArray.push(
-                      `<p class="${className}">${errorObj.code
+                      `<p class="${className}">${
+                        errorObj.code
                       }: ${errorObj.message.substr(0, 200)} ...</p>`,
                     )
                   })
@@ -287,6 +289,9 @@ export default new Vuex.Store({
     },
     mappedStopsWithErrors: state => {
       return state.stopsWithErrors
+    },
+    foiaReportStats: state => {
+      return state.foiaReportStats
     },
   },
 
@@ -483,6 +488,12 @@ export default new Vuex.Store({
     updateStopsWithErrors(state, stopsWithErrors) {
       state.stopsWithErrors = stopsWithErrors
     },
+    updateFoiaReportStats(state, reportStats) {
+      state.foiaReportStats = reportStats
+    },
+    resetFoiaReportStats(state) {
+      state.foiaReportStats = {}
+    },
   },
 
   actions: {
@@ -667,6 +678,30 @@ export default new Vuex.Store({
           console.log('There was an error uploading domain data', error)
           return error.response.data
         })
+    },
+
+    async createFoiaReport({ commit, state }, reportDates) {
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      const reportStats = {
+        items: [
+          {
+            level: 1,
+            header: 'Stop Count',
+            detail: 20,
+          },
+          {
+            level: 1,
+            header: 'Officer Count',
+            detail: 10,
+          },
+        ],
+        reportLink: 'Report Url',
+      }
+      commit('updateFoiaReportStats', reportStats)
+    },
+
+    resetFoiaReportStats({ commit }) {
+      commit('resetFoiaReportStats')
     },
 
     editOfficerUser({ dispatch, state }, mappedUser) {
@@ -987,8 +1022,9 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   cdsCode: item.cdsCode,
-                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${item.cdsCode
-                    }`,
+                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${
+                    item.cdsCode
+                  }`,
                 }
               })
             commit('updateFormSchools', data)
@@ -1160,11 +1196,13 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
 
         if (queryData.filters) {
           if (queryData.filters.stopFromDate !== null) {
@@ -1254,11 +1292,13 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
         if (queryData.filters) {
           if (queryData.filters.submissionFromDate !== null) {
             const formattedFromDate = new Date(
@@ -1309,15 +1349,17 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (pageData.offset) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${pageData.offset === null ? 0 : pageData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          pageData.offset === null ? 0 : pageData.offset
+        }`
       } else {
         queryString = `${queryString}?Offset=0`
       }
       if (pageData.limit) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}&Limit=${pageData.limit === null ? 0 : pageData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          pageData.limit === null ? 0 : pageData.limit
+        }`
       } else {
         queryString = `${queryString}&Limit=10`
       }

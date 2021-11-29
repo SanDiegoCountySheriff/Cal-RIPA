@@ -28,6 +28,7 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
+      @handleCreateFoiaReport="handleCreateFoiaReport"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -104,6 +105,7 @@ export default {
       'getErrorCodes',
       'submitStops',
       'submitAllStops',
+      'createFoiaReport',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -263,6 +265,14 @@ export default {
       const result = await Promise.all([this.uploadDomain(domainFile)])
       this.loading = false
       this.snackbarText = result[0]
+      this.snackbarVisible = true
+    },
+
+    async handleCreateFoiaReport(reportDates) {
+      this.loading = true
+      await Promise.all([this.createFoiaReport(reportDates)])
+      this.loading = false
+      this.snackbarText = `Report created from ${reportDates.fromDate} to ${reportDates.toDate}`
       this.snackbarVisible = true
     },
 

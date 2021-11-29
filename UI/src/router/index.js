@@ -62,6 +62,11 @@ const routes = [
         component: RipaAdminContainer,
         props: true,
       },
+      {
+        path: 'foia',
+        component: RipaAdminContainer,
+        props: true,
+      },
     ],
   },
   {

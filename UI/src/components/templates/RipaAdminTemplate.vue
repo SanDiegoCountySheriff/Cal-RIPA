@@ -28,6 +28,7 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
+      @handleCreateFoiaReport="handleCreateFoiaReport"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -131,6 +132,9 @@ export default {
       this.submitDialog = false
       this.selectedStops = []
       this.submitAllFilterData = null
+    },
+    handleCreateFoiaReport(reportDates) {
+      this.$emit('handleCreateFoiaReport', reportDates)
     },
   },
 
