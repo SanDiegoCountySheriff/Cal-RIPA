@@ -1325,15 +1325,12 @@ export default new Vuex.Store({
       }
 
       return axios
-        .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`http://localhost:7071/api/GetSubmissions${queryString}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           commit('updateAdminSubmissions', response.data)
         })
@@ -1376,7 +1373,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
+          `http://localhost:7071/api/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1441,7 +1438,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
+          `http://localhost:7071/api/PostSubmit`,
           { stopIds: stops },
           {
             headers: {
@@ -1509,7 +1506,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
+          `http://localhost:7071/api/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {
