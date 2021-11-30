@@ -77,7 +77,8 @@ namespace RIPA.Functions.Stop.Functions
             }
 
             IEnumerable<Common.Models.Stop> stopResponse;
-            IEnumerable<Common.Models.StopStatusCount> stopStatusCounts;
+            IEnumerable<StopStatusCount> stopStatusCounts;
+
             try
             {
                 stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);

@@ -125,8 +125,7 @@ export default new Vuex.Store({
                         ? 'currentSubmission'
                         : ''
                     errorArray.push(
-                      `<p class="${className}">${
-                        errorObj.code
+                      `<p class="${className}">${errorObj.code
                       }: ${errorObj.message.substr(0, 200)} ...</p>`,
                     )
                   })
@@ -988,9 +987,8 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   cdsCode: item.cdsCode,
-                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${
-                    item.cdsCode
-                  }`,
+                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${item.cdsCode
+                    }`,
                 }
               })
             commit('updateFormSchools', data)
@@ -1162,13 +1160,11 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
-        }`
+        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
+          }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
-        }`
+        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
+          }`
 
         if (queryData.filters) {
           if (queryData.filters.stopFromDate !== null) {
@@ -1235,19 +1231,34 @@ export default new Vuex.Store({
         })
     },
 
+    getAdminStopAudits({ state }, stopId) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          console.log('There was an error retrieving stop audits', error)
+        })
+    },
+
     getAdminSubmissions({ commit, state }, queryData) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
-        }`
+        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
+          }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
-        }`
+        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
+          }`
         if (queryData.filters) {
           if (queryData.filters.submissionFromDate !== null) {
             const formattedFromDate = new Date(
@@ -1298,17 +1309,15 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (pageData.offset) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${
-          pageData.offset === null ? 0 : pageData.offset
-        }`
+        queryString = `${queryString}?Offset=${pageData.offset === null ? 0 : pageData.offset
+          }`
       } else {
         queryString = `${queryString}?Offset=0`
       }
       if (pageData.limit) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}&Limit=${
-          pageData.limit === null ? 0 : pageData.limit
-        }`
+        queryString = `${queryString}&Limit=${pageData.limit === null ? 0 : pageData.limit
+          }`
       } else {
         queryString = `${queryString}&Limit=10`
       }

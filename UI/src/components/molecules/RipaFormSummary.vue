@@ -1,210 +1,120 @@
 <template>
-  <v-card class="ripa-form-summary mx-auto" flat>
-    <v-card-title class="tw-uppercase">Review and Submit</v-card-title>
-    <v-card-text>
-      <div class="tw-mb-2">
-        <span class="tw-text-base tw-font-bold">{{ getApiStopId }}</span>
-        <template v-if="editButtons">
-          <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
-            Edit
-          </v-btn>
-        </template>
-      </div>
-
-      <div v-for="item in getApiStopStopSummary" :key="item.id">
-        <ripa-list :item="item.content"></ripa-list>
-      </div>
-
-      <div
-        v-for="(person, index) in apiStop.listPersonStopped"
-        :key="person.index"
-      >
-        <div class="tw-my-4 tw-text-base tw-font-bold">
-          Person {{ index + 1 }}
-          <template v-if="editButtons">
-            <v-btn
-              class="tw-ml-4"
-              dense
-              outlined
-              x-small
-              @click="handleEditPerson($event, person.index)"
-            >
-              Edit
-            </v-btn>
-            <template v-if="!adminEditing">
-              <v-btn
-                class="tw-ml-2"
-                dense
-                outlined
-                x-small
-                @click="handleCopyPerson($event, person.index)"
-              >
-                Copy
-              </v-btn>
-            </template>
-            <template
-              v-if="apiStop.listPersonStopped.length > 1 && !adminEditing"
-            >
-              <v-btn
-                class="tw-ml-2"
-                dense
-                outlined
-                x-small
-                @click="handleDeletePerson($event, person.index)"
-              >
-                Delete
-              </v-btn>
-            </template>
-          </template>
-        </div>
-
-        <div v-for="item in getApiStopPersonSummary(person.id)" :key="item.id">
-          <ripa-list :item="item.content"></ripa-list>
-        </div>
-      </div>
-
-      <template v-if="anyAgencyQuestions">
-        <div class="tw-my-4 tw-text-base tw-font-bold">
-          <span class="tw-text-base tw-font-bold">Agency Questions</span>
-          <template v-if="editButtons">
-            <v-btn
-              class="tw-ml-4"
-              dense
-              outlined
-              x-small
-              @click="handleEditAgencyQuestions"
-            >
-              Edit
-            </v-btn>
-          </template>
-        </div>
-
-        <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
-          <ripa-list :item="item.content"></ripa-list>
-        </div>
-      </template>
-
-      <div class="tw-mt-4 tw-mb-2">
-        <v-divider></v-divider>
-      </div>
-
-      <template v-if="adminEditing">
-        <div class="tw-my-4 tw-text-base tw-font-bold">
-          <span class="tw-text-base tw-font-bold">Telemetry</span>
-        </div>
-
-        <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
-          <ripa-list :item="item.content"></ripa-list>
-        </div>
-
-        <div v-for="(submission, index) in getSubmissions" :key="submission.id">
-          <div class="tw-my-4 tw-text-base tw-font-bold">
-            Submission {{ index + 1 }}
-          </div>
-
-          <div
-            v-for="item in getApiStopSubmissionSummary(submission)"
-            :key="item.id"
-          >
-            <ripa-list :item="item.content"></ripa-list>
-          </div>
-        </div>
-      </template>
-    </v-card-text>
-  </v-card>
+  <div>
+    <div v-if="adminEditing">
+      <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
+        <v-tabs>
+          <v-tab>Current State</v-tab>
+          <v-tab-item>
+            <ripa-form-summary-detail
+              :apiStop="apiStop"
+              :adminEditing="adminEditing"
+              :editButtons="editButtons"
+              :onEditAgencyQuestions="onEditAgencyQuestions"
+              :onEditStop="onEditStop"
+              :onEditPerson="onEditPerson"
+            ></ripa-form-summary-detail>
+          </v-tab-item>
+          <v-tab v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
+            {{ getStopAuditDate(stopAudit.id) }}
+          </v-tab>
+          <v-tab-item v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
+            <ripa-form-summary-detail
+              :apiStop="stopAudit"
+              :adminEditing="adminEditing"
+              :title="getStopAuditTitle(stopAudit)"
+            ></ripa-form-summary-detail>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
+    </div>
+    <div v-if="!adminEditing">
+      <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
+        <ripa-form-summary-detail
+          :apiStop="apiStop"
+          :adminEditing="adminEditing"
+          :editButtons="editButtons"
+          :onDeletePerson="onDeletePerson"
+          :onCopyPerson="onCopyPerson"
+          :onEditAgencyQuestions="onEditAgencyQuestions"
+          :onEditStop="onEditStop"
+          :onEditPerson="onEditPerson"
+        ></ripa-form-summary-detail>
+      </v-card>
+    </div>
+  </div>
 </template>
 
 <script>
-import RipaList from '@/components/molecules/RipaList'
-import {
-  apiStopStopSummary,
-  apiStopPersonSummary,
-  apiStopAgencyQuestionsSummary,
-  apiStopTelemetrySummary,
-  apiStopSubmissionSummary,
-} from '@/utilities/stop'
+import RipaFormSummaryDetail from '@/components/molecules/RipaFormSummaryDetail'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ripa-form-summary',
 
   components: {
-    RipaList,
+    RipaFormSummaryDetail,
   },
 
-  computed: {
-    anyAgencyQuestions() {
-      const questions = this.apiStop?.listAgencyQuestion || []
-      return questions.length > 0
-    },
+  data() {
+    return {
+      loading: false,
+      stopAudits: [],
+    }
+  },
 
-    getApiStop() {
-      return this.apiStop
-    },
-
-    getApiStopId() {
-      return this.apiStop.id === 0 ? 'Unsaved Stop' : this.apiStop.id
-    },
-
-    getApiStopStopSummary() {
-      return apiStopStopSummary(this.apiStop)
-    },
-
-    getApiStopAgencyQuestionsSummary() {
-      return apiStopAgencyQuestionsSummary(this.apiStop)
-    },
-
-    getApiStopTelemetrySummary() {
-      return apiStopTelemetrySummary(this.apiStop)
-    },
-
-    getSubmissions() {
-      const value = localStorage.getItem('ripa_form_submitted_submissions')
-      return value ? JSON.parse(value) : []
-    },
+  created() {
+    const submittedStop = JSON.parse(
+      localStorage.getItem('ripa_form_submitted_api_stop'),
+    )
+    if (submittedStop.isEdited) {
+      this.getStopAudits()
+    }
   },
 
   methods: {
-    getApiStopSubmissionSummary(submission) {
-      return apiStopSubmissionSummary(submission)
+    ...mapActions(['getAdminStopAudits']),
+
+    async getStopAudits() {
+      this.loading = true
+      this.stopAudits = await this.getAdminStopAudits(this.apiStop.id)
+      this.stopAudits.sort((a, b) => (a.id < b.id ? 1 : b.id < a.id ? -1 : 0))
+      this.loading = false
     },
 
-    getApiStopPersonSummary(personId) {
-      return apiStopPersonSummary(this.apiStop, personId)
+    getStopAuditDate(stopAuditId) {
+      const stopAuditDate = stopAuditId.toString().split('-')[1]
+      const parsedDate = new Date(
+        Date.UTC(
+          stopAuditDate.substring(0, 4),
+          stopAuditDate.substring(4, 6) - 1,
+          stopAuditDate.substring(6, 8),
+          stopAuditDate.substring(8, 10),
+          stopAuditDate.substring(10, 12),
+        ),
+      )
+        .toISOString()
+        .split('T')[0]
+      return parsedDate
     },
 
-    handleEditStop(event) {
-      event.stopPropagation()
-      if (this.onEditStop) {
-        this.onEditStop()
-      }
+    getStopAuditTime(stopAuditId) {
+      const stopAuditDate = stopAuditId.toString().split('-')[1]
+      const parsedTime = new Date(
+        Date.UTC(
+          stopAuditDate.substring(0, 4),
+          stopAuditDate.substring(4, 6) - 1,
+          stopAuditDate.substring(6, 8),
+          stopAuditDate.substring(8, 10),
+          stopAuditDate.substring(10, 12),
+        ),
+      ).toLocaleTimeString('en-US')
+      return parsedTime
     },
 
-    handleEditPerson(event, id) {
-      event.stopPropagation()
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
-    },
-
-    handleCopyPerson(event, id) {
-      event.stopPropagation()
-      if (this.onCopyPerson) {
-        this.onCopyPerson(id)
-      }
-    },
-
-    handleDeletePerson(event, id) {
-      event.stopPropagation()
-      if (this.onDeletePerson) {
-        this.onDeletePerson(id)
-      }
-    },
-
-    handleEditAgencyQuestions(event) {
-      event.stopPropagation()
-      if (this.onEditAgencyQuestions) {
-        this.onEditAgencyQuestions()
-      }
+    getStopAuditTitle(stopAudit) {
+      return `State before edit on: ${this.getStopAuditDate(
+        stopAudit.id,
+      )} ${this.getStopAuditTime(stopAudit.id)}`
     },
   },
 
@@ -249,5 +159,11 @@ export default {
 .ripa-form-summary {
   width: 90%;
   border: 1px solid #ccc !important;
+}
+.v-sheet.v-card {
+  border-radius: 4px;
+}
+.v-window {
+  border-radius: 4px;
 }
 </style>
