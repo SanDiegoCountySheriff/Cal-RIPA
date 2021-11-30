@@ -38,7 +38,7 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
         [OpenApiParameter(name: "FromDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
         [OpenApiParameter(name: "ToDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(FileContentResult), Description = "CPRA Report")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CpraResult), Description = "CPRA Report Result")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
@@ -104,15 +104,6 @@ namespace RIPA.Functions.Submission.Functions
             };
 
             return new OkObjectResult(result);
-            
-            // TODO: Create download cpra report azure function
-
-            //var resultFile = await blobUtilities.GetBlob(fileName, _blobContainerClient);
-            
-            //return new FileContentResult(resultFile.Value.Content.ToArray(), "application/octet-stream")
-            //{
-            //    FileDownloadName = "CPRAReport.csv"
-            //};
         }
 
         private BlobContainerClient GetBlobContainerClient()

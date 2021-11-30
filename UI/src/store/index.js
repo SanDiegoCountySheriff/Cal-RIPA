@@ -708,13 +708,16 @@ export default new Vuex.Store({
 
     downloadFoiaReport({ state }, fileName) {
       return axios
-        .get('http://localhost:7071/api/GetCpraReport', fileName, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `http://localhost:7071/api/DownloadCpraReport?FileName=${fileName}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           const fileURL = window.URL.createObjectURL(new Blob([response.data]))
           const fileLink = document.createElement('a')

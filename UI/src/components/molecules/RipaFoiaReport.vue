@@ -4,28 +4,31 @@
       <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
-            class="tw-ml-2"
             label="From Date"
+            class="tw-ml-2"
             @input="fromDateChange"
             :rules="dateRules"
           ></ripa-date-picker>
         </div>
       </v-flex>
+
       <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
-            class="tw-ml-2"
             label="To Date"
+            class="tw-ml-2"
             @input="toDateChange"
             :rules="dateRules"
           ></ripa-date-picker>
         </div>
       </v-flex>
+
       <v-flex xs12 md2>
         <div class="tw-ml-2">
           <v-btn
             small
             color="primary"
+            class="tw-ml-2"
             @click="createFoiaReport(reportDates)"
             :disabled="!isValidDateRange"
             >Create</v-btn
@@ -33,11 +36,7 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-card
-      :loading="this.loading"
-      class="foia-report mx-2 my-2 float-left"
-      flat
-    >
+    <v-card :loading="this.loading" class="foia-report" flat>
       <v-card-title>FOIA Report</v-card-title>
       <v-card-text>
         <div v-for="(item, index) in foiaReportStats.cpraItems" :key="index">
@@ -46,7 +45,7 @@
       </v-card-text>
       <div class="tw-ml-4 tw-mb-4">
         <v-btn
-          @click="downloadReport"
+          @click="downloadReport(foiaReportStats.fileName)"
           v-show="foiaReportStats.fileName"
           small
           color="primary"
@@ -102,8 +101,7 @@ export default {
   },
 
   methods: {
-    // TODO: move to top-level component
-    ...mapActions(['resetFoiaReportStats']),
+    ...mapActions(['resetFoiaReportStats', 'downloadFoiaReport']),
 
     fromDateChange(val) {
       this.fromDate = val
@@ -117,9 +115,8 @@ export default {
       this.$emit('handleCreateFoiaReport', reportDates)
     },
 
-    downloadReport() {
-      // TODO: emit event with filename to download file
-      alert(this.foiaReportStats.fileName)
+    downloadReport(fileName) {
+      this.downloadFoiaReport(fileName)
     },
   },
 
@@ -131,7 +128,6 @@ export default {
   },
 
   destroyed() {
-    // TODO: emit event to reset stats
     this.resetFoiaReportStats()
   },
 }
