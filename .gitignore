@@ -380,20 +380,14 @@ yarn-error.log*
 /UI/public/config.json
 Functions/RIPA.Functions.Stop/Properties/launchSettings.json
 UI/package-lock.json
-<<<<<<< HEAD
+
 Functions/__blobstorage__/728759ce-7a05-46ff-96e1-248cdff4b0de
 Functions/.vscode/extensions.json
 Functions/.vscode/launch.json
 Functions/.vscode/settings.json
 Functions/.vscode/tasks.json
-=======
->>>>>>> main
 Functions/__azurite_db_blob__.json
 Functions/__azurite_db_blob_extent__.json
 Functions/__azurite_db_queue__.json
 Functions/__azurite_db_queue_extent__.json
 Functions/__azurite_db_table__.json
-<<<<<<< HEAD
-=======
-Functions/__blobstorage__/728759ce-7a05-46ff-96e1-248cdff4b0de
->>>>>>> main
