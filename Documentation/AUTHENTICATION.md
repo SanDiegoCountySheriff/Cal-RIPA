@@ -28,8 +28,9 @@ Use the following instructions to create the required resources.
     3. Navigate to the "Deployment/Scripts/Authentication" folder of the repository
     4. Open Powershell (running it as an **Administrator**)
     5. Connect to you Azure Subscription
-       1. az cloud set -n AzureUSGovernment
-       2. az login --tenant 00000000-0000-0000-0000-00000000000
+       1. az cloud set -n AzureCloud (if your tenant is in Azure GOV use -n AzureUSGovernment instead)
+       2. az login --tenant 00000000-0000-0000-0000-00000000000 --allow-no-subscriptions
+       3. Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass (if you get errors about a not digitally signed scripts)
     6. Run the script New-RIPAAuthenticationScheme.ps1 with the following parameters
        1. -DisplayName - This is the name that will be applied to the App Registration and Enterprise Application (Service Principal)
        2. -ReplyUri - This will be the URL of your deployed instance of CSSA RIPA. Make sure you use the right value here or you will be required to manually set the value later on
