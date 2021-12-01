@@ -72,7 +72,8 @@ export default new Vuex.Store({
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
     stopsWithErrors: [],
-    foiaReportStats: {},
+    cpraReportStats: {},
+    historicalCpraReports: [],
   },
 
   getters: {
@@ -290,8 +291,11 @@ export default new Vuex.Store({
     mappedStopsWithErrors: state => {
       return state.stopsWithErrors
     },
-    foiaReportStats: state => {
-      return state.foiaReportStats
+    mappedAdminCpraReportStats: state => {
+      return state.cpraReportStats
+    },
+    mappedAdminHistoricalCpraReports: state => {
+      return state.historicalCpraReports
     },
   },
 
@@ -488,11 +492,23 @@ export default new Vuex.Store({
     updateStopsWithErrors(state, stopsWithErrors) {
       state.stopsWithErrors = stopsWithErrors
     },
-    updateFoiaReportStats(state, reportStats) {
-      state.foiaReportStats = reportStats
+    updateCpraReportStats(state, reportStats) {
+      state.cpraReportStats = reportStats
     },
-    resetFoiaReportStats(state) {
-      state.foiaReportStats = {}
+    updateHistoricalCpraReports(state, historicalCpraReports) {
+      const reportObjects = []
+      for (const historicalCpraReport of historicalCpraReports) {
+        const fromDate = historicalCpraReport.split('/')[1]?.substring(0, 24)
+        const toDate = historicalCpraReport.split('/')[1]?.substring(25, 49)
+        const reportObject = {
+          officerName: historicalCpraReport.split('/')[0],
+          fromDate: formatDate(fromDate),
+          toDate: formatDate(toDate),
+          fileName: historicalCpraReport,
+        }
+        reportObjects.push(reportObject)
+      }
+      state.historicalCpraReports = reportObjects
     },
   },
 
@@ -680,25 +696,28 @@ export default new Vuex.Store({
         })
     },
 
-    createFoiaReport({ commit, state }, reportDates) {
+    createCpraReport({ commit, state }, reportParameters) {
       const formattedFromDate = new Date(
-        `${reportDates.fromDate} 00:00:00Z`,
+        `${reportParameters.reportDates.fromDate} 00:00:00Z`,
       ).toISOString()
       const formattedToDate = new Date(
-        `${reportDates.toDate} 23:59:59Z`,
+        `${reportParameters.reportDates.toDate} 23:59:59Z`,
       ).toISOString()
       const queryString = `FromDate=${formattedFromDate}&ToDate=${formattedToDate}`
 
       return axios
-        .post(`http://localhost:7071/api/GenerateCpraReport?${queryString}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .post(
+          `http://localhost:7071/api/GenerateCpraReport?${queryString}`,
+          reportParameters.officerName,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
-          console.log(response.data)
-          commit('updateFoiaReportStats', response.data)
+          commit('updateCpraReportStats', response.data)
         })
         .catch(error => {
           console.log('There was an error generating the CPRA report', error)
@@ -706,7 +725,7 @@ export default new Vuex.Store({
         })
     },
 
-    downloadFoiaReport({ state }, fileName) {
+    downloadCpraReport({ state }, fileName) {
       return axios
         .get(
           `http://localhost:7071/api/DownloadCpraReport?FileName=${fileName}`,
@@ -719,10 +738,14 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
+          const blobFileName = response.config.url.split('?')[1].split('/')[1]
+          const fromDate = formatDate(blobFileName?.substring(0, 24))
+          const toDate = formatDate(blobFileName?.substring(25, 49))
+          const fileName = `RIPAStops_${fromDate}_TO_${toDate}.csv`
           const fileURL = window.URL.createObjectURL(new Blob([response.data]))
           const fileLink = document.createElement('a')
           fileLink.href = fileURL
-          fileLink.setAttribute('download', 'CPRAReport.csv')
+          fileLink.setAttribute('download', fileName)
           document.body.appendChild(fileLink)
           fileLink.click()
         })
@@ -732,8 +755,24 @@ export default new Vuex.Store({
         })
     },
 
-    resetFoiaReportStats({ commit }) {
-      commit('resetFoiaReportStats')
+    getHistoricalCpraReports({ state, commit }) {
+      return axios
+        .get('http://localhost:7071/api/GetHistoricalCpraReports', {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          commit('updateHistoricalCpraReports', response.data)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error getting the historical CPRA Reports',
+            error,
+          )
+          return error.response.data
+        })
     },
 
     editOfficerUser({ dispatch, state }, mappedUser) {

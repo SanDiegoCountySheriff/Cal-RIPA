@@ -5,7 +5,7 @@
       <v-tab to="/admin/submissions">Submissions</v-tab>
       <v-tab to="/admin/users">Users</v-tab>
       <v-tab to="/admin/domains">Domains</v-tab>
-      <v-tab to="/admin/foia">FOIA Report</v-tab>
+      <v-tab to="/admin/cpra">CPRA Report</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
@@ -51,21 +51,26 @@
         ></ripa-users-grid>
       </v-tab-item>
 
-      <v-tab-item value="/admin/foia" id="/admin/foia">
+      <v-tab-item value="/admin/cpra" id="/admin/cpra">
         <v-tabs v-model="tabLevel3" show-arrows>
           <v-tab>Generate CPRA Report</v-tab>
           <v-tab>Previous CPRA Reports</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabLevel3">
           <v-tab-item>
-            <ripa-foia-report
-              @handleCreateFoiaReport="handleCreateFoiaReport"
+            <ripa-cpra-report
               :loading="loading"
-            ></ripa-foia-report>
+              :user="user"
+              :items="cpraReportStats"
+              @handleCreateCpraReport="handleCreateCpraReport"
+              @handleDownloadCpraReport="handleDownloadCpraReport"
+            ></ripa-cpra-report>
           </v-tab-item>
           <v-tab-item>
             <ripa-cpra-report-history
               :loading="loading"
+              :items="historicalCpraReports"
+              @handleDownloadCpraReport="handleDownloadCpraReport"
             ></ripa-cpra-report-history>
           </v-tab-item>
         </v-tabs-items>
@@ -204,7 +209,7 @@ import RipaStatutesGrid from '@/components/molecules/RipaStatutesGrid'
 import RipaStopsGrid from '@/components/molecules/RipaStopsGrid'
 import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid'
 import RipaUsersGrid from '@/components/molecules/RipaUsersGrid'
-import RipaFoiaReport from '@/components/molecules/RipaFoiaReport'
+import RipaCpraReport from '@/components/molecules/RipaCpraReport'
 import RipaCpraReportHistory from '@/components/molecules/RipaCpraReportHistory'
 
 export default {
@@ -218,7 +223,7 @@ export default {
     RipaStopsGrid,
     RipaSubmissionsGrid,
     RipaUsersGrid,
-    RipaFoiaReport,
+    RipaCpraReport,
     RipaCpraReportHistory,
   },
 
@@ -330,8 +335,11 @@ export default {
 
       this.closeFileDialog()
     },
-    handleCreateFoiaReport(reportDates) {
-      this.$emit('handleCreateFoiaReport', reportDates)
+    handleCreateCpraReport(reportParameters) {
+      this.$emit('handleCreateCpraReport', reportParameters)
+    },
+    handleDownloadCpraReport(fileName) {
+      this.$emit('handleDownloadCpraReport', fileName)
     },
   },
 
@@ -339,6 +347,14 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+    user: {
+      type: Object,
+      default: () => {},
+    },
+    cpraReportStats: {
+      type: Object,
+      default: () => {},
     },
     beats: {
       type: Array,
@@ -376,6 +392,10 @@ export default {
       default: () => {},
     },
     users: {
+      type: Array,
+      default: () => [],
+    },
+    historicalCpraReports: {
       type: Array,
       default: () => [],
     },

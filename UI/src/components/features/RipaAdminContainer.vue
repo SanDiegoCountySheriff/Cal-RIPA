@@ -2,6 +2,7 @@
   <div>
     <ripa-admin-template
       :loading="loading"
+      :user="mappedUser"
       :beats="mappedAdminBeats"
       :cities="mappedAdminCities"
       :schools="mappedAdminSchools"
@@ -19,6 +20,8 @@
       :on-upload-domain="handleUploadDomain"
       :on-tab-change="handleTabChange"
       :savedFilters="savedFilterState"
+      :historicalCpraReports="mappedAdminHistoricalCpraReports"
+      :cpraReportStats="mappedAdminCpraReportStats"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
@@ -28,7 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
-      @handleCreateFoiaReport="handleCreateFoiaReport"
+      @handleCreateCpraReport="handleCreateCpraReport"
+      @handleDownloadCpraReport="handleDownloadCpraReport"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -84,6 +88,9 @@ export default {
       'mappedAdminUsers',
       'mappedErrorCodeAdminSearch',
       'displayBeatInput',
+      'mappedAdminCpraReportStats',
+      'mappedAdminHistoricalCpraReports',
+      'mappedUser',
     ]),
   },
 
@@ -105,7 +112,9 @@ export default {
       'getErrorCodes',
       'submitStops',
       'submitAllStops',
-      'createFoiaReport',
+      'createCpraReport',
+      'downloadCpraReport',
+      'getHistoricalCpraReports',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -145,6 +154,9 @@ export default {
           this.getAdminSchools(),
           this.getAdminStatutes(),
         ])
+      }
+      if (tabIndex === '/admin/cpra') {
+        await Promise.all([this.getHistoricalCpraReports()])
       }
 
       this.loading = false
@@ -268,12 +280,18 @@ export default {
       this.snackbarVisible = true
     },
 
-    async handleCreateFoiaReport(reportDates) {
+    async CpraReport(reportParameters) {
       this.loading = true
-      await Promise.all([this.createFoiaReport(reportDates)])
+      await Promise.all([this.createCpraReport(reportParameters)])
       this.loading = false
-      this.snackbarText = `Report created from ${reportDates.fromDate} to ${reportDates.toDate}`
+      this.snackbarText = `Report created from ${reportParameters.reportDates.fromDate} to ${reportParameters.reportDates.toDate}`
       this.snackbarVisible = true
+    },
+
+    async handleDownloadCpraReport(fileName) {
+      this.loading = true
+      await Promise.all([this.downloadCpraReport(fileName)])
+      this.loading = false
     },
 
     async handleSubmitStops(stops) {

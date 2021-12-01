@@ -18,6 +18,15 @@ namespace RIPA.Functions.Submission.Utility
             }
         }
 
+        public async Task UploadBlobCpraReport(byte[] bytes, string fileName, string directoryName, BlobContainerClient blobContainerClient)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient($"{directoryName}/{fileName}");
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                await blobClient.UploadAsync(stream);
+            }
+        }
+
         public async Task DeleteBlobJson(string fileName, BlobContainerClient blobContainerClient)
         {
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);

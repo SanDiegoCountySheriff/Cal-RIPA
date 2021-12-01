@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -51,6 +53,16 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
+
+            var blobs = _blobContainerClient.GetBlobsAsync();
+            var response = new List<string>();
+
+            await foreach (BlobItem blob in blobs)
+            {
+                response.Add(blob.Name);
+            }
+
+            return new OkObjectResult(response);
         }
 
         private BlobContainerClient GetBlobContainerClient()

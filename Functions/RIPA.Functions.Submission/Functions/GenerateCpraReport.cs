@@ -36,11 +36,12 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiOperation(operationId: "GenerateCpraReport", tags: new[] { "name" })]
         [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
         [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-        [OpenApiParameter(name: "FromDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiParameter(name: "ToDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
+        [OpenApiParameter(name: "FromDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
+        [OpenApiParameter(name: "ToDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(string), Deprecated = false, Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CpraResult), Description = "CPRA Report Result")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, HttpRequest req,
             ILogger log)
         {
             log.LogInformation("CPRA Report Generation Requested");
@@ -87,20 +88,32 @@ namespace RIPA.Functions.Submission.Functions
 
             File.Delete(tempPath);
 
-            await blobUtilities.UploadBlobJson(fileBytes, fileName, _blobContainerClient);
+            await blobUtilities.UploadBlobCpraReport(fileBytes, fileName, officerName, _blobContainerClient);
 
             var result = new CpraResult
             {
-                FileName = fileName,
+                FileName = $"{officerName}/{fileName}",
                 CpraItems = new List<CpraListItem>
-            {
-                new CpraListItem()
                 {
-                    Level = 1,
-                    Header = "Stop Count",
-                    Detail = "2"
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "Stop Count",
+                        Detail = "2"
+                    },
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "From Date",
+                        Detail = fromDate
+                    },
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "To Date",
+                        Detail = toDate
+                    }
                 }
-            }
             };
 
             return new OkObjectResult(result);

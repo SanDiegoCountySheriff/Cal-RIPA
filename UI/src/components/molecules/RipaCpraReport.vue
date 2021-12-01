@@ -29,24 +29,24 @@
             small
             color="primary"
             class="tw-ml-2"
-            @click="createFoiaReport(reportDates)"
+            @click="createCpraReport(reportDates)"
             :disabled="!isValidDateRange"
             >Create</v-btn
           >
         </div>
       </v-flex>
     </v-layout>
-    <v-card :loading="this.loading" class="foia-report" flat>
-      <v-card-title>FOIA Report</v-card-title>
+    <v-card :loading="this.loading" class="cpra-report" flat>
+      <v-card-title>CPRA Report</v-card-title>
       <v-card-text>
-        <div v-for="(item, index) in foiaReportStats.cpraItems" :key="index">
+        <div v-for="(item, index) in cpraItems" :key="index">
           <ripa-list :item="item"></ripa-list>
         </div>
       </v-card-text>
       <div class="tw-ml-4 tw-mb-4">
         <v-btn
-          @click="downloadReport(foiaReportStats.fileName)"
-          v-show="foiaReportStats.fileName"
+          @click="downloadReport(reportStats.fileName)"
+          v-show="reportHasFilename"
           small
           color="primary"
           >Download Report</v-btn
@@ -60,10 +60,8 @@
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaList from '@/components/molecules/RipaList'
 
-import { mapGetters, mapActions } from 'vuex'
-
 export default {
-  name: 'ripa-foia-report',
+  name: 'ripa-cpra-report',
 
   components: { RipaDatePicker, RipaList },
 
@@ -71,12 +69,11 @@ export default {
     return {
       fromDate: null,
       toDate: null,
+      reportStats: {},
     }
   },
 
   computed: {
-    ...mapGetters(['foiaReportStats']),
-
     dateRules() {
       return [
         v => !!v || 'A date is required',
@@ -98,10 +95,22 @@ export default {
         toDate: this.toDate,
       }
     },
+
+    cpraItems() {
+      return this.reportStats?.cpraItems?.length > 0
+        ? this.reportStats.cpraItems
+        : []
+    },
+
+    reportHasFilename() {
+      return this.reportStats?.fileName !== undefined
+    },
   },
 
   methods: {
-    ...mapActions(['resetFoiaReportStats', 'downloadFoiaReport']),
+    init() {
+      this.reportStats = this.items
+    },
 
     fromDateChange(val) {
       this.fromDate = val
@@ -111,30 +120,48 @@ export default {
       this.toDate = val
     },
 
-    createFoiaReport(reportDates) {
-      this.$emit('handleCreateFoiaReport', reportDates)
+    createCpraReport(reportDates) {
+      const reportParameters = {
+        reportDates: reportDates,
+        officerName: `${this.user.firstName} ${this.user.lastName}`,
+      }
+      this.$emit('handleCreateCpraReport', reportParameters)
     },
 
     downloadReport(fileName) {
-      this.downloadFoiaReport(fileName)
+      this.$emit('handleDownloadCpraReport', fileName)
+    },
+  },
+
+  created() {
+    this.init()
+  },
+
+  watch: {
+    items(val) {
+      this.reports = val
     },
   },
 
   props: {
+    items: {
+      type: Object,
+      default: () => {},
+    },
     loading: {
       type: Boolean,
       default: false,
     },
-  },
-
-  destroyed() {
-    this.resetFoiaReportStats()
+    user: {
+      type: Object,
+      default: () => {},
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.foia-report {
+.cpra-report {
   width: 45%;
   border: 1px solid #ccc !important;
 }

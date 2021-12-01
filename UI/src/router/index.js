@@ -63,7 +63,7 @@ const routes = [
         props: true,
       },
       {
-        path: 'foia',
+        path: 'cpra',
         component: RipaAdminContainer,
         props: true,
       },

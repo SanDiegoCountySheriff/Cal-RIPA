@@ -36,7 +36,7 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
         [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
         [OpenApiParameter(name: "FileName", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The FileName parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/octet-stream", bodyType: typeof(FileContentResult), Description = "The file")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
@@ -56,8 +56,7 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             var fileName = req.Query["FileName"];
-
-            try 
+            try
             {
                 var resultFile = await blobUtilities.GetBlob(fileName, _blobContainerClient);
                 return new FileContentResult(resultFile.Value.Content.ToArray(), "application/octet-stream")
@@ -65,7 +64,7 @@ namespace RIPA.Functions.Submission.Functions
                     FileDownloadName = fileName
                 };
             }
-            catch (Exception ex) 
+            catch (Exception)
             {
                 return new NotFoundResult();
             }
