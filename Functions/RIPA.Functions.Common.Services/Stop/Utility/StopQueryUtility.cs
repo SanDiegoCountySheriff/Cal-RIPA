@@ -74,7 +74,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
             else if (forCpraReport) 
             {
-                whereStatements.Add(Environment.NewLine + "c.Status = 'Submitted' OR c.Status = 'Resubmitted'");
+                whereStatements.Add(Environment.NewLine + "(c.Status = 'Submitted' OR c.Status = 'Resubmitted')");
             }
 
             //ErrorCode
