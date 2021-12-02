@@ -780,7 +780,6 @@ export default new Vuex.Store({
             'There was an error getting the historical CPRA Reports',
             error,
           )
-          return error.response.data
         })
     },
 

@@ -53,7 +53,8 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
-
+            
+            await _blobContainerClient.CreateIfNotExistsAsync();
             var blobs = _blobContainerClient.GetBlobsAsync();
             var response = new List<string>();
 
