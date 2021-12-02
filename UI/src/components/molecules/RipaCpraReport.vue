@@ -139,7 +139,7 @@ export default {
 
   watch: {
     items(val) {
-      this.reports = val
+      this.reportStats = val
     },
   },
 

@@ -280,7 +280,7 @@ export default {
       this.snackbarVisible = true
     },
 
-    async CpraReport(reportParameters) {
+    async handleCreateCpraReport(reportParameters) {
       this.loading = true
       await Promise.all([this.createCpraReport(reportParameters)])
       this.loading = false

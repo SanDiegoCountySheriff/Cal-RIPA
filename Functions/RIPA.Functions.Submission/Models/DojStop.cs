@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace RIPA.Functions.Submission.Models
 {
@@ -15,6 +13,7 @@ namespace RIPA.Functions.Submission.Models
         public string SDate { get; set; }
         public string STime { get; set; }
         public string SDur { get; set; }
+        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
         public Officer Officer { get; set; }
         public Location Location { get; set; }
         public string Is_ServCall { get; set; }

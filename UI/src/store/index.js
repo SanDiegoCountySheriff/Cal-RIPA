@@ -703,7 +703,7 @@ export default new Vuex.Store({
       const formattedToDate = new Date(
         `${reportParameters.reportDates.toDate} 23:59:59Z`,
       ).toISOString()
-      const queryString = `FromDate=${formattedFromDate}&ToDate=${formattedToDate}`
+      const queryString = `StartDate=${formattedFromDate}&EndDate=${formattedToDate}`
 
       return axios
         .post(
