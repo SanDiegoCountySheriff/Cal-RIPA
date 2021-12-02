@@ -266,7 +266,7 @@ export default {
         : null,
       statuses: SUBMISSION_STATUSES,
       currentPage: 1,
-      PageOptions: [10, 25, 50, 100, 250, 500, 1000],
+      itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
       itemsPerPage: this.savedFilters.itemsPerPage
         ? this.savedFilters.itemsPerPage
         : 10,
