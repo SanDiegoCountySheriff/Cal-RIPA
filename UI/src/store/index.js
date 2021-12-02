@@ -725,7 +725,6 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log('There was an error generating the CPRA report', error)
-          console.log(error.response.data)
           if (error.response.data.includes('exists')) {
             return 'A report with those dates already exists, please use the historical report tab to download it'
           } else {

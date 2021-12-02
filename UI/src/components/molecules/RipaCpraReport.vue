@@ -59,6 +59,7 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaList from '@/components/molecules/RipaList'
+import { dateNotInFuture } from '@/utilities/dates'
 
 export default {
   name: 'ripa-cpra-report',
@@ -78,6 +79,7 @@ export default {
       return [
         v => !!v || 'A date is required',
         this.fromDate < this.toDate || 'From date must be before To Date',
+        v => dateNotInFuture(v) || 'Date must not be in the future',
       ]
     },
 
@@ -85,7 +87,9 @@ export default {
       return (
         this.fromDate !== null &&
         this.toDate !== null &&
-        this.fromDate < this.toDate
+        this.fromDate < this.toDate &&
+        dateNotInFuture(this.fromDate) &&
+        dateNotInFuture(this.toDate)
       )
     },
 
