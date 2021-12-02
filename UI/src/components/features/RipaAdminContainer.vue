@@ -282,16 +282,20 @@ export default {
 
     async handleCreateCpraReport(reportParameters) {
       this.loading = true
-      await Promise.all([this.createCpraReport(reportParameters)])
+      const result = await Promise.all([
+        this.createCpraReport(reportParameters),
+      ])
       this.loading = false
-      this.snackbarText = `Report created from ${reportParameters.reportDates.fromDate} to ${reportParameters.reportDates.toDate}`
+      this.snackbarText = result[0]
       this.snackbarVisible = true
     },
 
     async handleDownloadCpraReport(fileName) {
       this.loading = true
-      await Promise.all([this.downloadCpraReport(fileName)])
+      const result = await Promise.all([this.downloadCpraReport(fileName)])
       this.loading = false
+      this.snackbarText = result[0]
+      this.snackbarVisible = true
     },
 
     async handleSubmitStops(stops) {

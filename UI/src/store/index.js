@@ -4,6 +4,7 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import authentication from '@/authentication'
+import { es } from 'date-fns/locale'
 
 Vue.use(Vuex)
 
@@ -718,10 +719,18 @@ export default new Vuex.Store({
         )
         .then(response => {
           commit('updateCpraReportStats', response.data)
+          return `Report created for dates ${formatDate(
+            formattedFromDate,
+          )} to ${formatDate(formattedToDate)}`
         })
         .catch(error => {
           console.log('There was an error generating the CPRA report', error)
-          return error.response.data
+          console.log(error.response.data)
+          if (error.response.data.includes('exists')) {
+            return 'A report with those dates already exists, please use the historical report tab to download it'
+          } else {
+            return 'There was a problem generating the CPRA report, please try again'
+          }
         })
     },
 
@@ -748,6 +757,7 @@ export default new Vuex.Store({
           fileLink.setAttribute('download', fileName)
           document.body.appendChild(fileLink)
           fileLink.click()
+          return `Report ${fileName} downloaded`
         })
         .catch(error => {
           console.log('There was an error downloading the CPRA report', error)

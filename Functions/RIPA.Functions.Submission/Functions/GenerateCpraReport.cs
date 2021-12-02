@@ -137,7 +137,14 @@ namespace RIPA.Functions.Submission.Functions
 
             File.Delete(tempPath);
 
-            await blobUtilities.UploadBlobCpraReport(fileBytes, fileName, officerName, _blobContainerClient);
+            try 
+            {
+                await blobUtilities.UploadBlobCpraReport(fileBytes, fileName, officerName, _blobContainerClient);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
 
             var result = new CpraResult
             {
