@@ -70,7 +70,7 @@ namespace RIPA.Functions.Submission.Functions
             await _blobContainerClient.CreateIfNotExistsAsync();
 
             byte[] fileBytes;
-            string tempPath = $@"./{Guid.NewGuid()}.csv";
+            string tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
             var startDate = req.Query["StartDate"];
             var endDate = req.Query["EndDate"];
             var fileName = $"{startDate}-{endDate}-CPRAReport.csv";
