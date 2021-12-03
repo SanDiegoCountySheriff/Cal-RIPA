@@ -33,7 +33,7 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                Upload Users
+                Import Users
               </v-btn>
             </template>
             <v-card>

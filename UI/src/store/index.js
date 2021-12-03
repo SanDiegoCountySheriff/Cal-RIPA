@@ -708,7 +708,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `http://localhost:7071/api/GenerateCpraReport?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GenerateCpraReport?${queryString}`,
           reportParameters.officerName,
           {
             headers: {
@@ -736,7 +736,7 @@ export default new Vuex.Store({
     downloadCpraReport({ state }, fileName) {
       return axios
         .get(
-          `http://localhost:7071/api/DownloadCpraReport?FileName=${fileName}`,
+          `${state.apiConfig.apiBaseUrl}submission/DownloadCpraReport?FileName=${fileName}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -766,12 +766,15 @@ export default new Vuex.Store({
 
     getHistoricalCpraReports({ state, commit }) {
       return axios
-        .get('http://localhost:7071/api/GetHistoricalCpraReports', {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetHistoricalCpraReports`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           commit('updateHistoricalCpraReports', response.data)
         })
@@ -1404,12 +1407,15 @@ export default new Vuex.Store({
       }
 
       return axios
-        .get(`http://localhost:7071/api/GetSubmissions${queryString}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           commit('updateAdminSubmissions', response.data)
         })
@@ -1452,7 +1458,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `http://localhost:7071/api/GetSubmission/${pageData.id}${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1517,7 +1523,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `http://localhost:7071/api/PostSubmit`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
           { stopIds: stops },
           {
             headers: {
@@ -1585,7 +1591,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `http://localhost:7071/api/PostSubmitSearch?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {
