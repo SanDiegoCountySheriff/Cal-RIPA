@@ -20,7 +20,7 @@ export default {
       headers: [
         { text: 'From Date', value: 'fromDate' },
         { text: 'To Date', value: 'toDate' },
-        { text: 'Officer Name', value: 'officerName' },
+        { text: 'Created By', value: 'officerName' },
         { text: 'Download', value: 'actions', sortable: false },
       ],
     }

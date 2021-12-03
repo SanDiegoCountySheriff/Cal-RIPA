@@ -38,6 +38,10 @@
     </v-layout>
     <v-card :loading="this.loading" class="cpra-report" flat>
       <v-card-title>CPRA Report</v-card-title>
+      <v-card-text
+        >Only stops accepted by the California DOJ are included on the
+        report.</v-card-text
+      >
       <v-card-text>
         <div v-for="(item, index) in cpraItems" :key="index">
           <ripa-list :item="item"></ripa-list>

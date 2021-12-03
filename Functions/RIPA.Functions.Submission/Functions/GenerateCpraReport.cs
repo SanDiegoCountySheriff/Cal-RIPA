@@ -74,8 +74,8 @@ namespace RIPA.Functions.Submission.Functions
             var startDate = req.Query["StartDate"];
             var endDate = req.Query["EndDate"];
             var fileName = $"{startDate}-{endDate}-CPRAReport.csv";
-            string stopQueryString = String.Empty;
-            string stopSummaryQueryString = String.Empty;
+            string stopQueryString;
+            string stopSummaryQueryString;
 
             try
             {
@@ -91,10 +91,17 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             List<Stop> stopResponse;
+            IEnumerable<StopStatusCount> stopStatuses;
+            int totalStopCount = 0;
 
             try
             {
                 stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as List<Stop>;
+                stopStatuses = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
+                foreach (var stopStatus in stopStatuses)
+                {
+                    totalStopCount += stopStatus.Count;
+                }
             }
             catch (Exception ex)
             {
@@ -154,20 +161,26 @@ namespace RIPA.Functions.Submission.Functions
                     new CpraListItem()
                     {
                         Level = 1,
-                        Header = "Stop Count",
-                        Detail = stopResponse.Count.ToString()
+                        Header = "Total stops in date range",
+                        Detail = totalStopCount.ToString(),
+                    },
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "Submitted stops included on report",
+                        Detail = stopResponse.Count.ToString(),
                     },
                     new CpraListItem()
                     {
                         Level = 1,
                         Header = "From Date",
-                        Detail = startDate
+                        Detail = startDate,
                     },
                     new CpraListItem()
                     {
                         Level = 1,
                         Header = "To Date",
-                        Detail = endDate
+                        Detail = endDate,
                     }
                 }
             };
