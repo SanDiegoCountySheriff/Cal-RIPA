@@ -4,6 +4,7 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import authentication from '@/authentication'
+import { es } from 'date-fns/locale'
 
 Vue.use(Vuex)
 
@@ -72,6 +73,8 @@ export default new Vuex.Store({
     stopSubmissionPassedIds: [],
     stopSubmissionFailedStops: [],
     stopsWithErrors: [],
+    cpraReportStats: {},
+    historicalCpraReports: [],
   },
 
   getters: {
@@ -125,7 +128,8 @@ export default new Vuex.Store({
                         ? 'currentSubmission'
                         : ''
                     errorArray.push(
-                      `<p class="${className}">${errorObj.code
+                      `<p class="${className}">${
+                        errorObj.code
                       }: ${errorObj.message.substr(0, 200)} ...</p>`,
                     )
                   })
@@ -287,6 +291,12 @@ export default new Vuex.Store({
     },
     mappedStopsWithErrors: state => {
       return state.stopsWithErrors
+    },
+    mappedAdminCpraReportStats: state => {
+      return state.cpraReportStats
+    },
+    mappedAdminHistoricalCpraReports: state => {
+      return state.historicalCpraReports
     },
   },
 
@@ -483,6 +493,24 @@ export default new Vuex.Store({
     updateStopsWithErrors(state, stopsWithErrors) {
       state.stopsWithErrors = stopsWithErrors
     },
+    updateCpraReportStats(state, reportStats) {
+      state.cpraReportStats = reportStats
+    },
+    updateHistoricalCpraReports(state, historicalCpraReports) {
+      const reportObjects = []
+      for (const historicalCpraReport of historicalCpraReports) {
+        const fromDate = historicalCpraReport.split('/')[1]?.substring(0, 24)
+        const toDate = historicalCpraReport.split('/')[1]?.substring(25, 49)
+        const reportObject = {
+          officerName: historicalCpraReport.split('/')[0],
+          fromDate: formatDate(fromDate),
+          toDate: formatDate(toDate),
+          fileName: historicalCpraReport,
+        }
+        reportObjects.push(reportObject)
+      }
+      state.historicalCpraReports = reportObjects
+    },
   },
 
   actions: {
@@ -666,6 +694,95 @@ export default new Vuex.Store({
           dispatch('getAdminStatutes')
           console.log('There was an error uploading domain data', error)
           return error.response.data
+        })
+    },
+
+    createCpraReport({ commit, state }, reportParameters) {
+      const formattedFromDate = new Date(
+        `${reportParameters.reportDates.fromDate} 00:00:00Z`,
+      ).toISOString()
+      const formattedToDate = new Date(
+        `${reportParameters.reportDates.toDate} 23:59:59Z`,
+      ).toISOString()
+      const queryString = `StartDate=${formattedFromDate}&EndDate=${formattedToDate}`
+
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}submission/GenerateCpraReport?${queryString}`,
+          reportParameters.officerName,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          commit('updateCpraReportStats', response.data)
+          return `Report created for dates ${formatDate(
+            formattedFromDate,
+          )} to ${formatDate(formattedToDate)}`
+        })
+        .catch(error => {
+          console.log('There was an error generating the CPRA report', error)
+          if (error.response.data.includes('exists')) {
+            return 'A report with those dates already exists, please use the historical report tab to download it'
+          } else {
+            return 'There was a problem generating the CPRA report, please try again'
+          }
+        })
+    },
+
+    downloadCpraReport({ state }, fileName) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/DownloadCpraReport?FileName=${fileName}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          const blobFileName = response.config.url.split('?')[1].split('/')[1]
+          const fromDate = formatDate(blobFileName?.substring(0, 24))
+          const toDate = formatDate(blobFileName?.substring(25, 49))
+          const fileName = `RIPAStops_${fromDate}_TO_${toDate}.csv`
+          const fileURL = window.URL.createObjectURL(new Blob([response.data]))
+          const fileLink = document.createElement('a')
+          fileLink.href = fileURL
+          fileLink.setAttribute('download', fileName)
+          document.body.appendChild(fileLink)
+          fileLink.click()
+          return `Report ${fileName} downloaded`
+        })
+        .catch(error => {
+          console.log('There was an error downloading the CPRA report', error)
+          return error.response.data
+        })
+    },
+
+    getHistoricalCpraReports({ state, commit }) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}submission/GetHistoricalCpraReports`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          commit('updateHistoricalCpraReports', response.data)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error getting the historical CPRA Reports',
+            error,
+          )
         })
     },
 
@@ -987,8 +1104,9 @@ export default new Vuex.Store({
               .map(item => {
                 return {
                   cdsCode: item.cdsCode,
-                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${item.cdsCode
-                    }`,
+                  fullName: `${item.name.toUpperCase()} (${item.district.toUpperCase()}) ${
+                    item.cdsCode
+                  }`,
                 }
               })
             commit('updateFormSchools', data)
@@ -1160,11 +1278,13 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
 
         if (queryData.filters) {
           if (queryData.filters.stopFromDate !== null) {
@@ -1254,11 +1374,13 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${queryData.offset === null ? 0 : queryData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          queryData.offset === null ? 0 : queryData.offset
+        }`
         // if you send an items per page, set it, otherwise just default to 10
-        queryString = `${queryString}&Limit=${queryData.limit === null ? 10 : queryData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          queryData.limit === null ? 10 : queryData.limit
+        }`
         if (queryData.filters) {
           if (queryData.filters.submissionFromDate !== null) {
             const formattedFromDate = new Date(
@@ -1309,15 +1431,17 @@ export default new Vuex.Store({
       // this is typically when you first load the grid.
       if (pageData.offset) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}?Offset=${pageData.offset === null ? 0 : pageData.offset
-          }`
+        queryString = `${queryString}?Offset=${
+          pageData.offset === null ? 0 : pageData.offset
+        }`
       } else {
         queryString = `${queryString}?Offset=0`
       }
       if (pageData.limit) {
         // if offset is null, that means you are changing a filter so restart the paging
-        queryString = `${queryString}&Limit=${pageData.limit === null ? 0 : pageData.limit
-          }`
+        queryString = `${queryString}&Limit=${
+          pageData.limit === null ? 0 : pageData.limit
+        }`
       } else {
         queryString = `${queryString}&Limit=10`
       }

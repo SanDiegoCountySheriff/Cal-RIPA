@@ -1,11 +1,7 @@
 ﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using RIPA.Functions.Common.Models;
-using System;
-using System.Collections.Generic;
+using Azure.Storage.Blobs.Models;
+using Azure;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Utility
@@ -22,12 +18,27 @@ namespace RIPA.Functions.Submission.Utility
             }
         }
 
+        public async Task UploadBlobCpraReport(byte[] bytes, string fileName, string directoryName, BlobContainerClient blobContainerClient)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient($"{directoryName}/{fileName}");
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                await blobClient.UploadAsync(stream);
+            }
+        }
+
         public async Task DeleteBlobJson(string fileName, BlobContainerClient blobContainerClient)
         {
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             await blobClient.DeleteIfExistsAsync();
         }
 
+        public async Task<Response<BlobDownloadResult>> GetBlob(string fileName, BlobContainerClient blobContainerClient)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+            var file = await blobClient.DownloadContentAsync();
+            return file;
+        }
 
     }
 }

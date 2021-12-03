@@ -1,5 +1,4 @@
 using Azure.Messaging.ServiceBus;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -76,7 +75,7 @@ namespace RIPA.Functions.Submission.Functions
                 return new UnauthorizedResult();
             }
 
-            UserProfile userProfile; 
+            UserProfile userProfile;
             try
             {
                 var objectId = await RIPAAuthorization.GetUserId(req, log);
@@ -106,7 +105,7 @@ namespace RIPA.Functions.Submission.Functions
             {
                 stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.LogError(ex, "An error occurred getting stops requested.");
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");

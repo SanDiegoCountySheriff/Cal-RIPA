@@ -40,7 +40,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             return stopQuery;
         }
 
-        public string GetStopsQueryString(StopQuery stopQuery, Boolean isVisible)
+        public string GetStopsQueryString(StopQuery stopQuery, Boolean isVisible, Boolean forCpraReport = false)
         {
             List<string> whereStatements = new List<string>();
             string join = string.Empty;
@@ -68,9 +68,13 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
             //Status
-            if (!string.IsNullOrWhiteSpace(stopQuery.Status))
+            if (!string.IsNullOrWhiteSpace(stopQuery.Status) && !forCpraReport)
             {
                 whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
+            }
+            else if (forCpraReport) 
+            {
+                whereStatements.Add(Environment.NewLine + "(c.Status = 'Submitted' OR c.Status = 'Resubmitted')");
             }
 
             //ErrorCode

@@ -2,6 +2,7 @@
   <div>
     <ripa-admin-template
       :loading="loading"
+      :user="mappedUser"
       :beats="mappedAdminBeats"
       :cities="mappedAdminCities"
       :schools="mappedAdminSchools"
@@ -19,6 +20,8 @@
       :on-upload-domain="handleUploadDomain"
       :on-tab-change="handleTabChange"
       :savedFilters="savedFilterState"
+      :historicalCpraReports="mappedAdminHistoricalCpraReports"
+      :cpraReportStats="mappedAdminCpraReportStats"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
@@ -28,6 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
+      @handleCreateCpraReport="handleCreateCpraReport"
+      @handleDownloadCpraReport="handleDownloadCpraReport"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -83,6 +88,9 @@ export default {
       'mappedAdminUsers',
       'mappedErrorCodeAdminSearch',
       'displayBeatInput',
+      'mappedAdminCpraReportStats',
+      'mappedAdminHistoricalCpraReports',
+      'mappedUser',
     ]),
   },
 
@@ -104,6 +112,9 @@ export default {
       'getErrorCodes',
       'submitStops',
       'submitAllStops',
+      'createCpraReport',
+      'downloadCpraReport',
+      'getHistoricalCpraReports',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -143,6 +154,9 @@ export default {
           this.getAdminSchools(),
           this.getAdminStatutes(),
         ])
+      }
+      if (tabIndex === '/admin/cpra') {
+        await Promise.all([this.getHistoricalCpraReports()])
       }
 
       this.loading = false
@@ -261,6 +275,24 @@ export default {
     async handleUploadDomain(domainFile) {
       this.loading = true
       const result = await Promise.all([this.uploadDomain(domainFile)])
+      this.loading = false
+      this.snackbarText = result[0]
+      this.snackbarVisible = true
+    },
+
+    async handleCreateCpraReport(reportParameters) {
+      this.loading = true
+      const result = await Promise.all([
+        this.createCpraReport(reportParameters),
+      ])
+      this.loading = false
+      this.snackbarText = result[0]
+      this.snackbarVisible = true
+    },
+
+    async handleDownloadCpraReport(fileName) {
+      this.loading = true
+      const result = await Promise.all([this.downloadCpraReport(fileName)])
       this.loading = false
       this.snackbarText = result[0]
       this.snackbarVisible = true

@@ -2,6 +2,7 @@
   <div>
     <ripa-admin-wrapper
       :loading="loading"
+      :user="user"
       :beats="beats"
       :cities="cities"
       :schools="schools"
@@ -19,6 +20,8 @@
       :on-upload-domain="onUploadDomain"
       :on-tab-change="onTabChange"
       :savedFilters="savedFilters"
+      :historicalCpraReports="historicalCpraReports"
+      :cpraReportStats="cpraReportStats"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
       @handleRedoItemsPerPage="handleRedoItemsPerPage"
       @handlePaginate="handlePaginate"
@@ -28,6 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
+      @handleCreateCpraReport="handleCreateCpraReport"
+      @handleDownloadCpraReport="handleDownloadCpraReport"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -132,12 +137,26 @@ export default {
       this.selectedStops = []
       this.submitAllFilterData = null
     },
+    handleCreateCpraReport(reportParameters) {
+      this.$emit('handleCreateCpraReport', reportParameters)
+    },
+    handleDownloadCpraReport(fileName) {
+      this.$emit('handleDownloadCpraReport', fileName)
+    },
   },
 
   props: {
     loading: {
       type: Boolean,
       default: false,
+    },
+    user: {
+      type: Object,
+      default: () => {},
+    },
+    cpraReportStats: {
+      type: Object,
+      default: () => {},
     },
     beats: {
       type: Array,
@@ -171,6 +190,10 @@ export default {
       type: Object,
     },
     users: {
+      type: Array,
+      default: () => [],
+    },
+    historicalCpraReports: {
       type: Array,
       default: () => [],
     },
