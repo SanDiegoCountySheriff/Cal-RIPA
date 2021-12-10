@@ -33,8 +33,8 @@ Within your config.json file you can add as many additional question as you like
     {
         "Name": "ExtenuatingCircumstance",
         "Type": "Text",
-        "Prompt": "Discribe any extenuating circumstance or concerns that affected your encounter?",
-        "Hint": "Discribe in detail anything that might have affected the encounter.",
+        "Prompt": "Describe any extenuating circumstance or concerns that affected your encounter?",
+        "Hint": "Describe in detail anything that might have affected the encounter.",
         "MaxLength": 250,
         "Required": true
     }
