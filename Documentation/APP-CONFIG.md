@@ -84,15 +84,15 @@
             {
                 "Name": "ExtenuatingCircumstance",
                 "Type": "Text",
-                "Prompt": "Discribe any extenuating circumstance or concerns that affected your encounter?",
-                "Hint": "Discribe in detail anything that might have affected the encounter.",
+                "Prompt": "Describe any extenuating circumstance or concerns that affected your encounter?",
+                "Hint": "Describe in detail anything that might have affected the encounter.",
                 "MaxLength": 250,
                 "Required": true
             },
             {
                 "Name": "NumberOfOfficers",
                 "Type": "Text",
-                "Prompt": "What was the number officers responding to this event?",
+                "Prompt": "What was the number of officers responding to this event?",
                 "Hint": "Please provide a numeric value of the total number of responding officers.",
                 "MaxLength": 250,
                 "Required": true
