@@ -27,7 +27,7 @@ namespace RIPA.Functions.Submission.Functions
         public DownloadCpraReport()
         {
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
+            _storageContainerNamePrefix = "cpra";
             _blobContainerClient = GetBlobContainerClient();
         }
 
