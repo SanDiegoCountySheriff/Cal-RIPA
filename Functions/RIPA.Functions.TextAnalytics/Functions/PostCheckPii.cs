@@ -78,9 +78,15 @@ namespace RIPA.Functions.TextAnalytics.Functions
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string document = data?.Document;
             if (string.IsNullOrEmpty(document))
+            {
                 document = data?.document;
+            }
+
             if (string.IsNullOrEmpty(document))
+            {
                 return new BadRequestObjectResult("Must Provide Document");
+            }
+
             try
             {
                 PiiEntityCollection piiEntities = await _piiTextAnalyticsService.GetPiiEntities(document);
