@@ -55,6 +55,7 @@ export default {
           const apiStop = apiStops[index]
           if (apiStop.telemetry.offline) {
             for (const person of apiStop.listPersonStopped) {
+              // check basisForSearch
               let trimmedTextValue = person.basisForSearchBrief
                 ? person.basisForSearchBrief.trim()
                 : ''
@@ -64,50 +65,38 @@ export default {
                 trimmedTextValue.length > 0
               ) {
                 const response = await this.checkTextForPii(trimmedTextValue)
-                this.stop = Object.assign({}, this.stop)
-
-                if (this.stop.actionsTaken) {
-                  this.stop.actionsTaken.basisForSearchPiiFound =
-                    response &&
-                    response.piiEntities &&
-                    response.piiEntities.length > 0
-                  this.stop.isPiiFound =
-                    this.stop.isPiiFound ||
-                    this.stop.actionsTaken.basisForSearchPiiFound
-                }
-
+                person.basisForSearchPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.basisForSearchPiiFound
                 if (
-                  !this.stop.actionsTaken.basisForSearchPiiFound &&
-                  this.stop.piiEntities?.length > 0
+                  !person.basisForSearchPiiFound &&
+                  apiStop.piiEntities?.length > 0
                 ) {
-                  this.stop.piiEntities = this.stop.piiEntities.filter(
-                    e =>
-                      e.source !==
-                      this.basisForSearchSource + this.stop.person.index,
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.basisForSearchSource,
                   )
                 }
-
                 if (!response) {
                   this.stop.isPiiFound = true
                   this.stop.piiEntities = [
                     { entityText: 'Text Analytics Service was unavailable' },
                   ]
-                } else if (response?.piiEntities.length > 0) {
-                  this.stop.piiEntities = this.stop.piiEntities
-                    ? this.stop.piiEntities.filter(
-                        e =>
-                          e.source !==
-                          this.basisForSearchSource + this.stop.person.index,
+                } else if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e => e.source !== this.basisForSearchSource,
                       )
                     : []
                   for (const entity of response.piiEntities) {
-                    entity.source =
-                      this.basisForSearchSource + this.stop.person.index
-                    this.stop.piiEntities.push(entity)
+                    entity.source = this.basisForSearchSource
+                    apiStop.piiEntities.push(entity)
                   }
                 }
               }
-
+              // check reasonForStopExplanation
               trimmedTextValue = person.reasonForStopExplanation
                 ? person.reasonForStopExplanation.trim()
                 : ''
@@ -117,51 +106,39 @@ export default {
                 trimmedTextValue.length > 0
               ) {
                 const response = await this.checkTextForPii(trimmedTextValue)
-                this.stop = Object.assign({}, this.stop)
-
-                if (this.stop.stopReason) {
-                  this.stop.stopReason.reasonForStopPiiFound =
-                    response &&
-                    response.piiEntities &&
-                    response.piiEntities.length > 0
-                  this.stop.isPiiFound =
-                    this.stop.isPiiFound ||
-                    this.stop.stopReason.reasonForStopPiiFound
-                }
-
+                person.reasonForStopPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.reasonForStopPiiFound
                 if (
-                  !this.stop.stopReason.reasonForStopPiiFound &&
-                  this.stop.piiEntities?.length > 0
+                  !person.reasonForStopPiiFound &&
+                  apiStop.piiEntities?.length > 0
                 ) {
-                  this.stop.piiEntities = this.stop.piiEntities.filter(
-                    e =>
-                      e.source !==
-                      this.stopReasonSource + this.stop.person.index,
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.stopReasonSource,
                   )
                 }
-
                 if (!response) {
                   this.stop.isPiiFound = true
                   this.stop.piiEntities = [
                     { entityText: 'Text Analytics Service was unavailable' },
                   ]
-                } else if (response?.piiEntities.length > 0) {
-                  this.stop.piiEntities = this.stop.piiEntities
-                    ? this.stop.piiEntities.filter(
-                        e =>
-                          e.source !==
-                          this.stopReasonSource + this.stop.person.index,
+                } else if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e => e.source !== this.stopReasonSource,
                       )
                     : []
                   for (const entity of response.piiEntities) {
-                    entity.source =
-                      this.stopReasonSource + this.stop.person.index
-                    this.stop.piiEntities.push(entity)
+                    entity.source = this.stopReasonSource
+                    apiStop.piiEntities.push(entity)
                   }
                 }
               }
             }
-
+            // check location
             const trimmedTextValue = apiStop.location.fullAddress
               ? apiStop.location.fullAddress.trim()
               : ''
@@ -171,41 +148,34 @@ export default {
               trimmedTextValue.length > 0
             ) {
               const response = await this.checkTextForPii(trimmedTextValue)
-              this.stop = Object.assign({}, this.stop)
-
-              if (this.stop.location) {
-                this.stop.location.piiFound =
-                  response &&
-                  response.piiEntities &&
-                  response.piiEntities.length > 0
-                this.stop.isPiiFound =
-                  this.stop.isPiiFound || this.stop.location.piiFound
-              }
-
+              apiStop.location.piiFound =
+                response &&
+                response.piiEntities &&
+                response.piiEntities.length > 0
+              apiStop.isPiiFound =
+                apiStop.isPiiFound || apiStop.location.piiFound
               if (
-                !this.stop.location.piiFound &&
-                this.stop.piiEntities?.length > 0
+                !apiStop.location.piiFound &&
+                apiStop.piiEntities?.length > 0
               ) {
-                this.stop.piiEntities = this.stop.piiEntities.filter(
+                apiStop.piiEntities = apiStop.piiEntities.filter(
                   e => e.source !== this.locationSource,
                 )
               }
-
               if (!response) {
                 this.stop.isPiiFound = true
                 this.stop.piiEntities = [
                   { entityText: 'Text Analytics Service was unavailable' },
                 ]
               } else if (response.piiEntities.length > 0) {
-                this.stop.piiEntities = this.stop.piiEntities
-                  ? this.stop.piiEntities.filter(
+                apiStop.piiEntities = apiStop.piiEntities
+                  ? apiStop.piiEntities.filter(
                       e => e.source !== this.locationSource,
                     )
                   : []
-
                 for (const entity of response.piiEntities) {
                   entity.source = this.locationSource
-                  this.stop.piiEntities.push(entity)
+                  apiStop.piiEntities.push(entity)
                 }
               }
             }

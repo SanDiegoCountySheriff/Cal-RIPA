@@ -225,19 +225,13 @@ export default {
     async handlePiiCheck({ source, value }) {
       switch (source) {
         case 'location':
-          this.loadingPiiStep1 = true
           await this.validateLocationForPii(value)
-          this.loadingPiiStep1 = false
           break
         case 'reason':
-          this.loadingPiiStep3 = true
           await this.validateReasonForStopForPii(value)
-          this.loadingPiiStep3 = false
           break
         case 'search':
-          this.loadingPiiStep4 = true
           await this.validateBasisForSearchForPii(value)
-          this.loadingPiiStep4 = false
           break
         default:
           console.log('Error handling PII check')
@@ -252,9 +246,9 @@ export default {
         !this.invalidUser &&
         trimmedTextValue.length > 0
       ) {
+        this.loadingPiiStep1 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.location) {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
@@ -279,14 +273,14 @@ export default {
                 e => e.source !== this.locationSource,
               )
             : []
-
           for (const entity of response.piiEntities) {
             entity.source = this.locationSource
             this.stop.piiEntities.push(entity)
           }
         }
+        this.loadingPiiStep1 = false
+        this.updateFullStop()
       }
-      this.updateFullStop()
     },
 
     async validateReasonForStopForPii(textValue) {
@@ -296,9 +290,9 @@ export default {
         !this.invalidUser &&
         trimmedTextValue.length > 0
       ) {
+        this.loadingPiiStep3 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
@@ -314,13 +308,12 @@ export default {
             e => e.source !== this.stopReasonSource + this.stop.person.index,
           )
         }
-
         if (!response) {
           this.stop.isPiiFound = true
           this.stop.piiEntities = [
             { entityText: 'Text Analytics Service was unavailable' },
           ]
-        } else if (response?.piiEntities.length > 0) {
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>
@@ -332,8 +325,9 @@ export default {
             this.stop.piiEntities.push(entity)
           }
         }
+        this.loadingPiiStep3 = false
+        this.updateFullStop()
       }
-      this.updateFullStop()
     },
 
     async validateBasisForSearchForPii(textValue) {
@@ -343,9 +337,9 @@ export default {
         !this.invalidUser &&
         trimmedTextValue.length > 0
       ) {
+        this.loadingPiiStep4 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
@@ -353,7 +347,6 @@ export default {
             this.stop.isPiiFound ||
             this.stop.actionsTaken.basisForSearchPiiFound
         }
-
         if (
           !this.stop.actionsTaken.basisForSearchPiiFound &&
           this.stop.piiEntities?.length > 0
@@ -363,13 +356,12 @@ export default {
               e.source !== this.basisForSearchSource + this.stop.person.index,
           )
         }
-
         if (!response) {
           this.stop.isPiiFound = true
           this.stop.piiEntities = [
             { entityText: 'Text Analytics Service was unavailable' },
           ]
-        } else if (response?.piiEntities.length > 0) {
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>
@@ -382,8 +374,9 @@ export default {
             this.stop.piiEntities.push(entity)
           }
         }
+        this.loadingPiiStep4 = false
+        this.updateFullStop()
       }
-      this.updateFullStop()
     },
   },
 
