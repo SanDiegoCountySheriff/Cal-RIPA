@@ -82,7 +82,7 @@ export default {
                   )
                 }
 
-                if (response.piiEntities.length > 0) {
+                if (response?.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
                         e => e.source !== this.basisForSearchSource,
@@ -122,7 +122,7 @@ export default {
                   )
                 }
 
-                if (response.piiEntities.length > 0) {
+                if (response?.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
                         e => e.source !== this.stopReasonSource,
@@ -162,7 +162,7 @@ export default {
                 )
               }
 
-              if (response.piiEntities.length > 0) {
+              if (response?.piiEntities.length > 0) {
                 apiStop.piiEntities = apiStop.piiEntities
                   ? apiStop.piiEntities.filter(
                       e => e.source !== this.locationSource,

@@ -263,7 +263,12 @@ export default {
           )
         }
 
-        if (response.piiEntities.length > 0) {
+        if (!response) {
+          this.stop.isPiiFound = true
+          this.stop.piiEntities = [
+            { entityText: 'Text Analytics Service was unavailable' },
+          ]
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e => e.source !== this.locationSource,
@@ -307,7 +312,7 @@ export default {
           )
         }
 
-        if (response.piiEntities.length > 0) {
+        if (response?.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>
@@ -353,7 +358,7 @@ export default {
           )
         }
 
-        if (response.piiEntities.length > 0) {
+        if (response?.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>
