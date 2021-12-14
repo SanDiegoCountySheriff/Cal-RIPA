@@ -1,6 +1,4 @@
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   data() {
     return {
@@ -12,8 +10,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkTextForPii']),
-
     addApiStop(apiStop) {
       this.isLocked = true
       const apiStops = this.getApiStopsFromLocalStorage()
@@ -80,10 +76,7 @@ export default {
                   )
                 }
                 if (!response) {
-                  this.stop.isPiiFound = true
-                  this.stop.piiEntities = [
-                    { entityText: 'Text Analytics Service was unavailable' },
-                  ]
+                  await this.setPiiServiceAvailable(false)
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
@@ -121,10 +114,7 @@ export default {
                   )
                 }
                 if (!response) {
-                  this.stop.isPiiFound = true
-                  this.stop.piiEntities = [
-                    { entityText: 'Text Analytics Service was unavailable' },
-                  ]
+                  await this.setPiiServiceAvailable(false)
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
@@ -163,10 +153,7 @@ export default {
                 )
               }
               if (!response) {
-                this.stop.isPiiFound = true
-                this.stop.piiEntities = [
-                  { entityText: 'Text Analytics Service was unavailable' },
-                ]
+                await this.setPiiServiceAvailable(false)
               } else if (response.piiEntities.length > 0) {
                 apiStop.piiEntities = apiStop.piiEntities
                   ? apiStop.piiEntities.filter(
@@ -179,6 +166,16 @@ export default {
                 }
               }
             }
+          }
+
+          if (!this.piiServiceAvailable) {
+            apiStop.isPiiFound = true
+            apiStop.piiEntities = [
+              {
+                entityText:
+                  'Text analytics service was unavailable, please review the stop for PII',
+              },
+            ]
           }
 
           await this.timeout(1500)

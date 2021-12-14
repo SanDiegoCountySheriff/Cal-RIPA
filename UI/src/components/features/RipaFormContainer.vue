@@ -179,6 +179,7 @@ export default {
       'displayBeatInput',
       'displayDebugger',
       'stopTemplates',
+      'piiServiceAvailable',
     ]),
 
     getMappedUser() {
@@ -198,6 +199,10 @@ export default {
       'checkGpsLocation',
       'editOfficerUser',
       'editUser',
+      'setPiiServiceAvailable',
+      'setUserFavoriteLocations',
+      'setUserFavoriteReasons',
+      'setUserFavoriteResults',
     ]),
 
     handleSaveUser(user) {
@@ -263,10 +268,7 @@ export default {
         }
 
         if (!response) {
-          this.stop.isPiiFound = true
-          this.stop.piiEntities = [
-            { entityText: 'Text Analytics Service was unavailable' },
-          ]
+          await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
@@ -309,10 +311,7 @@ export default {
           )
         }
         if (!response) {
-          this.stop.isPiiFound = true
-          this.stop.piiEntities = [
-            { entityText: 'Text Analytics Service was unavailable' },
-          ]
+          await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
@@ -357,10 +356,7 @@ export default {
           )
         }
         if (!response) {
-          this.stop.isPiiFound = true
-          this.stop.piiEntities = [
-            { entityText: 'Text Analytics Service was unavailable' },
-          ]
+          await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(

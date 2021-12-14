@@ -1242,6 +1242,7 @@ const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
     return false
   }
 
+  const stopPiiFound = parsedApiStop?.isPiiFound
   const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false
@@ -1256,7 +1257,12 @@ const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
     }
   }
 
-  return locationPiiFound || reasonForStopPiiFound || basisForSearchPiiFound
+  return (
+    stopPiiFound ||
+    locationPiiFound ||
+    reasonForStopPiiFound ||
+    basisForSearchPiiFound
+  )
 }
 
 export const getOfficerAssignment = assignment => {
