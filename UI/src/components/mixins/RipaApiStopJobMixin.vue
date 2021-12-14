@@ -49,7 +49,7 @@ export default {
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
-          if (apiStop.telemetry.offline) {
+          if (apiStop.telemetry.offline && !apiStop.overridePii) {
             for (const person of apiStop.listPersonStopped) {
               // check basisForSearch
               let trimmedTextValue = person.basisForSearchBrief

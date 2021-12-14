@@ -1238,7 +1238,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
 }
 
 const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
-  if (parsedApiStop && fullStop.overridePii) {
+  if (parsedApiStop && (fullStop.overridePii || parsedApiStop.overridePii)) {
     return false
   }
 
