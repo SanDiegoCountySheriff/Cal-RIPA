@@ -258,7 +258,9 @@ export default {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound || this.stop.location.piiFound
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
         }
 
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
@@ -345,7 +347,8 @@ export default {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound ||
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
             this.stop.actionsTaken.basisForSearchPiiFound
         }
         if (
