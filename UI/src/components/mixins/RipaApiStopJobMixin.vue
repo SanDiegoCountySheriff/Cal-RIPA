@@ -85,6 +85,7 @@ export default {
                 }
                 if (!response) {
                   await this.setPiiServiceAvailable(false)
+                  person.basisForSearchPiiFound = person.basisForSearchPiiFound || false
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
@@ -123,6 +124,7 @@ export default {
                 }
                 if (!response) {
                   await this.setPiiServiceAvailable(false)
+                  person.reasonForStopPiiFound = person.reasonForStopPiiFound || false
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
@@ -162,6 +164,7 @@ export default {
               }
               if (!response) {
                 await this.setPiiServiceAvailable(false)
+                apiStop.location.piiFound = apiStop.location.piiFound || false
               } else if (response.piiEntities.length > 0) {
                 apiStop.piiEntities = apiStop.piiEntities
                   ? apiStop.piiEntities.filter(
