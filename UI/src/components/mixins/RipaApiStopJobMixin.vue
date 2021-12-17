@@ -1,4 +1,6 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -9,7 +11,13 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['piiServiceAvailable']),
+  },
+
   methods: {
+    ...mapActions(['checkTextForPii', 'setPiiServiceAvailable']),
+
     addApiStop(apiStop) {
       this.isLocked = true
       const apiStops = this.getApiStopsFromLocalStorage()
@@ -168,7 +176,7 @@ export default {
             }
           }
 
-          if (!this.piiServiceAvailable) {
+          if (!this.piiServiceAvailable && !apiStop.overridePii) {
             apiStop.isPiiFound = true
             apiStop.piiEntities = [
               {

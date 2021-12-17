@@ -822,6 +822,7 @@ export const apiStopToFullStop = apiStop => {
     internalId: nanoid(),
     template: apiStop.telemetry?.template || null,
     stepTrace: apiStop.telemetry?.listStepTrace || [],
+    isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
     location: {
       isSchool: apiStop.location?.school || false,
@@ -1074,6 +1075,7 @@ export const fullStopToStop = fullStop => {
     internalId: fullStop.id,
     template: fullStop.template,
     editStopExplanation: null,
+    isPiiFound: fullStop.isPiiFound || false,
     overridePii: false,
     piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,
@@ -1156,6 +1158,7 @@ export const fullStopToApiStop = (
     },
     listAgencyQuestion: fullStop.agencyQuestions || [],
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
+    overridePii: fullStop.overridePii || false,
     piiEntities: fullStop.piiEntities,
     listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
@@ -1237,12 +1240,12 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
   })
 }
 
-const getPiiFound = (parsedApiStop, fullStop, onlineAndAuthenticated) => {
+const getPiiFound = (parsedApiStop, fullStop) => {
   if (parsedApiStop && (fullStop.overridePii || parsedApiStop.overridePii)) {
     return false
   }
 
-  const stopPiiFound = parsedApiStop?.isPiiFound
+  const stopPiiFound = fullStop.isPiiFound
   const locationPiiFound = fullStop.location?.piiFound || false
   const people = fullStop.people || []
   let reasonForStopPiiFound = false

@@ -487,6 +487,7 @@ export default {
         updatedFullStop.location = this.stop.location
         updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.piiEntities = this.stop.piiEntities
+        updatedFullStop.isPiiFound = this.stop.isPiiFound
         updatedFullStop.editStopExplanation =
           this.stop.editStopExplanation || null
         updatedFullStop.overridePii = this.stop.overridePii || false

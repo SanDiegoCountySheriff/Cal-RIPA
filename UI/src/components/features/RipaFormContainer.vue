@@ -299,7 +299,9 @@ export default {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
         }
 
         if (

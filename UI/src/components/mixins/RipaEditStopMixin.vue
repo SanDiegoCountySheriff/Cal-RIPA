@@ -1,10 +1,8 @@
 <script>
 import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
-import { mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapActions(['']),
     handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
       const sortedSubmissions = submissions.sort(
