@@ -1,999 +1,1006 @@
 {
-	"$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
-	"handler": "Microsoft.Azure.CreateUIDef",
-	"version": "0.1.2-preview",
-	"parameters": {
-		"resourceTypes": [
-			"microsoft.resources/resourcegroups"
-		],
-		"config": {
-			"isWizard": false,
-			"basics": {
-				"description": "Information on this screen will define the naming used for the Azure resources created as well as the default domain name & URL if an existing private domain is not used. It is suggested that this application be deployed to US Gov Arizona region as require resources may not be available in other regions. The Agency Abbreviation and Application Name are combined to create a globally unique name & URL for this application instance.",
-				"resourceGroup": {
-					"constraints": {
-						"validations": []
-					},
-					"allowExisting": true
-				}
-			}
-		},
-		"basics": [
-			{
-				"name": "agency_full_name",
-				"type": "Microsoft.Common.TextBox",
-				"label": "Agency full display name",
-				"defaultValue": "Not used at this time",
-				"toolTip": "",
-				"constraints": {
-					"required": true,
-					"regex": "",
-					"validationMessage": ""
-				},
-				"visible": false
-			},
-			{
-				"name": "agency_dropdown",
-				"type": "Microsoft.Common.DropDown",
-				"label": "Agency",
-				"toolTip": "Select the agency that you are deploying this application for.",
-				"constraints": {
-					"allowedValues": [
-						{
-							"label": "ALAMEDA SHERIFF",
-							"value": {
-								"county": "Alameda",
-								"abbreviation": "alameda",
-								"type": "sd",
-								"ori": "CA0010000"
-							}
-						},
-						{
-							"label": "ALPINE SHERIFF",
-							"value": {
-								"county": "Alpine",
-								"abbreviation": "alpine",
-								"type": "sd",
-								"ori": "CA0020000"
-							}
-						},
-						{
-							"label": "AMADOR SHERIFF",
-							"value": {
-								"county": "Amador",
-								"abbreviation": "amador",
-								"type": "sd",
-								"ori": "CA0030000"
-							}
-						},
-						{
-							"label": "BUTTE SHERIFF",
-							"value": {
-								"county": "Butte",
-								"abbreviation": "butte",
-								"type": "sd",
-								"ori": "CA0040000"
-							}
-						},
-						{
-							"label": "CALAVERAS SHERIFF",
-							"value": {
-								"county": "Calaveras",
-								"abbreviation": "calaveras",
-								"type": "sd",
-								"ori": "CA0050000"
-							}
-						},
-						{
-							"label": "CAMPBELL POLICE",
-							"value": {
-								"county": "Santa Clara",
-								"abbreviation": "campbell",
-								"type": "pd",
-								"ori": "CA0430200"
-							}
-						},
-						{
-							"label": "COLUSA SHERIFF",
-							"value": {
-								"county": "Colusa",
-								"abbreviation": "colusa",
-								"type": "sd",
-								"ori": "CA0060000"
-							}
-						},
-						{
-							"label": "CONTRA COSTA SHERIFF",
-							"value": {
-								"county": "Contra Costa",
-								"abbreviation": "contracosta",
-								"type": "sd",
-								"ori": "CA0070000"
-							}
-						},
-						{
-							"label": "DEL NORTE SHERIFF",
-							"value": {
-								"county": "Del Norte",
-								"abbreviation": "delnorte",
-								"type": "sd",
-								"ori": "CA0080000"
-							}
-						},
-						{
-							"label": "EL CAJON POLICE",
-							"value": {
-								"county": "San Diego",
-								"abbreviation": "elcajon",
-								"type": "pd",
-								"ori": "CA0370500"
-							}
-						},
-						{
-							"label": "EL DORADO SHERIFF",
-							"value": {
-								"county": "El Dorado",
-								"abbreviation": "eldorado",
-								"type": "sd",
-								"ori": "CA0090000"
-							}
-						},
-						{
-							"label": "FRESNO SHERIFF",
-							"value": {
-								"county": "Fresno",
-								"abbreviation": "fresno",
-								"type": "sd",
-								"ori": "CA0100000"
-							}
-						},
-						{
-							"label": "GLENN SHERIFF",
-							"value": {
-								"county": "Glenn",
-								"abbreviation": "glenn",
-								"type": "sd",
-								"ori": "CA0110000"
-							}
-						},
-						{
-							"label": "HUMBOLDT SHERIFF",
-							"value": {
-								"county": "Humboldt",
-								"abbreviation": "humboldt",
-								"type": "sd",
-								"ori": "CA0120000"
-							}
-						},
-						{
-							"label": "IMPERIAL SHERIFF",
-							"value": {
-								"county": "Imperial",
-								"abbreviation": "imperial",
-								"type": "sd",
-								"ori": "CA0130000"
-							}
-						},
-						{
-							"label": "INYO SHERIFF",
-							"value": {
-								"county": "Inyo",
-								"abbreviation": "inyo",
-								"type": "sd",
-								"ori": "CA0140000"
-							}
-						},
-						{
-							"label": "KERN SHERIFF",
-							"value": {
-								"county": "Kern",
-								"abbreviation": "kern",
-								"type": "sd",
-								"ori": "CA0150000"
-							}
-						},
-						{
-							"label": "KINGS SHERIFF",
-							"value": {
-								"county": "Kings",
-								"abbreviation": "kings",
-								"type": "sd",
-								"ori": "CA0160000"
-							}
-						},
-						{
-							"label": "LAKE SHERIFF",
-							"value": {
-								"county": "Lake",
-								"abbreviation": "lake",
-								"type": "sd",
-								"ori": "CA0170000"
-							}
-						},
-						{
-							"label": "LASSEN SHERIFF",
-							"value": {
-								"county": "Lassen",
-								"abbreviation": "lassen",
-								"type": "sd",
-								"ori": "CA0180000"
-							}
-						},
-						{
-							"label": "LOS ALTOS POLICE",
-							"value": {
-								"county": "Sanata CLara",
-								"abbreviation": "sccla",
-								"type": "pd",
-								"ori": "CA0430500"
-							}
-						},
-						{
-							"label": "LOS ANGELES SHERIFF",
-							"value": {
-								"county": "Los Angeles",
-								"abbreviation": "la",
-								"type": "sd",
-								"ori": "CA0190000"
-							}
-						},
-						{
-							"label": "MADERA SHERIFF",
-							"value": {
-								"county": "Madera",
-								"abbreviation": "madera",
-								"type": "sd",
-								"ori": "CA0200000"
-							}
-						},
-						{
-							"label": "MARIN SHERIFF",
-							"value": {
-								"county": "Marin",
-								"abbreviation": "marin",
-								"type": "sd",
-								"ori": "CA0210000"
-							}
-						},
-						{
-							"label": "MARIPOSA SHERIFF",
-							"value": {
-								"county": "Mariposa",
-								"abbreviation": "mariposa",
-								"type": "sd",
-								"ori": "CA0220000"
-							}
-						},
-						{
-							"label": "MENDOCINO SHERIFF",
-							"value": {
-								"county": "Mendocino",
-								"abbreviation": "mendocino",
-								"type": "sd",
-								"ori": "CA0230000"
-							}
-						},
-						{
-							"label": "MERCED SHERIFF",
-							"value": {
-								"county": "Merced",
-								"abbreviation": "merced",
-								"type": "sd",
-								"ori": "CA0240000"
-							}
-						},
-						{
-							"label": "MODOC SHERIFF",
-							"value": {
-								"county": "Modoc",
-								"abbreviation": "modoc",
-								"type": "sd",
-								"ori": "CA0250000"
-							}
-						},
-						{
-							"label": "MONO SHERIFF",
-							"value": {
-								"county": "Mono",
-								"abbreviation": "mono",
-								"type": "sd",
-								"ori": "CA0260000"
-							}
-						},
-						{
-							"label": "MONTEREY SHERIFF",
-							"value": {
-								"county": "Monterey",
-								"abbreviation": "monterey",
-								"type": "sd",
-								"ori": "CA0270000"
-							}
-						},
-						{
-							"label": "NAPA SHERIFF",
-							"value": {
-								"county": "Napa",
-								"abbreviation": "napa",
-								"type": "sd",
-								"ori": "CA0280000"
-							}
-						},
-						{
-							"label": "NEVADA SHERIFF",
-							"value": {
-								"county": "Nevada",
-								"abbreviation": "nevada",
-								"type": "sd",
-								"ori": "CA0290000"
-							}
-						},
-						{
-							"label": "ORANGE SHERIFF",
-							"value": {
-								"county": "Orange",
-								"abbreviation": "orange",
-								"type": "sd",
-								"ori": "CA0300000"
-							}
-						},
-						{
-							"label": "PLACER SHERIFF",
-							"value": {
-								"county": "Placer",
-								"abbreviation": "placer",
-								"type": "sd",
-								"ori": "CA0310000"
-							}
-						},
-						{
-							"label": "PLUMAS SHERIFF",
-							"value": {
-								"county": "Plumas",
-								"abbreviation": "plumas",
-								"type": "sd",
-								"ori": "CA0320000"
-							}
-						},
-						{
-							"label": "RIVERSIDE SHERIFF",
-							"value": {
-								"county": "Riverside",
-								"abbreviation": "riverside",
-								"type": "sd",
-								"ori": "CA0330000"
-							}
-						},
-						{
-							"label": "SACRAMENTO SHERIFF",
-							"value": {
-								"county": "Sacramento",
-								"abbreviation": "sacramento",
-								"type": "sd",
-								"ori": "CA0340000"
-							}
-						},
-						{
-							"label": "SAN BENITO SHERIFF",
-							"value": {
-								"county": "San Benito",
-								"abbreviation": "sanbenito",
-								"type": "sd",
-								"ori": "CA0350000"
-							}
-						},
-						{
-							"label": "SAN BERNARDINO SHERIFF",
-							"value": {
-								"county": "San Bernardino",
-								"abbreviation": "sanbernardino",
-								"type": "sd",
-								"ori": "CA0360000"
-							}
-						},
-						{
-							"label": "SAN DIEGO SHERIFF",
-							"value": {
-								"county": "San Diego",
-								"abbreviation": "sd",
-								"type": "sd",
-								"ori": "CA0370000"
-							}
-						},
-						{
-							"label": "SAN FRANCISCO SHERIFF",
-							"value": {
-								"county": "San Francisco",
-								"abbreviation": "sf",
-								"type": "sd",
-								"ori": "CA0380000"
-							}
-						},
-						{
-							"label": "SAN JOAQUIN SHERIFF",
-							"value": {
-								"county": "San Joaquin",
-								"abbreviation": "sanjoaquin",
-								"type": "sd",
-								"ori": "CA0390000"
-							}
-						},
-						{
-							"label": "SAN LUIS OBISPO SHERIFF",
-							"value": {
-								"county": "San Luis Obispo",
-								"abbreviation": "slo",
-								"type": "sd",
-								"ori": "CA0400000"
-							}
-						},
-						{
-							"label": "SAN MATEO SHERIFF",
-							"value": {
-								"county": "San Mateo",
-								"abbreviation": "sm",
-								"type": "sd",
-								"ori": "CA0410000"
-							}
-						},
-						{
-							"label": "SANTA BARBARA SHERIFF",
-							"value": {
-								"county": "Santa Barbara",
-								"abbreviation": "sb",
-								"type": "so",
-								"ori": "CA0420000"
-							}
-						},
-						{
-							"label": "SANTA CLARA SHERIFF",
-							"value": {
-								"county": "Santa Clara",
-								"abbreviation": "santaclara",
-								"type": "sd",
-								"ori": "CA0430000"
-							}
-						},
-						{
-							"label": "SANTA CRUZ SHERIFF",
-							"value": {
-								"county": "Santa Cruz",
-								"abbreviation": "santacruz",
-								"type": "sd",
-								"ori": "CA0440000"
-							}
-						},
-						{
-							"label": "SHASTA SHERIFF",
-							"value": {
-								"county": "Shasta",
-								"abbreviation": "shasta",
-								"type": "sd",
-								"ori": "CA0450000"
-							}
-						},
-						{
-							"label": "SIERRA SHERIFF",
-							"value": {
-								"county": "Sierra",
-								"abbreviation": "sierra",
-								"type": "sd",
-								"ori": "CA0460000"
-							}
-						},
-						{
-							"label": "SISKIYOU SHERIFF",
-							"value": {
-								"county": "Siskiyou",
-								"abbreviation": "siskiyou",
-								"type": "sd",
-								"ori": "CA0470000"
-							}
-						},
-						{
-							"label": "SOLANO SHERIFF",
-							"value": {
-								"county": "Solano",
-								"abbreviation": "solano",
-								"type": "sd",
-								"ori": "CA0480000"
-							}
-						},
-						{
-							"label": "SONOMA SHERIFF",
-							"value": {
-								"county": "Sonoma",
-								"abbreviation": "sonoma",
-								"type": "sd",
-								"ori": "CA0490000"
-							}
-						},
-						{
-							"label": "STANISLAUS SHERIFF",
-							"value": {
-								"county": "Stanislaus",
-								"abbreviation": "stanislaus",
-								"type": "sd",
-								"ori": "CA0500000"
-							}
-						},
-						{
-							"label": "SUTTER SHERIFF",
-							"value": {
-								"county": "Sutter",
-								"abbreviation": "sutter",
-								"type": "sd",
-								"ori": "CA0510000"
-							}
-						},
-						{
-							"label": "TEHAMA SHERIFF",
-							"value": {
-								"county": "Tehama",
-								"abbreviation": "tehama",
-								"type": "sd",
-								"ori": "CA0520000"
-							}
-						},
-						{
-							"label": "TRINITY SHERIFF",
-							"value": {
-								"county": "Trinity",
-								"abbreviation": "trinity",
-								"type": "sd",
-								"ori": "CA0530000"
-							}
-						},
-						{
-							"label": "TULARE SHERIFF",
-							"value": {
-								"county": "Tulare",
-								"abbreviation": "tulare",
-								"type": "sd",
-								"ori": "CA0540000"
-							}
-						},
-						{
-							"label": "TUOLUMNE SHERIFF",
-							"value": {
-								"county": "Tuolumne",
-								"abbreviation": "tuolumne",
-								"type": "sd",
-								"ori": "CA0550000"
-							}
-						},
-						{
-							"label": "VENTURA SHERIFF",
-							"value": {
-								"county": "Ventura",
-								"abbreviation": "ventura",
-								"type": "sd",
-								"ori": "CA0560000"
-							}
-						},
-						{
-							"label": "YOLO SHERIFF",
-							"value": {
-								"county": "Yolo",
-								"abbreviation": "yolo",
-								"type": "sd",
-								"ori": "CA0570000"
-							}
-						},
-						{
-							"label": "YUBA SHERIFF",
-							"value": {
-								"county": "Yuba",
-								"abbreviation": "yuba",
-								"type": "sd",
-								"ori": "CA0580000"
-							}
-						}
-					],
-					"required": true
-				},
-				"visible": true
-			},
-			{
-				"name": "agency_abbreviation_length",
-				"type": "Microsoft.Common.InfoBox",
-				"visible": "[greater(length(basics('agency_dropdown').abbreviation), 0)]",
-				"options": {
-					"icon": "Warning",
-					"text": "[concat('Due to Azure storage account name limitations, your agency short name (', basics('agency_dropdown').abbreviation, ') that has a character length of (', string(length(basics('agency_dropdown').abbreviation)),') the \"Application name\" property below will be limited to ', string(sub(17, length(basics('agency_dropdown').abbreviation))) ,' characters.')]"
-				}
-			},
-			{
-				"name": "agency_application",
-				"type": "Microsoft.Common.TextBox",
-				"label": "Application name",
-				"defaultValue": "ripa",
-				"toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
-				"constraints": {
-					"required": true,
-					"regex": "[concat('^[a-z0-9-]{1,', string(sub(17, length(basics('agency_dropdown').abbreviation))), '}$')]",
-					"validationMessage": "[concat('The Application Name must be between 1 and ', string(sub(17, length(basics('agency_dropdown').abbreviation))), ' characters long and contain Lower case characters')]"
-				},
-				"visible": true
-			},
-			{
-				"name": "environment_type",
-				"type": "Microsoft.Common.OptionsGroup",
-				"label": "System usage (environment)",
-				"defaultValue": "Production",
-				"toolTip": "Please chose how this deployment will be used. Is this a production, qa or dev installation?",
-				"constraints": {
-					"allowedValues": [
-						{
-							"label": "Production",
-							"value": "PROD"
-						},
-						{
-							"label": "Quality Assurance (QA)",
-							"value": "QA"
-						},
-						{
-							"label": "Development",
-							"value": "DEV"
-						}
-					],
-					"required": true
-				},
-				"visible": true
-			},
-			{
-				"name": "enable_beats",
-				"type": "Microsoft.Common.CheckBox",
-				"label": "Enable officer beats?",
-				"toolTip": "Enables officer beats and related UI elements",
-				"constraints": {
-					"required": false
-				}
-			},
-			{
-				"name": "enable_stop_debugger",
-				"type": "Microsoft.Common.CheckBox",
-				"label": "Enable STOP data debugger?",
-				"toolTip": "Enables STOP data debugger and related UI elements",
-				"constraints": {
-					"required": false
-				}
-			}
-		],
-		"steps": [
-			{
-				"name": "steps_app_domain",
-				"label": "Application Domain",
-				"elements": [
-					{
-						"name": "app_domain_type",
-						"type": "Microsoft.Common.OptionsGroup",
-						"label": "Managed or Private Domain",
-						"defaultValue": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
-						"toolTip": "[basics('agency_dropdown').type]",
-						"constraints": {
-							"allowedValues": [
-								{
-									"label": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
-									"value": "cssa_cloud_domain"
-								},
-								{
-									"label": "Private Domain (you manage dns and certificate)",
-									"value": "private_domain"
-								}
-							],
-							"required": true
-						},
-						"visible": true
-					},
-					{
-						"name": "private_domain",
-						"type": "Microsoft.Common.Section",
-						"label": "Following details must be provided prior to beginning the deployment.",
-						"elements": [
-							{
-								"name": "private_domain_kv",
-								"type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
-								"visible": true,
-								"toolTip": "Select a certificate from an existing key vault. Or, you can upload a new certificate here too.",
-								"label": "KeyVault certificates selection"
-							},
-							{
-								"name": "private_domain_warning",
-								"type": "Microsoft.Common.InfoBox",
-								"visible": true,
-								"options": {
-									"icon": "Warning",
-									"text": "[concat('When using a private certificate (BYOC) you must ')]"
-								}
-							},
-							{
-								"name": "private_domain_root",
-								"type": "Microsoft.Common.TextBox",
-								"label": "Root Domain Name",
-								"defaultValue": "",
-								"placeholder": "youragencydomain.gov",
-								"toolTip": "The root DNS entry of your custom domain. I.e. myorganization.gov",
-								"constraints": {
-									"required": true,
-									"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
-									"validationMessage": ""
-								},
-								"visible": true
-							},
-							{
-								"name": "private_domain_cname",
-								"type": "Microsoft.Common.TextBox",
-								"label": "Application DNS CNAME",
-								"defaultValue": "",
-								"placeholder": "Choose your subdomain (Example: ripa)",
-								"toolTip": "This value should be a short and descriptive name to complete the application URL. I.e. ripa.myorganization.gov",
-								"constraints": {
-									"required": true,
-									"regex": "",
-									"validationMessage": ""
-								},
-								"visible": true
-							},
-							{
-								"name": "private_domain_info",
-								"type": "Microsoft.Common.TextBlock",
-								"visible": true,
-								"options": {
-									"text": "[concat('Your application will be URL: https://', steps('steps_app_domain').private_domain.private_domain_cname, '.', steps('steps_app_domain').private_domain.private_domain_root)]"
-								}
-							},
-							{
-								"name": "private_domain_warning",
-								"type": "Microsoft.Common.InfoBox",
-								"visible": true,
-								"options": {
-									"icon": "Warning",
-									"text": "[concat('When using a private domain you must create 2 DNS CNAME records in your DNS system. \t\t\t\t\t\t\t\t Please create the following CNAME records in your DNS system BEFORE CONTINUING. \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"cdnverify.', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"cdnverify.', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\"')]"
-								}
-							}
-						],
-						"visible": "[equals(steps('steps_app_domain').app_domain_type,'private_domain')]"
-					}
-				]
-			},
-			{
-				"name": "steps_authentication",
-				"label": "Authentication",
-				"subLabel": {},
-				"elements": [
-					{
-						"name": "auth_instructions",
-						"type": "Microsoft.Common.TextBlock",
-						"options": {
-							"text": "This application uses Azure Active Directory, OAuth/OpenID and RBAC. This requires an \"App Registration\" (AR) be created (or use an existing) in the Azure AD Tenant that you wish to use to for authentication & authorization. The AR needs to have several key properties and settings configured in order to work properly. Please review the link below for required settings and scripts that can be used to create a new AR in your tenant.",
-							"link": {
-								"label": "Instructions and scripts download",
-								"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Deployment/Scripts/Authentication"
-							}
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_fqdn",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Azure AD FQDN",
-						"placeholder": "sample.gov",
-						"toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
-						"constraints": {
-							"required": true,
-							"regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_app_id",
-						"type": "Microsoft.Common.TextBox",
-						"label": "AAD App Registration ID",
-						"placeholder": "********-****-****-****-************",
-						"toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
-						"constraints": {
-							"required": true,
-							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_tenant_id",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Tenant ID",
-						"placeholder": "********-****-****-****-************",
-						"toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
-						"constraints": {
-							"required": true,
-							"regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-							"validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_authority",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Login Authority",
-						"defaultValue": "https://login.microsoftonline.com/",
-						"toolTip": "This must point to a valid OAuth/OpenID authority.",
-						"constraints": {
-							"required": true,
-							"regex": "^(https:\/\/[a-z0-9]+.)[a-z0-9]+.[a-z]+(\/[a-zA-Z0-9#]+\/?)*\/$",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "auth_logout_url",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Logout URL",
-						"toolTip": "This should point to a URL that clears a users seesion.",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					}
-				]
-			},
-			{
-				"name": "steps_doj",
-				"label": "DOJ SFTP",
-				"subLabel": {},
-				"elements": [
-					{
-						"name": "doj_sftp_message",
-						"type": "Microsoft.Common.InfoBox",
-						"visible": true,
-						"options": {
-							"icon": "Info",
-							"text": "This system implements the SFTP push of STOP data to the DOJ hosted interface. If you have this information available today, please enter the details below. If you do not, you can review the steps required to configure this information at a later day here https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission",
-							"uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission"
-						}
-					},
-					{
-						"name": "doj_sftp_server",
-						"type": "Microsoft.Common.TextBox",
-						"label": "SFTP server host name",
-						"toolTip": "This can be a valid IP Address or a DNS host name provided by the DOJ IT",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "doj_sftp_server_key",
-						"type": "Microsoft.Common.TextBox",
-						"label": "SFTP server key",
-						"toolTip": "This is a security key for base access to the SFTP server provided by the DOJ IT",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "doj_sftp_username",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Username",
-						"toolTip": "This is the user credentials provided by the DOJ IT",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "doj_sftp_password",
-						"type": "Microsoft.Common.TextBox",
-						"label": "Password",
-						"toolTip": "This is the user credentials provided by the DOJ IT",
-						"constraints": {
-							"required": false,
-							"regex": "",
-							"validationMessage": ""
-						},
-						"visible": true
-					},
-					{
-						"name": "doj_environment",
-						"type": "Microsoft.Common.OptionsGroup",
-						"label": "DoJ Test or Production configuration",
-						"defaultValue": "Production",
-						"toolTip": "Choose the DoJ sFTP environment configuration you would like to set up for this deployment",
-						"constraints": {
-							"allowedValues": [
-								{
-									"label": "Production",
-									"value": "PROD"
-								},
-								{
-									"label": "Test (non-production)",
-									"value": "TEST"
-								}
-							],
-							"required": false
-						},
-						"visible": true
-					}
-				]
-			},
-			{
-				"name": "steps_tags",
-				"label": "Tags",
-				"elements": [
-					{
-						"name": "tagsInstructions",
-						"type": "Microsoft.Common.TextBlock",
-						"visible": true,
-						"options": {
-							"text": "Provide a list of tags and values for your application. (Optional)",
-							"link": {
-								"label": "Learn more",
-								"uri": "https://docs.microsoft.com/en-us/azure/templates/microsoft.resources/tags?tabs=json"
-							}
-						}
-					},
-					{
-						"name": "user_tags",
-						"type": "Microsoft.Common.TagsByResource",
-						"resources": [
-							"Microsoft.ApiManagement/service",
-							"Microsoft.CognitiveServices/accounts",
-							"Microsoft.Compute/virtualMachines",
-							"Microsoft.DocumentDB/databaseAccounts",
-							"Microsoft.Insights/components",
-							"Microsoft.Insights/actionGroups",
-							"Microsoft.KeyVault/vaults",
-							"Microsoft.Network/networkSecurityGroups",
-							"Microsoft.Network/privateDnsZones",
-							"Microsoft.Network/privateEndpoints",
-							"Microsoft.Network/virtualNetworks",
-							"Microsoft.OperationalInsights/workspaces",
-							"Microsoft.Resources/deploymentScripts",
-							"Microsoft.ServiceBus/namespaces",
-							"Microsoft.Storage/storageAccounts",
-							"Microsoft.Web/serverfarms",
-							"Microsoft.Web/sites"
-						]
-					}
-				]
-			}
-		],
-		"outputs": {
-			"agency_county": "[basics('agency_dropdown').county]",
-			"agency_abbreviation": "[concat(basics('agency_dropdown').abbreviation, basics('agency_dropdown').type)]",
-			"agency_type": "[basics('agency_dropdown').type]",
-			"agency_ori": "[basics('agency_dropdown').ori]",
-			"application": "[basics('agency_application')]",
-			"environment_type": "[basics('environment_type')]",
-			"apim_sku": "[if(equals(basics('environment_type'), 'PROD'), 'Basic', 'Developer')]",
-			"enable_beats": "[basics('enable_beats')]",
-			"enable_stop_debugger": "[basics('enable_stop_debugger')]",
-			"app_domain_type": "[steps('steps_app_domain').app_domain_type]",
-			"certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
-			"certificate_secret_name": "[steps('steps_app_domain').private_domain.private_domain_kv.certificateName]",
-			"primary_domain": "[steps('steps_app_domain').private_domain.private_domain_root]",
-			"app_cname_alias": "[steps('steps_app_domain').private_domain.private_domain_cname]",
-			"auth_fqdn": "[steps('steps_authentication').auth_fqdn]",
-			"auth_app_id": "[steps('steps_authentication').auth_app_id]",
-			"auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
-			"auth_authority": "[steps('steps_authentication').auth_authority]",
-			"auth_logout_url": "[steps('steps_authentication').auth_logout_url]",
-			"doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
-			"doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
-			"doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
-			"doj_sftp_password": "[steps('steps_doj').doj_sftp_password]",
-			"doj_environment": "[steps('steps_doj').doj_environment]",
-			"doj_sftp_disabled": "[if(equals(steps('steps_doj').doj_sftp_server_key, ''), 'true', 'false')]",
-			"user_tags": "[steps('steps_tags').user_tags]"
-		}
-	}
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "resourceTypes": ["microsoft.resources/resourcegroups"],
+    "config": {
+      "isWizard": false,
+      "basics": {
+        "description": "Information on this screen will define the naming used for the Azure resources created as well as the default domain name & URL if an existing private domain is not used. It is suggested that this application be deployed to US Gov Arizona region as require resources may not be available in other regions. The Agency Abbreviation and Application Name are combined to create a globally unique name & URL for this application instance.",
+        "resourceGroup": {
+          "constraints": {
+            "validations": []
+          },
+          "allowExisting": true
+        }
+      }
+    },
+    "basics": [
+      {
+        "name": "agency_full_name",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Agency full display name",
+        "defaultValue": "Not used at this time",
+        "toolTip": "",
+        "constraints": {
+          "required": true,
+          "regex": "",
+          "validationMessage": ""
+        },
+        "visible": false
+      },
+      {
+        "name": "agency_dropdown",
+        "type": "Microsoft.Common.DropDown",
+        "label": "Agency",
+        "toolTip": "Select the agency that you are deploying this application for.",
+        "constraints": {
+          "allowedValues": [
+            {
+              "label": "ALAMEDA SHERIFF",
+              "value": {
+                "county": "Alameda",
+                "abbreviation": "alameda",
+                "type": "sd",
+                "ori": "CA0010000"
+              }
+            },
+            {
+              "label": "ALPINE SHERIFF",
+              "value": {
+                "county": "Alpine",
+                "abbreviation": "alpine",
+                "type": "sd",
+                "ori": "CA0020000"
+              }
+            },
+            {
+              "label": "AMADOR SHERIFF",
+              "value": {
+                "county": "Amador",
+                "abbreviation": "amador",
+                "type": "sd",
+                "ori": "CA0030000"
+              }
+            },
+            {
+              "label": "BUTTE SHERIFF",
+              "value": {
+                "county": "Butte",
+                "abbreviation": "butte",
+                "type": "sd",
+                "ori": "CA0040000"
+              }
+            },
+            {
+              "label": "CALAVERAS SHERIFF",
+              "value": {
+                "county": "Calaveras",
+                "abbreviation": "calaveras",
+                "type": "sd",
+                "ori": "CA0050000"
+              }
+            },
+            {
+              "label": "CAMPBELL POLICE",
+              "value": {
+                "county": "Santa Clara",
+                "abbreviation": "campbell",
+                "type": "pd",
+                "ori": "CA0430200"
+              }
+            },
+            {
+              "label": "COLUSA SHERIFF",
+              "value": {
+                "county": "Colusa",
+                "abbreviation": "colusa",
+                "type": "sd",
+                "ori": "CA0060000"
+              }
+            },
+            {
+              "label": "CONTRA COSTA SHERIFF",
+              "value": {
+                "county": "Contra Costa",
+                "abbreviation": "contracosta",
+                "type": "sd",
+                "ori": "CA0070000"
+              }
+            },
+            {
+              "label": "CYPRESS POLICE",
+              "value": {
+                "county": "Orange",
+                "abbreviation": "cy",
+                "type": "pd",
+                "ori": "CA0300500"
+              }
+            },
+            {
+              "label": "DEL NORTE SHERIFF",
+              "value": {
+                "county": "Del Norte",
+                "abbreviation": "delnorte",
+                "type": "sd",
+                "ori": "CA0080000"
+              }
+            },
+            {
+              "label": "EL CAJON POLICE",
+              "value": {
+                "county": "San Diego",
+                "abbreviation": "elcajon",
+                "type": "pd",
+                "ori": "CA0370500"
+              }
+            },
+            {
+              "label": "EL DORADO SHERIFF",
+              "value": {
+                "county": "El Dorado",
+                "abbreviation": "eldorado",
+                "type": "sd",
+                "ori": "CA0090000"
+              }
+            },
+            {
+              "label": "FRESNO SHERIFF",
+              "value": {
+                "county": "Fresno",
+                "abbreviation": "fresno",
+                "type": "sd",
+                "ori": "CA0100000"
+              }
+            },
+            {
+              "label": "GLENN SHERIFF",
+              "value": {
+                "county": "Glenn",
+                "abbreviation": "glenn",
+                "type": "sd",
+                "ori": "CA0110000"
+              }
+            },
+            {
+              "label": "HUMBOLDT SHERIFF",
+              "value": {
+                "county": "Humboldt",
+                "abbreviation": "humboldt",
+                "type": "sd",
+                "ori": "CA0120000"
+              }
+            },
+            {
+              "label": "IMPERIAL SHERIFF",
+              "value": {
+                "county": "Imperial",
+                "abbreviation": "imperial",
+                "type": "sd",
+                "ori": "CA0130000"
+              }
+            },
+            {
+              "label": "INYO SHERIFF",
+              "value": {
+                "county": "Inyo",
+                "abbreviation": "inyo",
+                "type": "sd",
+                "ori": "CA0140000"
+              }
+            },
+            {
+              "label": "KERN SHERIFF",
+              "value": {
+                "county": "Kern",
+                "abbreviation": "kern",
+                "type": "sd",
+                "ori": "CA0150000"
+              }
+            },
+            {
+              "label": "KINGS SHERIFF",
+              "value": {
+                "county": "Kings",
+                "abbreviation": "kings",
+                "type": "sd",
+                "ori": "CA0160000"
+              }
+            },
+            {
+              "label": "LAKE SHERIFF",
+              "value": {
+                "county": "Lake",
+                "abbreviation": "lake",
+                "type": "sd",
+                "ori": "CA0170000"
+              }
+            },
+            {
+              "label": "LASSEN SHERIFF",
+              "value": {
+                "county": "Lassen",
+                "abbreviation": "lassen",
+                "type": "sd",
+                "ori": "CA0180000"
+              }
+            },
+            {
+              "label": "LOS ALTOS POLICE",
+              "value": {
+                "county": "Sanata CLara",
+                "abbreviation": "sccla",
+                "type": "pd",
+                "ori": "CA0430500"
+              }
+            },
+            {
+              "label": "LOS ANGELES SHERIFF",
+              "value": {
+                "county": "Los Angeles",
+                "abbreviation": "la",
+                "type": "sd",
+                "ori": "CA0190000"
+              }
+            },
+            {
+              "label": "MADERA SHERIFF",
+              "value": {
+                "county": "Madera",
+                "abbreviation": "madera",
+                "type": "sd",
+                "ori": "CA0200000"
+              }
+            },
+            {
+              "label": "MARIN SHERIFF",
+              "value": {
+                "county": "Marin",
+                "abbreviation": "marin",
+                "type": "sd",
+                "ori": "CA0210000"
+              }
+            },
+            {
+              "label": "MARIPOSA SHERIFF",
+              "value": {
+                "county": "Mariposa",
+                "abbreviation": "mariposa",
+                "type": "sd",
+                "ori": "CA0220000"
+              }
+            },
+            {
+              "label": "MENDOCINO SHERIFF",
+              "value": {
+                "county": "Mendocino",
+                "abbreviation": "mendocino",
+                "type": "sd",
+                "ori": "CA0230000"
+              }
+            },
+            {
+              "label": "MERCED SHERIFF",
+              "value": {
+                "county": "Merced",
+                "abbreviation": "merced",
+                "type": "sd",
+                "ori": "CA0240000"
+              }
+            },
+            {
+              "label": "MODOC SHERIFF",
+              "value": {
+                "county": "Modoc",
+                "abbreviation": "modoc",
+                "type": "sd",
+                "ori": "CA0250000"
+              }
+            },
+            {
+              "label": "MONO SHERIFF",
+              "value": {
+                "county": "Mono",
+                "abbreviation": "mono",
+                "type": "sd",
+                "ori": "CA0260000"
+              }
+            },
+            {
+              "label": "MONTEREY SHERIFF",
+              "value": {
+                "county": "Monterey",
+                "abbreviation": "monterey",
+                "type": "sd",
+                "ori": "CA0270000"
+              }
+            },
+            {
+              "label": "NAPA SHERIFF",
+              "value": {
+                "county": "Napa",
+                "abbreviation": "napa",
+                "type": "sd",
+                "ori": "CA0280000"
+              }
+            },
+            {
+              "label": "NEVADA SHERIFF",
+              "value": {
+                "county": "Nevada",
+                "abbreviation": "nevada",
+                "type": "sd",
+                "ori": "CA0290000"
+              }
+            },
+            {
+              "label": "ORANGE SHERIFF",
+              "value": {
+                "county": "Orange",
+                "abbreviation": "orange",
+                "type": "sd",
+                "ori": "CA0300000"
+              }
+            },
+            {
+              "label": "PLACER SHERIFF",
+              "value": {
+                "county": "Placer",
+                "abbreviation": "placer",
+                "type": "sd",
+                "ori": "CA0310000"
+              }
+            },
+            {
+              "label": "PLUMAS SHERIFF",
+              "value": {
+                "county": "Plumas",
+                "abbreviation": "plumas",
+                "type": "sd",
+                "ori": "CA0320000"
+              }
+            },
+            {
+              "label": "RIVERSIDE SHERIFF",
+              "value": {
+                "county": "Riverside",
+                "abbreviation": "riverside",
+                "type": "sd",
+                "ori": "CA0330000"
+              }
+            },
+            {
+              "label": "SACRAMENTO SHERIFF",
+              "value": {
+                "county": "Sacramento",
+                "abbreviation": "sacramento",
+                "type": "sd",
+                "ori": "CA0340000"
+              }
+            },
+            {
+              "label": "SAN BENITO SHERIFF",
+              "value": {
+                "county": "San Benito",
+                "abbreviation": "sanbenito",
+                "type": "sd",
+                "ori": "CA0350000"
+              }
+            },
+            {
+              "label": "SAN BERNARDINO SHERIFF",
+              "value": {
+                "county": "San Bernardino",
+                "abbreviation": "sanbernardino",
+                "type": "sd",
+                "ori": "CA0360000"
+              }
+            },
+            {
+              "label": "SAN DIEGO SHERIFF",
+              "value": {
+                "county": "San Diego",
+                "abbreviation": "sd",
+                "type": "sd",
+                "ori": "CA0370000"
+              }
+            },
+            {
+              "label": "SAN FRANCISCO SHERIFF",
+              "value": {
+                "county": "San Francisco",
+                "abbreviation": "sf",
+                "type": "sd",
+                "ori": "CA0380000"
+              }
+            },
+            {
+              "label": "SAN JOAQUIN SHERIFF",
+              "value": {
+                "county": "San Joaquin",
+                "abbreviation": "sanjoaquin",
+                "type": "sd",
+                "ori": "CA0390000"
+              }
+            },
+            {
+              "label": "SAN LUIS OBISPO SHERIFF",
+              "value": {
+                "county": "San Luis Obispo",
+                "abbreviation": "slo",
+                "type": "sd",
+                "ori": "CA0400000"
+              }
+            },
+            {
+              "label": "SAN MATEO SHERIFF",
+              "value": {
+                "county": "San Mateo",
+                "abbreviation": "sm",
+                "type": "sd",
+                "ori": "CA0410000"
+              }
+            },
+            {
+              "label": "SANTA BARBARA SHERIFF",
+              "value": {
+                "county": "Santa Barbara",
+                "abbreviation": "sb",
+                "type": "so",
+                "ori": "CA0420000"
+              }
+            },
+            {
+              "label": "SANTA CLARA SHERIFF",
+              "value": {
+                "county": "Santa Clara",
+                "abbreviation": "santaclara",
+                "type": "sd",
+                "ori": "CA0430000"
+              }
+            },
+            {
+              "label": "SANTA CRUZ SHERIFF",
+              "value": {
+                "county": "Santa Cruz",
+                "abbreviation": "santacruz",
+                "type": "sd",
+                "ori": "CA0440000"
+              }
+            },
+            {
+              "label": "SHASTA SHERIFF",
+              "value": {
+                "county": "Shasta",
+                "abbreviation": "shasta",
+                "type": "sd",
+                "ori": "CA0450000"
+              }
+            },
+            {
+              "label": "SIERRA SHERIFF",
+              "value": {
+                "county": "Sierra",
+                "abbreviation": "sierra",
+                "type": "sd",
+                "ori": "CA0460000"
+              }
+            },
+            {
+              "label": "SISKIYOU SHERIFF",
+              "value": {
+                "county": "Siskiyou",
+                "abbreviation": "siskiyou",
+                "type": "sd",
+                "ori": "CA0470000"
+              }
+            },
+            {
+              "label": "SOLANO SHERIFF",
+              "value": {
+                "county": "Solano",
+                "abbreviation": "solano",
+                "type": "sd",
+                "ori": "CA0480000"
+              }
+            },
+            {
+              "label": "SONOMA SHERIFF",
+              "value": {
+                "county": "Sonoma",
+                "abbreviation": "sonoma",
+                "type": "sd",
+                "ori": "CA0490000"
+              }
+            },
+            {
+              "label": "STANISLAUS SHERIFF",
+              "value": {
+                "county": "Stanislaus",
+                "abbreviation": "stanislaus",
+                "type": "sd",
+                "ori": "CA0500000"
+              }
+            },
+            {
+              "label": "SUTTER SHERIFF",
+              "value": {
+                "county": "Sutter",
+                "abbreviation": "sutter",
+                "type": "sd",
+                "ori": "CA0510000"
+              }
+            },
+            {
+              "label": "TEHAMA SHERIFF",
+              "value": {
+                "county": "Tehama",
+                "abbreviation": "tehama",
+                "type": "sd",
+                "ori": "CA0520000"
+              }
+            },
+            {
+              "label": "TRINITY SHERIFF",
+              "value": {
+                "county": "Trinity",
+                "abbreviation": "trinity",
+                "type": "sd",
+                "ori": "CA0530000"
+              }
+            },
+            {
+              "label": "TULARE SHERIFF",
+              "value": {
+                "county": "Tulare",
+                "abbreviation": "tulare",
+                "type": "sd",
+                "ori": "CA0540000"
+              }
+            },
+            {
+              "label": "TUOLUMNE SHERIFF",
+              "value": {
+                "county": "Tuolumne",
+                "abbreviation": "tuolumne",
+                "type": "sd",
+                "ori": "CA0550000"
+              }
+            },
+            {
+              "label": "VENTURA SHERIFF",
+              "value": {
+                "county": "Ventura",
+                "abbreviation": "ventura",
+                "type": "sd",
+                "ori": "CA0560000"
+              }
+            },
+            {
+              "label": "YOLO SHERIFF",
+              "value": {
+                "county": "Yolo",
+                "abbreviation": "yolo",
+                "type": "sd",
+                "ori": "CA0570000"
+              }
+            },
+            {
+              "label": "YUBA SHERIFF",
+              "value": {
+                "county": "Yuba",
+                "abbreviation": "yuba",
+                "type": "sd",
+                "ori": "CA0580000"
+              }
+            }
+          ],
+          "required": true
+        },
+        "visible": true
+      },
+      {
+        "name": "agency_abbreviation_length",
+        "type": "Microsoft.Common.InfoBox",
+        "visible": "[greater(length(basics('agency_dropdown').abbreviation), 0)]",
+        "options": {
+          "icon": "Warning",
+          "text": "[concat('Due to Azure storage account name limitations, your agency short name (', basics('agency_dropdown').abbreviation, ') that has a character length of (', string(length(basics('agency_dropdown').abbreviation)),') the \"Application name\" property below will be limited to ', string(sub(17, length(basics('agency_dropdown').abbreviation))) ,' characters.')]"
+        }
+      },
+      {
+        "name": "agency_application",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Application name",
+        "defaultValue": "ripa",
+        "toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
+        "constraints": {
+          "required": true,
+          "regex": "[concat('^[a-z0-9-]{1,', string(sub(17, length(basics('agency_dropdown').abbreviation))), '}$')]",
+          "validationMessage": "[concat('The Application Name must be between 1 and ', string(sub(17, length(basics('agency_dropdown').abbreviation))), ' characters long and contain Lower case characters')]"
+        },
+        "visible": true
+      },
+      {
+        "name": "environment_type",
+        "type": "Microsoft.Common.OptionsGroup",
+        "label": "System usage (environment)",
+        "defaultValue": "Production",
+        "toolTip": "Please chose how this deployment will be used. Is this a production, qa or dev installation?",
+        "constraints": {
+          "allowedValues": [
+            {
+              "label": "Production",
+              "value": "PROD"
+            },
+            {
+              "label": "Quality Assurance (QA)",
+              "value": "QA"
+            },
+            {
+              "label": "Development",
+              "value": "DEV"
+            }
+          ],
+          "required": true
+        },
+        "visible": true
+      },
+      {
+        "name": "enable_beats",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Enable officer beats?",
+        "toolTip": "Enables officer beats and related UI elements",
+        "constraints": {
+          "required": false
+        }
+      },
+      {
+        "name": "enable_stop_debugger",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Enable STOP data debugger?",
+        "toolTip": "Enables STOP data debugger and related UI elements",
+        "constraints": {
+          "required": false
+        }
+      }
+    ],
+    "steps": [
+      {
+        "name": "steps_app_domain",
+        "label": "Application Domain",
+        "elements": [
+          {
+            "name": "app_domain_type",
+            "type": "Microsoft.Common.OptionsGroup",
+            "label": "Managed or Private Domain",
+            "defaultValue": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
+            "toolTip": "[basics('agency_dropdown').type]",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "[concat(basics('agency_application'),'-',basics('agency_dropdown').abbreviation,basics('agency_dropdown').type,'.cssa.cloud')]",
+                  "value": "cssa_cloud_domain"
+                },
+                {
+                  "label": "Private Domain (you manage dns and certificate)",
+                  "value": "private_domain"
+                }
+              ],
+              "required": true
+            },
+            "visible": true
+          },
+          {
+            "name": "private_domain",
+            "type": "Microsoft.Common.Section",
+            "label": "Following details must be provided prior to beginning the deployment.",
+            "elements": [
+              {
+                "name": "private_domain_kv",
+                "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
+                "visible": true,
+                "toolTip": "Select a certificate from an existing key vault. Or, you can upload a new certificate here too.",
+                "label": "KeyVault certificates selection"
+              },
+              {
+                "name": "private_domain_warning",
+                "type": "Microsoft.Common.InfoBox",
+                "visible": true,
+                "options": {
+                  "icon": "Warning",
+                  "text": "[concat('When using a private certificate (BYOC) you must ')]"
+                }
+              },
+              {
+                "name": "private_domain_root",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Root Domain Name",
+                "defaultValue": "",
+                "placeholder": "youragencydomain.gov",
+                "toolTip": "The root DNS entry of your custom domain. I.e. myorganization.gov",
+                "constraints": {
+                  "required": true,
+                  "regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
+                  "validationMessage": ""
+                },
+                "visible": true
+              },
+              {
+                "name": "private_domain_cname",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Application DNS CNAME",
+                "defaultValue": "",
+                "placeholder": "Choose your subdomain (Example: ripa)",
+                "toolTip": "This value should be a short and descriptive name to complete the application URL. I.e. ripa.myorganization.gov",
+                "constraints": {
+                  "required": true,
+                  "regex": "",
+                  "validationMessage": ""
+                },
+                "visible": true
+              },
+              {
+                "name": "private_domain_info",
+                "type": "Microsoft.Common.TextBlock",
+                "visible": true,
+                "options": {
+                  "text": "[concat('Your application will be URL: https://', steps('steps_app_domain').private_domain.private_domain_cname, '.', steps('steps_app_domain').private_domain.private_domain_root)]"
+                }
+              },
+              {
+                "name": "private_domain_warning",
+                "type": "Microsoft.Common.InfoBox",
+                "visible": true,
+                "options": {
+                  "icon": "Warning",
+                  "text": "[concat('When using a private domain you must create 2 DNS CNAME records in your DNS system. \t\t\t\t\t\t\t\t Please create the following CNAME records in your DNS system BEFORE CONTINUING. \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ', 'CNAME: \"cdnverify.', steps('steps_app_domain').private_domain.private_domain_cname, '\" must point to: \"cdnverify.', basics('agency_application'),'-', basics('agency_dropdown').abbreviation, basics('agency_dropdown').type, '-cdn-ep.azureedge.us\"')]"
+                }
+              }
+            ],
+            "visible": "[equals(steps('steps_app_domain').app_domain_type,'private_domain')]"
+          }
+        ]
+      },
+      {
+        "name": "steps_authentication",
+        "label": "Authentication",
+        "subLabel": {},
+        "elements": [
+          {
+            "name": "auth_instructions",
+            "type": "Microsoft.Common.TextBlock",
+            "options": {
+              "text": "This application uses Azure Active Directory, OAuth/OpenID and RBAC. This requires an \"App Registration\" (AR) be created (or use an existing) in the Azure AD Tenant that you wish to use to for authentication & authorization. The AR needs to have several key properties and settings configured in order to work properly. Please review the link below for required settings and scripts that can be used to create a new AR in your tenant.",
+              "link": {
+                "label": "Instructions and scripts download",
+                "uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Deployment/Scripts/Authentication"
+              }
+            },
+            "visible": true
+          },
+          {
+            "name": "auth_fqdn",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Azure AD FQDN",
+            "placeholder": "sample.gov",
+            "toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
+            "constraints": {
+              "required": true,
+              "regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "auth_app_id",
+            "type": "Microsoft.Common.TextBox",
+            "label": "AAD App Registration ID",
+            "placeholder": "********-****-****-****-************",
+            "toolTip": "This should be a valid App ID (clientId) configured for RIPA authentication.",
+            "constraints": {
+              "required": true,
+              "regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+              "validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
+            },
+            "visible": true
+          },
+          {
+            "name": "auth_tenant_id",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Tenant ID",
+            "placeholder": "********-****-****-****-************",
+            "toolTip": "This should be the GUID (tenant_id) of the tenant being used for authentication.",
+            "constraints": {
+              "required": true,
+              "regex": "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+              "validationMessage": "You must provide a valid GUID/UUID in the format of ********-****-****-****-************."
+            },
+            "visible": true
+          },
+          {
+            "name": "auth_authority",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Login Authority",
+            "defaultValue": "https://login.microsoftonline.com/",
+            "toolTip": "This must point to a valid OAuth/OpenID authority.",
+            "constraints": {
+              "required": true,
+              "regex": "^(https://[a-z0-9]+.)[a-z0-9]+.[a-z]+(/[a-zA-Z0-9#]+/?)*/$",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "auth_logout_url",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Logout URL",
+            "toolTip": "This should point to a URL that clears a users seesion.",
+            "constraints": {
+              "required": false,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "visible": true
+          }
+        ]
+      },
+      {
+        "name": "steps_doj",
+        "label": "DOJ SFTP",
+        "subLabel": {},
+        "elements": [
+          {
+            "name": "doj_sftp_message",
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true,
+            "options": {
+              "icon": "Info",
+              "text": "This system implements the SFTP push of STOP data to the DOJ hosted interface. If you have this information available today, please enter the details below. If you do not, you can review the steps required to configure this information at a later day here https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission",
+              "uri": "https://github.com/SanDiegoCountySheriff/Cal-RIPA/tree/main/Functions/RIPA.Functions.Submission"
+            }
+          },
+          {
+            "name": "doj_sftp_server",
+            "type": "Microsoft.Common.TextBox",
+            "label": "SFTP server host name",
+            "toolTip": "This can be a valid IP Address or a DNS host name provided by the DOJ IT",
+            "constraints": {
+              "required": false,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "doj_sftp_server_key",
+            "type": "Microsoft.Common.TextBox",
+            "label": "SFTP server key",
+            "toolTip": "This is a security key for base access to the SFTP server provided by the DOJ IT",
+            "constraints": {
+              "required": false,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "doj_sftp_username",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Username",
+            "toolTip": "This is the user credentials provided by the DOJ IT",
+            "constraints": {
+              "required": false,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "doj_sftp_password",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Password",
+            "toolTip": "This is the user credentials provided by the DOJ IT",
+            "constraints": {
+              "required": false,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "visible": true
+          },
+          {
+            "name": "doj_environment",
+            "type": "Microsoft.Common.OptionsGroup",
+            "label": "DoJ Test or Production configuration",
+            "defaultValue": "Production",
+            "toolTip": "Choose the DoJ sFTP environment configuration you would like to set up for this deployment",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "Production",
+                  "value": "PROD"
+                },
+                {
+                  "label": "Test (non-production)",
+                  "value": "TEST"
+                }
+              ],
+              "required": false
+            },
+            "visible": true
+          }
+        ]
+      },
+      {
+        "name": "steps_tags",
+        "label": "Tags",
+        "elements": [
+          {
+            "name": "tagsInstructions",
+            "type": "Microsoft.Common.TextBlock",
+            "visible": true,
+            "options": {
+              "text": "Provide a list of tags and values for your application. (Optional)",
+              "link": {
+                "label": "Learn more",
+                "uri": "https://docs.microsoft.com/en-us/azure/templates/microsoft.resources/tags?tabs=json"
+              }
+            }
+          },
+          {
+            "name": "user_tags",
+            "type": "Microsoft.Common.TagsByResource",
+            "resources": [
+              "Microsoft.ApiManagement/service",
+              "Microsoft.CognitiveServices/accounts",
+              "Microsoft.Compute/virtualMachines",
+              "Microsoft.DocumentDB/databaseAccounts",
+              "Microsoft.Insights/components",
+              "Microsoft.Insights/actionGroups",
+              "Microsoft.KeyVault/vaults",
+              "Microsoft.Network/networkSecurityGroups",
+              "Microsoft.Network/privateDnsZones",
+              "Microsoft.Network/privateEndpoints",
+              "Microsoft.Network/virtualNetworks",
+              "Microsoft.OperationalInsights/workspaces",
+              "Microsoft.Resources/deploymentScripts",
+              "Microsoft.ServiceBus/namespaces",
+              "Microsoft.Storage/storageAccounts",
+              "Microsoft.Web/serverfarms",
+              "Microsoft.Web/sites"
+            ]
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "agency_county": "[basics('agency_dropdown').county]",
+      "agency_abbreviation": "[concat(basics('agency_dropdown').abbreviation, basics('agency_dropdown').type)]",
+      "agency_type": "[basics('agency_dropdown').type]",
+      "agency_ori": "[basics('agency_dropdown').ori]",
+      "application": "[basics('agency_application')]",
+      "environment_type": "[basics('environment_type')]",
+      "apim_sku": "[if(equals(basics('environment_type'), 'PROD'), 'Basic', 'Developer')]",
+      "enable_beats": "[basics('enable_beats')]",
+      "enable_stop_debugger": "[basics('enable_stop_debugger')]",
+      "app_domain_type": "[steps('steps_app_domain').app_domain_type]",
+      "certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
+      "certificate_secret_name": "[steps('steps_app_domain').private_domain.private_domain_kv.certificateName]",
+      "primary_domain": "[steps('steps_app_domain').private_domain.private_domain_root]",
+      "app_cname_alias": "[steps('steps_app_domain').private_domain.private_domain_cname]",
+      "auth_fqdn": "[steps('steps_authentication').auth_fqdn]",
+      "auth_app_id": "[steps('steps_authentication').auth_app_id]",
+      "auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
+      "auth_authority": "[steps('steps_authentication').auth_authority]",
+      "auth_logout_url": "[steps('steps_authentication').auth_logout_url]",
+      "doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
+      "doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
+      "doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
+      "doj_sftp_password": "[steps('steps_doj').doj_sftp_password]",
+      "doj_environment": "[steps('steps_doj').doj_environment]",
+      "doj_sftp_disabled": "[if(equals(steps('steps_doj').doj_sftp_server_key, ''), 'true', 'false')]",
+      "user_tags": "[steps('steps_tags').user_tags]"
+    }
+  }
 }

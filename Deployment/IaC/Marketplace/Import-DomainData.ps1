@@ -156,23 +156,29 @@ function Get-SchoolEntity {
 
 $ErrorActionPreference="Stop"
 
-Write-Host "Installing and Importing Az.Resources Module"
-Write-Host "Installing Az.Resources Module"
-Install-Module Az.Resources -Force
-Write-Host "Importing Az.Resources Module"
-Import-module Az.Resources -Force
+Write-Host "Installing Az v6.6.0 due to Az.Account version in image"
+Install-Module Az -Repository PSGallery -RequiredVersion 6.6.0 -AllowClobber -Force
 
-Write-Host "Installing and Importing Az.Storage Module"
-Write-Host "Installing Az.Storage Module"
-Install-Module Az.Storage -Force
-Write-Host "Importing Az.Storage Module"
-Import-module Az.Storage -Force
+Write-Host "Importing Az"
+Import-Module Az -Force
 
-Write-Host "Installing and Importing AzTable Module"
-Write-Host "Installing AzTable Module"
-Install-Module AzTable -Force
-Write-Host "Importing AzTable Module"
-Import-Module AzTable -Force
+# Write-Host "Installing and Importing Az.Resources Module"
+# Write-Host "Installing Az.Resources Module"
+# Install-Module Az.Resources -Force
+# Write-Host "Importing Az.Resources Module"
+# Import-module Az.Resources -Force
+
+# Write-Host "Installing and Importing Az.Storage Module"
+# Write-Host "Installing Az.Storage Module"
+# Install-Module Az.Storage -Force
+# Write-Host "Importing Az.Storage Module"
+# Import-module Az.Storage -Force
+
+# Write-Host "Installing and Importing AzTable Module"
+# Write-Host "Installing AzTable Module"
+# Install-Module AzTable -Force
+# Write-Host "Importing AzTable Module"
+# Import-Module AzTable -Force
 
 #endregion
 
