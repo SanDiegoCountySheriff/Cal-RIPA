@@ -44,7 +44,6 @@
       :on-open-template="handleOpenTemplate"
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
-      :on-submit-audit="handleSubmitAudit"
       :on-update-user="handleUpdateUser"
       @input="handleInput"
       @pii-check="handlePiiCheck"
@@ -212,10 +211,6 @@ export default {
       if (!this.isOnlineAndAuthenticated) {
         this.snackbarNotOnlineVisible = true
       }
-    },
-
-    handleSubmitAudit(route) {
-      this.$router.push(route)
     },
 
     handleUpdateUser() {

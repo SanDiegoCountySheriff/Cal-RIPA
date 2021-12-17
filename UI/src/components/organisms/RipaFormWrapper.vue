@@ -594,11 +594,6 @@ export default {
         console.log('Submitted Stop', apiStop)
         this.onSubmitStop(apiStop)
       }
-      if (this.adminEditing && this.onSubmitAudit) {
-        const route = localStorage.getItem('ripa_form_edit_route')
-        const parsedRoute = route || '/'
-        this.onSubmitAudit(parsedRoute)
-      }
       if (this.onCancelForm) {
         this.onCancelForm()
       }
@@ -842,10 +837,6 @@ export default {
       default: () => {},
     },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onSubmitAudit: {
       type: Function,
       default: () => {},
     },
