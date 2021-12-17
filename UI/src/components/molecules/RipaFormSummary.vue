@@ -66,7 +66,7 @@ export default {
     const submittedStop = JSON.parse(
       localStorage.getItem('ripa_form_submitted_api_stop'),
     )
-    if (submittedStop.isEdited) {
+    if (submittedStop?.isEdited) {
       this.getStopAudits()
     }
   },

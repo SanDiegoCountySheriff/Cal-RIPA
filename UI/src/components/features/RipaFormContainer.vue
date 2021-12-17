@@ -179,6 +179,7 @@ export default {
       'displayBeatInput',
       'displayDebugger',
       'stopTemplates',
+      'piiServiceAvailable',
     ]),
 
     getMappedUser() {
@@ -198,6 +199,10 @@ export default {
       'checkGpsLocation',
       'editOfficerUser',
       'editUser',
+      'setPiiServiceAvailable',
+      'setUserFavoriteLocations',
+      'setUserFavoriteReasons',
+      'setUserFavoriteResults',
     ]),
 
     handleSaveUser(user) {
@@ -249,12 +254,13 @@ export default {
         this.loadingPiiStep1 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.location) {
           this.stop.location.piiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound || this.stop.location.piiFound
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
         }
 
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
@@ -263,13 +269,14 @@ export default {
           )
         }
 
-        if (response.piiEntities.length > 0) {
+        if (!response) {
+          await this.setPiiServiceAvailable(false)
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e => e.source !== this.locationSource,
               )
             : []
-
           for (const entity of response.piiEntities) {
             entity.source = this.locationSource
             this.stop.piiEntities.push(entity)
@@ -290,12 +297,13 @@ export default {
         this.loadingPiiStep3 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.stopReason) {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
         }
 
         if (
@@ -306,8 +314,9 @@ export default {
             e => e.source !== this.stopReasonSource + this.stop.person.index,
           )
         }
-
-        if (response.piiEntities.length > 0) {
+        if (!response) {
+          await this.setPiiServiceAvailable(false)
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>
@@ -334,15 +343,14 @@ export default {
         this.loadingPiiStep4 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-
         if (this.stop.actionsTaken) {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound ||
+            this.stop.location.piiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
             this.stop.actionsTaken.basisForSearchPiiFound
         }
-
         if (
           !this.stop.actionsTaken.basisForSearchPiiFound &&
           this.stop.piiEntities?.length > 0
@@ -352,8 +360,9 @@ export default {
               e.source !== this.basisForSearchSource + this.stop.person.index,
           )
         }
-
-        if (response.piiEntities.length > 0) {
+        if (!response) {
+          await this.setPiiServiceAvailable(false)
+        } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
             ? this.stop.piiEntities.filter(
                 e =>

@@ -4,7 +4,6 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import authentication from '@/authentication'
-import { es } from 'date-fns/locale'
 
 Vue.use(Vuex)
 
@@ -75,6 +74,7 @@ export default new Vuex.Store({
     stopsWithErrors: [],
     cpraReportStats: {},
     historicalCpraReports: [],
+    piiServiceAvailable: true,
   },
 
   getters: {
@@ -298,6 +298,9 @@ export default new Vuex.Store({
     mappedAdminHistoricalCpraReports: state => {
       return state.historicalCpraReports
     },
+    piiServiceAvailable: state => {
+      return state.piiServiceAvailable
+    },
   },
 
   mutations: {
@@ -510,6 +513,9 @@ export default new Vuex.Store({
         reportObjects.push(reportObject)
       }
       state.historicalCpraReports = reportObjects
+    },
+    updatePiiServiceAvailable(state, piiServiceAvailable) {
+      state.piiServiceAvailable = piiServiceAvailable
     },
   },
 
@@ -1612,6 +1618,10 @@ export default new Vuex.Store({
             return 'There was an unknown error with your submission. Your stops were not submitted'
           }
         })
+    },
+
+    setPiiServiceAvailable({ commit }, value) {
+      commit('updatePiiServiceAvailable', value)
     },
 
     setAuthConfig({ commit }, value) {

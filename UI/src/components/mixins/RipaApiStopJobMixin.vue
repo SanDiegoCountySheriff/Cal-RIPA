@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -11,8 +11,12 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['piiServiceAvailable']),
+  },
+
   methods: {
-    ...mapActions(['checkTextForPii']),
+    ...mapActions(['checkTextForPii', 'setPiiServiceAvailable']),
 
     addApiStop(apiStop) {
       this.isLocked = true
@@ -53,7 +57,7 @@ export default {
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
           const apiStop = apiStops[index]
-          if (apiStop.telemetry.offline) {
+          if (apiStop.telemetry.offline && !apiStop.overridePii) {
             for (const person of apiStop.listPersonStopped) {
               // check basisForSearch
               let trimmedTextValue = person.basisForSearchBrief
@@ -65,14 +69,12 @@ export default {
                 trimmedTextValue.length > 0
               ) {
                 const response = await this.checkTextForPii(trimmedTextValue)
-
                 person.basisForSearchPiiFound =
                   response &&
                   response.piiEntities &&
                   response.piiEntities.length > 0
                 apiStop.isPiiFound =
                   apiStop.isPiiFound || person.basisForSearchPiiFound
-
                 if (
                   !person.basisForSearchPiiFound &&
                   apiStop.piiEntities?.length > 0
@@ -81,8 +83,9 @@ export default {
                     e => e.source !== this.basisForSearchSource,
                   )
                 }
-
-                if (response.piiEntities.length > 0) {
+                if (!response) {
+                  await this.setPiiServiceAvailable(false)
+                } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
                         e => e.source !== this.basisForSearchSource,
@@ -94,7 +97,6 @@ export default {
                   }
                 }
               }
-
               // check reasonForStopExplanation
               trimmedTextValue = person.reasonForStopExplanation
                 ? person.reasonForStopExplanation.trim()
@@ -105,14 +107,12 @@ export default {
                 trimmedTextValue.length > 0
               ) {
                 const response = await this.checkTextForPii(trimmedTextValue)
-
                 person.reasonForStopPiiFound =
                   response &&
                   response.piiEntities &&
                   response.piiEntities.length > 0
                 apiStop.isPiiFound =
                   apiStop.isPiiFound || person.reasonForStopPiiFound
-
                 if (
                   !person.reasonForStopPiiFound &&
                   apiStop.piiEntities?.length > 0
@@ -121,8 +121,9 @@ export default {
                     e => e.source !== this.stopReasonSource,
                   )
                 }
-
-                if (response.piiEntities.length > 0) {
+                if (!response) {
+                  await this.setPiiServiceAvailable(false)
+                } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
                         e => e.source !== this.stopReasonSource,
@@ -135,7 +136,6 @@ export default {
                 }
               }
             }
-
             // check location
             const trimmedTextValue = apiStop.location.fullAddress
               ? apiStop.location.fullAddress.trim()
@@ -152,7 +152,6 @@ export default {
                 response.piiEntities.length > 0
               apiStop.isPiiFound =
                 apiStop.isPiiFound || apiStop.location.piiFound
-
               if (
                 !apiStop.location.piiFound &&
                 apiStop.piiEntities?.length > 0
@@ -161,8 +160,9 @@ export default {
                   e => e.source !== this.locationSource,
                 )
               }
-
-              if (response.piiEntities.length > 0) {
+              if (!response) {
+                await this.setPiiServiceAvailable(false)
+              } else if (response.piiEntities.length > 0) {
                 apiStop.piiEntities = apiStop.piiEntities
                   ? apiStop.piiEntities.filter(
                       e => e.source !== this.locationSource,
@@ -174,6 +174,16 @@ export default {
                 }
               }
             }
+          }
+
+          if (!this.piiServiceAvailable && !apiStop.overridePii) {
+            apiStop.isPiiFound = true
+            apiStop.piiEntities = [
+              {
+                entityText:
+                  'Text analytics service was unavailable, please review the stop for PII',
+              },
+            ]
           }
 
           await this.timeout(1500)

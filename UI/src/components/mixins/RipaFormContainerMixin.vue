@@ -8,7 +8,6 @@ import {
 } from '@/utilities/stop'
 import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
-import store from '@/store/index'
 
 export default {
   data() {
@@ -410,7 +409,7 @@ export default {
     handleOpenTemplate(value) {
       this.handleStepIndexChange(1)
       localStorage.setItem('ripa_form_editing', '1')
-
+      this.setPiiServiceAvailable(true)
       const templates = this.getCustomTemplates()
 
       const [template] = templates.filter(tplt => {
@@ -442,7 +441,7 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)
         localStorage.setItem('ripa_favorite_locations', strLocations)
-        store.dispatch('setUserFavoriteLocations', strLocations)
+        this.setUserFavoriteLocations(strLocations)
         this.editUser(this.mappedUser)
       }
     },
@@ -451,7 +450,7 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         const strReasons = JSON.stringify(reasons)
         localStorage.setItem('ripa_favorite_reasons', strReasons)
-        store.dispatch('setUserFavoriteReasons', strReasons)
+        this.setUserFavoriteReasons(strReasons)
         this.editUser(this.mappedUser)
       }
     },
@@ -460,7 +459,7 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         const strResults = JSON.stringify(results)
         localStorage.setItem('ripa_favorite_results', strResults)
-        store.dispatch('setUserFavoriteResults', strResults)
+        this.setUserFavoriteResults(strResults)
         this.editUser(this.mappedUser)
       }
     },
@@ -479,7 +478,6 @@ export default {
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
         }
-
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
@@ -489,6 +487,7 @@ export default {
         updatedFullStop.location = this.stop.location
         updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.piiEntities = this.stop.piiEntities
+        updatedFullStop.isPiiFound = this.stop.isPiiFound
         updatedFullStop.editStopExplanation =
           this.stop.editStopExplanation || null
         updatedFullStop.overridePii = this.stop.overridePii || false
