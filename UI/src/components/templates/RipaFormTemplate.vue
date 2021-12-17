@@ -44,7 +44,6 @@
       :on-open-template="onOpenTemplate"
       :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
-      :on-submit-audit="onSubmitAudit"
       :on-update-user="onUpdateUser"
       @input="handleInput"
       @pii-check="handlePiiCheck"
@@ -247,10 +246,6 @@ export default {
       default: () => {},
     },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onSubmitAudit: {
       type: Function,
       default: () => {},
     },
