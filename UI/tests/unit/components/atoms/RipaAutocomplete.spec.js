@@ -1,0 +1,43 @@
+import RipaAutocomplete from '@/components/atoms/RipaAutocomplete.vue'
+import { mount } from '@vue/test-utils'
+import Vuetify from 'vuetify'
+
+describe('Ripa Autocomplete', () => {
+  let vuetify
+  let wrapper = null
+
+  beforeEach(() => {
+    vuetify = new Vuetify()
+  })
+
+  const factory = propsData => {
+    return mount(RipaAutocomplete, {
+      vuetify,
+      propsData: {
+        ...propsData,
+      },
+    })
+  }
+
+  const testItems = ['Item 1', 'Item 2']
+
+  it('should match snapshot', () => {
+    wrapper = factory()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should return the correct items with getItems', () => {
+    wrapper = factory({ items: testItems })
+    expect(wrapper.vm.getItems).toEqual(['Item 1', 'Item 2'])
+  })
+
+  it('should emit event whem model changes', async () => {
+    wrapper = factory({ items: testItems })
+
+    wrapper.vm.model = testItems[0]
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+    expect(wrapper.emitted('input').length).toBe(1)
+  })
+})
