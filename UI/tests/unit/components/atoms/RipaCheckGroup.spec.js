@@ -1,8 +1,8 @@
-import RipaButtonGroup from '@/components/atoms/RipaButtonGroup.vue'
+import RipaCheckGroup from '@/components/atoms/RipaCheckGroup.vue'
 import { mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
-describe('Ripa Button Group', () => {
+describe('Ripa Check Group', () => {
   let vuetify
   let wrapper = null
 
@@ -11,7 +11,7 @@ describe('Ripa Button Group', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaButtonGroup, {
+    return mount(RipaCheckGroup, {
       vuetify,
       propsData: {
         ...propsData,
@@ -39,12 +39,12 @@ describe('Ripa Button Group', () => {
     expect(wrapper.emitted('input').length).toBe(1)
   })
 
-  it('should update viewModel when value changes', async () => {
-    wrapper = factory({ items: testItems })
+  it('should watch value', async () => {
+    wrapper = factory()
 
-    wrapper.setProps({ value: 2 })
+    wrapper.setProps({ value: ['Test1', 'Test2'] })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual(2)
+    expect(wrapper.vm.viewModel).toEqual(['Test1', 'Test2'])
   })
 })

@@ -31,6 +31,16 @@ describe('Ripa Autocomplete', () => {
     expect(wrapper.vm.getItems).toEqual(['Item 1', 'Item 2'])
   })
 
+  it('should return the correct items with multiple getItems', () => {
+    wrapper = factory({
+      value: ['Code1', 'Code2'],
+      items: [{ code: 'Code1' }],
+      multiple: true,
+      maxSelections: 2,
+    })
+    expect(wrapper.vm.getItems).toEqual([{ code: 'Code1' }])
+  })
+
   it('should emit event whem model changes', async () => {
     wrapper = factory({ items: testItems })
 
@@ -39,5 +49,12 @@ describe('Ripa Autocomplete', () => {
 
     expect(wrapper.emitted('input')).toBeTruthy()
     expect(wrapper.emitted('input').length).toBe(1)
+  })
+
+  it('should watch value', async () => {
+    wrapper = factory({ items: testItems })
+    wrapper.setProps({ value: 'New Value' })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.viewModel).toEqual('New Value')
   })
 })

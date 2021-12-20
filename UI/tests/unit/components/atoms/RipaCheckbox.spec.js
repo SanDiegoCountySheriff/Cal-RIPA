@@ -1,8 +1,8 @@
-import RipaButtonGroup from '@/components/atoms/RipaButtonGroup.vue'
+import RipaCheckbox from '@/components/atoms/RipaCheckbox.vue'
 import { mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
-describe('Ripa Button Group', () => {
+describe('Ripa Checkbox', () => {
   let vuetify
   let wrapper = null
 
@@ -11,7 +11,7 @@ describe('Ripa Button Group', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaButtonGroup, {
+    return mount(RipaCheckbox, {
       vuetify,
       propsData: {
         ...propsData,
@@ -19,32 +19,27 @@ describe('Ripa Button Group', () => {
     })
   }
 
-  const testItems = [
-    { name: 'Item 1', value: 'Item 1' },
-    { name: 'Item 2', value: 'Item 2' },
-  ]
-
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = factory({ label: 'Item 1' })
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should emit event whem model changes', async () => {
-    wrapper = factory({ items: testItems })
+    wrapper = factory({ label: 'Item 1' })
 
-    wrapper.vm.model = testItems[0].value
+    wrapper.vm.model = !wrapper.vm.model
     await wrapper.vm.$nextTick()
 
     expect(wrapper.emitted('input')).toBeTruthy()
     expect(wrapper.emitted('input').length).toBe(1)
   })
 
-  it('should update viewModel when value changes', async () => {
-    wrapper = factory({ items: testItems })
+  it('should watch value', async () => {
+    wrapper = factory()
 
-    wrapper.setProps({ value: 2 })
+    wrapper.setProps({ value: true })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual(2)
+    expect(wrapper.vm.viewModel).toEqual(true)
   })
 })

@@ -175,6 +175,20 @@ describe('Ripa Stop Date', () => {
     expect(wrapper.emitted('input')).toBeTruthy()
     expect(wrapper.emitted('input').length).toBe(1)
   })
+
+  it('should watch value', async () => {
+    wrapper = factory({ value: stop })
+    const updatedStop = defaultStop()
+    updatedStop.id = 1
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.viewModel.id).toEqual(1)
+  })
+
+  it('should match snapshot', async () => {
+    wrapper = factory({ value: stop })
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })
 
 function createDate(days, months, years) {
