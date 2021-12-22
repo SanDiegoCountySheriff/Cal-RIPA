@@ -392,6 +392,7 @@ export default {
     const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
 
     if (localFormEditing) {
+      console.log('Editing local form!')
       const parsedStop = JSON.parse(localStop)
       const parsedFullStop = JSON.parse(localFullStop)
 
