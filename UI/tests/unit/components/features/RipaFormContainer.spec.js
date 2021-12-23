@@ -1,5 +1,10 @@
 import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
 import { mount, createLocalVue } from '@vue/test-utils'
+import {
+  PII_TEST_CASES,
+  LOCATION_PII_TEST_CASES,
+  REASON_PII_TEST_CASES,
+} from '../../constants/RipaFormContainerConstants'
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
@@ -20,6 +25,16 @@ describe('Ripa Form Container', () => {
 
   beforeEach(() => {
     localStorage.clear()
+    const officer = {
+      agency: 'SDSD',
+      assignment: 1,
+      officerId: '000000001',
+      officerName: 'John Smith',
+      otherType: null,
+      startDate: '2020-12-12',
+      yearsExperience: 10,
+    }
+    localStorage.setItem('ripa_officer', JSON.stringify(officer))
     vuetify = new Vuetify()
     state = {
       isOnline: true,
@@ -45,7 +60,15 @@ describe('Ripa Form Container', () => {
       mappedFormNonCountyCities: jest.fn(),
       mappedFormSchools: jest.fn(),
       mappedFormStatutes: jest.fn(),
-      mappedUser: jest.fn().mockReturnValue({ agency: 'SDSD', assignment: 1 }),
+      mappedUser: jest.fn().mockReturnValue({
+        agency: 'SDSD',
+        assignment: 1,
+        officerId: '000000001',
+        officerName: 'John Smith',
+        otherType: null,
+        startDate: '2020-12-12',
+        yearsExperience: 10,
+      }),
       stopTemplates: jest.fn(),
       invalidUser: jest.fn().mockReturnValue(false),
     }
@@ -74,8 +97,6 @@ describe('Ripa Form Container', () => {
     })
   }
 
-  const shallowFactory
-
   const adminFactory = propsData => {
     return mount(RipaFormContainer, {
       vuetify,
@@ -95,13 +116,6 @@ describe('Ripa Form Container', () => {
     })
   }
 
-  const piiTestCases = [
-    { source: 'location', expectedCalls: [1, 0, 0] },
-    { source: 'reason', expectedCalls: [0, 1, 0] },
-    { source: 'search', expectedCalls: [0, 0, 1] },
-    { source: '', expectedCalls: [0, 0, 0] },
-  ]
-
   it('should match snapshot', () => {
     wrapper = factory()
 
@@ -111,7 +125,13 @@ describe('Ripa Form Container', () => {
   it('should get mapped user', () => {
     wrapper = factory()
 
-    const expectedUser = { agency: 'SDSD' }
+    const expectedUser = {
+      agency: 'SDSD',
+      assignment: 1,
+      otherType: null,
+      startDate: '2020-12-12',
+      yearsExperience: 10,
+    }
     const actualUser = wrapper.vm.getMappedUser
 
     expect(actualUser).toEqual(expectedUser)
@@ -172,26 +192,108 @@ describe('Ripa Form Container', () => {
     expect(wrapper.vm.showUserDialog).toBeTruthy()
   })
 
-  piiTestCases.forEach(test => {
+  PII_TEST_CASES.forEach(test => {
     it(`should validate ${test.source}`, async () => {
       wrapper = factory()
-      await wrapper.vm.$nextTick()
       wrapper.vm.handleOpenTemplate()
-      console.log(wrapper.vm)
       const source = test.source
       const testValue = 'test'
+      const validateLocationForPii = jest.spyOn(
+        wrapper.vm,
+        'validateLocationForPii',
+      )
+      const validateReasonForStopForPii = jest.spyOn(
+        wrapper.vm,
+        'validateReasonForStopForPii',
+      )
+      const validateBasisForSearchForPii = jest.spyOn(
+        wrapper.vm,
+        'validateBasisForSearchForPii',
+      )
 
       await wrapper.vm.handlePiiCheck({ source: source, value: testValue })
 
-      expect(wrapper.vm.validateLocationForPii).toHaveBeenCalledTimes(
+      expect(validateLocationForPii).toHaveBeenCalledTimes(
         test.expectedCalls[0],
       )
-      expect(wrapper.vm.validateReasonForStopPii).toHaveBeenCalledTimes(
+      expect(validateReasonForStopForPii).toHaveBeenCalledTimes(
         test.expectedCalls[1],
       )
-      expect(wrapper.vm.validateBasisForSearchPii).toHaveBeenCalledTimes(
+      expect(validateBasisForSearchForPii).toHaveBeenCalledTimes(
         test.expectedCalls[2],
       )
+    })
+
+    LOCATION_PII_TEST_CASES.forEach(test => {
+      it(`should validate location for pii test number: ${test.testNumber}`, async () => {
+        wrapper = factory()
+        wrapper.vm.handleOpenTemplate()
+        if (test.setStopPiiEntities) {
+          wrapper.vm.stop.isPiiFound = true
+          wrapper.vm.stop.stopReason.reasonForStopPiiFound = true
+          wrapper.vm.stop.piiEntities = [
+            {
+              entityText: 'John Smith',
+              confidenceScore: '50',
+              category: 'Name',
+              source: 'Basis for Search Person: ',
+            },
+          ]
+        }
+        const textValue = test.testValue
+        const checkTextForPii = jest.spyOn(wrapper.vm, 'checkTextForPii')
+        checkTextForPii.mockReturnValue(test.checkTextForPiiReturnValue)
+        const setPiiServiceAvailable = jest.spyOn(
+          wrapper.vm,
+          'setPiiServiceAvailable',
+        )
+
+        await wrapper.vm.validateLocationForPii(textValue)
+
+        expect(checkTextForPii).toBeCalledTimes(test.checkTextForPiiCalledTimes)
+        expect(setPiiServiceAvailable).toBeCalledTimes(
+          test.setPiiServiceAvailableCalledTimes,
+        )
+        expect(wrapper.vm.stop.location.piiFound).toEqual(test.locationPiiFound)
+        expect(wrapper.vm.stop.isPiiFound).toEqual(test.stopPiiFound)
+        expect(wrapper.vm.stop.piiEntities).toEqual(test.expectedPiiEntities)
+      })
+    })
+
+    REASON_PII_TEST_CASES.forEach(test => {
+      it(`should validate reason for pii test number: ${test.testNumber}`, async () => {
+        wrapper = factory()
+        wrapper.vm.handleOpenTemplate()
+        if (test.setStopPiiEntities) {
+          wrapper.vm.stop.isPiiFound = true
+          wrapper.vm.stop.location.piiFound = true
+          wrapper.vm.stop.piiEntities = [
+            {
+              entityText: 'John Smith',
+              confidenceScore: '50',
+              category: 'Name',
+              source: 'Location',
+            },
+          ]
+        }
+        const textValue = test.testValue
+        const checkTextForPii = jest.spyOn(wrapper.vm, 'checkTextForPii')
+        checkTextForPii.mockReturnValue(test.checkTextForPiiReturnValue)
+        const setPiiServiceAvailable = jest.spyOn(
+          wrapper.vm,
+          'setPiiServiceAvailable',
+        )
+
+        await wrapper.vm.validateReasonForStopForPii(textValue)
+
+        expect(checkTextForPii).toBeCalledTimes(test.checkTextForPiiCalledTimes)
+        expect(setPiiServiceAvailable).toBeCalledTimes(
+          test.setPiiServiceAvailableCalledTimes,
+        )
+        expect(wrapper.vm.stop.location.piiFound).toEqual(test.locationPiiFound)
+        expect(wrapper.vm.stop.isPiiFound).toEqual(test.stopPiiFound)
+        expect(wrapper.vm.stop.piiEntities).toEqual(test.expectedPiiEntities)
+      })
     })
   })
 })

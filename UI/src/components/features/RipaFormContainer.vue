@@ -249,14 +249,10 @@ export default {
         this.loadingPiiStep1 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-        if (this.stop.location) {
-          this.stop.location.piiFound =
-            response && response.piiEntities && response.piiEntities.length > 0
-          this.stop.isPiiFound =
-            this.stop.location.piiFound ||
-            this.stop.stopReason.reasonForStopPiiFound ||
-            this.stop.actionsTaken.basisForSearchPiiFound
-        }
+        this.stop.location.piiFound =
+          response && response.piiEntities && response.piiEntities.length > 0
+        this.stop.isPiiFound =
+          this.stop.isPiiFound || this.stop.location.piiFound
 
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
@@ -264,7 +260,7 @@ export default {
           )
         }
 
-        if (!response) {
+        if (!response && trimmedTextValue.length > 0) {
           await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
@@ -296,9 +292,7 @@ export default {
           this.stop.stopReason.reasonForStopPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.location.piiFound ||
-            this.stop.stopReason.reasonForStopPiiFound ||
-            this.stop.actionsTaken.basisForSearchPiiFound
+            this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
         }
 
         if (
@@ -309,7 +303,7 @@ export default {
             e => e.source !== this.stopReasonSource + this.stop.person.index,
           )
         }
-        if (!response) {
+        if (!response && trimmedTextValue.length > 0) {
           await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
@@ -342,8 +336,7 @@ export default {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.location.piiFound ||
-            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.isPiiFound ||
             this.stop.actionsTaken.basisForSearchPiiFound
         }
         if (
@@ -355,7 +348,7 @@ export default {
               e.source !== this.basisForSearchSource + this.stop.person.index,
           )
         }
-        if (!response) {
+        if (!response && trimmedTextValue.length > 0) {
           await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities
@@ -392,7 +385,6 @@ export default {
     const stepIndex = localStorage.getItem('ripa_form_step_index') || 1
 
     if (localFormEditing) {
-      console.log('Editing local form!')
       const parsedStop = JSON.parse(localStop)
       const parsedFullStop = JSON.parse(localFullStop)
 
