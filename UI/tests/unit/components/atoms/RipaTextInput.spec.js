@@ -24,12 +24,30 @@ describe('Ripa Text Input', () => {
   }
 
   const keyPressTestCases = [
-      {
-          testNumber: 1,
-          numbersOnly: true,
-          which: 20,
-          preventDefaultCalledTimes: 1,
-      }
+    {
+      testNumber: 1,
+      numbersOnly: true,
+      which: 20,
+      preventDefaultCalledTimes: 1,
+    },
+    {
+      testNumber: 2,
+      numbersOnly: true,
+      keyCode: 20,
+      preventDefaultCalledTimes: 1,
+    },
+    {
+      testNumber: 3,
+      numbersOnly: true,
+      which: 50,
+      preventDefaultCalledTimes: 0,
+    },
+    {
+      testNumber: 4,
+      numbersOnly: false,
+      which: 20,
+      preventDefaultCalledTimes: 0,
+    },
   ]
 
   it('should match snapshot', () => {
@@ -50,18 +68,70 @@ describe('Ripa Text Input', () => {
     expect(preventDefault).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle key press', () => {
-    wrapper = factory()
-    const event = {
-        which: 20
-    }
+  keyPressTestCases.forEach(test => {
+    it(`should handle key press test number: ${test.testNumber}`, async () => {
+      wrapper = factory()
+      const event = {
+        which: test.which,
+        keyCode: test.keyCode,
+        preventDefault: jest.fn(),
+      }
+      const preventDefault = jest.spyOn(event, 'preventDefault')
+      wrapper.setProps({ numbersOnly: test.numbersOnly })
+      await wrapper.vm.$nextTick()
+
+      wrapper.vm.handleKeyPress(event)
+
+      expect(preventDefault).toHaveBeenCalledTimes(
+        test.preventDefaultCalledTimes,
+      )
+    })
   })
 
-  it.todo('should handle blur')
+  it('should handle blur', () => {
+    wrapper = factory()
+    const event = {
+      target: {
+        value: 'New Value',
+      },
+    }
+    const parseText = jest.spyOn(wrapper.vm, 'parseText')
+    const handleInput = jest.spyOn(wrapper.vm, 'handleInput')
 
-  it.todo('should parse text')
+    wrapper.vm.handleBlur(event)
 
-  it.todo('should handle input')
+    expect(parseText).toHaveBeenCalledTimes(1)
+    expect(handleInput).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.viewModel).toEqual('New Value')
+  })
+
+  it('should parse text', () => {
+    wrapper = factory()
+
+    let actualValue = wrapper.vm.parseText(false)
+
+    expect(actualValue).toEqual('')
+
+    actualValue = wrapper.vm.parseText('Text')
+
+    expect(actualValue).toEqual('Text')
+  })
+
+  it('should handle input', async () => {
+    wrapper = factory()
+
+    wrapper.vm.handleInput('oldVal', 'oldVal')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel).toEqual('oldVal')
+    expect(wrapper.emitted('input')).toBeFalsy()
+
+    wrapper.vm.handleInput('newVal', 'oldVal')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel).toEqual('newVal')
+    expect(wrapper.emitted('input')).toBeTruthy()
+  })
 
   it('should watch value', async () => {
     wrapper = factory()
