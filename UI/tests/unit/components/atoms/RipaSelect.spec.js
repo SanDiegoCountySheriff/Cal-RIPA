@@ -1,17 +1,21 @@
-import RipaCheckbox from '@/components/atoms/RipaCheckbox.vue'
+import RipaSelect from '@/components/atoms/RipaSelect'
 import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
-describe('Ripa Checkbox', () => {
+describe('Ripa Select', () => {
   let vuetify
-  let wrapper = null
+  let wrapper
 
   beforeEach(() => {
     vuetify = new Vuetify()
   })
 
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
   const factory = propsData => {
-    return shallowMount(RipaCheckbox, {
+    return shallowMount(RipaSelect, {
       vuetify,
       propsData: {
         ...propsData,
@@ -20,26 +24,27 @@ describe('Ripa Checkbox', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ label: 'Item 1' })
+    wrapper = factory()
+
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should emit event whem model changes', async () => {
-    wrapper = factory({ label: 'Item 1' })
+  it('should set model', async () => {
+    wrapper = factory()
 
-    wrapper.vm.model = !wrapper.vm.model
+    wrapper.vm.model = 'New Value'
     await wrapper.vm.$nextTick()
 
+    expect(wrapper.vm.viewModel).toEqual('New Value')
     expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input').length).toBe(1)
   })
 
   it('should watch value', async () => {
     wrapper = factory()
 
-    wrapper.setProps({ value: true })
+    wrapper.vm.value = 'New Value'
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual(true)
+    expect(wrapper.vm.viewModel).toEqual('New Value')
   })
 })

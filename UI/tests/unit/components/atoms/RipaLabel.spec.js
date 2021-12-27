@@ -1,8 +1,8 @@
-import RipaHeader from '@/components/atoms/RipaHeader.vue'
-import { shallowMount } from '@vue/test-utils'
+import RipaLabel from '@/components/atoms/RipaLabel'
 import Vuetify from 'vuetify'
+import { shallowMount } from '@vue/test-utils'
 
-describe('Ripa Header', () => {
+describe('Ripa Label', () => {
   let vuetify
   let wrapper = null
 
@@ -11,7 +11,7 @@ describe('Ripa Header', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaHeader, {
+    return shallowMount(RipaLabel, {
       vuetify,
       propsData: {
         ...propsData,
@@ -21,11 +21,13 @@ describe('Ripa Header', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
+
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should display value', () => {
-    wrapper = factory({ value: 'Value' })
-    expect(wrapper.html()).toContain('Value')
+  it('should return bold font', () => {
+    wrapper = factory({ bold: true })
+
+    expect(wrapper.vm.boldClass).toEqual('tw-font-bold')
   })
 })

@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import RipaLocation from '@/components/molecules/RipaLocation.vue'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
@@ -21,7 +21,7 @@ describe('Ripa Location', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaLocation, {
+    return shallowMount(RipaLocation, {
       vuetify,
       propsData: {
         ...propsData,

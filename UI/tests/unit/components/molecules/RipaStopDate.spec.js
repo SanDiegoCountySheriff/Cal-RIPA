@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import RipaStopDate from '@/components/molecules/RipaStopDate.vue'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
@@ -20,16 +20,6 @@ describe('Ripa Stop Date', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaStopDate, {
-      vuetify,
-      propsData: {
-        ...propsData,
-      },
-      mixins: [RipaModelMixin],
-    })
-  }
-
-  const shallowFactory = propsData => {
     return shallowMount(RipaStopDate, {
       vuetify,
       propsData: {
@@ -100,7 +90,7 @@ describe('Ripa Stop Date', () => {
 
   dateTestCases.forEach(test => {
     it(`should validate date: ${test.date} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      wrapper = shallowFactory({ value: stop })
+      wrapper = factory({ value: stop })
 
       stop.stopDate.date = test.date
       wrapper.vm.$data.viewModel = stop
@@ -115,7 +105,7 @@ describe('Ripa Stop Date', () => {
   })
 
   it('should validate admin date', () => {
-    wrapper = shallowFactory({ value: stop, adminEditing: true })
+    wrapper = factory({ value: stop, adminEditing: true })
     const inputDate = createDate(-2, 0, 0)
 
     stop.stopDate.date = inputDate
@@ -128,7 +118,7 @@ describe('Ripa Stop Date', () => {
 
   timeTestCases.forEach(test => {
     it(`should validate time: ${test.time} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      wrapper = shallowFactory({ value: stop })
+      wrapper = factory({ value: stop })
 
       stop.stopDate.time = test.time
       wrapper.vm.$data.viewModel = stop
@@ -144,7 +134,7 @@ describe('Ripa Stop Date', () => {
 
   durationTestCases.forEach(test => {
     it(`should validate duration: ${test.duration} as: "${test.expectedFirstCase}" and "${test.expectedSecondCase}"`, () => {
-      wrapper = shallowFactory({ value: stop })
+      wrapper = factory({ value: stop })
 
       stop.stopDate.duration = test.duration
       wrapper.vm.$data.viewModel = stop
@@ -159,21 +149,12 @@ describe('Ripa Stop Date', () => {
   })
 
   it('should handle input', () => {
-    wrapper = shallowFactory({ value: stop })
+    wrapper = factory({ value: stop })
 
     wrapper.vm.handleInput()
 
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
-  })
-
-  it('emits event on blur', async () => {
-    wrapper = factory({ value: stop })
-
-    wrapper.findAll('input').at(2).trigger('blur')
-    await wrapper.vm.$nextTick()
-
     expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input').length).toBe(1)
+    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
   })
 
   it('should watch value', async () => {
@@ -183,11 +164,6 @@ describe('Ripa Stop Date', () => {
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.viewModel.id).toEqual(1)
-  })
-
-  it('should match snapshot', async () => {
-    wrapper = factory({ value: stop })
-    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 

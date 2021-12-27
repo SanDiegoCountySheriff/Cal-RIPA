@@ -1,10 +1,10 @@
-import RipaDatePicker from '@/components/atoms/RipaDatePicker.vue'
-import { shallowMount } from '@vue/test-utils'
+import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import Vuetify from 'vuetify'
+import { shallowMount } from '@vue/test-utils'
 
-describe('Ripa Date Picker', () => {
+describe('Ripa Radio Group', () => {
   let vuetify
-  let wrapper = null
+  let wrapper
 
   beforeEach(() => {
     vuetify = new Vuetify()
@@ -15,7 +15,7 @@ describe('Ripa Date Picker', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaDatePicker, {
+    return shallowMount(RipaRadioGroup, {
       vuetify,
       propsData: {
         ...propsData,
@@ -25,15 +25,25 @@ describe('Ripa Date Picker', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
+
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should emit event', () => {
+  it('should set model', async () => {
     wrapper = factory()
     wrapper.vm.model = 'New Value'
 
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel).toEqual('New Value')
     expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input').length).toEqual(1)
+  })
+
+  it('should handle clear selection', () => {
+    wrapper = factory()
+    wrapper.vm.handleClearSelection()
+
+    expect(wrapper.vm.model).toEqual(null)
   })
 
   it('should watch value', async () => {

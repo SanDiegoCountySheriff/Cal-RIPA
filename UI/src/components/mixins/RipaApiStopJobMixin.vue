@@ -6,8 +6,8 @@ export default {
     return {
       isLocked: false,
       locationSource: 'Location',
-      basisForSearchSource: 'Basis for Search',
-      stopReasonSource: 'Stop Reason',
+      basisForSearchSource: 'Basis for Search Person: ',
+      stopReasonSource: 'Stop Reason Person: ',
     }
   },
 
@@ -80,7 +80,7 @@ export default {
                   apiStop.piiEntities?.length > 0
                 ) {
                   apiStop.piiEntities = apiStop.piiEntities.filter(
-                    e => e.source !== this.basisForSearchSource,
+                    e => e.source !== this.basisForSearchSource + person.index,
                   )
                 }
                 if (!response) {
@@ -90,7 +90,8 @@ export default {
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
-                        e => e.source !== this.basisForSearchSource,
+                        e =>
+                          e.source !== this.basisForSearchSource + person.index,
                       )
                     : []
                   for (const entity of response.piiEntities) {
@@ -120,7 +121,7 @@ export default {
                   apiStop.piiEntities?.length > 0
                 ) {
                   apiStop.piiEntities = apiStop.piiEntities.filter(
-                    e => e.source !== this.stopReasonSource,
+                    e => e.source !== this.stopReasonSource + person.index,
                   )
                 }
                 if (!response) {
@@ -130,7 +131,7 @@ export default {
                 } else if (response.piiEntities.length > 0) {
                   apiStop.piiEntities = apiStop.piiEntities
                     ? apiStop.piiEntities.filter(
-                        e => e.source !== this.stopReasonSource,
+                        e => e.source !== this.stopReasonSource + person.index,
                       )
                     : []
                   for (const entity of response.piiEntities) {

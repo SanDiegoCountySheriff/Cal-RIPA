@@ -1,5 +1,5 @@
 import RipaButtonGroup from '@/components/atoms/RipaButtonGroup.vue'
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Button Group', () => {
@@ -11,7 +11,7 @@ describe('Ripa Button Group', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaButtonGroup, {
+    return shallowMount(RipaButtonGroup, {
       vuetify,
       propsData: {
         ...propsData,

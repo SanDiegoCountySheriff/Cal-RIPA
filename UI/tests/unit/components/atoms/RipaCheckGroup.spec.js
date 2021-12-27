@@ -1,5 +1,5 @@
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup.vue'
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Check Group', () => {
@@ -11,7 +11,7 @@ describe('Ripa Check Group', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaCheckGroup, {
+    return shallowMount(RipaCheckGroup, {
       vuetify,
       propsData: {
         ...propsData,

@@ -43,9 +43,7 @@ export default {
 
   methods: {
     handleViewClick() {
-      if (this.onView) {
-        this.onView()
-      }
+      this.onView()
       this.model = false
     },
   },

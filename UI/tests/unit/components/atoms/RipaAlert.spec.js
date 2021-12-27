@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import RipaAlert from '@/components/atoms/RipaAlert.vue'
 import Vuetify from 'vuetify'
 
@@ -11,7 +11,7 @@ describe('Ripa Alert', () => {
   })
 
   const factory = (propsData, slotsData = '') => {
-    return mount(RipaAlert, {
+    return shallowMount(RipaAlert, {
       vuetify,
       propsData: {
         ...propsData,

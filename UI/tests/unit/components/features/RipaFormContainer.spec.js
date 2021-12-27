@@ -1,10 +1,11 @@
 import RipaFormContainer from '@/components/features/RipaFormContainer.vue'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import {
   PII_TEST_CASES,
   LOCATION_PII_TEST_CASES,
   REASON_PII_TEST_CASES,
-} from '../../constants/RipaFormContainerConstants'
+  BASIS_FOR_SEARCH_PII_TEST_CASES,
+} from '../../constants/RipaFormContainerTestConstants'
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
@@ -15,6 +16,10 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('Ripa Form Container', () => {
+  const app = document.createElement('div')
+  app.setAttribute('data-app', true)
+  document.body.append(app)
+
   let vuetify
   let store
   let state
@@ -41,6 +46,7 @@ describe('Ripa Form Container', () => {
       authentication: {
         isAuthenticated: true,
       },
+      mappedGpsLocationAddress: null,
     }
     actions = {
       editOfficerUser: jest.fn(),
@@ -48,7 +54,9 @@ describe('Ripa Form Container', () => {
       setPiiServiceAvailable: jest.fn(),
     }
     getters = {
-      mappedGpsLocationAddress: jest.fn(),
+      mappedGpsLocationAddress: jest.fn(() => {
+        return state.mappedGpsLocationAddress
+      }),
       mappedFormBeats: jest.fn(),
       mappedFormCountyCities: jest.fn(),
       displayBeatInput: jest.fn(),
@@ -80,13 +88,21 @@ describe('Ripa Form Container', () => {
         setIsOnline(state, value) {
           state.isOnline = value
         },
+        setMappedGpsLocationAddress(state, value) {
+          state.mappedGpsLocationAddress = value
+        },
       },
     })
     apiStop = defaultStop()
   })
 
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+  })
+
   const factory = propsData => {
-    return mount(RipaFormContainer, {
+    return shallowMount(RipaFormContainer, {
       vuetify,
       store,
       localVue,
@@ -98,7 +114,7 @@ describe('Ripa Form Container', () => {
   }
 
   const adminFactory = propsData => {
-    return mount(RipaFormContainer, {
+    return shallowMount(RipaFormContainer, {
       vuetify,
       store,
       localVue,
@@ -236,11 +252,10 @@ describe('Ripa Form Container', () => {
               entityText: 'John Smith',
               confidenceScore: '50',
               category: 'Name',
-              source: 'Basis for Search Person: ',
+              source: 'Stop Reason Person: 1',
             },
           ]
         }
-        const textValue = test.testValue
         const checkTextForPii = jest.spyOn(wrapper.vm, 'checkTextForPii')
         checkTextForPii.mockReturnValue(test.checkTextForPiiReturnValue)
         const setPiiServiceAvailable = jest.spyOn(
@@ -248,7 +263,7 @@ describe('Ripa Form Container', () => {
           'setPiiServiceAvailable',
         )
 
-        await wrapper.vm.validateLocationForPii(textValue)
+        await wrapper.vm.validateLocationForPii(test.testValue)
 
         expect(checkTextForPii).toBeCalledTimes(test.checkTextForPiiCalledTimes)
         expect(setPiiServiceAvailable).toBeCalledTimes(
@@ -276,7 +291,6 @@ describe('Ripa Form Container', () => {
             },
           ]
         }
-        const textValue = test.testValue
         const checkTextForPii = jest.spyOn(wrapper.vm, 'checkTextForPii')
         checkTextForPii.mockReturnValue(test.checkTextForPiiReturnValue)
         const setPiiServiceAvailable = jest.spyOn(
@@ -284,16 +298,72 @@ describe('Ripa Form Container', () => {
           'setPiiServiceAvailable',
         )
 
-        await wrapper.vm.validateReasonForStopForPii(textValue)
+        await wrapper.vm.validateReasonForStopForPii(test.testValue)
 
         expect(checkTextForPii).toBeCalledTimes(test.checkTextForPiiCalledTimes)
         expect(setPiiServiceAvailable).toBeCalledTimes(
           test.setPiiServiceAvailableCalledTimes,
         )
-        expect(wrapper.vm.stop.location.piiFound).toEqual(test.locationPiiFound)
+        expect(wrapper.vm.stop.stopReason.reasonForStopPiiFound).toEqual(
+          test.reasonForStopPiiFound,
+        )
         expect(wrapper.vm.stop.isPiiFound).toEqual(test.stopPiiFound)
         expect(wrapper.vm.stop.piiEntities).toEqual(test.expectedPiiEntities)
       })
     })
+
+    BASIS_FOR_SEARCH_PII_TEST_CASES.forEach(test => {
+      it(`should validate basis for search pii test number ${test.testNumber}`, async () => {
+        wrapper = factory()
+        wrapper.vm.handleOpenTemplate()
+        if (test.setStopPiiEntities) {
+          wrapper.vm.stop.isPiiFound = true
+          wrapper.vm.stop.location.piiFound = true
+          wrapper.vm.stop.piiEntities = [
+            {
+              entityText: 'John Smith',
+              confidenceScore: '50',
+              category: 'Name',
+              source: 'Location',
+            },
+          ]
+        }
+        const checkTextForPii = jest.spyOn(wrapper.vm, 'checkTextForPii')
+        checkTextForPii.mockReturnValue(test.checkTextForPiiReturnValue)
+        const setPiiServiceAvailable = jest.spyOn(
+          wrapper.vm,
+          'setPiiServiceAvailable',
+        )
+
+        await wrapper.vm.validateBasisForSearchForPii(test.testValue)
+
+        expect(checkTextForPii).toBeCalledTimes(test.checkTextForPiiCalledTimes)
+        expect(setPiiServiceAvailable).toBeCalledTimes(
+          test.setPiiServiceAvailableCalledTimes,
+        )
+        expect(wrapper.vm.stop.actionsTaken.basisForSearchPiiFound).toEqual(
+          test.expectedBasisForSearchPiiFound,
+        )
+        expect(wrapper.vm.stop.isPiiFound).toEqual(test.stopPiiFound)
+        expect(wrapper.vm.stop.piiEntities).toEqual(test.expectedPiiEntities)
+      })
+    })
+
+    it('should watch mappedGpsLocationAddress', async () => {
+      wrapper = factory()
+      wrapper.vm.handleOpenTemplate()
+
+      expect(wrapper.vm.lastLocation).toEqual(null)
+
+      store.commit('setMappedGpsLocationAddress', '1000 Anystreet')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.lastLocation).toEqual({
+        newLocation: '1000 Anystreet',
+        persistSchool: true,
+      })
+    })
+
+    it.todo('should mount when not editing local form')
   })
 })

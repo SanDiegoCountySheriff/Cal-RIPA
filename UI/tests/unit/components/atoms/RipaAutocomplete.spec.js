@@ -1,5 +1,5 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete.vue'
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Autocomplete', () => {
@@ -11,7 +11,7 @@ describe('Ripa Autocomplete', () => {
   })
 
   const factory = propsData => {
-    return mount(RipaAutocomplete, {
+    return shallowMount(RipaAutocomplete, {
       vuetify,
       propsData: {
         ...propsData,

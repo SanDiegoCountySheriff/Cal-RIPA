@@ -1,5 +1,5 @@
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog.vue'
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Confirm Dialog', () => {
@@ -10,8 +10,13 @@ describe('Ripa Confirm Dialog', () => {
     vuetify = new Vuetify()
   })
 
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+  })
+
   const factory = propsData => {
-    return mount(RipaConfirmDialog, {
+    return shallowMount(RipaConfirmDialog, {
       vuetify,
       propsData: {
         ...propsData,
@@ -28,44 +33,46 @@ describe('Ripa Confirm Dialog', () => {
   }
 
   it('should match snapshot', async () => {
-    wrapper = factory()
+    wrapper = factory(testData)
 
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should display titles correctly', async () => {
+  it('should handle cancel', () => {
     wrapper = factory(testData)
+    const onClose = jest.spyOn(wrapper.vm, 'onClose')
 
-    expect(wrapper.html()).toContain('Title')
-    expect(wrapper.html()).toContain('Subtitle')
+    wrapper.vm.handleCancel()
+
+    expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('should call this.onClose()', () => {
+  it('should handle confirm', () => {
     wrapper = factory(testData)
+    const onConfirm = jest.spyOn(wrapper.vm, 'onConfirm')
 
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(0)
+    wrapper.vm.handleConfirm()
 
-    wrapper.findAll('button').at(0).trigger('click')
-
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(1)
-  })
-
-  it('should call this.onConfirm()', () => {
-    wrapper = factory(testData)
-
-    expect(wrapper.vm.onConfirm).toHaveBeenCalledTimes(0)
-
-    wrapper.findAll('button').at(1).trigger('click')
-
-    expect(wrapper.vm.onConfirm).toHaveBeenCalledTimes(1)
+    expect(onConfirm).toHaveBeenCalledTimes(1)
   })
 
   it('should watch showDialog', async () => {
-    wrapper = factory()
+    wrapper = factory(testData)
+
+    wrapper.setProps({ showDialog: false })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.showDialog).toBeFalsy()
+
+    wrapper.setProps({ showDialog: false })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.showDialog).toBeFalsy()
 
     wrapper.setProps({ showDialog: true })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.showDialog).toEqual(true)
+    expect(wrapper.vm.showDialog).toBeTruthy()
+    expect(wrapper.vm.isConfirmDisabled).toBeFalsy()
   })
 })

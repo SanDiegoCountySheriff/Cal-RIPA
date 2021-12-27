@@ -171,7 +171,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     adminEditing: {
       type: Boolean,

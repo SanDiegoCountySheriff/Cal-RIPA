@@ -1,10 +1,10 @@
-import RipaDatePicker from '@/components/atoms/RipaDatePicker.vue'
+import RipaSnackBar from '@/components/atoms/RipaSnackBar'
 import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
-describe('Ripa Date Picker', () => {
+describe('Ripa Snackbar', () => {
   let vuetify
-  let wrapper = null
+  let wrapper
 
   beforeEach(() => {
     vuetify = new Vuetify()
@@ -15,7 +15,7 @@ describe('Ripa Date Picker', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaDatePicker, {
+    return shallowMount(RipaSnackBar, {
       vuetify,
       propsData: {
         ...propsData,
@@ -25,15 +25,39 @@ describe('Ripa Date Picker', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
+
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should emit event', () => {
+  it('should set model', async () => {
     wrapper = factory()
-    wrapper.vm.model = 'New Value'
 
+    wrapper.vm.model = 'New Value'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel).toEqual('New Value')
     expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input').length).toEqual(1)
+  })
+
+  it('should get timeout', async () => {
+    wrapper = factory()
+
+    expect(wrapper.vm.getTimeout).toEqual(6000)
+
+    wrapper.setProps({ autoClose: false })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.getTimeout).toEqual(null)
+  })
+
+  it('should handle view click', async () => {
+    wrapper = factory()
+    const onView = jest.spyOn(wrapper.vm, 'onView')
+
+    wrapper.vm.handleViewClick()
+
+    expect(onView).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.model).toBeFalsy()
   })
 
   it('should watch value', async () => {
