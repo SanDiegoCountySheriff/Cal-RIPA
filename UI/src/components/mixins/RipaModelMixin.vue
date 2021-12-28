@@ -40,7 +40,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber,
+          blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           toggleLocationOptions:
