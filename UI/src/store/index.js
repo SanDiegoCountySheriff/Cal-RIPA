@@ -401,9 +401,15 @@ export default new Vuex.Store({
         isAnAdmin = roles.filter(roleObj => {
           return roleObj === 'RIPA-ADMINS-ROLE'
         })
+        let fullName
         const firstName = value.profile.given_name
         const lastName = value.profile.family_name
-        const fullName = value.profile.upn.split('@')[0]
+
+        if (state.apiConfig.useOfficerUpn) {
+          fullName = value.profile.upn.split('@')[0]
+        } else {
+          fullName = `${firstName} ${lastName}`
+        }
 
         state.user = {
           ...state.user,
