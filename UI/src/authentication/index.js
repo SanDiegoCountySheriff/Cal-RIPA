@@ -15,6 +15,7 @@ export default {
         redirectUri: window.location.origin,
         cacheLocation: 'localStorage',
         loadFrameTimeout: 60000,
+        useOfficerUpn: res.data.Configuration.UseOfficerUPN ? res.data.Configuration.UseOfficerUPN : false
       }
 
       const environmentName = res.data.Configuration?.Environment || 'DEV'

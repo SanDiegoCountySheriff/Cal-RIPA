@@ -403,7 +403,7 @@ export default new Vuex.Store({
         })
         const firstName = value.profile.given_name
         const lastName = value.profile.family_name
-        const fullName = `${firstName} ${lastName}`
+        const fullName = value.profile.upn.split('@')[0]
 
         state.user = {
           ...state.user,
