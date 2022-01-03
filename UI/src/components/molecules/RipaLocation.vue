@@ -415,8 +415,8 @@ export default {
       }
     },
 
-    handleInput() {
-      this.updateModel()
+    async handleInput() {
+      await this.updateModel()
       this.$emit('input', this.viewModel)
     },
 

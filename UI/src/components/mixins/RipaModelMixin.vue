@@ -40,7 +40,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber: blockNumber,
+          blockNumber,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           toggleLocationOptions:
@@ -127,7 +127,7 @@ export default {
       })
     },
 
-    updateModel() {
+    async updateModel() {
       this.updateSchoolModel()
       this.updateStudentModel()
       this.updateMoreLocationOptionsModel()
@@ -136,7 +136,7 @@ export default {
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
-      this.updateBlockNumberModel()
+      await this.updateBlockNumberModel()
       this.updateFullAddressModel()
       this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
@@ -287,11 +287,12 @@ export default {
           ? blockNumber.toString()
           : null
 
+      console.log('Result: ', result)
       return result
     },
 
-    updateBlockNumberModel() {
-      this.$nextTick(() => {
+    async updateBlockNumberModel() {
+      await this.$nextTick(() => {
         this.viewModel.location.blockNumber = this.parseBlockNumber(
           this.viewModel.location.blockNumber,
         )
