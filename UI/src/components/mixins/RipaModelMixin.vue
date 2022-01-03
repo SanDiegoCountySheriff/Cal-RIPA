@@ -406,6 +406,20 @@ export default {
           this.viewModel.stopReason.educationViolationCode = null
         }
       }
+
+      if (
+        this.viewModel.stopReason.reasonForStop === 3 ||
+        this.viewModel.stopReason.reasonForStop === 4 ||
+        this.viewModel.stopReason.reasonForStop === 5 ||
+        this.viewModel.stopReason.reasonForStop === 8
+      ) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+      }
     },
 
     updateStopReasonSearchModel() {
