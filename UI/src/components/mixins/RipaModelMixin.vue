@@ -287,7 +287,6 @@ export default {
           ? blockNumber.toString()
           : null
 
-      console.log('Result: ', result)
       return result
     },
 
