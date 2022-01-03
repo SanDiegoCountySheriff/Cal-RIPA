@@ -127,7 +127,7 @@ export default {
       })
     },
 
-    updateModel() {
+    async updateModel() {
       this.updateSchoolModel()
       this.updateStudentModel()
       this.updateMoreLocationOptionsModel()
@@ -136,7 +136,7 @@ export default {
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
-      this.updateBlockNumberModel()
+      await this.updateBlockNumberModel()
       this.updateFullAddressModel()
       this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
@@ -290,8 +290,8 @@ export default {
       return result
     },
 
-    updateBlockNumberModel() {
-      this.$nextTick(() => {
+    async updateBlockNumberModel() {
+      await this.$nextTick(() => {
         this.viewModel.location.blockNumber = this.parseBlockNumber(
           this.viewModel.location.blockNumber,
         )
