@@ -7,8 +7,8 @@
   },
   "Configuration": {
       "Environment": "PROD",
-      "ServicesBaseUrl": "https://sdsd-ripa-prod-apim.azure-api.us/",
-      "Subscription": "96675deacb8c49d1b0bdc2f7e8827cef",
+      "ServicesBaseUrl": "#{ServicesBaseUrl}#",
+      "Subscription": "#{APISubscriptionKey}#",
       "DefaultCounty": "San Diego",
       "DisplayBeatsInput": "true",
       "DisplayDebugger": "true"
