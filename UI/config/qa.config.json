@@ -7,8 +7,8 @@
   },
   "Configuration": {
     "Environment": "QA",
-    "ServicesBaseUrl": "https://sdsd-ripa-q-apim.azure-api.us/",
-    "Subscription": "1188db29d44d497e956b7c277ed3244c",
+    "ServicesBaseUrl": "#{ServicesBaseUrl}#",
+    "Subscription": "#{APISubscriptionKey}#",
     "DefaultCounty": "San Diego",
     "DisplayBeatsInput": "true",
     "DisplayDebugger": "true"
