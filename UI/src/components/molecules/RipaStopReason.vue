@@ -202,7 +202,6 @@ export default {
 
   data() {
     return {
-      reasonForStopValue: this.value.stopReason?.reasonForStop || null,
       reasonRules: [v => !!v || 'Stop reason is required'],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
@@ -308,7 +307,6 @@ export default {
   methods: {
     handleInput() {
       this.updateModel()
-      this.reasonForStopValue = this.viewModel.stopReason?.reasonForStop || null
       this.$emit('input', this.viewModel)
     },
 
@@ -325,7 +323,6 @@ export default {
 
   watch: {
     value(newVal) {
-      this.reasonForStopValue = newVal.stopReason?.reasonForStop || null
       this.viewModel = this.syncModel(newVal)
     },
 
