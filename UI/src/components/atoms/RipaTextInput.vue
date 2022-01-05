@@ -83,7 +83,12 @@ export default {
         if (oldVal !== newVal) {
           this.$emit('input', this.viewModel)
         }
+        this.updateViewModel(this.value)
       })
+    },
+
+    updateViewModel(value) {
+      this.viewModel = value
     },
   },
 
