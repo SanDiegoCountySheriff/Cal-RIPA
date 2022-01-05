@@ -1,8 +1,14 @@
 <script>
 import { format } from 'date-fns'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  computed: {
+    ...mapGetters(['searchAutomaticallySelected']),
+  },
   methods: {
+    ...mapActions(['setSearchAutomaticallySelected']),
+
     syncModel(newValue) {
       const blockNumber = this.parseBlockNumber(
         newValue.location?.blockNumber || null,
@@ -140,8 +146,8 @@ export default {
       this.updateFullAddressModel()
       this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
-      this.updateStopReasonModel()
       this.updateStopReasonSearchModel()
+      this.updateStopReasonModel()
       this.updateStopResultModel()
     },
 
@@ -426,9 +432,11 @@ export default {
       if (this.viewModel.stopReason.reasonForStop !== 6) {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
+        this.setSearchAutomaticallySelected(false)
       }
 
       if (this.viewModel.stopReason.reasonForStop === 6) {
+        this.setSearchAutomaticallySelected(true)
         const actionsTaken =
           this.viewModel.actionsTaken?.actionsTakenDuringStop || []
         if (this.viewModel.stopReason.searchOfPerson) {
@@ -451,6 +459,7 @@ export default {
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
+          this.setSearchAutomaticallySelected(true)
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (!actionsTaken.includes(20)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {

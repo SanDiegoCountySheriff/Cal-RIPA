@@ -75,6 +75,7 @@ export default new Vuex.Store({
     cpraReportStats: {},
     historicalCpraReports: [],
     piiServiceAvailable: true,
+    searchAutomaticallySelected: false,
   },
 
   getters: {
@@ -301,6 +302,9 @@ export default new Vuex.Store({
     piiServiceAvailable: state => {
       return state.piiServiceAvailable
     },
+    searchAutomaticallySelected: state => {
+      return state.searchAutomaticallySelected
+    },
   },
 
   mutations: {
@@ -522,6 +526,9 @@ export default new Vuex.Store({
     },
     updatePiiServiceAvailable(state, piiServiceAvailable) {
       state.piiServiceAvailable = piiServiceAvailable
+    },
+    updateSearchAutomaticallySelected(state, value) {
+      state.searchAutomaticallySelected = value
     },
   },
 
@@ -1660,6 +1667,10 @@ export default new Vuex.Store({
       commit('updateStopSubmissionStatusError', null)
       commit('updateStopSubmissionPassedIds', null)
       commit('updateStopSubmissionFailedStops', null)
+    },
+
+    setSearchAutomaticallySelected({ commit }, value) {
+      commit('updateSearchAutomaticallySelected', value)
     },
   },
 
