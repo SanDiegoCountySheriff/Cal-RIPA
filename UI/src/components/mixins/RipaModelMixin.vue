@@ -4,10 +4,6 @@ import { format } from 'date-fns'
 export default {
   methods: {
     syncModel(newValue) {
-      const blockNumber = this.parseBlockNumber(
-        newValue.location?.blockNumber || null,
-      )
-
       const syncedModel = {
         id: newValue.id,
         template: newValue.template,
@@ -40,7 +36,7 @@ export default {
         location: {
           isSchool: newValue.location?.isSchool || false,
           school: newValue.location?.school || null,
-          blockNumber,
+          blockNumber: newValue.location?.blockNumber || null,
           streetName: newValue.location?.streetName || null,
           intersection: newValue.location?.intersection || null,
           toggleLocationOptions:
@@ -127,7 +123,7 @@ export default {
       })
     },
 
-    async updateModel() {
+    updateModel() {
       this.updateSchoolModel()
       this.updateStudentModel()
       this.updateMoreLocationOptionsModel()
@@ -136,7 +132,7 @@ export default {
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
-      await this.updateBlockNumberModel()
+      this.updateBlockNumberModel()
       this.updateFullAddressModel()
       this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
@@ -290,12 +286,10 @@ export default {
       return result
     },
 
-    async updateBlockNumberModel() {
-      await this.$nextTick(() => {
-        this.viewModel.location.blockNumber = this.parseBlockNumber(
-          this.viewModel.location.blockNumber,
-        )
-      })
+    updateBlockNumberModel() {
+      this.viewModel.location.blockNumber = this.parseBlockNumber(
+        this.viewModel.location.blockNumber,
+      )
     },
 
     updateFullAddressModel() {
