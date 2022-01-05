@@ -75,7 +75,8 @@ export default new Vuex.Store({
     cpraReportStats: {},
     historicalCpraReports: [],
     piiServiceAvailable: true,
-    searchAutomaticallySelected: false,
+    personSearchAutomaticallySelected: false,
+    propertySearchAutomaticallySelected: false,
   },
 
   getters: {
@@ -302,8 +303,11 @@ export default new Vuex.Store({
     piiServiceAvailable: state => {
       return state.piiServiceAvailable
     },
-    searchAutomaticallySelected: state => {
-      return state.searchAutomaticallySelected
+    personSearchAutomaticallySelected: state => {
+      return state.personSearchAutomaticallySelected
+    },
+    propertySearchAutomaticallySelected: state => {
+      return state.propertySearchAutomaticallySelected
     },
   },
 
@@ -527,8 +531,11 @@ export default new Vuex.Store({
     updatePiiServiceAvailable(state, piiServiceAvailable) {
       state.piiServiceAvailable = piiServiceAvailable
     },
-    updateSearchAutomaticallySelected(state, value) {
-      state.searchAutomaticallySelected = value
+    updatePersonSearchAutomaticallySelected(state, value) {
+      state.personSearchAutomaticallySelected = value
+    },
+    updatePropertySearchAutomaticallySelected(state, value) {
+      state.propertySearchAutomaticallySelected = value
     },
   },
 
@@ -1669,8 +1676,12 @@ export default new Vuex.Store({
       commit('updateStopSubmissionFailedStops', null)
     },
 
-    setSearchAutomaticallySelected({ commit }, value) {
-      commit('updateSearchAutomaticallySelected', value)
+    setPersonSearchAutomaticallySelected({ commit }, value) {
+      commit('updatePersonSearchAutomaticallySelected', value)
+    },
+
+    setPropertySearchAutomaticallySelected({ commit }, value) {
+      commit('updatePropertySearchAutomaticallySelected', value)
     },
   },
 

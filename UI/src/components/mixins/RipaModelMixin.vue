@@ -4,10 +4,16 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['searchAutomaticallySelected']),
+    ...mapGetters([
+      'personSearchAutomaticallySelected',
+      'propertySearchAutomaticallySelected',
+    ]),
   },
   methods: {
-    ...mapActions(['setSearchAutomaticallySelected']),
+    ...mapActions([
+      'setPersonSearchAutomaticallySelected',
+      'setPropertySearchAutomaticallySelected',
+    ]),
 
     syncModel(newValue) {
       const syncedModel = {
@@ -182,6 +188,20 @@ export default {
       const actionsTaken =
         this.viewModel.actionsTaken?.actionsTakenDuringStop || []
 
+      if (
+        actionsTaken.includes(18) &&
+        !this.viewModel.stopReason.searchOfPerson
+      ) {
+        this.setPersonSearchAutomaticallySelected(false)
+      }
+
+      if (
+        actionsTaken.includes(20) &&
+        !this.viewModel.stopReason.searchOfProperty
+      ) {
+        this.setPropertySearchAutomaticallySelected(false)
+      }
+
       if (this.viewModel.stopReason) {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.isAnyActionsTakenDisabled1 = true
@@ -191,6 +211,7 @@ export default {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
+            this.setPersonSearchAutomaticallySelected(true)
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
@@ -201,6 +222,7 @@ export default {
               this.viewModel.actionsTaken.actionsTakenDuringStop = []
             }
             this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
+            this.setPropertySearchAutomaticallySelected(true)
           }
         }
       }
@@ -368,6 +390,20 @@ export default {
       }
     },
 
+    removeActionsTakenPersonSearch() {
+      this.viewModel.actionsTaken.actionsTakenDuringStop =
+        this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+          item => item !== 18,
+        )
+    },
+
+    removeActionsTakenPropertySearch() {
+      this.viewModel.actionsTaken.actionsTakenDuringStop =
+        this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+          item => item !== 20,
+        )
+    },
+
     updateStopReasonModel() {
       if (!this.viewModel.person.isStudent) {
         if (
@@ -385,6 +421,12 @@ export default {
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.reasonableSuspicion = null
         this.viewModel.stopReason.reasonableSuspicionCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
       }
 
       if (this.viewModel.stopReason.reasonForStop === 2) {
@@ -392,6 +434,12 @@ export default {
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
       }
 
       if (this.viewModel.stopReason.reasonForStop === 7) {
@@ -399,11 +447,23 @@ export default {
         this.viewModel.stopReason.reasonableSuspicionCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
       }
 
       if (this.viewModel.stopReason.reasonForStop === 7) {
         if (this.viewModel.stopReason.educationViolation !== 1) {
           this.viewModel.stopReason.educationViolationCode = null
+        }
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
         }
       }
 
@@ -419,6 +479,21 @@ export default {
         this.viewModel.stopReason.reasonableSuspicionCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
+      }
+
+      if (this.viewModel.stopReason.reasonForStop === 6) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
       }
     },
 
@@ -426,11 +501,9 @@ export default {
       if (this.viewModel.stopReason.reasonForStop !== 6) {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
-        this.setSearchAutomaticallySelected(false)
       }
 
       if (this.viewModel.stopReason.reasonForStop === 6) {
-        this.setSearchAutomaticallySelected(true)
         const actionsTaken =
           this.viewModel.actionsTaken?.actionsTakenDuringStop || []
         if (this.viewModel.stopReason.searchOfPerson) {
@@ -453,7 +526,6 @@ export default {
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
-          this.setSearchAutomaticallySelected(true)
           this.viewModel.actionsTaken.anyActionsTaken = true
           if (!actionsTaken.includes(20)) {
             if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
