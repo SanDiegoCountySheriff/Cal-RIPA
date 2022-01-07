@@ -8,7 +8,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
 {
     public class StopQueryUtility
     {
-        
+
         public StopQuery GetStopQuery(HttpRequest req)
         {
             StopQuery stopQuery = new StopQuery
@@ -16,7 +16,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
                 StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
                 EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
                 ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
-                Status = !string.IsNullOrWhiteSpace(req.Query["Status"]) ? req.Query["Status"] : default,
+                Statuses = !string.IsNullOrWhiteSpace(req.Query["Statuses"]) ? req.Query["Statuses"].ToString().Split(',') : default,
                 OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
                 Offset = !string.IsNullOrWhiteSpace(req.Query["Offset"]) ? Convert.ToInt32(req.Query["Offset"]) : default,
                 Limit = !string.IsNullOrWhiteSpace(req.Query["Limit"]) ? Convert.ToInt32(req.Query["Limit"]) : default,
@@ -68,11 +68,18 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
             //Status
-            if (!string.IsNullOrWhiteSpace(stopQuery.Status) && !forCpraReport)
+            if (stopQuery.Statuses != null && !forCpraReport)
             {
-                whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
+                string stopQueryStatement = "(";
+
+                foreach (var status in stopQuery.Statuses)
+                {
+                    stopQueryStatement += Environment.NewLine + $"c.Status = '{status}' OR";
+                }
+                stopQueryStatement = stopQueryStatement.Remove(stopQueryStatement.Length - 2);
+                whereStatements.Add(stopQueryStatement + ")");
             }
-            else if (forCpraReport) 
+            else if (forCpraReport)
             {
                 whereStatements.Add(Environment.NewLine + "(c.Status = 'Submitted' OR c.Status = 'Resubmitted')");
             }
@@ -99,9 +106,6 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             {
                 whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
             }
-
-           
-
             string where = string.Empty;
             if (whereStatements.Count > 0)
             {
@@ -171,9 +175,15 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
             //Status
-            if (!string.IsNullOrWhiteSpace(stopQuery.Status))
+            if (stopQuery.Statuses != null)
             {
-                whereStatements.Add(Environment.NewLine + $"c.Status = '{stopQuery.Status}'");
+                string stopQueryStatement = "(";
+                foreach (var status in stopQuery.Statuses)
+                {
+                    stopQueryStatement += Environment.NewLine + $"c.Status = '{status}' OR";
+                }
+                stopQueryStatement = stopQueryStatement.Remove(stopQueryStatement.Length - 2);
+                whereStatements.Add(stopQueryStatement + ")");
             }
 
             //ErrorCode

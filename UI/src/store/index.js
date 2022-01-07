@@ -1313,8 +1313,18 @@ export default new Vuex.Store({
             queryString = `${queryString}&EndDate=${formattedToDate}`
           }
 
-          if (queryData.filters.status !== null) {
-            queryString = `${queryString}&Status=${queryData.filters.status}`
+          if (
+            queryData.filters.status !== null &&
+            queryData.filters.status.length > 0
+          ) {
+            let statusParameters = ''
+            for (const parameter of queryData.filters.status) {
+              statusParameters += parameter + ','
+            }
+            queryString = `${queryString}&Status=${statusParameters.substring(
+              0,
+              statusParameters.length - 1,
+            )}`
           }
 
           if (queryData.filters.isPiiFound !== null) {

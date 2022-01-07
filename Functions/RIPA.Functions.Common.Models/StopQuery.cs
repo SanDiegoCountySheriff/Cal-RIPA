@@ -7,7 +7,7 @@ namespace RIPA.Functions.Common.Models
         public DateTime? EndDate { get; set; }
         public bool? IsPII { get; set; }
         public string ErrorCode { get; set; }
-        public string Status { get; set; }
+        public string[] Statuses { get; set; }
         public bool? IsSubmitted { get; set; }
         public string OfficerId { get; set; }
         public int Limit { get; set; }
