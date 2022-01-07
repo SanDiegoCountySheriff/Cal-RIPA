@@ -68,7 +68,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
             //Status
-            if (stopQuery.Statuses != null && !forCpraReport)
+            if (stopQuery.Statuses.Length > 0 && !forCpraReport)
             {
                 string stopQueryStatement = "(";
 
@@ -175,7 +175,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
             //Status
-            if (stopQuery.Statuses != null)
+            if (stopQuery.Statuses.Length > 0)
             {
                 string stopQueryStatement = "(";
                 foreach (var status in stopQuery.Statuses)
