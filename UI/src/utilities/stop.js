@@ -645,20 +645,32 @@ const getSummaryAgencyQuestion = (question, answer) => {
 export const apiStopTelemetrySummary = apiStop => {
   const items = []
   if (apiStop.telemetry) {
-    items.push({ id: 'D1', content: getSummaryTelemetryTemplate(apiStop) })
     items.push({
-      id: 'D2',
+      id: 'D1',
+      content: getSummaryTelemetryEditStopOfficerId(apiStop),
+    })
+    items.push({ id: 'D2', content: getSummaryTelemetryTemplate(apiStop) })
+    items.push({
+      id: 'D3',
       content: getSummaryTelemetryLookupCacheDate(apiStop),
     })
     items.push({
-      id: 'D3',
+      id: 'D4',
       content: getSummaryTelemetryPullFromReasonCode(apiStop),
     })
-    items.push({ id: 'D4', content: getSummaryTelemetryFormCached(apiStop) })
-    items.push({ id: 'D5', content: getSummaryTelemetryStepTrace(apiStop) })
+    items.push({ id: 'D5', content: getSummaryTelemetryFormCached(apiStop) })
+    items.push({ id: 'D6', content: getSummaryTelemetryStepTrace(apiStop) })
   }
 
   return items
+}
+
+const getSummaryTelemetryEditStopOfficerId = apiStop => {
+  return {
+    level: 1,
+    header: 'Editing Officer ID',
+    detail: apiStop.editStopOfficerId,
+  }
 }
 
 const getSummaryTelemetryTemplate = apiStop => {
