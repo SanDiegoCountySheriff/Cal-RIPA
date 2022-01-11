@@ -75,6 +75,8 @@ export default new Vuex.Store({
     cpraReportStats: {},
     historicalCpraReports: [],
     piiServiceAvailable: true,
+    personSearchAutomaticallySelected: false,
+    propertySearchAutomaticallySelected: false,
   },
 
   getters: {
@@ -301,6 +303,12 @@ export default new Vuex.Store({
     piiServiceAvailable: state => {
       return state.piiServiceAvailable
     },
+    personSearchAutomaticallySelected: state => {
+      return state.personSearchAutomaticallySelected
+    },
+    propertySearchAutomaticallySelected: state => {
+      return state.propertySearchAutomaticallySelected
+    },
   },
 
   mutations: {
@@ -401,9 +409,15 @@ export default new Vuex.Store({
         isAnAdmin = roles.filter(roleObj => {
           return roleObj === 'RIPA-ADMINS-ROLE'
         })
+        let fullName
         const firstName = value.profile.given_name
         const lastName = value.profile.family_name
-        const fullName = `${firstName} ${lastName}`
+
+        if (state.apiConfig.useOfficerUpn) {
+          fullName = value.profile.upn.split('@')[0]
+        } else {
+          fullName = `${firstName} ${lastName}`
+        }
 
         state.user = {
           ...state.user,
@@ -516,6 +530,12 @@ export default new Vuex.Store({
     },
     updatePiiServiceAvailable(state, piiServiceAvailable) {
       state.piiServiceAvailable = piiServiceAvailable
+    },
+    updatePersonSearchAutomaticallySelected(state, value) {
+      state.personSearchAutomaticallySelected = value
+    },
+    updatePropertySearchAutomaticallySelected(state, value) {
+      state.propertySearchAutomaticallySelected = value
     },
   },
 
@@ -1307,8 +1327,18 @@ export default new Vuex.Store({
             queryString = `${queryString}&EndDate=${formattedToDate}`
           }
 
-          if (queryData.filters.status !== null) {
-            queryString = `${queryString}&Status=${queryData.filters.status}`
+          if (
+            queryData.filters.status !== null &&
+            queryData.filters.status.length > 0
+          ) {
+            let statusParameters = ''
+            for (const parameter of queryData.filters.status) {
+              statusParameters += parameter + ','
+            }
+            queryString = `${queryString}&Status=${statusParameters.substring(
+              0,
+              statusParameters.length - 1,
+            )}`
           }
 
           if (queryData.filters.isPiiFound !== null) {
@@ -1654,6 +1684,14 @@ export default new Vuex.Store({
       commit('updateStopSubmissionStatusError', null)
       commit('updateStopSubmissionPassedIds', null)
       commit('updateStopSubmissionFailedStops', null)
+    },
+
+    setPersonSearchAutomaticallySelected({ commit }, value) {
+      commit('updatePersonSearchAutomaticallySelected', value)
+    },
+
+    setPropertySearchAutomaticallySelected({ commit }, value) {
+      commit('updatePropertySearchAutomaticallySelected', value)
     },
   },
 

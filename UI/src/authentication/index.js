@@ -27,6 +27,7 @@ export default {
         displayDebugger: res.data.Configuration.DisplayDebugger === 'true',
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: environmentName.toUpperCase(),
+        useOfficerUpn: res.data.Configuration.UseOfficerUpn === 'true',
       })
 
       this.clientId = config.clientId

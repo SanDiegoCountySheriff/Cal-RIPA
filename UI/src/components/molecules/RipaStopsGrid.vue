@@ -29,6 +29,9 @@
           class="tw-ml-2"
           :items="statuses"
           label="Status"
+          multiple
+          deletable-chips
+          small-chips
           clearable
           @change="statusChange"
         ></v-select>
