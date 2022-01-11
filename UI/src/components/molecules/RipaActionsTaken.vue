@@ -381,7 +381,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     loadingPii: {
       type: Boolean,

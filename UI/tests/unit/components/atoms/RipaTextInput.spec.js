@@ -14,6 +14,10 @@ describe('Ripa Text Input', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
   const factory = propsData => {
     return shallowMount(RipaTextInput, {
       vuetify,
@@ -123,13 +127,11 @@ describe('Ripa Text Input', () => {
     wrapper.vm.handleInput('oldVal', 'oldVal')
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual('oldVal')
     expect(wrapper.emitted('input')).toBeFalsy()
 
     wrapper.vm.handleInput('newVal', 'oldVal')
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual('newVal')
     expect(wrapper.emitted('input')).toBeTruthy()
   })
 
