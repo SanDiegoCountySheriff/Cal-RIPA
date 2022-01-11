@@ -41,7 +41,7 @@ namespace RIPA.Functions.UserProfile.Functions
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Importing user profiles from uploaded csv");
             var count = 0;
 
             try
@@ -74,11 +74,14 @@ namespace RIPA.Functions.UserProfile.Functions
                         {
                             record.Agency = agency;
                         }
+                        record.FirstName ??= "";
+                        record.LastName ??= "";
                         await _userProfileCosmosDbService.UpdateUserProfileAsync(record.Id, record);
                     }
                 }
 
                 string responseMessage;
+
                 if (count >= 0)
                 {
                     responseMessage = $"Upload Complete: {count} {(count > 1 ? "records" : "record")} uploaded";
