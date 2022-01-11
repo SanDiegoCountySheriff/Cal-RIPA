@@ -744,10 +744,17 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          commit('updateCpraReportStats', response.data)
-          return `Report created for dates ${formatDate(
-            formattedFromDate,
-          )} to ${formatDate(formattedToDate)}`
+          if (
+            response.data ===
+            'No valid stops were found during that date range.'
+          ) {
+            return response.data
+          } else {
+            commit('updateCpraReportStats', response.data)
+            return `Report created for dates ${formatDate(
+              formattedFromDate,
+            )} to ${formatDate(formattedToDate)}`
+          }
         })
         .catch(error => {
           console.log('There was an error generating the CPRA report', error)
