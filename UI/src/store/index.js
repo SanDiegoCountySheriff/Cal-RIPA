@@ -1342,7 +1342,7 @@ export default new Vuex.Store({
             for (const parameter of queryData.filters.status) {
               statusParameters += parameter + ','
             }
-            queryString = `${queryString}&Status=${statusParameters.substring(
+            queryString = `${queryString}&Statuses=${statusParameters.substring(
               0,
               statusParameters.length - 1,
             )}`
