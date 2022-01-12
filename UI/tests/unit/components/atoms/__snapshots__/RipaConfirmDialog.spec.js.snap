@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Confirm Dialog should match snapshot 1`] = `
+<v-dialog-stub opendelay="0" closedelay="0" value="true" contentclass="" maxwidth="350px" origin="center center" persistent="true" retainfocus="true" transition="dialog-transition" width="auto">
+  <v-card-stub loaderheight="4" tag="div">
+    <v-card-title-stub>Title</v-card-title-stub>
+    <v-spacer-stub></v-spacer-stub>
+    <v-card-subtitle-stub>Subtitle</v-card-subtitle-stub>
+    <v-card-actions-stub class="tw-mb-4 tw-w-full">
+      <v-spacer-stub></v-spacer-stub>
+      <div class="tw-flex tw-justify-end tw-w-full">
+        <v-btn-stub color="blue darken-1" tag="button" activeclass="" type="button" class="tw-mr-4">
+          No
+        </v-btn-stub>
+        <v-btn-stub color="blue darken-1" tag="button" activeclass="" type="button" class="tw-w-24">
+          Yes
+        </v-btn-stub>
+      </div>
+      <v-spacer-stub></v-spacer-stub>
+    </v-card-actions-stub>
+  </v-card-stub>
+</v-dialog-stub>
+`;

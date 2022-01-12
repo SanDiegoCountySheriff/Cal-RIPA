@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Text Input should match snapshot 1`] = `
+<div class="ripa-text-input">
+  <!---->
+  <v-text-field-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" backgroundcolor="" hint="" label="" loaderheight="2" clearicon="$clear" type="text"></v-text-field-stub>
+</div>
+`;

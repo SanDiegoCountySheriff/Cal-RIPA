@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Checkbox should match snapshot 1`] = `<v-checkbox-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" validateonblur="true" backgroundcolor="" label="Item 1" ripple="true" valuecomparator="[Function]" indeterminateicon="$checkboxIndeterminate" officon="$checkboxOff" onicon="$checkboxOn"></v-checkbox-stub>`;

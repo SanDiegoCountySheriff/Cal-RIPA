@@ -232,19 +232,122 @@ describe('Ripa Actions Taken', () => {
     ])
   })
 
-  it.todo('should get basis for search items')
+  it('should get basis for search items', () => {
+    wrapper = factory({ value: stop })
+    wrapper.vm.basisForSearchItems = [
+      { value: 1 },
+      { value: 2 },
+      { value: 12 },
+      { value: 13 },
+    ]
 
-  it.todo('should get basis for property seizure items')
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = null
 
-  it.todo('should validate was search of person or property conducted')
+    expect(wrapper.vm.getBasisForSearchItems).toEqual([
+      { value: 1 },
+      { value: 2 },
+    ])
 
-  it.todo('should validate was asked for consent')
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [20]
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = []
 
-  it.todo('should validate was asked for consent to search person')
+    expect(wrapper.vm.getBasisForSearchItems).toEqual([
+      { value: 1 },
+      { value: 2 },
+      { value: 12 },
+    ])
 
-  it.todo('should validate was asked for consent to search property')
+    wrapper.vm.viewModel.person.isStudent = true
 
-  it.todo('should display search explanation correctly')
+    expect(wrapper.vm.getBasisForSearchItems).toEqual([
+      { value: 1 },
+      { value: 2 },
+      { value: 12 },
+      { value: 13 },
+    ])
+  })
+
+  it('should get basis for property seizure items', () => {
+    wrapper = factory({ value: stop })
+    wrapper.vm.basisForPropertySeizureItems = [
+      { value: 1 },
+      { value: 2 },
+      { value: 6 },
+    ]
+
+    expect(wrapper.vm.getBasisForPropertySeizureItems).toEqual([
+      { value: 1 },
+      { value: 2 },
+    ])
+
+    wrapper.vm.viewModel.person.isStudent = true
+
+    expect(wrapper.vm.getBasisForPropertySeizureItems).toEqual([
+      { value: 1 },
+      { value: 2 },
+      { value: 6 },
+    ])
+  })
+
+  it('should validate was search of person or property conducted', () => {
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = null
+
+    expect(wrapper.vm.wasSearchOfPersonOrPropertyConducted).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = []
+
+    expect(wrapper.vm.wasSearchOfPersonOrPropertyConducted).toBeTruthy()
+  })
+
+  it('should validate was asked for consent', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.wasAskedForConsent).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.personSearchConsentGiven = true
+
+    expect(wrapper.vm.wasAskedForConsent).toBeTruthy()
+  })
+
+  it('should validate was asked for consent to search person', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.wasAskedForConsentToSearchPerson).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [17]
+
+    expect(wrapper.vm.wasAskedForConsentToSearchPerson).toBeTruthy()
+  })
+
+  it('should validate was asked for consent to search property', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.wasAskedForConsentToSearchProperty).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [19]
+
+    expect(wrapper.vm.wasAskedForConsentToSearchProperty).toBeTruthy()
+  })
+
+  it('should display basis for search explanation when valid', () => {
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = []
+
+    expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = [4]
+
+    expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeFalsy()
+
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = []
+    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+
+    expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeTruthy()
+  })
 
   it.todo('should handle input')
 
