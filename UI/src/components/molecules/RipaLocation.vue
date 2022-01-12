@@ -172,6 +172,7 @@
             <ripa-text-input
               v-model="model.location.landmark"
               label="Road marker, landmark, or other"
+              :loading="loadingPii"
               :rules="landmarkRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
