@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style>
-input[type='time']::-webkit-calendar-picker-indicator {
+::-webkit-calendar-picker-indicator {
   position: absolute;
   top: 0;
   left: 0;
