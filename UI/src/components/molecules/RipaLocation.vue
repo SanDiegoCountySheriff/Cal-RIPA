@@ -12,7 +12,7 @@
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="3" class="tw-pr-2">
           <template v-if="isGeolocationAvailable">
-            <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
+            <div class="tw-mr-2 tw-mt-4">
               <v-btn
                 class="tw-w-full"
                 color="primary"
@@ -26,7 +26,7 @@
           </template>
         </v-col>
         <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
+          <div class="tw-mr-2 tw-mt-4">
             <v-btn
               class="tw-w-full"
               color="primary"
@@ -38,7 +38,7 @@
           </div>
         </v-col>
         <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
+          <div class="tw-mr-2 tw-mt-4">
             <v-btn
               class="tw-w-full"
               color="primary"
@@ -51,7 +51,7 @@
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <template v-if="isOnlineAndAuthenticated">
-            <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
+            <div class="tw-mr-2 tw-mt-4">
               <v-btn
                 class="tw-w-full"
                 color="primary"
