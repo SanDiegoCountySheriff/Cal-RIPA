@@ -10,12 +10,12 @@
 
     <v-container>
       <v-row no-gutters>
-        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
+        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
           <template v-if="isGeolocationAvailable">
-            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
               <v-btn
                 class="tw-w-full"
-                outlined
+                color="primary"
                 small
                 :loading="loadingGps"
                 @click="handleCurrentLocation"
@@ -25,11 +25,11 @@
             </div>
           </template>
         </v-col>
-        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
             <v-btn
               class="tw-w-full"
-              outlined
+              color="primary"
               small
               :disabled="!validLastLocation"
               @click="handleLastLocation"
@@ -37,11 +37,11 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12" sm="12" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
             <v-btn
               class="tw-w-full"
-              outlined
+              color="primary"
               small
               @click="handleOpenFavorites"
             >
@@ -49,12 +49,12 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12" sm="12" md="3">
+        <v-col cols="12" sm="6" md="3">
           <template v-if="isOnlineAndAuthenticated">
-            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <div class="tw-mr-2 tw-mt-4 sm:tw-mt-4">
               <v-btn
                 class="tw-w-full"
-                outlined
+                color="primary"
                 small
                 @click="handleSaveFavorite"
               >
