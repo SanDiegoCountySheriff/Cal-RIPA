@@ -4,7 +4,7 @@
       <ripa-header :value="title"></ripa-header>
       <template v-if="subtitle.length > 0">
         <v-icon
-          class="tw-ml-2"
+          class="tw-ml-2 icon"
           size="16"
           @click="handleSubtitleClick"
           color="primary"
@@ -50,3 +50,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.icon {
+  margin-bottom: 3px;
+}
+</style>
