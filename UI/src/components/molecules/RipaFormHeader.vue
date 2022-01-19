@@ -1,26 +1,18 @@
 <template>
   <div class="ripa-form-header">
-    <ripa-header :value="title"></ripa-header>
-    <div class="tw-flex">
-      <template v-if="required">
-        <v-chip class="tw-mt-1 tw-mr-2" color="red" text-color="white" small>
-          required
-        </v-chip>
-      </template>
+    <v-row class="tw-m-1">
+      <ripa-header :value="title"></ripa-header>
       <template v-if="subtitle.length > 0">
-        <v-chip
-          class="tw-mt-1"
-          color="primary"
-          outlined
-          pill
-          small
+        <v-icon
+          class="tw-ml-2"
+          size="16"
           @click="handleSubtitleClick"
+          color="primary"
         >
-          <v-icon left size="16"> mdi-scale-balance </v-icon>
-          {{ subtitle }}
-        </v-chip>
+          mdi-scale-balance
+        </v-icon>
       </template>
-    </div>
+    </v-row>
   </div>
 </template>
 
@@ -46,10 +38,6 @@ export default {
     title: {
       type: String,
       default: '',
-    },
-    required: {
-      type: Boolean,
-      default: false,
     },
     subtitle: {
       type: String,
