@@ -16,7 +16,9 @@
           <span>Required</span>
         </v-tooltip>
       </template>
+
       <ripa-header :value="title"></ripa-header>
+
       <template v-if="subtitle.length > 0">
         <v-icon
           class="icon"
