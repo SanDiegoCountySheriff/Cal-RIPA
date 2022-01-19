@@ -935,7 +935,9 @@ export default new Vuex.Store({
             .map(item => {
               return {
                 ...item,
-                id: pad(item.id, 3),
+                id: state.apiConfig.modifyBeatId
+                  ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                  : item.id,
               }
             })
           commit('updateAdminBeats', data)
@@ -970,10 +972,16 @@ export default new Vuex.Store({
               })
               .map(item => {
                 return {
-                  id: item.id ? pad(item.id, 3) : null,
-                  fullName: `${pad(item.id, 3)} ${item.community} (${
-                    item.command
-                  })`,
+                  id: item.id
+                    ? state.apiConfig.modifyBeatId
+                      ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                      : item.id
+                    : null,
+                  fullName: `${
+                    state.apiConfig.modifyBeatId
+                      ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                      : item.id
+                  } ${item.community} (${item.command})`,
                 }
               })
             commit('updateFormBeats', data)
