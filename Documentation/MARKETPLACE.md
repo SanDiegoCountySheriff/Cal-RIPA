@@ -55,7 +55,7 @@ First, you must work with the CSSA team to get an Azure subscription setup for y
 | ![Step 9](./assets/RIPA-Installation-Step-09.png) |
 |-
 
-10. The last important tab is the "Tags". The application will automatically generate a few tags and apply them to your installation. Youo can use this section to add your specific tags (name/value pairs).
+10. The last important tab is the "Tags". The application will automatically generate a few tags and apply them to your installation. You can use this section to add your specific tags (name/value pairs).
 
     1. application = ripa.
     2. agency = your abbreviated agency name chosen in "Step 6".
