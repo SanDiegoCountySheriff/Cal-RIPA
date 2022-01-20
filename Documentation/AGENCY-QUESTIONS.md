@@ -2,7 +2,7 @@
 
 ## Agency specific questions
 
-The RIPA by CSSA application provides a feature that allows each agency the ability to configure additonal questions that are displayed as Step #6 when they are configured. These extra questions are never transmitted to the California DoJ, but can be used internally to track certain metrics your agency desires to trend. Otherwise, if no questions are configured, Step #6 is the final step to review and save the STOP record.
+The RIPA by CSSA application provides a feature that allows each agency the ability to configure additional questions that are displayed as Step #6 when they are configured. These extra questions are never transmitted to the California DoJ, but can be used internally to track certain metrics your agency desires to trend. Otherwise, if no questions are configured, Step #6 is the final step to review and save the STOP record.
 
 Currently the application only supports text type questions using a standard "TextBox" control. Feel free to clone the repo and add functionality! (It is an Open-Source project just waiting to be extended!)
 

@@ -2,7 +2,7 @@
 
 ## How to install and configure your RIPA application instance
 
-First you should contact the California Deptment of Justice and request to be setup with sFTP interface for STOP data uploads.
+First you should contact the California Department of Justice and request to be setup with sFTP interface for STOP data uploads.
 
 Next you should follow the [Create Authentication Scheme](./AUTHENTICATION.md) instructions to create an Azure Active Directory OAuth/OpenID-Connect App Registration, Admin & User groups and the associated Roles.
 
