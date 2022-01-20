@@ -1,5 +1,5 @@
 <template>
-  <v-dialog
+  <!-- <v-dialog
     ref="dialog"
     v-model="modal"
     :return-value.sync="model"
@@ -19,11 +19,19 @@
       ></v-text-field>
     </template>
     <v-time-picker v-if="modal" v-model="model" full-width>
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
+    <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
     </v-time-picker>
-  </v-dialog>
+  </v-dialog> -->
+
+  <v-text-field
+    v-model="model"
+    :label="label"
+    :rules="rules"
+    append-icon="mdi-clock-time-four-outline"
+    type="time"
+  ></v-text-field>
 </template>
 
 <script>
@@ -75,3 +83,17 @@ export default {
   },
 }
 </script>
+
+<style>
+::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+</style>

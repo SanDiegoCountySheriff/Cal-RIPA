@@ -11,7 +11,8 @@
     "Subscription": "#{APISubscriptionKey}#",
     "DefaultCounty": "San Diego",
     "DisplayBeatsInput": "true",
-    "DisplayDebugger": "true"
+    "DisplayDebugger": "true",
+    "UseOfficerUpn": "true"
   },
   "AgencyQuestions": [
     {
