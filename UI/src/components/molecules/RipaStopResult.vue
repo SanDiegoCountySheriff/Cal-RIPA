@@ -10,19 +10,24 @@
 
     <v-container>
       <v-row no-gutters>
-        <v-col cols="12" sm="12" md="6" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
-            <v-btn class="tw-w-full" outlined small @click="onOpenFavorites">
+        <v-col cols="12" sm="6" md="6" class="tw-pr-2">
+          <div class="tw-mr-2 tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              color="primary"
+              small
+              @click="onOpenFavorites"
+            >
               Open Favorites
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12" sm="12" md="6">
+        <v-col cols="12" sm="6" md="6">
           <template v-if="isOnlineAndAuthenticated">
-            <div class="tw-mr-2 tw-mt-0 sm:tw-mt-4">
+            <div class="tw-mr-2 tw-mt-4">
               <v-btn
                 class="tw-w-full"
-                outlined
+                color="primary"
                 small
                 @click="handleSaveFavorite"
               >

@@ -109,6 +109,11 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
 
+            if (totalStopCount == 0)
+            {
+                return new OkObjectResult("No valid stops were found during that date range.");
+            }
+
             var builder = new StringBuilder();
 
             try 
