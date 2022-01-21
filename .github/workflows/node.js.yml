@@ -23,6 +23,6 @@ jobs:
         with:
           auto_fix: true
           eslint: true
-          eslint_dir: UI
           prettier: true
-          prettier_dir: UI
+        eslint_dir: UI
+        prettier_dir: UI
