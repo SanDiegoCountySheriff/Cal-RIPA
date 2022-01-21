@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+        working-directory: UI
       - name: npm install, lint, test
         working-directory: UI
         run: |
