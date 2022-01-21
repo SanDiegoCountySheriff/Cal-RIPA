@@ -73,5 +73,5 @@ export default {
 }
 .left-align input {
   text-align: left;
-}s
+}
 </style>
