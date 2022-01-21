@@ -22,4 +22,4 @@ jobs:
         with: 
           eslint: true
           prettier: true
-        auto-fix: true
+          auto-fix: true
