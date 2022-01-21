@@ -1225,6 +1225,15 @@ export default new Vuex.Store({
                   fullName: `${item.description} ${item.code}`,
                 }
               })
+              .sort((a, b) => {
+                if (a.fullName < b.fullName) {
+                  return -1
+                } else if (a.fullName > b.fullName) {
+                  return 1
+                } else {
+                  return 0
+                }
+              })
             commit('updateFormStatutes', data)
             localStorage.setItem('ripa_statutes', JSON.stringify(data))
           })
