@@ -19,9 +19,10 @@ jobs:
         working-directory: UI
 
       - name: run linters
-        working-directory: UI
         uses: wearerequired/lint-action@v1
         with:
           auto_fix: true
           eslint: true
+          eslint_dir: UI
           prettier: true
+          prettier_dir: UI
