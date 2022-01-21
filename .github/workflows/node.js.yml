@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Lint
+name: Build/Lint/Test
 
 on:
   pull_request:
@@ -26,3 +26,7 @@ jobs:
           eslint_dir: UI
           prettier: true
           prettier_dir: UI
+
+      - name: run unit tests
+        run: npm run test:unit
+        working-directory: UI
