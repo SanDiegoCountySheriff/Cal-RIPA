@@ -343,15 +343,37 @@ describe('Ripa Actions Taken', () => {
 
     expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeFalsy()
 
-    wrapper.vm.viewModel.actionsTaken.basisForSearch = []
+    wrapper.vm.viewModel.actionsTaken.basisForSearch = [3]
     wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
 
     expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeTruthy()
   })
 
-  it.todo('should handle input')
+  it('should handle input', () => {
+    wrapper = factory({ value: stop })
 
-  it.todo('should handle check pii')
+    wrapper.vm.handleInput()
 
-  it.todo('should watch value')
+    expect(wrapper.emitted('input')).toBeTruthy()
+  })
+
+  it('should handle check pii', () => {
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.handlePiiCheck('test')
+
+    expect(wrapper.emitted('pii-check')).toBeTruthy()
+    expect(wrapper.emitted('pii-check')[0][0].value).toEqual('test')
+  })
+
+  it('should watch value', async () => {
+    wrapper = factory({ value: stop })
+
+    const updatedStop = defaultStop()
+    updatedStop.id = 1
+
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.viewModel.id).toEqual(1)
+  })
 })

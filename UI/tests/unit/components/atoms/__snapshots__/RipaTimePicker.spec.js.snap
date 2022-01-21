@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Time Picker should match snapshot 1`] = `
-<v-dialog-stub opendelay="0" closedelay="0" contentclass="" maxwidth="none" origin="center center" persistent="true" retainfocus="true" transition="dialog-transition" width="290px">
-  <!---->
-</v-dialog-stub>
-`;
+exports[`Ripa Time Picker should match snapshot 1`] = `<v-text-field-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" appendicon="mdi-clock-time-four-outline" backgroundcolor="" label="" loaderheight="2" clearicon="$clear" type="time"></v-text-field-stub>`;
