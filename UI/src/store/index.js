@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
+import { pad } from '@/utilities/stop'
 import authentication from '@/authentication'
 
 Vue.use(Vuex)
@@ -925,11 +926,20 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          const data = response.data.sort((x, y) => {
-            const beatA = x.command.toUpperCase()
-            const beatB = y.command.toUpperCase()
-            return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
-          })
+          const data = response.data
+            .sort((x, y) => {
+              const beatA = x.command.toUpperCase()
+              const beatB = y.command.toUpperCase()
+              return beatA < beatB ? -1 : beatA > beatB ? 1 : 0
+            })
+            .map(item => {
+              return {
+                ...item,
+                id: state.apiConfig.modifyBeatId
+                  ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                  : item.id,
+              }
+            })
           commit('updateAdminBeats', data)
         })
         .catch(error => {
@@ -962,8 +972,16 @@ export default new Vuex.Store({
               })
               .map(item => {
                 return {
-                  id: item.id ? item.id.toString() : null,
-                  fullName: `${item.id} ${item.community} (${item.command})`,
+                  id: item.id
+                    ? state.apiConfig.modifyBeatId
+                      ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                      : item.id
+                    : null,
+                  fullName: `${
+                    state.apiConfig.modifyBeatId
+                      ? pad(item.id, state.apiConfig.beatIdNumberOfDigits)
+                      : item.id
+                  } ${item.community} (${item.command})`,
                 }
               })
             commit('updateFormBeats', data)
