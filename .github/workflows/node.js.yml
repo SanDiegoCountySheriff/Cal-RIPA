@@ -13,9 +13,12 @@ jobs:
     steps:
       - name: checkout git repository
         uses: actions/checkout@v2
-      - name: npm install
-        run: |
-          npm install
+      # - name: npm install
+      #   run: |
+      #     npm install
+      #   working-directory: UI
+      - name: install node.js dependencies
+        run: npm ci
         working-directory: UI
       - name: run linters
         uses: wearerequired/lint-action@v1
