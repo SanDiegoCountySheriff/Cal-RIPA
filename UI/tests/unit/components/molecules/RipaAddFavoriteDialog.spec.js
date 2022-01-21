@@ -69,7 +69,7 @@ describe('Ripa Add Favorite Dialog', () => {
   it('should watch show dialog', async () => {
     wrapper = factory()
 
-    wrapper.vm.showDialog = true
+    wrapper.setProps({ showDialog: true })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.viewModel).toBeTruthy()

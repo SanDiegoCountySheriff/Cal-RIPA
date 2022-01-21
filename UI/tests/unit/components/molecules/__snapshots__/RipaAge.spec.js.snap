@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Age should match snapshot 1`] = `
+<div class="ripa-age tw-pb-4">
+  <ripa-form-header-stub title="Perceived Age" required="true" subtitle="§999.226(a)(7)" onopenstatute="[Function]"></ripa-form-header-stub>
+  <v-container-stub tag="div">
+    <v-row-stub tag="div" nogutters="true">
+      <v-col-stub cols="12" sm="12" tag="div">
+        <ripa-number-input-stub label="Perceived Age" hint="" rules="[Function],[Function]" min="1" max="1250"></ripa-number-input-stub>
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Agency Questions should match snapshot 1`] = `
+<div class="ripa-agency-questions tw-pb-4">
+  <ripa-form-header-stub title="Agency Questions" subtitle="" onopenstatute="[Function]"></ripa-form-header-stub>
+  <v-container-stub tag="div"></v-container-stub>
+</div>
+`;
