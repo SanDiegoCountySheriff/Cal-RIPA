@@ -22,5 +22,4 @@ jobs:
         with: 
           eslint: true
           prettier: true
-        working-directory: UI
         auto-fix: true
