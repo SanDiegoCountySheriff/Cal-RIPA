@@ -15,7 +15,7 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 ## Features
 
 1. Open source community project that can be extended and maintained by the law enforcement community at large
-2. Simple installation via Azure Marketplace (Contact CSSA to get installtion instructions)
+2. Simple installation via Azure Marketplace (Contact CSSA to get installation instructions)
    1. Can be manually installed and maintained using Azure ARM templates and Azure DevOps if desired
 3. Cloud First design using Azure services like Azure Active Directory (AAD), Key Vault, Functions, API Management, Cosmos database and Azure Cognitive Services
 4. Automated deployments from centralized Azure Dev Ops under the CSSA Azure Tenant
@@ -33,10 +33,10 @@ This cloud-native solution is designed to run on serverless Azure Government clo
     2. Schools
     3. Statutes
 12. Agency Beat collection (optional)
-13. Domain list maintence screens
-14. User maintence screens
-15. STOP maintence screens
-16. DoJ Submission maintence screens
+13. Domain list maintenance screens
+14. User maintenance screens
+15. STOP maintenance screens
+16. DoJ Submission maintenance screens
 17. Officers last 10 STOPs screens
 18. User profile maintenance screens
 19. Various "Favorites" that allow for rapid selection of items each user uses the most
@@ -44,9 +44,9 @@ This cloud-native solution is designed to run on serverless Azure Government clo
 21. Ability to create and maintain predefined STOP templates
     1. These are JSON documents with a set of predetermined answers to help speed the data entry process for specific scenarios like traffic or probation related events
 22. Links to the RIPA statutes in specific sections of the STOP screens
-23. PII dectection using Azure Cognitive Services
+23. PII detection using Azure Cognitive Services
 24. GEO location detection for ease of location entry
-25. A debugger option that displays the internal details of a STOP record to help the angency find issues when required
+25. A debugger option that displays the internal details of a STOP record to help the agency find issues when required
 26. CSSA integrated domain names & certificates
     1. Or you can provide your own DNS & Certificate (BYOC)
 

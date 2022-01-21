@@ -32,20 +32,20 @@ First, you must work with the CSSA team to get an Azure subscription setup for y
 4.  Pick your agency from the dropdown list.
 5.  Choose an appropriate name for this installation. like "ripa-test" for a test system installation or "ripa" for a production system.
 
-    1. You will be limited to the length desplayed in the message because the system is designed to standardize Azure resource names and Azure has certain limits we must abide by.
+    1. You will be limited to the length displayed in the message because the system is designed to standardize Azure resource names and Azure has certain limits we must abide by.
 
-6.  Select the envirnment type for this installation. The choices are DEV, QA & PROD. DEV & QA change the UI to have color coded headers to make it easy to identify NON-PROD installations.
-7.  Select the "Enable officer beats" checkbox if you want to use the "Beats" UI compnents (i.e. the STOP will require the user to select a Beat). This can be turned on or off later on based on these instructions [Configuring Beats](./BEATS.md).
+6.  Select the environment type for this installation. The choices are DEV, QA & PROD. DEV & QA change the UI to have color coded headers to make it easy to identify NON-PROD installations.
+7.  Select the "Enable officer beats" checkbox if you want to use the "Beats" UI components (i.e. the STOP will require the user to select a Beat). This can be turned on or off later on based on these instructions [Configuring Beats](./BEATS.md).
 8.  Select the "Enable STOP data debugger" if you want to access the STOP data debugger (a screen element that lets you view the current STOP data). This can be turned on or off later on based on these instructions [Configuring STOP Data Debugger](./STOP-DEBUGGER.md).
 
-9.  In this step (Application Domain) you can choose to use the DNS & SSL Certificate provided by CSSA or you can bring you own certificate and DNS records. The easiest and recomended approach is to use the CSSA option.
+9.  In this step (Application Domain) you can choose to use the DNS & SSL Certificate provided by CSSA or you can bring you own certificate and DNS records. The easiest and recommended approach is to use the CSSA option.
 
-    1.  It is strongly recomended that you highlight and copy the DNS host name {appName-agency}.cssa.cloud for example. You will most likely need to reference it later and you will provide it to the end users so they can access the application.
+    1.  It is strongly recommended that you highlight and copy the DNS host name {appName-agency}.cssa.cloud for example. You will most likely need to reference it later and you will provide it to the end users so they can access the application.
 
 10. On the (Authentication) tab you will enter the information generated from the script you ran in "Step 1 (Create Authentication Scheme)" above.
 
     1.  Be sure to provide at least the first 3 fields, FQDN, AppId & TenantId.
-    2.  Logout URL is not required but helpful if youwish your end users to log out of everywhere from the applcation. This is unusual.
+    2.  Logout URL is not required but helpful if you wish your end users to log out of everywhere from the application. This is unusual.
 
 | ![Step 8](./assets/RIPA-Installation-Step-08.png) |
 |-
@@ -55,10 +55,10 @@ First, you must work with the CSSA team to get an Azure subscription setup for y
 | ![Step 9](./assets/RIPA-Installation-Step-09.png) |
 |-
 
-10. The last important tab is the "Tags". The application will automatically generate a few tags and apply them to your installation. Youo can use this section to add your specific tags (name/value pairs).
+10. The last important tab is the "Tags". The application will automatically generate a few tags and apply them to your installation. You can use this section to add your specific tags (name/value pairs).
 
     1. application = ripa.
-    2. agency = your appreviated agency name chosen in "Step 6".
+    2. agency = your abbreviated agency name chosen in "Step 6".
     3. agency_ori = your California DoJ assigned ORI.
     4. template_version = the version of the Marketplace Offering used for this installation.
 

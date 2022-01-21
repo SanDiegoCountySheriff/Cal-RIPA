@@ -2,13 +2,13 @@
 
 ## Existing User Profile Import
 
-The California Deptment of Justice (DoJ) requires that unique officer ids be used when submitting data to the DoJ RIPA system. These ids apply to the user for the entire lifetime of their employment/association at an agency. Hence, once an officer id is submitted to the DoJ it must be maintained and used for that user until they are no longer associated with the organiztion. If you have previously submitted RIPA related data to the DoJ, you will most likely want to maintain the "OfficerId" of employees who have created, managed or submitted said data. This topic provides instructions on how you can "Import" a list of existing user profiles.
+The California Department of Justice (DoJ) requires that unique officer ids be used when submitting data to the DoJ RIPA system. These ids apply to the user for the entire lifetime of their employment/association at an agency. Hence, once an officer id is submitted to the DoJ it must be maintained and used for that user until they are no longer associated with the organization. If you have previously submitted RIPA related data to the DoJ, you will most likely want to maintain the "OfficerId" of employees who have created, managed or submitted said data. This topic provides instructions on how you can "Import" a list of existing user profiles.
 
 This process is NOT required for new users. New users can simply open the application and create their "User Profile". However, you can use this feature to "Pre-load" all of your agency users if you wish.
 
 ### Navigation
 
-The Existing User Profile Import feature can be found on the "Users" screen in the "Admin" section of the apllication and is used to upload previously existing users from an existing RIPA application. The file must be of type .csv and include the required columns in any order. Navigate to the Administrator Users page and click Upload Users
+The Existing User Profile Import feature can be found on the "Users" screen in the "Admin" section of the application and is used to upload previously existing users from an existing RIPA application. The file must be of type .csv and include the required columns in any order. Navigate to the Administrator Users page and click Upload Users
 
 ![UploadUserButton](https://user-images.githubusercontent.com/83732510/128557273-790fd939-dc43-461b-a3c3-2594e4b9c9c7.PNG)
 
@@ -18,7 +18,7 @@ The Upload Users File Dialog will display the required and optional columns. 'Id
 
 ![UploadUserDialog](https://user-images.githubusercontent.com/83732510/128557424-c7da3d9f-7e4a-46c7-9649-478f55838625.PNG)
 
-Optional column 'Assigment' is the integer 1-10 representing the officer assignment according to RIPA standards. If 'Agency' is included on the .csv file check the box to skip entering the agency name or abbreviation, otherwise enter the agency name or abbreviation in the text field.
+Optional column 'Assignment' is the integer 1-10 representing the officer assignment according to RIPA standards. If 'Agency' is included on the .csv file check the box to skip entering the agency name or abbreviation, otherwise enter the agency name or abbreviation in the text field.
 
 ### File Format
 

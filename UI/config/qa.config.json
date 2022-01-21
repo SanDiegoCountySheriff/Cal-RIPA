@@ -11,7 +11,10 @@
     "Subscription": "#{APISubscriptionKey}#",
     "DefaultCounty": "San Diego",
     "DisplayBeatsInput": "true",
-    "DisplayDebugger": "true"
+    "DisplayDebugger": "true",
+    "UseOfficerUpn": "true",
+    "ModifyBeatId": "true",
+    "BeatIdNumberOfDigits": 3
   },
   "AgencyQuestions": [
     {
