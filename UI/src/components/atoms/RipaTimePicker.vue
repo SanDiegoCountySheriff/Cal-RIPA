@@ -1,31 +1,6 @@
 <template>
-  <!-- <v-dialog
-    ref="dialog"
-    v-model="modal"
-    :return-value.sync="model"
-    persistent
-    width="290px"
-  >
-    <template v-slot:activator="{ on, attrs }">
-      <v-text-field
-        v-model="model"
-        :disabled="disabled"
-        :label="label"
-        append-icon="mdi-clock-time-four-outline"
-        readonly
-        v-bind="attrs"
-        v-on="on"
-        :rules="rules"
-      ></v-text-field>
-    </template>
-    <v-time-picker v-if="modal" v-model="model" full-width>
-    <v-spacer></v-spacer>
-    <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-    <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
-    </v-time-picker>
-  </v-dialog> -->
-
   <v-text-field
+    class="left-align"
     v-model="model"
     :label="label"
     :rules="rules"
@@ -95,5 +70,8 @@ export default {
   height: auto;
   color: transparent;
   background: transparent;
+}
+.left-align input {
+  text-align: left;
 }
 </style>
