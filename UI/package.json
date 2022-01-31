@@ -12,6 +12,7 @@
     "storybook": "start-storybook -p 6007"
   },
   "dependencies": {
+    "@azure/msal-browser": "^2.21.0",
     "@mdi/font": "5.9.55",
     "@tailwindcss/postcss7-compat": "2.2.4",
     "adal-angular": "1.0.18",

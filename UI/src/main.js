@@ -8,7 +8,7 @@ import vuetify from './plugins/vuetify'
 import VueConfirmDialog from 'vue-confirm-dialog'
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
-import authentication from './authentication'
+import authentication from './authentication/msalindex.js'
 
 Vue.config.productionTip = false
 

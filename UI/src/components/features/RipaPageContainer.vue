@@ -86,7 +86,7 @@ import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithError
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
-import authentication from '@/authentication'
+import authentication from '@/authentication/msalindex.js'
 
 export default {
   name: 'ripa-page-container',
