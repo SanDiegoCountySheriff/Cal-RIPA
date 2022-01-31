@@ -355,15 +355,15 @@ export default {
     },
     onUpdateDark: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onUpdateUser: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onViewStopsWithErrors: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     invalidUser: {
       type: Boolean,

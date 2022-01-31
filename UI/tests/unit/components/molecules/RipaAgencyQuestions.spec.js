@@ -31,18 +31,50 @@ describe('Ripa Agency Questions', () => {
   it('should calculate is required', () => {
     wrapper = factory({ value: stop })
     expect(wrapper.vm.isRequired).toBeFalsy()
-    wrapper.vm.viewModel.agencyQuestions[0] = {
+
+    wrapper.vm.viewModel.agencyQuestions.push({
       name: 'FavoriteColor',
       required: true,
-    }
+    })
 
-    console.log(wrapper.vm.viewModel.agencyQuestions)
     expect(wrapper.vm.isRequired).toBeTruthy()
   })
 
-  it.todo('should handle input')
+  it('should handle input', async () => {
+    wrapper = factory({ value: stop })
 
-  it.todo('should validate question rules')
+    wrapper.vm.handleInput()
 
-  it.todo('should watch value')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+  })
+
+  it('should validate question rules', () => {
+    wrapper = factory({ value: stop })
+    const question = {
+      maxLength: 5,
+    }
+
+    expect(wrapper.vm.questionRules(question)[0]('')).toEqual(
+      'An answer is required',
+    )
+    expect(wrapper.vm.questionRules(question)[1]('')).toEqual(true)
+    expect(wrapper.vm.questionRules(question)[0]('Testing')).toEqual(true)
+    expect(wrapper.vm.questionRules(question)[1]('Testing')).toEqual(
+      'Max 5 characters',
+    )
+  })
+
+  it('should watch value', async () => {
+    wrapper = factory({ value: stop })
+
+    const updatedStop = defaultStop()
+    updatedStop.id = 1
+
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel.id).toEqual(1)
+  })
 })
