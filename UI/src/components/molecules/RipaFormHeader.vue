@@ -1,26 +1,28 @@
 <template>
   <div class="ripa-form-header">
-    <ripa-header :value="title"></ripa-header>
-    <div class="tw-flex">
+    <v-row class="tw-ml-1 tw-mt-1">
       <template v-if="required">
-        <v-chip class="tw-mt-1 tw-mr-2" color="red" text-color="white" small>
-          required
-        </v-chip>
+        <v-tooltip top color="error">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon color="error" size="16" v-bind="attrs" v-on="on"
+              >mdi-alert</v-icon
+            >
+          </template>
+          <span>Required</span>
+        </v-tooltip>
       </template>
       <template v-if="subtitle.length > 0">
-        <v-chip
-          class="tw-mt-1"
-          color="primary"
-          outlined
-          pill
-          small
+        <v-icon
+          class="icon"
+          size="16"
           @click="handleSubtitleClick"
+          color="primary"
         >
-          <v-icon left size="16"> mdi-scale-balance </v-icon>
-          {{ subtitle }}
-        </v-chip>
+          mdi-scale-balance
+        </v-icon>
       </template>
-    </div>
+      <ripa-header :value="title"></ripa-header>
+    </v-row>
   </div>
 </template>
 
@@ -62,3 +64,11 @@ export default {
   },
 }
 </script>
+
+<style>
+.icon {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 2px;
+}
+</style>

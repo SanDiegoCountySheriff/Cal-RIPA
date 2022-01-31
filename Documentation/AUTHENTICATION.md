@@ -2,11 +2,11 @@
 
 ## Creating AAD Authentication & Authorization
 
-CSSA RIPA uses Azure Active Directory (AAD) OAuth w/OpenID Connect (OIDC) & Role Based Access Control (RBAC) for authentication and authorization. Each deployment of CSSA RIPA requires an authentication configuration in order to ensure users abillities & access. Click [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/auth-oidc) to learn more about OAuth & OIDC in Azure.
+CSSA RIPA uses Azure Active Directory (AAD) OAuth w/OpenID Connect (OIDC) & Role Based Access Control (RBAC) for authentication and authorization. Each deployment of CSSA RIPA requires an authentication configuration in order to ensure users abilities & access. Click [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/auth-oidc) to learn more about OAuth & OIDC in Azure.
 
-Azure provides OAuth functionality using two core concepts. These concepts are "App Registration" and "Enterprise Applications" where the former is a template that describes the details of authentication/autorization and the ladder is a direct implementation (instance) of the template in the form of a Service Principal. Click [here](https://docs.microsoft.com/en-us/azure/active-directory/saas-apps/openidoauth-tutorial#:~:text=%20Configure%20an%20OpenID%2FOAuth%20application%20from%20the%20Azure,use%20the%20Azure%20AD%20consent%20framework...%20More%20) to learn more about configuring OAuth w/OpenID Connect.
+Azure provides OAuth functionality using two core concepts. These concepts are "App Registration" and "Enterprise Applications" where the former is a template that describes the details of authentication/authorization and the ladder is a direct implementation (instance) of the template in the form of a Service Principal. Click [here](https://docs.microsoft.com/en-us/azure/active-directory/saas-apps/openidoauth-tutorial#:~:text=%20Configure%20an%20OpenID%2FOAuth%20application%20from%20the%20Azure,use%20the%20Azure%20AD%20consent%20framework...%20More%20) to learn more about configuring OAuth w/OpenID Connect.
 
-CSSA RIPA implements two user roles to manage user autorization; the "RIPA-USERS-ROLE" and the "RIPA-ADMINS-ROLE". Once these two roles have been defined in an App Registration, they can then be assigned to AAD Groups and users can be added or removed from those groups as agency policy dictates.
+CSSA RIPA implements two user roles to manage user authorization; the "RIPA-USERS-ROLE" and the "RIPA-ADMINS-ROLE". Once these two roles have been defined in an App Registration, they can then be assigned to AAD Groups and users can be added or removed from those groups as agency policy dictates.
 
 Azure implements it's OAuth/OIDC the same whether your using Azure Cloud (public) or Azure US Government Cloud. Therefor, you may use the Cloud of your choice for Authentication & Authorization. However, CSSA RIPA must be deployed to Azure US Government Cloud.
 
@@ -132,7 +132,7 @@ You have now created and App Registration and Enterprise Application that is CSS
 
 ### Configuring Authentication & Authorization Manually
 
-The CSSA RIPA Marketplace deployment will promt you for your App Registration & tenant details during the "Athentication" tab of the deployment wizard. If you use the previously create App Registration during this step then no other configuration is rquired on your part.
+The CSSA RIPA Marketplace deployment will prompt you for your App Registration & tenant details during the "Authentication" tab of the deployment wizard. If you use the previously create App Registration during this step then no other configuration is required on your part.
 
 Follow the guide below to update or modify your authentication scheme manually if you need to at any time.
 

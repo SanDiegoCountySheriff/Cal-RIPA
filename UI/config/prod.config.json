@@ -1,19 +1,19 @@
 {
   "Authentication": {
-      "ClientId": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6",
-      "AuthorityUrl": "https://login.microsoftonline.com//7832cdfd-b337-4d07-af7e-9de082e16b31",
-      "TenantId": "7832cdfd-b337-4d07-af7e-9de082e16b31",
-      "PrimaryDomain": "sdsheriff.gov"
+    "ClientId": "98a0830a-956e-4ec7-8d6d-5cb7ce7880a6",
+    "AuthorityUrl": "https://login.microsoftonline.com//7832cdfd-b337-4d07-af7e-9de082e16b31",
+    "TenantId": "7832cdfd-b337-4d07-af7e-9de082e16b31",
+    "PrimaryDomain": "sdsheriff.gov"
   },
   "Configuration": {
-      "Environment": "PROD",
-      "ServicesBaseUrl": "#{ServicesBaseUrl}#",
-      "Subscription": "#{APISubscriptionKey}#",
-      "DefaultCounty": "San Diego",
-      "DisplayBeatsInput": "true",
-      "DisplayDebugger": "true"
+    "Environment": "PROD",
+    "ServicesBaseUrl": "#{ServicesBaseUrl}#",
+    "Subscription": "#{APISubscriptionKey}#",
+    "DefaultCounty": "San Diego",
+    "DisplayBeatsInput": "true",
+    "DisplayDebugger": "true",
+    "UseOfficerUpn": "true",
+    "ModifyBeatId": "true",
+    "BeatIdNumberOfDigits": 3
   }
 }
-
-
-

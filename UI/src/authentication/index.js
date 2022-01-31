@@ -28,6 +28,8 @@ export default {
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: environmentName.toUpperCase(),
         useOfficerUpn: res.data.Configuration.UseOfficerUpn === 'true',
+        modifyBeatId: res.data.Configuration.ModifyBeatId === 'true',
+        beatIdNumberOfDigits: res.data.Configuration.BeatIdNumberOfDigits || 0,
       })
 
       this.clientId = config.clientId

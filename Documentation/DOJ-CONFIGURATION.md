@@ -22,7 +22,7 @@ If you skipped this step during app deployment you can set the secrets and keys 
 
 ## Submission Function App Settings
 
-When you select Test(non-production), the application will connect to the /TEST folder and upload stops to /TEST/incoming_to_DOJ/JSON. This is the default and should be used for all evironments except Production.
+When you select Test(non-production), the application will connect to the /TEST folder and upload stops to /TEST/incoming_to_DOJ/JSON. This is the default and should be used for all environments except Production.
 
 When you select Production, the application will connect to the /PROD folder and upload stops to /PROD/incoming_to_DOJ/JSON.
 

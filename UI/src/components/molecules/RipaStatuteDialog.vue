@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="model" max-width="650px" persistent>
+  <v-dialog v-model="model" max-width="650px">
     <v-card>
       <v-card-title>
         <span>Statute {{ statuteTitle }}</span>
