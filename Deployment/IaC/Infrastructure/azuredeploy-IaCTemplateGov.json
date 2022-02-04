@@ -18,7 +18,7 @@
       "defaultValue": "sdsd",
       "type": "string",
       "metadata": {
-        "description": "Agency identifier is varries based on agency."
+        "description": "Agency identifier varies based on agency."
       }
     },
     "environment": {
@@ -452,10 +452,7 @@
         "tenantId": "[parameters('kv_tenantId')]",
         "accessPolicies": [
           {
-            //"tenantId": "[parameters('kv_tenantId')]",
-            //"objectId": "b079fea9-5f9c-48ee-b7aa-0b5fa4bdcf32",
             "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01','Full').identity.tenantId]",
-            //"objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01').principalId]",
             "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_user_fa_name')), '2018-11-01','Full').identity.principalId]",
             "permissions": {
               "keys": "[parameters('kv_keysPermissions')]",
@@ -1044,7 +1041,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_userprofile_name')",
+        "urlTemplate": "[parameters('apim_apis_userprofile_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -1080,7 +1077,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_stop_name')",
+        "urlTemplate": "[parameters('apim_apis_stop_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -1116,7 +1113,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_template_name')",
+        "urlTemplate": "[parameters('apim_apis_template_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -1152,7 +1149,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_textAnalytics_name')",
+        "urlTemplate": "[parameters('apim_apis_textAnalytics_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -1188,7 +1185,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_domain_name')",
+        "urlTemplate": "[parameters('apim_apis_domain_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -1224,7 +1221,7 @@
       "properties": {
         "displayName": "get",
         "method": "GET",
-        "urlTemplate": "/parameters('apim_apis_submission_name')",
+        "urlTemplate": "[parameters('apim_apis_submission_name')]",
         "templateParameters": [],
         "responses": []
       }
@@ -2485,8 +2482,6 @@
       "name": "[variables('sites_ripa_template_fa_name')]",
       "location": "[parameters('region')]",
       "identity": {
-        //"principalId": "5a17954d-9516-4210-8409-e04dcd475e3a",
-        //"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619",
         "type": "SystemAssigned"
       },
       "dependsOn": [
