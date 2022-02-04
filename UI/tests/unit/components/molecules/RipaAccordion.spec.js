@@ -22,7 +22,7 @@ describe('Ripa Accordion', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should format stop date', () => {

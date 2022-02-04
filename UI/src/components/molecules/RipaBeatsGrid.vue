@@ -273,11 +273,11 @@ export default {
     },
     onDeleteBeat: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditBeat: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

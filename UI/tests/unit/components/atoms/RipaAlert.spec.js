@@ -24,17 +24,17 @@ describe('Ripa Alert', () => {
 
   it('should display the default alert type and outline', () => {
     wrapper = factory()
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should display warning and default outline', () => {
     wrapper = factory({ alertType: 'warning' })
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should display outline', () => {
     wrapper = factory({ alertOutlined: true })
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should display slot data', () => {

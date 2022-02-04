@@ -25,7 +25,7 @@ describe('Ripa Age', () => {
   it('should match snapshot', () => {
     wrapper = factory({ value: stop })
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should validate age rules', () => {

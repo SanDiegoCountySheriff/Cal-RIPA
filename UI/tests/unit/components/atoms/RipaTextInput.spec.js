@@ -57,7 +57,7 @@ describe('Ripa Text Input', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should handle drop', () => {

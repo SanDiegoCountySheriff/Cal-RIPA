@@ -33,7 +33,7 @@ describe('Ripa App Bar', () => {
   }
 
   it('should match snapshot', () => {
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should get theme icon', () => {

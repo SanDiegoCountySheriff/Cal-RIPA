@@ -25,7 +25,7 @@ describe('Ripa Agency Questions', () => {
   it('should match snapshot', () => {
     wrapper = factory({ value: stop })
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should calculate is required', () => {

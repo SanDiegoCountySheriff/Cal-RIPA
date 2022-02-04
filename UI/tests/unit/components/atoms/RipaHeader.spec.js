@@ -21,7 +21,7 @@ describe('Ripa Header', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should display value', () => {

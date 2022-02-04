@@ -1,7 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Button Group should match snapshot 1`] = `
-<div class="ripa-radio-group">
-  <v-btn-toggle-stub value="" activeclass="v-item--active" tag="div" color="primary" group="true" tile="true"></v-btn-toggle-stub>
+<div
+  class="ripa-radio-group"
+>
+  <v-btn-toggle-stub
+    activeclass="v-item--active"
+    color="primary"
+    group="true"
+    tag="div"
+    tile="true"
+    value=""
+  />
 </div>
 `;

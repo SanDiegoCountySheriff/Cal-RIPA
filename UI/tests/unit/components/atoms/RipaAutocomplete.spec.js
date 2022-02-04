@@ -23,7 +23,7 @@ describe('Ripa Autocomplete', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should return the correct items with getItems', () => {

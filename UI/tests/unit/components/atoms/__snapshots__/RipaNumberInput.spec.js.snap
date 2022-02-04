@@ -1,3 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Number Input should match snapshot 1`] = `<v-text-field-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" validateonblur="true" backgroundcolor="" hint="" label="" loaderheight="2" clearicon="$clear" type="number" inputmode="numeric" min="0"></v-text-field-stub>`;
+exports[`Ripa Number Input should match snapshot 1`] = `
+<v-text-field-stub
+  backgroundcolor=""
+  clearicon="$clear"
+  errorcount="1"
+  errormessages=""
+  hint=""
+  inputmode="numeric"
+  label=""
+  loaderheight="2"
+  messages=""
+  min="0"
+  rules=""
+  successmessages=""
+  type="number"
+  validateonblur="true"
+/>
+`;

@@ -25,7 +25,7 @@ describe('Ripa Date Picker', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should emit event', () => {

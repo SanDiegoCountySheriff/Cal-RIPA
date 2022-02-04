@@ -1,11 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Date Picker should match snapshot 1`] = `
-<v-dialog-stub opendelay="0" closedelay="0" contentclass="" maxwidth="none" origin="center center" persistent="true" retainfocus="true" transition="dialog-transition" width="290px">
-  <v-date-picker-stub notitle="true" width="290" eventcolor="warning" firstdayofweek="0" localefirstdayofyear="0" max="" min="" nexticon="$next" nextmontharialabel="$vuetify.datePicker.nextMonthAriaLabel" nextyeararialabel="$vuetify.datePicker.nextYearAriaLabel" previcon="$prev" prevmontharialabel="$vuetify.datePicker.prevMonthAriaLabel" prevyeararialabel="$vuetify.datePicker.prevYearAriaLabel" scrollable="true" showcurrent="true" selecteditemstext="$vuetify.datePicker.itemsSelected" type="date">
-    <v-spacer-stub></v-spacer-stub>
-    <v-btn-stub color="primary" tag="button" activeclass="" text="true" type="button"> Cancel </v-btn-stub>
-    <v-btn-stub color="primary" tag="button" activeclass="" text="true" type="button"> OK </v-btn-stub>
+<v-dialog-stub
+  closedelay="0"
+  contentclass=""
+  maxwidth="none"
+  opendelay="0"
+  origin="center center"
+  persistent="true"
+  retainfocus="true"
+  transition="dialog-transition"
+  width="290px"
+>
+   
+  <v-date-picker-stub
+    eventcolor="warning"
+    firstdayofweek="0"
+    localefirstdayofyear="0"
+    max=""
+    min=""
+    nexticon="$next"
+    nextmontharialabel="$vuetify.datePicker.nextMonthAriaLabel"
+    nextyeararialabel="$vuetify.datePicker.nextYearAriaLabel"
+    notitle="true"
+    previcon="$prev"
+    prevmontharialabel="$vuetify.datePicker.prevMonthAriaLabel"
+    prevyeararialabel="$vuetify.datePicker.prevYearAriaLabel"
+    scrollable="true"
+    selecteditemstext="$vuetify.datePicker.itemsSelected"
+    showcurrent="true"
+    type="date"
+    width="290"
+  >
+    <v-spacer-stub />
+     
+    <v-btn-stub
+      activeclass=""
+      color="primary"
+      tag="button"
+      text="true"
+      type="button"
+    >
+       Cancel 
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      color="primary"
+      tag="button"
+      text="true"
+      type="button"
+    >
+       OK 
+    </v-btn-stub>
   </v-date-picker-stub>
 </v-dialog-stub>
 `;

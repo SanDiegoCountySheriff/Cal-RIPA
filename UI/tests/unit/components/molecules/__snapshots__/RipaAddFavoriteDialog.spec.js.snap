@@ -1,23 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Add Favorite Dialog should match snapshot 1`] = `
-<v-dialog-stub opendelay="0" closedelay="0" contentclass="" maxwidth="500px" origin="center center" persistent="true" retainfocus="true" transition="dialog-transition" width="auto">
-  <v-card-stub loaderheight="4" tag="div">
-    <v-card-title-stub><span>Add Favorite</span></v-card-title-stub>
+<v-dialog-stub
+  closedelay="0"
+  contentclass=""
+  maxwidth="500px"
+  opendelay="0"
+  origin="center center"
+  persistent="true"
+  retainfocus="true"
+  transition="dialog-transition"
+  width="auto"
+>
+  <v-card-stub
+    loaderheight="4"
+    tag="div"
+  >
+    <v-card-title-stub>
+      <span>
+        Add Favorite
+      </span>
+    </v-card-title-stub>
+     
     <v-card-text-stub>
-      <v-container-stub tag="div">
-        <v-row-stub tag="div">
-          <v-col-stub cols="12" tag="div">
-            <v-text-field-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" value="" backgroundcolor="" label="Favorite Name" loaderheight="2" clearicon="$clear" type="text" required=""></v-text-field-stub>
+      <v-container-stub
+        tag="div"
+      >
+        <v-row-stub
+          tag="div"
+        >
+          <v-col-stub
+            cols="12"
+            tag="div"
+          >
+            <v-text-field-stub
+              backgroundcolor=""
+              clearicon="$clear"
+              errorcount="1"
+              errormessages=""
+              label="Favorite Name"
+              loaderheight="2"
+              messages=""
+              required=""
+              rules=""
+              successmessages=""
+              type="text"
+              value=""
+            />
           </v-col-stub>
         </v-row-stub>
       </v-container-stub>
     </v-card-text-stub>
+     
     <v-card-actions-stub>
-      <v-spacer-stub></v-spacer-stub>
-      <v-btn-stub color="blue darken-1" tag="button" activeclass="" text="true" type="button"> Cancel </v-btn-stub>
-      <v-btn-stub color="blue darken-1" tag="button" activeclass="" disabled="true" text="true" type="button">
+      <v-spacer-stub />
+       
+      <v-btn-stub
+        activeclass=""
+        color="blue darken-1"
+        tag="button"
+        text="true"
+        type="button"
+      >
+         Cancel 
+      </v-btn-stub>
+       
+      <v-btn-stub
+        activeclass=""
+        color="blue darken-1"
+        disabled="true"
+        tag="button"
+        text="true"
+        type="button"
+      >
+        
         Save
+      
       </v-btn-stub>
     </v-card-actions-stub>
   </v-card-stub>

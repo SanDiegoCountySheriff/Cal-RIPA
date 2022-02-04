@@ -26,7 +26,7 @@ describe('Ripa Select', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should set model', async () => {

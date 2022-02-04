@@ -1,3 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Accordion should match snapshot 1`] = `<v-expansion-panels-stub activeclass="v-item--active" tag="div"></v-expansion-panels-stub>`;
+exports[`Ripa Accordion should match snapshot 1`] = `
+<v-expansion-panels-stub
+  activeclass="v-item--active"
+  tag="div"
+/>
+`;

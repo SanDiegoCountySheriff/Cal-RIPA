@@ -35,7 +35,7 @@ describe('Ripa Confirm Dialog', () => {
   it('should match snapshot', async () => {
     wrapper = factory(testData)
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should handle cancel', () => {

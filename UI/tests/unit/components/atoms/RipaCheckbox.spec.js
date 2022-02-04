@@ -21,7 +21,7 @@ describe('Ripa Checkbox', () => {
 
   it('should match snapshot', () => {
     wrapper = factory({ label: 'Item 1' })
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should emit event whem model changes', async () => {

@@ -22,7 +22,7 @@ describe('Ripa Label', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should return bold font', () => {

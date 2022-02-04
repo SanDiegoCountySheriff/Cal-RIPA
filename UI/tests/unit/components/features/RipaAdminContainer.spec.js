@@ -65,6 +65,6 @@ describe('Ripa Admin Container', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 })

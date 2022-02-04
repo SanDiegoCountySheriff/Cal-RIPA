@@ -1,3 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Autocomplete should match snapshot 1`] = `<v-autocomplete-stub errorcount="1" errormessages="" messages="" rules="" successmessages="" validateonblur="true" appendicon="$dropdown" backgroundcolor="" hint="" label="" loaderheight="2" clearable="true" clearicon="$clear" flat="true" type="text" valuecomparator="[Function]" nodatatext="$vuetify.noDataText" items="" itemcolor="primary" itemdisabled="disabled" itemtext="" itemvalue="" menuprops="[object Object]" allowoverflow="true" filter="[Function]" class="tw-my-4"></v-autocomplete-stub>`;
+exports[`Ripa Autocomplete should match snapshot 1`] = `
+<v-autocomplete-stub
+  allowoverflow="true"
+  appendicon="$dropdown"
+  backgroundcolor=""
+  class="tw-my-4"
+  clearable="true"
+  clearicon="$clear"
+  errorcount="1"
+  errormessages=""
+  filter="[Function]"
+  flat="true"
+  hint=""
+  itemcolor="primary"
+  itemdisabled="disabled"
+  items=""
+  itemtext=""
+  itemvalue=""
+  label=""
+  loaderheight="2"
+  menuprops="[object Object]"
+  messages=""
+  nodatatext="$vuetify.noDataText"
+  rules=""
+  successmessages=""
+  type="text"
+  validateonblur="true"
+  valuecomparator="[Function]"
+/>
+`;

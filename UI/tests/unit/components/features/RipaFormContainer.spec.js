@@ -135,7 +135,7 @@ describe('Ripa Form Container', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should get mapped user', () => {

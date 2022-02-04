@@ -26,7 +26,7 @@ describe('Ripa Check Group', () => {
 
   it('should match snapshot', () => {
     wrapper = factory()
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should emit event whem model changes', async () => {
