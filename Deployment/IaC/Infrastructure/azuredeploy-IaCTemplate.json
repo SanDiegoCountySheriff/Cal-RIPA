@@ -1935,7 +1935,6 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
             "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
             "action": "Allow",
             "tag": "Default",
@@ -2115,7 +2114,6 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
             "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
             "action": "Allow",
             "tag": "Default",
@@ -2294,7 +2292,6 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
             "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
             "action": "Allow",
             "tag": "Default",
@@ -2473,7 +2470,6 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
             "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
             "action": "Allow",
             "tag": "Default",
@@ -2652,7 +2648,6 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            //"vnetSubnetResourceId": "[concat(variables('virtualNetworks_ripa_vnet_name'), '/subnets/',variables('apim_subnet_name'))]",
             "vnetSubnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), variables('apim_subnet_name'))]",
             "action": "Allow",
             "tag": "Default",
