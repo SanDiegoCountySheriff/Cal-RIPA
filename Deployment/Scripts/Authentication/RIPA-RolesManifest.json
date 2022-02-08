@@ -5,7 +5,7 @@
 		],
 		"description": "RIPA-ADMINS-ROLE",
 		"displayName": "RIPA-ADMINS-ROLE",
-		"id": "624d1ecc-933a-4d68-8b4c-b9a8ce343824",
+		"id": "",
 		"isEnabled": true,
 		"origin": "Application",
 		"value": "RIPA-ADMINS-ROLE"
@@ -16,7 +16,7 @@
 		],
 		"description": "RIPA-USERS-ROLE",
 		"displayName": "RIPA-USERS-ROLE",
-		"id": "bd1f63c5-7525-4db1-bd97-09def6c07edf",
+		"id": "",
 		"isEnabled": true,
 		"origin": "Application",
 		"value": "RIPA-USERS-ROLE"
