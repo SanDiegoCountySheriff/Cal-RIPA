@@ -42,6 +42,68 @@ describe('Ripa Beats Grid', () => {
     })
   }
 
+  const saveTestCases = [
+    {
+      editedIndex: -1,
+      editedItem: {
+        id: 3,
+        community: 'community 3',
+        command: 'command 3',
+        commandAuditGroup: 'audit group 3',
+        commandAuditSize: 'audit size 3',
+      },
+      expected: [
+        {
+          id: 1,
+          community: 'community 1',
+          command: 'command 1',
+          commandAuditGroup: 'audit group 1',
+          commandAuditSize: 'audit size 1',
+        },
+        {
+          id: 2,
+          community: 'community 2',
+          command: 'command 2',
+          commandAuditGroup: 'audit group 2',
+          commandAuditSize: 'audit size 2',
+        },
+        {
+          id: 3,
+          community: 'community 3',
+          command: 'command 3',
+          commandAuditGroup: 'audit group 3',
+          commandAuditSize: 'audit size 3',
+        },
+      ],
+    },
+    {
+      editedIndex: 0,
+      editedItem: {
+        id: 1,
+        community: 'community 1 edited',
+        command: 'command 1',
+        commandAuditGroup: 'audit group 1',
+        commandAuditSize: 'audit size 1',
+      },
+      expected: [
+        {
+          id: 1,
+          community: 'community 1 edited',
+          command: 'command 1',
+          commandAuditGroup: 'audit group 1',
+          commandAuditSize: 'audit size 1',
+        },
+        {
+          id: 2,
+          community: 'community 2',
+          command: 'command 2',
+          commandAuditGroup: 'audit group 2',
+          commandAuditSize: 'audit size 2',
+        },
+      ],
+    },
+  ]
+
   it('should match snapshot', () => {
     wrapper = factory()
 
@@ -161,28 +223,31 @@ describe('Ripa Beats Grid', () => {
     expect(wrapper.vm.editedIndex).toEqual(-1)
   })
 
-  it('should save', () => {
-    wrapper = factory({items: beats}
+  saveTestCases.forEach(test => {
+    it(`should save with editedIndex: ${test.editedIndex}`, () => {
+      wrapper = factory({ items: beats })
+      wrapper.setData({ editedIndex: test.editedIndex })
+      wrapper.setData({ editedItem: test.editedItem })
+
+      wrapper.vm.save()
+
+      expect(wrapper.vm.beats).toEqual(test.expected)
+    })
   })
 
-  it.todo('should watch items')
-
-  it.todo('should watch dialog')
-
-  it.todo('should watch dialogDelete')
-})
-
-const saveTestCases = [
-  {
-    editedIndex: -1,
-    editedItem: {
+  it('should watch items', async () => {
+    wrapper = factory({ items: beats })
+    wrapper.vm.beats.push({
       id: 3,
       community: 'community 3',
       command: 'command 3',
       commandAuditGroup: 'audit group 3',
       commandAuditSize: 'audit size 3',
-    },
-    expected: [
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.beats).toEqual([
       {
         id: 1,
         community: 'community 1',
@@ -204,32 +269,26 @@ const saveTestCases = [
         commandAuditGroup: 'audit group 3',
         commandAuditSize: 'audit size 3',
       },
-    ],
-  },
-  {
-    editedIndex: 0,
-    editedItem: {
-      id: 1,
-      community: 'community 1 edited',
-      command: 'command 1',
-      commandAuditGroup: 'audit group 1',
-      commandAuditSize: 'audit size 1',
-    },
-    expected: [
-      {
-        id: 1,
-        community: 'community 1 edited',
-        command: 'command 1',
-        commandAuditGroup: 'audit group 1',
-        commandAuditSize: 'audit size 1',
-      },
-      {
-        id: 2,
-        community: 'community 2',
-        command: 'command 2',
-        commandAuditGroup: 'audit group 2',
-        commandAuditSize: 'audit size 2',
-      },
-    ],
-  },
-]
+    ])
+  })
+
+  it('should watch dialog', async () => {
+    wrapper = factory({ items: beats })
+    wrapper.setData({ dialog: null })
+    wrapper.vm.close = jest.fn()
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.close).toHaveBeenCalled()
+  })
+
+  it('should watch dialogDelete', async () => {
+    wrapper = factory({ items: beats })
+    wrapper.setData({ dialogDelete: null })
+    wrapper.vm.closeDelete = jest.fn()
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.closeDelete).toHaveBeenCalled()
+  })
+})
