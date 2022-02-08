@@ -209,9 +209,7 @@ export default {
 
     deleteItemConfirm() {
       this.beats.splice(this.editedIndex, 1)
-      if (this.onDeleteBeat) {
-        this.onDeleteBeat(this.editedItem)
-      }
+      this.onDeleteBeat(this.editedItem)
       this.closeDelete()
     },
 
@@ -237,11 +235,7 @@ export default {
       } else {
         this.beats.push(this.editedItem)
       }
-
-      if (this.onEditBeat) {
-        this.onEditBeat(this.editedItem)
-      }
-
+      this.onEditBeat(this.editedItem)
       this.close()
     },
   },

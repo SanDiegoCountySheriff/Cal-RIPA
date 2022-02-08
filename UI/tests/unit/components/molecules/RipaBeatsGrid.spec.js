@@ -5,9 +5,26 @@ import Vuetify from 'vuetify'
 describe('Ripa Beats Grid', () => {
   let vuetify
   let wrapper
+  let beats
 
   beforeEach(() => {
     vuetify = new Vuetify()
+    beats = [
+      {
+        id: 1,
+        community: 'community 1',
+        command: 'command 1',
+        commandAuditGroup: 'audit group 1',
+        commandAuditSize: 'audit size 1',
+      },
+      {
+        id: 2,
+        community: 'community 2',
+        command: 'command 2',
+        commandAuditGroup: 'audit group 2',
+        commandAuditSize: 'audit size 2',
+      },
+    ]
   })
 
   afterEach(() => {
@@ -21,22 +38,6 @@ describe('Ripa Beats Grid', () => {
         ...propsData,
         onEditBeat: jest.fn(),
         onDeleteBeat: jest.fn(),
-        items: [
-          {
-            id: 1,
-            community: 'community 1',
-            command: 'command 1',
-            commandAuditGroup: 'audit group 1',
-            commandAuditSize: 'audit size 1',
-          },
-          {
-            id: 2,
-            community: 'community 2',
-            command: 'command 2',
-            commandAuditGroup: 'audit group 2',
-            commandAuditSize: 'audit size 2',
-          },
-        ],
       },
     })
   }
@@ -47,21 +48,122 @@ describe('Ripa Beats Grid', () => {
     expect(wrapper.element).toMatchSnapshot()
   })
 
-  it.todo('should compute formTitle')
+  it('should compute formTitle', () => {
+    wrapper = factory({ items: beats })
 
-  it.todo('should compute isRowKeyDisabled')
+    expect(wrapper.vm.formTitle).toEqual('New Item')
 
-  it.todo('should compute isDuplicateKey')
+    wrapper.setData({ editedIndex: 1 })
 
-  it.todo('should edit item')
+    expect(wrapper.vm.formTitle).toEqual('Edit Item')
+  })
 
-  it.todo('should delete item')
+  it('should compute isRowKeyDisabled', () => {
+    wrapper = factory({ items: beats })
 
-  it.todo('should close')
+    expect(wrapper.vm.isRowKeyDisabled).toBeFalsy()
 
-  it.todo('should close delete')
+    wrapper.setData({ editedIndex: 1 })
 
-  it.todo('should save')
+    expect(wrapper.vm.isRowKeyDisabled).toBeTruthy()
+  })
+
+  it('should compute isDuplicateKey', () => {
+    wrapper = factory({ items: beats })
+
+    expect(wrapper.vm.isDuplicateKey).toBeTruthy()
+
+    wrapper.setData({ editedIndex: 1 })
+    wrapper.setData({ editedItem: { id: '1' } })
+
+    expect(wrapper.vm.isDuplicateKey).toBeFalsy()
+  })
+
+  it('should edit item', () => {
+    wrapper = factory({ items: beats })
+    const item = wrapper.vm.items[0]
+
+    wrapper.vm.editItem(item)
+
+    expect(wrapper.vm.editedIndex).toEqual(0)
+    expect(wrapper.vm.editedItem).toEqual(item)
+    expect(wrapper.vm.dialog).toBeTruthy()
+  })
+
+  it('should delete item', () => {
+    wrapper = factory({ items: beats })
+    const item = wrapper.vm.items[0]
+
+    wrapper.vm.deleteItem(item)
+
+    expect(wrapper.vm.editedIndex).toEqual(0)
+    expect(wrapper.vm.editedItem).toEqual(item)
+    expect(wrapper.vm.dialogDelete).toBeTruthy()
+  })
+
+  it('should delete item confirm', () => {
+    wrapper = factory({ items: beats })
+    wrapper.vm.closeDelete = jest.fn()
+    wrapper.setData({ editedItem: wrapper.vm.items[0] })
+    wrapper.setData({ editedIndex: 0 })
+
+    wrapper.vm.deleteItemConfirm()
+
+    expect(wrapper.vm.items).toEqual([
+      {
+        id: 2,
+        community: 'community 2',
+        command: 'command 2',
+        commandAuditGroup: 'audit group 2',
+        commandAuditSize: 'audit size 2',
+      },
+    ])
+    expect(wrapper.vm.onDeleteBeat).toHaveBeenCalledWith({
+      id: 1,
+      community: 'community 1',
+      command: 'command 1',
+      commandAuditGroup: 'audit group 1',
+      commandAuditSize: 'audit size 1',
+    })
+    expect(wrapper.vm.closeDelete).toHaveBeenCalledTimes(1)
+  })
+
+  it('should close', async () => {
+    wrapper = factory({ items: beats })
+
+    wrapper.vm.close()
+
+    expect(wrapper.vm.dialog).toBeFalsy()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.editedItem).toEqual({
+      id: '',
+      community: '',
+      command: '',
+      commandAuditGroup: '',
+      commandAuditSize: '',
+    })
+    expect(wrapper.vm.editedIndex).toEqual(-1)
+  })
+
+  it('should close delete', async () => {
+    wrapper = factory({ items: beats })
+    wrapper.vm.closeDelete()
+
+    expect(wrapper.vm.dialogDelete).toBeFalsy()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.editedItem).toEqual({
+      id: '',
+      community: '',
+      command: '',
+      commandAuditGroup: '',
+      commandAuditSize: '',
+    })
+    expect(wrapper.vm.editedIndex).toEqual(-1)
+  })
+
+  it('should save', () => {
+    wrapper = factory({items: beats}
+  })
 
   it.todo('should watch items')
 
@@ -69,3 +171,65 @@ describe('Ripa Beats Grid', () => {
 
   it.todo('should watch dialogDelete')
 })
+
+const saveTestCases = [
+  {
+    editedIndex: -1,
+    editedItem: {
+      id: 3,
+      community: 'community 3',
+      command: 'command 3',
+      commandAuditGroup: 'audit group 3',
+      commandAuditSize: 'audit size 3',
+    },
+    expected: [
+      {
+        id: 1,
+        community: 'community 1',
+        command: 'command 1',
+        commandAuditGroup: 'audit group 1',
+        commandAuditSize: 'audit size 1',
+      },
+      {
+        id: 2,
+        community: 'community 2',
+        command: 'command 2',
+        commandAuditGroup: 'audit group 2',
+        commandAuditSize: 'audit size 2',
+      },
+      {
+        id: 3,
+        community: 'community 3',
+        command: 'command 3',
+        commandAuditGroup: 'audit group 3',
+        commandAuditSize: 'audit size 3',
+      },
+    ],
+  },
+  {
+    editedIndex: 0,
+    editedItem: {
+      id: 1,
+      community: 'community 1 edited',
+      command: 'command 1',
+      commandAuditGroup: 'audit group 1',
+      commandAuditSize: 'audit size 1',
+    },
+    expected: [
+      {
+        id: 1,
+        community: 'community 1 edited',
+        command: 'command 1',
+        commandAuditGroup: 'audit group 1',
+        commandAuditSize: 'audit size 1',
+      },
+      {
+        id: 2,
+        community: 'community 2',
+        command: 'command 2',
+        commandAuditGroup: 'audit group 2',
+        commandAuditSize: 'audit size 2',
+      },
+    ],
+  },
+]
