@@ -188,7 +188,7 @@
       "type": "string"
     },
     "apim_publisherEmail": {
-      "defaultValue": "indrani.cherukumalli@insight.com",
+      "defaultValue": "redacted@redacted.com",
       "type": "string"
     },
     "apim_publisherName": {
@@ -1319,54 +1319,10 @@
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
       ],
       "properties": {
-        //"value": "[parameters('policyCont1')]",
         "value": "[if(equals(parameters('environment'),parameters('apim_policy_env')), variables('apim_policy_value1'), variables('apim_policy_value2'))]",
         "format": "xml"
       }
     },
-    // {
-    //     "condition": "[parameters('deploy_rg')]",
-    //     "type": "Microsoft.Network/networkInterfaces",
-    //     "apiVersion": "2020-05-01",
-    //     "name": "[variables('networkInt_cdb_name')]",
-    //     "location": "[parameters('region')]",
-    //     "dependsOn": [
-    //         "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
-    //     ],
-    //     "properties": {
-    //         "ipConfigurations": [
-    //             {
-    //                 "name": "[variables('networkInt_ipconfig1_name')]",
-    //                 "properties": {
-    //                     "privateIPAddress": "[parameters('cdb_private_ipaddress1')]",
-    //                     "privateIPAllocationMethod": "Dynamic",
-    //                     "subnet": {
-    //                         "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
-    //                     },
-    //                     "primary": true,
-    //                     "privateIPAddressVersion": "IPv4"
-    //                 }
-    //             },
-    //             {
-    //                 "name": "[variables('networkInt_ipconfig2_name')]",
-    //                 "properties": {
-    //                     "privateIPAddress": "[parameters('cdb_private_ipaddress2')]",
-    //                     "privateIPAllocationMethod": "Dynamic",
-    //                     "subnet": {
-    //                         "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
-    //                     },
-    //                     "primary": false,
-    //                     "privateIPAddressVersion": "IPv4"
-    //                 }
-    //             }
-    //         ],
-    //         "dnsSettings": {
-    //             "dnsServers": []
-    //         },
-    //         "enableAcceleratedNetworking": false,
-    //         "enableIPForwarding": false
-    //     }
-    // },
     {
       "condition": "[parameters('deploy_rg')]",
       "type": "Microsoft.DocumentDB/databaseAccounts",
@@ -2243,11 +2199,6 @@
           }
         ],
         "manualPrivateLinkServiceConnections": [],
-        // "networkInterfaces": [
-        //     {
-        //         "id": "[resourceId('Microsoft.Network/networkInterfaces/', variables('networkInt_cdb_name'))]"
-        //     }
-        // ],
         "subnet": {
           "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_ripa_vnet_name'), concat(variables('virtualNetworks_ripa_vnet_name'), parameters('cdb_subnet_name')))]"
         },
@@ -2274,26 +2225,6 @@
         ]
       }
     },
-    // {
-    //     "condition": "[parameters('deploy_rg')]",
-    //     "type": "Microsoft.DocumentDB/databaseAccounts/privateEndpointConnections",
-    //     "apiVersion": "2020-09-01",
-    //     "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', variables('databaseAccounts_ripa_cdb_name'), '-peConn')]",
-    //     "dependsOn": [
-    //         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]",
-    //         "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpoints_ripa_cdb_pe_name'))]"
-    //     ],
-    //     "properties": {
-    //         "provisioningState": "Succeeded",
-    //         "groupId": "Sql",
-    //         "privateEndpoint": {
-    //             "id": "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpoints_ripa_cdb_pe_name'))]"
-    //         },
-    //         "privateLinkServiceConnectionState": {
-    //             "status": "Approved"
-    //         }
-    //     }
-    // },
     //CosmosDB userprofile container
     {
       "condition": "[parameters('deploy_rg')]",

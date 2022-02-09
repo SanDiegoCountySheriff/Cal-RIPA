@@ -33,12 +33,7 @@
 
     <template v-if="!adminEditing">
       <div class="tw-flex tw-mt-4 tw-justify-center">
-        <v-btn
-          outlined
-          color="primary"
-          class="tw-mt-2"
-          @click="handleAddPerson"
-        >
+        <v-btn color="primary" class="tw-mt-2" @click="handleAddPerson">
           <v-icon left> mdi-plus </v-icon>
           Add Person
         </v-btn>
@@ -46,7 +41,7 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+      <v-btn color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
       <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
