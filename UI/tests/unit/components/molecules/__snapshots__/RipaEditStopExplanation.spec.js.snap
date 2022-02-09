@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Edit Stop Explanation should match snapshot 1`] = `
+<div
+  class="ripa-race tw-py-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle=""
+    title="Edit Stop Explanation"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-text-input-stub
+          hint="Please enter an explanation for editing the stop"
+          label="Edit Stop Explanation"
+          rules="[Function],[Function],[Function]"
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

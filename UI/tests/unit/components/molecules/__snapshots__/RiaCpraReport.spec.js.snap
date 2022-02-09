@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa CPRA Report should match snapshot 1`] = `
+<v-container-stub
+  class="tw-mt-2"
+  fluid="true"
+  tag="div"
+>
+  <v-layout-stub
+    align-center=""
+    class="tw-m-0"
+    nowrap=""
+    row=""
+    tag="div"
+  >
+    <v-flex-stub
+      md2=""
+      tag="div"
+      xs12=""
+    >
+      <div
+        class="tw-ml-2"
+      >
+        <ripa-date-picker-stub
+          class="tw-ml-2"
+          label="From Date"
+          max=""
+          min=""
+          rules="[Function],From date must be before To Date,[Function]"
+        />
+      </div>
+    </v-flex-stub>
+     
+    <v-flex-stub
+      md2=""
+      tag="div"
+      xs12=""
+    >
+      <div
+        class="tw-ml-2"
+      >
+        <ripa-date-picker-stub
+          class="tw-ml-2"
+          label="To Date"
+          max=""
+          min=""
+          rules="[Function],From date must be before To Date,[Function]"
+        />
+      </div>
+    </v-flex-stub>
+     
+    <v-flex-stub
+      md2=""
+      tag="div"
+      xs12=""
+    >
+      <div
+        class="tw-ml-2"
+      >
+        <v-btn-stub
+          activeclass=""
+          class="tw-ml-2"
+          color="primary"
+          disabled="true"
+          small="true"
+          tag="button"
+          type="button"
+        >
+          Create
+        </v-btn-stub>
+      </div>
+    </v-flex-stub>
+  </v-layout-stub>
+   
+  <v-card-stub
+    class="cpra-report"
+    flat="true"
+    loaderheight="4"
+    tag="div"
+  >
+    <v-card-title-stub>
+      CPRA Report
+    </v-card-title-stub>
+     
+    <v-card-text-stub>
+      Only stops accepted by the California DOJ are included on the
+      report.
+    </v-card-text-stub>
+     
+    <v-card-text-stub />
+     
+    <div
+      class="tw-ml-4 tw-mb-4"
+    >
+      <v-btn-stub
+        activeclass=""
+        color="primary"
+        small="true"
+        style="display: none;"
+        tag="button"
+        type="button"
+      >
+        Download Report
+      </v-btn-stub>
+    </div>
+  </v-card-stub>
+</v-container-stub>
+`;

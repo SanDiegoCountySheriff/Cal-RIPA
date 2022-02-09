@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Contraband should match snapshot 1`] = `
+<div
+  class="ripa-action-taken tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(12)(C)"
+    title="Contraband or Evidence Discovered"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Any Contraband or Evidence Discovered?"
+          maxwidth="350"
+          rules=""
+        />
+         
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;
