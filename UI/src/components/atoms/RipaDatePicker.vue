@@ -72,4 +72,7 @@ export default {
   color: transparent;
   background: transparent;
 }
+input::-webkit-date-and-time-value {
+  text-align: left;
+}
 </style>
