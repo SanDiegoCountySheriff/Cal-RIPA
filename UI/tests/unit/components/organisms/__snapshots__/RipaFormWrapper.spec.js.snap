@@ -1,0 +1,1323 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Wrapper should match snapshot 1`] = `
+<div
+  class="ripa-form-wrapper"
+>
+  <div
+    class="mx-auto v-card v-sheet v-sheet--outlined theme--light"
+    style="max-width: 900px;"
+  >
+    <div
+      class="v-card__text"
+    >
+      <!---->
+       
+      <div
+        class="v-stepper v-sheet theme--light"
+      >
+        <div
+          class="v-stepper__header"
+        >
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              1
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              2
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              3
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              4
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              5
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <!---->
+           
+          <div
+            class="v-stepper__step ripa-form-wrapper--summary-step-top v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              7
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="v-stepper__items"
+        >
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              >
+                <form
+                  class="v-form"
+                  display-user-edit="true"
+                  novalidate="novalidate"
+                >
+                  <!---->
+                   
+                  <!---->
+                   
+                  <div
+                    class="ripa-stop-date tw-pb-4"
+                  >
+                    <div
+                      class="ripa-form-header"
+                    >
+                      <div
+                        class="row tw-ml-1 tw-mt-1"
+                      >
+                        <span
+                          class="v-tooltip v-tooltip--top"
+                        >
+                          <!---->
+                          <i
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            aria-hidden="true"
+                            class="v-icon notranslate mdi mdi-alert theme--light error--text"
+                            style="font-size: 16px;"
+                          />
+                        </span>
+                         
+                        <button
+                          class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text"
+                          style="font-size: 16px;"
+                          type="button"
+                        />
+                         
+                        <div
+                          class="ripa-header"
+                        >
+                          <span
+                            class="tw-text-base md:tw-text-lg tw-uppercase"
+                          >
+                            Date of Stop
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                     
+                    <div
+                      class="container"
+                    >
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-md-4 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="v-dialog__container"
+                              role="dialog"
+                            >
+                              <div
+                                class="v-input v-input--is-label-active v-input--is-dirty v-input--is-readonly theme--light v-text-field"
+                              >
+                                <div
+                                  class="v-input__control"
+                                >
+                                  <div
+                                    class="v-input__slot"
+                                  >
+                                    <div
+                                      class="v-text-field__slot"
+                                    >
+                                      <label
+                                        class="v-label v-label--active theme--light"
+                                        for="input-27"
+                                        style="left: 0px; position: absolute;"
+                                      >
+                                        Date of Stop
+                                      </label>
+                                      <input
+                                        aria-expanded="false"
+                                        aria-haspopup="true"
+                                        id="input-27"
+                                        readonly="readonly"
+                                        role="button"
+                                        type="text"
+                                      />
+                                    </div>
+                                    <div
+                                      class="v-input__append-inner"
+                                    >
+                                      <div
+                                        class="v-input__icon v-input__icon--clear"
+                                      >
+                                        <button
+                                          aria-label="clear icon"
+                                          class="v-icon notranslate v-icon--link mdi mdi-close theme--light"
+                                          type="button"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="v-input__append-inner"
+                                    >
+                                      <div
+                                        class="v-input__icon v-input__icon--append"
+                                      >
+                                        <i
+                                          aria-hidden="true"
+                                          class="v-icon notranslate mdi mdi-calendar theme--light"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="v-text-field__details"
+                                  >
+                                    <div
+                                      class="v-messages theme--light"
+                                    >
+                                      <transition-group-stub
+                                        class="v-messages__wrapper"
+                                        name="message-transition"
+                                        tag="div"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!---->
+                            </div>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-12 col-md-4 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="v-input left-align v-input--is-label-active v-input--is-dirty theme--light v-text-field"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-text-field__slot"
+                                  >
+                                    <label
+                                      class="v-label v-label--active theme--light"
+                                      for="input-33"
+                                      style="left: 0px; position: absolute;"
+                                    >
+                                      Time of Stop
+                                    </label>
+                                    <input
+                                      id="input-33"
+                                      type="time"
+                                    />
+                                  </div>
+                                  <div
+                                    class="v-input__append-inner"
+                                  >
+                                    <div
+                                      class="v-input__icon v-input__icon--append"
+                                    >
+                                      <i
+                                        aria-hidden="true"
+                                        class="v-icon notranslate mdi mdi-clock-time-four-outline theme--light"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="v-text-field__details"
+                                >
+                                  <div
+                                    class="v-messages theme--light"
+                                  >
+                                    <transition-group-stub
+                                      class="v-messages__wrapper"
+                                      name="message-transition"
+                                      tag="div"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-12 col-md-4 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="v-input theme--light v-text-field"
+                              max="1440"
+                              min="1"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-text-field__slot"
+                                  >
+                                    <label
+                                      class="v-label theme--light"
+                                      for="input-38"
+                                      style="left: 0px; position: absolute;"
+                                    >
+                                      Stop Duration
+                                    </label>
+                                    <input
+                                      id="input-38"
+                                      inputmode="numeric"
+                                      min="0"
+                                      type="number"
+                                    />
+                                  </div>
+                                </div>
+                                <div
+                                  class="v-text-field__details"
+                                >
+                                  <div
+                                    class="v-messages theme--light"
+                                  >
+                                    <transition-group-stub
+                                      class="v-messages__wrapper"
+                                      name="message-transition"
+                                      tag="div"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-12"
+                        >
+                          <div
+                            class="ripa-switch"
+                            style="max-width: 300px;"
+                          >
+                            <div
+                              class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-input--selection-controls__input"
+                                  >
+                                    <input
+                                      aria-checked="false"
+                                      aria-disabled="false"
+                                      id="input-42"
+                                      role="switch"
+                                      type="checkbox"
+                                      value=""
+                                    />
+                                    <div
+                                      class="v-input--selection-controls__ripple"
+                                    />
+                                    <div
+                                      class="v-input--switch__track theme--light"
+                                    />
+                                    <div
+                                      class="v-input--switch__thumb theme--light"
+                                    >
+                                      <transition-stub
+                                        mode="out-in"
+                                        name="fab-transition"
+                                      />
+                                    </div>
+                                  </div>
+                                  <label
+                                    class="v-label theme--light"
+                                    for="input-42"
+                                    style="left: 0px; position: relative;"
+                                  >
+                                    
+      Stop in response to Call for Service
+    
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                   
+                  <div
+                    class="ripa-location tw-pb-4"
+                  >
+                    <div
+                      class="ripa-form-header"
+                    >
+                      <div
+                        class="row tw-ml-1 tw-mt-1"
+                      >
+                        <span
+                          class="v-tooltip v-tooltip--top"
+                        >
+                          <!---->
+                          <i
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            aria-hidden="true"
+                            class="v-icon notranslate mdi mdi-alert theme--light error--text"
+                            style="font-size: 16px;"
+                          />
+                        </span>
+                         
+                        <button
+                          class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text"
+                          style="font-size: 16px;"
+                          type="button"
+                        />
+                         
+                        <div
+                          class="ripa-header"
+                        >
+                          <span
+                            class="tw-text-base md:tw-text-lg tw-uppercase"
+                          >
+                            Location
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                     
+                    <div
+                      class="container"
+                    >
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="tw-pr-2 col-sm-6 col-md-3 col-12"
+                        >
+                          <!---->
+                        </div>
+                         
+                        <div
+                          class="tw-pr-2 col-sm-6 col-md-3 col-12"
+                        >
+                          <div
+                            class="tw-mr-2 tw-mt-4"
+                          >
+                            <button
+                              class="tw-w-full v-btn v-btn--disabled v-btn--has-bg theme--light v-size--small"
+                              disabled="disabled"
+                              type="button"
+                            >
+                              <span
+                                class="v-btn__content"
+                              >
+                                Last Location
+          
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="tw-pr-2 col-sm-6 col-md-3 col-12"
+                        >
+                          <div
+                            class="tw-mr-2 tw-mt-4"
+                          >
+                            <button
+                              class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"
+                              type="button"
+                            >
+                              <span
+                                class="v-btn__content"
+                              >
+                                
+            Open Favorites
+          
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-6 col-md-3 col-12"
+                        >
+                          <!---->
+                        </div>
+                      </div>
+                       
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-12"
+                        >
+                          <div
+                            class="ripa-switch"
+                            style="max-width: 200px;"
+                          >
+                            <div
+                              class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-input--selection-controls__input"
+                                  >
+                                    <input
+                                      aria-checked="false"
+                                      aria-disabled="false"
+                                      id="input-53"
+                                      role="switch"
+                                      type="checkbox"
+                                      value=""
+                                    />
+                                    <div
+                                      class="v-input--selection-controls__ripple"
+                                    />
+                                    <div
+                                      class="v-input--switch__track theme--light"
+                                    />
+                                    <div
+                                      class="v-input--switch__thumb theme--light"
+                                    >
+                                      <transition-stub
+                                        mode="out-in"
+                                        name="fab-transition"
+                                      />
+                                    </div>
+                                  </div>
+                                  <label
+                                    class="v-label theme--light"
+                                    for="input-53"
+                                    style="left: 0px; position: relative;"
+                                  >
+                                    
+      K-12 Public School
+    
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                           
+                          <!---->
+                           
+                          <div
+                            class="v-alert tw-mt-8 v-sheet v-sheet--outlined theme--light v-alert--dense v-alert--outlined info--text"
+                            role="alert"
+                          >
+                            <div
+                              class="v-alert__wrapper"
+                            >
+                              <i
+                                aria-hidden="true"
+                                class="v-icon notranslate v-alert__icon mdi mdi-information theme--light info--text"
+                              />
+                              <div
+                                class="v-alert__content"
+                              >
+                                
+          Note: Do not provide a street address if the location is a
+          residence.
+        
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <!---->
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-12 col-md-6 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="ripa-text-input"
+                            >
+                              <div
+                                class="v-input theme--light v-text-field"
+                              >
+                                <div
+                                  class="v-input__control"
+                                >
+                                  <div
+                                    class="v-input__slot"
+                                  >
+                                    <div
+                                      class="v-text-field__slot"
+                                    >
+                                      <label
+                                        class="v-label theme--light"
+                                        for="input-59"
+                                        style="left: 0px; position: absolute;"
+                                      >
+                                        Block Number
+                                      </label>
+                                      <input
+                                        id="input-59"
+                                        type="text"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="v-text-field__details"
+                                  >
+                                    <div
+                                      class="v-messages theme--light"
+                                    >
+                                      <transition-group-stub
+                                        class="v-messages__wrapper"
+                                        name="message-transition"
+                                        tag="div"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                               
+                              <!---->
+                            </div>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-12 col-md-6 col-12"
+                        >
+                          <div>
+                            <div
+                              class="ripa-text-input"
+                            >
+                              <!---->
+                               
+                              <div
+                                class="v-input theme--light v-text-field"
+                              >
+                                <div
+                                  class="v-input__control"
+                                >
+                                  <div
+                                    class="v-input__slot"
+                                  >
+                                    <div
+                                      class="v-text-field__slot"
+                                    >
+                                      <label
+                                        class="v-label theme--light"
+                                        for="input-63"
+                                        style="left: 0px; position: absolute;"
+                                      >
+                                        Street Name
+                                      </label>
+                                      <input
+                                        id="input-63"
+                                        type="text"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="v-text-field__details"
+                                  >
+                                    <div
+                                      class="v-messages theme--light"
+                                    >
+                                      <transition-group-stub
+                                        class="v-messages__wrapper"
+                                        name="message-transition"
+                                        tag="div"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-12"
+                        >
+                          <div
+                            class="ripa-label tw-font-bold tw-my-4"
+                          >
+                            <span>
+                              
+    -- or --
+  
+                            </span>
+                          </div>
+                           
+                          <div
+                            class="ripa-text-input"
+                          >
+                            <!---->
+                             
+                            <div
+                              class="v-input theme--light v-text-field"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-text-field__slot"
+                                  >
+                                    <label
+                                      class="v-label theme--light"
+                                      for="input-69"
+                                      style="left: 0px; position: absolute;"
+                                    >
+                                      Closest Intersection
+                                    </label>
+                                    <input
+                                      id="input-69"
+                                      type="text"
+                                    />
+                                  </div>
+                                </div>
+                                <div
+                                  class="v-text-field__details"
+                                >
+                                  <div
+                                    class="v-messages theme--light"
+                                  >
+                                    <transition-group-stub
+                                      class="v-messages__wrapper"
+                                      name="message-transition"
+                                      tag="div"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                           
+                          <div
+                            class="ripa-switch"
+                            style="max-width: 225px;"
+                          >
+                            <div
+                              class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-input--selection-controls__input"
+                                  >
+                                    <input
+                                      aria-checked="false"
+                                      aria-disabled="false"
+                                      id="input-73"
+                                      role="switch"
+                                      type="checkbox"
+                                      value=""
+                                    />
+                                    <div
+                                      class="v-input--selection-controls__ripple"
+                                    />
+                                    <div
+                                      class="v-input--switch__track theme--light"
+                                    />
+                                    <div
+                                      class="v-input--switch__thumb theme--light"
+                                    >
+                                      <transition-stub
+                                        mode="out-in"
+                                        name="fab-transition"
+                                      />
+                                    </div>
+                                  </div>
+                                  <label
+                                    class="v-label theme--light"
+                                    for="input-73"
+                                    style="left: 0px; position: relative;"
+                                  >
+                                    
+      More Location Options
+    
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                           
+                          <!---->
+                           
+                          <div
+                            class="tw-mt-8"
+                          >
+                            <div
+                              class="ripa-switch"
+                              style="max-width: 200px;"
+                            >
+                              <div
+                                class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch"
+                              >
+                                <div
+                                  class="v-input__control"
+                                >
+                                  <div
+                                    class="v-input__slot"
+                                  >
+                                    <div
+                                      class="v-input--selection-controls__input"
+                                    >
+                                      <input
+                                        aria-checked="false"
+                                        aria-disabled="false"
+                                        id="input-76"
+                                        role="switch"
+                                        type="checkbox"
+                                        value=""
+                                      />
+                                      <div
+                                        class="v-input--selection-controls__ripple"
+                                      />
+                                      <div
+                                        class="v-input--switch__track theme--light"
+                                      />
+                                      <div
+                                        class="v-input--switch__thumb theme--light"
+                                      >
+                                        <transition-stub
+                                          mode="out-in"
+                                          name="fab-transition"
+                                        />
+                                      </div>
+                                    </div>
+                                    <label
+                                      class="v-label theme--light"
+                                      for="input-76"
+                                      style="left: 0px; position: relative;"
+                                    >
+                                      
+      City Out of County?
+    
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       
+                      <div
+                        class="row no-gutters"
+                      >
+                        <div
+                          class="col-sm-12 col-md-6 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  aria-expanded="false"
+                                  aria-haspopup="listbox"
+                                  aria-owns="list-79"
+                                  class="v-input__slot"
+                                  role="combobox"
+                                >
+                                  <div
+                                    class="v-select__slot"
+                                  >
+                                    <label
+                                      class="v-label theme--light"
+                                      for="input-79"
+                                      style="left: 0px; position: absolute;"
+                                    >
+                                      City
+                                    </label>
+                                    <input
+                                      autocomplete="off"
+                                      id="input-79"
+                                      type="text"
+                                    />
+                                    <div
+                                      class="v-input__append-inner"
+                                    >
+                                      <div />
+                                    </div>
+                                    <div
+                                      class="v-input__append-inner"
+                                    >
+                                      <div
+                                        class="v-input__icon v-input__icon--append"
+                                      >
+                                        <i
+                                          aria-hidden="true"
+                                          class="v-icon notranslate mdi mdi-menu-down theme--light"
+                                        />
+                                      </div>
+                                    </div>
+                                    <input
+                                      type="hidden"
+                                    />
+                                  </div>
+                                  <div
+                                    class="v-menu"
+                                  >
+                                    <!---->
+                                  </div>
+                                </div>
+                                <div
+                                  class="v-text-field__details"
+                                >
+                                  <div
+                                    class="v-messages theme--light"
+                                  >
+                                    <transition-group-stub
+                                      class="v-messages__wrapper"
+                                      name="message-transition"
+                                      tag="div"
+                                    >
+                                      <div
+                                        class="v-messages__message"
+                                      >
+                                        Select 1 City (required)
+                                      </div>
+                                    </transition-group-stub>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         
+                        <!---->
+                      </div>
+                    </div>
+                  </div>
+                   
+                  <div
+                    class="spacer"
+                  />
+                   
+                  <!---->
+                   
+                  <div
+                    class="tw-flex tw-mt-8 tw-justify-center"
+                  >
+                    <button
+                      class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"
+                      type="button"
+                    >
+                      <span
+                        class="v-btn__content"
+                      >
+                        
+      Cancel
+    
+                      </span>
+                    </button>
+                     
+                    <button
+                      class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"
+                      type="button"
+                    >
+                      <span
+                        class="v-btn__content"
+                      >
+                        
+      Next
+    
+                      </span>
+                    </button>
+                  </div>
+                   
+                  <div
+                    class="v-dialog__container"
+                    role="dialog"
+                  >
+                    <!---->
+                  </div>
+                </form>
+              </div>
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+           
+          <transition-stub
+            name="tab-transition"
+          >
+            <div
+              class="v-stepper__content"
+              style="display: none;"
+            >
+              <div
+                class="v-stepper__wrapper"
+              />
+            </div>
+          </transition-stub>
+        </div>
+         
+        <div
+          class="v-stepper__header"
+        >
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              1
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              2
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              3
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              4
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <div
+            class="v-stepper__step v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              5
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+           
+          <hr
+            aria-orientation="horizontal"
+            class="v-divider theme--light"
+            role="separator"
+          />
+           
+          <!---->
+           
+          <div
+            class="v-stepper__step ripa-form-wrapper--summary-step-bottom v-stepper__step--inactive"
+          >
+            <span
+              class="v-stepper__step__step"
+            >
+              7
+            </span>
+            <div
+              class="v-stepper__label"
+            />
+          </div>
+        </div>
+      </div>
+       
+      <!---->
+       
+      <!---->
+    </div>
+  </div>
+   
+  <div
+    class="v-dialog__container"
+    role="dialog"
+  >
+    <!---->
+  </div>
+   
+  <div
+    class="v-dialog__container"
+    role="dialog"
+  >
+    <!---->
+  </div>
+   
+  <div
+    class="v-dialog__container"
+    role="dialog"
+  >
+    <!---->
+  </div>
+   
+  <div
+    class="v-dialog__container"
+    role="dialog"
+  >
+    <!---->
+  </div>
+   
+  <div
+    class="v-dialog__container"
+    role="dialog"
+  >
+    <!---->
+  </div>
+</div>
+`;
