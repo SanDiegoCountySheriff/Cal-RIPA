@@ -1,30 +1,14 @@
 <template>
-  <v-dialog
-    ref="dialog"
-    v-model="modal"
-    :return-value.sync="model"
-    persistent
-    width="290px"
+  <v-text-field
+    type="date"
+    v-model="model"
+    :label="label"
+    :rules="rules"
+    :disabled="disabled"
+    append-icon="mdi-calendar"
+    clearable
   >
-    <template v-slot:activator="{ on, attrs }">
-      <v-text-field
-        v-model="model"
-        :disabled="disabled"
-        :label="label"
-        append-icon="mdi-calendar"
-        readonly
-        v-bind="attrs"
-        v-on="on"
-        :rules="rules"
-        clearable
-      ></v-text-field>
-    </template>
-    <v-date-picker v-model="model" no-title scrollable :min="min" :max="max">
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.dialog.save(model)"> OK </v-btn>
-    </v-date-picker>
-  </v-dialog>
+  </v-text-field>
 </template>
 
 <script>
@@ -33,8 +17,6 @@ export default {
 
   data() {
     return {
-      menu: false,
-      modal: false,
       viewModel: this.value,
     }
   },
@@ -74,14 +56,20 @@ export default {
       type: Array,
       default: () => [],
     },
-    min: {
-      type: String,
-      default: '',
-    },
-    max: {
-      type: String,
-      default: '',
-    },
   },
 }
 </script>
+
+<style>
+::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+</style>
