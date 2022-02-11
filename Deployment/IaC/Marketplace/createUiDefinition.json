@@ -836,7 +836,7 @@
             "name": "auth_logout_url",
             "type": "Microsoft.Common.TextBox",
             "label": "Logout URL",
-            "toolTip": "This should point to a URL that clears a users session.",
+            "toolTip": "This should point to a URL that clears a user's session.",
             "constraints": {
               "required": false,
               "regex": "",
