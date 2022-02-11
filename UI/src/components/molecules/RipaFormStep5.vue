@@ -96,11 +96,11 @@ export default {
     },
     onOpenFavorites: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onSaveFavorite: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

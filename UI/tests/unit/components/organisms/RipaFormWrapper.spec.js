@@ -41,7 +41,7 @@ describe('Ripa Form Wrapper', () => {
   })
 
   it('should reset reasonableSuspicion when changing reasonForStop', async () => {
-    stop = CreateStartOfFormStepIndexThreeStop(stop)
+    stop = createStartOfFormStepIndexThreeStop(stop)
     wrapper = factory({ value: stop, formStepIndex: 3 })
     const expected = []
 
@@ -59,7 +59,7 @@ describe('Ripa Form Wrapper', () => {
   })
 })
 
-function CreateStartOfFormStepIndexThreeStop(stop) {
+function createStartOfFormStepIndexThreeStop(stop) {
   return {
     ...stop,
     actionsTaken: {

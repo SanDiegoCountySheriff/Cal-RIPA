@@ -5,7 +5,6 @@ exports[`Ripa Edit Stop Explanation should match snapshot 1`] = `
   class="ripa-race tw-py-4"
 >
   <ripa-form-header-stub
-    onopenstatute="[Function]"
     required="true"
     subtitle=""
     title="Edit Stop Explanation"

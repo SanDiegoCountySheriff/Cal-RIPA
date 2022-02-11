@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Step 7 should match snapshot 1`] = `
+<v-form-stub
+  lazyvalidation="true"
+>
+  <ripa-form-summary-stub
+    editbuttons="true"
+    oncopyperson="[Function]"
+    ondeleteperson="[Function]"
+    oneditagencyquestions="[Function]"
+    oneditperson="[Function]"
+    oneditstop="[Function]"
+    value="[object Object]"
+  />
+   
+  <v-spacer-stub />
+   
+  <!---->
+   
+  <v-spacer-stub />
+   
+  <!---->
+   
+  <div
+    class="tw-flex tw-mt-4 tw-justify-center"
+  >
+    <v-btn-stub
+      activeclass=""
+      class="tw-mt-2"
+      color="primary"
+      tag="button"
+      type="button"
+    >
+      <v-icon-stub
+        left=""
+      >
+         mdi-plus 
+      </v-icon-stub>
+      
+        Add Person
+      
+    </v-btn-stub>
+  </div>
+   
+  <div
+    class="tw-flex tw-mt-8 tw-justify-center"
+  >
+    <v-btn-stub
+      activeclass=""
+      class="tw-mr-2"
+      color="error"
+      tag="button"
+      type="button"
+    >
+      
+      Cancel
+    
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      color="primary"
+      tag="button"
+      type="button"
+    >
+       Submit 
+    </v-btn-stub>
+  </div>
+</v-form-stub>
+`;

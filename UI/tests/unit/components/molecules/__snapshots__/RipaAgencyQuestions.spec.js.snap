@@ -5,7 +5,6 @@ exports[`Ripa Agency Questions should match snapshot 1`] = `
   class="ripa-agency-questions tw-pb-4"
 >
   <ripa-form-header-stub
-    onopenstatute="[Function]"
     subtitle=""
     title="Agency Questions"
   />

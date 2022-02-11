@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Summary should match snapshot 1`] = `
+<div>
+  <!---->
+   
+  <div>
+    <v-card-stub
+      class="ripa-form-summary mx-auto"
+      flat="true"
+      loaderheight="4"
+      tag="div"
+    >
+      <ripa-form-summary-detail-stub
+        oncopyperson="[Function]"
+        ondeleteperson="[Function]"
+        oneditagencyquestions="[Function]"
+        oneditperson="[Function]"
+        oneditstop="[Function]"
+        title="Review, Edit and Submit"
+      />
+    </v-card-stub>
+  </div>
+</div>
+`;

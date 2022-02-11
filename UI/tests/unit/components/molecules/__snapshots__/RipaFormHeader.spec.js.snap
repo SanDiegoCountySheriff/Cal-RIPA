@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Header should match snapshot 1`] = `
+<div
+  class="ripa-form-header"
+>
+  <v-row-stub
+    class="tw-ml-1 tw-mt-1"
+    tag="div"
+  >
+    <!---->
+     
+    <!---->
+     
+    <ripa-header-stub
+      value=""
+    />
+  </v-row-stub>
+</div>
+`;

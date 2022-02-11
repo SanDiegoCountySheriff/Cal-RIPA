@@ -133,23 +133,23 @@ export default {
     },
     onDeletePerson: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onCopyPerson: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditAgencyQuestions: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditStop: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditPerson: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

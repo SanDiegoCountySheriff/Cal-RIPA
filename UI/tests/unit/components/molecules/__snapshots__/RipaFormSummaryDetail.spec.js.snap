@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Summary Detail should match snapshot 1`] = `
+<div>
+  <v-card-title-stub
+    class="tw-uppercase"
+  >
+    Review, Edit and Submit
+  </v-card-title-stub>
+   
+  <v-card-text-stub>
+    <div
+      class="tw-mb-3"
+    >
+      <span
+        class="tw-text-base tw-font-bold"
+      >
+        111111111111
+      </span>
+       
+      <!---->
+    </div>
+     
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+    <div>
+      <ripa-list-stub
+        item="[object Object]"
+      />
+    </div>
+     
+    <div>
+      <div
+        class="tw-my-4 tw-text-base tw-font-bold"
+      >
+        
+        Person 1
+        
+        <!---->
+      </div>
+       
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+      <div>
+        <ripa-list-stub
+          item="[object Object]"
+        />
+      </div>
+    </div>
+     
+    <!---->
+     
+    <div
+      class="tw-mt-4 tw-mb-2"
+    >
+      <v-divider-stub />
+    </div>
+     
+    <!---->
+  </v-card-text-stub>
+</div>
+`;
