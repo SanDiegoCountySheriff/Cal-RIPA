@@ -1,4 +1,4 @@
-import RipaSnackBar from '@/components/atoms/RipaSnackBar'
+import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
@@ -15,7 +15,7 @@ describe('Ripa Snackbar', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaSnackBar, {
+    return shallowMount(RipaSnackbar, {
       vuetify,
       propsData: {
         ...propsData,
