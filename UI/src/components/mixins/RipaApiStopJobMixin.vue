@@ -95,7 +95,7 @@ export default {
                       )
                     : []
                   for (const entity of response.piiEntities) {
-                    entity.source = this.basisForSearchSource
+                    entity.source = this.basisForSearchSource + person.index
                     apiStop.piiEntities.push(entity)
                   }
                 }
@@ -135,7 +135,7 @@ export default {
                       )
                     : []
                   for (const entity of response.piiEntities) {
-                    entity.source = this.stopReasonSource
+                    entity.source = this.stopReasonSource + person.index
                     apiStop.piiEntities.push(entity)
                   }
                 }
