@@ -45,17 +45,22 @@ describe('Ripa Form Wrapper', () => {
     wrapper = factory({ value: stop, formStepIndex: 3 })
     const expected = []
 
-    const selector = wrapper.findComponent(RipaSelect)
-    selector.vm.model = 2
-    await wrapper.vm.$nextTick()
+    for (let i = 1; i <= 6; i++) {
+      if (i === 2) {
+        continue
+      }
+      const selector = wrapper.findComponent(RipaSelect)
+      selector.vm.model = 2
+      await wrapper.vm.$nextTick()
 
-    const checkGroup = wrapper.findComponent(RipaCheckGroup)
-    checkGroup.vm.model = [1]
+      const checkGroup = wrapper.findComponent(RipaCheckGroup)
+      checkGroup.vm.model = [1]
 
-    selector.vm.model = 1
-    await wrapper.vm.$nextTick()
+      selector.vm.model = i
+      await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.stop.stopReason.reasonableSuspicion).toEqual(expected)
+      expect(wrapper.vm.stop.stopReason.reasonableSuspicion).toEqual(expected)
+    }
   })
 })
 
