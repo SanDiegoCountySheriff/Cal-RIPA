@@ -5,7 +5,12 @@
       <div class="tw-mb-3">
         <span class="tw-text-base tw-font-bold">{{ getApiStopId }}</span>
         <template v-if="editButtons">
-          <v-btn class="tw-ml-4" dense outlined x-small @click="handleEditStop">
+          <v-btn
+            class="tw-ml-4"
+            color="primary"
+            x-small
+            @click="handleEditStop"
+          >
             Edit
           </v-btn>
         </template>
@@ -24,8 +29,7 @@
           <template v-if="editButtons">
             <v-btn
               class="tw-ml-4"
-              dense
-              outlined
+              color="primary"
               x-small
               @click="handleEditPerson($event, person.index)"
             >
@@ -34,8 +38,7 @@
             <template v-if="!adminEditing">
               <v-btn
                 class="tw-ml-2"
-                dense
-                outlined
+                color="primary"
                 x-small
                 @click="handleCopyPerson($event, person.index)"
               >
@@ -47,8 +50,7 @@
             >
               <v-btn
                 class="tw-ml-2"
-                dense
-                outlined
+                color="primary"
                 x-small
                 @click="handleDeletePerson($event, person.index)"
               >
@@ -69,8 +71,7 @@
           <template v-if="editButtons">
             <v-btn
               class="tw-ml-4"
-              dense
-              outlined
+              color="primary"
               x-small
               @click="handleEditAgencyQuestions"
             >
@@ -250,7 +251,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'Review and Submit',
+      default: 'Review, Edit and Submit',
     },
   },
 }
