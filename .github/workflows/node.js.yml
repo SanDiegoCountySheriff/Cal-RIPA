@@ -18,15 +18,6 @@ jobs:
         run: npm install
         working-directory: UI
 
-      - name: run linters
-        uses: wearerequired/lint-action@v1
-        with:
-          auto_fix: true
-          eslint: true
-          eslint_dir: UI
-          prettier: true
-          prettier_dir: UI
-
       - name: run unit tests
         run: npm run test:unit
         working-directory: UI
