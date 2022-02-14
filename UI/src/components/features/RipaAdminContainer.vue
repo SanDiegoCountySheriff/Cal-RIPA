@@ -128,7 +128,6 @@ export default {
         !this.$route.params.submissionId
       ) {
         this.handleRetrieveSavedFilters()
-        await Promise.all([this.getAdminSubmissions()])
       }
       if (
         tabIndex === '/admin/submissions' &&
@@ -140,7 +139,6 @@ export default {
       }
       if (tabIndex === '/admin/stops') {
         this.handleRetrieveSavedFilters()
-        await Promise.all([this.getAdminStops()])
       }
       if (tabIndex === '/admin/users') {
         await Promise.all([this.getAdminUsers()])
