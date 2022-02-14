@@ -494,7 +494,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     schools: {
       type: Array,
@@ -538,19 +538,19 @@ export default {
     },
     onOpenFavorites: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onOpenLastLocation: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onSaveFavorite: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onGpsLocation: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
 import RipaLocation from '@/components/molecules/RipaLocation.vue'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
+import { shallowMount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 
 describe('Ripa Location', () => {
   let vuetify
+  let wrapper
   let stop
 
   const schoolsList = JSON.parse('[{"cdsCode":"1","fullName":"High School"}]')
@@ -20,13 +20,20 @@ describe('Ripa Location', () => {
     stop = defaultStop()
   })
 
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
   const factory = propsData => {
     return shallowMount(RipaLocation, {
       vuetify,
       propsData: {
         ...propsData,
+        onOpenFavorites: jest.fn(),
+        onOpenLastLocation: jest.fn(),
+        onSaveFavorite: jest.fn(),
+        onGpsLocation: jest.fn(),
       },
-      mixins: [RipaModelMixin],
     })
   }
 
@@ -41,9 +48,13 @@ describe('Ripa Location', () => {
     },
   ]
 
+  it('should match snapshot', () => {
+    wrapper = factory({ value: stop })
+  })
+
   schoolTestCases.forEach(test => {
     it(`should validate school: ${test.school} as: ${test.expected}`, () => {
-      const wrapper = factory({
+      wrapper = factory({
         value: stop,
         schools: schoolsList,
       })
@@ -57,7 +68,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate block number', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
 
     expect(wrapper.vm.blockNumberRules).toEqual([
       'A block number is required',
@@ -71,7 +82,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate street name', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
 
     expect(wrapper.vm.streetNameRules).toEqual([
       'A street name is required',
@@ -85,7 +96,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate intersection', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
 
     expect(wrapper.vm.intersectionRules).toEqual([
       'An intersection is required',
@@ -119,7 +130,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate highway', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
     stop.location.toggleLocationOptions = true
     expect(wrapper.vm.highwayRules).toEqual([
       'A highway and closest exit is required',
@@ -133,7 +144,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate landmark', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
     stop.location.toggleLocationOptions = true
     expect(wrapper.vm.landmarkRules).toEqual([
       'A road marker, landmark, or other description is required',
@@ -147,7 +158,7 @@ describe('Ripa Location', () => {
   })
 
   it('should handle input', () => {
-    const wrapper = factory({ value: stop })
+    wrapper = factory({ value: stop })
 
     wrapper.vm.handleInput()
 
