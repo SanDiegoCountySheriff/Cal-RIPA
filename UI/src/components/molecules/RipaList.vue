@@ -11,7 +11,7 @@
       <div>
         {{ item.header }}
       </div>
-      <div class="tw-ml-8" v-for="child in item.children" :key="child.detail">
+      <div class="tw-ml-8" v-for="(child, index) in item.children" :key="index">
         <div :class="getChildMarginLeft(child)">
           <span :style="{ color: getPrimaryColor }">
             {{ child.detail }}
@@ -24,7 +24,7 @@
       <div>
         {{ item.header }}
       </div>
-      <div class="tw-ml-8" v-for="child in item.children" :key="child.header">
+      <div class="tw-ml-8" v-for="(child, index) in item.children" :key="index">
         {{ child.header }}
         <span class="tw-ml-2" :style="{ color: getPrimaryColor }">
           {{ child.detail }}
