@@ -18,7 +18,7 @@ export default {
   props: {
     node: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }

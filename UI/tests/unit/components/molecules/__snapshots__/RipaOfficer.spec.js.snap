@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Officer should match snapshot 1`] = `
+<div
+  class="ripa-officer tw-pb-4"
+>
+  <ripa-form-header-stub
+    class="tw-mb-4"
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(15)"
+    title="Officer Years of Experience"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <v-alert-stub
+          closeicon="$cancel"
+          closelabel="$vuetify.close"
+          dense="true"
+          icon=""
+          outlined="true"
+          tag="div"
+          type="info"
+          value="true"
+        >
+          <v-row-stub
+            align="center"
+            tag="div"
+          >
+            <v-col-stub
+              class="grow"
+              tag="div"
+            >
+              <!---->
+               
+              <v-progress-circular-stub
+                color="primary"
+                indeterminate="true"
+                rotate="0"
+                size="32"
+                value="0"
+                width="4"
+              />
+            </v-col-stub>
+             
+            <v-col-stub
+              class="shrink"
+              tag="div"
+            >
+              <v-btn-stub
+                activeclass=""
+                color="primary"
+                small="true"
+                tag="button"
+                type="button"
+              >
+                
+                Update
+              
+              </v-btn-stub>
+            </v-col-stub>
+          </v-row-stub>
+        </v-alert-stub>
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;
