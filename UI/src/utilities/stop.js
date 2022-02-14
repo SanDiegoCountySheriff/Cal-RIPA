@@ -856,7 +856,7 @@ export const apiStopToFullStop = apiStop => {
       date: apiStop.date,
       time: apiStop.time,
       duration: Number(apiStop.stopDuration),
-      stopInResponseToCfs: apiStop.stopInResponseToCfs || false,
+      stopInResponseToCfs: apiStop.stopInResponseToCFS || false,
     },
     people: getFullStopPeopleListed(apiStop),
   }
