@@ -338,7 +338,7 @@ const getSummaryStopInResponseToCfs = apiStop => {
   return {
     level: 1,
     header: 'Stop in Response to CFS',
-    detail: apiStop.stopInResponseToCfs || false,
+    detail: apiStop.stopInResponseToCFS || false,
   }
 }
 
@@ -856,7 +856,7 @@ export const apiStopToFullStop = apiStop => {
       date: apiStop.date,
       time: apiStop.time,
       duration: Number(apiStop.stopDuration),
-      stopInResponseToCfs: apiStop.stopInResponseToCFS || false,
+      stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
     },
     people: getFullStopPeopleListed(apiStop),
   }
@@ -1211,7 +1211,7 @@ export const fullStopToApiStop = (
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
     stopDuration: duration ? duration.toString() : null,
-    stopInResponseToCfs: fullStop.stopDate?.stopInResponseToCfs || false,
+    stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
   }
 }
