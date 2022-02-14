@@ -45,8 +45,10 @@ export default {
         return this.viewModel
       },
       set(newVal) {
-        this.viewModel = newVal
-        this.$emit('input', newVal)
+        if (newVal !== this.viewModel) {
+          this.viewModel = newVal
+          this.$emit('input', newVal)
+        }
       },
     },
   },
