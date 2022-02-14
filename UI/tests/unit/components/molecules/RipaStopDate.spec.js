@@ -1,9 +1,8 @@
-import { shallowMount } from '@vue/test-utils'
 import RipaStopDate from '@/components/molecules/RipaStopDate.vue'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
+import { shallowMount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
-import Vuetify from 'vuetify'
 import { format } from 'date-fns'
+import Vuetify from 'vuetify'
 
 describe('Ripa Stop Date', () => {
   let vuetify
@@ -25,7 +24,6 @@ describe('Ripa Stop Date', () => {
       propsData: {
         ...propsData,
       },
-      mixins: [RipaModelMixin],
     })
   }
 
