@@ -4,7 +4,7 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { pad } from '@/utilities/stop'
-import authentication from '@/authentication/msalindex.js'
+import authentication from '@/authentication/msalindex'
 
 Vue.use(Vuex)
 

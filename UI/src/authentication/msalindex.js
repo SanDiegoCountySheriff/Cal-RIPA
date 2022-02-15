@@ -8,7 +8,7 @@ export default {
   accountId: null,
 
   async initialize() {
-    await axios.get('/config.json').then(res => {
+    await axios.get('/config.json').then(async res => {
       const msalConfig = {
         auth: {
           clientId: res.data.Authentication.ClientId,
@@ -43,23 +43,31 @@ export default {
       this.authContext = new msal.PublicClientApplication(msalConfig)
       return new Promise((resolve, reject) => {
         try {
-          this.authContext.loginPopup({ scopes: ['User.ReadWrite'] })
-          resolve()
-          //   if (window.self !== window.top) {
-          //     // redirect to the location specified in the url params.
-          //     this.authContext.handleRedirectPromise()
-          //   } else {
-          //     // try pull the user out of local storage
-          //     const user = this.authContext.getAccountByUsername(
-          //       'JKELLASH@sdsheriff.com',
-          //     )
-          //     console.log('User: ', user)
-          //     store.dispatch('setUserAccountInfo', user)
-          //     if (user !== null) {
-          //       localStorage.setItem('ripa_adal_user', JSON.stringify(user))
-          //     }
-          //     resolve()
-          //   }
+          // this.authContext.loginPopup({ scopes: ['User.ReadWrite'] })
+          // resolve()
+          let redirectPromiseResult
+          this.authContext.handleRedirectPromise().then(response => {
+            redirectPromiseResult = response
+
+            if (redirectPromiseResult !== null || window.self !== window.top) {
+              // redirect to the location specified in the url params.
+              this.authContext.handleRedirectPromise().then(() => {
+                resolve()
+              })
+            } else {
+              // try pull the user out of local storage
+              const user = this.authContext.getAllAccounts()[0]
+              console.log('User: ', user)
+              store.dispatch(
+                'setUserAccountInfo',
+                user !== undefined ? user : null,
+              )
+              if (user !== undefined) {
+                localStorage.setItem('ripa_adal_user', JSON.stringify(user))
+              }
+              resolve()
+            }
+          })
         } catch (error) {
           localStorage.removeItem('ripa_adal_user')
           reject(error)
@@ -69,8 +77,8 @@ export default {
   },
 
   acquireToken() {
-    const account = this.authContext.getAllAccounts()[0]
-
+    const account = this.authContext.getAllAccounts()
+    console.log(account)
     return new Promise((resolve, reject) => {
       this.authContext.acquireTokenSilent(account, (error, token) => {
         if (error || !token) {

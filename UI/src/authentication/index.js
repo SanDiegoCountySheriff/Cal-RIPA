@@ -41,11 +41,13 @@ export default {
             this.authenticationContext.isCallback(window.location.hash) ||
             window.self !== window.top
           ) {
+            console.log('calling handleWindowCallback')
             // redirect to the location specified in the url params.
             this.authenticationContext.handleWindowCallback()
           } else {
             // try pull the user out of local storage
             const user = this.authenticationContext.getCachedUser()
+            console.log(user)
             store.dispatch('setUserAccountInfo', user)
             if (user !== null) {
               localStorage.setItem('ripa_adal_user', JSON.stringify(user))
