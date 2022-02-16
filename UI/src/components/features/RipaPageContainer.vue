@@ -252,6 +252,7 @@ export default {
       localStorage.removeItem('ripa_statutes')
       localStorage.removeItem('ripa_agency_questions')
       localStorage.removeItem('ripa_templates')
+      console.log('I am setting the ripa_cache_date')
       localStorage.setItem('ripa_cache_date', new Date())
     },
 
@@ -265,6 +266,7 @@ export default {
     },
 
     checkAuthentication() {
+      console.log('checking authentication in RipaPageContainer')
       if (this.isOnlineAndAuthenticated) {
         authentication.acquireToken().catch(error => {
           console.log(`acquireToken error: ${error}`)
@@ -308,9 +310,12 @@ export default {
     },
 
     async initPage() {
+      console.log('initing the page')
       if (this.isOnlineAndAuthenticated) {
+        console.log("lol they think we're online and authenticated")
         this.updateAuthenticatedData()
       } else {
+        console.log('lol they do NOT think we are online and authenticated')
         if (this.isValidCacheState()) {
           this.loading = true
           await this.getFormData()

@@ -16,10 +16,13 @@ axios.interceptors.request.use(
       return req
     } else {
       authentication.acquireToken().then(token => {
+        console.log('We got the token in the store', token)
         req.headers.Authorization = `Bearer ${token}`
+        console.log('Heres the req: ', req)
         return req
       })
     }
+    console.log('Heres the req outside ', req)
     return req
   },
   function (error) {
@@ -404,33 +407,60 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      if (value && value.profile) {
+      if (value) {
         let isAnAdmin = false
-        const roles = value.profile?.roles || []
+        const roles = value.idTokenClaims?.roles || []
         isAnAdmin = roles.filter(roleObj => {
           return roleObj === 'RIPA-ADMINS-ROLE'
         })
         let fullName
-        const firstName = value.profile.given_name
-        const lastName = value.profile.family_name
+        const firstName = value.idTokenClaims.given_name
+        const lastName = value.idTokenClaims.family_name
 
         if (state.apiConfig.useOfficerUpn) {
-          fullName = value.profile.upn.split('@')[0]
+          fullName = value.username.split('@')[0]
         } else {
           fullName = `${firstName} ${lastName}`
         }
-
         state.user = {
           ...state.user,
-          email: value.profile.email,
+          email: value.idTokenClaims.email,
           firstName,
           fullName,
           isAdmin: isAnAdmin.length > 0,
           isAuthenticated: true,
           lastName,
-          oid: value.profile.oid,
+          oid: value.idTokenClaims.oid,
         }
       }
+
+      // if (value && value.profile) {
+      //   let isAnAdmin = false
+      //   const roles = value.profile?.roles || []
+      //   isAnAdmin = roles.filter(roleObj => {
+      //     return roleObj === 'RIPA-ADMINS-ROLE'
+      //   })
+      //   let fullName
+      //   const firstName = value.profile.given_name
+      //   const lastName = value.profile.family_name
+
+      //   if (state.apiConfig.useOfficerUpn) {
+      //     fullName = value.profile.upn.split('@')[0]
+      //   } else {
+      //     fullName = `${firstName} ${lastName}`
+      //   }
+
+      //   state.user = {
+      //     ...state.user,
+      //     email: value.profile.email,
+      //     firstName,
+      //     fullName,
+      //     isAdmin: isAnAdmin.length > 0,
+      //     isAuthenticated: true,
+      //     lastName,
+      //     oid: value.profile.oid,
+      //   }
+      // }
     },
     updateUserProfile(state, value) {
       let yearsExperience = value.yearsExperience
@@ -1693,6 +1723,7 @@ export default new Vuex.Store({
     },
 
     setUserAccountInfo({ commit }, value) {
+      console.log('user account info from the store: ', value)
       commit('updateUserAccount', value)
     },
 

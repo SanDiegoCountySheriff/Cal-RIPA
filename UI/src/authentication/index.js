@@ -7,6 +7,7 @@ export default {
   clientId: null,
 
   async initialize() {
+    console.log('initializing authentication')
     await axios.get('/config.json').then(res => {
       const config = {
         tenant: res.data.Authentication.TenantId,
@@ -45,11 +46,12 @@ export default {
             // redirect to the location specified in the url params.
             this.authenticationContext.handleWindowCallback()
           } else {
+            console.log('not calling handleWindowCallback')
             // try pull the user out of local storage
             const user = this.authenticationContext.getCachedUser()
-            console.log(user)
             store.dispatch('setUserAccountInfo', user)
             if (user !== null) {
+              console.log('setting ripa_adal_user')
               localStorage.setItem('ripa_adal_user', JSON.stringify(user))
             }
             resolve()
@@ -63,6 +65,13 @@ export default {
   },
 
   acquireToken() {
+    console.log('acquiring the token')
+    this.authenticationContext.acquireToken(this.clientId, (error, token) => {
+      console.log(token)
+      if (error) {
+        console.log(error)
+      }
+    })
     return new Promise((resolve, reject) => {
       this.authenticationContext.acquireToken(this.clientId, (error, token) => {
         if (error || !token) {
@@ -75,23 +84,28 @@ export default {
   },
 
   acquireTokenRedirect() {
+    console.log('acquiring the token with redirect')
     this.authenticationContext.acquireTokenRedirect(this.clientId)
   },
 
   isAuthenticated() {
+    console.log('checking is authenticated')
     // getCachedToken will only return a valid, non-expired token.
     if (this.authenticationContext.getCachedToken(this.clientId)) {
+      console.log('it thinks I am authenticated')
       return true
     }
-
+    console.log('it does not think I am authenticated')
     return false
   },
 
   getUserProfile() {
+    console.log('getting the user profile')
     return this.authenticationContext.getCachedUser().profile
   },
 
   signIn() {
+    console.log('signing in')
     this.authenticationContext.login()
   },
 

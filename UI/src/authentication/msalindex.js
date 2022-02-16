@@ -6,8 +6,12 @@ export default {
   authContext: null,
   clientId: null,
   accountId: null,
+  localAccountId: null,
+  aud: null,
+  tenantId: null,
 
   async initialize() {
+    console.log('initializing authentication')
     await axios.get('/config.json').then(async res => {
       const msalConfig = {
         auth: {
@@ -24,6 +28,7 @@ export default {
         },
       }
 
+      this.tenantId = res.data.Authentication.TenantId
       const environmentName = res.data.Configuration?.Environment || 'DEV'
 
       store.dispatch('setApiConfig', {
@@ -41,35 +46,23 @@ export default {
 
       this.clientId = msalConfig.auth.clientId
       this.authContext = new msal.PublicClientApplication(msalConfig)
+
       return new Promise((resolve, reject) => {
         try {
-          // this.authContext.loginPopup({ scopes: ['User.ReadWrite'] })
-          // resolve()
-          let redirectPromiseResult
-          this.authContext.handleRedirectPromise().then(response => {
-            redirectPromiseResult = response
-
-            if (redirectPromiseResult !== null || window.self !== window.top) {
-              // redirect to the location specified in the url params.
-              this.authContext.handleRedirectPromise().then(() => {
-                resolve()
-              })
-            } else {
-              // try pull the user out of local storage
-              const user = this.authContext.getAllAccounts()[0]
-              console.log('User: ', user)
-              store.dispatch(
-                'setUserAccountInfo',
-                user !== undefined ? user : null,
-              )
-              if (user !== undefined) {
-                localStorage.setItem('ripa_adal_user', JSON.stringify(user))
-              }
-              resolve()
+          this.authContext.handleRedirectPromise().then(() => {
+            const account = this.authContext.getAllAccounts()[0]
+            if (account !== undefined) {
+              console.log('attempting to save user account info')
+              this.localAccountId = account.localAccountId
+              this.aud = account.idTokenClaims.aud
+              this.authContext.setActiveAccount(account)
+              store.dispatch('setUserAccountInfo', account)
+              localStorage.setItem('ripa_msal_user', JSON.stringify(account))
             }
+            resolve()
           })
         } catch (error) {
-          localStorage.removeItem('ripa_adal_user')
+          localStorage.removeItem('ripa_msal_user')
           reject(error)
         }
       })
@@ -77,37 +70,60 @@ export default {
   },
 
   acquireToken() {
-    const account = this.authContext.getAllAccounts()
-    console.log(account)
+    console.log('acquiring the token')
+
     return new Promise((resolve, reject) => {
-      this.authContext.acquireTokenSilent(account, (error, token) => {
-        if (error || !token) {
-          return reject(error)
-        } else {
-          return resolve(token)
-        }
-      })
+      const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
+      const tokenCache = this.authContext.getTokenCache()
+
+      if (tokenCache.storage.browserStorage.windowStorage[tokenStorageString]) {
+        return resolve(
+          JSON.parse(
+            tokenCache.storage.browserStorage.windowStorage[tokenStorageString],
+          ).secret,
+        )
+      } else {
+        const error = null
+        return reject(error)
+      }
     })
   },
 
   acquireTokenRedirect() {
+    console.log('acquiring the token with redirect')
     this.authContext.acquireTokenRedirect()
   },
 
   isAuthenticated() {
-    if (this.authContext.getTokenCache(this.clientId)) {
+    const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
+    console.log('checking is authenticated')
+    const tokenCache = this.authContext.getTokenCache()
+    const tokenString =
+      tokenCache.storage.browserStorage.windowStorage[tokenStorageString]
+
+    if (
+      tokenString !== undefined &&
+      JSON.parse(
+        tokenCache.storage.browserStorage.windowStorage[tokenStorageString],
+      ).secret !== null
+    ) {
       return true
     }
-
     return false
   },
 
   getUserProfile() {
+    console.log('getting the user profile')
     return this.authContext.getCachedUser().profile
   },
 
   signIn() {
-    this.authContext.loginPopup()
+    console.log('signing in')
+    console.log('authContext before sign in: ', this.authContext)
+    return new Promise((resolve, reject) => {
+      this.authContext.loginRedirect()
+      resolve()
+    })
   },
 
   signOut() {
