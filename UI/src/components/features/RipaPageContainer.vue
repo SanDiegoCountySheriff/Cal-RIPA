@@ -259,6 +259,7 @@ export default {
     async updateAuthenticatedData() {
       this.loading = true
       this.checkCache()
+      console.log('Getting User Data')
       await this.getUserData()
       await this.getFormData()
       this.isValidCache = true

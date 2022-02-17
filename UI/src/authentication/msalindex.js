@@ -71,22 +71,13 @@ export default {
 
   acquireToken() {
     console.log('acquiring the token')
-
-    return new Promise((resolve, reject) => {
-      const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
-      const tokenCache = this.authContext.getTokenCache()
-
-      if (tokenCache.storage.browserStorage.windowStorage[tokenStorageString]) {
-        return resolve(
-          JSON.parse(
-            tokenCache.storage.browserStorage.windowStorage[tokenStorageString],
-          ).secret,
-        )
-      } else {
-        const error = null
-        return reject(error)
-      }
-    })
+    const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
+    const tokenCache = this.authContext.getTokenCache()
+    if (tokenCache.storage.browserStorage.windowStorage[tokenStorageString]) {
+      return JSON.parse(
+        tokenCache.storage.browserStorage.windowStorage[tokenStorageString],
+      ).secret
+    }
   },
 
   acquireTokenRedirect() {
@@ -101,15 +92,12 @@ export default {
     const tokenString =
       tokenCache.storage.browserStorage.windowStorage[tokenStorageString]
 
-    if (
+    return (
       tokenString !== undefined &&
       JSON.parse(
         tokenCache.storage.browserStorage.windowStorage[tokenStorageString],
       ).secret !== null
-    ) {
-      return true
-    }
-    return false
+    )
   },
 
   getUserProfile() {
@@ -121,8 +109,12 @@ export default {
     console.log('signing in')
     console.log('authContext before sign in: ', this.authContext)
     return new Promise((resolve, reject) => {
-      this.authContext.loginRedirect()
-      resolve()
+      try {
+        this.authContext.loginRedirect()
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
     })
   },
 

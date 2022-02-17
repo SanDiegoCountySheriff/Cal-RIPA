@@ -15,15 +15,20 @@ axios.interceptors.request.use(
     if (req.url === '/config.json') {
       return req
     } else {
-      authentication.acquireToken().then(token => {
-        console.log('We got the token in the store', token)
-        req.headers.Authorization = `Bearer ${token}`
-        console.log('Heres the req: ', req)
-        return req
-      })
+      const token = authentication.acquireToken()
+      console.log('We got the token in the store: ', token)
+      req.headers.Authorization = `Bearer ${token}`
+      console.log('Heres the req: ', req)
+      return req
+      // authentication.acquireToken().then(token => {
+      //   console.log('We got the token in the store', token)
+      //   req.headers.Authorization = `Bearer ${token}`
+      //   console.log('Heres the req: ', req)
+      //   return req
+      // })
     }
-    console.log('Heres the req outside ', req)
-    return req
+    // console.log('Heres the req outside ', req)
+    // return req
   },
   function (error) {
     return Promise.reject(error)
