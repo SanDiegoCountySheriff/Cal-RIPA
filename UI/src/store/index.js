@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { pad } from '@/utilities/stop'
 import authentication from '@/authentication/msalindex'
+import { consensualEncounterResultingInSearch } from '../stories/molecules/RipaActionsTaken.stories'
 
 Vue.use(Vuex)
 
@@ -93,13 +94,16 @@ export default new Vuex.Store({
       return state.user.isAdmin
     },
     isAuthenticated: () => {
-      return authentication.isAuthenticated()
+      return authentication.isAuthenticated('isAuthenticated')
     },
     isOnline: state => {
       return state.isOnline
     },
     isOnlineAndAuthenticated: state => {
-      return state.isOnline && authentication.isAuthenticated()
+      return (
+        state.isOnline &&
+        authentication.isAuthenticated('isOnlineAndAuthenticated')
+      )
     },
     mappedAdminBeats: state => {
       return state.adminBeats

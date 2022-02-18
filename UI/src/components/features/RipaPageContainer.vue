@@ -169,14 +169,21 @@ export default {
 
     async getFormData() {
       if (this.displayBeatInput) {
-        await Promise.all([this.getFormBeats()])
+        await Promise.all([
+          this.getFormBeats(),
+          this.getFormCities(),
+          this.getFormSchools(),
+          this.getFormStatutes(),
+          this.getFormTemplates(),
+        ])
+      } else {
+        await Promise.all([
+          this.getFormCities(),
+          this.getFormSchools(),
+          this.getFormStatutes(),
+          this.getFormTemplates(),
+        ])
       }
-      await Promise.all([
-        this.getFormCities(),
-        this.getFormSchools(),
-        this.getFormStatutes(),
-        this.getFormTemplates(),
-      ])
     },
 
     getDarkFromLocalStorage() {

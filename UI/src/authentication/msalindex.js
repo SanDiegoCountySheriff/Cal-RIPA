@@ -28,7 +28,6 @@ export default {
         },
       }
 
-      this.tenantId = res.data.Authentication.TenantId
       const environmentName = res.data.Configuration?.Environment || 'DEV'
 
       store.dispatch('setApiConfig', {
@@ -44,7 +43,8 @@ export default {
         beatIdNumberOfDigits: res.data.Configuration.BeatIdNumberOfDigits || 0,
       })
 
-      this.clientId = msalConfig.auth.clientId
+      this.clientId = res.data.Authentication.ClientId
+      this.tenantId = res.data.Authentication.TenantId
       this.authContext = new msal.PublicClientApplication(msalConfig)
 
       return new Promise((resolve, reject) => {
@@ -85,9 +85,9 @@ export default {
     this.authContext.acquireTokenRedirect()
   },
 
-  isAuthenticated() {
+  isAuthenticated(location) {
     const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
-    console.log('checking is authenticated')
+    console.log('checking is authenticated from: ', location)
     const tokenCache = this.authContext.getTokenCache()
     const tokenString =
       tokenCache.storage.browserStorage.windowStorage[tokenStorageString]
