@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { pad } from '@/utilities/stop'
 import authentication from '@/authentication/msalindex'
-import { consensualEncounterResultingInSearch } from '../stories/molecules/RipaActionsTaken.stories'
 
 Vue.use(Vuex)
 
