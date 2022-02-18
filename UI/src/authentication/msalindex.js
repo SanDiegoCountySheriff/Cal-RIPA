@@ -4,7 +4,6 @@ import store from '@/store/index'
 
 export default {
   authContext: null,
-  clientId: null,
   accountId: null,
   localAccountId: null,
   aud: null,
@@ -29,6 +28,8 @@ export default {
       }
 
       const environmentName = res.data.Configuration?.Environment || 'DEV'
+      this.tenantId = res.data.Authentication.TenantId
+      this.authContext = new msal.PublicClientApplication(msalConfig)
 
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
@@ -43,10 +44,6 @@ export default {
         beatIdNumberOfDigits: res.data.Configuration.BeatIdNumberOfDigits || 0,
       })
 
-      this.clientId = res.data.Authentication.ClientId
-      this.tenantId = res.data.Authentication.TenantId
-      this.authContext = new msal.PublicClientApplication(msalConfig)
-
       return new Promise((resolve, reject) => {
         try {
           this.authContext.handleRedirectPromise().then(() => {
@@ -56,6 +53,7 @@ export default {
               this.localAccountId = account.localAccountId
               this.aud = account.idTokenClaims.aud
               this.authContext.setActiveAccount(account)
+
               store.dispatch('setUserAccountInfo', account)
               localStorage.setItem('ripa_msal_user', JSON.stringify(account))
             }
@@ -80,11 +78,6 @@ export default {
     }
   },
 
-  acquireTokenRedirect() {
-    console.log('acquiring the token with redirect')
-    this.authContext.acquireTokenRedirect()
-  },
-
   isAuthenticated(location) {
     const tokenStorageString = `${this.localAccountId}.${this.tenantId}-login.windows.net-idtoken-${this.aud}-${this.tenantId}---`
     console.log('checking is authenticated from: ', location)
@@ -100,26 +93,13 @@ export default {
     )
   },
 
-  getUserProfile() {
-    console.log('getting the user profile')
-    return this.authContext.getCachedUser().profile
-  },
-
   signIn() {
     console.log('signing in')
-    console.log('authContext before sign in: ', this.authContext)
-    return new Promise((resolve, reject) => {
-      try {
-        this.authContext.loginRedirect()
-        resolve()
-      } catch (error) {
-        reject(error)
-      }
-    })
+    this.authContext.loginRedirect()
   },
 
   signOut() {
-    localStorage.removeItem('ripa_adal_user')
-    this.authenticationContext.logOutRedirect()
+    localStorage.removeItem('ripa_msal_user')
+    this.authContext.logOutRedirect()
   },
 }

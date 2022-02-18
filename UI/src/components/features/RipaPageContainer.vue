@@ -281,26 +281,16 @@ export default {
         if (token === null) {
           this.handleLogin()
         }
-        // authentication.acquireToken().catch(error => {
-        //   console.log(`acquireToken error: ${error}`)
-        //   this.handleLogIn()
-        // })
       }
     },
 
     async updateConnectionStatusInStore() {
       if (navigator.onLine) {
-        // const _that = this
         const online = await this.isWebsiteReachable(this.getServerUrl())
         await this.updateConnectionStatus(online)
         await this.initPage()
         console.log('finished updating the connection status in store')
-        // this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
-        //   _that.updateConnectionStatus(online)
-        //   _that.initPage()
-        // })
-      } else {
-        // handle offline status
+      } else if (!navigator.onLine) {
         await this.updateConnectionStatus(false)
       }
     },
