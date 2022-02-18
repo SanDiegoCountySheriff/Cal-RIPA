@@ -70,7 +70,7 @@ export default {
   },
 
   isAuthenticated() {
-    return this.authContext.getActiveAccount() !== null
+    return !!this.authContext.getActiveAccount()
   },
 
   signIn() {
