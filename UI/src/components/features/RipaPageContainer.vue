@@ -1,4 +1,4 @@
-<template>
+<template v-if="dataReady">
   <ripa-page-wrapper
     :admin="isAdmin"
     :authenticated="isAuthenticated"
@@ -116,6 +116,7 @@ export default {
       snackbarText: '',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
+      dataReady: false,
     }
   },
 
@@ -269,23 +270,31 @@ export default {
     checkAuthentication() {
       console.log('checking authentication in RipaPageContainer')
       if (this.isOnlineAndAuthenticated) {
-        authentication.acquireToken().catch(error => {
-          console.log(`acquireToken error: ${error}`)
-          this.handleLogIn()
-        })
+        const token = authentication.acquireToken()
+        if (token === null) {
+          this.handleLogin()
+        }
+        // authentication.acquireToken().catch(error => {
+        //   console.log(`acquireToken error: ${error}`)
+        //   this.handleLogIn()
+        // })
       }
     },
 
-    updateConnectionStatusInStore() {
+    async updateConnectionStatusInStore() {
       if (navigator.onLine) {
-        const _that = this
-        this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
-          _that.updateConnectionStatus(online)
-          _that.initPage()
-        })
+        // const _that = this
+        const online = await this.isWebsiteReachable(this.getServerUrl())
+        await this.updateConnectionStatus(online)
+        await this.initPage()
+        console.log('finished updating the connection status in store')
+        // this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
+        //   _that.updateConnectionStatus(online)
+        //   _that.initPage()
+        // })
       } else {
         // handle offline status
-        this.updateConnectionStatus(false)
+        await this.updateConnectionStatus(false)
       }
     },
 
@@ -293,14 +302,13 @@ export default {
       return window.location.origin
     },
 
-    isWebsiteReachable(url) {
-      return fetch(url, { method: 'HEAD', mode: 'no-cors' })
-        .then(function (resp) {
-          return resp && (resp.ok || resp.type === 'opaque')
-        })
-        .catch(function (err) {
-          console.warn('[conn test failure]:', err)
-        })
+    async isWebsiteReachable(url) {
+      try {
+        const resp = await fetch(url, { method: 'HEAD', mode: 'no-cors' })
+        return resp && (resp.ok || resp.type === 'opaque')
+      } catch (err) {
+        console.warn('[conn test failure]:', err)
+      }
     },
 
     isValidCacheState() {
@@ -314,7 +322,7 @@ export default {
       console.log('initing the page')
       if (this.isOnlineAndAuthenticated) {
         console.log("lol they think we're online and authenticated")
-        this.updateAuthenticatedData()
+        await this.updateAuthenticatedData()
       } else {
         console.log('lol they do NOT think we are online and authenticated')
         if (this.isValidCacheState()) {
@@ -326,10 +334,13 @@ export default {
     },
   },
 
-  mounted() {
-    this.updateConnectionStatusInStore()
+  async mounted() {
+    console.log('mounting, and awaiting the data')
+    await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
+    console.log('The data is ready')
+    this.dataReady = true
   },
 
   beforeDestroy() {
