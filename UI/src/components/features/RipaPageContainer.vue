@@ -86,7 +86,7 @@ import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithError
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
-import authentication from '@/authentication/msalindex'
+import authentication from '@/authentication'
 
 export default {
   name: 'ripa-page-container',
@@ -260,14 +260,12 @@ export default {
       localStorage.removeItem('ripa_statutes')
       localStorage.removeItem('ripa_agency_questions')
       localStorage.removeItem('ripa_templates')
-      console.log('I am setting the ripa_cache_date')
       localStorage.setItem('ripa_cache_date', new Date())
     },
 
     async updateAuthenticatedData() {
       this.loading = true
       this.checkCache()
-      console.log('Getting User Data')
       await this.getUserData()
       await this.getFormData()
       this.isValidCache = true
@@ -275,7 +273,6 @@ export default {
     },
 
     checkAuthentication() {
-      console.log('checking authentication in RipaPageContainer')
       if (this.isOnlineAndAuthenticated) {
         const token = authentication.acquireToken()
         if (token === null) {
@@ -289,7 +286,6 @@ export default {
         const online = await this.isWebsiteReachable(this.getServerUrl())
         await this.updateConnectionStatus(online)
         await this.initPage()
-        console.log('finished updating the connection status in store')
       } else if (!navigator.onLine) {
         await this.updateConnectionStatus(false)
       }
@@ -316,12 +312,9 @@ export default {
     },
 
     async initPage() {
-      console.log('initing the page')
       if (this.isOnlineAndAuthenticated) {
-        console.log("lol they think we're online and authenticated")
         await this.updateAuthenticatedData()
       } else {
-        console.log('lol they do NOT think we are online and authenticated')
         if (this.isValidCacheState()) {
           this.loading = true
           await this.getFormData()
@@ -332,11 +325,9 @@ export default {
   },
 
   async mounted() {
-    console.log('mounting, and awaiting the data')
     await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
-    console.log('The data is ready')
     this.dataReady = true
   },
 

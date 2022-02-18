@@ -1,24 +1,29 @@
 import axios from 'axios'
-import AuthenticationContext from 'adal-angular/lib/adal.js'
+import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
 
 export default {
-  authenticationContext: null,
-  clientId: null,
+  authContext: null,
 
   async initialize() {
-    console.log('initializing authentication')
-    await axios.get('/config.json').then(res => {
-      const config = {
-        tenant: res.data.Authentication.TenantId,
-        clientId: res.data.Authentication.ClientId,
-        postLogoutRedirectUri: window.location.origin,
-        redirectUri: window.location.origin,
-        cacheLocation: 'localStorage',
-        loadFrameTimeout: 60000,
+    await axios.get('/config.json').then(async res => {
+      const msalConfig = {
+        auth: {
+          clientId: res.data.Authentication.ClientId,
+          authority: res.data.Authentication.AuthorityUrl,
+          redirectUri: window.location.origin,
+          postLogoutRedirectUri: window.location.origin,
+        },
+        cache: {
+          cacheLocation: 'localStorage',
+        },
+        system: {
+          loadFrameTimeout: 60000,
+        },
       }
 
       const environmentName = res.data.Configuration?.Environment || 'DEV'
+      this.authContext = new msal.PublicClientApplication(msalConfig)
 
       store.dispatch('setApiConfig', {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
@@ -33,84 +38,47 @@ export default {
         beatIdNumberOfDigits: res.data.Configuration.BeatIdNumberOfDigits || 0,
       })
 
-      this.clientId = config.clientId
-      this.authenticationContext = new AuthenticationContext(config)
-
       return new Promise((resolve, reject) => {
         try {
-          if (
-            this.authenticationContext.isCallback(window.location.hash) ||
-            window.self !== window.top
-          ) {
-            console.log('calling handleWindowCallback')
-            // redirect to the location specified in the url params.
-            this.authenticationContext.handleWindowCallback()
-          } else {
-            console.log('not calling handleWindowCallback')
-            // try pull the user out of local storage
-            const user = this.authenticationContext.getCachedUser()
-            store.dispatch('setUserAccountInfo', user)
-            if (user !== null) {
-              console.log('setting ripa_adal_user')
-              localStorage.setItem('ripa_adal_user', JSON.stringify(user))
+          this.authContext.handleRedirectPromise().then(() => {
+            const accounts = this.authContext.getAllAccounts()
+
+            if (accounts.length > 0) {
+              this.authContext.setActiveAccount(accounts[0])
+              store.dispatch('setUserAccountInfo', accounts[0])
+              localStorage.setItem(
+                'ripa_msal_user',
+                JSON.stringify(accounts[0]),
+              )
             }
+
             resolve()
-          }
+          })
         } catch (error) {
-          localStorage.removeItem('ripa_adal_user')
+          localStorage.removeItem('ripa_msal_user')
           reject(error)
         }
       })
     })
   },
 
-  acquireToken() {
-    console.log('acquiring the token')
-    this.authenticationContext.acquireToken(this.clientId, (error, token) => {
-      console.log(token)
-      if (error) {
-        console.log(error)
-      }
-    })
-    return new Promise((resolve, reject) => {
-      this.authenticationContext.acquireToken(this.clientId, (error, token) => {
-        if (error || !token) {
-          return reject(error)
-        } else {
-          return resolve(token)
-        }
-      })
-    })
-  },
-
-  acquireTokenRedirect() {
-    console.log('acquiring the token with redirect')
-    this.authenticationContext.acquireTokenRedirect(this.clientId)
+  async acquireToken() {
+    const token = await this.authContext.acquireTokenSilent(
+      this.authContext.getActiveAccount(),
+    )
+    return token.idToken
   },
 
   isAuthenticated() {
-    console.log('checking is authenticated')
-    // getCachedToken will only return a valid, non-expired token.
-    if (this.authenticationContext.getCachedToken(this.clientId)) {
-      console.log('it thinks I am authenticated')
-      return true
-    }
-    console.log('it does not think I am authenticated')
-    return false
-  },
-
-  getUserProfile() {
-    console.log('getting the user profile')
-    return this.authenticationContext.getCachedUser().profile
+    return this.authContext.getActiveAccount() !== null
   },
 
   signIn() {
-    console.log('signing in')
-    this.authenticationContext.login()
+    this.authContext.loginRedirect()
   },
 
   signOut() {
-    localStorage.removeItem('ripa_adal_user')
-    this.authenticationContext.logOut()
+    localStorage.removeItem('ripa_msal_user')
+    this.authContext.logOutRedirect()
   },
 }

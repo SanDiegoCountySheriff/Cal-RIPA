@@ -4,31 +4,21 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { pad } from '@/utilities/stop'
-import authentication from '@/authentication/msalindex'
+import authentication from '@/authentication'
 
 Vue.use(Vuex)
 
 // Setup Axios Response Interceptors
 // to add the authentication token to each header
 axios.interceptors.request.use(
-  req => {
+  async req => {
     if (req.url === '/config.json') {
       return req
     } else {
-      const token = authentication.acquireToken()
-      console.log('We got the token in the store: ', token)
+      const token = await authentication.acquireToken()
       req.headers.Authorization = `Bearer ${token}`
-      console.log('Heres the req: ', req)
       return req
-      // authentication.acquireToken().then(token => {
-      //   console.log('We got the token in the store', token)
-      //   req.headers.Authorization = `Bearer ${token}`
-      //   console.log('Heres the req: ', req)
-      //   return req
-      // })
     }
-    // console.log('Heres the req outside ', req)
-    // return req
   },
   function (error) {
     return Promise.reject(error)
@@ -93,16 +83,13 @@ export default new Vuex.Store({
       return state.user.isAdmin
     },
     isAuthenticated: () => {
-      return authentication.isAuthenticated('isAuthenticated')
+      return authentication.isAuthenticated()
     },
     isOnline: state => {
       return state.isOnline
     },
     isOnlineAndAuthenticated: state => {
-      return (
-        state.isOnline &&
-        authentication.isAuthenticated('isOnlineAndAuthenticated')
-      )
+      return state.isOnline && authentication.isAuthenticated()
     },
     mappedAdminBeats: state => {
       return state.adminBeats
@@ -1731,7 +1718,6 @@ export default new Vuex.Store({
     },
 
     setUserAccountInfo({ commit }, value) {
-      console.log('user account info from the store: ', value)
       commit('updateUserAccount', value)
     },
 
