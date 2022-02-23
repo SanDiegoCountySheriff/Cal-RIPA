@@ -67,7 +67,11 @@ namespace RIPA.Functions.Common.Models
         [EnumMember(Value = "Resubmitted")]
         Resubmitted,
         [EnumMember(Value = "Failed")]
-        Failed
+        Failed,
+        [EnumMember(Value = "Pending")]
+        Pending,
+        [EnumMember(Value = "Success")]
+        Success,
     }
 
     public class Stop
