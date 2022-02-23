@@ -19,6 +19,7 @@ export default {
         },
         system: {
           loadFrameTimeout: 60000,
+          // tokenRenewalOffsetSeconds: 6000000,
         },
       }
 
@@ -46,16 +47,11 @@ export default {
             if (accounts.length > 0) {
               this.authContext.setActiveAccount(accounts[0])
               store.dispatch('setUserAccountInfo', accounts[0])
-              localStorage.setItem(
-                'ripa_msal_user',
-                JSON.stringify(accounts[0]),
-              )
             }
 
             resolve()
           })
         } catch (error) {
-          localStorage.removeItem('ripa_msal_user')
           reject(error)
         }
       })
@@ -69,33 +65,12 @@ export default {
     return token.idToken
   },
 
-  async isAuthenticated() {
-    return new Promise((resolve, reject) => {
-      try {
-        const account = this.authContext.getActiveAccount()
-        if (account) {
-          this.authContext.acquireTokenSilent(account).then(response => {
-            if (response.idToken) {
-              resolve(true)
-            } else {
-              resolve(false)
-            }
-          })
-        } else {
-          resolve(false)
-        }
-      } catch (error) {
-        reject(error)
-      }
-    })
-    // console.log('trying to get the token')
-    // const token = await this.authContext.acquireTokenSilent(
-    //   this.authContext.getActiveAccount(),
-    // )
-    // console.log(token.idToken)
-    // return !!token.idToken
-
-    // return !!this.authContext.getActiveAccount()
+  isAuthenticated() {
+    const account = this.authContext.getActiveAccount()
+    if (!account) {
+      return false
+    }
+    return new Date(account.idTokenClaims.exp * 1000) > Date.now()
   },
 
   signIn() {
@@ -103,7 +78,6 @@ export default {
   },
 
   signOut() {
-    localStorage.removeItem('ripa_msal_user')
-    this.authContext.logOutRedirect()
+    this.authContext.logoutRedirect()
   },
 }
