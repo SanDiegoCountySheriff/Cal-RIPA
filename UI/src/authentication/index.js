@@ -69,8 +69,33 @@ export default {
     return token.idToken
   },
 
-  isAuthenticated() {
-    return !!this.authContext.getActiveAccount()
+  async isAuthenticated() {
+    return new Promise((resolve, reject) => {
+      try {
+        const account = this.authContext.getActiveAccount()
+        if (account) {
+          this.authContext.acquireTokenSilent(account).then(response => {
+            if (response.idToken) {
+              resolve(true)
+            } else {
+              resolve(false)
+            }
+          })
+        } else {
+          resolve(false)
+        }
+      } catch (error) {
+        reject(error)
+      }
+    })
+    // console.log('trying to get the token')
+    // const token = await this.authContext.acquireTokenSilent(
+    //   this.authContext.getActiveAccount(),
+    // )
+    // console.log(token.idToken)
+    // return !!token.idToken
+
+    // return !!this.authContext.getActiveAccount()
   },
 
   signIn() {
