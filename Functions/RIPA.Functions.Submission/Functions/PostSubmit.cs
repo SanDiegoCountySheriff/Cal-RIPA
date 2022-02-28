@@ -13,7 +13,6 @@ using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
@@ -30,25 +29,17 @@ namespace RIPA.Functions.Submission.Functions
     public class PostSubmit
     {
         private readonly ISftpService _sftpService;
-        private readonly IStopService _stopService;
         private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
-        private readonly string _sftpInputPath;
-        private readonly string _storageConnectionString;
-        private readonly string _storageContainerNamePrefix;
         private readonly ISubmissionServiceBusService _serviceBusService;
 
-        public PostSubmit(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
+        public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
         {
             _sftpService = sftpService;
-            _stopService = stopService;
             _submissionCosmosDbService = submissionCosmosDbService;
             _stopCosmosDbService = stopCosmosDbService;
             _userProfileCosmosDbService = userProfileCosmosDbService;
-            _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
-            _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
             _serviceBusService = serviceBusService;
         }
 
@@ -114,11 +105,6 @@ namespace RIPA.Functions.Submission.Functions
             SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, log);
             Guid submissionId;
 
-            if (!submissionUtilities.IsValidSFTPConnection())
-            {
-                return new BadRequestObjectResult("An error occurred connecting to DOJ SFTP service.");
-            }
-
             try
             {
                 List<string> errorList = submissionUtilities.ValidateStops(stopResponse);
@@ -158,8 +144,6 @@ namespace RIPA.Functions.Submission.Functions
         {
             public List<string> StopIds { get; set; }
         }
-
-
     }
 }
 

@@ -29,4 +29,9 @@ export const SUBMISSION_STATUSES = [
     value: 'Success',
     isEditable: false,
   },
+  {
+    text: 'Duplicate',
+    value: 'Duplicate',
+    isEditable: false,
+  },
 ]

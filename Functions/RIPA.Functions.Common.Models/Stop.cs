@@ -72,6 +72,8 @@ namespace RIPA.Functions.Common.Models
         Pending,
         [EnumMember(Value = "Success")]
         Success,
+        [EnumMember(Value = "Duplicate")]
+        Duplicate,
     }
 
     public class Stop

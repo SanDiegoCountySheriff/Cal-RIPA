@@ -1,11 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
@@ -15,6 +10,10 @@ using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
+using System;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
@@ -24,7 +23,7 @@ namespace RIPA.Functions.Submission.Functions
         private readonly IStopCosmosDbService _stopCosmosDbService;
         private readonly ISftpService _sftpService;
         private readonly IStopService _stopService;
-        ISubmissionServiceBusService _submissionServiceBusService;
+        readonly ISubmissionServiceBusService _submissionServiceBusService;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
         private readonly string _sftpInputPath;
@@ -44,74 +43,74 @@ namespace RIPA.Functions.Submission.Functions
         }
 
         [FunctionName("TimersSubmissionConsumer")]
-        public async Task Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("*/10 * * * * *")] TimerInfo myTimer, ILogger log)
         {
             Stopwatch runStopwatch = new Stopwatch();
             runStopwatch.Start();
 
             string runId = Guid.NewGuid().ToString();
-            
+
             log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
             ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
-            var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver); 
+            var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver);
 
             log.LogInformation($"Received message count: {messages.Count} : {runId}");
 
-            foreach (var m in messages)
+            foreach (var message in messages)
             {
                 Stopwatch stopStopwatch = new Stopwatch();
                 stopStopwatch.Start();
 
-                await serviceBusReceiver.RenewMessageLockAsync(m);
+                await serviceBusReceiver.RenewMessageLockAsync(message);
 
-                SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(m.Body));
+                SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(message.Body));
 
                 if (submissionMessage == null)
                 {
-                    await serviceBusReceiver.DeadLetterMessageAsync(m);
+                    await serviceBusReceiver.DeadLetterMessageAsync(message);
 
                     continue;
                 }
-                
-                //Get Stop
+
+                // Get Stop
                 Stop stop = await GetStop(log, submissionMessage.StopId, runId);
 
                 if (stop == null)
                 {
                     log.LogWarning($"Failed to find stop: {submissionMessage.StopId} : {runId}");
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
 
                 DateTime dateSubmitted = DateTime.UtcNow;
 
-                //Get File Name
+                // Get File Name
                 string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id, runId);
                 log.LogInformation($"Using filename: {fileName} : {runId}");
                 if (fileName == null)
                 {
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
 
-                //Get Doj Stop
+                // Get Doj Stop
                 DojStop dojStop = GetDojStop(log, stop, runId);
 
                 if (dojStop == null)
                 {
-                    //if the cast error fails report, retry the message
+                    // if the cast error fails report, retry the message
                     if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId, runId))
                     {
-                        await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                        await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                         continue;
                     }
                     else
                     {
-                        await serviceBusReceiver.CompleteMessageAsync(m); // message complete
+                        await serviceBusReceiver.CompleteMessageAsync(message); // message complete
 
                         continue;
                     }
@@ -123,7 +122,7 @@ namespace RIPA.Functions.Submission.Functions
                 if (bytes == null)
                 {
                     log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID} : {runId}");
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
@@ -132,16 +131,16 @@ namespace RIPA.Functions.Submission.Functions
                 if (!await UploadBlob(log, bytes, fileName, stop.Id, runId))
                 {
                     log.LogWarning($"Failed to upload blob: {stop.Id} : {runId}");
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
 
-                if (!UploadSftpFile(log, bytes, fileName, stop.Id, runId))
+                if (!await UploadSftpFile(log, bytes, fileName, stop.Id, runId, stop))
                 {
                     log.LogWarning($"Failed to upload to FTP: {stop.Id} : {runId}");
-                    await RemoveBlob(log, fileName, stop.Id, runId); //delete the blob to clean up the failed run
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    await RemoveBlob(log, fileName, stop.Id, runId); // delete the blob to clean up the failed run
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
 
@@ -150,13 +149,13 @@ namespace RIPA.Functions.Submission.Functions
                 if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
                 {
                     log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
-                    RemoveSftpFile(log, fileName, stop.Id, runId); //remove the file from the SFTP server so it doesnt get duplicated. 
-                    await serviceBusReceiver.AbandonMessageAsync(m); // allows for retry to occur. 
+                    RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated. 
+                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
 
-                await serviceBusReceiver.CompleteMessageAsync(m); // message complete
+                await serviceBusReceiver.CompleteMessageAsync(message); // message complete
 
                 stopStopwatch.Stop();
                 log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
@@ -297,7 +296,7 @@ namespace RIPA.Functions.Submission.Functions
             }
         }
 
-        private bool UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId)
+        private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Stop stop)
         {
             try
             {
@@ -308,6 +307,8 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId} : {runId}");
+                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
+                await _stopCosmosDbService.UpdateStopAsync(stop);
                 return false;
             }
         }
@@ -358,7 +359,7 @@ namespace RIPA.Functions.Submission.Functions
                 await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
                 return;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Failed to update stop submission error");
             }
