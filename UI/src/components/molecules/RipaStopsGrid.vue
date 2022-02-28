@@ -617,7 +617,7 @@ export default {
     },
     savedFilters: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }
