@@ -48,7 +48,7 @@ namespace RIPA.Functions.Submission
                 Key = Environment.GetEnvironmentVariable("SftpKey")
             };
 #if DEBUG
-            sftpConfig.Key = File.ReadAllText(@"C:\Users\jkellash\Desktop\lplp.ppk");
+            sftpConfig.Key = File.ReadAllText(@"/Users/jacobkellas/source/repos/lplp.ppk");
 #endif
             LoggerFactory loggerFactory = new LoggerFactory();
             return new SftpService(loggerFactory.CreateLogger(typeof(SftpService)), sftpConfig);
