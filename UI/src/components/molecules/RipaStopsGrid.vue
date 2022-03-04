@@ -262,8 +262,12 @@ export default {
       selectedErrorCodes: this.savedFilters.errorCodes
         ? this.savedFilters.errorCodes
         : [],
-      stopFromDate: null,
-      stopToDate: this.savedFilters.toDate ? this.savedFilters.toDate : null,
+      stopFromDate: this.savedFilters.stopFromDate
+        ? this.savedFilters.stopFromDate
+        : null,
+      stopToDate: this.savedFilters.stopToDate
+        ? this.savedFilters.stopToDate
+        : null,
       currentStatusFilter: this.savedFilters.status
         ? this.savedFilters.status
         : null,
@@ -346,8 +350,8 @@ export default {
       this.stops = this.items
       // if the user has a from date saved in session storage
       // this overrides any date checking
-      if (this.savedFilters.fromDate) {
-        this.stopFromDate = this.savedFilters.fromDate
+      if (this.savedFilters.stopFromDate) {
+        this.stopFromDate = this.savedFilters.stopFromDate
       } else {
         const currentDateInUTC = zonedTimeToUtc(new Date())
         const currentYear = getYear(new Date())
@@ -510,7 +514,7 @@ export default {
       // reset any selections
       this.selectedItems = []
       const filterData = {
-        offset: null,
+        // offset: null,
         limit: this.itemsPerPage,
         filters: {
           stopFromDate: this.stopFromDate,
@@ -528,7 +532,11 @@ export default {
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
-      this.currentPage = 1
+      if (!this.savedFilters.offset) {
+        this.currentPage = 1
+      } else {
+        this.currentPage = this.savedFilters.offset / this.itemsPerPage + 1
+      }
       this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {

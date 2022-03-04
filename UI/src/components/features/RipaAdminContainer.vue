@@ -92,6 +92,7 @@ export default {
       'mappedAdminHistoricalCpraReports',
       'mappedUser',
       'savedStopFilters',
+      'stopQueryData',
     ]),
   },
 
@@ -181,13 +182,19 @@ export default {
 
     handleRetrieveSavedFilters() {
       this.savedFilterState = this.savedStopFilters ?? {}
+      if (this.stopQueryData?.offset) {
+        this.savedFilterState = {
+          ...this.savedFilterState,
+          offset: this.stopQueryData.offset,
+        }
+      }
     },
 
     async handleRedoItemsPerPage(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await Promise.all([this.getAdminStops(pageData)])
+        await Promise.all([this.getAdminStops()])
         this.loading = false
       } else if (pageData.type === 'submission') {
         await Promise.all([this.getAdminSubmissions(pageData)])
@@ -221,7 +228,7 @@ export default {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await Promise.all([this.getAdminStops(pageData)])
+        await Promise.all([this.getAdminStops()])
       } else if (pageData.type === 'submission') {
         await Promise.all([this.getAdminSubmissions(pageData)])
       }
@@ -229,11 +236,10 @@ export default {
     },
 
     async handleAdminFiltering(filterData) {
-      console.log('filterData from handleAdminFiltering: ', filterData)
       this.loading = true
       if (filterData.type === 'stops') {
         this.setStopQueryData(filterData)
-        await Promise.all([this.getAdminStops(filterData)])
+        await Promise.all([this.getAdminStops()])
         this.loading = false
       } else if (filterData.type === 'submission') {
         await Promise.all([this.getAdminSubmissions(filterData)])

@@ -78,7 +78,7 @@ export default new Vuex.Store({
     piiServiceAvailable: true,
     personSearchAutomaticallySelected: false,
     propertySearchAutomaticallySelected: false,
-    stopQueryData: { filters: {} },
+    stopQueryData: null,
   },
 
   getters: {
@@ -312,7 +312,7 @@ export default new Vuex.Store({
       return state.propertySearchAutomaticallySelected
     },
     savedStopFilters: state => {
-      return state.stopQueryData.filters
+      return state.stopQueryData?.filters ? state.stopQueryData.filters : {}
     },
     stopQueryData: state => {
       return state.stopQueryData
@@ -546,13 +546,22 @@ export default new Vuex.Store({
       state.propertySearchAutomaticallySelected = value
     },
     updateSavedStopFilters(state, value) {
-      state.stopQueryData.filters = {
-        ...state.stopQueryData.filters,
-        ...value,
+      if (state.stopQueryData?.filters) {
+        state.stopQueryData.filters = {
+          ...state.stopQueryData.filters,
+          ...value,
+        }
+      } else {
+        state.stopQueryData = {
+          filters: { ...value },
+        }
       }
     },
     updateStopQueryData(state, value) {
-      state.stopQueryData = value
+      state.stopQueryData = {
+        ...state.stopQueryData,
+        ...value,
+      }
     },
   },
 
@@ -890,7 +899,7 @@ export default new Vuex.Store({
             const apiStop = response.data
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
-            // dispatch('getAdminStops')
+            dispatch('getAdminStops')
           }
           if (response.status !== 200) {
             const errorStop = {
@@ -1349,10 +1358,11 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }, queryData) {
+    getAdminStops({ commit, state }) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
+      const queryData = state.stopQueryData
       console.log('QueryData:', queryData)
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
