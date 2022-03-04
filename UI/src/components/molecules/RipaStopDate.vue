@@ -55,7 +55,7 @@
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
-            v-model="model.stopDate.stopInResponseToCfs"
+            v-model="model.stopDate.stopInResponseToCFS"
             label="Stop in response to Call for Service"
             :max-width="300"
             @input="handleInput"

@@ -11,7 +11,7 @@ export const sampleStop = {
     date: '2021-05-07',
     time: '10:18',
     duration: 30,
-    stopInResponseToCfs: false,
+    stopInResponseToCFS: false,
   },
   location: {
     isSchool: false,
@@ -98,7 +98,7 @@ export const onePersonFullStop = {
     date: '2021-05-07',
     time: '10:18',
     duration: 30,
-    stopInResponseToCfs: false,
+    stopInResponseToCFS: false,
   },
   location: {
     isSchool: true,
@@ -187,7 +187,7 @@ export const twoPersonFullStop = {
     date: '2021-05-07',
     time: '10:18',
     duration: 30,
-    stopInResponseToCfs: false,
+    stopInResponseToCFS: false,
   },
   location: {
     isSchool: true,
@@ -587,7 +587,7 @@ export const apiStops = [
     officerName: 'Steve Pietrek',
     stopDateTime: '2021-05-21T12:17:00.000Z',
     stopDuration: '45',
-    stopInResponseToCfs: false,
+    stopInResponseToCFS: false,
     time: '08:17',
   },
 ]
