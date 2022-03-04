@@ -1,16 +1,12 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
-using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
-using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.SFTP
@@ -37,11 +33,10 @@ namespace RIPA.Functions.Submission.Services.SFTP
                     return;
                 }
             }
-
             _config = sftpConfig;
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
             using MemoryStream stream = new MemoryStream(byteArray);
-            
+
             _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new Renci.SshNet.PrivateKeyFile(stream, _config.Password));
         }
 
@@ -51,7 +46,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             {
                 throw new Exception("sftp client disabled");
             }
-            
+
             if (_sftpClient != null && !_sftpClient.IsConnected)
             {
                 _sftpClient.Connect();
@@ -66,7 +61,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
                 {
                     _sftpClient.Disconnect();
                 }
-                
+
                 _sftpClient.Dispose();
             }
         }

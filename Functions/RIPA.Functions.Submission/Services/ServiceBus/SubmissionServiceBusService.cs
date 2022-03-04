@@ -1,11 +1,8 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Services.ServiceBus
@@ -13,6 +10,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
     public class SubmissionServiceBusService : ISubmissionServiceBusService
     {
         private readonly ServiceBusClient _serviceBusClient;
+        private readonly ServiceBusClientOptions _serviceBusClientOptions;
         private const int batchMessageCountLimit = 250;
         private readonly ILogger _log;
 
@@ -20,7 +18,11 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
 
         public SubmissionServiceBusService(string serviceBusConnection, string queueName, ILogger log)
         {
-            _serviceBusClient = new ServiceBusClient(serviceBusConnection);
+            _serviceBusClientOptions = new ServiceBusClientOptions();
+#if DEBUG
+            _serviceBusClientOptions.TransportType = ServiceBusTransportType.AmqpWebSockets;
+#endif
+            _serviceBusClient = new ServiceBusClient(serviceBusConnection, _serviceBusClientOptions);
             _log = log;
         }
 

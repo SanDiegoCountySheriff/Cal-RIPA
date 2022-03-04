@@ -3,9 +3,7 @@ using System;
 using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models
-
 {
-
     public class Submission
     {
         public Guid Id { get; set; }
@@ -67,11 +65,12 @@ namespace RIPA.Functions.Common.Models
         [EnumMember(Value = "Resubmitted")]
         Resubmitted,
         [EnumMember(Value = "Failed")]
-        Failed
+        Failed,
+        [EnumMember(Value = "Pending")]
+        Pending,
     }
 
     public class Stop
-
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
@@ -114,7 +113,6 @@ namespace RIPA.Functions.Common.Models
         public Telemetry Telemetry { get; set; }
         public AgencyQuestion[] ListAgencyQuestion { get; set; }
     }
-
 
     public class OfficerAssignment
     {
