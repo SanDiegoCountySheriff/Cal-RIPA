@@ -338,12 +338,15 @@ export default {
   props: {
     submissionId: {
       type: String,
+      default: '',
     },
     submission: {
       type: Object,
+      default: () => {},
     },
     loading: {
       type: Boolean,
+      default: false,
     },
   },
 }
