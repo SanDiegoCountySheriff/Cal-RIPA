@@ -45,7 +45,7 @@ import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import { mapGetters, mapActions } from 'vuex'
 
-import _ from 'lodash'
+// import _ from 'lodash'
 
 export default {
   name: 'ripa-admin-container',
@@ -91,6 +91,7 @@ export default {
       'mappedAdminCpraReportStats',
       'mappedAdminHistoricalCpraReports',
       'mappedUser',
+      'savedStopFilters',
     ]),
   },
 
@@ -115,6 +116,8 @@ export default {
       'createCpraReport',
       'downloadCpraReport',
       'getHistoricalCpraReports',
+      'setSavedStopFilters',
+      'setStopQueryData',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -164,35 +167,26 @@ export default {
 
     handleUpdateSavedFilter(val) {
       let updatedFilters
-      const sessionStorageFilters = sessionStorage.getItem('ripa_saved_filters')
-      if (sessionStorageFilters) {
+      const savedStopFilters = this.savedStopFilters
+      if (savedStopFilters) {
         updatedFilters = {
-          ...JSON.parse(sessionStorageFilters),
+          ...savedStopFilters,
           ...val,
         }
       } else {
         updatedFilters = val
       }
-      // if no filters in session storage, set new ones
-      sessionStorage.setItem(
-        'ripa_saved_filters',
-        JSON.stringify(updatedFilters),
-      )
+      this.setSavedStopFilters(updatedFilters)
     },
 
     handleRetrieveSavedFilters() {
-      if (sessionStorage.getItem('ripa_saved_filters')) {
-        // omit null values from the filters
-        this.savedFilterState = _.omitBy(
-          JSON.parse(sessionStorage.getItem('ripa_saved_filters')),
-          _.isNull,
-        )
-      }
+      this.savedFilterState = this.savedStopFilters ?? {}
     },
 
     async handleRedoItemsPerPage(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
+        this.setStopQueryData(pageData)
         await Promise.all([this.getAdminStops(pageData)])
         this.loading = false
       } else if (pageData.type === 'submission') {
@@ -226,6 +220,7 @@ export default {
     async handlePaginate(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
+        this.setStopQueryData(pageData)
         await Promise.all([this.getAdminStops(pageData)])
       } else if (pageData.type === 'submission') {
         await Promise.all([this.getAdminSubmissions(pageData)])
@@ -234,8 +229,10 @@ export default {
     },
 
     async handleAdminFiltering(filterData) {
+      console.log('filterData from handleAdminFiltering: ', filterData)
       this.loading = true
       if (filterData.type === 'stops') {
+        this.setStopQueryData(filterData)
         await Promise.all([this.getAdminStops(filterData)])
         this.loading = false
       } else if (filterData.type === 'submission') {

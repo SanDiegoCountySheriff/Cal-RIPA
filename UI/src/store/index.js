@@ -78,6 +78,7 @@ export default new Vuex.Store({
     piiServiceAvailable: true,
     personSearchAutomaticallySelected: false,
     propertySearchAutomaticallySelected: false,
+    stopQueryData: { filters: {} },
   },
 
   getters: {
@@ -310,6 +311,12 @@ export default new Vuex.Store({
     propertySearchAutomaticallySelected: state => {
       return state.propertySearchAutomaticallySelected
     },
+    savedStopFilters: state => {
+      return state.stopQueryData.filters
+    },
+    stopQueryData: state => {
+      return state.stopQueryData
+    },
   },
 
   mutations: {
@@ -537,6 +544,15 @@ export default new Vuex.Store({
     },
     updatePropertySearchAutomaticallySelected(state, value) {
       state.propertySearchAutomaticallySelected = value
+    },
+    updateSavedStopFilters(state, value) {
+      state.stopQueryData.filters = {
+        ...state.stopQueryData.filters,
+        ...value,
+      }
+    },
+    updateStopQueryData(state, value) {
+      state.stopQueryData = value
     },
   },
 
@@ -859,7 +875,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitOfficerStop({ commit, state }, stop) {
+    submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
@@ -874,6 +890,7 @@ export default new Vuex.Store({
             const apiStop = response.data
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
+            // dispatch('getAdminStops')
           }
           if (response.status !== 200) {
             const errorStop = {
@@ -1336,6 +1353,7 @@ export default new Vuex.Store({
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
+      console.log('QueryData:', queryData)
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
@@ -1726,6 +1744,14 @@ export default new Vuex.Store({
 
     setPropertySearchAutomaticallySelected({ commit }, value) {
       commit('updatePropertySearchAutomaticallySelected', value)
+    },
+
+    setSavedStopFilters({ commit }, value) {
+      commit('updateSavedStopFilters', value)
+    },
+
+    setStopQueryData({ commit }, value) {
+      commit('updateStopQueryData', value)
     },
   },
 
