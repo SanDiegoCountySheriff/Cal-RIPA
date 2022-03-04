@@ -201,14 +201,18 @@ export default {
       return Math.ceil(this.totalSubmissions / this.itemsPerPage)
     },
     calculateItemsTo() {
-      if (this.currentPage === this.getPaginationLength) {
+      if (this.totalSubmissions === 0) {
+        return 0
+      } else if (this.currentPage === this.getPaginationLength) {
         return this.totalSubmissions
       } else {
         return this.currentPage * this.itemsPerPage
       }
     },
     calculateItemsFrom() {
-      if (this.currentPage === 1) {
+      if (this.totalSubmissions === 0) {
+        return 0
+      } else if (this.currentPage === 1) {
         return this.currentPage
       } else {
         return (this.currentPage - 1) * this.itemsPerPage + 1
