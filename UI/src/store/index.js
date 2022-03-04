@@ -1593,7 +1593,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `http://localhost:7071/api/PostSubmit`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
           { stopIds: stops },
           {
             headers: {

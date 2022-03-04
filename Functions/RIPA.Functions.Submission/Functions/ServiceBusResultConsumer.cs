@@ -48,7 +48,7 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
                 await messageReceiver.DeadLetterAsync(lockToken);
             }
-            // Update stop to Success status
+
             await messageReceiver.CompleteAsync(lockToken);
         }
 
