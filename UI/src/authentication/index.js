@@ -19,7 +19,6 @@ export default {
         },
         system: {
           loadFrameTimeout: 60000,
-          // tokenRenewalOffsetSeconds: 6000000,
         },
       }
 
