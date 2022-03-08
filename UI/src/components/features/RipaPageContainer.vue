@@ -1,4 +1,4 @@
-<template>
+<template v-if="dataReady">
   <ripa-page-wrapper
     :admin="isAdmin"
     :authenticated="isAuthenticated"
@@ -116,6 +116,7 @@ export default {
       snackbarText: '',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
+      dataReady: false,
     }
   },
 
@@ -168,14 +169,21 @@ export default {
 
     async getFormData() {
       if (this.displayBeatInput) {
-        await Promise.all([this.getFormBeats()])
+        await Promise.all([
+          this.getFormBeats(),
+          this.getFormCities(),
+          this.getFormSchools(),
+          this.getFormStatutes(),
+          this.getFormTemplates(),
+        ])
+      } else {
+        await Promise.all([
+          this.getFormCities(),
+          this.getFormSchools(),
+          this.getFormStatutes(),
+          this.getFormTemplates(),
+        ])
       }
-      await Promise.all([
-        this.getFormCities(),
-        this.getFormSchools(),
-        this.getFormStatutes(),
-        this.getFormTemplates(),
-      ])
     },
 
     getDarkFromLocalStorage() {
@@ -266,23 +274,20 @@ export default {
 
     checkAuthentication() {
       if (this.isOnlineAndAuthenticated) {
-        authentication.acquireToken().catch(error => {
-          console.log(`acquireToken error: ${error}`)
-          this.handleLogIn()
-        })
+        const token = authentication.acquireToken()
+        if (token === null) {
+          this.handleLogin()
+        }
       }
     },
 
-    updateConnectionStatusInStore() {
+    async updateConnectionStatusInStore() {
       if (navigator.onLine) {
-        const _that = this
-        this.isWebsiteReachable(this.getServerUrl()).then(function (online) {
-          _that.updateConnectionStatus(online)
-          _that.initPage()
-        })
-      } else {
-        // handle offline status
-        this.updateConnectionStatus(false)
+        const online = await this.isWebsiteReachable(this.getServerUrl())
+        await this.updateConnectionStatus(online)
+        await this.initPage()
+      } else if (!navigator.onLine) {
+        await this.updateConnectionStatus(false)
       }
     },
 
@@ -290,14 +295,13 @@ export default {
       return window.location.origin
     },
 
-    isWebsiteReachable(url) {
-      return fetch(url, { method: 'HEAD', mode: 'no-cors' })
-        .then(function (resp) {
-          return resp && (resp.ok || resp.type === 'opaque')
-        })
-        .catch(function (err) {
-          console.warn('[conn test failure]:', err)
-        })
+    async isWebsiteReachable(url) {
+      try {
+        const resp = await fetch(url, { method: 'HEAD', mode: 'no-cors' })
+        return resp && (resp.ok || resp.type === 'opaque')
+      } catch (err) {
+        console.warn('[conn test failure]:', err)
+      }
     },
 
     isValidCacheState() {
@@ -309,7 +313,7 @@ export default {
 
     async initPage() {
       if (this.isOnlineAndAuthenticated) {
-        this.updateAuthenticatedData()
+        await this.updateAuthenticatedData()
       } else {
         if (this.isValidCacheState()) {
           this.loading = true
@@ -320,10 +324,11 @@ export default {
     },
   },
 
-  mounted() {
-    this.updateConnectionStatusInStore()
+  async mounted() {
+    await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
+    this.dataReady = true
   },
 
   beforeDestroy() {

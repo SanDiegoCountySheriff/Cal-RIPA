@@ -11,16 +11,14 @@ Vue.use(Vuex)
 // Setup Axios Response Interceptors
 // to add the authentication token to each header
 axios.interceptors.request.use(
-  req => {
+  async req => {
     if (req.url === '/config.json') {
       return req
     } else {
-      authentication.acquireToken().then(token => {
-        req.headers.Authorization = `Bearer ${token}`
-        return req
-      })
+      const token = await authentication.acquireToken()
+      req.headers.Authorization = `Bearer ${token}`
+      return req
     }
-    return req
   },
   function (error) {
     return Promise.reject(error)
@@ -411,31 +409,30 @@ export default new Vuex.Store({
       }
     },
     updateUserAccount(state, value) {
-      if (value && value.profile) {
+      if (value) {
         let isAnAdmin = false
-        const roles = value.profile?.roles || []
+        const roles = value.idTokenClaims?.roles || []
         isAnAdmin = roles.filter(roleObj => {
           return roleObj === 'RIPA-ADMINS-ROLE'
         })
         let fullName
-        const firstName = value.profile.given_name
-        const lastName = value.profile.family_name
+        const firstName = value.idTokenClaims.given_name
+        const lastName = value.idTokenClaims.family_name
 
         if (state.apiConfig.useOfficerUpn) {
-          fullName = value.profile.upn.split('@')[0]
+          fullName = value.username.split('@')[0]
         } else {
           fullName = `${firstName} ${lastName}`
         }
-
         state.user = {
           ...state.user,
-          email: value.profile.email,
+          email: value.idTokenClaims.email,
           firstName,
           fullName,
           isAdmin: isAnAdmin.length > 0,
           isAuthenticated: true,
           lastName,
-          oid: value.profile.oid,
+          oid: value.idTokenClaims.oid,
         }
       }
     },

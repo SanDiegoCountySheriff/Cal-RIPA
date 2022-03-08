@@ -614,7 +614,7 @@
         "type": "Microsoft.Common.TextBox",
         "label": "Application name",
         "defaultValue": "ripa",
-        "toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 charaters in length and must be globally unique.",
+        "toolTip": "This value has a limit of 10 characters and is combined with the Agency Abbreviation in the format '{app-name}-{abbreviation}', example: 'test-ripa'. The combined value cannot exceed 17 characters in length and must be globally unique.",
         "constraints": {
           "required": true,
           "regex": "[concat('^[a-z0-9-]{1,', string(sub(17, length(basics('agency_dropdown').abbreviation))), '}$')]",
@@ -627,7 +627,7 @@
         "type": "Microsoft.Common.OptionsGroup",
         "label": "System usage (environment)",
         "defaultValue": "Production",
-        "toolTip": "Please chose how this deployment will be used. Is this a production, qa or dev installation?",
+        "toolTip": "Please chose how this deployment will be used. Is this a production, QA or dev installation?",
         "constraints": {
           "allowedValues": [
             {
@@ -701,7 +701,7 @@
                 "name": "private_domain_kv",
                 "type": "Microsoft.KeyVault.KeyVaultCertificateSelector",
                 "visible": true,
-                "toolTip": "Select a certificate from an existing key vault. Or, you can upload a new certificate here too.",
+                "toolTip": "Select a certificate from an existing key vault, or you can upload a new certificate here, too.",
                 "label": "KeyVault certificates selection"
               },
               {
@@ -836,7 +836,7 @@
             "name": "auth_logout_url",
             "type": "Microsoft.Common.TextBox",
             "label": "Logout URL",
-            "toolTip": "This should point to a URL that clears a users seesion.",
+            "toolTip": "This should point to a URL that clears a user's session.",
             "constraints": {
               "required": false,
               "regex": "",

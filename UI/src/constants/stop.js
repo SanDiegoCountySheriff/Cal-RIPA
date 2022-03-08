@@ -19,4 +19,9 @@ export const SUBMISSION_STATUSES = [
     value: 'Unsubmitted',
     isEditable: true,
   },
+  {
+    text: 'Pending',
+    value: 'Pending',
+    isEditable: false,
+  },
 ]

@@ -1,14 +1,13 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.REST.Contracts;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.ResultServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions
@@ -49,6 +48,7 @@ namespace RIPA.Functions.Submission.Functions
                 log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
                 await messageReceiver.DeadLetterAsync(lockToken);
             }
+
             await messageReceiver.CompleteAsync(lockToken);
         }
 
@@ -70,6 +70,7 @@ namespace RIPA.Functions.Submission.Functions
                     FileName = fileLevelFatalError.FileName
                 };
 
+                // Determine if stop is a duplicate, if so update SubmissionStatus to duplicate.
                 await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
             }
         }
@@ -136,9 +137,6 @@ namespace RIPA.Functions.Submission.Functions
             public string FileName { get; set; }
             public string LeaRecordId { get; set; }
             public string ErrorList { get; set; }
-
         }
-
-
     }
 }

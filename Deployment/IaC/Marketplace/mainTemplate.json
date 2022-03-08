@@ -425,7 +425,7 @@
     },
     "policyCont_d": {
       "type": "string",
-      "defaultValue": "/.well-known/openid-configuration\" /><audiences><audience>"
+      "defaultValue": "/v2.0/.well-known/openid-configuration\" /><audiences><audience>"
     },
     "policyCont_e": {
       "type": "string",
