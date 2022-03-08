@@ -1,6 +1,5 @@
 <template>
   <v-text-field
-    class="left-align"
     v-model="model"
     :label="label"
     :rules="rules"
@@ -71,7 +70,7 @@ export default {
   color: transparent;
   background: transparent;
 }
-.left-align input {
+input::-webkit-date-and-time-value {
   text-align: left;
 }
 </style>

@@ -381,7 +381,8 @@ yarn-error.log*
 Functions/RIPA.Functions.Stop/Properties/launchSettings.json
 UI/package-lock.json
 
-Functions/__blobstorage__/728759ce-7a05-46ff-96e1-248cdff4b0de
+Functions/__blobstorage__/
+Functions/__queuestorage__/
 Functions/.vscode/extensions.json
 Functions/.vscode/launch.json
 Functions/.vscode/settings.json

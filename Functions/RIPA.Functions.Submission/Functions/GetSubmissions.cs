@@ -111,7 +111,7 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
-            var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c");
+            var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c {where}");
 
             List<object> list = new List<object>() { };
 

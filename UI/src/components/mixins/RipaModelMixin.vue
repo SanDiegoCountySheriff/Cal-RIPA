@@ -83,7 +83,7 @@ export default {
           date: newValue.stopDate?.date || format(new Date(), 'yyyy-MM-dd'),
           time: newValue.stopDate?.time || format(new Date(), 'kk:mm'),
           duration: newValue.stopDate?.duration || null,
-          stopInResponseToCfs: newValue.stopDate?.stopInResponseToCfs || false,
+          stopInResponseToCFS: newValue.stopDate?.stopInResponseToCFS || false,
         },
         stopReason: {
           reasonForStop: newValue.stopReason?.reasonForStop || null,

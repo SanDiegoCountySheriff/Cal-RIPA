@@ -33,16 +33,16 @@ export default {
     RipaFormSummary,
   },
 
+  methods: {
+    formatStopDate(date) {
+      return format(new Date(date), 'MM-dd-yyyy HH:mm')
+    },
+  },
+
   props: {
     items: {
       type: Array,
       default: () => [],
-    },
-  },
-
-  methods: {
-    formatStopDate(date) {
-      return format(new Date(date), 'MM-dd-yyyy HH:mm')
     },
   },
 }
