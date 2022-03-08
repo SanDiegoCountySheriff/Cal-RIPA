@@ -144,7 +144,9 @@ export default {
       }
       if (tabIndex === '/admin/stops') {
         this.handleRetrieveSavedFilters()
-        await Promise.all([this.getAdminStops()])
+        if (!this.mappedAdminStops.stops) {
+          await Promise.all([this.getAdminStops()])
+        }
       }
       if (tabIndex === '/admin/users') {
         await Promise.all([this.getAdminUsers()])
@@ -238,6 +240,7 @@ export default {
     async handleAdminFiltering(filterData) {
       this.loading = true
       if (filterData.type === 'stops') {
+        alert('This is where we should reset pagination')
         this.setStopQueryData(filterData)
         await Promise.all([this.getAdminStops()])
         this.loading = false

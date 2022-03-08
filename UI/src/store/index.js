@@ -1360,15 +1360,14 @@ export default new Vuex.Store({
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
       const queryData = state.stopQueryData
-      console.log('QueryData:', queryData)
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
+          !queryData.offset ? 0 : queryData.offset
         }`
         // if you send an items per page, set it, otherwise just default to 10
         queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
+          !queryData.limit ? 10 : queryData.limit
         }`
 
         if (queryData.filters) {
@@ -1387,7 +1386,7 @@ export default new Vuex.Store({
           }
 
           if (
-            queryData.filters.status !== null &&
+            !!queryData.filters.status &&
             queryData.filters.status.length > 0
           ) {
             let statusParameters = ''
