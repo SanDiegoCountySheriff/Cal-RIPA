@@ -194,7 +194,7 @@
                 v-model="itemsPerPage"
                 :items="itemsPerPageOptions"
                 label="Items per page"
-                @input="handleUpdateItemsPerPage"
+                @input="handleFilter"
                 class="itemsPerPageSelector"
               ></v-combobox>
             </div>
@@ -381,22 +381,6 @@ export default {
         this.handleFilter()
       }
     },
-
-    handleUpdateItemsPerPage(val) {
-      this.itemsPerPage = val
-      // calculate the page you SHOULD be on with the new items per page
-      const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
-      this.currentPage = newPage
-      this.$emit('redoItemsPerPage', {
-        type: 'stops',
-        limit: this.itemsPerPage,
-        offset: this.itemsPerPage * (newPage - 1),
-        filters: this.getFilterStatus,
-      })
-      this.$emit('handleUpdateSavedFilter', {
-        itemsPerPage: val,
-      })
-    },
     handleNextPage() {
       // the pagination component updates the current page
       // BEFORE these are called but this math is based on the
@@ -463,50 +447,29 @@ export default {
     },
     fromDateChange(val) {
       this.stopFromDate = val
-      this.$emit('handleUpdateSavedFilter', {
-        fromDate: val,
-      })
       this.handleFilter()
     },
     toDateChange(val) {
       this.stopToDate = val
-      this.$emit('handleUpdateSavedFilter', {
-        toDate: val,
-      })
       this.handleFilter()
     },
     statusChange(val) {
       this.currentStatusFilter = val
-      this.$emit('handleUpdateSavedFilter', {
-        status: val,
-      })
       this.handleFilter()
     },
     piiChange(val) {
       if (!val) {
         this.isPiiFound = null
-        this.$emit('handleUpdateSavedFilter', {
-          isPiiFound: null,
-        })
       } else {
         this.isPiiFound = true
-        this.$emit('handleUpdateSavedFilter', {
-          isPiiFound: true,
-        })
       }
       this.handleFilter()
     },
     isEditedChange(val) {
       if (!val) {
         this.isEdited = null
-        this.$emit('handleUpdateSavedFilter', {
-          isEdited: null,
-        })
       } else {
         this.isEdited = true
-        this.$emit('handleUpdateSavedFilter', {
-          isEdited: true,
-        })
       }
       this.handleFilter()
     },
@@ -520,7 +483,6 @@ export default {
       // reset any selections
       this.selectedItems = []
       const filterData = {
-        // offset: null,
         limit: this.itemsPerPage,
         filters: {
           stopFromDate: this.stopFromDate,
@@ -588,7 +550,7 @@ export default {
         this.callErrorCodeSearch(val)
       }
     },
-    errorCodeSearch(val) {
+    errorCodeSearch() {
       this.errorCodesLoading = false
     },
     sortDesc: function (newValue, oldValue) {
@@ -601,10 +563,8 @@ export default {
         }
       }
     },
-    selectedErrorCodes(newValue) {
-      this.$emit('handleUpdateSavedFilter', {
-        errorCodes: newValue,
-      })
+    selectedErrorCodes() {
+      this.handleFilter()
     },
     savedFilters(newValue) {
       if (!newValue?.offset) {

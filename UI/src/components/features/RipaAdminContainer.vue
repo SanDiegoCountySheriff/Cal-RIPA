@@ -213,7 +213,7 @@ export default {
     async handlePaginate(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
-        await this.setStopQueryData(pageData)
+        this.setStopQueryData(pageData)
         await this.getAdminStops()
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
@@ -228,7 +228,6 @@ export default {
           filterData.offset = 0
         }
         this.setStopQueryData(filterData)
-        // this.handleRetrieveSavedFilters()
         await this.getAdminStops()
         this.loading = false
         this.setResetPagination(true)
