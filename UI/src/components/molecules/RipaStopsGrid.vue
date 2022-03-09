@@ -173,6 +173,9 @@
             >
               mdi-pencil
             </v-icon>
+            <v-icon v-else small class="tw-mr-2" @click="viewItem(item)"
+              >mdi-eye-arrow-right</v-icon
+            >
           </template>
           <template v-slot:footer>
             <div v-if="items.stops" class="paginationWrapper">
@@ -439,6 +442,9 @@ export default {
 
     editItem(item) {
       this.handleEditStopByAdmin(item, window.location.pathname)
+    },
+    viewItem(item) {
+      this.handleViewStopByAdmin(item, window.location.pathname)
     },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true
