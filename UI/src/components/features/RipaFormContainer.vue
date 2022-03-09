@@ -202,6 +202,7 @@ export default {
       'setUserFavoriteLocations',
       'setUserFavoriteReasons',
       'setUserFavoriteResults',
+      'setResetPagination',
     ]),
 
     handleSaveUser(user) {

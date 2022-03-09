@@ -250,32 +250,34 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isPiiFound: this.savedFilters.isPiiFound
-        ? this.savedFilters.isPiiFound
+      isPiiFound: this.savedFilters?.filters.isPiiFound
+        ? this.savedFilters?.filters.isPiiFound
         : null,
-      isEdited: this.savedFilters.isEdited ? this.savedFilters.isEdited : null,
-      errorsFound: this.savedFilters.isEdited
-        ? this.savedFilters.isEdited
+      isEdited: this.savedFilters?.filters.isEdited
+        ? this.savedFilters?.filters.isEdited
+        : null,
+      errorsFound: this.savedFilters?.filters.isEdited
+        ? this.savedFilters?.filters.isEdited
         : null,
       officerName: null,
       selectedItems: [],
-      selectedErrorCodes: this.savedFilters.errorCodes
-        ? this.savedFilters.errorCodes
+      selectedErrorCodes: this.savedFilters?.filters.errorCodes
+        ? this.savedFilters?.filters.errorCodes
         : [],
-      stopFromDate: this.savedFilters.stopFromDate
-        ? this.savedFilters.stopFromDate
+      stopFromDate: this.savedFilters?.filters.stopFromDate
+        ? this.savedFilters?.filters.stopFromDate
         : null,
-      stopToDate: this.savedFilters.stopToDate
-        ? this.savedFilters.stopToDate
+      stopToDate: this.savedFilters?.filters.stopToDate
+        ? this.savedFilters?.filters.stopToDate
         : null,
-      currentStatusFilter: this.savedFilters.status
-        ? this.savedFilters.status
+      currentStatusFilter: this.savedFilters?.filters.status
+        ? this.savedFilters?.filters.status
         : null,
       statuses: SUBMISSION_STATUSES,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
-      itemsPerPage: this.savedFilters.itemsPerPage
-        ? this.savedFilters.itemsPerPage
+      itemsPerPage: this.savedFilters?.filters.itemsPerPage
+        ? this.savedFilters?.filters.itemsPerPage
         : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
@@ -354,8 +356,8 @@ export default {
       this.stops = this.items
       // if the user has a from date saved in session storage
       // this overrides any date checking
-      if (this.savedFilters.stopFromDate) {
-        this.stopFromDate = this.savedFilters.stopFromDate
+      if (this.savedFilters?.filters.stopFromDate) {
+        this.stopFromDate = this.savedFilters?.filters.stopFromDate
       } else {
         const currentDateInUTC = zonedTimeToUtc(new Date())
         const currentYear = getYear(new Date())
@@ -370,9 +372,9 @@ export default {
           this.handleFilter()
         }
       }
-      if (!_.isEmpty(this.savedFilters)) {
-        if (this.savedFilters.errorCodes) {
-          this.savedFilters.errorCodes.forEach(errorCodeVal => {
+      if (!_.isEmpty(this.savedFilters?.filters)) {
+        if (this.savedFilters?.filters.errorCodes) {
+          this.savedFilters?.filters.errorCodes.forEach(errorCodeVal => {
             this.callErrorCodeSearch(errorCodeVal)
           })
         }
@@ -536,12 +538,12 @@ export default {
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
-      if (!this.savedFilters.offset) {
+      this.$emit('handleAdminStopsFiltering', filterData)
+      if (!this.savedFilters?.offset) {
         this.currentPage = 1
       } else {
-        this.currentPage = this.savedFilters.offset / this.itemsPerPage + 1
+        this.currentPage = this.savedFilters?.offset / this.itemsPerPage + 1
       }
-      this.$emit('handleAdminStopsFiltering', filterData)
     },
     handleSubmitAll() {
       const filterData = {
@@ -603,6 +605,13 @@ export default {
       this.$emit('handleUpdateSavedFilter', {
         errorCodes: newValue,
       })
+    },
+    savedFilters(newValue) {
+      if (!newValue?.offset) {
+        this.currentPage = 1
+      } else {
+        this.currentPage = newValue.offset / this.itemsPerPage + 1
+      }
     },
   },
 

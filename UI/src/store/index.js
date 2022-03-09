@@ -77,6 +77,7 @@ export default new Vuex.Store({
     personSearchAutomaticallySelected: false,
     propertySearchAutomaticallySelected: false,
     stopQueryData: null,
+    resetPagination: true,
   },
 
   getters: {
@@ -309,11 +310,11 @@ export default new Vuex.Store({
     propertySearchAutomaticallySelected: state => {
       return state.propertySearchAutomaticallySelected
     },
-    savedStopFilters: state => {
-      return state.stopQueryData?.filters ? state.stopQueryData.filters : {}
-    },
     stopQueryData: state => {
       return state.stopQueryData
+    },
+    resetPagination: state => {
+      return state.resetPagination
     },
   },
 
@@ -542,23 +543,14 @@ export default new Vuex.Store({
     updatePropertySearchAutomaticallySelected(state, value) {
       state.propertySearchAutomaticallySelected = value
     },
-    updateSavedStopFilters(state, value) {
-      if (state.stopQueryData?.filters) {
-        state.stopQueryData.filters = {
-          ...state.stopQueryData.filters,
-          ...value,
-        }
-      } else {
-        state.stopQueryData = {
-          filters: { ...value },
-        }
-      }
-    },
     updateStopQueryData(state, value) {
       state.stopQueryData = {
         ...state.stopQueryData,
         ...value,
       }
+    },
+    updateResetPagination(state, value) {
+      state.resetPagination = value
     },
   },
 
@@ -1752,12 +1744,12 @@ export default new Vuex.Store({
       commit('updatePropertySearchAutomaticallySelected', value)
     },
 
-    setSavedStopFilters({ commit }, value) {
-      commit('updateSavedStopFilters', value)
-    },
-
     setStopQueryData({ commit }, value) {
       commit('updateStopQueryData', value)
+    },
+
+    setResetPagination({ commit }, value) {
+      commit('updateResetPagination', value)
     },
   },
 

@@ -545,9 +545,7 @@ export default {
       this.fullStop = null
       if (route) {
         if (route === '/admin') {
-          alert('This is where we should save the pagination')
-        } else {
-          alert(route, 'We should reset pagination')
+          this.setResetPagination(false)
         }
         this.$router.push(route)
       }

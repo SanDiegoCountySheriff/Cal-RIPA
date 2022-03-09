@@ -19,7 +19,7 @@
       :on-upload-users="handleUploadUsers"
       :on-upload-domain="handleUploadDomain"
       :on-tab-change="handleTabChange"
-      :savedFilters="savedFilterState"
+      :savedFilters="stopQueryData"
       :historicalCpraReports="mappedAdminHistoricalCpraReports"
       :cpraReportStats="mappedAdminCpraReportStats"
       @handleCallErrorCodeSearch="handleCallErrorCodeSearch"
@@ -45,8 +45,6 @@ import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import { mapGetters, mapActions } from 'vuex'
 
-// import _ from 'lodash'
-
 export default {
   name: 'ripa-admin-container',
 
@@ -60,7 +58,6 @@ export default {
       loading: false,
       snackbarText: null,
       snackbarVisible: false,
-      savedFilterState: {},
     }
   },
 
@@ -91,8 +88,8 @@ export default {
       'mappedAdminCpraReportStats',
       'mappedAdminHistoricalCpraReports',
       'mappedUser',
-      'savedStopFilters',
       'stopQueryData',
+      'resetPagination',
     ]),
   },
 
@@ -117,8 +114,8 @@ export default {
       'createCpraReport',
       'downloadCpraReport',
       'getHistoricalCpraReports',
-      'setSavedStopFilters',
       'setStopQueryData',
+      'setResetPagination',
     ]),
 
     async handleCallErrorCodeSearch(val) {
@@ -131,38 +128,40 @@ export default {
         tabIndex === '/admin/submissions' &&
         !this.$route.params.submissionId
       ) {
-        this.handleRetrieveSavedFilters()
-        await Promise.all([this.getAdminSubmissions()])
+        await this.getAdminSubmissions()
       }
       if (
         tabIndex === '/admin/submissions' &&
         this.$route.params.submissionId
       ) {
-        await Promise.all([
-          this.getAdminSubmission({ id: this.$route.params.submissionId }),
-        ])
+        await this.getAdminSubmission({ id: this.$route.params.submissionId })
       }
       if (tabIndex === '/admin/stops') {
-        this.handleRetrieveSavedFilters()
         if (!this.mappedAdminStops.stops) {
-          await Promise.all([this.getAdminStops()])
+          await this.getAdminStops()
         }
       }
       if (tabIndex === '/admin/users') {
-        await Promise.all([this.getAdminUsers()])
+        await this.getAdminUsers()
       }
       if (tabIndex === '/admin/domains') {
         if (this.displayBeatInput) {
-          await Promise.all([this.getAdminBeats()])
+          await Promise.all([
+            this.getAdminBeats(),
+            this.getAdminCities(),
+            this.getAdminSchools(),
+            this.getAdminStatutes(),
+          ])
+        } else {
+          await Promise.all([
+            this.getAdminCities(),
+            this.getAdminSchools(),
+            this.getAdminStatutes(),
+          ])
         }
-        await Promise.all([
-          this.getAdminCities(),
-          this.getAdminSchools(),
-          this.getAdminStatutes(),
-        ])
       }
       if (tabIndex === '/admin/cpra') {
-        await Promise.all([this.getHistoricalCpraReports()])
+        await this.getHistoricalCpraReports()
       }
 
       this.loading = false
@@ -170,69 +169,54 @@ export default {
 
     handleUpdateSavedFilter(val) {
       let updatedFilters
-      const savedStopFilters = this.savedStopFilters
+      const savedStopFilters = this.stopQueryData?.filters ?? null
       if (savedStopFilters) {
         updatedFilters = {
-          ...savedStopFilters,
-          ...val,
+          filters: { ...savedStopFilters, ...val },
         }
       } else {
-        updatedFilters = val
+        updatedFilters = { filters: val }
       }
-      this.setSavedStopFilters(updatedFilters)
-    },
-
-    handleRetrieveSavedFilters() {
-      this.savedFilterState = this.savedStopFilters ?? {}
-      if (this.stopQueryData?.offset) {
-        this.savedFilterState = {
-          ...this.savedFilterState,
-          offset: this.stopQueryData.offset,
-        }
-      }
+      this.setStopQueryData(updatedFilters)
     },
 
     async handleRedoItemsPerPage(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await Promise.all([this.getAdminStops()])
+        await this.getAdminStops()
         this.loading = false
       } else if (pageData.type === 'submission') {
-        await Promise.all([this.getAdminSubmissions(pageData)])
+        await this.getAdminSubmissions(pageData)
         this.loading = false
       }
     },
 
     async handleSubmissionDetailItemsPerPage(pageData) {
       this.loading = true
-      await Promise.all([
-        this.getAdminSubmission({
-          id: pageData.id,
-          ...pageData,
-        }),
-      ])
+      await this.getAdminSubmission({
+        id: pageData.id,
+        ...pageData,
+      })
       this.loading = false
     },
 
     async handleSubmissionDetailPaginate(pageData) {
       this.loading = true
-      await Promise.all([
-        this.getAdminSubmission({
-          id: pageData.submissionId,
-          ...pageData,
-        }),
-      ])
+      await this.getAdminSubmission({
+        id: pageData.submissionId,
+        ...pageData,
+      })
       this.loading = false
     },
 
     async handlePaginate(pageData) {
       this.loading = true
       if (pageData.type === 'stops') {
-        this.setStopQueryData(pageData)
-        await Promise.all([this.getAdminStops()])
+        await this.setStopQueryData(pageData)
+        await this.getAdminStops()
       } else if (pageData.type === 'submission') {
-        await Promise.all([this.getAdminSubmissions(pageData)])
+        await this.getAdminSubmissions(pageData)
       }
       this.loading = false
     },
@@ -240,39 +224,41 @@ export default {
     async handleAdminFiltering(filterData) {
       this.loading = true
       if (filterData.type === 'stops') {
-        alert('This is where we should reset pagination')
+        if (this.resetPagination) {
+          filterData.offset = 0
+        }
         this.setStopQueryData(filterData)
-        await Promise.all([this.getAdminStops()])
+        // this.handleRetrieveSavedFilters()
+        await this.getAdminStops()
         this.loading = false
+        this.setResetPagination(true)
       } else if (filterData.type === 'submission') {
-        await Promise.all([this.getAdminSubmissions(filterData)])
+        await this.getAdminSubmissions(filterData)
         this.loading = false
       }
     },
 
     async handleDeleteBeat(beat) {
       this.loading = true
-      await Promise.all([this.deleteBeat(beat)])
+      await this.deleteBeat(beat)
       this.loading = false
     },
 
     async handleEditBeat(beat) {
       this.loading = true
-      await Promise.all([this.editBeat(beat)])
+      await this.editBeat(beat)
       this.loading = false
     },
 
     async handleEditUser(user) {
       this.loading = true
-      await Promise.all([this.editUser(user)])
+      await this.editUser(user)
       this.loading = false
     },
 
     async handleUploadUsers(usersFile, usersAgency) {
       this.loading = true
-      const result = await Promise.all([
-        this.uploadUsers({ usersFile, usersAgency }),
-      ])
+      const result = await this.uploadUsers({ usersFile, usersAgency })
       this.loading = false
       this.snackbarText = result[0]
       this.snackbarVisible = true
@@ -280,7 +266,7 @@ export default {
 
     async handleUploadDomain(domainFile) {
       this.loading = true
-      const result = await Promise.all([this.uploadDomain(domainFile)])
+      const result = await this.uploadDomain(domainFile)
       this.loading = false
       this.snackbarText = result[0]
       this.snackbarVisible = true
@@ -288,9 +274,7 @@ export default {
 
     async handleCreateCpraReport(reportParameters) {
       this.loading = true
-      const result = await Promise.all([
-        this.createCpraReport(reportParameters),
-      ])
+      const result = await this.createCpraReport(reportParameters)
       this.loading = false
       this.snackbarText = result[0]
       this.snackbarVisible = true
@@ -298,7 +282,7 @@ export default {
 
     async handleDownloadCpraReport(fileName) {
       this.loading = true
-      const result = await Promise.all([this.downloadCpraReport(fileName)])
+      const result = await this.downloadCpraReport(fileName)
       this.loading = false
       this.snackbarText = result[0]
       this.snackbarVisible = true
@@ -306,7 +290,7 @@ export default {
 
     async handleSubmitStops(stops) {
       this.loading = true
-      const submissionResults = await Promise.all([this.submitStops(stops)])
+      const submissionResults = await this.submitStops(stops)
       this.loading = false
       if (!submissionResults[0].submissionId) {
         // show the error message, no redirect
@@ -332,9 +316,7 @@ export default {
 
     async handleSubmitAll(filterData) {
       this.loading = true
-      const submissionResults = await Promise.all([
-        this.submitAllStops(filterData),
-      ])
+      const submissionResults = await this.submitAllStops(filterData)
       this.loading = false
       if (!submissionResults[0].submissionId) {
         this.snackbarText = `Submission error: ${submissionResults[0]}`
