@@ -1461,21 +1461,21 @@ export default new Vuex.Store({
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
+          !queryData.offset ? 0 : queryData.offset
         }`
         // if you send an items per page, set it, otherwise just default to 10
         queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
+          !queryData.limit ? 10 : queryData.limit
         }`
         if (queryData.filters) {
-          if (queryData.filters.submissionFromDate !== null) {
+          if (queryData.filters.submissionFromDate) {
             const formattedFromDate = new Date(
               `${queryData.filters.submissionFromDate} 00:00:00Z`,
             ).toISOString()
             queryString = `${queryString}&StartDate=${formattedFromDate}`
           }
 
-          if (queryData.filters.submissionToDate !== null) {
+          if (queryData.filters.submissionToDate) {
             const formattedToDate = new Date(
               `${queryData.filters.submissionToDate} 23:59:59Z`,
             ).toISOString()

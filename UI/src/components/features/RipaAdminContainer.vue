@@ -128,7 +128,18 @@ export default {
         tabIndex === '/admin/submissions' &&
         !this.$route.params.submissionId
       ) {
-        await this.getAdminSubmissions()
+        if (!this.mappedAdminSubmissions.submissions) {
+          let queryData = null
+          if (this.stopQueryData?.filters) {
+            queryData = {
+              filters: {
+                submissionFromDate: this.stopQueryData.filters.stopFromDate,
+                submissionToDate: this.stopQueryData.filters.stopToDate,
+              },
+            }
+          }
+          await this.getAdminSubmissions(queryData)
+        }
       }
       if (
         tabIndex === '/admin/submissions' &&

@@ -171,18 +171,18 @@ export default {
       ],
       editedIndex: -1,
       selectedItems: [],
-      submissionFromDate: this.savedFilters.fromDate
-        ? this.savedFilters.fromDate
+      submissionFromDate: this.savedFilters?.filters.stopFromDate
+        ? this.savedFilters?.filters.stopFromDate
         : null,
-      submissionToDate: this.savedFilters.toDate
-        ? this.savedFilters.toDate
+      submissionToDate: this.savedFilters?.filters.stopToDate
+        ? this.savedFilters?.filters.stopToDate
         : null,
       currentSubmissionLoading: false,
       format,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
-      itemsPerPage: this.savedFilters.itemsPerPage
-        ? this.savedFilters.itemsPerPage
+      itemsPerPage: this.savedFilters?.filters.itemsPerPage
+        ? this.savedFilters?.filters.itemsPerPage
         : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'dateSubmitted',
