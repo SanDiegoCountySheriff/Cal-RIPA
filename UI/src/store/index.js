@@ -61,10 +61,7 @@ export default new Vuex.Store({
     officerStops: [],
     gpsLocationAddress: null,
     errorCodeAdminSearch: {
-      loading: false,
       items: [],
-      search: null,
-      select: null,
     },
     stopSubmissionStatusTotal: 0,
     stopSubmissionStatusError: 0,

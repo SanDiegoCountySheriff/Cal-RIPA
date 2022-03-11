@@ -61,13 +61,30 @@
 
       <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
+
+
+
+          <!-- <ripa-autocomplete
+            :value="selectedErrorCodes"
+            :items="getErrorCodeSearchItems"
+            :loading="errorCodesLoading"
+            :cacheItems="true"
+            label="Error Codes"
+            multiple
+            dense
+            chips
+            deletable-chips
+            small-chips
+          ></ripa-autocomplete> -->
+
+
+
+
           <v-autocomplete
             v-model="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
             :loading="errorCodesLoading"
-            @input="handleChangeSearchCodes"
             cache-items
-            :search-input.sync="search"
             multiple
             dense
             chips
@@ -220,6 +237,7 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 import _ from 'lodash'
@@ -231,6 +249,7 @@ export default {
 
   components: {
     RipaDatePicker,
+    RipaAutocomplete,
   },
 
   mixins: [RipaEditStopMixin],
@@ -373,12 +392,10 @@ export default {
         }
       }
       if (!_.isEmpty(this.savedFilters?.filters)) {
-        if (this.savedFilters?.filters.errorCodes) {
-          this.savedFilters?.filters.errorCodes.forEach(errorCodeVal => {
-            this.callErrorCodeSearch(errorCodeVal)
-          })
-        }
         this.handleFilter()
+      }
+      if (this.getErrorCodeSearchItems.length === 0) {
+        this.callErrorCodeSearch('')
       }
     },
     handleNextPage() {

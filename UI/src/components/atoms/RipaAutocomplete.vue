@@ -16,6 +16,8 @@
     :deletable-chips="deletableChips"
     :multiple="multiple"
     :rules="rules"
+    :loading="loading"
+    :cache-items="cacheItems"
     validate-on-blur
   ></v-autocomplete>
 </template>
@@ -116,6 +118,14 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    cacheItems: {
+      type: Boolean,
+      default: false,
     },
   },
 }
