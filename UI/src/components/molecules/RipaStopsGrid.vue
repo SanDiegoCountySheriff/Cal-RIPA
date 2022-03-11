@@ -60,29 +60,12 @@
 
       <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
-          <!-- <ripa-autocomplete
-            :value="selectedErrorCodes"
-            :items="getErrorCodeSearchItems"
-            :loading="errorCodesLoading"
-            :cacheItems="true"
-            label="Error Codes"
-            multiple
-            dense
-            chips
-            deletable-chips
-            small-chips
-          ></ripa-autocomplete> -->
-
           <v-autocomplete
             v-model="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
             :loading="errorCodesLoading"
             cache-items
             multiple
-            dense
-            chips
-            deletable-chips
-            small-chips
             label="Error Codes"
           >
             <template v-slot:selection="data">
@@ -90,6 +73,7 @@
                 v-bind="data.attrs"
                 :input-value="data.selected"
                 close
+                small
                 @click:close="removeErrorCode(data.item)"
               >
                 {{ data.item.value }}
@@ -238,7 +222,6 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 import _ from 'lodash'
@@ -250,7 +233,6 @@ export default {
 
   components: {
     RipaDatePicker,
-    RipaAutocomplete,
   },
 
   mixins: [RipaEditStopMixin],
@@ -452,16 +434,10 @@ export default {
       this.errorCodesLoading = true
       this.$emit('callErrorCodeSearch', val)
     }, 400),
-    // handleChangeSearchCodes(val) {
-    //   // need to call getStops API here with search codes
-    //   this.selectedErrorCodes = val
-    //   this.handleFilter()
-    // },
     removeErrorCode(val) {
       this.selectedErrorCodes = this.selectedErrorCodes.filter(errorCode => {
         return errorCode !== val.value
       })
-      this.handleFilter()
     },
     fromDateChange(val) {
       this.stopFromDate = val
