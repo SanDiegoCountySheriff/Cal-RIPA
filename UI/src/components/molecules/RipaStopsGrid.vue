@@ -5,7 +5,6 @@
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopFromDate"
-            class="tw-ml-2"
             label="From Date"
             @input="fromDateChange"
           ></ripa-date-picker>
@@ -16,7 +15,6 @@
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopToDate"
-            class="tw-ml-2"
             label="To Date"
             @input="toDateChange"
           ></ripa-date-picker>
@@ -24,17 +22,18 @@
       </v-flex>
 
       <v-flex xs12 md2>
-        <v-select
-          v-model="currentStatusFilter"
-          class="tw-ml-2"
-          :items="statuses"
-          label="Status"
-          multiple
-          deletable-chips
-          small-chips
-          clearable
-          @change="statusChange"
-        ></v-select>
+        <div class="tw-ml-2">
+          <v-select
+            v-model="currentStatusFilter"
+            :items="statuses"
+            label="Status"
+            multiple
+            deletable-chips
+            small-chips
+            clearable
+            @change="statusChange"
+          ></v-select>
+        </div>
       </v-flex>
 
       <v-flex xs12 md1>
@@ -61,9 +60,6 @@
 
       <v-flex xs12 md4>
         <div class="tw-flex tw-justify-center">
-
-
-
           <!-- <ripa-autocomplete
             :value="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
@@ -76,9 +72,6 @@
             deletable-chips
             small-chips
           ></ripa-autocomplete> -->
-
-
-
 
           <v-autocomplete
             v-model="selectedErrorCodes"
@@ -307,6 +300,7 @@ export default {
   computed: {
     getStops() {
       if (this.items.stops) {
+        console.log(this.items.stops)
         return this.items.stops
       } else {
         return []
@@ -451,11 +445,11 @@ export default {
       this.errorCodesLoading = true
       this.$emit('callErrorCodeSearch', val)
     }, 400),
-    handleChangeSearchCodes(val) {
-      // need to call getStops API here with search codes
-      this.selectedErrorCodes = val
-      this.handleFilter()
-    },
+    // handleChangeSearchCodes(val) {
+    //   // need to call getStops API here with search codes
+    //   this.selectedErrorCodes = val
+    //   this.handleFilter()
+    // },
     removeErrorCode(val) {
       this.selectedErrorCodes = this.selectedErrorCodes.filter(errorCode => {
         return errorCode !== val.value
@@ -508,7 +502,7 @@ export default {
           isPiiFound: this.isPiiFound,
           isEdited: this.isEdited,
           // need to make a comma delimited string out of the error codes
-          errorCodes: this.selectedErrorCodes.join(),
+          errorCodes: this.selectedErrorCodes,
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
