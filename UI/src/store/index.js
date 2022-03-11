@@ -1349,7 +1349,6 @@ export default new Vuex.Store({
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
       const queryData = state.stopQueryData
-      console.log('queryData: ', queryData)
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
@@ -1410,7 +1409,6 @@ export default new Vuex.Store({
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
-      console.log('queryString: ', queryString)
       return axios
         .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {

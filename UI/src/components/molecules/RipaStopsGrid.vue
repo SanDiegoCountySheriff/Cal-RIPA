@@ -106,12 +106,20 @@
             <span class="count">{{ stops.summary.total }}</span>
           </p>
           <p>
+            <span class="label">Unsubmitted</span>
+            <span class="count">{{ stops.summary.unsubmitted }}</span>
+          </p>
+          <p>
             <span class="label">Submitted</span>
             <span class="count">{{ stops.summary.submitted }}</span>
           </p>
           <p>
-            <span class="label">Unsubmitted</span>
-            <span class="count">{{ stops.summary.unsubmitted }}</span>
+            <span class="label">Resubmitted</span>
+            <span class="count">{{ stops.summary.resubmitted }}</span>
+          </p>
+          <p>
+            <span class="label">Pending</span>
+            <span class="count">{{ stops.summary.pending }}</span>
           </p>
           <p>
             <span class="label">Errors</span>
@@ -300,7 +308,6 @@ export default {
   computed: {
     getStops() {
       if (this.items.stops) {
-        console.log(this.items.stops)
         return this.items.stops
       } else {
         return []
