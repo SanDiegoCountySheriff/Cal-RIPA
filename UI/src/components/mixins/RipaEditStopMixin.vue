@@ -45,6 +45,7 @@ export default {
       const stop = fullStopToStop(fullStop)
 
       localStorage.setItem('ripa_form_step_index', '7')
+      localStorage.setItem('ripa_form_admin_viewing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))
@@ -59,9 +60,9 @@ export default {
         JSON.stringify(sortedSubmissions),
       )
       this.$router.push('/')
-      console.log('Edit API Stop', apiStop)
-      console.log('Edit Full Stop', fullStop)
-      console.log('Edit Stop', stop)
+      console.log('View API Stop', apiStop)
+      console.log('View Full Stop', fullStop)
+      console.log('View Stop', stop)
     },
 
     handleEditStopWithError(apiStop) {

@@ -5,6 +5,7 @@
       edit-buttons
       :api-stop="apiStop"
       :admin-editing="adminEditing"
+      :admin-viewing="adminViewing"
       :on-copy-person="onCopyPerson"
       :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-stop="onEditStop"
@@ -31,7 +32,7 @@
       </ripa-alert>
     </template>
 
-    <template v-if="!adminEditing">
+    <template v-if="!adminEditing && !adminViewing">
       <div class="tw-flex tw-mt-4 tw-justify-center">
         <v-btn color="primary" class="tw-mt-2" @click="handleAddPerson">
           <v-icon left> mdi-plus </v-icon>
@@ -40,12 +41,22 @@
       </div>
     </template>
 
-    <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn color="error" class="tw-mr-2" @click="handleCancel">
-        Cancel
-      </v-btn>
-      <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
-    </div>
+    <template v-if="adminViewing">
+      <div class="tw-flex tw-mt-8 tw-justify-center">
+        <v-btn color="error" class="tw-mr-2" @click="handleCancel">
+          Cancel
+        </v-btn>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="tw-flex tw-mt-8 tw-justify-center">
+        <v-btn color="error" class="tw-mr-2" @click="handleCancel">
+          Cancel
+        </v-btn>
+        <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
+      </div>
+    </template>
   </v-form>
 </template>
 

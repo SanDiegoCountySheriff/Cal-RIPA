@@ -192,6 +192,7 @@
                   <ripa-form-step-7
                     v-model="stop"
                     :admin-editing="adminEditing"
+                    :admin-viewing="adminViewing"
                     :api-stop="getApiStop"
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
@@ -681,6 +682,10 @@ export default {
       default: () => {},
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },

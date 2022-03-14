@@ -3,6 +3,7 @@
     <ripa-form-wrapper
       v-model="stop"
       :admin-editing="adminEditing"
+      :admin-viewing="adminViewing"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
@@ -90,6 +91,10 @@ export default {
       default: () => {},
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },

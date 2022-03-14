@@ -89,6 +89,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    adminViewing: {
+      type: Boolean,
+      default: false,
+    },
     schools: {
       type: Array,
       default: () => [],

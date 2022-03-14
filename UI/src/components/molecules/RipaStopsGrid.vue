@@ -165,18 +165,39 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
+            <v-tooltip
+              top
               v-if="statuses.find(s => s.text === item.status).isEditable"
-              small
-              class="tw-mr-2"
-              @click="editItem(item)"
+              content-class="custom-tooltip"
             >
-              mdi-pencil
-            </v-icon>
-            <v-icon v-else small class="tw-mr-2" @click="viewItem(item)"
-              >mdi-eye-arrow-right</v-icon
-            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="editItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+            <v-tooltip top v-else content-class="custom-tooltip">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="viewItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                  >mdi-eye-arrow-right</v-icon
+                >
+              </template>
+              <span>View</span>
+            </v-tooltip>
           </template>
+
           <template v-slot:footer>
             <div v-if="items.stops" class="paginationWrapper">
               <p>
@@ -692,5 +713,10 @@ export default {
       margin-top: 10px;
     }
   }
+}
+
+.custom-tooltip {
+  opacity: var(--v-tooltip-opacity, 1) !important;
+  background: var(--v-tooltip-bg, #1976d2) !important;
 }
 </style>

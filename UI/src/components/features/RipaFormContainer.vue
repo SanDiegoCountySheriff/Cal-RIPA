@@ -3,6 +3,7 @@
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"
+      :admin-viewing="isAdminViewing"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
