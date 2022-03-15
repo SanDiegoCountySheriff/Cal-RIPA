@@ -43,8 +43,8 @@
 
     <template v-if="adminViewing">
       <div class="tw-flex tw-mt-8 tw-justify-center">
-        <v-btn color="error" class="tw-mr-2" @click="handleCancel">
-          Cancel
+        <v-btn color="primary" class="tw-mr-2" @click="handleCancel">
+          Done
         </v-btn>
       </div>
     </template>
