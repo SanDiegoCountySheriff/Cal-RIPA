@@ -203,6 +203,7 @@
                     :on-edit-stop="handleEditStop"
                     :on-submit="handleSubmit"
                     :on-cancel="handleCancel"
+                    @handle-done="handleDone"
                     @input="handleInput"
                   ></ripa-form-step-7>
                 </template>
@@ -396,6 +397,10 @@ export default {
   methods: {
     handleDebugger() {
       this.showDialog = true
+    },
+
+    handleDone() {
+      this.$emit('handle-done')
     },
 
     handleCloseDialog() {

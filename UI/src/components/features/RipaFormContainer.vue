@@ -46,6 +46,7 @@
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
       :on-update-user="handleUpdateUser"
+      @handle-done="handleDone"
       @input="handleInput"
       @pii-check="handlePiiCheck"
     ></ripa-form-template>
@@ -204,6 +205,12 @@ export default {
       'setUserFavoriteReasons',
       'setUserFavoriteResults',
     ]),
+
+    handleDone() {
+      const route = localStorage.getItem('ripa_form_edit_route')
+      this.clearLocalStorage()
+      this.$router.push(route)
+    },
 
     handleSaveUser(user) {
       this.editOfficerUser(user)

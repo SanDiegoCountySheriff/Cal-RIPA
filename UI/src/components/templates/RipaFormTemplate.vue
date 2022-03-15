@@ -46,6 +46,7 @@
       :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
       :on-update-user="onUpdateUser"
+      @handle-done="handleDone"
       @input="handleInput"
       @pii-check="handlePiiCheck"
     ></ripa-form-wrapper>
@@ -76,6 +77,10 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
+    },
+
+    handleDone() {
+      this.$emit('handle-done')
     },
   },
 

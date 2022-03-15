@@ -72,6 +72,10 @@ export default {
         this.onCancel()
       }
     },
+
+    handleDone() {
+      this.$emit('handle-done')
+    },
   },
 
   watch: {
