@@ -169,6 +169,7 @@
               top
               v-if="statuses.find(s => s.text === item.status).isEditable"
               content-class="custom-tooltip"
+              open-delay="500"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
@@ -183,7 +184,12 @@
               </template>
               <span>Edit</span>
             </v-tooltip>
-            <v-tooltip top v-else content-class="custom-tooltip">
+            <v-tooltip
+              top
+              v-else
+              content-class="custom-tooltip"
+              open-delay="500"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   small
@@ -191,7 +197,7 @@
                   @click="viewItem(item)"
                   v-bind="attrs"
                   v-on="on"
-                  >mdi-eye-arrow-right</v-icon
+                  >mdi-eye</v-icon
                 >
               </template>
               <span>View</span>
