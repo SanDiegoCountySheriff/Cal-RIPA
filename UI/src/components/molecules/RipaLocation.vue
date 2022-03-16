@@ -421,13 +421,15 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
-    handlePiiCheck() {
-      const textValue = `${this.model.location.streetName ?? ''}, ${
-        this.model.location.intersection ?? ''
-      }, ${this.model.location.highwayExit ?? ''}, ${
-        this.model.location.landmark ?? ''
-      }`
-      this.$emit('pii-check', { source: 'location', value: textValue })
+    handlePiiCheck(event) {
+      if (event) {
+        const textValue = `${this.model.location.streetName ?? ''}, ${
+          this.model.location.intersection ?? ''
+        }, ${this.model.location.highwayExit ?? ''}, ${
+          this.model.location.landmark ?? ''
+        }`
+        this.$emit('pii-check', { source: 'location', value: textValue })
+      }
     },
 
     handleInputOutOfCounty(newVal) {
