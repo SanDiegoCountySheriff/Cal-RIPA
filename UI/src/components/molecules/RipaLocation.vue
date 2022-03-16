@@ -421,7 +421,12 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
-    handlePiiCheck(textValue) {
+    handlePiiCheck() {
+      const textValue = `${this.model.location.streetName ?? ''}, ${
+        this.model.location.intersection ?? ''
+      }, ${this.model.location.highwayExit ?? ''}, ${
+        this.model.location.landmark ?? ''
+      }`
       this.$emit('pii-check', { source: 'location', value: textValue })
     },
 
