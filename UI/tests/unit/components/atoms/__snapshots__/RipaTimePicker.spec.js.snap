@@ -4,7 +4,6 @@ exports[`Ripa Time Picker should match snapshot 1`] = `
 <v-text-field-stub
   appendicon="mdi-clock-time-four-outline"
   backgroundcolor=""
-  class="left-align"
   clearicon="$clear"
   errorcount="1"
   errormessages=""

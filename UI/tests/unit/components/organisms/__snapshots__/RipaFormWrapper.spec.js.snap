@@ -205,91 +205,9 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                             class="md:tw-mr-4"
                           >
                             <div
-                              class="v-dialog__container"
-                              role="dialog"
-                            >
-                              <div
-                                class="v-input v-input--is-label-active v-input--is-dirty v-input--is-readonly theme--light v-text-field"
-                              >
-                                <div
-                                  class="v-input__control"
-                                >
-                                  <div
-                                    class="v-input__slot"
-                                  >
-                                    <div
-                                      class="v-text-field__slot"
-                                    >
-                                      <label
-                                        class="v-label v-label--active theme--light"
-                                        for="input-29"
-                                        style="left: 0px; position: absolute;"
-                                      >
-                                        Date of Stop
-                                      </label>
-                                      <input
-                                        aria-expanded="false"
-                                        aria-haspopup="true"
-                                        id="input-29"
-                                        readonly="readonly"
-                                        role="button"
-                                        type="text"
-                                      />
-                                    </div>
-                                    <div
-                                      class="v-input__append-inner"
-                                    >
-                                      <div
-                                        class="v-input__icon v-input__icon--clear"
-                                      >
-                                        <button
-                                          aria-label="clear icon"
-                                          class="v-icon notranslate v-icon--link mdi mdi-close theme--light"
-                                          type="button"
-                                        />
-                                      </div>
-                                    </div>
-                                    <div
-                                      class="v-input__append-inner"
-                                    >
-                                      <div
-                                        class="v-input__icon v-input__icon--append"
-                                      >
-                                        <i
-                                          aria-hidden="true"
-                                          class="v-icon notranslate mdi mdi-calendar theme--light"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div
-                                    class="v-text-field__details"
-                                  >
-                                    <div
-                                      class="v-messages theme--light"
-                                    >
-                                      <transition-group-stub
-                                        class="v-messages__wrapper"
-                                        name="message-transition"
-                                        tag="div"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <!---->
-                            </div>
-                          </div>
-                        </div>
-                         
-                        <div
-                          class="col-sm-12 col-md-4 col-12"
-                        >
-                          <div
-                            class="md:tw-mr-4"
-                          >
-                            <div
-                              class="v-input left-align v-input--is-label-active v-input--is-dirty theme--light v-text-field"
+                              class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field"
+                              max="2022-03-17T23:59:59.999-07:00"
+                              min="2018-02-01T23:59:59.999-08:00"
                             >
                               <div
                                 class="v-input__control"
@@ -302,13 +220,87 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   >
                                     <label
                                       class="v-label v-label--active theme--light"
-                                      for="input-35"
+                                      for="input-28"
+                                      style="left: 0px; position: absolute;"
+                                    >
+                                      Date of Stop
+                                    </label>
+                                    <input
+                                      id="input-28"
+                                      type="date"
+                                    />
+                                  </div>
+                                  <div
+                                    class="v-input__append-inner"
+                                  >
+                                    <div
+                                      class="v-input__icon v-input__icon--clear"
+                                    >
+                                      <button
+                                        aria-label="clear icon"
+                                        class="v-icon notranslate v-icon--link mdi mdi-close theme--light"
+                                        type="button"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="v-input__append-inner"
+                                  >
+                                    <div
+                                      class="v-input__icon v-input__icon--append"
+                                    >
+                                      <i
+                                        aria-hidden="true"
+                                        class="v-icon notranslate mdi mdi-calendar theme--light"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="v-text-field__details"
+                                >
+                                  <div
+                                    class="v-messages theme--light"
+                                  >
+                                    <transition-group-stub
+                                      class="v-messages__wrapper"
+                                      name="message-transition"
+                                      tag="div"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         
+                        <div
+                          class="col-sm-12 col-md-4 col-12"
+                        >
+                          <div
+                            class="md:tw-mr-4"
+                          >
+                            <div
+                              class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field"
+                            >
+                              <div
+                                class="v-input__control"
+                              >
+                                <div
+                                  class="v-input__slot"
+                                >
+                                  <div
+                                    class="v-text-field__slot"
+                                  >
+                                    <label
+                                      class="v-label v-label--active theme--light"
+                                      for="input-34"
                                       style="left: 0px; position: absolute;"
                                     >
                                       Time of Stop
                                     </label>
                                     <input
-                                      id="input-35"
+                                      id="input-34"
                                       type="time"
                                     />
                                   </div>
@@ -365,13 +357,13 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   >
                                     <label
                                       class="v-label theme--light"
-                                      for="input-40"
+                                      for="input-39"
                                       style="left: 0px; position: absolute;"
                                     >
                                       Stop Duration
                                     </label>
                                     <input
-                                      id="input-40"
+                                      id="input-39"
                                       inputmode="numeric"
                                       min="0"
                                       type="number"
@@ -422,7 +414,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     <input
                                       aria-checked="false"
                                       aria-disabled="false"
-                                      id="input-44"
+                                      id="input-43"
                                       role="switch"
                                       type="checkbox"
                                       value=""
@@ -444,7 +436,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   </div>
                                   <label
                                     class="v-label theme--light"
-                                    for="input-44"
+                                    for="input-43"
                                     style="left: 0px; position: relative;"
                                   >
                                     
@@ -586,7 +578,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     <input
                                       aria-checked="false"
                                       aria-disabled="false"
-                                      id="input-55"
+                                      id="input-54"
                                       role="switch"
                                       type="checkbox"
                                       value=""
@@ -608,7 +600,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   </div>
                                   <label
                                     class="v-label theme--light"
-                                    for="input-55"
+                                    for="input-54"
                                     style="left: 0px; position: relative;"
                                   >
                                     
@@ -682,13 +674,13 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     >
                                       <label
                                         class="v-label theme--light"
-                                        for="input-61"
+                                        for="input-60"
                                         style="left: 0px; position: absolute;"
                                       >
                                         Block Number
                                       </label>
                                       <input
-                                        id="input-61"
+                                        id="input-60"
                                         type="text"
                                       />
                                     </div>
@@ -737,13 +729,13 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     >
                                       <label
                                         class="v-label theme--light"
-                                        for="input-65"
+                                        for="input-64"
                                         style="left: 0px; position: absolute;"
                                       >
                                         Street Name
                                       </label>
                                       <input
-                                        id="input-65"
+                                        id="input-64"
                                         type="text"
                                       />
                                     </div>
@@ -803,13 +795,13 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   >
                                     <label
                                       class="v-label theme--light"
-                                      for="input-71"
+                                      for="input-70"
                                       style="left: 0px; position: absolute;"
                                     >
                                       Closest Intersection
                                     </label>
                                     <input
-                                      id="input-71"
+                                      id="input-70"
                                       type="text"
                                     />
                                   </div>
@@ -850,7 +842,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     <input
                                       aria-checked="false"
                                       aria-disabled="false"
-                                      id="input-75"
+                                      id="input-74"
                                       role="switch"
                                       type="checkbox"
                                       value=""
@@ -872,7 +864,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   </div>
                                   <label
                                     class="v-label theme--light"
-                                    for="input-75"
+                                    for="input-74"
                                     style="left: 0px; position: relative;"
                                   >
                                     
@@ -908,7 +900,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                       <input
                                         aria-checked="false"
                                         aria-disabled="false"
-                                        id="input-78"
+                                        id="input-77"
                                         role="switch"
                                         type="checkbox"
                                         value=""
@@ -930,7 +922,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                     </div>
                                     <label
                                       class="v-label theme--light"
-                                      for="input-78"
+                                      for="input-77"
                                       style="left: 0px; position: relative;"
                                     >
                                       
@@ -963,7 +955,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                 <div
                                   aria-expanded="false"
                                   aria-haspopup="listbox"
-                                  aria-owns="list-81"
+                                  aria-owns="list-80"
                                   class="v-input__slot"
                                   role="combobox"
                                 >
@@ -972,14 +964,14 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
                                   >
                                     <label
                                       class="v-label theme--light"
-                                      for="input-81"
+                                      for="input-80"
                                       style="left: 0px; position: absolute;"
                                     >
                                       City
                                     </label>
                                     <input
                                       autocomplete="off"
-                                      id="input-81"
+                                      id="input-80"
                                       type="text"
                                     />
                                     <div

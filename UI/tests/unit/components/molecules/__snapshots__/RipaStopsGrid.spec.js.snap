@@ -24,8 +24,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <ripa-date-picker-stub
           class="tw-ml-2"
           label="From Date"
-          max=""
-          min=""
           rules=""
         />
       </div>
@@ -42,8 +40,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <ripa-date-picker-stub
           class="tw-ml-2"
           label="To Date"
-          max=""
-          min=""
           rules=""
         />
       </div>
@@ -65,7 +61,7 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         errormessages=""
         itemcolor="primary"
         itemdisabled="disabled"
-        items="[object Object],[object Object],[object Object],[object Object]"
+        items="[object Object],[object Object],[object Object],[object Object],[object Object]"
         itemtext="text"
         itemvalue="value"
         label="Status"

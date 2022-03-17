@@ -310,12 +310,6 @@ export default {
     },
   },
 
-  created() {
-    if (this.submissionId) {
-      // this.$emit('loadNewSubmission', newValue)
-    }
-  },
-
   watch: {
     submissionId(newValue, oldValue) {
       this.currentSubmissionLoading = true
@@ -342,7 +336,7 @@ export default {
     },
     submission: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     loading: {
       type: Boolean,
