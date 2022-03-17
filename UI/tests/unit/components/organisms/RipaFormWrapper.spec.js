@@ -1,7 +1,7 @@
 import RipaFormWrapper from '@/components/organisms/RipaFormWrapper.vue'
 import RipaSelect from '@/components/atoms/RipaSelect.vue'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup.vue'
-import { createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
@@ -34,10 +34,21 @@ describe('Ripa Form Wrapper', () => {
     })
   }
 
-  it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+  const shallowFactory = propsData => {
+    return shallowMount(RipaFormWrapper, {
+      localVue,
+      store,
+      vuetify,
+      propsData: {
+        ...propsData,
+      },
+    })
+  }
 
-    expect(wrapper.html()).toMatchSnapshot()
+  it('should match snapshot', () => {
+    wrapper = shallowFactory({ value: stop })
+
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should reset reasonableSuspicion when changing reasonForStop', async () => {
