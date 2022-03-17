@@ -37,7 +37,7 @@ describe('Ripa Form Wrapper', () => {
   it('should match snapshot', () => {
     wrapper = factory({ value: stop })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should reset reasonableSuspicion when changing reasonForStop', async () => {
