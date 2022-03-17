@@ -112,7 +112,7 @@ namespace RIPA.Functions.TextAnalytics.Functions
             }
             catch (Exception ex)
             {
-                log.LogError("There was an error checking for PII: ", ex.Message);
+                log.LogError("There was an error checking for PII: ", ex.Message, ex.InnerException);
                 return new BadRequestObjectResult(ex.Message);
             }
 
