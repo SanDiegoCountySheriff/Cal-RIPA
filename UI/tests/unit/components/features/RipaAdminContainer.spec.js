@@ -9,7 +9,7 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 
 describe('Ripa Admin Container', () => {
-  let wrapper = null
+  let wrapper
   let vuetify
   let actions
   let getters
@@ -20,9 +20,7 @@ describe('Ripa Admin Container', () => {
       component: RipaAdminContainer,
     },
   ]
-  const router = new VueRouter({
-    routes,
-  })
+  const router = new VueRouter({ routes })
 
   beforeEach(() => {
     vuetify = new Vuetify()

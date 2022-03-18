@@ -85,7 +85,7 @@ describe('Ripa Actions Taken', () => {
     stop.actionsTaken.basisForSearchExplanation = 'Testing'
     wrapper = factory({ value: stop })
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should validate actions taken rules', () => {
