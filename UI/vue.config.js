@@ -1,5 +1,7 @@
 module.exports = {
   transpileDependencies: ['vuetify'],
+  // uncomment and remove '--host localhost' from line 6 of package.json
+  // to run locally on mobile device
   // devServer: {
   //   https: true,
   // },

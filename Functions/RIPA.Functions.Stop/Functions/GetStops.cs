@@ -97,7 +97,9 @@ namespace RIPA.Functions.Stop.Functions
                 {
                     Total = stopStatusCounts.Sum(x => x.Count),
                     Submitted = stopStatusCounts.Where(x => x.Status == "Submitted").Select(x => x.Count).FirstOrDefault(),
+                    Resubmitted = stopStatusCounts.Where(x => x.Status == "Resubmitted").Select(x => x.Count).FirstOrDefault(),
                     Unsubmitted = stopStatusCounts.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
+                    Pending = stopStatusCounts.Where(x => x.Status == "Pending").Select(x => x.Count).FirstOrDefault(),
                     Failed = stopStatusCounts.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
                 }
             };
@@ -110,6 +112,8 @@ namespace RIPA.Functions.Stop.Functions
             public int Total { get; set; }
             public int Submitted { get; set; }
             public int Unsubmitted { get; set; }
+            public int Resubmitted { get; set; }
+            public int Pending { get; set; }
             public int Failed { get; set; }
         }
 

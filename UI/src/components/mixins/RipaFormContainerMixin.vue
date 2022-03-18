@@ -550,6 +550,9 @@ export default {
       this.stop = null
       this.fullStop = null
       if (route) {
+        if (route === '/admin' || route === '/admin/stops') {
+          this.setResetPagination(false)
+        }
         this.$router.push(route)
       }
     },
