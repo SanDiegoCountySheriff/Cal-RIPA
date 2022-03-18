@@ -165,15 +165,45 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
+            <v-tooltip
+              top
               v-if="statuses.find(s => s.text === item.status).isEditable"
-              small
-              class="tw-mr-2"
-              @click="editItem(item)"
+              content-class="custom-tooltip"
+              open-delay="500"
             >
-              mdi-pencil
-            </v-icon>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="editItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+            <v-tooltip
+              top
+              v-else
+              content-class="custom-tooltip"
+              open-delay="500"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="viewItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                  >mdi-eye</v-icon
+                >
+              </template>
+              <span>View</span>
+            </v-tooltip>
           </template>
+
           <template v-slot:footer>
             <div v-if="items.stops" class="paginationWrapper">
               <p>
@@ -440,6 +470,9 @@ export default {
     editItem(item) {
       this.handleEditStopByAdmin(item, window.location.pathname)
     },
+    viewItem(item) {
+      this.handleViewStopByAdmin(item, window.location.pathname)
+    },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true
       this.$emit('callErrorCodeSearch', val)
@@ -686,5 +719,10 @@ export default {
       margin-top: 10px;
     }
   }
+}
+
+.custom-tooltip {
+  opacity: var(--v-tooltip-opacity, 1) !important;
+  background: var(--v-tooltip-bg, #1976d2) !important;
 }
 </style>
