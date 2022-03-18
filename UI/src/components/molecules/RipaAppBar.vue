@@ -44,10 +44,13 @@
             <v-btn icon v-bind="attrs" v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
+            <v-btn icon @click="handleViewStopsWithErrors">
+              <v-icon v-show="$vuetify.breakpoint.xs" color="error">mdi-alert</v-icon>
+            </v-btn>
           </template>
 
           <v-list>
-            <v-list-item>
+            <v-list-item v-show="!$vuetify.breakpoint.xs">
               <v-list-item-title>
                 <v-btn
                   aria-label="View stops with errors"
@@ -55,7 +58,7 @@
                   text
                   @click="handleViewStopsWithErrors"
                 >
-                  <v-icon class="tw-mr-4"> mdi-alert </v-icon>
+                  <v-icon class="tw-mr-4" color="error"> mdi-alert </v-icon>
                   View stops with errors
                 </v-btn>
               </v-list-item-title>
