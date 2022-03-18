@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa User should match snapshot 1`] = `
+<div
+  class="ripa-user"
+>
+  <v-container-stub
+    tag="div"
+  >
+    <!---->
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="12"
+        tag="div"
+      >
+        <div
+          class="md:tw-mr-4"
+        >
+          <ripa-date-picker-stub
+            label="Start Date"
+            max="2022-03-18T23:59:59.999-07:00"
+            rules="true,true,true"
+            value="2014-10-10"
+          />
+        </div>
+      </v-col-stub>
+       
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="12"
+        tag="div"
+      >
+        <div>
+          <ripa-number-input-stub
+            hint=""
+            label="Years of Experience"
+            rules="[Function],[Function]"
+            value="7"
+          />
+        </div>
+      </v-col-stub>
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="12"
+        tag="div"
+      >
+        <div
+          class="md:tw-mr-4"
+        >
+          <ripa-text-input-stub
+            hint=""
+            label="Agency"
+            rules="[Function]"
+            value="SDSD"
+          />
+        </div>
+      </v-col-stub>
+       
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="12"
+        tag="div"
+      >
+        <ripa-select-stub
+          hint=""
+          items="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+          itemtext="name"
+          itemvalue="value"
+          label="Officer Assignment"
+          rules="[Function]"
+          value="10"
+        />
+      </v-col-stub>
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-text-input-stub
+          hint=""
+          label="Other Type"
+          rules="true,[Function],[Function]"
+          value="Data Services"
+        />
+      </v-col-stub>
+    </v-row-stub>
+     
+    <!---->
+  </v-container-stub>
+</div>
+`;
