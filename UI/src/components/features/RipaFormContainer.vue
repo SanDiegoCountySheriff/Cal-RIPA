@@ -3,6 +3,7 @@
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"
+      :admin-viewing="isAdminViewing"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
@@ -45,6 +46,7 @@
       :on-step-index-change="handleStepIndexChange"
       :on-submit-stop="handleSubmitStop"
       :on-update-user="handleUpdateUser"
+      @handle-done="handleDone"
       @input="handleInput"
       @pii-check="handlePiiCheck"
     ></ripa-form-template>
@@ -204,6 +206,12 @@ export default {
       'setUserFavoriteResults',
       'setResetPagination',
     ]),
+
+    handleDone() {
+      const route = localStorage.getItem('ripa_form_edit_route')
+      this.clearLocalStorage()
+      this.$router.push(route)
+    },
 
     handleSaveUser(user) {
       this.editOfficerUser(user)

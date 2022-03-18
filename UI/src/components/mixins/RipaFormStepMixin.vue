@@ -72,6 +72,10 @@ export default {
         this.onCancel()
       }
     },
+
+    handleDone() {
+      this.$emit('handle-done')
+    },
   },
 
   watch: {
@@ -86,6 +90,10 @@ export default {
       default: () => {},
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },
