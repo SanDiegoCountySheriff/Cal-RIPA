@@ -19,7 +19,7 @@ export default {
   props: {
     treeData: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }
