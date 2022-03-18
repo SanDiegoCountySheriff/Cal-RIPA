@@ -144,7 +144,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             }
 
 
-            return $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
+            return $"SELECT DISTINCT VALUE c FROM c {join} {where} {order} {limit}";
         }
 
         public string GetStopsSummaryQueryString(StopQuery stopQuery)
@@ -189,7 +189,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
             //ErrorCode
             if (!string.IsNullOrWhiteSpace(stopQuery.ErrorCode))
             {
-                join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
+                join += Environment.NewLine + "FROM c JOIN ListSubmission IN c.ListSubmission";
                 join += Environment.NewLine + "JOIN ListSubmissionError IN ListSubmission.ListSubmissionError";
                 whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code IN ({string.Join(",", stopQuery.ErrorCode.Split(",").Select(x => string.Format("'{0}'", x)).ToList())})");
             }
@@ -224,7 +224,7 @@ namespace RIPA.Functions.Common.Services.Stop.Utility
                 where = where.Remove(where.Length - 3);
             }
 
-            return $"SELECT COUNT(c.id) AS Count, c.Status AS Status FROM c {join} {where} GROUP BY c.Status";
+            return $"SELECT COUNT(1) AS Count, t.Status FROM c JOIN (SELECT DISTINCT c.id as id, c.Status as Status {join} {where}) t GROUP BY t.Status";
         }
     }
 }

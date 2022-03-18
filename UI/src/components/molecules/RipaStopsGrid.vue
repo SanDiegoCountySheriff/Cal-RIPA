@@ -5,7 +5,6 @@
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopFromDate"
-            class="tw-ml-2"
             label="From Date"
             @input="fromDateChange"
           ></ripa-date-picker>
@@ -16,7 +15,6 @@
         <div class="tw-ml-2">
           <ripa-date-picker
             v-model="stopToDate"
-            class="tw-ml-2"
             label="To Date"
             @input="toDateChange"
           ></ripa-date-picker>
@@ -24,17 +22,18 @@
       </v-flex>
 
       <v-flex xs12 md2>
-        <v-select
-          v-model="currentStatusFilter"
-          class="tw-ml-2"
-          :items="statuses"
-          label="Status"
-          multiple
-          deletable-chips
-          small-chips
-          clearable
-          @change="statusChange"
-        ></v-select>
+        <div class="tw-ml-2">
+          <v-select
+            v-model="currentStatusFilter"
+            :items="statuses"
+            label="Status"
+            multiple
+            deletable-chips
+            small-chips
+            clearable
+            @change="statusChange"
+          ></v-select>
+        </div>
       </v-flex>
 
       <v-flex xs12 md1>
@@ -65,14 +64,8 @@
             v-model="selectedErrorCodes"
             :items="getErrorCodeSearchItems"
             :loading="errorCodesLoading"
-            @input="handleChangeSearchCodes"
             cache-items
-            :search-input.sync="search"
             multiple
-            dense
-            chips
-            deletable-chips
-            small-chips
             label="Error Codes"
           >
             <template v-slot:selection="data">
@@ -80,6 +73,7 @@
                 v-bind="data.attrs"
                 :input-value="data.selected"
                 close
+                small
                 @click:close="removeErrorCode(data.item)"
               >
                 {{ data.item.value }}
@@ -96,12 +90,20 @@
             <span class="count">{{ stops.summary.total }}</span>
           </p>
           <p>
+            <span class="label">Unsubmitted</span>
+            <span class="count">{{ stops.summary.unsubmitted }}</span>
+          </p>
+          <p>
             <span class="label">Submitted</span>
             <span class="count">{{ stops.summary.submitted }}</span>
           </p>
           <p>
-            <span class="label">Unsubmitted</span>
-            <span class="count">{{ stops.summary.unsubmitted }}</span>
+            <span class="label">Resubmitted</span>
+            <span class="count">{{ stops.summary.resubmitted }}</span>
+          </p>
+          <p>
+            <span class="label">Pending</span>
+            <span class="count">{{ stops.summary.pending }}</span>
           </p>
           <p>
             <span class="label">Errors</span>
@@ -165,15 +167,45 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
+            <v-tooltip
+              top
               v-if="statuses.find(s => s.text === item.status).isEditable"
-              small
-              class="tw-mr-2"
-              @click="editItem(item)"
+              content-class="custom-tooltip"
+              open-delay="500"
             >
-              mdi-pencil
-            </v-icon>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="editItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+            <v-tooltip
+              top
+              v-else
+              content-class="custom-tooltip"
+              open-delay="500"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  small
+                  class="tw-mr-2"
+                  @click="viewItem(item)"
+                  v-bind="attrs"
+                  v-on="on"
+                  >mdi-eye</v-icon
+                >
+              </template>
+              <span>View</span>
+            </v-tooltip>
           </template>
+
           <template v-slot:footer>
             <div v-if="items.stops" class="paginationWrapper">
               <p>
@@ -194,7 +226,7 @@
                 v-model="itemsPerPage"
                 :items="itemsPerPageOptions"
                 label="Items per page"
-                @input="handleUpdateItemsPerPage"
+                @input="handleFilter"
                 class="itemsPerPageSelector"
               ></v-combobox>
             </div>
@@ -250,28 +282,34 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
       editedIndex: -1,
-      isPiiFound: this.savedFilters.isPiiFound
-        ? this.savedFilters.isPiiFound
+      isPiiFound: this.savedFilters?.filters.isPiiFound
+        ? this.savedFilters?.filters.isPiiFound
         : null,
-      isEdited: this.savedFilters.isEdited ? this.savedFilters.isEdited : null,
-      errorsFound: this.savedFilters.isEdited
-        ? this.savedFilters.isEdited
+      isEdited: this.savedFilters?.filters.isEdited
+        ? this.savedFilters?.filters.isEdited
+        : null,
+      errorsFound: this.savedFilters?.filters.isEdited
+        ? this.savedFilters?.filters.isEdited
         : null,
       officerName: null,
       selectedItems: [],
-      selectedErrorCodes: this.savedFilters.errorCodes
-        ? this.savedFilters.errorCodes
+      selectedErrorCodes: this.savedFilters?.filters.errorCodes
+        ? this.savedFilters?.filters.errorCodes
         : [],
-      stopFromDate: null,
-      stopToDate: this.savedFilters.toDate ? this.savedFilters.toDate : null,
-      currentStatusFilter: this.savedFilters.status
-        ? this.savedFilters.status
+      stopFromDate: this.savedFilters?.filters.stopFromDate
+        ? this.savedFilters?.filters.stopFromDate
+        : null,
+      stopToDate: this.savedFilters?.filters.stopToDate
+        ? this.savedFilters?.filters.stopToDate
+        : null,
+      currentStatusFilter: this.savedFilters?.filters.status
+        ? this.savedFilters?.filters.status
         : null,
       statuses: SUBMISSION_STATUSES,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
-      itemsPerPage: this.savedFilters.itemsPerPage
-        ? this.savedFilters.itemsPerPage
+      itemsPerPage: this.savedFilters?.filters.itemsPerPage
+        ? this.savedFilters?.filters.itemsPerPage
         : 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
@@ -350,8 +388,8 @@ export default {
       this.stops = this.items
       // if the user has a from date saved in session storage
       // this overrides any date checking
-      if (this.savedFilters.fromDate) {
-        this.stopFromDate = this.savedFilters.fromDate
+      if (this.savedFilters?.filters.stopFromDate) {
+        this.stopFromDate = this.savedFilters?.filters.stopFromDate
       } else {
         const currentDateInUTC = zonedTimeToUtc(new Date())
         const currentYear = getYear(new Date())
@@ -366,30 +404,12 @@ export default {
           this.handleFilter()
         }
       }
-      if (!_.isEmpty(this.savedFilters)) {
-        if (this.savedFilters.errorCodes) {
-          this.savedFilters.errorCodes.forEach(errorCodeVal => {
-            this.callErrorCodeSearch(errorCodeVal)
-          })
-        }
+      if (!_.isEmpty(this.savedFilters?.filters)) {
         this.handleFilter()
       }
-    },
-
-    handleUpdateItemsPerPage(val) {
-      this.itemsPerPage = val
-      // calculate the page you SHOULD be on with the new items per page
-      const newPage = Math.ceil(this.currentPage / this.itemsPerPage)
-      this.currentPage = newPage
-      this.$emit('redoItemsPerPage', {
-        type: 'stops',
-        limit: this.itemsPerPage,
-        offset: this.itemsPerPage * (newPage - 1),
-        filters: this.getFilterStatus,
-      })
-      this.$emit('handleUpdateSavedFilter', {
-        itemsPerPage: val,
-      })
+      if (this.getErrorCodeSearchItems.length === 0) {
+        this.callErrorCodeSearch('')
+      }
     },
     handleNextPage() {
       // the pagination component updates the current page
@@ -440,67 +460,43 @@ export default {
     editItem(item) {
       this.handleEditStopByAdmin(item, window.location.pathname)
     },
+    viewItem(item) {
+      this.handleViewStopByAdmin(item, window.location.pathname)
+    },
     callErrorCodeSearch: _.debounce(function (val) {
       this.errorCodesLoading = true
       this.$emit('callErrorCodeSearch', val)
     }, 400),
-    handleChangeSearchCodes(val) {
-      // need to call getStops API here with search codes
-      this.selectedErrorCodes = val
-      this.handleFilter()
-    },
     removeErrorCode(val) {
       this.selectedErrorCodes = this.selectedErrorCodes.filter(errorCode => {
         return errorCode !== val.value
       })
-      this.handleFilter()
     },
     fromDateChange(val) {
       this.stopFromDate = val
-      this.$emit('handleUpdateSavedFilter', {
-        fromDate: val,
-      })
       this.handleFilter()
     },
     toDateChange(val) {
       this.stopToDate = val
-      this.$emit('handleUpdateSavedFilter', {
-        toDate: val,
-      })
       this.handleFilter()
     },
     statusChange(val) {
       this.currentStatusFilter = val
-      this.$emit('handleUpdateSavedFilter', {
-        status: val,
-      })
       this.handleFilter()
     },
     piiChange(val) {
       if (!val) {
         this.isPiiFound = null
-        this.$emit('handleUpdateSavedFilter', {
-          isPiiFound: null,
-        })
       } else {
         this.isPiiFound = true
-        this.$emit('handleUpdateSavedFilter', {
-          isPiiFound: true,
-        })
       }
       this.handleFilter()
     },
     isEditedChange(val) {
       if (!val) {
         this.isEdited = null
-        this.$emit('handleUpdateSavedFilter', {
-          isEdited: null,
-        })
       } else {
         this.isEdited = true
-        this.$emit('handleUpdateSavedFilter', {
-          isEdited: true,
-        })
       }
       this.handleFilter()
     },
@@ -514,7 +510,6 @@ export default {
       // reset any selections
       this.selectedItems = []
       const filterData = {
-        offset: null,
         limit: this.itemsPerPage,
         filters: {
           stopFromDate: this.stopFromDate,
@@ -523,7 +518,7 @@ export default {
           isPiiFound: this.isPiiFound,
           isEdited: this.isEdited,
           // need to make a comma delimited string out of the error codes
-          errorCodes: this.selectedErrorCodes.join(),
+          errorCodes: this.selectedErrorCodes,
           orderBy:
             // if the column sort name is null, default to sorting by the stop date
             this.getColumnSortName() === null
@@ -532,8 +527,12 @@ export default {
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
       }
-      this.currentPage = 1
       this.$emit('handleAdminStopsFiltering', filterData)
+      if (!this.savedFilters?.offset) {
+        this.currentPage = 1
+      } else {
+        this.currentPage = this.savedFilters?.offset / this.itemsPerPage + 1
+      }
     },
     handleSubmitAll() {
       const filterData = {
@@ -578,7 +577,7 @@ export default {
         this.callErrorCodeSearch(val)
       }
     },
-    errorCodeSearch(val) {
+    errorCodeSearch() {
       this.errorCodesLoading = false
     },
     sortDesc: function (newValue, oldValue) {
@@ -591,10 +590,15 @@ export default {
         }
       }
     },
-    selectedErrorCodes(newValue) {
-      this.$emit('handleUpdateSavedFilter', {
-        errorCodes: newValue,
-      })
+    selectedErrorCodes() {
+      this.handleFilter()
+    },
+    savedFilters(newValue) {
+      if (!newValue?.offset) {
+        this.currentPage = 1
+      } else {
+        this.currentPage = newValue.offset / this.itemsPerPage + 1
+      }
     },
   },
 
@@ -686,5 +690,10 @@ export default {
       margin-top: 10px;
     }
   }
+}
+
+.custom-tooltip {
+  opacity: var(--v-tooltip-opacity, 1) !important;
+  background: var(--v-tooltip-bg, #1976d2) !important;
 }
 </style>
