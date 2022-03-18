@@ -46,7 +46,6 @@
                 v-model="model.startDate"
                 label="Start Date"
                 :rules="startDateRules"
-                :max="getMaxDate"
                 @input="handleInput"
               ></ripa-date-picker>
             </div>

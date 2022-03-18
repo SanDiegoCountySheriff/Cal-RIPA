@@ -129,7 +129,7 @@ export default {
     },
     user: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     loading: {
       type: Boolean,
@@ -137,11 +137,11 @@ export default {
     },
     onClose: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onSave: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     admin: {
       type: Boolean,

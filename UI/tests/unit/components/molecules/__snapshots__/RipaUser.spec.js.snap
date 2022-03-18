@@ -24,7 +24,6 @@ exports[`Ripa User should match snapshot 1`] = `
         >
           <ripa-date-picker-stub
             label="Start Date"
-            max="2022-03-18T23:59:59.999-07:00"
             rules="true,true,true"
             value="2014-10-10"
           />
