@@ -2,7 +2,7 @@
   <div>
     <div v-if="adminEditing">
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
-        <v-tabs>
+        <v-tabs show-arrows>
           <v-tab>Current State</v-tab>
           <v-tab-item>
             <ripa-form-summary-detail
@@ -27,7 +27,31 @@
         </v-tabs>
       </v-card>
     </div>
-    <div v-if="!adminEditing">
+    <div v-else-if="adminViewing">
+      <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
+        <v-tabs show-arrows>
+          <v-tab>Current State</v-tab>
+          <v-tab-item>
+            <ripa-form-summary-detail
+              :apiStop="apiStop"
+              :adminViewing="adminViewing"
+              title="View Stop"
+            ></ripa-form-summary-detail>
+          </v-tab-item>
+          <v-tab v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
+            {{ getStopAuditDate(stopAudit.id) }}
+          </v-tab>
+          <v-tab-item v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
+            <ripa-form-summary-detail
+              :apiStop="stopAudit"
+              :admin-viewing="adminViewing"
+              :title="getStopAuditTitle(stopAudit)"
+            ></ripa-form-summary-detail>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
+    </div>
+    <div v-else>
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <ripa-form-summary-detail
           :apiStop="apiStop"
@@ -124,6 +148,10 @@ export default {
       default: () => {},
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },

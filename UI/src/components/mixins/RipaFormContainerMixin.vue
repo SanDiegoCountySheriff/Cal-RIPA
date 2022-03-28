@@ -45,6 +45,11 @@ export default {
       return value ? value === '1' : false
     },
 
+    isAdminViewing() {
+      const value = localStorage.getItem('ripa_form_admin_viewing')
+      return value ? value === '1' : false
+    },
+
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
@@ -524,6 +529,7 @@ export default {
 
     clearLocalStorage() {
       localStorage.removeItem('ripa_form_admin_editing')
+      localStorage.removeItem('ripa_form_admin_viewing')
       localStorage.removeItem('ripa_form_api_stop')
       localStorage.removeItem('ripa_form_cached')
       localStorage.removeItem('ripa_form_edit_agency_questions')
@@ -547,6 +553,9 @@ export default {
       this.stop = null
       this.fullStop = null
       if (route) {
+        if (route === '/admin' || route === '/admin/stops') {
+          this.setResetPagination(false)
+        }
         this.$router.push(route)
       }
     },

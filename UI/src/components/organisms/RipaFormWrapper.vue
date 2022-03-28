@@ -192,6 +192,7 @@
                   <ripa-form-step-7
                     v-model="stop"
                     :admin-editing="adminEditing"
+                    :admin-viewing="adminViewing"
                     :api-stop="getApiStop"
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
@@ -202,6 +203,7 @@
                     :on-edit-stop="handleEditStop"
                     :on-submit="handleSubmit"
                     :on-cancel="handleCancel"
+                    @handle-done="handleDone"
                     @input="handleInput"
                   ></ripa-form-step-7>
                 </template>
@@ -395,6 +397,10 @@ export default {
   methods: {
     handleDebugger() {
       this.showDialog = true
+    },
+
+    handleDone() {
+      this.$emit('handle-done')
     },
 
     handleCloseDialog() {
@@ -681,6 +687,10 @@ export default {
       default: () => {},
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },

@@ -89,7 +89,7 @@
         <v-divider></v-divider>
       </div>
 
-      <template v-if="adminEditing">
+      <template v-if="adminEditing || adminViewing">
         <div class="tw-my-4 tw-text-base tw-font-bold">
           <span class="tw-text-base tw-font-bold">Telemetry</span>
         </div>
@@ -226,6 +226,10 @@ export default {
       default: 'Review, Edit and Submit',
     },
     adminEditing: {
+      type: Boolean,
+      default: false,
+    },
+    adminViewing: {
       type: Boolean,
       default: false,
     },

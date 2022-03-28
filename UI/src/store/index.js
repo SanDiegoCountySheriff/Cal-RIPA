@@ -61,10 +61,7 @@ export default new Vuex.Store({
     officerStops: [],
     gpsLocationAddress: null,
     errorCodeAdminSearch: {
-      loading: false,
       items: [],
-      search: null,
-      select: null,
     },
     stopSubmissionStatusTotal: 0,
     stopSubmissionStatusError: 0,
@@ -76,6 +73,8 @@ export default new Vuex.Store({
     piiServiceAvailable: true,
     personSearchAutomaticallySelected: false,
     propertySearchAutomaticallySelected: false,
+    stopQueryData: null,
+    resetPagination: true,
   },
 
   getters: {
@@ -308,6 +307,12 @@ export default new Vuex.Store({
     propertySearchAutomaticallySelected: state => {
       return state.propertySearchAutomaticallySelected
     },
+    stopQueryData: state => {
+      return state.stopQueryData
+    },
+    resetPagination: state => {
+      return state.resetPagination
+    },
   },
 
   mutations: {
@@ -534,6 +539,15 @@ export default new Vuex.Store({
     },
     updatePropertySearchAutomaticallySelected(state, value) {
       state.propertySearchAutomaticallySelected = value
+    },
+    updateStopQueryData(state, value) {
+      state.stopQueryData = {
+        ...state.stopQueryData,
+        ...value,
+      }
+    },
+    updateResetPagination(state, value) {
+      state.resetPagination = value
     },
   },
 
@@ -856,7 +870,7 @@ export default new Vuex.Store({
         })
     },
 
-    submitOfficerStop({ commit, state }, stop) {
+    submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
@@ -871,6 +885,7 @@ export default new Vuex.Store({
             const apiStop = response.data
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
+            dispatch('getAdminStops')
           }
           if (response.status !== 200) {
             const errorStop = {
@@ -1329,18 +1344,19 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }, queryData) {
+    getAdminStops({ commit, state }) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
+      const queryData = state.stopQueryData
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
+          !queryData.offset ? 0 : queryData.offset
         }`
         // if you send an items per page, set it, otherwise just default to 10
         queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
+          !queryData.limit ? 10 : queryData.limit
         }`
 
         if (queryData.filters) {
@@ -1359,7 +1375,7 @@ export default new Vuex.Store({
           }
 
           if (
-            queryData.filters.status !== null &&
+            !!queryData.filters.status &&
             queryData.filters.status.length > 0
           ) {
             let statusParameters = ''
@@ -1381,9 +1397,7 @@ export default new Vuex.Store({
           }
 
           if (queryData.filters.errorCodes.length) {
-            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.split(
-              ',',
-            )}`
+            queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.join()}`
           }
 
           if (queryData.filters.orderBy) {
@@ -1395,7 +1409,6 @@ export default new Vuex.Store({
         // if no parameters, just set offset to 0 and limit to 10 (default page size)
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
-
       return axios
         .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {
@@ -1442,21 +1455,21 @@ export default new Vuex.Store({
       if (queryData) {
         // if offset is null, that means you are changing a filter so restart the paging
         queryString = `${queryString}?Offset=${
-          queryData.offset === null ? 0 : queryData.offset
+          !queryData.offset ? 0 : queryData.offset
         }`
         // if you send an items per page, set it, otherwise just default to 10
         queryString = `${queryString}&Limit=${
-          queryData.limit === null ? 10 : queryData.limit
+          !queryData.limit ? 10 : queryData.limit
         }`
         if (queryData.filters) {
-          if (queryData.filters.submissionFromDate !== null) {
+          if (queryData.filters.submissionFromDate) {
             const formattedFromDate = new Date(
               `${queryData.filters.submissionFromDate} 00:00:00Z`,
             ).toISOString()
             queryString = `${queryString}&StartDate=${formattedFromDate}`
           }
 
-          if (queryData.filters.submissionToDate !== null) {
+          if (queryData.filters.submissionToDate) {
             const formattedToDate = new Date(
               `${queryData.filters.submissionToDate} 23:59:59Z`,
             ).toISOString()
@@ -1723,6 +1736,14 @@ export default new Vuex.Store({
 
     setPropertySearchAutomaticallySelected({ commit }, value) {
       commit('updatePropertySearchAutomaticallySelected', value)
+    },
+
+    setStopQueryData({ commit }, value) {
+      commit('updateStopQueryData', value)
+    },
+
+    setResetPagination({ commit }, value) {
+      commit('updateResetPagination', value)
     },
   },
 
