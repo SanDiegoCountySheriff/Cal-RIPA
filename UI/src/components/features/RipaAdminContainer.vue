@@ -270,7 +270,7 @@ export default {
       this.loading = true
       const result = await this.uploadUsers({ usersFile, usersAgency })
       this.loading = false
-      this.snackbarText = result[0]
+      this.snackbarText = result
       this.snackbarVisible = true
     },
 
@@ -278,7 +278,7 @@ export default {
       this.loading = true
       const result = await this.uploadDomain(domainFile)
       this.loading = false
-      this.snackbarText = result[0]
+      this.snackbarText = result
       this.snackbarVisible = true
     },
 
@@ -286,7 +286,7 @@ export default {
       this.loading = true
       const result = await this.createCpraReport(reportParameters)
       this.loading = false
-      this.snackbarText = result[0]
+      this.snackbarText = result
       this.snackbarVisible = true
     },
 
@@ -294,7 +294,7 @@ export default {
       this.loading = true
       const result = await this.downloadCpraReport(fileName)
       this.loading = false
-      this.snackbarText = result[0]
+      this.snackbarText = result
       this.snackbarVisible = true
     },
 
@@ -302,9 +302,9 @@ export default {
       this.loading = true
       const submissionResults = await this.submitStops(stops)
       this.loading = false
-      if (!submissionResults[0].submissionId) {
+      if (!submissionResults.submissionId) {
         // show the error message, no redirect
-        this.snackbarText = `Submission error: ${submissionResults[0]}`
+        this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
       } else {
         // if the submission goes through (meaning no message was sent back),
@@ -318,7 +318,7 @@ export default {
         setTimeout(() => {
           // need to push user to submission screen
           this.$router.push(
-            `/admin/submissions/${submissionResults[0].submissionId}`,
+            `/admin/submissions/${submissionResults.submissionId}`,
           )
         }, 4000)
       }
@@ -328,8 +328,8 @@ export default {
       this.loading = true
       const submissionResults = await this.submitAllStops(filterData)
       this.loading = false
-      if (!submissionResults[0].submissionId) {
-        this.snackbarText = `Submission error: ${submissionResults[0]}`
+      if (!submissionResults.submissionId) {
+        this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
       } else {
         this.snackbarText = 'All stops were submitted'
@@ -338,7 +338,7 @@ export default {
         setTimeout(() => {
           // need to push user to submission screen
           this.$router.push(
-            `/admin/submissions/${submissionResults[0].submissionId}`,
+            `/admin/submissions/${submissionResults.submissionId}`,
           )
         }, 2000)
       }
