@@ -26,6 +26,10 @@ describe('Ripa Admin Container', () => {
     vuetify = new Vuetify()
     actions = {
       getAdminStops: jest.fn(),
+      createCpraReport: jest.fn(() => Promise.resolve('message')),
+      downloadCpraReport: jest.fn(() => Promise.resolve('message')),
+      uploadDomain: jest.fn(() => Promise.resolve('message')),
+      uploadUsers: jest.fn(() => Promise.resolve('message')),
     }
     getters = {
       mappedAdminBeats: jest.fn(),
@@ -61,9 +65,99 @@ describe('Ripa Admin Container', () => {
     })
   }
 
+  const submitAllTestCases = [
+    {
+      test: 'success',
+      returnValue: { submissionId: 1 },
+      expected: 'All stops were submitted',
+    },
+    {
+      test: 'null id',
+      returnValue:
+        'There was an unknown error with your submission. Your stops were not submitted',
+      expected:
+        'Submission error: There was an unknown error with your submission. Your stops were not submitted',
+    },
+  ]
+
+  const submitStopsTestCases = [
+    {
+      test: 'success',
+      returnValue: { submissionId: 1 },
+      expected: '2 stops were submitted',
+    },
+    {
+      test: 'null id',
+      returnValue:
+        'There was an unknown error with your submission. Your stops were not submitted',
+      expected:
+        'Submission error: There was an unknown error with your submission. Your stops were not submitted',
+    },
+  ]
+
   it('should match snapshot', () => {
     wrapper = factory()
 
     expect(wrapper.element).toMatchSnapshot()
+  })
+
+  it('should display toast message for handleCreateCpraReport', async () => {
+    wrapper = factory()
+    const expected = 'message'
+
+    await wrapper.vm.handleCreateCpraReport({})
+
+    expect(wrapper.vm.snackbarText).toEqual(expected)
+  })
+
+  it('should display toast message for handleDownloadCpraReport', async () => {
+    wrapper = factory()
+    const expected = 'message'
+
+    await wrapper.vm.handleDownloadCpraReport({})
+
+    expect(wrapper.vm.snackbarText).toEqual(expected)
+  })
+
+  it('should display toast message for handleUploadDomain', async () => {
+    wrapper = factory()
+    const expected = 'message'
+
+    await wrapper.vm.handleUploadDomain({})
+
+    expect(wrapper.vm.snackbarText).toEqual(expected)
+  })
+
+  it('should display toast message for handleUploadUsers', async () => {
+    wrapper = factory()
+    const expected = 'message'
+
+    await wrapper.vm.handleUploadUsers({})
+
+    expect(wrapper.vm.snackbarText).toEqual(expected)
+  })
+
+  submitAllTestCases.forEach(test => {
+    it(`should display toast message for ${test.test} handleSubmitAll`, async () => {
+      wrapper = factory()
+      wrapper.vm.submitAllStops = jest.fn(() =>
+        Promise.resolve(test.returnValue),
+      )
+
+      await wrapper.vm.handleSubmitAll({})
+
+      expect(wrapper.vm.snackbarText).toEqual(test.expected)
+    })
+  })
+
+  submitStopsTestCases.forEach(test => {
+    it(`should display toast message for ${test.test} handleSubmitStops`, async () => {
+      wrapper = factory()
+      wrapper.vm.submitStops = jest.fn(() => Promise.resolve(test.returnValue))
+
+      await wrapper.vm.handleSubmitStops([1, 2])
+
+      expect(wrapper.vm.snackbarText).toEqual(test.expected)
+    })
   })
 })
