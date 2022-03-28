@@ -625,7 +625,6 @@ export default {
     },
     savedFilters: {
       type: Object,
-      required: true,
     },
   },
 }

@@ -22,7 +22,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         class="tw-ml-2"
       >
         <ripa-date-picker-stub
-          class="tw-ml-2"
           label="From Date"
           rules=""
         />
@@ -38,7 +37,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         class="tw-ml-2"
       >
         <ripa-date-picker-stub
-          class="tw-ml-2"
           label="To Date"
           rules=""
         />
@@ -50,32 +48,35 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
       tag="div"
       xs12=""
     >
-      <v-select-stub
-        appendicon="$dropdown"
-        backgroundcolor=""
+      <div
         class="tw-ml-2"
-        clearable="true"
-        clearicon="$clear"
-        deletablechips="true"
-        errorcount="1"
-        errormessages=""
-        itemcolor="primary"
-        itemdisabled="disabled"
-        items="[object Object],[object Object],[object Object],[object Object],[object Object]"
-        itemtext="text"
-        itemvalue="value"
-        label="Status"
-        loaderheight="2"
-        menuprops="[object Object]"
-        messages=""
-        multiple="true"
-        nodatatext="$vuetify.noDataText"
-        rules=""
-        smallchips="true"
-        successmessages=""
-        type="text"
-        valuecomparator="[Function]"
-      />
+      >
+        <v-select-stub
+          appendicon="$dropdown"
+          backgroundcolor=""
+          clearable="true"
+          clearicon="$clear"
+          deletablechips="true"
+          errorcount="1"
+          errormessages=""
+          itemcolor="primary"
+          itemdisabled="disabled"
+          items="[object Object],[object Object],[object Object],[object Object],[object Object]"
+          itemtext="text"
+          itemvalue="value"
+          label="Status"
+          loaderheight="2"
+          menuprops="[object Object]"
+          messages=""
+          multiple="true"
+          nodatatext="$vuetify.noDataText"
+          rules=""
+          smallchips="true"
+          successmessages=""
+          type="text"
+          valuecomparator="[Function]"
+        />
+      </div>
     </v-flex-stub>
      
     <v-flex-stub
@@ -137,10 +138,7 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
           appendicon="$dropdown"
           backgroundcolor=""
           cacheitems="true"
-          chips="true"
           clearicon="$clear"
-          deletablechips="true"
-          dense="true"
           errorcount="1"
           errormessages=""
           filter="[Function]"
@@ -156,8 +154,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
           multiple="true"
           nodatatext="$vuetify.noDataText"
           rules=""
-          searchinput=""
-          smallchips="true"
           successmessages=""
           type="text"
           value=""

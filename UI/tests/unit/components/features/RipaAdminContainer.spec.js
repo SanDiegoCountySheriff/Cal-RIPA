@@ -41,6 +41,7 @@ describe('Ripa Admin Container', () => {
       displayBeatInput: jest.fn(),
       mappedAdminHistoricalCpraReports: jest.fn(),
       mappedAdminCpraReportStats: jest.fn(),
+      stopQueryData: jest.fn(),
     }
     store = new Vuex.Store({
       actions,

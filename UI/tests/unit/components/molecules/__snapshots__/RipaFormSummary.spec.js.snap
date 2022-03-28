@@ -2,8 +2,6 @@
 
 exports[`Ripa Form Summary should match snapshot 1`] = `
 <div>
-  <!---->
-   
   <div>
     <v-card-stub
       class="ripa-form-summary mx-auto"

@@ -12,7 +12,6 @@ exports[`Ripa Admin Container should match snapshot 1`] = `
     ontabchange="[Function]"
     onuploaddomain="[Function]"
     onuploadusers="[Function]"
-    savedfilters="[object Object]"
     schools=""
     statutes=""
     users=""

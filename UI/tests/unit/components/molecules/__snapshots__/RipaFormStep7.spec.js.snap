@@ -54,8 +54,8 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
       type="button"
     >
       
-      Cancel
-    
+        Cancel
+      
     </v-btn-stub>
      
     <v-btn-stub

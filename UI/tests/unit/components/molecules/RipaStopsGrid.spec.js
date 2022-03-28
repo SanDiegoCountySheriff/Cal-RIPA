@@ -25,7 +25,6 @@ describe('Ripa Stops Grid', () => {
 
   it('should match snapshot', () => {
     wrapper = factory({
-      savedFilters: { isPiiFound: false },
       errorCodeSearch: {
         items: [],
         loading: false,
