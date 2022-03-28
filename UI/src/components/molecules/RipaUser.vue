@@ -46,7 +46,6 @@
                 v-model="model.startDate"
                 label="Start Date"
                 :rules="startDateRules"
-                :max="getMaxDate"
                 @input="handleInput"
               ></ripa-date-picker>
             </div>
@@ -181,16 +180,6 @@ export default {
 
   data() {
     return {
-      yearsExperienceRules: [
-        v => !!v || 'Years of Experience is required',
-        v =>
-          (v >= 1 && v <= 50) ||
-          'Years of Experience must be between 1 and 50 Years',
-      ],
-      agencyRules: [v => !!v || 'An agency is required'],
-      assignmentRules: [v => !!v || 'An assignment is required'],
-      firstNameRules: [v => !!v || 'A first name is required'],
-      lastNameRules: [v => !!v || 'A last name is required'],
       assignmentItems: OFFICER_ASSIGNMENTS,
       viewModel: this.value,
     }
@@ -201,6 +190,31 @@ export default {
       get() {
         return this.viewModel
       },
+    },
+
+    yearsExperienceRules() {
+      return [
+        v => !!v || 'Years of Experience is required',
+        v =>
+          (v >= 1 && v <= 50) ||
+          'Years of Experience must be between 1 and 50 Years',
+      ]
+    },
+
+    agencyRules() {
+      return [v => !!v || 'An agency is required']
+    },
+
+    assignmentRules() {
+      return [v => !!v || 'An assignment is required']
+    },
+
+    firstNameRules() {
+      return [v => !!v || 'A first name is required']
+    },
+
+    lastNameRules() {
+      return [v => !!v || 'A last name is required']
     },
 
     startDateRules() {
@@ -266,7 +280,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     loading: {
       type: Boolean,

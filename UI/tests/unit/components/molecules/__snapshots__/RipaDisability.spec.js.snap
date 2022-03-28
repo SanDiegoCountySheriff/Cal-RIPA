@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Disability should match snapshot 1`] = `
+<div
+  class="ripa-disability tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(9)"
+    title="Perceived or Known Disability"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Any Disabilities?"
+          maxwidth="200"
+          rules=""
+        />
+         
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

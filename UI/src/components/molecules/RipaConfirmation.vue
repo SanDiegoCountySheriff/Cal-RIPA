@@ -21,7 +21,7 @@ export default {
   props: {
     onStartNew: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Gender should match snapshot 1`] = `
+<div
+  class="ripa-gender tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(5)"
+    title="Perceived Gender"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-radio-group-stub
+          clearselection="true"
+          items="[object Object],[object Object],[object Object],[object Object]"
+          rules="A gender is required"
+        />
+      </v-col-stub>
+       
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Gender Nonconforming"
+          maxwidth="250"
+          rules="A gender is required"
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+   
+  <ripa-form-header-stub
+    class="tw-mt-8"
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(6)"
+    title="Perceived LGBT"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Perceived as LGBT"
+          maxwidth="200"
+          rules=""
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

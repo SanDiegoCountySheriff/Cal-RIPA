@@ -221,6 +221,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    title: {
+      type: String,
+      default: 'Review, Edit and Submit',
+    },
     adminEditing: {
       type: Boolean,
       default: false,
@@ -235,27 +239,25 @@ export default {
     },
     onDeletePerson: {
       type: Function,
+      required: false,
       default: () => {},
     },
     onCopyPerson: {
       type: Function,
+      required: false,
       default: () => {},
     },
     onEditAgencyQuestions: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditStop: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onEditPerson: {
       type: Function,
-      default: () => {},
-    },
-    title: {
-      type: String,
-      default: 'Review, Edit and Submit',
+      required: true,
     },
   },
 }

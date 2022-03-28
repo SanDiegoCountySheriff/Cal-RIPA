@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Stop Reason should match snapshot 1`] = `
+<div
+  class="ripa-stop-reason tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(10)"
+    title="Reason for Stop"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        class="tw-pr-2"
+        cols="12"
+        md="6"
+        sm="6"
+        tag="div"
+      >
+        <div
+          class="tw-mr-2 tw-mt-4"
+        >
+          <v-btn-stub
+            activeclass=""
+            class="tw-w-full"
+            color="primary"
+            small="true"
+            tag="button"
+            type="button"
+          >
+            
+            Open Favorites
+          
+          </v-btn-stub>
+        </div>
+      </v-col-stub>
+       
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="6"
+        tag="div"
+      >
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        class="tw-mb-4"
+        cols="12"
+        sm="12"
+        tag="div"
+      />
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-select-stub
+          hint=""
+          items="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+          itemtext="name"
+          itemvalue="value"
+          label="Reason"
+          rules="[Function]"
+        />
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <ripa-subheader-stub
+          text="-- and --"
+        />
+         
+        <!---->
+         
+        <ripa-text-input-stub
+          hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
+          label="Brief Explanation"
+          persistent-hint=""
+          rules="[Function],[Function],[Function]"
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

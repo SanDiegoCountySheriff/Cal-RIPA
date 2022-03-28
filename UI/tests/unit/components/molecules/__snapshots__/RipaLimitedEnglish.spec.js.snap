@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Limited English should match snapshot 1`] = `
+<div
+  class="ripa-no-english tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    subtitle="§999.226(a)(8)"
+    title="Limited or No English Fluency"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Limited or no English fluency"
+          maxwidth="300"
+          rules=""
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

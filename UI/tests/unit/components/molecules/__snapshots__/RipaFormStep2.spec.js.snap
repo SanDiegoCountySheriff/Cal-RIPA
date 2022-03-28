@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Step 2 should match snapshot 1`] = `
+<v-form-stub
+  lazyvalidation="true"
+>
+  <!---->
+   
+  <ripa-race-stub
+    onopenstatute="[Function]"
+    value="[object Object]"
+  />
+   
+  <ripa-gender-stub
+    onopenstatute="[Function]"
+    value="[object Object]"
+  />
+   
+  <ripa-age-stub
+    onopenstatute="[Function]"
+    value="[object Object]"
+  />
+   
+  <ripa-limited-english-stub
+    onopenstatute="[Function]"
+    value="[object Object]"
+  />
+   
+  <ripa-disability-stub
+    onopenstatute="[Function]"
+    value="[object Object]"
+  />
+   
+  <v-spacer-stub />
+   
+  <!---->
+   
+  <div
+    class="tw-flex tw-mt-8 tw-justify-center"
+  >
+    <v-btn-stub
+      activeclass=""
+      class="tw-mr-2"
+      color="primary"
+      outlined="true"
+      tag="button"
+      type="button"
+    >
+      
+        Back
+      
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      class="tw-mr-2"
+      color="error"
+      outlined="true"
+      tag="button"
+      type="button"
+    >
+      
+      Cancel
+    
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      color="primary"
+      tag="button"
+      type="button"
+    >
+      
+      Next
+    
+    </v-btn-stub>
+  </div>
+</v-form-stub>
+`;

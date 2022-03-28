@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa User Dialog should match snapshot 1`] = `
+<v-dialog-stub
+  closedelay="0"
+  contentclass=""
+  maxwidth="650px"
+  opendelay="0"
+  origin="center center"
+  persistent="true"
+  retainfocus="true"
+  transition="dialog-transition"
+  width="auto"
+>
+  <v-card-stub
+    loaderheight="4"
+    tag="div"
+  >
+    <v-card-title-stub>
+      <span>
+        Manage User
+      </span>
+    </v-card-title-stub>
+     
+    <v-card-text-stub>
+      <v-form-stub
+        lazyvalidation="true"
+      >
+        <!---->
+         
+        <ripa-user-stub
+          isrowkeydisabled="true"
+          onopenstatute="[Function]"
+          value="[object Object]"
+        />
+      </v-form-stub>
+    </v-card-text-stub>
+     
+    <v-card-actions-stub>
+      <v-spacer-stub />
+       
+      <v-btn-stub
+        activeclass=""
+        color="blue darken-1"
+        tag="button"
+        text="true"
+        type="button"
+      >
+        
+            Cancel
+          
+      </v-btn-stub>
+       
+      <v-btn-stub
+        activeclass=""
+        color="blue darken-1"
+        tag="button"
+        text="true"
+        type="button"
+      >
+         Save 
+      </v-btn-stub>
+    </v-card-actions-stub>
+  </v-card-stub>
+</v-dialog-stub>
+`;

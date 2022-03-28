@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Radio Group should match snapshot 1`] = `
+<div
+  class="ripa-radio-group"
+>
+  <v-radio-group-stub
+    activeclass="v-item--active"
+    backgroundcolor=""
+    column="true"
+    errorcount="1"
+    errormessages=""
+    height="auto"
+    messages=""
+    rules=""
+    successmessages=""
+    tag="div"
+    value=""
+    valuecomparator="[Function]"
+  />
+   
+  <!---->
+</div>
+`;

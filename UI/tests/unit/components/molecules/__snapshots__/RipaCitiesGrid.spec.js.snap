@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Cities Grid should match snapshot 1`] = `
+<div
+  class="ripa-cities-grid"
+>
+  <p
+    class="ripa-cities-grid--info"
+  >
+    
+    Data in this table is provided by CA DOJ and maintained periodically on
+    CLEW (
+    <a
+      href="https://clew.doj.ca.gov/sd-ab953"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      
+      https://clew.doj.ca.gov/sd-ab953 
+    </a>
+    ). Exercise caution when uploading data. Any mismatches will produce
+    errors upon submission to CA DOJ.
+  
+  </p>
+   
+  <v-card-title-stub>
+    <v-text-field-stub
+      appendicon="mdi-magnify"
+      backgroundcolor=""
+      clearicon="$clear"
+      errorcount="1"
+      errormessages=""
+      hidedetails="true"
+      label="Search"
+      loaderheight="2"
+      messages=""
+      rules=""
+      singleline="true"
+      successmessages=""
+      type="text"
+      value=""
+    />
+  </v-card-title-stub>
+   
+  <v-data-table-stub
+    customfilter="[Function]"
+    customgroup="[Function]"
+    customsort="[Function]"
+    expanded=""
+    expandicon="$expand"
+    groupby=""
+    groupdesc=""
+    headers="[object Object],[object Object],[object Object],[object Object],[object Object]"
+    itemclass=""
+    itemkey="id"
+    items=""
+    itemsperpage="10"
+    loaderheight="4"
+    loadingtext="$vuetify.dataIterator.loadingText"
+    locale="en-US"
+    mobilebreakpoint="600"
+    nodatatext="$vuetify.noDataText"
+    noresultstext="$vuetify.dataIterator.noResultsText"
+    options="[object Object]"
+    page="1"
+    search=""
+    selectablekey="isSelectable"
+    serveritemslength="-1"
+    sortby="name"
+    sortdesc=""
+    value=""
+  />
+</div>
+`;

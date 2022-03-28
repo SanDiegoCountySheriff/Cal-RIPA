@@ -55,7 +55,7 @@ export default {
     },
 
     statuteContent() {
-      return (this.statute && this.statute.content) || []
+      return (this.statute && this.statute.content) || {}
     },
   },
 

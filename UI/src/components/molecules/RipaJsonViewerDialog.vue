@@ -98,7 +98,7 @@ export default {
     },
     onClose: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

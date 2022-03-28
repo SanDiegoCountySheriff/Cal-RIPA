@@ -227,23 +227,23 @@ export default {
     },
     onOpenFavorites: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onOpenLastLocation: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onSaveFavorite: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onGpsLocation: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onUpdateUser: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

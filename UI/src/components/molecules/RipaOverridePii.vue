@@ -84,11 +84,11 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     apiStop: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }

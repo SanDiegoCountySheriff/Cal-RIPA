@@ -24,7 +24,7 @@
         <v-btn color="blue darken-1" text @click="handleClose"> Cancel </v-btn>
         <v-btn
           color="blue darken-1"
-          :disabled="getSaveDiabled"
+          :disabled="getSaveDisabled"
           text
           @click="handleSave"
         >
@@ -53,14 +53,12 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.onClose()
         }
         this.viewModel = newValue
       },
     },
-    getSaveDiabled() {
+    getSaveDisabled() {
       return this.favoriteName.length === 0
     },
   },
@@ -71,16 +69,11 @@ export default {
     },
 
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.onClose()
     },
 
     handleSave() {
-      if (this.onAddFavorite) {
-        this.onAddFavorite(this.favoriteName)
-      }
-
+      this.onAddFavorite(this.favoriteName)
       this.handleClose()
     },
   },
@@ -102,11 +95,11 @@ export default {
     },
     onAddFavorite: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onClose: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

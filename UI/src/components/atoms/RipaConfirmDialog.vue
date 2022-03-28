@@ -37,28 +37,22 @@ export default {
 
   methods: {
     handleCancel() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.onClose()
     },
 
     handleConfirm() {
       this.isConfirmDisabled = true
       this.viewModel = false
-      if (this.onConfirm) {
-        this.onConfirm()
-      }
+      this.onConfirm()
       this.handleCancel()
     },
   },
 
   watch: {
-    showDialog(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.showDialog = newVal
-        if (newVal) {
-          this.isConfirmDisabled = false
-        }
+    showDialog(value) {
+      this.showDialog = value
+      if (value) {
+        this.isConfirmDisabled = false
       }
     },
   },
@@ -78,11 +72,11 @@ export default {
     },
     onClose: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onConfirm: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

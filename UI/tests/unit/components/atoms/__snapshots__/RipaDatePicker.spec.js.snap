@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Date Picker should match snapshot 1`] = `
+<v-text-field-stub
+  appendicon="mdi-calendar"
+  backgroundcolor=""
+  clearable="true"
+  clearicon="$clear"
+  errorcount="1"
+  errormessages=""
+  label=""
+  loaderheight="2"
+  messages=""
+  rules=""
+  successmessages=""
+  type="date"
+/>
+`;

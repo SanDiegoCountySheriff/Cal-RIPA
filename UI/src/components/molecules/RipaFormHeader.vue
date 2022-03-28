@@ -59,7 +59,6 @@ export default {
     },
     onOpenStatute: {
       type: Function,
-      default: () => {},
     },
   },
 }
