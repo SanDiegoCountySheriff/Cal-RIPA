@@ -38,33 +38,28 @@
 
       <v-spacer></v-spacer>
 
+      <v-tooltip v-if="stopsWithErrors.length > 0" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="bounce"
+            icon
+            small
+            @click="handleViewStopsWithErrors"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon color="error"> mdi-alert </v-icon>
+          </v-btn>
+        </template>
+        <span>View stops with errors</span>
+      </v-tooltip>
+
       <template v-if="isMobile">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon v-bind="attrs" v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
-            <!-- <v-tooltip left> -->
-            <!-- <template v-slot:activator="{ on, attrs }"> -->
-            <v-btn
-              v-if="stopsWithErrors.length > 0"
-              icon
-              v-bind="attrs"
-              v-on="on"
-              @click="handleViewStopsWithErrors"
-            >
-              <transition name="bounce">
-                <v-icon v-show="$vuetify.breakpoint.xs" color="error">
-                  mdi-alert
-                </v-icon>
-              </transition>
-            </v-btn>
-            <!-- </template> -->
-            <!-- <v-alert text prominent type="error" icon="mdi-cloud-alert">
-                Error
-              </v-alert> -->
-            <!-- <span>View stops with errrors</span>
-            </v-tooltip> -->
           </template>
 
           <v-list>
@@ -132,26 +127,6 @@
 
       <template v-if="!isMobile">
         <div v-if="!invalidUser">
-          <v-tooltip v-if="stopsWithErrors.length > 0" bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="tw-ml-4"
-                icon
-                small
-                @click="handleViewStopsWithErrors"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <transition name="bounce">
-                  <v-icon v-if="!$vuetify.breakpoint.xs" color="error">
-                    mdi-alert
-                  </v-icon>
-                </transition>
-              </v-btn>
-            </template>
-            <span>View stops with errors</span>
-          </v-tooltip>
-
           <v-tooltip v-if="authenticated && online" bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -421,41 +396,15 @@ export default {
   }
 }
 
-.bounce-enter-active {
-  animation: bounce-in 10s;
+.bounce {
+  animation: bounce-in 2s infinite;
 }
-.bounce-leave-active {
-  animation: bounce-in 10s reverse;
-}
+
 @keyframes bounce-in {
   0% {
     transform: scale(1);
   }
-  10% {
-    transform: scale(2);
-  }
-  20% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(2);
-  }
-  40% {
-    transform: scale(1);
-  }
   50% {
-    transform: scale(2);
-  }
-  60% {
-    transform: scale(1);
-  }
-  70% {
-    transform: scale(2);
-  }
-  80% {
-    transform: scale(1);
-  }
-  90% {
     transform: scale(2);
   }
   100% {
