@@ -44,25 +44,30 @@
             <v-btn icon v-bind="attrs" v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
-            <v-btn icon @click="handleViewStopsWithErrors">
-              <v-icon v-show="$vuetify.breakpoint.xs" color="error">mdi-alert</v-icon>
+            <!-- <v-tooltip left> -->
+            <!-- <template v-slot:activator="{ on, attrs }"> -->
+            <v-btn
+              v-if="stopsWithErrors.length > 0"
+              icon
+              v-bind="attrs"
+              v-on="on"
+              @click="handleViewStopsWithErrors"
+            >
+              <transition name="bounce">
+                <v-icon v-show="$vuetify.breakpoint.xs" color="error">
+                  mdi-alert
+                </v-icon>
+              </transition>
             </v-btn>
+            <!-- </template> -->
+            <!-- <v-alert text prominent type="error" icon="mdi-cloud-alert">
+                Error
+              </v-alert> -->
+            <!-- <span>View stops with errrors</span>
+            </v-tooltip> -->
           </template>
 
           <v-list>
-            <v-list-item v-show="!$vuetify.breakpoint.xs">
-              <v-list-item-title>
-                <v-btn
-                  aria-label="View stops with errors"
-                  small
-                  text
-                  @click="handleViewStopsWithErrors"
-                >
-                  <v-icon class="tw-mr-4" color="error"> mdi-alert </v-icon>
-                  View stops with errors
-                </v-btn>
-              </v-list-item-title>
-            </v-list-item>
             <template v-if="authenticated && online">
               <v-list-item>
                 <v-list-item-title>
@@ -137,7 +142,11 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon>mdi-alert</v-icon>
+                <transition name="bounce">
+                  <v-icon v-if="!$vuetify.breakpoint.xs" color="error">
+                    mdi-alert
+                  </v-icon>
+                </transition>
               </v-btn>
             </template>
             <span>View stops with errors</span>
@@ -409,6 +418,48 @@ export default {
 .ripa-app-bar--qa-light {
   .theme--light.v-app-bar.v-toolbar.v-sheet {
     background-color: #90caf9;
+  }
+}
+
+.bounce-enter-active {
+  animation: bounce-in 10s;
+}
+.bounce-leave-active {
+  animation: bounce-in 10s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(2);
+  }
+  20% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(2);
+  }
+  40% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(2);
+  }
+  60% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(2);
+  }
+  80% {
+    transform: scale(1);
+  }
+  90% {
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>
