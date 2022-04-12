@@ -104,6 +104,14 @@ describe('Ripa Stop Date', () => {
       propsData: {
         value: stop,
       },
+      computed: {
+        getMinDate: jest.fn(() => {
+          return '2019-01-01'
+        }),
+        getMaxDate: jest.fn(() => {
+          return '2019-12-31'
+        }),
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

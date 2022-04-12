@@ -1,5 +1,5 @@
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1.vue'
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Step 1', () => {
@@ -8,10 +8,6 @@ describe('Ripa Form Step 1', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -29,16 +25,7 @@ describe('Ripa Form Step 1', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep1, {
-      vuetify,
-      propsData: {
-        onOpenFavorites: jest.fn(),
-        onOpenLastLocation: jest.fn(),
-        onSaveFavorite: jest.fn(),
-        onGpsLocation: jest.fn(),
-        onUpdateUser: jest.fn(),
-      },
-    })
+    wrapper = factory()
 
     expect(wrapper.html()).toMatchSnapshot()
   })

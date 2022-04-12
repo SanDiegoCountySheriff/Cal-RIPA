@@ -11,7 +11,7 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
     <div class="row no-gutters">
       <div class="col-sm-12 col-md-4 col-12">
         <div class="md:tw-mr-4">
-          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field" min="2018-02-01T23:59:59.999-08:00" max="2022-04-12T23:59:59.999-07:00">
+          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field" min="2019-01-01" max="2019-12-31">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-text-field__slot"><label for="input-29" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Date of Stop</label><input id="input-29" type="date"></div>
