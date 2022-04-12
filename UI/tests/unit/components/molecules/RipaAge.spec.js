@@ -1,6 +1,6 @@
 import RipaAge from '@/components/molecules/RipaAge'
 import { defaultStop } from '@/utilities/stop.js'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Age', () => {
@@ -23,9 +23,9 @@ describe('Ripa Age', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaAge, { vuetify, propsData: { value: stop } })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should validate age rules', () => {

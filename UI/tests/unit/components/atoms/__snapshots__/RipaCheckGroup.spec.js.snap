@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Check Group should match snapshot 1`] = `
-<div
-  class="ripa-check-group"
-/>
-`;
+exports[`Ripa Check Group should match snapshot 1`] = `<div class="ripa-check-group"></div>`;

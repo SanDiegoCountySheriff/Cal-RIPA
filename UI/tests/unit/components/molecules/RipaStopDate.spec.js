@@ -1,5 +1,5 @@
 import RipaStopDate from '@/components/molecules/RipaStopDate.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import { format } from 'date-fns'
 import Vuetify from 'vuetify'
@@ -12,10 +12,6 @@ describe('Ripa Stop Date', () => {
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -100,6 +96,17 @@ describe('Ripa Stop Date', () => {
         test.expectedSecondCase,
       )
     })
+  })
+
+  it('should match snapshot', () => {
+    wrapper = mount(RipaStopDate, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should validate admin date', () => {

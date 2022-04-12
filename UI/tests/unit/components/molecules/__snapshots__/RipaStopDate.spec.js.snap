@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Stop Date should match snapshot 1`] = `
+<div class="ripa-stop-date tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Date of Stop</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-md-4 col-12">
+        <div class="md:tw-mr-4">
+          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field" min="2018-02-01T23:59:59.999-08:00" max="2022-04-12T23:59:59.999-07:00">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-29" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Date of Stop</label><input id="input-29" type="date"></div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
+                </div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-4 col-12">
+        <div class="md:tw-mr-4">
+          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-35" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Time of Stop</label><input id="input-35" type="time"></div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-clock-time-four-outline theme--light"></i></div>
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-4 col-12">
+        <div class="md:tw-mr-4">
+          <div class="v-input theme--light v-text-field" min="1" max="1440">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-40" class="v-label theme--light" style="left: 0px; position: absolute;">Stop Duration</label><input inputmode="numeric" min="0" id="input-40" type="number"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 300px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-44" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--switch__track theme--light"></div>
+                  <div class="v-input--switch__thumb theme--light">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-44" class="v-label theme--light" style="left: 0px; position: relative;">
+                  Stop in response to Call for Service
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

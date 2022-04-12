@@ -1,104 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa CPRA Report should match snapshot 1`] = `
-<v-container-stub
-  class="tw-mt-2"
-  fluid="true"
-  tag="div"
->
-  <v-layout-stub
-    align-center=""
-    class="tw-m-0"
-    nowrap=""
-    row=""
-    tag="div"
-  >
-    <v-flex-stub
-      md2=""
-      tag="div"
-      xs12=""
-    >
-      <div
-        class="tw-ml-2"
-      >
-        <ripa-date-picker-stub
-          class="tw-ml-2"
-          label="From Date"
-          rules="[Function],From date must be before To Date,[Function]"
-        />
+<div class="container tw-mt-2 container--fluid">
+  <div class="layout tw-m-0 row align-center nowrap">
+    <div class="flex xs12 md2">
+      <div class="tw-ml-2">
+        <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-text-field__slot"><label for="input-3" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">From Date</label><input id="input-3" type="date"></div>
+              <div class="v-input__append-inner">
+                <div></div>
+              </div>
+              <div class="v-input__append-inner">
+                <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </v-flex-stub>
-     
-    <v-flex-stub
-      md2=""
-      tag="div"
-      xs12=""
-    >
-      <div
-        class="tw-ml-2"
-      >
-        <ripa-date-picker-stub
-          class="tw-ml-2"
-          label="To Date"
-          rules="[Function],From date must be before To Date,[Function]"
-        />
-      </div>
-    </v-flex-stub>
-     
-    <v-flex-stub
-      md2=""
-      tag="div"
-      xs12=""
-    >
-      <div
-        class="tw-ml-2"
-      >
-        <v-btn-stub
-          activeclass=""
-          class="tw-ml-2"
-          color="primary"
-          disabled="true"
-          small="true"
-          tag="button"
-          type="button"
-        >
-          Create
-        </v-btn-stub>
-      </div>
-    </v-flex-stub>
-  </v-layout-stub>
-   
-  <v-card-stub
-    class="cpra-report"
-    flat="true"
-    loaderheight="4"
-    tag="div"
-  >
-    <v-card-title-stub>
-      CPRA Report
-    </v-card-title-stub>
-     
-    <v-card-text-stub>
-      Only stops accepted by the California DOJ are included on the
-      report.
-    </v-card-text-stub>
-     
-    <v-card-text-stub />
-     
-    <div
-      class="tw-ml-4 tw-mb-4"
-    >
-      <v-btn-stub
-        activeclass=""
-        color="primary"
-        small="true"
-        style="display: none;"
-        tag="button"
-        type="button"
-      >
-        Download Report
-      </v-btn-stub>
     </div>
-  </v-card-stub>
-</v-container-stub>
+    <div class="flex xs12 md2">
+      <div class="tw-ml-2">
+        <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-text-field__slot"><label for="input-8" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">To Date</label><input id="input-8" type="date"></div>
+              <div class="v-input__append-inner">
+                <div></div>
+              </div>
+              <div class="v-input__append-inner">
+                <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex xs12 md2">
+      <div class="tw-ml-2"><button type="button" disabled="disabled" class="tw-ml-2 v-btn v-btn--disabled v-btn--has-bg theme--light v-size--small"><span class="v-btn__content">Create</span></button></div>
+    </div>
+  </div>
+  <div class="cpra-report v-card v-card--flat v-sheet theme--light">
+    <div class="v-card__title">CPRA Report</div>
+    <div class="v-card__text">Only stops accepted by the California DOJ are included on the
+      report.</div>
+    <div class="v-card__text"></div>
+    <div class="tw-ml-4 tw-mb-4"><button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary" style="display: none;"><span class="v-btn__content">Download Report</span></button></div>
+  </div>
+</div>
 `;

@@ -1,5 +1,5 @@
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Confirm Dialog', () => {
@@ -33,9 +33,9 @@ describe('Ripa Confirm Dialog', () => {
   }
 
   it('should match snapshot', async () => {
-    wrapper = factory(testData)
+    wrapper = mount(RipaConfirmDialog, { vuetify, propsData: { ...testData } })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should handle cancel', () => {

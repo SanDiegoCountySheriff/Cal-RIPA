@@ -1,5 +1,5 @@
 import RipaTree from '@/components/molecules/RipaTree.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Tree', () => {
@@ -8,10 +8,6 @@ describe('Ripa Tree', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -24,8 +20,13 @@ describe('Ripa Tree', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ treeData: { id: 1, text: 'test' } })
+    wrapper = mount(RipaTree, {
+      vuetify,
+      propsData: {
+        treeData: { id: 1, text: 'test' },
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

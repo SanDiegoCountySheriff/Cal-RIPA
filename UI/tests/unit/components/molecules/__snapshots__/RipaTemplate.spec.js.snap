@@ -1,98 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Template should match snapshot 1`] = `
-<v-card-stub
-  class="mx-auto"
-  flat="true"
-  loaderheight="4"
-  maxwidth="500"
-  tag="div"
->
-  <v-card-text-stub>
-    <div
-      class="tw-mt-4 tw-mb-4"
-    >
-      <v-container-stub
-        fluid="true"
-        tag="div"
-      >
-        <v-row-stub
-          dense="true"
-          nogutters="true"
-          tag="div"
-        >
-          <v-col-stub
-            class="tw-mt-4 tw-text-center"
-            cols="12"
-            sm="12"
-            tag="div"
-          >
-            <v-btn-stub
-              activeclass=""
-              color="primary"
-              tag="button"
-              type="button"
-            >
-              
+<div class="mx-auto v-card v-card--flat v-sheet theme--light" style="max-width: 500px;">
+  <div class="v-card__text">
+    <div class="tw-mt-4 tw-mb-4">
+      <div class="container container--fluid">
+        <div class="row no-gutters row--dense">
+          <div class="tw-mt-4 tw-text-center col-sm-12 col-12"><button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
               BASIC STOP
-            
-            </v-btn-stub>
-          </v-col-stub>
-        </v-row-stub>
-         
-        <v-row-stub
-          tag="div"
-        />
-      </v-container-stub>
+            </span></button></div>
+        </div>
+        <div class="row"></div>
+      </div>
     </div>
-     
-    <v-divider-stub />
-     
-    <div
-      class="tw-mt-4"
-    >
-      About this App:
-    </div>
-     
+    <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
+    <div class="tw-mt-4">About this App:</div>
     <p>
-      
       The Racial and Identity Profiling Act of 2015 (AB 953) requires state
       and local law enforcement agencies, to collect data regarding stops of
       individuals, including perceived demographic information on the person
       stopped, and to report this data to the California Attorney General's
       (AG) Office.
-    
     </p>
-     
     <p>
-      
       The AG’s Office has adopted
-      
-      <a
-        href="https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        
+      <a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/ripa/stop-data-reg-final-text-110717.pdf" target="_blank" rel="noopener noreferrer">
         these regulations
-      
       </a>
-      
       on November 7, 2017. For more information please see the
-      
-      <a
-        href="https://oag.ca.gov/ab953/regulations"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        
-        AG's Website 
-      </a>
-      .
-    
+      <a href="https://oag.ca.gov/ab953/regulations" target="_blank" rel="noopener noreferrer">
+        AG's Website </a>.
     </p>
-     
-    <v-divider-stub />
-  </v-card-text-stub>
-</v-card-stub>
+    <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
+  </div>
+</div>
 `;

@@ -1,5 +1,5 @@
 import RipaLocation from '@/components/molecules/RipaLocation.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 
@@ -49,7 +49,18 @@ describe('Ripa Location', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaLocation, {
+      vuetify,
+      propsData: {
+        value: stop,
+        onOpenFavorites: jest.fn(),
+        onOpenLastLocation: jest.fn(),
+        onSaveFavorite: jest.fn(),
+        onGpsLocation: jest.fn(),
+      },
+    })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   schoolTestCases.forEach(test => {

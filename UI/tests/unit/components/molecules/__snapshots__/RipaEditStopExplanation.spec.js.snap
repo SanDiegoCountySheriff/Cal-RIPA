@@ -1,34 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Edit Stop Explanation should match snapshot 1`] = `
-<div
-  class="ripa-race tw-py-4"
->
-  <ripa-form-header-stub
-    required="true"
-    subtitle=""
-    title="Edit Stop Explanation"
-  />
-   
-  <v-container-stub
-    tag="div"
-  >
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        cols="12"
-        sm="12"
-        tag="div"
-      >
-        <ripa-text-input-stub
-          hint="Please enter an explanation for editing the stop"
-          label="Edit Stop Explanation"
-          rules="[Function],[Function],[Function]"
-        />
-      </v-col-stub>
-    </v-row-stub>
-  </v-container-stub>
+<div class="ripa-race tw-py-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span>
+      <!---->
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Edit Stop Explanation</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-text-input">
+          <!---->
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-7" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-7" type="text"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;

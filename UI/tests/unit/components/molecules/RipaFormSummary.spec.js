@@ -1,5 +1,6 @@
 import RipaFormSummary from '@/components/molecules/RipaFormSummary.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
+import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Summary', () => {
@@ -8,10 +9,6 @@ describe('Ripa Form Summary', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -29,8 +26,19 @@ describe('Ripa Form Summary', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    const apiStop = API_STOP
+    wrapper = mount(RipaFormSummary, {
+      vuetify,
+      propsData: {
+        apiStop: apiStop,
+        onDeletePerson: jest.fn(),
+        onCopyPerson: jest.fn(),
+        onEditAgencyQuestions: jest.fn(),
+        onEditStop: jest.fn(),
+        onEditPerson: jest.fn(),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

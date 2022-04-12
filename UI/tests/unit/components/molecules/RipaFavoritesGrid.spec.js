@@ -1,5 +1,5 @@
 import RipaFavoritesGrid from '@/components/molecules/RipaFavoritesGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Favorites Grid', () => {
@@ -24,8 +24,8 @@ describe('Ripa Favorites Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaFavoritesGrid, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

@@ -1,110 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Stop Reason should match snapshot 1`] = `
-<div
-  class="ripa-stop-reason tw-pb-4"
->
-  <ripa-form-header-stub
-    onopenstatute="[Function]"
-    required="true"
-    subtitle="§999.226(a)(10)"
-    title="Reason for Stop"
-  />
-   
-  <v-container-stub
-    tag="div"
-  >
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        class="tw-pr-2"
-        cols="12"
-        md="6"
-        sm="6"
-        tag="div"
-      >
-        <div
-          class="tw-mr-2 tw-mt-4"
-        >
-          <v-btn-stub
-            activeclass=""
-            class="tw-w-full"
-            color="primary"
-            small="true"
-            tag="button"
-            type="button"
-          >
-            
+<div class="ripa-stop-reason tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Reason for Stop</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="tw-pr-2 col-sm-6 col-md-6 col-12">
+        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
             Open Favorites
-          
-          </v-btn-stub>
+          </span></button></div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-12">
+        <!---->
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
+          <div class="v-input__control">
+            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-9" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-9" class="v-label theme--light" style="left: 0px; position: absolute;">Reason</label>
+                <div class="v-select__selections"><input clerable="" required="required" id="input-9" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                </div><input type="hidden">
+              </div>
+              <div class="v-menu">
+                <!---->
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+              </div>
+            </div>
+          </div>
         </div>
-      </v-col-stub>
-       
-      <v-col-stub
-        cols="12"
-        md="6"
-        sm="6"
-        tag="div"
-      >
         <!---->
-      </v-col-stub>
-    </v-row-stub>
-     
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        class="tw-mb-4"
-        cols="12"
-        sm="12"
-        tag="div"
-      />
-    </v-row-stub>
-     
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        cols="12"
-        sm="12"
-        tag="div"
-      >
-        <ripa-select-stub
-          hint=""
-          items="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
-          itemtext="name"
-          itemvalue="value"
-          label="Reason"
-          rules="[Function]"
-        />
-         
         <!---->
-         
         <!---->
-         
         <!---->
-         
+        <div class="ripa-label tw-font-bold tw-my-4"><span>
+    -- and --
+  </span></div>
         <!---->
-         
-        <ripa-subheader-stub
-          text="-- and --"
-        />
-         
-        <!---->
-         
-        <ripa-text-input-stub
-          hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-          label="Brief Explanation"
-          persistent-hint=""
-          rules="[Function],[Function],[Function]"
-        />
-      </v-col-stub>
-    </v-row-stub>
-  </v-container-stub>
+        <div class="ripa-text-input" persistent-hint="">
+          <!---->
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-17" class="v-label theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-17" type="text"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
