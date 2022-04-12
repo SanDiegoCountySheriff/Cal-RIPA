@@ -9,7 +9,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    uses: szenius/set-timezone@v1.0
+    with:
+      timezoneLinux: "Asia/Singapore"
+      timezoneMacos: "Asia/Singapore"
+      timezoneWindows: "Singapore Standard Time"
     steps:
       - name: checkout git repository
         uses: actions/checkout@v2
