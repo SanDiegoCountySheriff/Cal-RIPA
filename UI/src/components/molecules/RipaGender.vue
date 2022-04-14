@@ -139,7 +139,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     disabled: {
       type: Boolean,

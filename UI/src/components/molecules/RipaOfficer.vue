@@ -109,7 +109,7 @@ export default {
     },
     onUpdateUser: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

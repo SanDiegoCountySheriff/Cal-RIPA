@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa JSON Viewer Dialog should match snapshot 1`] = `
+<v-dialog-stub
+  closedelay="0"
+  contentclass=""
+  maxwidth="800px"
+  opendelay="0"
+  origin="center center"
+  retainfocus="true"
+  transition="dialog-transition"
+  width="auto"
+>
+  <v-card-stub
+    loaderheight="4"
+    tag="div"
+  >
+    <v-card-title-stub>
+      <span>
+        JSON Viewer
+      </span>
+    </v-card-title-stub>
+     
+    <v-card-text-stub>
+      <v-tabs-stub
+        activeclass=""
+        nexticon="$next"
+        previcon="$prev"
+        slidersize="2"
+        value="0"
+      >
+        <v-tab-stub
+          ripple="true"
+        >
+          API Stop
+        </v-tab-stub>
+         
+        <v-tab-stub
+          ripple="true"
+        >
+          RIPA Full Stop
+        </v-tab-stub>
+         
+        <v-tab-stub
+          ripple="true"
+        >
+          RIPA Stop
+        </v-tab-stub>
+      </v-tabs-stub>
+       
+      <v-tabs-items-stub
+        activeclass="v-window-item--active"
+        nexticon="$next"
+        previcon="$prev"
+        tag="div"
+        value="0"
+      >
+        <v-tab-item-stub>
+          <ripa-json-viewer-stub />
+        </v-tab-item-stub>
+         
+        <v-tab-item-stub>
+          <ripa-json-viewer-stub />
+        </v-tab-item-stub>
+         
+        <v-tab-item-stub>
+          <ripa-json-viewer-stub />
+        </v-tab-item-stub>
+      </v-tabs-items-stub>
+    </v-card-text-stub>
+     
+    <v-card-actions-stub>
+      <v-spacer-stub />
+       
+      <v-btn-stub
+        activeclass=""
+        color="blue darken-1"
+        tag="button"
+        text="true"
+        type="button"
+      >
+         Close 
+      </v-btn-stub>
+    </v-card-actions-stub>
+  </v-card-stub>
+</v-dialog-stub>
+`;

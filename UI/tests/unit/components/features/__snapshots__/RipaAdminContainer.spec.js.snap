@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Admin Container should match snapshot 1`] = `
+<div>
+  <ripa-admin-template-stub
+    beats=""
+    cities=""
+    historicalcprareports=""
+    ondeletebeat="[Function]"
+    oneditbeat="[Function]"
+    onedituser="[Function]"
+    ontabchange="[Function]"
+    onuploaddomain="[Function]"
+    onuploadusers="[Function]"
+    schools=""
+    statutes=""
+    users=""
+  />
+   
+  <ripa-snackbar-stub
+    autoclose="true"
+    onview="[Function]"
+    timeout="6000"
+  />
+</div>
+`;

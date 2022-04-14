@@ -310,12 +310,6 @@ export default {
     },
   },
 
-  created() {
-    if (this.submissionId) {
-      // this.$emit('loadNewSubmission', newValue)
-    }
-  },
-
   watch: {
     submissionId(newValue, oldValue) {
       this.currentSubmissionLoading = true
@@ -338,12 +332,15 @@ export default {
   props: {
     submissionId: {
       type: String,
+      default: '',
     },
     submission: {
       type: Object,
+      required: true,
     },
     loading: {
       type: Boolean,
+      default: false,
     },
   },
 }

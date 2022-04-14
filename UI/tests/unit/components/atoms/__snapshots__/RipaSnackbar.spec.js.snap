@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Snackbar should match snapshot 1`] = `
+<v-snackbar-stub
+  contentclass=""
+  tag="div"
+  timeout="6000"
+  transition="v-snack-transition"
+>
+  
+  
+
+  
+</v-snackbar-stub>
+`;

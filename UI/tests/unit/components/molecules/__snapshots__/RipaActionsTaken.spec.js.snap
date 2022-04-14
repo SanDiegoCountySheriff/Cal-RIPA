@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Actions Taken should handle pii check when created 1`] = `
+<div
+  class="ripa-action-taken tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(12)"
+    title="Actions Taken During Stop"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Any Actions Taken?"
+          maxwidth="200"
+          rules=""
+          value="true"
+        />
+         
+        <ripa-check-group-stub
+          items="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+          rules="At least one action taken is required"
+          value=""
+        />
+         
+        <ripa-subheader-stub
+          text="Search"
+        />
+         
+        <ripa-check-group-stub
+          items="[object Object],[object Object],[object Object],[object Object]"
+          rules="At least one action taken is required"
+          value=""
+        />
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <ripa-subheader-stub
+          text="Seizure"
+        />
+         
+        <ripa-switch-stub
+          hint=""
+          label="Property was Seized"
+          maxwidth="200"
+          rules=""
+        />
+         
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;
+
+exports[`Ripa Actions Taken should match snapshot 1`] = `
+<div
+  class="ripa-action-taken tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(12)"
+    title="Actions Taken During Stop"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Any Actions Taken?"
+          maxwidth="200"
+          rules=""
+          value="true"
+        />
+         
+        <ripa-check-group-stub
+          items="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+          rules="At least one action taken is required"
+          value=""
+        />
+         
+        <ripa-subheader-stub
+          text="Search"
+        />
+         
+        <ripa-check-group-stub
+          items="[object Object],[object Object],[object Object],[object Object]"
+          rules="At least one action taken is required"
+          value=""
+        />
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <ripa-subheader-stub
+          text="Seizure"
+        />
+         
+        <ripa-switch-stub
+          hint=""
+          label="Property was Seized"
+          maxwidth="200"
+          rules=""
+        />
+         
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

@@ -419,7 +419,7 @@ export default {
       if (this.viewModel.stopReason.reasonForStop === 1) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         if (this.personSearchAutomaticallySelected) {
           this.removeActionsTakenPersonSearch()
@@ -443,7 +443,7 @@ export default {
       }
 
       if (this.viewModel.stopReason.reasonForStop === 7) {
-        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
@@ -475,7 +475,7 @@ export default {
       ) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
@@ -490,7 +490,7 @@ export default {
       if (this.viewModel.stopReason.reasonForStop === 6) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = null
+        this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null

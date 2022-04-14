@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Student should match snapshot 1`] = `
+<div
+  class="ripa-student tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.224(a)(16)"
+    title="Student"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="K-12 Public School Student"
+          maxwidth="250"
+          rules=""
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

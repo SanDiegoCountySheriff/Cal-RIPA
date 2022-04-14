@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa App Bar should match snapshot 1`] = `
+<div
+  class="ripa-app-bar"
+>
+  <v-app-bar-stub
+    app="true"
+    dense="true"
+    extensionheight="48"
+    flat="true"
+    src=""
+    tag="header"
+    value="true"
+  >
+    <v-toolbar-title-stub
+      class="tw-cursor-pointer"
+    >
+      RIPA
+    </v-toolbar-title-stub>
+     
+    <v-tooltip-stub
+      bottom="true"
+      closedelay="0"
+      contentclass=""
+      fixed="true"
+      maxwidth="auto"
+      nudgebottom="0"
+      nudgeleft="0"
+      nudgeright="0"
+      nudgetop="0"
+      nudgewidth="0"
+      opendelay="0"
+      openonhover="true"
+      tag="span"
+    >
+       
+      <span>
+        Online Status
+      </span>
+    </v-tooltip-stub>
+     
+    <v-tooltip-stub
+      bottom="true"
+      closedelay="0"
+      contentclass=""
+      fixed="true"
+      maxwidth="auto"
+      nudgebottom="0"
+      nudgeleft="0"
+      nudgeright="0"
+      nudgetop="0"
+      nudgewidth="0"
+      opendelay="0"
+      openonhover="true"
+      tag="span"
+    >
+       
+      <span>
+        View dark mode
+      </span>
+    </v-tooltip-stub>
+     
+    <v-spacer-stub />
+     
+    <!---->
+     
+    <div>
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <!---->
+    </div>
+  </v-app-bar-stub>
+   
+  <!---->
+</div>
+`;

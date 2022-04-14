@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Step 5 should match snapshot 1`] = `
+<v-form-stub
+  lazyvalidation="true"
+>
+  <ripa-stop-result-stub
+    onopenfavorites="[Function]"
+    onopenstatute="[Function]"
+    onsavefavorite="[Function]"
+    statutes=""
+    value="[object Object]"
+  />
+   
+  <v-spacer-stub />
+   
+  <!---->
+   
+  <div
+    class="tw-flex tw-mt-8 tw-justify-center"
+  >
+    <v-btn-stub
+      activeclass=""
+      class="tw-mr-2"
+      color="primary"
+      outlined="true"
+      tag="button"
+      type="button"
+    >
+      
+      Back
+    
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      class="tw-mr-2"
+      color="error"
+      outlined="true"
+      tag="button"
+      type="button"
+    >
+      
+      Cancel
+    
+    </v-btn-stub>
+     
+    <v-btn-stub
+      activeclass=""
+      color="primary"
+      tag="button"
+      type="button"
+    >
+      
+      Next
+    
+    </v-btn-stub>
+  </div>
+   
+  <ripa-confirm-dialog-stub
+    onclose="[Function]"
+    onconfirm="[Function]"
+    subtitle="This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?"
+    title="Confirm Continue"
+  />
+</v-form-stub>
+`;

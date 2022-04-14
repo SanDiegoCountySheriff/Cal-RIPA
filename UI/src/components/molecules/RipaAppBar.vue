@@ -272,16 +272,12 @@ export default {
 
   methods: {
     handleViewStopsWithErrors() {
-      if (this.onViewStopsWithErrors) {
-        this.onViewStopsWithErrors()
-      }
+      this.onViewStopsWithErrors()
     },
 
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      if (this.onUpdateDark) {
-        this.onUpdateDark(this.$vuetify.theme.dark)
-      }
+      this.onUpdateDark(this.$vuetify.theme.dark)
     },
 
     handleAuth() {
@@ -301,9 +297,7 @@ export default {
     },
 
     handleUserChange() {
-      if (this.onUpdateUser) {
-        this.onUpdateUser()
-      }
+      this.onUpdateUser()
     },
 
     handleResize() {
@@ -334,9 +328,9 @@ export default {
   },
 
   beforeDestroy() {
-    if (typeof window === 'undefined') return
-
-    window.removeEventListener('resize', this.handleResize, { passive: true })
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.handleResize, { passive: true })
+    }
   },
 
   props: {
@@ -358,15 +352,15 @@ export default {
     },
     onUpdateDark: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onUpdateUser: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     onViewStopsWithErrors: {
       type: Function,
-      default: () => {},
+      required: true,
     },
     invalidUser: {
       type: Boolean,

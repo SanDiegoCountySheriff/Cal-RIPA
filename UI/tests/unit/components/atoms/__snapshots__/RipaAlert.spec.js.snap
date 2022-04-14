@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Alert should display outline 1`] = `
+<v-alert-stub
+  closeicon="$cancel"
+  closelabel="$vuetify.close"
+  dense="true"
+  icon=""
+  outlined="true"
+  tag="div"
+  type="info"
+  value="true"
+/>
+`;
+
+exports[`Ripa Alert should display the default alert type and outline 1`] = `
+<v-alert-stub
+  closeicon="$cancel"
+  closelabel="$vuetify.close"
+  dense="true"
+  icon=""
+  tag="div"
+  type="info"
+  value="true"
+/>
+`;
+
+exports[`Ripa Alert should display warning and default outline 1`] = `
+<v-alert-stub
+  closeicon="$cancel"
+  closelabel="$vuetify.close"
+  dense="true"
+  icon=""
+  tag="div"
+  type="warning"
+  value="true"
+/>
+`;

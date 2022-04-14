@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Switch should match snapshot 1`] = `
+<div
+  class="ripa-switch"
+  style="max-width: 250px;"
+>
+  <v-switch-stub
+    backgroundcolor=""
+    class="v-input--reverse v-input--expand"
+    errorcount="1"
+    errormessages=""
+    hidedetails="true"
+    hint=""
+    messages=""
+    ripple="true"
+    rules=""
+    successmessages=""
+    validateonblur="true"
+    valuecomparator="[Function]"
+  />
+</div>
+`;

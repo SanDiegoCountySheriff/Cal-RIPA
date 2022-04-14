@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Time Picker should match snapshot 1`] = `
+<v-text-field-stub
+  appendicon="mdi-clock-time-four-outline"
+  backgroundcolor=""
+  clearicon="$clear"
+  errorcount="1"
+  errormessages=""
+  label=""
+  loaderheight="2"
+  messages=""
+  rules=""
+  successmessages=""
+  type="time"
+/>
+`;

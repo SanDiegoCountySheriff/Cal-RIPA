@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Override PII should match snapshot 1`] = `
+<div
+  class="ripa-override-pii tw-pb-4"
+>
+  <ripa-form-header-stub
+    subtitle=""
+    title="Override PII"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        
+        Is PII Found: false
+      
+      </v-col-stub>
+       
+      <!---->
+       
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Override"
+          maxwidth="250"
+          rules=""
+        />
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

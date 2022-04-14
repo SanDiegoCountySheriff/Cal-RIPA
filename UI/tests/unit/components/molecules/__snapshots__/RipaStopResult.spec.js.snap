@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Stop Result should match snapshot 1`] = `
+<div
+  class="ripa-action-taken tw-pb-4"
+>
+  <ripa-form-header-stub
+    onopenstatute="[Function]"
+    required="true"
+    subtitle="§999.226(a)(13)"
+    title="Result of Stop"
+  />
+   
+  <v-container-stub
+    tag="div"
+  >
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        class="tw-pr-2"
+        cols="12"
+        md="6"
+        sm="6"
+        tag="div"
+      >
+        <div
+          class="tw-mr-2 tw-mt-4"
+        >
+          <v-btn-stub
+            activeclass=""
+            class="tw-w-full"
+            color="primary"
+            small="true"
+            tag="button"
+            type="button"
+          >
+            
+            Open Favorites
+          
+          </v-btn-stub>
+        </div>
+      </v-col-stub>
+       
+      <v-col-stub
+        cols="12"
+        md="6"
+        sm="6"
+        tag="div"
+      >
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        class="tw-mb-4"
+        cols="12"
+        sm="12"
+        tag="div"
+      />
+    </v-row-stub>
+     
+    <v-row-stub
+      nogutters="true"
+      tag="div"
+    >
+      <v-col-stub
+        cols="12"
+        sm="12"
+        tag="div"
+      >
+        <ripa-switch-stub
+          hint=""
+          label="Any Results of Stop?"
+          maxwidth="200"
+          rules=""
+          value="true"
+        />
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Warning (verbal or written)"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Citation for infraction"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="In-field cite and release"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Custodial arrest pursurant to outstanding warrant"
+          rules="An action taken is required"
+        />
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Custodial arrest without warrant"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Field interview card completed"
+          rules="An action taken is required"
+        />
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Noncriminal transport or caretaking transport"
+          rules="An action taken is required"
+        />
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Contacted parent/legal guardian or other person responsible for the minor"
+          rules="An action taken is required"
+        />
+         
+        <ripa-checkbox-stub
+          hidedetails="true"
+          label="Psychiatric hold"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+         
+        <ripa-checkbox-stub
+          label="Contacted U.S. Department of Homeland Security"
+          rules="An action taken is required"
+        />
+         
+        <!---->
+      </v-col-stub>
+    </v-row-stub>
+  </v-container-stub>
+</div>
+`;

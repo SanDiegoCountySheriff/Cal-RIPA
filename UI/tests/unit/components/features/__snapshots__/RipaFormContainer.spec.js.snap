@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Form Container should match snapshot 1`] = `
+<div
+  class="ripa-form-container"
+>
+  <ripa-form-template-stub
+    beats=""
+    countycities=""
+    formstepindex="0"
+    fullstop="[object Object]"
+    isonlineandauthenticated="true"
+    noncountycities=""
+    onaddperson="[Function]"
+    oncancelaction="[Function]"
+    oncancelform="[Function]"
+    oncopyperson="[Function]"
+    ondeleteperson="[Function]"
+    oneditagencyquestions="[Function]"
+    oneditperson="[Function]"
+    oneditstop="[Function]"
+    ongpslocation="[Function]"
+    onopenlastlocation="[Function]"
+    onopenlocationfavorites="[Function]"
+    onopenreasonfavorites="[Function]"
+    onopenresultfavorites="[Function]"
+    onopenstatute="[Function]"
+    onopentemplate="[Function]"
+    onsavelocationfavorite="[Function]"
+    onsavereasonfavorite="[Function]"
+    onsaveresultfavorite="[Function]"
+    onstepindexchange="[Function]"
+    onsubmitstop="[Function]"
+    onupdateuser="[Function]"
+    schools=""
+    statutes=""
+    stoptemplates=""
+    user="[object Object]"
+    validlastlocation="true"
+    value="[object Object]"
+  />
+   
+  <ripa-favorites-dialog-stub
+    favorites=""
+    isonlineandauthenticated="true"
+    onclose="[Function]"
+    ondeletefavorite="[Function]"
+    oneditfavorite="[Function]"
+    onopenfavorite="[Function]"
+    onsavefavorite="[Function]"
+    title="Locations"
+  />
+   
+  <ripa-favorites-dialog-stub
+    favorites=""
+    isonlineandauthenticated="true"
+    onclose="[Function]"
+    ondeletefavorite="[Function]"
+    oneditfavorite="[Function]"
+    onopenfavorite="[Function]"
+    onsavefavorite="[Function]"
+    title="Reasons"
+  />
+   
+  <ripa-favorites-dialog-stub
+    favorites=""
+    isonlineandauthenticated="true"
+    onclose="[Function]"
+    ondeletefavorite="[Function]"
+    oneditfavorite="[Function]"
+    onopenfavorite="[Function]"
+    onsavefavorite="[Function]"
+    title="Results"
+  />
+   
+  <ripa-add-favorite-dialog-stub
+    onaddfavorite="[Function]"
+    onclose="[Function]"
+  />
+   
+  <ripa-add-favorite-dialog-stub
+    onaddfavorite="[Function]"
+    onclose="[Function]"
+  />
+   
+  <ripa-add-favorite-dialog-stub
+    onaddfavorite="[Function]"
+    onclose="[Function]"
+  />
+   
+  <ripa-statute-dialog-stub
+    onclose="[Function]"
+  />
+   
+  <ripa-user-dialog-stub
+    formtitle="Manage User"
+    isrowkeydisabled="true"
+    onclose="[Function]"
+    onsave="[Function]"
+    user="[object Object]"
+  />
+   
+  <ripa-snackbar-stub
+    autoclose="true"
+    onview="[Function]"
+    text="Stop was stored locally and will be submitted to the server once you are online and authenticated."
+    timeout="6000"
+  />
+   
+  <ripa-snackbar-stub
+    autoclose="true"
+    onview="[Function]"
+    text="There was an error checking GPS location."
+    timeout="6000"
+  />
+</div>
+`;

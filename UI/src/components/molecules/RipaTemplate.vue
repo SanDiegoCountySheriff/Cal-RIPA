@@ -89,7 +89,7 @@ export default {
     },
     onOpenTemplate: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

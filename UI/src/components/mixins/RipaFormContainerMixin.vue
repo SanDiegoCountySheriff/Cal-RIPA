@@ -416,10 +416,13 @@ export default {
       localStorage.setItem('ripa_form_editing', '1')
       this.setPiiServiceAvailable(true)
       const templates = this.getCustomTemplates()
+      let template
 
-      const [template] = templates.filter(tplt => {
-        return tplt.displayName === value
-      })
+      if (templates) {
+        template = templates.filter(tplt => {
+          return tplt.displayName === value
+        })
+      }
 
       // assign defaultStop to this.stop
       this.stop = {

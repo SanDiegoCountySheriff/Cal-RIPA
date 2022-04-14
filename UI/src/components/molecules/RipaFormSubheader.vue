@@ -59,7 +59,7 @@ export default {
     },
     onOpenStatute: {
       type: Function,
-      default: () => {},
+      required: true,
     },
   },
 }

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Node Tree should match snapshot 1`] = `
+<li>
+  <span
+    class="label"
+  >
+    1. test
+  </span>
+   
+  <!---->
+</li>
+`;
