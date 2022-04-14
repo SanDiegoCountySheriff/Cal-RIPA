@@ -63,20 +63,21 @@
             <template v-if="model.stopResult.resultsOfStop2">
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
-                hint="Select Up to 5 Offense Codes (required)"
+                hint="Select Up To 5 Offense Codes (required)"
                 persistent-hint
+                label="Offense Code"
                 item-text="fullName"
                 item-value="code"
-                label="Offense Code"
                 :items="statutes"
                 multiple
-                chips
-                small-chips
-                deletable-chips
+                custom-chip
                 :max-selections="5"
                 :rules="warningRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('warningCodes', $event)"
                 @input="handleInput"
-              ></ripa-autocomplete>
+              >
+              </ripa-autocomplete>
               <template v-if="isPullReasonCodeWarningVisible">
                 <div class="tw-mt-4 tw-text-content">
                   <v-btn
@@ -454,6 +455,17 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
+    removeItem(list, statute) {
+      this.viewModel.stopResult[list] = this.viewModel.stopResult[list].filter(
+        code => code !== statute.item.code,
+      )
+      this.handleInput()
+    },
+
+    getStatuteLabel(statute) {
+      return statute.item.fullName.split('-')[0]
+    },
+
     getReasonCode() {
       const trafficViolationCode =
         this.viewModel.stopReason?.trafficViolationCode || null
@@ -477,6 +489,7 @@ export default {
         this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.warningCodes.push(reasonCode)
       }
+      this.handleInput()
     },
 
     handlePullReasonCodeCitation() {
