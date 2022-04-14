@@ -63,19 +63,11 @@ exports[`Ripa App Bar should match snapshot 1`] = `
      
     <v-spacer-stub />
      
-    <transition-stub
-      name="slider"
-    >
-      <div
-        class="text-right"
-      >
-        <!---->
-      </div>
-    </transition-stub>
-     
     <!---->
      
     <div>
+      <!---->
+       
       <!---->
        
       <!---->
