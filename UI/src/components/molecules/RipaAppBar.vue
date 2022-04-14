@@ -38,21 +38,20 @@
 
       <v-spacer></v-spacer>
 
-      <v-tooltip v-if="stopsWithErrors.length > 0" bottom>
-        <template v-slot:activator="{ on, attrs }">
+      <transition name="slider">
+        <div class="text-right">
           <v-btn
-            class="bounce"
-            icon
-            small
+            v-if="stopsWithErrors.length > 0"
+            color="error"
+            x-small
+            class="default"
+            :class="{ bigger: expandButton, bounce: !expandButton }"
             @click="handleViewStopsWithErrors"
-            v-bind="attrs"
-            v-on="on"
           >
-            <v-icon color="error"> mdi-alert </v-icon>
+            <strong>{{ buttonText }}</strong>
           </v-btn>
-        </template>
-        <span>View stops with errors</span>
-      </v-tooltip>
+        </div>
+      </transition>
 
       <template v-if="isMobile">
         <v-menu offset-y>
@@ -218,6 +217,8 @@ export default {
   data() {
     return {
       isMobile: false,
+      expandButton: true,
+      buttonText: 'View stops with errors',
     }
   },
 
@@ -308,6 +309,21 @@ export default {
     handleResize() {
       this.isMobile = window.innerWidth < 600
     },
+
+    handleShrink() {
+      setTimeout(() => {
+        this.expandButton = false
+        this.buttonText = '!'
+      }, 3000)
+    },
+  },
+
+  watch: {
+    stopsWithErrors(newVal) {
+      if (newVal.length > 0 && this.expandButton) {
+        this.handleShrink()
+      }
+    },
   },
 
   mounted() {
@@ -395,9 +411,21 @@ export default {
     background-color: #90caf9;
   }
 }
-
+.default {
+  transition: max-height 0.3s ease-out;
+  width: 20px;
+  transition-duration: 0.3s;
+  transition-property: width;
+}
+.bigger {
+  transition: max-height 0.3s ease-out;
+  width: 170px;
+  transition-property: width;
+}
 .bounce {
   animation: bounce-in 2s infinite;
+  font-weight: bolder;
+  font-size: 200%;
 }
 
 @keyframes bounce-in {
@@ -405,7 +433,7 @@ export default {
     transform: scale(1);
   }
   50% {
-    transform: scale(2);
+    transform: scale(1.5);
   }
   100% {
     transform: scale(1);
