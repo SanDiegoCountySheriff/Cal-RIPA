@@ -111,11 +111,11 @@
                 label="Offense Code"
                 :items="statutes"
                 multiple
-                chips
-                small-chips
-                deletable-chips
+                custom-chip
                 :max-selections="5"
                 :rules="citationRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('citationCodes', $event)"
                 @input="handleInput"
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeCitationVisible">
@@ -151,11 +151,11 @@
                 label="Offense Code"
                 :items="statutes"
                 multiple
-                chips
-                small-chips
-                deletable-chips
+                custom-chip
                 :max-selections="5"
                 :rules="infieldRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('infieldCodes', $event)"
                 @input="handleInput"
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeInfieldVisible">
@@ -199,11 +199,11 @@
                 label="Offense Code"
                 :items="statutes"
                 multiple
-                chips
-                small-chips
-                deletable-chips
+                custom-chip
                 :max-selections="5"
                 :rules="custodialArrestRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('custodialArrestCodes', $event)"
                 @input="handleInput"
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeCustodialArrestVisible">
@@ -489,7 +489,6 @@ export default {
         this.viewModel.stopResult.pullFromReasonCode = true
         this.viewModel.stopResult.warningCodes.push(reasonCode)
       }
-      this.handleInput()
     },
 
     handlePullReasonCodeCitation() {

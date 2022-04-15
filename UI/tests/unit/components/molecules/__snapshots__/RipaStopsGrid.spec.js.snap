@@ -24,6 +24,7 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <ripa-date-picker-stub
           label="From Date"
           rules=""
+          value="2022-01-01"
         />
       </div>
     </v-flex-stub>
