@@ -61,18 +61,6 @@ export default {
     }
   },
 
-  watch: {
-    '$route.params': {
-      handler: function (params) {
-        if (params.submissionId) {
-          this.handleTabChange('/admin/submissions')
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-
   computed: {
     ...mapGetters([
       'mappedAdminBeats',
