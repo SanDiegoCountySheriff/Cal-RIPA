@@ -2,134 +2,99 @@
 
 exports[`Ripa Submissions Grid should match snapshot 1`] = `
 <div>
-  <div class="container tw-mt-2 container--fluid">
-    <div class="layout row wrap">
-      <div class="flex xs12 md2">
-        <div class="tw-ml-2">
-          <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-3" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Submission From Date</label><input id="input-3" type="date"></div>
-                <div class="v-input__append-inner">
-                  <div></div>
-                </div>
-                <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
-                </div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
-              </div>
-            </div>
-          </div>
+  <v-container-stub
+    class="tw-mt-2"
+    fluid="true"
+    tag="div"
+  >
+    <v-layout-stub
+      row=""
+      tag="div"
+      wrap=""
+    >
+      <v-flex-stub
+        md2=""
+        tag="div"
+        xs12=""
+      >
+        <div
+          class="tw-ml-2"
+        >
+          <ripa-date-picker-stub
+            class="tw-ml-2"
+            label="Submission From Date"
+            rules=""
+          />
         </div>
-      </div>
-      <div class="flex xs12 md2">
-        <div class="tw-ml-2">
-          <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-8" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Submission To Date</label><input id="input-8" type="date"></div>
-                <div class="v-input__append-inner">
-                  <div></div>
-                </div>
-                <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
-                </div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
-              </div>
-            </div>
-          </div>
+      </v-flex-stub>
+       
+      <v-flex-stub
+        md2=""
+        tag="div"
+        xs12=""
+      >
+        <div
+          class="tw-ml-2"
+        >
+          <ripa-date-picker-stub
+            class="tw-ml-2"
+            label="Submission To Date"
+            rules=""
+          />
         </div>
-      </div>
-      <div class="flex xs12">
-        <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
-      </div>
-      <div class="flex xs12">
-        <div class="v-data-table v-data-table--has-top v-data-table--has-bottom theme--light">
-          <header class="v-sheet theme--light v-toolbar v-toolbar--flat" style="height: 64px;">
-            <div class="v-toolbar__content" style="height: 64px;">
-              <div class="v-toolbar__title tw-uppercase">Admin: Submissions</div>
-            </div>
-          </header>
-          <div class="v-data-table__wrapper">
-            <table>
-              <colgroup>
-                <col class="">
-                <col class="">
-                <col class="">
-                <col class="">
-                <col class="">
-                <col class="">
-                <col class="">
-              </colgroup>
-              <thead class="v-data-table-header">
-                <tr>
-                  <th role="columnheader" scope="col" aria-label="Submission Date: Sorted descending. Activate to remove sorting." aria-sort="descending" class="text-start sortable active desc"><span>Submission Date</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                  <th role="columnheader" scope="col" aria-label="First Stop Date: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>First Stop Date</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                  <th role="columnheader" scope="col" aria-label="Last Stop Date: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Last Stop Date</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                  <th role="columnheader" scope="col" aria-label="Total Stops: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Total Stops</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                  <th role="columnheader" scope="col" aria-label="Officer Name: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Officer Name</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                  <th role="columnheader" scope="col" aria-label="Error Count" class="text-start"><span>Error Count</span></th>
-                  <th role="columnheader" scope="col" aria-label="Actions" class="text-start" style="width: 100px; min-width: 100px;"><span>Actions</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="v-data-table__empty-wrapper">
-                  <td colspan="7">
-                    <div>No Submissions Found</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="paginationWrapper">
-            <p>
-              Items 0 - 0 of
-              0
-            </p>
-            <nav role="navigation" aria-label="Pagination Navigation">
-              <ul class="v-pagination theme--light">
-                <li><button disabled="disabled" type="button" aria-label="Previous page" class="v-pagination__navigation v-pagination__navigation--disabled"><i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-left theme--light"></i></button></li>
-                <li><button disabled="disabled" type="button" aria-label="Next page" class="v-pagination__navigation v-pagination__navigation--disabled"><i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-right theme--light"></i></button></li>
-              </ul>
-            </nav>
-            <div class="v-input itemsPerPageSelector v-input--is-label-active v-input--is-dirty v-input--dense theme--light v-text-field v-text-field--enclosed v-text-field--outlined v-select v-autocomplete">
-              <div class="v-input__control">
-                <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-26" class="v-input__slot">
-                  <fieldset aria-hidden="true">
-                    <legend style="width: 0px;"><span class="notranslate">​</span></legend>
-                  </fieldset>
-                  <div class="v-select__slot"><label for="input-26" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Items per page</label><input id="input-26" type="text" autocomplete="off">
-                    <div class="v-input__append-inner">
-                      <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
-                    </div><input type="hidden" value="10">
-                  </div>
-                  <div class="v-menu">
-                    <!---->
-                  </div>
-                </div>
-                <div class="v-text-field__details">
-                  <div class="v-messages theme--light">
-                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex xs12">
-        <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
-      </div>
-    </div>
-  </div>
+      </v-flex-stub>
+       
+      <v-flex-stub
+        tag="div"
+        xs12=""
+      >
+        <v-divider-stub />
+      </v-flex-stub>
+       
+      <v-flex-stub
+        tag="div"
+        xs12=""
+      >
+        <v-data-table-stub
+          customfilter="[Function]"
+          customgroup="[Function]"
+          customsort="[Function]"
+          expanded=""
+          expandicon="$expand"
+          groupby=""
+          groupdesc=""
+          headers="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+          hidedefaultfooter="true"
+          itemclass=""
+          itemkey="id"
+          items=""
+          itemsperpage="10"
+          loaderheight="4"
+          loadingtext="$vuetify.dataIterator.loadingText"
+          locale="en-US"
+          mobilebreakpoint="600"
+          nodatatext="$vuetify.noDataText"
+          noresultstext="$vuetify.dataIterator.noResultsText"
+          options="[object Object]"
+          page="1"
+          search=""
+          selectablekey="isSelectable"
+          serveritemslength="0"
+          sortby="dateSubmitted"
+          sortdesc="true"
+          value=""
+        />
+      </v-flex-stub>
+       
+      <v-flex-stub
+        tag="div"
+        xs12=""
+      >
+        <v-divider-stub />
+      </v-flex-stub>
+    </v-layout-stub>
+  </v-container-stub>
+   
   <!---->
 </div>
 `;
