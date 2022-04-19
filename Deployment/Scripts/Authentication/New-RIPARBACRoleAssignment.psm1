@@ -11,9 +11,9 @@
 
     # Usage 
     # 
-    # $EnterpriseObjectId = "ad3c8811-ec11-4845-be90-69b5d1a911fb"
-    # $ADGroupId = "67c1b2df-4f88-47cb-85c4-61abc845d583"
-    # $AppRoleId = "bd1f63c5-7525-4db1-bd97-09def6c07edf"
+    # $EnterpriseObjectId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    # $ADGroupId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    # $AppRoleId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     #
     # New-EnterpriseAppRbacRoleAssingment -EnterpriseObjectId $EnterpriseObjectId -ADGroupId $ADGroupId -AppRoleId $AppRoleId
     # 

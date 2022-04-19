@@ -32,7 +32,7 @@ describe('Ripa Submissions Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ savedFilters: {} })
+    wrapper = factory()
 
     expect(wrapper.element).toMatchSnapshot()
   })

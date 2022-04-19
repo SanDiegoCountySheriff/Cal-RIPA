@@ -1,5 +1,5 @@
 import RipaHeader from '@/components/atoms/RipaHeader.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Header', () => {
@@ -20,8 +20,9 @@ describe('Ripa Header', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaHeader, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should display value', () => {

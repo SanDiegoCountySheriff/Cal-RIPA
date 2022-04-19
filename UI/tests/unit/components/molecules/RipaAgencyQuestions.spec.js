@@ -1,6 +1,6 @@
 import RipaAgencyQuestions from '@/components/molecules/RipaAgencyQuestions'
 import { defaultStop } from '@/utilities/stop.js'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Agency Questions', () => {
@@ -23,9 +23,12 @@ describe('Ripa Agency Questions', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaAgencyQuestions, {
+      vuetify,
+      propsData: { value: stop },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should calculate is required', () => {

@@ -1,5 +1,5 @@
 import RipaList from '@/components/molecules/RipaList.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa List', () => {
@@ -8,10 +8,6 @@ describe('Ripa List', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -28,8 +24,13 @@ describe('Ripa List', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ item: item })
+    wrapper = mount(RipaList, {
+      vuetify,
+      propsData: {
+        item: item,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

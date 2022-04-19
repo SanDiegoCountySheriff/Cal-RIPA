@@ -1,5 +1,5 @@
 import RipaRace from '@/components/molecules/RipaRace.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
@@ -13,10 +13,6 @@ describe('Ripa Race', () => {
     stop = defaultStop()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaRace, {
       vuetify,
@@ -27,8 +23,13 @@ describe('Ripa Race', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaRace, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

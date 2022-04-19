@@ -1,5 +1,5 @@
 import RipaStopsWithErrorsGrid from '@/components/molecules/RipaStopsWithErrorsGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
@@ -13,10 +13,6 @@ describe('Ripa Stops With Errors Grid', () => {
     stop = defaultStop()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaStopsWithErrorsGrid, {
       vuetify,
@@ -27,8 +23,13 @@ describe('Ripa Stops With Errors Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaStopsWithErrorsGrid, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

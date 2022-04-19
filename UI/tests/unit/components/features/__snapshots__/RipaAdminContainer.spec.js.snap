@@ -2,25 +2,7 @@
 
 exports[`Ripa Admin Container should match snapshot 1`] = `
 <div>
-  <ripa-admin-template-stub
-    beats=""
-    cities=""
-    historicalcprareports=""
-    ondeletebeat="[Function]"
-    oneditbeat="[Function]"
-    onedituser="[Function]"
-    ontabchange="[Function]"
-    onuploaddomain="[Function]"
-    onuploadusers="[Function]"
-    schools=""
-    statutes=""
-    users=""
-  />
-   
-  <ripa-snackbar-stub
-    autoclose="true"
-    onview="[Function]"
-    timeout="6000"
-  />
+  <ripa-admin-template-stub beats="" cities="" schools="" statutes="" users="" historicalcprareports="" ondeletebeat="[Function]" oneditbeat="[Function]" onedituser="[Function]" onuploadusers="[Function]" ontabchange="[Function]" onuploaddomain="[Function]"></ripa-admin-template-stub>
+  <ripa-snackbar-stub timeout="6000" autoclose="true" onview="[Function]"></ripa-snackbar-stub>
 </div>
 `;

@@ -1,5 +1,5 @@
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Step 6', () => {
@@ -24,8 +24,8 @@ describe('Ripa Form Step 6', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaFormStep6, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

@@ -428,7 +428,10 @@ export default {
         }, ${this.model.location.highwayExit ?? ''}, ${
           this.model.location.landmark ?? ''
         }`
-        this.$emit('pii-check', { source: 'location', value: textValue })
+        this.$emit('pii-check', {
+          source: 'location',
+          value: textValue.replace('.', ''),
+        })
       }
     },
 

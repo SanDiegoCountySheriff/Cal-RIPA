@@ -168,13 +168,13 @@ export default {
       ],
       editedIndex: -1,
       selectedItems: [],
-      submissionFromDate: this.savedFilters.fromDate ?? null,
-      submissionToDate: this.savedFilters.toDate ?? null,
+      submissionFromDate: this.savedFilters?.filters.stopfromDate ?? null,
+      submissionToDate: this.savedFilters?.filters.stoptoDate ?? null,
       currentSubmissionLoading: false,
       format,
       currentPage: 1,
       itemsPerPageOptions: [10, 25, 50, 100, 250, 500, 1000],
-      itemsPerPage: this.savedFilters.itemsPerPage ?? 10,
+      itemsPerPage: this.savedFilters?.filters.itemsPerPage ?? 10,
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'dateSubmitted',
       sortDesc: true,
@@ -321,7 +321,7 @@ export default {
       const columnToSort = this.headers.filter(headerObj => {
         return headerObj.value === columnName
       })
-      if (columnToSort.length) {
+      if (columnToSort?.length) {
         return columnToSort[0].sortName
       } else {
         return null
@@ -366,10 +366,11 @@ export default {
     },
     currentSubmission: {
       type: Object,
+      default: () => {},
     },
     savedFilters: {
       type: Object,
-      required: true,
+      default: () => {},
     },
   },
 }

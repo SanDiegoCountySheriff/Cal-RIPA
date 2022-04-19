@@ -1,5 +1,5 @@
 import RipaAppBar from '@/components/molecules/RipaAppBar'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa App Bar', () => {
@@ -9,7 +9,6 @@ describe('Ripa App Bar', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-    wrapper = factory()
   })
 
   afterEach(() => {
@@ -33,22 +32,37 @@ describe('Ripa App Bar', () => {
   }
 
   it('should match snapshot', () => {
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaAppBar, {
+      vuetify,
+      propsData: {
+        onUpdateDark: jest.fn(),
+        onUpdateUser: jest.fn(),
+        onViewStopsWithErrors: jest.fn(),
+      },
+    })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should get theme icon', () => {
+    wrapper = factory()
+
     expect(wrapper.vm.getThemeIcon).toEqual('mdi-moon-first-quarter')
     wrapper.vm.$vuetify.theme.dark = true
     expect(wrapper.vm.getThemeIcon).toEqual('mdi-white-balance-sunny')
   })
 
   it('should get theme tooltip', () => {
+    wrapper = factory()
+
     expect(wrapper.vm.getThemeTooltip).toEqual('View dark mode')
     wrapper.vm.$vuetify.theme.dark = true
     expect(wrapper.vm.getThemeTooltip).toEqual('View light mode')
   })
 
   it('should get app title', async () => {
+    wrapper = factory()
+
     expect(wrapper.vm.getAppTitle).toEqual('RIPA')
 
     wrapper.setProps({ environmentName: 'QA' })
@@ -62,6 +76,8 @@ describe('Ripa App Bar', () => {
   })
 
   it('should get admin', async () => {
+    wrapper = factory()
+
     wrapper.setProps({ admin: false })
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.getAdmin).toBeFalsy()
@@ -72,6 +88,8 @@ describe('Ripa App Bar', () => {
   })
 
   it('should get online icon', async () => {
+    wrapper = factory()
+
     expect(wrapper.vm.getOnlineIcon).toEqual('mdi-wifi-strength-off')
     wrapper.setProps({ online: true })
     await wrapper.vm.$nextTick()
@@ -80,6 +98,8 @@ describe('Ripa App Bar', () => {
   })
 
   it('should get app bar background class', async () => {
+    wrapper = factory()
+
     wrapper.setProps({ environmentName: '' })
     await wrapper.vm.$nextTick()
 
@@ -108,12 +128,16 @@ describe('Ripa App Bar', () => {
   })
 
   it('should handle view stops with errors', () => {
+    wrapper = factory()
+
     wrapper.vm.handleViewStopsWithErrors()
 
     expect(wrapper.vm.onViewStopsWithErrors).toHaveBeenCalled()
   })
 
   it('should handle theme change', () => {
+    wrapper = factory()
+
     wrapper.vm.handleThemeChange()
 
     expect(wrapper.vm.$vuetify.theme.dark).toBeTruthy()
@@ -126,6 +150,8 @@ describe('Ripa App Bar', () => {
   })
 
   it('should handle auth', async () => {
+    wrapper = factory()
+
     wrapper.vm.handleLogIn = jest.fn()
     wrapper.vm.handleLogOut = jest.fn()
     wrapper.vm.handleAuth()
@@ -142,24 +168,32 @@ describe('Ripa App Bar', () => {
   })
 
   it('should handle logout', () => {
+    wrapper = factory()
+
     wrapper.vm.handleLogOut()
 
     expect(wrapper.emitted('handleLogOut')).toBeTruthy()
   })
 
   it('should handle login', () => {
+    wrapper = factory()
+
     wrapper.vm.handleLogIn()
 
     expect(wrapper.emitted('handleLogIn')).toBeTruthy()
   })
 
   it('should handle user change', () => {
+    wrapper = factory()
+
     wrapper.vm.handleUserChange()
 
     expect(wrapper.vm.onUpdateUser).toHaveBeenCalledTimes(1)
   })
 
   it('should handle before destroy', () => {
+    wrapper = factory()
+
     delete global.window
     const removeEventListener = jest.spyOn(window, 'removeEventListener')
 

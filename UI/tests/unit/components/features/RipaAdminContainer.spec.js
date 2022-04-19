@@ -1,5 +1,5 @@
 import RipaAdminContainer from '@/components/features/RipaAdminContainer'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
@@ -98,7 +98,7 @@ describe('Ripa Admin Container', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should display toast message for handleCreateCpraReport', async () => {

@@ -1,21 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa List should match snapshot 1`] = `
-<div
-  class=""
->
-  
-    
-    
-  <span
-    class="tw-ml-2"
-    style="color: rgb(33, 150, 243);"
-  >
-    
-  </span>
-   
+<div class="">
+
+  <span class="tw-ml-2" style="color: rgb(33, 150, 243);"></span>
   <!---->
-   
   <!---->
 </div>
 `;

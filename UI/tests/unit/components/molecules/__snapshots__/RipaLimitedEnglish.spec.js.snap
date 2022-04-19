@@ -1,35 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Limited English should match snapshot 1`] = `
-<div
-  class="ripa-no-english tw-pb-4"
->
-  <ripa-form-header-stub
-    onopenstatute="[Function]"
-    subtitle="§999.226(a)(8)"
-    title="Limited or No English Fluency"
-  />
-   
-  <v-container-stub
-    tag="div"
-  >
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        cols="12"
-        sm="12"
-        tag="div"
-      >
-        <ripa-switch-stub
-          hint=""
-          label="Limited or no English fluency"
-          maxwidth="300"
-          rules=""
-        />
-      </v-col-stub>
-    </v-row-stub>
-  </v-container-stub>
+<div class="ripa-no-english tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1">
+      <!----> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Limited or No English Fluency</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 300px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-6" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--switch__track theme--light"></div>
+                  <div class="v-input--switch__thumb theme--light">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-6" class="v-label theme--light" style="left: 0px; position: relative;">
+                  Limited or no English fluency
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;

@@ -1,5 +1,5 @@
 import RipaJsonViewer from '@/components/molecules/RipaJsonViewer.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa JSON Viewer', () => {
@@ -27,8 +27,13 @@ describe('Ripa JSON Viewer', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaJsonViewer, {
+      vuetify,
+      components: {
+        VueJsonPretty: () => import('../../../../node_modules/vue-json-pretty'),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

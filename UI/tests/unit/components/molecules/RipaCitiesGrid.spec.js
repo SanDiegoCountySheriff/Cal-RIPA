@@ -1,5 +1,5 @@
 import RipaCitiesGrid from '@/components/molecules/RipaCitiesGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Cities Grid', () => {
@@ -24,9 +24,9 @@ describe('Ripa Cities Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaCitiesGrid, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should watch items', async () => {
