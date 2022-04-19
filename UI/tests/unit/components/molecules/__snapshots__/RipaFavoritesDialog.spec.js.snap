@@ -1,61 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Favorites Dialog should match snapshot 1`] = `
-<v-dialog-stub
-  closedelay="0"
-  contentclass=""
-  maxwidth="1000px"
-  opendelay="0"
-  origin="center center"
-  retainfocus="true"
-  transition="dialog-transition"
-  width="auto"
->
-  <v-card-stub
-    loaderheight="4"
-    tag="div"
-  >
-    <v-card-title-stub>
-      <span>
-        Favorite 
-      </span>
-    </v-card-title-stub>
-     
-    <v-card-text-stub>
-      <v-container-stub
-        tag="div"
-      >
-        <v-row-stub
-          tag="div"
-        >
-          <v-col-stub
-            cols="12"
-            tag="div"
-          >
-            <ripa-favorites-grid-stub
-              items=""
-              ondeletefavorite="[Function]"
-              oneditfavorite="[Function]"
-              onopenfavorite="[Function]"
-            />
-          </v-col-stub>
-        </v-row-stub>
-      </v-container-stub>
-    </v-card-text-stub>
-     
-    <v-card-actions-stub>
-      <v-spacer-stub />
-       
-      <v-btn-stub
-        activeclass=""
-        color="blue darken-1"
-        tag="button"
-        text="true"
-        type="button"
-      >
-         Cancel 
-      </v-btn-stub>
-    </v-card-actions-stub>
-  </v-card-stub>
-</v-dialog-stub>
+<div role="dialog" class="v-dialog__container">
+  <!---->
+</div>
 `;

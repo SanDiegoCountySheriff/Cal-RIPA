@@ -1,5 +1,5 @@
 import RipaBeatsGrid from '@/components/molecules/RipaBeatsGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Beats Grid', () => {
@@ -105,9 +105,12 @@ describe('Ripa Beats Grid', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaBeatsGrid, {
+      vuetify,
+      propsData: { onEditBeat: jest.fn(), onDeleteBeat: jest.fn() },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should compute formTitle', () => {

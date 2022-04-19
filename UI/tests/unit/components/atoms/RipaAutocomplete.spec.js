@@ -1,5 +1,5 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Autocomplete', () => {
@@ -22,8 +22,9 @@ describe('Ripa Autocomplete', () => {
   const testItems = ['Item 1', 'Item 2']
 
   it('should match snapshot', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaAutocomplete, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should return the correct items with getItems', () => {

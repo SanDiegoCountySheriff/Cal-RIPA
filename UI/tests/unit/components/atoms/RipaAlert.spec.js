@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import RipaAlert from '@/components/atoms/RipaAlert.vue'
 import Vuetify from 'vuetify'
 
@@ -23,8 +23,9 @@ describe('Ripa Alert', () => {
   }
 
   it('should display the default alert type and outline', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaAlert, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should display warning and default outline', () => {

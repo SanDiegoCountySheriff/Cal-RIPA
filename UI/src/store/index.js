@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import { formatDate, differenceInYears } from '@/utilities/dates'
 import { pad } from '@/utilities/stop'
 import authentication from '@/authentication'
+import router from '@/router'
 
 Vue.use(Vuex)
 
@@ -885,7 +886,9 @@ export default new Vuex.Store({
             const apiStop = response.data
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
-            dispatch('getAdminStops')
+            if (router.currentRoute.fullPath === '/admin') {
+              dispatch('getAdminStops')
+            }
           }
           if (response.status !== 200) {
             const errorStop = {

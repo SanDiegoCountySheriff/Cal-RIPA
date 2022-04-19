@@ -1,5 +1,5 @@
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Check Group', () => {
@@ -25,8 +25,9 @@ describe('Ripa Check Group', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaCheckGroup, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should emit event whem model changes', async () => {

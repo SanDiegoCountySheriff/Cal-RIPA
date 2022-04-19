@@ -1,5 +1,5 @@
 import RipaContraband from '@/components/molecules/RipaContraband.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 
@@ -27,9 +27,9 @@ describe('Ripa Contraband', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaContraband, { vuetify, propsData: { value: stop } })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.todo('should compute model')

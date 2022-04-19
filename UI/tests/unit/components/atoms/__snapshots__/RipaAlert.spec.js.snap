@@ -14,15 +14,11 @@ exports[`Ripa Alert should display outline 1`] = `
 `;
 
 exports[`Ripa Alert should display the default alert type and outline 1`] = `
-<v-alert-stub
-  closeicon="$cancel"
-  closelabel="$vuetify.close"
-  dense="true"
-  icon=""
-  tag="div"
-  type="info"
-  value="true"
-/>
+<div role="alert" class="v-alert v-sheet theme--dark v-alert--dense info">
+  <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-information theme--dark"></i>
+    <div class="v-alert__content"></div>
+  </div>
+</div>
 `;
 
 exports[`Ripa Alert should display warning and default outline 1`] = `

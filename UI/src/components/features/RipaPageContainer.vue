@@ -328,6 +328,7 @@ export default {
     await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
+    this.checkLocalStorage()
     this.dataReady = true
   },
 

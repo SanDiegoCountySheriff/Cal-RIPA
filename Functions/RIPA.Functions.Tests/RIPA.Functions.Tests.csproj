@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.17.2" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.Domain\RIPA.Functions.Domain.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.Stop\RIPA.Functions.Stop.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.Submission\RIPA.Functions.Submission.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.TextAnalytics\RIPA.Functions.TextAnalytics.csproj" />
+    <ProjectReference Include="..\RIPA.Functions.UserProfile\RIPA.Functions.UserProfile.csproj" />
+  </ItemGroup>
+
+</Project>

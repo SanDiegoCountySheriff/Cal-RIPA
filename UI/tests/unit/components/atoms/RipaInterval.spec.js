@@ -13,12 +13,6 @@ describe('Ripa Interval', () => {
     })
   }
 
-  it('should match snapshot', () => {
-    wrapper = factory()
-
-    expect(wrapper.element).toMatchSnapshot()
-  })
-
   it('should emit tick', async () => {
     wrapper = factory()
 
@@ -36,6 +30,6 @@ describe('Ripa Interval', () => {
     wrapper.destroy()
 
     expect(clearInterval).toBeCalledTimes(1)
-    expect(clearInterval).toHaveBeenCalledWith(3)
+    expect(clearInterval).toHaveBeenCalledWith(2)
   })
 })

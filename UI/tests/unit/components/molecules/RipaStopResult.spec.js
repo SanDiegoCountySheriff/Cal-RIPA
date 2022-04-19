@@ -1,5 +1,5 @@
 import RipaStopResult from '@/components/molecules/RipaStopResult.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
@@ -13,10 +13,6 @@ describe('Ripa Stop Result', () => {
     stop = defaultStop()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaStopResult, {
       vuetify,
@@ -27,8 +23,13 @@ describe('Ripa Stop Result', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

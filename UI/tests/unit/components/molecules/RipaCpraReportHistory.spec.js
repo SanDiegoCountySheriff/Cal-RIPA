@@ -1,5 +1,5 @@
 import RipaCpraReportHistory from '@/components/molecules/RipaCpraReportHistory.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa CPRA Report History', () => {
@@ -24,8 +24,8 @@ describe('Ripa CPRA Report History', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaCpraReportHistory, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

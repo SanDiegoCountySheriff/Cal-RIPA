@@ -1,5 +1,5 @@
 import RipaOfficer from '@/components/molecules/RipaOfficer.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Officer', () => {
@@ -8,10 +8,6 @@ describe('Ripa Officer', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -25,8 +21,13 @@ describe('Ripa Officer', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaOfficer, {
+      vuetify,
+      propsData: {
+        onUpdateUser: jest.fn(),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

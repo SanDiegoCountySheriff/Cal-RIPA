@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput.vue'
 import Vuetify from 'vuetify'
 
@@ -47,9 +47,9 @@ describe('Ripa Number Input', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaNumberInput, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   handleKeyPressTestCases.forEach(test => {
