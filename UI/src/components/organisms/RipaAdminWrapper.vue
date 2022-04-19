@@ -386,6 +386,7 @@ export default {
     },
     currentSubmission: {
       type: Object,
+      default: () => {},
     },
     errorCodeSearch: {
       type: Object,

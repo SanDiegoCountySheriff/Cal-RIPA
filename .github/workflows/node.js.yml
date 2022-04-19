@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: checkout git repository
         uses: actions/checkout@v2
@@ -18,6 +18,10 @@ jobs:
         run: npm install
         working-directory: UI
 
-      - name: run unit tests
+      - name: run jest unit tests
         run: npm run test:unit
         working-directory: UI
+
+      - name: run xunit unit tests
+        run: dotnet test
+        working-directory: Functions

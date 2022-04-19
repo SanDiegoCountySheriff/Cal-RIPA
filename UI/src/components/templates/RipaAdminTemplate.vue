@@ -188,6 +188,7 @@ export default {
     },
     currentSubmission: {
       type: Object,
+      default: () => {},
     },
     users: {
       type: Array,

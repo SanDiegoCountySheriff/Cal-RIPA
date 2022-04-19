@@ -1,21 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa App Bar should match snapshot 1`] = `
-<div class="ripa-app-bar">
-  <header class="v-sheet theme--light v-toolbar v-toolbar--dense v-toolbar--flat v-app-bar v-app-bar--fixed" style="height: 48px; margin-top: 0px; transform: translateY(0px); left: 0px; right: 0px;">
-    <div class="v-toolbar__content" style="height: 48px;">
-      <div class="v-toolbar__title tw-cursor-pointer">RIPA</div> <span class="v-tooltip v-tooltip--bottom"><!----><i aria-hidden="true" aria-label="Online indicator" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate tw-ml-4 mdi mdi-wifi-strength-off theme--light" style="font-size: 22px;"></i></span> <span class="v-tooltip v-tooltip--bottom"><!----><button type="button" class="tw-ml-4 v-btn v-btn--icon v-btn--round theme--light v-size--small" aria-label="Change dark/light mode" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content"><i aria-hidden="true" class="v-icon notranslate mdi mdi-moon-first-quarter theme--light"></i></span></button></span>
-      <div class="spacer"></div>
-      <!---->
-      <div>
-        <!---->
-        <!---->
-        <!---->
-        <!---->
+<div
+  class="ripa-app-bar"
+>
+  <v-app-bar-stub
+    app="true"
+    dense="true"
+    extensionheight="48"
+    flat="true"
+    src=""
+    tag="header"
+    value="true"
+  >
+    <v-toolbar-title-stub
+      class="tw-cursor-pointer"
+    >
+      RIPA
+    </v-toolbar-title-stub>
+     
+    <v-tooltip-stub
+      bottom="true"
+      closedelay="0"
+      contentclass=""
+      fixed="true"
+      maxwidth="auto"
+      nudgebottom="0"
+      nudgeleft="0"
+      nudgeright="0"
+      nudgetop="0"
+      nudgewidth="0"
+      opendelay="0"
+      openonhover="true"
+      tag="span"
+    >
+       
+      <span>
+        Online Status
+      </span>
+    </v-tooltip-stub>
+     
+    <v-tooltip-stub
+      bottom="true"
+      closedelay="0"
+      contentclass=""
+      fixed="true"
+      maxwidth="auto"
+      nudgebottom="0"
+      nudgeleft="0"
+      nudgeright="0"
+      nudgetop="0"
+      nudgewidth="0"
+      opendelay="0"
+      openonhover="true"
+      tag="span"
+    >
+       
+      <span>
+        View dark mode
+      </span>
+    </v-tooltip-stub>
+     
+    <v-spacer-stub />
+     
+    <transition-stub
+      name="slider"
+    >
+      <div
+        class="text-right"
+      >
         <!---->
       </div>
+    </transition-stub>
+     
+    <!---->
+     
+    <div>
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <!---->
     </div>
-  </header>
+  </v-app-bar-stub>
+   
   <!---->
 </div>
 `;

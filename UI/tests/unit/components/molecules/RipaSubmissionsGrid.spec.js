@@ -1,5 +1,5 @@
 import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid.vue'
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 
@@ -16,6 +16,10 @@ describe('Ripa Submissions Grid', () => {
     vuetify = new Vuetify()
   })
 
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
   const factory = propsData => {
     return shallowMount(RipaSubmissionsGrid, {
       localVue,
@@ -28,16 +32,9 @@ describe('Ripa Submissions Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaSubmissionsGrid, {
-      localVue,
-      router,
-      vuetify,
-      propsData: {
-        savedFilters: {},
-      },
-    })
+    wrapper = factory()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.element).toMatchSnapshot()
   })
 
   it.todo('should get submissions')

@@ -38,6 +38,21 @@
 
       <v-spacer></v-spacer>
 
+      <transition name="slider">
+        <div class="text-right">
+          <v-btn
+            v-if="stopsWithErrors.length > 0"
+            color="error"
+            x-small
+            class="default"
+            :class="{ bigger: expandButton, bounce: !expandButton }"
+            @click="handleViewStopsWithErrors"
+          >
+            <strong>{{ buttonText }}</strong>
+          </v-btn>
+        </div>
+      </transition>
+
       <template v-if="isMobile">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -47,19 +62,6 @@
           </template>
 
           <v-list>
-            <v-list-item>
-              <v-list-item-title>
-                <v-btn
-                  aria-label="View stops with errors"
-                  small
-                  text
-                  @click="handleViewStopsWithErrors"
-                >
-                  <v-icon class="tw-mr-4"> mdi-alert </v-icon>
-                  View stops with errors
-                </v-btn>
-              </v-list-item-title>
-            </v-list-item>
             <template v-if="authenticated && online">
               <v-list-item>
                 <v-list-item-title>
@@ -124,22 +126,6 @@
 
       <template v-if="!isMobile">
         <div v-if="!invalidUser">
-          <v-tooltip v-if="stopsWithErrors.length > 0" bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="tw-ml-4"
-                icon
-                small
-                @click="handleViewStopsWithErrors"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>mdi-alert</v-icon>
-              </v-btn>
-            </template>
-            <span>View stops with errors</span>
-          </v-tooltip>
-
           <v-tooltip v-if="authenticated && online" bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -231,6 +217,8 @@ export default {
   data() {
     return {
       isMobile: false,
+      expandButton: true,
+      buttonText: 'View stops with errors',
     }
   },
 
@@ -314,6 +302,21 @@ export default {
 
     handleResize() {
       this.isMobile = window.innerWidth < 600
+    },
+
+    handleShrink() {
+      setTimeout(() => {
+        this.expandButton = false
+        this.buttonText = '!'
+      }, 3000)
+    },
+  },
+
+  watch: {
+    stopsWithErrors(newVal) {
+      if (newVal.length > 0 && this.expandButton) {
+        this.handleShrink()
+      }
     },
   },
 
@@ -400,6 +403,34 @@ export default {
 .ripa-app-bar--qa-light {
   .theme--light.v-app-bar.v-toolbar.v-sheet {
     background-color: #90caf9;
+  }
+}
+.default {
+  transition: max-height 0.3s ease-out;
+  width: 20px;
+  transition-duration: 0.3s;
+  transition-property: width;
+}
+.bigger {
+  transition: max-height 0.3s ease-out;
+  width: 170px;
+  transition-property: width;
+}
+.bounce {
+  animation: bounce-in 2s infinite;
+  font-weight: bolder;
+  font-size: 200%;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>
