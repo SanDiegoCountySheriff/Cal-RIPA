@@ -1,5 +1,5 @@
 import RipaStopsGrid from '@/components/molecules/RipaStopsGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Stops Grid', () => {
@@ -24,16 +24,19 @@ describe('Ripa Stops Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({
-      errorCodeSearch: {
-        items: [],
-        loading: false,
-        search: null,
-        select: null,
+    wrapper = mount(RipaStopsGrid, {
+      vuetify,
+      propsData: {
+        errorCodeSearch: {
+          items: [],
+          loading: false,
+          search: null,
+          select: null,
+        },
+        items: { summary: null },
       },
-      items: { summary: null },
     })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

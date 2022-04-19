@@ -1,5 +1,5 @@
 import RipaFormHeader from '@/components/molecules/RipaFormHeader.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Header', () => {
@@ -25,8 +25,13 @@ describe('Ripa Form Header', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaFormHeader, {
+      vuetify,
+      propsData: {
+        onOpenStatute: jest.fn(),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

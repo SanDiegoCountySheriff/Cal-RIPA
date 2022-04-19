@@ -1,5 +1,5 @@
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Text Input', () => {
@@ -55,9 +55,9 @@ describe('Ripa Text Input', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaTextInput, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should handle drop', () => {

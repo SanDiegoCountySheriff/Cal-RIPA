@@ -10,10 +10,6 @@ describe('Ripa Form Step 1', () => {
     vuetify = new Vuetify()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaFormStep1, {
       vuetify,
@@ -31,6 +27,6 @@ describe('Ripa Form Step 1', () => {
   it('should match snapshot', () => {
     wrapper = factory()
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

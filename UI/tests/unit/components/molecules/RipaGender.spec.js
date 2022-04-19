@@ -1,5 +1,5 @@
 import RipaGender from '@/components/molecules/RipaGender.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
@@ -13,10 +13,6 @@ describe('Ripa Gender', () => {
     stop = defaultStop()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaGender, {
       vuetify,
@@ -27,8 +23,13 @@ describe('Ripa Gender', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaGender, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

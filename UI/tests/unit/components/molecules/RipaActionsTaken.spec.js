@@ -1,7 +1,7 @@
 import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Actions Taken', () => {
@@ -11,11 +11,6 @@ describe('Ripa Actions Taken', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-    stop = defaultStop()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
     stop = defaultStop()
   })
 
@@ -30,9 +25,9 @@ describe('Ripa Actions Taken', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaActionsTaken, { vuetify, propsData: { value: stop } })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should validate explanation rules', () => {

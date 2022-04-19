@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Time Picker should match snapshot 1`] = `
-<v-text-field-stub
-  appendicon="mdi-clock-time-four-outline"
-  backgroundcolor=""
-  clearicon="$clear"
-  errorcount="1"
-  errormessages=""
-  label=""
-  loaderheight="2"
-  messages=""
-  rules=""
-  successmessages=""
-  type="time"
-/>
+<div class="v-input v-input--is-label-active theme--light v-text-field">
+  <div class="v-input__control">
+    <div class="v-input__slot">
+      <div class="v-text-field__slot"><input id="input-2" type="time"></div>
+      <div class="v-input__append-inner">
+        <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-clock-time-four-outline theme--light"></i></div>
+      </div>
+    </div>
+    <div class="v-text-field__details">
+      <div class="v-messages theme--light">
+        <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+      </div>
+    </div>
+  </div>
+</div>
 `;

@@ -1,5 +1,5 @@
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Switch', () => {
@@ -24,9 +24,9 @@ describe('Ripa Switch', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaSwitch, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should set model', async () => {

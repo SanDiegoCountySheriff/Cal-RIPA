@@ -3,162 +3,96 @@
 exports[`Ripa Submission should match snapshot 1`] = `
 <div>
   <!---->
-   
-  <v-container-stub
-    class="submissionDetail--container tw-mt-2"
-    fluid="true"
-    tag="div"
-  >
-    <v-layout-stub
-      row=""
-      tag="div"
-      v=""
-    >
-      <v-flex-stub
-        tag="div"
-        xs12=""
-      >
-        <v-toolbar-stub
-          extensionheight="48"
-          flat="true"
-          src=""
-          tag="header"
-        >
-          <v-toolbar-title-stub
-            class="tw-uppercase submissionDetail--titleBar"
-          >
-            Submission Details
-          </v-toolbar-title-stub>
-           
-          <v-btn-stub
-            activeclass=""
-            class="backToSubmissionsBtn"
-            tag="button"
-            type="button"
-          >
-            
+  <div class="container submissionDetail--container tw-mt-2 container--fluid">
+    <div class="layout v row">
+      <div class="flex xs12">
+        <header class="v-sheet theme--light v-toolbar v-toolbar--flat" style="height: 64px;">
+          <div class="v-toolbar__content" style="height: 64px;">
+            <div class="v-toolbar__title tw-uppercase submissionDetail--titleBar">Submission Details</div> <button type="button" class="backToSubmissionsBtn v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default"><span class="v-btn__content">
             Back to Submissions
-          
-          </v-btn-stub>
-        </v-toolbar-stub>
-      </v-flex-stub>
-    </v-layout-stub>
-     
-    <v-layout-stub
-      class="submissionDetail--header"
-      row=""
-      tag="div"
-    >
-      <v-flex-stub
-        tag="div"
-        xs3=""
-      >
-        <span
-          class="submissionDetail--header--label"
-        >
-          Submission ID:
-        </span>
-         
-        <span>
-          1
-        </span>
-      </v-flex-stub>
-       
-      <v-flex-stub
-        tag="div"
-        xs4=""
-      >
-        <span
-          class="submissionDetail--header--label"
-        >
-          Date Submitted:
-        </span>
-         
-        <span>
-          2022-03-11 24:00
-          <br />
-          (Note: It can take up to 48 hours for stop statuses to
-          update below.)
-        </span>
-      </v-flex-stub>
-       
-      <v-flex-stub
-        tag="div"
-        xs2=""
-      >
-        <span
-          class="submissionDetail--header--label"
-        >
-          Submission Stops From Date:
-        </span>
-         
-        <span>
-          2022-02-14 24:00
-        </span>
-      </v-flex-stub>
-       
-      <v-flex-stub
-        tag="div"
-        xs2=""
-      >
-        <span
-          class="submissionDetail--header--label"
-        >
-          Submission Stops To Date:
-        </span>
-         
-        <span>
-          2022-02-14 24:00
-        </span>
-      </v-flex-stub>
-    </v-layout-stub>
-     
-    <v-layout-stub
-      row=""
-      tag="div"
-    >
-      <v-flex-stub
-        tag="div"
-        xs12=""
-      >
+          </span></button>
+          </div>
+        </header>
+      </div>
+    </div>
+    <div class="layout submissionDetail--header row">
+      <div class="flex xs3"><span class="submissionDetail--header--label">Submission ID:</span> <span>1</span></div>
+      <div class="flex xs4"><span class="submissionDetail--header--label">Date Submitted:</span> <span>2022-03-11 24:00<br>(Note: It can take up to 48 hours for stop statuses to
+          update below.)</span></div>
+      <div class="flex xs2"><span class="submissionDetail--header--label">Submission Stops From Date:</span> <span>2022-02-14 24:00</span></div>
+      <div class="flex xs2"><span class="submissionDetail--header--label">Submission Stops To Date:</span> <span>2022-02-14 24:00</span></div>
+    </div>
+    <div class="layout row">
+      <div class="flex xs12">
         <!---->
-      </v-flex-stub>
-       
-      <v-flex-stub
-        tag="div"
-        xs12=""
-      >
-        <v-data-table-stub
-          class="submissionsStopTable"
-          customfilter="[Function]"
-          customgroup="[Function]"
-          customsort="[Function]"
-          expanded=""
-          expandicon="$expand"
-          groupby=""
-          groupdesc=""
-          headers="[object Object],[object Object],[object Object],[object Object],[object Object]"
-          hidedefaultfooter="true"
-          itemclass=""
-          itemkey="id"
-          items=""
-          itemsperpage="10"
-          loaderheight="4"
-          loadingtext="$vuetify.dataIterator.loadingText"
-          locale="en-US"
-          mobilebreakpoint="600"
-          nodatatext="$vuetify.noDataText"
-          noresultstext="$vuetify.dataIterator.noResultsText"
-          options="[object Object]"
-          page="1"
-          search=""
-          selectablekey="isSelectable"
-          serveritemslength="1"
-          sortdesc="true"
-          value=""
-        />
-      </v-flex-stub>
-    </v-layout-stub>
-  </v-container-stub>
+      </div>
+      <div class="flex xs12">
+        <div class="v-data-table submissionsStopTable v-data-table--has-bottom theme--light">
+          <div class="v-data-table__wrapper">
+            <table>
+              <colgroup>
+                <col class="">
+                <col class="">
+                <col class="">
+                <col class="">
+                <col class="">
+              </colgroup>
+              <thead class="v-data-table-header">
+                <tr>
+                  <th role="columnheader" scope="col" aria-label="Stop: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Stop</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
+                  <th role="columnheader" scope="col" aria-label="Status: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable" style="width: 100px; min-width: 100px;"><span>Status</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
+                  <th role="columnheader" scope="col" aria-label="Edited: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable" style="width: 100px; min-width: 100px;"><span>Edited</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
+                  <th role="columnheader" scope="col" aria-label="Error (errors from this submission are highlighted)" class="text-start"><span>Error (errors from this submission are highlighted)</span></th>
+                  <th role="columnheader" scope="col" aria-label="Actions" class="text-start"><span>Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="v-data-table__empty-wrapper">
+                  <td colspan="5">
+                    <div>No Stops Found in This Submission</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="paginationWrapper">
+            <p>
+              Items 1 - 1 of
+              1
+            </p>
+            <nav role="navigation" aria-label="Pagination Navigation">
+              <ul class="v-pagination theme--light">
+                <li><button disabled="disabled" type="button" aria-label="Previous page" class="v-pagination__navigation v-pagination__navigation--disabled"><i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-left theme--light"></i></button></li>
+                <li><button type="button" aria-current="true" aria-label="Current Page, Page 1" class="v-pagination__item v-pagination__item--active primary">1</button></li>
+                <li><button disabled="disabled" type="button" aria-label="Next page" class="v-pagination__navigation v-pagination__navigation--disabled"><i aria-hidden="true" class="v-icon notranslate mdi mdi-chevron-right theme--light"></i></button></li>
+              </ul>
+            </nav>
+            <div class="v-input itemsPerPageSelector v-input--is-label-active v-input--is-dirty v-input--dense theme--light v-text-field v-text-field--enclosed v-text-field--outlined v-select v-autocomplete">
+              <div class="v-input__control">
+                <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-14" class="v-input__slot">
+                  <fieldset aria-hidden="true">
+                    <legend style="width: 0px;"><span class="notranslate">​</span></legend>
+                  </fieldset>
+                  <div class="v-select__slot"><label for="input-14" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Items per page</label><input id="input-14" type="text" autocomplete="off">
+                    <div class="v-input__append-inner">
+                      <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                    </div><input type="hidden" value="10">
+                  </div>
+                  <div class="v-menu">
+                    <!---->
+                  </div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;

@@ -1,5 +1,5 @@
 import RipaEditStopExplanation from '@/components/molecules/RipaEditStopExplanation.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
@@ -27,8 +27,13 @@ describe('Ripa Edit Stop Explanation', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ value: stop })
+    wrapper = mount(RipaEditStopExplanation, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

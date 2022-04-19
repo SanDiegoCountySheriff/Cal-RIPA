@@ -1,5 +1,7 @@
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
+import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
+
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Step 7', () => {
@@ -24,8 +26,12 @@ describe('Ripa Form Step 7', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    const apiStop = API_STOP
+    wrapper = mount(RipaFormStep7, {
+      vuetify,
+      propsData: { apiStop: apiStop },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

@@ -1,5 +1,5 @@
 import RipaSubmission from '@/components/molecules/RipaSubmission.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Submission', () => {
@@ -25,10 +25,6 @@ describe('Ripa Submission', () => {
     }
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaSubmission, {
       vuetify,
@@ -39,9 +35,14 @@ describe('Ripa Submission', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ submission: defaultSubmission })
+    wrapper = mount(RipaSubmission, {
+      vuetify,
+      propsData: {
+        submission: defaultSubmission,
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.todo('should handle back to submission')

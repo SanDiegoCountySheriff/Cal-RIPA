@@ -1,68 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Step 1 should match snapshot 1`] = `
-<v-form-stub
-  lazyvalidation="true"
->
+<v-form-stub lazyvalidation="true">
   <!---->
-   
   <!---->
-   
-  <ripa-stop-date-stub
-    onopenstatute="[Function]"
-    value="[object Object]"
-  />
-   
-  <ripa-location-stub
-    beats=""
-    countycities=""
-    noncountycities=""
-    ongpslocation="[Function]"
-    onopenfavorites="[Function]"
-    onopenlastlocation="[Function]"
-    onopenstatute="[Function]"
-    onsavefavorite="[Function]"
-    schools=""
-    value="[object Object]"
-  />
-   
-  <v-spacer-stub />
-   
+  <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
+  <ripa-location-stub onopenstatute="[Function]" value="[object Object]" schools="" beats="" countycities="" noncountycities="" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]"></ripa-location-stub>
+  <v-spacer-stub></v-spacer-stub>
   <!---->
-   
-  <div
-    class="tw-flex tw-mt-8 tw-justify-center"
-  >
-    <v-btn-stub
-      activeclass=""
-      class="tw-mr-2"
-      color="error"
-      outlined="true"
-      tag="button"
-      type="button"
-    >
-      
+  <div class="tw-flex tw-mt-8 tw-justify-center">
+    <v-btn-stub color="error" outlined="true" tag="button" activeclass="" type="button" class="tw-mr-2">
       Cancel
-    
     </v-btn-stub>
-     
-    <v-btn-stub
-      activeclass=""
-      color="primary"
-      tag="button"
-      type="button"
-    >
-      
+    <v-btn-stub color="primary" tag="button" activeclass="" type="button">
       Next
-    
     </v-btn-stub>
   </div>
-   
-  <ripa-confirm-dialog-stub
-    onclose="[Function]"
-    onconfirm="[Function]"
-    subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
-    title="Confirm Continue"
-  />
+  <ripa-confirm-dialog-stub title="Confirm Continue" subtitle="This page may contain personally identifying information. Are you sure you want to continue?" onclose="[Function]" onconfirm="[Function]"></ripa-confirm-dialog-stub>
 </v-form-stub>
 `;

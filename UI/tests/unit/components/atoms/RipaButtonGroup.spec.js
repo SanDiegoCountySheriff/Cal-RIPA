@@ -1,5 +1,5 @@
 import RipaButtonGroup from '@/components/atoms/RipaButtonGroup.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Button Group', () => {
@@ -25,8 +25,9 @@ describe('Ripa Button Group', () => {
   ]
 
   it('should match snapshot', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaButtonGroup, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should emit event whem model changes', async () => {
