@@ -12,7 +12,6 @@ import {
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
-import RipaEditStopMixin from '@/components/mixins/RipaEditStopMixin'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 
@@ -72,15 +71,7 @@ describe('Ripa Form Container', () => {
       mappedFormNonCountyCities: jest.fn(),
       mappedFormSchools: jest.fn(),
       mappedFormStatutes: jest.fn(),
-      mappedUser: jest.fn().mockReturnValue({
-        agency: 'SDSD',
-        assignment: 1,
-        officerId: '000000001',
-        officerName: 'John Smith',
-        otherType: null,
-        startDate: '2020-12-12',
-        yearsExperience: 10,
-      }),
+      mappedUser: jest.fn().mockReturnValue(officer),
       stopTemplates: jest.fn(),
       invalidUser: jest.fn().mockReturnValue(false),
     }
@@ -101,7 +92,7 @@ describe('Ripa Form Container', () => {
   })
 
   beforeAll(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {})
+    // jest.spyOn(console, 'log').mockImplementation(() => {})
     jest.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
@@ -381,41 +372,57 @@ describe('Ripa Form Container', () => {
     })
   })
 
-  it('should not delete errored stop from memory when canceling edit', () => {
+  it('should not delete errored stop from memory when canceling edit', async () => {
+    localStorage.setItem(
+      'ripa_submitted_api_stops_with_errors',
+      JSON.stringify([
+        {
+          internalId: '1',
+          apiStop: API_STOP,
+          statusCode: 400,
+          statusError: 'This appears to be a duplicate Stop',
+        },
+      ]),
+    )
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', STOP.toString())
-    localStorage.setItem('ripa_form_full_stop', FULL_STOP.toString())
-    localStorage.setItem('ripa_form_api_stop', null)
-    localStorage.setItem('ripa_form_submitted_api_stop', API_STOP.toString())
+    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
+    localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
+    localStorage.setItem(
+      'ripa_form_submitted_api_stop',
+      JSON.stringify(API_STOP),
+    )
+    localStorage.setItem('ripa_form_cached', '1')
+    localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
     wrapper = mountFactory()
-    const apiStop = API_STOP
+    await wrapper.vm.$nextTick()
+    wrapper.vm.handleCancelForm()
+
+    const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
+
+    expect(actual).not.toEqual(null)
+  })
+
+  it.skip('should delete errored stop from memory when submitting edit', async () => {
+    localStorage.setItem('ripa_form_step_index', '7')
+    localStorage.setItem('ripa_form_editing', '1')
+    localStorage.setItem('ripa_form_editing_stop_with_error', '1')
+    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
+    localStorage.setItem('ripa_form_api_stop', null)
+    localStorage.setItem(
+      'ripa_form_submitted_api_stop',
+      JSON.stringify(API_STOP),
+    )
+    localStorage.setItem('ripa_form_cached', '1')
+    localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
+    wrapper = mountFactory()
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.todo('should mount when not editing local form')
 })
-
-class LocalStorageMock {
-  constructor() {
-    this.store = {}
-  }
-
-  clear() {
-    this.store = {}
-  }
-
-  getItem(key) {
-    return this.store[key] || null
-  }
-
-  setItem(key, value) {
-    this.store[key] = String(value)
-  }
-
-  removeItem(key) {
-    delete this.store[key]
-  }
-}

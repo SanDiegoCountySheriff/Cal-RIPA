@@ -273,6 +273,7 @@ export default {
     },
 
     deleteStopWithError(internalId) {
+      console.log(internalId)
       const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
       const updatedApiStopsWithErrors = apiStopsWithErrors.filter(
         item => item.internalId !== internalId,
