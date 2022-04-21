@@ -1,5 +1,5 @@
 import RipaCheckbox from '@/components/atoms/RipaCheckbox.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Checkbox', () => {
@@ -20,7 +20,8 @@ describe('Ripa Checkbox', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({ label: 'Item 1' })
+    wrapper = mount(RipaCheckbox, { vuetify, propsData: { label: 'Item 1' } })
+
     expect(wrapper.element).toMatchSnapshot()
   })
 

@@ -1,21 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Subheader should match snapshot 1`] = `
-<div
-  class="ripa-form-header tw-my-4 tw-mb-7"
->
-  <v-row-stub
-    class="tw-ml-1 tw-mt-1"
-    tag="div"
-  >
+<div class="ripa-form-header tw-my-4 tw-mb-7">
+  <div class="row tw-ml-1 tw-mt-1">
     <!---->
-     
     <!---->
-     
-    <ripa-subheader-stub
-      nomargins="true"
-      text=""
-    />
-  </v-row-stub>
+    <div class="ripa-label tw-font-bold"><span>
+
+  </span></div>
+  </div>
 </div>
 `;

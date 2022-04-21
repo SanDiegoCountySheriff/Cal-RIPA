@@ -1,5 +1,5 @@
 import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa JSON Viewer Dialog', () => {
@@ -25,8 +25,13 @@ describe('Ripa JSON Viewer Dialog', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaJsonViewerDialog, {
+      vuetify,
+      propsData: {
+        onClose: jest.fn(),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

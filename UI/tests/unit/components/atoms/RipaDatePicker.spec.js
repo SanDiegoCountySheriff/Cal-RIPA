@@ -1,5 +1,5 @@
 import RipaDatePicker from '@/components/atoms/RipaDatePicker.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Date Picker', () => {
@@ -24,8 +24,9 @@ describe('Ripa Date Picker', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
-    expect(wrapper.element).toMatchSnapshot()
+    wrapper = mount(RipaDatePicker, { vuetify })
+
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should emit event', () => {

@@ -1,6 +1,6 @@
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import Vuetify from 'vuetify'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 
 describe('Ripa Radio Group', () => {
   let vuetify
@@ -24,9 +24,9 @@ describe('Ripa Radio Group', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaRadioGroup, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should set model', async () => {

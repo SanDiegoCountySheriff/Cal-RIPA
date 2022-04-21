@@ -1,20 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Number Input should match snapshot 1`] = `
-<v-text-field-stub
-  backgroundcolor=""
-  clearicon="$clear"
-  errorcount="1"
-  errormessages=""
-  hint=""
-  inputmode="numeric"
-  label=""
-  loaderheight="2"
-  messages=""
-  min="0"
-  rules=""
-  successmessages=""
-  type="number"
-  validateonblur="true"
-/>
+<div class="v-input theme--light v-text-field">
+  <div class="v-input__control">
+    <div class="v-input__slot">
+      <div class="v-text-field__slot"><input inputmode="numeric" min="0" id="input-2" type="number"></div>
+    </div>
+    <div class="v-text-field__details">
+      <div class="v-messages theme--light">
+        <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+      </div>
+    </div>
+  </div>
+</div>
 `;

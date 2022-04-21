@@ -1,5 +1,5 @@
 import RipaAccordion from '@/components/molecules/RipaAccordion'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Accordion', () => {
@@ -20,9 +20,9 @@ describe('Ripa Accordion', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaAccordion, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should format stop date', () => {

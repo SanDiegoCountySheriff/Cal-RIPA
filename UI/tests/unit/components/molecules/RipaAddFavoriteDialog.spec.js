@@ -1,5 +1,5 @@
 import RipaAddFavoriteDialog from '@/components/molecules/RipaAddFavoriteDialog'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Add Favorite Dialog', () => {
@@ -22,9 +22,12 @@ describe('Ripa Add Favorite Dialog', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaAddFavoriteDialog, {
+      vuetify,
+      propsData: { onAddFavorite: jest.fn(), onClose: jest.fn() },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should set model', async () => {

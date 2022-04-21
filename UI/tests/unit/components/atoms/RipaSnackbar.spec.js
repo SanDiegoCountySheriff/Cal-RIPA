@@ -1,5 +1,5 @@
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Snackbar', () => {
@@ -24,9 +24,9 @@ describe('Ripa Snackbar', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaSnackbar, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should set model', async () => {

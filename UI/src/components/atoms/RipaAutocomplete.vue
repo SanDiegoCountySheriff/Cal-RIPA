@@ -17,7 +17,18 @@
     :multiple="multiple"
     :rules="rules"
     validate-on-blur
-  ></v-autocomplete>
+    ><template v-if="customChip" v-slot:selection="data">
+      <v-chip
+        v-bind="data.attrs"
+        :input-value="data.selected"
+        close
+        small
+        @click:close="handleRemoveItem(data)"
+      >
+        {{ getCustomChipLabel(data) }}
+      </v-chip>
+    </template></v-autocomplete
+  >
 </template>
 
 <script>
@@ -28,6 +39,19 @@ export default {
     return {
       viewModel: this.value,
     }
+  },
+
+  methods: {
+    handleRemoveItem(data) {
+      this.$emit('remove-item', data)
+    },
+
+    getCustomChipLabel(data) {
+      if (this.customChipLabel) {
+        return this.customChipLabel(data)
+      }
+      return ''
+    },
   },
 
   computed: {
@@ -96,6 +120,14 @@ export default {
     chips: {
       type: Boolean,
       default: false,
+    },
+    customChip: {
+      type: Boolean,
+      default: false,
+    },
+    customChipLabel: {
+      type: Function,
+      default: () => {},
     },
     smallChips: {
       type: Boolean,

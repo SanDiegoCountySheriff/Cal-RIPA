@@ -1,57 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Step 6 should match snapshot 1`] = `
-<v-form-stub
-  lazyvalidation="true"
->
-  <ripa-agency-questions-stub
-    onopenstatute="[Function]"
-    value="[object Object]"
-  />
-   
-  <v-spacer-stub />
-   
-  <!---->
-   
-  <div
-    class="tw-flex tw-mt-8 tw-justify-center"
-  >
-    <v-btn-stub
-      activeclass=""
-      class="tw-mr-2"
-      color="primary"
-      outlined="true"
-      tag="button"
-      type="button"
-    >
-      
-        Back
-      
-    </v-btn-stub>
-     
-    <v-btn-stub
-      activeclass=""
-      class="tw-mr-2"
-      color="error"
-      outlined="true"
-      tag="button"
-      type="button"
-    >
-      
-      Cancel
-    
-    </v-btn-stub>
-     
-    <v-btn-stub
-      activeclass=""
-      color="primary"
-      tag="button"
-      type="button"
-    >
-      
-      Next
-    
-    </v-btn-stub>
+<form novalidate="novalidate" class="v-form">
+  <div class="ripa-agency-questions tw-pb-4">
+    <div class="ripa-form-header">
+      <div class="row tw-ml-1 tw-mt-1">
+        <!---->
+        <!---->
+        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Agency Questions</span></div>
+      </div>
+    </div>
+    <div class="container"></div>
   </div>
-</v-form-stub>
+  <div class="spacer"></div>
+  <!---->
+  <div class="tw-flex tw-mt-8 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+        Back
+      </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
+</form>
 `;

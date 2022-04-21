@@ -1,5 +1,5 @@
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Statue Dialog', () => {
@@ -8,10 +8,6 @@ describe('Ripa Statue Dialog', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -24,8 +20,8 @@ describe('Ripa Statue Dialog', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaStatuteDialog, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

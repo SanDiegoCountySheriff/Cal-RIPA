@@ -1,138 +1,148 @@
 <template>
-  <v-container class="submissionDetail--container tw-mt-2" fluid>
+  <div>
     <v-progress-linear
-      v-if="loading"
+      v-if="loading && !submission"
       indeterminate
-      color="cyan"
+      color="primary"
+      class="tw-mt-3"
     ></v-progress-linear>
-    <v-layout v row>
-      <v-flex xs12>
-        <v-toolbar flat>
-          <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
-            >Submission Details</v-toolbar-title
+    <v-container
+      class="submissionDetail--container tw-mt-2"
+      fluid
+      v-if="submission"
+    >
+      <v-layout v row>
+        <v-flex xs12>
+          <v-toolbar flat>
+            <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
+              >Submission Details</v-toolbar-title
+            >
+            <v-btn
+              @click="handleBackToSubmissions"
+              class="backToSubmissionsBtn"
+            >
+              Back to Submissions
+            </v-btn>
+          </v-toolbar>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="!loading" row class="submissionDetail--header">
+        <v-flex xs3>
+          <span class="submissionDetail--header--label">Submission ID:</span>
+          <span>{{ submission.submission.id }}</span>
+        </v-flex>
+        <v-flex xs4>
+          <span class="submissionDetail--header--label">Date Submitted:</span>
+          <span
+            >{{
+              format(
+                new Date(submission.submission.dateSubmitted),
+                'yyyy-MM-dd kk:mm',
+              )
+            }}<br />(Note: It can take up to 48 hours for stop statuses to
+            update below.)</span
           >
-          <v-btn @click="handleBackToSubmissions" class="backToSubmissionsBtn">
-            Back to Submissions
-          </v-btn>
-        </v-toolbar>
-      </v-flex>
-    </v-layout>
-    <v-layout v-if="!loading" row class="submissionDetail--header">
-      <v-flex xs3>
-        <span class="submissionDetail--header--label">Submission ID:</span>
-        <span>{{ submission.submission.id }}</span>
-      </v-flex>
-      <v-flex xs4>
-        <span class="submissionDetail--header--label">Date Submitted:</span>
-        <span
-          >{{
+        </v-flex>
+        <v-flex xs2>
+          <span class="submissionDetail--header--label"
+            >Submission Stops From Date:</span
+          >
+          <span>{{
             format(
-              new Date(submission.submission.dateSubmitted),
+              new Date(submission.submission.minStopDate),
               'yyyy-MM-dd kk:mm',
             )
-          }}<br />(Note: It can take up to 48 hours for stop statuses to update
-          below.)</span
-        >
-      </v-flex>
-      <v-flex xs2>
-        <span class="submissionDetail--header--label"
-          >Submission Stops From Date:</span
-        >
-        <span>{{
-          format(
-            new Date(submission.submission.minStopDate),
-            'yyyy-MM-dd kk:mm',
-          )
-        }}</span>
-      </v-flex>
-      <v-flex xs2>
-        <span class="submissionDetail--header--label"
-          >Submission Stops To Date:</span
-        >
-        <span>{{
-          format(
-            new Date(submission.submission.maxStopDate),
-            'yyyy-MM-dd kk:mm',
-          )
-        }}</span>
-      </v-flex>
-    </v-layout>
-    <v-layout v-if="submission" row>
-      <v-flex v-if="submission" xs12>
-        <div v-if="submission.summary.length" class="submissionSummary">
-          <p v-for="(errorCode, index) in submission.summary" :key="index">
-            <span class="label">{{ errorCode.code }}</span>
-            <v-btn
-              :class="{
-                activeFilter: currentErrorCodeFilter === errorCode.code,
-              }"
-              @click="handleChangeErrorCodeFilter(errorCode.code)"
-              text
-              >{{ errorCode.count }}</v-btn
-            >
-          </p>
-        </div>
-      </v-flex>
-      <v-flex xs12>
-        <v-data-table
-          class="submissionsStopTable"
-          :loading="loading"
-          :headers="headers"
-          :hide-default-footer="true"
-          :items="submission.stops"
-          :server-items-length="getTotalStops"
-          :search="search"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-        >
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              v-if="statuses.find(s => s.text === item.status).isEditable"
-              small
-              class="tw-mr-2"
-              @click="editItem(item)"
-            >
-              mdi-pencil
-            </v-icon>
-          </template>
-          <template :item-class="stopError" v-slot:item.error="{ item }">
-            <div class="stopError" v-html="item.error"></div>
-          </template>
-          <template v-slot:item.edited="{ item }">
-            {{ item.isEdited ? 'Yes' : 'No' }}
-          </template>
-          <template v-slot:no-data>
-            <div>No Stops Found in This Submission</div>
-          </template>
-          <template v-slot:footer>
-            <div class="paginationWrapper">
-              <p>
-                Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
-                {{ submission.submission.recordCount }}
-              </p>
-              <v-pagination
-                v-model="currentPage"
-                :length="getPaginationLength"
-                @next="handleNextPage"
-                @input="handleJumpToPage"
-                :total-visible="20"
-                @previous="handlePreviousPage"
-              ></v-pagination>
-              <v-combobox
-                outlined
-                dense
-                v-model="itemsPerPage"
-                :items="itemsPerPageOptions"
-                label="Items per page"
-                @input="handleUpdateItemsPerPage"
-                class="itemsPerPageSelector"
-              ></v-combobox>
-            </div>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
-  </v-container>
+          }}</span>
+        </v-flex>
+        <v-flex xs2>
+          <span class="submissionDetail--header--label"
+            >Submission Stops To Date:</span
+          >
+          <span>{{
+            format(
+              new Date(submission.submission.maxStopDate),
+              'yyyy-MM-dd kk:mm',
+            )
+          }}</span>
+        </v-flex>
+      </v-layout>
+      <v-layout v-if="submission" row>
+        <v-flex v-if="submission" xs12>
+          <div v-if="submission.summary.length" class="submissionSummary">
+            <p v-for="(errorCode, index) in submission.summary" :key="index">
+              <span class="label">{{ errorCode.code }}</span>
+              <v-btn
+                :class="{
+                  activeFilter: currentErrorCodeFilter === errorCode.code,
+                }"
+                @click="handleChangeErrorCodeFilter(errorCode.code)"
+                text
+                >{{ errorCode.count }}</v-btn
+              >
+            </p>
+          </div>
+        </v-flex>
+        <v-flex xs12>
+          <v-data-table
+            class="submissionsStopTable"
+            :loading="loading"
+            :headers="headers"
+            :hide-default-footer="true"
+            :items="submission.stops"
+            :server-items-length="getTotalStops"
+            :search="search"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                v-if="statuses.find(s => s.text === item.status).isEditable"
+                small
+                class="tw-mr-2"
+                @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <template :item-class="stopError" v-slot:item.error="{ item }">
+              <div class="stopError" v-html="item.error"></div>
+            </template>
+            <template v-slot:item.edited="{ item }">
+              {{ item.isEdited ? 'Yes' : 'No' }}
+            </template>
+            <template v-slot:no-data>
+              <div>No Stops Found in This Submission</div>
+            </template>
+            <template v-slot:footer>
+              <div class="paginationWrapper">
+                <p>
+                  Items {{ calculateItemsFrom }} - {{ calculateItemsTo }} of
+                  {{ submission.submission.recordCount }}
+                </p>
+                <v-pagination
+                  v-model="currentPage"
+                  :length="getPaginationLength"
+                  @next="handleNextPage"
+                  @input="handleJumpToPage"
+                  :total-visible="20"
+                  @previous="handlePreviousPage"
+                ></v-pagination>
+                <v-combobox
+                  outlined
+                  dense
+                  v-model="itemsPerPage"
+                  :items="itemsPerPageOptions"
+                  label="Items per page"
+                  @input="handleUpdateItemsPerPage"
+                  class="itemsPerPageSelector"
+                ></v-combobox>
+              </div>
+            </template>
+          </v-data-table>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -336,7 +346,7 @@ export default {
     },
     submission: {
       type: Object,
-      required: true,
+      default: () => {},
     },
     loading: {
       type: Boolean,

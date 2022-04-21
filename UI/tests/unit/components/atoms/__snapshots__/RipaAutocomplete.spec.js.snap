@@ -1,32 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Autocomplete should match snapshot 1`] = `
-<v-autocomplete-stub
-  allowoverflow="true"
-  appendicon="$dropdown"
-  backgroundcolor=""
-  class="tw-my-4"
-  clearable="true"
-  clearicon="$clear"
-  errorcount="1"
-  errormessages=""
-  filter="[Function]"
-  flat="true"
-  hint=""
-  itemcolor="primary"
-  itemdisabled="disabled"
-  items=""
-  itemtext=""
-  itemvalue=""
-  label=""
-  loaderheight="2"
-  menuprops="[object Object]"
-  messages=""
-  nodatatext="$vuetify.noDataText"
-  rules=""
-  successmessages=""
-  type="text"
-  validateonblur="true"
-  valuecomparator="[Function]"
-/>
+<div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
+  <div class="v-input__control">
+    <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-2" class="v-input__slot">
+      <div class="v-select__slot"><input id="input-2" type="text" autocomplete="off">
+        <div class="v-input__append-inner">
+          <div></div>
+        </div>
+        <div class="v-input__append-inner">
+          <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+        </div><input type="hidden">
+      </div>
+      <div class="v-menu">
+        <!---->
+      </div>
+    </div>
+    <div class="v-text-field__details">
+      <div class="v-messages theme--light">
+        <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+      </div>
+    </div>
+  </div>
+</div>
 `;

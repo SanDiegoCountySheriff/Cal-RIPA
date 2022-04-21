@@ -1,5 +1,5 @@
 import RipaUser from '@/components/molecules/RipaUser.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa User', () => {
@@ -8,10 +8,6 @@ describe('Ripa User', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -24,17 +20,20 @@ describe('Ripa User', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory({
-      value: {
-        agency: 'SDSD',
-        assignment: 10,
-        otherType: 'Data Services',
-        startDate: '2014-10-10',
-        yearsExperience: 7,
+    wrapper = mount(RipaUser, {
+      vuetify,
+      propsData: {
+        value: {
+          agency: 'SDSD',
+          assignment: 10,
+          otherType: 'Data Services',
+          startDate: '2014-10-10',
+          yearsExperience: 7,
+        },
       },
     })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.todo('should validate years experience rules')

@@ -1,6 +1,6 @@
 import RipaLabel from '@/components/atoms/RipaLabel'
 import Vuetify from 'vuetify'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 
 describe('Ripa Label', () => {
   let vuetify
@@ -20,9 +20,9 @@ describe('Ripa Label', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaLabel, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should return bold font', () => {

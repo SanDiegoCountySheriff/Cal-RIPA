@@ -1,5 +1,5 @@
 import RipaTemplate from '@/components/molecules/RipaTemplate.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Template', () => {
@@ -10,24 +10,25 @@ describe('Ripa Template', () => {
     vuetify = new Vuetify()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
     return shallowMount(RipaTemplate, {
       vuetify,
       propsData: {
-        onOpenTemplate: jest.fn(),
         ...propsData,
+        onOpenTemplate: jest.fn(),
       },
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaTemplate, {
+      vuetify,
+      propsData: {
+        onOpenTemplate: jest.fn(),
+      },
+    })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 
   it.todo('should handle dynamic templates')

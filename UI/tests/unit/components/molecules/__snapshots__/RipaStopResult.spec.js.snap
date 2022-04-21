@@ -1,159 +1,146 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Stop Result should match snapshot 1`] = `
-<div
-  class="ripa-action-taken tw-pb-4"
->
-  <ripa-form-header-stub
-    onopenstatute="[Function]"
-    required="true"
-    subtitle="§999.226(a)(13)"
-    title="Result of Stop"
-  />
-   
-  <v-container-stub
-    tag="div"
-  >
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        class="tw-pr-2"
-        cols="12"
-        md="6"
-        sm="6"
-        tag="div"
-      >
-        <div
-          class="tw-mr-2 tw-mt-4"
-        >
-          <v-btn-stub
-            activeclass=""
-            class="tw-w-full"
-            color="primary"
-            small="true"
-            tag="button"
-            type="button"
-          >
-            
+<div class="ripa-action-taken tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Result of Stop</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="tw-pr-2 col-sm-6 col-md-6 col-12">
+        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
             Open Favorites
-          
-          </v-btn-stub>
+          </span></button></div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-12">
+        <!---->
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 200px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--switch primary--text">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="true" id="input-9" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple primary--text"></div>
+                  <div class="v-input--switch__track theme--light primary--text"></div>
+                  <div class="v-input--switch__thumb theme--light primary--text">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-9" class="v-label theme--light" style="left: 0px; position: relative;">
+                  Any Results of Stop?
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
-      </v-col-stub>
-       
-      <v-col-stub
-        cols="12"
-        md="6"
-        sm="6"
-        tag="div"
-      >
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-12" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-12" class="v-label theme--light" style="left: 0px; position: relative;">Warning (verbal or written)</label>
+            </div>
+          </div>
+        </div>
         <!---->
-      </v-col-stub>
-    </v-row-stub>
-     
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        class="tw-mb-4"
-        cols="12"
-        sm="12"
-        tag="div"
-      />
-    </v-row-stub>
-     
-    <v-row-stub
-      nogutters="true"
-      tag="div"
-    >
-      <v-col-stub
-        cols="12"
-        sm="12"
-        tag="div"
-      >
-        <ripa-switch-stub
-          hint=""
-          label="Any Results of Stop?"
-          maxwidth="200"
-          rules=""
-          value="true"
-        />
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Warning (verbal or written)"
-          rules="An action taken is required"
-        />
-         
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-15" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;">Citation for infraction</label>
+            </div>
+          </div>
+        </div>
         <!---->
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Citation for infraction"
-          rules="An action taken is required"
-        />
-         
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-18" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-18" class="v-label theme--light" style="left: 0px; position: relative;">In-field cite and release</label>
+            </div>
+          </div>
+        </div>
         <!---->
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="In-field cite and release"
-          rules="An action taken is required"
-        />
-         
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-21" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-21" class="v-label theme--light" style="left: 0px; position: relative;">Custodial arrest pursurant to outstanding warrant</label>
+            </div>
+          </div>
+        </div>
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-24" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-24" class="v-label theme--light" style="left: 0px; position: relative;">Custodial arrest without warrant</label>
+            </div>
+          </div>
+        </div>
         <!---->
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Custodial arrest pursurant to outstanding warrant"
-          rules="An action taken is required"
-        />
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Custodial arrest without warrant"
-          rules="An action taken is required"
-        />
-         
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-27" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-27" class="v-label theme--light" style="left: 0px; position: relative;">Field interview card completed</label>
+            </div>
+          </div>
+        </div>
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-30" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-30" class="v-label theme--light" style="left: 0px; position: relative;">Noncriminal transport or caretaking transport</label>
+            </div>
+          </div>
+        </div>
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-33" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-33" class="v-label theme--light" style="left: 0px; position: relative;">Contacted parent/legal guardian or other person responsible for the minor</label>
+            </div>
+          </div>
+        </div>
+        <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-36" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Psychiatric hold</label>
+            </div>
+          </div>
+        </div>
         <!---->
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Field interview card completed"
-          rules="An action taken is required"
-        />
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Noncriminal transport or caretaking transport"
-          rules="An action taken is required"
-        />
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Contacted parent/legal guardian or other person responsible for the minor"
-          rules="An action taken is required"
-        />
-         
-        <ripa-checkbox-stub
-          hidedetails="true"
-          label="Psychiatric hold"
-          rules="An action taken is required"
-        />
-         
+        <div class="v-input theme--light v-input--selection-controls v-input--checkbox">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-39" role="checkbox" type="checkbox" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+              </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;">Contacted U.S. Department of Homeland Security</label>
+            </div>
+            <div class="v-messages theme--light">
+              <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+            </div>
+          </div>
+        </div>
         <!---->
-         
-        <ripa-checkbox-stub
-          label="Contacted U.S. Department of Homeland Security"
-          rules="An action taken is required"
-        />
-         
-        <!---->
-      </v-col-stub>
-    </v-row-stub>
-  </v-container-stub>
+      </div>
+    </div>
+  </div>
 </div>
 `;

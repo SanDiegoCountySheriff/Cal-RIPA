@@ -1,5 +1,5 @@
 import RipaSchoolsGrid from '@/components/molecules/RipaSchoolsGrid.vue'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Schools Grid', () => {
@@ -8,10 +8,6 @@ describe('Ripa Schools Grid', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   const factory = propsData => {
@@ -24,8 +20,8 @@ describe('Ripa Schools Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = mount(RipaSchoolsGrid, { vuetify })
 
-    expect(wrapper.element).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
