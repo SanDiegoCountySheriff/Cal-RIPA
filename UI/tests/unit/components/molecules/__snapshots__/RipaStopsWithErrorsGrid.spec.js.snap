@@ -14,6 +14,7 @@ exports[`Ripa Stops With Errors Grid should match snapshot 1`] = `
     groupby=""
     groupdesc=""
     headers="[object Object],[object Object]"
+    hidedefaultfooter="true"
     itemclass=""
     itemkey="id"
     items=""

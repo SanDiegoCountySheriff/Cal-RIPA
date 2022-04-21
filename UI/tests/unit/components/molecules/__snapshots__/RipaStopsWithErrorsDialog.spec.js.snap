@@ -22,6 +22,13 @@ exports[`Ripa Stops With Errors Dialog should match snapshot 1`] = `
     </v-card-title-stub>
      
     <v-card-text-stub>
+      
+      Click the error message to edit the stop. You may also delete stops that
+      no longer need to be submitted.
+    
+    </v-card-text-stub>
+     
+    <v-card-text-stub>
       <v-container-stub
         tag="div"
       >
