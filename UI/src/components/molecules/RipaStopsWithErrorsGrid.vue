@@ -6,6 +6,7 @@
       @click:row="handleRowClick"
       sort-by="id"
       single-select
+      hide-default-footer
       :mobile-breakpoint="0"
     >
       <template v-slot:top>
