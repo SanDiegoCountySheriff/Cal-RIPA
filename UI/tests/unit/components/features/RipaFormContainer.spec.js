@@ -28,6 +28,7 @@ describe('Ripa Form Container', () => {
   let state
   let actions
   let getters
+  let mutations
   let wrapper = null
   let apiStop
 
@@ -75,24 +76,26 @@ describe('Ripa Form Container', () => {
       stopTemplates: jest.fn(),
       invalidUser: jest.fn().mockReturnValue(false),
     }
+    mutations = {
+      updateStopsWithErrors: jest.fn(),
+      setIsOnline: (state, value) => {
+        state.isOnline = value
+      },
+      setMappedGpsLocationAddress: (state, value) => {
+        state.mappedGpsLocationAddress = value
+      },
+    }
     store = new Vuex.Store({
       state,
       actions,
       getters,
-      mutations: {
-        setIsOnline(state, value) {
-          state.isOnline = value
-        },
-        setMappedGpsLocationAddress(state, value) {
-          state.mappedGpsLocationAddress = value
-        },
-      },
+      mutations,
     })
     apiStop = defaultStop()
   })
 
   beforeAll(() => {
-    // jest.spyOn(console, 'log').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
     jest.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
@@ -384,6 +387,7 @@ describe('Ripa Form Container', () => {
         },
       ]),
     )
+    localStorage.setItem('ripa_errored_stop_internal_id', '1')
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
@@ -398,20 +402,32 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
     wrapper = mountFactory()
     await wrapper.vm.$nextTick()
-    wrapper.vm.handleCancelForm()
+    wrapper.vm.handleCancelAction()
 
     const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
 
     expect(actual).not.toEqual(null)
   })
 
-  it.skip('should delete errored stop from memory when submitting edit', async () => {
+  it('should delete errored stop from memory when submitting edit', async () => {
+    localStorage.setItem(
+      'ripa_submitted_api_stops_with_errors',
+      JSON.stringify([
+        {
+          internalId: '1',
+          apiStop: API_STOP,
+          statusCode: 400,
+          statusError: 'This appears to be a duplicate Stop',
+        },
+      ]),
+    )
+    localStorage.setItem('ripa_errored_stop_internal_id', '1')
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
     localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
-    localStorage.setItem('ripa_form_api_stop', null)
+    localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(
       'ripa_form_submitted_api_stop',
       JSON.stringify(API_STOP),
@@ -420,8 +436,59 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
     wrapper = mountFactory()
     await wrapper.vm.$nextTick()
+    wrapper.vm.handleSubmitStop()
 
-    expect(wrapper.html()).toMatchSnapshot()
+    const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
+
+    expect(actual).toEqual(null)
+  })
+
+  it('should only delete submitted stop from memory when submitting edit', async () => {
+    localStorage.setItem(
+      'ripa_submitted_api_stops_with_errors',
+      JSON.stringify([
+        {
+          internalId: '1',
+          apiStop: API_STOP,
+          statusCode: 400,
+          statusError: 'This appears to be a duplicate Stop',
+        },
+        {
+          internalId: '2',
+          apiStop: API_STOP,
+          statusCode: 400,
+          statusError: 'This appears to be a duplicate Stop',
+        },
+      ]),
+    )
+    const expected = JSON.stringify([
+      {
+        internalId: '2',
+        apiStop: API_STOP,
+        statusCode: 400,
+        statusError: 'This appears to be a duplicate Stop',
+      },
+    ])
+    localStorage.setItem('ripa_errored_stop_internal_id', '1')
+    localStorage.setItem('ripa_form_step_index', '7')
+    localStorage.setItem('ripa_form_editing', '1')
+    localStorage.setItem('ripa_form_editing_stop_with_error', '1')
+    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
+    localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
+    localStorage.setItem(
+      'ripa_form_submitted_api_stop',
+      JSON.stringify(API_STOP),
+    )
+    localStorage.setItem('ripa_form_cached', '1')
+    localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
+    wrapper = mountFactory()
+    await wrapper.vm.$nextTick()
+    wrapper.vm.handleSubmitStop()
+
+    const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
+
+    expect(actual).toEqual(expected)
   })
 
   it.todo('should mount when not editing local form')

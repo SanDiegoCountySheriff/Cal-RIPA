@@ -206,7 +206,6 @@ const getStopEditExplanation = apiStop => {
 }
 
 const getSummaryPersonCount = apiStop => {
-  console.log('getting summary person count')
   return {
     level: 1,
     header: 'Person Count',

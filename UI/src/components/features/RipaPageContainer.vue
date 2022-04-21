@@ -225,8 +225,7 @@ export default {
       this.showStopsWithErrorsDialog = false
       const apiStop = this.getStopWithErrorGivenInternalId(internalId)
       if (apiStop) {
-        // this.deleteStopWithError(internalId)
-        this.handleEditStopWithError(apiStop)
+        this.handleEditStopWithError(apiStop, internalId)
       }
     },
 

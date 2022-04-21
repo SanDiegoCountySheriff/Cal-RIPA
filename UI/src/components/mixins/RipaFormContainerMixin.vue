@@ -528,6 +528,7 @@ export default {
     },
 
     clearLocalStorage() {
+      localStorage.removeItem('ripa_errored_stop_internal_id')
       localStorage.removeItem('ripa_form_admin_editing')
       localStorage.removeItem('ripa_form_admin_viewing')
       localStorage.removeItem('ripa_form_api_stop')
@@ -548,14 +549,11 @@ export default {
     },
 
     handleCancelForm() {
-      console.log('route', this.$route)
-      console.log('handling cancel form')
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
       this.stop = null
       this.fullStop = null
       if (route) {
-        console.log('there is a route')
         if (route === '/admin' || route === '/admin/stops') {
           this.setResetPagination(false)
         }

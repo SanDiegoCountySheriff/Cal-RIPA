@@ -139,7 +139,7 @@ import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
@@ -204,6 +204,8 @@ export default {
       'setResetPagination',
     ]),
 
+    ...mapMutations(['updateStopsWithErrors']),
+
     handleDone() {
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
@@ -215,6 +217,10 @@ export default {
     },
 
     handleSubmitStop(apiStop) {
+      const internalId = localStorage.getItem('ripa_errored_stop_internal_id')
+      if (internalId) {
+        this.deleteStopWithError(internalId)
+      }
       this.addApiStop(apiStop)
       if (!this.isAdminEditing) {
         this.setLastLocation(this.stop)
