@@ -139,7 +139,7 @@ import RipaFormTemplate from '@/components/templates/RipaFormTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ripa-home-container',
@@ -202,9 +202,8 @@ export default {
       'setUserFavoriteReasons',
       'setUserFavoriteResults',
       'setResetPagination',
+      'setStopsWithErrors',
     ]),
-
-    ...mapMutations(['updateStopsWithErrors']),
 
     handleDone() {
       const route = localStorage.getItem('ripa_form_edit_route')

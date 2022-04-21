@@ -12,6 +12,7 @@ describe('Ripa Page Container', () => {
   let vuetify
   let wrapper
   let store
+  let actions
   let mutations
   let getters
 
@@ -27,9 +28,9 @@ describe('Ripa Page Container', () => {
       yearsExperience: 10,
     }
     vuetify = new Vuetify()
-    mutations = {
-      updateConnectionStatus: jest.fn(),
-      updateStopsWithErrors: jest.fn(),
+    actions = {
+      setStopsWithErrors: jest.fn(),
+      setConnectionStatus: jest.fn(),
     }
     getters = {
       invalidUser: jest.fn(),
@@ -41,7 +42,7 @@ describe('Ripa Page Container', () => {
       mappedStopsWithErrors: jest.fn(),
       isOnlineAndAuthenticated: jest.fn(),
     }
-    store = new Vuex.Store({ getters, mutations })
+    store = new Vuex.Store({ actions, getters })
   })
 
   beforeAll(() => {

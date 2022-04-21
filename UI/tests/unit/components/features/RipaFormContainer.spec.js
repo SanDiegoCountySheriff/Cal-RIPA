@@ -56,6 +56,7 @@ describe('Ripa Form Container', () => {
       editOfficerUser: jest.fn(),
       checkTextForPii: jest.fn(),
       setPiiServiceAvailable: jest.fn(),
+      setStopsWithErrors: jest.fn(),
     }
     getters = {
       mappedGpsLocationAddress: jest.fn(() => {
@@ -77,7 +78,6 @@ describe('Ripa Form Container', () => {
       invalidUser: jest.fn().mockReturnValue(false),
     }
     mutations = {
-      updateStopsWithErrors: jest.fn(),
       setIsOnline: (state, value) => {
         state.isOnline = value
       },
