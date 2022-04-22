@@ -84,7 +84,7 @@ import RipaPageWrapper from '@/components/organisms/RipaPageWrapper'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import authentication from '@/authentication'
 
@@ -159,9 +159,9 @@ export default {
       'getFormTemplates',
       'getUser',
       'resetStopSubmissionStatus',
+      'setConnectionStatus',
+      'setStopsWithErrors',
     ]),
-
-    ...mapMutations(['updateConnectionStatus', 'updateStopsWithErrors']),
 
     async getUserData() {
       await Promise.all([this.getUser()])
@@ -225,8 +225,7 @@ export default {
       this.showStopsWithErrorsDialog = false
       const apiStop = this.getStopWithErrorGivenInternalId(internalId)
       if (apiStop) {
-        this.deleteStopWithError(internalId)
-        this.handleEditStopWithError(apiStop)
+        this.handleEditStopWithError(apiStop, internalId)
       }
     },
 
@@ -284,10 +283,10 @@ export default {
     async updateConnectionStatusInStore() {
       if (navigator.onLine) {
         const online = await this.isWebsiteReachable(this.getServerUrl())
-        await this.updateConnectionStatus(online)
+        this.setConnectionStatus(online)
         await this.initPage()
       } else if (!navigator.onLine) {
-        await this.updateConnectionStatus(false)
+        this.setConnectionStatus(false)
       }
     },
 
