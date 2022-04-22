@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as msal from '@azure/msal-browser'
 import store from '@/store/index'
-
+// add comment for testing
 export default {
   authContext: null,
 
