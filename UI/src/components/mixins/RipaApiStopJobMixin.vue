@@ -34,7 +34,7 @@ export default {
           this.runApiStopsJob(apiStops)
         }
         const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
-        this.updateStopsWithErrors(apiStopsWithErrors)
+        this.setStopsWithErrors(apiStopsWithErrors)
         this.isLocked = false
       }
     },
@@ -278,7 +278,7 @@ export default {
         item => item.internalId !== internalId,
       )
       this.setApiStopsWithErrorsToLocalStorage(updatedApiStopsWithErrors)
-      this.updateStopsWithErrors(apiStopsWithErrors)
+      this.setStopsWithErrors(apiStopsWithErrors)
     },
 
     getStopWithErrorGivenInternalId(internalId) {

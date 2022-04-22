@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Page Container should match snapshot 1`] = `
+<div class="ripa-page-wrapper">
+  <div class="ripa-app-bar">
+    <header class="v-sheet theme--light v-toolbar v-toolbar--dense v-toolbar--flat v-app-bar v-app-bar--fixed" style="height: 48px; margin-top: 0px; transform: translateY(0px); left: 0px; right: 0px;">
+      <div class="v-toolbar__content" style="height: 48px;">
+        <div class="v-toolbar__title tw-cursor-pointer">RIPA</div> <span class="v-tooltip v-tooltip--bottom"><!----><i aria-hidden="true" aria-label="Online indicator" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate tw-ml-4 mdi mdi-wifi-strength-off theme--light" style="font-size: 22px;"></i></span> <span class="v-tooltip v-tooltip--bottom"><!----><button type="button" class="tw-ml-4 v-btn v-btn--icon v-btn--round theme--light v-size--small" aria-label="Change dark/light mode" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content"><i aria-hidden="true" class="v-icon notranslate mdi mdi-moon-first-quarter theme--light"></i></span></button></span>
+        <div class="spacer"></div>
+        <transition-stub name="slider">
+          <div class="text-right">
+            <!---->
+          </div>
+        </transition-stub>
+        <!---->
+        <div>
+          <!---->
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </div>
+    </header>
+    <!---->
+  </div>
+  <div class="container tw-my-6 container--fluid">
+    <!---->
+    <!---->
+    <div role="dialog" class="v-dialog__container">
+      <!---->
+    </div>
+    <div role="dialog" class="v-dialog__container">
+      <!---->
+    </div>
+    <div class="v-snack v-snack--bottom v-snack--has-background" style="padding-bottom: 0px; padding-top: 48px;" multi-line="">
+      <transition-stub name="v-snack-transition">
+        <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
+          <div role="status" aria-live="polite" class="v-snack__content">
+
+
+          </div>
+          <div class="v-snack__action ">
+            <!----> <button type="button" class="v-btn v-btn--text theme--dark v-size--default blue--text v-snack__btn"><span class="v-btn__content">
+      Close
+    </span></button>
+          </div>
+        </div>
+      </transition-stub>
+    </div>
+    <div class="v-snack v-snack--bottom v-snack--has-background" style="padding-bottom: 0px; padding-top: 48px;" multi-line="">
+      <transition-stub name="v-snack-transition">
+        <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
+          <div role="status" aria-live="polite" class="v-snack__content">
+
+
+          </div>
+          <div class="v-snack__action "><button type="button" class="v-btn v-btn--text theme--dark v-size--default blue--text v-snack__btn"><span class="v-btn__content">
+        View
+      </span></button> <button type="button" class="v-btn v-btn--text theme--dark v-size--default blue--text v-snack__btn"><span class="v-btn__content">
+      Close
+    </span></button></div>
+        </div>
+      </transition-stub>
+    </div>
+    <!---->
+    <!---->
+    <div role="dialog" class="v-dialog__container">
+      <!---->
+    </div>
+  </div>
+  <footer class="v-footer v-sheet theme--light v-footer--fixed v-footer--padless" style="left: 0px; right: 0px; bottom: 0px;">
+    <div class="text-center col col-12">
+      © 2022 — CSSA — #{TEMPLATE_VERSION}#
+    </div>
+  </footer>
+</div>
+`;

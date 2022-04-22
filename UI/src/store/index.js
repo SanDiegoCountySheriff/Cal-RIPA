@@ -1748,6 +1748,14 @@ export default new Vuex.Store({
     setResetPagination({ commit }, value) {
       commit('updateResetPagination', value)
     },
+
+    setConnectionStatus({ commit }, value) {
+      commit('updateConnectionStatus', value)
+    },
+
+    setStopsWithErrors({ commit }, value) {
+      commit('updateStopsWithErrors', value)
+    },
   },
 
   modules: {},

@@ -129,7 +129,7 @@ import {
 } from '@/utilities/stop'
 
 export default {
-  name: 'ripa-form-summary',
+  name: 'ripa-form-summary-detail',
 
   components: {
     RipaList,
