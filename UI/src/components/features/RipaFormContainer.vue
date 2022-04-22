@@ -202,6 +202,7 @@ export default {
       'setUserFavoriteReasons',
       'setUserFavoriteResults',
       'setResetPagination',
+      'setStopsWithErrors',
     ]),
 
     handleDone() {
@@ -215,6 +216,10 @@ export default {
     },
 
     handleSubmitStop(apiStop) {
+      const internalId = localStorage.getItem('ripa_errored_stop_internal_id')
+      if (internalId) {
+        this.deleteStopWithError(internalId)
+      }
       this.addApiStop(apiStop)
       if (!this.isAdminEditing) {
         this.setLastLocation(this.stop)

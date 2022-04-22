@@ -528,6 +528,7 @@ export default {
     },
 
     clearLocalStorage() {
+      localStorage.removeItem('ripa_errored_stop_internal_id')
       localStorage.removeItem('ripa_form_admin_editing')
       localStorage.removeItem('ripa_form_admin_viewing')
       localStorage.removeItem('ripa_form_api_stop')

@@ -6,6 +6,11 @@
       </v-card-title>
 
       <v-card-text>
+        Click the error message to edit the stop. You may also delete stops that
+        no longer need to be submitted.
+      </v-card-text>
+
+      <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">

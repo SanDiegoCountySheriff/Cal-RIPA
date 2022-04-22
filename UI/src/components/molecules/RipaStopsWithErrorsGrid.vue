@@ -6,6 +6,8 @@
       @click:row="handleRowClick"
       sort-by="id"
       single-select
+      hide-default-footer
+      :mobile-breakpoint="0"
     >
       <template v-slot:top>
         <v-dialog v-model="dialogDelete" max-width="500px" persistent>
@@ -43,9 +45,6 @@ export default {
       dialogDelete: false,
       stopsWithErrors: [],
       headers: [
-        { text: 'Stop Date', value: 'stopDate', width: '120' },
-        { text: 'Stop Time', value: 'stopTime', width: '120' },
-        { text: 'Error Code', value: 'errorCode', width: '120' },
         { text: 'Error Text', value: 'errorText' },
         {
           text: 'Actions',
