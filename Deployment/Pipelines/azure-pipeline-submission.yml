@@ -6,7 +6,7 @@
 trigger:
   branches:
     include:
-      - main
+      - dev-v2
   paths:
     include:
       - Functions/RIPA.Functions.Submission/*
