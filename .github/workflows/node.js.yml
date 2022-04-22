@@ -5,7 +5,7 @@ name: Build/Test
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev-v2]
 
 jobs:
   build:
