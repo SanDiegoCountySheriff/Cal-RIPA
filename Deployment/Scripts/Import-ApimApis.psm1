@@ -45,6 +45,9 @@ function Import-FunctionApi()
     for ($i = 0; $i -le 5; $i++)
 	{
         Write-Host "APIM import attempt:" $i
+        Write-Host "ApimCntx: $ApimCntx"
+        Write-Host "swaggerUrl: $swaggerUrl"
+        Write-Host "ApiTag: $ApiTag"
         $importSuccess = (Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag)
         if($importSuccess)
         {
