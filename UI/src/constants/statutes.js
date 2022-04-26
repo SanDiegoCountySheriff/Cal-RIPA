@@ -193,15 +193,15 @@ export const STATUTES = [
             children: [
               {
                 id: 'A',
-                text: "When reporting this data element, the officer shall select at least one of the following data values. In doing so and when applicable, the officer may select 'Gender nonconforming' in addition to one of the four enumerated gender data values of Male, Female, Transgender man/boy, or Transgender woman/girl. If the officer cannot perceive the person stopped to be within the categories of Male, Female, Transgender man/boy, or Transgender woman/girl, the officer must select 'Gender nonconforming' as the only data value.",
+                text: "When reporting this data element, the officer shall select at least one of the following data values. In doing so and when applicable, the officer may select 'Nonbinary person' in addition to one of the four enumerated gender data values of Cisgender Male, Cisgender Female, Transgender man/boy, or Transgender woman/girl. If the officer cannot perceive the person stopped to be within the categories of Cisgender Male, Cisgender Female, Transgender man/boy, or Transgender woman/girl, the officer must select 'Nonbinary person' as the only data value.",
                 children: [
                   {
                     id: '1',
-                    text: 'Male',
+                    text: 'Cisgender Male',
                   },
                   {
                     id: '2',
-                    text: 'Female',
+                    text: 'Cisgender Female',
                   },
                   {
                     id: '3',
@@ -213,7 +213,7 @@ export const STATUTES = [
                   },
                   {
                     id: '5',
-                    text: 'Gender nonconforming',
+                    text: 'Nonbinary person',
                   },
                 ],
               },
@@ -231,7 +231,7 @@ export const STATUTES = [
                   },
                   {
                     id: '3',
-                    text: "'Gender nonconforming' means a person whose gender-related appearance, behavior, or both, differ from traditional conceptions about how males or females typically look or behave. A person of any gender or gender identity may be gender nonconforming. For this reason, an officer may select 'Gender nonconforming' in addition to any of the other gender data values, if applicable.",
+                    text: "'Nonbinary person' means a person whose gender-related appearance, behavior, or both, differ from traditional conceptions about how males or females typically look or behave. A person of any gender or gender identity may be gender nonconforming or nonbinary. For this reason, an officer may select 'Nonbinary person' in addition to any of the other gender data values, if applicable.",
                   },
                 ],
               },
@@ -323,7 +323,7 @@ export const STATUTES = [
                       },
                       {
                         id: 'c',
-                        text: 'Witness or victim identification of suspect at the scene',
+                        text: 'Witness or victim identified stopped person as a suspect of a crime',
                       },
                       {
                         id: 'd',
@@ -347,7 +347,7 @@ export const STATUTES = [
                       },
                       {
                         id: 'i',
-                        text: 'Other reasonable suspicion of a crime',
+                        text: 'Other reasonable suspicion or probable cause that a crime has occurred',
                       },
                     ],
                   },

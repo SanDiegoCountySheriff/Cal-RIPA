@@ -274,7 +274,7 @@ export default {
         actionsTaken: filteredPerson?.actionsTaken || {},
         person: {
           anyDisabilities: filteredPerson?.anyDisabilities || false,
-          genderNonconforming: filteredPerson?.genderNonconforming || false,
+          nonbinaryPerson: filteredPerson?.nonbinaryPerson || false,
           id: filteredPerson?.id,
           index: filteredPerson?.index,
           isStudent: filteredPerson?.isStudent || false,

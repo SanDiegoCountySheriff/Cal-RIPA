@@ -467,8 +467,8 @@ export const API_STOP = {
         },
       ],
       perceivedAge: 10,
-      perceivedGender: 'Male',
-      genderNonconforming: false,
+      perceivedGender: 'Cisgender Male',
+      nonbinaryPerson: false,
       perceivedLgbt: false,
       reasonForStop: {
         key: '5',
@@ -589,7 +589,7 @@ export const FULL_STOP = {
         typeOfPropertySeized: [],
       },
       anyDisabilities: false,
-      genderNonconforming: false,
+      nonbinaryPerson: false,
       id: 1,
       index: 1,
       isStudent: false,
@@ -736,7 +736,7 @@ export const STOP = {
   },
   person: {
     anyDisabilities: false,
-    genderNonconforming: false,
+    nonbinaryPerson: false,
     id: 1,
     isStudent: false,
     perceivedAge: 33,

@@ -24,10 +24,10 @@ namespace RIPA.Functions.Common.Models
 
     public enum PercievedGender
     {
-        [EnumMember(Value = "Male")]
-        Male = 1,
-        [EnumMember(Value = "Female")]
-        Female = 2,
+        [EnumMember(Value = "Cisgender man/boy")]
+        CisgenderManBoy = 1,
+        [EnumMember(Value = "Cisgender woman/girl")]
+        CisgenderWomanGirl = 2,
         [EnumMember(Value = "Transgender man/boy")]
         TransgenderManBoy = 3,
         [EnumMember(Value = "Transgender woman/girl")]
@@ -174,7 +174,7 @@ namespace RIPA.Functions.Common.Models
         public PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
-        public bool GenderNonconforming { get; set; }
+        public bool NonbinaryPerson { get; set; }
         public bool PerceivedLgbt { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string ReasonForStopExplanation { get; set; }

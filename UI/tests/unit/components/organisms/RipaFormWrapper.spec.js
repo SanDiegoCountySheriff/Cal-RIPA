@@ -102,7 +102,7 @@ function createStartOfFormStepIndexThreeStop(stop) {
       isStudent: false,
       perceivedAge: 10,
       perceivedGender: 1,
-      genderNonconforming: false,
+      nonbinaryPerson: false,
       perceivedLimitedEnglish: false,
       perceivedLgbt: false,
       perceivedOrKnownDisability: [],

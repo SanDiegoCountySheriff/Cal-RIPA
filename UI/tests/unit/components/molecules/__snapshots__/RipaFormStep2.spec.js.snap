@@ -101,12 +101,12 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                     <div class="v-radio theme--light">
                       <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-34" role="radio" type="radio" name="radio-33" value="1">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-34" class="v-label theme--light" style="left: 0px; position: relative;">Male</label>
+                      </div><label for="input-34" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender Male</label>
                     </div>
                     <div class="v-radio theme--light">
                       <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-36" role="radio" type="radio" name="radio-33" value="2">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Female</label>
+                      </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender Female</label>
                     </div>
                     <div class="v-radio theme--light">
                       <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-38" role="radio" type="radio" name="radio-33" value="3">
@@ -140,7 +140,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
                   </div><label for="input-45" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Gender Nonconforming
+                    Nonbinary Person
                   </label>
                 </div>
                 <div class="v-messages theme--light">

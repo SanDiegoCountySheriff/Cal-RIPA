@@ -18,7 +18,7 @@ namespace RIPA.Functions.Tests.Tests.SubmissionTests
         {
             // Arrange
             var defaultStop = DefaultRipaStop.CreateDefaultStop();
-            defaultStop.ListPersonStopped[0].PerceivedGender = "Male";
+            defaultStop.ListPersonStopped[0].PerceivedGender = "Cisgender man/boy";
             var expected = "1";
 
             // Act

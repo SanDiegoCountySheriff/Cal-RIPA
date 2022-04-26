@@ -25,8 +25,8 @@
 
           <v-col cols="12" sm="12">
             <ripa-switch
-              v-model="model.person.genderNonconforming"
-              label="Gender Nonconforming"
+              v-model="model.person.nonbinaryPerson"
+              label="Nonbinary Person"
               :disabled="disabled"
               :max-width="250"
               :rules="genderRules"
@@ -98,7 +98,7 @@ export default {
 
     genderRules() {
       const gender = this.viewModel.person.perceivedGender
-      const checked = this.viewModel.person.genderNonconforming
+      const checked = this.viewModel.person.nonbinaryPerson
       const isValid = gender !== null || checked
 
       return [isValid !== false || 'A gender is required']

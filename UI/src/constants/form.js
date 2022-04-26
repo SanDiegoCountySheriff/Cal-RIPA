@@ -28,8 +28,8 @@ export const DISABILITIES = [
 ]
 
 export const GENDERS = [
-  { name: 'Male', value: 1 },
-  { name: 'Female', value: 2 },
+  { name: 'Cisgender Male', value: 1 },
+  { name: 'Cisgender Female', value: 2 },
   { name: 'Transgender Male', value: 3 },
   { name: 'Transgender Female', value: 4 },
 ]
@@ -97,21 +97,24 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Officer witnessed commission of a crime', value: 1 },
   { name: 'Matched suspect description', value: 2 },
   {
-    name: 'Witness or Victim identification of Suspect at the scene',
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
     value: 3,
   },
-  { name: 'Carrying Suspicious Object', value: 4 },
+  { name: 'Carrying suspicious object', value: 4 },
   {
     name: 'Actions indicative of casing a victim or location',
     value: 5,
   },
-  { name: 'Suspected of Acting as Lookout', value: 6 },
+  { name: 'Suspected of acting as lookout', value: 6 },
   { name: 'Actions indicative of drug transaction', value: 7 },
   {
     name: 'Actions indicative of engaging in violent crime',
     value: 8,
   },
-  { name: 'Other Reasonable Suspicion of a crime', value: 9 },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 9,
+  },
 ]
 
 export const ACTIONS_TAKEN = [
