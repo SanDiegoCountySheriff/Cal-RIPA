@@ -759,7 +759,7 @@ export const STATUTES = [
               },
               {
                 id: 'I',
-                text: 'Contacted parent/legal guardian or other person responsible for the minor',
+                text: 'Contacted parent/legal guardian or other person legally responsible for the minor',
               },
               {
                 id: 'J',
