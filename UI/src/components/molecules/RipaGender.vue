@@ -22,17 +22,6 @@
             >
             </ripa-radio-group>
           </v-col>
-
-          <v-col cols="12" sm="12">
-            <ripa-switch
-              v-model="model.person.nonbinaryPerson"
-              label="Nonbinary Person"
-              :disabled="disabled"
-              :max-width="250"
-              :rules="genderRules"
-              @input="handleInput"
-            ></ripa-switch>
-          </v-col>
         </v-row>
       </v-container>
     </template>
@@ -84,7 +73,7 @@ export default {
 
   data() {
     return {
-      genderItems: GENDERS,
+      genderItems: GENDERS.filter(item => !item.disabled),
       viewModel: this.syncModel(this.value),
     }
   },
@@ -108,7 +97,10 @@ export default {
       return (
         this.disabled ||
         this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
+        this.viewModel.person.perceivedGender === 4 ||
+        this.viewModel.person.perceivedGender === 7 ||
+        this.viewModel.person.perceivedGender === 8 ||
+        this.viewModel.person.perceivedGender === 9
       )
     },
   },
@@ -117,7 +109,9 @@ export default {
     handleGenderInput() {
       if (
         this.viewModel.person.perceivedGender === 1 ||
-        this.viewModel.person.perceivedGender === 2
+        this.viewModel.person.perceivedGender === 2 ||
+        this.viewModel.person.perceivedGender === 5 ||
+        this.viewModel.person.perceivedGender === 6
       ) {
         this.viewModel.person.perceivedLgbt = false
       }

@@ -28,10 +28,15 @@ export const DISABILITIES = [
 ]
 
 export const GENDERS = [
-  { name: 'Cisgender Male', value: 1 },
-  { name: 'Cisgender Female', value: 2 },
-  { name: 'Transgender Male', value: 3 },
-  { name: 'Transgender Female', value: 4 },
+  { name: 'Male', value: 1, disabled: true },
+  { name: 'Female', value: 2, disabled: true },
+  { name: 'Transgender Male', value: 3, disabled: true },
+  { name: 'Transgender Female', value: 4, disabled: true },
+  { name: 'Cisgender man/boy', value: 5, disabled: false },
+  { name: 'Cisgender woman/girl', value: 6, disabled: false },
+  { name: 'Transgender man/boy', value: 7, disabled: false },
+  { name: 'Transgender woman/girl', value: 8, disabled: false },
+  { name: 'Nonbinary person', value: 9, disabled: false },
 ]
 
 export const RACES = [

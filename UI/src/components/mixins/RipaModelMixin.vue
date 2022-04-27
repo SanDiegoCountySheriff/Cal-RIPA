@@ -333,7 +333,10 @@ export default {
     updatePerceivedLgbtModel() {
       if (
         this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
+        this.viewModel.person.perceivedGender === 4 ||
+        this.viewModel.person.perceivedGender === 7 ||
+        this.viewModel.person.perceivedGender === 8 ||
+        this.viewModel.person.perceivedGender === 9
       ) {
         this.viewModel.person.perceivedLgbt = true
       }

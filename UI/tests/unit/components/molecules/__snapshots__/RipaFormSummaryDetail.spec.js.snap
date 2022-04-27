@@ -154,8 +154,8 @@ exports[`Ripa Form Summary Detail should match snapshot 1`] = `
       </div>
       <div>
         <div class="">
-          Nonbinary Person
-          <span class="tw-ml-2" style="color: rgb(33, 150, 243);">false</span>
+          Gender Noncomforning
+          <span class="tw-ml-2" style="color: rgb(33, 150, 243);"></span>
           <!---->
           <!---->
         </div>

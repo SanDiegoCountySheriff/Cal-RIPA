@@ -17,7 +17,7 @@ describe('Ripa Form Summary Detail', () => {
     wrapper.destroy()
   })
 
-  const factory = propsData => {
+  const shallowFactory = propsData => {
     return shallowMount(RipaFormSummaryDetail, {
       vuetify,
       propsData: {
@@ -31,11 +31,11 @@ describe('Ripa Form Summary Detail', () => {
     })
   }
 
-  it('should match snapshot', () => {
-    wrapper = mount(RipaFormSummaryDetail, {
+  const factory = propsData => {
+    return mount(RipaFormSummaryDetail, {
       vuetify,
       propsData: {
-        apiStop: apiStop,
+        ...propsData,
         onDeletePerson: jest.fn(),
         onCopyPerson: jest.fn(),
         onEditAgencyQuestions: jest.fn(),
@@ -43,7 +43,26 @@ describe('Ripa Form Summary Detail', () => {
         onEditPerson: jest.fn(),
       },
     })
+  }
+
+  it('should match snapshot', () => {
+    wrapper = factory({ apiStop: apiStop })
 
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should display gender correctly for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Male')
+    expect(wrapper.html()).not.toContain('Cisgender man/boy')
+  })
+
+  it('should display gender correctly for v2 stops', () => {
+    apiStop.listPersonStopped[0].perceivedGender = 'Cisgender man/boy'
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Cisgender man/boy')
+    expect(wrapper.html()).not.toContain('Male')
   })
 })
