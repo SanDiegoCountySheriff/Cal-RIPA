@@ -10,7 +10,7 @@ describe('Ripa User', () => {
     vuetify = new Vuetify()
   })
 
-  const factory = propsData => {
+  const shallowFactory = propsData => {
     return shallowMount(RipaUser, {
       vuetify,
       propsData: {
@@ -19,21 +19,56 @@ describe('Ripa User', () => {
     })
   }
 
-  it('should match snapshot', () => {
-    wrapper = mount(RipaUser, {
+  const factory = propsData => {
+    return mount(RipaUser, {
       vuetify,
       propsData: {
-        value: {
-          agency: 'SDSD',
-          assignment: 10,
-          otherType: 'Data Services',
-          startDate: '2014-10-10',
-          yearsExperience: 7,
-        },
+        ...propsData,
+      },
+    })
+  }
+
+  it('should match snapshot', () => {
+    wrapper = factory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
       },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should include officer race input', () => {
+    wrapper = factory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
+      },
+    })
+
+    expect(wrapper.html()).toContain('Officer Race')
+  })
+
+  it('should validate officer race rules', () => {
+    wrapper = shallowFactory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
+      },
+    })
+
+    expect(wrapper.vm.raceRules[0]('')).toEqual('An officer race is required')
+    expect(wrapper.vm.raceRules[0]('White')).toEqual(true)
   })
 
   it.todo('should validate years experience rules')
