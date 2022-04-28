@@ -667,8 +667,7 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `http://localhost:7072/api/PutUser/${updatedUser.id}`,
-          // `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -858,8 +857,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `http://localhost:7072/api/PutUser/${userId}`,
-          // `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -881,8 +879,7 @@ export default new Vuex.Store({
     submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
-        .put(`http://localhost:7071/api/PutStop/${stop.id}`, stop, {
-          // .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
+        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1304,8 +1301,7 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get('http://localhost:7072/api/GetUsers', {
-          // .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
@@ -1422,8 +1418,7 @@ export default new Vuex.Store({
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
       return axios
-        .get(`http://localhost:7071/api/GetStops${queryString}`, {
-          // .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
+        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -1574,8 +1569,7 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`http://localhost:7072/api/GetUser/${id}`, {
-          // .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
