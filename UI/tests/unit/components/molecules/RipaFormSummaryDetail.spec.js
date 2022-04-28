@@ -60,5 +60,6 @@ describe('Ripa Form Summary Detail', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
     expect(wrapper.html()).toContain('Officer Race')
+    expect(wrapper.html()).toContain('White')
   })
 })

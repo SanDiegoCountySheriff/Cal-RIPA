@@ -316,6 +316,7 @@ const getSummaryOfficer = apiStop => {
         header: 'Officer Name',
         detail: apiStop.officerName,
       },
+      { header: 'Officer Race', detail: apiStop.officerRace },
       { header: 'Years Experience', detail: apiStop.expYears },
       { header: 'Assignment', detail: apiStop.officerAssignment.type },
       {
