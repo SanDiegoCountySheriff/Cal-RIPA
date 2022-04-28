@@ -86,22 +86,6 @@ describe('Ripa User', () => {
     expect(wrapper.html()).toContain('White')
   })
 
-  it('should disable officer race when admin editing', () => {
-    wrapper = factory({
-      value: {
-        agency: 'SDSD',
-        assignment: 10,
-        officerRace: 'White',
-        otherType: 'Data Services',
-        startDate: '2014-10-10',
-        yearsExperience: 7,
-      },
-      adminEditing: true,
-    })
-
-    expect(wrapper.vm.officerRaceDisabled).toBeTruthy()
-  })
-
   it.todo('should validate years experience rules')
 
   it.todo('should validate agency rules')

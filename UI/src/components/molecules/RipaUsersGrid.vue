@@ -112,7 +112,7 @@
           </v-dialog>
 
           <ripa-user-dialog
-            :admin="true"
+            :admin-editing="true"
             :user="editedItem"
             :showDialog="dialog"
             :on-close="close"
