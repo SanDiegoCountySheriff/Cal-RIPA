@@ -65,6 +65,22 @@
         </v-row>
 
         <v-row no-gutters>
+          <v-col cols="12" sm="12" md="12">
+            <div>
+              <ripa-select
+                v-model="model.officerRace"
+                label="Officer Race"
+                :items="raceItems"
+                itemText="name"
+                itemValue="value"
+                :rules="raceRules"
+                @input="handleInput"
+              ></ripa-select>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
             <div class="md:tw-mr-4">
               <ripa-text-input
@@ -158,7 +174,7 @@ import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import { OFFICER_ASSIGNMENTS, RACES } from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
@@ -181,6 +197,7 @@ export default {
   data() {
     return {
       assignmentItems: OFFICER_ASSIGNMENTS,
+      raceItems: RACES,
       viewModel: this.value,
     }
   },
@@ -215,6 +232,10 @@ export default {
 
     lastNameRules() {
       return [v => !!v || 'A last name is required']
+    },
+
+    raceRules() {
+      return [v => !!v || 'An officer race is required']
     },
 
     startDateRules() {
