@@ -54,6 +54,7 @@ export default new Vuex.Store({
       isAuthenticated: false,
       officerId: null,
       officerName: null,
+      officerRace: null,
       assignment: null,
       otherType: null,
     },
@@ -192,6 +193,7 @@ export default new Vuex.Store({
         name: state.user.name,
         officerId: state.user.officerId,
         officerName: state.user.officerName,
+        officerRace: state.user.officerRace,
         oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
@@ -450,6 +452,7 @@ export default new Vuex.Store({
         favoriteReasons: value.favoriteReasons || '',
         favoriteResults: value.favoriteResults || '',
         officerId: value.officerId,
+        officerRace: value.officerRace,
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
@@ -460,6 +463,7 @@ export default new Vuex.Store({
         assignment: state.user.assignment,
         officerId: state.user.officerId,
         officerName: state.user.fullName,
+        officerRace: state.user.officerRace,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
@@ -663,7 +667,8 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
+          `http://localhost:7072/api/PutUser/${updatedUser.id}`,
+          // `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -843,6 +848,7 @@ export default new Vuex.Store({
         firstName: state.user.firstName,
         id: state.user.oid,
         lastName: state.user.lastName,
+        officerRace: mappedUser.officerRace,
         name: state.user.fullName,
         officerId: state.user.officerId,
         otherType: mappedUser.otherType,
@@ -852,7 +858,8 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
+          `http://localhost:7072/api/PutUser/${userId}`,
+          // `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1564,7 +1571,8 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
+        .get(`http://localhost:7072/api/GetUser/${id}`, {
+          // .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',

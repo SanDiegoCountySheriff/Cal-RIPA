@@ -72,7 +72,7 @@
                 label="Officer Race"
                 :items="raceItems"
                 itemText="name"
-                itemValue="value"
+                itemValue="name"
                 :rules="raceRules"
                 @input="handleInput"
               ></ripa-select>
