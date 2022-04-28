@@ -1571,8 +1571,12 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
+          if (!response.data.officerRace) {
+            commit('updateInvalidUser', true)
+          } else {
+            commit('updateInvalidUser', false)
+          }
           commit('updateUserProfile', response.data)
-          commit('updateInvalidUser', false)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
