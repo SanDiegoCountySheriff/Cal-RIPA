@@ -78,6 +78,7 @@ namespace RIPA.Functions.Common.Models
         public string Agency { get; set; }
         public string OfficerId { get; set; }
         public string OfficerName { get; set; }
+        public string OfficerRace { get; set; }
         public string ExpYears { get; set; }
         public OfficerAssignment OfficerAssignment { get; set; }
         public string Date { get; set; }
