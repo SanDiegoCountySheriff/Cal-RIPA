@@ -1303,7 +1303,8 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
+        .get('http://localhost:7072/api/GetUsers', {
+          // .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',

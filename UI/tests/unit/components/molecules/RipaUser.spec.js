@@ -71,6 +71,8 @@ describe('Ripa User', () => {
     expect(wrapper.vm.raceRules[0]('White')).toEqual(true)
   })
 
+  it.todo('should display officer race correctly')
+
   it.todo('should validate years experience rules')
 
   it.todo('should validate agency rules')
