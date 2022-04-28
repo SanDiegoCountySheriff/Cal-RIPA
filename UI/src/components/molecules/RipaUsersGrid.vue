@@ -112,7 +112,7 @@
           </v-dialog>
 
           <ripa-user-dialog
-            :admin-editing="true"
+            :admin="true"
             :user="editedItem"
             :showDialog="dialog"
             :on-close="close"
@@ -185,7 +185,7 @@ export default {
         startDate: '',
         agency: '',
         assignment: 0,
-        yearsExperience: '',
+        yearsExperience: 0,
       },
       defaultItem: {
         id: '',
@@ -194,7 +194,7 @@ export default {
         startDate: '',
         agency: '',
         assignment: 0,
-        yearsExperience: '',
+        yearsExperience: 0,
       },
     }
   },

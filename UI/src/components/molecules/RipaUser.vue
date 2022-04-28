@@ -71,6 +71,7 @@
                 v-model="model.officerRace"
                 label="Officer Race"
                 :items="raceItems"
+                :disabled="admin"
                 itemText="name"
                 itemValue="name"
                 :rules="raceRules"
