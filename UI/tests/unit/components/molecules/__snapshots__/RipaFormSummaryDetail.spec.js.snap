@@ -90,6 +90,12 @@ exports[`Ripa Form Summary Detail should match snapshot 1`] = `
       </span>
         </div>
         <div class="tw-ml-8">
+          Officer Race
+          <span class="tw-ml-2" style="color: rgb(33, 150, 243);">
+
+      </span>
+        </div>
+        <div class="tw-ml-8">
           Years Experience
           <span class="tw-ml-2" style="color: rgb(33, 150, 243);">
         1

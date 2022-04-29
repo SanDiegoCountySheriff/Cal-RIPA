@@ -32,6 +32,9 @@ namespace RIPA.Functions.Common.Models
         [JsonProperty(PropertyName = "yearsExperience")]
         public int YearsExperience { get; set; }
 
+        [JsonProperty(PropertyName = "officerRace")]
+        public string OfficerRace { get; set; }
+
         [JsonRequired]
         [JsonProperty(PropertyName = "agency")]
         public string Agency { get; set; }

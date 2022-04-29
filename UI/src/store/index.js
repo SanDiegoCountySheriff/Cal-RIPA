@@ -54,6 +54,7 @@ export default new Vuex.Store({
       isAuthenticated: false,
       officerId: null,
       officerName: null,
+      officerRace: null,
       assignment: null,
       otherType: null,
     },
@@ -192,6 +193,7 @@ export default new Vuex.Store({
         name: state.user.name,
         officerId: state.user.officerId,
         officerName: state.user.officerName,
+        officerRace: state.user.officerRace,
         oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
@@ -450,6 +452,7 @@ export default new Vuex.Store({
         favoriteReasons: value.favoriteReasons || '',
         favoriteResults: value.favoriteResults || '',
         officerId: value.officerId,
+        officerRace: value.officerRace,
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
@@ -460,6 +463,7 @@ export default new Vuex.Store({
         assignment: state.user.assignment,
         officerId: state.user.officerId,
         officerName: state.user.fullName,
+        officerRace: state.user.officerRace,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
@@ -843,6 +847,7 @@ export default new Vuex.Store({
         firstName: state.user.firstName,
         id: state.user.oid,
         lastName: state.user.lastName,
+        officerRace: mappedUser.officerRace,
         name: state.user.fullName,
         officerId: state.user.officerId,
         otherType: mappedUser.otherType,
@@ -1571,8 +1576,12 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
+          if (!response.data.officerRace) {
+            commit('updateInvalidUser', true)
+          } else {
+            commit('updateInvalidUser', false)
+          }
           commit('updateUserProfile', response.data)
-          commit('updateInvalidUser', false)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
