@@ -45,13 +45,37 @@ exports[`Ripa User should match snapshot 1`] = `
       </div>
     </div>
     <div class="row no-gutters">
-      <div class="col-sm-12 col-md-12 col-12">
-        <div>
+      <div class="col-sm-12 col-md-6 col-12">
+        <div class="md:tw-mr-4">
           <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
             <div class="v-input__control">
               <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-13" class="v-input__slot">
                 <div class="v-select__slot"><label for="input-13" class="v-label theme--light" style="left: 0px; position: absolute;">Officer Race</label>
                   <div class="v-select__selections"><input clerable="" required="required" id="input-13" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                  </div><input type="hidden">
+                </div>
+                <div class="v-menu">
+                  <!---->
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-12">
+        <div>
+          <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
+            <div class="v-input__control">
+              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-19" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-19" class="v-label theme--light" style="left: 0px; position: absolute;">Officer Gender</label>
+                  <div class="v-select__selections"><input clerable="" required="required" id="input-19" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
                   <div class="v-input__append-inner">
                     <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
                   </div><input type="hidden">
@@ -78,7 +102,7 @@ exports[`Ripa User should match snapshot 1`] = `
             <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-19" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Agency</label><input id="input-19" type="text"></div>
+                  <div class="v-text-field__slot"><label for="input-25" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Agency</label><input id="input-25" type="text"></div>
                 </div>
                 <div class="v-text-field__details">
                   <div class="v-messages theme--light">
@@ -93,10 +117,10 @@ exports[`Ripa User should match snapshot 1`] = `
       <div class="col-sm-12 col-md-6 col-12">
         <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--solo-flat v-select">
           <div class="v-input__control">
-            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-23" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-23" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Officer Assignment</label>
+            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-29" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-29" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Officer Assignment</label>
                 <div class="v-select__selections">
-                  <div class="v-select__selection v-select__selection--comma">Other</div><input clerable="" required="required" id="input-23" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
+                  <div class="v-select__selection v-select__selection--comma">Other</div><input clerable="" required="required" id="input-29" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
                 </div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
@@ -122,7 +146,7 @@ exports[`Ripa User should match snapshot 1`] = `
           <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-29" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Other Type</label><input id="input-29" type="text"></div>
+                <div class="v-text-field__slot"><label for="input-35" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Other Type</label><input id="input-35" type="text"></div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">

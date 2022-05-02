@@ -65,8 +65,8 @@
         </v-row>
 
         <v-row no-gutters>
-          <v-col cols="12" sm="12" md="12">
-            <div>
+          <v-col cols="12" sm="12" md="6">
+            <div class="md:tw-mr-4">
               <ripa-select
                 v-model="model.officerRace"
                 label="Officer Race"
@@ -75,6 +75,21 @@
                 itemText="name"
                 itemValue="name"
                 :rules="raceRules"
+                @input="handleInput"
+              ></ripa-select>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-select
+                v-model="model.officerGender"
+                label="Officer Gender"
+                :items="genderItems"
+                :disabled="admin"
+                itemText="name"
+                itemValue="name"
+                :rules="genderRules"
                 @input="handleInput"
               ></ripa-select>
             </div>
@@ -175,7 +190,7 @@ import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { OFFICER_ASSIGNMENTS, RACES } from '@/constants/form'
+import { OFFICER_ASSIGNMENTS, RACES, GENDERS } from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
@@ -199,6 +214,7 @@ export default {
     return {
       assignmentItems: OFFICER_ASSIGNMENTS,
       raceItems: RACES,
+      genderItems: GENDERS.filter(item => !item.disabled),
       viewModel: this.value,
     }
   },
@@ -237,6 +253,10 @@ export default {
 
     raceRules() {
       return [v => !!v || 'An officer race is required']
+    },
+
+    genderRules() {
+      return [v => !!v || 'An officer gender is required']
     },
 
     startDateRules() {
