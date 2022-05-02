@@ -1576,16 +1576,19 @@ export default new Vuex.Store({
           },
         })
         .then(response => {
-          if (!response.data.officerRace) {
+          commit('updateUserProfile', response.data)
+          if (!response.data.officerRace || !response.data.officerGender) {
             commit('updateInvalidUser', true)
+            return true
           } else {
             commit('updateInvalidUser', false)
+            return false
           }
-          commit('updateUserProfile', response.data)
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
           commit('updateInvalidUser', true)
+          return false
         })
     },
 
