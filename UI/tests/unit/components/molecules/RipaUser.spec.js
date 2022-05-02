@@ -320,4 +320,50 @@ describe('Ripa User', () => {
 
     expect(wrapper.vm.viewModel).toEqual({ agency: 'San Diego' })
   })
+
+  it('should display input for officer gender', () => {
+    wrapper = factory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
+      },
+    })
+
+    expect(wrapper.html()).toContain('Officer Gender')
+  })
+
+  it('should display officer gender correctly', () => {
+    wrapper = factory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
+        officerGender: 'Male',
+      },
+    })
+
+    expect(wrapper.html()).toContain('Male')
+  })
+
+  it('should validate gender rules', () => {
+    wrapper = shallowFactory({
+      value: {
+        agency: 'SDSD',
+        assignment: 10,
+        otherType: 'Data Services',
+        startDate: '2014-10-10',
+        yearsExperience: 7,
+      },
+    })
+
+    expect(wrapper.vm.genderRules[0]('')).toEqual(
+      'An officer gender is required',
+    )
+    expect(wrapper.vm.genderRules[0]('Male')).toEqual(true)
+  })
 })
