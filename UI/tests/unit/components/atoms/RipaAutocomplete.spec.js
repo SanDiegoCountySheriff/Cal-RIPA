@@ -27,6 +27,31 @@ describe('Ripa Autocomplete', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
+  it('should handle remove item', () => {
+    wrapper = factory({ items: testItems })
+
+    wrapper.vm.handleRemoveItem({ item: 'item' })
+
+    expect(wrapper.emitted('remove-item')).toBeTruthy()
+  })
+
+  it('should get custom chip label', () => {
+    wrapper = factory({ items: testItems, customChipLabel: jest.fn() })
+    const customChipLabel = jest.spyOn(wrapper.vm, 'customChipLabel')
+
+    wrapper.vm.getCustomChipLabel('data')
+
+    expect(customChipLabel).toHaveBeenCalled()
+  })
+
+  it('should return empty string if custom chip label is not provided', () => {
+    wrapper = factory({ items: testItems })
+
+    const actual = wrapper.vm.getCustomChipLabel('data')
+
+    expect(actual).toEqual('')
+  })
+
   it('should return the correct items with getItems', () => {
     wrapper = factory({ items: testItems })
     expect(wrapper.vm.getItems).toEqual(['Item 1', 'Item 2'])

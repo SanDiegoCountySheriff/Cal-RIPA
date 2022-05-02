@@ -13,8 +13,8 @@ describe('Ripa Page Container', () => {
   let wrapper
   let store
   let actions
-  let mutations
   let getters
+  const displayBeatInputMock = jest.fn()
 
   beforeEach(() => {
     global.fetch = jest.fn().mockImplementation(() => true)
@@ -23,6 +23,8 @@ describe('Ripa Page Container', () => {
       assignment: 1,
       officerId: '000000001',
       officerName: 'John Smith',
+      officerRace: 'race',
+      officerGender: 'gender',
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,
@@ -31,6 +33,13 @@ describe('Ripa Page Container', () => {
     actions = {
       setStopsWithErrors: jest.fn(),
       setConnectionStatus: jest.fn(),
+      editOfficerUser: jest.fn(),
+      getUser: jest.fn().mockReturnValue(true),
+      getFormBeats: jest.fn(),
+      getFormCities: jest.fn(),
+      getFormSchools: jest.fn(),
+      getFormStatutes: jest.fn(),
+      getFormTemplates: jest.fn(),
     }
     getters = {
       invalidUser: jest.fn(),
@@ -41,6 +50,7 @@ describe('Ripa Page Container', () => {
       isOnline: jest.fn(),
       mappedStopsWithErrors: jest.fn(),
       isOnlineAndAuthenticated: jest.fn(),
+      displayBeatInput: displayBeatInputMock,
     }
     store = new Vuex.Store({ actions, getters })
   })
@@ -86,5 +96,79 @@ describe('Ripa Page Container', () => {
     const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
 
     expect(actual).not.toEqual(null)
+  })
+
+  it('should get mapped user', () => {
+    wrapper = factory()
+
+    const expectedUser = {
+      agency: 'SDSD',
+      assignment: 1,
+      officerRace: 'race',
+      officerGender: 'gender',
+      otherType: null,
+      startDate: '2020-12-12',
+      yearsExperience: 10,
+    }
+
+    expect(wrapper.vm.getMappedUser).toEqual(expectedUser)
+  })
+
+  it('should handle save user', async () => {
+    wrapper = factory()
+    wrapper.setData({ snackbarOfficerRaceGender: true })
+    const editOfficerUser = jest.spyOn(wrapper.vm, 'editOfficerUser')
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handleSaveUser()
+
+    expect(wrapper.vm.snackbarOfficerRaceGender).toBeFalsy()
+    expect(editOfficerUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('should get user data', async () => {
+    wrapper = factory()
+    const getUser = jest.spyOn(wrapper.vm, 'getUser')
+
+    await wrapper.vm.getUserData()
+
+    expect(wrapper.vm.snackbarOfficerRaceGender).toBeTruthy()
+    expect(getUser).toHaveBeenCalled()
+  })
+
+  it('should get form data with beat input', async () => {
+    displayBeatInputMock.mockReturnValue(true)
+    wrapper = factory()
+    const getFormBeats = jest.spyOn(wrapper.vm, 'getFormBeats')
+    const getFormCities = jest.spyOn(wrapper.vm, 'getFormCities')
+    const getFormSchools = jest.spyOn(wrapper.vm, 'getFormSchools')
+    const getFormStatutes = jest.spyOn(wrapper.vm, 'getFormStatutes')
+    const getFormTemplates = jest.spyOn(wrapper.vm, 'getFormTemplates')
+
+    await wrapper.vm.getFormData()
+
+    expect(getFormBeats).toHaveBeenCalled()
+    expect(getFormCities).toHaveBeenCalled()
+    expect(getFormSchools).toHaveBeenCalled()
+    expect(getFormStatutes).toHaveBeenCalled()
+    expect(getFormTemplates).toHaveBeenCalled()
+  })
+
+  it('should get form data without beat input', async () => {
+    displayBeatInputMock.mockReturnValue(false)
+    wrapper = factory()
+    const getFormBeats = jest.spyOn(wrapper.vm, 'getFormBeats')
+    const getFormCities = jest.spyOn(wrapper.vm, 'getFormCities')
+    const getFormSchools = jest.spyOn(wrapper.vm, 'getFormSchools')
+    const getFormStatutes = jest.spyOn(wrapper.vm, 'getFormStatutes')
+    const getFormTemplates = jest.spyOn(wrapper.vm, 'getFormTemplates')
+
+    await wrapper.vm.getFormData()
+
+    expect(getFormBeats).not.toHaveBeenCalled()
+    expect(getFormCities).toHaveBeenCalled()
+    expect(getFormSchools).toHaveBeenCalled()
+    expect(getFormStatutes).toHaveBeenCalled()
+    expect(getFormTemplates).toHaveBeenCalled()
   })
 })

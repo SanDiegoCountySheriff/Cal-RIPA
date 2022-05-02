@@ -558,6 +558,7 @@ export const V2_API_STOP = {
   officerId: '111111111',
   officerName: 'Name',
   officerRace: 'White',
+  officerGender: 'Male',
   expYears: '1',
   officerAssignment: {
     key: '10',
@@ -942,6 +943,7 @@ export const USER = {
   isInvalid: false,
   officerName: null,
   officerRace: 'race',
+  officerGender: 'gender',
   oid: '',
   id: '',
   agency: 'Agency',

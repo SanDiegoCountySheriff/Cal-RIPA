@@ -38,6 +38,14 @@
     ></ripa-invalid-user-dialog>
 
     <ripa-snackbar
+      text="Recent regulation changes require the collection of officer race and gender. Please input these values now."
+      v-model="snackbarOfficerRaceGender"
+      :auto-close="false"
+      multi-line
+      top
+    ></ripa-snackbar>
+
+    <ripa-snackbar
       :text="snackbarText"
       v-model="snackbarNoErrorsVisible"
       multi-line
@@ -116,6 +124,7 @@ export default {
       snackbarText: '',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
+      snackbarOfficerRaceGender: false,
       dataReady: false,
     }
   },
@@ -142,6 +151,7 @@ export default {
         agency: this.mappedUser.agency,
         assignment: this.mappedUser.assignment,
         officerRace: this.mappedUser.officerRace,
+        officerGender: this.mappedUser.officerGender,
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
@@ -165,7 +175,7 @@ export default {
     ]),
 
     async getUserData() {
-      await Promise.all([this.getUser()])
+      this.snackbarOfficerRaceGender = await this.getUser()
     },
 
     async getFormData() {
@@ -198,6 +208,7 @@ export default {
     },
 
     handleSaveUser(user) {
+      this.snackbarOfficerRaceGender = false
       this.editOfficerUser(user)
     },
 
