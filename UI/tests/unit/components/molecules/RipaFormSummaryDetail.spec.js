@@ -62,4 +62,11 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Officer Race')
     expect(wrapper.html()).toContain('White')
   })
+
+  it('should display officer gender in summary', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Officer Gender')
+    expect(wrapper.html()).toContain('Male')
+  })
 })
