@@ -13,7 +13,6 @@ describe('Ripa Page Container', () => {
   let wrapper
   let store
   let actions
-  let mutations
   let getters
 
   beforeEach(() => {
@@ -23,6 +22,8 @@ describe('Ripa Page Container', () => {
       assignment: 1,
       officerId: '000000001',
       officerName: 'John Smith',
+      officerRace: 'race',
+      officerGender: 'gender',
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,
@@ -86,5 +87,21 @@ describe('Ripa Page Container', () => {
     const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
 
     expect(actual).not.toEqual(null)
+  })
+
+  it('should get mapped user', () => {
+    wrapper = factory()
+
+    const expectedUser = {
+      agency: 'SDSD',
+      assignment: 1,
+      officerRace: 'race',
+      officerGender: 'gender',
+      otherType: null,
+      startDate: '2020-12-12',
+      yearsExperience: 10,
+    }
+
+    expect(wrapper.vm.getMappedUser).toEqual(expectedUser)
   })
 })

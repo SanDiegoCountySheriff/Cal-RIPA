@@ -151,6 +151,7 @@ export default {
         agency: this.mappedUser.agency,
         assignment: this.mappedUser.assignment,
         officerRace: this.mappedUser.officerRace,
+        officerGender: this.mappedUser.officerGender,
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,

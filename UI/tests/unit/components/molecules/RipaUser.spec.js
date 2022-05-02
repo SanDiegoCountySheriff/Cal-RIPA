@@ -8,6 +8,13 @@ describe('Ripa User', () => {
   let wrapper
   let vuetify
 
+  const VueFormStub = {
+    render: () => {},
+    methods: {
+      validate: () => {},
+    },
+  }
+
   beforeEach(() => {
     vuetify = new Vuetify()
   })
@@ -17,6 +24,9 @@ describe('Ripa User', () => {
       vuetify,
       propsData: {
         ...propsData,
+      },
+      stubs: {
+        'v-form': VueFormStub,
       },
     })
   }

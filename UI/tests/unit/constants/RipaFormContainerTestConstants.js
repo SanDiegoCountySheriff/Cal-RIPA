@@ -943,6 +943,7 @@ export const USER = {
   isInvalid: false,
   officerName: null,
   officerRace: 'race',
+  officerGender: 'gender',
   oid: '',
   id: '',
   agency: 'Agency',
