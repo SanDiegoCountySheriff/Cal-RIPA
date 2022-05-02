@@ -3,6 +3,7 @@ import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa App Bar', () => {
+  jest.useFakeTimers()
   let vuetify
   let wrapper
   const { window } = global
@@ -189,6 +190,36 @@ describe('Ripa App Bar', () => {
     wrapper.vm.handleUserChange()
 
     expect(wrapper.vm.onUpdateUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle shrink', () => {
+    wrapper = factory()
+
+    wrapper.vm.handleShrink()
+    jest.advanceTimersByTime(3000)
+
+    expect(wrapper.vm.expandButton).toBeFalsy()
+    expect(wrapper.vm.buttonText).toEqual('!')
+  })
+
+  it('should watch stops with errors', async () => {
+    wrapper = factory()
+    const handleShrink = jest.spyOn(wrapper.vm, 'handleShrink')
+
+    wrapper.setProps({ stopsWithErrors: [1, 2] })
+    await wrapper.vm.$nextTick()
+
+    expect(handleShrink).toHaveBeenCalledTimes(1)
+  })
+
+  it('should watch stops with errors empty array', async () => {
+    wrapper = factory()
+    const handleShrink = jest.spyOn(wrapper.vm, 'handleShrink')
+
+    wrapper.setProps({ stopsWithErrors: [] })
+    await wrapper.vm.$nextTick()
+
+    expect(handleShrink).toHaveBeenCalledTimes(0)
   })
 
   it('should handle before destroy', () => {

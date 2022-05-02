@@ -208,6 +208,7 @@ export default {
     },
 
     handleSaveUser(user) {
+      this.snackbarOfficerRaceGender = false
       this.editOfficerUser(user)
     },
 

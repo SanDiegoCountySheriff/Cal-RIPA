@@ -127,7 +127,6 @@ export default {
     },
     customChipLabel: {
       type: Function,
-      default: () => {},
     },
     smallChips: {
       type: Boolean,
