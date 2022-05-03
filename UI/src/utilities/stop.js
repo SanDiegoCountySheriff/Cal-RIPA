@@ -352,7 +352,8 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    if (!apiStop.officerRace) {
+    console.log(apiStop)
+    if (person.genderNonconforming !== null) {
       items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
     }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
@@ -1233,7 +1234,6 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: person.genderNonconforming || false,
       id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
