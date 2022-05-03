@@ -163,8 +163,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.v-dialog:not(.v-dialog--fullscreen) {
-  max-height: 600px !important;
+<style scoped="true">
+* >>> .v-dialog {
+  overflow-y: visible;
 }
 </style>

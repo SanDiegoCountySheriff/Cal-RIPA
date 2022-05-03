@@ -1,16 +1,21 @@
 import RipaFormSummaryDetail from '@/components/molecules/RipaFormSummaryDetail.vue'
 import { shallowMount, mount } from '@vue/test-utils'
-import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
+import {
+  API_STOP,
+  V2_API_STOP,
+} from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Summary Detail', () => {
   let vuetify
   let wrapper
   let apiStop
+  let v2ApiStop
 
   beforeEach(() => {
     vuetify = new Vuetify()
     apiStop = API_STOP
+    v2ApiStop = V2_API_STOP
   })
 
   afterEach(() => {
@@ -64,5 +69,19 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Cisgender man/boy')
     expect(wrapper.html()).not.toContain('Male')
+  })
+
+  it('should display officer race in summary', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Officer Race')
+    expect(wrapper.html()).toContain('White')
+  })
+
+  it('should display officer gender in summary', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Officer Gender')
+    expect(wrapper.html()).toContain('Male')
   })
 })

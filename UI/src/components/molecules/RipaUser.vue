@@ -2,15 +2,98 @@
   <div class="ripa-user">
     <v-container>
       <template v-if="!adminEditing">
-        <template v-if="admin">
+        <v-form ref="form">
+          <template v-if="admin">
+            <v-row no-gutters>
+              <v-col cols="12" sm="12">
+                <ripa-text-input
+                  v-model="model.id"
+                  label="ID"
+                  :disabled="isRowKeyDisabled"
+                >
+                </ripa-text-input>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="12" md="6">
+                <div class="md:tw-mr-4">
+                  <ripa-text-input
+                    v-model="model.firstName"
+                    label="First Name"
+                    :rules="firstNameRules"
+                  >
+                  </ripa-text-input>
+                </div>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="6">
+                <div>
+                  <ripa-text-input
+                    v-model="model.lastName"
+                    label="Last Name"
+                    :rules="lastNameRules"
+                  >
+                  </ripa-text-input>
+                </div>
+              </v-col>
+            </v-row>
+          </template>
+
           <v-row no-gutters>
-            <v-col cols="12" sm="12">
-              <ripa-text-input
-                v-model="model.id"
-                label="ID"
-                :disabled="isRowKeyDisabled"
-              >
-              </ripa-text-input>
+            <v-col cols="12" sm="12" md="6">
+              <div class="md:tw-mr-4">
+                <ripa-date-picker
+                  v-model="model.startDate"
+                  label="Start Date"
+                  :rules="startDateRules"
+                  @input="handleInput"
+                ></ripa-date-picker>
+              </div>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="6">
+              <div>
+                <ripa-number-input
+                  v-model="model.yearsExperience"
+                  label="Years of Experience"
+                  :rules="yearsExperienceRules"
+                  @input="handleInput"
+                >
+                </ripa-number-input>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col cols="12" sm="12" md="6">
+              <div class="md:tw-mr-4">
+                <ripa-select
+                  v-model="model.officerRace"
+                  label="Officer Race"
+                  :items="raceItems"
+                  :disabled="admin"
+                  itemText="name"
+                  itemValue="name"
+                  :rules="raceRules"
+                  @input="handleInput"
+                ></ripa-select>
+              </div>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="6">
+              <div>
+                <ripa-select
+                  v-model="model.officerGender"
+                  label="Officer Gender"
+                  :items="genderItems"
+                  :disabled="admin"
+                  itemText="name"
+                  itemValue="name"
+                  :rules="genderRules"
+                  @input="handleInput"
+                ></ripa-select>
+              </div>
             </v-col>
           </v-row>
 
@@ -18,135 +101,88 @@
             <v-col cols="12" sm="12" md="6">
               <div class="md:tw-mr-4">
                 <ripa-text-input
-                  v-model="model.firstName"
-                  label="First Name"
-                  :rules="firstNameRules"
+                  v-model="model.agency"
+                  label="Agency"
+                  :rules="agencyRules"
+                  @input="handleInput"
                 >
                 </ripa-text-input>
               </div>
             </v-col>
 
             <v-col cols="12" sm="12" md="6">
-              <div>
+              <ripa-select
+                v-model="model.assignment"
+                label="Officer Assignment"
+                :items="assignmentItems"
+                itemText="name"
+                itemValue="value"
+                :rules="assignmentRules"
+                @input="handleInput"
+              >
+              </ripa-select>
+            </v-col>
+          </v-row>
+
+          <template v-if="model.assignment === 10">
+            <v-row no-gutters>
+              <v-col cols="12" sm="12">
                 <ripa-text-input
-                  v-model="model.lastName"
-                  label="Last Name"
-                  :rules="lastNameRules"
+                  v-model="model.otherType"
+                  label="Other Type"
+                  :rules="otherTypeRules"
+                  @input="handleInput"
                 >
                 </ripa-text-input>
-              </div>
-            </v-col>
-          </v-row>
-        </template>
-
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <div class="md:tw-mr-4">
-              <ripa-date-picker
-                v-model="model.startDate"
-                label="Start Date"
-                :rules="startDateRules"
-                @input="handleInput"
-              ></ripa-date-picker>
-            </div>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
-            <div>
-              <ripa-number-input
-                v-model="model.yearsExperience"
-                label="Years of Experience"
-                :rules="yearsExperienceRules"
-                @input="handleInput"
-              >
-              </ripa-number-input>
-            </div>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <div class="md:tw-mr-4">
-              <ripa-text-input
-                v-model="model.agency"
-                label="Agency"
-                :rules="agencyRules"
-                @input="handleInput"
-              >
-              </ripa-text-input>
-            </div>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
-            <ripa-select
-              v-model="model.assignment"
-              label="Officer Assignment"
-              :items="assignmentItems"
-              itemText="name"
-              itemValue="value"
-              :rules="assignmentRules"
-              @input="handleInput"
-            >
-            </ripa-select>
-          </v-col>
-        </v-row>
-
-        <template v-if="model.assignment === 10">
-          <v-row no-gutters>
-            <v-col cols="12" sm="12">
-              <ripa-text-input
-                v-model="model.otherType"
-                label="Other Type"
-                :rules="otherTypeRules"
-                @input="handleInput"
-              >
-              </ripa-text-input>
-            </v-col>
-          </v-row>
-        </template>
+              </v-col>
+            </v-row>
+          </template>
+        </v-form>
       </template>
 
       <template v-if="adminEditing">
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <div class="md:tw-mr-4">
-              <ripa-number-input
-                v-model="model.yearsExperience"
-                label="Years of Experience"
-                :rules="yearsExperienceRules"
-                @input="handleInput"
-              >
-              </ripa-number-input>
-            </div>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
-            <ripa-select
-              v-model="model.assignment"
-              label="Officer Assignment"
-              :items="assignmentItems"
-              itemText="name"
-              itemValue="value"
-              :rules="assignmentRules"
-              @input="handleInput"
-            >
-            </ripa-select>
-          </v-col>
-        </v-row>
-
-        <template v-if="model.assignment === 10">
+        <v-form>
           <v-row no-gutters>
-            <v-col cols="12" sm="12">
-              <ripa-text-input
-                v-model="model.otherType"
-                label="Other Type"
-                :rules="otherTypeRules"
+            <v-col cols="12" sm="12" md="6">
+              <div class="md:tw-mr-4">
+                <ripa-number-input
+                  v-model="model.yearsExperience"
+                  label="Years of Experience"
+                  :rules="yearsExperienceRules"
+                  @input="handleInput"
+                >
+                </ripa-number-input>
+              </div>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="6">
+              <ripa-select
+                v-model="model.assignment"
+                label="Officer Assignment"
+                :items="assignmentItems"
+                itemText="name"
+                itemValue="value"
+                :rules="assignmentRules"
                 @input="handleInput"
               >
-              </ripa-text-input>
+              </ripa-select>
             </v-col>
           </v-row>
-        </template>
+
+          <template v-if="model.assignment === 10">
+            <v-row no-gutters>
+              <v-col cols="12" sm="12">
+                <ripa-text-input
+                  v-model="model.otherType"
+                  label="Other Type"
+                  :rules="otherTypeRules"
+                  @input="handleInput"
+                >
+                </ripa-text-input>
+              </v-col>
+            </v-row>
+          </template>
+        </v-form>
       </template>
     </v-container>
   </div>
@@ -158,7 +194,7 @@ import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import { OFFICER_ASSIGNMENTS, RACES, GENDERS } from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
@@ -181,6 +217,8 @@ export default {
   data() {
     return {
       assignmentItems: OFFICER_ASSIGNMENTS,
+      raceItems: RACES,
+      genderItems: GENDERS.filter(item => !item.disabled),
       viewModel: this.value,
     }
   },
@@ -217,6 +255,14 @@ export default {
       return [v => !!v || 'A last name is required']
     },
 
+    raceRules() {
+      return [v => !!v || 'An officer race is required']
+    },
+
+    genderRules() {
+      return [v => !!v || 'An officer gender is required']
+    },
+
     startDateRules() {
       const startDate = this.viewModel.startDate
       const isValid = isValidDate(startDate)
@@ -238,8 +284,8 @@ export default {
 
       return [
         (otherType && otherType.length > 0) || 'Other type is required',
-        v => (v || '').length <= 60 || 'Max 60 characters',
-        v => (v || '').length >= 5 || 'Min 5 characters',
+        (otherType || '').length <= 60 || 'Max 60 characters',
+        (otherType || '').length >= 5 || 'Min 5 characters',
       ]
     },
 
@@ -275,6 +321,10 @@ export default {
     value(newVal) {
       this.viewModel = newVal
     },
+  },
+
+  mounted() {
+    this.$refs.form.validate()
   },
 
   props: {
