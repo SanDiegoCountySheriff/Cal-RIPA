@@ -123,31 +123,6 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                         <div class="v-input--selection-controls__ripple"></div>
                       </div><label for="input-42" class="v-label theme--light" style="left: 0px; position: relative;">Nonbinary person</label>
                     </div>
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-42" role="radio" type="radio" name="radio-33" value="5">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-42" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender man/boy</label>
-                    </div>
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-44" role="radio" type="radio" name="radio-33" value="6">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-44" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender woman/girl</label>
-                    </div>
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-46" role="radio" type="radio" name="radio-33" value="7">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-46" class="v-label theme--light" style="left: 0px; position: relative;">Transgender man/boy</label>
-                    </div>
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-48" role="radio" type="radio" name="radio-33" value="8">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-48" class="v-label theme--light" style="left: 0px; position: relative;">Transgender woman/girl</label>
-                    </div>
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-50" role="radio" type="radio" name="radio-33" value="9">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-50" class="v-label theme--light" style="left: 0px; position: relative;">Nonbinary person</label>
-                    </div>
                   </div>
                 </div>
                 <div class="v-messages theme--light">
