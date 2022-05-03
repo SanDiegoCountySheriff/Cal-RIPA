@@ -25,9 +25,9 @@ namespace RIPA.Functions.Common.Models
     public enum PercievedGender
     {
         [EnumMember(Value = "Male")]
-        CisgenderManBoy = 1,
+        Male = 1,
         [EnumMember(Value = "Female")]
-        CisgenderWomanGirl = 2,
+        Female = 2,
         [EnumMember(Value = "Transgender man/boy")]
         TransgenderManBoy = 3,
         [EnumMember(Value = "Transgender woman/girl")]
