@@ -71,7 +71,7 @@ export default {
           isStudent: newValue.person?.isStudent || false,
           perceivedAge: newValue.person?.perceivedAge || null,
           perceivedGender: newValue.person?.perceivedGender || null,
-          nonbinaryPerson: newValue.person?.nonbinaryPerson || false,
+          genderNonconforming: newValue.person?.genderNonconforming || false,
           perceivedLimitedEnglish:
             newValue.person?.perceivedLimitedEnglish || false,
           perceivedLgbt: newValue.person?.perceivedLgbt || false,

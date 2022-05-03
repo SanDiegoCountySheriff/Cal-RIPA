@@ -164,7 +164,7 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
               <div>
                 <div class="">
                   Gender Noncomforning
-                  <span class="tw-ml-2" style="color: rgb(33, 150, 243);"></span>
+                  <span class="tw-ml-2" style="color: rgb(33, 150, 243);">false</span>
                   <!---->
                   <!---->
                 </div>
@@ -172,7 +172,7 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
               <div>
                 <div class="">
                   Perceived Gender
-                  <span class="tw-ml-2" style="color: rgb(33, 150, 243);">Cisgender Male</span>
+                  <span class="tw-ml-2" style="color: rgb(33, 150, 243);">Male</span>
                   <!---->
                   <!---->
                 </div>

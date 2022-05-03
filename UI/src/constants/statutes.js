@@ -323,7 +323,7 @@ export const STATUTES = [
                       },
                       {
                         id: 'c',
-                        text: 'Witness or victim identified stopped person as a suspect of a crime',
+                        text: 'Witness or victim identification of suspect at the scene',
                       },
                       {
                         id: 'd',
@@ -347,7 +347,7 @@ export const STATUTES = [
                       },
                       {
                         id: 'i',
-                        text: 'Other reasonable suspicion or probable cause that a crime has occurred',
+                        text: 'Other reasonable suspicion of a crime',
                       },
                     ],
                   },
