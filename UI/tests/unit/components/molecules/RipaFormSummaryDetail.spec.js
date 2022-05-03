@@ -84,4 +84,16 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Officer Gender')
     expect(wrapper.html()).toContain('Male')
   })
+
+  it('should not display gender nonconforming for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).not.toContain('Gender Nonconforming')
+  })
+
+  it('should display gender nonconforming for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Gender Nonconforming')
+  })
 })

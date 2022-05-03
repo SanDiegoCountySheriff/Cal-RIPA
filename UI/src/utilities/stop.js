@@ -352,7 +352,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    if (!apiStop.officerRace) {
+      items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
     items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
@@ -418,7 +420,7 @@ const getSummaryPerceivedGender = person => {
 const getSummaryGenderNonconforming = person => {
   return {
     level: 1,
-    header: 'Gender Noncomforning',
+    header: 'Gender Nonconforming',
     detail: person.genderNonconforming,
   }
 }
