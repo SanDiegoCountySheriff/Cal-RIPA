@@ -2,7 +2,7 @@
   <div class="tw-pb-4">
     <ripa-form-header
       title="Perceived Unhoused"
-      subtitle="§999.226(a)(8) (change)"
+      subtitle="§999.226(a)(8)"
       :on-open-statute="onOpenStatute"
     ></ripa-form-header>
 

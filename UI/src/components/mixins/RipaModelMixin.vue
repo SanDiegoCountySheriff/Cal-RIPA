@@ -72,6 +72,7 @@ export default {
           perceivedAge: newValue.person?.perceivedAge || null,
           perceivedGender: newValue.person?.perceivedGender || null,
           genderNonconforming: newValue.person?.genderNonconforming || false,
+          perceivedUnhoused: newValue.person?.perceivedUnhoused || false,
           perceivedLimitedEnglish:
             newValue.person?.perceivedLimitedEnglish || false,
           perceivedLgbt: newValue.person?.perceivedLgbt || false,

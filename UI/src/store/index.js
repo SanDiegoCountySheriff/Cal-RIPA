@@ -884,7 +884,8 @@ export default new Vuex.Store({
     submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
+        .put(`http://localhost:7071/api/PutStop/${stop.id}`, stop, {
+          // .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
           headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1334,7 +1335,8 @@ export default new Vuex.Store({
       const officerId = state.user.officerId
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
+          `http://localhost:7071/api/GetStops?officerId=${officerId}&limit=10`,
+          // `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1423,7 +1425,8 @@ export default new Vuex.Store({
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
+        .get(`http://localhost:7071/api/GetStops${queryString}`, {
+          // .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -1446,7 +1449,8 @@ export default new Vuex.Store({
 
     getAdminStopAudits({ state }, stopId) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`, {
+        .get(`http://localhost:7071/api/GetStopAudits?id=${stopId}`, {
+          // .get(`${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`, {
           headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1600,7 +1604,8 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
+          `http://localhost:7071/api/GetErrorCodes?search=${value}`,
+          // `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
