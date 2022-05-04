@@ -178,6 +178,7 @@ namespace RIPA.Functions.Common.Models
         public string PerceivedGender { get; set; }
         public bool GenderNonconforming { get; set; }
         public bool PerceivedLgbt { get; set; }
+        public bool? PerceivedUnhoused { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string ReasonForStopExplanation { get; set; }
         public bool ReasonForStopPiiFound { get; set; }
