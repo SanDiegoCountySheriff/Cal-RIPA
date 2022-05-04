@@ -1260,8 +1260,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
-      perceivedUnhoused:
-        person.perceivedUnhoused !== null ? person.perceivedUnhoused : null,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
         person.actionsTaken?.personSearchConsentGiven || false,
