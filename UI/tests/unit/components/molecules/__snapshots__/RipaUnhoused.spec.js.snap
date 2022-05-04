@@ -1,3 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ripa Unhoused should match snapshot 1`] = `<div value="[object Object]"></div>`;
+exports[`Ripa Unhoused should match snapshot 1`] = `
+<div class="tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1">
+      <!----> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Perceived Unhoused</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div no="" gutters="" class="row">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 300px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-6" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--switch__track theme--light"></div>
+                  <div class="v-input--switch__thumb theme--light">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-6" class="v-label theme--light" style="left: 0px; position: relative;">
+                  Perceived Unhoused
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
