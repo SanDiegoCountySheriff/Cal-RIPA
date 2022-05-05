@@ -6,11 +6,18 @@
       subtitle="§999.226(a)(7)"
       :on-open-statue="onOpenStatute"
     ></ripa-form-header>
-    <ripa-radio-group
-      v-model="model.stopType"
-      :items="stopTypes"
-      :rules="stopTypeRules"
-    ></ripa-radio-group>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-radio-group
+            v-model="model.stopType"
+            :items="stopTypes"
+            :rules="stopTypeRules"
+            :display-row="true"
+          ></ripa-radio-group>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -31,7 +38,11 @@ export default {
 
   data() {
     return {
-      stopTypes: ['Vehicular', 'Bicycle', 'Pedestrian'],
+      stopTypes: [
+        { name: 'Vehicular', value: 'Vehicular' },
+        { name: 'Bicycle', value: 'Bicycle' },
+        { name: 'Pedestrian', value: 'Pedestrian' },
+      ],
       viewModel: this.syncModel(this.value),
     }
   },

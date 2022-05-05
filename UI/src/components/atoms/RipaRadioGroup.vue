@@ -1,6 +1,6 @@
 <template>
   <div class="ripa-radio-group">
-    <v-radio-group v-model="model" :rules="rules">
+    <v-radio-group :row="displayRow" v-model="model" :rules="rules">
       <v-radio
         v-for="(item, index) in items"
         :disabled="disabled"
@@ -82,6 +82,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayRow: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
+
+<style scoped>
+.ripa-radio-group {
+  display: inline-block;
+}
+</style>
