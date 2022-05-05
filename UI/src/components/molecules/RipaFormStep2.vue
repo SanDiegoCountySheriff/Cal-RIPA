@@ -27,6 +27,11 @@
       :on-open-statute="onOpenStatute"
     ></ripa-age>
 
+    <ripa-unhoused
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-unhoused>
+
     <ripa-limited-english
       v-model="model"
       :disabled="disabled"
@@ -79,6 +84,7 @@ import RipaLimitedEnglish from '@/components/molecules/RipaLimitedEnglish'
 import RipaRace from '@/components/molecules/RipaRace'
 import RipaStudent from '@/components/molecules/RipaStudent'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
+import RipaUnhoused from '@/components/molecules/RipaUnhoused'
 
 export default {
   name: 'ripa-form-step2',
@@ -93,6 +99,7 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+    RipaUnhoused,
   },
 
   computed: {

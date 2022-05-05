@@ -460,6 +460,7 @@ export const API_STOP = {
         },
       ],
       perceivedLimitedEnglish: false,
+      perceivedUnhoused: null,
       listPerceivedOrKnownDisability: [
         {
           disability: 'None',
@@ -609,6 +610,7 @@ export const V2_API_STOP = {
         },
       ],
       perceivedLimitedEnglish: false,
+      perceivedUnhoused: false,
       listPerceivedOrKnownDisability: [
         {
           disability: 'None',

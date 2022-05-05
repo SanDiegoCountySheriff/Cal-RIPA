@@ -356,29 +356,32 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
     items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
-    items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
+    if (person.perceivedUnhoused !== null) {
+      items.push({ id: 'B7', content: getSummaryPerceivedUnhoused(person) })
+    }
+    items.push({ id: 'B8', content: getSummaryLimitedEnglish(person) })
     items.push({
-      id: 'B8',
+      id: 'B9',
       content: getSummaryPerceivedOrKnownDisability(person),
     })
-    items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    items.push({ id: 'B10', content: getSummaryReasonForStop(person) })
     items.push({
-      id: 'B10',
+      id: 'B11',
       content: getSummaryReasonForStopExplanation(person),
     })
-    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
-    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+    items.push({ id: 'B12', content: getSummaryActionsTaken(person) })
+    items.push({ id: 'B13', content: getSummaryBasisForSearch(person) })
     items.push({
-      id: 'B13',
+      id: 'B14',
       content: getSummaryBasisForSearchExplanation(person),
     })
     items.push({
-      id: 'B14',
+      id: 'B15',
       content: getSummaryBasisForPropertySeizure(person),
     })
-    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
-    items.push({ id: 'B16', content: getSummaryContraband(person) })
-    items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
+    items.push({ id: 'B16', content: getSummaryTypeOfPropertySeized(person) })
+    items.push({ id: 'B17', content: getSummaryContraband(person) })
+    items.push({ id: 'B18', content: getSummaryResultOfStop(person) })
     return items
   }
   return []
@@ -436,6 +439,14 @@ const getSummaryPerceivedAge = person => {
     level: 1,
     header: 'Perceived Age',
     detail: person.perceivedAge,
+  }
+}
+
+const getSummaryPerceivedUnhoused = person => {
+  return {
+    level: 1,
+    header: 'Perceived Unhoused',
+    detail: person.perceivedUnhoused,
   }
 }
 
@@ -907,6 +918,7 @@ const getFullStopPeopleListed = apiStop => {
       perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: person.genderNonconforming,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedLgbt: person.perceivedLgbt,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
@@ -1103,6 +1115,7 @@ export const fullStopToStop = fullStop => {
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
       perceivedLgbt: person.perceivedLgbt || false,
+      perceivedUnhoused: person.perceivedUnhoused || null,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
@@ -1247,6 +1260,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt || false,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
         person.actionsTaken?.personSearchConsentGiven || false,

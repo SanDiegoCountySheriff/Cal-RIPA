@@ -69,4 +69,16 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Officer Gender')
     expect(wrapper.html()).toContain('Male')
   })
+
+  it('should display perceived unhoused for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Perceived Unhoused')
+  })
+
+  it('should not display perceived unhoused for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).not.toContain('Perceived Unhoused')
+  })
 })
