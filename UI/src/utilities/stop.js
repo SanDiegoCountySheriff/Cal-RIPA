@@ -860,6 +860,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1118,6 +1119,7 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
+    stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,

@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Type of Stop"
       required
-      subtitle="§999.226(a)(7)"
+      subtitle="§999.226(a)(2)"
       :on-open-statue="onOpenStatute"
     ></ripa-form-header>
     <v-container>
