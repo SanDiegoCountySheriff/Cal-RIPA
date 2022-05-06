@@ -4,7 +4,7 @@
       title="Type of Stop"
       required
       subtitle="§999.226(a)(2)"
-      :on-open-statue="onOpenStatute"
+      :on-open-statute="onOpenStatute"
     ></ripa-form-header>
     <v-container>
       <v-row no-gutters>
