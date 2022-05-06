@@ -84,6 +84,7 @@ namespace RIPA.Functions.Common.Models
         public OfficerAssignment OfficerAssignment { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+        public string StopType { get; set; }
         public DateTime StopDateTime
         {
             get
