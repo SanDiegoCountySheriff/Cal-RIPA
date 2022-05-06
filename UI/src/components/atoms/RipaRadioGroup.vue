@@ -96,9 +96,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.ripa-radio-group {
-  display: inline-block;
-}
-</style>
