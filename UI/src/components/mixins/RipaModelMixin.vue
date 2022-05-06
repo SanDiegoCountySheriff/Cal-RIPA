@@ -23,6 +23,7 @@ export default {
         overridePii: newValue.overridePii || false,
         piiEntities: newValue.piiEntities,
         stepTrace: newValue.stepTrace || [],
+        stopType: newValue.stopType,
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:

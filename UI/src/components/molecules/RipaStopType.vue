@@ -14,6 +14,7 @@
             :items="stopTypes"
             :rules="stopTypeRules"
             :display-row="true"
+            @input="handleInput"
           ></ripa-radio-group>
         </v-col>
       </v-row>
