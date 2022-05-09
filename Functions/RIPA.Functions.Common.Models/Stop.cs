@@ -184,6 +184,8 @@ namespace RIPA.Functions.Common.Models
         public string ReasonForStopExplanation { get; set; }
         public bool ReasonForStopPiiFound { get; set; }
         public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+        public NonForceActionTakenDuringStop[] ListNonForceActionTakenDuringStop { get; set; }
+        public ForceActionTakenDuringStop[] ListForceActionTakenDuringStop { get; set; }
         public bool PersonSearchConsentGiven { get; set; }
         public bool PropertySearchConsentGiven { get; set; }
         public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
@@ -240,6 +242,18 @@ namespace RIPA.Functions.Common.Models
     }
 
     public class ActionTakenDuringStop
+    {
+        public string Action { get; set; }
+        public string Key { get; set; }
+    }
+
+    public class NonForceActionTakenDuringStop
+    {
+        public string Action { get; set; }
+        public string Key { get; set; }
+    }
+
+    public class ForceActionTakenDuringStop
     {
         public string Action { get; set; }
         public string Key { get; set; }
