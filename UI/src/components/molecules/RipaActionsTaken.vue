@@ -151,7 +151,7 @@ import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
-  ACTIONS_TAKEN,
+  NON_FORCE_ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   SEIZED_PROPERTY_TYPES,
@@ -179,7 +179,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      actionsTakenItems: ACTIONS_TAKEN,
+      actionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled1: false,
@@ -206,7 +206,7 @@ export default {
       const checked = this.viewModel.actionsTaken.anyActionsTaken
       const options =
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-          item => item !== 21,
+          item => item !== 13,
         )
 
       return [
@@ -271,11 +271,11 @@ export default {
 
     getActionsTakenGeneralItems() {
       const filteredItems = this.actionsTakenItems.filter(
-        item => ![17, 18, 19, 20, 21].includes(item.value),
+        item => ![8, 10, 11, 12, 13].includes(item.value),
       )
 
       if (!this.viewModel.person.isStudent) {
-        return filteredItems.filter(item => item.value !== 23)
+        return filteredItems.filter(item => item.value !== 17)
       }
 
       return filteredItems
@@ -283,13 +283,13 @@ export default {
 
     getActionsTakenSearchItems() {
       return this.actionsTakenItems
-        .filter(item => [17, 18, 19, 20].includes(item.value))
+        .filter(item => [8, 10, 11, 12].includes(item.value))
         .map(item => {
           return {
             ...item,
             disabled:
-              (this.isAnyActionsTakenDisabled1 && item.value === 18) ||
-              (this.isAnyActionsTakenDisabled2 && item.value === 20),
+              (this.isAnyActionsTakenDisabled1 && item.value === 10) ||
+              (this.isAnyActionsTakenDisabled2 && item.value === 12),
           }
         })
     },
@@ -303,7 +303,7 @@ export default {
         filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
-      if (actionsTaken.includes(20)) {
+      if (actionsTaken.includes(12)) {
         return filteredItems
       }
 
@@ -323,7 +323,7 @@ export default {
     wasSearchOfPersonOrPropertyConducted() {
       const actionsTaken =
         this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
-      return actionsTaken.includes(18) || actionsTaken.includes(20)
+      return actionsTaken.includes(10) || actionsTaken.includes(12)
     },
 
     wasAskedForConsent() {
@@ -335,13 +335,13 @@ export default {
 
     wasAskedForConsentToSearchPerson() {
       return this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.includes(
-        17,
+        8,
       )
     },
 
     wasAskedForConsentToSearchProperty() {
       return this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.includes(
-        19,
+        11,
       )
     },
 

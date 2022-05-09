@@ -119,30 +119,33 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Other Reasonable Suspicion of a crime', value: 9 },
 ]
 
-export const ACTIONS_TAKEN = [
+export const NON_FORCE_ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
-  { name: 'Person removed from vehicle by physical contact', value: 2 },
-  { name: 'Field sobriety test conducted', value: 3 },
-  { name: 'Curbside detention', value: 4 },
-  { name: 'Handcuffed or flex cuffed', value: 5 },
-  { name: 'Patrol car detention', value: 6 },
-  { name: 'Canine removed from vehicle or used to search', value: 7 },
-  { name: 'Firearm pointed at person', value: 8 },
-  { name: 'Firearm discharged or used', value: 9 },
-  { name: 'Electronic control device used', value: 10 },
-  { name: 'Impact projectile discharged or used', value: 11 },
-  { name: 'Canine bit or held person', value: 12 },
-  { name: 'Baton or other impact weapon used', value: 13 },
-  { name: 'Chemical spray used', value: 14 },
-  { name: 'Physical or vehicle contact', value: 15 },
-  { name: 'Person photographed', value: 16 },
-  { name: 'Asked for consent to search person', value: 17 },
-  { name: 'Search of person was conducted', value: 18 },
-  { name: 'Asked for consent to search property', value: 19 },
-  { name: 'Search of property was conducted', value: 20 },
-  { name: 'Property was seized', value: 21 },
-  { name: 'Vehicle impounded', value: 22 },
-  { name: 'Admission or written statement obtained from student', value: 23 },
+  { name: 'Field sobriety test conducted', value: 2 },
+  { name: 'Curbside detention', value: 3 },
+  { name: 'Patrol car detention', value: 4 },
+  {
+    name: 'Canine used to search for, locate, and/or detect contraband',
+    value: 5,
+  },
+  { name: 'Person photographed', value: 6 },
+  {
+    name: 'Asked whether the person is on parole, probabation, PRCS, or some other form of mandatory supervision',
+    value: 7,
+  },
+  { name: 'Asked for consent to search person', value: 8 },
+  {
+    name: "Terry v. Ohio frisk/pat search of person's outer clothing was conducted",
+    value: 9,
+  },
+  { name: 'Search of person was conducted', value: 10 },
+  { name: 'Asked for consent to search property', value: 11 },
+  { name: 'Search of property was conducted', value: 12 },
+  { name: 'Property was seized', value: 13 },
+  { name: 'Vehicle impounded', value: 14 },
+  { name: "Ran name of stopped person's passenger", value: 15 },
+  { name: "Asked for identification of stopped person's passenger", value: 16 },
+  { name: 'Admission or written statement obtained from student', value: 17 },
 ]
 
 export const BASIS_FOR_SEARCH = [

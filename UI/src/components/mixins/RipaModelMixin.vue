@@ -180,7 +180,7 @@ export default {
         ) {
           this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-              item => item !== 23,
+              item => item !== 17,
             )
         }
       }
@@ -191,14 +191,14 @@ export default {
         this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
 
       if (
-        actionsTaken.includes(18) &&
+        actionsTaken.includes(10) &&
         !this.viewModel.stopReason.searchOfPerson
       ) {
         this.setPersonSearchAutomaticallySelected(false)
       }
 
       if (
-        actionsTaken.includes(20) &&
+        actionsTaken.includes(12) &&
         !this.viewModel.stopReason.searchOfProperty
       ) {
         this.setPropertySearchAutomaticallySelected(false)
@@ -208,42 +208,42 @@ export default {
         if (this.viewModel.stopReason.searchOfPerson) {
           this.isAnyActionsTakenDisabled1 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(18)) {
+          if (!actionsTaken.includes(10)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
               null
             ) {
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
             }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(18)
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(10)
             this.setPersonSearchAutomaticallySelected(true)
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
           this.isAnyActionsTakenDisabled2 = true
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(20)) {
+          if (!actionsTaken.includes(12)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
               null
             ) {
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
             }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(20)
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(12)
             this.setPropertySearchAutomaticallySelected(true)
           }
         }
       }
 
-      if (!actionsTaken.includes(17)) {
+      if (!actionsTaken.includes(8)) {
         this.viewModel.actionsTaken.personSearchConsentGiven = false
       }
 
-      if (!actionsTaken.includes(19)) {
+      if (!actionsTaken.includes(11)) {
         this.viewModel.actionsTaken.propertySearchConsentGiven = false
       }
 
-      if (!actionsTaken.includes(18) && !actionsTaken.includes(20)) {
+      if (!actionsTaken.includes(10) && !actionsTaken.includes(12)) {
         this.viewModel.actionsTaken.basisForSearch = null
         this.viewModel.actionsTaken.basisForSearchExplanation = null
         this.viewModel.actionsTaken.basisForSearchPiiFound = false
@@ -263,7 +263,7 @@ export default {
       const actionsTaken =
         this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
       if (
-        !actionsTaken.includes(20) &&
+        !actionsTaken.includes(12) &&
         this.viewModel.actionsTaken.basisForSearch !== null &&
         this.viewModel.actionsTaken.basisForSearch.length > 0
       ) {
@@ -355,15 +355,15 @@ export default {
         this.viewModel.actionsTaken.basisForPropertySeizure = null
         this.viewModel.actionsTaken.typeOfPropertySeized = null
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
-          actionsTaken.filter(item => item !== 21)
+          actionsTaken.filter(item => item !== 13)
       } else {
-        if (!actionsTaken.includes(21)) {
+        if (!actionsTaken.includes(13)) {
           if (
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop === null
           ) {
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
           }
-          this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(21)
+          this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(13)
         }
       }
     },
@@ -518,14 +518,14 @@ export default {
           this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
         if (this.viewModel.stopReason.searchOfPerson) {
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(18)) {
+          if (!actionsTaken.includes(10)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
               null
             ) {
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
             }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(18)
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(10)
           }
         } else {
           if (
@@ -536,20 +536,20 @@ export default {
           ) {
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-                item => item !== 18,
+                item => item !== 10,
               )
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
           this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(20)) {
+          if (!actionsTaken.includes(12)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
               null
             ) {
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
             }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(20)
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(12)
           }
         } else {
           if (
@@ -560,7 +560,7 @@ export default {
           ) {
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-                item => item !== 20,
+                item => item !== 12,
               )
           }
         }
