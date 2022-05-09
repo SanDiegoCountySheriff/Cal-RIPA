@@ -1,9 +1,9 @@
 <template>
   <div class="ripa-action-taken tw-pb-4">
     <ripa-form-header
-      title="Actions Taken During Stop"
+      title="Non-Force Actions Taken During Stop"
       required
-      subtitle="§999.226(a)(12)"
+      subtitle="§999.226(a)(15)"
       :on-open-statute="onOpenStatute"
     >
     </ripa-form-header>
@@ -21,7 +21,7 @@
 
           <template v-if="model.actionsTaken.anyActionsTaken">
             <ripa-check-group
-              v-model="model.actionsTaken.actionsTakenDuringStop"
+              v-model="model.actionsTaken.nonForceActionsTakenDuringStop"
               :items="getActionsTakenGeneralItems"
               :rules="actionsTakenRules"
               @input="handleInput"
@@ -31,7 +31,7 @@
             <ripa-subheader text="Search"></ripa-subheader>
 
             <ripa-check-group
-              v-model="model.actionsTaken.actionsTakenDuringStop"
+              v-model="model.actionsTaken.nonForceActionsTakenDuringStop"
               :items="getActionsTakenSearchItems"
               :rules="actionsTakenRules"
               @input="handleInput"
@@ -204,9 +204,10 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.actionsTaken.anyActionsTaken
-      const options = this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-        item => item !== 21,
-      )
+      const options =
+        this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
+          item => item !== 21,
+        )
 
       return [
         (checked && options.length > 0) ||
@@ -295,7 +296,7 @@ export default {
 
     getBasisForSearchItems() {
       const actionsTaken =
-        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+        this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
       let filteredItems = this.basisForSearchItems
 
       if (!this.viewModel.person.isStudent) {
@@ -321,7 +322,7 @@ export default {
 
     wasSearchOfPersonOrPropertyConducted() {
       const actionsTaken =
-        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+        this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
       return actionsTaken.includes(18) || actionsTaken.includes(20)
     },
 
@@ -333,11 +334,15 @@ export default {
     },
 
     wasAskedForConsentToSearchPerson() {
-      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)
+      return this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.includes(
+        17,
+      )
     },
 
     wasAskedForConsentToSearchProperty() {
-      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+      return this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.includes(
+        19,
+      )
     },
 
     isBasisForSearchExplanationVisible() {
