@@ -380,7 +380,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       id: 'B11',
       content: getSummaryReasonForStopExplanation(person),
     })
-    items.push({ id: 'B12', content: getSummaryActionsTaken(person) })
+    if (person.listActionTakenDuringStop?.length > 0) {
+      items.push({ id: 'B12', content: getSummaryActionsTaken(person) })
+    }
     items.push({ id: 'B13', content: getSummaryBasisForSearch(person) })
     items.push({
       id: 'B14',

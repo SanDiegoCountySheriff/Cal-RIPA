@@ -6,7 +6,7 @@
 import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 
 export default {
-  name: 'mock-component',
+  name: 'mock-model-component',
 
   mixins: [RipaModelMixin],
 

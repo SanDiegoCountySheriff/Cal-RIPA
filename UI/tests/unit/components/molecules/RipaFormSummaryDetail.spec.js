@@ -93,4 +93,8 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Stop Type')
   })
+
+  it.todo('should display actions taken during stop for legacy stops')
+
+  it.todo('should display non-force actions taken during stop for v2 stops')
 })
