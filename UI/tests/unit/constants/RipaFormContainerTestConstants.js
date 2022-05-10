@@ -938,6 +938,7 @@ export const V2_FULL_STOP = {
     stopInResponseToCFS: false,
     time: '12:00',
   },
+  stopType: 'Vehicular',
   template: null,
 }
 
@@ -1066,6 +1067,7 @@ export const V2_STOP = {
   editStopExplanation: null,
   isPiiFound: false,
   overridePii: false,
+  stopType: 'Vehicular',
   stepTrace: [
     {
       index: 1,
