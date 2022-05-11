@@ -51,6 +51,18 @@ describe('stop', () => {
     const expected = [{ key: '24', action: 'None' }]
 
     expect(actual[0].listActionTakenDuringStop).toEqual(expected)
+    expect(actual[0].listNonForceActionTakenDuringStop).toEqual(null)
+  })
+
+  it('should get api stop people listed actions taken for legacy stops admin edit', () => {
+    const actual = stop.getApiStopPeopleListed(FULL_STOP, [
+      { id: '1', code: 'Statute 1' },
+      { id: '2', code: 'Statute 2' },
+    ])
+    const expected = [{ key: '24', action: 'None' }]
+
+    expect(actual[0].listActionTakenDuringStop).toEqual(expected)
+    expect(actual[0].listNonForceActionTakenDuringStop).toEqual(null)
   })
 
   it('should get api stop people listed non-force actions taken for v2 stops', () => {
@@ -60,6 +72,26 @@ describe('stop', () => {
     ])
     const expected = [{ key: '18', action: 'None' }]
 
+    expect(actual[0].listActionTakenDuringStop).toEqual(null)
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
+
+  it('should get api stop people listed non-force actions taken for v2 stops admin edit', () => {
+    const actual = stop.getApiStopPeopleListed(V2_FULL_STOP, [
+      { id: '1', code: 'Statute 1' },
+      { id: '2', code: 'Statute 2' },
+    ])
+    const expected = [{ key: '18', action: 'None' }]
+
+    expect(actual[0].listActionTakenDuringStop).toEqual(null)
+    expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
+  })
+
+  it.todo(
+    'should get api stop submission summary actions taken for legacy stops',
+  )
+
+  it.todo(
+    'should get api stop submission summary non-force actions taken for v2 stops',
+  )
 })

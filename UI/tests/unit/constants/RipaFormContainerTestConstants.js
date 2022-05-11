@@ -486,6 +486,7 @@ export const API_STOP = {
           key: '24',
         },
       ],
+      listNonForceActionTakenDuringStop: null,
       personSearchConsentGiven: false,
       propertySearchConsentGiven: false,
       listContrabandOrEvidenceDiscovered: [
@@ -560,7 +561,7 @@ export const V2_API_STOP = {
   officerId: '111111111',
   officerName: 'Name',
   officerRace: 'White',
-  officerGender: 'Male',
+  officerGender: 'Cisgender man/boy',
   expYears: '1',
   officerAssignment: {
     key: '10',
@@ -637,6 +638,7 @@ export const V2_API_STOP = {
           key: '18',
         },
       ],
+      listActionTakenDuringStop: null,
       personSearchConsentGiven: false,
       propertySearchConsentGiven: false,
       listContrabandOrEvidenceDiscovered: [
@@ -729,6 +731,7 @@ export const FULL_STOP = {
     {
       actionsTaken: {
         actionsTakenDuringStop: [],
+        nonForceActionsTakenDuringStop: null,
         anyActionsTaken: false,
         anyContraband: false,
         basisForPropertySeizure: [],
@@ -848,6 +851,7 @@ export const V2_FULL_STOP = {
     {
       actionsTaken: {
         nonForceActionsTakenDuringStop: [],
+        actionsTakenDuringStop: null,
         anyActionsTaken: false,
         anyContraband: false,
         basisForPropertySeizure: [],

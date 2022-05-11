@@ -119,6 +119,32 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Other Reasonable Suspicion of a crime', value: 9 },
 ]
 
+export const ACTIONS_TAKEN = [
+  { name: 'Person removed from vehicle by order', value: 1 },
+  { name: 'Person removed from vehicle by physical contact', value: 2 },
+  { name: 'Field sobriety test conducted', value: 3 },
+  { name: 'Curbside detention', value: 4 },
+  { name: 'Handcuffed or flex cuffed', value: 5 },
+  { name: 'Patrol car detention', value: 6 },
+  { name: 'Canine removed from vehicle or used to search', value: 7 },
+  { name: 'Firearm pointed at person', value: 8 },
+  { name: 'Firearm discharged or used', value: 9 },
+  { name: 'Electronic control device used', value: 10 },
+  { name: 'Impact projectile discharged or used', value: 11 },
+  { name: 'Canine bit or held person', value: 12 },
+  { name: 'Baton or other impact weapon used', value: 13 },
+  { name: 'Chemical spray used', value: 14 },
+  { name: 'Physical or vehicle contact', value: 15 },
+  { name: 'Person photographed', value: 16 },
+  { name: 'Asked for consent to search person', value: 17 },
+  { name: 'Search of person was conducted', value: 18 },
+  { name: 'Asked for consent to search property', value: 19 },
+  { name: 'Search of property was conducted', value: 20 },
+  { name: 'Property was seized', value: 21 },
+  { name: 'Vehicle impounded', value: 22 },
+  { name: 'Admission or written statement obtained from student', value: 23 },
+]
+
 export const NON_FORCE_ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Field sobriety test conducted', value: 2 },
