@@ -204,34 +204,30 @@ export default {
         this.setPropertySearchAutomaticallySelected(false)
       }
 
-      if (this.viewModel.stopReason) {
-        if (this.viewModel.stopReason.searchOfPerson) {
-          this.isAnyActionsTakenDisabled1 = true
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(10)) {
-            if (
-              this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
-              null
-            ) {
-              this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
-            }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(10)
-            this.setPersonSearchAutomaticallySelected(true)
+      if (this.viewModel.stopReason.searchOfPerson) {
+        this.isAnyActionsTakenDisabled1 = true
+        this.viewModel.actionsTaken.anyActionsTaken = true
+        if (!actionsTaken.includes(10)) {
+          if (
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop === null
+          ) {
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
           }
+          this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(10)
+          this.setPersonSearchAutomaticallySelected(true)
         }
-        if (this.viewModel.stopReason.searchOfProperty) {
-          this.isAnyActionsTakenDisabled2 = true
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(12)) {
-            if (
-              this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
-              null
-            ) {
-              this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
-            }
-            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(12)
-            this.setPropertySearchAutomaticallySelected(true)
+      }
+      if (this.viewModel.stopReason.searchOfProperty) {
+        this.isAnyActionsTakenDisabled2 = true
+        this.viewModel.actionsTaken.anyActionsTaken = true
+        if (!actionsTaken.includes(12)) {
+          if (
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop === null
+          ) {
+            this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = []
           }
+          this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.push(12)
+          this.setPropertySearchAutomaticallySelected(true)
         }
       }
 
@@ -403,14 +399,14 @@ export default {
     removeActionsTakenPersonSearch() {
       this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-          item => item !== 18,
+          item => item !== 10,
         )
     },
 
     removeActionsTakenPropertySearch() {
       this.viewModel.actionsTaken.nonForceActionsTakenDuringStop =
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
-          item => item !== 20,
+          item => item !== 12,
         )
     },
 

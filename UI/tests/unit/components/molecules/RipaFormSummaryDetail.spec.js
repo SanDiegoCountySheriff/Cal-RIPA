@@ -94,7 +94,17 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Stop Type')
   })
 
-  it.todo('should display actions taken during stop for legacy stops')
+  it('should display actions taken during stop for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
 
-  it.todo('should display non-force actions taken during stop for v2 stops')
+    expect(wrapper.html()).toContain('Actions Taken During Stop')
+    expect(wrapper.html()).not.toContain('Non-Force Actions Taken During Stop')
+  })
+
+  it('should display non-force actions taken during stop for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).not.toContain('Actions Taken During Stop')
+    expect(wrapper.html()).toContain('Non-Force Actions Taken During Stop')
+  })
 })
