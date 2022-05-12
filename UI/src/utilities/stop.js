@@ -75,6 +75,7 @@ export const defaultStop = () => {
   return {
     actionsTaken: {
       anyActionsTaken: true,
+      anyForceActionsTaken: false,
     },
     id: 0,
     internalId: nanoid(),

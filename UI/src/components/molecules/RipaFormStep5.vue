@@ -1,6 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-force-actions-taken></ripa-force-actions-taken>
+    <ripa-force-actions-taken
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-force-actions-taken>
 
     <v-spacer> </v-spacer>
 
