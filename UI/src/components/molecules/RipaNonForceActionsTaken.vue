@@ -22,7 +22,7 @@
           <template v-if="model.actionsTaken.anyActionsTaken">
             <ripa-check-group
               v-model="model.actionsTaken.nonForceActionsTakenDuringStop"
-              :items="getActionsTakenGeneralItems"
+              :items="getNonForceActionsTakenGeneralItems"
               :rules="actionsTakenRules"
               @input="handleInput"
             >
@@ -32,7 +32,7 @@
 
             <ripa-check-group
               v-model="model.actionsTaken.nonForceActionsTakenDuringStop"
-              :items="getActionsTakenSearchItems"
+              :items="getNonForceActionsTakenSearchItems"
               :rules="actionsTakenRules"
               @input="handleInput"
             >
@@ -179,7 +179,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      actionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
+      nonForceActionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled1: false,
@@ -269,8 +269,8 @@ export default {
       ]
     },
 
-    getActionsTakenGeneralItems() {
-      const filteredItems = this.actionsTakenItems.filter(
+    getNonForceActionsTakenGeneralItems() {
+      const filteredItems = this.nonForceActionsTakenItems.filter(
         item => ![8, 10, 11, 12, 13].includes(item.value),
       )
 
@@ -281,8 +281,8 @@ export default {
       return filteredItems
     },
 
-    getActionsTakenSearchItems() {
-      return this.actionsTakenItems
+    getNonForceActionsTakenSearchItems() {
+      return this.nonForceActionsTakenItems
         .filter(item => [8, 10, 11, 12].includes(item.value))
         .map(item => {
           return {

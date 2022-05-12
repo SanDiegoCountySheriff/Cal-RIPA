@@ -1,4 +1,4 @@
-import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaNonForceActionsTaken from '@/components/molecules/RipaNonForceActionsTaken'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
 import { shallowMount, mount } from '@vue/test-utils'
@@ -15,7 +15,7 @@ describe('Ripa Actions Taken', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaActionsTaken, {
+    return shallowMount(RipaNonForceActionsTaken, {
       vuetify,
       propsData: {
         ...propsData,
@@ -25,7 +25,10 @@ describe('Ripa Actions Taken', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaActionsTaken, { vuetify, propsData: { value: stop } })
+    wrapper = mount(RipaNonForceActionsTaken, {
+      vuetify,
+      propsData: { value: stop },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -174,7 +177,7 @@ describe('Ripa Actions Taken', () => {
 
   it('should get actions taken general items', () => {
     wrapper = factory({ value: stop })
-    wrapper.vm.actionsTakenItems = [
+    wrapper.vm.nonForceActionsTakenItems = [
       { value: 1 },
       { value: 2 },
       { value: 8 },
@@ -183,7 +186,7 @@ describe('Ripa Actions Taken', () => {
     ]
 
     wrapper.vm.viewModel.person.isStudent = true
-    expect(wrapper.vm.getActionsTakenGeneralItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenGeneralItems).toEqual([
       { value: 1 },
       { value: 2 },
       { value: 17 },
@@ -191,7 +194,7 @@ describe('Ripa Actions Taken', () => {
 
     wrapper.vm.viewModel.person.isStudent = false
 
-    expect(wrapper.vm.getActionsTakenGeneralItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenGeneralItems).toEqual([
       { value: 1 },
       { value: 2 },
     ])
@@ -199,7 +202,7 @@ describe('Ripa Actions Taken', () => {
 
   it('should get actions taken search items', () => {
     wrapper = factory({ value: stop })
-    wrapper.vm.actionsTakenItems = [
+    wrapper.vm.nonForceActionsTakenItems = [
       { value: 1 },
       { value: 2 },
       { value: 8 },
@@ -209,7 +212,7 @@ describe('Ripa Actions Taken', () => {
       { value: 17 },
     ]
 
-    expect(wrapper.vm.getActionsTakenSearchItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
       { value: 8, disabled: false },
       { value: 10, disabled: false },
       { value: 11, disabled: false },
@@ -219,7 +222,7 @@ describe('Ripa Actions Taken', () => {
     wrapper.vm.isAnyActionsTakenDisabled1 = true
     wrapper.vm.isAnyActionsTakenDisabled2 = true
 
-    expect(wrapper.vm.getActionsTakenSearchItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
       { value: 8, disabled: false },
       { value: 10, disabled: true },
       { value: 11, disabled: false },
