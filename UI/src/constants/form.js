@@ -145,6 +145,35 @@ export const ACTIONS_TAKEN = [
   { name: 'Admission or written statement obtained from student', value: 23 },
 ]
 
+export const NON_FORCE_ACTIONS_TAKEN = [
+  { name: 'Person removed from vehicle by order', value: 1 },
+  { name: 'Field sobriety test conducted', value: 2 },
+  { name: 'Curbside detention', value: 3 },
+  { name: 'Patrol car detention', value: 4 },
+  {
+    name: 'Canine used to search for, locate, and/or detect contraband',
+    value: 5,
+  },
+  { name: 'Person photographed', value: 6 },
+  {
+    name: 'Asked whether the person is on parole, probabation, PRCS, or some other form of mandatory supervision',
+    value: 7,
+  },
+  { name: 'Asked for consent to search person', value: 8 },
+  {
+    name: "Terry v. Ohio frisk/pat search of person's outer clothing was conducted",
+    value: 9,
+  },
+  { name: 'Search of person was conducted', value: 10 },
+  { name: 'Asked for consent to search property', value: 11 },
+  { name: 'Search of property was conducted', value: 12 },
+  { name: 'Property was seized', value: 13 },
+  { name: 'Vehicle impounded', value: 14 },
+  { name: "Ran name of stopped person's passenger", value: 15 },
+  { name: "Asked for identification of stopped person's passenger", value: 16 },
+  { name: 'Admission or written statement obtained from student', value: 17 },
+]
+
 export const BASIS_FOR_SEARCH = [
   { name: 'Consent given', value: 1 },
   { name: 'Officer safety/safety of others', value: 2 },
