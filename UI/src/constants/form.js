@@ -174,6 +174,29 @@ export const NON_FORCE_ACTIONS_TAKEN = [
   { name: 'Admission or written statement obtained from student', value: 17 },
 ]
 
+export const FORCE_ACTIONS_TAKEN = [
+  { name: 'Handcuffed for flex cuffed', value: 1 },
+  { name: 'Physical compliance tactics and techniques', value: 2 },
+  {
+    name: "Peace officer's canine removed from patrol vehicle to gain compliance and/or for purposes of apprehending stopped person",
+    value: 3,
+  },
+  { name: "Peace officer's canine bit or held person", value: 4 },
+  { name: 'Firearm pointed at person', value: 5 },
+  { name: 'Firearm discharged', value: 6 },
+  { name: 'Firearm unholstered', value: 7 },
+  { name: 'Electronic control device pointed at person or sparked', value: 8 },
+  { name: 'Electronic control device used in dart-mode', value: 9 },
+  { name: 'Electronic control device used in drive-stun mode', value: 10 },
+  { name: 'Impact projectile weapon pointed at person', value: 11 },
+  { name: 'Impact projectile discharged or used', value: 12 },
+  { name: 'Baton or other impact weapon drawn', value: 13 },
+  { name: 'Baton or other impact weapon used to strike or prod', value: 14 },
+  { name: 'Chemical spray used', value: 15 },
+  { name: 'Person removed from vehicle by physical contact', value: 16 },
+  { name: 'Use of vehicle in apprehension of stopped person', value: 17 },
+]
+
 export const BASIS_FOR_SEARCH = [
   { name: 'Consent given', value: 1 },
   { name: 'Officer safety/safety of others', value: 2 },
