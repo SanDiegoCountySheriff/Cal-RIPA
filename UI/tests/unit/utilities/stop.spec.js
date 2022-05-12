@@ -86,12 +86,4 @@ describe('stop', () => {
     expect(actual[0].listActionTakenDuringStop).toEqual(null)
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
-
-  it.todo(
-    'should get api stop submission summary actions taken for legacy stops',
-  )
-
-  it.todo(
-    'should get api stop submission summary non-force actions taken for v2 stops',
-  )
 })
