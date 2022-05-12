@@ -105,6 +105,5 @@ describe('Ripa Form Summary Detail', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
     expect(wrapper.html()).toContain('Non-Force Actions Taken During Stop')
-    expect(wrapper.html()).not.toContain('Actions Taken During Stop')
   })
 })
