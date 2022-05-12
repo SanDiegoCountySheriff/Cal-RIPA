@@ -106,4 +106,6 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Non-Force Actions Taken During Stop')
   })
+
+  it.todo('should display force actions taken during stop for v2 stops')
 })
