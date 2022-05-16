@@ -57,19 +57,23 @@ export const STOP_REASONS = [
     value: 3,
   },
   {
-    name: 'Knowledge of outstanding arrest warrant/wanted person',
+    name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150',
     value: 4,
   },
   {
-    name: 'Investigation to determine whether the person was truant',
+    name: 'Knowledge of outstanding arrest warrant/wanted person',
     value: 5,
   },
-  { name: 'Consensual Encounter resulting in a search', value: 6 },
+  {
+    name: 'Investigation to determine whether the person was truant',
+    value: 6,
+  },
+  { name: 'Consensual Encounter resulting in a search', value: 7 },
   {
     name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
-    value: 7,
+    value: 8,
   },
-  { name: 'Determine whether the student violated school policy', value: 8 },
+  { name: 'Determine whether the student violated school policy', value: 9 },
 ]
 
 export const EDUCATION_VIOLATIONS = [
