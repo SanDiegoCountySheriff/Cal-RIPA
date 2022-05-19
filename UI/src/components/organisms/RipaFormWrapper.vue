@@ -405,7 +405,7 @@ export default {
       return this.isCreateForm()
     },
 
-    getFormStep6BackButtonVisible() {
+    getFormStep7BackButtonVisible() {
       return this.isCreateForm()
     },
 
@@ -593,7 +593,7 @@ export default {
 
       if (this.isCreateForm()) {
         if (!this.anyAgencyQuestions && this.stepIndex === 6) {
-          return 7
+          return 8
         }
       }
 
