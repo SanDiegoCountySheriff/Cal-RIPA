@@ -145,7 +145,7 @@ namespace RIPA.Functions.Submission.Services.REST
                         },
                         Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
                         LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
-                        GendNC = personStopped.GenderNonconforming ? "5" : string.Empty
+                        GendNC = (bool)personStopped.GenderNonconforming ? "5" : string.Empty
                     },
                     Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                     PrimaryReason = CastToDojPrimaryReason(personStopped),
