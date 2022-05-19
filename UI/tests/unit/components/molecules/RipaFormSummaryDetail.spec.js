@@ -114,5 +114,9 @@ describe('Ripa Form Summary Detail', () => {
     )
   })
 
-  it.todo('should display force actions taken during stop for v2 stops')
+  it('should display force actions taken during stop for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Force-Related Actions Taken During Stop')
+  })
 })

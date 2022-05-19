@@ -46,7 +46,19 @@ describe('stop', () => {
     expect(actual.filter(item => item.id === 'B12')[0]).toEqual(expected)
   })
 
-  it.todo('should get api stop person summary force actions taken for v2 stops')
+  it('should get api stop person summary force actions taken for v2 stops', () => {
+    const actual = stop.apiStopPersonSummary(V2_API_STOP, '1')
+    const expected = {
+      id: 'B13',
+      content: {
+        level: 2,
+        header: 'Force-Related Actions Taken During Stop',
+        children: [{ detail: 'None' }],
+      },
+    }
+
+    expect(actual.filter(item => item.id === 'B13')[0]).toEqual(expected)
+  })
 
   it('should get api stop people listed actions taken for legacy stops', () => {
     const actual = stop.getApiStopPeopleListed(FULL_STOP, [
