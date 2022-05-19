@@ -389,18 +389,21 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     if (person.listNonForceActionTakenDuringStop !== null) {
       items.push({ id: 'B12', content: getSummaryNonForceActionsTaken(person) })
     }
-    items.push({ id: 'B13', content: getSummaryBasisForSearch(person) })
+    if (person.listForceActionTakenDuringStop !== null) {
+      items.push({ id: 'B13', content: getSummaryForceActionsTaken(person) })
+    }
+    items.push({ id: 'B14', content: getSummaryBasisForSearch(person) })
     items.push({
-      id: 'B14',
+      id: 'B15',
       content: getSummaryBasisForSearchExplanation(person),
     })
     items.push({
-      id: 'B15',
+      id: 'B16',
       content: getSummaryBasisForPropertySeizure(person),
     })
-    items.push({ id: 'B16', content: getSummaryTypeOfPropertySeized(person) })
-    items.push({ id: 'B17', content: getSummaryContraband(person) })
-    items.push({ id: 'B18', content: getSummaryResultOfStop(person) })
+    items.push({ id: 'B17', content: getSummaryTypeOfPropertySeized(person) })
+    items.push({ id: 'B18', content: getSummaryContraband(person) })
+    items.push({ id: 'B19', content: getSummaryResultOfStop(person) })
     return items
   }
   return []
@@ -558,7 +561,23 @@ const getSummaryNonForceActionsTaken = person => {
 
   return {
     level: 2,
-    header: 'Non-Force Actions Taken During Stop',
+    header: 'Non-Force-Related Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryForceActionsTaken = person => {
+  const actions = person.listForceActionTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Force-Related Actions Taken During Stop',
     children: actions,
   }
 }
@@ -928,6 +947,11 @@ const getFullStopPeopleListed = apiStop => {
         person.listNonForceActionTakenDuringStop.length > 0 &&
         person.listNonForceActionTakenDuringStop[0].key !== '18')
 
+    const anyForceActionsTaken =
+      person.listForceActionTakenDuringStop !== null &&
+      person.listForceActionTakenDuringStop.length > 0 &&
+      person.listForceActionTakenDuringStop[0].key !== '18'
+
     const anyContraband =
       person.listContrabandOrEvidenceDiscovered.length > 0 &&
       person.listContrabandOrEvidenceDiscovered[0].key !== '1'
@@ -958,6 +982,15 @@ const getFullStopPeopleListed = apiStop => {
         : []
     }
 
+    let forceActionTakenDuringStop
+    if (person.listForceActionTakenDuringStop === null) {
+      forceActionTakenDuringStop = null
+    } else {
+      forceActionTakenDuringStop = anyForceActionsTaken
+        ? person.listForceActionTakenDuringStop
+        : []
+    }
+
     const contrabandOrEvidenceDiscovered = anyContraband
       ? person.listContrabandOrEvidenceDiscovered
       : []
@@ -979,11 +1012,15 @@ const getFullStopPeopleListed = apiStop => {
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
         anyActionsTaken,
+        anyForceActionsTaken,
         actionsTakenDuringStop: actionTakenDuringStop
           ? getKeyArray(actionTakenDuringStop)
           : null,
         nonForceActionsTakenDuringStop: nonForceActionTakenDuringStop
           ? getKeyArray(nonForceActionTakenDuringStop)
+          : null,
+        forceActionsTakenDuringStop: forceActionTakenDuringStop
+          ? getKeyArray(forceActionTakenDuringStop)
           : null,
         personSearchConsentGiven: person.personSearchConsentGiven,
         propertySearchConsentGiven: person.propertySearchConsentGiven,
