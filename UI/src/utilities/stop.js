@@ -1194,7 +1194,7 @@ export const fullStopToStop = fullStop => {
     stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
-      genderNonconforming: person.genderNonconforming || false,
+      genderNonconforming: person.genderNonconforming,
       id: person.id,
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
@@ -1352,6 +1352,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
+      genderNonconforming: person.genderNonconforming,
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
