@@ -38,7 +38,7 @@ describe('stop', () => {
       id: 'B12',
       content: {
         level: 2,
-        header: 'Non-Force Actions Taken During Stop',
+        header: 'Non-Force-Related Actions Taken During Stop',
         children: [{ detail: 'None' }],
       },
     }

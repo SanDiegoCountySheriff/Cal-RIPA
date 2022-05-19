@@ -98,13 +98,20 @@ describe('Ripa Form Summary Detail', () => {
     wrapper = factory({ apiStop: apiStop })
 
     expect(wrapper.html()).toContain('Actions Taken During Stop')
-    expect(wrapper.html()).not.toContain('Non-Force Actions Taken During Stop')
+    expect(wrapper.html()).not.toContain(
+      'Non-Force-Related Actions Taken During Stop',
+    )
+    expect(wrapper.html()).not.toContain(
+      'Force-Related Actions Taken During Stop',
+    )
   })
 
   it('should display non-force actions taken during stop for v2 stops', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
-    expect(wrapper.html()).toContain('Non-Force Actions Taken During Stop')
+    expect(wrapper.html()).toContain(
+      'Non-Force-Related Actions Taken During Stop',
+    )
   })
 
   it.todo('should display force actions taken during stop for v2 stops')
