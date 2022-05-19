@@ -1,0 +1,68 @@
+{
+    "agency_county": {
+      "value": "Alameda"
+    },
+    "agency_abbreviation": {
+      "value": "alamedasd"
+    },
+    "agency_type": {
+      "value": "sd"
+    },
+    "agency_ori": {
+      "value": "CA0010000"
+    },
+    "application": {
+      "value": "testman18"
+    },
+    "environment_type": {
+      "value": "DEV"
+    },
+    "apim_sku": {
+      "value": "Developer"
+    },
+    "enable_beats": {
+      "value": true
+    },
+    "enable_stop_debugger": {
+      "value": true
+    },
+    "app_domain_type": {
+      "value": "cssa_cloud_domain"
+    },
+    "auth_fqdn": {
+      "value": "lesmcwhirter.me"
+    },
+    "auth_app_id": {
+      "value": "4372d0a2-d9cd-46b1-b8dd-89d42a7a302c"
+    },
+    "auth_tenant_id": {
+      "value": "6ab62649-cbe9-460c-b26f-ff063ee0d392"
+    },
+    "auth_authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "auth_logout_url": {
+      "value": ""
+    },
+    "doj_sftp_server": {
+      "value": ""
+    },
+    "doj_sftp_server_key": {
+      "value": ""
+    },
+    "doj_sftp_username": {
+      "value": ""
+    },
+    "doj_sftp_password": {
+      "value": ""
+    },
+    "doj_environment": {
+      "value": "TEST"
+    },
+    "doj_sftp_disabled": {
+      "value": "true"
+    },
+    "user_tags": {
+      "value": {}
+    }
+  }
