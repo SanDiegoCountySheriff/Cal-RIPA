@@ -1782,7 +1782,7 @@
     //SecurityRule for VnetAzureCloud
     {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-      "apiVersion": "2020-08-01",
+      "apiVersion": "2020-08-01", 
       "name": "[concat(variables('networkSecurityGroups_ripa_apim_nsg_name'), '/VnetAzureCloud')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
