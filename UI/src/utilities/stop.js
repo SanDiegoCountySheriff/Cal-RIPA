@@ -13,6 +13,7 @@ import {
   REASONABLE_SUSPICIONS,
   ACTIONS_TAKEN,
   NON_FORCE_ACTIONS_TAKEN,
+  FORCE_ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   CONTRABAND_TYPES,
@@ -1341,6 +1342,10 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.nonForceActionsTakenDuringStop !== null
           ? getNonForceActionsTakenDuringStop(person)
           : null,
+      listForceActionTakenDuringStop:
+        person.actionsTaken?.forceActionsTakenDuringStop !== null
+          ? getForceActionsTakenDuringStop(person)
+          : null,
       listBasisForPropertySeizure: getBasisForPropertySeizure(person),
       listBasisForSearch: getBasisForSearch(person),
       listContrabandOrEvidenceDiscovered:
@@ -1712,6 +1717,38 @@ const getNonForceActionsTakenDuringStop = person => {
 
   const mappedItems = actions.map(item => {
     const [filteredAction] = NON_FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = {
+      key: item.toString(),
+      action: filteredAction?.name || '',
+    }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '18',
+      action: 'None',
+    },
+  ]
+}
+
+const getForceActionsTakenDuringStop = person => {
+  if (person.actionsTaken.forceActionsTakenDuringStop === null) {
+    return null
+  }
+
+  const actions = person.actionsTaken?.forceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = FORCE_ACTIONS_TAKEN.filter(
       item2 => item2.value === item,
     )
 
