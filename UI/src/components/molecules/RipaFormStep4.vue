@@ -1,11 +1,11 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-actions-taken
+    <ripa-non-force-actions-taken
       v-model="model"
       :loading-pii="loadingPii"
       :on-open-statute="onOpenStatute"
       @pii-check="handlePiiCheck"
-    ></ripa-actions-taken>
+    ></ripa-non-force-actions-taken>
 
     <ripa-contraband
       v-model="model"
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaNonForceActionsTaken from '@/components/molecules/RipaNonForceActionsTaken'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaContraband from '@/components/molecules/RipaContraband'
@@ -67,7 +67,7 @@ export default {
   mixins: [RipaFormStepMixin],
 
   components: {
-    RipaActionsTaken,
+    RipaNonForceActionsTaken,
     RipaAlert,
     RipaConfirmDialog,
     RipaContraband,

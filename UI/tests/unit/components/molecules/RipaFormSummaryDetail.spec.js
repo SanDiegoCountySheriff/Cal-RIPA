@@ -96,4 +96,41 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Gender Nonconforming')
   })
+
+  it('should display perceived unhoused for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Perceived Unhoused')
+  })
+
+  it('should not display perceived unhoused for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).not.toContain('Perceived Unhoused')
+  })
+
+  it('should not display stop type for legacy stop', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).not.toContain('Stop Type')
+  })
+
+  it('should display stop type for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Stop Type')
+  })
+
+  it('should display actions taken during stop for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Actions Taken During Stop')
+    expect(wrapper.html()).not.toContain('Non-Force Actions Taken During Stop')
+  })
+
+  it('should display non-force actions taken during stop for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Non-Force Actions Taken During Stop')
+  })
 })

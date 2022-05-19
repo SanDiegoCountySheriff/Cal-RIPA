@@ -1,13 +1,13 @@
-import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaNonForceActionsTaken from '@/components/molecules/RipaNonForceActionsTaken'
 
 export default {
   title: 'Molecules/RipaActionsTaken',
-  component: RipaActionsTaken,
+  component: RipaNonForceActionsTaken,
   parameters: {},
 }
 
 export const basic = () => ({
-  components: { RipaActionsTaken },
+  components: { RipaNonForceActionsTaken },
   data() {
     return {
       stop: {},
@@ -18,7 +18,7 @@ export const basic = () => ({
 })
 
 export const consensualEncounterResultingInSearch = () => ({
-  components: { RipaActionsTaken },
+  components: { RipaNonForceActionsTaken },
   data() {
     return {
       stop: {

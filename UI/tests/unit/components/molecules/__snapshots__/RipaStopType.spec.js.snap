@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Stop Type should match snapshot 1`] = `
+<div>
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Type of Stop</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-radio-group">
+          <div class="v-input theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--row">
+            <div class="v-input__control">
+              <div class="v-input__slot" style="height: auto;">
+                <div role="radiogroup" aria-labelledby="input-8" class="v-input--radio-group__input">
+                  <div class="v-radio theme--light">
+                    <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-9" role="radio" type="radio" name="radio-8" value="Vehicular">
+                      <div class="v-input--selection-controls__ripple"></div>
+                    </div><label for="input-9" class="v-label theme--light" style="left: 0px; position: relative;">Vehicular</label>
+                  </div>
+                  <div class="v-radio theme--light">
+                    <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-11" role="radio" type="radio" name="radio-8" value="Bicycle">
+                      <div class="v-input--selection-controls__ripple"></div>
+                    </div><label for="input-11" class="v-label theme--light" style="left: 0px; position: relative;">Bicycle</label>
+                  </div>
+                  <div class="v-radio theme--light">
+                    <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-13" role="radio" type="radio" name="radio-8" value="Pedestrian">
+                      <div class="v-input--selection-controls__ripple"></div>
+                    </div><label for="input-13" class="v-label theme--light" style="left: 0px; position: relative;">Pedestrian</label>
+                  </div>
+                </div>
+              </div>
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+              </div>
+            </div>
+          </div>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

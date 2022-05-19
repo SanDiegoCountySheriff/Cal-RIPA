@@ -7,6 +7,11 @@
         :on-update-user="handleUpdateStopUser"
       ></ripa-officer>
 
+      <ripa-stop-type
+        v-model="model"
+        :on-open-statute="onOpenStatute"
+      ></ripa-stop-type>
+
       <ripa-user-dialog
         admin-editing
         :is-invalid-user="false"
@@ -24,6 +29,11 @@
         :on-update-user="onUpdateUser"
       ></ripa-officer>
     </template>
+
+    <ripa-stop-type
+      v-model="model"
+      :on-open-statute="onOpenStatute"
+    ></ripa-stop-type>
 
     <ripa-stop-date
       v-model="model"
@@ -92,6 +102,7 @@ import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
+import RipaStopType from '@/components/molecules/RipaStopType'
 import { getOfficerAssignment } from '@/utilities/stop'
 
 export default {
@@ -106,6 +117,7 @@ export default {
     RipaStopDate,
     RipaLocation,
     RipaUserDialog,
+    RipaStopType,
   },
 
   data() {
