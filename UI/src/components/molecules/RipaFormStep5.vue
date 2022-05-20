@@ -1,16 +1,11 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-result
+    <ripa-force-actions-taken
       v-model="model"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-result="lastResult"
-      :statutes="statutes"
-      :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
-    ></ripa-stop-result>
+    ></ripa-force-actions-taken>
 
-    <v-spacer></v-spacer>
+    <v-spacer> </v-spacer>
 
     <template v-if="!isFormValid">
       <ripa-alert alert-type="error">
@@ -40,23 +35,13 @@
         Next
       </v-btn>
     </div>
-
-    <ripa-confirm-dialog
-      :show-dialog="showConfirmDialog"
-      title="Confirm Continue"
-      subtitle="This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
-    >
-    </ripa-confirm-dialog>
   </v-form>
 </template>
 
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
-import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaStopResult from '@/components/molecules/RipaStopResult'
+import RipaForceActionsTaken from '@/components/molecules/RipaForceActionsTaken'
 
 export default {
   name: 'ripa-form-step5',
@@ -65,42 +50,16 @@ export default {
 
   components: {
     RipaAlert,
-    RipaConfirmDialog,
-    RipaStopResult,
+    RipaForceActionsTaken,
   },
 
   methods: {
     handleStep5Next() {
-      const anyResultsOfStop =
-        this.viewModel.stopResult?.anyResultsOfStop || false
-      if (!anyResultsOfStop) {
-        this.showConfirmDialog = true
-      } else {
-        this.handleNext()
-      }
+      this.handleNext()
     },
 
     handleCloseDialog() {
       this.showConfirmDialog = false
-    },
-  },
-
-  props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastResult: {
-      type: Object,
-      default: () => {},
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

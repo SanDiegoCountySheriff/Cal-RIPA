@@ -26,8 +26,12 @@ export default {
         stopType: newValue.stopType,
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
+          anyForceActionsTaken:
+            newValue.actionsTaken?.anyForceActionsTaken || false,
           nonForceActionsTakenDuringStop:
             newValue.actionsTaken?.nonForceActionsTakenDuringStop || [],
+          forceActionsTakenDuringStop:
+            newValue.actionsTaken?.forceActionsTakenDuringStop || [],
           personSearchConsentGiven:
             newValue.actionsTaken?.personSearchConsentGiven || false,
           propertySearchConsentGiven:

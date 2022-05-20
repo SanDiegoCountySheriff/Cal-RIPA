@@ -17,8 +17,10 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
           <v-divider-stub></v-divider-stub>
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="5"></v-stepper-step-stub>
           <v-divider-stub></v-divider-stub>
+          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="6"></v-stepper-step-stub>
+          <v-divider-stub></v-divider-stub>
           <!---->
-          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="7" class="ripa-form-wrapper--summary-step-top"></v-stepper-step-stub>
+          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="8" class="ripa-form-wrapper--summary-step-top"></v-stepper-step-stub>
         </v-stepper-header-stub>
         <v-stepper-items-stub>
           <v-stepper-content-stub step="1">
@@ -42,6 +44,9 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
           <v-stepper-content-stub step="7">
             <!---->
           </v-stepper-content-stub>
+          <v-stepper-content-stub step="8">
+            <!---->
+          </v-stepper-content-stub>
         </v-stepper-items-stub>
         <v-stepper-header-stub>
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="1"></v-stepper-step-stub>
@@ -54,8 +59,10 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
           <v-divider-stub></v-divider-stub>
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="5"></v-stepper-step-stub>
           <v-divider-stub></v-divider-stub>
+          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="6"></v-stepper-step-stub>
+          <v-divider-stub></v-divider-stub>
           <!---->
-          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="7" class="ripa-form-wrapper--summary-step-bottom"></v-stepper-step-stub>
+          <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="8" class="ripa-form-wrapper--summary-step-bottom"></v-stepper-step-stub>
         </v-stepper-header-stub>
       </v-stepper-stub>
       <!---->
