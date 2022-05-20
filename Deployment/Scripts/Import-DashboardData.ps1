@@ -19,11 +19,12 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # $env:CSSA_SP_APP_ID="12341234-1234-1234-1234-123412341234"
 # $env:CSSA_SP_SECRET="*****************************"
 # $env:CSSA_TENANT_ID="12341234-1234-1234-1234-123412341234"
-# $env:SUBSCRIPTION_ID="12341234-1234-1234-1234-123412341234"
+# $env:ETL_SUBSCRIPTION_ID="12341234-1234-1234-1234-123412341234"
 
 # $env:APPLICATION="ripa"
 # $env:AGENCY_ABBREVIATION="sdsd"
 # $env:ENVIRONMENT_TYPE="PROD"
+# $env:DASHBOARD_COSMOS_PRIMARY_KEY # do not log
 
 Write-Host "CSSA_SP_APP_ID: $env:CSSA_SP_APP_ID"
 Write-Host "CSSA_TENANT_ID: $env:CSSA_TENANT_ID"
@@ -35,7 +36,7 @@ Write-Host "DEPLOY_WEB_CONFIG_JSON: $env:DEPLOY_WEB_CONFIG_JSON"
 # [string]$userpassword = $env:CSSA_SP_SECRET
 # [securestring]$secstringpassword = convertto-securestring $userpassword -asplaintext -force
 # [pscredential]$credobject = new-object system.management.automation.pscredential ($username, $secstringpassword)
-# Connect-AzAccount -environment azureusgovernment -Tenant $env:CSSA_TENANT_ID -Subscription $env:SUBSCRIPTION_ID -ServicePrincipal -Credential $credobject
+# Connect-AzAccount -environment azureusgovernment -Tenant $env:CSSA_TENANT_ID -Subscription $env:ETL_SUBSCRIPTION_ID -ServicePrincipal -Credential $credobject
 
 # Write-Host "checking login context"
 # Get-AzContext
@@ -43,7 +44,7 @@ Write-Host "DEPLOY_WEB_CONFIG_JSON: $env:DEPLOY_WEB_CONFIG_JSON"
 Write-Host "logging into azure cli"
 az cloud set -n azureusgovernment 
 az login --service-principal --tenant $env:CSSA_TENANT_ID -u $env:CSSA_SP_APP_ID -p $env:CSSA_SP_SECRET
-az account set -s $env:SUBSCRIPTION_ID
+az account set -s $env:ETL_SUBSCRIPTION_ID
 
 Write-Host "checking cli login context"
 az account show
@@ -57,7 +58,7 @@ function SaveDatabaseRecord($tableName, $dataRecord)
         Write-Host "Inserting new record for table:" $tableName
         $columnNames = "[DataSourceName], [DataSourceType], [DatabaseServerName], [DatabaseName], [DatabaseTableName], [DatabaseUserNamePasswordSecret], [DataSourceAuthenticationType], [IsEnabled], [IsIncremental], [Raw2Stage]"
         $insertStatement1 = "INSERT [adf].[DataSource] (" + $columnNames + ") VALUES ("
-        $insertStatement2 = $insertStatement1 + "'$dataSourceName', 'cosmosdb', 'https://" + $sqlServerName + ":1433/', 'ripastops', '$tableName', 'sec-ripa-cosmosdb-$dataSourceName-cdb-acccess-key', 'Account Key', 1, 0, 1)"
+        $insertStatement2 = $insertStatement1 + "'$dataSourceName', 'cosmosdb', 'https://" + $sqlServerName + ":1433/', 'ripastops', '$tableName', 'sec-ripa-cosmosdb-$dataSourceName-cdb-acccess-key', 'Account Key', 1, 0, 1)" 
         
         Write-Host $insertStatement2
         $sqlcmd.CommandText = $insertStatement2
@@ -83,13 +84,14 @@ function SaveDatabaseRecord($tableName, $dataRecord)
 # $dataSourceName = "sdsd-ripa-dev-les"
 
 $tenantId = $env:CSSA_TENANT_ID
-$subscriptionId = $env:SUBSCRIPTION_ID
-$resourceGroupName = "sdsd-ripa-etl-d-rg"
+$subscriptionId = $env:ETL_SUBSCRIPTION_ID
 $keyVaultName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-kv"
 $sqlServerName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-sql.database.usgovcloudapi.net"
 $databaseName = "mdw-db"
 $dataSourceName = $env:AGENCY_ABBREVIATION + "-" + $env:APPLICATION_NAME
+$dashboardSecretKey = $env:DASHBOARD_COSMOS_PRIMARY_KEY 
 
+# log variables
 Write-Host "tennantID:" $tenantId
 Write-Host "subscriptionId:" $subscriptionId
 Write-Host "keyVaultName:" $keyVaultName
@@ -97,7 +99,7 @@ Write-Host "sqlServerName:" $sqlServerName
 Write-Host "databaseName:" $databaseName
 Write-Host "dataSourceName:" $dataSourceName
 
-Write-Host "SUBSCRIPTION_ID: $env:SUBSCRIPTION_ID"
+Write-Host "ETL_SUBSCRIPTION_ID: $env:ETL_SUBSCRIPTION_ID"
 Write-Host "CSSA_SP_APP_ID: $env:CSSA_SP_APP_ID"
 Write-Host "CSSA_TENANT_ID: $env:CSSA_TENANT_ID"
 Write-Host "ENVIRONMENT_TYPE" $env:ENVIRONMENT_TYPE
@@ -111,7 +113,7 @@ $ripaDbSecret = "sec-ripa-cosmosdb-$dataSourceName-cdb-acccess-key"
 
 Write-Host "Reading database connection details from Azure Key Vault"
 
-$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-user) | ConvertFrom-Json).value
+$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-user) | ConvertFrom-Json).value #aha, a hint
 $dbPassword = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-pwd) | ConvertFrom-Json).value
 
 Write-Host "Connecting to the database"
@@ -142,3 +144,8 @@ SaveDatabaseRecord -tableName "userprofile" -dataRecord $userprofileRecord
 
 $sqlConn.Close()
 Write-Host "Closed the connection"
+
+# place CosmosDB key into etl kv of another subscription
+Write-Host "Writing CosmosDB Key to Az Secrets"
+$dashboardSecretName = $dataSourceName + "-cosmos-key"
+az keyvault secret set --name $dashboardSecretName --value $dashboardSecretKey --vault-name $keyVaultName

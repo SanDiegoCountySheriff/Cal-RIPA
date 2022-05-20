@@ -519,29 +519,12 @@
     "keyvault_secret_servicebus_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key0'),')')]",
     "doj_inbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_input_path'))]",
     "doj_outbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_output_path'))]",
+  
+    // switch sub key for linking cosmosDB to dashboard
+    "ext-dashboard-subscription-key": "[
+      if(equals(parameters('environment_type'), 'PROD'), '5edf03ce-623c-47c3-b15f-dab2be8a319e', 
+        if(equals(parameters('environment_type'), 'QA'), 'c74e04b6-0cd7-4778-863e-34654eb49270', 'c74e04b6-0cd7-4778-863e-34654eb49270'))]", 
     
-    // external db connection
-    //"test_ect-group": "sdsd-ripa-etl-q-rg", 
-    //"test_ripa_kv": "sdsd-ripa-etl-q-kv", 
-
-    //"ext_sub_name":"", 
-
-    // "ext_group_name":"[
-    //   if(equals(parameters('environment_type'), 'DEV'), 'sdsd-ripa-etl-d-rg', 
-    //     if(equals(parameters('environment_type'), 'QA'), 'sdsd-ripa-etl-q-rg', ''))]", // todo: prod?
-    // "ext_kv_name":"[
-    //   if(equals(parameters('environment_type'), 'DEV'), 'sdsd-ripa-etl-d-kv', 
-    //     if(equals(parameters('environment_type'), 'QA'), 'sdsd-ripa-etl-q-kv', ''))]", // todo: prod?
-    "ext_group_name":"sdsd-ripa-etl-q-rg",
-    "ext_kv_name": "sdsd-ripa-etl-q-kv",
-    
-    "keyvault_secret_ext_db_name": "[
-      if(equals(parameters('environment_type'), 'PROD'), 'prod result', 
-        if(equals(parameters('environment_type'), 'QA'), 'qa result', 'dev result'))]", // might be moved to db entry
-    
-    "keyvault_secret_ext_db_key":"[
-      if(equals(parameters('environment_type'), 'PROD'), 'prod result', 
-        if(equals(parameters('environment_type'), 'QA'), 'qa result', 'dev result'))]", // default to dev
     
     // "template_version": "v2021.06.17.1",
     "template_version": "#{TEMPLATE_VERSION}#",
@@ -3534,20 +3517,27 @@
       }
     },
     {
+        // add Cosmos Key to dashboard via script
         "type": "Microsoft.Resources/deploymentScripts",
         "apiVersion": "2020-10-01",
-        "name": "ext-save-db-record-01",
+        "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'copy-cosmos-dashboard-key')]",
         "location": "[resourceGroup().location]",
         "kind": "AzurePowerShell",
-        "dependsOn": [],
+        "dependsOn": [
+          "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+        ],
         "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
         "properties": {
             "forceUpdateTag": "newGuid()",
             "containerSettings": {
-            "containerGroupName": "ext-save-db-record-01" // todo: modify name
+            "containerGroupName": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'ext-cosmos-dashboard')]"
             },
             "azPowerShellVersion": "3.0",
             "environmentVariables":[
+              {
+                "name":"DASHBOARD_COSMOS_PRIMARY_KEY",
+                "secureValue": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
+              },
               {
                 "name": "CSSA_SP_APP_ID",
                 "secureValue": "5ff48213-da14-4ac7-85fb-a21bb91d8eb3"
@@ -3561,8 +3551,8 @@
                 "value": "a44e5271-a297-4daf-a3a9-f90a3146f3f5"
               },
               {
-                "name": "SUBSCRIPTION_ID",
-                "value": "5edf03ce-623c-47c3-b15f-dab2be8a319e"
+                "name": "ETL_SUBSCRIPTION_ID",
+                "value": "[variables('ext-dashboard-subscription-key')]"
               },
               {
                 "name": "APPLICATION_NAME",
