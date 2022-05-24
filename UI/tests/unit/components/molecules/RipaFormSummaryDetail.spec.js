@@ -56,6 +56,21 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
+  it('should display gender correctly for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Male')
+    expect(wrapper.html()).not.toContain('Cisgender man/boy')
+  })
+
+  it('should display gender correctly for v2 stops', () => {
+    apiStop.listPersonStopped[0].perceivedGender = 'Cisgender man/boy'
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Cisgender man/boy')
+    expect(wrapper.html()).not.toContain('Male')
+  })
+
   it('should display officer race in summary', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
@@ -68,6 +83,18 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Officer Gender')
     expect(wrapper.html()).toContain('Male')
+  })
+
+  it('should not display gender nonconforming for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).not.toContain('Gender Nonconforming')
+  })
+
+  it('should display gender nonconforming for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Gender Nonconforming')
   })
 
   it('should display perceived unhoused for v2 stops', () => {

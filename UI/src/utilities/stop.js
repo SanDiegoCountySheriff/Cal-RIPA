@@ -366,7 +366,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    if (person.genderNonconforming !== null) {
+      items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
     items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
@@ -443,7 +445,7 @@ const getSummaryPerceivedGender = person => {
 const getSummaryGenderNonconforming = person => {
   return {
     level: 1,
-    header: 'Gender Noncomforning',
+    header: 'Gender Nonconforming',
     detail: person.genderNonconforming,
   }
 }
@@ -1230,7 +1232,7 @@ export const fullStopToStop = fullStop => {
     stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
-      genderNonconforming: person.genderNonconforming || false,
+      genderNonconforming: person.genderNonconforming,
       id: person.id,
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
@@ -1366,7 +1368,6 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: person.genderNonconforming || false,
       id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
@@ -1393,6 +1394,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
+      genderNonconforming: person.genderNonconforming,
       perceivedLgbt: person.perceivedLgbt || false,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,

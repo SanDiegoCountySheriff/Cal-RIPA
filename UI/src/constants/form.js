@@ -116,7 +116,10 @@ export const REASONABLE_SUSPICIONS = [
     name: 'Actions indicative of engaging in violent crime',
     value: 8,
   },
-  { name: 'Other Reasonable Suspicion of a crime', value: 9 },
+  {
+    name: 'Other Reasonable Suspicion of a crime',
+    value: 9,
+  },
 ]
 
 export const ACTIONS_TAKEN = [

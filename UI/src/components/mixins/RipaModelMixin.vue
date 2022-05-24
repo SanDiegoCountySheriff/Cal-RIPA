@@ -76,7 +76,7 @@ export default {
           isStudent: newValue.person?.isStudent || false,
           perceivedAge: newValue.person?.perceivedAge || null,
           perceivedGender: newValue.person?.perceivedGender || null,
-          genderNonconforming: newValue.person?.genderNonconforming || false,
+          genderNonconforming: newValue.person?.genderNonconforming || null,
           perceivedUnhoused: newValue.person?.perceivedUnhoused || false,
           perceivedLimitedEnglish:
             newValue.person?.perceivedLimitedEnglish || false,
@@ -341,7 +341,10 @@ export default {
     updatePerceivedLgbtModel() {
       if (
         this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
+        this.viewModel.person.perceivedGender === 4 ||
+        this.viewModel.person.perceivedGender === 7 ||
+        this.viewModel.person.perceivedGender === 8 ||
+        this.viewModel.person.perceivedGender === 9
       ) {
         this.viewModel.person.perceivedLgbt = true
       }
