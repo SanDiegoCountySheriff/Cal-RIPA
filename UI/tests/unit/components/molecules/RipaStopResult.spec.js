@@ -185,4 +185,28 @@ describe('Ripa Stop Result', () => {
 
     expect(wrapper.html()).toContain('Verbal Warning')
   })
+
+  it('should not contain "(Warning (verbal or written))"', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.warningCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.removeItem('warningCodes', { item: { code: 1 } })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.html()).not.toContain('Warning (verbal or written)')
+  })
 })
