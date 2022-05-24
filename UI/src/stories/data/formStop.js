@@ -1080,7 +1080,7 @@ export const stopPersonsContent = [
     id: 2,
     index: 2,
     isStudent: true,
-    perceivedRace: ['Hispanic/Latino(a)'],
+    perceivedRace: ['Hispanic/Latine(x)'],
     perceivedGender: 'Male',
     genderNonconforming: false,
     perceivedLgbt: false,
