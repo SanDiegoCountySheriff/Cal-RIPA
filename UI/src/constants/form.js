@@ -42,7 +42,7 @@ export const GENDERS = [
 export const RACES = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },
-  { name: 'Hispanic/Latino(a)', value: 3 },
+  { name: 'Hispanic/Latine(x)', value: 3 },
   { name: 'Middle Eastern or South Asian', value: 4 },
   { name: 'Native American', value: 5 },
   { name: 'Pacific Islander', value: 6 },
