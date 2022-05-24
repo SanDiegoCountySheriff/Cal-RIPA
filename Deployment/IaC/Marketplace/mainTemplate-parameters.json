@@ -12,10 +12,10 @@
       "value": "CA0010000"
     },
     "application": {
-      "value": "testman25"
+      "value": "testman39"
     },
     "environment_type": {
-      "value": "DEV"
+      "value": "QA"
     },
     "apim_sku": {
       "value": "Developer"

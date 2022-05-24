@@ -525,7 +525,12 @@
       if(equals(parameters('environment_type'), 'PROD'), '5edf03ce-623c-47c3-b15f-dab2be8a319e', 
         if(equals(parameters('environment_type'), 'QA'), 'c74e04b6-0cd7-4778-863e-34654eb49270', 'c74e04b6-0cd7-4778-863e-34654eb49270'))]", 
     
+    // QA 5ff48213-da14-4ac7-85fb-a21bb91d8eb3; DEV a44e5271-a297-4daf-a3a9-f90a3146f3f5
+    // "ext-dashboard-tennant-id": "[
+    //   if(equals(parameters('environment_type'), 'PROD'), '', 
+    //     if(equals(parameters('environment_type'), 'QA'), '5ff48213-da14-4ac7-85fb-a21bb91d8eb3', 'a44e5271-a297-4daf-a3a9-f90a3146f3f5'))]", 
     
+
     // "template_version": "v2021.06.17.1",
     "template_version": "#{TEMPLATE_VERSION}#",
     "default_tags": {
@@ -3548,7 +3553,7 @@
               },
               {
                 "name": "CSSA_TENANT_ID",
-                "value": "a44e5271-a297-4daf-a3a9-f90a3146f3f5"
+                "value": "a44e5271-a297-4daf-a3a9-f90a3146f3f5" 
               },
               {
                 "name": "ETL_SUBSCRIPTION_ID",
@@ -3564,7 +3569,7 @@
               },
               {
                   "name": "ENVIRONMENT_TYPE",
-                  "value": "DEV"
+                  "value": "[parameters('environment_type')]"
               }
             ],
             "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/rl-insight/Import-DashboardData.ps1?sv=2020-08-04&ss=bfqt&srt=sco&sp=rlptfx&se=2023-05-19T04:56:21Z&st=2022-05-18T20:56:21Z&spr=https&sig=P2Dd1mVJPwcI74G11dMsTYMa3NpIe6ObdTfGXFqfi%2Fc%3D",

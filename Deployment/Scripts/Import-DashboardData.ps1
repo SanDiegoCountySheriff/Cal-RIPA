@@ -87,6 +87,7 @@ $tenantId = $env:CSSA_TENANT_ID
 $subscriptionId = $env:ETL_SUBSCRIPTION_ID
 $keyVaultName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-kv"
 $sqlServerName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-sql.database.usgovcloudapi.net"
+#$sqlServerName = "sdsd-ripa-etl-" + "d" + "-sql.database.usgovcloudapi.net" # debug, i think q in q was causing issues
 $databaseName = "mdw-db"
 $dataSourceName = $env:AGENCY_ABBREVIATION + "-" + $env:APPLICATION_NAME
 $dashboardSecretKey = $env:DASHBOARD_COSMOS_PRIMARY_KEY 
@@ -113,10 +114,16 @@ $ripaDbSecret = "sec-ripa-cosmosdb-$dataSourceName-cdb-acccess-key"
 
 Write-Host "Reading database connection details from Azure Key Vault"
 
-$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-user) | ConvertFrom-Json).value #aha, a hint
+$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-user) | ConvertFrom-Json).value
 $dbPassword = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-pwd) | ConvertFrom-Json).value
 
-Write-Host "Connecting to the database"
+Write-Host "Connecting to the database as user" $dbUserName
+if($dbPassword -eq $null){
+    Write-Host "Connection being made with password"
+}
+else {
+    Write-Host "No SQL password provided"
+}
 
 $sqlConn = New-Object System.Data.SqlClient.SqlConnection
 $sqlConn.ConnectionString = “Server=$sqlServerName,1433;User id=$dbUserName; Password=$dbPassword;Initial Catalog=$databaseName”
@@ -146,6 +153,7 @@ $sqlConn.Close()
 Write-Host "Closed the connection"
 
 # place CosmosDB key into etl kv of another subscription
-Write-Host "Writing CosmosDB Key to Az Secrets"
 $dashboardSecretName = $dataSourceName + "-cosmos-key"
-az keyvault secret set --name $dashboardSecretName --value $dashboardSecretKey --vault-name $keyVaultName
+Write-Host "Writing CosmosDB Key to" $keyVaultName
+az keyvault secret set --name $dashboardSecretName --value $dashboardSecretKey --vault-name $keyVaultName 1> /dev/null #prevent writing secret to log
+Write-Host "Finished writing" $dashboardSecretName "to" $keyVaultName
