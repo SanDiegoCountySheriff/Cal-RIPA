@@ -53,8 +53,49 @@
 
           <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
+              v-model="model.stopResult.resultsOfStop1"
+              label="Verbal Warning"
+              :rules="actionsTakenRules"
+              hide-details
+              @input="handleInput"
+            ></ripa-checkbox>
+
+            <template v-if="model.stopResult.resultsOfStop1">
+              <ripa-autocomplete
+                v-model="model.stopResult.warningCodes"
+                hint="Select Up To 5 Offense Codes (required)"
+                persistent-hint
+                label="Offense Code"
+                item-text="fullName"
+                item-value="code"
+                :items="statutes"
+                multiple
+                custom-chip
+                :max-selections="5"
+                :rules="warningRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('warningCodes', $event)"
+                @input="handleInput"
+              >
+              </ripa-autocomplete>
+              <template v-if="isPullReasonCodeWarningVisible">
+                <div class="tw-mt-4 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    :disabled="isPullReasonCodeWarningDisabled"
+                    @click="handlePullReasonCodeWarning"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
+            <ripa-checkbox
               v-model="model.stopResult.resultsOfStop2"
-              label="Warning (verbal or written)"
+              label="Written Warning"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
@@ -377,6 +418,7 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.stopResult.anyResultsOfStop
+      const value1 = this.viewModel.stopResult.resultsOfStop1
       const value2 = this.viewModel.stopResult.resultsOfStop2
       const value3 = this.viewModel.stopResult.resultsOfStop3
       const value4 = this.viewModel.stopResult.resultsOfStop4
@@ -392,7 +434,8 @@ export default {
 
       return [
         (checked &&
-          (value2 ||
+          (value1 ||
+            value2 ||
             value3 ||
             value4 ||
             value5 ||
@@ -410,11 +453,13 @@ export default {
 
     warningRules() {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop2
+      const checked2 = this.viewModel.stopResult.resultsOfStop1
+      const checked3 = this.viewModel.stopResult.resultsOfStop2
       const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
-          'An offense code is required',
+          'An offense code is required' ||
+          (checked1 && checked3 && options !== null && options.length > 0),
       ]
     },
 

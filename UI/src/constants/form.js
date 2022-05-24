@@ -256,7 +256,8 @@ export const SEIZED_PROPERTY_TYPES = [
 ]
 
 export const STOP_RESULTS = [
-  { name: 'Warning (verbal or written)', value: 2 },
+  { name: 'Verbal Warning', value: 1 },
+  { name: 'Written Warning', value: 2 },
   { name: 'Citation for infraction', value: 3 },
   { name: 'In-field cite and release', value: 4 },
   { name: 'Custodial Arrest pursuant to outstanding warrant', value: 5 },
