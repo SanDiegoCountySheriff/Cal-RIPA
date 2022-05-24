@@ -487,6 +487,7 @@ export const API_STOP = {
         },
       ],
       listNonForceActionTakenDuringStop: null,
+      listForceActionTakenDuringStop: null,
       personSearchConsentGiven: false,
       propertySearchConsentGiven: false,
       listContrabandOrEvidenceDiscovered: [
@@ -638,6 +639,12 @@ export const V2_API_STOP = {
           key: '18',
         },
       ],
+      listForceActionTakenDuringStop: [
+        {
+          action: 'None',
+          key: '18',
+        },
+      ],
       listActionTakenDuringStop: null,
       personSearchConsentGiven: false,
       propertySearchConsentGiven: false,
@@ -732,6 +739,7 @@ export const FULL_STOP = {
       actionsTaken: {
         actionsTakenDuringStop: [],
         nonForceActionsTakenDuringStop: null,
+        forceActionsTakenDuringStop: null,
         anyActionsTaken: false,
         anyContraband: false,
         basisForPropertySeizure: [],
@@ -851,6 +859,7 @@ export const V2_FULL_STOP = {
     {
       actionsTaken: {
         nonForceActionsTakenDuringStop: [],
+        forceActionsTakenDuringStop: [],
         actionsTakenDuringStop: null,
         anyActionsTaken: false,
         anyContraband: false,
@@ -1103,6 +1112,7 @@ export const V2_STOP = {
   actionsTaken: {
     anyActionsTaken: false,
     nonForceActionsTakenDuringStop: [],
+    forceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
     basisForSearch: [],
