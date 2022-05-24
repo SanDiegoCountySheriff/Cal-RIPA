@@ -264,7 +264,7 @@ export const STOP_RESULTS = [
   { name: 'Field interview card completed', value: 7 },
   { name: 'Noncriminal transport or caretaking transport', value: 8 },
   {
-    name: 'Contacted parent/legal guardian or other person legally responsible for the minor',
+    name: 'Contacted parent/legal guardian or other person legally responsible for the person',
     value: 9,
   },
   { name: 'Psychiatric hold', value: 10 },

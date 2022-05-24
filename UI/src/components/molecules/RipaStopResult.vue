@@ -239,7 +239,7 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop9"
-              label="Contacted parent/legal guardian or other person legally responsible for the minor"
+              label="Contacted parent/legal guardian or other person legally responsible for the person"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
