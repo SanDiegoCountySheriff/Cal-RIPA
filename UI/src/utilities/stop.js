@@ -366,7 +366,6 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    console.log(apiStop)
     if (person.genderNonconforming !== null) {
       items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
     }
