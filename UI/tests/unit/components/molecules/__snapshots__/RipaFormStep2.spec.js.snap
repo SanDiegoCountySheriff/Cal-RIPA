@@ -36,7 +36,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                 <div class="v-input__slot">
                   <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-14" role="checkbox" type="checkbox" value="3">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latino(a)</label>
+                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latine(x)</label>
                 </div>
               </div>
             </div>

@@ -128,7 +128,7 @@ export const STATUTES = [
                   },
                   {
                     id: '3',
-                    text: 'Hispanic/Latino(a)',
+                    text: 'Hispanic/Latine(x)',
                   },
                   {
                     id: '4',
@@ -151,7 +151,7 @@ export const STATUTES = [
                     children: [
                       {
                         id: 'a',
-                        text: "Example: If a person appears to be both Black and Latino(a), the officer shall select both 'Black/African American' and 'Hispanic/Latino(a).'",
+                        text: "Example: If a person appears to be both Black and Latine(x), the officer shall select both 'Black/African American' and 'Hispanic/Latine(x).'",
                       },
                     ],
                   },
@@ -167,7 +167,7 @@ export const STATUTES = [
               },
               {
                 id: 'D',
-                text: "Hispanic/Latino(a)' refers to a person of Mexican, Puerto Rican, Cuban, Central or South American, or other Spanish culture or origin, regardless of race.",
+                text: "Hispanic/Latine(x)' refers to a person of Mexican, Puerto Rican, Cuban, Central or South American, or other Spanish culture or origin, regardless of race.",
               },
               {
                 id: 'E',
