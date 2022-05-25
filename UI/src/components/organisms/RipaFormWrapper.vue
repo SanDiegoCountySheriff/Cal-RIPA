@@ -8,7 +8,7 @@
             :stopTemplates="stopTemplates"
           ></ripa-template>
         </template>
-        <template v-if="stepIndex >= 1 && stepIndex <= 7">
+        <template v-if="stepIndex >= 1 && stepIndex <= 8">
           <v-stepper v-model="stepIndex">
             <v-stepper-header>
               <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -36,8 +36,13 @@
 
               <v-divider></v-divider>
 
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 6" step="6">
+                <v-stepper-step :complete="stepIndex > 7" step="7">
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -45,7 +50,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-top"
-                step="7"
+                step="8"
               ></v-stepper-step>
             </v-stepper-header>
 
@@ -160,6 +165,26 @@
 
                   <ripa-form-step-5
                     v-model="stop"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :on-open-statute="onOpenStatute"
+                    :statutes="statutes"
+                    @input="handleInput"
+                  ></ripa-form-step-5>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="6">
+                <template v-if="stepIndex === 6">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-6
+                    v-model="stop"
                     :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-result="lastResult"
                     :on-back="handleBack"
@@ -170,19 +195,6 @@
                     :on-save-favorite="onSaveResultFavorite"
                     :statutes="statutes"
                     @input="handleInput"
-                  ></ripa-form-step-5>
-                </template>
-              </v-stepper-content>
-
-              <v-stepper-content step="6">
-                <template v-if="stepIndex === 6">
-                  <ripa-form-step-6
-                    v-model="stop"
-                    :on-back="handleBack"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
-                    :back-button-visible="getFormStep6BackButtonVisible"
-                    @input="handleInput"
                   ></ripa-form-step-6>
                 </template>
               </v-stepper-content>
@@ -190,6 +202,19 @@
               <v-stepper-content step="7">
                 <template v-if="stepIndex === 7">
                   <ripa-form-step-7
+                    v-model="stop"
+                    :on-back="handleBack"
+                    :on-next="handleNext"
+                    :on-cancel="handleCancel"
+                    :back-button-visible="getFormStep7BackButtonVisible"
+                    @input="handleInput"
+                  ></ripa-form-step-7>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="8">
+                <template v-if="stepIndex === 8">
+                  <ripa-form-step-8
                     v-model="stop"
                     :admin-editing="adminEditing"
                     :admin-viewing="adminViewing"
@@ -205,7 +230,7 @@
                     :on-cancel="handleCancel"
                     @handle-done="handleDone"
                     @input="handleInput"
-                  ></ripa-form-step-7>
+                  ></ripa-form-step-8>
                 </template>
               </v-stepper-content>
             </v-stepper-items>
@@ -236,8 +261,13 @@
 
               <v-divider></v-divider>
 
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 6" step="6">
+                <v-stepper-step :complete="stepIndex > 7" step="7">
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -245,7 +275,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-bottom"
-                step="7"
+                step="8"
               ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
@@ -316,6 +346,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
+import RipaFormStep8 from '@/components/molecules/RipaFormStep8'
 import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaTemplate from '@/components/molecules/RipaTemplate'
@@ -334,6 +365,7 @@ export default {
     RipaFormStep5,
     RipaFormStep6,
     RipaFormStep7,
+    RipaFormStep8,
     RipaJsonViewerDialog,
     RipaSubheader,
     RipaTemplate,
@@ -342,7 +374,7 @@ export default {
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 8,
+      confirmationStepIndex: 9,
       stop: this.value,
       stepTrace: null,
       showDialog: false,
@@ -373,7 +405,7 @@ export default {
       return this.isCreateForm()
     },
 
-    getFormStep6BackButtonVisible() {
+    getFormStep7BackButtonVisible() {
       return this.isCreateForm()
     },
 
@@ -531,7 +563,7 @@ export default {
     },
 
     handleEditAgencyQuestions() {
-      this.stepIndex = 6
+      this.stepIndex = 7
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
@@ -550,18 +582,18 @@ export default {
             localStorage.setItem('ripa_form_edit_person', '1')
             return 3
           } else {
-            return 7
+            return 8
           }
         }
 
-        if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
-          return 7
+        if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 6) {
+          return 8
         }
       }
 
       if (this.isCreateForm()) {
-        if (!this.anyAgencyQuestions && this.stepIndex === 5) {
-          return 7
+        if (!this.anyAgencyQuestions && this.stepIndex === 6) {
+          return 8
         }
       }
 
@@ -622,7 +654,7 @@ export default {
     },
 
     getFormSummaryStepText() {
-      return this.anyAgencyQuestions ? '7' : '6'
+      return this.anyAgencyQuestions ? '8' : '7'
     },
 
     updateFormStepNumbers() {
@@ -664,10 +696,10 @@ export default {
     formStepIndex(newVal, oldVal) {
       this.updateFormStepNumbers()
       if (newVal !== oldVal) {
-        if (newVal > 0 && oldVal > 0 && oldVal < 7) {
+        if (newVal > 0 && oldVal > 0 && oldVal < 8) {
           this.updateStepTrace(new Date())
         }
-        if (newVal > 0 && newVal < 7) {
+        if (newVal > 0 && newVal < 8) {
           this.createStepTrace(newVal, new Date())
         }
         if (newVal === 0) {

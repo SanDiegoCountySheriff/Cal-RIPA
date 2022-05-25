@@ -19,12 +19,20 @@ describe('Ripa Form Step 6', () => {
       vuetify,
       propsData: {
         ...propsData,
+        onOpenFavorites: jest.fn(),
+        onSaveFavorite: jest.fn(),
       },
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep6, { vuetify })
+    wrapper = mount(RipaFormStep6, {
+      vuetify,
+      propsData: {
+        onOpenFavorites: jest.fn(),
+        onSaveFavorite: jest.fn(),
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

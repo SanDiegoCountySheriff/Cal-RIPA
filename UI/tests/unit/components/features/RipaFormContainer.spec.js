@@ -186,7 +186,7 @@ describe('Ripa Form Container', () => {
 
     expect(addApiStop).toHaveBeenCalledTimes(1)
     expect(setLastLocation).toHaveBeenCalledTimes(0)
-    expect(wrapper.vm.snackbatNotOnlineVisible).toBeFalsy()
+    expect(wrapper.vm.snackbarNotOnlineVisible).toBeFalsy()
   })
 
   it('should handle submit stop not admin and online', () => {

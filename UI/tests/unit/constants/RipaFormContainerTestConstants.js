@@ -487,6 +487,7 @@ export const API_STOP = {
         },
       ],
       listNonForceActionTakenDuringStop: null,
+      listForceActionTakenDuringStop: null,
       personSearchConsentGiven: false,
       propertySearchConsentGiven: false,
       listContrabandOrEvidenceDiscovered: [
@@ -622,7 +623,7 @@ export const V2_API_STOP = {
       ],
       perceivedAge: 10,
       perceivedGender: 'Male',
-      genderNonconforming: false,
+      genderNonconforming: null,
       perceivedLgbt: false,
       reasonForStop: {
         key: '5',
@@ -633,6 +634,12 @@ export const V2_API_STOP = {
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
       listNonForceActionTakenDuringStop: [
+        {
+          action: 'None',
+          key: '18',
+        },
+      ],
+      listForceActionTakenDuringStop: [
         {
           action: 'None',
           key: '18',
@@ -732,7 +739,10 @@ export const FULL_STOP = {
       actionsTaken: {
         actionsTakenDuringStop: [],
         nonForceActionsTakenDuringStop: null,
+
         anyNonForceActionsTaken: false,
+        forceActionsTakenDuringStop: null,
+
         anyContraband: false,
         basisForPropertySeizure: [],
         basisForSearch: [],
@@ -851,6 +861,7 @@ export const V2_FULL_STOP = {
     {
       actionsTaken: {
         nonForceActionsTakenDuringStop: [],
+        forceActionsTakenDuringStop: [],
         actionsTakenDuringStop: null,
         anyNonForceActionsTaken: false,
         anyContraband: false,
@@ -870,6 +881,7 @@ export const V2_FULL_STOP = {
       isStudent: false,
       perceivedAge: 20,
       perceivedGender: 1,
+      genderNonconforming: null,
       perceivedLgbt: false,
       perceivedLImitedEnglish: false,
       perceivedOrKnownDisability: [],
@@ -1102,6 +1114,7 @@ export const V2_STOP = {
   actionsTaken: {
     anyNonForceActionsTaken: false,
     nonForceActionsTakenDuringStop: [],
+    forceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
     basisForSearch: [],
@@ -1135,6 +1148,7 @@ export const V2_STOP = {
     isStudent: false,
     perceivedAge: 33,
     perceivedGender: 1,
+    genderNonconforming: null,
     perceivedLgbt: false,
     perceivedLimitedEnglish: false,
     perceivedOrKnownDisability: [],
