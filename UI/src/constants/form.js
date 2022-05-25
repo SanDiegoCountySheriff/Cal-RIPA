@@ -124,7 +124,7 @@ export const REASONABLE_SUSPICIONS = [
     name: 'Other reasonable suspicion or probable cause that a crime has occurred',
     value: 10,
   },
-
+]
 
 export const ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
