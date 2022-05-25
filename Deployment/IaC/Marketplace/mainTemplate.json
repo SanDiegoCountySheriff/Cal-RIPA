@@ -295,6 +295,7 @@
       "type": "string",
       "defaultValue": "CosmosConnectionString"
     },
+    
     "submission_fa_config_storage_container_prefix_results": {
       "type": "string",
       "defaultValue": "result"
@@ -518,6 +519,18 @@
     "keyvault_secret_servicebus_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key0'),')')]",
     "doj_inbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_input_path'))]",
     "doj_outbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_output_path'))]",
+  
+    // switch sub key for linking cosmosDB to dashboard
+    "ext-dashboard-subscription-key": "[
+      if(equals(parameters('environment_type'), 'PROD'), '5edf03ce-623c-47c3-b15f-dab2be8a319e', 
+        if(equals(parameters('environment_type'), 'QA'), 'c74e04b6-0cd7-4778-863e-34654eb49270', 'c74e04b6-0cd7-4778-863e-34654eb49270'))]", 
+    
+    // QA 5ff48213-da14-4ac7-85fb-a21bb91d8eb3; DEV a44e5271-a297-4daf-a3a9-f90a3146f3f5
+    // "ext-dashboard-tennant-id": "[
+    //   if(equals(parameters('environment_type'), 'PROD'), '', 
+    //     if(equals(parameters('environment_type'), 'QA'), '5ff48213-da14-4ac7-85fb-a21bb91d8eb3', 'a44e5271-a297-4daf-a3a9-f90a3146f3f5'))]", 
+    
+
     // "template_version": "v2021.06.17.1",
     "template_version": "#{TEMPLATE_VERSION}#",
     "default_tags": {
@@ -687,6 +700,15 @@
           {
             "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_textanalytics_fa_name')), '2018-11-01','Full').identity.tenantId]",
             "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_textanalytics_fa_name')), '2018-11-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": "[parameters('kv_keysPermissions')]",
+              "secrets": "[parameters('kv_secretsPermissions')]",
+              "certificates": "[parameters('kv_CertPermissions')]"
+            }
+          },
+          { // hardcode rl permissions
+            "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('sites_ripa_textanalytics_fa_name')), '2018-11-01','Full').identity.tenantId]",
+            "objectId": "5e3fa671-8543-49e3-8969-a555cc530a78",
             "permissions": {
               "keys": "[parameters('kv_keysPermissions')]",
               "secrets": "[parameters('kv_secretsPermissions')]",
@@ -1416,6 +1438,7 @@
         "value": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
       }
     },
+    
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2016-10-01",
@@ -1555,6 +1578,82 @@
 
       }
     },
+    // adding in key
+    // agency_ori , '_RIPA_CDB' --- probbbbs what the key will be
+    // needs to go to a hardcoded val, prod vs non prod
+    // { 
+    //   "type": "Microsoft.KeyVault/vaults/secrets",
+    //   "apiVersion": "2016-10-01",
+    //   "name": "[concat(variables('test_ripa_kv'), '/', 'rl-test')]",
+    //   "location": "[resourceGroup().location]",
+    //   "dependsOn": [
+    //     "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]",
+    //     "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+    //   ],
+    //   "properties": {
+    //     "attributes": {
+    //       "enabled": true
+    //     },
+    //     "value": "beep beep beep beep beep"
+
+        
+    //     // "value": "[parameters('doj_sftp_password')]"
+
+    //   }
+    // },
+    // {
+    //   // add key to cross vault using nested template
+    //   "apiVersion": "2017-05-10",
+    //   "name": "ext_kv_db_vals",
+    //   "type": "Microsoft.Resources/deployments",
+      
+    //   "resourceGroup": "[variables('ext_group_name')]",
+    //   "properties":{
+    //     "mode": "Incremental",
+    //     "template":{
+    //         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    //         "contentVersion": "1.0.0.0",
+    //         "resources": [
+    //           {
+    //             "type": "Microsoft.KeyVault/vaults/secrets",
+    //             "apiVersion": "2016-10-01",
+    //             "name": "[concat(variables('ext_kv_name'), '/', 'db_name')]",
+    //             "location":"[resourceGroup().location]",
+    //             "dependsOn": [
+    //             ],
+    //             "properties": {
+    //               "attributes": {
+    //                 "enabled": true
+    //               },
+    //               "value": "[variables('keyvault_secret_ext_db_name')]"
+    //             }
+                
+    //           },
+    //           {
+    //             "type": "Microsoft.KeyVault/vaults/secrets",
+    //             "apiVersion": "2016-10-01",
+    //             "name": "[concat(variables('ext_kv_name'), '/', 'db_key')]",
+    //             "location":"[resourceGroup().location]",
+    //             "dependsOn": [
+    //             ],
+    //             "properties": {
+    //               "attributes": {
+    //                 "enabled": true
+    //               },
+    //               "value": "[variables('keyvault_secret_ext_db_key')]"
+    //             }
+                
+    //           }
+    //         ]
+    //     }
+    //   },
+    //   "dependsOn": [
+    //     "[resourceId('Microsoft.KeyVault/vaults', variables('vaults_ripa_kv_name'))]",
+    //     "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+    //   ]
+    // },
+
+    // todo: name
     {
       "type": "Microsoft.Insights/components",
       "apiVersion": "2020-02-02-preview",
@@ -1671,7 +1770,7 @@
     //SecurityRule for VnetAzureCloud
     {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-      "apiVersion": "2020-08-01",
+      "apiVersion": "2020-08-01", 
       "name": "[concat(variables('networkSecurityGroups_ripa_apim_nsg_name'), '/VnetAzureCloud')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
@@ -3423,9 +3522,67 @@
       }
     },
     {
+        // add Cosmos Key to dashboard via script
+        "type": "Microsoft.Resources/deploymentScripts",
+        "apiVersion": "2020-10-01",
+        "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'cssa-cosmos-dashboard-runonce-delete-me-dps')]",
+        "location": "[resourceGroup().location]",
+        "kind": "AzurePowerShell",
+        "dependsOn": [
+          "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+        ],
+        "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
+        "properties": {
+            "forceUpdateTag": "newGuid()",
+            "containerSettings": {
+            "containerGroupName": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'ext-cosmos-dashboard')]"
+            },
+            "azPowerShellVersion": "3.0",
+            "environmentVariables":[
+              {
+                "name":"DASHBOARD_COSMOS_PRIMARY_KEY",
+                "secureValue": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
+              },
+              {
+                "name": "CSSA_SP_APP_ID",
+                "secureValue": "#{CSSA_SP_APP_ID}#"
+              },
+              {
+                "name": "CSSA_SP_SECRET",
+                "secureValue": "#{CSSA_SP_SECRET}#"
+              },
+              {
+                "name": "CSSA_TENANT_ID",
+                "value": "#{CSSA_TENANT_ID}#" 
+              },
+              {
+                "name": "ETL_SUBSCRIPTION_ID",
+                "value": "[variables('ext-dashboard-subscription-key')]"
+              },
+              {
+                "name": "APPLICATION_NAME",
+                "value": "[parameters('application')]"
+              },
+              {
+                  "name": "AGENCY_ABBREVIATION",
+                  "value": "[parameters('agency_abbreviation')]"
+              },
+              {
+                  "name": "ENVIRONMENT_TYPE",
+                  "value": "[parameters('environment_type')]"
+              }
+            ],
+            "primaryScriptUri": "#{ZMP-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
+            "supportingScriptUris": [],
+            "timeout": "PT4H",
+            "cleanupPreference": "OnExpiration",
+            "retentionInterval": "PT4H" 
+          }
+        },
+    {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-delete-me-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzureCLI",
       "dependsOn": [
@@ -3435,7 +3592,7 @@
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
-          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]"
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-delete-me-dps')]"
         },
         "storageAccountSettings": {
           "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
@@ -3546,7 +3703,7 @@
     {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzurePowerShell",
       "dependsOn": [
@@ -3556,7 +3713,7 @@
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
-          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]"
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]"
         },
         "storageAccountSettings": {
           "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
@@ -3604,7 +3761,7 @@
     {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzurePowerShell",
       "dependsOn": [
@@ -3625,7 +3782,7 @@
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
-          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]"
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]"
         },
         "storageAccountSettings": {
           "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
