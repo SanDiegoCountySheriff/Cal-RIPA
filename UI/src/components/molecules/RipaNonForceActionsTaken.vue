@@ -15,8 +15,8 @@
             v-model="model.actionsTaken.anyNonForceActionsTaken"
             label="Any Actions Taken?"
             :disabled="
-              isanyNonForceActionsTakenDisabled1 ||
-              isanyNonForceActionsTakenDisabled2
+              isAnyNonForceActionsTakenDisabled1 ||
+              isAnyNonForceActionsTakenDisabled2
             "
             :max-width="200"
             @input="handleInput"
@@ -185,8 +185,8 @@ export default {
       nonForceActionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
-      isanyNonForceActionsTakenDisabled1: false,
-      isanyNonForceActionsTakenDisabled2: false,
+      isAnyNonForceActionsTakenDisabled1: false,
+      isAnyNonForceActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
       viewModel: this.syncModel(this.value),
     }
@@ -291,8 +291,8 @@ export default {
           return {
             ...item,
             disabled:
-              (this.isanyNonForceActionsTakenDisabled1 && item.value === 10) ||
-              (this.isanyNonForceActionsTakenDisabled2 && item.value === 12),
+              (this.isAnyNonForceActionsTakenDisabled1 && item.value === 10) ||
+              (this.isAnyNonForceActionsTakenDisabled2 && item.value === 12),
           }
         })
     },

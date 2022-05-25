@@ -206,7 +206,7 @@ export default {
       }
 
       if (this.viewModel.stopReason.searchOfPerson) {
-        this.isanyNonForceActionsTakenDisabled1 = true
+        this.isAnyNonForceActionsTakenDisabled1 = true
         this.viewModel.actionsTaken.anyNonForceActionsTaken = true
         if (!actionsTaken.includes(10)) {
           if (
@@ -219,7 +219,7 @@ export default {
         }
       }
       if (this.viewModel.stopReason.searchOfProperty) {
-        this.isanyNonForceActionsTakenDisabled2 = true
+        this.isAnyNonForceActionsTakenDisabled2 = true
         this.viewModel.actionsTaken.anyNonForceActionsTaken = true
         if (!actionsTaken.includes(12)) {
           if (

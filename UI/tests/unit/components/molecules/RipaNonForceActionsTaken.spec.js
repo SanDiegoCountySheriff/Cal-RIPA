@@ -219,8 +219,8 @@ describe('Ripa Actions Taken', () => {
       { value: 12, disabled: false },
     ])
 
-    wrapper.vm.isanyNonForceActionsTakenDisabled1 = true
-    wrapper.vm.isanyNonForceActionsTakenDisabled2 = true
+    wrapper.vm.isAnyNonForceActionsTakenDisabled1 = true
+    wrapper.vm.isAnyNonForceActionsTakenDisabled2 = true
 
     expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
       { value: 8, disabled: false },
