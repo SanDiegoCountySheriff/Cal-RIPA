@@ -3525,7 +3525,7 @@
         // add Cosmos Key to dashboard via script
         "type": "Microsoft.Resources/deploymentScripts",
         "apiVersion": "2020-10-01",
-        "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'copy-cosmos-dashboard-key')]",
+        "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'cssa-cosmos-dashboard-runonce-delete-me-dps')]",
         "location": "[resourceGroup().location]",
         "kind": "AzurePowerShell",
         "dependsOn": [
@@ -3545,15 +3545,15 @@
               },
               {
                 "name": "CSSA_SP_APP_ID",
-                "secureValue": "5ff48213-da14-4ac7-85fb-a21bb91d8eb3"
+                "secureValue": "#{CSSA_SP_APP_ID}#"
               },
               {
                 "name": "CSSA_SP_SECRET",
-                "secureValue": "Q3JFU2ic-u65S-yJrSn~FlVdQCWXM1.MF9"
+                "secureValue": "#{CSSA_SP_SECRET}#"
               },
               {
                 "name": "CSSA_TENANT_ID",
-                "value": "a44e5271-a297-4daf-a3a9-f90a3146f3f5" 
+                "value": "#{CSSA_TENANT_ID}#" 
               },
               {
                 "name": "ETL_SUBSCRIPTION_ID",
@@ -3561,330 +3561,330 @@
               },
               {
                 "name": "APPLICATION_NAME",
-                "value": "ripa"
+                "value": "[parameters('application')]"
               },
               {
                   "name": "AGENCY_ABBREVIATION",
-                  "value": "RLTEST"
+                  "value": "[parameters('agency_abbreviation')]"
               },
               {
                   "name": "ENVIRONMENT_TYPE",
                   "value": "[parameters('environment_type')]"
               }
             ],
-            "primaryScriptUri": "https://cssagenpdeploymentsa.blob.core.usgovcloudapi.net/rl-insight/Import-DashboardData.ps1?sv=2020-08-04&ss=bfqt&srt=sco&sp=rlptfx&se=2023-05-19T04:56:21Z&st=2022-05-18T20:56:21Z&spr=https&sig=P2Dd1mVJPwcI74G11dMsTYMa3NpIe6ObdTfGXFqfi%2Fc%3D",
+            "primaryScriptUri": "#{ZMP-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
             "supportingScriptUris": [],
             "timeout": "PT4H",
             "cleanupPreference": "OnExpiration",
             "retentionInterval": "PT4H" 
           }
-        }//,
-    // {
-    //   "type": "Microsoft.Resources/deploymentScripts",
-    //   "apiVersion": "2020-10-01",
-    //   "name": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]",
-    //   "location": "[resourceGroup().location]",
-    //   "kind": "AzureCLI",
-    //   "dependsOn": [
-    //     "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]"
-    //   ],
-    //   "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
-    //   "properties": {
-    //     "forceUpdateTag": "newGuid()",
-    //     "containerSettings": {
-    //       "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-deleteme-ifucme-dps')]"
-    //     },
-    //     "storageAccountSettings": {
-    //       "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
-    //       "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
-    //     },
-    //     "azCliVersion": "2.23.0",
-    //     "environmentVariables": [
-    //       {
-    //         "name": "CLOUD_TYPE",
-    //         "value": "AzureUSGovernment"
-    //       },
-    //       {
-    //         "name": "CSSA_SP_APP_ID",
-    //         "secureValue": "#{CSSA_SP_APP_ID}#"
-    //       },
-    //       {
-    //         "name": "CSSA_SP_SECRET",
-    //         "secureValue": "#{CSSA_SP_SECRET}#"
-    //       },
-    //       {
-    //         "name": "CSSA_TENANT_ID",
-    //         "value": "#{CSSA_TENANT_ID}#"
-    //       },
-    //       {
-    //         "name": "CSSA_SUBSCRIPTION_ID",
-    //         "value": "#{CSSA_SUBSCRIPTION_ID}#"
-    //       },
-    //       {
-    //         "name": "CSSA_RESOURCE_GROUP_NAME",
-    //         "value": "#{CSSA_RESOURCE_GROUP_NAME}#"
-    //       },
-    //       {
-    //         "name": "CSSA_CERT_KEY_VAULT_RG",
-    //         "value": "#{CSSA_CERT_KEY_VAULT_RG}#"
-    //       },
-    //       {
-    //         "name": "CSSA_CERT_KEY_VAULT_NAME",
-    //         "value": "#{CSSA_CERT_KEY_VAULT_NAME}#"
-    //       },
-    //       {
-    //         "name": "CSSA_CERT_SECRET_NAME",
-    //         "value": "#{CSSA_CERT_SECRET_NAME}#"
-    //       },
-    //       {
-    //         "name": "CSSA_CERT_SECRET_VERSION",
-    //         "value": "#{CSSA_CERT_SECRET_VERSION}#"
-    //       },
-    //       {
-    //         "name": "CSSA_CDN_PROFILE_NAME",
-    //         "value": "#{CSSA_CDN_PROFILE_NAME}#"
-    //       },
-    //       {
-    //         "name": "CSSA_DNS_ROOT_ZONE",
-    //         "value": "#{CSSA_DNS_ROOT_ZONE}#"
-    //       },
-    //       {
-    //         "name": "AGENCY_ORI",
-    //         "value": "[parameters('agency_ori')]"
-    //       },
-    //       {
-    //         "name": "AGENCY_ABBREVIATION",
-    //         "value": "[parameters('agency_abbreviation')]"
-    //       },
-    //       {
-    //         "name": "APPLICATION_SUBSCRIPTION_ID",
-    //         "value": "[subscription().subscriptionId]"
-    //       },
-    //       {
-    //         "name": "APPLICATION_RESOURCE_GROUP_NAME",
-    //         "value": "[resourceGroup().Name]"
-    //       },
-    //       {
-    //         "name": "APPLICATION_NAME",
-    //         "value": "[parameters('application')]"
-    //       },
-    //       {
-    //         "name": "APPLICATION_UI_SA_NAME",
-    //         "value": "[variables('storageAccounts_ripauisa_name')]"
-    //       },
-    //       {
-    //         "name": "APP_DOMAIN_TYPE",
-    //         "value": "[parameters('app_domain_type')]"
-    //       },
-    //       {
-    //         "name": "CUSTOM_PRIMARY_DOMAIN",
-    //         "value": "[parameters('primary_domain')]"
-    //       },
-    //       {
-    //         "name": "CUSTOM_APP_CNAME_ALIAS",
-    //         "value": "[parameters('app_cname_alias')]"
-    //       },
-    //       {
-    //         "name": "CUSTOM_CERT_KEY_VAULT_RID",
-    //         "value": "[parameters('certificate_key_vault_rid')]"
-    //       },
-    //       {
-    //         "name": "CUSTOM_CERT_SECRET_NAME",
-    //         "value": "[parameters('certificate_secret_name')]"
-    //       }
-    //     ],
-    //     "primaryScriptUri": "#{ZMP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
-    //     "supportingScriptUris": [],
-    //     "timeout": "PT4H",
-    //     "cleanupPreference": "OnExpiration",
-    //     "retentionInterval": "PT4H"
-    //   }
-    // },
-    // {
-    //   "type": "Microsoft.Resources/deploymentScripts",
-    //   "apiVersion": "2020-10-01",
-    //   "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]",
-    //   "location": "[resourceGroup().location]",
-    //   "kind": "AzurePowerShell",
-    //   "dependsOn": [
-    //     "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
-    //   ],
-    //   "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
-    //   "properties": {
-    //     "forceUpdateTag": "newGuid()",
-    //     "containerSettings": {
-    //       "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-deleteme-ifucme-dps')]"
-    //     },
-    //     "storageAccountSettings": {
-    //       "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
-    //       "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
-    //     },
-    //     "azPowerShellVersion": "3.0",
-    //     "environmentVariables": [
-    //       {
-    //         "name": "CSSA_SP_APP_ID",
-    //         "secureValue": "#{CSSA_SP_APP_ID}#"
-    //       },
-    //       {
-    //         "name": "CSSA_SP_SECRET",
-    //         "secureValue": "#{CSSA_SP_SECRET}#"
-    //       },
-    //       {
-    //         "name": "CSSA_TENANT_ID",
-    //         "value": "#{CSSA_TENANT_ID}#"
-    //       },
-    //       {
-    //         "name": "APP_SUBSCRIPTION_ID",
-    //         "value": "[subscription().subscriptionId]"
-    //       },
-    //       {
-    //         "name": "RESOURCE_GROUP_NAME",
-    //         "value": "[resourceGroup().name]"
-    //       },
-    //       {
-    //         "name": "STORAGE_ACCOUNT_NAME",
-    //         "value": "[variables('storageAccounts_ripactsa_name')]"
-    //       }
-    //     ],
-    //     "primaryScriptUri": "#{ZMP-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
-    //     "supportingScriptUris": [
-    //       "#{ZMP-BEAT-TABLE-CSV-SAS-URL}#",
-    //       "#{ZMP-CITY-TABLE-CSV-SAS-URL}#",
-    //       "#{ZMP-OFFENSE-TABLE-CSV-SAS-URL}#",
-    //       "#{ZMP-SCHOOL-TABLE-CSV-SAS-URL}#"
-    //     ],
-    //     "timeout": "PT4H",
-    //     "cleanupPreference": "OnExpiration",
-    //     "retentionInterval": "PT4H"
-    //   }
-    // },
-    // {
-    //   "type": "Microsoft.Resources/deploymentScripts",
-    //   "apiVersion": "2020-10-01",
-    //   "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]",
-    //   "location": "[resourceGroup().location]",
-    //   "kind": "AzurePowerShell",
-    //   "dependsOn": [
-    //     "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]",
-    //     "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_domain_fa_name'), 'web')]",
-    //     "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_stop_fa_name'), 'web')]",
-    //     "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_submission_fa_name'), 'web')]",
-    //     "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_textanalytics_fa_name'), 'web')]",
-    //     "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_user_fa_name'), 'web')]",
+        },
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-delete-me-dps')]",
+      "location": "[resourceGroup().location]",
+      "kind": "AzureCLI",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]"
+      ],
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-delete-me-dps')]"
+        },
+        "storageAccountSettings": {
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
+        },
+        "azCliVersion": "2.23.0",
+        "environmentVariables": [
+          {
+            "name": "CLOUD_TYPE",
+            "value": "AzureUSGovernment"
+          },
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "CSSA_SUBSCRIPTION_ID",
+            "value": "#{CSSA_SUBSCRIPTION_ID}#"
+          },
+          {
+            "name": "CSSA_RESOURCE_GROUP_NAME",
+            "value": "#{CSSA_RESOURCE_GROUP_NAME}#"
+          },
+          {
+            "name": "CSSA_CERT_KEY_VAULT_RG",
+            "value": "#{CSSA_CERT_KEY_VAULT_RG}#"
+          },
+          {
+            "name": "CSSA_CERT_KEY_VAULT_NAME",
+            "value": "#{CSSA_CERT_KEY_VAULT_NAME}#"
+          },
+          {
+            "name": "CSSA_CERT_SECRET_NAME",
+            "value": "#{CSSA_CERT_SECRET_NAME}#"
+          },
+          {
+            "name": "CSSA_CERT_SECRET_VERSION",
+            "value": "#{CSSA_CERT_SECRET_VERSION}#"
+          },
+          {
+            "name": "CSSA_CDN_PROFILE_NAME",
+            "value": "#{CSSA_CDN_PROFILE_NAME}#"
+          },
+          {
+            "name": "CSSA_DNS_ROOT_ZONE",
+            "value": "#{CSSA_DNS_ROOT_ZONE}#"
+          },
+          {
+            "name": "AGENCY_ORI",
+            "value": "[parameters('agency_ori')]"
+          },
+          {
+            "name": "AGENCY_ABBREVIATION",
+            "value": "[parameters('agency_abbreviation')]"
+          },
+          {
+            "name": "APPLICATION_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
+            "name": "APPLICATION_RESOURCE_GROUP_NAME",
+            "value": "[resourceGroup().Name]"
+          },
+          {
+            "name": "APPLICATION_NAME",
+            "value": "[parameters('application')]"
+          },
+          {
+            "name": "APPLICATION_UI_SA_NAME",
+            "value": "[variables('storageAccounts_ripauisa_name')]"
+          },
+          {
+            "name": "APP_DOMAIN_TYPE",
+            "value": "[parameters('app_domain_type')]"
+          },
+          {
+            "name": "CUSTOM_PRIMARY_DOMAIN",
+            "value": "[parameters('primary_domain')]"
+          },
+          {
+            "name": "CUSTOM_APP_CNAME_ALIAS",
+            "value": "[parameters('app_cname_alias')]"
+          },
+          {
+            "name": "CUSTOM_CERT_KEY_VAULT_RID",
+            "value": "[parameters('certificate_key_vault_rid')]"
+          },
+          {
+            "name": "CUSTOM_CERT_SECRET_NAME",
+            "value": "[parameters('certificate_secret_name')]"
+          }
+        ],
+        "primaryScriptUri": "#{ZMP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
+        "supportingScriptUris": [],
+        "timeout": "PT4H",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT4H"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]",
+      "location": "[resourceGroup().location]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
+      ],
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]"
+        },
+        "storageAccountSettings": {
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
+        },
+        "azPowerShellVersion": "3.0",
+        "environmentVariables": [
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "APP_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
+            "name": "RESOURCE_GROUP_NAME",
+            "value": "[resourceGroup().name]"
+          },
+          {
+            "name": "STORAGE_ACCOUNT_NAME",
+            "value": "[variables('storageAccounts_ripactsa_name')]"
+          }
+        ],
+        "primaryScriptUri": "#{ZMP-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
+        "supportingScriptUris": [
+          "#{ZMP-BEAT-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-CITY-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-OFFENSE-TABLE-CSV-SAS-URL}#",
+          "#{ZMP-SCHOOL-TABLE-CSV-SAS-URL}#"
+        ],
+        "timeout": "PT4H",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT4H"
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]",
+      "location": "[resourceGroup().location]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageAccounts_ripauisa_name'), 'default', '$web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_domain_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_stop_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_submission_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_textanalytics_fa_name'), 'web')]",
+        "[resourceId('Microsoft.Web/sites/config', variables('sites_ripa_user_fa_name'), 'web')]",
 
-    //     "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_domain_name'))]",
-    //     "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_stop_name'))]",
-    //     "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_submission_name'))]",
-    //     "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytics_name'))]",
-    //     "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]"
-    //   ],
-    //   "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
-    //   "properties": {
-    //     "forceUpdateTag": "newGuid()",
-    //     "containerSettings": {
-    //       "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-deleteme-ifucme-dps')]"
-    //     },
-    //     "storageAccountSettings": {
-    //       "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
-    //       "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
-    //     },
-    //     "azPowerShellVersion": "3.0",
-    //     "environmentVariables": [
-    //       {
-    //         "name": "CSSA_SP_APP_ID",
-    //         "secureValue": "#{CSSA_SP_APP_ID}#"
-    //       },
-    //       {
-    //         "name": "CSSA_SP_SECRET",
-    //         "secureValue": "#{CSSA_SP_SECRET}#"
-    //       },
-    //       {
-    //         "name": "CSSA_TENANT_ID",
-    //         "value": "#{CSSA_TENANT_ID}#"
-    //       },
-    //       {
-    //         "name": "APP_SUBSCRIPTION_ID",
-    //         "value": "[subscription().subscriptionId]"
-    //       },
-    //       {
-    //         "name": "APP_RESOURCE_GROUP_NAME",
-    //         "value": "[resourceGroup().name]"
-    //       },
-    //       // {
-    //       //   "name": "APIM_INSTANCE_NAME",
-    //       //   "value": "[variables('service_ripa_apim_wus2_name')]"
-    //       // },
-    //       {
-    //         "name": "AUTH_SP_APP_ID",
-    //         "value": "[parameters('auth_app_id')]"
-    //       },
-    //       {
-    //         "name": "AUTH_TENANT_ID",
-    //         "value": "[parameters('auth_tenant_id')]"
-    //       },
-    //       {
-    //         "name": "AUTH_AUTHORITY",
-    //         "value": "[parameters('auth_authority')]"
-    //       },
-    //       {
-    //         "name": "AUTH_PRIMARY_DOMAIN",
-    //         "value": "[parameters('auth_fqdn')]"
-    //       },
-    //       // {
-    //       //   "name": "APIM_INSTANCE_URL",
-    //       //   "value": "[reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.gatewayUrl]"
-    //       // },
-    //       {
-    //         "name": "AGENCY_ABBREVIATION",
-    //         "value": "[parameters('agency_abbreviation')]"
-    //       },
-    //       {
-    //         "name": "APPLICATION_NAME",
-    //         "value": "[parameters('application')]"
-    //       },
-    //       // {
-    //       //   "name": "STORAGE_ACCOUNT_NAME",
-    //       //   "value": "[variables('storageAccounts_ripauisa_name')]"
-    //       // },
-    //       {
-    //         "name": "DEFAULT_COUNTY",
-    //         "value": "[parameters('agency_county')]"
-    //       },
-    //       {
-    //         "name": "ENVIRONMENT_TYPE",
-    //         "value": "[parameters('environment_type')]"
-    //       },
-    //       {
-    //         "name": "ENABLE_BEATS",
-    //         "value": "[parameters('enable_beats')]"
-    //       },
-    //       {
-    //         "name": "ENABLE_STOP_DEBUGGER",
-    //         "value": "[parameters('enable_stop_debugger')]"
-    //       },
-    //       {
-    //         "name": "DEPLOY_WEB_CONFIG_JSON",
-    //         "value": "True"
-    //       }
-    //     ],
-    //     "primaryScriptUri": "#{ZMP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
-    //     "supportingScriptUris": [
-    //       "#{ZMP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
-    //       "#{ZMP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
-    //       "#{ZMP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
-    //       "#{ZMP-CONFIG-JSON-SAS-URL}#",
-    //       "#{ZMP-DOMAIN-ZIP-SAS-URL}#",
-    //       "#{ZMP-STOP-ZIP-SAS-URL}#",
-    //       "#{ZMP-SUBMISSION-ZIP-SAS-URL}#",
-    //       "#{ZMP-TEXTANALYTICS-ZIP-SAS-URL}#",
-    //       "#{ZMP-USERPROFILE-ZIP-SAS-URL}#",
-    //       "#{ZMP-UI-ZIP-SAS-URL}#"
-    //     ],
-    //     "timeout": "PT4H",
-    //     "cleanupPreference": "OnExpiration",
-    //     "retentionInterval": "PT4H"
-    //   }
-    // }
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_domain_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_stop_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_submission_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_textAnalytics_name'))]",
+        "[resourceId('Microsoft.ApiManagement/service/apis', variables('service_ripa_apim_wus2_name'), parameters('apim_apis_userprofile_name'))]"
+      ],
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]"
+        },
+        "storageAccountSettings": {
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
+        },
+        "azPowerShellVersion": "3.0",
+        "environmentVariables": [
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "APP_SUBSCRIPTION_ID",
+            "value": "[subscription().subscriptionId]"
+          },
+          {
+            "name": "APP_RESOURCE_GROUP_NAME",
+            "value": "[resourceGroup().name]"
+          },
+          // {
+          //   "name": "APIM_INSTANCE_NAME",
+          //   "value": "[variables('service_ripa_apim_wus2_name')]"
+          // },
+          {
+            "name": "AUTH_SP_APP_ID",
+            "value": "[parameters('auth_app_id')]"
+          },
+          {
+            "name": "AUTH_TENANT_ID",
+            "value": "[parameters('auth_tenant_id')]"
+          },
+          {
+            "name": "AUTH_AUTHORITY",
+            "value": "[parameters('auth_authority')]"
+          },
+          {
+            "name": "AUTH_PRIMARY_DOMAIN",
+            "value": "[parameters('auth_fqdn')]"
+          },
+          // {
+          //   "name": "APIM_INSTANCE_URL",
+          //   "value": "[reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.gatewayUrl]"
+          // },
+          {
+            "name": "AGENCY_ABBREVIATION",
+            "value": "[parameters('agency_abbreviation')]"
+          },
+          {
+            "name": "APPLICATION_NAME",
+            "value": "[parameters('application')]"
+          },
+          // {
+          //   "name": "STORAGE_ACCOUNT_NAME",
+          //   "value": "[variables('storageAccounts_ripauisa_name')]"
+          // },
+          {
+            "name": "DEFAULT_COUNTY",
+            "value": "[parameters('agency_county')]"
+          },
+          {
+            "name": "ENVIRONMENT_TYPE",
+            "value": "[parameters('environment_type')]"
+          },
+          {
+            "name": "ENABLE_BEATS",
+            "value": "[parameters('enable_beats')]"
+          },
+          {
+            "name": "ENABLE_STOP_DEBUGGER",
+            "value": "[parameters('enable_stop_debugger')]"
+          },
+          {
+            "name": "DEPLOY_WEB_CONFIG_JSON",
+            "value": "True"
+          }
+        ],
+        "primaryScriptUri": "#{ZMP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
+        "supportingScriptUris": [
+          "#{ZMP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{ZMP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{ZMP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{ZMP-CONFIG-JSON-SAS-URL}#",
+          "#{ZMP-DOMAIN-ZIP-SAS-URL}#",
+          "#{ZMP-STOP-ZIP-SAS-URL}#",
+          "#{ZMP-SUBMISSION-ZIP-SAS-URL}#",
+          "#{ZMP-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{ZMP-USERPROFILE-ZIP-SAS-URL}#",
+          "#{ZMP-UI-ZIP-SAS-URL}#"
+        ],
+        "timeout": "PT4H",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT4H"
+      }
+    }
   ],
   "outputs": {
     "resourcegroup_name": {
