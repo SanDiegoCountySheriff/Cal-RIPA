@@ -12,6 +12,8 @@ import {
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
   ACTIONS_TAKEN,
+  NON_FORCE_ACTIONS_TAKEN,
+  FORCE_ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   CONTRABAND_TYPES,
@@ -74,6 +76,7 @@ export const defaultStop = () => {
   return {
     actionsTaken: {
       anyActionsTaken: true,
+      anyForceActionsTaken: false,
     },
     id: 0,
     internalId: nanoid(),
@@ -177,12 +180,15 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
-  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
-  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
-  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
-  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
+  if (apiStop.stopType !== null) {
+    items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+  }
+  items.push({ id: 'A3', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A4', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -210,6 +216,14 @@ const getSummaryPersonCount = apiStop => {
     level: 1,
     header: 'Person Count',
     detail: apiStop.listPersonStopped.length,
+  }
+}
+
+const getSummaryStopType = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop Type',
+    detail: apiStop.stopType,
   }
 }
 
@@ -316,6 +330,8 @@ const getSummaryOfficer = apiStop => {
         header: 'Officer Name',
         detail: apiStop.officerName,
       },
+      { header: 'Officer Race', detail: apiStop.officerRace },
+      { header: 'Officer Gender', detail: apiStop.officerGender },
       { header: 'Years Experience', detail: apiStop.expYears },
       { header: 'Assignment', detail: apiStop.officerAssignment.type },
       {
@@ -350,33 +366,46 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    if (person.genderNonconforming !== null) {
+      items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
     items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
-    items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
+    if (person.perceivedUnhoused !== null) {
+      items.push({ id: 'B7', content: getSummaryPerceivedUnhoused(person) })
+    }
+    items.push({ id: 'B8', content: getSummaryLimitedEnglish(person) })
     items.push({
-      id: 'B8',
+      id: 'B9',
       content: getSummaryPerceivedOrKnownDisability(person),
     })
-    items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    items.push({ id: 'B10', content: getSummaryReasonForStop(person) })
     items.push({
-      id: 'B10',
+      id: 'B11',
       content: getSummaryReasonForStopExplanation(person),
     })
-    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
-    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+    if (person.listActionTakenDuringStop !== null) {
+      items.push({ id: 'B12', content: getSummaryActionsTaken(person) })
+    }
+    if (person.listNonForceActionTakenDuringStop !== null) {
+      items.push({ id: 'B12', content: getSummaryNonForceActionsTaken(person) })
+    }
+    if (person.listForceActionTakenDuringStop !== null) {
+      items.push({ id: 'B13', content: getSummaryForceActionsTaken(person) })
+    }
+    items.push({ id: 'B14', content: getSummaryBasisForSearch(person) })
     items.push({
-      id: 'B13',
+      id: 'B15',
       content: getSummaryBasisForSearchExplanation(person),
     })
     items.push({
-      id: 'B14',
+      id: 'B16',
       content: getSummaryBasisForPropertySeizure(person),
     })
-    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
-    items.push({ id: 'B16', content: getSummaryContraband(person) })
-    items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
+    items.push({ id: 'B17', content: getSummaryTypeOfPropertySeized(person) })
+    items.push({ id: 'B18', content: getSummaryContraband(person) })
+    items.push({ id: 'B19', content: getSummaryResultOfStop(person) })
     return items
   }
   return []
@@ -416,7 +445,7 @@ const getSummaryPerceivedGender = person => {
 const getSummaryGenderNonconforming = person => {
   return {
     level: 1,
-    header: 'Gender Noncomforning',
+    header: 'Gender Nonconforming',
     detail: person.genderNonconforming,
   }
 }
@@ -434,6 +463,14 @@ const getSummaryPerceivedAge = person => {
     level: 1,
     header: 'Perceived Age',
     detail: person.perceivedAge,
+  }
+}
+
+const getSummaryPerceivedUnhoused = person => {
+  return {
+    level: 1,
+    header: 'Perceived Unhoused',
+    detail: person.perceivedUnhoused,
   }
 }
 
@@ -511,6 +548,38 @@ const getSummaryActionsTaken = person => {
   return {
     level: 2,
     header: 'Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryNonForceActionsTaken = person => {
+  const actions = person.listNonForceActionTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Non-Force-Related Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryForceActionsTaken = person => {
+  const actions = person.listForceActionTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Force-Related Actions Taken During Stop',
     children: actions,
   }
 }
@@ -836,6 +905,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -872,8 +942,17 @@ const getFullStopPeopleListed = apiStop => {
       person.listPerceivedOrKnownDisability[0].key !== '8'
 
     const anyActionsTaken =
-      person.listActionTakenDuringStop.length > 0 &&
-      person.listActionTakenDuringStop[0].key !== '24'
+      (person.listActionTakenDuringStop !== null &&
+        person.listActionTakenDuringStop.length > 0 &&
+        person.listActionTakenDuringStop[0].key !== '24') ||
+      (person.listNonForceActionTakenDuringStop !== null &&
+        person.listNonForceActionTakenDuringStop.length > 0 &&
+        person.listNonForceActionTakenDuringStop[0].key !== '18')
+
+    const anyForceActionsTaken =
+      person.listForceActionTakenDuringStop !== null &&
+      person.listForceActionTakenDuringStop.length > 0 &&
+      person.listForceActionTakenDuringStop[0].key !== '18'
 
     const anyContraband =
       person.listContrabandOrEvidenceDiscovered.length > 0 &&
@@ -887,9 +966,32 @@ const getFullStopPeopleListed = apiStop => {
       ? person.listPerceivedOrKnownDisability
       : []
 
-    const actionTakenDuringStop = anyActionsTaken
-      ? person.listActionTakenDuringStop
-      : []
+    let actionTakenDuringStop
+    if (person.listActionTakenDuringStop === null) {
+      actionTakenDuringStop = null
+    } else {
+      actionTakenDuringStop = anyActionsTaken
+        ? person.listActionTakenDuringStop
+        : []
+    }
+
+    let nonForceActionTakenDuringStop
+    if (person.listNonForceActionTakenDuringStop === null) {
+      nonForceActionTakenDuringStop = null
+    } else {
+      nonForceActionTakenDuringStop = anyActionsTaken
+        ? person.listNonForceActionTakenDuringStop
+        : []
+    }
+
+    let forceActionTakenDuringStop
+    if (person.listForceActionTakenDuringStop === null) {
+      forceActionTakenDuringStop = null
+    } else {
+      forceActionTakenDuringStop = anyForceActionsTaken
+        ? person.listForceActionTakenDuringStop
+        : []
+    }
 
     const contrabandOrEvidenceDiscovered = anyContraband
       ? person.listContrabandOrEvidenceDiscovered
@@ -905,13 +1007,23 @@ const getFullStopPeopleListed = apiStop => {
       perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: person.genderNonconforming,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedLgbt: person.perceivedLgbt,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
         anyActionsTaken,
-        actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
+        anyForceActionsTaken,
+        actionsTakenDuringStop: actionTakenDuringStop
+          ? getKeyArray(actionTakenDuringStop)
+          : null,
+        nonForceActionsTakenDuringStop: nonForceActionTakenDuringStop
+          ? getKeyArray(nonForceActionTakenDuringStop)
+          : null,
+        forceActionsTakenDuringStop: forceActionTakenDuringStop
+          ? getKeyArray(forceActionTakenDuringStop)
+          : null,
         personSearchConsentGiven: person.personSearchConsentGiven,
         propertySearchConsentGiven: person.propertySearchConsentGiven,
         basisForSearch: getKeyArray(person.listBasisForSearch),
@@ -979,14 +1091,26 @@ const getFullStopPeopleListed = apiStop => {
 const getStopReasonSearchOfPerson = person => {
   const reasonForStop = Number(person.reasonForStop.key)
   const anyActionsTaken =
-    person.listActionTakenDuringStop.length > 0 &&
-    person.listActionTakenDuringStop[0].key !== '24'
+    (person.listActionTakenDuringStop !== null &&
+      person.listActionTakenDuringStop.length > 0 &&
+      person.listActionTakenDuringStop[0].key !== '24') ||
+    (person.listNonForceActionTakenDuringStop !== null &&
+      person.listNonForceActionTakenDuringStop.length > 0 &&
+      person.listNonForceActionTakenDuringStop[0].key !== '18')
+
   const actionsTaken = person.listActionTakenDuringStop || []
+  const nonForceActionsTaken = person.listNonForceActionTakenDuringStop || []
   const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+  const mappedNonForceActionsTaken = nonForceActionsTaken.map(item =>
+    Number(item.key),
+  )
 
   if (reasonForStop === 6) {
     if (anyActionsTaken) {
       if (mappedActionsTaken.includes(18)) {
+        return true
+      }
+      if (mappedNonForceActionsTaken.includes(10)) {
         return true
       }
     }
@@ -998,14 +1122,26 @@ const getStopReasonSearchOfPerson = person => {
 const getStopReasonSearchOfProperty = person => {
   const reasonForStop = Number(person.reasonForStop.key)
   const anyActionsTaken =
-    person.listActionTakenDuringStop.length > 0 &&
-    person.listActionTakenDuringStop[0].key !== '24'
+    (person.listActionTakenDuringStop !== null &&
+      person.listActionTakenDuringStop.length > 0 &&
+      person.listActionTakenDuringStop[0].key !== '24') ||
+    (person.listNonForceActionTakenDuringStop !== null &&
+      person.listNonForceActionTakenDuringStop.length > 0 &&
+      person.listNonForceActionTakenDuringStop[0].key !== '18')
+
   const actionsTaken = person.listActionTakenDuringStop || []
+  const nonForceActionsTaken = person.listNonForceActionTakenDuringStop || []
   const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+  const mappedNonForceActionsTaken = nonForceActionsTaken.map(item =>
+    Number(item.key),
+  )
 
   if (reasonForStop === 6) {
     if (anyActionsTaken) {
       if (mappedActionsTaken.includes(20)) {
+        return true
+      }
+      if (mappedNonForceActionsTaken.includes(12)) {
         return true
       }
     }
@@ -1093,14 +1229,16 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
+    stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
-      genderNonconforming: person.genderNonconforming || false,
+      genderNonconforming: person.genderNonconforming,
       id: person.id,
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
       perceivedLgbt: person.perceivedLgbt || false,
+      perceivedUnhoused: person.perceivedUnhoused || null,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
@@ -1207,12 +1345,19 @@ export const fullStopToApiStop = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
+    officerRace: parsedApiStop
+      ? parsedApiStop.officerRace
+      : officer.officerRace,
+    officerGender: parsedApiStop
+      ? parsedApiStop.officerGender
+      : officer.officerGender,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
     stopDuration: duration ? duration.toString() : null,
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
+    stopType: fullStop.stopType,
   }
 }
 
@@ -1223,11 +1368,22 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
         person.actionsTaken?.basisForSearchPiiFound || false,
-      genderNonconforming: person.genderNonconforming || false,
       id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
-      listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      listActionTakenDuringStop:
+        person.actionsTaken.actionsTakenDuringStop !== null &&
+        person.actionsTaken.actionsTakenDuringStop !== undefined
+          ? getActionsTakenDuringStop(person)
+          : null,
+      listNonForceActionTakenDuringStop:
+        person.actionsTaken?.nonForceActionsTakenDuringStop !== null
+          ? getNonForceActionsTakenDuringStop(person)
+          : null,
+      listForceActionTakenDuringStop:
+        person.actionsTaken?.forceActionsTakenDuringStop !== null
+          ? getForceActionsTakenDuringStop(person)
+          : null,
       listBasisForPropertySeizure: getBasisForPropertySeizure(person),
       listBasisForSearch: getBasisForSearch(person),
       listContrabandOrEvidenceDiscovered:
@@ -1238,7 +1394,9 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
+      genderNonconforming: person.genderNonconforming,
       perceivedLgbt: person.perceivedLgbt || false,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
         person.actionsTaken?.personSearchConsentGiven || false,
@@ -1562,6 +1720,9 @@ const getReasonableSuspicionCode = (person, statutes) => {
 }
 
 const getActionsTakenDuringStop = person => {
+  if (person.actionsTaken.actionsTakenDuringStop === null) {
+    return null
+  }
   const actions = person.actionsTaken?.actionsTakenDuringStop || []
 
   const mappedItems = actions.map(item => {
@@ -1582,6 +1743,69 @@ const getActionsTakenDuringStop = person => {
   return [
     {
       key: '24',
+      action: 'None',
+    },
+  ]
+}
+
+const getNonForceActionsTakenDuringStop = person => {
+  if (person.actionsTaken.nonForceActionsTakenDuringStop === null) {
+    return null
+  }
+  const actions = person.actionsTaken?.nonForceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = NON_FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = {
+      key: item.toString(),
+      action: filteredAction?.name || '',
+    }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '18',
+      action: 'None',
+    },
+  ]
+}
+
+const getForceActionsTakenDuringStop = person => {
+  if (person.actionsTaken.forceActionsTakenDuringStop === null) {
+    return null
+  }
+
+  const actions = person.actionsTaken?.forceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = {
+      key: item.toString(),
+      action: filteredAction?.name || '',
+    }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '18',
       action: 'None',
     },
   ]

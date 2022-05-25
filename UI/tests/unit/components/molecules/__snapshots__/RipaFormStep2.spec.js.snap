@@ -36,7 +36,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                 <div class="v-input__slot">
                   <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-14" role="checkbox" type="checkbox" value="3">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latino(a)</label>
+                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latine(x)</label>
                 </div>
               </div>
             </div>
@@ -99,24 +99,29 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                 <div class="v-input__slot" style="height: auto;">
                   <div role="radiogroup" aria-labelledby="input-33" class="v-input--radio-group__input">
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-34" role="radio" type="radio" name="radio-33" value="1">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-34" role="radio" type="radio" name="radio-33" value="5">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-34" class="v-label theme--light" style="left: 0px; position: relative;">Male</label>
+                      </div><label for="input-34" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender man/boy</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-36" role="radio" type="radio" name="radio-33" value="2">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-36" role="radio" type="radio" name="radio-33" value="6">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Female</label>
+                      </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Cisgender woman/girl</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-38" role="radio" type="radio" name="radio-33" value="3">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-38" role="radio" type="radio" name="radio-33" value="7">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Male</label>
+                      </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;">Transgender man/boy</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-40" role="radio" type="radio" name="radio-33" value="4">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-40" role="radio" type="radio" name="radio-33" value="8">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-40" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Female</label>
+                      </div><label for="input-40" class="v-label theme--light" style="left: 0px; position: relative;">Transgender woman/girl</label>
+                    </div>
+                    <div class="v-radio theme--light">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-42" role="radio" type="radio" name="radio-33" value="9">
+                        <div class="v-input--selection-controls__ripple"></div>
+                      </div><label for="input-42" class="v-label theme--light" style="left: 0px; position: relative;">Nonbinary person</label>
                     </div>
                   </div>
                 </div>
@@ -126,28 +131,6 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
               </div>
             </div>
             <!---->
-          </div>
-        </div>
-        <div class="col-sm-12 col-12">
-          <div class="ripa-switch" style="max-width: 250px;">
-            <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-45" role="switch" type="checkbox" aria-disabled="false" value="">
-                    <div class="v-input--selection-controls__ripple"></div>
-                    <div class="v-input--switch__track theme--light"></div>
-                    <div class="v-input--switch__thumb theme--light">
-                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
-                    </div>
-                  </div><label for="input-45" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Gender Nonconforming
-                  </label>
-                </div>
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -164,13 +147,13 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
             <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-55" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-52" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-55" class="v-label theme--light" style="left: 0px; position: relative;">
+                  </div><label for="input-52" class="v-label theme--light" style="left: 0px; position: relative;">
                     Perceived as LGBT
                   </label>
                 </div>
@@ -193,11 +176,42 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
           <div class="v-input theme--light v-text-field" min="1" max="1250">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-64" class="v-label theme--light" style="left: 0px; position: absolute;">Perceived Age</label><input inputmode="numeric" min="0" id="input-64" type="number"></div>
+                <div class="v-text-field__slot"><label for="input-61" class="v-label theme--light" style="left: 0px; position: absolute;">Perceived Age</label><input inputmode="numeric" min="0" id="input-61" type="number"></div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">
                   <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tw-pb-4">
+    <div class="ripa-form-header">
+      <div class="row tw-ml-1 tw-mt-1">
+        <!----> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Perceived Unhoused</span></div>
+      </div>
+    </div>
+    <div class="container">
+      <div no="" gutters="" class="row">
+        <div class="col-sm-12 col-12">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-69" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-69" class="v-label theme--light" style="left: 0px; position: relative;">
+                    Perceived Unhoused
+                  </label>
                 </div>
               </div>
             </div>
@@ -220,13 +234,13 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
             <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-72" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-76" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-72" class="v-label theme--light" style="left: 0px; position: relative;">
+                  </div><label for="input-76" class="v-label theme--light" style="left: 0px; position: relative;">
                     Limited or no English fluency
                   </label>
                 </div>
@@ -250,13 +264,13 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
             <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-81" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-85" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-81" class="v-label theme--light" style="left: 0px; position: relative;">
+                  </div><label for="input-85" class="v-label theme--light" style="left: 0px; position: relative;">
                     Any Disabilities?
                   </label>
                 </div>

@@ -39,6 +39,8 @@ describe('Ripa Form Container', () => {
       assignment: 1,
       officerId: '000000001',
       officerName: 'John Smith',
+      officerRace: 'race',
+      officerGender: 'gender',
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,
@@ -154,6 +156,8 @@ describe('Ripa Form Container', () => {
     const expectedUser = {
       agency: 'SDSD',
       assignment: 1,
+      officerRace: 'race',
+      officerGender: 'gender',
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,
@@ -182,7 +186,7 @@ describe('Ripa Form Container', () => {
 
     expect(addApiStop).toHaveBeenCalledTimes(1)
     expect(setLastLocation).toHaveBeenCalledTimes(0)
-    expect(wrapper.vm.snackbatNotOnlineVisible).toBeFalsy()
+    expect(wrapper.vm.snackbarNotOnlineVisible).toBeFalsy()
   })
 
   it('should handle submit stop not admin and online', () => {

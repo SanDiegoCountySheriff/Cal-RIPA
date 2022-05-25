@@ -32,4 +32,16 @@ describe('Ripa Race', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it('should contain "Hispanic/Latine(x)"', () => {
+    wrapper = mount(RipaRace, {
+      vuetify,
+      propsData: {
+        value: stop,
+      },
+    })
+
+    expect(wrapper.html()).toContain('Hispanic/Latine(x)')
+    expect(wrapper.html()).not.toContain('Hispanic/Latino(a)')
+  })
 })

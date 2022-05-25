@@ -487,6 +487,7 @@ export default {
           stopResult: this.stop?.stopResult || null,
         }
         let updatedFullStop = Object.assign({}, this.fullStop)
+        updatedFullStop.stopType = this.stop.stopType
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
         updatedFullStop.internalId = this.stop.internalId

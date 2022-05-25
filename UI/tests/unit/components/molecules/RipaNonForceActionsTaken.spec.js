@@ -1,4 +1,4 @@
-import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaNonForceActionsTaken from '@/components/molecules/RipaNonForceActionsTaken'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
 import { shallowMount, mount } from '@vue/test-utils'
@@ -15,7 +15,7 @@ describe('Ripa Actions Taken', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaActionsTaken, {
+    return shallowMount(RipaNonForceActionsTaken, {
       vuetify,
       propsData: {
         ...propsData,
@@ -25,7 +25,10 @@ describe('Ripa Actions Taken', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaActionsTaken, { vuetify, propsData: { value: stop } })
+    wrapper = mount(RipaNonForceActionsTaken, {
+      vuetify,
+      propsData: { value: stop },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -91,7 +94,7 @@ describe('Ripa Actions Taken', () => {
     ])
 
     wrapper.vm.viewModel.actionsTaken.anyActionsTaken = true
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [1]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [1]
 
     expect(wrapper.vm.actionsTakenRules).toEqual([true])
   })
@@ -105,7 +108,7 @@ describe('Ripa Actions Taken', () => {
     ])
 
     wrapper.vm.viewModel.actionsTaken.personSearchConsentGiven = true
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [10]
     wrapper.vm.viewModel.actionsTaken.basisForSearch = [2]
 
     expect(wrapper.vm.basisForSearchRules).toEqual([
@@ -114,7 +117,7 @@ describe('Ripa Actions Taken', () => {
     ])
 
     wrapper.vm.viewModel.actionsTaken.personSearchConsentGiven = true
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [10]
     wrapper.vm.viewModel.actionsTaken.basisForSearch = [1]
 
     expect(wrapper.vm.basisForSearchRules).toEqual([true, true])
@@ -174,24 +177,24 @@ describe('Ripa Actions Taken', () => {
 
   it('should get actions taken general items', () => {
     wrapper = factory({ value: stop })
-    wrapper.vm.actionsTakenItems = [
+    wrapper.vm.nonForceActionsTakenItems = [
       { value: 1 },
       { value: 2 },
+      { value: 8 },
+      { value: 10 },
       { value: 17 },
-      { value: 18 },
-      { value: 23 },
     ]
 
     wrapper.vm.viewModel.person.isStudent = true
-    expect(wrapper.vm.getActionsTakenGeneralItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenGeneralItems).toEqual([
       { value: 1 },
       { value: 2 },
-      { value: 23 },
+      { value: 17 },
     ])
 
     wrapper.vm.viewModel.person.isStudent = false
 
-    expect(wrapper.vm.getActionsTakenGeneralItems).toEqual([
+    expect(wrapper.vm.getNonForceActionsTakenGeneralItems).toEqual([
       { value: 1 },
       { value: 2 },
     ])
@@ -199,31 +202,31 @@ describe('Ripa Actions Taken', () => {
 
   it('should get actions taken search items', () => {
     wrapper = factory({ value: stop })
-    wrapper.vm.actionsTakenItems = [
+    wrapper.vm.nonForceActionsTakenItems = [
       { value: 1 },
       { value: 2 },
+      { value: 8 },
+      { value: 10 },
+      { value: 11 },
+      { value: 12 },
       { value: 17 },
-      { value: 18 },
-      { value: 19 },
-      { value: 20 },
-      { value: 23 },
     ]
 
-    expect(wrapper.vm.getActionsTakenSearchItems).toEqual([
-      { value: 17, disabled: false },
-      { value: 18, disabled: false },
-      { value: 19, disabled: false },
-      { value: 20, disabled: false },
+    expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
+      { value: 8, disabled: false },
+      { value: 10, disabled: false },
+      { value: 11, disabled: false },
+      { value: 12, disabled: false },
     ])
 
     wrapper.vm.isAnyActionsTakenDisabled1 = true
     wrapper.vm.isAnyActionsTakenDisabled2 = true
 
-    expect(wrapper.vm.getActionsTakenSearchItems).toEqual([
-      { value: 17, disabled: false },
-      { value: 18, disabled: true },
-      { value: 19, disabled: false },
-      { value: 20, disabled: true },
+    expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
+      { value: 8, disabled: false },
+      { value: 10, disabled: true },
+      { value: 11, disabled: false },
+      { value: 12, disabled: true },
     ])
   })
 
@@ -236,14 +239,14 @@ describe('Ripa Actions Taken', () => {
       { value: 13 },
     ]
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = null
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = null
 
     expect(wrapper.vm.getBasisForSearchItems).toEqual([
       { value: 1 },
       { value: 2 },
     ])
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [20]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [12]
     wrapper.vm.viewModel.actionsTaken.basisForSearch = []
 
     expect(wrapper.vm.getBasisForSearchItems).toEqual([
@@ -287,11 +290,11 @@ describe('Ripa Actions Taken', () => {
   it('should validate was search of person or property conducted', () => {
     wrapper = factory({ value: stop })
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = null
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = null
 
     expect(wrapper.vm.wasSearchOfPersonOrPropertyConducted).toBeFalsy()
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [10]
     wrapper.vm.viewModel.actionsTaken.basisForSearch = []
 
     expect(wrapper.vm.wasSearchOfPersonOrPropertyConducted).toBeTruthy()
@@ -312,7 +315,7 @@ describe('Ripa Actions Taken', () => {
 
     expect(wrapper.vm.wasAskedForConsentToSearchPerson).toBeFalsy()
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [17]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [8]
 
     expect(wrapper.vm.wasAskedForConsentToSearchPerson).toBeTruthy()
   })
@@ -322,7 +325,7 @@ describe('Ripa Actions Taken', () => {
 
     expect(wrapper.vm.wasAskedForConsentToSearchProperty).toBeFalsy()
 
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [19]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [11]
 
     expect(wrapper.vm.wasAskedForConsentToSearchProperty).toBeTruthy()
   })
@@ -339,7 +342,7 @@ describe('Ripa Actions Taken', () => {
     expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeFalsy()
 
     wrapper.vm.viewModel.actionsTaken.basisForSearch = [3]
-    wrapper.vm.viewModel.actionsTaken.actionsTakenDuringStop = [18]
+    wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [10]
 
     expect(wrapper.vm.isBasisForSearchExplanationVisible).toBeTruthy()
   })

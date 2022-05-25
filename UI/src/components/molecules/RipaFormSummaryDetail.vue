@@ -219,7 +219,7 @@ export default {
   props: {
     apiStop: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     title: {
       type: String,
@@ -240,24 +240,19 @@ export default {
     onDeletePerson: {
       type: Function,
       required: false,
-      default: () => {},
     },
     onCopyPerson: {
       type: Function,
       required: false,
-      default: () => {},
     },
     onEditAgencyQuestions: {
       type: Function,
-      required: true,
     },
     onEditStop: {
       type: Function,
-      required: true,
     },
     onEditPerson: {
       type: Function,
-      required: true,
     },
   },
 }

@@ -1,39 +1,37 @@
-import RipaFormStep5 from '@/components/molecules/RipaFormStep5.vue'
-import { shallowMount, mount } from '@vue/test-utils'
+import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
+import { mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Step 5', () => {
-  let vuetify
   let wrapper
+  let vuetify
 
   beforeEach(() => {
     vuetify = new Vuetify()
   })
 
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
   const factory = propsData => {
-    return shallowMount(RipaFormStep5, {
+    return mount(RipaFormStep5, {
       vuetify,
       propsData: {
         ...propsData,
-        onOpenFavorites: jest.fn(),
-        onSaveFavorite: jest.fn(),
       },
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep5, {
-      vuetify,
-      propsData: {
-        onOpenFavorites: jest.fn(),
-        onSaveFavorite: jest.fn(),
-      },
-    })
+    wrapper = factory()
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it.todo('should handle step 5 next')
+
+  it.todo('should get model')
+
+  it.todo('should handle close dialog')
+
+  it.todo('should handle input')
+
+  it.todo('should watch value')
 })

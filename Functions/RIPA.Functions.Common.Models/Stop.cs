@@ -78,10 +78,13 @@ namespace RIPA.Functions.Common.Models
         public string Agency { get; set; }
         public string OfficerId { get; set; }
         public string OfficerName { get; set; }
+        public string OfficerRace { get; set; }
+        public string OfficerGender { get; set; }
         public string ExpYears { get; set; }
         public OfficerAssignment OfficerAssignment { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+        public string StopType { get; set; }
         public DateTime StopDateTime
         {
             get
@@ -174,12 +177,15 @@ namespace RIPA.Functions.Common.Models
         public PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
-        public bool GenderNonconforming { get; set; }
+        public bool? GenderNonconforming { get; set; }
         public bool PerceivedLgbt { get; set; }
+        public bool? PerceivedUnhoused { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string ReasonForStopExplanation { get; set; }
         public bool ReasonForStopPiiFound { get; set; }
         public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+        public NonForceActionTakenDuringStop[] ListNonForceActionTakenDuringStop { get; set; }
+        public ForceActionTakenDuringStop[] ListForceActionTakenDuringStop { get; set; }
         public bool PersonSearchConsentGiven { get; set; }
         public bool PropertySearchConsentGiven { get; set; }
         public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
@@ -236,6 +242,18 @@ namespace RIPA.Functions.Common.Models
     }
 
     public class ActionTakenDuringStop
+    {
+        public string Action { get; set; }
+        public string Key { get; set; }
+    }
+
+    public class NonForceActionTakenDuringStop
+    {
+        public string Action { get; set; }
+        public string Key { get; set; }
+    }
+
+    public class ForceActionTakenDuringStop
     {
         public string Action { get; set; }
         public string Key { get; set; }

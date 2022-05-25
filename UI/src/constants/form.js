@@ -28,16 +28,21 @@ export const DISABILITIES = [
 ]
 
 export const GENDERS = [
-  { name: 'Male', value: 1 },
-  { name: 'Female', value: 2 },
-  { name: 'Transgender Male', value: 3 },
-  { name: 'Transgender Female', value: 4 },
+  { name: 'Male', value: 1, disabled: true },
+  { name: 'Female', value: 2, disabled: true },
+  { name: 'Transgender Male', value: 3, disabled: true },
+  { name: 'Transgender Female', value: 4, disabled: true },
+  { name: 'Cisgender man/boy', value: 5, disabled: false },
+  { name: 'Cisgender woman/girl', value: 6, disabled: false },
+  { name: 'Transgender man/boy', value: 7, disabled: false },
+  { name: 'Transgender woman/girl', value: 8, disabled: false },
+  { name: 'Nonbinary person', value: 9, disabled: false },
 ]
 
 export const RACES = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },
-  { name: 'Hispanic/Latino(a)', value: 3 },
+  { name: 'Hispanic/Latine(x)', value: 3 },
   { name: 'Middle Eastern or South Asian', value: 4 },
   { name: 'Native American', value: 5 },
   { name: 'Pacific Islander', value: 6 },
@@ -119,7 +124,7 @@ export const REASONABLE_SUSPICIONS = [
     name: 'Other reasonable suspicion or probable cause that a crime has occurred',
     value: 10,
   },
-]
+
 
 export const ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
@@ -145,6 +150,58 @@ export const ACTIONS_TAKEN = [
   { name: 'Property was seized', value: 21 },
   { name: 'Vehicle impounded', value: 22 },
   { name: 'Admission or written statement obtained from student', value: 23 },
+]
+
+export const NON_FORCE_ACTIONS_TAKEN = [
+  { name: 'Person removed from vehicle by order', value: 1 },
+  { name: 'Field sobriety test conducted', value: 2 },
+  { name: 'Curbside detention', value: 3 },
+  { name: 'Patrol car detention', value: 4 },
+  {
+    name: 'Canine used to search for, locate, and/or detect contraband',
+    value: 5,
+  },
+  { name: 'Person photographed', value: 6 },
+  {
+    name: 'Asked whether the person is on parole, probabation, PRCS, or some other form of mandatory supervision',
+    value: 7,
+  },
+  { name: 'Asked for consent to search person', value: 8 },
+  {
+    name: "Terry v. Ohio frisk/pat search of person's outer clothing was conducted",
+    value: 9,
+  },
+  { name: 'Search of person was conducted', value: 10 },
+  { name: 'Asked for consent to search property', value: 11 },
+  { name: 'Search of property was conducted', value: 12 },
+  { name: 'Property was seized', value: 13 },
+  { name: 'Vehicle impounded', value: 14 },
+  { name: "Ran name of stopped person's passenger", value: 15 },
+  { name: "Asked for identification of stopped person's passenger", value: 16 },
+  { name: 'Admission or written statement obtained from student', value: 17 },
+]
+
+export const FORCE_ACTIONS_TAKEN = [
+  { name: 'Handcuffed for flex cuffed', value: 1 },
+  { name: 'Physical compliance tactics and techniques', value: 2 },
+  {
+    name: "Peace officer's canine removed from patrol vehicle to gain compliance and/or for purposes of apprehending stopped person",
+    value: 3,
+  },
+  { name: "Peace officer's canine bit or held person", value: 4 },
+  { name: 'Firearm pointed at person', value: 5 },
+  { name: 'Firearm discharged', value: 6 },
+  { name: 'Firearm unholstered', value: 7 },
+  { name: 'Electronic control device pointed at person or sparked', value: 8 },
+  { name: 'Electronic control device used in dart-mode', value: 9 },
+  { name: 'Electronic control device used in drive-stun mode', value: 10 },
+  { name: 'Impact projectile weapon pointed at person', value: 11 },
+  { name: 'Impact projectile discharged or used', value: 12 },
+  { name: 'Baton or other impact weapon drawn', value: 13 },
+  { name: 'Baton or other impact weapon used to strike or prod', value: 14 },
+  { name: 'Chemical spray used', value: 15 },
+  { name: 'Person removed from vehicle by physical contact', value: 16 },
+  { name: 'Use of vehicle in apprehension of stopped person', value: 17 },
 ]
 
 export const BASIS_FOR_SEARCH = [

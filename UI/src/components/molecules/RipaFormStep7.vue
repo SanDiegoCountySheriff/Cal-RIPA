@@ -1,27 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-form-summary
+    <ripa-agency-questions
       v-model="model"
-      edit-buttons
-      :api-stop="apiStop"
-      :admin-editing="adminEditing"
-      :admin-viewing="adminViewing"
-      :on-copy-person="onCopyPerson"
-      :on-edit-agency-questions="onEditAgencyQuestions"
-      :on-edit-stop="onEditStop"
-      :on-edit-person="onEditPerson"
-      :on-delete-person="onDeletePerson"
-    ></ripa-form-summary>
-
-    <v-spacer></v-spacer>
-
-    <template v-if="adminEditing">
-      <ripa-edit-stop-explanation v-model="model"></ripa-edit-stop-explanation>
-      <ripa-override-pii
-        :api-stop="apiStop"
-        v-model="model"
-      ></ripa-override-pii>
-    </template>
+      :on-open-statute="onOpenStatute"
+    ></ripa-agency-questions>
 
     <v-spacer></v-spacer>
 
@@ -32,40 +14,32 @@
       </ripa-alert>
     </template>
 
-    <template v-if="!adminEditing && !adminViewing">
-      <div class="tw-flex tw-mt-4 tw-justify-center">
-        <v-btn color="primary" class="tw-mt-2" @click="handleAddPerson">
-          <v-icon left> mdi-plus </v-icon>
-          Add Person
+    <div class="tw-flex tw-mt-8 tw-justify-center">
+      <template v-if="backButtonVisible">
+        <v-btn
+          outlined
+          color="primary"
+          class="tw-mr-2"
+          :disabled="isBackNextDisabled"
+          @click="handleBack"
+        >
+          Back
         </v-btn>
-      </div>
-    </template>
-
-    <template v-if="adminViewing">
-      <div class="tw-flex tw-mt-8 tw-justify-center">
-        <v-btn color="primary" class="tw-mr-2" @click="handleDone">
-          Done
-        </v-btn>
-      </div>
-    </template>
-
-    <template v-else>
-      <div class="tw-flex tw-mt-8 tw-justify-center">
-        <v-btn color="error" class="tw-mr-2" @click="handleCancel">
-          Cancel
-        </v-btn>
-        <v-btn color="primary" @click="handleSubmit"> Submit </v-btn>
-      </div>
-    </template>
+      </template>
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="isBackNextDisabled" @click="handleNext">
+        Next
+      </v-btn>
+    </div>
   </v-form>
 </template>
 
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
+import RipaAgencyQuestions from '@/components/molecules/RipaAgencyQuestions'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaFormSummary from '@/components/molecules/RipaFormSummary'
-import RipaEditStopExplanation from '@/components/molecules/RipaEditStopExplanation'
-import RipaOverridePii from '@/components/molecules/RipaOverridePii'
 
 export default {
   name: 'ripa-form-step7',
@@ -74,15 +48,13 @@ export default {
 
   components: {
     RipaAlert,
-    RipaFormSummary,
-    RipaEditStopExplanation,
-    RipaOverridePii,
+    RipaAgencyQuestions,
   },
 
   props: {
-    apiStop: {
-      type: Object,
-      default: () => {},
+    backButtonVisible: {
+      type: Boolean,
+      default: true,
     },
   },
 }

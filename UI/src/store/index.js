@@ -54,6 +54,8 @@ export default new Vuex.Store({
       isAuthenticated: false,
       officerId: null,
       officerName: null,
+      officerRace: null,
+      officerGender: null,
       assignment: null,
       otherType: null,
     },
@@ -192,6 +194,8 @@ export default new Vuex.Store({
         name: state.user.name,
         officerId: state.user.officerId,
         officerName: state.user.officerName,
+        officerRace: state.user.officerRace,
+        officerGender: state.user.officerGender,
         oid: state.user.oid,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
@@ -450,6 +454,8 @@ export default new Vuex.Store({
         favoriteReasons: value.favoriteReasons || '',
         favoriteResults: value.favoriteResults || '',
         officerId: value.officerId,
+        officerRace: value.officerRace,
+        officerGender: value.officerGender,
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
@@ -460,6 +466,8 @@ export default new Vuex.Store({
         assignment: state.user.assignment,
         officerId: state.user.officerId,
         officerName: state.user.fullName,
+        officerRace: state.user.officerRace,
+        officerGender: state.user.officerGender,
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
@@ -843,6 +851,8 @@ export default new Vuex.Store({
         firstName: state.user.firstName,
         id: state.user.oid,
         lastName: state.user.lastName,
+        officerRace: mappedUser.officerRace,
+        officerGender: mappedUser.officerGender,
         name: state.user.fullName,
         officerId: state.user.officerId,
         otherType: mappedUser.otherType,
@@ -1572,11 +1582,18 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
-          commit('updateInvalidUser', false)
+          if (!response.data.officerRace || !response.data.officerGender) {
+            commit('updateInvalidUser', true)
+            return true
+          } else {
+            commit('updateInvalidUser', false)
+            return false
+          }
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
           commit('updateInvalidUser', true)
+          return false
         })
     },
 

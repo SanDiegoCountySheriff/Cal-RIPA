@@ -3,56 +3,37 @@
 exports[`Ripa User should match snapshot 1`] = `
 <div class="ripa-user">
   <div class="container">
-    <!---->
-    <div class="row no-gutters">
-      <div class="col-sm-12 col-md-6 col-12">
-        <div class="md:tw-mr-4">
-          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-3" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Start Date</label><input id="input-3" type="date"></div>
-                <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
-                </div>
-                <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
-                </div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-6 col-12">
-        <div>
-          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-9" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Years of Experience</label><input inputmode="numeric" min="0" id="input-9" type="number"></div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-sm-12 col-md-6 col-12">
-        <div class="md:tw-mr-4">
-          <div class="ripa-text-input">
-            <!---->
+    <form novalidate="novalidate" class="v-form">
+      <!---->
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="md:tw-mr-4">
             <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-13" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Agency</label><input id="input-13" type="text"></div>
+                  <div class="v-text-field__slot"><label for="input-4" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Start Date</label><input id="input-4" type="date"></div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
+                  </div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+                  </div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-12">
+          <div>
+            <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-10" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Years of Experience</label><input inputmode="numeric" min="0" id="input-10" type="number"></div>
                 </div>
                 <div class="v-text-field__details">
                   <div class="v-messages theme--light">
@@ -64,39 +45,91 @@ exports[`Ripa User should match snapshot 1`] = `
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-6 col-12">
-        <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--solo-flat v-select">
-          <div class="v-input__control">
-            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-17" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-17" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Officer Assignment</label>
-                <div class="v-select__selections">
-                  <div class="v-select__selection v-select__selection--comma">Other</div><input clerable="" required="required" id="input-17" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="md:tw-mr-4">
+            <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
+              <div class="v-input__control">
+                <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-14" class="v-input__slot">
+                  <div class="v-select__slot"><label for="input-14" class="v-label theme--light" style="left: 0px; position: absolute;">Officer Race</label>
+                    <div class="v-select__selections"><input clerable="" required="required" id="input-14" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                    <div class="v-input__append-inner">
+                      <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                    </div><input type="hidden">
+                  </div>
+                  <div class="v-menu">
+                    <!---->
+                  </div>
                 </div>
-                <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
-                </div><input type="hidden" value="10">
-              </div>
-              <div class="v-menu">
-                <!---->
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="v-text-field__details">
-              <div class="v-messages theme--light">
-                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-12">
+          <div>
+            <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
+              <div class="v-input__control">
+                <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-20" class="v-input__slot">
+                  <div class="v-select__slot"><label for="input-20" class="v-label theme--light" style="left: 0px; position: absolute;">Officer Gender</label>
+                    <div class="v-select__selections"><input clerable="" required="required" id="input-20" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                    <div class="v-input__append-inner">
+                      <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                    </div><input type="hidden">
+                  </div>
+                  <div class="v-menu">
+                    <!---->
+                  </div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-sm-12 col-12">
-        <div class="ripa-text-input">
-          <!---->
-          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="md:tw-mr-4">
+            <div class="ripa-text-input">
+              <!---->
+              <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+                <div class="v-input__control">
+                  <div class="v-input__slot">
+                    <div class="v-text-field__slot"><label for="input-26" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Agency</label><input id="input-26" type="text"></div>
+                  </div>
+                  <div class="v-text-field__details">
+                    <div class="v-messages theme--light">
+                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--solo-flat v-select">
             <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-23" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Other Type</label><input id="input-23" type="text"></div>
+              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-30" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-30" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Officer Assignment</label>
+                  <div class="v-select__selections">
+                    <div class="v-select__selection v-select__selection--comma">Other</div><input clerable="" required="required" id="input-30" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
+                  </div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                  </div><input type="hidden" value="10">
+                </div>
+                <div class="v-menu">
+                  <!---->
+                </div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">
@@ -107,7 +140,26 @@ exports[`Ripa User should match snapshot 1`] = `
           </div>
         </div>
       </div>
-    </div>
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-12">
+          <div class="ripa-text-input">
+            <!---->
+            <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-36" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Other Type</label><input id="input-36" type="text"></div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
     <!---->
   </div>
 </div>
