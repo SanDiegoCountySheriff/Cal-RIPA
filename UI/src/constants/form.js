@@ -116,7 +116,7 @@ export const REASONABLE_SUSPICIONS = [
     value: 9,
   },
   {
-    name: 'Other reasonable suspicion or probable cause that a crime has occured',
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
     value: 10,
   },
 ]
