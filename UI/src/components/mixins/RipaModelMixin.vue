@@ -25,8 +25,8 @@ export default {
         stepTrace: newValue.stepTrace || [],
         stopType: newValue.stopType,
         actionsTaken: {
-          AnyNonForceActionsTaken:
-            newValue.actionsTaken?.AnyNonForceActionsTaken || false,
+          anyNonForceActionsTaken:
+            newValue.actionsTaken?.anyNonForceActionsTaken || false,
           nonForceActionsTakenDuringStop:
             newValue.actionsTaken?.nonForceActionsTakenDuringStop || [],
           personSearchConsentGiven:
@@ -164,7 +164,7 @@ export default {
     },
 
     updateNonForceActionsTakenModel() {
-      if (!this.viewModel.actionsTaken.AnyNonForceActionsTaken) {
+      if (!this.viewModel.actionsTaken.anyNonForceActionsTaken) {
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop = null
         this.viewModel.actionsTaken.propertyWasSeized = false
         this.viewModel.actionsTaken.personSearchConsentGiven = false
@@ -206,8 +206,8 @@ export default {
       }
 
       if (this.viewModel.stopReason.searchOfPerson) {
-        this.isAnyNonForceActionsTakenDisabled1 = true
-        this.viewModel.actionsTaken.AnyNonForceActionsTaken = true
+        this.isanyNonForceActionsTakenDisabled1 = true
+        this.viewModel.actionsTaken.anyNonForceActionsTaken = true
         if (!actionsTaken.includes(10)) {
           if (
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop === null
@@ -219,8 +219,8 @@ export default {
         }
       }
       if (this.viewModel.stopReason.searchOfProperty) {
-        this.isAnyNonForceActionsTakenDisabled2 = true
-        this.viewModel.actionsTaken.AnyNonForceActionsTaken = true
+        this.isanyNonForceActionsTakenDisabled2 = true
+        this.viewModel.actionsTaken.anyNonForceActionsTaken = true
         if (!actionsTaken.includes(12)) {
           if (
             this.viewModel.actionsTaken.nonForceActionsTakenDuringStop === null
@@ -514,7 +514,7 @@ export default {
         const actionsTaken =
           this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
         if (this.viewModel.stopReason.searchOfPerson) {
-          this.viewModel.actionsTaken.AnyNonForceActionsTaken = true
+          this.viewModel.actionsTaken.anyNonForceActionsTaken = true
           if (!actionsTaken.includes(10)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===
@@ -538,7 +538,7 @@ export default {
           }
         }
         if (this.viewModel.stopReason.searchOfProperty) {
-          this.viewModel.actionsTaken.AnyNonForceActionsTaken = true
+          this.viewModel.actionsTaken.anyNonForceActionsTaken = true
           if (!actionsTaken.includes(12)) {
             if (
               this.viewModel.actionsTaken.nonForceActionsTakenDuringStop ===

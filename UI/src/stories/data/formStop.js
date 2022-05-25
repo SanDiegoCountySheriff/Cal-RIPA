@@ -71,7 +71,7 @@ export const sampleStop = {
     custodialArrestCodes: null,
   },
   actionsTaken: {
-    AnyNonForceActionsTaken: true,
+    anyNonForceActionsTaken: true,
     actionsTakenDuringStop: [1, 4, 5, 17, 18, 19, 20],
     personSearchConsentGiven: true,
     propertySearchConsentGiven: true,
@@ -158,7 +158,7 @@ export const onePersonFullStop = {
         custodialArrestCodes: null,
       },
       actionsTaken: {
-        AnyNonForceActionsTaken: true,
+        anyNonForceActionsTaken: true,
         actionsTakenDuringStop: [1, 4, 5, 17, 18, 19, 20],
         personSearchConsentGiven: true,
         propertySearchConsentGiven: true,
@@ -246,7 +246,7 @@ export const twoPersonFullStop = {
         custodialArrestCodes: null,
       },
       actionsTaken: {
-        AnyNonForceActionsTaken: true,
+        anyNonForceActionsTaken: true,
         actionsTakenDuringStop: [1, 4, 5, 17, 18, 19, 20],
         personSearchConsentGiven: true,
         propertySearchConsentGiven: true,
@@ -278,7 +278,7 @@ export const twoPersonFullStop = {
         reasonForStopPiiFound: false,
       },
       actionsTaken: {
-        AnyNonForceActionsTaken: true,
+        anyNonForceActionsTaken: true,
         actionsTakenDuringStop: [1, 3, 4, 5, 18, 17],
         personSearchConsentGiven: true,
         propertySearchConsentGiven: false,

@@ -15,10 +15,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 0,
     stopReason: {},
     searchOfPerson: false,
-    expectedIsAnyNonForceActionsTakenDisabled1: false,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: false,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: false,
-    expectedIsAnyNonForceActionsTakenDisabled2: false,
+    expectedIsanyNonForceActionsTakenDisabled2: false,
     expectedNonForceActionsTakenDuringStop: [],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -32,10 +32,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 1,
     stopReason: {},
     searchOfPerson: false,
-    expectedIsAnyNonForceActionsTakenDisabled1: false,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: false,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: false,
-    expectedIsAnyNonForceActionsTakenDisabled2: false,
+    expectedIsanyNonForceActionsTakenDisabled2: false,
     expectedNonForceActionsTakenDuringStop: [10, 12],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -49,10 +49,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 0,
     stopReason: {},
     searchOfPerson: true,
-    expectedIsAnyNonForceActionsTakenDisabled1: true,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: true,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: false,
-    expectedIsAnyNonForceActionsTakenDisabled2: false,
+    expectedIsanyNonForceActionsTakenDisabled2: false,
     expectedNonForceActionsTakenDuringStop: [10],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -66,10 +66,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 0,
     stopReason: {},
     searchOfPerson: true,
-    expectedIsAnyNonForceActionsTakenDisabled1: true,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: true,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: false,
-    expectedIsAnyNonForceActionsTakenDisabled2: false,
+    expectedIsanyNonForceActionsTakenDisabled2: false,
     expectedNonForceActionsTakenDuringStop: [10],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -83,10 +83,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 1,
     stopReason: {},
     searchOfPerson: false,
-    expectedIsAnyNonForceActionsTakenDisabled1: false,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: false,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: true,
-    expectedIsAnyNonForceActionsTakenDisabled2: true,
+    expectedIsanyNonForceActionsTakenDisabled2: true,
     expectedNonForceActionsTakenDuringStop: [12],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -100,10 +100,10 @@ const searchModelTests = [
     expectedSetPropertySearchCalledTimes: 0,
     stopReason: {},
     searchOfPerson: false,
-    expectedIsAnyNonForceActionsTakenDisabled1: false,
-    expectedAnyNonForceActionsTaken: true,
+    expectedIsanyNonForceActionsTakenDisabled1: false,
+    expectedanyNonForceActionsTaken: true,
     searchOfProperty: true,
-    expectedIsAnyNonForceActionsTakenDisabled2: true,
+    expectedIsanyNonForceActionsTakenDisabled2: true,
     expectedNonForceActionsTakenDuringStop: [12],
     expectedPersonSearchConsentGiven: false,
     expectedPropertySearchConsentGiven: false,
@@ -152,7 +152,7 @@ describe('Ripa Model Mixin', () => {
 
   it('should update non force actions taken model', () => {
     stop.actionsTaken.nonForceActionsTakenDuringStop = [16, 17]
-    stop.actionsTaken.AnyNonForceActionsTaken = true
+    stop.actionsTaken.anyNonForceActionsTaken = true
     wrapper = factory({ value: stop })
 
     wrapper.vm.updateNonForceActionsTakenModel()
@@ -164,7 +164,7 @@ describe('Ripa Model Mixin', () => {
 
   it('should update non force actions taken model for student', () => {
     stop.actionsTaken.nonForceActionsTakenDuringStop = [16, 17]
-    stop.actionsTaken.AnyNonForceActionsTaken = true
+    stop.actionsTaken.anyNonForceActionsTaken = true
     stop.person.isStudent = true
     wrapper = factory({ value: stop })
 
@@ -202,14 +202,14 @@ describe('Ripa Model Mixin', () => {
       expect(setPropertySearchAutomaticallySelected).toHaveBeenCalledTimes(
         searchModelTests.expectedSetPropertySearchCalledTimes,
       )
-      expect(wrapper.vm.isAnyNonForceActionsTakenDisabled1).toEqual(
-        searchModelTests.expectedIsAnyNonForceActionsTakenDisabled1,
+      expect(wrapper.vm.isanyNonForceActionsTakenDisabled1).toEqual(
+        searchModelTests.expectedIsanyNonForceActionsTakenDisabled1,
       )
-      expect(wrapper.vm.viewModel.actionsTaken.AnyNonForceActionsTaken).toEqual(
-        searchModelTests.expectedAnyNonForceActionsTaken,
+      expect(wrapper.vm.viewModel.actionsTaken.anyNonForceActionsTaken).toEqual(
+        searchModelTests.expectedanyNonForceActionsTaken,
       )
-      expect(wrapper.vm.isAnyNonForceActionsTakenDisabled2).toEqual(
-        searchModelTests.expectedIsAnyNonForceActionsTakenDisabled2,
+      expect(wrapper.vm.isanyNonForceActionsTakenDisabled2).toEqual(
+        searchModelTests.expectedIsanyNonForceActionsTakenDisabled2,
       )
       expect(
         wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop,

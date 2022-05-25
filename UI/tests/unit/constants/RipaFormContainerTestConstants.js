@@ -732,7 +732,7 @@ export const FULL_STOP = {
       actionsTaken: {
         actionsTakenDuringStop: [],
         nonForceActionsTakenDuringStop: null,
-        AnyNonForceActionsTaken: false,
+        anyNonForceActionsTaken: false,
         anyContraband: false,
         basisForPropertySeizure: [],
         basisForSearch: [],
@@ -852,7 +852,7 @@ export const V2_FULL_STOP = {
       actionsTaken: {
         nonForceActionsTakenDuringStop: [],
         actionsTakenDuringStop: null,
-        AnyNonForceActionsTaken: false,
+        anyNonForceActionsTaken: false,
         anyContraband: false,
         basisForPropertySeizure: [],
         basisForSearch: [],
@@ -981,7 +981,7 @@ export const STOP = {
     },
   ],
   actionsTaken: {
-    AnyNonForceActionsTaken: false,
+    anyNonForceActionsTaken: false,
     actionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
@@ -1100,7 +1100,7 @@ export const V2_STOP = {
     },
   ],
   actionsTaken: {
-    AnyNonForceActionsTaken: false,
+    anyNonForceActionsTaken: false,
     nonForceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,

@@ -13,8 +13,8 @@ export default {
   data() {
     return {
       viewModel: this.syncModel(this.value),
-      isAnyNonForceActionsTakenDisabled1: false,
-      isAnyNonForceActionsTakenDisabled2: false,
+      isanyNonForceActionsTakenDisabled1: false,
+      isanyNonForceActionsTakenDisabled2: false,
     }
   },
 

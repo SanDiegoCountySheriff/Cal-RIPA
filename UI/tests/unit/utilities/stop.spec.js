@@ -10,7 +10,7 @@ describe('stop', () => {
   it('should create a default stop', () => {
     const actual = stop.defaultStop()
 
-    expect(actual.actionsTaken).toEqual({ AnyNonForceActionsTaken: true })
+    expect(actual.actionsTaken).toEqual({ anyNonForceActionsTaken: true })
     expect(actual.id).toEqual(0)
     expect(actual.person.index).toEqual(1)
   })
