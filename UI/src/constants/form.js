@@ -102,23 +102,27 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Officer witnessed commission of a crime', value: 1 },
   { name: 'Matched suspect description', value: 2 },
   {
-    name: 'Witness or Victim identification of Suspect at the scene',
+    name: "Matched description of suspect's vehicle or vehicle observed at the scene of a crime",
     value: 3,
   },
-  { name: 'Carrying Suspicious Object', value: 4 },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime ',
+    value: 4,
+  },
+  { name: 'Carrying suspicious object', value: 5 },
   {
     name: 'Actions indicative of casing a victim or location',
-    value: 5,
+    value: 6,
   },
-  { name: 'Suspected of Acting as Lookout', value: 6 },
-  { name: 'Actions indicative of drug transaction', value: 7 },
+  { name: 'Suspected of acting as a lookout', value: 7 },
+  { name: 'Actions indicative of drug transaction', value: 8 },
   {
     name: 'Actions indicative of engaging in violent crime',
-    value: 8,
+    value: 9,
   },
   {
-    name: 'Other Reasonable Suspicion of a crime',
-    value: 9,
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 10,
   },
 ]
 
