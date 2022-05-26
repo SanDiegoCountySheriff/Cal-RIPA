@@ -76,6 +76,7 @@ export default new Vuex.Store({
     propertySearchAutomaticallySelected: false,
     stopQueryData: null,
     resetPagination: true,
+    apiUnavailable: false,
   },
 
   getters: {
@@ -314,6 +315,9 @@ export default new Vuex.Store({
     resetPagination: state => {
       return state.resetPagination
     },
+    isApiUnavailable: state => {
+      return state.apiUnavailable
+    },
   },
 
   mutations: {
@@ -406,6 +410,9 @@ export default new Vuex.Store({
         ...state.user,
         isInvalid: value,
       }
+    },
+    updateApiUnavailable(state, value) {
+      state.apiUnavailable = value
     },
     updateUserAccount(state, value) {
       if (value) {
@@ -1576,7 +1583,11 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
-          commit('updateInvalidUser', true)
+          if (error.response.status === 503) {
+            commit('updateApiUnavailable', true)
+          } else {
+            commit('updateInvalidUser', true)
+          }
         })
     },
 
