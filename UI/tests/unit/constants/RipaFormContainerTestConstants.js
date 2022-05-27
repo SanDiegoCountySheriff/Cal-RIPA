@@ -739,10 +739,8 @@ export const FULL_STOP = {
       actionsTaken: {
         actionsTakenDuringStop: [],
         nonForceActionsTakenDuringStop: null,
-
         anyNonForceActionsTaken: false,
         forceActionsTakenDuringStop: null,
-
         anyContraband: false,
         basisForPropertySeizure: [],
         basisForSearch: [],

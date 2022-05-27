@@ -75,7 +75,6 @@ export const defaultLocation = () => {
 export const defaultStop = () => {
   return {
     actionsTaken: {
-
       anyNonForceActionsTaken: true,
       anyForceActionsTaken: false,
     },
@@ -1014,11 +1013,8 @@ const getFullStopPeopleListed = apiStop => {
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
-
         anyNonForceActionsTaken,
-
         anyForceActionsTaken,
-
         actionsTakenDuringStop: actionTakenDuringStop
           ? getKeyArray(actionTakenDuringStop)
           : null,
