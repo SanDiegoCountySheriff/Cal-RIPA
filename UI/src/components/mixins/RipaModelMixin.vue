@@ -29,7 +29,6 @@ export default {
             newValue.actionsTaken?.anyNonForceActionsTaken || false,
           anyForceActionsTaken:
             newValue.actionsTaken?.anyForceActionsTaken || false,
-
           nonForceActionsTakenDuringStop:
             newValue.actionsTaken?.nonForceActionsTakenDuringStop || [],
           forceActionsTakenDuringStop:
