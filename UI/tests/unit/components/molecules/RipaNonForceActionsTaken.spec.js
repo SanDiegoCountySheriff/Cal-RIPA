@@ -93,7 +93,7 @@ describe('Ripa Actions Taken', () => {
       'At least one action taken is required',
     ])
 
-    wrapper.vm.viewModel.actionsTaken.anyActionsTaken = true
+    wrapper.vm.viewModel.actionsTaken.anyNonForceActionsTaken = true
     wrapper.vm.viewModel.actionsTaken.nonForceActionsTakenDuringStop = [1]
 
     expect(wrapper.vm.actionsTakenRules).toEqual([true])
@@ -219,8 +219,8 @@ describe('Ripa Actions Taken', () => {
       { value: 12, disabled: false },
     ])
 
-    wrapper.vm.isAnyActionsTakenDisabled1 = true
-    wrapper.vm.isAnyActionsTakenDisabled2 = true
+    wrapper.vm.isAnyNonForceActionsTakenDisabled1 = true
+    wrapper.vm.isAnyNonForceActionsTakenDisabled2 = true
 
     expect(wrapper.vm.getNonForceActionsTakenSearchItems).toEqual([
       { value: 8, disabled: false },
