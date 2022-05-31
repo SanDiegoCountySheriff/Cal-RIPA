@@ -72,7 +72,7 @@
                 multiple
                 custom-chip
                 :max-selections="5"
-                :rules="warningRules"
+                :rules="verbalWarningRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('warningCodes', $event)"
                 @input="handleInput"
@@ -113,7 +113,7 @@
                 multiple
                 custom-chip
                 :max-selections="5"
-                :rules="warningRules"
+                :rules="writtenWarningRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('warningCodes', $event)"
                 @input="handleInput"
@@ -451,15 +451,23 @@ export default {
       ]
     },
 
-    warningRules() {
+    verbalWarningRules() {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
       const checked2 = this.viewModel.stopResult.resultsOfStop1
-      const checked3 = this.viewModel.stopResult.resultsOfStop2
       const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
-          'An offense code is required' ||
-          (checked1 && checked3 && options !== null && options.length > 0),
+          'An offense code is required',
+      ]
+    },
+
+    writtenWarningRules() {
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop1
+      const options = this.viewModel.stopResult.warningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
       ]
     },
 

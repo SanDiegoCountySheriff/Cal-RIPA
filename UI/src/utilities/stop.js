@@ -1949,7 +1949,10 @@ const getResultOfStop = (person, statutes) => {
       key: item.toString(),
       result: filteredStopResult?.name || '',
     }
-    if (item === 1 || item === 2) {
+    if (item === 1) {
+      stopResult.listCodes = getVerbalWarningCodes(person, statutes)
+    }
+    if (item === 2) {
       stopResult.listCodes = getWarningCodes(person, statutes)
     }
     if (item === 3) {
@@ -1975,6 +1978,22 @@ const getResultOfStop = (person, statutes) => {
       result: 'None',
     },
   ]
+}
+
+const getVerbalWarningCodes = (person, statutes) => {
+  const codes = person.stopResult?.verbalWarningCodes || []
+
+  return codes.map(code => {
+    return getStatute(code, statutes)
+  })
+}
+
+const getWrittenWarningCodes = (person, statutes) => {
+  const codes = person.stopResult?.writtenWarningCodes || []
+
+  return codes.map(code => {
+    return getStatute(code, statutes)
+  })
 }
 
 const getWarningCodes = (person, statutes) => {
