@@ -111,6 +111,7 @@ export default {
         },
         stopResult: {
           anyResultsOfStop: newValue.stopResult?.anyResultsOfStop || false,
+          resultsOfStop1: newValue.stopResult?.resultsOfStop1 || false,
           resultsOfStop2: newValue.stopResult?.resultsOfStop2 || false,
           resultsOfStop3: newValue.stopResult?.resultsOfStop3 || false,
           resultsOfStop4: newValue.stopResult?.resultsOfStop4 || false,
@@ -572,6 +573,7 @@ export default {
 
     updateStopResultModel() {
       if (!this.viewModel.stopResult.anyResultsOfStop) {
+        this.viewModel.stopResult.resultsOfStop1 = false
         this.viewModel.stopResult.resultsOfStop2 = false
         this.viewModel.stopResult.resultsOfStop3 = false
         this.viewModel.stopResult.resultsOfStop4 = false
@@ -584,6 +586,10 @@ export default {
         this.viewModel.stopResult.resultsOfStop11 = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
+      }
+
+      if (!this.viewModel.stopResult.resultsOfStop1) {
+        this.viewModel.stopResult.warningCodes = null
       }
 
       if (!this.viewModel.stopResult.resultsOfStop2) {

@@ -216,7 +216,7 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop5"
-              label="Custodial arrest pursurant to outstanding warrant"
+              label="Custodial arrest pursuant to outstanding warrant"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"

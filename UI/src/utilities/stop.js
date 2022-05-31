@@ -144,6 +144,7 @@ export const stopResultGivenTemplate = template => {
   if (template === 'motor') {
     return {
       anyResultsOfStop: true,
+      resultsofStop1: false,
       resultsOfStop2: false,
       resultsOfStop3: true,
       resultsOfStop4: false,
@@ -1066,6 +1067,7 @@ const getFullStopPeopleListed = apiStop => {
       },
       stopResult: {
         anyResultsOfStop,
+        resultsOfStop1: getKeyFoundInArray(resultsOfStop, 1),
         resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
         resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
         resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
@@ -1884,6 +1886,7 @@ const getContrabandOrEvidenceDiscovered = person => {
 
 const getResultOfStop = (person, statutes) => {
   const types = []
+  const resultsOfStop1 = person.stopResult?.resultsOfStop1 || false
   const resultsOfStop2 = person.stopResult?.resultsOfStop2 || false
   const resultsOfStop3 = person.stopResult?.resultsOfStop3 || false
   const resultsOfStop4 = person.stopResult?.resultsOfStop4 || false
@@ -1897,6 +1900,9 @@ const getResultOfStop = (person, statutes) => {
   const resultsOfStop12 = person.stopResult?.resultsOfStop12 || false
   const resultsOfStop13 = person.stopResult?.resultsOfStop13 || false
 
+  if (resultsOfStop1) {
+    types.push(1)
+  }
   if (resultsOfStop2) {
     types.push(2)
   }
@@ -1943,7 +1949,7 @@ const getResultOfStop = (person, statutes) => {
       key: item.toString(),
       result: filteredStopResult?.name || '',
     }
-    if (item === 2) {
+    if (item === 1 || item === 2) {
       stopResult.listCodes = getWarningCodes(person, statutes)
     }
     if (item === 3) {
