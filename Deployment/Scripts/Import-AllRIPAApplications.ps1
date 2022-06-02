@@ -113,7 +113,7 @@ Write-Host "Publishing to:" $uiStorageAccountName
 $fileName = (Get-ChildItem -Path "./" -Filter "*ui.zip").Name
 Write-Host "Deploying UI package:" $fileName
 Expand-Archive -Path "./$fileName" -DestinationPath "./" -Force
-az storage blob upload-batch --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
+az storage blob upload-batch --overwrite true --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
 
 if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
 {
@@ -147,7 +147,7 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Set-Content -Path $configFilePath -Value $configJson -Force
 
     Write-Host "Uploading config.json"
-    az storage blob upload --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f './config.json' 
+    az storage blob upload --overwrite true --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f './config.json' 
 }
 
 Write-Host "Finished deploying & importing applications"
