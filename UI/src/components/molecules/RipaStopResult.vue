@@ -376,6 +376,18 @@ export default {
       return [1, 2, 3, 5].includes(reasonForStop)
     },
 
+    isPullReasonCodeVerbalWarningVisible() {
+      const codes = this.viewModel.stopResult?.verbalWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeWrittenWarningVisible() {
+      const codes = this.viewModel.stopResult?.writtenWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
     isPullReasonCodeWarningVisible() {
       const codes = this.viewModel.stopResult?.warningCodes || []
       const reasonCode = this.getReasonCode()
@@ -398,6 +410,14 @@ export default {
       const codes = this.viewModel.stopResult?.custodialArrestCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeVerbalWarningDisabled() {
+      return this.viewModel.stopResult?.verbalWarningCodes.length >= 5
+    },
+
+    isPullReasonCodeWrittenWarningDisabled() {
+      return this.viewModel.stopResult?.writtenWarningCodes.length >= 5
     },
 
     isPullReasonCodeWarningDisabled() {
@@ -534,6 +554,22 @@ export default {
       }
 
       return null
+    },
+
+    handlePullReasonCodeVerbalWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
+        this.viewModel.stopResult.verbalWarningCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeWrittenWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
+        this.viewModel.stopResult.writtenWarningCodes.push(reasonCode)
+      }
     },
 
     handlePullReasonCodeWarning() {
