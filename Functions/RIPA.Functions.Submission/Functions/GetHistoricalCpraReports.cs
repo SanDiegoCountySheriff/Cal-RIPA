@@ -26,7 +26,7 @@ namespace RIPA.Functions.Submission.Functions
         public GetHistoricalCpraReports()
         {
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = "cpra";
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
             _blobContainerClient = GetBlobContainerClient();
         }
 
@@ -70,8 +70,7 @@ namespace RIPA.Functions.Submission.Functions
         private BlobContainerClient GetBlobContainerClient()
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = $"{_storageContainerNamePrefix}";
-            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
             
             return blobContainerClient;
         }

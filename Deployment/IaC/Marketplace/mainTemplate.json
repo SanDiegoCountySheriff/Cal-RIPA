@@ -295,7 +295,6 @@
       "type": "string",
       "defaultValue": "CosmosConnectionString"
     },
-    
     "submission_fa_config_storage_container_prefix_results": {
       "type": "string",
       "defaultValue": "result"
@@ -303,6 +302,10 @@
     "submission_fa_config_storage_container_prefix_submissions": {
       "type": "string",
       "defaultValue": "submission"
+    },
+    "submission_fa_config_storage_container_prefix_cpra": {
+      "type": "string",
+      "defaultValue": "cpra"
     },
     "doj_environment": {
       "type": "string",
@@ -3083,6 +3086,10 @@
             {
               "name": "ContainerPrefixResults",
               "value": "[parameters('submission_fa_config_storage_container_prefix_results')]"
+            },
+            {
+              "name": "ContainerPrefixCpra",
+              "value": "[parameters('submission_fa_config_storage_container_prefix_cpra')]"
             },
             {
               "name": "UserProfileContainerName",
