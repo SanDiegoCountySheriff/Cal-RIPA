@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Utility;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -22,7 +22,6 @@ namespace RIPA.Functions.Submission.Functions
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
         private readonly BlobContainerClient _blobContainerClient;
-        private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
         public GetHistoricalCpraReports()
         {
@@ -41,6 +40,7 @@ namespace RIPA.Functions.Submission.Functions
             ILogger log)
         {
             log.LogInformation("Getting Historical CPRA Reports");
+            
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -51,9 +51,10 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
+                
                 return new UnauthorizedResult();
             }
-            
+
             await _blobContainerClient.CreateIfNotExistsAsync();
             var blobs = _blobContainerClient.GetBlobsAsync();
             var response = new List<string>();
@@ -71,6 +72,7 @@ namespace RIPA.Functions.Submission.Functions
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
             string containerName = $"{_storageContainerNamePrefix}";
             BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            
             return blobContainerClient;
         }
     }
