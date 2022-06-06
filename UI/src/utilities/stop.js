@@ -1082,6 +1082,8 @@ const getFullStopPeopleListed = apiStop => {
         resultsOfStop11: getKeyFoundInArray(resultsOfStop, 11),
         resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
         resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
+        verbalWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 1),
+        writtenWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
         warningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
         citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
         infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
@@ -1956,6 +1958,7 @@ const getResultOfStop = (person, statutes) => {
     }
     if (item === 2) {
       stopResult.listCodes = getWarningCodes(person, statutes)
+      stopResult.listCodes = getWrittenWarningCodes(person, statutes)
     }
     if (item === 3) {
       stopResult.listCodes = getCitationCodes(person, statutes)
