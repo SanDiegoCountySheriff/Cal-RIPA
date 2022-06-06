@@ -7,6 +7,7 @@
     :invalidUser="invalidUser"
     :loading="loading"
     :online="isOnline"
+    :is-api-unavailable="isApiUnavailable"
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     :on-view-stops-with-errors="handleViewStopsWithErrors"
@@ -17,6 +18,13 @@
     <template v-if="!isValidCache">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
+      </ripa-alert>
+    </template>
+
+    <template v-if="isApiUnavailable">
+      <ripa-alert alert-type="error">
+        RIPA is currently unavailable. Please report to the help desk and try
+        again later.
       </ripa-alert>
     </template>
 
@@ -135,6 +143,7 @@ export default {
       'mappedStopSubmissionPassedIds',
       'mappedStopSubmissionFailedStops',
       'mappedStopsWithErrors',
+      'isApiUnavailable',
     ]),
 
     getMappedUser() {

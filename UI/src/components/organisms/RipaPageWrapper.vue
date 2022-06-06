@@ -6,6 +6,7 @@
       :online="online"
       :authenticated="authenticated"
       :invalidUser="invalidUser"
+      :is-api-unavailable="isApiUnavailable"
       :dark="dark"
       :on-update-dark="onUpdateDark"
       :on-update-user="onUpdateUser"
@@ -88,6 +89,10 @@ export default {
       default: false,
     },
     online: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },
