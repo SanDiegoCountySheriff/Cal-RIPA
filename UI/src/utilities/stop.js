@@ -157,6 +157,8 @@ export const stopResultGivenTemplate = template => {
       resultsOfStop11: false,
       resultsOfStop12: false,
       resultsOfStop13: false,
+      verbalWarningCodes: [],
+      writtenWarningCodes: [],
       warningCodes: [],
       citationCodes: [54106],
       infieldCodes: [],

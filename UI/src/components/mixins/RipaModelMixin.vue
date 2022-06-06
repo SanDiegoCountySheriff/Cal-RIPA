@@ -124,6 +124,8 @@ export default {
           resultsOfStop11: newValue.stopResult?.resultsOfStop11 || false,
           resultsOfStop12: newValue.stopResult?.resultsOfStop12 || false,
           resultsOfStop13: newValue.stopResult?.resultsOfStop13 || false,
+          verbalWarningCodes: newValue.stopResult?.verbalWarningCodes || [],
+          writtenWarningCodes: newValue.stopResult?.writtenWarningCodes || [],
           warningCodes: newValue.stopResult?.warningCodes || [],
           citationCodes: newValue.stopResult?.citationCodes || [],
           infieldCodes: newValue.stopResult?.infieldCodes || [],
