@@ -103,7 +103,7 @@
 
             <template v-if="model.stopResult.resultsOfStop2">
               <ripa-autocomplete
-                v-model="model.stopResult.warningCodes"
+                v-model="model.stopResult.writtenWarningCodes"
                 hint="Select Up To 5 Offense Codes (required)"
                 persistent-hint
                 label="Offense Code"
@@ -115,18 +115,18 @@
                 :max-selections="5"
                 :rules="writtenWarningRules"
                 :custom-chip-label="getStatuteLabel"
-                @remove-item="removeItem('warningCodes', $event)"
+                @remove-item="removeItem('writtenWarningCodes', $event)"
                 @input="handleInput"
               >
               </ripa-autocomplete>
-              <template v-if="isPullReasonCodeWarningVisible">
+              <template v-if="isPullReasonCodeWrittenWarningVisible">
                 <div class="tw-mt-4 tw-text-content">
                   <v-btn
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeWarningDisabled"
-                    @click="handlePullReasonCodeWarning"
+                    :disabled="isPullReasonCodeWrittenWarningDisabled"
+                    @click="handlePullReasonCodeWrittenWarning"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -483,8 +483,8 @@ export default {
 
     writtenWarningRules() {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop1
-      const options = this.viewModel.stopResult.warningCodes
+      const checked2 = this.viewModel.stopResult.resultsOfStop2
+      const options = this.viewModel.stopResult.writtenWarningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
