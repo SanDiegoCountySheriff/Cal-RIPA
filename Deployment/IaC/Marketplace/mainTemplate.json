@@ -32,6 +32,14 @@
       "type": "bool",
       "defaultValue": false
     },
+    "modify_beat_id": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "beat_id_number_of_digits": {
+      "type": "int",
+      "defaultValue": 1
+    },
     "enable_stop_debugger": {
       "type": "bool",
       "defaultValue": false
@@ -3868,6 +3876,14 @@
           {
             "name": "ENABLE_BEATS",
             "value": "[parameters('enable_beats')]"
+          },
+          {
+            "name": "MODIFY_BEAT_ID",
+            "value": "[parameters('modify_beat_id')]"
+          },
+          {
+            "name": "BEAT_ID_NUMBER_OF_DIGITS",
+            "value": "[parameters('beat_id_number_of_digits')]"
           },
           {
             "name": "ENABLE_STOP_DEBUGGER",

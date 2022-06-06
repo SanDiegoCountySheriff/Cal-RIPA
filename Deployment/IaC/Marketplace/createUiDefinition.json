@@ -657,6 +657,28 @@
         }
       },
       {
+        "name": "modify_beat_id",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Add leading zeros to Beat ID?",
+        "toolTip": "Enables leading zeros on the Beat ID, e.g., 001 instead of 1",
+        "constraints": {
+          "required": false
+        },
+        "visible": "[equals(basics('enable_beats'),true)]"
+      },
+      {
+        "name": "beat_id_number_of_digits",
+        "type": "Microsoft.Common.Slider",
+        "min": 1,
+        "max": 10,
+        "label": "Number of leading zeros",
+        "toolTip": "Select the number of leading zeros for Beat ID",
+        "constraints": {
+          "required": false
+        },
+        "visible": "[equals(basics('modify_beat_id'),true)]"
+      },
+      {
         "name": "enable_stop_debugger",
         "type": "Microsoft.Common.CheckBox",
         "label": "Enable STOP data debugger?",
@@ -992,6 +1014,8 @@
       "environment_type": "[basics('environment_type')]",
       "apim_sku": "[if(equals(basics('environment_type'), 'PROD'), 'Basic', 'Developer')]",
       "enable_beats": "[basics('enable_beats')]",
+      "modify_beat_id": "[basics('modify_beat_id')]",
+      "beat_id_number_of_digits": "[basics('beat_id_number_of_digits')]",
       "enable_stop_debugger": "[basics('enable_stop_debugger')]",
       "app_domain_type": "[steps('steps_app_domain').app_domain_type]",
       "certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
