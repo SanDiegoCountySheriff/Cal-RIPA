@@ -1957,7 +1957,6 @@ const getResultOfStop = (person, statutes) => {
       stopResult.listCodes = getVerbalWarningCodes(person, statutes)
     }
     if (item === 2) {
-      stopResult.listCodes = getWarningCodes(person, statutes)
       stopResult.listCodes = getWrittenWarningCodes(person, statutes)
     }
     if (item === 3) {

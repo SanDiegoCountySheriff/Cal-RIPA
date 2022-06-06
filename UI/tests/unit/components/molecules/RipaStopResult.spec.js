@@ -57,7 +57,7 @@ describe('Ripa Stop Result', () => {
 
     updatedStop = defaultStop()
     updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1]
+    updatedStop.stopResult.writtenWarningCodes = [1]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
@@ -77,7 +77,7 @@ describe('Ripa Stop Result', () => {
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
-    wrapper.vm.handlePullReasonCodeWarning()
+    wrapper.vm.handlePullReasonCodeWrittenWarning()
 
     await wrapper.vm.$nextTick()
 
@@ -98,11 +98,11 @@ describe('Ripa Stop Result', () => {
 
     updatedStop = defaultStop()
     updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1, 2]
+    updatedStop.stopResult.writtenWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
-    wrapper.vm.removeItem('warningCodes', { item: { code: 1 } })
+    wrapper.vm.removeItem('writtenWarningCodes', { item: { code: 1 } })
 
     await wrapper.vm.$nextTick()
 
