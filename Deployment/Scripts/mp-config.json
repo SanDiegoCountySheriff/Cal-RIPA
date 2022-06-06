@@ -1,16 +1,17 @@
 {
-    "Authentication": {
-        "ClientId": "__AUTH_SP_APP_ID__",
-        "AuthorityUrl": "__AUTH_AUTHORITY__/__AUTH_TENANT_ID__",
-        "TenantId": "__AUTH_TENANT_ID__",
-        "PrimaryDomain": "__AUTH_PRIMARY_DOMAIN__"
-    },
-    "Configuration": {
-        "Environment": "__ENVIRONMENT_TYPE__",
-        "ServicesBaseUrl": "__APIM_INSTANCE_URL__/",
-        "Subscription": "__APIM_MASTER_SUBSCRIPTION_KEY__",
-        "DefaultCounty": "__DEFAULT_COUNTY__",
-        "DisplayBeatsInput": "__ENABLE_BEATS__",
-        "DisplayDebugger": "__ENABLE_STOP_DEBUGGER__"
-    }
+  "Authentication": {
+    "ClientId": "__AUTH_SP_APP_ID__",
+    "AuthorityUrl": "__AUTH_AUTHORITY__/__AUTH_TENANT_ID__",
+    "TenantId": "__AUTH_TENANT_ID__",
+    "PrimaryDomain": "__AUTH_PRIMARY_DOMAIN__"
+  },
+  "Configuration": {
+    "Environment": "__ENVIRONMENT_TYPE__",
+    "ServicesBaseUrl": "__APIM_INSTANCE_URL__/",
+    "Subscription": "__APIM_MASTER_SUBSCRIPTION_KEY__",
+    "DefaultCounty": "__DEFAULT_COUNTY__",
+    "DisplayBeatsInput": "__ENABLE_BEATS__",
+    "DisplayDebugger": "__ENABLE_STOP_DEBUGGER__",
+    "UseOfficerUpn": "__USE_OFFICER_UPN__"
+  }
 }

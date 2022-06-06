@@ -46,6 +46,10 @@
       "defaultValue": "",
       "type": "string"
     },
+    "use_officer_upn": {
+      "type": "bool",
+      "defaultValue": false
+    },
     "doj_sftp_server": {
       "defaultValue": "",
       "type": "string"
@@ -3868,6 +3872,10 @@
           {
             "name": "ENABLE_STOP_DEBUGGER",
             "value": "[parameters('enable_stop_debugger')]"
+          },
+          {
+            "name": "USE_OFFICER_UPN",
+            "value": "[parameters('use_officer_upn')]"
           },
           {
             "name": "DEPLOY_WEB_CONFIG_JSON",

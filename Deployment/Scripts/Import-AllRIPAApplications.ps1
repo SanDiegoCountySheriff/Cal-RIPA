@@ -129,6 +129,7 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Write-Host "ENVIRONMENT_TYPE: $env:ENVIRONMENT_TYPE"
     Write-Host "ENABLE_BEATS: $env:ENABLE_BEATS"
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
+    Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
 
     $configFilePath = "./config.json"
     $configJson = Get-Content -Path $configFilePath
@@ -142,6 +143,7 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     $configJson = $configJson.Replace("__DEFAULT_COUNTY__", $env:DEFAULT_COUNTY)
     $configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
     $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
+    $configJson = $configJson.Replace("__USE_OFFICER_UPN__", $env:USE_OFFICER_UPN)
 
     Write-Host "Saving config.json"
     Set-Content -Path $configFilePath -Value $configJson -Force

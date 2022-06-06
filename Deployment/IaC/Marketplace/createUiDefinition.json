@@ -843,6 +843,15 @@
               "validationMessage": ""
             },
             "visible": true
+          },
+          {
+            "name": "use_officer_upn",
+            "type": "Microsoft.Common.CheckBox",
+            "label": "Display officer's username (UPN) instead of full officer's name?",
+            "toolTip": "Check this box to display the officer's username (UPN) instead of their full name, e.g., JDOESH instead of John Doe",
+            "constraints": {
+              "required": false
+            }
           }
         ]
       },
@@ -994,6 +1003,7 @@
       "auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
       "auth_authority": "[steps('steps_authentication').auth_authority]",
       "auth_logout_url": "[steps('steps_authentication').auth_logout_url]",
+      "use_officer_upn": "[steps('steps_authentication').use_officer_upn",
       "doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
       "doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
       "doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",
