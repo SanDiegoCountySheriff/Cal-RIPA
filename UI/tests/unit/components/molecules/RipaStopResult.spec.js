@@ -169,12 +169,12 @@ describe('Ripa Stop Result', () => {
     })
 
     let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop1 = true
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
     updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop1 = true
     updatedStop.stopResult.verbalWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
