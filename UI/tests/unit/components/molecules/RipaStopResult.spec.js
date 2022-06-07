@@ -151,11 +151,11 @@ describe('Ripa Stop Result', () => {
 
     updatedStop = defaultStop()
     updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1, 2]
+    updatedStop.stopResult.writtenWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
-    wrapper.vm.removeItem('warningCodes', { item: { code: 1 } })
+    wrapper.vm.removeItem('writtenWarningCodes', { item: { code: 1 } })
 
     await wrapper.vm.$nextTick()
 
@@ -175,18 +175,18 @@ describe('Ripa Stop Result', () => {
 
     updatedStop = defaultStop()
     updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1, 2]
+    updatedStop.stopResult.verbalWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
-    wrapper.vm.removeItem('warningCodes', { item: { code: 1 } })
+    wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
 
     await wrapper.vm.$nextTick()
 
     expect(wrapper.html()).toContain('Verbal Warning')
   })
 
-  it('should not contain "(Warning (verbal or written))"', async () => {
+  it('should not contain "Warning (verbal or written)"', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop, statutes: statutes },
