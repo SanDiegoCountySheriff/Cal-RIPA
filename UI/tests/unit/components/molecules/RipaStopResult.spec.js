@@ -51,12 +51,12 @@ describe('Ripa Stop Result', () => {
     })
 
     let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
     updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     updatedStop.stopResult.writtenWarningCodes = [1]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
@@ -73,7 +73,7 @@ describe('Ripa Stop Result', () => {
 
     const updatedStop = defaultStop()
     updatedStop.stopReason.trafficViolationCode = 1
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
@@ -92,12 +92,12 @@ describe('Ripa Stop Result', () => {
     })
 
     let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
     updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     updatedStop.stopResult.writtenWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
@@ -145,12 +145,12 @@ describe('Ripa Stop Result', () => {
     })
 
     let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
     updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.resultsOfStop14 = true
     updatedStop.stopResult.writtenWarningCodes = [1, 2]
     wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
