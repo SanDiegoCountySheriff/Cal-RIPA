@@ -272,6 +272,7 @@ export const STOP_RESULTS = [
   { name: 'Contacted U.S. Department of Homeland Security', value: 11 },
   { name: 'Referral to school administrator', value: 12 },
   { name: 'Referral to school counselor or other support staff', value: 13 },
+  { name: 'Warning (verbal or written)', value: 14 },
 ]
 
 export const EDUCATION_CODE_SECTIONS = [

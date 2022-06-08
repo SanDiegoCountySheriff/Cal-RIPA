@@ -124,6 +124,7 @@ export default {
           resultsOfStop11: newValue.stopResult?.resultsOfStop11 || false,
           resultsOfStop12: newValue.stopResult?.resultsOfStop12 || false,
           resultsOfStop13: newValue.stopResult?.resultsOfStop13 || false,
+          resultsOfStop14: newValue.stopResult?.resultsOfStop14 || false,
           verbalWarningCodes: newValue.stopResult?.verbalWarningCodes || [],
           writtenWarningCodes: newValue.stopResult?.writtenWarningCodes || [],
           warningCodes: newValue.stopResult?.warningCodes || [],
@@ -588,14 +589,15 @@ export default {
         this.viewModel.stopResult.resultsOfStop11 = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
+        this.viewModel.stopResult.resultsOfStop14 = false
       }
 
       if (!this.viewModel.stopResult.resultsOfStop1) {
-        this.viewModel.stopResult.warningCodes = null
+        this.viewModel.stopResult.verbalWarningCodes = null
       }
 
       if (!this.viewModel.stopResult.resultsOfStop2) {
-        this.viewModel.stopResult.warningCodes = null
+        this.viewModel.stopResult.writtenWarningCodes = null
       }
 
       if (!this.viewModel.stopResult.resultsOfStop3) {
@@ -608,6 +610,10 @@ export default {
 
       if (!this.viewModel.stopResult.resultsOfStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
+      }
+
+      if (!this.viewModel.stopResult.resultsOfStop14) {
+        this.viewModel.stopResult.warningCodes = null
       }
     },
   },
