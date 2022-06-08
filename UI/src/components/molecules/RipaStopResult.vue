@@ -94,14 +94,14 @@
             </template>
 
             <ripa-checkbox
-              v-model="model.stopResult.resultsOfStop2"
+              v-model="model.stopResult.resultsOfStop14"
               label="Written Warning"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop2">
+            <template v-if="model.stopResult.resultsOfStop14">
               <ripa-autocomplete
                 v-model="model.stopResult.writtenWarningCodes"
                 hint="Select Up To 5 Offense Codes (required)"
@@ -485,7 +485,7 @@ export default {
 
     writtenWarningRules() {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop2
+      const checked2 = this.viewModel.stopResult.resultsOfStop14
       const options = this.viewModel.stopResult.writtenWarningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -495,7 +495,7 @@ export default {
 
     warningRules() {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop14
+      const checked2 = this.viewModel.stopResult.resultsOfStop2
       const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||

@@ -597,7 +597,7 @@ export default {
       }
 
       if (!this.viewModel.stopResult.resultsOfStop2) {
-        this.viewModel.stopResult.writtenWarningCodes = null
+        this.viewModel.stopResult.warningCodes = null
       }
 
       if (!this.viewModel.stopResult.resultsOfStop3) {
@@ -613,7 +613,7 @@ export default {
       }
 
       if (!this.viewModel.stopResult.resultsOfStop14) {
-        this.viewModel.stopResult.warningCodes = null
+        this.viewModel.stopResult.writtenWarningCodes = null
       }
     },
   },
