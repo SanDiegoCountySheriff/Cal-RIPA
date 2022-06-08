@@ -12,14 +12,17 @@
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-switch
-            v-model="model.actionsTaken.anyActionsTaken"
+            v-model="model.actionsTaken.anyNonForceActionsTaken"
             label="Any Actions Taken?"
-            :disabled="isAnyActionsTakenDisabled1 || isAnyActionsTakenDisabled2"
+            :disabled="
+              isAnyNonForceActionsTakenDisabled1 ||
+              isAnyNonForceActionsTakenDisabled2
+            "
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
 
-          <template v-if="model.actionsTaken.anyActionsTaken">
+          <template v-if="model.actionsTaken.anyNonForceActionsTaken">
             <ripa-check-group
               v-model="model.actionsTaken.nonForceActionsTakenDuringStop"
               :items="getNonForceActionsTakenGeneralItems"
@@ -182,8 +185,8 @@ export default {
       nonForceActionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
       basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
-      isAnyActionsTakenDisabled1: false,
-      isAnyActionsTakenDisabled2: false,
+      isAnyNonForceActionsTakenDisabled1: false,
+      isAnyNonForceActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
       viewModel: this.syncModel(this.value),
     }
@@ -203,7 +206,7 @@ export default {
     },
 
     actionsTakenRules() {
-      const checked = this.viewModel.actionsTaken.anyActionsTaken
+      const checked = this.viewModel.actionsTaken.anyNonForceActionsTaken
       const options =
         this.viewModel.actionsTaken.nonForceActionsTakenDuringStop.filter(
           item => item !== 13,
@@ -288,8 +291,8 @@ export default {
           return {
             ...item,
             disabled:
-              (this.isAnyActionsTakenDisabled1 && item.value === 10) ||
-              (this.isAnyActionsTakenDisabled2 && item.value === 12),
+              (this.isAnyNonForceActionsTakenDisabled1 && item.value === 10) ||
+              (this.isAnyNonForceActionsTakenDisabled2 && item.value === 12),
           }
         })
     },

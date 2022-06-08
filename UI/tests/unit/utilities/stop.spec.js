@@ -11,7 +11,7 @@ describe('stop', () => {
     const actual = stop.defaultStop()
 
     expect(actual.actionsTaken).toEqual({
-      anyActionsTaken: true,
+      anyNonForceActionsTaken: true,
       anyForceActionsTaken: false,
     })
     expect(actual.id).toEqual(0)
