@@ -451,6 +451,7 @@ export default {
       const value11 = this.viewModel.stopResult.resultsOfStop11
       const value12 = this.viewModel.stopResult.resultsOfStop12
       const value13 = this.viewModel.stopResult.resultsOfStop13
+      const value14 = this.viewModel.stopResult.resultsOfStop14
 
       return [
         (checked &&
@@ -466,7 +467,8 @@ export default {
             value10 ||
             value11 ||
             value12 ||
-            value13)) ||
+            value13 ||
+            value14)) ||
           'An action taken is required',
       ]
     },
@@ -485,6 +487,16 @@ export default {
       const checked1 = this.viewModel.stopResult.anyResultsOfStop
       const checked2 = this.viewModel.stopResult.resultsOfStop2
       const options = this.viewModel.stopResult.writtenWarningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
+    warningRules() {
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop14
+      const options = this.viewModel.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
