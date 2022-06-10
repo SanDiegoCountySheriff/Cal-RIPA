@@ -36,7 +36,7 @@ function Upload-RIPAMPArtifact
     Rename-Item -Path $FileName -NewName $LowerCaseFileName
 
     Write-Host "Uploading API package:" $LowerCaseFileName
-    az storage blob upload --timeout 300 --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName -f $LowerCaseFileName 
+    az storage blob upload --overwrite true --timeout 300 --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName -f $LowerCaseFileName 
 
     Write-Host "Requesting URL:" $LowerCaseFileName
     $url = (az storage blob url --account-name $StorageAccountName --account-key $StorageAccountKey -c $StorageAccountContainer -n $LowerCaseFileName).ToString()
