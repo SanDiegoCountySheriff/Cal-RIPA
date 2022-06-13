@@ -193,11 +193,6 @@ describe('Ripa Stop Result', () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop, statutes: statutes },
-      computed: {
-        isPullReasonCodeVerbalWarningDisabled() {
-          return true
-        },
-      },
     })
 
     let updatedStop = defaultStop()
@@ -225,11 +220,6 @@ describe('Ripa Stop Result', () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop, statutes: statutes },
-      computed: {
-        isPullReasonCodeVerbalWarningDisabled() {
-          return false
-        },
-      },
     })
 
     let updatedStop = defaultStop()
@@ -249,6 +239,262 @@ describe('Ripa Stop Result', () => {
 
     expect(wrapper.vm.isPullReasonCodeVerbalWarningDisabled).toBe(false)
     expect(updatedStop.stopResult.verbalWarningCodes.length).toBeLessThan(5)
+  })
+
+  it('should have a true isPullReasonCodeWrittenWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop14 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop14 = true
+    updatedStop.stopResult.writtenWarningCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeWrittenWarningDisabled).toBe(true)
+    expect(
+      updatedStop.stopResult.writtenWarningCodes.length,
+    ).toBeGreaterThanOrEqual(5)
+  })
+
+  it('should have a false isPullReasonCodeWrittenWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop14 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop14 = true
+    updatedStop.stopResult.writtenWarningCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeWrittenWarningDisabled).toBe(false)
+    expect(updatedStop.stopResult.writtenWarningCodes.length).toBeLessThan(5)
+  })
+
+  it('should have a true isPullReasonCodeWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.warningCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeWarningDisabled).toBe(true)
+    expect(updatedStop.stopResult.warningCodes.length).toBeGreaterThanOrEqual(5)
+  })
+
+  it('should have a false isPullReasonCodeWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop2 = true
+    updatedStop.stopResult.warningCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeWarningDisabled).toBe(false)
+    expect(updatedStop.stopResult.warningCodes.length).toBeLessThan(5)
+  })
+
+  it('should have a true isPullReasonCodeCitationDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop3 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop3 = true
+    updatedStop.stopResult.citationCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeCitationDisabled).toBe(true)
+    expect(updatedStop.stopResult.citationCodes.length).toBeGreaterThanOrEqual(
+      5,
+    )
+  })
+
+  it('should have a false isPullReasonCodeCitationDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop3 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop3 = true
+    updatedStop.stopResult.citationCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeCitationDisabled).toBe(false)
+    expect(updatedStop.stopResult.citationCodes.length).toBeLessThan(5)
+  })
+
+  it('should have a true isPullReasonCodeInfieldDisable()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop4 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop4 = true
+    updatedStop.stopResult.infieldCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeInfieldDisable).toBe(true)
+    expect(updatedStop.stopResult.infieldCodes.length).toBeGreaterThanOrEqual(5)
+  })
+
+  it('should have a false isPullReasonCodeInfieldDisable()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop4 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop4 = true
+    updatedStop.stopResult.infieldCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeInfieldDisable).toBe(false)
+    expect(updatedStop.stopResult.infieldCodes.length).toBeLessThan(5)
+  })
+
+  it('should have a true isPullReasonCodeCustodialArrestDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    updatedStop.stopResult.custodialArrestCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeCustodialArrestDisabled).toBe(true)
+    expect(
+      updatedStop.stopResult.custodialArrestCodes.length,
+    ).toBeGreaterThanOrEqual(5)
+  })
+
+  it('should have a false isPullReasonCodeCustodialArrestDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    updatedStop.stopResult.custodialArrestCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeCustodialArrestDisabled).toBe(false)
+    expect(updatedStop.stopResult.custodialArrestCodes.length).toBeLessThan(5)
   })
 
   it('should not contain "Warning (verbal or written)"', async () => {
@@ -273,5 +519,60 @@ describe('Ripa Stop Result', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.html()).not.toContain('Warning (verbal or written)')
+  })
+
+  it('should return true if homeland security is selected', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop10 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop10 = true
+    updatedStop.stopResult.custodialArrestCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isHomelandSecuritySelected).toBe(true)
+  })
+
+  it('should return true if reasonable suspicion is selected', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop6 = true
+    updatedStop.stopResult.custodialArrestCodes = [1, 2]
+    updatedStop.stopReason.reasonableSuspicionCode = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+    let reasonableSuspicion = null
+
+    if (updatedStop.stopReason.reasonableSuspicionCode) {
+      reasonableSuspicion = true
+    }
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    // expect(wrapper.vm.isReasonableSuspicionCode).toBe(true)
+    expect(reasonableSuspicion).toBe(true)
   })
 })
