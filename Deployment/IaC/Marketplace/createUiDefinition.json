@@ -68,8 +68,8 @@
               "label": "BUTTE SHERIFF",
               "value": {
                 "county": "Butte",
-                "abbreviation": "butte",
-                "type": "sd",
+                "abbreviation": "bc",
+                "type": "so",
                 "ori": "CA0040000"
               }
             },
@@ -77,8 +77,8 @@
               "label": "CALAVERAS SHERIFF",
               "value": {
                 "county": "Calaveras",
-                "abbreviation": "calaveras",
-                "type": "sd",
+                "abbreviation": "cc",
+                "type": "so",
                 "ori": "CA0050000"
               }
             },
@@ -104,8 +104,8 @@
               "label": "CONTRA COSTA SHERIFF",
               "value": {
                 "county": "Contra Costa",
-                "abbreviation": "contracosta",
-                "type": "sd",
+                "abbreviation": "ccc",
+                "type": "so",
                 "ori": "CA0070000"
               }
             },
@@ -140,8 +140,8 @@
               "label": "EL DORADO SHERIFF",
               "value": {
                 "county": "El Dorado",
-                "abbreviation": "eldorado",
-                "type": "sd",
+                "abbreviation": "ed",
+                "type": "so",
                 "ori": "CA0090000"
               }
             },
@@ -203,8 +203,8 @@
               "label": "KINGS SHERIFF",
               "value": {
                 "county": "Kings",
-                "abbreviation": "kings",
-                "type": "sd",
+                "abbreviation": "kc",
+                "type": "so",
                 "ori": "CA0160000"
               }
             },
@@ -212,8 +212,8 @@
               "label": "LAKE SHERIFF",
               "value": {
                 "county": "Lake",
-                "abbreviation": "lake",
-                "type": "sd",
+                "abbreviation": "lc",
+                "type": "so",
                 "ori": "CA0170000"
               }
             },
@@ -257,8 +257,8 @@
               "label": "MARIN SHERIFF",
               "value": {
                 "county": "Marin",
-                "abbreviation": "marin",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so4",
                 "ori": "CA0210000"
               }
             },
@@ -266,8 +266,8 @@
               "label": "MARIPOSA SHERIFF",
               "value": {
                 "county": "Mariposa",
-                "abbreviation": "mariposa",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so3",
                 "ori": "CA0220000"
               }
             },
@@ -284,8 +284,8 @@
               "label": "MERCED SHERIFF",
               "value": {
                 "county": "Merced",
-                "abbreviation": "merced",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so2",
                 "ori": "CA0240000"
               }
             },
@@ -293,8 +293,8 @@
               "label": "MODOC SHERIFF",
               "value": {
                 "county": "Modoc",
-                "abbreviation": "modoc",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so",
                 "ori": "CA0250000"
               }
             },
@@ -311,8 +311,8 @@
               "label": "MONTEREY SHERIFF",
               "value": {
                 "county": "Monterey",
-                "abbreviation": "monterey",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so1",
                 "ori": "CA0270000"
               }
             },
@@ -356,8 +356,8 @@
               "label": "PLUMAS SHERIFF",
               "value": {
                 "county": "Plumas",
-                "abbreviation": "plumas",
-                "type": "sd",
+                "abbreviation": "pc",
+                "type": "so",
                 "ori": "CA0320000"
               }
             },
@@ -365,8 +365,8 @@
               "label": "RIVERSIDE SHERIFF",
               "value": {
                 "county": "Riverside",
-                "abbreviation": "riverside",
-                "type": "sd",
+                "abbreviation": "r",
+                "type": "so",
                 "ori": "CA0330000"
               }
             },
@@ -383,8 +383,8 @@
               "label": "SAN BENITO SHERIFF",
               "value": {
                 "county": "San Benito",
-                "abbreviation": "sanbenito",
-                "type": "sd",
+                "abbreviation": "sbc",
+                "type": "so",
                 "ori": "CA0350000"
               }
             },
@@ -419,8 +419,8 @@
               "label": "SAN JOAQUIN SHERIFF",
               "value": {
                 "county": "San Joaquin",
-                "abbreviation": "sanjoaquin",
-                "type": "sd",
+                "abbreviation": "sjc",
+                "type": "so",
                 "ori": "CA0390000"
               }
             },
@@ -429,7 +429,7 @@
               "value": {
                 "county": "San Luis Obispo",
                 "abbreviation": "slo",
-                "type": "sd",
+                "type": "so",
                 "ori": "CA0400000"
               }
             },
@@ -437,8 +437,8 @@
               "label": "SAN MATEO SHERIFF",
               "value": {
                 "county": "San Mateo",
-                "abbreviation": "sm",
-                "type": "sd",
+                "abbreviation": "smc",
+                "type": "so",
                 "ori": "CA0410000"
               }
             },
@@ -464,8 +464,8 @@
               "label": "SANTA CRUZ SHERIFF",
               "value": {
                 "county": "Santa Cruz",
-                "abbreviation": "santacruz",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so1",
                 "ori": "CA0440000"
               }
             },
@@ -482,8 +482,8 @@
               "label": "SIERRA SHERIFF",
               "value": {
                 "county": "Sierra",
-                "abbreviation": "sierra",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so2",
                 "ori": "CA0460000"
               }
             },
@@ -509,8 +509,8 @@
               "label": "SONOMA SHERIFF",
               "value": {
                 "county": "Sonoma",
-                "abbreviation": "sonoma",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so",
                 "ori": "CA0490000"
               }
             },
@@ -518,7 +518,7 @@
               "label": "STANISLAUS SHERIFF",
               "value": {
                 "county": "Stanislaus",
-                "abbreviation": "stanislaus",
+                "abbreviation": "sc",
                 "type": "sd",
                 "ori": "CA0500000"
               }
@@ -563,8 +563,8 @@
               "label": "TUOLUMNE SHERIFF",
               "value": {
                 "county": "Tuolumne",
-                "abbreviation": "tuolumne",
-                "type": "sd",
+                "abbreviation": "tc",
+                "type": "so",
                 "ori": "CA0550000"
               }
             },
@@ -572,8 +572,8 @@
               "label": "VENTURA SHERIFF",
               "value": {
                 "county": "Ventura",
-                "abbreviation": "ventura",
-                "type": "sd",
+                "abbreviation": "vc",
+                "type": "so",
                 "ori": "CA0560000"
               }
             },
@@ -590,8 +590,8 @@
               "label": "YUBA SHERIFF",
               "value": {
                 "county": "Yuba",
-                "abbreviation": "yuba",
-                "type": "sd",
+                "abbreviation": "yc",
+                "type": "so",
                 "ori": "CA0580000"
               }
             }
