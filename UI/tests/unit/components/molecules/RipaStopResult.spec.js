@@ -136,6 +136,9 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).toContain(
       'Contacted parent/legal guardian or other person legally responsible for the person',
     )
+    expect(wrapper.html()).not.toContain(
+      'Contacted parent/legal guardian or other person legally responsible for the minor',
+    )
   })
 
   it('should contain "Written Warning"', async () => {
@@ -184,6 +187,68 @@ describe('Ripa Stop Result', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.html()).toContain('Verbal Warning')
+  })
+
+  it('should have a true isPullReasonCodeVerbalWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+      computed: {
+        isPullReasonCodeVerbalWarningDisabled() {
+          return true
+        },
+      },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop1 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop1 = true
+    updatedStop.stopResult.verbalWarningCodes = [1, 2, 3, 4, 5]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeVerbalWarningDisabled).toBe(true)
+    expect(
+      updatedStop.stopResult.verbalWarningCodes.length,
+    ).toBeGreaterThanOrEqual(5)
+  })
+
+  it('should have a false isPullReasonCodeVerbalWarningDisabled()', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+      computed: {
+        isPullReasonCodeVerbalWarningDisabled() {
+          return false
+        },
+      },
+    })
+
+    let updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop1 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    updatedStop = defaultStop()
+    updatedStop.stopResult.resultsOfStop1 = true
+    updatedStop.stopResult.verbalWarningCodes = [1, 2]
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    // wrapper.vm.removeItem('verbalWarningCodes', { item: { code: 1 } })
+
+    // await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isPullReasonCodeVerbalWarningDisabled).toBe(false)
+    expect(updatedStop.stopResult.verbalWarningCodes.length).toBeLessThan(5)
   })
 
   it('should not contain "Warning (verbal or written)"', async () => {
