@@ -32,6 +32,14 @@
       "type": "bool",
       "defaultValue": false
     },
+    "modify_beat_id": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "beat_id_number_of_digits": {
+      "type": "int",
+      "defaultValue": 1
+    },
     "enable_stop_debugger": {
       "type": "bool",
       "defaultValue": false
@@ -45,6 +53,10 @@
     "auth_logout_url": {
       "defaultValue": "",
       "type": "string"
+    },
+    "use_officer_upn": {
+      "type": "bool",
+      "defaultValue": false
     },
     "doj_sftp_server": {
       "defaultValue": "",
@@ -295,7 +307,6 @@
       "type": "string",
       "defaultValue": "CosmosConnectionString"
     },
-    
     "submission_fa_config_storage_container_prefix_results": {
       "type": "string",
       "defaultValue": "result"
@@ -303,6 +314,10 @@
     "submission_fa_config_storage_container_prefix_submissions": {
       "type": "string",
       "defaultValue": "submission"
+    },
+    "submission_fa_config_storage_container_prefix_cpra": {
+      "type": "string",
+      "defaultValue": "cpra"
     },
     "doj_environment": {
       "type": "string",
@@ -3085,6 +3100,10 @@
               "value": "[parameters('submission_fa_config_storage_container_prefix_results')]"
             },
             {
+              "name": "ContainerPrefixCpra",
+              "value": "[parameters('submission_fa_config_storage_container_prefix_cpra')]"
+            },
+            {
               "name": "UserProfileContainerName",
               "value": "[parameters('dbaccount_sqlDb_user_container_name')]"
             },
@@ -3859,8 +3878,20 @@
             "value": "[parameters('enable_beats')]"
           },
           {
+            "name": "MODIFY_BEAT_ID",
+            "value": "[parameters('modify_beat_id')]"
+          },
+          {
+            "name": "BEAT_ID_NUMBER_OF_DIGITS",
+            "value": "[parameters('beat_id_number_of_digits')]"
+          },
+          {
             "name": "ENABLE_STOP_DEBUGGER",
             "value": "[parameters('enable_stop_debugger')]"
+          },
+          {
+            "name": "USE_OFFICER_UPN",
+            "value": "[parameters('use_officer_upn')]"
           },
           {
             "name": "DEPLOY_WEB_CONFIG_JSON",

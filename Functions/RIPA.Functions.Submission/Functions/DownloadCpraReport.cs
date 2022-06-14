@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +7,11 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Utility;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -27,7 +25,7 @@ namespace RIPA.Functions.Submission.Functions
         public DownloadCpraReport()
         {
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = "cpra";
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
             _blobContainerClient = GetBlobContainerClient();
         }
 
@@ -42,6 +40,7 @@ namespace RIPA.Functions.Submission.Functions
             ILogger log)
         {
             log.LogInformation("Downloading CPRA report");
+            
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -52,6 +51,7 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
+                
                 return new UnauthorizedResult();
             }
 
@@ -59,6 +59,7 @@ namespace RIPA.Functions.Submission.Functions
             try
             {
                 var resultFile = await blobUtilities.GetBlob(fileName, _blobContainerClient);
+                
                 return new FileContentResult(resultFile.Value.Content.ToArray(), "application/octet-stream")
                 {
                     FileDownloadName = fileName
@@ -73,8 +74,8 @@ namespace RIPA.Functions.Submission.Functions
         private BlobContainerClient GetBlobContainerClient()
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = $"{_storageContainerNamePrefix}";
-            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
+            
             return blobContainerClient;
         }
     }
