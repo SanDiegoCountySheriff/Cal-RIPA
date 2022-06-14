@@ -41,6 +41,7 @@ describe('Ripa Page Container', () => {
       isOnline: jest.fn(),
       mappedStopsWithErrors: jest.fn(),
       isOnlineAndAuthenticated: jest.fn(),
+      isApiUnavailable: jest.fn(),
     }
     store = new Vuex.Store({ actions, getters })
   })

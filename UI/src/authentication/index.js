@@ -35,7 +35,8 @@ export default {
         environmentName: environmentName.toUpperCase(),
         useOfficerUpn: res.data.Configuration.UseOfficerUpn === 'true',
         modifyBeatId: res.data.Configuration.ModifyBeatId === 'true',
-        beatIdNumberOfDigits: res.data.Configuration.BeatIdNumberOfDigits || 0,
+        beatIdNumberOfDigits:
+          parseInt(res.data.Configuration.BeatIdNumberOfDigits) || 0,
       })
 
       return new Promise((resolve, reject) => {

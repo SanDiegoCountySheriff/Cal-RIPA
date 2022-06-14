@@ -76,6 +76,7 @@ describe('Ripa Form Container', () => {
       mappedUser: jest.fn().mockReturnValue(officer),
       stopTemplates: jest.fn(),
       invalidUser: jest.fn().mockReturnValue(false),
+      isApiUnavailable: jest.fn(),
     }
     mutations = {
       setIsOnline: (state, value) => {

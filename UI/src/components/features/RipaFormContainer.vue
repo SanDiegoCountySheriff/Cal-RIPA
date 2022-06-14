@@ -12,6 +12,7 @@
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
+      :is-api-unavailable="isApiUnavailable"
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
@@ -178,6 +179,7 @@ export default {
       'displayDebugger',
       'stopTemplates',
       'piiServiceAvailable',
+      'isApiUnavailable',
     ]),
 
     getMappedUser() {

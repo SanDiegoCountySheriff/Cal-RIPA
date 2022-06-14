@@ -12,6 +12,7 @@
       :full-stop="fullStop"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
+      :is-api-unavailable="isApiUnavailable"
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
@@ -132,6 +133,10 @@ export default {
       default: false,
     },
     isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },

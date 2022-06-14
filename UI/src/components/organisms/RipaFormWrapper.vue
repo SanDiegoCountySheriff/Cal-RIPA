@@ -1,6 +1,6 @@
 <template>
   <div class="ripa-form-wrapper">
-    <v-card class="mx-auto" max-width="900" outlined>
+    <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
@@ -727,6 +727,10 @@ export default {
       default: false,
     },
     isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },

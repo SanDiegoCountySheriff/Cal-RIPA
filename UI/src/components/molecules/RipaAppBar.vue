@@ -53,7 +53,7 @@
         </div>
       </transition>
 
-      <template v-if="isMobile">
+      <template v-if="isMobile && !isApiUnavailable">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon v-bind="attrs" v-on="on">
@@ -124,7 +124,7 @@
         </v-menu>
       </template>
 
-      <template v-if="!isMobile">
+      <template v-if="!isMobile && !isApiUnavailable">
         <div v-if="!invalidUser">
           <v-tooltip v-if="authenticated && online" bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -347,6 +347,10 @@ export default {
       default: '',
     },
     online: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },

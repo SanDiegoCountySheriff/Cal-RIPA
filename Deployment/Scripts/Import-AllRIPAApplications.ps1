@@ -113,7 +113,7 @@ Write-Host "Publishing to:" $uiStorageAccountName
 $fileName = (Get-ChildItem -Path "./" -Filter "*ui.zip").Name
 Write-Host "Deploying UI package:" $fileName
 Expand-Archive -Path "./$fileName" -DestinationPath "./" -Force
-az storage blob upload-batch --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
+az storage blob upload-batch --overwrite true --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
 
 if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
 {
@@ -128,7 +128,10 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Write-Host "AGENCY_ABBREVIATION: $env:AGENCY_ABBREVIATION"
     Write-Host "ENVIRONMENT_TYPE: $env:ENVIRONMENT_TYPE"
     Write-Host "ENABLE_BEATS: $env:ENABLE_BEATS"
+    Write-Host "MODIFY_BEAT_ID: $env:MODIFY_BEAT_ID"
+    Write-Host "BEAT_ID_NUMBER_OF_DIGITS: $env:BEAT_ID_NUMBER_OF_DIGITS"
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
+    Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
 
     $configFilePath = "./config.json"
     $configJson = Get-Content -Path $configFilePath
@@ -141,13 +144,16 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     $configJson = $configJson.Replace("__APIM_MASTER_SUBSCRIPTION_KEY__", $apimPrimaryKey)
     $configJson = $configJson.Replace("__DEFAULT_COUNTY__", $env:DEFAULT_COUNTY)
     $configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
+    $configJson = $configJson.Replace("__MODIFY_BEAT_ID__", $env:MODIFY_BEAT_ID)
+    $configJson = $configJson.Replace("__BEAT_ID_NUMBER_OF_DIGITS__", $env:BEAT_ID_NUMBER_OF_DIGITS)
     $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
+    $configJson = $configJson.Replace("__USE_OFFICER_UPN__", $env:USE_OFFICER_UPN)
 
     Write-Host "Saving config.json"
     Set-Content -Path $configFilePath -Value $configJson -Force
 
     Write-Host "Uploading config.json"
-    az storage blob upload --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f './config.json' 
+    az storage blob upload --overwrite true --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f './config.json' 
 }
 
 Write-Host "Finished deploying & importing applications"
