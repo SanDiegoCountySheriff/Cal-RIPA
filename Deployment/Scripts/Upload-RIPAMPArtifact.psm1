@@ -16,6 +16,9 @@ function Upload-RIPAMPArtifact
 
     Write-Host "**************************************************************************************"
     Write-Host "Processing file:" $FileName
+
+    $currentErrorSetting = $ErrorActionPreference
+    $ErrorActionPreference = "Stop"
     
     Set-Location $WorkingFolder
 
@@ -52,6 +55,8 @@ function Upload-RIPAMPArtifact
     Write-Host "Storing key in KV:" $itemSecretKey
     $secret = (az keyvault secret set --vault-name $KeyVaultName -n $itemSecretKey --value $itemSasUrl -o tsv).id
     Write-Host "Created secret:" $secret
+
+    $ErrorActionPreference = $currentErrorSetting
 
     Write-Host "Finished processing:" $FileName
     Write-Host ""
