@@ -46,7 +46,7 @@ function Upload-RIPAMPArtifact
 
     $itemSasUrl = "$($url)?$($sas)".Replace('"?"', '?')
     
-    $itemSecretKey = "ZMP-" + $LowerCaseFileName.ToUpper().Replace('.', '-').Replace('_', '-') + "-SAS-URL"
+    $itemSecretKey = $LowerCaseFileName.ToUpper().Replace('.', '-').Replace('_', '-') + "-SAS-URL"
     Write-Host "Using secret key:" $itemSecretKey
 
     Write-Host "Storing key in KV:" $itemSecretKey
