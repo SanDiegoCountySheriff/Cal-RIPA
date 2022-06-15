@@ -24,7 +24,7 @@
       "type": "string",
       "defaultValue": "PROD"
     },
-    "apim_sku" : {
+    "apim_sku": {
       "type": "string",
       "defaultValue": "Developer"
     },
@@ -307,7 +307,6 @@
       "type": "string",
       "defaultValue": "CosmosConnectionString"
     },
-    
     "submission_fa_config_storage_container_prefix_results": {
       "type": "string",
       "defaultValue": "result"
@@ -535,17 +534,17 @@
     "keyvault_secret_servicebus_connection_string": "[concat('@Microsoft.KeyVault(SecretUri=https://',variables('vaults_ripa_kv_name'),'.usgovcloudapi.net/secrets/', parameters('vaults_kv_secrets_key0'),')')]",
     "doj_inbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_input_path'))]",
     "doj_outbound_folder": "[concat('/', parameters('doj_environment'), parameters('submission_fa_config_sftp_output_path'))]",
-  
+
     // switch sub key for linking cosmosDB to dashboard
     "ext-dashboard-subscription-key": "[
       if(equals(parameters('environment_type'), 'PROD'), '5edf03ce-623c-47c3-b15f-dab2be8a319e', 
-        if(equals(parameters('environment_type'), 'QA'), 'c74e04b6-0cd7-4778-863e-34654eb49270', 'c74e04b6-0cd7-4778-863e-34654eb49270'))]", 
-    
+        if(equals(parameters('environment_type'), 'QA'), 'c74e04b6-0cd7-4778-863e-34654eb49270', 'c74e04b6-0cd7-4778-863e-34654eb49270'))]",
+
     // QA 5ff48213-da14-4ac7-85fb-a21bb91d8eb3; DEV a44e5271-a297-4daf-a3a9-f90a3146f3f5
     // "ext-dashboard-tennant-id": "[
     //   if(equals(parameters('environment_type'), 'PROD'), '', 
     //     if(equals(parameters('environment_type'), 'QA'), '5ff48213-da14-4ac7-85fb-a21bb91d8eb3', 'a44e5271-a297-4daf-a3a9-f90a3146f3f5'))]", 
-    
+
 
     // "template_version": "v2021.06.17.1",
     "template_version": "#{TEMPLATE_VERSION}#",
@@ -1454,7 +1453,7 @@
         "value": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
       }
     },
-    
+
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2016-10-01",
@@ -1612,7 +1611,7 @@
     //     },
     //     "value": "beep beep beep beep beep"
 
-        
+
     //     // "value": "[parameters('doj_sftp_password')]"
 
     //   }
@@ -1622,7 +1621,7 @@
     //   "apiVersion": "2017-05-10",
     //   "name": "ext_kv_db_vals",
     //   "type": "Microsoft.Resources/deployments",
-      
+
     //   "resourceGroup": "[variables('ext_group_name')]",
     //   "properties":{
     //     "mode": "Incremental",
@@ -1643,7 +1642,7 @@
     //               },
     //               "value": "[variables('keyvault_secret_ext_db_name')]"
     //             }
-                
+
     //           },
     //           {
     //             "type": "Microsoft.KeyVault/vaults/secrets",
@@ -1658,7 +1657,7 @@
     //               },
     //               "value": "[variables('keyvault_secret_ext_db_key')]"
     //             }
-                
+
     //           }
     //         ]
     //     }
@@ -1786,7 +1785,7 @@
     //SecurityRule for VnetAzureCloud
     {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-      "apiVersion": "2020-08-01", 
+      "apiVersion": "2020-08-01",
       "name": "[concat(variables('networkSecurityGroups_ripa_apim_nsg_name'), '/VnetAzureCloud')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_ripa_apim_nsg_name'))]"
@@ -3542,63 +3541,63 @@
       }
     },
     {
-        // add Cosmos Key to dashboard via script
-        "type": "Microsoft.Resources/deploymentScripts",
-        "apiVersion": "2020-10-01",
-        "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'cssa-cosmos-dashboard-runonce-delete-me-dps')]",
-        "location": "[resourceGroup().location]",
-        "kind": "AzurePowerShell",
-        "dependsOn": [
-          "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
-        ],
-        "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
-        "properties": {
-            "forceUpdateTag": "newGuid()",
-            "containerSettings": {
-            "containerGroupName": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'ext-cosmos-dashboard')]"
-            },
-            "azPowerShellVersion": "3.0",
-            "environmentVariables":[
-              {
-                "name":"DASHBOARD_COSMOS_PRIMARY_KEY",
-                "secureValue": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
-              },
-              {
-                "name": "CSSA_SP_APP_ID",
-                "secureValue": "#{CSSA_SP_APP_ID}#"
-              },
-              {
-                "name": "CSSA_SP_SECRET",
-                "secureValue": "#{CSSA_SP_SECRET}#"
-              },
-              {
-                "name": "CSSA_TENANT_ID",
-                "value": "#{CSSA_TENANT_ID}#" 
-              },
-              {
-                "name": "ETL_SUBSCRIPTION_ID",
-                "value": "[variables('ext-dashboard-subscription-key')]"
-              },
-              {
-                "name": "APPLICATION_NAME",
-                "value": "[parameters('application')]"
-              },
-              {
-                  "name": "AGENCY_ABBREVIATION",
-                  "value": "[parameters('agency_abbreviation')]"
-              },
-              {
-                  "name": "ENVIRONMENT_TYPE",
-                  "value": "[parameters('environment_type')]"
-              }
-            ],
-            "primaryScriptUri": "#{ZMP-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
-            "supportingScriptUris": [],
-            "timeout": "PT4H",
-            "cleanupPreference": "OnExpiration",
-            "retentionInterval": "PT4H" 
-          }
+      // add Cosmos Key to dashboard via script
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'cssa-cosmos-dashboard-runonce-delete-me-dps')]",
+      "location": "[resourceGroup().location]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+      ],
+      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
+      "properties": {
+        "forceUpdateTag": "newGuid()",
+        "containerSettings": {
+          "containerGroupName": "[concat(variables('sites_ripa_domain_fa_name'), '-', 'ext-cosmos-dashboard')]"
         },
+        "azPowerShellVersion": "3.0",
+        "environmentVariables": [
+          {
+            "name": "DASHBOARD_COSMOS_PRIMARY_KEY",
+            "secureValue": "[listKeys(concat('Microsoft.DocumentDB/databaseAccounts/',  variables('databaseAccounts_ripa_cdb_name')), '2020-09-01').primaryMasterKey]"
+          },
+          {
+            "name": "CSSA_SP_APP_ID",
+            "secureValue": "#{CSSA_SP_APP_ID}#"
+          },
+          {
+            "name": "CSSA_SP_SECRET",
+            "secureValue": "#{CSSA_SP_SECRET}#"
+          },
+          {
+            "name": "CSSA_TENANT_ID",
+            "value": "#{CSSA_TENANT_ID}#"
+          },
+          {
+            "name": "ETL_SUBSCRIPTION_ID",
+            "value": "[variables('ext-dashboard-subscription-key')]"
+          },
+          {
+            "name": "APPLICATION_NAME",
+            "value": "[parameters('application')]"
+          },
+          {
+            "name": "AGENCY_ABBREVIATION",
+            "value": "[parameters('agency_abbreviation')]"
+          },
+          {
+            "name": "ENVIRONMENT_TYPE",
+            "value": "[parameters('environment_type')]"
+          }
+        ],
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
+        "supportingScriptUris": [],
+        "timeout": "PT4H",
+        "cleanupPreference": "OnExpiration",
+        "retentionInterval": "PT4H"
+      }
+    },
     {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
@@ -3713,7 +3712,7 @@
             "value": "[parameters('certificate_secret_name')]"
           }
         ],
-        "primaryScriptUri": "#{ZMP-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
@@ -3766,12 +3765,12 @@
             "value": "[variables('storageAccounts_ripactsa_name')]"
           }
         ],
-        "primaryScriptUri": "#{ZMP-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{ZMP-BEAT-TABLE-CSV-SAS-URL}#",
-          "#{ZMP-CITY-TABLE-CSV-SAS-URL}#",
-          "#{ZMP-OFFENSE-TABLE-CSV-SAS-URL}#",
-          "#{ZMP-SCHOOL-TABLE-CSV-SAS-URL}#"
+          "#{__TEMPLATE_VERSION_FORMATTED__-BEAT-TABLE-CSV-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-CITY-TABLE-CSV-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-OFFENSE-TABLE-CSV-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-SCHOOL-TABLE-CSV-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
@@ -3899,18 +3898,18 @@
             "value": "True"
           }
         ],
-        "primaryScriptUri": "#{ZMP-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{ZMP-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
-          "#{ZMP-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
-          "#{ZMP-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
-          "#{ZMP-CONFIG-JSON-SAS-URL}#",
-          "#{ZMP-DOMAIN-ZIP-SAS-URL}#",
-          "#{ZMP-STOP-ZIP-SAS-URL}#",
-          "#{ZMP-SUBMISSION-ZIP-SAS-URL}#",
-          "#{ZMP-TEXTANALYTICS-ZIP-SAS-URL}#",
-          "#{ZMP-USERPROFILE-ZIP-SAS-URL}#",
-          "#{ZMP-UI-ZIP-SAS-URL}#"
+          "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-CONFIG-JSON-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-DOMAIN-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-STOP-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-SUBMISSION-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-USERPROFILE-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-UI-ZIP-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
