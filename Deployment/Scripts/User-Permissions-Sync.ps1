@@ -5,8 +5,8 @@ $environment        = "dev" # shd, dev, uat, prd, sbx(?)
 $env_initial        = "d" #s, d, q, p
 
 # DO NOT COMMIT
-$userObjectId = "5ff48213-da14-4ac7-85fb-a21bb91d8eb3"
-$userPassword = "Q3JFU2ic-u65S-yJrSn~FlVdQCWXM1.MF9"
+$userObjectId = ""
+$userPassword = ""
 # DO NOT COMMIT
 
 ## Sign into Azure w/ Service Principal
