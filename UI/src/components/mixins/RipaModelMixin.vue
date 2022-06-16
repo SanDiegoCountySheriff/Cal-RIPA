@@ -77,11 +77,12 @@ export default {
           isStudent: newValue.person?.isStudent || false,
           perceivedAge: newValue.person?.perceivedAge || null,
           perceivedGender: newValue.person?.perceivedGender || null,
+          perceivedOrientation: newValue.person?.perceivedOrientation || null,
           genderNonconforming: newValue.person?.genderNonconforming || null,
           perceivedUnhoused: newValue.person?.perceivedUnhoused || false,
           perceivedLimitedEnglish:
             newValue.person?.perceivedLimitedEnglish || false,
-          perceivedLgbt: newValue.person?.perceivedLgbt || false,
+          perceivedLgbt: newValue.person?.perceivedLgbt || null,
           perceivedOrKnownDisability:
             newValue.person?.perceivedOrKnownDisability || [],
           perceivedRace: newValue.person?.perceivedRace || [],
@@ -153,7 +154,7 @@ export default {
       this.updateBasisForPropertySeizureModel()
       this.updateBlockNumberModel()
       this.updateFullAddressModel()
-      this.updatePerceivedLgbtModel()
+      // this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
       this.updateStopReasonSearchModel()
       this.updateStopReasonModel()
@@ -339,17 +340,17 @@ export default {
       this.viewModel.location.fullAddress = fullAddress
     },
 
-    updatePerceivedLgbtModel() {
-      if (
-        this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4 ||
-        this.viewModel.person.perceivedGender === 7 ||
-        this.viewModel.person.perceivedGender === 8 ||
-        this.viewModel.person.perceivedGender === 9
-      ) {
-        this.viewModel.person.perceivedLgbt = true
-      }
-    },
+    // updatePerceivedLgbtModel() {
+    //   if (
+    //     this.viewModel.person.perceivedGender === 3 ||
+    //     this.viewModel.person.perceivedGender === 4 ||
+    //     this.viewModel.person.perceivedGender === 7 ||
+    //     this.viewModel.person.perceivedGender === 8 ||
+    //     this.viewModel.person.perceivedGender === 9
+    //   ) {
+    //     this.viewModel.person.perceivedLgbt = true
+    //   }
+    // },
 
     updatePropertyWasSeizedModel() {
       const actionsTaken =

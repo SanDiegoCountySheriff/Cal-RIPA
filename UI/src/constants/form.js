@@ -27,6 +27,11 @@ export const DISABILITIES = [
   },
 ]
 
+export const SEXUAL_ORIENTATIONS = [
+  { name: 'Straight/Heterosexual', value: 1 },
+  { name: 'LGB+', value: 2 },
+]
+
 export const GENDERS = [
   { name: 'Male', value: 1, disabled: true },
   { name: 'Female', value: 2, disabled: true },

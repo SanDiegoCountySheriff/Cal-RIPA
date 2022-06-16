@@ -29,7 +29,7 @@
     <template>
       <ripa-form-header
         class="tw-mt-8"
-        title="Perceived LGBT"
+        title="Perceived Sexual Orientation"
         required
         subtitle="§999.226(a)(6)"
         :on-open-statute="onOpenStatute"
@@ -39,13 +39,16 @@
       <v-container>
         <v-row no-gutters>
           <v-col cols="12" sm="12">
-            <ripa-switch
-              v-model="model.person.perceivedLgbt"
-              label="Perceived as LGBT"
+            <ripa-radio-group
+              name="orientationRadioGroup"
+              v-model="model.person.perceivedOrientation"
+              :items="orientationItems"
+              :rules="orientationRules"
+              label="Perceived Sexual Orientation"
               :max-width="200"
-              :disabled="isPerceivedLgbtDisabled"
               @input="handleInput"
-            ></ripa-switch>
+            >
+            </ripa-radio-group>
           </v-col>
         </v-row>
       </v-container>
@@ -57,8 +60,7 @@
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { GENDERS } from '@/constants/form'
+import { GENDERS, SEXUAL_ORIENTATIONS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
@@ -68,12 +70,12 @@ export default {
   components: {
     RipaFormHeader,
     RipaRadioGroup,
-    RipaSwitch,
   },
 
   data() {
     return {
       genderItems: GENDERS.filter(item => !item.disabled),
+      orientationItems: SEXUAL_ORIENTATIONS,
       viewModel: this.syncModel(this.value),
     }
   },
@@ -92,15 +94,11 @@ export default {
       return [isValid !== false || 'A gender is required']
     },
 
-    isPerceivedLgbtDisabled() {
-      return (
-        this.disabled ||
-        this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4 ||
-        this.viewModel.person.perceivedGender === 7 ||
-        this.viewModel.person.perceivedGender === 8 ||
-        this.viewModel.person.perceivedGender === 9
-      )
+    orientationRules() {
+      return [
+        this.viewModel.person.perceivedOrientation ||
+          'A perceived orientation is required',
+      ]
     },
   },
 

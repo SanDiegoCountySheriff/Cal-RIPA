@@ -74,14 +74,27 @@ describe('Ripa Gender', () => {
     expect(wrapper.html()).not.toContain('Female')
   })
 
-  it('should check lgbt as true', async () => {
+  it('should select LGB+', async () => {
     wrapper = factory({ value: stop })
 
-    const radioGroup = wrapper.findComponent(RipaRadioGroup)
-    radioGroup.vm.model = 9
+    const orientationRadioGroup = wrapper.findComponent('orientationRadioGroup')
+    orientationRadioGroup.vm.model = 2
+
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel.person.perceivedLgbt).toEqual(true)
-    expect(wrapper.vm.isPerceivedLgbtDisabled).toEqual(true)
+    expect(wrapper.vm.viewModel.person.perceivedOrientation).toEqual(2)
   })
+
+  it('should select Straight/Heterosexual', async () => {
+    wrapper = factory({ value: stop })
+
+    const orientationRadioGroup = wrapper.findComponent('orientationRadioGroup')
+    orientationRadioGroup.vm.model = 1
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.viewModel.person.perceivedOrientation).toEqual(1)
+  })
+
+  it.todo('should validate orientationRules')
 })
