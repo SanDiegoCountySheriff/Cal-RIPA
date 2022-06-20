@@ -4,10 +4,11 @@ $baseSubscription   = "c74e04b6-0cd7-4778-863e-34654eb49270"
 $environment        = "dev" # shd, dev, uat, prd, sbx(?)
 $env_initial        = "d" #s, d, q, p
 
-# DO NOT COMMIT
-$userObjectId = ""
-$userPassword = ""
-# DO NOT COMMIT
+# get principal user info from keyvayult
+$shdKeyVaultSubscription = "5edf03ce-623c-47c3-b15f-dab2be8a319e"
+$shdKeyVaultName = "kv-cssa-it-ops-shd-001"
+$userObjectId = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-spn) | ConvertFrom-Json).value
+$userPassword = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-pwd) | ConvertFrom-Json).value
 
 ## Sign into Azure w/ Service Principal
 Write-Host "Logging into Azure Cloud"
