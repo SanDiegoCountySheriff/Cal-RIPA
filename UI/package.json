@@ -28,7 +28,7 @@
     "vue-confirm-dialog": "1.0.2",
     "vue-json-pretty": "^1.8.1",
     "vue-router": "3.5.2",
-    "vuetify": "2.5.7",
+    "vuetify": "^2.5.7",
     "vuex": "3.6.2"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "eslint-plugin-vue": "7.12.1",
     "jest": "^27.0.6",
     "prettier": "2.3.2",
-    "sass": "^1.32.12",
+    "sass": "~1.32.12",
     "sass-loader": "10.1.1",
     "storybook-vue-router": "1.0.7",
     "vue-cli-plugin-tailwind": "2.0.6",
