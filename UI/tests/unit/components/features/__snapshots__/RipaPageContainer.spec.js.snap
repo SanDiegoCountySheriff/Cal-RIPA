@@ -27,13 +27,13 @@ exports[`Ripa Page Container should match snapshot 1`] = `
     <!---->
     <!---->
     <!---->
-    <div role="dialog" class="v-dialog__container">
+    <div class="v-dialog__container">
       <!---->
     </div>
-    <div role="dialog" class="v-dialog__container">
+    <div class="v-dialog__container">
       <!---->
     </div>
-    <div class="v-snack v-snack--bottom v-snack--has-background" style="padding-bottom: 0px; padding-top: 48px;" multi-line="">
+    <div class="v-snack v-snack--bottom v-snack--has-background" multi-line="">
       <transition-stub name="v-snack-transition">
         <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
           <div role="status" aria-live="polite" class="v-snack__content">
@@ -48,7 +48,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
         </div>
       </transition-stub>
     </div>
-    <div class="v-snack v-snack--bottom v-snack--has-background" style="padding-bottom: 0px; padding-top: 48px;" multi-line="">
+    <div class="v-snack v-snack--bottom v-snack--has-background" multi-line="">
       <transition-stub name="v-snack-transition">
         <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
           <div role="status" aria-live="polite" class="v-snack__content">
@@ -65,7 +65,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
     </div>
     <!---->
     <!---->
-    <div role="dialog" class="v-dialog__container">
+    <div class="v-dialog__container">
       <!---->
     </div>
   </div>

@@ -3,10 +3,10 @@
 exports[`Ripa Form Wrapper should match snapshot 1`] = `
 <div class="ripa-form-wrapper">
   <v-card-stub loaderheight="4" tag="div" maxwidth="900" outlined="true" class="mx-auto">
-    <v-card-text-stub>
+    <v-card-text-stub tag="div">
       <!---->
       <v-stepper-stub tag="div" value="1">
-        <v-stepper-header-stub>
+        <v-stepper-header-stub tag="div">
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="1"></v-stepper-step-stub>
           <v-divider-stub></v-divider-stub>
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="2"></v-stepper-step-stub>
@@ -20,7 +20,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
           <!---->
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="7" class="ripa-form-wrapper--summary-step-top"></v-stepper-step-stub>
         </v-stepper-header-stub>
-        <v-stepper-items-stub>
+        <v-stepper-items-stub tag="div">
           <v-stepper-content-stub step="1">
             <ripa-form-step-1-stub value="[object Object]" schools="" beats="" countycities="" noncountycities="" statutes="" onaddperson="[Function]" oncopyperson="[Function]" ondeleteperson="[Function]" oneditagencyquestions="[Function]" oneditperson="[Function]" oneditstop="[Function]" onback="[Function]" oncancel="[Function]" onnext="[Function]" onopenstatute="[Function]" onsubmit="[Function]" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]" onupdateuser="[Function]" display-user-edit="true"></ripa-form-step-1-stub>
           </v-stepper-content-stub>
@@ -43,7 +43,7 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
             <!---->
           </v-stepper-content-stub>
         </v-stepper-items-stub>
-        <v-stepper-header-stub>
+        <v-stepper-header-stub tag="div">
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="1"></v-stepper-step-stub>
           <v-divider-stub></v-divider-stub>
           <v-stepper-step-stub color="primary" completeicon="$complete" editicon="$edit" erroricon="$error" rules="" step="2"></v-stepper-step-stub>
