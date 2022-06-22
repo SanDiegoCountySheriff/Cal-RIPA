@@ -48,7 +48,7 @@ stages:
 
           - task: NodeTool@0
             inputs:
-              versionSpec: "16.x"
+              versionSpec: "14.x"
             displayName: "Install Node.js"
 
           - script: rm -rf "UI/node_modules"
@@ -95,7 +95,7 @@ stages:
             inputs:
               command: "custom"
               workingDir: "UI/"
-              customCommand: "run build --legacy-peer-deps"
+              customCommand: "run build"
 
           - task: ArchiveFiles@2
             displayName: "Archive storybook Files"
