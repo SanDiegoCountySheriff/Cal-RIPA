@@ -59,6 +59,15 @@
           AG's Website </a
         >.
       </p>
+      <p
+        >To report any bugs or request features please
+        <a
+          href="https://github.com/SanDiegoCountySheriff/Cal-RIPA/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          >submit an issue</a
+        >.</p
+      >
       <v-divider></v-divider>
     </v-card-text>
   </v-card>
