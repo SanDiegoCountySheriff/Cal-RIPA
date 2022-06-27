@@ -112,6 +112,7 @@ export default {
         },
         stopResult: {
           anyResultsOfStop: newValue.stopResult?.anyResultsOfStop || false,
+          resultsOfStop1: newValue.stopResult?.resultsOfStop1 || false,
           resultsOfStop2: newValue.stopResult?.resultsOfStop2 || false,
           resultsOfStop3: newValue.stopResult?.resultsOfStop3 || false,
           resultsOfStop4: newValue.stopResult?.resultsOfStop4 || false,
@@ -124,6 +125,9 @@ export default {
           resultsOfStop11: newValue.stopResult?.resultsOfStop11 || false,
           resultsOfStop12: newValue.stopResult?.resultsOfStop12 || false,
           resultsOfStop13: newValue.stopResult?.resultsOfStop13 || false,
+          resultsOfStop14: newValue.stopResult?.resultsOfStop14 || false,
+          verbalWarningCodes: newValue.stopResult?.verbalWarningCodes || [],
+          writtenWarningCodes: newValue.stopResult?.writtenWarningCodes || [],
           warningCodes: newValue.stopResult?.warningCodes || [],
           citationCodes: newValue.stopResult?.citationCodes || [],
           infieldCodes: newValue.stopResult?.infieldCodes || [],
@@ -573,6 +577,7 @@ export default {
 
     updateStopResultModel() {
       if (!this.viewModel.stopResult.anyResultsOfStop) {
+        this.viewModel.stopResult.resultsOfStop1 = false
         this.viewModel.stopResult.resultsOfStop2 = false
         this.viewModel.stopResult.resultsOfStop3 = false
         this.viewModel.stopResult.resultsOfStop4 = false
@@ -585,6 +590,11 @@ export default {
         this.viewModel.stopResult.resultsOfStop11 = false
         this.viewModel.stopResult.resultsOfStop12 = false
         this.viewModel.stopResult.resultsOfStop13 = false
+        this.viewModel.stopResult.resultsOfStop14 = false
+      }
+
+      if (!this.viewModel.stopResult.resultsOfStop1) {
+        this.viewModel.stopResult.verbalWarningCodes = null
       }
 
       if (!this.viewModel.stopResult.resultsOfStop2) {
@@ -601,6 +611,10 @@ export default {
 
       if (!this.viewModel.stopResult.resultsOfStop6) {
         this.viewModel.stopResult.custodialArrestCodes = null
+      }
+
+      if (!this.viewModel.stopResult.resultsOfStop14) {
+        this.viewModel.stopResult.writtenWarningCodes = null
       }
     },
   },

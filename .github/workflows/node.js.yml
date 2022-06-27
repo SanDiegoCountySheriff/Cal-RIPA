@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: install node.js dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: UI
 
       - name: run jest unit tests

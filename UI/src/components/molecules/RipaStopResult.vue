@@ -53,16 +53,16 @@
 
           <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
-              v-model="model.stopResult.resultsOfStop2"
-              label="Warning (verbal or written)"
+              v-model="model.stopResult.resultsOfStop1"
+              label="Verbal Warning"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop2">
+            <template v-if="model.stopResult.resultsOfStop1">
               <ripa-autocomplete
-                v-model="model.stopResult.warningCodes"
+                v-model="model.stopResult.verbalWarningCodes"
                 hint="Select Up To 5 Offense Codes (required)"
                 persistent-hint
                 label="Offense Code"
@@ -72,20 +72,61 @@
                 multiple
                 custom-chip
                 :max-selections="5"
-                :rules="warningRules"
+                :rules="verbalWarningRules"
                 :custom-chip-label="getStatuteLabel"
-                @remove-item="removeItem('warningCodes', $event)"
+                @remove-item="removeItem('verbalWarningCodes', $event)"
                 @input="handleInput"
               >
               </ripa-autocomplete>
-              <template v-if="isPullReasonCodeWarningVisible">
+              <template v-if="isPullReasonCodeVerbalWarningVisible">
                 <div class="tw-mt-4 tw-text-content">
                   <v-btn
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeWarningDisabled"
-                    @click="handlePullReasonCodeWarning"
+                    :disabled="isPullReasonCodeVerbalWarningDisabled"
+                    @click="handlePullReasonCodeVerbalWarning"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
+            <ripa-checkbox
+              v-model="model.stopResult.resultsOfStop14"
+              label="Written Warning"
+              :rules="actionsTakenRules"
+              hide-details
+              @input="handleInput"
+            ></ripa-checkbox>
+
+            <template v-if="model.stopResult.resultsOfStop14">
+              <ripa-autocomplete
+                v-model="model.stopResult.writtenWarningCodes"
+                hint="Select Up To 5 Offense Codes (required)"
+                persistent-hint
+                label="Offense Code"
+                item-text="fullName"
+                item-value="code"
+                :items="statutes"
+                multiple
+                custom-chip
+                :max-selections="5"
+                :rules="writtenWarningRules"
+                :custom-chip-label="getStatuteLabel"
+                @remove-item="removeItem('writtenWarningCodes', $event)"
+                @input="handleInput"
+              >
+              </ripa-autocomplete>
+              <template v-if="isPullReasonCodeWrittenWarningVisible">
+                <div class="tw-mt-4 tw-text-content">
+                  <v-btn
+                    x-small
+                    outlined
+                    color="primary"
+                    :disabled="isPullReasonCodeWrittenWarningDisabled"
+                    @click="handlePullReasonCodeWrittenWarning"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -175,7 +216,7 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop5"
-              label="Custodial arrest pursurant to outstanding warrant"
+              label="Custodial arrest pursuant to outstanding warrant"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
@@ -239,7 +280,7 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop9"
-              label="Contacted parent/legal guardian or other person legally responsible for the minor"
+              label="Contacted parent/legal guardian or other person legally responsible for the person"
               :rules="actionsTakenRules"
               hide-details
               @input="handleInput"
@@ -335,6 +376,18 @@ export default {
       return [1, 2, 3, 5].includes(reasonForStop)
     },
 
+    isPullReasonCodeVerbalWarningVisible() {
+      const codes = this.viewModel.stopResult?.verbalWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeWrittenWarningVisible() {
+      const codes = this.viewModel.stopResult?.writtenWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
     isPullReasonCodeWarningVisible() {
       const codes = this.viewModel.stopResult?.warningCodes || []
       const reasonCode = this.getReasonCode()
@@ -359,6 +412,14 @@ export default {
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
+    isPullReasonCodeVerbalWarningDisabled() {
+      return this.viewModel.stopResult?.verbalWarningCodes.length >= 5
+    },
+
+    isPullReasonCodeWrittenWarningDisabled() {
+      return this.viewModel.stopResult?.writtenWarningCodes.length >= 5
+    },
+
     isPullReasonCodeWarningDisabled() {
       return this.viewModel.stopResult?.warningCodes.length >= 5
     },
@@ -377,6 +438,7 @@ export default {
 
     actionsTakenRules() {
       const checked = this.viewModel.stopResult.anyResultsOfStop
+      const value1 = this.viewModel.stopResult.resultsOfStop1
       const value2 = this.viewModel.stopResult.resultsOfStop2
       const value3 = this.viewModel.stopResult.resultsOfStop3
       const value4 = this.viewModel.stopResult.resultsOfStop4
@@ -389,10 +451,12 @@ export default {
       const value11 = this.viewModel.stopResult.resultsOfStop11
       const value12 = this.viewModel.stopResult.resultsOfStop12
       const value13 = this.viewModel.stopResult.resultsOfStop13
+      const value14 = this.viewModel.stopResult.resultsOfStop14
 
       return [
         (checked &&
-          (value2 ||
+          (value1 ||
+            value2 ||
             value3 ||
             value4 ||
             value5 ||
@@ -403,8 +467,29 @@ export default {
             value10 ||
             value11 ||
             value12 ||
-            value13)) ||
+            value13 ||
+            value14)) ||
           'An action taken is required',
+      ]
+    },
+
+    verbalWarningRules() {
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop1
+      const options = this.viewModel.stopResult.verbalWarningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
+    writtenWarningRules() {
+      const checked1 = this.viewModel.stopResult.anyResultsOfStop
+      const checked2 = this.viewModel.stopResult.resultsOfStop14
+      const options = this.viewModel.stopResult.writtenWarningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
       ]
     },
 
@@ -481,6 +566,22 @@ export default {
       }
 
       return null
+    },
+
+    handlePullReasonCodeVerbalWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
+        this.viewModel.stopResult.verbalWarningCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeWrittenWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.viewModel.stopResult.pullFromReasonCode = true
+        this.viewModel.stopResult.writtenWarningCodes.push(reasonCode)
+      }
     },
 
     handlePullReasonCodeWarning() {

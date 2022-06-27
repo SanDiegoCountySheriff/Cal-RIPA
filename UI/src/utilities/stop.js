@@ -144,6 +144,7 @@ export const stopResultGivenTemplate = template => {
   if (template === 'motor') {
     return {
       anyResultsOfStop: true,
+      resultsOfStop1: false,
       resultsOfStop2: false,
       resultsOfStop3: true,
       resultsOfStop4: false,
@@ -156,6 +157,8 @@ export const stopResultGivenTemplate = template => {
       resultsOfStop11: false,
       resultsOfStop12: false,
       resultsOfStop13: false,
+      verbalWarningCodes: [],
+      writtenWarningCodes: [],
       warningCodes: [],
       citationCodes: [54106],
       infieldCodes: [],
@@ -1066,6 +1069,7 @@ const getFullStopPeopleListed = apiStop => {
       },
       stopResult: {
         anyResultsOfStop,
+        resultsOfStop1: getKeyFoundInArray(resultsOfStop, 1),
         resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
         resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
         resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
@@ -1078,6 +1082,9 @@ const getFullStopPeopleListed = apiStop => {
         resultsOfStop11: getKeyFoundInArray(resultsOfStop, 11),
         resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
         resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
+        resultsOfStop14: getKeyFoundInArray(resultsOfStop, 14),
+        verbalWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 1),
+        writtenWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 14),
         warningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
         citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
         infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
@@ -1884,6 +1891,7 @@ const getContrabandOrEvidenceDiscovered = person => {
 
 const getResultOfStop = (person, statutes) => {
   const types = []
+  const resultsOfStop1 = person.stopResult?.resultsOfStop1 || false
   const resultsOfStop2 = person.stopResult?.resultsOfStop2 || false
   const resultsOfStop3 = person.stopResult?.resultsOfStop3 || false
   const resultsOfStop4 = person.stopResult?.resultsOfStop4 || false
@@ -1896,7 +1904,11 @@ const getResultOfStop = (person, statutes) => {
   const resultsOfStop11 = person.stopResult?.resultsOfStop11 || false
   const resultsOfStop12 = person.stopResult?.resultsOfStop12 || false
   const resultsOfStop13 = person.stopResult?.resultsOfStop13 || false
+  const resultsOfStop14 = person.stopResult?.resultsOfStop14 || false
 
+  if (resultsOfStop1) {
+    types.push(1)
+  }
   if (resultsOfStop2) {
     types.push(2)
   }
@@ -1933,6 +1945,9 @@ const getResultOfStop = (person, statutes) => {
   if (resultsOfStop13) {
     types.push(13)
   }
+  if (resultsOfStop14) {
+    types.push(14)
+  }
 
   const mappedItems = types.map(item => {
     const [filteredStopResult] = STOP_RESULTS.filter(
@@ -1942,6 +1957,10 @@ const getResultOfStop = (person, statutes) => {
     const stopResult = {
       key: item.toString(),
       result: filteredStopResult?.name || '',
+    }
+
+    if (item === 1) {
+      stopResult.listCodes = getVerbalWarningCodes(person, statutes)
     }
     if (item === 2) {
       stopResult.listCodes = getWarningCodes(person, statutes)
@@ -1954,6 +1973,9 @@ const getResultOfStop = (person, statutes) => {
     }
     if (item === 6) {
       stopResult.listCodes = getCustodialArrestCodes(person, statutes)
+    }
+    if (item === 14) {
+      stopResult.listCodes = getWrittenWarningCodes(person, statutes)
     }
 
     return stopResult
@@ -1969,6 +1991,22 @@ const getResultOfStop = (person, statutes) => {
       result: 'None',
     },
   ]
+}
+
+const getVerbalWarningCodes = (person, statutes) => {
+  const codes = person.stopResult?.verbalWarningCodes || []
+
+  return codes.map(code => {
+    return getStatute(code, statutes)
+  })
+}
+
+const getWrittenWarningCodes = (person, statutes) => {
+  const codes = person.stopResult?.writtenWarningCodes || []
+
+  return codes.map(code => {
+    return getStatute(code, statutes)
+  })
 }
 
 const getWarningCodes = (person, statutes) => {
