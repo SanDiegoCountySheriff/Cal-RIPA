@@ -575,4 +575,122 @@ describe('Ripa Stop Result', () => {
     // expect(wrapper.vm.isReasonableSuspicionCode).toBe(true)
     expect(reasonableSuspicion).toBe(true)
   })
+
+  it('should return false for handlePullReasonCodeVerbalWarning', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop1 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeVerbalWarning()
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.html()).toContain('Statute Code 1')
+    expect(wrapper.html()).not.toContain('Statute Code 1 - Statute Text 1')
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
+
+  it('should return false for handlePullReasonCodeWrittenWarning', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop14 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeWrittenWarning()
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.html()).toContain('Statute Code 1')
+    expect(wrapper.html()).not.toContain('Statute Code 1 - Statute Text 1')
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
+
+  it('should return false for handlePullReasonCodeWarning', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop2 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeWarning()
+
+    await wrapper.vm.$nextTick()
+
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
+
+  it('should return false for handlePullReasonCodeCitation', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop3 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeCitation()
+
+    await wrapper.vm.$nextTick()
+
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
+
+  it('should return false for handlePullReasonCodeInfield', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop4 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeInfield()
+
+    await wrapper.vm.$nextTick()
+
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
+
+  it('should return false for handlePullReasonCodeCustodialArrest', async () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop, statutes: statutes },
+    })
+
+    const updatedStop = defaultStop()
+    updatedStop.stopReason.trafficViolationCode = 1
+    updatedStop.stopResult.resultsOfStop6 = true
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    wrapper.vm.handlePullReasonCodeCustodialArrest()
+
+    await wrapper.vm.$nextTick()
+
+    expect(updatedStop.stopResult.pullFromReasonCode).toBe(false)
+  })
 })
