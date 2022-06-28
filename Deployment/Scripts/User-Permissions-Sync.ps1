@@ -41,11 +41,13 @@ $sqlConn.Open()
 Write-Host "Connected to database"
 
 # delete ALL entries in db
-$delSql = "delete from [model].[dimSecurity]"
+Write-Host "Truncating the user table"
+$delSql = "truncate table [model].[dimSecurity]"
 $delcmd = New-Object Data.SqlClient.SqlCommand
 $delcmd.Connection = $sqlConn
 $delcmd.CommandText = $delSql
 $delcmd.ExecuteNonQuery() | Out-Null
+Write-Host "All records removed"
 
 # iterate thru groups
 foreach ($group in $ripaDashboardReaders) {
@@ -108,9 +110,7 @@ foreach ($group in $ripaDashboardReaders) {
             # nack out
             Write-Host $_
             Write-Error $member.displayName "was not added to db" 
-
-        }
-        
+        }        
     }    
 }
 
