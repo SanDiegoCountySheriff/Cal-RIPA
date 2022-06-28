@@ -5,6 +5,7 @@ import {
   OFFICER_ASSIGNMENTS,
   RACES,
   GENDERS,
+  SEXUAL_ORIENTATIONS,
   DISABILITIES,
   STOP_REASONS,
   EDUCATION_VIOLATIONS,
@@ -1237,7 +1238,7 @@ export const fullStopToStop = fullStop => {
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
-      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLgbt: person.perceivedLgbt || null,
       perceivedUnhoused: person.perceivedUnhoused || null,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
@@ -1394,8 +1395,9 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
+      perceivedOrientation: getPerceivedOrientationText(person),
       genderNonconforming: person.genderNonconforming,
-      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLgbt: person.perceivedLgbt || null,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
@@ -1532,6 +1534,25 @@ const getPerceivedGender = person => {
   return null
 }
 
+const getPerceivedOrientation = person => {
+  const orientation = person.perceivedOrientation || null
+  if (orientation) {
+    const [filteredOrientationValue] = SEXUAL_ORIENTATIONS.filter(
+      item => item.value === orientation,
+    )
+    const [filteredOrientationName] = SEXUAL_ORIENTATIONS.filter(
+      item => item.name === orientation,
+    )
+    const filteredOrientation =
+      filteredOrientationValue || filteredOrientationName
+
+    return {
+      code: filteredOrientation?.value || null,
+      text: filteredOrientation?.name || '',
+    }
+  }
+}
+
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
   return gender?.code || null
@@ -1540,6 +1561,11 @@ const getPerceivedGenderCode = person => {
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
   return gender?.text || ''
+}
+
+const getPerceivedOrientationText = person => {
+  const orientation = getPerceivedOrientation(person)
+  return orientation?.text || ''
 }
 
 const getPerceivedOrKnownDisability = person => {

@@ -96,7 +96,7 @@ export default {
 
     orientationRules() {
       return [
-        this.viewModel.person.perceivedOrientation ||
+        !!this.viewModel.person.perceivedOrientation ||
           'A perceived orientation is required',
       ]
     },
