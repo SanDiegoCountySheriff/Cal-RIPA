@@ -10,8 +10,6 @@ $shdKeyVaultName = "kv-cssa-it-ops-shd-001"
 $userObjectId = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-spn) | ConvertFrom-Json).value
 $userPassword = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-pwd) | ConvertFrom-Json).value
 
-
-
 ## Sign into Azure w/ Service Principal
 Write-Host "Logging into Azure Cloud"
 az cloud set -n AzureUSGovernment
@@ -58,7 +56,13 @@ foreach ($group in $ripaDashboardReaders) {
     $agency = $group.displayName.Split("-")[0]; # take first section of display name to get agency name
     $agencySubscription = $subscriptions | Where-Object -FilterScript { $_.name -eq "$agency-$environment" }
     Write-Host "subscription:" $agencySubscription.displayName $agencySubscription.id
-    
+        
+    if ($null -eq $agencySubscription){
+        # can't find sub from query. warn user & move on
+        Write-Warning "no subscription found for $agency-$environment" 
+        continue
+    }
+
     # get the ORI code
     $subid = "/subscriptions/" + $agencySubscription.id
     $tagList = (az tag list --resource-id $subid) | ConvertFrom-Json
