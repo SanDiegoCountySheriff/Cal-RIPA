@@ -10,6 +10,8 @@ $shdKeyVaultName = "kv-cssa-it-ops-shd-001"
 $userObjectId = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-spn) | ConvertFrom-Json).value
 $userPassword = ((az keyvault secret show --subscription $shdKeyVaultSubscription --vault-name $shdKeyVaultName -n cssa-marketplace-deployment-pwd) | ConvertFrom-Json).value
 
+
+
 ## Sign into Azure w/ Service Principal
 Write-Host "Logging into Azure Cloud"
 az cloud set -n AzureUSGovernment
@@ -40,6 +42,13 @@ $sqlConn.ConnectionString = "Server=$sqlServerName,1433;User id=$dbUserName; Pas
 $sqlConn.Open()
 Write-Host "Connected to database"
 
+# delete ALL entries in db
+$delSql = "delete from [model].[dimSecurity]"
+$delcmd = New-Object Data.SqlClient.SqlCommand
+$delcmd.Connection = $sqlConn
+$delcmd.CommandText = $delSql
+$delcmd.ExecuteNonQuery() | Out-Null
+
 # iterate thru groups
 foreach ($group in $ripaDashboardReaders) {
 
@@ -61,17 +70,8 @@ foreach ($group in $ripaDashboardReaders) {
         }    
 
     # define sql statement
-    $sql="if exists (select 1 from [model].[dimSecurity] where AD_ObjectID = @ObjectId and AD_Group = @Group)
-    begin
-        update [model].[dimSecurity]
-        set AD_Group = @Group, Ori = @Ori, IsEnabled = 1, AD_Name = @Name, AD_Email = @Email, AD_ObjectGroupID = @ObjectGroupId, AD_User_Principal_Name = @PrincipalName
-        where AD_ObjectID = @ObjectId and AD_Group = @Group
-    end
-    else
-    begin
-        insert into [model].[dimSecurity](AD_Group, Ori, IsEnabled, AD_Name, AD_ObjectID, AD_Email, AD_ObjectGroupID, AD_User_Principal_Name)
-        values (@Group, @Ori, 1, @Name, @ObjectId, @Email, @ObjectGroupId, @PrincipalName)
-    end"
+    $sql="insert into [model].[dimSecurity](AD_Group, Ori, IsEnabled, AD_Name, AD_ObjectID, AD_Email, AD_ObjectGroupID, AD_User_Principal_Name)
+        values (@Group, @Ori, 1, @Name, @ObjectId, @Email, @ObjectGroupId, @PrincipalName)"
 
     # prepare the command
     $sqlcmd = New-Object Data.SqlClient.SqlCommand
