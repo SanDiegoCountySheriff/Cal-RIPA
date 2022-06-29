@@ -371,7 +371,12 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
     }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
-    items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    if (person.perceivedOrientation) {
+      items.push({ id: 'B5', content: getSummaryPerceivedOrientation(person) })
+    }
+    if (person.perceivedLgbt !== null) {
+      items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    }
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
     if (person.perceivedUnhoused !== null) {
       items.push({ id: 'B7', content: getSummaryPerceivedUnhoused(person) })
@@ -440,6 +445,14 @@ const getSummaryPerceivedGender = person => {
     level: 1,
     header: 'Perceived Gender',
     detail: person.perceivedGender,
+  }
+}
+
+const getSummaryPerceivedOrientation = person => {
+  return {
+    level: 1,
+    header: 'Perceived Orientation',
+    detail: person.perceivedOrientation,
   }
 }
 
@@ -1007,6 +1020,7 @@ const getFullStopPeopleListed = apiStop => {
       isStudent: person.isStudent || false,
       perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
+      perceivedOrientation: getPerceivedOrientationCode(person),
       genderNonconforming: person.genderNonconforming,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
@@ -1238,7 +1252,8 @@ export const fullStopToStop = fullStop => {
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
-      perceivedLgbt: person.perceivedLgbt || null,
+      perceivedOrientation: person.perceivedOrientation || null,
+      perceivedLgbt: person.perceivedLgbt,
       perceivedUnhoused: person.perceivedUnhoused || null,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
@@ -1397,7 +1412,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedGender: getPerceivedGenderText(person),
       perceivedOrientation: getPerceivedOrientationText(person),
       genderNonconforming: person.genderNonconforming,
-      perceivedLgbt: person.perceivedLgbt || null,
+      perceivedLgbt: person.perceivedLgbt,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
@@ -1558,6 +1573,11 @@ const getPerceivedGenderCode = person => {
   return gender?.code || null
 }
 
+const getPerceivedOrientationCode = person => {
+  const orientation = getPerceivedOrientation(person)
+  return orientation?.code || null
+}
+
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
   return gender?.text || ''
@@ -1565,7 +1585,7 @@ const getPerceivedGenderText = person => {
 
 const getPerceivedOrientationText = person => {
   const orientation = getPerceivedOrientation(person)
-  return orientation?.text || ''
+  return orientation?.text || null
 }
 
 const getPerceivedOrKnownDisability = person => {

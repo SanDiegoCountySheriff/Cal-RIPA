@@ -17,7 +17,6 @@
               :disabled="disabled"
               :items="genderItems"
               :rules="genderRules"
-              clear-selection
               @input="handleGenderInput"
             >
             </ripa-radio-group>

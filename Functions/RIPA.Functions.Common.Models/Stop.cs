@@ -177,8 +177,9 @@ namespace RIPA.Functions.Common.Models
         public PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
         public int PerceivedAge { get; set; }
         public string PerceivedGender { get; set; }
+        public string PerceivedOrientation { get; set; }
         public bool? GenderNonconforming { get; set; }
-        public bool PerceivedLgbt { get; set; }
+        public bool? PerceivedLgbt { get; set; }
         public bool? PerceivedUnhoused { get; set; }
         public ReasonForStop ReasonForStop { get; set; }
         public string ReasonForStopExplanation { get; set; }
