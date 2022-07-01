@@ -40,6 +40,15 @@ $sqlConn.ConnectionString = "Server=$sqlServerName,1433;User id=$dbUserName; Pas
 $sqlConn.Open()
 Write-Host "Connected to database"
 
+# delete ALL entries in db
+Write-Host "Truncating the user table"
+$delSql = "truncate table [model].[dimSecurity]"
+$delcmd = New-Object Data.SqlClient.SqlCommand
+$delcmd.Connection = $sqlConn
+$delcmd.CommandText = $delSql
+$delcmd.ExecuteNonQuery() | Out-Null
+Write-Host "All records removed"
+
 # iterate thru groups
 foreach ($group in $ripaDashboardReaders) {
 
@@ -49,7 +58,13 @@ foreach ($group in $ripaDashboardReaders) {
     $agency = $group.displayName.Split("-")[0]; # take first section of display name to get agency name
     $agencySubscription = $subscriptions | Where-Object -FilterScript { $_.name -eq "$agency-$environment" }
     Write-Host "subscription:" $agencySubscription.displayName $agencySubscription.id
-    
+        
+    if ($null -eq $agencySubscription){
+        # can't find sub from query. warn user & move on
+        Write-Warning "no subscription found for $agency-$environment" 
+        continue
+    }
+
     # get the ORI code
     $subid = "/subscriptions/" + $agencySubscription.id
     $tagList = (az tag list --resource-id $subid) | ConvertFrom-Json
@@ -61,17 +76,8 @@ foreach ($group in $ripaDashboardReaders) {
         }    
 
     # define sql statement
-    $sql="if exists (select 1 from [model].[dimSecurity] where AD_ObjectID = @ObjectId and AD_Group = @Group)
-    begin
-        update [model].[dimSecurity]
-        set AD_Group = @Group, Ori = @Ori, IsEnabled = 1, AD_Name = @Name, AD_Email = @Email, AD_ObjectGroupID = @ObjectGroupId, AD_User_Principal_Name = @PrincipalName
-        where AD_ObjectID = @ObjectId and AD_Group = @Group
-    end
-    else
-    begin
-        insert into [model].[dimSecurity](AD_Group, Ori, IsEnabled, AD_Name, AD_ObjectID, AD_Email, AD_ObjectGroupID, AD_User_Principal_Name)
-        values (@Group, @Ori, 1, @Name, @ObjectId, @Email, @ObjectGroupId, @PrincipalName)
-    end"
+    $sql="insert into [model].[dimSecurity](AD_Group, Ori, IsEnabled, AD_Name, AD_ObjectID, AD_Email, AD_ObjectGroupID, AD_User_Principal_Name)
+        values (@Group, @Ori, 1, @Name, @ObjectId, @Email, @ObjectGroupId, @PrincipalName)"
 
     # prepare the command
     $sqlcmd = New-Object Data.SqlClient.SqlCommand
@@ -104,9 +110,7 @@ foreach ($group in $ripaDashboardReaders) {
             # nack out
             Write-Host $_
             Write-Error $member.displayName "was not added to db" 
-
-        }
-        
+        }        
     }    
 }
 
