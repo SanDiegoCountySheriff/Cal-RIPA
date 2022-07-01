@@ -3,7 +3,9 @@
   "handler": "Microsoft.Azure.CreateUIDef",
   "version": "0.1.2-preview",
   "parameters": {
-    "resourceTypes": ["microsoft.resources/resourcegroups"],
+    "resourceTypes": [
+      "microsoft.resources/resourcegroups"
+    ],
     "config": {
       "isWizard": false,
       "basics": {
@@ -59,8 +61,8 @@
               "label": "AMADOR SHERIFF",
               "value": {
                 "county": "Amador",
-                "abbreviation": "amador",
-                "type": "sd",
+                "abbreviation": "ac",
+                "type": "so",
                 "ori": "CA0030000"
               }
             },
@@ -86,7 +88,7 @@
               "label": "CAMPBELL POLICE",
               "value": {
                 "county": "Santa Clara",
-                "abbreviation": "campbell",
+                "abbreviation": "c",
                 "type": "pd",
                 "ori": "CA0430200"
               }
@@ -131,7 +133,7 @@
               "label": "EL CAJON POLICE",
               "value": {
                 "county": "San Diego",
-                "abbreviation": "elcajon",
+                "abbreviation": "ec",
                 "type": "pd",
                 "ori": "CA0370500"
               }
@@ -158,8 +160,8 @@
               "label": "GLENN SHERIFF",
               "value": {
                 "county": "Glenn",
-                "abbreviation": "glenn",
-                "type": "sd",
+                "abbreviation": "gc",
+                "type": "so",
                 "ori": "CA0110000"
               }
             },
@@ -167,8 +169,8 @@
               "label": "HUMBOLDT SHERIFF",
               "value": {
                 "county": "Humboldt",
-                "abbreviation": "humboldt",
-                "type": "sd",
+                "abbreviation": "hc",
+                "type": "so",
                 "ori": "CA0120000"
               }
             },
@@ -194,8 +196,8 @@
               "label": "KERN SHERIFF",
               "value": {
                 "county": "Kern",
-                "abbreviation": "kern",
-                "type": "sd",
+                "abbreviation": "kc",
+                "type": "so1",
                 "ori": "CA0150000"
               }
             },
@@ -227,6 +229,15 @@
               }
             },
             {
+              "label": "LIVERMORE POLICE",
+              "value": {
+                "county": "Alameda",
+                "abbreviation": "l",
+                "type": "pd",
+                "ori": "CA0010700"
+              }
+            },
+            {
               "label": "LOS ALTOS POLICE",
               "value": {
                 "county": "Sanata CLara",
@@ -248,8 +259,8 @@
               "label": "MADERA SHERIFF",
               "value": {
                 "county": "Madera",
-                "abbreviation": "madera",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so5",
                 "ori": "CA0200000"
               }
             },
@@ -275,8 +286,8 @@
               "label": "MENDOCINO SHERIFF",
               "value": {
                 "county": "Mendocino",
-                "abbreviation": "mendocino",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so6",
                 "ori": "CA0230000"
               }
             },
@@ -320,8 +331,8 @@
               "label": "NAPA SHERIFF",
               "value": {
                 "county": "Napa",
-                "abbreviation": "napa",
-                "type": "sd",
+                "abbreviation": "n",
+                "type": "so",
                 "ori": "CA0280000"
               }
             },
@@ -329,8 +340,8 @@
               "label": "NEVADA SHERIFF",
               "value": {
                 "county": "Nevada",
-                "abbreviation": "nevada",
-                "type": "sd",
+                "abbreviation": "nc",
+                "type": "so",
                 "ori": "CA0290000"
               }
             },
@@ -338,7 +349,7 @@
               "label": "ORANGE SHERIFF",
               "value": {
                 "county": "Orange",
-                "abbreviation": "orange",
+                "abbreviation": "oc",
                 "type": "sd",
                 "ori": "CA0300000"
               }
@@ -347,8 +358,8 @@
               "label": "PLACER SHERIFF",
               "value": {
                 "county": "Placer",
-                "abbreviation": "placer",
-                "type": "sd",
+                "abbreviation": "pc",
+                "type": "so1",
                 "ori": "CA0310000"
               }
             },
@@ -392,7 +403,7 @@
               "label": "SAN BERNARDINO SHERIFF",
               "value": {
                 "county": "San Bernardino",
-                "abbreviation": "sanbernardino",
+                "abbreviation": "sbc",
                 "type": "sd",
                 "ori": "CA0360000"
               }
@@ -411,7 +422,7 @@
               "value": {
                 "county": "San Francisco",
                 "abbreviation": "sf",
-                "type": "sd",
+                "type": "so",
                 "ori": "CA0380000"
               }
             },
@@ -455,8 +466,8 @@
               "label": "SANTA CLARA SHERIFF",
               "value": {
                 "county": "Santa Clara",
-                "abbreviation": "santaclara",
-                "type": "sd",
+                "abbreviation": "scc",
+                "type": "so",
                 "ori": "CA0430000"
               }
             },
@@ -491,8 +502,8 @@
               "label": "SISKIYOU SHERIFF",
               "value": {
                 "county": "Siskiyou",
-                "abbreviation": "siskiyou",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so4",
                 "ori": "CA0470000"
               }
             },
@@ -527,8 +538,8 @@
               "label": "SUTTER SHERIFF",
               "value": {
                 "county": "Sutter",
-                "abbreviation": "sutter",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so3",
                 "ori": "CA0510000"
               }
             },
@@ -554,8 +565,8 @@
               "label": "TULARE SHERIFF",
               "value": {
                 "county": "Tulare",
-                "abbreviation": "tulare",
-                "type": "sd",
+                "abbreviation": "tc",
+                "type": "so1",
                 "ori": "CA0540000"
               }
             },
