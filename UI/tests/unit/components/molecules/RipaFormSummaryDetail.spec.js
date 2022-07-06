@@ -146,4 +146,16 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Force-Related Actions Taken During Stop')
   })
+
+  it('should display perceived LGBT for legacy stops', () => {
+    wrapper = factory({ apiStop: apiStop })
+
+    expect(wrapper.html()).toContain('Perceived LGBT')
+  })
+
+  it('should display perceived orientation for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Perceived Orientation')
+  })
 })

@@ -81,4 +81,24 @@ describe('stop', () => {
     expect(actual[0].listActionTakenDuringStop).toEqual(null)
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
+
+  it('should get api stop people listed for perceived LGBT for legacy stops', () => {
+    const actual = stop.getApiStopPeopleListed(FULL_STOP, [
+      { id: '1', code: 'Statute 1' },
+      { id: '2', code: 'Statute 2' },
+    ])
+
+    expect(actual[0].perceivedLgbt).toEqual(false)
+    expect(actual[0].perceivedOrientation).toEqual(null)
+  })
+
+  it('should get api stop people listed for perceived orientation for v2 stops', () => {
+    const actual = stop.getApiStopPeopleListed(V2_FULL_STOP, [
+      { id: '1', code: 'Statute 1' },
+      { id: '2', code: 'Statute 2' },
+    ])
+
+    expect(actual[0].perceivedOrientation).toEqual('Straight/Heterosexual')
+    expect(actual[0].perceivedLgbt).toEqual(null)
+  })
 })
