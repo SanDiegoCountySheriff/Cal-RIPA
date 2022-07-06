@@ -231,4 +231,6 @@ describe('Ripa Model Mixin', () => {
       )
     },
   )
+
+  it.todo('should update stop reason model')
 })

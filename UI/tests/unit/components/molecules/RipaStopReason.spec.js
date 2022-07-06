@@ -32,4 +32,8 @@ describe('Ripa Stop Reason', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it.todo('should validate probable cause rules')
+
+  it.todo('should validate probable cause code rules')
 })

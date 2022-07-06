@@ -3,6 +3,21 @@ import { format } from 'date-fns'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  data() {
+    return {
+      EDUCATION_SUSPENSION_CODE: 1,
+      TRAFFIC_VIOLATION_REASON: 1,
+      REASONABLE_SUSPICION_REASON: 2,
+      PROBABLE_CAUSE_REASON: 3,
+      PAROLE_REASON: 4,
+      OUTSTANDING_WARRANT_REASON: 5,
+      TRUANT_REASON: 6,
+      CONSENSUAL_ENCOUNTER_REASON: 7,
+      EDUCATION_VIOLATION_REASON: 8,
+      STUDENT_VIOLATION_REASON: 9,
+    }
+  },
+
   computed: {
     ...mapGetters([
       'personSearchAutomaticallySelected',
@@ -103,6 +118,8 @@ export default {
           reasonableSuspicion: newValue.stopReason?.reasonableSuspicion || [],
           reasonableSuspicionCode:
             newValue.stopReason?.reasonableSuspicionCode || null,
+          probableCause: newValue.stopReason?.probableCause || [],
+          probableCauseCode: newValue.stopReason?.probableCauseCode || null,
           searchOfPerson: newValue.stopReason?.searchOfPerson || null,
           searchOfProperty: newValue.stopReason?.searchOfProperty || null,
           reasonForStopExplanation:
@@ -425,8 +442,10 @@ export default {
     updateStopReasonModel() {
       if (!this.viewModel.person.isStudent) {
         if (
-          this.viewModel.stopReason.reasonForStop === 7 ||
-          this.viewModel.stopReason.reasonForStop === 8
+          this.viewModel.stopReason.reasonForStop ===
+            this.EDUCATION_VIOLATION_REASON ||
+          this.viewModel.stopReason.reasonForStop ===
+            this.STUDENT_VIOLATION_REASON
         ) {
           this.viewModel.stopReason.reasonForStop = null
           this.viewModel.stopReason.educationViolation = null
@@ -434,10 +453,50 @@ export default {
         }
       }
 
-      if (this.viewModel.stopReason.reasonForStop === 1) {
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.TRAFFIC_VIOLATION_REASON
+      ) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.reasonableSuspicion = []
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.probableCause = []
+        this.viewModel.stopReason.probableCauseCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
+      }
+
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.REASONABLE_SUSPICION_REASON
+      ) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+        this.viewModel.stopReason.probableCause = []
+        this.viewModel.stopReason.probableCauseCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.removeActionsTakenPersonSearch()
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.removeActionsTakenPropertySearch()
+        }
+      }
+
+      if (
+        this.viewModel.stopReason.reasonForStop === this.PROBABLE_CAUSE_REASON
+      ) {
+        this.viewModel.stopReason.educationViolation = null
+        this.viewModel.stopReason.educationViolationCode = null
+        this.viewModel.stopReason.trafficViolation = null
+        this.viewModel.stopReason.trafficViolationCode = null
+        this.viewModel.stopReason.reasonibleSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         if (this.personSearchAutomaticallySelected) {
           this.removeActionsTakenPersonSearch()
@@ -447,9 +506,14 @@ export default {
         }
       }
 
-      if (this.viewModel.stopReason.reasonForStop === 2) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.EDUCATION_VIOLATION_REASON
+      ) {
+        this.viewModel.stopReason.reasonableSuspicion = []
+        this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.probableCause = []
+        this.viewModel.stopReason.probableCauseCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
         if (this.personSearchAutomaticallySelected) {
@@ -460,21 +524,14 @@ export default {
         }
       }
 
-      if (this.viewModel.stopReason.reasonForStop === 7) {
-        this.viewModel.stopReason.reasonableSuspicion = []
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
-
-      if (this.viewModel.stopReason.reasonForStop === 7) {
-        if (this.viewModel.stopReason.educationViolation !== 1) {
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.STUDENT_VIOLATION_REASON
+      ) {
+        if (
+          this.viewModel.stopReason.educationViolation !==
+          this.EDUCATION_SUSPENSION_CODE
+        ) {
           this.viewModel.stopReason.educationViolationCode = null
         }
         if (this.personSearchAutomaticallySelected) {
@@ -486,15 +543,19 @@ export default {
       }
 
       if (
-        this.viewModel.stopReason.reasonForStop === 3 ||
-        this.viewModel.stopReason.reasonForStop === 4 ||
-        this.viewModel.stopReason.reasonForStop === 5 ||
-        this.viewModel.stopReason.reasonForStop === 8
+        this.viewModel.stopReason.reasonForStop === this.PAROLE_REASON ||
+        this.viewModel.stopReason.reasonForStop ===
+          this.OUTSTANDING_WARRANT_REASON ||
+        this.viewModel.stopReason.reasonForStop === this.TRUANT_REASON ||
+        this.viewModel.stopReason.reasonForStop ===
+          this.EDUCATION_VIOLATION_REASON
       ) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.probableCause = []
+        this.viewModel.stopReason.probableCauseCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
         if (this.personSearchAutomaticallySelected) {
@@ -505,23 +566,34 @@ export default {
         }
       }
 
-      if (this.viewModel.stopReason.reasonForStop === 6) {
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.CONSENSUAL_ENCOUNTER_REASON
+      ) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
+        this.viewModel.stopReason.probableCause = []
+        this.viewModel.stopReason.probableCauseCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
       }
     },
 
     updateStopReasonSearchModel() {
-      if (this.viewModel.stopReason.reasonForStop !== 6) {
+      if (
+        this.viewModel.stopReason.reasonForStop !==
+        this.CONSENSUAL_ENCOUNTER_REASON
+      ) {
         this.viewModel.stopReason.searchOfPerson = false
         this.viewModel.stopReason.searchOfProperty = false
       }
 
-      if (this.viewModel.stopReason.reasonForStop === 6) {
+      if (
+        this.viewModel.stopReason.reasonForStop ===
+        this.CONSENSUAL_ENCOUNTER_REASON
+      ) {
         const actionsTaken =
           this.viewModel.actionsTaken?.nonForceActionsTakenDuringStop || []
         if (this.viewModel.stopReason.searchOfPerson) {

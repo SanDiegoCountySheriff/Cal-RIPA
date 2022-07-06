@@ -136,6 +136,29 @@
           </template>
 
           <template
+            v-if="model.stopReason.reasonForStop === PROBABLE_CAUSE_REASON"
+          >
+            <ripa-check-group
+              v-model="model.stopReason.probableCause"
+              :items="probableCauseItems"
+              :rules="probableCauseRules"
+              @input="handleInput"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="statutes"
+              :rules="probableCauseCodeRules"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
+
+          <template
             v-if="
               model.stopReason.reasonForStop === CONSENSUAL_ENCOUNTER_REASON
             "
@@ -235,13 +258,8 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
+      probableCauseItems: REASONABLE_SUSPICIONS,
       viewModel: this.syncModel(this.value),
-      EDUCATION_SUSPENSION_CODE: 1,
-      TRAFFIC_VIOLATION_REASON: 1,
-      REASONABLE_SUSPICION_REASON: 2,
-      CONSENSUAL_ENCOUNTER_REASON: 6,
-      EDUCATION_VIOLATION_REASON: 7,
-      STUDENT_VIOLATION_REASON: 8,
     }
   },
 
@@ -329,6 +347,23 @@ export default {
         this.viewModel.stopReason.reasonForStop ===
         this.REASONABLE_SUSPICION_REASON
       const code = this.viewModel.stopReason.reasonableSuspicionCode
+      return [(checked && code !== null) || 'An offense code is required']
+    },
+
+    probableCauseRules() {
+      const checked =
+        this.viewModel.stopReason.reasonForStop === this.PROBABLE_CAUSE_REASON
+      const options = this.viewModel.stopReason.probableCause
+      return [
+        (checked && options !== null && options.length > 0) ||
+          'A probable cause type is required',
+      ]
+    },
+
+    probableCauseCodeRules() {
+      const checked =
+        this.viewModel.stopReason.reasonForStop === this.PROBABLE_CAUSE_REASON
+      const code = this.viewModel.stopReason.probableCauseCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
