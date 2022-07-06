@@ -81,4 +81,8 @@ describe('stop', () => {
     expect(actual[0].listActionTakenDuringStop).toEqual(null)
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
+
+  it.todo('should get probable cause')
+
+  it.todo('should get probable cause code')
 })
