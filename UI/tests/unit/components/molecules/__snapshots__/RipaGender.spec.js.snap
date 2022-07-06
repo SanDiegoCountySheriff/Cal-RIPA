@@ -60,7 +60,7 @@ exports[`Ripa Gender should match snapshot 1`] = `
   <div class="container">
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
-        <div class="ripa-radio-group" name="orientationRadioGroup" label="Perceived Sexual Orientation" max-width="200">
+        <div class="ripa-radio-group" label="Perceived Sexual Orientation" max-width="200">
           <div class="v-input theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--column">
             <div class="v-input__control">
               <div class="v-input__slot" style="height: auto;">

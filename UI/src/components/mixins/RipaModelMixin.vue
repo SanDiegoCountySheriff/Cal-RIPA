@@ -154,7 +154,6 @@ export default {
       this.updateBasisForPropertySeizureModel()
       this.updateBlockNumberModel()
       this.updateFullAddressModel()
-      // this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
       this.updateStopReasonSearchModel()
       this.updateStopReasonModel()
@@ -339,18 +338,6 @@ export default {
         streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
       this.viewModel.location.fullAddress = fullAddress
     },
-
-    // updatePerceivedLgbtModel() {
-    //   if (
-    //     this.viewModel.person.perceivedGender === 3 ||
-    //     this.viewModel.person.perceivedGender === 4 ||
-    //     this.viewModel.person.perceivedGender === 7 ||
-    //     this.viewModel.person.perceivedGender === 8 ||
-    //     this.viewModel.person.perceivedGender === 9
-    //   ) {
-    //     this.viewModel.person.perceivedLgbt = true
-    //   }
-    // },
 
     updatePropertyWasSeizedModel() {
       const actionsTaken =

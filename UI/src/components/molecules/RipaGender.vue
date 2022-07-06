@@ -39,7 +39,6 @@
         <v-row no-gutters>
           <v-col cols="12" sm="12">
             <ripa-radio-group
-              name="orientationRadioGroup"
               v-model="model.person.perceivedOrientation"
               :items="orientationItems"
               :rules="orientationRules"
