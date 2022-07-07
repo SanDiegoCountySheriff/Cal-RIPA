@@ -144,7 +144,7 @@ namespace RIPA.Functions.Submission.Services.REST
                             Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                         },
                         Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
-                        LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
+                        LGBT = personStopped.PerceivedLgbt == null ? null : (bool)personStopped.PerceivedLgbt ? "Y" : "N",
                         GendNC = personStopped.GenderNonconforming == null ? null : (bool)personStopped.GenderNonconforming ? "Y" : string.Empty,
                     },
                     Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
