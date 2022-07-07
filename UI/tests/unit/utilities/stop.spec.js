@@ -82,7 +82,14 @@ describe('stop', () => {
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
 
-  it.todo('should get probable cause')
+  it('should get probable cause', () => {
+    // set up v2 full stop
 
-  it.todo('should get probable cause code')
+    const actual = stop.getApiStopPeopleListed(V2_FULL_STOP, [
+      { id: '1', code: 'Statute 1' },
+      { id: '2', code: 'Statute 2' },
+    ])
+
+    expect(actual[0].reasonForStop).toEqual('person')
+  })
 })
