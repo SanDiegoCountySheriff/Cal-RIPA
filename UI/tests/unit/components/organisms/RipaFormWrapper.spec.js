@@ -56,7 +56,7 @@ describe('Ripa Form Wrapper', () => {
     wrapper = factory({ value: stop, formStepIndex: 3 })
     const expected = []
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 7; i++) {
       if (i === 2) {
         continue
       }
@@ -71,6 +71,29 @@ describe('Ripa Form Wrapper', () => {
       await wrapper.vm.$nextTick()
 
       expect(wrapper.vm.stop.stopReason.reasonableSuspicion).toEqual(expected)
+    }
+  })
+
+  it('should reset probableCause when changing reasonForStop', async () => {
+    stop = createStartOfFormStepIndexThreeStop(stop)
+    wrapper = factory({ value: stop, formStepIndex: 3 })
+    const expected = []
+
+    for (let i = 1; i <= 7; i++) {
+      if (i === 3) {
+        continue
+      }
+      const selector = wrapper.findComponent(RipaSelect)
+      selector.vm.model = 3
+      await wrapper.vm.$nextTick()
+
+      const checkGroup = wrapper.findComponent(RipaCheckGroup)
+      checkGroup.vm.model = [1]
+
+      selector.vm.model = i
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.stop.stopReason.probableCause).toEqual(expected)
     }
   })
 })

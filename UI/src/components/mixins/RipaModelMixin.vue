@@ -496,7 +496,7 @@ export default {
         this.viewModel.stopReason.educationViolationCode = null
         this.viewModel.stopReason.trafficViolation = null
         this.viewModel.stopReason.trafficViolationCode = null
-        this.viewModel.stopReason.reasonibleSuspicion = []
+        this.viewModel.stopReason.reasonableSuspicion = []
         this.viewModel.stopReason.reasonableSuspicionCode = null
         if (this.personSearchAutomaticallySelected) {
           this.removeActionsTakenPersonSearch()
