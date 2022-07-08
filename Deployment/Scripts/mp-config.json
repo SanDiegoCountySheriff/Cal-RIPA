@@ -1,7 +1,7 @@
 {
   "Authentication": {
     "ClientId": "__AUTH_SP_APP_ID__",
-    "AuthorityUrl": "__AUTH_AUTHORITY__/__AUTH_TENANT_ID__",
+    "AuthorityUrl": "__AUTH_AUTHORITY____AUTH_TENANT_ID__",
     "TenantId": "__AUTH_TENANT_ID__",
     "PrimaryDomain": "__AUTH_PRIMARY_DOMAIN__"
   },
