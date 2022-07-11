@@ -24,12 +24,7 @@ import {
 const TRAFFIC_VIOLATION_REASON = 1
 const REASONABLE_SUSPICION_REASON = 2
 const PROBABLE_CAUSE_REASON = 3
-const PAROLE_REASON = 4
-const OUTSTANDING_WARRANT_REASON = 5
-const TRUANT_REASON = 6
-const CONSENSUAL_ENCOUNTER_REASON = 7
 const EDUCATION_VIOLATION_REASON = 8
-const STUDENT_VIOLATION_REASON = 9
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')

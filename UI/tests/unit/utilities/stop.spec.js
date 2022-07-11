@@ -83,13 +83,35 @@ describe('stop', () => {
   })
 
   it('should get probable cause', () => {
-    // set up v2 full stop
+    const v2FullStop = V2_FULL_STOP
+    v2FullStop.people[0].stopReason = {
+      reasonForStop: 3,
+      educationViolation: null,
+      educationViolationCode: null,
+      trafficViolation: null,
+      trafficViolationCode: null,
+      reasonableSuspicion: [],
+      reasonableSuspicionCode: null,
+      probableCause: [1],
+      probableCauseCode: 3,
+      searchOfPerson: false,
+      searchOfProperty: false,
+      reasonForStopExplanation: 'testing',
+      reasonForStopPiiFound: false,
+    }
 
-    const actual = stop.getApiStopPeopleListed(V2_FULL_STOP, [
+    const [actual] = stop.getApiStopPeopleListed(v2FullStop, [
       { id: '1', code: 'Statute 1' },
       { id: '2', code: 'Statute 2' },
     ])
 
-    expect(actual[0].reasonForStop).toEqual('person')
+    expect(actual.reasonForStop).toEqual({
+      key: '3',
+      listCodes: [{ code: '3', text: '' }],
+      listDetail: [
+        { key: '1', reason: 'Officer witnessed commission of a crime' },
+      ],
+      reason: 'Probable cause to arrest or search',
+    })
   })
 })
