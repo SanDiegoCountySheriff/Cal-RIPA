@@ -33,7 +33,35 @@ describe('Ripa Stop Reason', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it.todo('should validate probable cause rules')
+  it('should validate probable cause rules', async () => {
+    stop.stopReason.reasonForStop = 3
+    stop.stopReason.probableCause = [1]
+    wrapper = factory({ value: stop })
 
-  it.todo('should validate probable cause code rules')
+    expect(wrapper.vm.probableCauseRules).toEqual([true])
+
+    const updatedStop = defaultStop()
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.probableCauseRules).toEqual([
+      'A probable cause type is required',
+    ])
+  })
+
+  it('should validate probable cause code rules', async () => {
+    stop.stopReason.reasonForStop = 3
+    stop.stopReason.probableCauseCode = 'Test Code'
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.probableCauseCodeRules).toEqual([true])
+
+    const updatedStop = defaultStop()
+    wrapper.setProps({ value: updatedStop })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.probableCauseCodeRules).toEqual([
+      'An offense code is required',
+    ])
+  })
 })
