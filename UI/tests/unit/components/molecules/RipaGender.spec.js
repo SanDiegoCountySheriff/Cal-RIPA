@@ -74,14 +74,14 @@ describe('Ripa Gender', () => {
     expect(wrapper.html()).not.toContain('Female')
   })
 
-  it('should check lgbt as true', async () => {
-    wrapper = factory({ value: stop })
+  it('should watch value', async () => {
+    wrapper = shallowFactory({ value: stop })
+    const updatedStop = defaultStop()
+    updatedStop.id = 1
 
-    const radioGroup = wrapper.findComponent(RipaRadioGroup)
-    radioGroup.vm.model = 9
+    wrapper.setProps({ value: updatedStop })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel.person.perceivedLgbt).toEqual(true)
-    expect(wrapper.vm.isPerceivedLgbtDisabled).toEqual(true)
+    expect(wrapper.vm.viewModel.id).toEqual(1)
   })
 })
