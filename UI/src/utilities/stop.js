@@ -25,6 +25,7 @@ import {
 const TRAFFIC_VIOLATION_REASON = 1
 const REASONABLE_SUSPICION_REASON = 2
 const PROBABLE_CAUSE_REASON = 3
+const CONSENSUAL_ENCOUNTER_REASON = 7
 const EDUCATION_VIOLATION_REASON = 8
 
 const getAgencyQuestionsFromLocalStorage = () => {
@@ -1132,7 +1133,7 @@ const getStopReasonSearchOfPerson = person => {
     Number(item.key),
   )
 
-  if (reasonForStop === 6) {
+  if (reasonForStop === CONSENSUAL_ENCOUNTER_REASON) {
     if (anyNonForceActionsTaken) {
       if (mappedActionsTaken.includes(18)) {
         return true
@@ -1163,7 +1164,7 @@ const getStopReasonSearchOfProperty = person => {
     Number(item.key),
   )
 
-  if (reasonForStop === 6) {
+  if (reasonForStop === CONSENSUAL_ENCOUNTER_REASON) {
     if (anyNonForceActionsTaken) {
       if (mappedActionsTaken.includes(20)) {
         return true
@@ -1178,7 +1179,7 @@ const getStopReasonSearchOfProperty = person => {
 }
 
 const getTrafficViolationDetailKey = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 1) {
+  if (stopReason.key && Number(stopReason.key) === TRAFFIC_VIOLATION_REASON) {
     return Number(stopReason.listDetail[0].key)
   }
 
@@ -1186,7 +1187,7 @@ const getTrafficViolationDetailKey = stopReason => {
 }
 
 const getTrafficViolationDetailCode = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 1) {
+  if (stopReason.key && Number(stopReason.key) === TRAFFIC_VIOLATION_REASON) {
     return Number(stopReason.listCodes[0].code)
   }
 
@@ -1194,7 +1195,10 @@ const getTrafficViolationDetailCode = stopReason => {
 }
 
 const getReasonableSuspicionDetailKeys = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 2) {
+  if (
+    stopReason.key &&
+    Number(stopReason.key) === REASONABLE_SUSPICION_REASON
+  ) {
     return stopReason.listDetail.map(item => Number(item.key))
   }
 
@@ -1202,7 +1206,10 @@ const getReasonableSuspicionDetailKeys = stopReason => {
 }
 
 const getReasonableSuspicionDetailCode = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 2) {
+  if (
+    stopReason.key &&
+    Number(stopReason.key) === REASONABLE_SUSPICION_REASON
+  ) {
     return Number(stopReason.listCodes[0].code)
   }
 
@@ -1210,7 +1217,7 @@ const getReasonableSuspicionDetailCode = stopReason => {
 }
 
 const getEducationViolationDetailKey = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 7) {
+  if (stopReason.key && Number(stopReason.key) === EDUCATION_VIOLATION_REASON) {
     return Number(stopReason.listDetail[0].key)
   }
 
@@ -1218,7 +1225,7 @@ const getEducationViolationDetailKey = stopReason => {
 }
 
 const getEducationViolationDetailCode = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 7) {
+  if (stopReason.key && Number(stopReason.key) === EDUCATION_VIOLATION_REASON) {
     const listCodes = stopReason.listCodes || []
     if (listCodes.length > 0) {
       return Number(stopReason.listCodes[0].code)

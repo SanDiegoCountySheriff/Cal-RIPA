@@ -534,9 +534,7 @@ export default {
         this.viewModel.stopReason.reasonForStop === this.PAROLE_REASON ||
         this.viewModel.stopReason.reasonForStop ===
           this.OUTSTANDING_WARRANT_REASON ||
-        this.viewModel.stopReason.reasonForStop === this.TRUANT_REASON ||
-        this.viewModel.stopReason.reasonForStop ===
-          this.EDUCATION_VIOLATION_REASON
+        this.viewModel.stopReason.reasonForStop === this.TRUANT_REASON
       ) {
         this.viewModel.stopReason.educationViolation = null
         this.viewModel.stopReason.educationViolationCode = null
