@@ -2,7 +2,7 @@
 
 exports[`Ripa Stops Grid should match snapshot 1`] = `
 <div class="container tw-mt-2 container--fluid">
-  <div class="layout stopsGridContainer row align-center nowrap">
+  <div class="layout stopsGridContainer row align-center wrap">
     <div class="flex xs12 md2">
       <div class="tw-ml-2">
         <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
