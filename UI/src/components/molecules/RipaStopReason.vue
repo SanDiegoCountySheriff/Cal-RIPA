@@ -53,7 +53,9 @@
             @input="handleInput"
           ></ripa-select>
 
-          <template v-if="model.stopReason.reasonForStop === 7">
+          <template
+            v-if="model.stopReason.reasonForStop === EDUCATION_VIOLATION_REASON"
+          >
             <ripa-radio-group
               v-model="model.stopReason.educationViolation"
               :items="educationViolationItems"
@@ -61,7 +63,12 @@
               @input="handleInput"
             ></ripa-radio-group>
 
-            <template v-if="model.stopReason.educationViolation === 1">
+            <template
+              v-if="
+                model.stopReason.educationViolation ===
+                EDUCATION_SUSPENSION_CODE
+              "
+            >
               <div class="tw-mt-2"></div>
 
               <ripa-autocomplete
@@ -78,7 +85,9 @@
             </template>
           </template>
 
-          <template v-if="model.stopReason.reasonForStop === 1">
+          <template
+            v-if="model.stopReason.reasonForStop === TRAFFIC_VIOLATION_REASON"
+          >
             <ripa-radio-group
               v-model="model.stopReason.trafficViolation"
               :items="trafficViolationItems"
@@ -101,7 +110,11 @@
             ></ripa-autocomplete>
           </template>
 
-          <template v-if="model.stopReason.reasonForStop === 2">
+          <template
+            v-if="
+              model.stopReason.reasonForStop === REASONABLE_SUSPICION_REASON
+            "
+          >
             <ripa-check-group
               v-model="model.stopReason.reasonableSuspicion"
               :items="reasonableSuspicionItems"
@@ -122,7 +135,34 @@
             ></ripa-autocomplete>
           </template>
 
-          <template v-if="model.stopReason.reasonForStop === 6">
+          <template
+            v-if="model.stopReason.reasonForStop === PROBABLE_CAUSE_REASON"
+          >
+            <ripa-check-group
+              v-model="model.stopReason.probableCause"
+              :items="probableCauseItems"
+              :rules="probableCauseRules"
+              @input="handleInput"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseCode"
+              hint="Select 1 Offense Code (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="statutes"
+              :rules="probableCauseCodeRules"
+              @input="handleInput"
+            ></ripa-autocomplete>
+          </template>
+
+          <template
+            v-if="
+              model.stopReason.reasonForStop === CONSENSUAL_ENCOUNTER_REASON
+            "
+          >
             <ripa-alert alert-outlined alert-type="warning">
               Your selection indicates that a search was conducted, please
               select from the search criteria below.
@@ -218,6 +258,7 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
+      probableCauseItems: REASONABLE_SUSPICIONS,
       viewModel: this.syncModel(this.value),
     }
   },
@@ -241,12 +282,16 @@ export default {
       }
 
       return this.reasonItems.filter(
-        item => item.value !== 7 && item.value !== 8,
+        item =>
+          item.value !== this.EDUCATION_VIOLATION_REASON &&
+          item.value !== this.STUDENT_VIOLATION_REASON,
       )
     },
 
     educationViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 7
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.EDUCATION_VIOLATION_REASON
       const options = this.viewModel.stopReason.educationViolation
       return [
         (checked && options !== null) ||
@@ -255,8 +300,12 @@ export default {
     },
 
     educationViolationCodeRules() {
-      const checked1 = this.viewModel.stopReason.reasonForStop === 7
-      const checked2 = this.viewModel.stopReason.educationViolation === 1
+      const checked1 =
+        this.viewModel.stopReason.reasonForStop ===
+        this.EDUCATION_VIOLATION_REASON
+      const checked2 =
+        this.viewModel.stopReason.educationViolation ===
+        this.EDUCATION_SUSPENSION_CODE
       const code = this.viewModel.stopReason.educationViolationCode
       return [
         (checked1 && checked2 && code !== null) ||
@@ -265,7 +314,9 @@ export default {
     },
 
     trafficViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.TRAFFIC_VIOLATION_REASON
       const options = this.viewModel.stopReason.trafficViolation
       return [
         (checked && options !== null) || 'A traffic violation type is required',
@@ -273,13 +324,17 @@ export default {
     },
 
     trafficViolationCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.TRAFFIC_VIOLATION_REASON
       const code = this.viewModel.stopReason.trafficViolationCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
     reasonableSuspicionRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.REASONABLE_SUSPICION_REASON
       const options = this.viewModel.stopReason.reasonableSuspicion
       return [
         (checked && options !== null && options.length > 0) ||
@@ -288,13 +343,34 @@ export default {
     },
 
     reasonableSuspicionCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.REASONABLE_SUSPICION_REASON
       const code = this.viewModel.stopReason.reasonableSuspicionCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
+    probableCauseRules() {
+      const checked =
+        this.viewModel.stopReason.reasonForStop === this.PROBABLE_CAUSE_REASON
+      const options = this.viewModel.stopReason.probableCause
+      return [
+        (checked && options !== null && options.length > 0) ||
+          'A probable cause type is required',
+      ]
+    },
+
+    probableCauseCodeRules() {
+      const checked =
+        this.viewModel.stopReason.reasonForStop === this.PROBABLE_CAUSE_REASON
+      const code = this.viewModel.stopReason.probableCauseCode
+      return [(checked && code !== null) || 'An offense code is required']
+    },
+
     searchRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 6
+      const checked =
+        this.viewModel.stopReason.reasonForStop ===
+        this.CONSENSUAL_ENCOUNTER_REASON
       const checkedPerson = this.viewModel.stopReason.searchOfPerson
       const checkedProperty = this.viewModel.stopReason.searchOfProperty
       if (checked) {

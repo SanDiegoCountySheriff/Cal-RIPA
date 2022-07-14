@@ -82,23 +82,36 @@ describe('stop', () => {
     expect(actual[0].listNonForceActionTakenDuringStop).toEqual(expected)
   })
 
-  it('should get api stop people listed for perceived LGBT for legacy stops', () => {
-    const actual = stop.getApiStopPeopleListed(FULL_STOP, [
+  it('should get probable cause', () => {
+    const v2FullStop = V2_FULL_STOP
+    v2FullStop.people[0].stopReason = {
+      reasonForStop: 3,
+      educationViolation: null,
+      educationViolationCode: null,
+      trafficViolation: null,
+      trafficViolationCode: null,
+      reasonableSuspicion: [],
+      reasonableSuspicionCode: null,
+      probableCause: [1],
+      probableCauseCode: 3,
+      searchOfPerson: false,
+      searchOfProperty: false,
+      reasonForStopExplanation: 'testing',
+      reasonForStopPiiFound: false,
+    }
+
+    const [actual] = stop.getApiStopPeopleListed(v2FullStop, [
       { id: '1', code: 'Statute 1' },
       { id: '2', code: 'Statute 2' },
     ])
 
-    expect(actual[0].perceivedLgbt).toEqual(false)
-    expect(actual[0].perceivedOrientation).toEqual(null)
-  })
-
-  it('should get api stop people listed for perceived orientation for v2 stops', () => {
-    const actual = stop.getApiStopPeopleListed(V2_FULL_STOP, [
-      { id: '1', code: 'Statute 1' },
-      { id: '2', code: 'Statute 2' },
-    ])
-
-    expect(actual[0].perceivedOrientation).toEqual('Straight/Heterosexual')
-    expect(actual[0].perceivedLgbt).toEqual(null)
+    expect(actual.reasonForStop).toEqual({
+      key: '3',
+      listCodes: [{ code: '3', text: '' }],
+      listDetail: [
+        { key: '1', reason: 'Officer witnessed commission of a crime' },
+      ],
+      reason: 'Probable cause to arrest or search',
+    })
   })
 })
