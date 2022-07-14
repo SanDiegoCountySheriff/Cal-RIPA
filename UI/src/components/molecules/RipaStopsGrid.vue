@@ -1,6 +1,6 @@
 <template>
   <v-container class="tw-mt-2" fluid>
-    <v-layout row align-center nowrap class="stopsGridContainer">
+    <v-layout row align-center wrap class="stopsGridContainer">
       <v-flex xs12 md2>
         <div class="tw-ml-2">
           <ripa-date-picker
