@@ -77,7 +77,7 @@ function SaveDatabaseRecord($tableName, $dataRecord)
 
 # $tenantId = "a44e5271-a297-4daf-a3a9-f90a3146f3f5"
 # $subscriptionId = "c74e04b6-0cd7-4778-863e-34654eb49270"
-# $resourceGroupName = "sdsd-ripa-etl-d-rg"
+# $resourceGroupName = "rg-cssa-it-etl-dev-001"
 # $keyVaultName = "sdsd-ripa-etl-d-kv"
 # $sqlServerName = "sdsd-ripa-etl-d-sql.database.usgovcloudapi.net"
 # $databaseName = "mdw-db"
@@ -85,9 +85,17 @@ function SaveDatabaseRecord($tableName, $dataRecord)
 
 $tenantId = $env:CSSA_TENANT_ID
 $subscriptionId = $env:ETL_SUBSCRIPTION_ID
-$keyVaultName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-kv"
-$sqlServerName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-sql.database.usgovcloudapi.net"
-#$sqlServerName = "sdsd-ripa-etl-" + "d" + "-sql.database.usgovcloudapi.net" # debug, i think q in q was causing issues
+if($env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() -ne "prod")
+{
+    $keyVaultName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-kv"
+    $sqlServerName = "sdsd-ripa-etl-" + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + "-sql.database.usgovcloudapi.net"
+}
+else 
+{
+    $keyVaultName = "kvsdsdlawripadashprd001"    
+    $sqlServerName = "sql-sdsd-law-ripadash-prd-001"
+}
+
 $databaseName = "mdw-db"
 $dataSourceName = $env:AGENCY_ABBREVIATION + "-" + $env:APPLICATION_NAME
 $dashboardSecretKey = $env:DASHBOARD_COSMOS_PRIMARY_KEY 
