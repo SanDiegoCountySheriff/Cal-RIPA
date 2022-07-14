@@ -11,7 +11,7 @@
       fluid
       v-if="submission"
     >
-      <v-layout v row>
+      <v-layout v row wrap>
         <v-flex xs12>
           <v-toolbar flat>
             <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
