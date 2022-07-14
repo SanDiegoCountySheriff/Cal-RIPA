@@ -6,7 +6,7 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
   <!---->
   <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
   <ripa-location-stub onopenstatute="[Function]" value="[object Object]" schools="" beats="" countycities="" noncountycities="" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]"></ripa-location-stub>
-  <v-spacer-stub tag="div"></v-spacer-stub>
+  <v-spacer-stub></v-spacer-stub>
   <!---->
   <div class="tw-flex tw-mt-8 tw-justify-center">
     <v-btn-stub color="error" outlined="true" tag="button" activeclass="" type="button" class="tw-mr-2">

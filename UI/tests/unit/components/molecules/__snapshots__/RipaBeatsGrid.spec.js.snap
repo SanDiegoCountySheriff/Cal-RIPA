@@ -19,12 +19,12 @@ exports[`Ripa Beats Grid should match snapshot 1`] = `
       <div class="v-toolbar__content" style="height: 64px;">
         <div class="v-toolbar__title tw-uppercase">Admin: Maintain Beats</div>
         <div class="spacer"></div>
-        <div class="v-dialog__container"><button type="button" class="tw-mb-2 v-btn v-btn--is-elevated v-btn--has-bg theme--dark v-size--default primary" role="button" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content">
+        <div role="dialog" class="v-dialog__container"><button type="button" class="tw-mb-2 v-btn v-btn--is-elevated v-btn--has-bg theme--dark v-size--default primary" role="button" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content">
               New Item
             </span></button>
           <!---->
         </div>
-        <div class="v-dialog__container">
+        <div role="dialog" class="v-dialog__container">
           <!---->
         </div>
       </div>
