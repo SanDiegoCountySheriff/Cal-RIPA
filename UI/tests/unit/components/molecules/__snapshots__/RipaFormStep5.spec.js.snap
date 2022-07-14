@@ -55,7 +55,7 @@ exports[`Ripa Form Step 5 should match snapshot 1`] = `
     </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
       Next
     </span></button></div>
-  <div class="v-dialog__container">
+  <div role="dialog" class="v-dialog__container">
     <!---->
   </div>
 </form>
