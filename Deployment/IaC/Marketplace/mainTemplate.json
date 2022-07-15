@@ -490,6 +490,18 @@
     "utcNowValue": {
       "type": "string",
       "defaultValue": "[utcNow('yyyyMMDDHHmmssFFFF')]"
+    },
+    "cssa_subscription_id": {
+      "type": "string",
+      "defaultValue": "#{CSSA_SUBSCRIPTION_ID}#"
+    },
+    "cssa_subscription_id_dev": {
+      "type": "string",
+      "defaultValue": "#{CSSA_SUBSCRIPTION_ID_DEV}#"
+    },
+    "cssa_subscription_id_uat": {
+      "type": "string",
+      "defaultValue": "#{CSSA_SUBSCRIPTION_ID_UAT}#"
     }
   },
   "variables": {
@@ -537,16 +549,9 @@
 
     // switch sub key for linking cosmosDB to dashboard
     "ext-dashboard-subscription-key": "[
-      if(equals(parameters('environment_type'), 'PROD'), 'd5ed1328-c578-4302-b045-9c95d14c8bd2', 
-        if(equals(parameters('environment_type'), 'QA'), 'b0f013ea-e738-450a-ba1b-7c0c91849825', '153bd846-81ba-4c56-9d18-ad548056b669'))]",
+      if(equals(parameters('environment_type'), 'PROD'), parameters('cssa_subscription_id'), 
+        if(equals(parameters('environment_type'), 'QA'), parameters('cssa_subscription_id_uat'), parameters('cssa_subscription_id_dev')))]",
 
-    // QA 5ff48213-da14-4ac7-85fb-a21bb91d8eb3; DEV a44e5271-a297-4daf-a3a9-f90a3146f3f5
-    // "ext-dashboard-tennant-id": "[
-    //   if(equals(parameters('environment_type'), 'PROD'), '', 
-    //     if(equals(parameters('environment_type'), 'QA'), '5ff48213-da14-4ac7-85fb-a21bb91d8eb3', 'a44e5271-a297-4daf-a3a9-f90a3146f3f5'))]", 
-
-
-    // "template_version": "v2021.06.17.1",
     "template_version": "#{TEMPLATE_VERSION}#",
     "default_tags": {
       "application": "ripa",
@@ -3589,6 +3594,30 @@
           {
             "name": "ENVIRONMENT_TYPE",
             "value": "[parameters('environment_type')]"
+          },
+          {
+            "name": "CSSA_DASHBOARD_KEY_VAULT_PREFIX",
+            "value": "#{CSSA_DASHBOARD_KEY_VAULT_PREFIX}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_KEY_VAULT_SUFFIX",
+            "value": "#{CSSA_DASHBOARD_KEY_VAULT_SUFFIX}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_KEY_VAULT_PROD",
+            "value": "#{CSSA_DASHBOARD_KEY_VAULT_PROD}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_SQL_SERVER_PREFIX",
+            "value": "#{CSSA_DASHBOARD_SQL_SERVER_PREFIX}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_SQL_SERVER_SUFFIX",
+            "value": "#{CSSA_DASHBOARD_SQL_SERVER_SUFFIX}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_SQL_SERVER_PROD",
+            "value": "#{CSSA_DASHBOARD_SQL_SERVER_PROD}#"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
