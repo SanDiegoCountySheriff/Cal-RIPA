@@ -134,6 +134,11 @@ describe('Ripa Stop Date', () => {
       wrapper = factory({ value: stop })
 
       stop.stopDate.time = test.time
+
+      if (stop.stopDate.time < new Date()) {
+        stop.stopDate.date = createDate(1, 0, 0)
+      }
+
       wrapper.vm.$data.viewModel = stop
 
       expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
