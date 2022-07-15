@@ -4,7 +4,7 @@ exports[`Ripa Submission should match snapshot 1`] = `
 <div>
   <!---->
   <div class="container submissionDetail--container tw-mt-2 container--fluid">
-    <div class="layout v row">
+    <div class="layout v row wrap">
       <div class="flex xs12">
         <header class="v-sheet theme--light v-toolbar v-toolbar--flat" style="height: 64px;">
           <div class="v-toolbar__content" style="height: 64px;">
