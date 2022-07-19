@@ -44,7 +44,7 @@ Write-Host "DEPLOY_WEB_CONFIG_JSON: $env:DEPLOY_WEB_CONFIG_JSON"
 Write-Host "logging into azure cli"
 az cloud set -n azureusgovernment 
 az login --service-principal --tenant $env:CSSA_TENANT_ID -u $env:CSSA_SP_APP_ID -p $env:CSSA_SP_SECRET
-az account set -s $env:ETL_SUBSCRIPTION_ID
+az account set -s "$env:ETL_SUBSCRIPTION_ID"
 
 Write-Host "checking cli login context"
 az account show
