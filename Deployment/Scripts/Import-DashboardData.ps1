@@ -127,7 +127,7 @@ else {
 }
 
 $sqlConn = New-Object System.Data.SqlClient.SqlConnection
-$sqlConn.ConnectionString = “Server=$sqlServerName,1433;User id=$dbUserName; Password=$dbPassword;Initial Catalog=$databaseName”
+$sqlConn.ConnectionString = “Server=tcp:$sqlServerName,1433;User ID=$dbUserName; Password=$dbPassword;Initial Catalog=$databaseName;”
 $sqlConn.Open()
 
 Write-Host "Connected to the database"
