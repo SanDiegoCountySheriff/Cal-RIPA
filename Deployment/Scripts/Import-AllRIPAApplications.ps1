@@ -153,7 +153,7 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Set-Content -Path $configFilePath -Value $configJson -Force
 
     Write-Host "Uploading config.json"
-    az storage blob upload --overwrite true --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f './config.json' 
+    az storage blob upload --overwrite true --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f "./$env:TEMPLATE_VERSION_FORMATTED-config.json" 
 }
 
 Write-Host "Finished deploying & importing applications"
