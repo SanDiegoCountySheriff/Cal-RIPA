@@ -3618,6 +3618,14 @@
           {
             "name": "CSSA_DASHBOARD_SQL_SERVER_PROD",
             "value": "#{CSSA_DASHBOARD_SQL_SERVER_PROD}#"
+          },
+          {
+            "name": "KV_SQL_SERVER_USER",
+            "value": "#{KV_SQL_SERVER_USER}#"
+          },
+          {
+            "name": "KV_SQL_SERVER_PWD",
+            "value": "#{KV_SQL_SERVER_PWD}#"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",

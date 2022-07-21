@@ -115,8 +115,8 @@ $ripaDbSecret = "sec-ripa-cosmosdb-$dataSourceName-cdb-acccess-key"
 
 Write-Host "Reading database connection details from Azure Key Vault"
 
-$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-user) | ConvertFrom-Json).value
-$dbPassword = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n sec-sql-server-admin-pwd) | ConvertFrom-Json).value
+$dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n $env:KV_SQL_SERVER_USER) | ConvertFrom-Json).value
+$dbPassword = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n $env:KV_SQL_SERVER_PWD) | ConvertFrom-Json).value
 
 Write-Host "Connecting to the database as user" $dbUserName
 if($dbPassword -eq $null){
