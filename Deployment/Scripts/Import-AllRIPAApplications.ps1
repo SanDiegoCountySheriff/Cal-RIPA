@@ -133,7 +133,7 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
     Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
 
-    $configFilePath = "./config.json"
+    $configFilePath = "./$env:TEMPLATE_VERSION_FORMATTED-config.json"
     $configJson = Get-Content -Path $configFilePath
     $configJson = $configJson.Replace("__ENVIRONMENT_TYPE__", $env:ENVIRONMENT_TYPE)
     $configJson = $configJson.Replace("__AUTH_SP_APP_ID__", $env:AUTH_SP_APP_ID)

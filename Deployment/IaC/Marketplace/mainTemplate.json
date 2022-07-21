@@ -3925,6 +3925,10 @@
           {
             "name": "DEPLOY_WEB_CONFIG_JSON",
             "value": "True"
+          },
+          {
+            "name": "TEMPLATE_VERSION_FORMATTED",
+            "value": "#{__TEMPLATE_VERSION_FORMATTED__}#"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
