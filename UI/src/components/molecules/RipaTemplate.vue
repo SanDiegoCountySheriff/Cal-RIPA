@@ -60,12 +60,21 @@
         >.
       </p>
       <p
-        >To report any bugs or request features please
+        >To report any bugs or suggest new features please
         <a
           href="https://github.com/SanDiegoCountySheriff/Cal-RIPA/issues"
           target="_blank"
           rel="noopener noreferrer"
           >submit an issue</a
+        >.</p
+      >
+      <p
+        >The latest release notes are available
+        <a
+          href="https://github.com/SanDiegoCountySheriff/Cal-RIPA/releases/tag/20220721.1"
+          target="_blank"
+          rel="noopener noreferrer"
+          >at this link</a
         >.</p
       >
       <v-divider></v-divider>
