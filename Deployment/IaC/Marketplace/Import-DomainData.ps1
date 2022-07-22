@@ -114,7 +114,10 @@ $excel = New-Object -Com Excel.Application
 $wb = $excel.Workbooks.Open("$PSScriptRoot\$env:TEMPLATE_VERSION_FORMATTED-sdcs-look-up-table-2022.xlsx")
 
 if ($env:ENABLE_BEATS -eq "true") {
-    New-AzStorageTable -Name "Beats" -Context $ctx
+    Write-Host "Creating Beats Table"
+    if($null -eq (Get-AzStorageTable -Context $ctx | Where-Object { $_.Name -eq "Beats"})) {
+        $null = New-AzStorageTable -Name "Beats" -Context $ctx
+    }
 }
 
 foreach ($tableName in $tableNames) {
