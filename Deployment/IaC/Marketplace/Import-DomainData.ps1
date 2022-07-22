@@ -1,5 +1,5 @@
 Write-Host "Installing Az v6.6.0 due to Az.Account version in image"
-Install-Module Az -Repository PSGallery -RequiredVersion 6.6.0 -AllowClobber -Force
+Install-Module Az -Repository PSGallery -AllowClobber -Force
 
 Write-Host "Importing Az"
 Import-Module Az -Force
