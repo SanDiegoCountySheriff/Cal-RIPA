@@ -111,7 +111,7 @@ $tableNames = @('Cities','Schools','Statutes')
 $stopWatch = [system.diagnostics.stopwatch]::StartNew()
 
 $excel = New-Object -Com Excel.Application
-$wb = $excel.Workbooks.Open("$PSScriptRoot\sdcs-look-up-table-2021.xlsx")
+$wb = $excel.Workbooks.Open("$PSScriptRoot\$env:TEMPLATE_VERSION_FORMATTED-sdcs-look-up-table-2022.xlsx")
 
 if ($env:ENABLE_BEATS -eq "true") {
     New-AzStorageTable -Name "Beats" -Context $ctx
