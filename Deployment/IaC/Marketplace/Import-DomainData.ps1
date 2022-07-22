@@ -1,5 +1,5 @@
 Write-Host "Installing Az v6.6.0 due to Az.Account version in image"
-Install-Module Az -Repository PSGallery -AllowClobber -Force
+Install-Module Az -Repository PSGallery -RequiredVersion 6.6.0 -AllowClobber -Force
 
 Write-Host "Importing Az"
 Import-Module Az -Force
@@ -16,6 +16,7 @@ Get-AzContext
 
 Write-Host "Getting storage account context"
 $ctx = (Get-AzStorageAccount -ResourceGroupName $env:RESOURCE_GROUP_NAME -Name $env:STORAGE_ACCOUNT_NAME).Context
+Write-Host "Successfully retrieved storage account context"
 
 function Get-CityEntity {
     param ($row)
