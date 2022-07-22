@@ -29,12 +29,12 @@ export default {
         apiBaseUrl: res.data.Configuration.ServicesBaseUrl,
         apiSubscription: res.data.Configuration.Subscription,
         defaultCounty: res.data.Configuration.DefaultCounty,
-        displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'true',
-        displayDebugger: res.data.Configuration.DisplayDebugger === 'true',
+        displayBeatInput: res.data.Configuration.DisplayBeatsInput === 'True',
+        displayDebugger: res.data.Configuration.DisplayDebugger === 'True',
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: environmentName.toUpperCase(),
-        useOfficerUpn: res.data.Configuration.UseOfficerUpn === 'true',
-        modifyBeatId: res.data.Configuration.ModifyBeatId === 'true',
+        useOfficerUpn: res.data.Configuration.UseOfficerUpn === 'True',
+        modifyBeatId: res.data.Configuration.ModifyBeatId === 'True',
         beatIdNumberOfDigits:
           parseInt(res.data.Configuration.BeatIdNumberOfDigits) || 0,
       })
