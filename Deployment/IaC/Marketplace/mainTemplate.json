@@ -3800,6 +3800,10 @@
           {
             "name": "STORAGE_ACCOUNT_NAME",
             "value": "[variables('storageAccounts_ripactsa_name')]"
+          },
+          {
+            "name": "ENABLE_BEATS",
+            "value": "[parameters('enable_beats')]"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
