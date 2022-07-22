@@ -3812,7 +3812,7 @@
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "#{__TEMPLATE_VERSION_FORMATTED__-SDCS-LOOK-UP-TABLE-2022-XLSX-CSV-SAS-URL}#"
+          "#{__TEMPLATE_VERSION_FORMATTED__-SDCS-LOOK-UP-TABLE-2022-XLSX-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
