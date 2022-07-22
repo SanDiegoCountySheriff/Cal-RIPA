@@ -668,7 +668,7 @@
       {
         "name": "modify_beat_id",
         "type": "Microsoft.Common.CheckBox",
-        "label": "Add leading zeros to Beat ID?",
+        "label": "Specify number of digits in Beat ID?",
         "toolTip": "Enables leading zeros on the Beat ID, e.g., 001 instead of 1",
         "constraints": {
           "required": false
@@ -680,8 +680,8 @@
         "type": "Microsoft.Common.Slider",
         "min": 1,
         "max": 10,
-        "label": "Number of leading zeros",
-        "toolTip": "Select the number of leading zeros for Beat ID",
+        "label": "Number of digits in Beat ID",
+        "toolTip": "Select the number of digits in the Beat ID. Leading zeros will be added to the front of the Beat ID in order to meet the required number of digits.",
         "constraints": {
           "required": false
         },
