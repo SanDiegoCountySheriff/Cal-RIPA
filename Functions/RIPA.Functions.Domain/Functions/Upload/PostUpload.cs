@@ -142,6 +142,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
         public async static Task<int> ProcessEntities(DataTable dataTable, CloudTable table)
         {
+            await table.CreateIfNotExistsAsync();
             int batchCount = 0;
             int totalRows = dataTable.Rows.Count - 1;
             int returnTotalRows = totalRows;
