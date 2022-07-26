@@ -2,6 +2,9 @@
 
 exports[`Ripa Form Wrapper should match snapshot 1`] = `
 <div class="ripa-form-wrapper">
+  <!---->
+  <ripa-alert-stub alerttype="error">This application is currently not ready for data submission. Please
+    contact your systems administrator before creating RIPA Stops.</ripa-alert-stub>
   <v-card-stub loaderheight="4" tag="div" maxwidth="900" outlined="true" class="mx-auto">
     <v-card-text-stub>
       <!---->
