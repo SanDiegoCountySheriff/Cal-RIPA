@@ -4,6 +4,7 @@
       v-model="stop"
       :admin-editing="adminEditing"
       :admin-viewing="adminViewing"
+      :is-admin="isAdmin"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
@@ -101,6 +102,10 @@ export default {
       default: false,
     },
     adminViewing: {
+      type: Boolean,
+      default: false,
+    },
+    isAdmin: {
       type: Boolean,
       default: false,
     },

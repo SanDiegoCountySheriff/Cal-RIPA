@@ -4,6 +4,7 @@
       v-model="stop"
       :admin-editing="isAdminEditing"
       :admin-viewing="isAdminViewing"
+      :is-admin="isAdmin"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
@@ -180,6 +181,7 @@ export default {
       'stopTemplates',
       'piiServiceAvailable',
       'isApiUnavailable',
+      'isAdmin',
     ]),
 
     getMappedUser() {
