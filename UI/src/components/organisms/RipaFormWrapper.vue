@@ -5,8 +5,13 @@
       :alert-outlined="false"
       alert-type="error"
       >In order to finish initializing the RIPA application please upload CLEW
-      data by <a @click="$router.push('/admin/domains')">clicking here</a> and
-      uploading the CLEW spreadsheet including cities, schools and
+      data by
+      <a
+        class="text-decoration-underline white--text font-weight-bold"
+        @click="$router.push('/admin/domains')"
+        >clicking here</a
+      >
+      and uploading the CLEW spreadsheet including cities, schools and
       statutes.</ripa-alert
     >
     <ripa-alert
@@ -14,7 +19,7 @@
       :alert-outlined="false"
       alert-type="error"
       >This application is currently not ready for data submission. Please
-      contact your systems administrator before creating RIPA Stops</ripa-alert
+      contact your systems administrator before creating RIPA Stops.</ripa-alert
     >
     <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
@@ -22,6 +27,9 @@
           <ripa-template
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
+            :disable-buttons="
+              isDomainDataEmptyUser || isDomainDataEmptyAdministrator
+            "
           ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">

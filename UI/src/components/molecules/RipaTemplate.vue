@@ -5,7 +5,11 @@
         <v-container fluid>
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="primary" @click="handleDefaultTemplate">
+              <v-btn
+                :disabled="disableButtons"
+                color="primary"
+                @click="handleDefaultTemplate"
+              >
                 BASIC STOP
               </v-btn>
             </v-col>
@@ -20,6 +24,7 @@
               :key="index"
             >
               <v-btn
+                :disabled="disableButtons"
                 outlined
                 color="primary"
                 @click="handleDynamicTemplates(template.displayName)"
@@ -108,6 +113,10 @@ export default {
     onOpenTemplate: {
       type: Function,
       required: true,
+    },
+    disableButtons: {
+      type: Boolean,
+      default: false,
     },
   },
 }
