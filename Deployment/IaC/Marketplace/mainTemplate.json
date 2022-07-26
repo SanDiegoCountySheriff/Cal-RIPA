@@ -3759,69 +3759,6 @@
     {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]",
-      "location": "[resourceGroup().location]",
-      "kind": "AzurePowerShell",
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_ripactsa_name'), 'default')]"
-      ],
-      "tags": "[union(variables('default_tags'), if(contains(parameters('user_tags'), 'Microsoft.Resources/deploymentScripts'), parameters('user_tags')['Microsoft.Resources/deploymentScripts'], json('{}')))]",
-      "properties": {
-        "forceUpdateTag": "newGuid()",
-        "containerSettings": {
-          "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-domain-import-runonce-delete-me-dps')]"
-        },
-        "storageAccountSettings": {
-          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
-          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
-        },
-        "azPowerShellVersion": "3.0",
-        "environmentVariables": [
-          {
-            "name": "CSSA_SP_APP_ID",
-            "secureValue": "#{CSSA_SP_APP_ID}#"
-          },
-          {
-            "name": "CSSA_SP_SECRET",
-            "secureValue": "#{CSSA_SP_SECRET}#"
-          },
-          {
-            "name": "CSSA_TENANT_ID",
-            "value": "#{CSSA_TENANT_ID}#"
-          },
-          {
-            "name": "APP_SUBSCRIPTION_ID",
-            "value": "[subscription().subscriptionId]"
-          },
-          {
-            "name": "RESOURCE_GROUP_NAME",
-            "value": "[resourceGroup().name]"
-          },
-          {
-            "name": "STORAGE_ACCOUNT_NAME",
-            "value": "[variables('storageAccounts_ripactsa_name')]"
-          },
-          {
-            "name": "ENABLE_BEATS",
-            "value": "[parameters('enable_beats')]"
-          },
-          {
-            "name": "TEMPLATE_VERSION_FORMATTED",
-            "value": "#{TEMPLATE_VERSION_FORMATTED}#"
-          }
-        ],
-        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DOMAINDATA-PS1-SAS-URL}#",
-        "supportingScriptUris": [
-          "#{__TEMPLATE_VERSION_FORMATTED__-SDCS-LOOK-UP-TABLE-2022-XLSX-SAS-URL}#"
-        ],
-        "timeout": "PT4H",
-        "cleanupPreference": "OnExpiration",
-        "retentionInterval": "PT4H"
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deploymentScripts",
-      "apiVersion": "2020-10-01",
       "name": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzurePowerShell",
