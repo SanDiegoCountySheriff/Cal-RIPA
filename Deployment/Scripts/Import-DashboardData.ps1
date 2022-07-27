@@ -78,16 +78,21 @@ function SaveDatabaseRecord($tableName, $dataRecord)
 $tenantId = $env:CSSA_TENANT_ID
 $subscriptionId = $env:ETL_SUBSCRIPTION_ID
 
-if($env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() -ne "prod")
-{
-    $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
-    $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
-}
-else 
-{
-    $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PROD   
-    $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PROD
-}
+# Temporarily set to dev.  Uncomment if statement to set correct environment in the future
+
+$keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + "d" + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
+$sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + "d" + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
+
+# if($env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() -ne "prod")
+# {
+#     $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
+#     $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
+# }
+# else 
+# {
+#     $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PROD   
+#     $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PROD
+# }
 
 $databaseName = "mdw-db"
 $dataSourceName = $env:AGENCY_ABBREVIATION + "-" + $env:APPLICATION_NAME
