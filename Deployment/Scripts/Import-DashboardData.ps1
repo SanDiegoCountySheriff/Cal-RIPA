@@ -131,6 +131,9 @@ else {
     Write-Host "No SQL password provided"
 }
 
+$credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:CSSA_SP_APP_ID, $env:CSSA_SP_SECRET
+Connect-AzAccount -ServicePrincipal -TenantId $env:CSSA_TENANT_ID -Credential $credential
+
 Write-Host "Getting database"
 $resourceGroupName = $env:CSSA_DASHBOARD_RG_PREFIX + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
 $database = Get-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $databaseName -ServerName $sqlServerName
