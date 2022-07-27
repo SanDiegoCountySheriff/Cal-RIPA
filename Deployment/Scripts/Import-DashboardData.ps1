@@ -132,12 +132,12 @@ else {
 }
 
 Write-Host "Getting database"
-$database = Get-AzureSqlDatabase -DatabaseName $databaseName -ServerName $sqlServerName
+$database = Get-AzSqlDatabase -DatabaseName $databaseName -ServerName $sqlServerName
 
 if($database) {
     if($database.Status -eq "Paused") {
         Write-Host "Resuming database"
-        $database | Resume-AzureRmSqlDatabase
+        $database | Resume-AzSqlDatabase 
     }
     else {
         Write-Host "Database was not paused"
