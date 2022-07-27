@@ -131,6 +131,22 @@ else {
     Write-Host "No SQL password provided"
 }
 
+Write-Host "Getting database"
+$database = Get-AzureSqlDatabase -DatabaseName $databaseName -ServerName $sqlServerName
+
+if($database) {
+    if($database.Status -eq "Paused") {
+        Write-Host "Resuming database"
+        $database | Resume-AzureRmSqlDatabase
+    }
+    else {
+        Write-Host "Database was not paused"
+    }
+}
+else {
+    Write-Host "Database not found"
+}
+
 $sqlConn = New-Object System.Data.SqlClient.SqlConnection
 $sqlConn.ConnectionString = "Server=tcp:$sqlServerName,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$dbUserName;Password=$dbPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;"
 $sqlConn.Open()
