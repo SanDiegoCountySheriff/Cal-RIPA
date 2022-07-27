@@ -134,6 +134,7 @@ else {
 $spSecureString = ConvertTo-SecureString $env:CSSA_SP_SECRET -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($env:CSSA_SP_APP_ID, $spSecureString)
 Connect-AzAccount -ServicePrincipal -TenantId $env:CSSA_TENANT_ID -Credential $credential
+Set-AzContext -Subscription $subscriptionId
 
 Write-Host "Getting database"
 $resourceGroupName = $env:CSSA_DASHBOARD_RG_PREFIX + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
