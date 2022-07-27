@@ -3626,6 +3626,10 @@
           {
             "name": "KV_SQL_SERVER_PWD",
             "value": "#{KV_SQL_SERVER_PWD}#"
+          },
+          {
+            "name": "CSSA_DASHBOARD_RG_PREFIX",
+            "value": "#{CSSA_DASHBOARD_RG_PREFIX}#"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-DASHBOARDDATA-PS1-SAS-URL}#",
