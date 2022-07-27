@@ -132,7 +132,8 @@ else {
 }
 
 Write-Host "Getting database"
-$database = Get-AzSqlDatabase -DatabaseName $databaseName -ServerName $sqlServerName
+$resourceGroupName = $env:CSSA_DASHBOARD_RG_PREFIX + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
+$database = Get-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $databaseName -ServerName $sqlServerName
 
 if($database) {
     if($database.Status -eq "Paused") {
