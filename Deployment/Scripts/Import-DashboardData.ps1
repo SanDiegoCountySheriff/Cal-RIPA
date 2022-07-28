@@ -124,38 +124,40 @@ $dbUserName = ((az keyvault secret show --subscription $subscriptionId --vault-n
 $dbPassword = ((az keyvault secret show --subscription $subscriptionId --vault-name $keyVaultName -n $env:KV_SQL_SERVER_PWD) | ConvertFrom-Json).value
 
 Write-Host "Connecting to the database as user" $dbUserName
+
 if($dbPassword -eq $null){
-    Write-Host "Connection being made with password"
-}
-else {
     Write-Host "No SQL password provided"
 }
-
-$spSecureString = ConvertTo-SecureString $env:CSSA_SP_SECRET -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential($env:CSSA_SP_APP_ID, $spSecureString)
-Connect-AzAccount -ServicePrincipal -TenantId $env:CSSA_TENANT_ID -Credential $credential -Environment "AzureUSGovernment"
-Set-AzContext -Subscription $subscriptionId
-
-Write-Host "Getting database"
-$resourceGroupName = $env:CSSA_DASHBOARD_RG_PREFIX + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
-$database = Get-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $databaseName.Split('.')[0] -ServerName $sqlServerName
-
-if($database) {
-    if($database.Status -eq "Paused") {
-        Write-Host "Resuming database"
-        $database | Resume-AzSqlDatabase 
-    }
-    else {
-        Write-Host "Database was not paused"
-    }
-}
 else {
-    Write-Host "Database not found"
+    Write-Host "Connection being made with password"
 }
 
 $sqlConn = New-Object System.Data.SqlClient.SqlConnection
 $sqlConn.ConnectionString = "Server=tcp:$sqlServerName,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$dbUserName;Password=$dbPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;"
-$sqlConn.Open()
+
+$currentErrorState = $ErrorActionPreference
+Write-Host "Setting error action preference to Continue"
+$ErrorActionPreference = 'Continue'
+
+for ($i = 1; i -le 4; i++) {
+    Write-Host "Attempt $i to connect to database"
+    try {
+        $sqlConn.Open()
+        if ($sqlConn.State -eq "Open") {
+            Write-Host "SQL Connection is open"
+            break
+        }
+    }
+    catch {
+        Write-Host "An error occurred:"
+        Write-Host $_
+    }
+    Write-Host "Sleeping 30 seconds before retrying"
+    sleep(30)
+}
+
+Write-Host "Restoring error action preference"
+$ErrorActionPreference = $currentErrorState
 
 Write-Host "Connected to the database"
 
