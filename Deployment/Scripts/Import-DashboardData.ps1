@@ -138,7 +138,7 @@ Set-AzContext -Subscription $subscriptionId
 
 Write-Host "Getting database"
 $resourceGroupName = $env:CSSA_DASHBOARD_RG_PREFIX + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
-$database = Get-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $databaseName -ServerName $sqlServerName
+$database = Get-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $databaseName.Split('.')[0] -ServerName $sqlServerName
 
 if($database) {
     if($database.Status -eq "Paused") {
