@@ -139,7 +139,7 @@ $currentErrorState = $ErrorActionPreference
 Write-Host "Setting error action preference to Continue"
 $ErrorActionPreference = 'Continue'
 
-for ($i = 1; i -le 4; i++) {
+for ($i = 1; $i -le 4; $i++) {
     Write-Host "Attempt $i to connect to database"
     try {
         $sqlConn.Open()
