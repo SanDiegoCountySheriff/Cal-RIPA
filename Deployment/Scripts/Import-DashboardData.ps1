@@ -159,31 +159,35 @@ for ($i = 1; i -le 4; i++) {
 Write-Host "Restoring error action preference"
 $ErrorActionPreference = $currentErrorState
 
-Write-Host "Connected to the database"
+if ($sqlConn.State -eq "Open") {
+    Write-Host "Connected to the database"
 
-$sqlcmd = $sqlConn.CreateCommand()
-$query = “SELECT * FROM adf.DataSource " + $whereClause 
-$sqlcmd.CommandText = $query
+    $sqlcmd = $sqlConn.CreateCommand()
+    $query = “SELECT * FROM adf.DataSource " + $whereClause 
+    $sqlcmd.CommandText = $query
 
-$adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd
+    $adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd
 
-$data = New-Object System.Data.DataSet
-$adp.Fill($data) | Out-Null
+    $data = New-Object System.Data.DataSet
+    $adp.Fill($data) | Out-Null
 
-Write-Host "Data rows retrieved:" $data.Tables[0].Rows.Count
+    Write-Host "Data rows retrieved:" $data.Tables[0].Rows.Count
 
-$stopRecord = ($data.Tables[0].Rows | Where-Object {$_.DatabaseTableName -eq "stop"})
-$userprofileRecord = ($data.Tables[0].Rows | Where-Object {$_.DatabaseTableName -eq "userprofile"})
+    $stopRecord = ($data.Tables[0].Rows | Where-Object {$_.DatabaseTableName -eq "stop"})
+    $userprofileRecord = ($data.Tables[0].Rows | Where-Object {$_.DatabaseTableName -eq "userprofile"})
 
-Write-Host "Checking and updating values"
-SaveDatabaseRecord -tableName "stop" -dataRecord $stopRecord
-SaveDatabaseRecord -tableName "userprofile" -dataRecord $userprofileRecord
+    Write-Host "Checking and updating values"
+    SaveDatabaseRecord -tableName "stop" -dataRecord $stopRecord
+    SaveDatabaseRecord -tableName "userprofile" -dataRecord $userprofileRecord
 
-$sqlConn.Close()
-Write-Host "Closed the connection"
+    $sqlConn.Close()
+    Write-Host "Closed the connection"
 
-# place CosmosDB key into etl kv of another subscription
-$dashboardSecretName = $dataSourceName + "-cosmos-key"
-Write-Host "Writing CosmosDB Key to" $keyVaultName
-az keyvault secret set --name $dashboardSecretName --value $dashboardSecretKey --vault-name $keyVaultName 1> /dev/null #prevent writing secret to log
-Write-Host "Finished writing" $dashboardSecretName "to" $keyVaultName
+    # place CosmosDB key into etl kv of another subscription
+    $dashboardSecretName = $dataSourceName + "-cosmos-key"
+    Write-Host "Writing CosmosDB Key to" $keyVaultName
+    az keyvault secret set --name $dashboardSecretName --value $dashboardSecretKey --vault-name $keyVaultName 1> /dev/null #prevent writing secret to log
+    Write-Host "Finished writing" $dashboardSecretName "to" $keyVaultName
+} elseif ($sqlConn.State -eq "Closed") {
+    Write-Host "Unable to connect with database"
+}
