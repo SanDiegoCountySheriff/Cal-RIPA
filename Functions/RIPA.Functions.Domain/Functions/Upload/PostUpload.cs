@@ -154,6 +154,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 if (IsBatchCountExecutable(batchCount))
                 {
                     await ExecuteBatch(table, log);
+                    _operations.Clear();
                     batchCount = 0;
                     Console.WriteLine($"processed {_batchLimit} - " + Environment.NewLine + $"{totalRows}");
                 }
@@ -189,6 +190,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
 
             await ExecuteBatch(table, log);
+            _operations.Clear();
             return returnTotalRows;
         }
 
