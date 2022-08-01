@@ -25,16 +25,14 @@ namespace RIPA.Functions.Domain.Functions.Upload
 {
     public class PostUpload
     {
-        private readonly ILogger _log;
         private readonly TableBatchOperation _operations;
         private readonly int _batchLimit = 100;
         private readonly CloudTableClient _client;
 
-        public PostUpload(CloudTableClient client, ILogger log)
+        public PostUpload(CloudTableClient client)
         {
             _client = client;
             _operations = new TableBatchOperation();
-            _log = log;
         }
 
         [FunctionName("PostUpload")]
@@ -70,21 +68,21 @@ namespace RIPA.Functions.Domain.Functions.Upload
 
                 if (dataSet.Tables["Beat_Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], _client.GetTableReference("Beats"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], _client.GetTableReference("Beats"), log);
                 }
 
-                recordCount += await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableReference("Cities"));
+                recordCount += await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableReference("Cities"), log);
 
-                recordCount += await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableReference("Schools"));
+                recordCount += await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableReference("Schools"), log);
 
                 // CA DOJ currently has the table name as "Offense Table" which does not follow the conventions of the other tables
                 if (dataSet.Tables["Offense_Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], _client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], _client.GetTableReference("Statutes"), log);
                 }
                 else if (dataSet.Tables["Offense Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], _client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], _client.GetTableReference("Statutes"), log);
                 }
 
                 string responseMessage;
@@ -114,7 +112,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return dataSet;
         }
 
-        private async Task<bool> ExecuteBatch(CloudTable table)
+        private async Task<bool> ExecuteBatch(CloudTable table, ILogger log)
         {
             try
             {
@@ -122,7 +120,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
             catch (Exception ex)
             {
-                _log.LogError($"batch failed {ex.Message}");
+                log.LogError($"batch failed {ex.Message}");
                 return false;
             }
             return true;
@@ -143,7 +141,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
         }
 
-        private async Task<int> ProcessEntities(DataTable dataTable, CloudTable table)
+        private async Task<int> ProcessEntities(DataTable dataTable, CloudTable table, ILogger log)
         {
             await table.CreateIfNotExistsAsync();
             int batchCount = 0;
@@ -155,7 +153,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 batchCount++;
                 if (IsBatchCountExecutable(batchCount))
                 {
-                    await ExecuteBatch(table);
+                    await ExecuteBatch(table, log);
                     batchCount = 0;
                     Console.WriteLine($"processed {_batchLimit} - " + Environment.NewLine + $"{totalRows}");
                 }
@@ -186,11 +184,11 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    log.LogError(ex.Message);
                 }
             }
 
-            await ExecuteBatch(table);
+            await ExecuteBatch(table, log);
             return returnTotalRows;
         }
 
