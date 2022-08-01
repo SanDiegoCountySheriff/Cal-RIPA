@@ -732,6 +732,11 @@ export default new Vuex.Store({
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
           dispatch('getAdminStatutes')
+          localStorage.removeItem('ripa_non_county_cities')
+          localStorage.removeItem('ripa_county_cities')
+          localStorage.removeItem('ripa_beats')
+          localStorage.removeItem('ripa_schools')
+          localStorage.removeItem('ripa_statutes')
           return response.data
         })
         .catch(error => {
