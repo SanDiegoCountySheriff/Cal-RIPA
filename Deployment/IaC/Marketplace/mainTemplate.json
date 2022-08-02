@@ -3677,8 +3677,8 @@
             "value": "#{CSSA_TENANT_ID}#"
           },
           {
-            "name": "CSSA_SUBSCRIPTION_ID",
-            "value": "#{CSSA_SUBSCRIPTION_ID}#"
+            "name": "CSSA_SHD_SUBSCRIPTION_ID",
+            "value": "#{CSSA_SHD_SUBSCRIPTION_ID}#"
           },
           {
             "name": "CSSA_RESOURCE_GROUP_NAME",
