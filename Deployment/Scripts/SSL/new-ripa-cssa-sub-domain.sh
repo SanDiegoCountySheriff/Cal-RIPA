@@ -8,7 +8,7 @@ echo
 # CSSA_SP_APP_ID: This is a Service Principal that has been granted access to the core CSSA global resources
 # CSSA_SP_SECRET: This is the password/secret for the Service Principal
 # CSSA_TENANT_ID: This is the core CSSA Tenant ID 
-# CSSA_SUBSCRIPTION_ID: This is the CSSA Subscription ID where the CSSA global resources are
+# CSSA_SHD_SUBSCRIPTION_ID: This is the CSSA Subscription ID where the CSSA global resources are
 # CSSA_RESOURCE_GROUP_NAME: This is the main resource group where the CSSA global are. KV, CDN, DNS Zone (sdsd-gen-p-rg)
 # CSSA_CDN_PROFILE_NAME: This is the CSSA global DNS Zone resource name (cssa.cloud)
 # CSSA_DNS_ROOT_ZONE: This is the root DNS entry for the CSSA DNS ZOne (cssa.cloud)
@@ -51,7 +51,7 @@ fi
 echo "CLOUD_TYPE: " $CLOUD_TYPE
 echo "CSSA_TENANT_ID: " $CSSA_TENANT_ID
 echo "CSSA_SP_APP_ID: " $CSSA_SP_APP_ID
-echo "CSSA_SUBSCRIPTION_ID: " $CSSA_SUBSCRIPTION_ID
+echo "CSSA_SHD_SUBSCRIPTION_ID: " $CSSA_SHD_SUBSCRIPTION_ID
 echo "CSSA_RESOURCE_GROUP_NAME: " $CSSA_RESOURCE_GROUP_NAME
 echo "CSSA_CDN_PROFILE_NAME: " $CSSA_CDN_PROFILE_NAME
 echo "CSSA_DNS_ROOT_ZONE: " $CSSA_DNS_ROOT_ZONE
@@ -77,8 +77,8 @@ echo "Setting Azure cloud:" $CLOUD_TYPE
 result=$(az cloud set -n $CLOUD_TYPE)
 echo "Logging in with Azure CLI:" $CSSA_TENANT_ID $CSSA_SP_APP_ID
 result=$(az login --service-principal --tenant $CSSA_TENANT_ID -u $CSSA_SP_APP_ID -p $CSSA_SP_SECRET)
-echo "Setting default subscription:" $CSSA_SUBSCRIPTION_ID
-result=$(az account set -s $CSSA_SUBSCRIPTION_ID)
+echo "Setting default subscription:" $CSSA_SHD_SUBSCRIPTION_ID
+result=$(az account set -s $CSSA_SHD_SUBSCRIPTION_ID)
 az account show
 echo
 
@@ -119,9 +119,9 @@ then
     # Create DNS CNAMEs for the application URL and for CDN Verify
     echo "Using CSSA DNS configuration"
     echo "Creating/updating DNS CNAMES"
-    result=$(az network dns record-set cname set-record --subscription $CSSA_SUBSCRIPTION_ID -g $CSSA_RESOURCE_GROUP_NAME -z $CSSA_DNS_ROOT_ZONE -n $dns_sub_domain_name -c $cname_alias)
+    result=$(az network dns record-set cname set-record --subscription $CSSA_SHD_SUBSCRIPTION_ID -g $CSSA_RESOURCE_GROUP_NAME -z $CSSA_DNS_ROOT_ZONE -n $dns_sub_domain_name -c $cname_alias)
     echo "Created" $cname_alias "record"
-    result=$(az network dns record-set cname set-record --subscription $CSSA_SUBSCRIPTION_ID -g $CSSA_RESOURCE_GROUP_NAME -z $CSSA_DNS_ROOT_ZONE -n cdnverify.$dns_sub_domain_name -c cdnverify.$cname_alias)
+    result=$(az network dns record-set cname set-record --subscription $CSSA_SHD_SUBSCRIPTION_ID -g $CSSA_RESOURCE_GROUP_NAME -z $CSSA_DNS_ROOT_ZONE -n cdnverify.$dns_sub_domain_name -c cdnverify.$cname_alias)
     echo "Created cdnverify."$cname_alias "record"
     echo
 fi
@@ -132,7 +132,7 @@ ori=${AGENCY_ORI,,}
 agency=${AGENCY_ABBREVIATION,,}
 # result=$(
 az cdn endpoint create \
-    --subscription $CSSA_SUBSCRIPTION_ID \
+    --subscription $CSSA_SHD_SUBSCRIPTION_ID \
     --resource-group $CSSA_RESOURCE_GROUP_NAME \
     --location "Global" \
     --profile-name $CSSA_CDN_PROFILE_NAME \
@@ -171,7 +171,7 @@ az cdn custom-domain enable-https \
     --endpoint-name $endpoint_name \
     --name $dns_host_name_name \
     --min-tls-version 1.2 \
-    --user-cert-subscription-id $CSSA_SUBSCRIPTION_ID \
+    --user-cert-subscription-id $CSSA_SHD_SUBSCRIPTION_ID \
     --user-cert-group-name $CSSA_RESOURCE_GROUP_NAME \
     --user-cert-vault-name $CSSA_CERT_KEY_VAULT_NAME \
     --user-cert-secret-name $CSSA_CERT_SECRET_NAME \
