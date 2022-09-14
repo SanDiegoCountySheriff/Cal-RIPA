@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,25 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
 {
     public class StopCosmosDbService : IStopCosmosDbService
     {
+        private readonly ILogger<StopCosmosDbService> _logger;
         private readonly Container _container;
         private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-        public StopCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
+        public StopCosmosDbService(ILogger<StopCosmosDbService> logger)
         {
-            _container = dbClient.GetContainer(databaseName, containerName);
+            _logger = logger;
+            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+            string containerName = Environment.GetEnvironmentVariable("StopContainerName");
+            string account = Environment.GetEnvironmentVariable("Account");
+            string key = Environment.GetEnvironmentVariable("Key");
+
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
+
+            _container = client.GetContainer(databaseName, containerName);
         }
 
         public async Task AddStopAsync(Common.Models.Stop stop)

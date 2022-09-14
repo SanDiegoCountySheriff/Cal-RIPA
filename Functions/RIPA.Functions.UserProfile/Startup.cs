@@ -15,10 +15,11 @@ namespace RIPA.Functions.UserProfile
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IUserProfileCosmosDbService>(InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult());
+            builder.Services.AddSingleton<IUserProfileCosmosDbService, UserProfileCosmosDbService>();
+            InitializeCosmosClientInstanceAsync().GetAwaiter().GetResult();
         }
 
-        private static async Task<UserProfileCosmosDbService> InitializeCosmosClientInstanceAsync()
+        private static async Task InitializeCosmosClientInstanceAsync()
         {
             string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
@@ -29,11 +30,8 @@ namespace RIPA.Functions.UserProfile
             clientOptions.ConnectionMode = ConnectionMode.Gateway;
 #endif
             CosmosClient client = new CosmosClient(account, key, clientOptions);
-            UserProfileCosmosDbService cosmosDbService = new UserProfileCosmosDbService(client, databaseName, containerName);
             DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
-
-            return cosmosDbService;
         }
     }
 }
