@@ -419,7 +419,7 @@ export default {
       let template
 
       if (templates) {
-        template = templates.filter(tplt => {
+        template = templates.find(tplt => {
           return tplt.displayName === value
         })
       }
