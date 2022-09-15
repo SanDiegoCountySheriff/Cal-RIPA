@@ -12,18 +12,18 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
         private readonly ServiceBusClient _serviceBusClient;
         private readonly ServiceBusClientOptions _serviceBusClientOptions;
         private const int batchMessageCountLimit = 250;
-        private readonly ILogger _log;
+        private readonly ILogger<SubmissionServiceBusService> _logger;
 
         ServiceBusClient ISubmissionServiceBusService.SubmissionServiceBusClient { get { return _serviceBusClient; } }
 
-        public SubmissionServiceBusService(string serviceBusConnection, string queueName, ILogger log)
+        public SubmissionServiceBusService(ILogger<SubmissionServiceBusService> logger)
         {
+            _logger = logger;
             _serviceBusClientOptions = new ServiceBusClientOptions();
 #if DEBUG
             _serviceBusClientOptions.TransportType = ServiceBusTransportType.AmqpWebSockets;
 #endif
-            _serviceBusClient = new ServiceBusClient(serviceBusConnection, _serviceBusClientOptions);
-            _log = log;
+            _serviceBusClient = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"), _serviceBusClientOptions);
         }
 
         public class SubmissionMessage
@@ -42,7 +42,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
             try
             {
                 ServiceBusSender serviceBusSender = _serviceBusClient.CreateSender("submission");
-                _log.LogInformation($"Sending {listServiceBusMessages.Count} messages");
+                _logger.LogInformation($"Sending {listServiceBusMessages.Count} messages");
                 ServiceBusMessageBatch messageBatch = await serviceBusSender.CreateMessageBatchAsync();
                 int batchMessageCount = 0;
                 foreach (ServiceBusMessage serviceBusMessage in listServiceBusMessages)
@@ -51,7 +51,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
                     if (!messageBatch.TryAddMessage(serviceBusMessage))
                     {
                         // if it is too large for the batch
-                        _log.LogError("$The message { i} is too large to fit in the batch.");
+                        _logger.LogError("$The message { i} is too large to fit in the batch.");
                         throw new Exception($"The message {serviceBusMessage.Body} is too large to fit in the batch.");
                     }
                     batchMessageCount++;
@@ -60,7 +60,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
                     {
                         // Use the producer client to send the batch of messages to the Service Bus queue
                         await serviceBusSender.SendMessagesAsync(messageBatch);
-                        _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
+                        _logger.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
                         messageBatch.Dispose();
                         messageBatch = await serviceBusSender.CreateMessageBatchAsync();
                         batchMessageCount = 0;
@@ -68,12 +68,12 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
                 }
                 await serviceBusSender.SendMessagesAsync(messageBatch);
                 messageBatch.Dispose();
-                _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
+                _logger.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
 
             }
             catch (Exception ex)
             {
-                _log.LogError("error occurred", ex);
+                _logger.LogError("error occurred", ex);
             }
         }
     }

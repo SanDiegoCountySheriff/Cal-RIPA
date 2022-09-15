@@ -13,14 +13,24 @@ namespace RIPA.Functions.Submission.Services.SFTP
 {
     public class SftpService : ISftpService
     {
-        public readonly ILogger _logger;
+        public readonly ILogger<SftpService> _logger;
         public readonly SftpConfig _config;
         public readonly bool _disabled;
-
         public readonly SftpClient _sftpClient;
 
-        public SftpService(ILogger logger, SftpConfig sftpConfig)
+        public SftpService(ILogger<SftpService> logger)
         {
+            _config = new SftpConfig
+            {
+                Host = Environment.GetEnvironmentVariable("SftpHost"),
+                Port = Convert.ToInt32(Environment.GetEnvironmentVariable("SftpPort")),
+                UserName = Environment.GetEnvironmentVariable("SftpUserName"),
+                Password = Environment.GetEnvironmentVariable("SftpPassword"),
+                Key = Environment.GetEnvironmentVariable("SftpKey")
+            };
+#if DEBUG
+            _config.Key = File.ReadAllText(@"PATH/TO/lplp.ppk");
+#endif
             _logger = logger;
             var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
 
@@ -33,7 +43,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
                     return;
                 }
             }
-            _config = sftpConfig;
+
             byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
             using MemoryStream stream = new MemoryStream(byteArray);
 

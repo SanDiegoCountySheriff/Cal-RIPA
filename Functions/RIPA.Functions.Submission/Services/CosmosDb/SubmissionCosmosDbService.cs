@@ -1,5 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +10,23 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
 {
     public class SubmissionCosmosDbService : ISubmissionCosmosDbService
     {
+        private readonly ILogger<SubmissionCosmosDbService> _logger;
         private readonly Container _container;
 
-        public SubmissionCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
+        public SubmissionCosmosDbService(ILogger<SubmissionCosmosDbService> logger)
         {
-            _container = dbClient.GetContainer(databaseName, containerName);
+            _logger = logger;
+            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+            string containerName = Environment.GetEnvironmentVariable("ContainerNameSubmissions");
+            string account = Environment.GetEnvironmentVariable("Account");
+            string key = Environment.GetEnvironmentVariable("Key");
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            CosmosClient client = new CosmosClient(account, key, clientOptions);
 
+            _container = client.GetContainer(databaseName, containerName);
         }
 
         public async Task AddSubmissionAsync(Models.Submission submission)

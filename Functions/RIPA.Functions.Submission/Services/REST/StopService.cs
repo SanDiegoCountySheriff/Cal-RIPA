@@ -1,4 +1,5 @@
-﻿using RIPA.Functions.Common.Models;
+﻿using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
@@ -14,6 +15,13 @@ namespace RIPA.Functions.Submission.Services.REST
 {
     public class StopService : IStopService
     {
+        private readonly ILogger<StopService> _logger;
+
+        public StopService(ILogger<StopService> logger)
+        {
+            _logger = logger;
+        }
+
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
@@ -123,7 +131,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return dojLocation;
         }
 
-        public  Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
+        public Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
         {
             var listDojPersonStopped = new Person_Stopped[0].ToList();
             foreach (PersonStopped personStopped in listPersonStopped)
@@ -163,7 +171,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
-        public  Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
+        public Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
         {
             var stopReasonKey = personStopped.ReasonForStop?.Key;
             Primaryreason primaryReason = new Primaryreason
@@ -194,7 +202,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return primaryReason;
         }
 
-        public  Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
+        public Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
         {
             var listActionsTaken = new List<Acttak>();
             foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
@@ -213,7 +221,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listacttak { ActTak = listActionsTaken.ToArray() };
         }
 
-        public  Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
+        public Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
         {
             var listResults = new List<Result>();
             foreach (ResultOfStop ros in listResultOfStop)
@@ -228,7 +236,7 @@ namespace RIPA.Functions.Submission.Services.REST
             return new Listresult { Result = listResults.ToArray() };
         }
 
-        public  string CastToDojPercievedGender(string percievedGender)
+        public string CastToDojPercievedGender(string percievedGender)
         {
             return percievedGender switch
             {
@@ -240,7 +248,7 @@ namespace RIPA.Functions.Submission.Services.REST
             };
         }
 
-        public  string CastToDojTXType(Stop stop)
+        public string CastToDojTXType(Stop stop)
         {
             if (stop.ListSubmission == null || stop.ListSubmission.Length == 0)
                 return "I"; // no submissions 
