@@ -53,6 +53,7 @@ namespace RIPA.Functions.UserProfile.Functions
             if (!string.IsNullOrEmpty(Id))
             {
                 var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
+
                 if (response != null)
                 {
                     return new OkObjectResult(response);

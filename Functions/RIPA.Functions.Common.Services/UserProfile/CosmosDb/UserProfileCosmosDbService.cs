@@ -30,16 +30,18 @@ namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb
 
         public async Task AddUserProfileAsync(Models.UserProfile userProfile)
         {
+            _logger.LogInformation($"Adding user profile: {userProfile.OfficerId}");
             await _container.CreateItemAsync<Models.UserProfile>(userProfile, new PartitionKey(userProfile.Id));
         }
 
         public async Task DeleteUserProfileAsync(string id)
         {
+            _logger.LogInformation($"Deleting user profile: {id}");
             await _container.DeleteItemAsync<Models.UserProfile>(id, new PartitionKey(id));
         }
 
         public async Task<Models.UserProfile> GetUserProfileAsync(string id)
-        {
+        { 
             try
             {
                 ItemResponse<Models.UserProfile> response = await _container.ReadItemAsync<Models.UserProfile>(id, new PartitionKey(id));
@@ -47,6 +49,7 @@ namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
+                _logger.LogError($"Error getting user profile: {ex.Message}");
                 return null;
             }
         }
@@ -55,14 +58,22 @@ namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb
         {
             var query = _container.GetItemQueryIterator<Models.UserProfile>(new QueryDefinition(queryString));
             List<Models.UserProfile> results = new List<Models.UserProfile>();
-            while (query.HasMoreResults)
+
+            try
             {
-                var response = await query.ReadNextAsync();
+                while (query.HasMoreResults)
+                {
+                    var response = await query.ReadNextAsync();
 
-                results.AddRange(response.ToList());
+                    results.AddRange(response.ToList());
+                }
+                return results;
             }
-
-            return results;
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting user profiles: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task UpdateUserProfileAsync(string id, Models.UserProfile userProfile)

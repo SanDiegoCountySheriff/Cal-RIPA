@@ -49,7 +49,12 @@ namespace RIPA.Functions.UserProfile.Functions
 
             var response = await _userProfileCosmosDbService.GetUserProfilesAsync("SELECT * FROM c ORDER BY c.name");
 
-            return new OkObjectResult(response);
+            if (response != null)
+            {
+                return new OkObjectResult(response);    
+            }
+
+            return new BadRequestObjectResult("Not Found");
         }
     }
 }
