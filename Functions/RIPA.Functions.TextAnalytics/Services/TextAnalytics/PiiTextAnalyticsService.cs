@@ -17,6 +17,7 @@ namespace RIPA.Functions.TextAnalytics.Services.TextAnalytics
             _logger = logger;
             _textAnalyticsClient = new TextAnalyticsClient(new Uri(Environment.GetEnvironmentVariable("TextAnalyticsEndpoint")), new AzureKeyCredential(Environment.GetEnvironmentVariable("TextAnalyticsKey")));
         }
+
         public async Task<CategorizedEntityCollection> GetCategorizedEntities(string document)
         {
             return await _textAnalyticsClient.RecognizeEntitiesAsync(document);
