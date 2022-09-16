@@ -147,6 +147,11 @@ namespace RIPA.Functions.Submission.Functions
             try
             {
                 submissionId = await submissionUtilities.NewSubmission(stopResponse, userProfile);
+                foreach (var stop in stopResponse)
+                {
+                    stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Pending);
+                    await _stopCosmosDbService.UpdateStopAsync(stop);
+                }
             }
             catch (Exception ex)
             {
