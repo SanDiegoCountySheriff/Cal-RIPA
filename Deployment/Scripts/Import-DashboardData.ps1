@@ -75,24 +75,44 @@ function SaveDatabaseRecord($tableName, $dataRecord)
     }
 }
 
+function CheckFirewallRuleExists($fwRuleName)
+{
+    Write-Host "Checking to see if firewall rule exists:" $fwRuleName
+    $myIpFirewallRule = ((az sql server firewall-rule list --ids $sqlResourceId) | ConvertFrom-Json) | Where-Object name -eq $myFirewallRuleName
+    $myIpFirewallRule
+    Write-Host "Is not null:" ($myIpFirewallRule -ne $NULL)
+
+    return ($myIpFirewallRule -ne $NULL)
+}
+
+function Add-FirewallRule()
+{
+    Write-host "Adding my public IP Address to the Firewall Rules"
+
+    $myPublicIpAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
+    
+    az sql server firewall-rule create --name $myFirewallRuleName --resource-group $resourceGroupName --server $sqlServerName --end-ip-address $myPublicIpAddress --start-ip-address $myPublicIpAddress
+}
+
 $tenantId = $env:CSSA_TENANT_ID
 $subscriptionId = $env:ETL_SUBSCRIPTION_ID
 
 # Temporarily set to dev.  Uncomment if statement to set correct environment in the future
+# $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + "d" + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
+# $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + "d" + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
 
-$keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + "d" + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
-$sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + "d" + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
-
-# if($env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() -ne "prod")
-# {
-#     $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
-#     $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
-# }
-# else 
-# {
-#     $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PROD   
-#     $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PROD
-# }
+if($env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() -ne "p")
+{
+    $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_KEY_VAULT_SUFFIX
+    $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PREFIX + $env:ENVIRONMENT_TYPE.Substring(0,1).ToLower() + $env:CSSA_DASHBOARD_SQL_SERVER_SUFFIX
+    $resourceGroupName = "rg-cssa-it-etl-" + $env:ENVIRONMENT_TYPE.ToLower() + "-001"
+}
+else 
+{
+    $keyVaultName = $env:CSSA_DASHBOARD_KEY_VAULT_PROD   
+    $sqlServerName = $env:CSSA_DASHBOARD_SQL_SERVER_PROD
+    $resourceGroupName = "rg-cssa-it-etl-prd-001"
+}
 
 $databaseName = "mdw-db"
 $dataSourceName = $env:AGENCY_ABBREVIATION + "-" + $env:APPLICATION_NAME
@@ -132,28 +152,56 @@ else {
     Write-Host "Connection being made with password"
 }
 
+Write-Host 
+Write-Host "Verifying SQL DB is online and running"
+Write-Host 
+
 $sqlConn = New-Object System.Data.SqlClient.SqlConnection
 $sqlConn.ConnectionString = "Server=tcp:$sqlServerName,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$dbUserName;Password=$dbPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;"
+$sqlResourceId = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Sql/servers/$sqlServerName"
+
+$fwExists = CheckFirewallRuleExists($myFirewallRuleName)
+if(!$fwExists)
+{
+    Add-FirewallRule
+}
 
 $currentErrorState = $ErrorActionPreference
 Write-Host "Setting error action preference to Continue"
 $ErrorActionPreference = 'Continue'
 
-for ($i = 1; $i -le 4; $i++) {
-    Write-Host "Attempt $i to connect to database"
-    try {
-        $sqlConn.Open()
-        if ($sqlConn.State -eq "Open") {
-            Write-Host "SQL Connection is open"
-            break
-        }
+for ($i = 0; $i -lt 5; $i++)
+{
+    $dbStatus = (az sql db show -g $resourceGroupName --server $sqlServerName -n $databaseName) | ConvertFrom-Json
+    Write-Host "Current database status is: $dbStatus.status"
+    Write-Host 
+
+    if($dbStatus.status.ToLower() -eq "online")
+    {
+        Write-Host "Database is online"
+        Write-Host 
+
+        break;
     }
-    catch {
-        Write-Host "An error occurred:"
-        Write-Host $_
-    }
-    Write-Host "Sleeping 30 seconds before retrying"
-    sleep(30)
+
+    Write-Host "Database is NOT online yet"
+
+    $sqlConn = New-Object System.Data.SqlClient.SqlConnection
+    $sqlConn.ConnectionString = $connectionString
+    $sqlConn.Open()
+}
+
+Write-Host "Checking to see if we need to remove my firewall rule"
+$myIpFirewallRule = ((az sql server firewall-rule list --ids $sqlResourceId) | ConvertFrom-Json) | Where-Object name -eq $myFirewallRuleName
+$myIpFirewallRule
+Write-Host "Is not null:" ($myIpFirewallRule -ne $NULL)
+
+$fwExists = CheckFirewallRuleExists($myFirewallRuleName)
+if($fwExists)
+{
+    Write-host "Remving my public IP Address from the Firewall Rules"
+    
+    az sql server firewall-rule delete --name $myFirewallRuleName --resource-group $resourceGroupName --server $sqlServerName 
 }
 
 Write-Host "Restoring error action preference"
