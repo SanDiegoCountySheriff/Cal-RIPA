@@ -25,16 +25,14 @@ namespace RIPA.Functions.Submission.Services.REST
         public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+
             if (stop.ListSubmission == null)
             {
                 stop.ListSubmission = new Common.Models.Submission[0];
             }
-            else
+            else if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
             {
-                if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
-                {// this is same logic as TXType for DOJ? 
-                    stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
-                }
+                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
             }
 
             var submissions = stop.ListSubmission.ToList();
@@ -45,8 +43,8 @@ namespace RIPA.Functions.Submission.Services.REST
                 Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted),
                 FileName = fileName
             };
-            submissions.Add(submission);
 
+            submissions.Add(submission);
             stop.ListSubmission = submissions.ToArray();
 
             return stop;
@@ -70,6 +68,7 @@ namespace RIPA.Functions.Submission.Services.REST
             }
 
             var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
+
             foreach (var submission in pendingSubmissions)
             {
                 List<SubmissionError> listSubmissionError = new List<SubmissionError>();
@@ -82,6 +81,7 @@ namespace RIPA.Functions.Submission.Services.REST
 
                 submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
             }
+
             stop.Status = stopStatus;
             return stop;
         }
@@ -114,12 +114,14 @@ namespace RIPA.Functions.Submission.Services.REST
                 Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
                 ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School) : null
             };
+
             return dojStop;
         }
 
         public string CastToDojLocation(RIPA.Functions.Common.Models.Location location)
         {
             string dojLocation = location.Intersection;
+
             if (location.BlockNumber != "")
                 dojLocation += " " + location.BlockNumber;
             if (location.LandMark != "")
@@ -128,12 +130,14 @@ namespace RIPA.Functions.Submission.Services.REST
                 dojLocation += " " + location.StreetName;
             if (location.HighwayExit != "")
                 dojLocation += " " + location.HighwayExit;
+
             return dojLocation;
         }
 
         public Listperson_Stopped CastToDojListPersonStopped(RIPA.Functions.Common.Models.PersonStopped[] listPersonStopped, bool isSchool)
         {
             var listDojPersonStopped = new Person_Stopped[0].ToList();
+
             foreach (PersonStopped personStopped in listPersonStopped)
             {
                 Person_Stopped dojPersonStopped = new Person_Stopped
@@ -166,8 +170,10 @@ namespace RIPA.Functions.Submission.Services.REST
                     ListResult = CastToDojListResult(personStopped.ListResultOfStop)
 
                 };
+
                 listDojPersonStopped.Add(dojPersonStopped);
             }
+
             return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
         }
 
@@ -199,17 +205,26 @@ namespace RIPA.Functions.Submission.Services.REST
                 default: //All other stop reason keys
                     break;
             }
+
             return primaryReason;
         }
 
         public Listacttak CastToDojListActTak(Common.Models.ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
         {
             var listActionsTaken = new List<Acttak>();
+
             foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
             {
                 var isCon = "na";
-                if (atds.Key == "17") { isCon = isPersonSearchConsentGiven ? "Y" : "N"; }
-                else if (atds.Key == "19") { isCon = isPropertySearchConsentGiven ? "Y" : "N"; }
+
+                if (atds.Key == "17")
+                {
+                    isCon = isPersonSearchConsentGiven ? "Y" : "N";
+                }
+                else if (atds.Key == "19")
+                {
+                    isCon = isPropertySearchConsentGiven ? "Y" : "N";
+                }
 
                 Acttak acttak = new Acttak
                 {
@@ -218,12 +233,14 @@ namespace RIPA.Functions.Submission.Services.REST
                 };
                 listActionsTaken.Add(acttak);
             }
+
             return new Listacttak { ActTak = listActionsTaken.ToArray() };
         }
 
         public Listresult CastToDojListResult(Common.Models.ResultOfStop[] listResultOfStop)
         {
             var listResults = new List<Result>();
+
             foreach (ResultOfStop ros in listResultOfStop)
             {
                 Result result = new Result
@@ -233,6 +250,7 @@ namespace RIPA.Functions.Submission.Services.REST
                 };
                 listResults.Add(result);
             }
+
             return new Listresult { Result = listResults.ToArray() };
         }
 

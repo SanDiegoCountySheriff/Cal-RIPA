@@ -105,6 +105,7 @@ namespace RIPA.Functions.Submission.Services.SFTP
             }
             catch (Exception exception)
             {
+                _logger.LogError($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
                 throw new Exception($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
             }
         }

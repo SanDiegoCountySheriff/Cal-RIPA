@@ -65,7 +65,6 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
-                
                 return new UnauthorizedResult();
             }
 
@@ -87,8 +86,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError("An error occurred while evaluating the stop query.", ex);
-                
+                log.LogError($"An error occurred while evaluating the stop query: {ex.Message}");
                 return new BadRequestObjectResult("An error occurred while evaluating the stop query. Please try again.");
             }
 
@@ -108,8 +106,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError("An error occurred getting stops requested.", ex);
-                
+                log.LogError($"An error occurred getting stops requested: {ex.Message}");
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
 
@@ -161,6 +158,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
+                log.LogError($"Error uploading CPRA report to blog: {ex.Message}");
                 return new BadRequestObjectResult(ex.Message);
             }
 
