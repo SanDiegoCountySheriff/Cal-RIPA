@@ -47,14 +47,16 @@ namespace RIPA.Functions.UserProfile.Functions
                 return new UnauthorizedResult();
             }
 
-            var response = await _userProfileCosmosDbService.GetUserProfilesAsync("SELECT * FROM c ORDER BY c.name");
-
-            if (response != null)
+            try
             {
-                return new OkObjectResult(response);    
+                var response = await _userProfileCosmosDbService.GetUserProfilesAsync("SELECT * FROM c ORDER BY c.name");
+                return new OkObjectResult(response);
             }
-
-            return new BadRequestObjectResult("Not Found");
+            catch (Exception ex)
+            {
+                log.LogError($"Unable to get user profiles: {ex.Message}");
+                return new BadRequestObjectResult($"Unable to get user profiles: {ex.Message}");
+            }
         }
     }
 }
