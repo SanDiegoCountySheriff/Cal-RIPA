@@ -158,7 +158,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError($"Error uploading CPRA report to blog: {ex.Message}");
+                log.LogError($"Error uploading CPRA report to blob: {ex.Message}");
                 return new BadRequestObjectResult(ex.Message);
             }
 

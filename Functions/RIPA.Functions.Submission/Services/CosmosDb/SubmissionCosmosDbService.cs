@@ -41,15 +41,8 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
 
         public async Task<Models.Submission> GetSubmissionAsync(string id)
         {
-            try
-            {
-                ItemResponse<Models.Submission> response = await _container.ReadItemAsync<Models.Submission>(id, new PartitionKey(id));
-                return response.Resource;
-            }
-            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+            ItemResponse<Models.Submission> response = await _container.ReadItemAsync<Models.Submission>(id, new PartitionKey(id));
+            return response.Resource;
         }
 
         public async Task<IEnumerable<Models.Submission>> GetSubmissionsAsync(string queryString)

@@ -68,7 +68,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError($"Error downloading CPRA Report: {ex.Message}");
+                log.LogError($"Error downloading CPRA Report {fileName}: {ex.Message}");
                 return new NotFoundResult();
             }
         }
