@@ -59,24 +59,17 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             await _container.DeleteItemAsync<Common.Models.Stop>(id, new PartitionKey(id));
         }
 
-        public async Task<Common.Models.Stop> GetStopAsync(string id)
+        public async Task<Models.Stop> GetStopAsync(string id)
         {
-            try
-            {
-                ItemResponse<Common.Models.Stop> response = await _container.ReadItemAsync<Common.Models.Stop>(id, new PartitionKey(id));
-                return response.Resource;
-            }
-            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+            ItemResponse<Models.Stop> response = await _container.ReadItemAsync<Models.Stop>(id, new PartitionKey(id));
+            return response.Resource;
         }
 
         public async Task<bool> CheckForDuplicateStop(string stopId, string ori, string officerId, string date, string time)
         {
             string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
             var queryDefinition = new QueryDefinition(queryString);
-            
+
             var results = _container.GetItemQueryIterator<Common.Models.Stop>(queryDefinition);
 
             List<Common.Models.Stop> matchingStops = new List<Common.Models.Stop>();
