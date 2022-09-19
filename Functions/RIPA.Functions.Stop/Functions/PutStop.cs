@@ -159,6 +159,7 @@ namespace RIPA.Functions.Stop.Functions
                 retryAttempts--;
             }
 
+            log.LogError("The maximum number of attempts to save the STOP was exceeded");
             return new BadRequestObjectResult("The maximum number of attempts to save the STOP was exceeded");
         }
 

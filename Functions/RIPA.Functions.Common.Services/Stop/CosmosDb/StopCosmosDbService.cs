@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             _container = client.GetContainer(databaseName, containerName);
         }
 
-        public async Task AddStopAsync(Common.Models.Stop stop)
+        public async Task AddStopAsync(Models.Stop stop)
         {
             DateTime now = DateTime.Now;
             StringBuilder sb = new StringBuilder();
@@ -46,17 +47,17 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
 
             stop.Id = sb.ToString();
 
-            await _container.CreateItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Id));
+            await _container.CreateItemAsync(stop, new PartitionKey(stop.Id));
         }
 
-        public async Task UpdateStopAsync(Common.Models.Stop stop)
+        public async Task UpdateStopAsync(Models.Stop stop)
         {
-            await _container.UpsertItemAsync<Common.Models.Stop>(stop, new PartitionKey(stop.Id));
+            await _container.UpsertItemAsync(stop, new PartitionKey(stop.Id));
         }
 
         public async Task DeleteStopAsync(string id)
         {
-            await _container.DeleteItemAsync<Common.Models.Stop>(id, new PartitionKey(id));
+            await _container.DeleteItemAsync<Models.Stop>(id, new PartitionKey(id));
         }
 
         public async Task<Models.Stop> GetStopAsync(string id)
@@ -70,9 +71,9 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
             var queryDefinition = new QueryDefinition(queryString);
 
-            var results = _container.GetItemQueryIterator<Common.Models.Stop>(queryDefinition);
+            var results = _container.GetItemQueryIterator<Models.Stop>(queryDefinition);
 
-            List<Common.Models.Stop> matchingStops = new List<Common.Models.Stop>();
+            List<Models.Stop> matchingStops = new List<Models.Stop>();
             while (results.HasMoreResults)
             {
                 var response = await results.ReadNextAsync();
@@ -82,10 +83,10 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return matchingStops.Count > 0;
         }
 
-        public async Task<IEnumerable<Common.Models.Stop>> GetStopsAsync(string queryString)
+        public async Task<IEnumerable<Models.Stop>> GetStopsAsync(string queryString)
         {
-            var query = _container.GetItemQueryIterator<Common.Models.Stop>(new QueryDefinition(queryString));
-            List<Common.Models.Stop> results = new List<Common.Models.Stop>();
+            var query = _container.GetItemQueryIterator<Models.Stop>(new QueryDefinition(queryString));
+            List<Models.Stop> results = new List<Models.Stop>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -96,10 +97,10 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
-        public async Task<IEnumerable<Common.Models.StopStatusCount>> GetStopStatusCounts(string queryString)
+        public async Task<IEnumerable<StopStatusCount>> GetStopStatusCounts(string queryString)
         {
-            var query = _container.GetItemQueryIterator<Common.Models.StopStatusCount>(new QueryDefinition(queryString));
-            List<Common.Models.StopStatusCount> results = new List<Common.Models.StopStatusCount>();
+            var query = _container.GetItemQueryIterator<StopStatusCount>(new QueryDefinition(queryString));
+            List<StopStatusCount> results = new List<StopStatusCount>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -108,11 +109,11 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
-        public async Task<IEnumerable<Common.Models.SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id)
+        public async Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id)
         {
             var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' GROUP BY ListSubmissionError.Code";
-            var query = _container.GetItemQueryIterator<Common.Models.SubmissionErrorSummary>(new QueryDefinition(queryString));
-            List<Common.Models.SubmissionErrorSummary> results = new List<Common.Models.SubmissionErrorSummary>();
+            var query = _container.GetItemQueryIterator<SubmissionErrorSummary>(new QueryDefinition(queryString));
+            List<SubmissionErrorSummary> results = new List<SubmissionErrorSummary>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -121,11 +122,11 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
-        public async Task<IEnumerable<Common.Models.SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id)
+        public async Task<IEnumerable<SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id)
         {
             var queryString = $"Select Max(c.StopDateTime) AS MaxStopDateTime, Min(c.StopDateTime) AS MinStopDateTime FROM c JOIN ListSubmission IN c.ListSubmission WHERE ListSubmission.Id = '{id}'";
-            var query = _container.GetItemQueryIterator<Common.Models.SubmissionStopDateTimeSummary>(new QueryDefinition(queryString));
-            List<Common.Models.SubmissionStopDateTimeSummary> results = new List<Common.Models.SubmissionStopDateTimeSummary>();
+            var query = _container.GetItemQueryIterator<SubmissionStopDateTimeSummary>(new QueryDefinition(queryString));
+            List<SubmissionStopDateTimeSummary> results = new List<SubmissionStopDateTimeSummary>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -134,16 +135,15 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             return results;
         }
 
-
-        public async Task<IEnumerable<Common.Models.DojError>> GetErrorCodes(string inputText, string submissionId)
+        public async Task<IEnumerable<DojError>> GetErrorCodes(string inputText, string submissionId)
         {
             var queryString = $"SELECT ListSubmissionError.Code Code, ListSubmissionError.Message Message FROM Code JOIN ListSubmission IN Code.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE CONTAINS(ListSubmissionError.Code, '{inputText}', true) OR CONTAINS(ListSubmissionError.Message, '{inputText}', true)";
-            if (!String.IsNullOrWhiteSpace(submissionId))
+            if (!string.IsNullOrWhiteSpace(submissionId))
             {
                 queryString += $" AND ListSubmission.Id = '{submissionId}'";
             }
-            var query = _container.GetItemQueryIterator<Common.Models.DojError>(new QueryDefinition(queryString));
-            List<Common.Models.DojError> results = new List<Common.Models.DojError>();
+            var query = _container.GetItemQueryIterator<DojError>(new QueryDefinition(queryString));
+            List<DojError> results = new List<DojError>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -151,6 +151,5 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
             }
             return results;
         }
-
     }
 }
