@@ -33,7 +33,7 @@ namespace RIPA.Functions.UserProfile
         public async override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IUserProfileCosmosDbService, UserProfileCosmosDbService>(sp =>
+            builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
                 return new UserProfileCosmosDbService(_container, logger);
