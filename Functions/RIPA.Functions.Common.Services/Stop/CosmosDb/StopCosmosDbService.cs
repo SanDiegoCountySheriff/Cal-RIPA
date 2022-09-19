@@ -20,7 +20,7 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
         {
             _logger = logger;
             string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("StopContainerName");
+            string containerName = Environment.GetEnvironmentVariable("ContainerNameStops") ?? "stop";
             string account = Environment.GetEnvironmentVariable("Account");
             string key = Environment.GetEnvironmentVariable("Key");
 
