@@ -16,21 +16,10 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
         private readonly Container _container;
         private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-        public StopCosmosDbService(ILogger<StopCosmosDbService> logger)
+        public StopCosmosDbService(Container container, ILogger<StopCosmosDbService> logger)
         {
             _logger = logger;
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("ContainerNameStops") ?? "stop";
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-
-            _container = client.GetContainer(databaseName, containerName);
+            _container = container;
         }
 
         public async Task AddStopAsync(Models.Stop stop)
@@ -47,12 +36,12 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb
 
             stop.Id = sb.ToString();
 
-            await _container.CreateItemAsync(stop, new PartitionKey(stop.Id));
+            await _container.CreateItemAsync<Models.Stop>(stop, new PartitionKey(stop.Id));
         }
 
         public async Task UpdateStopAsync(Models.Stop stop)
         {
-            await _container.UpsertItemAsync(stop, new PartitionKey(stop.Id));
+            await _container.UpsertItemAsync<Models.Stop>(stop, new PartitionKey(stop.Id));
         }
 
         public async Task DeleteStopAsync(string id)

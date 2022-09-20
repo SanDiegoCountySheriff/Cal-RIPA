@@ -14,11 +14,10 @@ namespace RIPA.Functions.UserProfile
     public class Startup : FunctionsStartup
     {
         private readonly string _databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-        private readonly string _containerName = Environment.GetEnvironmentVariable("ContainerName");
+        private readonly string _userProfileContainerName = Environment.GetEnvironmentVariable("ContainerName");
         private readonly string _account = Environment.GetEnvironmentVariable("Account");
         private readonly string _key = Environment.GetEnvironmentVariable("Key");
         private readonly CosmosClient _client;
-        private readonly Container _container;
 
         public Startup()
         {
@@ -27,24 +26,24 @@ namespace RIPA.Functions.UserProfile
             clientOptions.ConnectionMode = ConnectionMode.Gateway;
 #endif
             _client = new CosmosClient(_account, _key, clientOptions);
-            _container = _client.GetContainer(_databaseName, _containerName);
         }
 
         public async override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
+            var userProfileContainer = await CreateUserProfileContainer();
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
-                return new UserProfileCosmosDbService(_container, logger);
+                return new UserProfileCosmosDbService(userProfileContainer, logger);
             });
-            await CreateDatabaseAsync();
         }
 
-        private async Task CreateDatabaseAsync()
+        private async Task<Container> CreateUserProfileContainer()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(_containerName, "/id");
+            var containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_userProfileContainerName, "/id");
+            return containerResponse.Container;
         }
     }
 }

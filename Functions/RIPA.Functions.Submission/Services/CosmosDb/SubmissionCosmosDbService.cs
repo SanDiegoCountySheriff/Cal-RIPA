@@ -13,20 +13,10 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
         private readonly ILogger<SubmissionCosmosDbService> _logger;
         private readonly Container _container;
 
-        public SubmissionCosmosDbService(ILogger<SubmissionCosmosDbService> logger)
+        public SubmissionCosmosDbService(Container container, ILogger<SubmissionCosmosDbService> logger)
         {
             _logger = logger;
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("ContainerNameSubmissions");
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-
-            _container = client.GetContainer(databaseName, containerName);
+            _container = container;
         }
 
         public async Task AddSubmissionAsync(Models.Submission submission)
