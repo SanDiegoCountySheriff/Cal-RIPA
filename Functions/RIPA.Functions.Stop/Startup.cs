@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Services.Stop.CosmosDb;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
@@ -16,60 +17,65 @@ namespace RIPA.Functions.Stop
 {
     public class Startup : FunctionsStartup
     {
-        public override void Configure(IFunctionsHostBuilder builder)
+        private readonly string _databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+        private readonly string _stopAuditContainerName = Environment.GetEnvironmentVariable("StopAuditContainerName");
+        private readonly string _stopContainerName = Environment.GetEnvironmentVariable("StopContainerName");
+        private readonly string _userProfileContainerName = Environment.GetEnvironmentVariable("UserProfileContainerName");
+        private readonly string _account = Environment.GetEnvironmentVariable("Account");
+        private readonly string _key = Environment.GetEnvironmentVariable("Key");
+        private readonly CosmosClient _client;
+
+        public Startup()
+        {
+            CosmosClientOptions clientOptions = new CosmosClientOptions();
+#if DEBUG
+            clientOptions.ConnectionMode = ConnectionMode.Gateway;
+#endif
+            _client = new CosmosClient(_account, _key, clientOptions);
+        }
+
+        public async override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IStopCosmosDbService, StopCosmosDbService>();
-            InitializeStopCosmosClientInstanceAsync().GetAwaiter().GetResult();
-            builder.Services.AddSingleton<IStopAuditCosmosDbService, StopAuditCosmosDbService>();
-            InitializeStopAuditCosmosClientInstanceAsync().GetAwaiter().GetResult();
-            builder.Services.AddSingleton<IUserProfileCosmosDbService, UserProfileCosmosDbService>();
-            InitializeUserProfileCosmosClientInstanceAsync().GetAwaiter().GetResult();
+            var stopContainer = await InitializeStopCosmosClientInstanceAsync();
+            builder.Services.AddSingleton<IStopCosmosDbService>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<StopCosmosDbService>>();
+                return new StopCosmosDbService(stopContainer, logger);
+            });
+            var stopAuditContainer = await InitializeStopAuditCosmosClientInstanceAsync();
+            builder.Services.AddSingleton<IStopAuditCosmosDbService>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<StopAuditCosmosDbService>>();
+                return new StopAuditCosmosDbService(stopAuditContainer, logger);
+            });
+            var userProfileContainer = await InitializeUserProfileCosmosClientInstanceAsync();
+            builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
+                return new UserProfileCosmosDbService(userProfileContainer, logger);
+            });
         }
 
-        private static async Task InitializeStopCosmosClientInstanceAsync()
+        private async Task<Container> InitializeStopCosmosClientInstanceAsync()
         {
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("StopContainerName");
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+            DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
+            ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_stopContainerName, "/id");
+            return containerResponse.Container;
         }
 
-        private static async Task InitializeStopAuditCosmosClientInstanceAsync()
+        private async Task<Container> InitializeStopAuditCosmosClientInstanceAsync()
         {
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("StopAuditContainerName");
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+            DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
+            ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_stopAuditContainerName, "/id");
+            return containerResponse.Container;
         }
 
-        private static async Task InitializeUserProfileCosmosClientInstanceAsync()
+        private async Task<Container> InitializeUserProfileCosmosClientInstanceAsync()
         {
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("UserProfileContainerName");
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-            DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+            DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
+            ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_userProfileContainerName, "/id");
+            return containerResponse.Container;
         }
 
     }

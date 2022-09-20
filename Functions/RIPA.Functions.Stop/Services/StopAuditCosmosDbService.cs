@@ -13,20 +13,10 @@ namespace RIPA.Functions.Stop.Services
         private readonly ILogger<StopAuditCosmosDbService> _logger;
         private readonly Container _container;
 
-        public StopAuditCosmosDbService(ILogger<StopAuditCosmosDbService> logger)
+        public StopAuditCosmosDbService(Container container, ILogger<StopAuditCosmosDbService> logger)
         {
             _logger = logger;
-            string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            string containerName = Environment.GetEnvironmentVariable("StopAuditContainerName");
-            string account = Environment.GetEnvironmentVariable("Account");
-            string key = Environment.GetEnvironmentVariable("Key");
-            CosmosClientOptions clientOptions = new CosmosClientOptions();
-#if DEBUG
-            clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
-            CosmosClient client = new CosmosClient(account, key, clientOptions);
-
-            _container = client.GetContainer(databaseName, containerName);
+            _container = container;
         }
 
         public async Task<IEnumerable<Common.Models.Stop>> GetStopAuditsAsync(string queryString)
