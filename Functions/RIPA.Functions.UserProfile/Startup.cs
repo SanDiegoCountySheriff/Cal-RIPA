@@ -28,10 +28,10 @@ namespace RIPA.Functions.UserProfile
             _client = new CosmosClient(_account, _key, clientOptions);
         }
 
-        public async override void Configure(IFunctionsHostBuilder builder)
+        public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            var userProfileContainer = await CreateUserProfileContainer();
+            var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
@@ -39,7 +39,7 @@ namespace RIPA.Functions.UserProfile
             });
         }
 
-        private async Task<Container> CreateUserProfileContainer()
+        private async Task<Container> CreateUserProfileContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             var containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_userProfileContainerName, "/id");

@@ -34,22 +34,22 @@ namespace RIPA.Functions.Stop
             _client = new CosmosClient(_account, _key, clientOptions);
         }
 
-        public async override void Configure(IFunctionsHostBuilder builder)
+        public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            var stopContainer = await InitializeStopCosmosClientInstanceAsync();
+            var stopContainer = CreateStopContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IStopCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<StopCosmosDbService>>();
                 return new StopCosmosDbService(stopContainer, logger);
             });
-            var stopAuditContainer = await InitializeStopAuditCosmosClientInstanceAsync();
+            var stopAuditContainer = CreateStopAuditContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IStopAuditCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<StopAuditCosmosDbService>>();
                 return new StopAuditCosmosDbService(stopAuditContainer, logger);
             });
-            var userProfileContainer = await InitializeUserProfileCosmosClientInstanceAsync();
+            var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
@@ -57,21 +57,21 @@ namespace RIPA.Functions.Stop
             });
         }
 
-        private async Task<Container> InitializeStopCosmosClientInstanceAsync()
+        private async Task<Container> CreateStopContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_stopContainerName, "/id");
             return containerResponse.Container;
         }
 
-        private async Task<Container> InitializeStopAuditCosmosClientInstanceAsync()
+        private async Task<Container> CreateStopAuditContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_stopAuditContainerName, "/id");
             return containerResponse.Container;
         }
 
-        private async Task<Container> InitializeUserProfileCosmosClientInstanceAsync()
+        private async Task<Container> CreateUserProfileContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_userProfileContainerName, "/id");

@@ -42,24 +42,24 @@ namespace RIPA.Functions.Submission
             _client = new CosmosClient(_account, _key, clientOptions);
         }
 
-        public async override void Configure(IFunctionsHostBuilder builder)
+        public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
             builder.Services.AddTransient<IStopService, StopService>();
             builder.Services.AddSingleton<ISftpService, SftpService>();
-            var submissionContainer = await InitializeSubmissionCosmosClientInstanceAsync();
+            var submissionContainer = CreateSubmissionContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<ISubmissionCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<SubmissionCosmosDbService>>();
                 return new SubmissionCosmosDbService(submissionContainer, logger);
             });
-            var stopContainer = await InitializeStopCosmosClientInstanceAsync();
+            var stopContainer = CreateStopContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IStopCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<StopCosmosDbService>>();
                 return new StopCosmosDbService(stopContainer, logger);
             });
-            var userProfileContainer = await InitializeUserProfileCosmosClientInstanceAsync();
+            var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
             builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
@@ -69,21 +69,21 @@ namespace RIPA.Functions.Submission
             builder.Services.AddSingleton<IResultServiceBusService, ResultServiceBusService>();
         }
 
-        private async Task<Container> InitializeSubmissionCosmosClientInstanceAsync()
+        private async Task<Container> CreateSubmissionContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_submissionContainerName, "/id");
             return containerResponse.Container;
         }
 
-        private async Task<Container> InitializeStopCosmosClientInstanceAsync()
+        private async Task<Container> CreateStopContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_stopContainerName, "/id");
             return containerResponse.Container;
         }
 
-        private async Task<Container> InitializeUserProfileCosmosClientInstanceAsync()
+        private async Task<Container> CreateUserProfileContainerAsync()
         {
             DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);
             ContainerResponse containerResponse = await database.Database.CreateContainerIfNotExistsAsync(_userProfileContainerName, "/id");
