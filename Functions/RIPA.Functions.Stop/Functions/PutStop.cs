@@ -123,10 +123,10 @@ namespace RIPA.Functions.Stop.Functions
                 return new BadRequestObjectResult("Failed getting stop submission history");
             }
 
-            int retryAttemps = GetRetrySetting("RetryAttemps", 3);
+            int retryAttempts = GetRetrySetting("RetryAttempts", 3);
             int retrywait = GetRetrySetting("RetryWait", 1000);
 
-            while (retryAttemps > 0)
+            while (retryAttempts > 0)
             {
                 try
                 {
@@ -151,15 +151,16 @@ namespace RIPA.Functions.Stop.Functions
                 }
                 catch (Exception exception)
                 {
-                    log.LogError($"Failed to insert/update stop, attempt counter: {retryAttemps}, ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}", exception.GetBaseException());
+                    log.LogError($"Failed to insert/update stop, attempt counter: {retryAttempts}, ID: {Id}, SID: {stop.Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}", exception.GetBaseException());
                 }
 
                 await Task.Delay(retrywait);
 
-                retryAttemps--;
+                retryAttempts--;
             }
 
-            return new BadRequestObjectResult("The maximum number of attemps to save the STOP was exceeded");
+            log.LogError("The maximum number of attempts to save the STOP was exceeded");
+            return new BadRequestObjectResult("The maximum number of attempts to save the STOP was exceeded");
         }
 
         private static int GetRetrySetting(string settingName, int defaultValue)

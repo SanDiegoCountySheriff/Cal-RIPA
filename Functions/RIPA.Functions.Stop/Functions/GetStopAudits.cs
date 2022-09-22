@@ -56,14 +56,13 @@ namespace RIPA.Functions.Stop.Functions
             try
             {
                 stopResponse = await _stopAuditCosmosDbService.GetStopAuditsAsync(queryString);
+                return new OkObjectResult(stopResponse);
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An error occurred getting stop audits requested.");
+                log.LogError($"An error occurred getting stop audits requested: {ex.Message}");
                 return new BadRequestObjectResult("An error occurred getting stop audits requested. Please try again.");
             }
-
-            return new OkObjectResult(stopResponse);
         }
     }
 }

@@ -56,15 +56,25 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             await _blobContainerClient.CreateIfNotExistsAsync();
-            var blobs = _blobContainerClient.GetBlobsAsync();
             var response = new List<string>();
 
-            await foreach (BlobItem blob in blobs)
+            try
             {
-                response.Add(blob.Name);
+                var blobs = _blobContainerClient.GetBlobsAsync();
+
+                await foreach (BlobItem blob in blobs)
+                {
+                    response.Add(blob.Name);
+                }
+
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting historical CPRA report: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting historical CPRA report: {ex.Message}");
             }
 
-            return new OkObjectResult(response);
         }
 
         private BlobContainerClient GetBlobContainerClient()

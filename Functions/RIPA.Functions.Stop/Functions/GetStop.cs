@@ -48,16 +48,16 @@ namespace RIPA.Functions.Stop.Functions
                 return new UnauthorizedResult();
             }
 
-            if (!string.IsNullOrEmpty(Id))
+            try
             {
                 var response = await _stopCosmosDbService.GetStopAsync(Id);
-                if (response != null)
-                {
-                    return new OkObjectResult(response);
-                }
+                return new OkObjectResult(response);
             }
-
-            return new BadRequestObjectResult("Not found");
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting stop: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting stop: {ex.Message}");
+            }
         }
     }
 }

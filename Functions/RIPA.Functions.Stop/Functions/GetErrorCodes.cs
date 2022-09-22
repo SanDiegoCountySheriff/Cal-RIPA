@@ -51,9 +51,17 @@ namespace RIPA.Functions.Stop.Functions
 
             var inputText = req.Query["Search"];
             var submissionId = req.Query["SubmissionId"];
-            var response = await _stopCosmosDbService.GetErrorCodes(inputText, submissionId);
-            
-            return new OkObjectResult(response);
+
+            try
+            {
+                var response = await _stopCosmosDbService.GetErrorCodes(inputText, submissionId);
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting stop error codes: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting stop error codes: {ex.Message}");
+            }
         }
     }
 }

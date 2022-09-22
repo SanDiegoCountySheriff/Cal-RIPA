@@ -10,7 +10,6 @@ namespace RIPA.Functions.Submission.Utility
     {
         public async Task UploadBlobJson(byte[] bytes, string fileName, BlobContainerClient blobContainerClient)
         {
-
             BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
             using (MemoryStream stream = new MemoryStream(bytes))
             {

@@ -110,34 +110,44 @@ namespace RIPA.Functions.Submission.Functions
                 }
             }
 
-            var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
-            var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c {where}");
-
-            List<object> list = new List<object>() { };
-
-            foreach (var submission in submissions)
+            try
             {
-                list.Add(new
+                var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
+                var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c {where}");
+
+                List<object> list = new List<object>() { };
+
+                foreach (var submission in submissions)
                 {
-                    submission.Id,
-                    submission.DateSubmitted,
-                    submission.RecordCount,
-                    submission.OfficerName,
-                    submission.OfficerId,
-                    submission.MaxStopDate,
-                    submission.MinStopDate,
-                    ErrorCount = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString())).Sum(x=>x.Count)
-                });
+                    list.Add(new
+                    {
+                        submission.Id,
+                        submission.DateSubmitted,
+                        submission.RecordCount,
+                        submission.OfficerName,
+                        submission.OfficerId,
+                        submission.MaxStopDate,
+                        submission.MinStopDate,
+                        ErrorCount = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString())).Sum(x => x.Count)
+                    });
+                }
+
+                var response = new
+                {
+                    submissions = list,
+                    total = count
+                };
+
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting submissions: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting submissions: {ex.Message}");
             }
 
-            var response = new
-            {
-                submissions = list,
-                total = count
-            };
-
-            return new OkObjectResult(response);
         }
+
         public class SubmissionQuery
         {
             public DateTime? StartDate { get; set; }

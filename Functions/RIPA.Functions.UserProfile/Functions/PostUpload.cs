@@ -95,7 +95,7 @@ namespace RIPA.Functions.UserProfile.Functions
             }
             catch (Exception ex)
             {
-                log.LogError(ex.Message);
+                log.LogError($"Error uploading users: {ex.Message}");
                 return new BadRequestObjectResult("There was an error with the file format.  Please verify data and try again.");
             }
         }

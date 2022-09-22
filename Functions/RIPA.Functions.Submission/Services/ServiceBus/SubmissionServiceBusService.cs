@@ -12,18 +12,18 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
         private readonly ServiceBusClient _serviceBusClient;
         private readonly ServiceBusClientOptions _serviceBusClientOptions;
         private const int batchMessageCountLimit = 250;
-        private readonly ILogger _log;
+        private readonly ILogger<SubmissionServiceBusService> _logger;
 
         ServiceBusClient ISubmissionServiceBusService.SubmissionServiceBusClient { get { return _serviceBusClient; } }
 
-        public SubmissionServiceBusService(string serviceBusConnection, string queueName, ILogger log)
+        public SubmissionServiceBusService(ILogger<SubmissionServiceBusService> logger)
         {
+            _logger = logger;
             _serviceBusClientOptions = new ServiceBusClientOptions();
 #if DEBUG
             _serviceBusClientOptions.TransportType = ServiceBusTransportType.AmqpWebSockets;
 #endif
-            _serviceBusClient = new ServiceBusClient(serviceBusConnection, _serviceBusClientOptions);
-            _log = log;
+            _serviceBusClient = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"), _serviceBusClientOptions);
         }
 
         public class SubmissionMessage
@@ -39,42 +39,34 @@ namespace RIPA.Functions.Submission.Services.ServiceBus
 
         public async Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessages)
         {
-            try
+            ServiceBusSender serviceBusSender = _serviceBusClient.CreateSender("submission");
+            _logger.LogInformation($"Sending {listServiceBusMessages.Count} messages");
+            ServiceBusMessageBatch messageBatch = await serviceBusSender.CreateMessageBatchAsync();
+            int batchMessageCount = 0;
+            foreach (ServiceBusMessage serviceBusMessage in listServiceBusMessages)
             {
-                ServiceBusSender serviceBusSender = _serviceBusClient.CreateSender("submission");
-                _log.LogInformation($"Sending {listServiceBusMessages.Count} messages");
-                ServiceBusMessageBatch messageBatch = await serviceBusSender.CreateMessageBatchAsync();
-                int batchMessageCount = 0;
-                foreach (ServiceBusMessage serviceBusMessage in listServiceBusMessages)
+
+                if (!messageBatch.TryAddMessage(serviceBusMessage))
                 {
-
-                    if (!messageBatch.TryAddMessage(serviceBusMessage))
-                    {
-                        // if it is too large for the batch
-                        _log.LogError("$The message { i} is too large to fit in the batch.");
-                        throw new Exception($"The message {serviceBusMessage.Body} is too large to fit in the batch.");
-                    }
-                    batchMessageCount++;
-
-                    if (batchMessageCount >= batchMessageCountLimit)
-                    {
-                        // Use the producer client to send the batch of messages to the Service Bus queue
-                        await serviceBusSender.SendMessagesAsync(messageBatch);
-                        _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
-                        messageBatch.Dispose();
-                        messageBatch = await serviceBusSender.CreateMessageBatchAsync();
-                        batchMessageCount = 0;
-                    }
+                    // if it is too large for the batch
+                    _logger.LogError($"The message {serviceBusMessage.Body} is too large to fit in the batch.");
+                    throw new Exception($"The message {serviceBusMessage.Body} is too large to fit in the batch.");
                 }
-                await serviceBusSender.SendMessagesAsync(messageBatch);
-                messageBatch.Dispose();
-                _log.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
+                batchMessageCount++;
 
+                if (batchMessageCount >= batchMessageCountLimit)
+                {
+                    // Use the producer client to send the batch of messages to the Service Bus queue
+                    await serviceBusSender.SendMessagesAsync(messageBatch);
+                    _logger.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
+                    messageBatch.Dispose();
+                    messageBatch = await serviceBusSender.CreateMessageBatchAsync();
+                    batchMessageCount = 0;
+                }
             }
-            catch (Exception ex)
-            {
-                _log.LogError("error occurred", ex);
-            }
+            await serviceBusSender.SendMessagesAsync(messageBatch);
+            messageBatch.Dispose();
+            _logger.LogInformation($"A batch of {batchMessageCount} messages has been published to the queue.");
         }
     }
 }

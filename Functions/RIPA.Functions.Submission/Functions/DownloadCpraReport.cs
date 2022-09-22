@@ -56,6 +56,7 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             var fileName = req.Query["FileName"];
+
             try
             {
                 var resultFile = await blobUtilities.GetBlob(fileName, _blobContainerClient);
@@ -65,8 +66,9 @@ namespace RIPA.Functions.Submission.Functions
                     FileDownloadName = fileName
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.LogError($"Error downloading CPRA Report {fileName}: {ex.Message}");
                 return new NotFoundResult();
             }
         }

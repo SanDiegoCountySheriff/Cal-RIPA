@@ -52,11 +52,19 @@ namespace RIPA.Functions.UserProfile.Functions
 
             if (!string.IsNullOrEmpty(Id))
             {
-                await _userProfileCosmosDbService.DeleteUserProfileAsync(Id);
-                return new OkObjectResult($"Deleted {Id}");
+                try
+                {
+                    await _userProfileCosmosDbService.DeleteUserProfileAsync(Id);
+                    return new OkObjectResult($"Deleted {Id}");
+                }
+                catch (Exception ex)
+                {
+                    log.LogError($"Unable to delete user profile: {ex.Message}");
+                    return new BadRequestObjectResult($"Unable to delete user profile: {ex.Message}");
+                }
             }
 
-            return new BadRequestObjectResult("Not found");
+            return new BadRequestObjectResult("ID Not Provided");
         }
     }
 }

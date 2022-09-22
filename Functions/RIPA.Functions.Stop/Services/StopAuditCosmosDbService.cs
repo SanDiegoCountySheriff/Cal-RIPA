@@ -1,5 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 using RIPA.Functions.Stop.Services.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,11 +10,13 @@ namespace RIPA.Functions.Stop.Services
 {
     public class StopAuditCosmosDbService : IStopAuditCosmosDbService
     {
+        private readonly ILogger<StopAuditCosmosDbService> _logger;
         private readonly Container _container;
 
-        public StopAuditCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
+        public StopAuditCosmosDbService(Container container, ILogger<StopAuditCosmosDbService> logger)
         {
-            _container = dbClient.GetContainer(databaseName, containerName);
+            _logger = logger;
+            _container = container;
         }
 
         public async Task<IEnumerable<Common.Models.Stop>> GetStopAuditsAsync(string queryString)

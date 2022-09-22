@@ -74,9 +74,17 @@ namespace RIPA.Functions.UserProfile.Functions
             }
 
             userProfile.Id = Id;
-            await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
 
-            return new OkObjectResult(userProfile);
+            try
+            {
+                await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
+                return new OkObjectResult(userProfile);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error updating user profile: {ex.Message}");
+                return new BadRequestObjectResult($"Error updating user profile: {ex.Message}");
+            }
         }
     }
 }
