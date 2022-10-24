@@ -121,9 +121,6 @@ export default {
       showInvalidUserDialog: false,
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
-      snackbarText: '',
-      snackbarNoErrorsVisible: false,
-      snackbarErrorsVisible: false,
       dataReady: false,
     }
   },
@@ -139,10 +136,6 @@ export default {
       'isOnlineAndAuthenticated',
       'apiConfig',
       'mappedUser',
-      'mappedStopSubmissionStatus',
-      'mappedStopSubmissionPassedIds',
-      'mappedStopSubmissionFailedStops',
-      'mappedStopsWithErrors',
       'isApiUnavailable',
     ]),
 
@@ -159,7 +152,6 @@ export default {
 
   methods: {
     ...mapActions([
-      'submitOfficerStop',
       'editOfficerUser',
       'getFormBeats',
       'getFormCities',
@@ -167,7 +159,6 @@ export default {
       'getFormStatutes',
       'getFormTemplates',
       'getUser',
-      'resetStopSubmissionStatus',
       'setConnectionStatus',
       'setStopsWithErrors',
     ]),
@@ -350,6 +341,19 @@ export default {
       if (newVal && this.isOnlineAndAuthenticated) {
         this.showUserDialog = true
       }
+    },
+
+    viewStopsWithErrors(newVal) {
+      if (newVal) {
+        this.showStopsWithErrorsDialog = true
+      }
+    },
+  },
+
+  props: {
+    viewStopsWithErrors: {
+      type: Boolean,
+      default: false,
     },
   },
 }

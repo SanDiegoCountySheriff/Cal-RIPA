@@ -17,6 +17,7 @@
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
+      :loading="loading"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -129,6 +130,23 @@
       v-model="snackbarGpsVisible"
     >
     </ripa-snackbar>
+
+    <ripa-snackbar
+      :text="snackbarText"
+      v-model="snackbarNoErrorsVisible"
+      multi-line
+    >
+    </ripa-snackbar>
+
+    <ripa-snackbar
+      :text="snackbarText"
+      v-model="snackbarErrorsVisible"
+      multi-line
+      :auto-close="false"
+      view-button-visible
+      :on-view="onViewStopsWithErrors"
+    >
+    </ripa-snackbar>
   </div>
 </template>
 
@@ -161,6 +179,7 @@ export default {
     return {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
+      loading: false,
     }
   },
 
@@ -219,16 +238,22 @@ export default {
       this.editOfficerUser(user)
     },
 
-    handleSubmitStop(apiStop) {
+    async handleSubmitStop(apiStop) {
       const internalId = localStorage.getItem('ripa_errored_stop_internal_id')
       if (internalId) {
         this.deleteStopWithError(internalId)
       }
-      this.addApiStop(apiStop)
+
       if (!this.isAdminEditing) {
         this.setLastLocation(this.stop)
       }
-      if (!this.isOnlineAndAuthenticated) {
+
+      if (this.isOnlineAndAuthenticated) {
+        this.loading = true
+        await this.submitOfficerStopOnline(apiStop)
+        this.loading = false
+      } else {
+        this.addApiStop(apiStop)
         this.snackbarNotOnlineVisible = true
       }
     },
@@ -377,6 +402,10 @@ export default {
         this.loadingPiiStep4 = false
         this.updateFullStop()
       }
+    },
+
+    onViewStopsWithErrors() {
+      this.$emit('on-view-stops-with-errors')
     },
   },
 
