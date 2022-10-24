@@ -57,6 +57,8 @@ describe('Ripa Form Container', () => {
       checkTextForPii: jest.fn(),
       setPiiServiceAvailable: jest.fn(),
       setStopsWithErrors: jest.fn(),
+      resetStopSubmissionStatus: jest.fn(),
+      submitOfficerStop: jest.fn(),
     }
     getters = {
       mappedGpsLocationAddress: jest.fn(() => {
@@ -78,6 +80,11 @@ describe('Ripa Form Container', () => {
       invalidUser: jest.fn().mockReturnValue(false),
       isApiUnavailable: jest.fn(),
       isAdmin: jest.fn(),
+      mappedStopSubmissionPassedIds: jest.fn().mockReturnValue([]),
+      resetStopSubmissionStatus: jest.fn(),
+      mappedStopSubmissionFailedIds: jest.fn().mockReturnValue([]),
+      mappedStopSubmissionStatus: jest.fn(),
+      mappedStopSubmissionFailedStops: jest.fn().mockReturnValue([]),
     }
     mutations = {
       setIsOnline: (state, value) => {
@@ -175,38 +182,53 @@ describe('Ripa Form Container', () => {
     expect(actions.editOfficerUser).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle submit stop admin and online', () => {
+  it('should handle submit stop admin and online', async () => {
     wrapper = adminFactory()
     const addApiStop = jest.spyOn(wrapper.vm, 'addApiStop')
+    const submitOfficerStopOnline = jest.spyOn(
+      wrapper.vm,
+      'submitOfficerStopOnline',
+    )
     const setLastLocation = jest.spyOn(wrapper.vm, 'setLastLocation')
 
-    wrapper.vm.handleSubmitStop(apiStop)
+    await wrapper.vm.handleSubmitStop(apiStop)
 
-    expect(addApiStop).toHaveBeenCalledTimes(1)
+    expect(submitOfficerStopOnline).toHaveBeenCalledTimes(1)
+    expect(addApiStop).toHaveBeenCalledTimes(0)
     expect(setLastLocation).toHaveBeenCalledTimes(0)
     expect(wrapper.vm.snackbatNotOnlineVisible).toBeFalsy()
   })
 
-  it('should handle submit stop not admin and online', () => {
+  it('should handle submit stop not admin and online', async () => {
     wrapper = factory()
     const addApiStop = jest.spyOn(wrapper.vm, 'addApiStop')
+    const submitOfficerStopOnline = jest.spyOn(
+      wrapper.vm,
+      'submitOfficerStopOnline',
+    )
     const setLastLocation = jest.spyOn(wrapper.vm, 'setLastLocation')
 
-    wrapper.vm.handleSubmitStop(apiStop)
+    await wrapper.vm.handleSubmitStop(apiStop)
 
-    expect(addApiStop).toHaveBeenCalledTimes(1)
+    expect(submitOfficerStopOnline).toHaveBeenCalledTimes(1)
+    expect(addApiStop).toHaveBeenCalledTimes(0)
     expect(setLastLocation).toHaveBeenCalledTimes(1)
     expect(wrapper.vm.snackbarNotOnlineVisible).toBeFalsy()
   })
 
-  it('should handle submit stop not admin and offline', () => {
+  it('should handle submit stop not admin and offline', async () => {
     wrapper = factory()
     const addApiStop = jest.spyOn(wrapper.vm, 'addApiStop')
+    const submitOfficerStopOnline = jest.spyOn(
+      wrapper.vm,
+      'submitOfficerStopOnline',
+    )
     const setLastLocation = jest.spyOn(wrapper.vm, 'setLastLocation')
 
     store.commit('setIsOnline', false)
-    wrapper.vm.handleSubmitStop(apiStop)
+    await wrapper.vm.handleSubmitStop(apiStop)
 
+    expect(submitOfficerStopOnline).toHaveBeenCalledTimes(0)
     expect(addApiStop).toHaveBeenCalledTimes(1)
     expect(setLastLocation).toHaveBeenCalledTimes(1)
     expect(wrapper.vm.snackbarNotOnlineVisible).toBeTruthy()
@@ -438,7 +460,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
     wrapper = mountFactory()
     await wrapper.vm.$nextTick()
-    wrapper.vm.handleSubmitStop()
+    await wrapper.vm.handleSubmitStop()
 
     const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
 
@@ -486,7 +508,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_submitted_submissions', JSON.stringify([]))
     wrapper = mountFactory()
     await wrapper.vm.$nextTick()
-    wrapper.vm.handleSubmitStop()
+    await wrapper.vm.handleSubmitStop()
 
     const actual = localStorage.getItem('ripa_submitted_api_stops_with_errors')
 

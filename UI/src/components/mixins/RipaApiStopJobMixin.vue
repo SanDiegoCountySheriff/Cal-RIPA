@@ -251,13 +251,6 @@ export default {
 
       await this.submitOfficerStop(apiStop)
 
-      console.log(
-        `Api Stops Submitted Successfully: ${this.mappedStopSubmissionPassedIds.length} stops`,
-      )
-      console.log(
-        `Api Stops Submitted with Errors: ${this.mappedStopSubmissionFailedStops.length} stops`,
-      )
-
       let stopIdsPassedStr = ''
       if (this.mappedStopSubmissionPassedIds.length > 0) {
         stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
@@ -267,8 +260,6 @@ export default {
 
       // update snackbarText regardless if errors or not
       this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
-
-      console.log(`Api Stops Job Status Text: ${this.snackbarText}`)
 
       // display no errors snackbar which closes automatically
       if (this.mappedStopSubmissionFailedStops.length === 0) {
