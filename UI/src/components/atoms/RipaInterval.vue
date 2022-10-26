@@ -5,7 +5,6 @@ export default {
   render: () => null,
 
   mounted() {
-    console.log('setting interval', this.delay)
     this.id = window.setInterval(() => this.$emit('tick'), this.delay)
   },
 

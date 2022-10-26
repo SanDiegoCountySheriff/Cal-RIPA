@@ -117,7 +117,7 @@ export default {
       isDark: this.getDarkFromLocalStorage(),
       isValidCache: true,
       stopIntervalMsApi: 5000,
-      stopIntervalMsAuth: 5000,
+      stopIntervalMsAuth: 30000,
       showInvalidUserDialog: false,
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
@@ -273,11 +273,9 @@ export default {
 
     checkAuthentication() {
       if (this.isOnlineAndAuthenticated) {
-        console.log('checking authentication')
         const token = authentication.acquireToken()
-        if (token === null) {
-          console.log('token was null!')
-          this.handleLogin()
+        if (token === null || !authentication.isAuthenticated()) {
+          this.handleLogIn()
         }
       }
     },

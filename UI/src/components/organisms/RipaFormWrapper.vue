@@ -284,6 +284,8 @@
           <ripa-confirmation
             :loading="loading"
             :on-start-new="handleStartNew"
+            :is-online-and-authenticated="isOnlineAndAuthenticated"
+            @go-home="onGoHome"
           ></ripa-confirmation>
         </template>
       </v-card-text>
@@ -443,6 +445,13 @@ export default {
   },
 
   methods: {
+    onGoHome() {
+      this.stepIndex = 0
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+    },
+
     handleDebugger() {
       this.showDialog = true
     },
