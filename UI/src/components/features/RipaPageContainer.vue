@@ -272,7 +272,7 @@ export default {
     },
 
     checkAuthentication() {
-      if (this.isOnlineAndAuthenticated) {
+      if (this.isOnline) {
         const token = authentication.acquireToken()
         if (token === null || !authentication.isAuthenticated()) {
           this.handleLogIn()
