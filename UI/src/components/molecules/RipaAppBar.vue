@@ -196,11 +196,10 @@
     </v-app-bar>
 
     <v-banner v-if="!authenticated && online" single-line :sticky="true">
-      You are not logged in. While you can initiate a new stop, you must be
-      logged in to submit it.
+      You must log into RIPA to create new stops.
       <template v-slot:actions>
         <v-btn
-          color="primary"
+          color="error"
           @click="handleLogIn"
           class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
           >Login</v-btn

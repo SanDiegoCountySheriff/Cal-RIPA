@@ -63,6 +63,7 @@ export default {
   },
 
   async acquireToken() {
+    console.log('getting the token')
     const silentRequest = {
       scopes: ['User.Read'],
       account: this.authContext.getActiveAccount(),
@@ -70,6 +71,7 @@ export default {
     }
 
     const token = await this.authContext.acquireTokenSilent(silentRequest)
+    console.log('token', token)
     return token.idToken
   },
 

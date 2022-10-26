@@ -28,7 +28,9 @@
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
             :disable-buttons="
-              isDomainDataEmptyUser || isDomainDataEmptyAdministrator
+              isDomainDataEmptyUser ||
+              isDomainDataEmptyAdministrator ||
+              !isOnlineAndAuthenticated
             "
           ></ripa-template>
         </template>
