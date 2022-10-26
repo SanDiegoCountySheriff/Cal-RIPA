@@ -279,7 +279,10 @@
           </template>
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
-          <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
+          <ripa-confirmation
+            :loading="loading"
+            :on-start-new="handleStartNew"
+          ></ripa-confirmation>
         </template>
       </v-card-text>
     </v-card>
@@ -792,6 +795,10 @@ export default {
     lastResult: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     loadingGps: {
       type: Boolean,

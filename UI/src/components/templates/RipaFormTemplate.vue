@@ -17,6 +17,7 @@
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
+      :loading="loading"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -156,6 +157,10 @@ export default {
     lastResult: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     loadingGps: {
       type: Boolean,

@@ -8,15 +8,29 @@ export default {
       locationSource: 'Location',
       basisForSearchSource: 'Basis for Search Person: ',
       stopReasonSource: 'Stop Reason Person: ',
+      snackbarText: '',
+      snackbarNoErrorsVisible: false,
+      snackbarErrorsVisible: false,
     }
   },
 
   computed: {
-    ...mapGetters(['piiServiceAvailable']),
+    ...mapGetters([
+      'piiServiceAvailable',
+      'mappedStopSubmissionStatus',
+      'mappedStopSubmissionPassedIds',
+      'mappedStopSubmissionFailedStops',
+      'mappedStopsWithErrors',
+    ]),
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'setPiiServiceAvailable']),
+    ...mapActions([
+      'checkTextForPii',
+      'setPiiServiceAvailable',
+      'submitOfficerStop',
+      'resetStopSubmissionStatus',
+    ]),
 
     addApiStop(apiStop) {
       this.isLocked = true
@@ -229,6 +243,36 @@ export default {
             this.mappedStopSubmissionFailedStops,
           )
         }
+      }
+    },
+
+    async submitOfficerStopOnline(apiStop) {
+      this.resetStopSubmissionStatus()
+
+      await this.submitOfficerStop(apiStop)
+
+      let stopIdsPassedStr = ''
+      if (this.mappedStopSubmissionPassedIds.length > 0) {
+        stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+          ', ',
+        )}.`
+      }
+
+      // update snackbarText regardless if errors or not
+      this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
+
+      // display no errors snackbar which closes automatically
+      if (this.mappedStopSubmissionFailedStops.length === 0) {
+        this.snackbarNoErrorsVisible = true
+      }
+
+      if (this.mappedStopSubmissionFailedStops.length > 0) {
+        // display errors snackbar which remains open
+        this.snackbarErrorsVisible = true
+        // if there are failed ids, update error stops key
+        this.pushFailedStopsToStopsWithErrors(
+          this.mappedStopSubmissionFailedStops,
+        )
       }
     },
 
