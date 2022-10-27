@@ -9,6 +9,8 @@
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
       :display-debugger="displayDebugger"
+      :display-reporting-email="displayReportingEmail"
+      :reporting-email-address="reportingEmailAddress"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-online="isOnline"
@@ -126,6 +128,14 @@ export default {
     displayDebugger: {
       type: Boolean,
       default: false,
+    },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
     },
     formStepIndex: {
       type: Number,

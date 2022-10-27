@@ -41,6 +41,9 @@ export default {
           res.data.Configuration.ModifyBeatId.toUpperCase() === 'TRUE',
         beatIdNumberOfDigits:
           parseInt(res.data.Configuration.BeatIdNumberOfDigits) || 0,
+        displayReportingEmail:
+          res.data.Configuration.DisplayReportingEmail.toUpperCase() === 'TRUE',
+        reportingEmailAddress: res.data.Configuration.ReportingEmailAddress,
       })
 
       return new Promise((resolve, reject) => {

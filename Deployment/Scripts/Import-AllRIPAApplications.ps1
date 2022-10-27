@@ -130,6 +130,8 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     Write-Host "ENABLE_BEATS: $env:ENABLE_BEATS"
     Write-Host "MODIFY_BEAT_ID: $env:MODIFY_BEAT_ID"
     Write-Host "BEAT_ID_NUMBER_OF_DIGITS: $env:BEAT_ID_NUMBER_OF_DIGITS"
+    Write-Host "DISPLAY_REPORTING_EMAIL": $env:DISPLAY_REPORTING_EMAIL
+    Write-Host "REPORTING_EMAIL_ADDRESS": $env:REPORTING_EMAIL_ADDRESS
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
     Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
 
@@ -146,6 +148,8 @@ if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
     $configJson = $configJson.Replace("__ENABLE_BEATS__", $env:ENABLE_BEATS)
     $configJson = $configJson.Replace("__MODIFY_BEAT_ID__", $env:MODIFY_BEAT_ID)
     $configJson = $configJson.Replace("__BEAT_ID_NUMBER_OF_DIGITS__", $env:BEAT_ID_NUMBER_OF_DIGITS)
+    $configJson = $configJson.Replace("__DISPLAY_REPORTING_EMAIL__", $env:DISPLAY_REPORTING_EMAIL)
+    $configJson = $configJson.Replace("__REPORTING_EMAIL_ADDRESS__", $env:REPORTING_EMAIL_ADDRESS)
     $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
     $configJson = $configJson.Replace("__USE_OFFICER_UPN__", $env:USE_OFFICER_UPN)
 

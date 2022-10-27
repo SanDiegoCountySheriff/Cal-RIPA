@@ -69,6 +69,9 @@
         >.
       </p>
       <v-divider></v-divider>
+      <v-container v-if="displayReportingEmail" class="text-center">
+        <v-btn @click="handleEmail" color="primary">Report Issues</v-btn>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
@@ -95,6 +98,12 @@ export default {
         this.onOpenTemplate()
       }
     },
+
+    handleEmail() {
+      if (this.reportingEmailAddress) {
+        window.open(`mailto:${this.reportingEmailAddress}`)
+      }
+    },
   },
 
   props: {
@@ -109,6 +118,14 @@ export default {
     disableButtons: {
       type: Boolean,
       default: false,
+    },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
     },
     isOnline: {
       type: Boolean,

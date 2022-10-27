@@ -214,6 +214,12 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
+    displayReportingEmail: state => {
+      return state.apiConfig?.displayReportingEmail || false
+    },
+    reportingEmailAddress: state => {
+      return state.apiConfig?.reportingEmailAddress || ''
+    },
     displayBeatInput: state => {
       return state.apiConfig?.displayBeatInput || false
     },

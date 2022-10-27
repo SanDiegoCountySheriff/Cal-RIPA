@@ -44,6 +44,13 @@
       "type": "bool",
       "defaultValue": false
     },
+    "display_reporting_email": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "reporting_email_address": {
+      "type": "string"
+    },
     "auth_tenant_id": {
       "type": "string"
     },
@@ -3863,6 +3870,14 @@
           {
             "name": "MODIFY_BEAT_ID",
             "value": "[parameters('modify_beat_id')]"
+          },
+          {
+            "name": "DISPLAY_REPORTING_EMAIL",
+            "value": "[parameters('display_reporting_email')]"
+          },
+          {
+            "name": "REPORTING_EMAIL_ADDRESS",
+            "value": "[parameters('reporting_email_address')]"
           },
           {
             "name": "BEAT_ID_NUMBER_OF_DIGITS",
