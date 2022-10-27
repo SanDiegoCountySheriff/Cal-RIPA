@@ -28,6 +28,8 @@
             :is-online="isOnline"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
+            :display-reporting-email="displayReportingEmail"
+            :reporting-email-address="reportingEmailAddress"
             :disable-buttons="
               isDomainDataEmptyUser ||
               isDomainDataEmptyAdministrator ||
@@ -767,6 +769,14 @@ export default {
     countyCities: {
       type: Array,
       default: () => [],
+    },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
     },
     displayBeatInput: {
       type: Boolean,

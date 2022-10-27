@@ -9,6 +9,8 @@
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
       :display-debugger="displayDebugger"
+      :display-reporting-email="displayReportingEmail"
+      :reporting-email-address="reportingEmailAddress"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
       :is-online="isOnline"
@@ -203,6 +205,8 @@ export default {
       'piiServiceAvailable',
       'isApiUnavailable',
       'isAdmin',
+      'displayReportingEmail',
+      'reportingEmailAddress',
     ]),
 
     getMappedUser() {
