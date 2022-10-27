@@ -695,6 +695,31 @@
         "constraints": {
           "required": false
         }
+      },
+      {
+        "name": "display_reporting_email",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Enable email administrator button?",
+        "toolTip": "This button will show up on the home screen and enable the users to send an email to a systems adminstrator email address of your choosing to report issues with the application.",
+        "constraints": {
+          "required": false
+        }
+      },
+      {
+        "name": "reporting_email_address",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Reporting email address",
+        "toolTip": "Please input the email address you would like to receive issue reporting",
+        "constraints": {
+          "required": false,
+          "validations": [
+            {
+              "regex": "^(([^<>()[\\]\\.,;:\\s@\\']+(\\.[^<>()[\\]\\.,;:\\s@\\']+)*)|(\\'.+\\'))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
+              "message": "Please enter a valid email address"
+            }
+          ]
+        },
+        "visible": "[equals(basics('display_reporting_email'),true)]"
       }
     ],
     "steps": [
@@ -1026,6 +1051,8 @@
       "modify_beat_id": "[basics('modify_beat_id')]",
       "beat_id_number_of_digits": "[basics('beat_id_number_of_digits')]",
       "enable_stop_debugger": "[basics('enable_stop_debugger')]",
+      "display_reporting_email": "[basics('display_reporting_email')]",
+      "reporting_email_address": "[basics('reporting_email_address')]",
       "app_domain_type": "[steps('steps_app_domain').app_domain_type]",
       "certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
       "certificate_secret_name": "[steps('steps_app_domain').private_domain.private_domain_kv.certificateName]",
