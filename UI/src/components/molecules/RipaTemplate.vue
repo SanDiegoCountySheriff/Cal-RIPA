@@ -3,6 +3,10 @@
     <v-card-text>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
+          <ripa-alert alert-type="error" v-if="!isOnline">
+            You are currently offline. Please connect to the internet to submit
+            stops.
+          </ripa-alert>
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
               <v-btn
@@ -70,8 +74,14 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert.vue'
+
 export default {
   name: 'ripa-template',
+
+  components: {
+    RipaAlert,
+  },
 
   methods: {
     handleDynamicTemplates(name) {
@@ -97,6 +107,10 @@ export default {
       required: true,
     },
     disableButtons: {
+      type: Boolean,
+      default: false,
+    },
+    isOnline: {
       type: Boolean,
       default: false,
     },
