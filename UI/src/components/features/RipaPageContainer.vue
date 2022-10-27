@@ -272,8 +272,8 @@ export default {
     },
 
     checkAuthentication() {
+      const token = authentication.acquireToken()
       if (this.isOnlineAndAuthenticated) {
-        const token = authentication.acquireToken()
         if (token === null || !authentication.isAuthenticated()) {
           this.handleLogIn()
         }
