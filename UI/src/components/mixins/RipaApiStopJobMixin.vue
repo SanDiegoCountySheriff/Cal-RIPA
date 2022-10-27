@@ -57,6 +57,8 @@ export default {
       return new Promise(resolve => setTimeout(resolve, ms))
     },
 
+    // localStorage being removed even if it doesn't submit
+
     async runApiStopsJob(apiStops) {
       if (this.isOnlineAndAuthenticated) {
         // reset stop submission status in store

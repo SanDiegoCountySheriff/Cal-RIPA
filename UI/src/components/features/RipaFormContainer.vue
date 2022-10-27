@@ -11,6 +11,7 @@
       :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-online="isOnline"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :is-api-unavailable="isApiUnavailable"
@@ -186,6 +187,7 @@ export default {
   computed: {
     ...mapGetters([
       'invalidUser',
+      'isOnline',
       'isAuthenticated',
       'isOnlineAndAuthenticated',
       'mappedFormBeats',

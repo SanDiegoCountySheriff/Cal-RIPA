@@ -21,6 +21,9 @@
       >This application is currently not ready for data submission. Please
       contact your systems administrator before creating RIPA Stops.</ripa-alert
     >
+    <ripa-alert alert-type="error" v-if="!isOnline">
+      You are currently offline. Please connect to the internet to submit stops.
+    </ripa-alert>
     <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
         <template v-if="stepIndex == 0">
@@ -782,6 +785,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
     },
     isAuthenticated: {
       type: Boolean,
