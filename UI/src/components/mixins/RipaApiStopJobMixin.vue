@@ -201,6 +201,9 @@ export default {
           }
 
           await this.timeout(1500)
+          if (!this.isOnlineAndAuthenticated) {
+            return
+          }
           await this.submitOfficerStop(apiStop)
           await this.timeout(1500)
         }
