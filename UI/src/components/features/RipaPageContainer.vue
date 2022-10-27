@@ -117,7 +117,7 @@ export default {
       isDark: this.getDarkFromLocalStorage(),
       isValidCache: true,
       stopIntervalMsApi: 5000,
-      stopIntervalMsAuth: 600000,
+      stopIntervalMsAuth: 30000,
       showInvalidUserDialog: false,
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
@@ -272,10 +272,10 @@ export default {
     },
 
     checkAuthentication() {
+      const token = authentication.acquireToken()
       if (this.isOnlineAndAuthenticated) {
-        const token = authentication.acquireToken()
-        if (token === null) {
-          this.handleLogin()
+        if (token === null || !authentication.isAuthenticated()) {
+          this.handleLogIn()
         }
       }
     },
@@ -327,7 +327,7 @@ export default {
     await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
-    this.checkLocalStorage()
+    await this.checkLocalStorage()
     this.dataReady = true
   },
 

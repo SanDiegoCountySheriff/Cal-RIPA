@@ -61,6 +61,7 @@ describe('Ripa Form Container', () => {
       submitOfficerStop: jest.fn(),
     }
     getters = {
+      isOnline: jest.fn(),
       mappedGpsLocationAddress: jest.fn(() => {
         return state.mappedGpsLocationAddress
       }),

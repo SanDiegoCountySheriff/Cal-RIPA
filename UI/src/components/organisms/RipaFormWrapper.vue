@@ -25,10 +25,13 @@
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
+            :is-online="isOnline"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
             :disable-buttons="
-              isDomainDataEmptyUser || isDomainDataEmptyAdministrator
+              isDomainDataEmptyUser ||
+              isDomainDataEmptyAdministrator ||
+              !isOnlineAndAuthenticated
             "
           ></ripa-template>
         </template>
@@ -282,6 +285,8 @@
           <ripa-confirmation
             :loading="loading"
             :on-start-new="handleStartNew"
+            :is-online-and-authenticated="isOnlineAndAuthenticated"
+            @go-home="onGoHome"
           ></ripa-confirmation>
         </template>
       </v-card-text>
@@ -441,6 +446,13 @@ export default {
   },
 
   methods: {
+    onGoHome() {
+      this.stepIndex = 0
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+    },
+
     handleDebugger() {
       this.showDialog = true
     },
@@ -771,6 +783,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
     },
     isAuthenticated: {
       type: Boolean,

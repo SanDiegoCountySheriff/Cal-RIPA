@@ -11,6 +11,7 @@
       :display-debugger="displayDebugger"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-online="isOnline"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :is-api-unavailable="isApiUnavailable"
@@ -133,6 +134,10 @@ export default {
     fullStop: {
       type: Object,
       default: () => {},
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
     },
     isAuthenticated: {
       type: Boolean,
