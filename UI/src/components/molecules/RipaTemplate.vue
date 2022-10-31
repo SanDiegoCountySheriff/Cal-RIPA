@@ -68,10 +68,11 @@
           AG's Website </a
         >.
       </p>
+      <p v-if="displayReportingEmail"
+        >If you experience issues please contact us at
+        <a @click="handleEmail">{{ reportingEmailAddress }}</a></p
+      >
       <v-divider></v-divider>
-      <v-container v-if="displayReportingEmail" class="text-center">
-        <v-btn @click="handleEmail" color="primary">Report Issues</v-btn>
-      </v-container>
     </v-card-text>
   </v-card>
 </template>

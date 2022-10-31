@@ -39,8 +39,8 @@ exports[`Ripa Template should match snapshot 1`] = `
       <a href="https://oag.ca.gov/ab953/regulations" target="_blank" rel="noopener noreferrer">
         AG's Website </a>.
     </p>
-    <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
     <!---->
+    <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
   </div>
 </div>
 `;
