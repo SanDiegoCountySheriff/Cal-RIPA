@@ -10,10 +10,12 @@
     "ServicesBaseUrl": "#{ServicesBaseUrl}#",
     "Subscription": "#{APISubscriptionKey}#",
     "DefaultCounty": "San Diego",
-    "DisplayBeatsInput": "true",
-    "DisplayDebugger": "true",
-    "UseOfficerUpn": "true",
-    "ModifyBeatId": "true",
-    "BeatIdNumberOfDigits": 3
+    "DisplayBeatsInput": "True",
+    "DisplayDebugger": "True",
+    "UseOfficerUpn": "True",
+    "ModifyBeatId": "True",
+    "BeatIdNumberOfDigits": 3,
+    "DisplayReportingEmail": "True",
+    "ReportingEmailAddress": "dsddevops@sdsheriff.org"
   }
 }
