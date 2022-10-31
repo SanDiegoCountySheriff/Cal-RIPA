@@ -10,28 +10,13 @@
     "ServicesBaseUrl": "#{ServicesBaseUrl}#",
     "Subscription": "#{APISubscriptionKey}#",
     "DefaultCounty": "San Diego",
-    "DisplayBeatsInput": "true",
-    "DisplayDebugger": "true",
-    "UseOfficerUpn": "true",
-    "ModifyBeatId": "true",
-    "BeatIdNumberOfDigits": 3
+    "DisplayBeatsInput": "True",
+    "DisplayDebugger": "True",
+    "UseOfficerUpn": "True",
+    "ModifyBeatId": "True",
+    "BeatIdNumberOfDigits": 3,
+    "DisplayReportingEmail": "True",
+    "ReportingEmailAddress": "dsddevops@sdsheriff.org"
   },
-  "AgencyQuestions": [
-    {
-      "Name": "FavoriteColor",
-      "Type": "Text",
-      "Prompt": "What is your favorite color?",
-      "Hint": "The color should be real and look good",
-      "MaxLength": 250,
-      "Required": true
-    },
-    {
-      "Name": "FavoriteCar",
-      "Type": "Text",
-      "Prompt": "What is your favorite car?",
-      "Hint": "The car should go really fast!",
-      "MaxLength": 250,
-      "Required": true
-    }
-  ]
+  "AgencyQuestions": []
 }

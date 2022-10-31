@@ -45,10 +45,11 @@
       "defaultValue": false
     },
     "display_reporting_email": {
-      "type": "bool",
-      "defaultValue": false
+      "defaultValue": false,
+      "type": "bool"
     },
     "reporting_email_address": {
+      "defaultValue": "",
       "type": "string"
     },
     "auth_tenant_id": {
