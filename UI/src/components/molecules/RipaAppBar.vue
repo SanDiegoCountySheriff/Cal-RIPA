@@ -195,6 +195,16 @@
       </template>
     </v-app-bar>
 
+    <template v-if="apiStopJobLoading">
+      <v-progress-linear indeterminate></v-progress-linear>
+      <v-container class="text-center">
+        <ripa-alert alert-outlined alert-type="warning"
+          >Stops are currently uploading, please do not close the application.
+          You may continue to create stops.</ripa-alert
+        >
+      </v-container>
+    </template>
+
     <v-banner v-if="!authenticated && online" single-line :sticky="true">
       You must log into RIPA to create new stops.
       <template v-slot:actions>
@@ -210,8 +220,14 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
+
 export default {
   name: 'ripa-app-bar',
+
+  components: {
+    RipaAlert,
+  },
 
   data() {
     return {
@@ -376,6 +392,10 @@ export default {
     stopsWithErrors: {
       type: Array,
       default: () => [],
+    },
+    apiStopJobLoading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

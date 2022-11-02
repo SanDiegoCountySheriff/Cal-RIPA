@@ -30,20 +30,22 @@ export default {
         apiSubscription: res.data.Configuration.Subscription,
         defaultCounty: res.data.Configuration.DefaultCounty,
         displayBeatInput:
-          res.data.Configuration.DisplayBeatsInput.toUpperCase() === 'TRUE',
+          res.data.Configuration.DisplayBeatsInput?.toUpperCase() === 'TRUE',
         displayDebugger:
-          res.data.Configuration.DisplayDebugger.toUpperCase() === 'TRUE',
+          res.data.Configuration.DisplayDebugger?.toUpperCase() === 'TRUE',
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: environmentName.toUpperCase(),
         useOfficerUpn:
-          res.data.Configuration.UseOfficerUpn.toUpperCase() === 'TRUE',
+          res.data.Configuration.UseOfficerUpn?.toUpperCase() === 'TRUE',
         modifyBeatId:
-          res.data.Configuration.ModifyBeatId.toUpperCase() === 'TRUE',
+          res.data.Configuration.ModifyBeatId?.toUpperCase() === 'TRUE',
         beatIdNumberOfDigits:
           parseInt(res.data.Configuration.BeatIdNumberOfDigits) || 0,
         displayReportingEmail:
-          res.data.Configuration.DisplayReportingEmail.toUpperCase() === 'TRUE',
-        reportingEmailAddress: res.data.Configuration.ReportingEmailAddress,
+          res.data.Configuration.DisplayReportingEmail?.toUpperCase() ===
+          'TRUE',
+        reportingEmailAddress:
+          res.data.Configuration.ReportingEmailAddress ?? '',
       })
 
       return new Promise((resolve, reject) => {
@@ -67,6 +69,12 @@ export default {
 
   async acquireToken() {
     const account = this.authContext.getActiveAccount()
+
+    if (!account) {
+      store.dispatch('setIsAuthenticated', false)
+      return
+    }
+
     const silentRequest = {
       scopes: ['User.Read'],
       account: account,
@@ -79,10 +87,16 @@ export default {
 
   isAuthenticated() {
     const account = this.authContext.getActiveAccount()
+
     if (!account) {
+      store.dispatch('setIsAuthenticated', false)
       return false
     }
-    return new Date(account.idTokenClaims.exp * 1000) > Date.now()
+
+    const isAuthenticated =
+      new Date(account.idTokenClaims.exp * 1000) > Date.now()
+    store.dispatch('setIsAuthenticated', isAuthenticated)
+    return isAuthenticated
   },
 
   signIn() {

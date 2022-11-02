@@ -26,6 +26,7 @@
         <template v-if="stepIndex == 0">
           <ripa-template
             :is-online="isOnline"
+            :is-authenticated="isAuthenticated"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
             :display-reporting-email="displayReportingEmail"
@@ -33,7 +34,7 @@
             :disable-buttons="
               isDomainDataEmptyUser ||
               isDomainDataEmptyAdministrator ||
-              !isOnlineAndAuthenticated
+              !isAuthenticated
             "
           ></ripa-template>
         </template>
@@ -287,7 +288,7 @@
           <ripa-confirmation
             :loading="loading"
             :on-start-new="handleStartNew"
-            :is-online-and-authenticated="isOnlineAndAuthenticated"
+            :is-authenticated="isAuthenticated"
             @go-home="onGoHome"
           ></ripa-confirmation>
         </template>

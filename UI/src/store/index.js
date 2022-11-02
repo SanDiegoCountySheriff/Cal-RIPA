@@ -30,6 +30,7 @@ export default new Vuex.Store({
   state: {
     isDark: true,
     isOnline: false,
+    isAuthenticated: false,
     adminBeats: [],
     adminCities: [],
     adminSchools: [],
@@ -83,8 +84,8 @@ export default new Vuex.Store({
     isAdmin: state => {
       return state.user.isAdmin
     },
-    isAuthenticated: () => {
-      return authentication.isAuthenticated()
+    isAuthenticated: state => {
+      return state.isAuthenticated
     },
     isOnline: state => {
       return state.isOnline
@@ -562,6 +563,9 @@ export default new Vuex.Store({
     },
     updateResetPagination(state, value) {
       state.resetPagination = value
+    },
+    updateIsAuthenticated(state, value) {
+      state.isAuthenticated = value
     },
   },
 
@@ -1777,6 +1781,10 @@ export default new Vuex.Store({
 
     setStopsWithErrors({ commit }, value) {
       commit('updateStopsWithErrors', value)
+    },
+
+    setIsAuthenticated({ commit }, value) {
+      commit('updateIsAuthenticated', value)
     },
   },
 

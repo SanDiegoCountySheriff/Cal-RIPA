@@ -12,6 +12,7 @@
     :on-update-user="handleUpdateUser"
     :on-view-stops-with-errors="handleViewStopsWithErrors"
     :stops-with-errors="mappedStopsWithErrors"
+    :api-stop-job-loading="apiStopJobLoading"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
@@ -117,7 +118,7 @@ export default {
       isDark: this.getDarkFromLocalStorage(),
       isValidCache: true,
       stopIntervalMsApi: 5000,
-      stopIntervalMsAuth: 30000,
+      stopIntervalMsAuth: 5000,
       showInvalidUserDialog: false,
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
@@ -273,8 +274,9 @@ export default {
 
     checkAuthentication() {
       const token = authentication.acquireToken()
+      const authenticated = authentication.isAuthenticated()
       if (this.isOnlineAndAuthenticated) {
-        if (token === null || !authentication.isAuthenticated()) {
+        if (token === null || !authenticated) {
           this.handleLogIn()
         }
       }

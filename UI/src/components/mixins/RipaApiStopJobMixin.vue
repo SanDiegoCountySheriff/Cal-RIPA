@@ -11,6 +11,7 @@ export default {
       snackbarText: '',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
+      apiStopJobLoading: false,
     }
   },
 
@@ -45,7 +46,9 @@ export default {
         this.isLocked = true
         const apiStops = this.getApiStopsFromLocalStorage()
         if (apiStops.length > 0) {
+          this.apiStopJobLoading = true
           await this.runApiStopsJob(apiStops)
+          this.apiStopJobLoading = false
         }
         const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
         this.setStopsWithErrors(apiStopsWithErrors)
