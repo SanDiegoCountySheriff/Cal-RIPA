@@ -5,11 +5,11 @@ exports[`Ripa Template should match snapshot 1`] = `
   <div class="v-card__text">
     <div class="tw-mt-4 tw-mb-4">
       <div class="container container--fluid">
+        <!---->
         <div role="alert" class="v-alert v-sheet theme--dark v-alert--dense error">
           <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-alert theme--dark"></i>
             <div class="v-alert__content">
-              You are currently offline. Please connect to the internet to submit
-              stops.
+              You are currently offline. You must log in to create stops.
             </div>
           </div>
         </div>
