@@ -3,9 +3,12 @@
     <v-card-text>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
-          <ripa-alert alert-type="error" v-if="!isOnline">
-            You are currently offline. Please connect to the internet to submit
-            stops.
+          <ripa-alert alert-type="error" v-if="!isOnline && isAuthenticated">
+            You are currently offline. You may create stops but MUST log in to
+            submit them.
+          </ripa-alert>
+          <ripa-alert alert-type="error" v-if="!isOnline && !isAuthenticated">
+            You are currently offline. You must log in to create stops.
           </ripa-alert>
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
@@ -68,10 +71,10 @@
           AG's Website </a
         >.
       </p>
-      <p v-if="displayReportingEmail"
-        >If you experience issues please contact us at
-        <a @click="handleEmail">{{ reportingEmailAddress }}</a></p
-      >
+      <p v-if="displayReportingEmail">
+        If you experience issues please contact us at
+        <a @click="handleEmail">{{ reportingEmailAddress }}</a>
+      </p>
       <v-divider></v-divider>
     </v-card-text>
   </v-card>
@@ -129,6 +132,10 @@ export default {
       default: '',
     },
     isOnline: {
+      type: Boolean,
+      default: false,
+    },
+    isAuthenticated: {
       type: Boolean,
       default: false,
     },

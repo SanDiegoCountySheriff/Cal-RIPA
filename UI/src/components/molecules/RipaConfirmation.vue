@@ -9,7 +9,7 @@
     <v-card v-else class="ripa-confirmation mx-auto my-12" flat max-width="650">
       <v-card-title class="tw-uppercase">RIPA Stops</v-card-title>
 
-      <v-card-text v-if="isOnlineAndAuthenticated">
+      <v-card-text v-if="isAuthenticated">
         <div>Thank you for your submission.</div>
         <div class="tw-my-4 tw-flex tw-justify-center">
           <v-btn color="secondary" to="/stops">My Stops</v-btn>
@@ -20,7 +20,7 @@
       </v-card-text>
 
       <v-card-text v-else>
-        <div>You must be online and logged in to create more stops</div>
+        <div>You must be logged in to create more stops</div>
         <div class="tw-my-4 tw-flex tw-justify-center">
           <v-btn color="primary" @click="onGoHome">Home</v-btn>
         </div>
@@ -48,7 +48,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isOnlineAndAuthenticated: {
+    isAuthenticated: {
       type: Boolean,
       default: false,
     },

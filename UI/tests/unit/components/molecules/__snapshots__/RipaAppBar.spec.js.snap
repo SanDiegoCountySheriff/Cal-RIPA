@@ -21,5 +21,6 @@ exports[`Ripa App Bar should match snapshot 1`] = `
     </div>
   </header>
   <!---->
+  <!---->
 </div>
 `;
