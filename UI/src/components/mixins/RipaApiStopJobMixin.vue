@@ -208,6 +208,7 @@ export default {
             return
           }
           await this.submitOfficerStop(apiStop)
+          this.removeSingleApiStopFromLocalStorage(apiStop)
           await this.timeout(1500)
         }
 
@@ -271,6 +272,22 @@ export default {
 
     removeApiStopsFromLocalStorage() {
       localStorage.removeItem('ripa_submitted_api_stops')
+    },
+
+    removeSingleApiStopFromLocalStorage(apiStop) {
+      const apiStops = JSON.parse(
+        localStorage.getItem('ripa_submitted_api_stops'),
+      )
+
+      const index = apiStops.findIndex(s => s.time === apiStop.time)
+
+      if (index > -1) {
+        apiStops.splice(index, 1)
+        localStorage.setItem(
+          'ripa_submitted_api_stops',
+          JSON.stringify(apiStops),
+        )
+      }
     },
 
     getApiStopsFromLocalStorage() {

@@ -911,6 +911,7 @@ export default new Vuex.Store({
             if (router.currentRoute.fullPath === '/admin') {
               dispatch('getAdminStops')
             }
+            return apiStop
           }
           if (response.status !== 200) {
             const errorStop = {
