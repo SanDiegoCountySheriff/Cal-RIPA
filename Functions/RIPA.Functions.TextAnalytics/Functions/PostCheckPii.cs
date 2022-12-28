@@ -101,7 +101,7 @@ namespace RIPA.Functions.TextAnalytics.Functions
                     AllowedCategories = _allowedCategories
                 };
 
-                foreach (var entity in piiEntities)
+                foreach (var entity in piiEntities.Where(x => (x.ConfidenceScore > _minimumConfidenceScore) && _allowedCategories.Any(x.Category.ToString().Equals)))
                 {
                     piiResponse.PiiEntities.Add(new PiiEntity
                     {
