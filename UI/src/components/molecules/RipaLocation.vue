@@ -405,6 +405,25 @@ export default {
     },
   },
 
+  created() {
+    if (
+      this.model.location.streetName !== null ||
+      this.model.location.intersection !== null ||
+      this.model.location.highwayExit !== null ||
+      this.model.location.landmark
+    ) {
+      const textValue = `${this.model.location.streetName ?? ''}, ${
+        this.model.location.intersection ?? ''
+      }, ${this.model.location.highwayExit ?? ''}, ${
+        this.model.location.landmark ?? ''
+      }`
+      this.$emit('pii-check', {
+        source: 'location',
+        value: textValue.replace('.', ''),
+      })
+    }
+  },
+
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
