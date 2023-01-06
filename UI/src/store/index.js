@@ -1037,7 +1037,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1075,7 +1074,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {
@@ -1133,7 +1131,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1172,7 +1169,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {
@@ -1213,7 +1209,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1245,7 +1240,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {

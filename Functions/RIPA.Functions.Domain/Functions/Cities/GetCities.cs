@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.Azure.Cosmos.Table;
 using RIPA.Functions.Domain.Functions.Cities.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -44,6 +45,16 @@ namespace RIPA.Functions.Domain.Functions.Cities
 
             List<City> response = new List<City>();
             TableContinuationToken continuationToken = null;
+
+            var singleResponse = cities.ExecuteQuery(new TableQuery<City>()).FirstOrDefault();
+            var etag = singleResponse.ETag;
+            req.HttpContext.Response.Headers.Add("ETag", etag);
+
+            if (etag == req.Headers["If-None-Match"])
+            {
+                return new StatusCodeResult((int)HttpStatusCode.NotModified);
+            }
+
             do
             {
                 var request = await cities.ExecuteQuerySegmentedAsync(new TableQuery<City>(), continuationToken);
@@ -53,9 +64,9 @@ namespace RIPA.Functions.Domain.Functions.Cities
                 {
                     response.Add(entity);
                 }
-            } 
+            }
             while (continuationToken != null);
-            
+
             log.LogInformation($"GetCities returned {response.Count} cities");
             return new OkObjectResult(response);
 
