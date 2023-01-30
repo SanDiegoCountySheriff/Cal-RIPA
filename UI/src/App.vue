@@ -2,7 +2,6 @@
   <v-app>
     <v-main fluid>
       <ripa-page-container :view-stops-with-errors="viewStopsWithErrors">
-        <vue-confirm-dialog></vue-confirm-dialog>
         <ripa-pwa-wrapper></ripa-pwa-wrapper>
         <router-view
           :key="$route.fullPath"
