@@ -259,6 +259,8 @@ export default {
     }
   },
 
+  inject: ['beats', 'countyCities', 'displayBeatInput'],
+
   computed: {
     model: {
       get() {
@@ -526,14 +528,6 @@ export default {
       required: true,
     },
     schools: {
-      type: Array,
-      default: () => [],
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
       type: Array,
       default: () => [],
     },

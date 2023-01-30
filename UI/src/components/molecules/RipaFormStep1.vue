@@ -33,9 +33,6 @@
     <ripa-location
       v-model="model"
       :schools="schools"
-      :beats="beats"
-      :county-cities="countyCities"
-      :display-beat-input="displayBeatInput"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-location="lastLocation"
       :loading-gps="loadingGps"
@@ -186,18 +183,6 @@ export default {
   },
 
   props: {
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
     isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,

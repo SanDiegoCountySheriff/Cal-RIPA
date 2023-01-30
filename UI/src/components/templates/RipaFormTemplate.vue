@@ -2,14 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :beats="beats"
-      :county-cities="countyCities"
-      :display-beat-input="displayBeatInput"
-      :display-debugger="displayDebugger"
-      :display-reporting-email="displayReportingEmail"
-      :reporting-email-address="reportingEmailAddress"
-      :form-step-index="formStepIndex"
-      :full-stop="fullStop"
       :is-online="isOnline"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
@@ -95,38 +87,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    displayDebugger: {
-      type: Boolean,
-      default: false,
-    },
-    displayReportingEmail: {
-      type: Boolean,
-      default: false,
-    },
-    reportingEmailAddress: {
-      type: String,
-      default: '',
-    },
-    formStepIndex: {
-      type: Number,
-      default: 1,
-    },
-    fullStop: {
       type: Object,
       default: () => {},
     },

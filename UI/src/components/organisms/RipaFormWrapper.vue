@@ -29,8 +29,6 @@
             :is-authenticated="isAuthenticated"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
-            :display-reporting-email="displayReportingEmail"
-            :reporting-email-address="reportingEmailAddress"
             :disable-buttons="
               isDomainDataEmptyUser ||
               isDomainDataEmptyAdministrator ||
@@ -86,10 +84,7 @@
                     v-model="stop"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :beats="beats"
-                    :county-cities="countyCities"
                     :display-user-edit="displayUserEdit"
-                    :display-beat-input="displayBeatInput"
                     :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-location="lastLocation"
                     :loading-gps="loadingGps"
@@ -294,7 +289,6 @@
 
     <ripa-json-viewer-dialog
       :stop="stop"
-      :full-stop="fullStop"
       :api-stop="getApiStop"
       :show-dialog="showDialog"
       :on-close="handleCloseDialog"
@@ -388,7 +382,15 @@ export default {
     }
   },
 
-  inject: ['isAdminEditing', 'isAdmin'],
+  inject: [
+    'isAdminEditing',
+    'isAdmin',
+    'beats',
+    'countyCities',
+    'displayDebugger',
+    'formStepIndex',
+    'fullStop',
+  ],
 
   computed: {
     anyAgencyQuestions() {
@@ -749,38 +751,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    displayReportingEmail: {
-      type: Boolean,
-      default: false,
-    },
-    reportingEmailAddress: {
-      type: String,
-      default: '',
-    },
-    displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    displayDebugger: {
-      type: Boolean,
-      default: false,
-    },
-    formStepIndex: {
-      type: Number,
-      default: 1,
-    },
-    fullStop: {
-      type: Object,
-      default: () => {},
     },
     isOnline: {
       type: Boolean,

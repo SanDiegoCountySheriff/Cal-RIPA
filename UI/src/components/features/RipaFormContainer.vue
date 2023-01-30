@@ -2,14 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :beats="mappedFormBeats"
-      :county-cities="mappedFormCountyCities"
-      :display-beat-input="displayBeatInput"
-      :display-debugger="displayDebugger"
-      :display-reporting-email="displayReportingEmail"
-      :reporting-email-address="reportingEmailAddress"
-      :form-step-index="formStepIndex"
-      :full-stop="fullStop"
       :is-online="isOnline"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
@@ -186,9 +178,17 @@ export default {
 
   provide() {
     return {
-      isAdminEditing: computed(() => this.isAdminEditing),
-      isAdminViewing: computed(() => this.isAdminViewing),
-      isAdmin: computed(() => this.isAdmin),
+      isAdminEditing: this.isAdminEditing,
+      isAdminViewing: this.isAdminViewing,
+      isAdmin: this.isAdmin,
+      beats: this.mappedFormBeats,
+      countyCities: this.mappedFormCountyCities,
+      displayBeatInput: this.displayBeatInput,
+      displayDebugger: this.displayDebugger,
+      displayReportingEmail: this.displayReportingEmail,
+      reportingEmailAddress: this.reportingEmailAddress,
+      formStepIndex: computed(() => this.formStepIndex),
+      fullStop: computed(() => this.fullStop),
     }
   },
 
