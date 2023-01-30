@@ -35,7 +35,7 @@
             >
               Edit
             </v-btn>
-            <template v-if="!adminEditing">
+            <template v-if="!isAdminEditing">
               <v-btn
                 class="tw-ml-2"
                 color="primary"
@@ -46,7 +46,7 @@
               </v-btn>
             </template>
             <template
-              v-if="apiStop.listPersonStopped.length > 1 && !adminEditing"
+              v-if="apiStop.listPersonStopped.length > 1 && !isAdminEditing"
             >
               <v-btn
                 class="tw-ml-2"
@@ -89,7 +89,7 @@
         <v-divider></v-divider>
       </div>
 
-      <template v-if="adminEditing || adminViewing">
+      <template v-if="isAdminEditing || isAdminViewing">
         <div class="tw-my-4 tw-text-base tw-font-bold">
           <span class="tw-text-base tw-font-bold">Telemetry</span>
         </div>
@@ -134,6 +134,8 @@ export default {
   components: {
     RipaList,
   },
+
+  inject: ['isAdminEditing', 'isAdminViewing'],
 
   computed: {
     anyAgencyQuestions() {
@@ -224,14 +226,6 @@ export default {
     title: {
       type: String,
       default: 'Review, Edit and Submit',
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    adminViewing: {
-      type: Boolean,
-      default: false,
     },
     editButtons: {
       type: Boolean,

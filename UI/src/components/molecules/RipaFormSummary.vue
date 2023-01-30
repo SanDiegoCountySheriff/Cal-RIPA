@@ -1,13 +1,12 @@
 <template>
   <div>
-    <div v-if="adminEditing">
+    <div v-if="isAdminEditing">
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <v-tabs show-arrows>
           <v-tab>Current State</v-tab>
           <v-tab-item>
             <ripa-form-summary-detail
               :apiStop="apiStop"
-              :adminEditing="adminEditing"
               :editButtons="editButtons"
               :onEditAgencyQuestions="onEditAgencyQuestions"
               :onEditStop="onEditStop"
@@ -20,21 +19,19 @@
           <v-tab-item v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
             <ripa-form-summary-detail
               :apiStop="stopAudit"
-              :adminEditing="adminEditing"
               :title="getStopAuditTitle(stopAudit)"
             ></ripa-form-summary-detail>
           </v-tab-item>
         </v-tabs>
       </v-card>
     </div>
-    <div v-else-if="adminViewing">
+    <div v-else-if="isAdminViewing">
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <v-tabs show-arrows>
           <v-tab>Current State</v-tab>
           <v-tab-item>
             <ripa-form-summary-detail
               :apiStop="apiStop"
-              :adminViewing="adminViewing"
               title="View Stop"
             ></ripa-form-summary-detail>
           </v-tab-item>
@@ -44,7 +41,6 @@
           <v-tab-item v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
             <ripa-form-summary-detail
               :apiStop="stopAudit"
-              :admin-viewing="adminViewing"
               :title="getStopAuditTitle(stopAudit)"
             ></ripa-form-summary-detail>
           </v-tab-item>
@@ -55,7 +51,6 @@
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <ripa-form-summary-detail
           :apiStop="apiStop"
-          :adminEditing="adminEditing"
           :editButtons="editButtons"
           :onDeletePerson="onDeletePerson"
           :onCopyPerson="onCopyPerson"
@@ -85,6 +80,8 @@ export default {
       stopAudits: [],
     }
   },
+
+  inject: ['isAdminEditing', 'isAdminViewing'],
 
   created() {
     const submittedStop = JSON.parse(
@@ -146,14 +143,6 @@ export default {
     apiStop: {
       type: Object,
       default: () => {},
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    adminViewing: {
-      type: Boolean,
-      default: false,
     },
     editButtons: {
       type: Boolean,

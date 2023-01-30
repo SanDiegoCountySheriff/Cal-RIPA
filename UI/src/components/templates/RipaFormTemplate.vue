@@ -2,9 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :admin-editing="adminEditing"
-      :admin-viewing="adminViewing"
-      :is-admin="isAdmin"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
@@ -100,18 +97,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    adminViewing: {
-      type: Boolean,
-      default: false,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
     beats: {
       type: Array,

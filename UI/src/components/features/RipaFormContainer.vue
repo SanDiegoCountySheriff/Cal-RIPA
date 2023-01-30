@@ -2,9 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :admin-editing="isAdminEditing"
-      :admin-viewing="isAdminViewing"
-      :is-admin="isAdmin"
       :beats="mappedFormBeats"
       :county-cities="mappedFormCountyCities"
       :display-beat-input="displayBeatInput"
@@ -163,6 +160,7 @@ import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   name: 'ripa-home-container',
@@ -183,6 +181,14 @@ export default {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
       loading: false,
+    }
+  },
+
+  provide() {
+    return {
+      isAdminEditing: computed(() => this.isAdminEditing),
+      isAdminViewing: computed(() => this.isAdminViewing),
+      isAdmin: computed(() => this.isAdmin),
     }
   },
 

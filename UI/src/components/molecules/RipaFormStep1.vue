@@ -1,6 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <template v-if="adminEditing">
+    <template v-if="isAdminEditing">
       <ripa-officer
         :user="getApiStopUser"
         :on-open-statute="onOpenStatute"
@@ -17,7 +17,7 @@
       ></ripa-user-dialog>
     </template>
 
-    <template v-if="!adminEditing && isOnlineAndAuthenticated">
+    <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
       <ripa-officer
         :user="user"
         :on-open-statute="onOpenStatute"
@@ -27,7 +27,6 @@
 
     <ripa-stop-date
       v-model="model"
-      :admin-editing="adminEditing"
       :on-open-statute="onOpenStatute"
     ></ripa-stop-date>
 
@@ -114,6 +113,8 @@ export default {
     }
   },
 
+  inject: ['isAdminEditing'],
+
   computed: {
     getApiStopUser() {
       const submittedApiStop = localStorage.getItem(
@@ -198,10 +199,6 @@ export default {
       default: false,
     },
     isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    adminEditing: {
       type: Boolean,
       default: false,
     },

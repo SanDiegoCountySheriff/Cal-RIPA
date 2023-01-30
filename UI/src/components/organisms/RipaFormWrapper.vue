@@ -91,7 +91,6 @@
                     :display-user-edit="displayUserEdit"
                     :display-beat-input="displayBeatInput"
                     :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-                    :admin-editing="adminEditing"
                     :last-location="lastLocation"
                     :loading-gps="loadingGps"
                     :loading-pii="loadingPiiStep1"
@@ -221,8 +220,6 @@
                 <template v-if="stepIndex === 7">
                   <ripa-form-step-7
                     v-model="stop"
-                    :admin-editing="adminEditing"
-                    :admin-viewing="adminViewing"
                     :api-stop="getApiStop"
                     :on-add-person="handleAddPerson"
                     :on-back="handleBack"
@@ -391,6 +388,8 @@ export default {
     }
   },
 
+  inject: ['isAdminEditing', 'isAdmin'],
+
   computed: {
     anyAgencyQuestions() {
       const questions = this.stop?.agencyQuestions || []
@@ -398,7 +397,7 @@ export default {
     },
 
     displayUserEdit() {
-      return !this.adminEditing
+      return !this.isAdminEditing
     },
 
     getEditPersonText() {
@@ -427,7 +426,7 @@ export default {
     },
 
     isFormStep2Disabled() {
-      return this.adminEditing && this.stepIndex === 2
+      return this.isAdminEditing && this.stepIndex === 2
     },
 
     isDomainDataEmpty() {
@@ -667,7 +666,7 @@ export default {
     },
 
     createStepTrace(index, startTimeStamp) {
-      if (!this.adminEditing) {
+      if (!this.isAdminEditing) {
         this.stepTrace = {
           index,
           startTimeStamp,
@@ -676,7 +675,7 @@ export default {
     },
 
     updateStepTrace(endTimeStamp) {
-      if (!this.adminEditing && this.stepTrace) {
+      if (!this.isAdminEditing && this.stepTrace) {
         this.stepTrace.endTimeStamp = endTimeStamp
         this.stop.stepTrace.push(this.stepTrace)
       }
@@ -746,18 +745,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    adminViewing: {
-      type: Boolean,
-      default: false,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
     schools: {
       type: Array,
