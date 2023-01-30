@@ -77,7 +77,7 @@ export default {
 
     const silentRequest = {
       scopes: ['User.Read'],
-      account: account,
+      account,
       forceRefresh: false,
     }
 
