@@ -130,7 +130,7 @@ export default {
 
     createCpraReport(reportDates) {
       const reportParameters = {
-        reportDates: reportDates,
+        reportDates,
         officerName: `${this.user.firstName} ${this.user.lastName}`,
       }
       this.$emit('handleCreateCpraReport', reportParameters)

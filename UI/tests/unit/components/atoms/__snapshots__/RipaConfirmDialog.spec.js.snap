@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Confirm Dialog should match snapshot 1`] = `
-<div role="dialog" class="v-dialog__container">
-  <div role="document" tabindex="0" class="v-dialog__content v-dialog__content--active" style="z-index: 202;">
+<div class="v-dialog__container">
+  <div role="dialog" aria-modal="true" class="v-dialog__content v-dialog__content--active" style="z-index: 202;">
     <transition-stub name="dialog-transition" appear="true">
-      <div class="v-dialog v-dialog--active v-dialog--persistent" style="transform-origin: center center; max-width: 350px;">
+      <div tabindex="0" class="v-dialog v-dialog--active v-dialog--persistent" style="transform-origin: center center; max-width: 350px;">
         <div class="v-card v-sheet theme--light">
           <div class="v-card__title">Title</div>
           <div class="spacer"></div>

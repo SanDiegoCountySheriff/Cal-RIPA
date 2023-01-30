@@ -10,4 +10,7 @@ module.exports = {
     '/src/plugins/',
     '/src/constants/',
   ],
+  moduleNameMapper: {
+    '^axios$': require.resolve('axios'),
+  },
 }
