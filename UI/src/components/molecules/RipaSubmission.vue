@@ -11,7 +11,7 @@
       fluid
       v-if="submission"
     >
-      <v-layout v row>
+      <v-layout v row wrap>
         <v-flex xs12>
           <v-toolbar flat>
             <v-toolbar-title class="tw-uppercase submissionDetail--titleBar"
@@ -26,7 +26,7 @@
           </v-toolbar>
         </v-flex>
       </v-layout>
-      <v-layout v-if="!loading" row class="submissionDetail--header">
+      <v-layout v-if="!loading" row class="submissionDetail--header" wrap>
         <v-flex xs3>
           <span class="submissionDetail--header--label">Submission ID:</span>
           <span>{{ submission.submission.id }}</span>
@@ -66,7 +66,7 @@
           }}</span>
         </v-flex>
       </v-layout>
-      <v-layout v-if="submission" row>
+      <v-layout v-if="submission" row wrap>
         <v-flex v-if="submission" xs12>
           <div v-if="submission.summary.length" class="submissionSummary">
             <p v-for="(errorCode, index) in submission.summary" :key="index">

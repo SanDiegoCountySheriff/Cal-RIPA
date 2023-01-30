@@ -50,16 +50,16 @@ namespace RIPA.Functions.UserProfile.Functions
                 return new UnauthorizedResult();
             }
 
-            if (!string.IsNullOrEmpty(Id))
+            try
             {
                 var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
-                if (response != null)
-                {
-                    return new OkObjectResult(response);
-                }
+                return new OkObjectResult(response);
             }
-
-            return new BadRequestObjectResult("Not found");
+            catch (Exception ex)
+            {
+                log.LogError($"Unable to get user: {ex.Message}");
+                return new BadRequestObjectResult($"Unable to get user: {ex.Message}");
+            }
         }
     }
 }

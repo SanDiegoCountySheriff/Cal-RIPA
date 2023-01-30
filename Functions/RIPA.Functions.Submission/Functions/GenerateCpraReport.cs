@@ -35,7 +35,7 @@ namespace RIPA.Functions.Submission.Functions
         public GenerateCpraReport(IStopCosmosDbService stopCosmosDbService, IStopService stopService)
         {
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = "cpra";
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
             _blobContainerClient = GetBlobContainerClient();
             _stopCosmosDbService = stopCosmosDbService;
             _stopService = stopService;
@@ -54,6 +54,7 @@ namespace RIPA.Functions.Submission.Functions
             ILogger log)
         {
             log.LogInformation("CPRA Report Generation Requested");
+            
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -68,7 +69,6 @@ namespace RIPA.Functions.Submission.Functions
             }
 
             await _blobContainerClient.CreateIfNotExistsAsync();
-
             byte[] fileBytes;
             string tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
             var startDate = req.Query["StartDate"];
@@ -86,7 +86,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError("An error occurred while evaluating the stop query.", ex);
+                log.LogError($"An error occurred while evaluating the stop query: {ex.Message}");
                 return new BadRequestObjectResult("An error occurred while evaluating the stop query. Please try again.");
             }
 
@@ -98,6 +98,7 @@ namespace RIPA.Functions.Submission.Functions
             {
                 stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as List<Stop>;
                 stopStatuses = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
+                
                 foreach (var stopStatus in stopStatuses)
                 {
                     totalStopCount += stopStatus.Count;
@@ -105,7 +106,7 @@ namespace RIPA.Functions.Submission.Functions
             }
             catch (Exception ex)
             {
-                log.LogError("An error occurred getting stops requested.", ex);
+                log.LogError($"An error occurred getting stops requested: {ex.Message}");
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
 
@@ -116,17 +117,19 @@ namespace RIPA.Functions.Submission.Functions
 
             var builder = new StringBuilder();
 
-            try 
+            try
             {
-                foreach (var stop in stopResponse) 
+                foreach (var stop in stopResponse)
                 {
                     var dojStop = _stopService.CastToDojStop(stop);
                     dojStop.Officer = null;
                     var jsonStop = JsonConvert.SerializeObject(dojStop);
-                    if (stop.Location.Beat != null) 
+                    
+                    if (stop.Location.Beat != null)
                     {
                         jsonStop += $"|{stop.Location.Beat.Codes.Text}";
                     }
+
                     jsonStop = jsonStop.Replace("\"", "\"\"");
                     builder.AppendLine($"\"{jsonStop}\"");
                 }
@@ -149,12 +152,13 @@ namespace RIPA.Functions.Submission.Functions
 
             File.Delete(tempPath);
 
-            try 
+            try
             {
                 await blobUtilities.UploadBlobCpraReport(fileBytes, fileName, officerName, _blobContainerClient);
             }
             catch (Exception ex)
             {
+                log.LogError($"Error uploading CPRA report to blob: {ex.Message}");
                 return new BadRequestObjectResult(ex.Message);
             }
 
@@ -196,8 +200,8 @@ namespace RIPA.Functions.Submission.Functions
         private BlobContainerClient GetBlobContainerClient()
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = $"{_storageContainerNamePrefix}";
-            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
+            
             return blobContainerClient;
         }
     }

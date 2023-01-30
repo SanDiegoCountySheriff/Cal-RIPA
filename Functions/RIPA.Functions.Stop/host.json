@@ -1,11 +1,16 @@
 {
     "version": "2.0",
     "logging": {
-        "applicationInsights": {
-            "samplingSettings": {
-                "isEnabled": true,
-                "excludedTypes": "Request"
-            }
+      "applicationInsights": {
+        "samplingSettings": {
+          "isEnabled": true,
+          "excludedTypes": "Request"
         }
+      },
+      "logLevel": {
+        "RIPA.Functions.Common.Services.Stop.CosmosDb": "Information",
+        "RIPA.Functions.Common.Services.UserProfile.CosmosDb": "Information",
+        "RIPA.Functions.Stop.Services": "Information"
+      }
     }
 }

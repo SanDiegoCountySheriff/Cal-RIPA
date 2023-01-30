@@ -53,7 +53,7 @@
         </div>
       </transition>
 
-      <template v-if="isMobile">
+      <template v-if="isMobile && !isApiUnavailable">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon v-bind="attrs" v-on="on">
@@ -124,7 +124,7 @@
         </v-menu>
       </template>
 
-      <template v-if="!isMobile">
+      <template v-if="!isMobile && !isApiUnavailable">
         <div v-if="!invalidUser">
           <v-tooltip v-if="authenticated && online" bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -195,12 +195,21 @@
       </template>
     </v-app-bar>
 
+    <template v-if="apiStopJobLoading">
+      <v-progress-linear indeterminate></v-progress-linear>
+      <v-container class="text-center">
+        <ripa-alert alert-outlined alert-type="warning"
+          >Stops are currently uploading, please do not close the application.
+          You may continue to create stops.</ripa-alert
+        >
+      </v-container>
+    </template>
+
     <v-banner v-if="!authenticated && online" single-line :sticky="true">
-      You are not logged in. While you can initiate a new stop, you must be
-      logged in to submit it.
+      You must log into RIPA to create new stops.
       <template v-slot:actions>
         <v-btn
-          color="primary"
+          color="error"
           @click="handleLogIn"
           class="tw-mr-4 tw-mt-4 sm:tw-mt-0"
           >Login</v-btn
@@ -211,8 +220,14 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
+
 export default {
   name: 'ripa-app-bar',
+
+  components: {
+    RipaAlert,
+  },
 
   data() {
     return {
@@ -350,6 +365,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isApiUnavailable: {
+      type: Boolean,
+      default: false,
+    },
     onUpdateDark: {
       type: Function,
       required: true,
@@ -373,6 +392,10 @@ export default {
     stopsWithErrors: {
       type: Array,
       default: () => [],
+    },
+    apiStopJobLoading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

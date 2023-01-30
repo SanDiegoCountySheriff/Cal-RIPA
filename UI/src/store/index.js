@@ -30,6 +30,7 @@ export default new Vuex.Store({
   state: {
     isDark: true,
     isOnline: false,
+    isAuthenticated: false,
     adminBeats: [],
     adminCities: [],
     adminSchools: [],
@@ -76,14 +77,15 @@ export default new Vuex.Store({
     propertySearchAutomaticallySelected: false,
     stopQueryData: null,
     resetPagination: true,
+    apiUnavailable: false,
   },
 
   getters: {
     isAdmin: state => {
       return state.user.isAdmin
     },
-    isAuthenticated: () => {
-      return authentication.isAuthenticated()
+    isAuthenticated: state => {
+      return state.isAuthenticated
     },
     isOnline: state => {
       return state.isOnline
@@ -213,6 +215,12 @@ export default new Vuex.Store({
     invalidUser: state => {
       return state.user.isInvalid
     },
+    displayReportingEmail: state => {
+      return state.apiConfig?.displayReportingEmail || false
+    },
+    reportingEmailAddress: state => {
+      return state.apiConfig?.reportingEmailAddress || ''
+    },
     displayBeatInput: state => {
       return state.apiConfig?.displayBeatInput || false
     },
@@ -314,6 +322,9 @@ export default new Vuex.Store({
     resetPagination: state => {
       return state.resetPagination
     },
+    isApiUnavailable: state => {
+      return state.apiUnavailable
+    },
   },
 
   mutations: {
@@ -406,6 +417,9 @@ export default new Vuex.Store({
         ...state.user,
         isInvalid: value,
       }
+    },
+    updateApiUnavailable(state, value) {
+      state.apiUnavailable = value
     },
     updateUserAccount(state, value) {
       if (value) {
@@ -549,6 +563,9 @@ export default new Vuex.Store({
     },
     updateResetPagination(state, value) {
       state.resetPagination = value
+    },
+    updateIsAuthenticated(state, value) {
+      state.isAuthenticated = value
     },
   },
 
@@ -725,6 +742,11 @@ export default new Vuex.Store({
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
           dispatch('getAdminStatutes')
+          localStorage.removeItem('ripa_non_county_cities')
+          localStorage.removeItem('ripa_county_cities')
+          localStorage.removeItem('ripa_beats')
+          localStorage.removeItem('ripa_schools')
+          localStorage.removeItem('ripa_statutes')
           return response.data
         })
         .catch(error => {
@@ -889,6 +911,7 @@ export default new Vuex.Store({
             if (router.currentRoute.fullPath === '/admin') {
               dispatch('getAdminStops')
             }
+            return apiStop
           }
           if (response.status !== 200) {
             const errorStop = {
@@ -1014,7 +1037,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1052,7 +1074,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {
@@ -1110,7 +1131,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1149,7 +1169,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {
@@ -1190,7 +1209,6 @@ export default new Vuex.Store({
         .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
           },
         })
         .then(response => {
@@ -1222,7 +1240,6 @@ export default new Vuex.Store({
           .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
             },
           })
           .then(response => {
@@ -1576,7 +1593,11 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
-          commit('updateInvalidUser', true)
+          if (error.response.status === 503) {
+            commit('updateApiUnavailable', true)
+          } else {
+            commit('updateInvalidUser', true)
+          }
         })
     },
 
@@ -1755,6 +1776,10 @@ export default new Vuex.Store({
 
     setStopsWithErrors({ commit }, value) {
       commit('updateStopsWithErrors', value)
+    },
+
+    setIsAuthenticated({ commit }, value) {
+      commit('updateIsAuthenticated', value)
     },
   },
 

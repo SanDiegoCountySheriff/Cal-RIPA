@@ -7,16 +7,25 @@
     :invalidUser="invalidUser"
     :loading="loading"
     :online="isOnline"
+    :is-api-unavailable="isApiUnavailable"
     :on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     :on-view-stops-with-errors="handleViewStopsWithErrors"
     :stops-with-errors="mappedStopsWithErrors"
+    :api-stop-job-loading="apiStopJobLoading"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
     <template v-if="!isValidCache">
       <ripa-alert alert-type="error">
         Please log into the application to submit stops.
+      </ripa-alert>
+    </template>
+
+    <template v-if="isApiUnavailable">
+      <ripa-alert alert-type="error">
+        RIPA is currently unavailable. Please report to the help desk and try
+        again later.
       </ripa-alert>
     </template>
 
@@ -109,13 +118,10 @@ export default {
       isDark: this.getDarkFromLocalStorage(),
       isValidCache: true,
       stopIntervalMsApi: 5000,
-      stopIntervalMsAuth: 600000,
+      stopIntervalMsAuth: 5000,
       showInvalidUserDialog: false,
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
-      snackbarText: '',
-      snackbarNoErrorsVisible: false,
-      snackbarErrorsVisible: false,
       dataReady: false,
     }
   },
@@ -131,10 +137,7 @@ export default {
       'isOnlineAndAuthenticated',
       'apiConfig',
       'mappedUser',
-      'mappedStopSubmissionStatus',
-      'mappedStopSubmissionPassedIds',
-      'mappedStopSubmissionFailedStops',
-      'mappedStopsWithErrors',
+      'isApiUnavailable',
     ]),
 
     getMappedUser() {
@@ -150,7 +153,6 @@ export default {
 
   methods: {
     ...mapActions([
-      'submitOfficerStop',
       'editOfficerUser',
       'getFormBeats',
       'getFormCities',
@@ -158,7 +160,6 @@ export default {
       'getFormStatutes',
       'getFormTemplates',
       'getUser',
-      'resetStopSubmissionStatus',
       'setConnectionStatus',
       'setStopsWithErrors',
     ]),
@@ -272,10 +273,11 @@ export default {
     },
 
     checkAuthentication() {
+      const token = authentication.acquireToken()
+      const authenticated = authentication.isAuthenticated()
       if (this.isOnlineAndAuthenticated) {
-        const token = authentication.acquireToken()
-        if (token === null) {
-          this.handleLogin()
+        if (token === null || !authenticated) {
+          this.handleLogIn()
         }
       }
     },
@@ -327,7 +329,7 @@ export default {
     await this.updateConnectionStatusInStore()
     window.addEventListener('online', this.updateConnectionStatusInStore)
     window.addEventListener('offline', this.updateConnectionStatusInStore)
-    this.checkLocalStorage()
+    await this.checkLocalStorage()
     this.dataReady = true
   },
 
@@ -341,6 +343,19 @@ export default {
       if (newVal && this.isOnlineAndAuthenticated) {
         this.showUserDialog = true
       }
+    },
+
+    viewStopsWithErrors(newVal) {
+      if (newVal) {
+        this.showStopsWithErrorsDialog = true
+      }
+    },
+  },
+
+  props: {
+    viewStopsWithErrors: {
+      type: Boolean,
+      default: false,
     },
   },
 }

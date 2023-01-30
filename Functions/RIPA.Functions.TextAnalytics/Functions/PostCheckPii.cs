@@ -61,6 +61,8 @@ namespace RIPA.Functions.TextAnalytics.Functions
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
+            log.LogInformation("Calling PostCheckPii");
+
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -108,6 +110,7 @@ namespace RIPA.Functions.TextAnalytics.Functions
                         Category = entity.Category.ToString()
                     });
                 }
+
                 return new OkObjectResult(piiResponse);
             }
             catch (Exception ex)

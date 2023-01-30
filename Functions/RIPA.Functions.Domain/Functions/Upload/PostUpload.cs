@@ -23,11 +23,17 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Domain.Functions.Upload
 {
-    public static class PostUpload
+    public class PostUpload
     {
-        public static ILogger _log;
-        public static TableBatchOperation _operations;
-        public static int _batchLimit = 100;
+        private readonly TableBatchOperation _operations;
+        private readonly int _batchLimit = 100;
+        private readonly CloudTableClient _client;
+
+        public PostUpload(CloudTableClient client)
+        {
+            _client = client;
+            _operations = new TableBatchOperation();
+        }
 
         [FunctionName("PostUpload")]
         [OpenApiOperation(operationId: "PostUpload", tags: new[] { "name" })]
@@ -37,7 +43,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Upload Complete")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;")]
 
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
             try
             {
@@ -55,32 +61,28 @@ namespace RIPA.Functions.Domain.Functions.Upload
             try
             {
                 int recordCount = 0;
-                _log = log;
                 var formData = await req.ReadFormAsync();
                 var file = req.Form.Files["file"];
-
-                var account = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("RipaStorage"));
-                var client = account.CreateCloudTableClient();
 
                 DataSet dataSet = RunExcelDataReader(file);
 
                 if (dataSet.Tables["Beat_Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], client.GetTableReference("Beats"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], _client.GetTableReference("Beats"), log);
                 }
 
-                recordCount += await ProcessEntities(dataSet.Tables["City_Table"], client.GetTableReference("Cities"));
+                recordCount += await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableReference("Cities"), log);
 
-                recordCount += await ProcessEntities(dataSet.Tables["School_Table"], client.GetTableReference("Schools"));
+                recordCount += await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableReference("Schools"), log);
 
                 // CA DOJ currently has the table name as "Offense Table" which does not follow the conventions of the other tables
                 if (dataSet.Tables["Offense_Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], _client.GetTableReference("Statutes"), log);
                 }
                 else if (dataSet.Tables["Offense Table"] != null)
                 {
-                    recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], client.GetTableReference("Statutes"));
+                    recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], _client.GetTableReference("Statutes"), log);
                 }
 
                 string responseMessage;
@@ -97,12 +99,12 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
             catch (Exception ex)
             {
-                _log.LogError(ex.Message);
+                log.LogError(ex.Message);
                 return new BadRequestObjectResult("File Format Error.  Sheets should be included: City_Table, School_Table, and Offense_Table");
             }
         }
 
-        public static DataSet RunExcelDataReader(IFormFile file)
+        private DataSet RunExcelDataReader(IFormFile file)
         {
             IExcelDataReader reader = ExcelReaderFactory.CreateReader(file.OpenReadStream());
             DataSet dataSet = reader.AsDataSet();
@@ -110,7 +112,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return dataSet;
         }
 
-        public static async Task<bool> ExecuteBatch(CloudTable table)
+        private async Task<bool> ExecuteBatch(CloudTable table, ILogger log)
         {
             try
             {
@@ -118,21 +120,20 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
             catch (Exception ex)
             {
-                _log.LogError($"batch failed {ex.Message}");
+                log.LogError($"batch failed {ex.Message}");
                 return false;
             }
-            _operations = new TableBatchOperation();
             return true;
         }
 
-        public static bool IsBatchCountExecutable(int batchCount)
+        private bool IsBatchCountExecutable(int batchCount)
         {
             if (batchCount == _batchLimit)
                 return true;
             return false;
         }
 
-        public static void DeduplicateBatch(TableEntity obj)
+        private void DeduplicateBatch(TableEntity obj)
         {
             if (_operations.Any(x => x.Entity.RowKey == obj.RowKey))
             {
@@ -140,19 +141,20 @@ namespace RIPA.Functions.Domain.Functions.Upload
             }
         }
 
-        public async static Task<int> ProcessEntities(DataTable dataTable, CloudTable table)
+        private async Task<int> ProcessEntities(DataTable dataTable, CloudTable table, ILogger log)
         {
+            await table.CreateIfNotExistsAsync();
             int batchCount = 0;
             int totalRows = dataTable.Rows.Count - 1;
             int returnTotalRows = totalRows;
-            _operations = new TableBatchOperation();
             foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Skip(1))
             {
                 totalRows--;
                 batchCount++;
                 if (IsBatchCountExecutable(batchCount))
                 {
-                    await ExecuteBatch(table);
+                    await ExecuteBatch(table, log);
+                    _operations.Clear();
                     batchCount = 0;
                     Console.WriteLine($"processed {_batchLimit} - " + Environment.NewLine + $"{totalRows}");
                 }
@@ -183,15 +185,16 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    log.LogError(ex.Message);
                 }
             }
 
-            await ExecuteBatch(table);
+            await ExecuteBatch(table, log);
+            _operations.Clear();
             return returnTotalRows;
         }
 
-        public static City GetCity(DataRow row)
+        private City GetCity(DataRow row)
         {
             City city = new City
             {
@@ -210,7 +213,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return city;
         }
 
-        public static School GetSchool(DataRow row)
+        private School GetSchool(DataRow row)
         {
             School school = new School
             {
@@ -226,7 +229,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return school;
         }
 
-        public static Statute GetStatute(DataRow row)
+        private Statute GetStatute(DataRow row)
         {
             Statute statute = new Statute
             {
@@ -266,7 +269,7 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return statute;
         }
 
-        public static Beat GetBeat(DataRow row)
+        private Beat GetBeat(DataRow row)
         {
             Beat beat = new Beat
             {
@@ -282,11 +285,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
             return beat;
         }
 
-        public class UploadRequest
+        private class UploadRequest
         {
             public string File { get; set; }
         }
-
     }
 }
-

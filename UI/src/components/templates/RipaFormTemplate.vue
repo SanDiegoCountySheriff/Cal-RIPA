@@ -4,17 +4,23 @@
       v-model="stop"
       :admin-editing="adminEditing"
       :admin-viewing="adminViewing"
+      :is-admin="isAdmin"
       :beats="beats"
       :county-cities="countyCities"
       :display-beat-input="displayBeatInput"
       :display-debugger="displayDebugger"
+      :display-reporting-email="displayReportingEmail"
+      :reporting-email-address="reportingEmailAddress"
       :form-step-index="formStepIndex"
       :full-stop="fullStop"
+      :is-online="isOnline"
       :is-authenticated="isAuthenticated"
       :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
+      :is-api-unavailable="isApiUnavailable"
       :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
+      :loading="loading"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
@@ -103,6 +109,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     beats: {
       type: Array,
       default: () => [],
@@ -119,6 +129,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
+    },
     formStepIndex: {
       type: Number,
       default: 1,
@@ -127,11 +145,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
     isAuthenticated: {
       type: Boolean,
       default: false,
     },
     isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },
@@ -146,6 +172,10 @@ export default {
     lastResult: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     loadingGps: {
       type: Boolean,

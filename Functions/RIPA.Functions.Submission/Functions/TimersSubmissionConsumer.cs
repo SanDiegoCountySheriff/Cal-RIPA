@@ -143,7 +143,6 @@ namespace RIPA.Functions.Submission.Functions
                     await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
-
                 }
 
                 if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))

@@ -135,9 +135,21 @@ namespace RIPA.Functions.Submission.Functions
                 return new BadRequestObjectResult($"Failure Adding Submission to CosmosDb, No Records Submitted: {ex.Message}");
             }
 
-            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, SubmissionId = submissionId })))).ToList());
-
-            return new OkObjectResult(new { submissionId });
+            try
+            {
+                await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, SubmissionId = submissionId })))).ToList());
+                return new OkObjectResult(new { submissionId });
+            }
+            catch (Exception ex)
+            {
+                foreach (var stop in stopResponse)
+                {
+                    stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
+                    await _stopCosmosDbService.UpdateStopAsync(stop);
+                }
+                log.LogError($"Failure submitting stops to service bus: {ex.Message}");
+                return new BadRequestObjectResult($"Failure submitting stops: {ex.Message}");
+            }
         }
 
         public class SubmitRequest

@@ -6,11 +6,13 @@
       :online="online"
       :authenticated="authenticated"
       :invalidUser="invalidUser"
+      :is-api-unavailable="isApiUnavailable"
       :dark="dark"
       :on-update-dark="onUpdateDark"
       :on-update-user="onUpdateUser"
       :on-view-stops-with-errors="onViewStopsWithErrors"
       :stops-with-errors="stopsWithErrors"
+      :api-stop-job-loading="apiStopJobLoading"
       @handleLogOut="handleLogOut"
       @handleLogIn="handleLogIn"
     ></ripa-app-bar>
@@ -91,6 +93,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isApiUnavailable: {
+      type: Boolean,
+      default: false,
+    },
     onUpdateDark: {
       type: Function,
       default: () => {},
@@ -114,6 +120,10 @@ export default {
     stopsWithErrors: {
       type: Array,
       default: () => [],
+    },
+    apiStopJobLoading: {
+      type: Boolean,
+      default: false,
     },
   },
 }

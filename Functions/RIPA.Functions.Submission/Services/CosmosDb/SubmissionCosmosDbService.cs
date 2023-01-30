@@ -1,5 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +10,13 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
 {
     public class SubmissionCosmosDbService : ISubmissionCosmosDbService
     {
+        private readonly ILogger<SubmissionCosmosDbService> _logger;
         private readonly Container _container;
 
-        public SubmissionCosmosDbService(CosmosClient dbClient, string databaseName, string containerName)
+        public SubmissionCosmosDbService(Container container, ILogger<SubmissionCosmosDbService> logger)
         {
-            _container = dbClient.GetContainer(databaseName, containerName);
-
+            _logger = logger;
+            _container = container;
         }
 
         public async Task AddSubmissionAsync(Models.Submission submission)
@@ -28,21 +31,15 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
 
         public async Task<Models.Submission> GetSubmissionAsync(string id)
         {
-            try
-            {
-                ItemResponse<Models.Submission> response = await _container.ReadItemAsync<Models.Submission>(id, new PartitionKey(id));
-                return response.Resource;
-            }
-            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+            ItemResponse<Models.Submission> response = await _container.ReadItemAsync<Models.Submission>(id, new PartitionKey(id));
+            return response.Resource;
         }
 
         public async Task<IEnumerable<Models.Submission>> GetSubmissionsAsync(string queryString)
         {
             var query = _container.GetItemQueryIterator<Models.Submission>(new QueryDefinition(queryString));
             List<Models.Submission> results = new List<Models.Submission>();
+
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -57,10 +54,12 @@ namespace RIPA.Functions.Submission.Services.CosmosDb
         {
             await _container.UpsertItemAsync<Models.Submission>(submission, new PartitionKey(id));
         }
+
         public async Task<int> GetSubmissionsCountAsync(string queryString)
         {
             var query = _container.GetItemQueryIterator<int>(new QueryDefinition(queryString));
             List<int> results = new List<int>();
+
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();

@@ -59,8 +59,8 @@
               "label": "AMADOR SHERIFF",
               "value": {
                 "county": "Amador",
-                "abbreviation": "amador",
-                "type": "sd",
+                "abbreviation": "ac",
+                "type": "so",
                 "ori": "CA0030000"
               }
             },
@@ -68,8 +68,8 @@
               "label": "BUTTE SHERIFF",
               "value": {
                 "county": "Butte",
-                "abbreviation": "butte",
-                "type": "sd",
+                "abbreviation": "bc",
+                "type": "so",
                 "ori": "CA0040000"
               }
             },
@@ -77,8 +77,8 @@
               "label": "CALAVERAS SHERIFF",
               "value": {
                 "county": "Calaveras",
-                "abbreviation": "calaveras",
-                "type": "sd",
+                "abbreviation": "cc",
+                "type": "so",
                 "ori": "CA0050000"
               }
             },
@@ -86,7 +86,7 @@
               "label": "CAMPBELL POLICE",
               "value": {
                 "county": "Santa Clara",
-                "abbreviation": "campbell",
+                "abbreviation": "c",
                 "type": "pd",
                 "ori": "CA0430200"
               }
@@ -104,8 +104,8 @@
               "label": "CONTRA COSTA SHERIFF",
               "value": {
                 "county": "Contra Costa",
-                "abbreviation": "contracosta",
-                "type": "sd",
+                "abbreviation": "ccc",
+                "type": "so",
                 "ori": "CA0070000"
               }
             },
@@ -131,7 +131,7 @@
               "label": "EL CAJON POLICE",
               "value": {
                 "county": "San Diego",
-                "abbreviation": "elcajon",
+                "abbreviation": "ec",
                 "type": "pd",
                 "ori": "CA0370500"
               }
@@ -140,8 +140,8 @@
               "label": "EL DORADO SHERIFF",
               "value": {
                 "county": "El Dorado",
-                "abbreviation": "eldorado",
-                "type": "sd",
+                "abbreviation": "ed",
+                "type": "so",
                 "ori": "CA0090000"
               }
             },
@@ -158,8 +158,8 @@
               "label": "GLENN SHERIFF",
               "value": {
                 "county": "Glenn",
-                "abbreviation": "glenn",
-                "type": "sd",
+                "abbreviation": "gc",
+                "type": "so",
                 "ori": "CA0110000"
               }
             },
@@ -167,8 +167,8 @@
               "label": "HUMBOLDT SHERIFF",
               "value": {
                 "county": "Humboldt",
-                "abbreviation": "humboldt",
-                "type": "sd",
+                "abbreviation": "hc",
+                "type": "so",
                 "ori": "CA0120000"
               }
             },
@@ -194,8 +194,8 @@
               "label": "KERN SHERIFF",
               "value": {
                 "county": "Kern",
-                "abbreviation": "kern",
-                "type": "sd",
+                "abbreviation": "kc",
+                "type": "so1",
                 "ori": "CA0150000"
               }
             },
@@ -203,8 +203,8 @@
               "label": "KINGS SHERIFF",
               "value": {
                 "county": "Kings",
-                "abbreviation": "kings",
-                "type": "sd",
+                "abbreviation": "kc",
+                "type": "so",
                 "ori": "CA0160000"
               }
             },
@@ -212,8 +212,8 @@
               "label": "LAKE SHERIFF",
               "value": {
                 "county": "Lake",
-                "abbreviation": "lake",
-                "type": "sd",
+                "abbreviation": "lc",
+                "type": "so",
                 "ori": "CA0170000"
               }
             },
@@ -224,6 +224,15 @@
                 "abbreviation": "lassen",
                 "type": "sd",
                 "ori": "CA0180000"
+              }
+            },
+            {
+              "label": "LIVERMORE POLICE",
+              "value": {
+                "county": "Alameda",
+                "abbreviation": "l",
+                "type": "pd",
+                "ori": "CA0010700"
               }
             },
             {
@@ -248,8 +257,8 @@
               "label": "MADERA SHERIFF",
               "value": {
                 "county": "Madera",
-                "abbreviation": "madera",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so5",
                 "ori": "CA0200000"
               }
             },
@@ -257,8 +266,8 @@
               "label": "MARIN SHERIFF",
               "value": {
                 "county": "Marin",
-                "abbreviation": "marin",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so4",
                 "ori": "CA0210000"
               }
             },
@@ -266,8 +275,8 @@
               "label": "MARIPOSA SHERIFF",
               "value": {
                 "county": "Mariposa",
-                "abbreviation": "mariposa",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so3",
                 "ori": "CA0220000"
               }
             },
@@ -275,8 +284,8 @@
               "label": "MENDOCINO SHERIFF",
               "value": {
                 "county": "Mendocino",
-                "abbreviation": "mendocino",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so6",
                 "ori": "CA0230000"
               }
             },
@@ -284,8 +293,8 @@
               "label": "MERCED SHERIFF",
               "value": {
                 "county": "Merced",
-                "abbreviation": "merced",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so2",
                 "ori": "CA0240000"
               }
             },
@@ -293,8 +302,8 @@
               "label": "MODOC SHERIFF",
               "value": {
                 "county": "Modoc",
-                "abbreviation": "modoc",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so",
                 "ori": "CA0250000"
               }
             },
@@ -311,8 +320,8 @@
               "label": "MONTEREY SHERIFF",
               "value": {
                 "county": "Monterey",
-                "abbreviation": "monterey",
-                "type": "sd",
+                "abbreviation": "mc",
+                "type": "so1",
                 "ori": "CA0270000"
               }
             },
@@ -320,8 +329,8 @@
               "label": "NAPA SHERIFF",
               "value": {
                 "county": "Napa",
-                "abbreviation": "napa",
-                "type": "sd",
+                "abbreviation": "n",
+                "type": "so",
                 "ori": "CA0280000"
               }
             },
@@ -329,8 +338,8 @@
               "label": "NEVADA SHERIFF",
               "value": {
                 "county": "Nevada",
-                "abbreviation": "nevada",
-                "type": "sd",
+                "abbreviation": "nc",
+                "type": "so",
                 "ori": "CA0290000"
               }
             },
@@ -338,7 +347,7 @@
               "label": "ORANGE SHERIFF",
               "value": {
                 "county": "Orange",
-                "abbreviation": "orange",
+                "abbreviation": "oc",
                 "type": "sd",
                 "ori": "CA0300000"
               }
@@ -347,8 +356,8 @@
               "label": "PLACER SHERIFF",
               "value": {
                 "county": "Placer",
-                "abbreviation": "placer",
-                "type": "sd",
+                "abbreviation": "pc",
+                "type": "so1",
                 "ori": "CA0310000"
               }
             },
@@ -356,8 +365,8 @@
               "label": "PLUMAS SHERIFF",
               "value": {
                 "county": "Plumas",
-                "abbreviation": "plumas",
-                "type": "sd",
+                "abbreviation": "pc",
+                "type": "so",
                 "ori": "CA0320000"
               }
             },
@@ -365,8 +374,8 @@
               "label": "RIVERSIDE SHERIFF",
               "value": {
                 "county": "Riverside",
-                "abbreviation": "riverside",
-                "type": "sd",
+                "abbreviation": "r",
+                "type": "so",
                 "ori": "CA0330000"
               }
             },
@@ -383,8 +392,8 @@
               "label": "SAN BENITO SHERIFF",
               "value": {
                 "county": "San Benito",
-                "abbreviation": "sanbenito",
-                "type": "sd",
+                "abbreviation": "sbc",
+                "type": "so",
                 "ori": "CA0350000"
               }
             },
@@ -392,7 +401,7 @@
               "label": "SAN BERNARDINO SHERIFF",
               "value": {
                 "county": "San Bernardino",
-                "abbreviation": "sanbernardino",
+                "abbreviation": "sbc",
                 "type": "sd",
                 "ori": "CA0360000"
               }
@@ -411,7 +420,7 @@
               "value": {
                 "county": "San Francisco",
                 "abbreviation": "sf",
-                "type": "sd",
+                "type": "so",
                 "ori": "CA0380000"
               }
             },
@@ -419,8 +428,8 @@
               "label": "SAN JOAQUIN SHERIFF",
               "value": {
                 "county": "San Joaquin",
-                "abbreviation": "sanjoaquin",
-                "type": "sd",
+                "abbreviation": "sjc",
+                "type": "so",
                 "ori": "CA0390000"
               }
             },
@@ -429,7 +438,7 @@
               "value": {
                 "county": "San Luis Obispo",
                 "abbreviation": "slo",
-                "type": "sd",
+                "type": "so",
                 "ori": "CA0400000"
               }
             },
@@ -437,8 +446,8 @@
               "label": "SAN MATEO SHERIFF",
               "value": {
                 "county": "San Mateo",
-                "abbreviation": "sm",
-                "type": "sd",
+                "abbreviation": "smc",
+                "type": "so",
                 "ori": "CA0410000"
               }
             },
@@ -455,8 +464,8 @@
               "label": "SANTA CLARA SHERIFF",
               "value": {
                 "county": "Santa Clara",
-                "abbreviation": "santaclara",
-                "type": "sd",
+                "abbreviation": "scc",
+                "type": "so",
                 "ori": "CA0430000"
               }
             },
@@ -464,8 +473,8 @@
               "label": "SANTA CRUZ SHERIFF",
               "value": {
                 "county": "Santa Cruz",
-                "abbreviation": "santacruz",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so1",
                 "ori": "CA0440000"
               }
             },
@@ -482,8 +491,8 @@
               "label": "SIERRA SHERIFF",
               "value": {
                 "county": "Sierra",
-                "abbreviation": "sierra",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so2",
                 "ori": "CA0460000"
               }
             },
@@ -491,8 +500,8 @@
               "label": "SISKIYOU SHERIFF",
               "value": {
                 "county": "Siskiyou",
-                "abbreviation": "siskiyou",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so4",
                 "ori": "CA0470000"
               }
             },
@@ -509,8 +518,8 @@
               "label": "SONOMA SHERIFF",
               "value": {
                 "county": "Sonoma",
-                "abbreviation": "sonoma",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so",
                 "ori": "CA0490000"
               }
             },
@@ -518,7 +527,7 @@
               "label": "STANISLAUS SHERIFF",
               "value": {
                 "county": "Stanislaus",
-                "abbreviation": "stanislaus",
+                "abbreviation": "sc",
                 "type": "sd",
                 "ori": "CA0500000"
               }
@@ -527,8 +536,8 @@
               "label": "SUTTER SHERIFF",
               "value": {
                 "county": "Sutter",
-                "abbreviation": "sutter",
-                "type": "sd",
+                "abbreviation": "sc",
+                "type": "so3",
                 "ori": "CA0510000"
               }
             },
@@ -554,8 +563,8 @@
               "label": "TULARE SHERIFF",
               "value": {
                 "county": "Tulare",
-                "abbreviation": "tulare",
-                "type": "sd",
+                "abbreviation": "tc",
+                "type": "so1",
                 "ori": "CA0540000"
               }
             },
@@ -563,8 +572,8 @@
               "label": "TUOLUMNE SHERIFF",
               "value": {
                 "county": "Tuolumne",
-                "abbreviation": "tuolumne",
-                "type": "sd",
+                "abbreviation": "tc",
+                "type": "so",
                 "ori": "CA0550000"
               }
             },
@@ -572,8 +581,8 @@
               "label": "VENTURA SHERIFF",
               "value": {
                 "county": "Ventura",
-                "abbreviation": "ventura",
-                "type": "sd",
+                "abbreviation": "vc",
+                "type": "so",
                 "ori": "CA0560000"
               }
             },
@@ -590,8 +599,8 @@
               "label": "YUBA SHERIFF",
               "value": {
                 "county": "Yuba",
-                "abbreviation": "yuba",
-                "type": "sd",
+                "abbreviation": "yc",
+                "type": "so",
                 "ori": "CA0580000"
               }
             }
@@ -657,6 +666,28 @@
         }
       },
       {
+        "name": "modify_beat_id",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Specify number of digits in Beat ID?",
+        "toolTip": "Enables leading zeros on the Beat ID, e.g., 001 instead of 1",
+        "constraints": {
+          "required": false
+        },
+        "visible": "[equals(basics('enable_beats'),true)]"
+      },
+      {
+        "name": "beat_id_number_of_digits",
+        "type": "Microsoft.Common.Slider",
+        "min": 1,
+        "max": 10,
+        "label": "Number of digits in Beat ID",
+        "toolTip": "Select the number of digits in the Beat ID. Leading zeros will be added to the front of the Beat ID in order to meet the required number of digits.",
+        "constraints": {
+          "required": false
+        },
+        "visible": "[equals(basics('modify_beat_id'),true)]"
+      },
+      {
         "name": "enable_stop_debugger",
         "type": "Microsoft.Common.CheckBox",
         "label": "Enable STOP data debugger?",
@@ -664,6 +695,31 @@
         "constraints": {
           "required": false
         }
+      },
+      {
+        "name": "display_reporting_email",
+        "type": "Microsoft.Common.CheckBox",
+        "label": "Enable email administrator button?",
+        "toolTip": "This button will show up on the home screen and enable the users to send an email to a systems adminstrator email address of your choosing to report issues with the application.",
+        "constraints": {
+          "required": false
+        }
+      },
+      {
+        "name": "reporting_email_address",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Reporting email address",
+        "toolTip": "Please input the email address you would like to receive issue reporting",
+        "constraints": {
+          "required": false,
+          "validations": [
+            {
+              "regex": "^(([^<>()[\\]\\.,;:\\s@\\']+(\\.[^<>()[\\]\\.,;:\\s@\\']+)*)|(\\'.+\\'))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
+              "message": "Please enter a valid email address"
+            }
+          ]
+        },
+        "visible": "[equals(basics('display_reporting_email'),true)]"
       }
     ],
     "steps": [
@@ -843,6 +899,15 @@
               "validationMessage": ""
             },
             "visible": true
+          },
+          {
+            "name": "use_officer_upn",
+            "type": "Microsoft.Common.CheckBox",
+            "label": "Display officer's username (UPN) instead of full officer's name?",
+            "toolTip": "Check this box to display the officer's username (UPN) instead of their full name, e.g., JDOESH instead of John Doe",
+            "constraints": {
+              "required": false
+            }
           }
         ]
       },
@@ -983,7 +1048,11 @@
       "environment_type": "[basics('environment_type')]",
       "apim_sku": "[if(equals(basics('environment_type'), 'PROD'), 'Basic', 'Developer')]",
       "enable_beats": "[basics('enable_beats')]",
+      "modify_beat_id": "[basics('modify_beat_id')]",
+      "beat_id_number_of_digits": "[basics('beat_id_number_of_digits')]",
       "enable_stop_debugger": "[basics('enable_stop_debugger')]",
+      "display_reporting_email": "[basics('display_reporting_email')]",
+      "reporting_email_address": "[basics('reporting_email_address')]",
       "app_domain_type": "[steps('steps_app_domain').app_domain_type]",
       "certificate_key_vault_rid": "[steps('steps_app_domain').private_domain.private_domain_kv.keyVaultId]",
       "certificate_secret_name": "[steps('steps_app_domain').private_domain.private_domain_kv.certificateName]",
@@ -994,6 +1063,7 @@
       "auth_tenant_id": "[steps('steps_authentication').auth_tenant_id]",
       "auth_authority": "[steps('steps_authentication').auth_authority]",
       "auth_logout_url": "[steps('steps_authentication').auth_logout_url]",
+      "use_officer_upn": "[steps('steps_authentication').use_officer_upn]",
       "doj_sftp_server": "[steps('steps_doj').doj_sftp_server]",
       "doj_sftp_server_key": "[steps('steps_doj').doj_sftp_server_key]",
       "doj_sftp_username": "[steps('steps_doj').doj_sftp_username]",

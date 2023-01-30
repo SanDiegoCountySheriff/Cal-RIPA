@@ -4,7 +4,7 @@ exports[`Ripa Submission should match snapshot 1`] = `
 <div>
   <!---->
   <div class="container submissionDetail--container tw-mt-2 container--fluid">
-    <div class="layout v row">
+    <div class="layout v row wrap">
       <div class="flex xs12">
         <header class="v-sheet theme--light v-toolbar v-toolbar--flat" style="height: 64px;">
           <div class="v-toolbar__content" style="height: 64px;">
@@ -15,14 +15,14 @@ exports[`Ripa Submission should match snapshot 1`] = `
         </header>
       </div>
     </div>
-    <div class="layout submissionDetail--header row">
+    <div class="layout submissionDetail--header row wrap">
       <div class="flex xs3"><span class="submissionDetail--header--label">Submission ID:</span> <span>1</span></div>
       <div class="flex xs4"><span class="submissionDetail--header--label">Date Submitted:</span> <span>2022-03-11 24:00<br>(Note: It can take up to 48 hours for stop statuses to
           update below.)</span></div>
       <div class="flex xs2"><span class="submissionDetail--header--label">Submission Stops From Date:</span> <span>2022-02-14 24:00</span></div>
       <div class="flex xs2"><span class="submissionDetail--header--label">Submission Stops To Date:</span> <span>2022-02-14 24:00</span></div>
     </div>
-    <div class="layout row">
+    <div class="layout row wrap">
       <div class="flex xs12">
         <!---->
       </div>

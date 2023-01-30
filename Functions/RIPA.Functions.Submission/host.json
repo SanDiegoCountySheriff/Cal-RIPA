@@ -6,6 +6,14 @@
         "isEnabled": true,
         "excludedTypes": "Request"
       }
+    },
+    "logLevel": {
+      "RIPA.Functions.Submission.Services.REST": "Information",
+      "RIPA.Functions.Submission.Services.SFTP": "Information",
+      "RIPA.Functions.Submission.Services.CosmosDb": "Information",
+      "RIPA.Functions.Common.Services.Stop.CosmosDb": "Information",
+      "RIPA.Functions.Common.Services.UserProfile.CosmosDb": "Information",
+      "RIPA.Functions.Submission.Services.ServiceBus": "Information",
     }
   },
   "queues": {

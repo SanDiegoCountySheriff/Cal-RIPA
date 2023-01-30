@@ -1,11 +1,41 @@
 <template>
   <div class="ripa-form-wrapper">
-    <v-card class="mx-auto" max-width="900" outlined>
+    <ripa-alert
+      v-if="isDomainDataEmptyAdministrator"
+      :alert-outlined="false"
+      alert-type="error"
+      >In order to finish initializing the RIPA application please upload CLEW
+      data by
+      <a
+        class="text-decoration-underline white--text font-weight-bold"
+        @click="$router.push('/admin/domains')"
+        >clicking here</a
+      >
+      and uploading the CLEW spreadsheet including cities, schools and
+      statutes.</ripa-alert
+    >
+    <ripa-alert
+      v-if="isDomainDataEmptyUser"
+      :alert-outlined="false"
+      alert-type="error"
+      >This application is currently not ready for data submission. Please
+      contact your systems administrator before creating RIPA Stops.</ripa-alert
+    >
+    <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
+            :is-online="isOnline"
+            :is-authenticated="isAuthenticated"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
+            :display-reporting-email="displayReportingEmail"
+            :reporting-email-address="reportingEmailAddress"
+            :disable-buttons="
+              isDomainDataEmptyUser ||
+              isDomainDataEmptyAdministrator ||
+              !isAuthenticated
+            "
           ></ripa-template>
         </template>
         <template v-if="stepIndex >= 1 && stepIndex <= 7">
@@ -255,7 +285,12 @@
           </template>
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
-          <ripa-confirmation :on-start-new="handleStartNew"></ripa-confirmation>
+          <ripa-confirmation
+            :loading="loading"
+            :on-start-new="handleStartNew"
+            :is-authenticated="isAuthenticated"
+            @go-home="onGoHome"
+          ></ripa-confirmation>
         </template>
       </v-card-text>
     </v-card>
@@ -307,6 +342,7 @@
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1'
@@ -325,6 +361,7 @@ export default {
   name: 'ripa-form-wrapper',
 
   components: {
+    RipaAlert,
     RipaConfirmation,
     RipaConfirmDialog,
     RipaFormStep1,
@@ -392,9 +429,33 @@ export default {
     isFormStep2Disabled() {
       return this.adminEditing && this.stepIndex === 2
     },
+
+    isDomainDataEmpty() {
+      return (
+        this.beats.length === 0 &&
+        this.countyCities.length === 0 &&
+        this.statutes.length === 0 &&
+        this.schools.length === 0
+      )
+    },
+
+    isDomainDataEmptyUser() {
+      return this.isDomainDataEmpty && !this.isAdmin
+    },
+
+    isDomainDataEmptyAdministrator() {
+      return this.isDomainDataEmpty && this.isAdmin
+    },
   },
 
   methods: {
+    onGoHome() {
+      this.stepIndex = 0
+      if (this.onStepIndexChange) {
+        this.onStepIndexChange(this.stepIndex)
+      }
+    },
+
     handleDebugger() {
       this.showDialog = true
     },
@@ -694,6 +755,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     schools: {
       type: Array,
       default: () => [],
@@ -705,6 +770,14 @@ export default {
     countyCities: {
       type: Array,
       default: () => [],
+    },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
     },
     displayBeatInput: {
       type: Boolean,
@@ -722,11 +795,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
     isAuthenticated: {
       type: Boolean,
       default: false,
     },
     isOnlineAndAuthenticated: {
+      type: Boolean,
+      default: false,
+    },
+    isApiUnavailable: {
       type: Boolean,
       default: false,
     },
@@ -741,6 +822,10 @@ export default {
     lastResult: {
       type: Object,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
     loadingGps: {
       type: Boolean,

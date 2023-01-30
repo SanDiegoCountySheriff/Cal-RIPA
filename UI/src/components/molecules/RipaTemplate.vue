@@ -3,9 +3,20 @@
     <v-card-text>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
+          <ripa-alert alert-type="error" v-if="!isOnline && isAuthenticated">
+            You are currently offline. You may create stops but MUST log in to
+            submit them.
+          </ripa-alert>
+          <ripa-alert alert-type="error" v-if="!isOnline && !isAuthenticated">
+            You are currently offline. You must log in to create stops.
+          </ripa-alert>
           <v-row no-gutters dense>
             <v-col cols="12" sm="12" class="tw-mt-4 tw-text-center">
-              <v-btn color="primary" @click="handleDefaultTemplate">
+              <v-btn
+                :disabled="disableButtons"
+                color="primary"
+                @click="handleDefaultTemplate"
+              >
                 BASIC STOP
               </v-btn>
             </v-col>
@@ -20,6 +31,7 @@
               :key="index"
             >
               <v-btn
+                :disabled="disableButtons"
                 outlined
                 color="primary"
                 @click="handleDynamicTemplates(template.displayName)"
@@ -59,14 +71,24 @@
           AG's Website </a
         >.
       </p>
+      <p v-if="displayReportingEmail">
+        If you experience issues please contact us at
+        <a @click="handleEmail">{{ reportingEmailAddress }}</a>
+      </p>
       <v-divider></v-divider>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import RipaAlert from '@/components/atoms/RipaAlert.vue'
+
 export default {
   name: 'ripa-template',
+
+  components: {
+    RipaAlert,
+  },
 
   methods: {
     handleDynamicTemplates(name) {
@@ -80,6 +102,12 @@ export default {
         this.onOpenTemplate()
       }
     },
+
+    handleEmail() {
+      if (this.reportingEmailAddress) {
+        window.open(`mailto:${this.reportingEmailAddress}`)
+      }
+    },
   },
 
   props: {
@@ -90,6 +118,26 @@ export default {
     onOpenTemplate: {
       type: Function,
       required: true,
+    },
+    disableButtons: {
+      type: Boolean,
+      default: false,
+    },
+    displayReportingEmail: {
+      type: Boolean,
+      default: false,
+    },
+    reportingEmailAddress: {
+      type: String,
+      default: '',
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
+    isAuthenticated: {
+      type: Boolean,
+      default: false,
     },
   },
 }

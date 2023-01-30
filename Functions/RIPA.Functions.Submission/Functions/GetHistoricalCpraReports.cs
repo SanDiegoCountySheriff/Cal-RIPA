@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Utility;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace RIPA.Functions.Submission.Functions
 {
@@ -22,12 +22,11 @@ namespace RIPA.Functions.Submission.Functions
         private readonly string _storageConnectionString;
         private readonly string _storageContainerNamePrefix;
         private readonly BlobContainerClient _blobContainerClient;
-        private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
         public GetHistoricalCpraReports()
         {
             _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-            _storageContainerNamePrefix = "cpra";
+            _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
             _blobContainerClient = GetBlobContainerClient();
         }
 
@@ -41,6 +40,7 @@ namespace RIPA.Functions.Submission.Functions
             ILogger log)
         {
             log.LogInformation("Getting Historical CPRA Reports");
+            
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -51,26 +51,37 @@ namespace RIPA.Functions.Submission.Functions
             catch (Exception ex)
             {
                 log.LogError(ex.Message);
+                
                 return new UnauthorizedResult();
             }
-            
+
             await _blobContainerClient.CreateIfNotExistsAsync();
-            var blobs = _blobContainerClient.GetBlobsAsync();
             var response = new List<string>();
 
-            await foreach (BlobItem blob in blobs)
+            try
             {
-                response.Add(blob.Name);
+                var blobs = _blobContainerClient.GetBlobsAsync();
+
+                await foreach (BlobItem blob in blobs)
+                {
+                    response.Add(blob.Name);
+                }
+
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting historical CPRA report: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting historical CPRA report: {ex.Message}");
             }
 
-            return new OkObjectResult(response);
         }
 
         private BlobContainerClient GetBlobContainerClient()
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
-            string containerName = $"{_storageContainerNamePrefix}";
-            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
+            
             return blobContainerClient;
         }
     }

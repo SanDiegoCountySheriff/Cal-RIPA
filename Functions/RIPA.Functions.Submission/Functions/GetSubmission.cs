@@ -106,36 +106,39 @@ namespace RIPA.Functions.Submission.Functions
                 where = where.Remove(where.Length - 3);
             }
 
-            if (!string.IsNullOrEmpty(Id))
+            try
             {
                 var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
-                if (submissionResponse != null)
-                {
-                    string query = $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
 
-                    var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
-                    var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
-                    var response = new
+                string query = $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
+
+                var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
+                var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
+                var response = new
+                {
+                    submission = new
                     {
-                        submission = new {
-                            submissionResponse.Id,
-                            submissionResponse.DateSubmitted,
-                            submissionResponse.RecordCount,
-                            submissionResponse.OfficerId,
-                            submissionResponse.OfficerName,
-                            submissionResponse.MaxStopDate,
-                            submissionResponse.MinStopDate,
-                            ErrorCount = getSubmissionErrorSummariesResponse.Sum(x=>x.Count)
-                        },
-                        stops = stopResponse,
-                        summary = getSubmissionErrorSummariesResponse
-                        
-                    };
-                   
-                    return new OkObjectResult(response);
-                }
+                        submissionResponse.Id,
+                        submissionResponse.DateSubmitted,
+                        submissionResponse.RecordCount,
+                        submissionResponse.OfficerId,
+                        submissionResponse.OfficerName,
+                        submissionResponse.MaxStopDate,
+                        submissionResponse.MinStopDate,
+                        ErrorCount = getSubmissionErrorSummariesResponse.Sum(x => x.Count)
+                    },
+                    stops = stopResponse,
+                    summary = getSubmissionErrorSummariesResponse
+
+                };
+
+                return new OkObjectResult(response);
             }
-            return new BadRequestObjectResult("Submission Id not found");
+            catch (Exception ex)
+            {
+                log.LogError($"Error getting submission: {ex.Message}");
+                return new BadRequestObjectResult($"Error getting submission: {ex.Message}");
+            }
         }
     }
 }

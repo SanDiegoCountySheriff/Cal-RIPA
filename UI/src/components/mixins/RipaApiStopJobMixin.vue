@@ -8,15 +8,30 @@ export default {
       locationSource: 'Location',
       basisForSearchSource: 'Basis for Search Person: ',
       stopReasonSource: 'Stop Reason Person: ',
+      snackbarText: '',
+      snackbarNoErrorsVisible: false,
+      snackbarErrorsVisible: false,
+      apiStopJobLoading: false,
     }
   },
 
   computed: {
-    ...mapGetters(['piiServiceAvailable']),
+    ...mapGetters([
+      'piiServiceAvailable',
+      'mappedStopSubmissionStatus',
+      'mappedStopSubmissionPassedIds',
+      'mappedStopSubmissionFailedStops',
+      'mappedStopsWithErrors',
+    ]),
   },
 
   methods: {
-    ...mapActions(['checkTextForPii', 'setPiiServiceAvailable']),
+    ...mapActions([
+      'checkTextForPii',
+      'setPiiServiceAvailable',
+      'submitOfficerStop',
+      'resetStopSubmissionStatus',
+    ]),
 
     addApiStop(apiStop) {
       this.isLocked = true
@@ -26,12 +41,14 @@ export default {
       this.isLocked = false
     },
 
-    checkLocalStorage() {
+    async checkLocalStorage() {
       if (!this.isLocked && this.isOnlineAndAuthenticated) {
         this.isLocked = true
         const apiStops = this.getApiStopsFromLocalStorage()
         if (apiStops.length > 0) {
-          this.runApiStopsJob(apiStops)
+          this.apiStopJobLoading = true
+          await this.runApiStopsJob(apiStops)
+          this.apiStopJobLoading = false
         }
         const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
         this.setStopsWithErrors(apiStopsWithErrors)
@@ -47,12 +64,6 @@ export default {
       if (this.isOnlineAndAuthenticated) {
         // reset stop submission status in store
         this.resetStopSubmissionStatus()
-
-        // clear api stops key since all api stops were handled -
-        // either submitted successfully or moved to new key in local storage
-        this.removeApiStopsFromLocalStorage()
-
-        console.log(`Api Stops Job Submitted: ${apiStops.length} stops`)
 
         // iterate through each apiStop
         for (let index = 0; index < apiStops.length; index++) {
@@ -193,16 +204,15 @@ export default {
           }
 
           await this.timeout(1500)
+          if (!this.isOnlineAndAuthenticated) {
+            return
+          }
           await this.submitOfficerStop(apiStop)
+          this.removeSingleApiStopFromLocalStorage(apiStop)
           await this.timeout(1500)
         }
 
-        console.log(
-          `Api Stops Submitted Successfully: ${this.mappedStopSubmissionPassedIds.length} stops`,
-        )
-        console.log(
-          `Api Stops Submitted with Errors: ${this.mappedStopSubmissionFailedStops.length} stops`,
-        )
+        this.removeApiStopsFromLocalStorage()
 
         let stopIdsPassedStr = ''
         if (this.mappedStopSubmissionPassedIds.length > 0) {
@@ -213,8 +223,6 @@ export default {
 
         // update snackbarText regardless if errors or not
         this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
-
-        console.log(`Api Stops Job Status Text: ${this.snackbarText}`)
 
         // display no errors snackbar which closes automatically
         if (this.mappedStopSubmissionFailedStops.length === 0) {
@@ -232,8 +240,54 @@ export default {
       }
     },
 
+    async submitOfficerStopOnline(apiStop) {
+      this.resetStopSubmissionStatus()
+
+      await this.submitOfficerStop(apiStop)
+
+      let stopIdsPassedStr = ''
+      if (this.mappedStopSubmissionPassedIds.length > 0) {
+        stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+          ', ',
+        )}.`
+      }
+
+      // update snackbarText regardless if errors or not
+      this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
+
+      // display no errors snackbar which closes automatically
+      if (this.mappedStopSubmissionFailedStops.length === 0) {
+        this.snackbarNoErrorsVisible = true
+      }
+
+      if (this.mappedStopSubmissionFailedStops.length > 0) {
+        // display errors snackbar which remains open
+        this.snackbarErrorsVisible = true
+        // if there are failed ids, update error stops key
+        this.pushFailedStopsToStopsWithErrors(
+          this.mappedStopSubmissionFailedStops,
+        )
+      }
+    },
+
     removeApiStopsFromLocalStorage() {
       localStorage.removeItem('ripa_submitted_api_stops')
+    },
+
+    removeSingleApiStopFromLocalStorage(apiStop) {
+      const apiStops = JSON.parse(
+        localStorage.getItem('ripa_submitted_api_stops'),
+      )
+
+      const index = apiStops.findIndex(s => s.time === apiStop.time)
+
+      if (index > -1) {
+        apiStops.splice(index, 1)
+        localStorage.setItem(
+          'ripa_submitted_api_stops',
+          JSON.stringify(apiStops),
+        )
+      }
     },
 
     getApiStopsFromLocalStorage() {
