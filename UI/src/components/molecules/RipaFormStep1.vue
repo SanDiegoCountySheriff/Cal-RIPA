@@ -32,7 +32,6 @@
 
     <ripa-location
       v-model="model"
-      :schools="schools"
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
@@ -178,10 +177,6 @@ export default {
   },
 
   props: {
-    schools: {
-      type: Array,
-      default: () => [],
-    },
     user: {
       type: Object,
       default: () => {},

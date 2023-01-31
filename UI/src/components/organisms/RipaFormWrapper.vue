@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :schools="schools"
                     :user="user"
                     :valid-last-location="validLastLocation"
                     :on-open-favorites="onOpenLocationFavorites"
@@ -374,6 +373,7 @@ export default {
     'beats',
     'countyCities',
     'nonCountyCities',
+    'schools',
     'displayDebugger',
     'formStepIndex',
     'fullStop',
@@ -739,10 +739,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    schools: {
-      type: Array,
-      default: () => [],
     },
     statutes: {
       type: Array,

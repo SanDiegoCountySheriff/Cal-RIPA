@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :schools="schools"
       :statutes="statutes"
       :user="user"
       :stopTemplates="stopTemplates"
@@ -76,10 +75,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    schools: {
-      type: Array,
-      default: () => [],
     },
     statutes: {
       type: Array,

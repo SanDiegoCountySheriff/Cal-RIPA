@@ -14,6 +14,12 @@ describe('Ripa Form Wrapper', () => {
   let wrapper
   let vuetify
   let stop
+  const schoolsList = JSON.parse('[{"cdsCode":"1","fullName":"High School"}]')
+  const countyCitiesList = JSON.parse('[{"id":"1","fullName":"CountyCity"}]')
+  const nonCountyCitiesList = JSON.parse(
+    '[{"id":"2","fullName":"NonCountyCity"}]',
+  )
+  const beatsList = JSON.parse('[{"id":"1","fullName":"Beat 1"}]')
 
   beforeEach(() => {
     vuetify = new Vuetify()
@@ -47,9 +53,10 @@ describe('Ripa Form Wrapper', () => {
         isAuthenticated: () => false,
         fullStop: () => {},
         displayDebugger: () => true,
-        countyCities: computed(() => []),
-        nonCountyCities: computed(() => []),
-        beats: computed(() => []),
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
+        beats: computed(() => beatsList),
       },
     })
   }
@@ -72,9 +79,10 @@ describe('Ripa Form Wrapper', () => {
         isAuthenticated: () => false,
         fullStop: () => {},
         displayDebugger: () => true,
-        countyCities: computed(() => []),
-        nonCountyCities: computed(() => []),
-        beats: computed(() => []),
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
+        beats: computed(() => beatsList),
       },
     })
   }

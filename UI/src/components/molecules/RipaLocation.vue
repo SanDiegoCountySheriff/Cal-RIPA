@@ -263,6 +263,7 @@ export default {
     'beats',
     'countyCities',
     'nonCountyCities',
+    'schools',
     'displayBeatInput',
     'isOnlineAndAuthenticated',
     'lastLocation',
@@ -535,10 +536,6 @@ export default {
     value: {
       type: Object,
       required: true,
-    },
-    schools: {
-      type: Array,
-      default: () => [],
     },
     displayBeatInput: {
       type: Boolean,

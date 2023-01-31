@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
       :user="mappedUser"
       :valid-last-location="isLastLocationValid"
@@ -168,6 +167,7 @@ export default {
       beats: this.mappedFormBeats,
       countyCities: this.mappedFormCountyCities,
       nonCountyCities: this.mappedFormNonCountyCities,
+      schools: this.mappedFormSchools,
       displayBeatInput: this.displayBeatInput,
       displayDebugger: this.displayDebugger,
       displayReportingEmail: this.displayReportingEmail,

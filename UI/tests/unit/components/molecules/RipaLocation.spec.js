@@ -44,6 +44,7 @@ describe('Ripa Location', () => {
         beats: computed(() => beatsList),
         countyCities: computed(() => countyCitiesList),
         nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
         displayBeatInput() {
           return true
         },
@@ -84,6 +85,7 @@ describe('Ripa Location', () => {
         beats: computed(() => beatsList),
         countyCities: computed(() => countyCitiesList),
         nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
         displayBeatInput() {
           return true
         },
