@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :last-reason="lastReason"
       :last-result="lastResult"
       :loading="loading"
       :loading-gps="loadingGps"
@@ -82,10 +81,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    lastReason: {
       type: Object,
       default: () => {},
     },

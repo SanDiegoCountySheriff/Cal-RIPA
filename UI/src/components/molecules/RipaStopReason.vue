@@ -222,7 +222,7 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated'],
+  inject: ['isOnlineAndAuthenticated', 'lastReason'],
 
   created() {
     if (this.viewModel.stopReason.reasonForStopExplanation) {
@@ -343,10 +343,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    lastReason: {
       type: Object,
       default: () => {},
     },

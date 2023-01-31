@@ -132,7 +132,6 @@
 
                   <ripa-form-step-3
                     v-model="stop"
-                    :last-reason="lastReason"
                     :loading-pii="loadingPiiStep3"
                     :on-back="handleBack"
                     :on-next="handleNext"
@@ -747,10 +746,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    lastReason: {
-      type: Object,
-      default: () => {},
     },
     lastResult: {
       type: Object,

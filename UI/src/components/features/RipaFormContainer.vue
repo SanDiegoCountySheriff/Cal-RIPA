@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :last-reason="lastReason"
       :last-result="lastResult"
       :loading="loading"
       :loading-gps="loadingGps"
@@ -186,6 +185,7 @@ export default {
       isOnlineAndAuthenticated: this.isOnlineAndAuthenticated,
       isApiUnavailable: this.isApiUnavailable,
       lastLocation: computed(() => this.lastLocation),
+      lastReason: computed(() => this.lastReason),
     }
   },
 
