@@ -31,6 +31,7 @@ describe('Ripa Form Wrapper', () => {
       vuetify,
       propsData: {
         ...propsData,
+        statutes: [{ id: 'test' }],
       },
       provide: {
         formStepIndex: computed(() => provideData?.formStepIndex ?? 0),
@@ -82,9 +83,8 @@ describe('Ripa Form Wrapper', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it.skip('should reset reasonableSuspicion when changing reasonForStop', async () => {
+  it('should reset reasonableSuspicion when changing reasonForStop', async () => {
     stop = createStartOfFormStepIndexThreeStop(stop)
-    console.log(stop)
     wrapper = factory({ value: stop }, { formStepIndex: 3 })
     const expected = []
 

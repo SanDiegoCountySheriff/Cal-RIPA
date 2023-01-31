@@ -14,6 +14,7 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -119,6 +120,9 @@ describe('Ripa Form Container', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        formStepIndex: computed(() => 0),
+      },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
     })
   }
@@ -130,6 +134,7 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
       },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
       computed: {
@@ -149,13 +154,16 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
+      },
+      computed: {
+        mappedFormBeats: () => [{ id: 'test' }],
+        mappedFormCountyCities: () => [{ id: 'test' }],
+        mappedFormNonCountyCities: () => [{ id: 'test' }],
+        mappedFormSchools: () => [{ id: 'test' }],
+        mappedFormStatutes: () => [{ id: 'test' }],
       },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
-      provide: {
-        formStepIndex() {
-          return 0
-        },
-      },
     })
   }
 
@@ -407,7 +415,7 @@ describe('Ripa Form Container', () => {
     })
   })
 
-  it.skip('should not delete errored stop from memory when canceling edit', async () => {
+  it('should not delete errored stop from memory when canceling edit', async () => {
     localStorage.setItem(
       'ripa_submitted_api_stops_with_errors',
       JSON.stringify([
@@ -441,7 +449,7 @@ describe('Ripa Form Container', () => {
     expect(actual).not.toEqual(null)
   })
 
-  it.skip('should delete errored stop from memory when submitting edit', async () => {
+  it('should delete errored stop from memory when submitting edit', async () => {
     localStorage.setItem(
       'ripa_submitted_api_stops_with_errors',
       JSON.stringify([
@@ -475,7 +483,7 @@ describe('Ripa Form Container', () => {
     expect(actual).toEqual(null)
   })
 
-  it.skip('should only delete submitted stop from memory when submitting edit', async () => {
+  it('should only delete submitted stop from memory when submitting edit', async () => {
     localStorage.setItem(
       'ripa_submitted_api_stops_with_errors',
       JSON.stringify([
