@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :loading-gps="loadingGps"
                     :loading-pii="loadingPiiStep1"
                     :non-county-cities="nonCountyCities"
                     :schools="schools"
@@ -745,14 +744,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    loadingGps: {
-      type: Boolean,
-      default: false,
     },
     loadingPiiStep1: {
       type: Boolean,

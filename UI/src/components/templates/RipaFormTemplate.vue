@@ -2,8 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :loading="loading"
-      :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
       :loading-pii-step4="loadingPiiStep4"
@@ -82,14 +80,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    loadingGps: {
-      type: Boolean,
-      default: false,
     },
     loadingPiiStep1: {
       type: Boolean,

@@ -265,6 +265,7 @@ export default {
     'displayBeatInput',
     'isOnlineAndAuthenticated',
     'lastLocation',
+    'loadingGps',
   ],
 
   computed: {
@@ -538,10 +539,6 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    loadingGps: {
       type: Boolean,
       default: false,
     },

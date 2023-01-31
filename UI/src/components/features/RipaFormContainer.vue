@@ -2,8 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :loading="loading"
-      :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
       :loading-pii-step4="loadingPiiStep4"
@@ -186,6 +184,8 @@ export default {
       lastLocation: computed(() => this.lastLocation ?? null),
       lastReason: computed(() => this.lastReason ?? null),
       lastResult: computed(() => this.lastResult ?? null),
+      loading: computed(() => this.loading),
+      loadingGps: computed(() => this.loadingGps),
     }
   },
 
