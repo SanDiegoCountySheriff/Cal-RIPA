@@ -3,6 +3,7 @@ import RipaModelMixin from '@/components/mixins/RipaModelMixin.vue'
 import { defaultStop } from '@/utilities/stop.js'
 import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Actions Taken', () => {
   let vuetify
@@ -20,12 +21,23 @@ describe('Ripa Actions Taken', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        loadingPiiStep4: computed(() => false),
+      },
       mixins: [RipaModelMixin],
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaActionsTaken, { vuetify, propsData: { value: stop } })
+    wrapper = mount(RipaActionsTaken, {
+      vuetify,
+      propsData: { value: stop },
+      provide: {
+        loadingPiiStep4() {
+          return false
+        },
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

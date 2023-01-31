@@ -43,6 +43,9 @@ describe('Ripa Stop Result', () => {
         isOnlineAndAuthenticated() {
           return true
         },
+        lastResult() {
+          return {}
+        },
       },
     })
 
@@ -56,6 +59,9 @@ describe('Ripa Stop Result', () => {
       provide: {
         isOnlineAndAuthenticated() {
           return true
+        },
+        lastResult() {
+          return {}
         },
       },
     })
@@ -83,6 +89,9 @@ describe('Ripa Stop Result', () => {
         isOnlineAndAuthenticated() {
           return true
         },
+        lastResult() {
+          return {}
+        },
       },
     })
 
@@ -107,6 +116,9 @@ describe('Ripa Stop Result', () => {
       provide: {
         isOnlineAndAuthenticated() {
           return true
+        },
+        lastResult() {
+          return {}
         },
       },
     })

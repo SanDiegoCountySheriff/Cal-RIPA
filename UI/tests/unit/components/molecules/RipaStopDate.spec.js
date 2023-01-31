@@ -20,6 +20,9 @@ describe('Ripa Stop Date', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        isAdminEditing: () => false,
+      },
     })
   }
 
@@ -111,6 +114,9 @@ describe('Ripa Stop Date', () => {
         getMaxDate: jest.fn(() => {
           return '2019-12-31'
         }),
+      },
+      provide: {
+        isAdminEditing: () => false,
       },
     })
 

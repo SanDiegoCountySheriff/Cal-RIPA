@@ -22,8 +22,14 @@ describe('Ripa Form Step 1', () => {
         onUpdateUser: jest.fn(),
       },
       computed: {
-        user() {
-          return {}
+        getApiStopUser() {
+          return {
+            agency: 'SDSD',
+            assignment: 10,
+            otherType: 'Data Services',
+            startDate: '2014-10-10',
+            yearsExperience: 7,
+          }
         },
       },
       provide: {

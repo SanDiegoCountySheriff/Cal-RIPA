@@ -16,7 +16,9 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
           </span></button></div>
         </div>
         <div class="col-sm-6 col-md-6 col-12">
-          <!---->
+          <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+              Save Reason
+            </span></button></div>
         </div>
       </div>
       <div class="row no-gutters">
@@ -26,9 +28,9 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
         <div class="col-sm-12 col-12">
           <div class="v-input theme--light v-text-field v-text-field--solo-flat v-select">
             <div class="v-input__control">
-              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-11" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-11" class="v-label theme--light" style="left: 0px; position: absolute;">Reason</label>
-                  <div class="v-select__selections"><input clerable="" required="required" id="input-11" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-12" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-12" class="v-label theme--light" style="left: 0px; position: absolute;">Reason</label>
+                  <div class="v-select__selections"><input clerable="" required="required" id="input-12" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
                   <div class="v-input__append-inner">
                     <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
                   </div><input type="hidden">
@@ -57,7 +59,7 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
             <div class="v-input theme--light v-text-field">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-19" class="v-label theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-19" type="text"></div>
+                  <div class="v-text-field__slot"><label for="input-20" class="v-label theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-20" type="text"></div>
                 </div>
                 <div class="v-text-field__details">
                   <div class="v-messages theme--light">

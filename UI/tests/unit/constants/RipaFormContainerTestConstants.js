@@ -405,7 +405,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
 ]
 
 export const API_STOP = {
-  id: '111111111111',
+  id: '1111111111111',
   ori: 'CA0370000',
   agency: 'SDSD',
   officerId: '111111111',
@@ -511,7 +511,7 @@ export const API_STOP = {
   isPiiFound: false,
   piiEntities: null,
   overridePii: false,
-  editStopExplanation: null,
+  editStopExplanation: 'edit',
   editStopOfficerId: '100000002',
   isEdited: false,
   telemetry: {
@@ -674,7 +674,7 @@ export const STOP = {
   id: 1,
   internalId: 1,
   template: null,
-  editStopExplanation: null,
+  editStopExplanation: '',
   isPiiFound: false,
   overridePii: false,
   stepTrace: [

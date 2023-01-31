@@ -46,6 +46,9 @@ describe('Ripa Form Summary Detail', () => {
         isAdminEditing() {
           return true
         },
+        isAdminViewing() {
+          return false
+        },
       },
     })
 

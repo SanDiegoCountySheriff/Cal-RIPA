@@ -6,6 +6,7 @@ import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import store from '@/store'
+import { computed } from 'vue'
 
 describe('Ripa Form Wrapper', () => {
   const localVue = createLocalVue()
@@ -35,17 +36,48 @@ describe('Ripa Form Wrapper', () => {
         formStepIndex() {
           return provideData.formStepIndex ?? 0
         },
+        isApiUnavailable() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return false
+        },
+        isAdmin: () => true,
+        isAdminEditing: () => true,
+        isAuthenticated: () => false,
+        fullStop: () => {},
+        displayDebugger: () => true,
+        countyCities: computed(() => []),
+        beats: computed(() => []),
       },
     })
   }
 
-  const shallowFactory = propsData => {
+  const shallowFactory = (propsData, provideData) => {
     return shallowMount(RipaFormWrapper, {
       localVue,
       store,
       vuetify,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        formStepIndex() {
+          return provideData.formStepIndex ?? 0
+        },
+        isApiUnavailable() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return false
+        },
+        isAdmin: () => true,
+        isAdminEditing: () => true,
+        isAuthenticated: () => false,
+        fullStop: () => {},
+        displayDebugger: () => true,
+        countyCities: computed(() => []),
+        beats: computed(() => []),
       },
     })
   }
@@ -56,7 +88,7 @@ describe('Ripa Form Wrapper', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it.only('should reset reasonableSuspicion when changing reasonForStop', async () => {
+  it('should reset reasonableSuspicion when changing reasonForStop', async () => {
     stop = createStartOfFormStepIndexThreeStop(stop)
     wrapper = factory({ value: stop }, { formStepIndex: 3 })
     console.log('formStepIndex: ', wrapper.vm.formStepIndex)

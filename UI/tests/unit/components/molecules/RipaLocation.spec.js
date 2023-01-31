@@ -2,6 +2,7 @@ import RipaLocation from '@/components/molecules/RipaLocation.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Location', () => {
   let vuetify
@@ -34,6 +35,22 @@ describe('Ripa Location', () => {
         onSaveFavorite: jest.fn(),
         onGpsLocation: jest.fn(),
       },
+      provide: {
+        loadingPiiStep1: computed(() => false),
+        loadingGps: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        beats: computed(() => []),
+        countyCities: computed(() => []),
+        nonCountyCities: computed(() => []),
+        displayBeatInput() {
+          return true
+        },
+        lastLocation() {
+          return {}
+        },
+      },
     })
   }
 
@@ -57,6 +74,22 @@ describe('Ripa Location', () => {
         onOpenLastLocation: jest.fn(),
         onSaveFavorite: jest.fn(),
         onGpsLocation: jest.fn(),
+      },
+      provide: {
+        loadingPiiStep1: computed(() => false),
+        loadingGps: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        beats: computed(() => []),
+        countyCities: computed(() => []),
+        nonCountyCities: computed(() => []),
+        displayBeatInput() {
+          return true
+        },
+        lastLocation() {
+          return {}
+        },
       },
     })
 
