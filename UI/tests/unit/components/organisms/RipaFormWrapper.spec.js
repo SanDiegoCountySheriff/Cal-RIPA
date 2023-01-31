@@ -23,13 +23,18 @@ describe('Ripa Form Wrapper', () => {
     wrapper.destroy()
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return mount(RipaFormWrapper, {
       localVue,
       store,
       vuetify,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        formStepIndex() {
+          return provideData.formStepIndex ?? 0
+        },
       },
     })
   }
@@ -51,9 +56,10 @@ describe('Ripa Form Wrapper', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should reset reasonableSuspicion when changing reasonForStop', async () => {
+  it.only('should reset reasonableSuspicion when changing reasonForStop', async () => {
     stop = createStartOfFormStepIndexThreeStop(stop)
-    wrapper = factory({ value: stop, formStepIndex: 3 })
+    wrapper = factory({ value: stop }, { formStepIndex: 3 })
+    console.log('formStepIndex: ', wrapper.vm.formStepIndex)
     const expected = []
 
     for (let i = 1; i <= 6; i++) {

@@ -39,6 +39,11 @@ describe('Ripa Stop Result', () => {
       propsData: {
         value: stop,
       },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
@@ -47,7 +52,12 @@ describe('Ripa Stop Result', () => {
   it('should display custom chip', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes: statutes },
+      propsData: { value: stop, statutes },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
     })
 
     let updatedStop = defaultStop()
@@ -68,7 +78,12 @@ describe('Ripa Stop Result', () => {
   it('should pull from reason code', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes: statutes },
+      propsData: { value: stop, statutes },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
     })
 
     const updatedStop = defaultStop()
@@ -88,7 +103,12 @@ describe('Ripa Stop Result', () => {
   it('should remove item when deleting chip', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes: statutes },
+      propsData: { value: stop, statutes },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
     })
 
     let updatedStop = defaultStop()

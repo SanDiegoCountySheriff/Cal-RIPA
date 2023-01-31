@@ -29,7 +29,15 @@ describe('Ripa Form Step 7', () => {
     const apiStop = API_STOP
     wrapper = mount(RipaFormStep7, {
       vuetify,
-      propsData: { apiStop: apiStop },
+      propsData: { apiStop },
+      provide: {
+        isAdminEditing() {
+          return false
+        },
+        isAdminViewing() {
+          return false
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

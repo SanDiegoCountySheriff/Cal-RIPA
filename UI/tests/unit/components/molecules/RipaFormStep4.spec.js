@@ -24,7 +24,14 @@ describe('Ripa Form Step 4', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep4, { vuetify })
+    wrapper = mount(RipaFormStep4, {
+      vuetify,
+      provide: {
+        loadingPiiStep4() {
+          return false
+        },
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

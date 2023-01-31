@@ -35,12 +35,17 @@ describe('Ripa Form Summary Detail', () => {
     wrapper = mount(RipaFormSummaryDetail, {
       vuetify,
       propsData: {
-        apiStop: apiStop,
+        apiStop,
         onDeletePerson: jest.fn(),
         onCopyPerson: jest.fn(),
         onEditAgencyQuestions: jest.fn(),
         onEditStop: jest.fn(),
         onEditPerson: jest.fn(),
+      },
+      provide: {
+        isAdminEditing() {
+          return true
+        },
       },
     })
 

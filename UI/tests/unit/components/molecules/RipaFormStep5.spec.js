@@ -32,6 +32,14 @@ describe('Ripa Form Step 5', () => {
         onOpenFavorites: jest.fn(),
         onSaveFavorite: jest.fn(),
       },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastResult() {
+          return {}
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

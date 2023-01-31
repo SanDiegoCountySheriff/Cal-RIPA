@@ -2,10 +2,11 @@
 
 exports[`Ripa Form Step 1 should match snapshot 1`] = `
 <v-form-stub lazyvalidation="true">
-  <!---->
+  <ripa-officer-stub onopenstatute="[Function]" onupdateuser="[Function]"></ripa-officer-stub>
+  <ripa-user-dialog-stub onclose="[Function]" onsave="[Function]" adminediting="true" isrowkeydisabled="true" formtitle="Manage User"></ripa-user-dialog-stub>
   <!---->
   <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
-  <ripa-location-stub onopenstatute="[Function]" value="[object Object]" schools="" beats="" countycities="" noncountycities="" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]"></ripa-location-stub>
+  <ripa-location-stub onopenstatute="[Function]" value="[object Object]" schools="" noncountycities="" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]"></ripa-location-stub>
   <v-spacer-stub tag="div"></v-spacer-stub>
   <!---->
   <div class="tw-flex tw-mt-8 tw-justify-center">

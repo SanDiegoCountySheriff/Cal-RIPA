@@ -21,6 +21,19 @@ describe('Ripa Form Step 1', () => {
         onGpsLocation: jest.fn(),
         onUpdateUser: jest.fn(),
       },
+      computed: {
+        user() {
+          return {}
+        },
+      },
+      provide: {
+        isAdminEditing() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
     })
   }
 

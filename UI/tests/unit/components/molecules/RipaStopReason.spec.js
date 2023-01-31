@@ -28,6 +28,20 @@ describe('Ripa Stop Reason', () => {
       propsData: {
         value: stop,
       },
+      provide: {
+        loadingPiiStep3() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        loading() {
+          return false
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

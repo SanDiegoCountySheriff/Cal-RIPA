@@ -497,7 +497,9 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
+      console.log('handleAddPerson', this.stepIndex)
       if (this.onStepIndexChange) {
+        console.log('found function', this.stepIndex)
         this.onStepIndexChange(this.stepIndex)
       }
       if (this.onAddPerson) {

@@ -32,6 +32,20 @@ describe('Ripa Form Step 3', () => {
         onOpenFavorites: jest.fn(),
         onSaveFavorite: jest.fn(),
       },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        loadingPiiStep3() {
+          return false
+        },
+        loading() {
+          return false
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
