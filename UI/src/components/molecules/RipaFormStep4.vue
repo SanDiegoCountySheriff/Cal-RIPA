@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-actions-taken
       v-model="model"
-      :loading-pii="loadingPii"
       :on-open-statute="onOpenStatute"
       @pii-check="handlePiiCheck"
     ></ripa-actions-taken>

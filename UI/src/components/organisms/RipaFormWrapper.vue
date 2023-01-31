@@ -130,7 +130,6 @@
 
                   <ripa-form-step-3
                     v-model="stop"
-                    :loading-pii="loadingPiiStep3"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
@@ -154,7 +153,6 @@
 
                   <ripa-form-step-4
                     v-model="stop"
-                    :loading-pii="loadingPiiStep4"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
@@ -743,14 +741,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    loadingPiiStep3: {
-      type: Boolean,
-      default: false,
-    },
-    loadingPiiStep4: {
-      type: Boolean,
-      default: false,
     },
     nonCountyCities: {
       type: Array,

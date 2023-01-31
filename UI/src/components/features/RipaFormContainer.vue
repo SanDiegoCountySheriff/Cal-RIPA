@@ -2,8 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :loading-pii-step3="loadingPiiStep3"
-      :loading-pii-step4="loadingPiiStep4"
       :non-county-cities="mappedFormNonCountyCities"
       :schools="mappedFormSchools"
       :statutes="mappedFormStatutes"
@@ -186,6 +184,8 @@ export default {
       loading: computed(() => this.loading),
       loadingGps: computed(() => this.loadingGps),
       loadingPiiStep1: computed(() => this.loadingPiiStep1),
+      loadingPiiStep3: computed(() => this.loadingPiiStep3),
+      loadingPiiStep4: computed(() => this.loadingPiiStep4),
     }
   },
 

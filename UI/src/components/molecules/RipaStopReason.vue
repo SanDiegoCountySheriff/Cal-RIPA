@@ -159,7 +159,7 @@
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
-            :loading="loadingPii"
+            :loading="loadingPiiStep3"
             :rules="explanationRules"
             @input="handleInput($event), handlePiiCheck($event)"
           ></ripa-text-input>
@@ -222,7 +222,7 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated', 'lastReason'],
+  inject: ['isOnlineAndAuthenticated', 'lastReason', 'loadingPiiStep3'],
 
   created() {
     if (this.viewModel.stopReason.reasonForStopExplanation) {
@@ -345,10 +345,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
     },
     statutes: {
       type: Array,
