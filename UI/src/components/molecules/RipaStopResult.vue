@@ -319,7 +319,7 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated', 'lastResult'],
+  inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
 
   computed: {
     model: {
@@ -541,10 +541,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
     onOpenFavorites: {
       type: Function,

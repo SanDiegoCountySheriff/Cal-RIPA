@@ -155,7 +155,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :on-open-statute="onOpenStatute"
-                    :statutes="statutes"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-4>
@@ -178,7 +177,6 @@
                     :on-open-favorites="onOpenResultFavorites"
                     :on-open-statute="onOpenStatute"
                     :on-save-favorite="onSaveResultFavorite"
-                    :statutes="statutes"
                     @input="handleInput"
                   ></ripa-form-step-5>
                 </template>
@@ -374,6 +372,7 @@ export default {
     'countyCities',
     'nonCountyCities',
     'schools',
+    'statutes',
     'displayDebugger',
     'formStepIndex',
     'fullStop',
@@ -739,10 +738,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
     user: {
       type: Object,

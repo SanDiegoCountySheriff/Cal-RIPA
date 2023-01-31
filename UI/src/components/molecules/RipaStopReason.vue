@@ -193,6 +193,8 @@ export default {
 
   mixins: [RipaModelMixin],
 
+  inject: ['statutes'],
+
   components: {
     RipaAlert,
     RipaAutocomplete,
@@ -345,10 +347,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
     onOpenFavorites: {
       type: Function,

@@ -2,11 +2,22 @@ import RipaStopResult from '@/components/molecules/RipaStopResult.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Stop Result', () => {
   let vuetify
   let wrapper
   let stop
+  const statutes = [
+    {
+      code: 1,
+      fullName: 'Statute Code 1 - Statute Text 1',
+    },
+    {
+      code: 2,
+      fullName: 'Statute Code 2 - Statute Text 2',
+    },
+  ]
 
   beforeEach(() => {
     vuetify = new Vuetify()
@@ -19,19 +30,11 @@ describe('Ripa Stop Result', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        statutes: computed(() => statutes),
+      },
     })
   }
-
-  const statutes = [
-    {
-      code: 1,
-      fullName: 'Statute Code 1 - Statute Text 1',
-    },
-    {
-      code: 2,
-      fullName: 'Statute Code 2 - Statute Text 2',
-    },
-  ]
 
   it('should match snapshot', () => {
     wrapper = mount(RipaStopResult, {
@@ -46,6 +49,7 @@ describe('Ripa Stop Result', () => {
         lastResult() {
           return {}
         },
+        statutes: computed(() => statutes),
       },
     })
 
@@ -55,7 +59,7 @@ describe('Ripa Stop Result', () => {
   it('should display custom chip', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes },
+      propsData: { value: stop },
       provide: {
         isOnlineAndAuthenticated() {
           return true
@@ -63,6 +67,7 @@ describe('Ripa Stop Result', () => {
         lastResult() {
           return {}
         },
+        statutes: computed(() => statutes),
       },
     })
 
@@ -84,7 +89,7 @@ describe('Ripa Stop Result', () => {
   it('should pull from reason code', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes },
+      propsData: { value: stop },
       provide: {
         isOnlineAndAuthenticated() {
           return true
@@ -92,6 +97,7 @@ describe('Ripa Stop Result', () => {
         lastResult() {
           return {}
         },
+        statutes: computed(() => statutes),
       },
     })
 
@@ -112,7 +118,7 @@ describe('Ripa Stop Result', () => {
   it('should remove item when deleting chip', async () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
-      propsData: { value: stop, statutes },
+      propsData: { value: stop },
       provide: {
         isOnlineAndAuthenticated() {
           return true
@@ -120,6 +126,7 @@ describe('Ripa Stop Result', () => {
         lastResult() {
           return {}
         },
+        statutes: computed(() => statutes),
       },
     })
 

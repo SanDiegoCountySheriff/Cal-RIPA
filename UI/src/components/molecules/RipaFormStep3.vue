@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
-      :statutes="getStatutes"
       :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
@@ -80,12 +79,6 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
-    },
-  },
-
-  computed: {
-    getStatutes() {
-      return this.statutes
     },
   },
 

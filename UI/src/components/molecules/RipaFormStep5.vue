@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-result
       v-model="model"
-      :statutes="statutes"
       :on-open-favorites="onOpenFavorites"
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"

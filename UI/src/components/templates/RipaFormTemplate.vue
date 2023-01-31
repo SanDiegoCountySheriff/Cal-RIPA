@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :statutes="statutes"
       :user="user"
       :stopTemplates="stopTemplates"
       :valid-last-location="validLastLocation"
@@ -75,10 +74,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
     },
     user: {
       type: Object,

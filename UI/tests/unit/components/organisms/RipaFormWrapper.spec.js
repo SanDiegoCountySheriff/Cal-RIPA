@@ -37,7 +37,6 @@ describe('Ripa Form Wrapper', () => {
       vuetify,
       propsData: {
         ...propsData,
-        statutes: [{ id: 'test' }],
       },
       provide: {
         formStepIndex: computed(() => provideData?.formStepIndex ?? 0),
@@ -57,6 +56,7 @@ describe('Ripa Form Wrapper', () => {
         nonCountyCities: computed(() => nonCountyCitiesList),
         schools: computed(() => schoolsList),
         beats: computed(() => beatsList),
+        statutes: computed(() => []),
       },
     })
   }
@@ -83,6 +83,7 @@ describe('Ripa Form Wrapper', () => {
         nonCountyCities: computed(() => nonCountyCitiesList),
         schools: computed(() => schoolsList),
         beats: computed(() => beatsList),
+        statutes: computed(() => []),
       },
     })
   }

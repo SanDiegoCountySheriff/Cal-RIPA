@@ -113,10 +113,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
     onAddPerson: {
       type: Function,
       default: () => {},
