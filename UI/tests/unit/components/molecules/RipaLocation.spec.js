@@ -41,9 +41,9 @@ describe('Ripa Location', () => {
         isOnlineAndAuthenticated() {
           return true
         },
-        beats: computed(() => []),
-        countyCities: computed(() => []),
-        nonCountyCities: computed(() => []),
+        beats: computed(() => beatsList),
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
         displayBeatInput() {
           return true
         },
@@ -81,9 +81,9 @@ describe('Ripa Location', () => {
         isOnlineAndAuthenticated() {
           return true
         },
-        beats: computed(() => []),
-        countyCities: computed(() => []),
-        nonCountyCities: computed(() => []),
+        beats: computed(() => beatsList),
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
         displayBeatInput() {
           return true
         },

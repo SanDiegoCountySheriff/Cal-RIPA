@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :non-county-cities="nonCountyCities"
                     :schools="schools"
                     :user="user"
                     :valid-last-location="validLastLocation"
@@ -374,6 +373,7 @@ export default {
     'isAdmin',
     'beats',
     'countyCities',
+    'nonCountyCities',
     'displayDebugger',
     'formStepIndex',
     'fullStop',
@@ -741,10 +741,6 @@ export default {
       default: () => {},
     },
     schools: {
-      type: Array,
-      default: () => [],
-    },
-    nonCountyCities: {
       type: Array,
       default: () => [],
     },

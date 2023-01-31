@@ -33,7 +33,6 @@
     <ripa-location
       v-model="model"
       :schools="schools"
-      :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
@@ -179,10 +178,6 @@ export default {
   },
 
   props: {
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
     schools: {
       type: Array,
       default: () => [],

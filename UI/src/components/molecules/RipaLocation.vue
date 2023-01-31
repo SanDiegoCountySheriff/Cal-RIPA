@@ -262,6 +262,7 @@ export default {
   inject: [
     'beats',
     'countyCities',
+    'nonCountyCities',
     'displayBeatInput',
     'isOnlineAndAuthenticated',
     'lastLocation',
@@ -542,10 +543,6 @@ export default {
     displayBeatInput: {
       type: Boolean,
       default: false,
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
     },
     validLastLocation: {
       type: Boolean,

@@ -48,6 +48,7 @@ describe('Ripa Form Wrapper', () => {
         fullStop: () => {},
         displayDebugger: () => true,
         countyCities: computed(() => []),
+        nonCountyCities: computed(() => []),
         beats: computed(() => []),
       },
     })
@@ -72,6 +73,7 @@ describe('Ripa Form Wrapper', () => {
         fullStop: () => {},
         displayDebugger: () => true,
         countyCities: computed(() => []),
+        nonCountyCities: computed(() => []),
         beats: computed(() => []),
       },
     })

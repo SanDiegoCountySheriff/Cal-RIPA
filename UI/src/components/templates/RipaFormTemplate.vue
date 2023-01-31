@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :non-county-cities="nonCountyCities"
       :schools="schools"
       :statutes="statutes"
       :user="user"
@@ -77,10 +76,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
     },
     schools: {
       type: Array,
