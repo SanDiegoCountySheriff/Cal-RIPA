@@ -33,7 +33,6 @@
     <ripa-location
       v-model="model"
       :schools="schools"
-      :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
       :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"

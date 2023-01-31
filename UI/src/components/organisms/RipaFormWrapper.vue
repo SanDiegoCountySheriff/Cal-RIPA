@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :loading-pii="loadingPiiStep1"
                     :non-county-cities="nonCountyCities"
                     :schools="schools"
                     :user="user"
@@ -744,10 +743,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    loadingPiiStep1: {
-      type: Boolean,
-      default: false,
     },
     loadingPiiStep3: {
       type: Boolean,

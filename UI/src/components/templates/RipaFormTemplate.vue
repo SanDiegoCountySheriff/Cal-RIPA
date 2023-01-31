@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :loading-pii-step1="loadingPiiStep1"
       :loading-pii-step3="loadingPiiStep3"
       :loading-pii-step4="loadingPiiStep4"
       :non-county-cities="nonCountyCities"
@@ -80,10 +79,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    loadingPiiStep1: {
-      type: Boolean,
-      default: false,
     },
     loadingPiiStep3: {
       type: Boolean,

@@ -111,7 +111,7 @@
             <ripa-text-input
               v-model="model.location.blockNumber"
               label="Block Number"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="blockNumberRules"
               numbers-only
               prevent-paste
@@ -126,7 +126,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="streetNameRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -142,7 +142,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
-            :loading="loadingPii"
+            :loading="loadingPiiStep1"
             :rules="intersectionRules"
             @input="handleInput($event), handlePiiCheck($event)"
           >
@@ -161,7 +161,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closest exit"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="highwayRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -172,7 +172,7 @@
             <ripa-text-input
               v-model="model.location.landmark"
               label="Road marker, landmark, or other"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="landmarkRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -266,6 +266,7 @@ export default {
     'isOnlineAndAuthenticated',
     'lastLocation',
     'loadingGps',
+    'loadingPiiStep1',
   ],
 
   computed: {
@@ -539,10 +540,6 @@ export default {
       default: () => [],
     },
     displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    loadingPii: {
       type: Boolean,
       default: false,
     },
