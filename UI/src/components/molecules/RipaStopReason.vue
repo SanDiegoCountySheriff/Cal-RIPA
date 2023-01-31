@@ -193,8 +193,6 @@ export default {
 
   mixins: [RipaModelMixin],
 
-  inject: ['statutes'],
-
   components: {
     RipaAlert,
     RipaAutocomplete,
@@ -224,7 +222,12 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated', 'lastReason', 'loadingPiiStep3'],
+  inject: [
+    'isOnlineAndAuthenticated',
+    'lastReason',
+    'loadingPiiStep3',
+    'statutes',
+  ],
 
   created() {
     if (this.viewModel.stopReason.reasonForStopExplanation) {

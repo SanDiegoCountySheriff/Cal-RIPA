@@ -37,6 +37,7 @@ describe('Ripa Stop Reason', () => {
         lastReason() {
           return {}
         },
+        statutes: computed(() => []),
       },
     })
 
