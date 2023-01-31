@@ -139,16 +139,12 @@ export default {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
 
-      console.log(this.isAdminEditing)
-
       if (!this.isAdminEditing) {
-        console.log('not admin editing')
         return (
           dateWithinLastHours(dateStr, timeStr, 24) &&
           dateNotInFuture(dateStr, timeStr)
         )
       }
-      console.log('admin editing')
       return dateNotInFuture(dateStr, timeStr)
     },
 
