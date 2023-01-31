@@ -319,7 +319,7 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated'],
+  inject: ['isOnlineAndAuthenticated', 'lastResult'],
 
   computed: {
     model: {
@@ -539,10 +539,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    lastResult: {
       type: Object,
       default: () => {},
     },

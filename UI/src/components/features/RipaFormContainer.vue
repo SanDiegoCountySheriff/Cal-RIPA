@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :last-result="lastResult"
       :loading="loading"
       :loading-gps="loadingGps"
       :loading-pii-step1="loadingPiiStep1"
@@ -184,8 +183,9 @@ export default {
       isAuthenticated: this.isAuthenticated,
       isOnlineAndAuthenticated: this.isOnlineAndAuthenticated,
       isApiUnavailable: this.isApiUnavailable,
-      lastLocation: computed(() => this.lastLocation),
-      lastReason: computed(() => this.lastReason),
+      lastLocation: computed(() => this.lastLocation ?? null),
+      lastReason: computed(() => this.lastReason ?? null),
+      lastResult: computed(() => this.lastResult ?? null),
     }
   },
 

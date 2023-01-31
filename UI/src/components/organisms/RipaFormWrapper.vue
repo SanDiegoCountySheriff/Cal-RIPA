@@ -178,7 +178,6 @@
 
                   <ripa-form-step-5
                     v-model="stop"
-                    :last-result="lastResult"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
@@ -746,10 +745,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    lastResult: {
-      type: Object,
-      default: () => {},
     },
     loading: {
       type: Boolean,
