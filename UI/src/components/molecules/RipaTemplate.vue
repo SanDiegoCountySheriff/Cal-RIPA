@@ -90,7 +90,12 @@ export default {
     RipaAlert,
   },
 
-  inject: ['displayReportingEmail', 'reportingEmailAddress'],
+  inject: [
+    'displayReportingEmail',
+    'reportingEmailAddress',
+    'isOnline',
+    'isAuthenticated',
+  ],
 
   methods: {
     handleDynamicTemplates(name) {
@@ -122,14 +127,6 @@ export default {
       required: true,
     },
     disableButtons: {
-      type: Boolean,
-      default: false,
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
       type: Boolean,
       default: false,
     },

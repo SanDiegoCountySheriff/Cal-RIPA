@@ -222,6 +222,8 @@ export default {
     }
   },
 
+  inject: ['isOnlineAndAuthenticated'],
+
   created() {
     if (this.viewModel.stopReason.reasonForStopExplanation) {
       this.handlePiiCheck(this.viewModel.stopReason.reasonForStopExplanation)
@@ -349,10 +351,6 @@ export default {
       default: () => {},
     },
     loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
       type: Boolean,
       default: false,
     },

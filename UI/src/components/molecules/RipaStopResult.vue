@@ -319,6 +319,8 @@ export default {
     }
   },
 
+  inject: ['isOnlineAndAuthenticated'],
+
   computed: {
     model: {
       get() {
@@ -539,10 +541,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
     },
     lastResult: {
       type: Object,

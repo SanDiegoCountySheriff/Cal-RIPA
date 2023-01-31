@@ -39,16 +39,14 @@ export default {
     },
   },
 
+  inject: ['isAuthenticated'],
+
   props: {
     onStartNew: {
       type: Function,
       required: true,
     },
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
       type: Boolean,
       default: false,
     },

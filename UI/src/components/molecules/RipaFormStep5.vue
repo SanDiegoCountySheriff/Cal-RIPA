@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-result
       v-model="model"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-result="lastResult"
       :statutes="statutes"
       :on-open-favorites="onOpenFavorites"
@@ -86,10 +85,6 @@ export default {
   },
 
   props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
     lastResult: {
       type: Object,
       default: () => {},

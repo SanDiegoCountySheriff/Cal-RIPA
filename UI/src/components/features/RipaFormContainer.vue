@@ -2,11 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :is-online="isOnline"
-      :is-authenticated="isAuthenticated"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :is-api-unavailable="isApiUnavailable"
-      :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
       :loading="loading"
@@ -50,7 +45,6 @@
       :show-dialog="showLocationFavoritesDialog"
       title="Locations"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditLocationFavorite"
       :on-open-favorite="handleOpenLocationFavorite"
@@ -61,7 +55,6 @@
       :show-dialog="showReasonFavoritesDialog"
       title="Reasons"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditReasonFavorite"
       :on-open-favorite="handleOpenReasonFavorite"
@@ -72,7 +65,6 @@
       :show-dialog="showResultFavoritesDialog"
       title="Results"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditResultFavorite"
       :on-open-favorite="handleOpenResultFavorite"
@@ -189,6 +181,11 @@ export default {
       reportingEmailAddress: this.reportingEmailAddress,
       formStepIndex: computed(() => this.formStepIndex),
       fullStop: computed(() => this.fullStop),
+      isOnline: this.isOnline,
+      isAuthenticated: this.isAuthenticated,
+      isOnlineAndAuthenticated: this.isOnlineAndAuthenticated,
+      isApiUnavailable: this.isApiUnavailable,
+      lastLocation: computed(() => this.lastLocation),
     }
   },
 

@@ -2,7 +2,6 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :last-reason="lastReason"
       :loading-pii="loadingPii"
       :statutes="getStatutes"
@@ -93,10 +92,6 @@ export default {
   },
 
   props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
     lastReason: {
       type: Object,
       default: () => {},

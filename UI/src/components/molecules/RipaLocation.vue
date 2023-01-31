@@ -259,7 +259,13 @@ export default {
     }
   },
 
-  inject: ['beats', 'countyCities', 'displayBeatInput'],
+  inject: [
+    'beats',
+    'countyCities',
+    'displayBeatInput',
+    'isOnlineAndAuthenticated',
+    'lastLocation',
+  ],
 
   computed: {
     model: {
@@ -534,14 +540,6 @@ export default {
     displayBeatInput: {
       type: Boolean,
       default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
     },
     loadingGps: {
       type: Boolean,

@@ -2,11 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :is-online="isOnline"
-      :is-authenticated="isAuthenticated"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :is-api-unavailable="isApiUnavailable"
-      :last-location="lastLocation"
       :last-reason="lastReason"
       :last-result="lastResult"
       :loading="loading"
@@ -87,26 +82,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    isApiUnavailable: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
       type: Object,
       default: () => {},
     },

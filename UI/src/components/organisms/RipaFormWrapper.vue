@@ -25,8 +25,6 @@
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
-            :is-online="isOnline"
-            :is-authenticated="isAuthenticated"
             :on-open-template="onOpenTemplate"
             :stopTemplates="stopTemplates"
             :disable-buttons="
@@ -85,8 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-                    :last-location="lastLocation"
                     :loading-gps="loadingGps"
                     :loading-pii="loadingPiiStep1"
                     :non-county-cities="nonCountyCities"
@@ -136,7 +132,6 @@
 
                   <ripa-form-step-3
                     v-model="stop"
-                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-reason="lastReason"
                     :loading-pii="loadingPiiStep3"
                     :on-back="handleBack"
@@ -184,7 +179,6 @@
 
                   <ripa-form-step-5
                     v-model="stop"
-                    :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
                     :last-result="lastResult"
                     :on-back="handleBack"
                     :on-next="handleNext"
@@ -280,7 +274,6 @@
           <ripa-confirmation
             :loading="loading"
             :on-start-new="handleStartNew"
-            :is-authenticated="isAuthenticated"
             @go-home="onGoHome"
           ></ripa-confirmation>
         </template>
@@ -390,6 +383,9 @@ export default {
     'displayDebugger',
     'formStepIndex',
     'fullStop',
+    'isAuthenticated',
+    'isOnlineAndAuthenticated',
+    'isApiUnavailable',
   ],
 
   computed: {
@@ -751,26 +747,6 @@ export default {
     schools: {
       type: Array,
       default: () => [],
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    isApiUnavailable: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
     },
     lastReason: {
       type: Object,

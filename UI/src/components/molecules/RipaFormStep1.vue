@@ -33,8 +33,6 @@
     <ripa-location
       v-model="model"
       :schools="schools"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-location="lastLocation"
       :loading-gps="loadingGps"
       :loading-pii="loadingPii"
       :non-county-cities="nonCountyCities"
@@ -110,7 +108,7 @@ export default {
     }
   },
 
-  inject: ['isAdminEditing'],
+  inject: ['isAdminEditing', 'isOnlineAndAuthenticated'],
 
   computed: {
     getApiStopUser() {
@@ -183,14 +181,6 @@ export default {
   },
 
   props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
-    },
     nonCountyCities: {
       type: Array,
       default: () => [],
