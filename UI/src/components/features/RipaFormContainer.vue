@@ -6,7 +6,7 @@
       @on-cancel-form="handleCancelForm"
       @on-cancel-action="handleCancelAction"
       @on-copy-person="handleCopyPerson"
-      :on-delete-person="handleDeletePerson"
+      @on-delete-person="handleDeletePerson"
       :on-edit-agency-questions="handleEditAgencyQuestions"
       :on-edit-person="handleEditPerson"
       :on-edit-stop="handleEditStop"

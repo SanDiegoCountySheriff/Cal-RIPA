@@ -544,8 +544,8 @@ export default {
     },
 
     handleDeletePerson() {
-      if (this.deletePersonId && this.onDeletePerson) {
-        this.onDeletePerson(this.deletePersonId)
+      if (this.deletePersonId) {
+        this.$emit('on-delete-person', this.deletePersonId)
       }
     },
 
@@ -719,10 +719,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onDeletePerson: {
-      type: Function,
       default: () => {},
     },
     onEditAgencyQuestions: {
