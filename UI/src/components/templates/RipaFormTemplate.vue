@@ -3,8 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-open-template="onOpenTemplate"
-      :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
       :on-update-user="onUpdateUser"
       @handle-done="handleDone"
@@ -56,15 +54,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    onStepIndexChange: {
-      type: Function,
-      default: () => {},
-    },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenTemplate: {
       type: Function,
       default: () => {},
     },

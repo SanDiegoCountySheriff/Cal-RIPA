@@ -100,15 +100,11 @@ export default {
 
   methods: {
     handleDynamicTemplates(name) {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate(name)
-      }
+      this.$emit('on-open-template', name)
     },
 
     handleDefaultTemplate() {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate()
-      }
+      this.$emit('on-open-template')
     },
 
     handleEmail() {
@@ -119,10 +115,6 @@ export default {
   },
 
   props: {
-    onOpenTemplate: {
-      type: Function,
-      required: true,
-    },
     disableButtons: {
       type: Boolean,
       default: false,

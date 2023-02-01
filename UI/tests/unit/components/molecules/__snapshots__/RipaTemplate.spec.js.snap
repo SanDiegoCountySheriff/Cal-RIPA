@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Template should match snapshot 1`] = `
-<div class="mx-auto v-card v-card--flat v-sheet theme--light" style="max-width: 500px;">
+<div class="mx-auto v-card v-card--flat v-sheet theme--light" style="max-width: 500px;" onopentemplate="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="v-card__text">
     <div class="tw-mt-4 tw-mb-4">
       <div class="container container--fluid">

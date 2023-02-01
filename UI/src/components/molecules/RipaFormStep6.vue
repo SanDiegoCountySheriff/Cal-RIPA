@@ -1,9 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-agency-questions
-      v-model="model"
-      :on-open-statute="onOpenStatute"
-    ></ripa-agency-questions>
+    <ripa-agency-questions v-model="model"></ripa-agency-questions>
 
     <v-spacer></v-spacer>
 

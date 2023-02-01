@@ -25,7 +25,7 @@
       <v-card-text>
         <template v-if="stepIndex == 0">
           <ripa-template
-            :on-open-template="onOpenTemplate"
+            v-on="$listeners"
             :disable-buttons="
               isDomainDataEmptyUser ||
               isDomainDataEmptyAdministrator ||
@@ -428,9 +428,7 @@ export default {
   methods: {
     onGoHome() {
       this.stepIndex = 0
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
     },
 
     handleDebugger() {
@@ -483,17 +481,13 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-add-person')
     },
 
     handleBack() {
       this.stepIndex = this.stepIndex - 1
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       window.scrollTo(0, 0)
     },
 
@@ -511,9 +505,7 @@ export default {
 
     handleCancelForm() {
       this.stepIndex = 0
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-cancel-form')
     },
 
@@ -523,9 +515,7 @@ export default {
 
     handleCopyPerson(id) {
       this.stepIndex = 2
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-copy-person', id)
     },
 
@@ -542,25 +532,19 @@ export default {
 
     handleEditPerson(id) {
       this.stepIndex = 2
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-person', id)
     },
 
     handleEditStop() {
       this.stepIndex = 1
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-stop')
     },
 
     handleEditAgencyQuestions() {
       this.stepIndex = 6
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
 
@@ -594,17 +578,13 @@ export default {
 
     handleNext() {
       this.stepIndex = this.getNextStepIndex()
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       window.scrollTo(0, 0)
     },
 
     handleStartNew() {
       this.stepIndex = 0
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-cancel-form')
     },
 
@@ -614,9 +594,7 @@ export default {
 
     handleConfirmSubmit() {
       this.stepIndex = this.confirmationStepIndex
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
       if (this.onSubmitStop) {
         const apiStop = this.getApiStop
         console.log('Submitted Stop', apiStop)
@@ -695,9 +673,7 @@ export default {
         }
       }
       this.stepIndex = newVal
-      if (this.onStepIndexChange) {
-        this.onStepIndexChange(this.stepIndex)
-      }
+      this.$emit('on-step-index-change', this.stepIndex)
     },
   },
 
@@ -710,15 +686,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    onStepIndexChange: {
-      type: Function,
-      default: () => {},
-    },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenTemplate: {
       type: Function,
       default: () => {},
     },
