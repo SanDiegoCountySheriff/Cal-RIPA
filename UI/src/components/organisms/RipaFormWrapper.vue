@@ -523,9 +523,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCancelForm) {
-        this.onCancelForm()
-      }
+      this.$emit('on-cancel-form')
     },
 
     handleCancelAction() {
@@ -626,9 +624,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCancelForm) {
-        this.onCancelForm()
-      }
+      this.$emit('on-cancel-form')
     },
 
     handleSubmit() {
@@ -645,9 +641,7 @@ export default {
         console.log('Submitted Stop', apiStop)
         this.onSubmitStop(apiStop)
       }
-      if (this.onCancelForm) {
-        this.onCancelForm()
-      }
+      this.$emit('on-cancel-form')
     },
 
     createStepTrace(index, startTimeStamp) {
@@ -729,10 +723,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onCancelForm: {
-      type: Function,
       default: () => {},
     },
     onCancelAction: {

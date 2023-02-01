@@ -3,7 +3,7 @@
     <ripa-form-template
       v-model="stop"
       @on-add-person="handleAddPerson"
-      :on-cancel-form="handleCancelForm"
+      @on-cancel-form="handleCancelForm"
       :on-cancel-action="handleCancelAction"
       :on-copy-person="handleCopyPerson"
       :on-delete-person="handleDeletePerson"
