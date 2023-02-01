@@ -535,9 +535,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onCopyPerson) {
-        this.onCopyPerson(id)
-      }
+      this.$emit('on-copy-person', id)
     },
 
     handleCallDeletePerson(id) {
@@ -721,10 +719,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onCopyPerson: {
-      type: Function,
       default: () => {},
     },
     onDeletePerson: {
