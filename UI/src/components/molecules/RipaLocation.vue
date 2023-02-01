@@ -269,6 +269,7 @@ export default {
     'lastLocation',
     'loadingGps',
     'loadingPiiStep1',
+    'validLastLocation',
   ],
 
   computed: {
@@ -538,10 +539,6 @@ export default {
       required: true,
     },
     displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    validLastLocation: {
       type: Boolean,
       default: false,
     },

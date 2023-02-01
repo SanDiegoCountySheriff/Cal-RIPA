@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :valid-last-location="validLastLocation"
                     :on-open-favorites="onOpenLocationFavorites"
                     :on-open-last-location="onOpenLastLocation"
                     :on-open-statute="onOpenStatute"
@@ -737,10 +736,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
     },
     stopTemplates: {
       type: Array,

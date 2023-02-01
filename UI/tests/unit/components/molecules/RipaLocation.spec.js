@@ -51,6 +51,7 @@ describe('Ripa Location', () => {
         lastLocation() {
           return {}
         },
+        validLastLocation: computed(() => true),
       },
     })
   }
@@ -92,6 +93,7 @@ describe('Ripa Location', () => {
         lastLocation() {
           return {}
         },
+        validLastLocation: computed(() => true),
       },
     })
 

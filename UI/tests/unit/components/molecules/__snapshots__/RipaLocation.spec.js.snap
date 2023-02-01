@@ -13,7 +13,7 @@ exports[`Ripa Location should match snapshot 1`] = `
         <!---->
       </div>
       <div class="tw-pr-2 col-sm-6 col-md-3 col-12">
-        <div class="tw-mr-2 tw-mt-4"><button type="button" disabled="disabled" class="tw-w-full v-btn v-btn--disabled v-btn--has-bg theme--light v-size--small"><span class="v-btn__content">Last Location
+        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Last Location
           </span></button></div>
       </div>
       <div class="tw-pr-2 col-sm-6 col-md-3 col-12">

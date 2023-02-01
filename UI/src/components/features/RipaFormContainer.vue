@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :valid-last-location="isLastLocationValid"
       :stopTemplates="stopTemplates"
       :on-add-person="handleAddPerson"
       :on-cancel-form="handleCancelForm"
@@ -185,6 +184,7 @@ export default {
       loadingPiiStep3: computed(() => this.loadingPiiStep3),
       loadingPiiStep4: computed(() => this.loadingPiiStep4),
       user: this.mappedUser,
+      validLastLocation: this.isLastLocationValid,
     }
   },
 

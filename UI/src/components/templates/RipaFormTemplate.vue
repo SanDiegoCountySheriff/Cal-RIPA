@@ -3,7 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       :stopTemplates="stopTemplates"
-      :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
       :on-cancel-form="onCancelForm"
       :on-cancel-action="onCancelAction"
@@ -73,10 +72,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
     },
     stopTemplates: {
       type: Array,

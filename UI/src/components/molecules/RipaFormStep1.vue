@@ -31,7 +31,6 @@
 
     <ripa-location
       v-model="model"
-      :valid-last-location="validLastLocation"
       :on-open-favorites="onOpenFavorites"
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
@@ -176,10 +175,6 @@ export default {
   },
 
   props: {
-    validLastLocation: {
-      type: Boolean,
-      default: false,
-    },
     onOpenFavorites: {
       type: Function,
       required: true,
