@@ -3,7 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-edit-agency-questions="onEditAgencyQuestions"
       :on-edit-person="onEditPerson"
       :on-edit-stop="onEditStop"
       :on-gps-location="onGpsLocation"
@@ -66,10 +65,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onEditAgencyQuestions: {
-      type: Function,
       default: () => {},
     },
     onEditPerson: {

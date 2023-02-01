@@ -574,9 +574,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onEditAgencyQuestions) {
-        this.onEditAgencyQuestions()
-      }
+      this.$emit('on-edit-agency-questions')
     },
 
     getNextStepIndex() {
@@ -719,10 +717,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onEditAgencyQuestions: {
-      type: Function,
       default: () => {},
     },
     onEditPerson: {

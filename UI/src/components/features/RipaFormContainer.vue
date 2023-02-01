@@ -7,7 +7,7 @@
       @on-cancel-action="handleCancelAction"
       @on-copy-person="handleCopyPerson"
       @on-delete-person="handleDeletePerson"
-      :on-edit-agency-questions="handleEditAgencyQuestions"
+      @on-edit-agency-questions="handleEditAgencyQuestions"
       :on-edit-person="handleEditPerson"
       :on-edit-stop="handleEditStop"
       :on-gps-location="handleGpsLocation"
