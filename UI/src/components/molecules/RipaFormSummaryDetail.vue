@@ -184,37 +184,27 @@ export default {
 
     handleEditStop(event) {
       event.stopPropagation()
-      if (this.onEditStop) {
-        this.onEditStop()
-      }
+      this.$emit('on-edit-stop')
     },
 
     handleEditPerson(event, id) {
       event.stopPropagation()
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
+      this.$emit('on-edit-person', id)
     },
 
     handleCopyPerson(event, id) {
       event.stopPropagation()
-      if (this.onCopyPerson) {
-        this.onCopyPerson(id)
-      }
+      this.$emit('on-copy-person', id)
     },
 
     handleDeletePerson(event, id) {
       event.stopPropagation()
-      if (this.onDeletePerson) {
-        this.onDeletePerson(id)
-      }
+      this.$emit('on-delete-person', id)
     },
 
     handleEditAgencyQuestions(event) {
       event.stopPropagation()
-      if (this.onEditAgencyQuestions) {
-        this.onEditAgencyQuestions()
-      }
+      this.$emit('on-edit-agency-questions')
     },
   },
 
@@ -230,28 +220,6 @@ export default {
     editButtons: {
       type: Boolean,
       default: false,
-    },
-    onDeletePerson: {
-      type: Function,
-      required: false,
-      default: () => {},
-    },
-    onCopyPerson: {
-      type: Function,
-      required: false,
-      default: () => {},
-    },
-    onEditAgencyQuestions: {
-      type: Function,
-      required: true,
-    },
-    onEditStop: {
-      type: Function,
-      required: true,
-    },
-    onEditPerson: {
-      type: Function,
-      required: true,
     },
   },
 }

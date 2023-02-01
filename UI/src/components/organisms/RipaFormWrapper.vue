@@ -199,11 +199,11 @@
                     :api-stop="getApiStop"
                     @on-add-person="handleAddPerson"
                     :on-back="handleBack"
-                    :on-copy-person="handleCopyPerson"
+                    @on-copy-person="handleCopyPerson"
                     :on-delete-person="handleCallDeletePerson"
-                    :on-edit-agency-questions="handleEditAgencyQuestions"
-                    :on-edit-person="handleEditPerson"
-                    :on-edit-stop="handleEditStop"
+                    @on-edit-agency-questions="handleEditAgencyQuestions"
+                    @on-edit-person="handleEditPerson"
+                    @on-edit-stop="handleEditStop"
                     :on-submit="handleSubmit"
                     :on-cancel="handleCancel"
                     @handle-done="handleDone"
@@ -554,9 +554,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onEditPerson) {
-        this.onEditPerson(id)
-      }
+      this.$emit('on-edit-person', id)
     },
 
     handleEditStop() {
@@ -564,9 +562,7 @@ export default {
       if (this.onStepIndexChange) {
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onEditStop) {
-        this.onEditStop()
-      }
+      this.$emit('on-edit-stop')
     },
 
     handleEditAgencyQuestions() {
@@ -717,10 +713,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onEditPerson: {
-      type: Function,
       default: () => {},
     },
     onEditStop: {

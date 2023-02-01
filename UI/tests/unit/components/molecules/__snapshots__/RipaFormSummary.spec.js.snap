@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Summary should match snapshot 1`] = `
-<div>
+<div ondeleteperson="function () {
+        return fn.apply(this, arguments);
+      }" oncopyperson="function () {
+        return fn.apply(this, arguments);
+      }" oneditagencyquestions="function () {
+        return fn.apply(this, arguments);
+      }" oneditstop="function () {
+        return fn.apply(this, arguments);
+      }" oneditperson="function () {
+        return fn.apply(this, arguments);
+      }">
   <div>
     <div class="ripa-form-summary mx-auto v-card v-card--flat v-sheet theme--light">
       <div class="v-tabs theme--light">

@@ -6,11 +6,9 @@
           <v-tab>Current State</v-tab>
           <v-tab-item>
             <ripa-form-summary-detail
+              v-on="$listeners"
               :apiStop="apiStop"
               :editButtons="editButtons"
-              :onEditAgencyQuestions="onEditAgencyQuestions"
-              :onEditStop="onEditStop"
-              :onEditPerson="onEditPerson"
             ></ripa-form-summary-detail>
           </v-tab-item>
           <v-tab v-for="stopAudit of this.stopAudits" :key="stopAudit.id">
@@ -50,13 +48,9 @@
     <div v-else>
       <v-card class="ripa-form-summary mx-auto" :loading="this.loading" flat>
         <ripa-form-summary-detail
+          v-on="$listeners"
           :apiStop="apiStop"
           :editButtons="editButtons"
-          :onDeletePerson="onDeletePerson"
-          :onCopyPerson="onCopyPerson"
-          :onEditAgencyQuestions="onEditAgencyQuestions"
-          :onEditStop="onEditStop"
-          :onEditPerson="onEditPerson"
         ></ripa-form-summary-detail>
       </v-card>
     </div>
@@ -147,26 +141,6 @@ export default {
     editButtons: {
       type: Boolean,
       default: false,
-    },
-    onDeletePerson: {
-      type: Function,
-      required: true,
-    },
-    onCopyPerson: {
-      type: Function,
-      required: true,
-    },
-    onEditAgencyQuestions: {
-      type: Function,
-      required: true,
-    },
-    onEditStop: {
-      type: Function,
-      required: true,
-    },
-    onEditPerson: {
-      type: Function,
-      required: true,
     },
   },
 }

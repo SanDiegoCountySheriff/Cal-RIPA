@@ -3,8 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-edit-person="onEditPerson"
-      :on-edit-stop="onEditStop"
       :on-gps-location="onGpsLocation"
       :on-open-location-favorites="onOpenLocationFavorites"
       :on-open-reason-favorites="onOpenReasonFavorites"
@@ -65,14 +63,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
-      type: Function,
       default: () => {},
     },
     onOpenLocationFavorites: {

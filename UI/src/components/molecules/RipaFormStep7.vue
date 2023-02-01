@@ -2,13 +2,9 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-form-summary
       v-model="model"
+      v-on="$listeners"
       edit-buttons
       :api-stop="apiStop"
-      :on-copy-person="onCopyPerson"
-      :on-edit-agency-questions="onEditAgencyQuestions"
-      :on-edit-stop="onEditStop"
-      :on-edit-person="onEditPerson"
-      :on-delete-person="onDeletePerson"
     ></ripa-form-summary>
 
     <v-spacer></v-spacer>

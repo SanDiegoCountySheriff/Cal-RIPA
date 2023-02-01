@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Summary Detail should match snapshot 1`] = `
-<div>
+<div ondeleteperson="function () {
+        return fn.apply(this, arguments);
+      }" oncopyperson="function () {
+        return fn.apply(this, arguments);
+      }" oneditagencyquestions="function () {
+        return fn.apply(this, arguments);
+      }" oneditstop="function () {
+        return fn.apply(this, arguments);
+      }" oneditperson="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="v-card__title tw-uppercase">Review, Edit and Submit</div>
   <div class="v-card__text">
     <div class="tw-mb-3"><span class="tw-text-base tw-font-bold">1111111111111</span>

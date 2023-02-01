@@ -111,23 +111,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    onCopyPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onDeletePerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditAgencyQuestions: {
-      type: Function,
-      default: () => {},
-    },
     onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
       type: Function,
       default: () => {},
     },
