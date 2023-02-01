@@ -26,7 +26,6 @@
         <template v-if="stepIndex == 0">
           <ripa-template
             :on-open-template="onOpenTemplate"
-            :stopTemplates="stopTemplates"
             :disable-buttons="
               isDomainDataEmptyUser ||
               isDomainDataEmptyAdministrator ||
@@ -736,10 +735,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    stopTemplates: {
-      type: Array,
-      default: () => [],
     },
     onAddPerson: {
       type: Function,

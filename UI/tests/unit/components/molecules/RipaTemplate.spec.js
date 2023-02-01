@@ -44,6 +44,7 @@ describe('Ripa Template', () => {
         isAuthenticated() {
           return true
         },
+        stopTemplates: () => {},
       },
     })
 

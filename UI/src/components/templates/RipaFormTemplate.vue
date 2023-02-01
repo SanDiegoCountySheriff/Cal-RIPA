@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :stopTemplates="stopTemplates"
       :on-add-person="onAddPerson"
       :on-cancel-form="onCancelForm"
       :on-cancel-action="onCancelAction"
@@ -72,10 +71,6 @@ export default {
     value: {
       type: Object,
       default: () => {},
-    },
-    stopTemplates: {
-      type: Array,
-      default: () => [],
     },
     onAddPerson: {
       type: Function,

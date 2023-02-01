@@ -95,6 +95,7 @@ export default {
     'reportingEmailAddress',
     'isOnline',
     'isAuthenticated',
+    'stopTemplates',
   ],
 
   methods: {
@@ -118,10 +119,6 @@ export default {
   },
 
   props: {
-    stopTemplates: {
-      type: Array,
-      default: () => [],
-    },
     onOpenTemplate: {
       type: Function,
       required: true,

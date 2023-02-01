@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :stopTemplates="stopTemplates"
       :on-add-person="handleAddPerson"
       :on-cancel-form="handleCancelForm"
       :on-cancel-action="handleCancelAction"
@@ -185,6 +184,7 @@ export default {
       loadingPiiStep4: computed(() => this.loadingPiiStep4),
       user: this.mappedUser,
       validLastLocation: this.isLastLocationValid,
+      stopTemplates: this.stopTemplates,
     }
   },
 
