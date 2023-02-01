@@ -527,9 +527,7 @@ export default {
     },
 
     handleCancelAction() {
-      if (this.onCancelAction) {
-        this.onCancelAction()
-      }
+      this.$emit('on-cancel-action')
     },
 
     handleCopyPerson(id) {
@@ -723,10 +721,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onCancelAction: {
-      type: Function,
       default: () => {},
     },
     onCopyPerson: {
