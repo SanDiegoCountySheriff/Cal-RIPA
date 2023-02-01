@@ -3,8 +3,6 @@
     <ripa-stop-reason
       v-model="model"
       v-on="$listeners"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
       @pii-check="handlePiiCheck"
     ></ripa-stop-reason>
 
@@ -79,13 +77,6 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
-    },
-  },
-
-  props: {
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

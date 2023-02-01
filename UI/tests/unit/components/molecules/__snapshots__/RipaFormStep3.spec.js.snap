@@ -3,6 +3,8 @@
 exports[`Ripa Form Step 3 should match snapshot 1`] = `
 <form novalidate="novalidate" class="v-form" onopenfavorites="function () {
         return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
       }">
   <div class="ripa-stop-reason tw-pb-4">
     <div class="ripa-form-header">

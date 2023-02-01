@@ -4,7 +4,7 @@
       title="Student"
       required
       subtitle="§999.224(a)(16)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 

@@ -4,7 +4,7 @@
       title="Location"
       required
       subtitle="§999.226(a)(3)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -473,9 +473,7 @@ export default {
     },
 
     handleLastLocation() {
-      if (this.onOpenLastLocation) {
-        this.onOpenLastLocation()
-      }
+      this.$emit('on-open-last-location')
     },
 
     handleOpenFavorites() {
@@ -483,9 +481,7 @@ export default {
     },
 
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.location)
-      }
+      this.$emit('on-save-location-favorite', this.viewModel.location)
     },
 
     handleOutOfCountyToggle() {
@@ -537,14 +533,6 @@ export default {
     displayBeatInput: {
       type: Boolean,
       default: false,
-    },
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

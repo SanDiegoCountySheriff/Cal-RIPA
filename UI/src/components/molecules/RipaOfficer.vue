@@ -5,7 +5,7 @@
       required
       subtitle="§999.226(a)(15)"
       class="tw-mb-4"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 

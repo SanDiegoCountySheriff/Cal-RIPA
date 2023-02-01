@@ -4,7 +4,7 @@
       title="Date of Stop"
       required
       subtitle="§999.226(a)(2)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 

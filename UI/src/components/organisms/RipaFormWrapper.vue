@@ -83,9 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :on-open-last-location="onOpenLastLocation"
-                    :on-open-statute="onOpenStatute"
-                    :on-save-favorite="onSaveLocationFavorite"
                     :on-update-user="onUpdateUser"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
@@ -103,11 +100,11 @@
 
                   <ripa-form-step-2
                     v-model="stop"
+                    v-on="$listeners"
                     :disabled="isFormStep2Disabled"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :on-open-statute="onOpenStatute"
                     :back-button-visible="getFormStep2BackButtonVisible"
                     @input="handleInput"
                   ></ripa-form-step-2>
@@ -128,9 +125,6 @@
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :on-open-statute="onOpenStatute"
-                    :on-save-favorite="onSaveReasonFavorite"
-                    :statutes="statutes"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-3>
@@ -147,10 +141,10 @@
 
                   <ripa-form-step-4
                     v-model="stop"
+                    v-on="$listeners"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :on-open-statute="onOpenStatute"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-4>
@@ -167,12 +161,10 @@
 
                   <ripa-form-step-5
                     v-model="stop"
+                    v-on="$listeners"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :on-open-favorites="onOpenResultFavorites"
-                    :on-open-statute="onOpenStatute"
-                    :on-save-favorite="onSaveResultFavorite"
                     @input="handleInput"
                   ></ripa-form-step-5>
                 </template>
@@ -715,30 +707,6 @@ export default {
       default: () => {},
     },
     onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenResultFavorites: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenLastLocation: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStatute: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveLocationFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveReasonFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveResultFavorite: {
       type: Function,
       default: () => {},
     },

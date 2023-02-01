@@ -3,6 +3,10 @@
 exports[`Ripa Location should match snapshot 1`] = `
 <div class="ripa-location tw-pb-4" onopenfavorites="function () {
         return fn.apply(this, arguments);
+      }" onopenlastlocation="function () {
+        return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
       }" ongpslocation="function () {
         return fn.apply(this, arguments);
       }">

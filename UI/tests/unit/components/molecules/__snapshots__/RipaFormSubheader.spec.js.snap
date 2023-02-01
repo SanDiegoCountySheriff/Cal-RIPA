@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Subheader should match snapshot 1`] = `
-<div class="ripa-form-header tw-my-4 tw-mb-7">
+<div class="ripa-form-header tw-my-4 tw-mb-7" onopenstatute="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="row tw-ml-1 tw-mt-1">
     <!---->
     <!---->

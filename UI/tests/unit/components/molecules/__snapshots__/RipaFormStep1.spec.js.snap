@@ -3,6 +3,10 @@
 exports[`Ripa Form Step 1 should match snapshot 1`] = `
 <v-form-stub lazyvalidation="true" onopenfavorites="function () {
         return fn.apply(this, arguments);
+      }" onopenlastlocation="function () {
+        return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
       }" ongpslocation="function () {
         return fn.apply(this, arguments);
       }">
@@ -10,7 +14,7 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
   <ripa-user-dialog-stub onclose="[Function]" onsave="[Function]" adminediting="true" isrowkeydisabled="true" formtitle="Manage User" user="[object Object]"></ripa-user-dialog-stub>
   <!---->
   <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
-  <ripa-location-stub onopenstatute="[Function]" value="[object Object]" onopenlastlocation="[Function]" onsavefavorite="[Function]"></ripa-location-stub>
+  <ripa-location-stub onopenstatute="[Function]" value="[object Object]"></ripa-location-stub>
   <v-spacer-stub tag="div"></v-spacer-stub>
   <!---->
   <div class="tw-flex tw-mt-8 tw-justify-center">

@@ -4,7 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     ></ripa-form-header>
 
     <v-container>
@@ -327,9 +327,7 @@ export default {
     },
 
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.stopReason)
-      }
+      this.$emit('on-save-reason-favorite', this.viewModel.stopReason)
     },
 
     handlePiiCheck(textValue) {
@@ -353,10 +351,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
       default: () => {},
     },
   },

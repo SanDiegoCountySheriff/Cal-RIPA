@@ -3,12 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-open-result-favorites="onOpenResultFavorites"
-      :on-save-location-favorite="onSaveLocationFavorite"
-      :on-save-reason-favorite="onSaveReasonFavorite"
-      :on-save-result-favorite="onSaveResultFavorite"
-      :on-open-last-location="onOpenLastLocation"
-      :on-open-statute="onOpenStatute"
       :on-open-template="onOpenTemplate"
       :on-step-index-change="onStepIndexChange"
       :on-submit-stop="onSubmitStop"
@@ -60,30 +54,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onOpenResultFavorites: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenLastLocation: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStatute: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveLocationFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveReasonFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveResultFavorite: {
-      type: Function,
       default: () => {},
     },
     onStepIndexChange: {

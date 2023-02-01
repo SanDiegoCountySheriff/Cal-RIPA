@@ -2,8 +2,8 @@
   <v-form ref="stepForm" lazy-validation>
     <template v-if="isAdminEditing">
       <ripa-officer
+        v-on="$listeners"
         :user="getApiStopUser"
-        :on-open-statute="onOpenStatute"
         :on-update-user="handleUpdateStopUser"
       ></ripa-officer>
 
@@ -19,22 +19,16 @@
 
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
       <ripa-officer
-        :on-open-statute="onOpenStatute"
+        v-on="$listeners"
         :on-update-user="onUpdateUser"
       ></ripa-officer>
     </template>
 
-    <ripa-stop-date
-      v-model="model"
-      :on-open-statute="onOpenStatute"
-    ></ripa-stop-date>
+    <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
 
     <ripa-location
       v-model="model"
       v-on="$listeners"
-      :on-open-last-location="onOpenLastLocation"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
       @pii-check="handlePiiCheck"
     ></ripa-location>
 
@@ -174,14 +168,6 @@ export default {
   },
 
   props: {
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
     onUpdateUser: {
       type: Function,
       required: true,

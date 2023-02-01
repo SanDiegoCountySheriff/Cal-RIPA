@@ -4,7 +4,7 @@
       title="Actions Taken During Stop"
       required
       subtitle="§999.226(a)(12)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -63,7 +63,7 @@
                 title="Basis for Search"
                 required
                 subtitle="§999.226(a)(12)(B)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -108,7 +108,7 @@
                 title="Basis for Property Seizure"
                 required
                 subtitle="§999.226(a)(12)(D)(1)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -123,7 +123,7 @@
                 title="Types of Property Seized"
                 required
                 subtitle="§999.226(a)(12)(D)(2)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group

@@ -1,9 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Step 5 should match snapshot 1`] = `
-<form novalidate="novalidate" class="v-form">
+<form novalidate="novalidate" class="v-form" onopenfavorites="function () {
+        return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="ripa-action-taken tw-pb-4">
-    <div class="ripa-form-header">
+    <div class="ripa-form-header" on-open-statute="function () { [native code] }">
       <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
         <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Result of Stop</span></div>
       </div>

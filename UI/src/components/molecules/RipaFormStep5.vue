@@ -1,11 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-result
-      v-model="model"
-      :on-open-favorites="onOpenFavorites"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
-    ></ripa-stop-result>
+    <ripa-stop-result v-model="model" v-on="$listeners"></ripa-stop-result>
 
     <v-spacer></v-spacer>
 
@@ -79,17 +74,6 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
-    },
-  },
-
-  props: {
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

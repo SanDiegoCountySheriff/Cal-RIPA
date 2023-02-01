@@ -3,40 +3,36 @@
     <template v-if="isSchool">
       <ripa-student
         v-model="model"
+        v-on="$listeners"
         :disabled="disabled"
         toggle
-        :on-open-statute="onOpenStatute"
       ></ripa-student>
     </template>
 
     <ripa-race
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-race>
 
     <ripa-gender
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-gender>
 
-    <ripa-age
-      v-model="model"
-      :disabled="disabled"
-      :on-open-statute="onOpenStatute"
-    ></ripa-age>
+    <ripa-age v-model="model" v-on="$listeners" :disabled="disabled"></ripa-age>
 
     <ripa-limited-english
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-limited-english>
 
     <ripa-disability
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-disability>
 
     <v-spacer></v-spacer>
