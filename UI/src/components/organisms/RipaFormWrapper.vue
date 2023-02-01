@@ -124,10 +124,10 @@
 
                   <ripa-form-step-3
                     v-model="stop"
+                    v-on="$listeners"
                     :on-back="handleBack"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
-                    :on-open-favorites="onOpenReasonFavorites"
                     :on-open-statute="onOpenStatute"
                     :on-save-favorite="onSaveReasonFavorite"
                     :statutes="statutes"
@@ -715,10 +715,6 @@ export default {
       default: () => {},
     },
     onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenReasonFavorites: {
       type: Function,
       default: () => {},
     },

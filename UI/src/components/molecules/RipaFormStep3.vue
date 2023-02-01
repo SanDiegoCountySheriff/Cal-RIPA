@@ -2,7 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
-      :on-open-favorites="onOpenFavorites"
+      v-on="$listeners"
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
       @pii-check="handlePiiCheck"
@@ -83,10 +83,6 @@ export default {
   },
 
   props: {
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
     onSaveFavorite: {
       type: Function,
       required: true,

@@ -3,7 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-open-reason-favorites="onOpenReasonFavorites"
       :on-open-result-favorites="onOpenResultFavorites"
       :on-save-location-favorite="onSaveLocationFavorite"
       :on-save-reason-favorite="onSaveReasonFavorite"
@@ -61,10 +60,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onOpenReasonFavorites: {
-      type: Function,
       default: () => {},
     },
     onOpenResultFavorites: {

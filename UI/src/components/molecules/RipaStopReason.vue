@@ -15,7 +15,7 @@
               class="tw-w-full"
               color="primary"
               small
-              @click="onOpenFavorites"
+              @click="handleOpenFavorites"
             >
               Open Favorites
             </v-btn>
@@ -322,6 +322,10 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
+    handleOpenFavorites() {
+      this.$emit('on-open-reason-favorites')
+    },
+
     handleSaveFavorite() {
       if (this.onSaveFavorite) {
         this.onSaveFavorite(this.viewModel.stopReason)
@@ -349,10 +353,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onOpenFavorites: {
-      type: Function,
       default: () => {},
     },
     onSaveFavorite: {

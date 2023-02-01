@@ -479,7 +479,7 @@ export default {
     },
 
     handleOpenFavorites() {
-      this.$emit('on-open-favorites')
+      this.$emit('on-open-location-favorites')
     },
 
     handleSaveFavorite() {

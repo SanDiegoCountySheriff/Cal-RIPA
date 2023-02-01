@@ -12,7 +12,7 @@
       @on-edit-stop="handleEditStop"
       @on-gps-location="handleGpsLocation"
       @on-open-location-favorites="handleOpenLocationFavorites"
-      :on-open-reason-favorites="handleOpenReasonFavorites"
+      @on-open-reason-favorites="handleOpenReasonFavorites"
       :on-open-result-favorites="handleOpenResultFavorites"
       :on-save-location-favorite="handleSaveLocationFavorite"
       :on-save-reason-favorite="handleSaveReasonFavorite"
