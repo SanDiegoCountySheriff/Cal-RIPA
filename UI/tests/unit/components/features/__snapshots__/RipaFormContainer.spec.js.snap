@@ -2,7 +2,7 @@
 
 exports[`Ripa Form Container should match snapshot 1`] = `
 <div class="ripa-form-container">
-  <ripa-form-template-stub value="[object Object]" onopenlocationfavorites="[Function]" onopenreasonfavorites="[Function]" onopenresultfavorites="[Function]" onopenlastlocation="[Function]" onopenstatute="[Function]" onsavelocationfavorite="[Function]" onsavereasonfavorite="[Function]" onsaveresultfavorite="[Function]" onstepindexchange="[Function]" onsubmitstop="[Function]" ongpslocation="[Function]" onopentemplate="[Function]" onupdateuser="[Function]"></ripa-form-template-stub>
+  <ripa-form-template-stub value="[object Object]" onopenreasonfavorites="[Function]" onopenresultfavorites="[Function]" onopenlastlocation="[Function]" onopenstatute="[Function]" onsavelocationfavorite="[Function]" onsavereasonfavorite="[Function]" onsaveresultfavorite="[Function]" onstepindexchange="[Function]" onsubmitstop="[Function]" onopentemplate="[Function]" onupdateuser="[Function]"></ripa-form-template-stub>
   <ripa-favorites-dialog-stub title="Locations" favorites="" onclose="[Function]" ondeletefavorite="[Function]" oneditfavorite="[Function]" onopenfavorite="[Function]" onsavefavorite="[Function]"></ripa-favorites-dialog-stub>
   <ripa-favorites-dialog-stub title="Reasons" favorites="" onclose="[Function]" ondeletefavorite="[Function]" oneditfavorite="[Function]" onopenfavorite="[Function]" onsavefavorite="[Function]"></ripa-favorites-dialog-stub>
   <ripa-favorites-dialog-stub title="Results" favorites="" onclose="[Function]" ondeletefavorite="[Function]" oneditfavorite="[Function]" onopenfavorite="[Function]" onsavefavorite="[Function]"></ripa-favorites-dialog-stub>

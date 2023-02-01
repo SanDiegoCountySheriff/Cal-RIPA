@@ -3,8 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-gps-location="onGpsLocation"
-      :on-open-location-favorites="onOpenLocationFavorites"
       :on-open-reason-favorites="onOpenReasonFavorites"
       :on-open-result-favorites="onOpenResultFavorites"
       :on-save-location-favorite="onSaveLocationFavorite"
@@ -65,10 +63,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    onOpenLocationFavorites: {
-      type: Function,
-      default: () => {},
-    },
     onOpenReasonFavorites: {
       type: Function,
       default: () => {},
@@ -102,10 +96,6 @@ export default {
       default: () => {},
     },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onGpsLocation: {
       type: Function,
       default: () => {},
     },

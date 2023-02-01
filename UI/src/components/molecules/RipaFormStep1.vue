@@ -31,11 +31,10 @@
 
     <ripa-location
       v-model="model"
-      :on-open-favorites="onOpenFavorites"
+      v-on="$listeners"
       :on-open-last-location="onOpenLastLocation"
       :on-open-statute="onOpenStatute"
       :on-save-favorite="onSaveFavorite"
-      :on-gps-location="onGpsLocation"
       @pii-check="handlePiiCheck"
     ></ripa-location>
 
@@ -175,19 +174,11 @@ export default {
   },
 
   props: {
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
     onOpenLastLocation: {
       type: Function,
       required: true,
     },
     onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
       type: Function,
       required: true,
     },

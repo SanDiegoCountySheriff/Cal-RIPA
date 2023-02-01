@@ -79,14 +79,13 @@
                 <template v-if="stepIndex === 1">
                   <ripa-form-step-1
                     v-model="stop"
+                    v-on="$listeners"
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :on-open-favorites="onOpenLocationFavorites"
                     :on-open-last-location="onOpenLastLocation"
                     :on-open-statute="onOpenStatute"
                     :on-save-favorite="onSaveLocationFavorite"
-                    :on-gps-location="onGpsLocation"
                     :on-update-user="onUpdateUser"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
@@ -719,10 +718,6 @@ export default {
       type: Function,
       default: () => {},
     },
-    onOpenLocationFavorites: {
-      type: Function,
-      default: () => {},
-    },
     onOpenReasonFavorites: {
       type: Function,
       default: () => {},
@@ -756,10 +751,6 @@ export default {
       default: () => {},
     },
     onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onGpsLocation: {
       type: Function,
       default: () => {},
     },

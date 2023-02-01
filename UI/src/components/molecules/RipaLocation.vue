@@ -440,9 +440,7 @@ export default {
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        if (this.onGpsLocation) {
-          this.onGpsLocation()
-        }
+        this.$emit('on-gps-location')
       } else {
         console.log('Geolocation is not supported by this browser.')
       }
@@ -481,9 +479,7 @@ export default {
     },
 
     handleOpenFavorites() {
-      if (this.onOpenFavorites) {
-        this.onOpenFavorites()
-      }
+      this.$emit('on-open-favorites')
     },
 
     handleSaveFavorite() {
@@ -542,19 +538,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
     onOpenLastLocation: {
       type: Function,
       required: true,
     },
     onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
       type: Function,
       required: true,
     },
