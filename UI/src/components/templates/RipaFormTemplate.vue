@@ -2,7 +2,7 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :on-add-person="onAddPerson"
+      v-on="$listeners"
       :on-cancel-form="onCancelForm"
       :on-cancel-action="onCancelAction"
       :on-copy-person="onCopyPerson"
@@ -70,10 +70,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onAddPerson: {
-      type: Function,
       default: () => {},
     },
     onCancelForm: {

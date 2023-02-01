@@ -2,7 +2,7 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :on-add-person="handleAddPerson"
+      @on-add-person="handleAddPerson"
       :on-cancel-form="handleCancelForm"
       :on-cancel-action="handleCancelAction"
       :on-copy-person="handleCopyPerson"
@@ -182,7 +182,7 @@ export default {
       loadingPiiStep1: computed(() => this.loadingPiiStep1),
       loadingPiiStep3: computed(() => this.loadingPiiStep3),
       loadingPiiStep4: computed(() => this.loadingPiiStep4),
-      user: this.mappedUser,
+      user: computed(() => this.mappedUser),
       validLastLocation: this.isLastLocationValid,
       stopTemplates: this.stopTemplates,
     }

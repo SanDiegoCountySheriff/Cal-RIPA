@@ -197,7 +197,7 @@
                   <ripa-form-step-7
                     v-model="stop"
                     :api-stop="getApiStop"
-                    :on-add-person="handleAddPerson"
+                    @on-add-person="handleAddPerson"
                     :on-back="handleBack"
                     :on-copy-person="handleCopyPerson"
                     :on-delete-person="handleCallDeletePerson"
@@ -259,7 +259,6 @@
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
           <ripa-confirmation
-            :loading="loading"
             :on-start-new="handleStartNew"
             @go-home="onGoHome"
           ></ripa-confirmation>
@@ -493,14 +492,10 @@ export default {
 
     handleAddPerson() {
       this.stepIndex = 2
-      console.log('handleAddPerson', this.stepIndex)
       if (this.onStepIndexChange) {
-        console.log('found function', this.stepIndex)
         this.onStepIndexChange(this.stepIndex)
       }
-      if (this.onAddPerson) {
-        this.onAddPerson()
-      }
+      this.$emit('on-add-person')
     },
 
     handleBack() {
@@ -734,10 +729,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onAddPerson: {
-      type: Function,
       default: () => {},
     },
     onCancelForm: {

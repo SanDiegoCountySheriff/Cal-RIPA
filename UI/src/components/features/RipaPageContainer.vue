@@ -36,7 +36,6 @@
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :loading="loading"
-      :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleCloseDialog"
       :on-save="handleSaveUser"
@@ -96,6 +95,7 @@ import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import authentication from '@/authentication'
+import { computed } from 'vue'
 
 export default {
   name: 'ripa-page-container',
@@ -123,6 +123,12 @@ export default {
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
       dataReady: false,
+    }
+  },
+
+  provide() {
+    return {
+      user: computed(() => this.getMappedUser),
     }
   },
 

@@ -34,9 +34,7 @@ export default {
     },
 
     handleAddPerson() {
-      if (this.onAddPerson) {
-        this.onAddPerson()
-      }
+      this.$emit('on-add-person')
     },
 
     handleBack() {
@@ -112,10 +110,6 @@ export default {
     nonCountyCities: {
       type: Array,
       default: () => [],
-    },
-    onAddPerson: {
-      type: Function,
-      default: () => {},
     },
     onCopyPerson: {
       type: Function,
