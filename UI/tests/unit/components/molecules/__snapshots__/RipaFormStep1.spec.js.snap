@@ -9,8 +9,10 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
         return fn.apply(this, arguments);
       }" ongpslocation="function () {
         return fn.apply(this, arguments);
+      }" onupdateuser="function () {
+        return fn.apply(this, arguments);
       }">
-  <ripa-officer-stub onopenstatute="[Function]" onupdateuser="[Function]" user="[object Object]"></ripa-officer-stub>
+  <ripa-officer-stub onopenstatute="[Function]" user="[object Object]" on-update-user="function () { [native code] }"></ripa-officer-stub>
   <ripa-user-dialog-stub onclose="[Function]" onsave="[Function]" adminediting="true" isrowkeydisabled="true" formtitle="Manage User" user="[object Object]"></ripa-user-dialog-stub>
   <!---->
   <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>

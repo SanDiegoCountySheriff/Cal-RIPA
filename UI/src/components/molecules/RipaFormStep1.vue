@@ -20,7 +20,6 @@
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
       <ripa-officer
         v-on="$listeners"
-        :on-update-user="onUpdateUser"
       ></ripa-officer>
     </template>
 
@@ -164,13 +163,6 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
-    },
-  },
-
-  props: {
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

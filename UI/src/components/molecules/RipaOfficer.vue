@@ -92,22 +92,13 @@ export default {
     },
 
     handleUpdateUser() {
-      if (this.onUpdateUser) {
-        this.onUpdateUser()
-      }
+      this.$emit('on-update-user')
     },
   },
 
   watch: {
     user(newValue) {
       this.viewModelUser = newValue
-    },
-  },
-
-  props: {
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

@@ -3,8 +3,6 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      :on-submit-stop="onSubmitStop"
-      :on-update-user="onUpdateUser"
       @handle-done="handleDone"
       @input="handleInput"
       @pii-check="handlePiiCheck"
@@ -52,14 +50,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onUpdateUser: {
-      type: Function,
       default: () => {},
     },
   },

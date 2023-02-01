@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :on-update-user="onUpdateUser"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-1>
@@ -595,11 +594,9 @@ export default {
     handleConfirmSubmit() {
       this.stepIndex = this.confirmationStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
-      if (this.onSubmitStop) {
-        const apiStop = this.getApiStop
-        console.log('Submitted Stop', apiStop)
-        this.onSubmitStop(apiStop)
-      }
+      const apiStop = this.getApiStop
+      console.log('Submitted Stop', apiStop)
+      this.$emit('on-submit-stop', apiStop)
       this.$emit('on-cancel-form')
     },
 
@@ -680,18 +677,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onSubmitStop: {
-      type: Function,
-      default: () => {},
-    },
-    onUpdateUser: {
-      type: Function,
       default: () => {},
     },
   },
