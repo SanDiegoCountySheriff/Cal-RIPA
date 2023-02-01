@@ -3,9 +3,7 @@
     <ripa-form-wrapper
       v-model="stop"
       v-on="$listeners"
-      @handle-done="handleDone"
       @input="handleInput"
-      @pii-check="handlePiiCheck"
     ></ripa-form-wrapper>
   </div>
 </template>
@@ -30,14 +28,6 @@ export default {
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.$emit('input', this.stop)
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
-    },
-
-    handleDone() {
-      this.$emit('handle-done')
     },
   },
 
