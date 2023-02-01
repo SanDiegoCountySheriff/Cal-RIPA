@@ -2,7 +2,6 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :user="mappedUser"
       :valid-last-location="isLastLocationValid"
       :stopTemplates="stopTemplates"
       :on-add-person="handleAddPerson"
@@ -87,7 +86,6 @@
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
-      :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleCloseDialog"
       :on-save="handleSaveUser"
@@ -186,6 +184,7 @@ export default {
       loadingPiiStep1: computed(() => this.loadingPiiStep1),
       loadingPiiStep3: computed(() => this.loadingPiiStep3),
       loadingPiiStep4: computed(() => this.loadingPiiStep4),
+      user: this.mappedUser,
     }
   },
 

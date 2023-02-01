@@ -83,7 +83,6 @@
                     :on-next="handleNext"
                     :on-cancel="handleCancel"
                     :display-user-edit="displayUserEdit"
-                    :user="user"
                     :valid-last-location="validLastLocation"
                     :on-open-favorites="onOpenLocationFavorites"
                     :on-open-last-location="onOpenLastLocation"
@@ -736,10 +735,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    user: {
       type: Object,
       default: () => {},
     },

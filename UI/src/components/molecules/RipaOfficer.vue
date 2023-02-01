@@ -58,6 +58,8 @@ export default {
     }
   },
 
+  inject: ['user'],
+
   computed: {
     isValidUser() {
       return this.user && this.user.assignment
@@ -103,10 +105,6 @@ export default {
   },
 
   props: {
-    user: {
-      type: Object,
-      default: () => {},
-    },
     onUpdateUser: {
       type: Function,
       required: true,

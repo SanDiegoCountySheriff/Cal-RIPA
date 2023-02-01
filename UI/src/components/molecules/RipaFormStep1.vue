@@ -19,7 +19,6 @@
 
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
       <ripa-officer
-        :user="user"
         :on-open-statute="onOpenStatute"
         :on-update-user="onUpdateUser"
       ></ripa-officer>
@@ -177,10 +176,6 @@ export default {
   },
 
   props: {
-    user: {
-      type: Object,
-      default: () => {},
-    },
     validLastLocation: {
       type: Boolean,
       default: false,

@@ -2,7 +2,6 @@
   <div class="ripa-form-template">
     <ripa-form-wrapper
       v-model="stop"
-      :user="user"
       :stopTemplates="stopTemplates"
       :valid-last-location="validLastLocation"
       :on-add-person="onAddPerson"
@@ -72,10 +71,6 @@ export default {
 
   props: {
     value: {
-      type: Object,
-      default: () => {},
-    },
-    user: {
       type: Object,
       default: () => {},
     },
