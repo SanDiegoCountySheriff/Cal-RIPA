@@ -15,8 +15,6 @@ describe('Ripa Add Favorite Dialog', () => {
       vuetify,
       propsData: {
         ...propsData,
-        onAddFavorite: jest.fn(),
-        onClose: jest.fn(),
       },
     })
   }
@@ -24,7 +22,6 @@ describe('Ripa Add Favorite Dialog', () => {
   it('should match snapshot', () => {
     wrapper = mount(RipaAddFavoriteDialog, {
       vuetify,
-      propsData: { onAddFavorite: jest.fn(), onClose: jest.fn() },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
@@ -36,11 +33,11 @@ describe('Ripa Add Favorite Dialog', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.viewModel).toEqual(true)
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(0)
+    expect(wrapper.emitted('on-close')).toBeFalsy()
 
     wrapper.vm.model = null
 
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-close').length).toEqual(1)
   })
 
   it('should get saved disabled', () => {
@@ -57,7 +54,7 @@ describe('Ripa Add Favorite Dialog', () => {
 
     wrapper.vm.handleClose()
 
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-close').length).toEqual(1)
   })
 
   it('should handle save', () => {
@@ -65,8 +62,8 @@ describe('Ripa Add Favorite Dialog', () => {
 
     wrapper.vm.handleSave()
 
-    expect(wrapper.vm.onAddFavorite).toHaveBeenCalledTimes(1)
-    expect(wrapper.vm.onClose).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-add-favorite').length).toEqual(1)
+    expect(wrapper.emitted('on-close').length).toEqual(1)
   })
 
   it('should watch show dialog', async () => {

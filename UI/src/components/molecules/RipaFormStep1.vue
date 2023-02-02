@@ -18,9 +18,7 @@
     </template>
 
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
-      <ripa-officer
-        v-on="$listeners"
-      ></ripa-officer>
+      <ripa-officer v-on="$listeners"></ripa-officer>
     </template>
 
     <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
