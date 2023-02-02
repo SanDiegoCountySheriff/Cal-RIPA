@@ -11,7 +11,6 @@ export default {
       snackbarText: '',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
-      apiStopJobLoading: false,
     }
   },
 

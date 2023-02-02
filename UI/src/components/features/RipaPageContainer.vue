@@ -123,6 +123,7 @@ export default {
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
       dataReady: false,
+      apiStopJobLoading: false,
     }
   },
 
