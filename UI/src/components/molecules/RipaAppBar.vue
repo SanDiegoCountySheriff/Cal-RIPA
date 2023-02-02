@@ -237,7 +237,7 @@ export default {
     }
   },
 
-  inject: ['admin', 'authenticated', 'dark', 'environmentName'],
+  inject: ['admin', 'authenticated', 'dark', 'environmentName', 'invalidUser'],
 
   computed: {
     getThemeIcon() {
@@ -370,10 +370,6 @@ export default {
     onViewStopsWithErrors: {
       type: Function,
       required: true,
-    },
-    invalidUser: {
-      type: Boolean,
-      default: false,
     },
     stopsWithErrors: {
       type: Array,

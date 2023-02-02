@@ -1,6 +1,5 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
-    :invalidUser="invalidUser"
     :loading="loading"
     :online="isOnline"
     :is-api-unavailable="isApiUnavailable"
@@ -130,6 +129,7 @@ export default {
       authenticated: computed(() => this.isAuthenticated),
       dark: computed(() => this.isDark),
       environmentName: computed(() => this.environmentName),
+      invalidUser: computed(() => this.invalidUser),
     }
   },
 

@@ -34,6 +34,7 @@ describe('Ripa App Bar', () => {
         authenticated: computed(() => provideData?.authenticated ?? true),
         dark: computed(() => provideData?.dark ?? false),
         environmentName: computed(() => provideData?.environmentName ?? ''),
+        invalidUser: computed(() => provideData?.invalidUser ?? false),
       },
     })
   }
@@ -51,6 +52,7 @@ describe('Ripa App Bar', () => {
         authenticated: computed(() => true),
         dark: computed(() => false),
         environmentName: computed(() => ''),
+        invalidUser: computed(() => false),
       },
     })
 
