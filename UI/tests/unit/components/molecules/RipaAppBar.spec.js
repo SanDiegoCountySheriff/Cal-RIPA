@@ -36,6 +36,9 @@ describe('Ripa App Bar', () => {
         environmentName: computed(() => provideData?.environmentName ?? ''),
         invalidUser: computed(() => provideData?.invalidUser ?? false),
         online: computed(() => provideData?.online ?? true),
+        isApiUnavailable: computed(
+          () => provideData?.isApiUnavailable ?? false,
+        ),
       },
       stubs: ['router-link'],
     })
@@ -56,6 +59,7 @@ describe('Ripa App Bar', () => {
         environmentName: computed(() => ''),
         invalidUser: computed(() => false),
         online: computed(() => true),
+        isApiUnavailable: computed(() => false),
       },
       stubs: ['router-link'],
     })

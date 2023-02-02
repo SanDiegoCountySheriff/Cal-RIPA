@@ -1,7 +1,6 @@
 <template>
   <div class="ripa-page-wrapper">
     <ripa-app-bar
-      :is-api-unavailable="isApiUnavailable"
       :on-update-dark="onUpdateDark"
       :on-update-user="onUpdateUser"
       :on-view-stops-with-errors="onViewStopsWithErrors"
@@ -68,10 +67,6 @@ export default {
 
   props: {
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    isApiUnavailable: {
       type: Boolean,
       default: false,
     },

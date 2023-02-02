@@ -244,6 +244,7 @@ export default {
     'environmentName',
     'invalidUser',
     'online',
+    'isApiUnavailable',
   ],
 
   computed: {
@@ -358,10 +359,6 @@ export default {
   },
 
   props: {
-    isApiUnavailable: {
-      type: Boolean,
-      default: false,
-    },
     onUpdateDark: {
       type: Function,
       required: true,
