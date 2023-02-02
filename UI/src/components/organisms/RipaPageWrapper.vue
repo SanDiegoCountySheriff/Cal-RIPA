@@ -3,7 +3,6 @@
     <ripa-app-bar
       :environment-name="environmentName"
       :online="online"
-      :authenticated="authenticated"
       :invalidUser="invalidUser"
       :is-api-unavailable="isApiUnavailable"
       :dark="dark"
@@ -105,10 +104,6 @@ export default {
       default: () => {},
     },
     invalidUser: {
-      type: Boolean,
-      default: false,
-    },
-    authenticated: {
       type: Boolean,
       default: false,
     },

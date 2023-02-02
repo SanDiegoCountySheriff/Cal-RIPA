@@ -237,7 +237,7 @@ export default {
     }
   },
 
-  inject: ['admin'],
+  inject: ['admin', 'authenticated'],
 
   computed: {
     getThemeIcon() {
@@ -380,10 +380,6 @@ export default {
       required: true,
     },
     invalidUser: {
-      type: Boolean,
-      default: false,
-    },
-    authenticated: {
       type: Boolean,
       default: false,
     },

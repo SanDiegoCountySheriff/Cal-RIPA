@@ -31,6 +31,7 @@ describe('Ripa App Bar', () => {
       },
       provide: {
         admin: computed(() => provideData?.admin ?? false),
+        authenticated: computed(() => provideData?.authenticated ?? true),
       },
     })
   }
@@ -45,6 +46,7 @@ describe('Ripa App Bar', () => {
       },
       provide: {
         admin: computed(() => false),
+        authenticated: computed(() => true),
       },
     })
 
@@ -154,7 +156,7 @@ describe('Ripa App Bar', () => {
   })
 
   it('should handle auth', async () => {
-    wrapper = factory()
+    wrapper = factory({}, { authenticated: false })
 
     wrapper.vm.handleLogIn = jest.fn()
     wrapper.vm.handleLogOut = jest.fn()
@@ -163,11 +165,15 @@ describe('Ripa App Bar', () => {
     expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(1)
     expect(wrapper.vm.handleLogOut).toHaveBeenCalledTimes(0)
 
-    wrapper.setProps({ authenticated: true })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
+
+    wrapper = factory({}, { authenticated: true })
+
+    wrapper.vm.handleLogIn = jest.fn()
+    wrapper.vm.handleLogOut = jest.fn()
     wrapper.vm.handleAuth()
 
-    expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(0)
     expect(wrapper.vm.handleLogOut).toHaveBeenCalledTimes(1)
   })
 
