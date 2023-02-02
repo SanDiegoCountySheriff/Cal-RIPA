@@ -237,7 +237,14 @@ export default {
     }
   },
 
-  inject: ['admin', 'authenticated', 'dark', 'environmentName', 'invalidUser'],
+  inject: [
+    'admin',
+    'authenticated',
+    'dark',
+    'environmentName',
+    'invalidUser',
+    'online',
+  ],
 
   computed: {
     getThemeIcon() {
@@ -351,10 +358,6 @@ export default {
   },
 
   props: {
-    online: {
-      type: Boolean,
-      default: false,
-    },
     isApiUnavailable: {
       type: Boolean,
       default: false,

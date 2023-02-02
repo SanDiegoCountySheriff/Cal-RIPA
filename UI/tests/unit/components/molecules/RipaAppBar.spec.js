@@ -35,7 +35,9 @@ describe('Ripa App Bar', () => {
         dark: computed(() => provideData?.dark ?? false),
         environmentName: computed(() => provideData?.environmentName ?? ''),
         invalidUser: computed(() => provideData?.invalidUser ?? false),
+        online: computed(() => provideData?.online ?? true),
       },
+      stubs: ['router-link'],
     })
   }
 
@@ -53,7 +55,9 @@ describe('Ripa App Bar', () => {
         dark: computed(() => false),
         environmentName: computed(() => ''),
         invalidUser: computed(() => false),
+        online: computed(() => true),
       },
+      stubs: ['router-link'],
     })
 
     expect(wrapper.html()).toMatchSnapshot()
@@ -98,12 +102,11 @@ describe('Ripa App Bar', () => {
   })
 
   it('should get online icon', async () => {
-    wrapper = factory()
-
+    wrapper = factory({}, { online: false })
     expect(wrapper.vm.getOnlineIcon).toEqual('mdi-wifi-strength-off')
-    wrapper.setProps({ online: true })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
 
+    wrapper = factory({}, { online: true })
     expect(wrapper.vm.getOnlineIcon).toEqual('mdi-wifi')
   })
 
