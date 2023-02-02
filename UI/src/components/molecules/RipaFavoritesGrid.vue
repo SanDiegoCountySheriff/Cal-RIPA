@@ -112,6 +112,8 @@ export default {
     }
   },
 
+  inject: ['isOnlineAndAuthenticated'],
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -206,10 +208,6 @@ export default {
     items: {
       type: Array,
       default: () => [],
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
     },
     onDeleteFavorite: {
       type: Function,

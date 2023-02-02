@@ -2,6 +2,7 @@ import RipaStopReason from '@/components/molecules/RipaStopReason.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Stop Reason', () => {
   let vuetify
@@ -27,6 +28,16 @@ describe('Ripa Stop Reason', () => {
       vuetify,
       propsData: {
         value: stop,
+      },
+      provide: {
+        loadingPiiStep3: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        statutes: computed(() => []),
       },
     })
 

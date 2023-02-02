@@ -90,17 +90,21 @@ export default {
     RipaAlert,
   },
 
+  inject: [
+    'displayReportingEmail',
+    'reportingEmailAddress',
+    'isOnline',
+    'isAuthenticated',
+    'stopTemplates',
+  ],
+
   methods: {
     handleDynamicTemplates(name) {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate(name)
-      }
+      this.$emit('on-open-template', name)
     },
 
     handleDefaultTemplate() {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate()
-      }
+      this.$emit('on-open-template')
     },
 
     handleEmail() {
@@ -111,31 +115,7 @@ export default {
   },
 
   props: {
-    stopTemplates: {
-      type: Array,
-      default: () => [],
-    },
-    onOpenTemplate: {
-      type: Function,
-      required: true,
-    },
     disableButtons: {
-      type: Boolean,
-      default: false,
-    },
-    displayReportingEmail: {
-      type: Boolean,
-      default: false,
-    },
-    reportingEmailAddress: {
-      type: String,
-      default: '',
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
       type: Boolean,
       default: false,
     },

@@ -4,7 +4,7 @@
       title="Perceived Age"
       required
       subtitle="§999.226(a)(7)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 

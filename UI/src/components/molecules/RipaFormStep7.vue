@@ -2,20 +2,14 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-form-summary
       v-model="model"
+      v-on="$listeners"
       edit-buttons
       :api-stop="apiStop"
-      :admin-editing="adminEditing"
-      :admin-viewing="adminViewing"
-      :on-copy-person="onCopyPerson"
-      :on-edit-agency-questions="onEditAgencyQuestions"
-      :on-edit-stop="onEditStop"
-      :on-edit-person="onEditPerson"
-      :on-delete-person="onDeletePerson"
     ></ripa-form-summary>
 
     <v-spacer></v-spacer>
 
-    <template v-if="adminEditing">
+    <template v-if="isAdminEditing">
       <ripa-edit-stop-explanation v-model="model"></ripa-edit-stop-explanation>
       <ripa-override-pii
         :api-stop="apiStop"
@@ -32,7 +26,7 @@
       </ripa-alert>
     </template>
 
-    <template v-if="!adminEditing && !adminViewing">
+    <template v-if="!isAdminEditing && !isAdminViewing">
       <div class="tw-flex tw-mt-4 tw-justify-center">
         <v-btn color="primary" class="tw-mt-2" @click="handleAddPerson">
           <v-icon left> mdi-plus </v-icon>
@@ -41,7 +35,7 @@
       </div>
     </template>
 
-    <template v-if="adminViewing">
+    <template v-if="isAdminViewing">
       <div class="tw-flex tw-mt-8 tw-justify-center">
         <v-btn color="primary" class="tw-mr-2" @click="handleDone">
           Done
@@ -78,6 +72,8 @@ export default {
     RipaEditStopExplanation,
     RipaOverridePii,
   },
+
+  inject: ['isAdminEditing', 'isAdminViewing'],
 
   props: {
     apiStop: {

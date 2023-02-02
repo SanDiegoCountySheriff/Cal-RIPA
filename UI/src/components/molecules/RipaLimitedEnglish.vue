@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Limited or No English Fluency"
       subtitle="§999.226(a)(8)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 

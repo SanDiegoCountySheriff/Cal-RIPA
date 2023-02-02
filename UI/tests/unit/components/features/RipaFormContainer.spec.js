@@ -14,6 +14,7 @@ import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
 import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -119,6 +120,9 @@ describe('Ripa Form Container', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        formStepIndex: computed(() => 0),
+      },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
     })
   }
@@ -130,6 +134,7 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
       },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
       computed: {
@@ -149,6 +154,14 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
+      },
+      computed: {
+        mappedFormBeats: () => [{ id: 'test' }],
+        mappedFormCountyCities: () => [{ id: 'test' }],
+        mappedFormNonCountyCities: () => [{ id: 'test' }],
+        mappedFormSchools: () => [{ id: 'test' }],
+        mappedFormStatutes: () => [{ id: 'test' }],
       },
       mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
     })
@@ -264,7 +277,7 @@ describe('Ripa Form Container', () => {
         'validateBasisForSearchForPii',
       )
 
-      await wrapper.vm.handlePiiCheck({ source: source, value: testValue })
+      await wrapper.vm.handlePiiCheck({ source, value: testValue })
 
       expect(validateLocationForPii).toHaveBeenCalledTimes(
         test.expectedCalls[0],

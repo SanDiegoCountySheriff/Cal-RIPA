@@ -61,6 +61,8 @@ export default {
     }
   },
 
+  inject: ['user'],
+
   computed: {
     modelDialog: {
       get() {
@@ -126,10 +128,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    user: {
-      type: Object,
-      required: true,
     },
     loading: {
       type: Boolean,

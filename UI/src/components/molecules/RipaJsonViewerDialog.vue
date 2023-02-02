@@ -49,6 +49,8 @@ export default {
     }
   },
 
+  inject: ['fullStop'],
+
   computed: {
     model: {
       get() {
@@ -81,10 +83,6 @@ export default {
 
   props: {
     stop: {
-      type: Object,
-      default: () => {},
-    },
-    fullStop: {
       type: Object,
       default: () => {},
     },

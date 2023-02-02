@@ -2,13 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-stop-reason
       v-model="model"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-reason="lastReason"
-      :loading-pii="loadingPii"
-      :statutes="getStatutes"
-      :on-open-favorites="onOpenFavorites"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
+      v-on="$listeners"
       @pii-check="handlePiiCheck"
     ></ripa-stop-reason>
 
@@ -83,31 +77,6 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
-    },
-  },
-
-  computed: {
-    getStatutes() {
-      return this.statutes
-    },
-  },
-
-  props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastReason: {
-      type: Object,
-      default: () => {},
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

@@ -4,7 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     ></ripa-form-header>
 
     <v-container>
@@ -15,7 +15,7 @@
               class="tw-w-full"
               color="primary"
               small
-              @click="onOpenFavorites"
+              @click="handleOpenFavorites"
             >
               Open Favorites
             </v-btn>
@@ -159,7 +159,7 @@
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
-            :loading="loadingPii"
+            :loading="loadingPiiStep3"
             :rules="explanationRules"
             @input="handleInput($event), handlePiiCheck($event)"
           ></ripa-text-input>
@@ -221,6 +221,13 @@ export default {
       viewModel: this.syncModel(this.value),
     }
   },
+
+  inject: [
+    'isOnlineAndAuthenticated',
+    'lastReason',
+    'loadingPiiStep3',
+    'statutes',
+  ],
 
   created() {
     if (this.viewModel.stopReason.reasonForStopExplanation) {
@@ -315,10 +322,12 @@ export default {
       this.$emit('input', this.viewModel)
     },
 
+    handleOpenFavorites() {
+      this.$emit('on-open-reason-favorites')
+    },
+
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.stopReason)
-      }
+      this.$emit('on-save-reason-favorite', this.viewModel.stopReason)
     },
 
     handlePiiCheck(textValue) {
@@ -342,30 +351,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    lastReason: {
-      type: Object,
-      default: () => {},
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
-    onOpenFavorites: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
       default: () => {},
     },
   },

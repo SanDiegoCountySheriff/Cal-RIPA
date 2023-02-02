@@ -4,7 +4,7 @@
       title="Result of Stop"
       required
       subtitle="§999.226(a)(13)"
-      :on-open-statute="onOpenStatute"
+      :on-open-statute="handleOpenStatute"
     >
     </ripa-form-header>
 
@@ -16,7 +16,7 @@
               class="tw-w-full"
               color="primary"
               small
-              @click="onOpenFavorites"
+              @click="handleOpenFavorites"
             >
               Open Favorites
             </v-btn>
@@ -319,6 +319,8 @@ export default {
     }
   },
 
+  inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
+
   computed: {
     model: {
       get() {
@@ -515,10 +517,16 @@ export default {
       }
     },
 
+    handleOpenFavorites() {
+      this.$emit('on-open-result-favorites')
+    },
+
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.stopResult)
-      }
+      this.$emit('on-save-result-favorite', this.viewModel.stopResult)
+    },
+
+    handleOpenStatute() {
+      this.$emit('on-open-statute')
     },
   },
 
@@ -538,26 +546,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastResult: {
-      type: Object,
-      default: () => {},
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
-    onOpenFavorites: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
       default: () => {},
     },
   },

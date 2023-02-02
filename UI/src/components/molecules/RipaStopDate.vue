@@ -4,7 +4,7 @@
       title="Date of Stop"
       required
       subtitle="§999.226(a)(2)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -99,6 +99,8 @@ export default {
     }
   },
 
+  inject: ['isAdminEditing'],
+
   computed: {
     model: {
       get() {
@@ -137,13 +139,12 @@ export default {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
 
-      if (!this.adminEditing) {
+      if (!this.isAdminEditing) {
         return (
           dateWithinLastHours(dateStr, timeStr, 24) &&
           dateNotInFuture(dateStr, timeStr)
         )
       }
-
       return dateNotInFuture(dateStr, timeStr)
     },
 
@@ -172,10 +173,6 @@ export default {
     value: {
       type: Object,
       required: true,
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
     },
   },
 }

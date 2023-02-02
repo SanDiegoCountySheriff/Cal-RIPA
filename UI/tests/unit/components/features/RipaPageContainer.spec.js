@@ -63,6 +63,9 @@ describe('Ripa Page Container', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        user: () => {},
+      },
     })
   }
 

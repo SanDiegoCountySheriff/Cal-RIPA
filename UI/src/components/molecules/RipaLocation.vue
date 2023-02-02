@@ -4,7 +4,7 @@
       title="Location"
       required
       subtitle="§999.226(a)(3)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -111,7 +111,7 @@
             <ripa-text-input
               v-model="model.location.blockNumber"
               label="Block Number"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="blockNumberRules"
               numbers-only
               prevent-paste
@@ -126,7 +126,7 @@
             <ripa-text-input
               v-model="model.location.streetName"
               label="Street Name"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="streetNameRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -142,7 +142,7 @@
           <ripa-text-input
             v-model="model.location.intersection"
             label="Closest Intersection"
-            :loading="loadingPii"
+            :loading="loadingPiiStep1"
             :rules="intersectionRules"
             @input="handleInput($event), handlePiiCheck($event)"
           >
@@ -161,7 +161,7 @@
             <ripa-text-input
               v-model="model.location.highwayExit"
               label="Highway and closest exit"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="highwayRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -172,7 +172,7 @@
             <ripa-text-input
               v-model="model.location.landmark"
               label="Road marker, landmark, or other"
-              :loading="loadingPii"
+              :loading="loadingPiiStep1"
               :rules="landmarkRules"
               @input="handleInput($event), handlePiiCheck($event)"
             >
@@ -258,6 +258,19 @@ export default {
       viewModel: this.syncModel(this.value),
     }
   },
+
+  inject: [
+    'beats',
+    'countyCities',
+    'nonCountyCities',
+    'schools',
+    'displayBeatInput',
+    'isOnlineAndAuthenticated',
+    'lastLocation',
+    'loadingGps',
+    'loadingPiiStep1',
+    'validLastLocation',
+  ],
 
   computed: {
     model: {
@@ -427,9 +440,7 @@ export default {
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        if (this.onGpsLocation) {
-          this.onGpsLocation()
-        }
+        this.$emit('on-gps-location')
       } else {
         console.log('Geolocation is not supported by this browser.')
       }
@@ -462,21 +473,15 @@ export default {
     },
 
     handleLastLocation() {
-      if (this.onOpenLastLocation) {
-        this.onOpenLastLocation()
-      }
+      this.$emit('on-open-last-location')
     },
 
     handleOpenFavorites() {
-      if (this.onOpenFavorites) {
-        this.onOpenFavorites()
-      }
+      this.$emit('on-open-location-favorites')
     },
 
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.location)
-      }
+      this.$emit('on-save-location-favorite', this.viewModel.location)
     },
 
     handleOutOfCountyToggle() {
@@ -525,61 +530,9 @@ export default {
       type: Object,
       required: true,
     },
-    schools: {
-      type: Array,
-      default: () => [],
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
     displayBeatInput: {
       type: Boolean,
       default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
-    },
-    loadingGps: {
-      type: Boolean,
-      default: false,
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
-      type: Function,
-      required: true,
     },
   },
 }

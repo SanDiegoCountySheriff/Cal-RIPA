@@ -5,7 +5,7 @@
       required
       subtitle="§999.226(a)(15)"
       class="tw-mb-4"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -58,6 +58,8 @@ export default {
     }
   },
 
+  inject: ['user'],
+
   computed: {
     isValidUser() {
       return this.user && this.user.assignment
@@ -90,26 +92,13 @@ export default {
     },
 
     handleUpdateUser() {
-      if (this.onUpdateUser) {
-        this.onUpdateUser()
-      }
+      this.$emit('on-update-user')
     },
   },
 
   watch: {
     user(newValue) {
       this.viewModelUser = newValue
-    },
-  },
-
-  props: {
-    user: {
-      type: Object,
-      default: () => {},
-    },
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

@@ -17,6 +17,11 @@ describe('Ripa Template', () => {
         ...propsData,
         onOpenTemplate: jest.fn(),
       },
+      provide: {
+        displayReportingEmail() {
+          return true
+        },
+      },
     })
   }
 
@@ -25,6 +30,21 @@ describe('Ripa Template', () => {
       vuetify,
       propsData: {
         onOpenTemplate: jest.fn(),
+      },
+      provide: {
+        displayReportingEmail() {
+          return true
+        },
+        reportingEmailAddress() {
+          return ''
+        },
+        isOnline() {
+          return true
+        },
+        isAuthenticated() {
+          return true
+        },
+        stopTemplates: () => {},
       },
     })
 

@@ -34,9 +34,7 @@ export default {
     },
 
     handleAddPerson() {
-      if (this.onAddPerson) {
-        this.onAddPerson()
-      }
+      this.$emit('on-add-person')
     },
 
     handleBack() {
@@ -89,14 +87,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    adminViewing: {
-      type: Boolean,
-      default: false,
-    },
     schools: {
       type: Array,
       default: () => [],
@@ -121,31 +111,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
-    onAddPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onCopyPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onDeletePerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditAgencyQuestions: {
-      type: Function,
-      default: () => {},
-    },
     onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
       type: Function,
       default: () => {},
     },
@@ -158,10 +124,6 @@ export default {
       default: () => {},
     },
     onNext: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenStatute: {
       type: Function,
       default: () => {},
     },

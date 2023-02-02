@@ -3,6 +3,7 @@ import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import { format } from 'date-fns'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Stop Date', () => {
   let vuetify
@@ -14,11 +15,14 @@ describe('Ripa Stop Date', () => {
     stop = defaultStop()
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return shallowMount(RipaStopDate, {
       vuetify,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        isAdminEditing: computed(() => provideData?.isAdminEditing ?? false),
       },
     })
   }
@@ -112,13 +116,16 @@ describe('Ripa Stop Date', () => {
           return '2019-12-31'
         }),
       },
+      provide: {
+        isAdminEditing: computed(() => false),
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should validate admin date', () => {
-    wrapper = factory({ value: stop, adminEditing: true })
+    wrapper = factory({ value: stop }, { isAdminEditing: true })
     const inputDate = createDate(-2, 0, 0)
 
     stop.stopDate.date = inputDate

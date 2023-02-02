@@ -2,56 +2,27 @@
   <div class="ripa-form-container">
     <ripa-form-template
       v-model="stop"
-      :admin-editing="isAdminEditing"
-      :admin-viewing="isAdminViewing"
-      :is-admin="isAdmin"
-      :beats="mappedFormBeats"
-      :county-cities="mappedFormCountyCities"
-      :display-beat-input="displayBeatInput"
-      :display-debugger="displayDebugger"
-      :display-reporting-email="displayReportingEmail"
-      :reporting-email-address="reportingEmailAddress"
-      :form-step-index="formStepIndex"
-      :full-stop="fullStop"
-      :is-online="isOnline"
-      :is-authenticated="isAuthenticated"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :is-api-unavailable="isApiUnavailable"
-      :last-location="lastLocation"
-      :last-reason="lastReason"
-      :last-result="lastResult"
-      :loading="loading"
-      :loading-gps="loadingGps"
-      :loading-pii-step1="loadingPiiStep1"
-      :loading-pii-step3="loadingPiiStep3"
-      :loading-pii-step4="loadingPiiStep4"
-      :non-county-cities="mappedFormNonCountyCities"
-      :schools="mappedFormSchools"
-      :statutes="mappedFormStatutes"
-      :user="mappedUser"
-      :valid-last-location="isLastLocationValid"
-      :stopTemplates="stopTemplates"
-      :on-add-person="handleAddPerson"
-      :on-cancel-form="handleCancelForm"
-      :on-cancel-action="handleCancelAction"
-      :on-copy-person="handleCopyPerson"
-      :on-delete-person="handleDeletePerson"
-      :on-edit-agency-questions="handleEditAgencyQuestions"
-      :on-edit-person="handleEditPerson"
-      :on-edit-stop="handleEditStop"
-      :on-gps-location="handleGpsLocation"
-      :on-open-location-favorites="handleOpenLocationFavorites"
-      :on-open-reason-favorites="handleOpenReasonFavorites"
-      :on-open-result-favorites="handleOpenResultFavorites"
-      :on-save-location-favorite="handleSaveLocationFavorite"
-      :on-save-reason-favorite="handleSaveReasonFavorite"
-      :on-save-result-favorite="handleSaveResultFavorite"
-      :on-open-last-location="handleOpenLastLocation"
-      :on-open-statute="handleOpenStatute"
-      :on-open-template="handleOpenTemplate"
-      :on-step-index-change="handleStepIndexChange"
-      :on-submit-stop="handleSubmitStop"
-      :on-update-user="handleUpdateUser"
+      @on-add-person="handleAddPerson"
+      @on-cancel-form="handleCancelForm"
+      @on-cancel-action="handleCancelAction"
+      @on-copy-person="handleCopyPerson"
+      @on-delete-person="handleDeletePerson"
+      @on-edit-agency-questions="handleEditAgencyQuestions"
+      @on-edit-person="handleEditPerson"
+      @on-edit-stop="handleEditStop"
+      @on-gps-location="handleGpsLocation"
+      @on-open-location-favorites="handleOpenLocationFavorites"
+      @on-open-reason-favorites="handleOpenReasonFavorites"
+      @on-open-result-favorites="handleOpenResultFavorites"
+      @on-save-location-favorite="handleSaveLocationFavorite"
+      @on-save-reason-favorite="handleSaveReasonFavorite"
+      @on-save-result-favorite="handleSaveResultFavorite"
+      @on-open-last-location="handleOpenLastLocation"
+      @on-open-statute="handleOpenStatute"
+      @on-open-template="handleOpenTemplate"
+      @on-step-index-change="handleStepIndexChange"
+      @on-submit-stop="handleSubmitStop"
+      @on-update-user="handleUpdateUser"
       @handle-done="handleDone"
       @input="handleInput"
       @pii-check="handlePiiCheck"
@@ -61,7 +32,6 @@
       :show-dialog="showLocationFavoritesDialog"
       title="Locations"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditLocationFavorite"
       :on-open-favorite="handleOpenLocationFavorite"
@@ -72,7 +42,6 @@
       :show-dialog="showReasonFavoritesDialog"
       title="Reasons"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditReasonFavorite"
       :on-open-favorite="handleOpenReasonFavorite"
@@ -83,7 +52,6 @@
       :show-dialog="showResultFavoritesDialog"
       title="Results"
       :favorites="favorites"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
       :on-close="handleCloseDialog"
       :on-edit-favorite="handleEditResultFavorite"
       :on-open-favorite="handleOpenResultFavorite"
@@ -116,7 +84,6 @@
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
-      :user="getMappedUser"
       :show-dialog="showUserDialog"
       :on-close="handleCloseDialog"
       :on-save="handleSaveUser"
@@ -163,6 +130,7 @@ import RipaSnackbar from '@/components/atoms/RipaSnackbar'
 import RipaStatuteDialog from '@/components/molecules/RipaStatuteDialog'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   name: 'ripa-home-container',
@@ -183,6 +151,40 @@ export default {
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
       loading: false,
+    }
+  },
+
+  provide() {
+    return {
+      isAdminEditing: this.isAdminEditing,
+      isAdminViewing: this.isAdminViewing,
+      isAdmin: this.isAdmin,
+      beats: this.mappedFormBeats,
+      countyCities: this.mappedFormCountyCities,
+      nonCountyCities: this.mappedFormNonCountyCities,
+      schools: this.mappedFormSchools,
+      statutes: this.mappedFormStatutes,
+      displayBeatInput: this.displayBeatInput,
+      displayDebugger: this.displayDebugger,
+      displayReportingEmail: this.displayReportingEmail,
+      reportingEmailAddress: this.reportingEmailAddress,
+      formStepIndex: computed(() => this.formStepIndex),
+      fullStop: computed(() => this.fullStop),
+      isOnline: this.isOnline,
+      isAuthenticated: this.isAuthenticated,
+      isOnlineAndAuthenticated: this.isOnlineAndAuthenticated,
+      isApiUnavailable: this.isApiUnavailable,
+      lastLocation: computed(() => this.lastLocation ?? null),
+      lastReason: computed(() => this.lastReason ?? null),
+      lastResult: computed(() => this.lastResult ?? null),
+      loading: computed(() => this.loading),
+      loadingGps: computed(() => this.loadingGps),
+      loadingPiiStep1: computed(() => this.loadingPiiStep1),
+      loadingPiiStep3: computed(() => this.loadingPiiStep3),
+      loadingPiiStep4: computed(() => this.loadingPiiStep4),
+      user: computed(() => this.mappedUser),
+      validLastLocation: this.isLastLocationValid,
+      stopTemplates: this.stopTemplates,
     }
   },
 

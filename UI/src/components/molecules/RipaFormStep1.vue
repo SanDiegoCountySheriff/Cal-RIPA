@@ -1,9 +1,9 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <template v-if="adminEditing">
+    <template v-if="isAdminEditing">
       <ripa-officer
+        v-on="$listeners"
         :user="getApiStopUser"
-        :on-open-statute="onOpenStatute"
         :on-update-user="handleUpdateStopUser"
       ></ripa-officer>
 
@@ -17,37 +17,17 @@
       ></ripa-user-dialog>
     </template>
 
-    <template v-if="!adminEditing && isOnlineAndAuthenticated">
+    <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
       <ripa-officer
-        :user="user"
-        :on-open-statute="onOpenStatute"
-        :on-update-user="onUpdateUser"
+        v-on="$listeners"
       ></ripa-officer>
     </template>
 
-    <ripa-stop-date
-      v-model="model"
-      :admin-editing="adminEditing"
-      :on-open-statute="onOpenStatute"
-    ></ripa-stop-date>
+    <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
 
     <ripa-location
       v-model="model"
-      :schools="schools"
-      :beats="beats"
-      :county-cities="countyCities"
-      :display-beat-input="displayBeatInput"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-location="lastLocation"
-      :loading-gps="loadingGps"
-      :loading-pii="loadingPii"
-      :non-county-cities="nonCountyCities"
-      :valid-last-location="validLastLocation"
-      :on-open-favorites="onOpenFavorites"
-      :on-open-last-location="onOpenLastLocation"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
-      :on-gps-location="onGpsLocation"
+      v-on="$listeners"
       @pii-check="handlePiiCheck"
     ></ripa-location>
 
@@ -113,6 +93,8 @@ export default {
       showUserDialog: false,
     }
   },
+
+  inject: ['isAdminEditing', 'isOnlineAndAuthenticated'],
 
   computed: {
     getApiStopUser() {
@@ -181,69 +163,6 @@ export default {
 
     handlePiiCheck({ source, value }) {
       this.$emit('pii-check', { source, value })
-    },
-  },
-
-  props: {
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
-    schools: {
-      type: Array,
-      default: () => [],
-    },
-    user: {
-      type: Object,
-      default: () => {},
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
-      type: Function,
-      required: true,
-    },
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

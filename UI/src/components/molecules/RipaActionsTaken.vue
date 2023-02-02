@@ -4,7 +4,7 @@
       title="Actions Taken During Stop"
       required
       subtitle="§999.226(a)(12)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -63,7 +63,7 @@
                 title="Basis for Search"
                 required
                 subtitle="§999.226(a)(12)(B)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -87,7 +87,7 @@
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
                   label="Brief Explanation"
-                  :loading="loadingPii"
+                  :loading="loadingPiiStep4"
                   :rules="explanationRules"
                   @input="handleInput($event), handlePiiCheck($event)"
                 ></ripa-text-input>
@@ -108,7 +108,7 @@
                 title="Basis for Property Seizure"
                 required
                 subtitle="§999.226(a)(12)(D)(1)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -123,7 +123,7 @@
                 title="Types of Property Seized"
                 required
                 subtitle="§999.226(a)(12)(D)(2)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -188,6 +188,8 @@ export default {
       viewModel: this.syncModel(this.value),
     }
   },
+
+  inject: ['loadingPiiStep4'],
 
   created() {
     if (this.viewModel.actionsTaken.basisForSearchExplanation) {
@@ -382,10 +384,6 @@ export default {
     value: {
       type: Object,
       required: true,
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
     },
   },
 }

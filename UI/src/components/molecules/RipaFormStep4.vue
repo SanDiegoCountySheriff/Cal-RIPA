@@ -2,15 +2,11 @@
   <v-form ref="stepForm" lazy-validation>
     <ripa-actions-taken
       v-model="model"
-      :loading-pii="loadingPii"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
       @pii-check="handlePiiCheck"
     ></ripa-actions-taken>
 
-    <ripa-contraband
-      v-model="model"
-      :on-open-statute="onOpenStatute"
-    ></ripa-contraband>
+    <ripa-contraband v-model="model" v-on="$listeners"></ripa-contraband>
 
     <v-spacer></v-spacer>
 
