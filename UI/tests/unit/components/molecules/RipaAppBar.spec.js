@@ -1,5 +1,6 @@
 import RipaAppBar from '@/components/molecules/RipaAppBar'
 import { shallowMount, mount } from '@vue/test-utils'
+import { computed } from 'vue'
 import Vuetify from 'vuetify'
 
 describe('Ripa App Bar', () => {
@@ -19,7 +20,7 @@ describe('Ripa App Bar', () => {
     global.window = window
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return shallowMount(RipaAppBar, {
       vuetify,
       propsData: {
@@ -27,6 +28,9 @@ describe('Ripa App Bar', () => {
         onUpdateDark: jest.fn(),
         onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
+      },
+      provide: {
+        admin: computed(() => provideData?.admin ?? false),
       },
     })
   }
@@ -38,6 +42,9 @@ describe('Ripa App Bar', () => {
         onUpdateDark: jest.fn(),
         onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
+      },
+      provide: {
+        admin: computed(() => false),
       },
     })
 
@@ -77,13 +84,10 @@ describe('Ripa App Bar', () => {
 
   it('should get admin', async () => {
     wrapper = factory()
-
-    wrapper.setProps({ admin: false })
-    await wrapper.vm.$nextTick()
     expect(wrapper.vm.getAdmin).toBeFalsy()
+    wrapper.destroy()
 
-    wrapper.setProps({ admin: true })
-    await wrapper.vm.$nextTick()
+    wrapper = factory({}, { admin: true })
     expect(wrapper.vm.getAdmin).toBeTruthy()
   })
 

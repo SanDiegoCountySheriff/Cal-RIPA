@@ -1,7 +1,6 @@
 <template>
   <div class="ripa-page-wrapper">
     <ripa-app-bar
-      :admin="admin"
       :environment-name="environmentName"
       :online="online"
       :authenticated="authenticated"
@@ -73,10 +72,6 @@ export default {
   },
 
   props: {
-    admin: {
-      type: Boolean,
-      default: false,
-    },
     dark: {
       type: Boolean,
       default: false,

@@ -237,6 +237,8 @@ export default {
     }
   },
 
+  inject: ['admin'],
+
   computed: {
     getThemeIcon() {
       return this.$vuetify.theme.dark
@@ -349,10 +351,6 @@ export default {
   },
 
   props: {
-    admin: {
-      type: Boolean,
-      default: false,
-    },
     dark: {
       type: Boolean,
       default: false,

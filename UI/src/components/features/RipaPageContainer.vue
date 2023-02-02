@@ -1,6 +1,5 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
-    :admin="isAdmin"
     :authenticated="isAuthenticated"
     :dark="isDark"
     :environment-name="environmentName"
@@ -130,6 +129,7 @@ export default {
   provide() {
     return {
       user: computed(() => this.getMappedUser),
+      admin: computed(() => this.isAdmin),
     }
   },
 
