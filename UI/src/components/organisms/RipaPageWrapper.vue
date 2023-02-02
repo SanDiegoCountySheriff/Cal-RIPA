@@ -1,7 +1,6 @@
 <template>
   <div class="ripa-page-wrapper">
     <ripa-app-bar
-      :environment-name="environmentName"
       :online="online"
       :invalidUser="invalidUser"
       :is-api-unavailable="isApiUnavailable"
@@ -70,10 +69,6 @@ export default {
   },
 
   props: {
-    environmentName: {
-      type: String,
-      default: '',
-    },
     loading: {
       type: Boolean,
       default: false,

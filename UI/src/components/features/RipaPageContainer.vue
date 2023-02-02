@@ -1,6 +1,5 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
-    :environment-name="environmentName"
     :invalidUser="invalidUser"
     :loading="loading"
     :online="isOnline"
@@ -130,6 +129,7 @@ export default {
       admin: computed(() => this.isAdmin),
       authenticated: computed(() => this.isAuthenticated),
       dark: computed(() => this.isDark),
+      environmentName: computed(() => this.environmentName),
     }
   },
 

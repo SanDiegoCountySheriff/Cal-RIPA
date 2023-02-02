@@ -33,6 +33,7 @@ describe('Ripa App Bar', () => {
         admin: computed(() => provideData?.admin ?? false),
         authenticated: computed(() => provideData?.authenticated ?? true),
         dark: computed(() => provideData?.dark ?? false),
+        environmentName: computed(() => provideData?.environmentName ?? ''),
       },
     })
   }
@@ -49,6 +50,7 @@ describe('Ripa App Bar', () => {
         admin: computed(() => false),
         authenticated: computed(() => true),
         dark: computed(() => false),
+        environmentName: computed(() => ''),
       },
     })
 
@@ -73,16 +75,14 @@ describe('Ripa App Bar', () => {
 
   it('should get app title', async () => {
     wrapper = factory()
-
     expect(wrapper.vm.getAppTitle).toEqual('RIPA')
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'QA' })
-    await wrapper.vm.$nextTick()
-
+    wrapper = factory({}, { environmentName: 'QA' })
     expect(wrapper.vm.getAppTitle).toEqual('RIPA (QA)')
-    wrapper.setProps({ environmentName: 'DEV' })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
 
+    wrapper = factory({}, { environmentName: 'DEV' })
     expect(wrapper.vm.getAppTitle).toEqual('RIPA (DEV)')
   })
 
@@ -107,32 +107,25 @@ describe('Ripa App Bar', () => {
 
   it('should get app bar background class', async () => {
     wrapper = factory()
-
-    wrapper.setProps({ environmentName: '' })
-    await wrapper.vm.$nextTick()
-
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual('')
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'DEV' })
-    await wrapper.vm.$nextTick()
+    wrapper = factory({}, { environmentName: 'DEV' })
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--dev-light',
     )
-
     wrapper.vm.$vuetify.theme.dark = true
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--dev-dark',
     )
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'QA' })
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.getAppBarBackgroundClass).toEqual('ripa-app-bar--qa-dark')
-
-    wrapper.vm.$vuetify.theme.dark = false
+    wrapper = factory({}, { environmentName: 'QA' })
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--qa-light',
     )
+    wrapper.vm.$vuetify.theme.dark = true
+    expect(wrapper.vm.getAppBarBackgroundClass).toEqual('ripa-app-bar--qa-dark')
   })
 
   it('should handle view stops with errors', () => {
