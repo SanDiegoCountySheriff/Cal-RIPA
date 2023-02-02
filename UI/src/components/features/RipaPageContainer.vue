@@ -1,7 +1,7 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
     :loading="loading"
-    :on-update-dark="handleUpdateDark"
+    @on-update-dark="handleUpdateDark"
     :on-update-user="handleUpdateUser"
     :on-view-stops-with-errors="handleViewStopsWithErrors"
     :stops-with-errors="mappedStopsWithErrors"

@@ -1,7 +1,7 @@
 <template>
   <div class="ripa-page-wrapper">
     <ripa-app-bar
-      :on-update-dark="onUpdateDark"
+      v-on="$listeners"
       :on-update-user="onUpdateUser"
       :on-view-stops-with-errors="onViewStopsWithErrors"
       :stops-with-errors="stopsWithErrors"
@@ -69,10 +69,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-    onUpdateDark: {
-      type: Function,
-      default: () => {},
     },
     onUpdateUser: {
       type: Function,

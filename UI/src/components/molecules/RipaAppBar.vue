@@ -302,7 +302,7 @@ export default {
 
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      this.onUpdateDark(this.$vuetify.theme.dark)
+      this.$emit('on-update-dark', this.$vuetify.theme.dark)
     },
 
     handleAuth() {
@@ -359,10 +359,6 @@ export default {
   },
 
   props: {
-    onUpdateDark: {
-      type: Function,
-      required: true,
-    },
     onUpdateUser: {
       type: Function,
       required: true,

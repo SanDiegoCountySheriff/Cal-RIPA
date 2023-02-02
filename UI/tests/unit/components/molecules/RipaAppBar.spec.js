@@ -25,7 +25,6 @@ describe('Ripa App Bar', () => {
       vuetify,
       propsData: {
         ...propsData,
-        onUpdateDark: jest.fn(),
         onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
       },
@@ -48,7 +47,6 @@ describe('Ripa App Bar', () => {
     wrapper = mount(RipaAppBar, {
       vuetify,
       propsData: {
-        onUpdateDark: jest.fn(),
         onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
       },
@@ -151,12 +149,13 @@ describe('Ripa App Bar', () => {
     wrapper.vm.handleThemeChange()
 
     expect(wrapper.vm.$vuetify.theme.dark).toBeTruthy()
-    expect(wrapper.vm.onUpdateDark).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-update-dark')).toBeTruthy()
+    expect(wrapper.emitted('on-update-dark').length).toEqual(1)
 
     wrapper.vm.handleThemeChange()
 
     expect(wrapper.vm.$vuetify.theme.dark).toBeFalsy()
-    expect(wrapper.vm.onUpdateDark).toHaveBeenCalledTimes(2)
+    expect(wrapper.emitted('on-update-dark').length).toEqual(2)
   })
 
   it('should handle auth', async () => {
