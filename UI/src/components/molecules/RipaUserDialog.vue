@@ -70,9 +70,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModelDialog = newValue
       },
@@ -94,9 +92,7 @@ export default {
       if (!this.isFormValid && !this.admin) {
         return
       }
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.$emit('on-close')
     },
 
     handleSave() {
@@ -104,9 +100,7 @@ export default {
       if (!this.isFormValid) {
         return
       }
-      if (this.onSave) {
-        this.onSave(this.viewModelUser)
-      }
+      this.$emit('on-save', this.viewModelUser)
       this.handleClose()
     },
   },
@@ -132,14 +126,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      required: true,
-    },
-    onSave: {
-      type: Function,
-      required: true,
     },
     admin: {
       type: Boolean,

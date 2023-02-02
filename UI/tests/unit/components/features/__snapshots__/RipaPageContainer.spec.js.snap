@@ -28,7 +28,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
     <!---->
     <!---->
     <!---->
-    <div class="v-dialog__container">
+    <div class="v-dialog__container" on-close="function () { [native code] }" on-save="function () { [native code] }">
       <!---->
     </div>
     <div class="v-dialog__container">
@@ -49,7 +49,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
         </div>
       </transition-stub>
     </div>
-    <div class="v-snack v-snack--bottom v-snack--has-background" multi-line="">
+    <div class="v-snack v-snack--bottom v-snack--has-background" multi-line="" on-view="function () { [native code] }">
       <transition-stub name="v-snack-transition">
         <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
           <div role="status" aria-live="polite" class="v-snack__content">

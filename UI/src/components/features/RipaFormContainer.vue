@@ -30,8 +30,8 @@
 
     <ripa-favorites-dialog
       :show-dialog="showLocationFavoritesDialog"
-      title="Locations"
       :favorites="favorites"
+      title="Locations"
       @on-close="handleCloseDialog"
       @on-edit-favorite="handleEditLocationFavorite"
       @on-open-favorite="handleOpenLocationFavorite"
@@ -40,8 +40,8 @@
 
     <ripa-favorites-dialog
       :show-dialog="showReasonFavoritesDialog"
-      title="Reasons"
       :favorites="favorites"
+      title="Reasons"
       @on-close="handleCloseDialog"
       @on-edit-favorite="handleEditReasonFavorite"
       @on-open-favorite="handleOpenReasonFavorite"
@@ -50,8 +50,8 @@
 
     <ripa-favorites-dialog
       :show-dialog="showResultFavoritesDialog"
-      title="Results"
       :favorites="favorites"
+      title="Results"
       @on-close="handleCloseDialog"
       @on-edit-favorite="handleEditResultFavorite"
       @on-open-favorite="handleOpenResultFavorite"
@@ -79,14 +79,14 @@
     <ripa-statute-dialog
       :show-dialog="showStatuteDialog"
       :statute="statute"
-      :on-close="handleCloseDialog"
+      @on-close="handleCloseDialog"
     ></ripa-statute-dialog>
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :show-dialog="showUserDialog"
-      :on-close="handleCloseDialog"
-      :on-save="handleSaveUser"
+      @on-close="handleCloseDialog"
+      @on-save="handleSaveUser"
     ></ripa-user-dialog>
 
     <ripa-snackbar
@@ -112,7 +112,7 @@
       v-model="snackbarErrorsVisible"
       :text="snackbarText"
       :auto-close="false"
-      :on-view="onViewStopsWithErrors"
+      @on-view="onViewStopsWithErrors"
       multi-line
       view-button-visible
     >

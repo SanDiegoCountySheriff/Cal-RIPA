@@ -9,11 +9,11 @@ exports[`Ripa Form Container should match snapshot 1`] = `
   <ripa-add-favorite-dialog-stub></ripa-add-favorite-dialog-stub>
   <ripa-add-favorite-dialog-stub></ripa-add-favorite-dialog-stub>
   <ripa-add-favorite-dialog-stub></ripa-add-favorite-dialog-stub>
-  <ripa-statute-dialog-stub onclose="[Function]"></ripa-statute-dialog-stub>
-  <ripa-user-dialog-stub onclose="[Function]" onsave="[Function]" isrowkeydisabled="true" formtitle="Manage User"></ripa-user-dialog-stub>
-  <ripa-snackbar-stub text="Stop was stored locally and will be submitted to the server once you are online and authenticated." timeout="6000" autoclose="true" onview="[Function]"></ripa-snackbar-stub>
-  <ripa-snackbar-stub text="There was an error checking GPS location." timeout="6000" autoclose="true" onview="[Function]"></ripa-snackbar-stub>
-  <ripa-snackbar-stub text="" timeout="6000" autoclose="true" onview="[Function]" multi-line=""></ripa-snackbar-stub>
-  <ripa-snackbar-stub text="" timeout="6000" viewbuttonvisible="true" onview="[Function]" multi-line=""></ripa-snackbar-stub>
+  <ripa-statute-dialog-stub></ripa-statute-dialog-stub>
+  <ripa-user-dialog-stub isrowkeydisabled="true" formtitle="Manage User"></ripa-user-dialog-stub>
+  <ripa-snackbar-stub text="Stop was stored locally and will be submitted to the server once you are online and authenticated." timeout="6000" autoclose="true"></ripa-snackbar-stub>
+  <ripa-snackbar-stub text="There was an error checking GPS location." timeout="6000" autoclose="true"></ripa-snackbar-stub>
+  <ripa-snackbar-stub text="" timeout="6000" autoclose="true" multi-line=""></ripa-snackbar-stub>
+  <ripa-snackbar-stub text="" timeout="6000" viewbuttonvisible="true" multi-line=""></ripa-snackbar-stub>
 </div>
 `;
