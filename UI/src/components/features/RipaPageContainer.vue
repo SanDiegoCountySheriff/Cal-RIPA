@@ -1,6 +1,5 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
-    :dark="isDark"
     :environment-name="environmentName"
     :invalidUser="invalidUser"
     :loading="loading"
@@ -130,6 +129,7 @@ export default {
       user: computed(() => this.getMappedUser),
       admin: computed(() => this.isAdmin),
       authenticated: computed(() => this.isAuthenticated),
+      dark: computed(() => this.isDark),
     }
   },
 

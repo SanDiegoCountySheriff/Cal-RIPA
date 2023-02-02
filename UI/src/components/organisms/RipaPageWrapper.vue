@@ -5,7 +5,6 @@
       :online="online"
       :invalidUser="invalidUser"
       :is-api-unavailable="isApiUnavailable"
-      :dark="dark"
       :on-update-dark="onUpdateDark"
       :on-update-user="onUpdateUser"
       :on-view-stops-with-errors="onViewStopsWithErrors"
@@ -71,10 +70,6 @@ export default {
   },
 
   props: {
-    dark: {
-      type: Boolean,
-      default: false,
-    },
     environmentName: {
       type: String,
       default: '',

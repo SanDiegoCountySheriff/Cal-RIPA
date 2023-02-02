@@ -237,7 +237,7 @@ export default {
     }
   },
 
-  inject: ['admin', 'authenticated'],
+  inject: ['admin', 'authenticated', 'dark'],
 
   computed: {
     getThemeIcon() {
@@ -351,10 +351,6 @@ export default {
   },
 
   props: {
-    dark: {
-      type: Boolean,
-      default: false,
-    },
     environmentName: {
       type: String,
       default: '',

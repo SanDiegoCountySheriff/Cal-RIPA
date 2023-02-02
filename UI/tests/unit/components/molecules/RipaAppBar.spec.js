@@ -32,6 +32,7 @@ describe('Ripa App Bar', () => {
       provide: {
         admin: computed(() => provideData?.admin ?? false),
         authenticated: computed(() => provideData?.authenticated ?? true),
+        dark: computed(() => provideData?.dark ?? false),
       },
     })
   }
@@ -47,6 +48,7 @@ describe('Ripa App Bar', () => {
       provide: {
         admin: computed(() => false),
         authenticated: computed(() => true),
+        dark: computed(() => false),
       },
     })
 
