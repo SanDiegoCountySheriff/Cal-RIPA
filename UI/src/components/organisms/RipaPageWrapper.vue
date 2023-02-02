@@ -2,7 +2,6 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       v-on="$listeners"
-      :on-update-user="onUpdateUser"
       :on-view-stops-with-errors="onViewStopsWithErrors"
       :stops-with-errors="stopsWithErrors"
       :api-stop-job-loading="apiStopJobLoading"
@@ -69,10 +68,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-    onUpdateUser: {
-      type: Function,
-      default: () => {},
     },
     onViewStopsWithErrors: {
       type: Function,

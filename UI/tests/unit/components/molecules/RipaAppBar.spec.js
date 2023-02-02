@@ -25,7 +25,6 @@ describe('Ripa App Bar', () => {
       vuetify,
       propsData: {
         ...propsData,
-        onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
       },
       provide: {
@@ -47,7 +46,6 @@ describe('Ripa App Bar', () => {
     wrapper = mount(RipaAppBar, {
       vuetify,
       propsData: {
-        onUpdateUser: jest.fn(),
         onViewStopsWithErrors: jest.fn(),
       },
       provide: {
@@ -201,7 +199,7 @@ describe('Ripa App Bar', () => {
 
     wrapper.vm.handleUserChange()
 
-    expect(wrapper.vm.onUpdateUser).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-update-user')).toBeTruthy()
   })
 
   it('should handle before destroy', () => {

@@ -322,7 +322,7 @@ export default {
     },
 
     handleUserChange() {
-      this.onUpdateUser()
+      this.$emit('on-update-user')
     },
 
     handleResize() {
@@ -359,10 +359,6 @@ export default {
   },
 
   props: {
-    onUpdateUser: {
-      type: Function,
-      required: true,
-    },
     onViewStopsWithErrors: {
       type: Function,
       required: true,
