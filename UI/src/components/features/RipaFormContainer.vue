@@ -236,7 +236,6 @@ export default {
       'displayBeatInput',
       'displayDebugger',
       'stopTemplates',
-      'piiServiceAvailable',
       'isApiUnavailable',
       'isAdmin',
       'displayReportingEmail',
@@ -270,17 +269,57 @@ export default {
 
   methods: {
     ...mapActions([
-      'checkTextForPii',
       'checkGpsLocation',
       'editOfficerUser',
       'editUser',
-      'setPiiServiceAvailable',
       'setUserFavoriteLocations',
       'setUserFavoriteReasons',
       'setUserFavoriteResults',
       'setResetPagination',
       'setStopsWithErrors',
     ]),
+
+    addApiStop(apiStop) {
+      this.isLocked = true
+      const apiStops = this.getApiStopsFromLocalStorage()
+      apiStops.push(apiStop)
+      this.setApiStopsToLocalStorage(apiStops)
+      this.isLocked = false
+    },
+
+    setApiStopsToLocalStorage(apiStops) {
+      localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
+    },
+
+    async submitOfficerStopOnline(apiStop) {
+      this.resetStopSubmissionStatus()
+
+      await this.submitOfficerStop(apiStop)
+
+      let stopIdsPassedStr = ''
+      if (this.mappedStopSubmissionPassedIds.length > 0) {
+        stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+          ', ',
+        )}.`
+      }
+
+      // update snackbarText regardless if errors or not
+      this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
+
+      // display no errors snackbar which closes automatically
+      if (this.mappedStopSubmissionFailedStops.length === 0) {
+        this.snackbarNoErrorsVisible = true
+      }
+
+      if (this.mappedStopSubmissionFailedStops.length > 0) {
+        // display errors snackbar which remains open
+        this.snackbarErrorsVisible = true
+        // if there are failed ids, update error stops key
+        this.pushFailedStopsToStopsWithErrors(
+          this.mappedStopSubmissionFailedStops,
+        )
+      }
+    },
 
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
