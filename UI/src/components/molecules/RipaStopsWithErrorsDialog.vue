@@ -48,6 +48,8 @@ export default {
     }
   },
 
+  inject: ['stopsWithErrors'],
+
   computed: {
     model: {
       get() {
@@ -91,10 +93,6 @@ export default {
   },
 
   props: {
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
     showDialog: {
       type: Boolean,
       default: false,

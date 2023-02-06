@@ -4,7 +4,6 @@
     @on-update-dark="handleUpdateDark"
     @on-update-user="handleUpdateUser"
     @on-view-stops-with-errors="handleViewStopsWithErrors"
-    :stops-with-errors="mappedStopsWithErrors"
     :api-stop-job-loading="apiStopJobLoading"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
@@ -66,7 +65,6 @@
     ></ripa-interval>
 
     <ripa-stops-with-errors-dialog
-      :stops-with-errors="mappedStopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
       :on-close="handleCloseDialog"
       :on-edit-stop="handleOpenStopWithError"
@@ -130,6 +128,7 @@ export default {
       invalidUser: computed(() => this.invalidUser),
       online: computed(() => this.isOnline),
       isApiUnavailable: computed(() => this.isApiUnavailable),
+      stopsWithErrors: computed(() => this.mappedStopsWithErrors),
     }
   },
 

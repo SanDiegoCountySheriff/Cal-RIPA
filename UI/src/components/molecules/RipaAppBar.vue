@@ -245,6 +245,7 @@ export default {
     'invalidUser',
     'online',
     'isApiUnavailable',
+    'stopsWithErrors',
   ],
 
   computed: {
@@ -359,10 +360,6 @@ export default {
   },
 
   props: {
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
     apiStopJobLoading: {
       type: Boolean,
       default: false,
