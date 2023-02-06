@@ -75,6 +75,25 @@ export default {
 
   inject: ['isAdminEditing', 'isAdminViewing'],
 
+  methods: {
+    handleAddPerson() {
+      this.$emit('on-add-person')
+    },
+
+    handleSubmit() {
+      this.isFormValid = this.$refs.stepForm.validate()
+      if (!this.isFormValid) {
+        return
+      }
+      this.$emit('input', this.viewModel)
+      this.$emit('on-submit')
+    },
+
+    handleDone() {
+      this.$emit('handle-done')
+    },
+  },
+
   props: {
     apiStop: {
       type: Object,

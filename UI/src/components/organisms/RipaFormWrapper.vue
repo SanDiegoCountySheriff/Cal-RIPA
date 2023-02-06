@@ -100,10 +100,10 @@
                     v-model="stop"
                     v-on="$listeners"
                     :disabled="isFormStep2Disabled"
-                    :on-back="handleBack"
-                    :on-next="handleNext"
-                    @on-cancel="handleCancel"
                     :back-button-visible="getFormStep2BackButtonVisible"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     @input="handleInput"
                   ></ripa-form-step-2>
                 </template>
@@ -120,7 +120,7 @@
                   <ripa-form-step-3
                     v-model="stop"
                     v-on="$listeners"
-                    :on-back="handleBack"
+                    @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
@@ -140,7 +140,7 @@
                   <ripa-form-step-4
                     v-model="stop"
                     v-on="$listeners"
-                    :on-back="handleBack"
+                    @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
@@ -160,7 +160,7 @@
                   <ripa-form-step-5
                     v-model="stop"
                     v-on="$listeners"
-                    :on-back="handleBack"
+                    @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
@@ -172,10 +172,10 @@
                 <template v-if="stepIndex === 6">
                   <ripa-form-step-6
                     v-model="stop"
-                    :on-back="handleBack"
+                    :back-button-visible="getFormStep6BackButtonVisible"
+                    @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    :back-button-visible="getFormStep6BackButtonVisible"
                     @input="handleInput"
                   ></ripa-form-step-6>
                 </template>
@@ -187,13 +187,13 @@
                     v-model="stop"
                     :api-stop="getApiStop"
                     @on-add-person="handleAddPerson"
-                    :on-back="handleBack"
+                    @on-back="handleBack"
                     @on-copy-person="handleCopyPerson"
-                    :on-delete-person="handleCallDeletePerson"
+                    @on-delete-person="handleCallDeletePerson"
                     @on-edit-agency-questions="handleEditAgencyQuestions"
                     @on-edit-person="handleEditPerson"
                     @on-edit-stop="handleEditStop"
-                    :on-submit="handleSubmit"
+                    @on-submit="handleSubmit"
                     @on-cancel="handleCancel"
                     @handle-done="handleDone"
                     @input="handleInput"
@@ -248,7 +248,7 @@
         </template>
         <template v-if="stepIndex === confirmationStepIndex">
           <ripa-confirmation
-            :on-start-new="handleStartNew"
+            @on-start-new="handleStartNew"
             @go-home="onGoHome"
           ></ripa-confirmation>
         </template>
