@@ -28,8 +28,8 @@
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :loading="loading"
       :show-dialog="showUserDialog"
-      :on-close="handleCloseDialog"
-      :on-save="handleSaveUser"
+      @on-close="handleCloseDialog"
+      @on-save="handleSaveUser"
     ></ripa-user-dialog>
 
     <ripa-invalid-user-dialog
@@ -65,9 +65,9 @@
 
     <ripa-stops-with-errors-dialog
       :show-dialog="showStopsWithErrorsDialog"
-      :on-close="handleCloseDialog"
-      :on-edit-stop="handleOpenStopWithError"
-      :on-delete-stop="handleDeleteStopWithError"
+      @on-close="handleCloseDialog"
+      @on-edit-stop="handleOpenStopWithError"
+      @on-delete-stop="handleDeleteStopWithError"
     ></ripa-stops-with-errors-dialog>
   </ripa-page-wrapper>
 </template>

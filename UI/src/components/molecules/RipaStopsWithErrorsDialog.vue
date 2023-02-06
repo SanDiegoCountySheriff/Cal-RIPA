@@ -15,9 +15,8 @@
           <v-row>
             <v-col cols="12">
               <ripa-stops-with-errors-grid
+                v-on="$listeners"
                 :items="stopsWithErrors"
-                :on-edit-stop="handleEditStop"
-                :on-delete-stop="handleDeleteStop"
               ></ripa-stops-with-errors-grid>
             </v-col>
           </v-row>
@@ -57,9 +56,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModel = newValue
       },
@@ -68,21 +65,7 @@ export default {
 
   methods: {
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
-    },
-
-    handleEditStop(internalId) {
-      if (this.onEditStop) {
-        this.onEditStop(internalId)
-      }
-    },
-
-    handleDeleteStop(internalId) {
-      if (this.onDeleteStop) {
-        this.onDeleteStop(internalId)
-      }
+      this.$emit('on-close')
     },
   },
 
@@ -96,18 +79,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      default: () => {},
-    },
-    onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteStop: {
-      type: Function,
-      default: () => {},
     },
   },
 }
