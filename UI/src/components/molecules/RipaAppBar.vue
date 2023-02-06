@@ -246,6 +246,7 @@ export default {
     'online',
     'isApiUnavailable',
     'stopsWithErrors',
+    'apiStopJobLoading',
   ],
 
   computed: {
@@ -357,13 +358,6 @@ export default {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', this.handleResize, { passive: true })
     }
-  },
-
-  props: {
-    apiStopJobLoading: {
-      type: Boolean,
-      default: false,
-    },
   },
 }
 </script>

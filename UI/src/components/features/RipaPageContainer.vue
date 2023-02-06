@@ -4,7 +4,6 @@
     @on-update-dark="handleUpdateDark"
     @on-update-user="handleUpdateUser"
     @on-view-stops-with-errors="handleViewStopsWithErrors"
-    :api-stop-job-loading="apiStopJobLoading"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
@@ -129,6 +128,7 @@ export default {
       online: computed(() => this.isOnline),
       isApiUnavailable: computed(() => this.isApiUnavailable),
       stopsWithErrors: computed(() => this.mappedStopsWithErrors),
+      apiStopJobLoading: computed(() => this.apiStopJobLoading),
     }
   },
 

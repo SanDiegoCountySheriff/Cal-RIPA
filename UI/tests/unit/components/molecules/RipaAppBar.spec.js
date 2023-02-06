@@ -37,6 +37,7 @@ describe('Ripa App Bar', () => {
           () => provideData?.isApiUnavailable ?? false,
         ),
         stopsWithErrors: computed(() => []),
+        apiStopJobLoading: computed(() => false),
       },
       stubs: ['router-link'],
     })
@@ -54,6 +55,7 @@ describe('Ripa App Bar', () => {
         online: computed(() => true),
         isApiUnavailable: computed(() => false),
         stopsWithErrors: computed(() => []),
+        apiStopJobLoading: computed(() => false),
       },
       stubs: ['router-link'],
     })

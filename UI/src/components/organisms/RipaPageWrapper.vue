@@ -2,7 +2,6 @@
   <div class="ripa-page-wrapper">
     <ripa-app-bar
       v-on="$listeners"
-      :api-stop-job-loading="apiStopJobLoading"
       @handleLogOut="handleLogOut"
       @handleLogIn="handleLogIn"
     ></ripa-app-bar>
@@ -64,10 +63,6 @@ export default {
 
   props: {
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    apiStopJobLoading: {
       type: Boolean,
       default: false,
     },
