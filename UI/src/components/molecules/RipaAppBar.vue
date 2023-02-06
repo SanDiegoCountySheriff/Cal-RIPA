@@ -297,7 +297,7 @@ export default {
 
   methods: {
     handleViewStopsWithErrors() {
-      this.onViewStopsWithErrors()
+      this.$emit('on-view-stops-with-errors')
     },
 
     handleThemeChange() {
@@ -359,10 +359,6 @@ export default {
   },
 
   props: {
-    onViewStopsWithErrors: {
-      type: Function,
-      required: true,
-    },
     stopsWithErrors: {
       type: Array,
       default: () => [],

@@ -25,7 +25,6 @@ describe('Ripa App Bar', () => {
       vuetify,
       propsData: {
         ...propsData,
-        onViewStopsWithErrors: jest.fn(),
       },
       provide: {
         admin: computed(() => provideData?.admin ?? false),
@@ -45,9 +44,6 @@ describe('Ripa App Bar', () => {
   it('should match snapshot', () => {
     wrapper = mount(RipaAppBar, {
       vuetify,
-      propsData: {
-        onViewStopsWithErrors: jest.fn(),
-      },
       provide: {
         admin: computed(() => false),
         authenticated: computed(() => true),
@@ -138,7 +134,7 @@ describe('Ripa App Bar', () => {
 
     wrapper.vm.handleViewStopsWithErrors()
 
-    expect(wrapper.vm.onViewStopsWithErrors).toHaveBeenCalled()
+    expect(wrapper.emitted('on-view-stops-with-errors')).toBeTruthy()
   })
 
   it('should handle theme change', () => {
