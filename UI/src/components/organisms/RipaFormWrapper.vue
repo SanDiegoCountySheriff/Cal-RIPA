@@ -80,9 +80,8 @@
                   <ripa-form-step-1
                     v-model="stop"
                     v-on="$listeners"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
-                    :display-user-edit="displayUserEdit"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-1>
@@ -103,7 +102,7 @@
                     :disabled="isFormStep2Disabled"
                     :on-back="handleBack"
                     :on-next="handleNext"
-                    :on-cancel="handleCancel"
+                    @on-cancel="handleCancel"
                     :back-button-visible="getFormStep2BackButtonVisible"
                     @input="handleInput"
                   ></ripa-form-step-2>
@@ -122,8 +121,8 @@
                     v-model="stop"
                     v-on="$listeners"
                     :on-back="handleBack"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-3>
@@ -142,8 +141,8 @@
                     v-model="stop"
                     v-on="$listeners"
                     :on-back="handleBack"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     @input="handleInput"
                     @pii-check="handlePiiCheck"
                   ></ripa-form-step-4>
@@ -162,8 +161,8 @@
                     v-model="stop"
                     v-on="$listeners"
                     :on-back="handleBack"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     @input="handleInput"
                   ></ripa-form-step-5>
                 </template>
@@ -174,8 +173,8 @@
                   <ripa-form-step-6
                     v-model="stop"
                     :on-back="handleBack"
-                    :on-next="handleNext"
-                    :on-cancel="handleCancel"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
                     :back-button-visible="getFormStep6BackButtonVisible"
                     @input="handleInput"
                   ></ripa-form-step-6>
@@ -195,7 +194,7 @@
                     @on-edit-person="handleEditPerson"
                     @on-edit-stop="handleEditStop"
                     :on-submit="handleSubmit"
-                    :on-cancel="handleCancel"
+                    @on-cancel="handleCancel"
                     @handle-done="handleDone"
                     @input="handleInput"
                   ></ripa-form-step-7>
@@ -371,10 +370,6 @@ export default {
     anyAgencyQuestions() {
       const questions = this.stop?.agencyQuestions || []
       return questions.length > 0
-    },
-
-    displayUserEdit() {
-      return !this.isAdminEditing
     },
 
     getEditPersonText() {

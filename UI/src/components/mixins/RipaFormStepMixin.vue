@@ -49,9 +49,7 @@ export default {
         return
       }
       this.$emit('input', this.viewModel)
-      if (this.onNext) {
-        this.onNext()
-      }
+      this.$emit('on-next')
     },
 
     handleSubmit() {
@@ -66,9 +64,7 @@ export default {
     },
 
     handleCancel() {
-      if (this.onCancel) {
-        this.onCancel()
-      }
+      this.$emit('on-cancel')
     },
 
     handleDone() {
@@ -116,14 +112,6 @@ export default {
       default: () => {},
     },
     onBack: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
-      type: Function,
-      default: () => {},
-    },
-    onNext: {
       type: Function,
       default: () => {},
     },
