@@ -259,7 +259,7 @@
       :stop="stop"
       :api-stop="getApiStop"
       :show-dialog="showDialog"
-      :on-close="handleCloseDialog"
+      @on-close="handleCloseDialog"
     ></ripa-json-viewer-dialog>
 
     <ripa-confirm-dialog
