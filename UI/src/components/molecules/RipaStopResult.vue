@@ -66,7 +66,6 @@
                 :items="statutes"
                 :max-selections="5"
                 :rules="warningRules"
-                :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('warningCodes', $event)"
                 @input="handleInput"
                 hint="Select Up To 5 Offense Codes (required)"
@@ -107,7 +106,6 @@
                 :items="statutes"
                 :max-selections="5"
                 :rules="citationRules"
-                :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('citationCodes', $event)"
                 @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -147,7 +145,6 @@
                 :items="statutes"
                 :max-selections="5"
                 :rules="infieldRules"
-                :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('infieldCodes', $event)"
                 @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -195,7 +192,6 @@
                 :items="statutes"
                 :max-selections="5"
                 :rules="custodialArrestRules"
-                :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('custodialArrestCodes', $event)"
                 @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
@@ -462,10 +458,6 @@ export default {
         code => code !== statute.item.code,
       )
       this.handleInput()
-    },
-
-    getStatuteLabel(statute) {
-      return statute.item.fullName.split('-')[0]
     },
 
     getReasonCode() {

@@ -264,37 +264,37 @@
 
     <ripa-confirm-dialog
       :show-dialog="showCancelFormDialog"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleCancelForm"
       title="Confirm Cancel"
       subtitle="Are you sure you want to cancel the form? You will lose all changes."
-      :on-close="handleCloseDialog"
-      :on-confirm="handleCancelForm"
     >
     </ripa-confirm-dialog>
 
     <ripa-confirm-dialog
       :show-dialog="showCancelActionDialog"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleCancelAction"
       title="Confirm Cancel"
       subtitle="Are you sure you want to cancel the action? You will lose all changes."
-      :on-close="handleCloseDialog"
-      :on-confirm="handleCancelAction"
     >
     </ripa-confirm-dialog>
 
     <ripa-confirm-dialog
       :show-dialog="showDeletePersonDialog"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleDeletePerson"
       title="Confirm Delete"
       subtitle="Are you sure you want to delete the person?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleDeletePerson"
     >
     </ripa-confirm-dialog>
 
     <ripa-confirm-dialog
       :show-dialog="showConfirmDialog"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirmSubmit"
       title="Confirm Submission"
       subtitle="Are you sure you want to submit the form?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirmSubmit"
     >
     </ripa-confirm-dialog>
   </div>

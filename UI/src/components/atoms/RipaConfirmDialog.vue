@@ -37,13 +37,13 @@ export default {
 
   methods: {
     handleCancel() {
-      this.onClose()
+      this.$emit('on-close')
     },
 
     handleConfirm() {
       this.isConfirmDisabled = true
       this.viewModel = false
-      this.onConfirm()
+      this.$emit('on-confirm')
       this.handleCancel()
     },
   },
@@ -69,14 +69,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      required: true,
-    },
-    onConfirm: {
-      type: Function,
-      required: true,
     },
   },
 }

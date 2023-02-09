@@ -41,8 +41,8 @@
       :show-dialog="showConfirmDialog"
       title="Confirm Continue"
       subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirm"
     >
     </ripa-confirm-dialog>
   </v-form>

@@ -35,10 +35,10 @@
 
     <ripa-confirm-dialog
       :show-dialog="showConfirmDialog"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirm"
       title="Confirm Continue"
       subtitle="This stop does not have any actions taken as a result of the stop. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
     >
     </ripa-confirm-dialog>
   </v-form>

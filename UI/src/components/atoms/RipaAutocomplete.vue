@@ -47,10 +47,7 @@ export default {
     },
 
     getCustomChipLabel(data) {
-      if (this.customChipLabel) {
-        return this.customChipLabel(data)
-      }
-      return ''
+      return data.item.fullName.split('-')[0]
     },
   },
 
@@ -124,10 +121,6 @@ export default {
     customChip: {
       type: Boolean,
       default: false,
-    },
-    customChipLabel: {
-      type: Function,
-      default: () => {},
     },
     smallChips: {
       type: Boolean,
