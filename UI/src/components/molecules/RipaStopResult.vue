@@ -13,10 +13,10 @@
         <v-col cols="12" sm="6" md="6" class="tw-pr-2">
           <div class="tw-mr-2 tw-mt-4">
             <v-btn
+              @click="handleOpenFavorites"
               class="tw-w-full"
               color="primary"
               small
-              @click="handleOpenFavorites"
             >
               Open Favorites
             </v-btn>
@@ -26,10 +26,10 @@
           <template v-if="isOnlineAndAuthenticated">
             <div class="tw-mr-2 tw-mt-4">
               <v-btn
+                @click="handleSaveFavorite"
                 class="tw-w-full"
                 color="primary"
                 small
-                @click="handleSaveFavorite"
               >
                 Save Result
               </v-btn>
@@ -46,46 +46,46 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.stopResult.anyResultsOfStop"
-            label="Any Results of Stop?"
             :max-width="200"
             @input="handleInput"
+            label="Any Results of Stop?"
           ></ripa-switch>
 
           <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop2"
-              label="Warning (verbal or written)"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Warning (verbal or written)"
+              hide-details
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.resultsOfStop2">
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
-                hint="Select Up To 5 Offense Codes (required)"
-                persistent-hint
-                label="Offense Code"
-                item-text="fullName"
-                item-value="code"
                 :items="statutes"
-                multiple
-                custom-chip
                 :max-selections="5"
                 :rules="warningRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('warningCodes', $event)"
                 @input="handleInput"
+                hint="Select Up To 5 Offense Codes (required)"
+                persistent-hint
+                label="Offense Code"
+                item-text="fullName"
+                item-value="code"
+                multiple
+                custom-chip
               >
               </ripa-autocomplete>
               <template v-if="isPullReasonCodeWarningVisible">
                 <div class="tw-mt-4 tw-text-content">
                   <v-btn
+                    :disabled="isPullReasonCodeWarningDisabled"
+                    @click="handlePullReasonCodeWarning"
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeWarningDisabled"
-                    @click="handlePullReasonCodeWarning"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -95,37 +95,37 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop3"
-              label="Citation for infraction"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Citation for infraction"
+              hide-details
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.resultsOfStop3">
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
-                hint="Select Up to 5 Offense Codes (required)"
-                persistent-hint
-                item-text="fullName"
-                item-value="code"
-                label="Offense Code"
                 :items="statutes"
-                multiple
-                custom-chip
                 :max-selections="5"
                 :rules="citationRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('citationCodes', $event)"
                 @input="handleInput"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeCitationVisible">
                 <div class="tw-mt-2 tw-text-content">
                   <v-btn
+                    :disabled="isPullReasonCodeCitationDisabled"
+                    @click="handlePullReasonCodeCitation"
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeCitationDisabled"
-                    @click="handlePullReasonCodeCitation"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -135,37 +135,37 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop4"
-              label="In-field cite and release"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="In-field cite and release"
+              hide-details
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.resultsOfStop4">
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
-                hint="Select Up to 5 Offense Codes (required)"
-                persistent-hint
-                item-text="fullName"
-                item-value="code"
-                label="Offense Code"
                 :items="statutes"
-                multiple
-                custom-chip
                 :max-selections="5"
                 :rules="infieldRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('infieldCodes', $event)"
                 @input="handleInput"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeInfieldVisible">
                 <div class="tw-mt-2 tw-text-content">
                   <v-btn
+                    :disabled="isPullReasonCodeInfieldDisable"
+                    @click="handlePullReasonCodeInfield"
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeInfieldDisable"
-                    @click="handlePullReasonCodeInfield"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -175,18 +175,18 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop5"
-              label="Custodial arrest pursurant to outstanding warrant"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Custodial arrest pursurant to outstanding warrant"
+              hide-details
             ></ripa-checkbox>
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop6"
-              label="Custodial arrest without warrant"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Custodial arrest without warrant"
+              hide-details
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.resultsOfStop6">
@@ -209,11 +209,11 @@
               <template v-if="isPullReasonCodeCustodialArrestVisible">
                 <div class="tw-mt-2 tw-text-content">
                   <v-btn
+                    :disabled="isPullReasonCodeCustodialArrestDisabled"
+                    @click="handlePullReasonCodeCustodialArrest"
                     x-small
                     outlined
                     color="primary"
-                    :disabled="isPullReasonCodeCustodialArrestDisabled"
-                    @click="handlePullReasonCodeCustodialArrest"
                   >
                     Pull from Reason Code
                   </v-btn>
@@ -223,58 +223,58 @@
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop7"
-              label="Field interview card completed"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Field interview card completed"
+              hide-details
             ></ripa-checkbox>
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop8"
-              label="Noncriminal transport or caretaking transport"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Noncriminal transport or caretaking transport"
+              hide-details
             ></ripa-checkbox>
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop9"
-              label="Contacted parent/legal guardian or other person responsible for the minor"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Contacted parent/legal guardian or other person responsible for the minor"
+              hide-details
             ></ripa-checkbox>
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop10"
-              label="Psychiatric hold"
               :rules="actionsTakenRules"
-              hide-details
               @input="handleInput"
+              label="Psychiatric hold"
+              hide-details
             ></ripa-checkbox>
 
             <template v-if="model.person.isStudent">
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop12"
-                label="Referral to school administrator"
                 :rules="actionsTakenRules"
-                hide-details
                 @input="handleInput"
+                label="Referral to school administrator"
+                hide-details
               ></ripa-checkbox>
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop13"
-                label="Referral to school counselor or other support staff"
                 :rules="actionsTakenRules"
-                hide-details
                 @input="handleInput"
+                label="Referral to school counselor or other support staff"
+                hide-details
               ></ripa-checkbox>
             </template>
 
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop11"
-              label="Contacted U.S. Department of Homeland Security"
               :rules="actionsTakenRules"
               @input="handleInput"
+              label="Contacted U.S. Department of Homeland Security"
             ></ripa-checkbox>
 
             <template v-if="model.stopResult.resultsOfStop11">
