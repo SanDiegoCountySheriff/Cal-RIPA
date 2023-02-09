@@ -192,19 +192,19 @@
             <template v-if="model.stopResult.resultsOfStop6">
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
-                hint="Select Up to 5 Offense Codes (required)"
-                persistent-hint
-                item-text="fullName"
-                item-value="code"
-                label="Offense Code"
                 :items="statutes"
-                multiple
-                custom-chip
                 :max-selections="5"
                 :rules="custodialArrestRules"
                 :custom-chip-label="getStatuteLabel"
                 @remove-item="removeItem('custodialArrestCodes', $event)"
                 @input="handleInput"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
               ></ripa-autocomplete>
               <template v-if="isPullReasonCodeCustodialArrestVisible">
                 <div class="tw-mt-2 tw-text-content">
