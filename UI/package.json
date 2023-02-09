@@ -5,11 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve --host localhost --port 4000",
     "build": "vue-cli-service build",
-    "test:unit": "set TZ=UTC && vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6007",
-    "test:unit-update": "set TZ=UTC && vue-cli-service test:unit -u"
+    "test:unit-update": "vue-cli-service test:unit -u"
   },
   "dependencies": {
     "@azure/msal-browser": "^2.22.0",

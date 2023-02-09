@@ -4,7 +4,7 @@
       title="Result of Stop"
       required
       subtitle="§999.226(a)(13)"
-      :on-open-statute="handleOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
