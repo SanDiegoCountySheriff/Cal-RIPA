@@ -11,7 +11,6 @@ import {
 } from '../../constants/RipaFormContainerTestConstants'
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
-import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import { computed } from 'vue'
@@ -123,7 +122,7 @@ describe('Ripa Form Container', () => {
       provide: {
         formStepIndex: computed(() => 0),
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      mixins: [RipaApiStopJobMixin],
     })
   }
 
@@ -136,7 +135,7 @@ describe('Ripa Form Container', () => {
         ...propsData,
         formStepIndex: 1,
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      mixins: [RipaApiStopJobMixin],
       computed: {
         isAdminEditing: {
           get() {
@@ -163,7 +162,7 @@ describe('Ripa Form Container', () => {
         mappedFormSchools: () => [{ id: 'test' }],
         mappedFormStatutes: () => [{ id: 'test' }],
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      mixins: [RipaApiStopJobMixin],
     })
   }
 

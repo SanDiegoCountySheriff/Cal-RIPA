@@ -33,14 +33,8 @@ export default {
       this.handleNext()
     },
 
-    handleAddPerson() {
-      this.$emit('on-add-person')
-    },
-
     handleBack() {
-      if (this.onBack) {
-        this.onBack()
-      }
+      this.$emit('on-back')
     },
 
     handleNext() {
@@ -49,30 +43,11 @@ export default {
         return
       }
       this.$emit('input', this.viewModel)
-      if (this.onNext) {
-        this.onNext()
-      }
-    },
-
-    handleSubmit() {
-      this.isFormValid = this.$refs.stepForm.validate()
-      if (!this.isFormValid) {
-        return
-      }
-      this.$emit('input', this.viewModel)
-      if (this.onSubmit) {
-        this.onSubmit()
-      }
+      this.$emit('on-next')
     },
 
     handleCancel() {
-      if (this.onCancel) {
-        this.onCancel()
-      }
-    },
-
-    handleDone() {
-      this.$emit('handle-done')
+      this.$emit('on-cancel')
     },
   },
 
@@ -85,50 +60,6 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    schools: {
-      type: Array,
-      default: () => [],
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    loadingGps: {
-      type: Boolean,
-      defaeult: false,
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
-    onEditPerson: {
-      type: Function,
-      default: () => {},
-    },
-    onBack: {
-      type: Function,
-      default: () => {},
-    },
-    onCancel: {
-      type: Function,
-      default: () => {},
-    },
-    onNext: {
-      type: Function,
-      default: () => {},
-    },
-    onSubmit: {
-      type: Function,
       default: () => {},
     },
   },

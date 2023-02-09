@@ -1,6 +1,7 @@
 import RipaStopsWithErrorsDialog from '@/components/molecules/RipaStopsWithErrorsDialog.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Stops With Errors Dialog', () => {
   let vuetify
@@ -16,11 +17,19 @@ describe('Ripa Stops With Errors Dialog', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        stopsWithErrors: computed(() => []),
+      },
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaStopsWithErrorsDialog, { vuetify })
+    wrapper = mount(RipaStopsWithErrorsDialog, {
+      vuetify,
+      provide: {
+        stopsWithErrors: computed(() => []),
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

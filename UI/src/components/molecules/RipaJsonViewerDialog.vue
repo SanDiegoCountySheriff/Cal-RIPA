@@ -58,9 +58,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModel = newValue
       },
@@ -69,9 +67,7 @@ export default {
 
   methods: {
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.$emit('on-close')
     },
   },
 
@@ -93,10 +89,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      required: true,
     },
   },
 }

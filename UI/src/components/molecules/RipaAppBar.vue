@@ -237,6 +237,18 @@ export default {
     }
   },
 
+  inject: [
+    'admin',
+    'authenticated',
+    'dark',
+    'environmentName',
+    'invalidUser',
+    'online',
+    'isApiUnavailable',
+    'stopsWithErrors',
+    'apiStopJobLoading',
+  ],
+
   computed: {
     getThemeIcon() {
       return this.$vuetify.theme.dark
@@ -287,12 +299,12 @@ export default {
 
   methods: {
     handleViewStopsWithErrors() {
-      this.onViewStopsWithErrors()
+      this.$emit('on-view-stops-with-errors')
     },
 
     handleThemeChange() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      this.onUpdateDark(this.$vuetify.theme.dark)
+      this.$emit('on-update-dark', this.$vuetify.theme.dark)
     },
 
     handleAuth() {
@@ -312,7 +324,7 @@ export default {
     },
 
     handleUserChange() {
-      this.onUpdateUser()
+      this.$emit('on-update-user')
     },
 
     handleResize() {
@@ -346,57 +358,6 @@ export default {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', this.handleResize, { passive: true })
     }
-  },
-
-  props: {
-    admin: {
-      type: Boolean,
-      default: false,
-    },
-    dark: {
-      type: Boolean,
-      default: false,
-    },
-    environmentName: {
-      type: String,
-      default: '',
-    },
-    online: {
-      type: Boolean,
-      default: false,
-    },
-    isApiUnavailable: {
-      type: Boolean,
-      default: false,
-    },
-    onUpdateDark: {
-      type: Function,
-      required: true,
-    },
-    onUpdateUser: {
-      type: Function,
-      required: true,
-    },
-    onViewStopsWithErrors: {
-      type: Function,
-      required: true,
-    },
-    invalidUser: {
-      type: Boolean,
-      default: false,
-    },
-    authenticated: {
-      type: Boolean,
-      default: false,
-    },
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
-    apiStopJobLoading: {
-      type: Boolean,
-      default: false,
-    },
   },
 }
 </script>

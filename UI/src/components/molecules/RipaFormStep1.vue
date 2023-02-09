@@ -4,7 +4,7 @@
       <ripa-officer
         v-on="$listeners"
         :user="getApiStopUser"
-        :on-update-user="handleUpdateStopUser"
+        @on-update-user="handleUpdateStopUser"
       ></ripa-officer>
 
       <ripa-user-dialog
@@ -12,15 +12,13 @@
         :is-invalid-user="false"
         :user="getApiStopUser"
         :show-dialog="showUserDialog"
-        :on-close="handleCloseDialog"
-        :on-save="handleSaveUser"
+        @on-close="handleCloseDialog"
+        @on-save="handleSaveUser"
       ></ripa-user-dialog>
     </template>
 
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
-      <ripa-officer
-        v-on="$listeners"
-      ></ripa-officer>
+      <ripa-officer v-on="$listeners"></ripa-officer>
     </template>
 
     <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
@@ -57,8 +55,8 @@
       :show-dialog="showConfirmDialog"
       title="Confirm Continue"
       subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirm"
     >
     </ripa-confirm-dialog>
   </v-form>

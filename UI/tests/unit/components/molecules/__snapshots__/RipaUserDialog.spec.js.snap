@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa User Dialog should match snapshot 1`] = `
-<div class="v-dialog__container" user="[object Object]">
+<div class="v-dialog__container" user="[object Object]" onclose="function () {
+        return fn.apply(this, arguments);
+      }" onsave="function () {
+        return fn.apply(this, arguments);
+      }">
   <!---->
 </div>
 `;

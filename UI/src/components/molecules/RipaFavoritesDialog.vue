@@ -11,9 +11,7 @@
             <v-col cols="12">
               <ripa-favorites-grid
                 :items="favorites"
-                :on-delete-favorite="onDeleteFavorite"
-                :on-edit-favorite="onEditFavorite"
-                :on-open-favorite="onOpenFavorite"
+                v-on="$listeners"
               ></ripa-favorites-grid>
             </v-col>
           </v-row>
@@ -51,9 +49,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModel = newValue
       },
@@ -62,9 +58,7 @@ export default {
 
   methods: {
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.$emit('on-close')
     },
     getTitle() {
       return 'Favorite ' + this.title
@@ -89,26 +83,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onEditFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
-      default: () => {},
     },
   },
 }

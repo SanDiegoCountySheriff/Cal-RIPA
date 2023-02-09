@@ -28,8 +28,6 @@ describe('Ripa Confirm Dialog', () => {
     title: 'Title',
     subtitle: 'Subtitle',
     showDialog: true,
-    onClose: jest.fn(),
-    onConfirm: jest.fn(),
   }
 
   it('should match snapshot', async () => {
@@ -40,20 +38,18 @@ describe('Ripa Confirm Dialog', () => {
 
   it('should handle cancel', () => {
     wrapper = factory(testData)
-    const onClose = jest.spyOn(wrapper.vm, 'onClose')
 
     wrapper.vm.handleCancel()
 
-    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-close')).toBeTruthy()
   })
 
   it('should handle confirm', () => {
     wrapper = factory(testData)
-    const onConfirm = jest.spyOn(wrapper.vm, 'onConfirm')
 
     wrapper.vm.handleConfirm()
 
-    expect(onConfirm).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-confirm')).toBeTruthy()
   })
 
   it('should watch showDialog', async () => {

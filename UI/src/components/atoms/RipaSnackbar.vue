@@ -43,7 +43,7 @@ export default {
 
   methods: {
     handleViewClick() {
-      this.onView()
+      this.$emit('on-view')
       this.model = false
     },
   },
@@ -74,10 +74,6 @@ export default {
     viewButtonVisible: {
       type: Boolean,
       default: false,
-    },
-    onView: {
-      type: Function,
-      default: () => {},
     },
   },
 }

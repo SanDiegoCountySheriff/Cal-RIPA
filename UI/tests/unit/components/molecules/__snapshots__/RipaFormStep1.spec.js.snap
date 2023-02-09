@@ -12,11 +12,11 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
       }" onupdateuser="function () {
         return fn.apply(this, arguments);
       }">
-  <ripa-officer-stub onopenstatute="[Function]" user="[object Object]" on-update-user="function () { [native code] }"></ripa-officer-stub>
-  <ripa-user-dialog-stub onclose="[Function]" onsave="[Function]" adminediting="true" isrowkeydisabled="true" formtitle="Manage User" user="[object Object]"></ripa-user-dialog-stub>
+  <ripa-officer-stub user="[object Object]"></ripa-officer-stub>
+  <ripa-user-dialog-stub adminediting="true" isrowkeydisabled="true" formtitle="Manage User" user="[object Object]"></ripa-user-dialog-stub>
   <!---->
-  <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
-  <ripa-location-stub onopenstatute="[Function]" value="[object Object]"></ripa-location-stub>
+  <ripa-stop-date-stub value="[object Object]"></ripa-stop-date-stub>
+  <ripa-location-stub value="[object Object]"></ripa-location-stub>
   <v-spacer-stub tag="div"></v-spacer-stub>
   <!---->
   <div class="tw-flex tw-mt-8 tw-justify-center">
@@ -27,6 +27,6 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
       Next
     </v-btn-stub>
   </div>
-  <ripa-confirm-dialog-stub title="Confirm Continue" subtitle="This page may contain personally identifying information. Are you sure you want to continue?" onclose="[Function]" onconfirm="[Function]"></ripa-confirm-dialog-stub>
+  <ripa-confirm-dialog-stub title="Confirm Continue" subtitle="This page may contain personally identifying information. Are you sure you want to continue?"></ripa-confirm-dialog-stub>
 </v-form-stub>
 `;

@@ -94,28 +94,6 @@ export const defaultStop = () => {
   }
 }
 
-export const motorStop = () => {
-  return {
-    actionsTaken: {
-      anyActionsTaken: true,
-    },
-    stopReason: stopReasonGivenTemplate('motor'),
-    stopResult: stopResultGivenTemplate('motor'),
-  }
-}
-
-export const probationStop = () => {
-  return {
-    actionsTaken: {
-      anyActionsTaken: true,
-      actionsTakenDuringStop: [4, 18, 20],
-      basisForSearch: [4],
-    },
-    stopReason: stopReasonGivenTemplate('probation'),
-    stopResult: stopResultGivenTemplate('probation'),
-  }
-}
-
 export const stopReasonGivenTemplate = template => {
   if (template === 'motor') {
     return {

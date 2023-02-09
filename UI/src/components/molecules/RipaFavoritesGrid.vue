@@ -141,9 +141,7 @@ export default {
 
     deleteItemConfirm() {
       this.favorites.splice(this.editedIndex, 1)
-      if (this.onDeleteFavorite) {
-        this.onDeleteFavorite(this.editedItem.id)
-      }
+      this.$emit('on-delete-favorite', this.editedItem.id)
       this.closeDelete()
     },
 
@@ -164,9 +162,7 @@ export default {
     },
 
     handleRowClick(item) {
-      if (this.onOpenFavorite) {
-        this.onOpenFavorite(item.id)
-      }
+      this.$emit('on-open-favorite', item.id)
     },
 
     save() {
@@ -174,12 +170,10 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.favorites[this.editedIndex], this.editedItem)
       } else {
-        this.onDeleteFavorite.push(this.editedItem)
+        this.$emit('on-delete-favorite', this.editedItem.id)
       }
 
-      if (this.onEditFavorite) {
-        this.onEditFavorite(this.editedItem)
-      }
+      this.$emit('on-edit-favorite', this.editedItem)
       this.close()
     },
   },
@@ -208,18 +202,6 @@ export default {
     items: {
       type: Array,
       default: () => [],
-    },
-    onDeleteFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onEditFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenFavorite: {
-      type: Function,
-      default: () => {},
     },
   },
 }
