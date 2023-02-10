@@ -1,10 +1,11 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿using Azure;
+using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
 namespace RIPA.Functions.Domain.Functions.Statutes.Models
 {
-    public class Statute : TableEntity
+    public class Statute : ITableEntity
     {
         [JsonProperty(PropertyName = "offenseValidationCD")]
         public int OffenseValidationCD { get; set; }
@@ -14,7 +15,7 @@ namespace RIPA.Functions.Domain.Functions.Statutes.Models
 
         [JsonProperty(PropertyName = "offenseTxnTypeCD")]
         public int OffenseTxnTypeCD { get; set; }
-        
+
         [JsonProperty(PropertyName = "offenseStatute")]
         public string OffenseStatute { get; set; }
 
@@ -47,7 +48,9 @@ namespace RIPA.Functions.Domain.Functions.Statutes.Models
 
         [JsonProperty(PropertyName = "alpsCognizantCD")]
         public string ALPSCognizantCD { get; set; }
-
-
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
     }
 }

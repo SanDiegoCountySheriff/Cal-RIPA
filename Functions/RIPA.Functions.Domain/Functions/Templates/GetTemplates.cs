@@ -1,3 +1,4 @@
+using Azure.Data.Tables;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -6,8 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.Azure.Cosmos.Table;
-using Newtonsoft.Json;
 using RIPA.Functions.Domain.Functions.Templates.Models;
 using RIPA.Functions.Security;
 using System;
@@ -17,65 +16,56 @@ using System.Net;
 using System.Threading.Tasks;
 
 
-namespace RIPA.Functions.Domain.Functions.Templates
+namespace RIPA.Functions.Domain.Functions.Templates;
+
+public class GetTemplates
 {
-    public static class GetTemplates
+    private readonly TableServiceClient _tableServiceClient;
+    private readonly TableClient _tableClient;
+
+    public GetTemplates(TableServiceClient tableServiceClient)
     {
-        [FunctionName("GetTemplates")]
+        _tableServiceClient = tableServiceClient;
+        _tableClient = _tableServiceClient.GetTableClient("Templates");
+    }
 
-        [OpenApiOperation(operationId: "GetTemplates", tags: new[] { "name" })]
-        [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
-        [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Template")]
-
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
-            [Table("Templates", Connection = "RipaStorage")] CloudTable templates, ILogger log)
-
+    [FunctionName("GetTemplates")]
+    [OpenApiOperation(operationId: "GetTemplates", tags: new[] { "name" })]
+    [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
+    [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Template")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    {
+        try
         {
-            try
+            if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
             {
-                if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
-                {
-                    return new UnauthorizedResult();
-                }
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
-
-            List<object> response = new List<object>();
-            TableContinuationToken continuationToken = null;
-            do
-            {
-                var request = await templates.ExecuteQuerySegmentedAsync(new TableQuery<Template>(), continuationToken);
-                continuationToken = request.ContinuationToken;
-
-                var orderedRequest = request.Results.OrderBy(e => e.Id);
-
-                foreach (Template entity in orderedRequest)
-                {
-                    if(entity?.DeactivationDate <= DateTime.Now)
-                    {
-                        continue;
-                    }
-
-                    response.Add(new
-                    {
-                        id = entity.Id,
-                        displayName = entity.DisplayName,
-                        deactivationDate = entity.DeactivationDate,
-                        stop = JsonConvert.DeserializeObject(entity.StopTemplate)
-                    });
-                }
-            }
-            while (continuationToken != null);
-
-            log.LogInformation($"GetTemplates returned {response.Count} templates");
-            return new OkObjectResult(response);
         }
+        catch (Exception ex)
+        {
+            log.LogError(ex.Message);
+            return new UnauthorizedResult();
+        }
+
+        List<Template> response = new List<Template>();
+
+        var queryResult = _tableClient.Query<Template>();
+
+        foreach (var template in queryResult)
+        {
+            if (template?.DeactivationDate <= DateTime.Now)
+            {
+                continue;
+            }
+            response.Add(template);
+        }
+
+        response.OrderBy(t => t.Id);
+
+        log.LogInformation($"GetTemplates returned {response.Count} templates");
+        return new OkObjectResult(response);
     }
 }
 
