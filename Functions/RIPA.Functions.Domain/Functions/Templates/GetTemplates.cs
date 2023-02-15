@@ -15,7 +15,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-
 namespace RIPA.Functions.Domain.Functions.Templates;
 
 public class GetTemplates
@@ -68,4 +67,3 @@ public class GetTemplates
         return new OkObjectResult(response);
     }
 }
-

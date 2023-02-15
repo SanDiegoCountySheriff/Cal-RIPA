@@ -77,4 +77,3 @@ public class GetStatutes
         return new OkObjectResult(response);
     }
 }
-

@@ -1,5 +1,4 @@
-﻿
-using Azure;
+﻿using Azure;
 using Azure.Data.Tables;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +61,5 @@ public class DeleteCity
         {
             return new BadRequestObjectResult("City Id not found");
         }
-
     }
 }

@@ -13,7 +13,6 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-
 namespace RIPA.Functions.Domain.Functions.Statutes;
 
 public class DeleteStatute
@@ -62,4 +61,3 @@ public class DeleteStatute
         }
     }
 }
-
