@@ -25,7 +25,7 @@ namespace RIPA.Functions.Domain.Functions.Upload;
 
 public class PostUpload
 {
-    private readonly List<TableTransactionAction> _batch;
+    private List<TableTransactionAction> _batch;
     private readonly int _batchLimit = 100;
     private readonly TableServiceClient _client;
 
@@ -72,7 +72,6 @@ public class PostUpload
             }
 
             recordCount += await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableClient("Cities"), log);
-
             recordCount += await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableClient("Schools"), log);
 
             // CA DOJ currently has the table name as "Offense Table" which does not follow the conventions of the other tables
@@ -86,6 +85,7 @@ public class PostUpload
             }
 
             string responseMessage;
+
             if (recordCount >= 1)
             {
                 responseMessage = $"Upload complete: {recordCount} {(recordCount > 1 ? "records" : "record")} updated.";
@@ -123,14 +123,18 @@ public class PostUpload
             log.LogError($"batch failed {ex.Message}");
             return false;
         }
+
         return true;
+    }
+
+    private void DeduplicateBatch()
+    {
+        _batch = _batch.GroupBy(e => e.Entity.RowKey).Select(e => e.First()).ToList();
     }
 
     private bool IsBatchCountExecutable(int batchCount)
     {
-        if (batchCount == _batchLimit)
-            return true;
-        return false;
+        return batchCount == _batchLimit;
     }
 
     private async Task<int> ProcessEntities(DataTable dataTable, TableClient table, ILogger log)
@@ -144,6 +148,7 @@ public class PostUpload
         {
             totalRows--;
             batchCount++;
+
             if (IsBatchCountExecutable(batchCount))
             {
                 await ExecuteBatch(table, log);
@@ -171,6 +176,8 @@ public class PostUpload
                     default:
                         break;
                 }
+
+                DeduplicateBatch();
             }
             catch (Exception ex)
             {
@@ -180,6 +187,7 @@ public class PostUpload
 
         await ExecuteBatch(table, log);
         _batch.Clear();
+
         return returnTotalRows;
     }
 
@@ -194,10 +202,13 @@ public class PostUpload
             County = row.ItemArray[2].ToString(),
         };
         string inactiveDate = row.ItemArray[3].ToString();
+
         if (!string.IsNullOrEmpty(inactiveDate))
         {
-            city.DeactivationDate = DateTime.Parse(inactiveDate);
+            DateTime unspecified = DateTime.Parse(inactiveDate, CultureInfo.InvariantCulture);
+            city.DeactivationDate = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
         }
+
         return city;
     }
 
@@ -213,6 +224,7 @@ public class PostUpload
             District = row.ItemArray[5].ToString(),
             Name = row.ItemArray[6].ToString()
         };
+
         return school;
     }
 
@@ -232,26 +244,43 @@ public class PostUpload
             OffenseTypeOfCharge = row.ItemArray[7].ToString(),
             OffenseLiteralIdentifierCD = row.ItemArray[8].ToString()
         };
-        statute.OffenseDegree = String.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
-        statute.BCSHierarchyCD = String.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
+        statute.OffenseDegree = string.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
+        statute.BCSHierarchyCD = string.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
         string offenseEnacted = row.ItemArray[11].ToString();
+
         if (!string.IsNullOrEmpty(offenseEnacted))
         {
             if (offenseEnacted.Length == 8)
-                statute.OffenseEnacted = DateTime.ParseExact(offenseEnacted, "yyyyMMdd", CultureInfo.InvariantCulture);
+            {
+                var unspecified = DateTime.ParseExact(offenseEnacted, "yyyyMMdd", CultureInfo.InvariantCulture);
+                statute.OffenseEnacted = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            }
             else
-                statute.OffenseEnacted = DateTime.Parse(offenseEnacted);
+            {
+                var unspecified = DateTime.Parse(offenseEnacted);
+                statute.OffenseEnacted = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            }
 
         }
+
         string offenseRepealed = row.ItemArray[12].ToString();
+
         if (!string.IsNullOrEmpty(offenseRepealed))
         {
             if (offenseEnacted.Length == 8)
-                statute.OffenseRepealed = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
+            {
+                var unspecified = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
+                statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            }
             else
-                statute.OffenseRepealed = DateTime.Parse(offenseRepealed);
+            {
+                var unspecified = DateTime.Parse(offenseRepealed);
+                statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            }
         }
+
         statute.ALPSCognizantCD = row.ItemArray[13].ToString();
+
         return statute;
     }
 
@@ -267,6 +296,7 @@ public class PostUpload
             CommandAuditGroup = row.ItemArray[3].ToString(),
             CommandAuditSize = row.ItemArray[4].ToString()
         };
+
         return beat;
     }
 

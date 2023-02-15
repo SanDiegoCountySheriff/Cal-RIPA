@@ -24,7 +24,7 @@ namespace RIPA.Functions.Submission.Functions
         }
 
         [FunctionName("ServiceBusResultConsumer")]
-        public async void Run(
+        public async Task Run(
             [ServiceBusTrigger("result", Connection = "ServiceBusConnection")] string myQueueItem, int deliveryCount,
             MessageReceiver messageReceiver, string lockToken,
             ILogger log)
