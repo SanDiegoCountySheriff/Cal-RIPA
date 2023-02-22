@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Services.ServiceBus.Contracts
+namespace RIPA.Functions.Submission.Services.ServiceBus.Contracts;
+
+public interface IResultServiceBusService
 {
-    public interface IResultServiceBusService
-    {
-        public Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessage);
-    }
+    public Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessage);
 }

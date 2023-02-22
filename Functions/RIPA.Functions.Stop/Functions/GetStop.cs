@@ -12,53 +12,51 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Stop.Functions
+namespace RIPA.Functions.Stop.Functions;
+
+public class GetStop
 {
-    public class GetStop
+    private readonly IStopCosmosDbService _stopCosmosDbService;
+
+    public GetStop(IStopCosmosDbService stopCosmosDbService)
     {
-        private readonly IStopCosmosDbService _stopCosmosDbService;
+        _stopCosmosDbService = stopCosmosDbService;
+    }
 
-        public GetStop(IStopCosmosDbService stopCosmosDbService)
+    [FunctionName("GetStop")]
+    [OpenApiOperation(operationId: "GetStop", tags: new[] { "name" })]
+    [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
+    [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
+    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Stop Id/ori")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Object")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop Id/ori not found")]
+
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
+    {
+        log.LogInformation("GET - Get Stop requested");
+
+        try
         {
-            _stopCosmosDbService = stopCosmosDbService;
-        }
-
-        [FunctionName("GetStop")]
-        [OpenApiOperation(operationId: "GetStop", tags: new[] { "name" })]
-        [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
-        [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-        [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Stop Id/ori")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Object")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop Id/ori not found")]
-
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
-        {
-            log.LogInformation("GET - Get Stop requested");
-
-            try
+            if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
             {
-                if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
-                {
-                    return new UnauthorizedResult();
-                }
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex.Message);
                 return new UnauthorizedResult();
             }
+        }
+        catch (Exception ex)
+        {
+            log.LogError(ex.Message);
+            return new UnauthorizedResult();
+        }
 
-            try
-            {
-                var response = await _stopCosmosDbService.GetStopAsync(Id);
-                return new OkObjectResult(response);
-            }
-            catch (Exception ex)
-            {
-                log.LogError($"Error getting stop: {ex.Message}");
-                return new BadRequestObjectResult($"Error getting stop: {ex.Message}");
-            }
+        try
+        {
+            var response = await _stopCosmosDbService.GetStopAsync(Id);
+            return new OkObjectResult(response);
+        }
+        catch (Exception ex)
+        {
+            log.LogError($"Error getting stop: {ex.Message}");
+            return new BadRequestObjectResult($"Error getting stop: {ex.Message}");
         }
     }
 }
-
