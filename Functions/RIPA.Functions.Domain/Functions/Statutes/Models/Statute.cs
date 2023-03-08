@@ -13,7 +13,7 @@ namespace RIPA.Functions.Domain.Functions.Statutes.Models
         public int OffenseCode { get; set; }
 
         [JsonProperty(PropertyName = "offenseTxnTypeCD")]
-        public int OffenseTxnTypeCD { get; set; }
+        public int? OffenseTxnTypeCD { get; set; }
         
         [JsonProperty(PropertyName = "offenseStatute")]
         public string OffenseStatute { get; set; }

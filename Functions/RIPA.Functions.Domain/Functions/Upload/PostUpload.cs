@@ -14,6 +14,7 @@ using RIPA.Functions.Domain.Functions.Schools.Models;
 using RIPA.Functions.Domain.Functions.Statutes.Models;
 using RIPA.Functions.Security;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
@@ -28,11 +29,19 @@ namespace RIPA.Functions.Domain.Functions.Upload
         private readonly TableBatchOperation _operations;
         private readonly int _batchLimit = 100;
         private readonly CloudTableClient _client;
+        private readonly List<string> BeatTableHeaders;
+        private readonly List<string> CityTableHeaders;
+        private readonly List<string> SchoolTableHeaders;
+        private readonly List<string> StatuteTableHeaders;
 
         public PostUpload(CloudTableClient client)
         {
             _client = client;
             _operations = new TableBatchOperation();
+            BeatTableHeaders = new List<string>();
+            CityTableHeaders = new List<string>();
+            SchoolTableHeaders = new List<string>();
+            StatuteTableHeaders = new List<string>();
         }
 
         [FunctionName("PostUpload")]
@@ -147,6 +156,40 @@ namespace RIPA.Functions.Domain.Functions.Upload
             int batchCount = 0;
             int totalRows = dataTable.Rows.Count - 1;
             int returnTotalRows = totalRows;
+
+            foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Take(1))
+            {
+                switch (table.Name)
+                {
+                    case "Beats":
+                        foreach (var columnName in row.ItemArray)
+                        {
+                            BeatTableHeaders.Add(columnName.ToString().ToUpper());
+                        }
+                        break;
+                    case "Cities":
+                        foreach (var columnName in row.ItemArray)
+                        {
+                            CityTableHeaders.Add(columnName.ToString().ToUpper());
+                        }
+                        break;
+                    case "Schools":
+                        foreach (var columnName in row.ItemArray)
+                        {
+                            SchoolTableHeaders.Add(columnName.ToString().ToUpper());
+                        }
+                        break;
+                    case "Statutes":
+                        foreach (var columnName in row.ItemArray)
+                        {
+                            StatuteTableHeaders.Add(columnName.ToString().ToUpper());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Skip(1))
             {
                 totalRows--;
@@ -199,13 +242,13 @@ namespace RIPA.Functions.Domain.Functions.Upload
             City city = new City
             {
                 ETag = "*",
-                PartitionKey = row.ItemArray[0].ToString(),
-                State = row.ItemArray[0].ToString(),
-                RowKey = row.ItemArray[1].ToString(),
-                Name = row.ItemArray[1].ToString(),
-                County = row.ItemArray[2].ToString(),
+                PartitionKey = row.ItemArray[CityTableHeaders.IndexOf("STATE")].ToString(),
+                State = row.ItemArray[CityTableHeaders.IndexOf("STATE")].ToString(),
+                RowKey = row.ItemArray[CityTableHeaders.IndexOf("CITY")].ToString(),
+                Name = row.ItemArray[CityTableHeaders.IndexOf("CITY")].ToString(),
+                County = row.ItemArray[CityTableHeaders.IndexOf("COUNTY")].ToString(),
             };
-            string inactiveDate = row.ItemArray[3].ToString();
+            string inactiveDate = row.ItemArray[CityTableHeaders.IndexOf("INACTIVE DATE")].ToString();
             if (!string.IsNullOrEmpty(inactiveDate))
             {
                 city.DeactivationDate = DateTime.Parse(inactiveDate);
@@ -219,12 +262,12 @@ namespace RIPA.Functions.Domain.Functions.Upload
             {
                 ETag = "*",
                 PartitionKey = "CA",
-                RowKey = row.ItemArray[0].ToString(),
-                CDSCode = row.ItemArray[0].ToString(),
-                Status = row.ItemArray[3].ToString(),
-                County = row.ItemArray[4].ToString(),
-                District = row.ItemArray[5].ToString(),
-                Name = row.ItemArray[6].ToString()
+                RowKey = row.ItemArray[SchoolTableHeaders.IndexOf("CDSCODE")].ToString(),
+                CDSCode = row.ItemArray[SchoolTableHeaders.IndexOf("CDSCODE")].ToString(),
+                Status = row.ItemArray[SchoolTableHeaders.IndexOf("STATUSTYPE")].ToString(),
+                County = row.ItemArray[SchoolTableHeaders.IndexOf("COUNTY")].ToString(),
+                District = row.ItemArray[SchoolTableHeaders.IndexOf("DISTRICT")].ToString(),
+                Name = row.ItemArray[SchoolTableHeaders.IndexOf("SCHOOL")].ToString()
             };
             return school;
         }
@@ -235,20 +278,22 @@ namespace RIPA.Functions.Domain.Functions.Upload
             {
                 ETag = "*",
                 PartitionKey = "CA",
-                OffenseValidationCD = Convert.ToInt32(row.ItemArray[0]),
-                RowKey = row.ItemArray[1].ToString(),
-                OffenseCode = Convert.ToInt32(row.ItemArray[1]),
-                OffenseTxnTypeCD = Convert.ToInt32(row.ItemArray[2].ToString()),
-                OffenseStatute = row.ItemArray[3].ToString(),
-                OffenseTypeOfStatuteCD = row.ItemArray[4].ToString(),
-                StatuteLiteral = row.ItemArray[5].ToString(),
-                OffenseDefaultTypeOfCharge = row.ItemArray[6].ToString(),
-                OffenseTypeOfCharge = row.ItemArray[7].ToString(),
-                OffenseLiteralIdentifierCD = row.ItemArray[8].ToString()
+                OffenseValidationCD = Convert.ToInt32(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE VALIDATION CD")].ToString()),
+                RowKey = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE CODE")].ToString(),
+                OffenseCode = Convert.ToInt32(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE CODE")].ToString()),
+                OffenseTxnTypeCD = string.IsNullOrEmpty(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE TXN TYPE CD")].ToString()) ? 0 : Convert.ToInt32(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE TXN TYPE CD")].ToString()),
+                OffenseStatute = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE STATUTE")].ToString(),
+                OffenseTypeOfStatuteCD = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE TYPE OF STATUTE CD")].ToString(),
+                StatuteLiteral = row.ItemArray[StatuteTableHeaders.IndexOf("STATUTE LITERAL 25")].ToString(),
+                OffenseDefaultTypeOfCharge = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE DEFAULT TYPE OF CHARGE")].ToString(),
+                OffenseTypeOfCharge = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE TYPE OF CHARGE")].ToString(),
+                OffenseLiteralIdentifierCD = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE LITERAL IDENTIFIER CD")].ToString()
             };
-            statute.OffenseDegree = String.IsNullOrEmpty(row.ItemArray[9].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[9].ToString());
-            statute.BCSHierarchyCD = String.IsNullOrEmpty(row.ItemArray[10].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[10].ToString());
-            string offenseEnacted = row.ItemArray[11].ToString();
+
+            statute.OffenseDegree = string.IsNullOrEmpty(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE DEGREE")].ToString()) ? null : statute.OffenseDegree = Convert.ToInt32(row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE DEGREE")].ToString());
+            statute.BCSHierarchyCD = string.IsNullOrEmpty(row.ItemArray[StatuteTableHeaders.IndexOf("BCS HIERARCHY CD")].ToString()) ? null : statute.BCSHierarchyCD = Convert.ToInt32(row.ItemArray[StatuteTableHeaders.IndexOf("BCS HIERARCHY CD")].ToString());
+            string offenseEnacted = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE ENACTED")].ToString();
+
             if (!string.IsNullOrEmpty(offenseEnacted))
             {
                 if (offenseEnacted.Length == 8)
@@ -257,7 +302,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
                     statute.OffenseEnacted = DateTime.Parse(offenseEnacted);
 
             }
-            string offenseRepealed = row.ItemArray[12].ToString();
+
+            string offenseRepealed = row.ItemArray[StatuteTableHeaders.IndexOf("OFFENSE REPEALED")].ToString();
+
             if (!string.IsNullOrEmpty(offenseRepealed))
             {
                 if (offenseEnacted.Length == 8)
@@ -265,7 +312,9 @@ namespace RIPA.Functions.Domain.Functions.Upload
                 else
                     statute.OffenseRepealed = DateTime.Parse(offenseRepealed);
             }
-            statute.ALPSCognizantCD = row.ItemArray[13].ToString();
+
+            statute.ALPSCognizantCD = row.ItemArray[StatuteTableHeaders.IndexOf("ALPS COGNIZANT CD")].ToString();
+
             return statute;
         }
 
