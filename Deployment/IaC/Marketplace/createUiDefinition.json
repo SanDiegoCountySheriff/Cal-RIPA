@@ -407,6 +407,15 @@
               }
             },
             {
+              "label": "SAN DIEGO POLICE",
+              "value": {
+                "county": "San Diego",
+                "abbreviation": "sd",
+                "type": "pd",
+                "ori": "CA0371100"
+              }
+            },
+            {
               "label": "SAN DIEGO SHERIFF",
               "value": {
                 "county": "San Diego",
