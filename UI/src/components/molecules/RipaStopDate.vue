@@ -37,19 +37,27 @@
         </v-col>
 
         <v-col cols="12" sm="12" md="4">
-          <div class="md:tw-mr-4">
-            <ripa-number-input
-              v-model="model.stopDate.duration"
-              label="Stop Duration"
-              hint="Duration of Stop should be defined in minutes. Maximum of 1440."
-              :min="1"
-              :max="1440"
-              :rules="durationRules"
-              @input="handleInput"
-            >
-            </ripa-number-input>
-          </div>
+          <ripa-number-input
+            v-model="model.stopDate.duration"
+            label="Stop Duration"
+            hint="Duration of Stop should be defined in minutes. Maximum of 1440."
+            :min="1"
+            :max="1440"
+            :rules="durationRules"
+            @input="handleInput"
+          >
+          </ripa-number-input>
         </v-col>
+      </v-row>
+
+      <v-row v-if="this.environmentName === 'DEV'">
+        <v-btn
+          @click="devTime = !devTime"
+          class="ml-3 mb-3"
+          small
+          color="primary"
+          >{{ devTime ? 'Turn Off Dev Time' : 'Turn On Dev Time' }}</v-btn
+        >
       </v-row>
 
       <v-row no-gutters>
@@ -96,10 +104,11 @@ export default {
   data() {
     return {
       viewModel: this.syncModel(this.value),
+      devTime: false,
     }
   },
 
-  inject: ['isAdminEditing'],
+  inject: ['isAdminEditing', 'environmentName'],
 
   computed: {
     model: {
@@ -109,6 +118,10 @@ export default {
     },
 
     dateRules() {
+      if (this.devTime) {
+        return [v => !!v || 'A date is required']
+      }
+
       return [
         v => !!v || 'A date is required',
         v =>
@@ -118,6 +131,10 @@ export default {
     },
 
     timeRules() {
+      if (this.devTime) {
+        return [v => !!v || 'A time is required']
+      }
+
       return [
         v => !!v || 'A time is required',
         v =>
@@ -138,6 +155,10 @@ export default {
     isValidDateTime() {
       const dateStr = this.viewModel.stopDate.date
       const timeStr = this.viewModel.stopDate.time
+
+      if (this.devTime) {
+        return true
+      }
 
       if (!this.isAdminEditing) {
         return (
