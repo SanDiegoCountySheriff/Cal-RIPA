@@ -112,6 +112,7 @@ public class Stop
     [JsonProperty(PropertyName = "telemetry")]
     public Telemetry Telemetry { get; set; }
     public AgencyQuestion[] ListAgencyQuestion { get; set; }
+    public StopVersion? StopVersion { get; set; }
 }
 
 public class OfficerAssignment

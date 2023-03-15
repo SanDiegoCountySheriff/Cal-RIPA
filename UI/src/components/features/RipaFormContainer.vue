@@ -764,6 +764,7 @@ export default {
         updatedFullStop.editStopExplanation =
           this.stop.editStopExplanation || null
         updatedFullStop.overridePii = this.stop.overridePii || false
+        updatedFullStop.stopVersion = this.stop.stopVersion || 1
         const personId = this.stop.person.id
         const people = updatedFullStop.people || []
         updatedFullStop.people = people.filter(item => item.id !== personId)

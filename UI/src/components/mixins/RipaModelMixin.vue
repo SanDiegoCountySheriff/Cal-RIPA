@@ -124,6 +124,7 @@ export default {
           pullFromReasonCode: newValue.stopResult?.pullFromReasonCode || false,
         },
         agencyQuestions: newValue.agencyQuestions || [],
+        stopVersion: newValue.stopDate?.date >= '2024-01-01' ? 2 : 1,
       }
 
       return syncedModel
