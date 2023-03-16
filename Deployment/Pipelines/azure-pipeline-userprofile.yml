@@ -25,6 +25,13 @@ stages:
       buildConfiguration: "Release"
 
     jobs:
+      - job: install_sdk
+        steps:
+          - task: UseDotNet@2
+            displayName: "Use .NET Core sdk 6.x"
+            inputs:
+              version: 6.x
+
       - job: job_1
         displayName: "build .net core function api"
 
