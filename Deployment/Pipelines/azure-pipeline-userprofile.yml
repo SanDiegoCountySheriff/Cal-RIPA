@@ -29,20 +29,6 @@ stages:
         displayName: "build .net core function api"
 
         steps:
-          - task: AzurePowerShell@5
-            inputs:
-              azureSubscription: $(Subscription)
-              ScriptType: 'InlineScript'
-              Inline: '"TLS 1.2 readiness check:"; (Invoke-WebRequest -Uri status.dev.azure.com -UseBasicParsing).StatusDescription'
-              FailOnStandardError: true
-              
-          - task: UseDotNet@2
-            displayName: "Use .NET Core sdk 6.x"
-            inputs:
-              packageType: 'sdk'
-              version: '6.0.x'
-              includePreviewVersions: true
-
           - task: DotNetCoreCLI@2
             displayName: "dotnet restore"
             inputs:
