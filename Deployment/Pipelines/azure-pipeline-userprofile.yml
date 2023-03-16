@@ -31,6 +31,7 @@ stages:
         steps:
           - task: AzurePowerShell@5
             inputs:
+              azureSubscription: $(Subscription)
               ScriptType: 'InlineScript'
               Inline: '"TLS 1.2 readiness check:"; (Invoke-WebRequest -Uri status.dev.azure.com -UseBasicParsing).StatusDescription'
               FailOnStandardError: true
