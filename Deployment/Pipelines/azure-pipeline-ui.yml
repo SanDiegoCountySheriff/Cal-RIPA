@@ -68,13 +68,6 @@ stages:
               workingDir: "UI/"
               customCommand: "install --legacy-peer-deps --save"
 
-          - task: Npm@1
-            displayName: "npm build-storybook"
-            inputs:
-              command: "custom"
-              workingDir: "UI/"
-              customCommand: "run build-storybook"
-
           - task: replacetokens@3
             displayName: "Replace UI Version #"
             inputs:
