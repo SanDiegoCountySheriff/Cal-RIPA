@@ -16,7 +16,7 @@ trigger:
       - Deployment/Pipelines/azure-pipeline-userprofile.yml
 
 pool:
-  vmImage: "windows-latest"
+  vmImage: "ubuntu-latest"
 
 stages:
   - stage: Build
