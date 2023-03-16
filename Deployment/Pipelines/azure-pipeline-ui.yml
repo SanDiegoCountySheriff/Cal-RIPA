@@ -90,15 +90,6 @@ stages:
               workingDir: "UI/"
               customCommand: "run build"
 
-          - task: ArchiveFiles@2
-            displayName: "Archive storybook Files"
-            inputs:
-              rootFolderOrFile: "$(Build.SourcesDirectory)/UI/storybook-static"
-              includeRootFolder: true
-              archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-storybook.zip"
-              replaceExistingArchive: true
-
           - task: CopyFiles@2
             inputs:
               SourceFolder: "$(Build.SourcesDirectory)/UI"
