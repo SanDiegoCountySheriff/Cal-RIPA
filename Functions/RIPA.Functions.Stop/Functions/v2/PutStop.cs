@@ -32,8 +32,8 @@ public class PutStop
         _stopAuditCosmosDbService = stopAuditCosmosDbService;
     }
 
-    [FunctionName("PutStopV2")]
-    [OpenApiOperation(operationId: "PutStopV2", tags: new[] { "name" })]
+    [FunctionName("v2/PutStop")]
+    [OpenApiOperation(operationId: "v2/PutStop", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Stop Id/ori")]
