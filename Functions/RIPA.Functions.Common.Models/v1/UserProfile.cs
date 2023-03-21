@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Common.Models;
+namespace RIPA.Functions.Common.Models.v1;
 
 public class UserProfile
 {

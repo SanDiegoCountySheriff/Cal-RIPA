@@ -64,7 +64,7 @@ public class PostUpload
             {
                 var agency = req.Query["agency"];
                 csv.Context.RegisterClassMap<UserProfileMap>();
-                var records = csv.GetRecords<Common.Models.UserProfile>().ToList();
+                var records = csv.GetRecords<Common.Models.v1.UserProfile>().ToList();
                 count = records.Count();
 
                 foreach (var record in records)
@@ -101,7 +101,7 @@ public class PostUpload
     }
 }
 
-public class UserProfileMap : ClassMap<Common.Models.UserProfile>
+public class UserProfileMap : ClassMap<Common.Models.v1.UserProfile>
 {
     public UserProfileMap()
     {

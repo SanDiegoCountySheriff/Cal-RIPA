@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace RIPA.Functions.Common.Models;
+namespace RIPA.Functions.Common.Models.v1;
 
 public class Submission
 {

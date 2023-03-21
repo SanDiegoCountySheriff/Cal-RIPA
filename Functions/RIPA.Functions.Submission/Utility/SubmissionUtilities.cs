@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
-using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;

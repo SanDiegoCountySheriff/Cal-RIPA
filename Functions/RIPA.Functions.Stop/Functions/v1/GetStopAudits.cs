@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Stop.Functions;
+namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStopAudits
 {
@@ -24,14 +24,14 @@ public class GetStopAudits
         _stopAuditCosmosDbService = stopAuditCosmosDbService;
     }
 
-    [FunctionName("GetStopAudits")]
-    [OpenApiOperation(operationId: "GetStopAudits", tags: new[] { "name" })]
+    [FunctionName("v1/GetStopAudits")]
+    [OpenApiOperation(operationId: "v1/GetStopAudits", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The id of the stop")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Common.Models.Stop>), Description = "List of Stops")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Common.Models.v1.Stop>), Description = "List of Stops")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetStopAudits")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("GET - Get stop audits requested");
@@ -51,7 +51,7 @@ public class GetStopAudits
 
         string id = req.Query["id"];
         string queryString = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\"";
-        IEnumerable<Common.Models.Stop> stopResponse;
+        IEnumerable<Common.Models.v1.Stop> stopResponse;
 
         try
         {

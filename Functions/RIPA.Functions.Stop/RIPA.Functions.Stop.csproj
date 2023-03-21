@@ -24,5 +24,8 @@
     <ProjectReference Include="..\RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj" />
 		<ProjectReference Include="..\RIPA.Functions.Security\RIPA.Functions.Security.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\v2\" />
+  </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>

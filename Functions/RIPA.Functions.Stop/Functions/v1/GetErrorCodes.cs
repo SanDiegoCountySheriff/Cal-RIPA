@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Stop.Functions;
+namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetErrorCodes
 {
@@ -23,14 +23,14 @@ public class GetErrorCodes
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("GetErrorCodes")]
-    [OpenApiOperation(operationId: "GetErrorCodes", tags: new[] { "name" })]
+    [FunctionName("v1/GetErrorCodes")]
+    [OpenApiOperation(operationId: "v1/GetErrorCodes", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Search", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Type ahead error search")]
     [OpenApiParameter(name: "SubmissionId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The Submission Id to filter errors by")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(List<string>), Description = "Return a list of errors, maybe object with code and message properties")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetErrorCodes")] HttpRequest req, ILogger log)
     {
         log.LogInformation("Get - GetErrorCodes requested.");
         try

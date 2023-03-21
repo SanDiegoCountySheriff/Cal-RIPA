@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
@@ -23,7 +23,7 @@ public class StopService : IStopService
 
         if (stop.ListSubmission == null)
         {
-            stop.ListSubmission = new Common.Models.Submission[0];
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
         }
         else if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
@@ -31,7 +31,7 @@ public class StopService : IStopService
         }
 
         var submissions = stop.ListSubmission.ToList();
-        Common.Models.Submission submission = new Common.Models.Submission
+        Common.Models.v1.Submission submission = new Common.Models.Submission
         {
             DateSubmitted = dateSubmitted,
             Id = submissionId,
@@ -49,8 +49,8 @@ public class StopService : IStopService
     {
         if (stop.ListSubmission == null)
         {
-            stop.ListSubmission = new Common.Models.Submission[0];
-            Common.Models.Submission submission = new Common.Models.Submission
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
+            Common.Models.v1.Submission submission = new Common.Models.Submission
             {
                 DateSubmitted = submissionError.DateReported,
                 Id = submissionError.SubmissionId,
@@ -113,7 +113,7 @@ public class StopService : IStopService
         return dojStop;
     }
 
-    public string CastToDojLocation(Common.Models.Location location)
+    public string CastToDojLocation(Common.Models.v1.Location location)
     {
         string dojLocation = location.Intersection;
 

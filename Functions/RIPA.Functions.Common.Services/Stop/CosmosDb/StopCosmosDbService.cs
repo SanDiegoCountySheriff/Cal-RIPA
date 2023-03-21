@@ -22,7 +22,7 @@ public class StopCosmosDbService : IStopCosmosDbService
         _container = container;
     }
 
-    public async Task AddStopAsync(Models.Stop stop)
+    public async Task AddStopAsync(Models.v1.Stop stop)
     {
         DateTime now = DateTime.Now;
         StringBuilder sb = new StringBuilder();
@@ -39,19 +39,19 @@ public class StopCosmosDbService : IStopCosmosDbService
         await _container.CreateItemAsync(stop, new PartitionKey(stop.Id));
     }
 
-    public async Task UpdateStopAsync(Models.Stop stop)
+    public async Task UpdateStopAsync(Models.v1.Stop stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(stop.Id));
     }
 
     public async Task DeleteStopAsync(string id)
     {
-        await _container.DeleteItemAsync<Models.Stop>(id, new PartitionKey(id));
+        await _container.DeleteItemAsync<Models.v1.Stop>(id, new PartitionKey(id));
     }
 
-    public async Task<Models.Stop> GetStopAsync(string id)
+    public async Task<Models.v1.Stop> GetStopAsync(string id)
     {
-        ItemResponse<Models.Stop> response = await _container.ReadItemAsync<Models.Stop>(id, new PartitionKey(id));
+        ItemResponse<Models.v1.Stop> response = await _container.ReadItemAsync<Models.v1.Stop>(id, new PartitionKey(id));
         return response.Resource;
     }
 
@@ -60,9 +60,9 @@ public class StopCosmosDbService : IStopCosmosDbService
         string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
         var queryDefinition = new QueryDefinition(queryString);
 
-        var results = _container.GetItemQueryIterator<Models.Stop>(queryDefinition);
+        var results = _container.GetItemQueryIterator<Models.v1.Stop>(queryDefinition);
 
-        List<Models.Stop> matchingStops = new List<Models.Stop>();
+        List<Models.v1.Stop> matchingStops = new List<Models.v1.Stop>();
         while (results.HasMoreResults)
         {
             var response = await results.ReadNextAsync();
@@ -72,10 +72,10 @@ public class StopCosmosDbService : IStopCosmosDbService
         return matchingStops.Count > 0;
     }
 
-    public async Task<IEnumerable<Models.Stop>> GetStopsAsync(string queryString)
+    public async Task<IEnumerable<Models.v1.Stop>> GetStopsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<Models.Stop>(new QueryDefinition(queryString));
-        List<Models.Stop> results = new List<Models.Stop>();
+        var query = _container.GetItemQueryIterator<Models.v1.Stop>(new QueryDefinition(queryString));
+        List<Models.v1.Stop> results = new List<Models.v1.Stop>();
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();

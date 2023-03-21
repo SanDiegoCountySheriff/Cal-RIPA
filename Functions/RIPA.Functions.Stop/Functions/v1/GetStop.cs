@@ -12,7 +12,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Stop.Functions;
+namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStop
 {
@@ -23,15 +23,15 @@ public class GetStop
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("GetStop")]
-    [OpenApiOperation(operationId: "GetStop", tags: new[] { "name" })]
+    [FunctionName("v1/GetStop")]
+    [OpenApiOperation(operationId: "v1/GetStop", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Stop Id/ori")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Object")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v1.Stop), Description = "Stop Object")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop Id/ori not found")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetStop/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("GET - Get Stop requested");
 

@@ -18,10 +18,10 @@ public class StopAuditCosmosDbService : IStopAuditCosmosDbService
         _container = container;
     }
 
-    public async Task<IEnumerable<Common.Models.Stop>> GetStopAuditsAsync(string queryString)
+    public async Task<IEnumerable<Common.Models.v1.Stop>> GetStopAuditsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<Common.Models.Stop>(new QueryDefinition(queryString));
-        List<Common.Models.Stop> results = new List<Common.Models.Stop>();
+        var query = _container.GetItemQueryIterator<Common.Models.v1.Stop>(new QueryDefinition(queryString));
+        List<Common.Models.v1.Stop> results = new List<Common.Models.v1.Stop>();
 
         while (query.HasMoreResults)
         {
@@ -33,7 +33,7 @@ public class StopAuditCosmosDbService : IStopAuditCosmosDbService
         return results;
     }
 
-    public async Task UpdateStopAuditAsync(string id, Common.Models.Stop stop)
+    public async Task UpdateStopAuditAsync(string id, Common.Models.v1.Stop stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(id));
     }
