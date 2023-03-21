@@ -1,4 +1,5 @@
-﻿using RIPA.Functions.Common.Models.v1;
+﻿using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.v1;
 
 namespace RIPA.Functions.Tests.Utility;
 

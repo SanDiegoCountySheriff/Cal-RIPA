@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using RIPA.Functions.Common.Models.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 
 public interface IUserProfileCosmosDbService
 {
-    Task<IEnumerable<Models.v1.UserProfile>> GetUserProfilesAsync(string queryString);
-    Task<Models.v1.UserProfile> GetUserProfileAsync(string id);
-    Task AddUserProfileAsync(Models.v1.UserProfile userProfile);
-    Task UpdateUserProfileAsync(string id, Models.v1.UserProfile userProfile);
+    Task<IEnumerable<IUserProfile>> GetUserProfilesAsync(string queryString);
+    Task<IUserProfile> GetUserProfileAsync(string id);
+    Task AddUserProfileAsync(IUserProfile userProfile);
+    Task UpdateUserProfileAsync(string id, IUserProfile userProfile);
     Task DeleteUserProfileAsync(string id);
 }

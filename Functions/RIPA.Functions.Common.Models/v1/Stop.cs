@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RIPA.Functions.Common.Models.Interfaces;
 using System;
 using System.Runtime.Serialization;
 
@@ -70,7 +71,7 @@ public enum SubmissionStatus
     Pending,
 }
 
-public class Stop
+public class Stop : IStop
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; set; }
@@ -122,23 +123,6 @@ public class OfficerAssignment
     public string OtherType { get; set; }
 }
 
-public class Location
-{
-    public bool ToggleLocationOptions { get; set; }
-    public string Intersection { get; set; }
-    public string BlockNumber { get; set; }
-    public string LandMark { get; set; }
-    public string StreetName { get; set; }
-    public string HighwayExit { get; set; }
-    public City City { get; set; }
-    public Beat Beat { get; set; }
-    public bool School { get; set; }
-    public SchoolName SchoolName { get; set; }
-    public bool OutOfCounty { get; set; }
-    public bool PiiFound { get; set; }
-    public GeoLocation GeoLocation { get; set; }
-}
-
 public class GeoLocation
 {
     public decimal? Latitude { get; set; }
@@ -148,12 +132,6 @@ public class GeoLocation
 public class City
 {
     public Codes Codes { get; set; }
-}
-
-public class Codes
-{
-    public string Code { get; set; }
-    public string Text { get; set; }
 }
 
 public class Beat
