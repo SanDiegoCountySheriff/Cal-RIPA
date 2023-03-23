@@ -34,11 +34,6 @@ export const GENDERS = [
   { name: 'Transgender Female', value: 4 },
 ]
 
-export const VERSIONS = [
-  { name: '1.0', value: 1 },
-  { name: '2.0', value: 2 },
-]
-
 export const RACES = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },

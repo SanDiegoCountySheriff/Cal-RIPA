@@ -17,7 +17,6 @@ import {
   CONTRABAND_TYPES,
   SEIZED_PROPERTY_TYPES,
   STOP_RESULTS,
-  VERSIONS,
 } from '@/constants/form'
 
 const getAgencyQuestionsFromLocalStorage = () => {
@@ -1192,7 +1191,7 @@ export const fullStopToApiStop = (
     stopDuration: duration ? duration.toString() : null,
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
-    stopVersion: VERSIONS.filter(v => v.value === fullStop.stopVersion)[0].name,
+    stopVersion: fullStop.stopVersion,
   }
 }
 

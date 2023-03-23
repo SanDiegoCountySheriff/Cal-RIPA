@@ -78,6 +78,7 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
+    version: Date.now() >= '2024-01-01' ? 2 : 1,
   },
 
   getters: {
@@ -577,7 +578,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
+          `${state.apiConfig.apiBaseUrl}textanalytics/v${state.version}/PostCheckPii`,
           document,
           {
             headers: {
@@ -638,12 +639,15 @@ export default new Vuex.Store({
 
     deleteBeat({ dispatch, state }, beat) {
       return axios
-        .delete(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .delete(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/DeleteBeat/${beat.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -655,13 +659,17 @@ export default new Vuex.Store({
 
     editBeat({ dispatch, state }, beat) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .put(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/PutBeat/${beat.id}`,
+          beat,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -680,7 +688,7 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -705,7 +713,7 @@ export default new Vuex.Store({
       formData.append('file', usersFile)
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}userprofile/PostUpload?agency=${usersAgency}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PostUpload?agency=${usersAgency}`,
           formData,
           {
             headers: {
@@ -731,13 +739,17 @@ export default new Vuex.Store({
       const formData = new FormData()
       formData.append('file', domainFile)
       return axios
-        .post(`${state.apiConfig.apiBaseUrl}domain/PostUpload`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .post(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/PostUpload`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           dispatch('getAdminSchools')
           dispatch('getAdminCities')
@@ -769,7 +781,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/GenerateCpraReport?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GenerateCpraReport?${queryString}`,
           reportParameters.officerName,
           {
             headers: {
@@ -804,7 +816,7 @@ export default new Vuex.Store({
     downloadCpraReport({ state }, fileName) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/DownloadCpraReport?FileName=${fileName}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/DownloadCpraReport?FileName=${fileName}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -835,7 +847,7 @@ export default new Vuex.Store({
     getHistoricalCpraReports({ state, commit }) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetHistoricalCpraReports`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetHistoricalCpraReports`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -874,7 +886,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -896,13 +908,17 @@ export default new Vuex.Store({
     submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .put(
+          `${state.apiConfig.apiBaseUrl}stop/v${stop.stopVersion}/PutStop/${stop.id}`,
+          stop,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           if (response.status === 200) {
             const apiStop = response.data
@@ -957,7 +973,7 @@ export default new Vuex.Store({
 
     getAdminBeats({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
+        .get(`${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetBeats`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -995,12 +1011,15 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetBeats`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+                'Cache-Control': 'no-cache',
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data
               .sort((x, y) => {
@@ -1034,11 +1053,14 @@ export default new Vuex.Store({
 
     getAdminCities({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+        .get(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetCities`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            },
           },
-        })
+        )
         .then(response => {
           const data = response.data
             .sort((x, y) => {
@@ -1071,11 +1093,14 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetCities`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data.sort((x, y) => {
               const cityA = x.name.toUpperCase()
@@ -1128,11 +1153,14 @@ export default new Vuex.Store({
 
     getAdminSchools({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+        .get(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetSchools`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            },
           },
-        })
+        )
         .then(response => {
           const data = response.data
             .sort((x, y) => {
@@ -1166,11 +1194,14 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetSchools`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data
               .filter(item => item.status === 'Active')
@@ -1206,11 +1237,14 @@ export default new Vuex.Store({
 
     getAdminStatutes({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+        .get(
+          `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetStatutes`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            },
           },
-        })
+        )
         .then(response => {
           const data = response.data.map(item => {
             return {
@@ -1237,11 +1271,14 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetStatutes`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data
               .filter(item => item.offenseRepealed === null)
@@ -1285,12 +1322,15 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetTemplates`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetTemplates`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+                'Cache-Control': 'no-cache',
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data.map(item => {
               const displayName = item.displayName
@@ -1313,12 +1353,15 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUsers`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           const data = response.data.map(item => {
             return {
@@ -1339,9 +1382,10 @@ export default new Vuex.Store({
 
     getOfficerStops({ commit, state }) {
       const officerId = state.user.officerId
+
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops?officerId=${officerId}&limit=10`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1430,12 +1474,15 @@ export default new Vuex.Store({
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops${queryString}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           commit('updateAdminStops', {
             summary: response.data.summary,
@@ -1453,13 +1500,16 @@ export default new Vuex.Store({
 
     getAdminStopAudits({ state }, stopId) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStopAudits?id=${stopId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           return response.data
         })
@@ -1508,7 +1558,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmissions${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1558,7 +1608,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1581,12 +1631,15 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           commit('updateUserProfile', response.data)
           commit('updateInvalidUser', false)
@@ -1604,7 +1657,7 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1627,7 +1680,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmit`,
           { stopIds: stops },
           {
             headers: {
@@ -1695,7 +1748,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {
