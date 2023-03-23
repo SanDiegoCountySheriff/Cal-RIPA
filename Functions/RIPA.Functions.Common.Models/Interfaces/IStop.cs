@@ -1,4 +1,6 @@
-﻿namespace RIPA.Functions.Common.Models.Interfaces;
+﻿using RIPA.Functions.Common.Models.v1;
+
+namespace RIPA.Functions.Common.Models.Interfaces;
 
 public interface IStop
 {
@@ -11,5 +13,5 @@ public interface IStop
     string Status { get; set; }
     string Ori { get; set; }
     bool IsEdited { get; set; }
-    object ListSubmission { get; set; }
+    ISubmission[] ListSubmission { get; set; }
 }

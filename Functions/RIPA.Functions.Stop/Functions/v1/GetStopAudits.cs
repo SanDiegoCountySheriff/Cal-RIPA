@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Security;
 using RIPA.Functions.Stop.Services.Contracts;
 using System;
@@ -51,7 +52,7 @@ public class GetStopAudits
 
         string id = req.Query["id"];
         string queryString = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\"";
-        IEnumerable<Common.Models.v1.Stop> stopResponse;
+        IEnumerable<IStop> stopResponse;
 
         try
         {

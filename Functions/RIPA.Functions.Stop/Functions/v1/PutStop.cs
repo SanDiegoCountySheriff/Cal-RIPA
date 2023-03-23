@@ -38,8 +38,8 @@ public class PutStop
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Stop Id/ori")]
-    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(IStop), Deprecated = false, Description = "Stop object", Required = true)]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IStop), Description = "Stop Created")]
+    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(RIPA.Functions.Common.Models.v1.Stop), Deprecated = false, Description = "Stop object", Required = true)]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(RIPA.Functions.Common.Models.v1.Stop), Description = "Stop Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
 
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutStop/{Id}")] IStop stop, HttpRequest req, string Id, ILogger log)

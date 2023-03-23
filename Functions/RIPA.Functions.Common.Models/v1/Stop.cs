@@ -5,14 +5,6 @@ using System.Runtime.Serialization;
 
 namespace RIPA.Functions.Common.Models.v1;
 
-public class Submission
-{
-    public Guid Id { get; set; }
-    public DateTime DateSubmitted { get; set; }
-    public string Status { get; set; }
-    public string FileName { get; set; }
-    public SubmissionError[] ListSubmissionError { get; set; }
-}
 public class SubmissionError
 {
     public string ErrorType { get; set; }
@@ -98,11 +90,11 @@ public class Stop : IStop
         }
         set { }
     }
-    public Location Location { get; set; }
+    public ILocation Location { get; set; }
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
     public PersonStopped[] ListPersonStopped { get; set; }
-    public Submission[] ListSubmission { get; set; }
+    public ISubmission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
     public PiiEntity[] PiiEntities { get; set; }
@@ -121,27 +113,6 @@ public class OfficerAssignment
     public string Key { get; set; }
     public string Type { get; set; }
     public string OtherType { get; set; }
-}
-
-public class GeoLocation
-{
-    public decimal? Latitude { get; set; }
-    public decimal? Longitude { get; set; }
-}
-
-public class City
-{
-    public Codes Codes { get; set; }
-}
-
-public class Beat
-{
-    public Codes Codes { get; set; }
-}
-
-public class SchoolName
-{
-    public Codes Codes { get; set; }
 }
 
 public class PersonStopped
