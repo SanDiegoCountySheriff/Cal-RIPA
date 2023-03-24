@@ -9,5 +9,5 @@ public class Submission : ISubmission
     public DateTime DateSubmitted { get; set; }
     public string Status { get; set; }
     public string FileName { get; set; }
-    public SubmissionError[] ListSubmissionError { get; set; }
+    public ISubmissionError[] ListSubmissionError { get; set; }
 }

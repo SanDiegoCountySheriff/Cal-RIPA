@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace RIPA.Functions.Common.Models.Interfaces;
+﻿namespace RIPA.Functions.Common.Models.Interfaces;
 
 public interface ISchoolName
 {
+    Codes Codes { get; set; }
 }
 

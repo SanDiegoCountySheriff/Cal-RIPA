@@ -3,6 +3,8 @@ using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Models;
@@ -74,7 +76,7 @@ public class TimersSubmissionConsumer
             }
 
             // Get Stop
-            Stop stop = await GetStop(log, submissionMessage.StopId, runId);
+            IStop stop = await GetStop(log, submissionMessage.StopId, runId);
 
             if (stop == null)
             {
@@ -185,7 +187,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<Stop> GetStop(ILogger log, string id, string runId)
+    private async Task<IStop> GetStop(ILogger log, string id, string runId)
     {
         try
         {
@@ -212,7 +214,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private DojStop GetDojStop(ILogger log, Stop stop, string runId)
+    private DojStop GetDojStop(ILogger log, IStop stop, string runId)
     {
         try
         {
@@ -226,7 +228,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
+    private async Task<bool> HandledDojCastError(ILogger log, IStop stop, DateTime date, string fileName, Guid submissionId, string runId)
     {
         try
         {
@@ -295,7 +297,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Stop stop)
+    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, IStop stop)
     {
         try
         {
@@ -342,7 +344,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Stop stop)
+    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, IStop stop)
     {
         try
         {

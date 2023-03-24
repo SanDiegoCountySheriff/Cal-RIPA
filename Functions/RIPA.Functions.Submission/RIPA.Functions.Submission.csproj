@@ -33,4 +33,8 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\v2\" />
+    <Folder Include="Functions\v1\" />
+  </ItemGroup>
 </Project>

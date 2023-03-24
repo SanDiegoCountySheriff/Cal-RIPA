@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RIPA.Functions.Common.Models.Interfaces;
 
 namespace RIPA.Functions.Submission.Models;
 

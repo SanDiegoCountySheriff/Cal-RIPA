@@ -1,4 +1,4 @@
-﻿using RIPA.Functions.Common.Models.v1;
+﻿using System;
 
 namespace RIPA.Functions.Common.Models.Interfaces;
 
@@ -14,4 +14,10 @@ public interface IStop
     string Ori { get; set; }
     bool IsEdited { get; set; }
     ISubmission[] ListSubmission { get; set; }
+    DateTime StopDateTime { get; }
+    int StopDuration { get; }
+    string ExpYears { get; }
+    IOfficerAssignment OfficerAssignment { get; }
+    bool StopInResponseToCFS { get; }
+    IPersonStopped[] ListPersonStopped { get; }
 }
