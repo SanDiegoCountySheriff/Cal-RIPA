@@ -26,7 +26,7 @@ public class PutUser
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("v1/PutUser")]
+    [FunctionName("PutUser_v1")]
 
     [OpenApiOperation(operationId: "v1/PutUser", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]

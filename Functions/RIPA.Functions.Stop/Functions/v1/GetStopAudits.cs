@@ -25,7 +25,7 @@ public class GetStopAudits
         _stopAuditCosmosDbService = stopAuditCosmosDbService;
     }
 
-    [FunctionName("v1/GetStopAudits")]
+    [FunctionName("GetStopAudits_v1")]
     [OpenApiOperation(operationId: "v1/GetStopAudits", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]

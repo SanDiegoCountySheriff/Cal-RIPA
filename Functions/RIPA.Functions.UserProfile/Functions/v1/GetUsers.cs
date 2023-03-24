@@ -23,7 +23,7 @@ public class GetUsers
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("v1/GetUsers")]
+    [FunctionName("GetUsers_v1")]
     [OpenApiOperation(operationId: "v1/GetUsers", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]

@@ -28,7 +28,7 @@ public class GetSubmission
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("v1/GetSubmission")]
+    [FunctionName("GetSubmission_v1")]
     [OpenApiOperation(operationId: "v1/GetSubmission", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]

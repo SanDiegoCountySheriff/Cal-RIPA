@@ -26,7 +26,7 @@ public class DeleteStatute
         _tableClient = _tableServiceClient.GetTableClient("Statutes");
     }
 
-    [FunctionName("v1/DeleteStatute")]
+    [FunctionName("DeleteStatute_v1")]
     [OpenApiOperation(operationId: "v1/DeleteStatute", tags: new[] { "name", "v1"})]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]

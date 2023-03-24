@@ -55,7 +55,7 @@ public class PostSubmitSearch
         _submissionServiceBusService = submissionServiceBusService;
     }
 
-    [FunctionName("v1/PostSubmitSearch")]
+    [FunctionName("PostSubmitSearch_v1")]
     [OpenApiOperation(operationId: "v1/PostSubmitSearch", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
     [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]

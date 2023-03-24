@@ -23,7 +23,7 @@ public class GetStop
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("v2/GetStop")]
+    [FunctionName("GetStop_v2")]
     [OpenApiOperation(operationId: "v2/GetStop", tags: new[] { "name", "v2" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
