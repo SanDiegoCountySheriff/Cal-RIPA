@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Domain.Functions.Schools.Models;
+namespace RIPA.Functions.Domain.Functions.v1.Schools.Models;
 
 public class School : ITableEntity
 {

@@ -7,7 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Schools.Models;
+using RIPA.Functions.Domain.Functions.v1.Statutes.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
@@ -15,25 +15,25 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Schools;
+namespace RIPA.Functions.Domain.Functions.v1.Statutes;
 
-public class GetSchools
+public class GetStatutes
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public GetSchools(TableServiceClient tableServiceClient)
+    public GetStatutes(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Schools");
+        _tableClient = _tableServiceClient.GetTableClient("Statutes");
     }
 
-    [FunctionName("GetSchools")]
-    [OpenApiOperation(operationId: "GetSchools", tags: new[] { "name" })]
+    [FunctionName("v1/GetStatutes")]
+    [OpenApiOperation(operationId: "v1/GetStatutes", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Schools")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Statute")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetStatutes")] HttpRequest req, ILogger log)
     {
         try
         {
@@ -48,9 +48,9 @@ public class GetSchools
             return new UnauthorizedResult();
         }
 
-        List<School> response = new List<School>();
+        List<Statute> response = new List<Statute>();
 
-        var singleResponse = _tableClient.Query<School>().FirstOrDefault();
+        var singleResponse = _tableClient.Query<Statute>().FirstOrDefault();
         var etag = singleResponse.ETag;
         req.HttpContext.Response.Headers.Add("ETag", etag.ToString());
 
@@ -61,11 +61,11 @@ public class GetSchools
 
         try
         {
-            var queryResults = _tableClient.Query<School>();
+            var queryResults = _tableClient.Query<Statute>();
 
-            foreach (var school in queryResults)
+            foreach (var statute in queryResults)
             {
-                response.Add(school);
+                response.Add(statute);
             }
         }
         catch (Exception ex)
@@ -73,7 +73,7 @@ public class GetSchools
             return new NotFoundObjectResult(ex.Message);
         }
 
-        log.LogInformation($"GetSchools returned {response.Count} schools");
+        log.LogInformation($"GetStatutes returned {response.Count} statutes");
         return new OkObjectResult(response);
     }
 }

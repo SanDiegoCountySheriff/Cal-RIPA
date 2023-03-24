@@ -8,10 +8,10 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Beats.Models;
-using RIPA.Functions.Domain.Functions.Cities.Models;
-using RIPA.Functions.Domain.Functions.Schools.Models;
-using RIPA.Functions.Domain.Functions.Statutes.Models;
+using RIPA.Functions.Domain.Functions.v1.Beats.Models;
+using RIPA.Functions.Domain.Functions.v1.Cities.Models;
+using RIPA.Functions.Domain.Functions.v1.Schools.Models;
+using RIPA.Functions.Domain.Functions.v1.Statutes.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Upload;
+namespace RIPA.Functions.Domain.Functions.v1.Upload;
 
 public class PostUpload
 {
@@ -35,15 +35,15 @@ public class PostUpload
         _batch = new List<TableTransactionAction>();
     }
 
-    [FunctionName("PostUpload")]
-    [OpenApiOperation(operationId: "PostUpload", tags: new[] { "name" })]
+    [FunctionName("v1/PostUpload")]
+    [OpenApiOperation(operationId: "v1/PostUpload", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "multipart/form-data; boundary=<calculated when request is sent>", bodyType: typeof(UploadRequest), Deprecated = false, Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Upload Complete")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.xslx; Sheets should be included: Beat_Table, City_Table, School_Table, and Offense_Table;")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostUpload")] HttpRequest req, ILogger log)
     {
         try
         {

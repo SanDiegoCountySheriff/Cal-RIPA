@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Domain.Functions.Templates.Models;
+namespace RIPA.Functions.Domain.Functions.v1.Templates.Models;
 
 public class Template : ITableEntity
 {

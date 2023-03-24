@@ -7,33 +7,33 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Templates.Models;
+using RIPA.Functions.Domain.Functions.v1.Templates.Models;
 using RIPA.Functions.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Templates;
+namespace RIPA.Functions.Domain.Functions.v1.Templates;
 
-public class GetTemplates
+public class GetTemplate
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public GetTemplates(TableServiceClient tableServiceClient)
+    public GetTemplate(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
         _tableClient = _tableServiceClient.GetTableClient("Templates");
     }
 
-    [FunctionName("GetTemplates")]
-    [OpenApiOperation(operationId: "GetTemplates", tags: new[] { "name" })]
+    [FunctionName("v1/GetTemplate")]
+    [OpenApiOperation(operationId: "v1/GetTemplate", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Template")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Template Id/Name")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Template), Description = "Template Object")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Template Id not found")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetTemplate/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         try
         {
@@ -48,22 +48,15 @@ public class GetTemplates
             return new UnauthorizedResult();
         }
 
-        List<Template> response = new List<Template>();
-
-        var queryResult = _tableClient.Query<Template>();
-
-        foreach (var template in queryResult)
+        try
         {
-            if (template?.DeactivationDate <= DateTime.Now)
-            {
-                continue;
-            }
-            response.Add(template);
+            Template result = await _tableClient.GetEntityAsync<Template>("CA", Id);
+
+            return new OkObjectResult(result);
         }
-
-        response.OrderBy(t => t.Id);
-
-        log.LogInformation($"GetTemplates returned {response.Count} templates");
-        return new OkObjectResult(response);
+        catch
+        {
+            return new BadRequestObjectResult("Template not found");
+        }
     }
 }

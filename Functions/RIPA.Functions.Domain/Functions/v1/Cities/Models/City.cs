@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Domain.Functions.Cities.Models;
+namespace RIPA.Functions.Domain.Functions.v1.Cities.Models;
 
 public class City : ITableEntity
 {

@@ -7,35 +7,34 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Beats.Models;
+using RIPA.Functions.Domain.Functions.v1.Beats.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Beats;
+namespace RIPA.Functions.Domain.Functions.v1.Beats;
 
-public class PutBeat
+public class DeleteBeat
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public PutBeat(TableServiceClient tableServiceClient)
+    public DeleteBeat(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
         _tableClient = _tableServiceClient.GetTableClient("Beats");
     }
 
-    [FunctionName("PutBeat")]
-    [OpenApiOperation(operationId: "PutBeat", tags: new[] { "name" })]
+    [FunctionName("v1/DeleteBeat")]
+    [OpenApiOperation(operationId: "v1/DeleteBeat", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Beat Id")]
-    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Beat), Deprecated = false, Description = "beat object", Required = true)]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Beat Created")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat failed on insert or replace")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Beat deleted")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat Id not found")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutBeat/{Id}")] Beat beat, HttpRequest req, int Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteBeat/{Id}")] HttpRequest req, int Id, ILogger log)
     {
         try
         {
@@ -52,17 +51,14 @@ public class PutBeat
 
         try
         {
-            beat.PartitionKey = "CA";
-            beat.RowKey = Id.ToString();
-            beat.Id = Id;
-
-            var response = _tableClient.UpsertEntity(beat);
+            Beat beat = new Beat { PartitionKey = "CA", RowKey = Id.ToString(), Id = Id };
+            var response = await _tableClient.DeleteEntityAsync(beat.PartitionKey, beat.RowKey);
 
             return new OkObjectResult(response.ToString());
         }
         catch
         {
-            return new BadRequestObjectResult("beat failed on insert or replace");
+            return new BadRequestObjectResult("Beat Id not found");
         }
     }
 }

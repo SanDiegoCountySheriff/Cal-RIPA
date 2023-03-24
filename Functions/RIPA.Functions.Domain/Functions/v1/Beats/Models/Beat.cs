@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Domain.Functions.Beats.Models;
+namespace RIPA.Functions.Domain.Functions.v1.Beats.Models;
 
 public class Beat : ITableEntity
 {

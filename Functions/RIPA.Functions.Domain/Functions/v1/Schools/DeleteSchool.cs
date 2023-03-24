@@ -1,5 +1,4 @@
-﻿using Azure;
-using Azure.Data.Tables;
+﻿using Azure.Data.Tables;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -8,34 +7,33 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Cities.Models;
+using RIPA.Functions.Domain.Functions.v1.Schools.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Cities;
+namespace RIPA.Functions.Domain.Functions.v1.Schools;
 
-public class DeleteCity
+public class DeleteSchool
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public DeleteCity(TableServiceClient tableServiceClient)
+    public DeleteSchool(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Cities");
+        _tableClient = _tableServiceClient.GetTableClient("Schools");
     }
 
-    [FunctionName("DeleteCity")]
-    [OpenApiOperation(operationId: "DeleteCity", tags: new[] { "name" })]
+    [FunctionName("v1/DeleteSchool")]
+    [OpenApiOperation(operationId: "v1/DeleteSchool", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The City Id/Name")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "City deleted")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "City Id not found")]
-
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteCity/{Id}")] HttpRequest req, string Id, ILogger log)
+    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The School Id/Name")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "School deleted")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "School Id not found")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteSchool/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         try
         {
@@ -52,14 +50,14 @@ public class DeleteCity
 
         try
         {
-            City city = new City() { PartitionKey = "CA", RowKey = Id, Name = Id };
-            Response response = await _tableClient.DeleteEntityAsync(city.PartitionKey, city.RowKey);
+            School school = new School { PartitionKey = "CA", RowKey = Id, Name = Id };
+            var response = await _tableClient.DeleteEntityAsync(school.PartitionKey, school.RowKey);
 
             return new OkObjectResult(response.ToString());
         }
         catch
         {
-            return new BadRequestObjectResult("City Id not found");
+            return new BadRequestObjectResult("School Id not found");
         }
     }
 }

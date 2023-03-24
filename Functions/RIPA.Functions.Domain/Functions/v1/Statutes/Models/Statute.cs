@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Newtonsoft.Json;
 using System;
 
-namespace RIPA.Functions.Domain.Functions.Statutes.Models;
+namespace RIPA.Functions.Domain.Functions.v1.Statutes.Models;
 
 public class Statute : ITableEntity
 {

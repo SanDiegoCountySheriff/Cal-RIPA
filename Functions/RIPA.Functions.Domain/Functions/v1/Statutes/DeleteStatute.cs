@@ -7,33 +7,33 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Templates.Models;
+using RIPA.Functions.Domain.Functions.v1.Statutes.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Templates;
+namespace RIPA.Functions.Domain.Functions.v1.Statutes;
 
-public class DeleteTemplate
+public class DeleteStatute
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public DeleteTemplate(TableServiceClient tableServiceClient)
+    public DeleteStatute(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Templates");
+        _tableClient = _tableServiceClient.GetTableClient("Statutes");
     }
 
-    [FunctionName("DeleteTemplate")]
-    [OpenApiOperation(operationId: "DeleteTemplate", tags: new[] { "name" })]
+    [FunctionName("v1/DeleteStatute")]
+    [OpenApiOperation(operationId: "v1/DeleteStatute", tags: new[] { "name", "v1"})]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Template Id/Name")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Template deleted")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Template Id not found")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteTemplate/{Id}")] HttpRequest req, string Id, ILogger log)
+    [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Statute Id/Name")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Statute deleted")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Statute Id not found")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteStatute/{Id}")] HttpRequest req, int Id, ILogger log)
     {
         try
         {
@@ -50,15 +50,14 @@ public class DeleteTemplate
 
         try
         {
-            Template template = new Template { PartitionKey = "CA", RowKey = Id };
-
-            var response = await _tableClient.DeleteEntityAsync(template.PartitionKey, template.RowKey);
+            Statute statute = new Statute { PartitionKey = "CA", RowKey = Id.ToString(), OffenseCode = Id };
+            var response = await _tableClient.DeleteEntityAsync(statute.PartitionKey, statute.RowKey);
 
             return new OkObjectResult(response.ToString());
         }
         catch
         {
-            return new BadRequestObjectResult("Template not found");
+            return new BadRequestObjectResult("Statute Offense Code not found");
         }
     }
 }

@@ -7,33 +7,33 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Domain.Functions.Cities.Models;
+using RIPA.Functions.Domain.Functions.v1.Beats.Models;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Domain.Functions.Cities;
+namespace RIPA.Functions.Domain.Functions.v1.Beats;
 
-public class GetCities
+public class GetBeats
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly TableClient _tableClient;
 
-    public GetCities(TableServiceClient tableServiceClient)
+    public GetBeats(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Cities");
+        _tableClient = _tableServiceClient.GetTableClient("Beats");
     }
 
-    [FunctionName("GetCities")]
-    [OpenApiOperation(operationId: "GetCities", tags: new[] { "name" })]
+    [FunctionName("v1/GetBeats")]
+    [OpenApiOperation(operationId: "v1/GetBeats", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Cities")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of Beats")]
+
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetBeats")] HttpRequest req, ILogger log)
     {
         try
         {
@@ -48,24 +48,15 @@ public class GetCities
             return new UnauthorizedResult();
         }
 
-        List<City> response = new List<City>();
-
-        var singleResponse = _tableClient.Query<City>().FirstOrDefault();
-        var etag = singleResponse.ETag;
-        req.HttpContext.Response.Headers.Add("ETag", etag.ToString());
-
-        if (etag == req.Headers["If-None-Match"])
-        {
-            return new StatusCodeResult((int)HttpStatusCode.NotModified);
-        }
+        List<Beat> response = new List<Beat>();
 
         try
         {
-            var queryResults = _tableClient.Query<City>();
+            var queryResults = _tableClient.Query<Beat>();
 
-            foreach (var city in queryResults)
+            foreach (var beat in queryResults)
             {
-                response.Add(city);
+                response.Add(beat);
             }
         }
         catch (Exception ex)
@@ -73,7 +64,7 @@ public class GetCities
             return new NotFoundObjectResult(ex.Message);
         }
 
-        log.LogInformation($"GetCities returned {response.Count} cities");
+        log.LogInformation($"GetBeats returned {response.Count} beats");
         return new OkObjectResult(response);
     }
 }
