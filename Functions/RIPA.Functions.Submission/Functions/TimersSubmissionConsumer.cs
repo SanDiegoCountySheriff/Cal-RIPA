@@ -329,7 +329,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
+    private async Task<bool> HandleDojSubmitSuccess(ILogger log, IStop stop, DateTime date, Guid submissionId, string fileName, string runId)
     {
         try
         {

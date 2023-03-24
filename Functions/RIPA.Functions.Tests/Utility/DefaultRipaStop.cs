@@ -7,7 +7,7 @@ public static class DefaultRipaStop
 {
     public static Common.Models.v1.Stop CreateDefaultStop()
     {
-        return new Common.Models.Stop()
+        return new Common.Models.v1.Stop()
         {
             Id = "1",
             Ori = "001",

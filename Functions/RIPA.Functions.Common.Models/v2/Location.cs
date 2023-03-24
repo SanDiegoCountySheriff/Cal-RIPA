@@ -10,11 +10,11 @@ public class Location : ILocation
     public string LandMark { get; set; }
     public string StreetName { get; set; }
     public string HighwayExit { get; set; }
-    public City City { get; set; }
-    public Beat Beat { get; set; }
+    public ICity City { get; set; }
+    public IBeat Beat { get; set; }
     public bool School { get; set; }
-    public SchoolName SchoolName { get; set; }
+    public ISchoolName SchoolName { get; set; }
     public bool OutOfCounty { get; set; }
     public bool PiiFound { get; set; }
-    public GeoLocation GeoLocation { get; set; }
+    public IGeoLocation GeoLocation { get; set; }
 }

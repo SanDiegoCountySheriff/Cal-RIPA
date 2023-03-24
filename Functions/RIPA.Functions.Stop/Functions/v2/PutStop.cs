@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v2;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;

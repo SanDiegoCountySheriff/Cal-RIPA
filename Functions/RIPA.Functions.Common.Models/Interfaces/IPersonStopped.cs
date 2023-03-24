@@ -1,6 +1,6 @@
-﻿namespace RIPA.Functions.Common.Models.Interfaces
+﻿namespace RIPA.Functions.Common.Models.Interfaces;
+
+public interface IPersonStopped
 {
-    public interface IPersonStopped
-    {
-    }
+    string PerceivedGender { get; set; }
 }

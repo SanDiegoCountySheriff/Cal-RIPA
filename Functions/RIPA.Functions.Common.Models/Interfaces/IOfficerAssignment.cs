@@ -1,8 +1,7 @@
-﻿namespace RIPA.Functions.Common.Models.Interfaces
+﻿namespace RIPA.Functions.Common.Models.Interfaces;
+
+public interface IOfficerAssignment
 {
-    public interface IOfficerAssignment
-    {
-        string Key { get; }
-        string OtherType { get; }
-    }
+    string Key { get; }
+    string OtherType { get; }
 }
