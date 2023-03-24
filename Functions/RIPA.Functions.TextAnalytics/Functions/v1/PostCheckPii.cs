@@ -50,7 +50,7 @@ public class PostCheckPii
         }
     }
 
-    [FunctionName("v1/PostCheckPii")]
+    [FunctionName("PostCheckPii_v1")]
 
     [OpenApiOperation(operationId: "v1/PostCheckPii", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]

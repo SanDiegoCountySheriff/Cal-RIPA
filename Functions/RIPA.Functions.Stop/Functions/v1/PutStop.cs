@@ -33,7 +33,7 @@ public class PutStop
         _stopAuditCosmosDbService = stopAuditCosmosDbService;
     }
 
-    [FunctionName("v1/PutStop")]
+    [FunctionName("PutStop_v1")]
     [OpenApiOperation(operationId: "v1/PutStop", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
@@ -42,7 +42,7 @@ public class PutStop
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v1.Stop), Description = "Stop Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
     
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutStop/{Id}")] IStop stop, HttpRequest req, string Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutStop/{Id}")] Common.Models.v1.Stop stop, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation($"PUT - Put Stop requested, ID: {Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
 
