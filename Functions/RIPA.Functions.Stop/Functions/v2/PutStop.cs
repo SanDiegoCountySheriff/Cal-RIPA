@@ -42,7 +42,6 @@ public class PutStop
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.v2.Stop), Deprecated = false, Description = "Stop object", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v2.Stop), Description = "Stop Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
-
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v2/PutStop/{Id}")] IStop stop, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation($"PUT - Put Stop requested, ID: {Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
