@@ -50,9 +50,9 @@ public class StopCosmosDbService : IStopCosmosDbService
         await _container.DeleteItemAsync<IStop>(id, new PartitionKey(id));
     }
 
-    public async Task<IStop> GetStopAsync(string id)
+    public async Task<dynamic> GetStopAsync(string id)
     {
-        ItemResponse<IStop> response = await _container.ReadItemAsync<IStop>(id, new PartitionKey(id));
+        ItemResponse<dynamic> response = await _container.ReadItemAsync<dynamic>(id, new PartitionKey(id));
         return response.Resource;
     }
 
@@ -74,10 +74,10 @@ public class StopCosmosDbService : IStopCosmosDbService
         return matchingStops.Count > 0;
     }
 
-    public async Task<IEnumerable<IStop>> GetStopsAsync(string queryString)
+    public async Task<IEnumerable<dynamic>> GetStopsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<IStop>(new QueryDefinition(queryString));
-        List<IStop> results = new();
+        var query = _container.GetItemQueryIterator<dynamic>(new QueryDefinition(queryString));
+        List<dynamic> results = new();
 
         while (query.HasMoreResults)
         {

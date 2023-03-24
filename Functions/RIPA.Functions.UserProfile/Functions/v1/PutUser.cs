@@ -27,7 +27,6 @@ public class PutUser
     }
 
     [FunctionName("PutUser_v1")]
-
     [OpenApiOperation(operationId: "v1/PutUser", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
@@ -60,7 +59,7 @@ public class PutUser
         {
             int officerId = 100000000;
             string query = "SELECT VALUE c FROM c ORDER BY c.officerId DESC OFFSET 0 LIMIT 1";
-            IEnumerable<IUserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
+            IEnumerable<dynamic> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
             IUserProfile maxId = maxOfficer.FirstOrDefault();
 
             if (maxId != null)

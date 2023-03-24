@@ -51,6 +51,7 @@ public class GetUser
         try
         {
             var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
+
             return new OkObjectResult(response);
         }
         catch (Exception ex)
