@@ -6,8 +6,8 @@ namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 
 public interface IUserProfileCosmosDbService
 {
-    Task<IEnumerable<IUserProfile>> GetUserProfilesAsync(string queryString);
-    Task<IUserProfile> GetUserProfileAsync(string id);
+    Task<IEnumerable<dynamic>> GetUserProfilesAsync(string queryString);
+    Task<dynamic> GetUserProfileAsync(string id);
     Task AddUserProfileAsync(IUserProfile userProfile);
     Task UpdateUserProfileAsync(string id, IUserProfile userProfile);
     Task DeleteUserProfileAsync(string id);

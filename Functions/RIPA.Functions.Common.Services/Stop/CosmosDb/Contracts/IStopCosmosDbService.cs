@@ -7,8 +7,8 @@ namespace RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 
 public interface IStopCosmosDbService
 {
-    Task<IEnumerable<IStop>> GetStopsAsync(string queryString);
-    Task<IStop> GetStopAsync(string id);
+    Task<IEnumerable<dynamic>> GetStopsAsync(string queryString);
+    Task<dynamic> GetStopAsync(string id);
     Task<bool> CheckForDuplicateStop(string stopId, string ori, string officerId, string date, string time);
     Task AddStopAsync(IStop stop);
     Task UpdateStopAsync(IStop stop);
