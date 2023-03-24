@@ -1,12 +1,13 @@
 ﻿using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.v1;
 
 namespace RIPA.Functions.Tests.Utility;
 
 public static class DefaultRipaStop
 {
-    public static Common.Models.Stop CreateDefaultStop()
+    public static Common.Models.v1.Stop CreateDefaultStop()
     {
-        return new Common.Models.Stop()
+        return new Common.Models.v1.Stop()
         {
             Id = "1",
             Ori = "001",

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -7,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
+using RIPA.Functions.Common.Models.v2;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
@@ -33,15 +35,14 @@ public class PutStop
     }
 
     [FunctionName("v2/PutStop")]
-    [OpenApiOperation(operationId: "v2/PutStop", tags: new[] { "name" })]
+    [OpenApiOperation(operationId: "v2/PutStop", tags: new[] { "name", "v2" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Stop Id/ori")]
-    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.Stop), Deprecated = false, Description = "Stop object", Required = true)]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.Stop), Description = "Stop Created")]
+    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.v2.Stop), Deprecated = false, Description = "Stop object", Required = true)]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v2.Stop), Description = "Stop Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
-
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v2/PutStop/{Id}")] Common.Models.Stop stop, HttpRequest req, string Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v2/PutStop/{Id}")] IStop stop, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation($"PUT - Put Stop requested, ID: {Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
 
@@ -109,7 +110,7 @@ public class PutStop
             if (Id != "0")
             {
                 //Protect the submission history
-                Common.Models.Stop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
+                IStop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
                 editingStop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
                 await _stopAuditCosmosDbService.UpdateStopAuditAsync(editingStop.Id, editingStop);
                 log.LogInformation($"Saving stop audit ID: {editingStop.Id}");
@@ -176,4 +177,3 @@ public class PutStop
         return settingValue;
     }
 }
-

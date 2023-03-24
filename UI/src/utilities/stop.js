@@ -1191,6 +1191,7 @@ export const fullStopToApiStop = (
     stopDuration: duration ? duration.toString() : null,
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
+    stopVersion: fullStop.stopVersion,
   }
 }
 

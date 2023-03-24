@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
+using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Submission.Models;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
@@ -17,13 +19,13 @@ public class StopService : IStopService
         _logger = logger;
     }
 
-    public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
+    public IStop NewSubmission(IStop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
         stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
 
         if (stop.ListSubmission == null)
         {
-            stop.ListSubmission = new Common.Models.Submission[0];
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
         }
         else if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
@@ -31,7 +33,7 @@ public class StopService : IStopService
         }
 
         var submissions = stop.ListSubmission.ToList();
-        Common.Models.Submission submission = new Common.Models.Submission
+        ISubmission submission = new Common.Models.v1.Submission
         {
             DateSubmitted = dateSubmitted,
             Id = submissionId,
@@ -45,12 +47,12 @@ public class StopService : IStopService
         return stop;
     }
 
-    public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
+    public IStop ErrorSubmission(IStop stop, SubmissionError submissionError, string stopStatus)
     {
         if (stop.ListSubmission == null)
         {
-            stop.ListSubmission = new Common.Models.Submission[0];
-            Common.Models.Submission submission = new Common.Models.Submission
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
+            ISubmission submission = new Common.Models.v1.Submission
             {
                 DateSubmitted = submissionError.DateReported,
                 Id = submissionError.SubmissionId,
@@ -66,7 +68,7 @@ public class StopService : IStopService
 
         foreach (var submission in pendingSubmissions)
         {
-            List<SubmissionError> listSubmissionError = new List<SubmissionError>();
+            List<ISubmissionError> listSubmissionError = new List<ISubmissionError>();
             if (submission.ListSubmissionError != null)
             {
                 listSubmissionError = submission.ListSubmissionError.ToList();
@@ -81,7 +83,7 @@ public class StopService : IStopService
         return stop;
     }
 
-    public DojStop CastToDojStop(Stop stop)
+    public DojStop CastToDojStop(IStop stop)
     {
         DojStop dojStop = new DojStop
         {
@@ -113,7 +115,7 @@ public class StopService : IStopService
         return dojStop;
     }
 
-    public string CastToDojLocation(Common.Models.Location location)
+    public string CastToDojLocation(ILocation location)
     {
         string dojLocation = location.Intersection;
 
@@ -140,7 +142,7 @@ public class StopService : IStopService
         return dojLocation;
     }
 
-    public Listperson_Stopped CastToDojListPersonStopped(PersonStopped[] listPersonStopped, bool isSchool)
+    public Listperson_Stopped CastToDojListPersonStopped(IPersonStopped[] listPersonStopped, bool isSchool)
     {
         var listDojPersonStopped = new Person_Stopped[0].ToList();
 
@@ -272,7 +274,7 @@ public class StopService : IStopService
         };
     }
 
-    public string CastToDojTXType(Stop stop)
+    public string CastToDojTXType(IStop stop)
     {
         if (stop.ListSubmission == null || stop.ListSubmission.Length == 0)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
         _container = container;
     }
 
-    public async Task AddUserProfileAsync(Models.UserProfile userProfile)
+    public async Task AddUserProfileAsync(IUserProfile userProfile)
     {
         _logger.LogInformation($"Adding user profile: {userProfile.OfficerId}");
         await _container.CreateItemAsync(userProfile, new PartitionKey(userProfile.Id));
@@ -27,20 +28,20 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
     public async Task DeleteUserProfileAsync(string id)
     {
         _logger.LogInformation($"Deleting user profile: {id}");
-        await _container.DeleteItemAsync<Models.UserProfile>(id, new PartitionKey(id));
+        await _container.DeleteItemAsync<IUserProfile>(id, new PartitionKey(id));
     }
 
-    public async Task<Models.UserProfile> GetUserProfileAsync(string id)
+    public async Task<IUserProfile> GetUserProfileAsync(string id)
     {
-        ItemResponse<Models.UserProfile> response = await _container.ReadItemAsync<Models.UserProfile>(id, new PartitionKey(id));
+        ItemResponse<IUserProfile> response = await _container.ReadItemAsync<IUserProfile>(id, new PartitionKey(id));
 
         return response.Resource;
     }
 
-    public async Task<IEnumerable<Models.UserProfile>> GetUserProfilesAsync(string queryString)
+    public async Task<IEnumerable<IUserProfile>> GetUserProfilesAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<Models.UserProfile>(new QueryDefinition(queryString));
-        List<Models.UserProfile> results = new List<Models.UserProfile>();
+        var query = _container.GetItemQueryIterator<IUserProfile>(new QueryDefinition(queryString));
+        List<IUserProfile> results = new();
 
         while (query.HasMoreResults)
         {
@@ -51,7 +52,7 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
         return results;
     }
 
-    public async Task UpdateUserProfileAsync(string id, Models.UserProfile userProfile)
+    public async Task UpdateUserProfileAsync(string id, IUserProfile userProfile)
     {
         await _container.UpsertItemAsync(userProfile, new PartitionKey(id));
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Stop.Services.Contracts;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,22 +19,21 @@ public class StopAuditCosmosDbService : IStopAuditCosmosDbService
         _container = container;
     }
 
-    public async Task<IEnumerable<Common.Models.Stop>> GetStopAuditsAsync(string queryString)
+    public async Task<IEnumerable<IStop>> GetStopAuditsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<Common.Models.Stop>(new QueryDefinition(queryString));
-        List<Common.Models.Stop> results = new List<Common.Models.Stop>();
+        var query = _container.GetItemQueryIterator<IStop>(new QueryDefinition(queryString));
+        List<IStop> results = new();
 
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();
-
             results.AddRange(response.ToList());
         }
 
         return results;
     }
 
-    public async Task UpdateStopAuditAsync(string id, Common.Models.Stop stop)
+    public async Task UpdateStopAuditAsync(string id, IStop stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(id));
     }
