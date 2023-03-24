@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
@@ -14,7 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.UserProfile.Functions;
+namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class PutUser
 {
@@ -25,16 +26,16 @@ public class PutUser
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("PutUser")]
+    [FunctionName("v1/PutUser")]
 
-    [OpenApiOperation(operationId: "PutUser", tags: new[] { "name" })]
+    [OpenApiOperation(operationId: "v1/PutUser", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The User Id")]
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.v1.UserProfile), Deprecated = false, Description = "User Profile object", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v1.UserProfile), Description = "User Profile Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "User Profile failed on insert or replace")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "PutUser/{Id}")] Common.Models.v1.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutUser/{Id}")] Common.Models.v1.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("PUT - Put User requested");
         try
@@ -58,11 +59,10 @@ public class PutUser
         if (string.IsNullOrEmpty(userProfile.OfficerId))
         {
             int officerId = 100000000;
-
             string query = "SELECT VALUE c FROM c ORDER BY c.officerId DESC OFFSET 0 LIMIT 1";
-            IEnumerable<Common.Models.v1.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
+            IEnumerable<IUserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
+            IUserProfile maxId = maxOfficer.FirstOrDefault();
 
-            Common.Models.v1.UserProfile maxId = maxOfficer.FirstOrDefault();
             if (maxId != null)
             {
                 officerId = int.Parse(maxId.OfficerId);

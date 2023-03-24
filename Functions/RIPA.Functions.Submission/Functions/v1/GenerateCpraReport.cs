@@ -22,7 +22,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class GenerateCpraReport
 {
@@ -42,8 +42,8 @@ public class GenerateCpraReport
         _stopService = stopService;
     }
 
-    [FunctionName("GenerateCpraReport")]
-    [OpenApiOperation(operationId: "GenerateCpraReport", tags: new[] { "name" })]
+    [FunctionName("v1/GenerateCpraReport")]
+    [OpenApiOperation(operationId: "v1/GenerateCpraReport", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
@@ -51,11 +51,11 @@ public class GenerateCpraReport
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(string), Deprecated = false, Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CpraResult), Description = "CPRA Report Result")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/GenerateCpraReport")] string officerName, HttpRequest req,
         ILogger log)
     {
         log.LogInformation("CPRA Report Generation Requested");
-        
+
         try
         {
             if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -99,7 +99,7 @@ public class GenerateCpraReport
         {
             stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as List<Stop>;
             stopStatuses = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
-            
+
             foreach (var stopStatus in stopStatuses)
             {
                 totalStopCount += stopStatus.Count;
@@ -125,7 +125,7 @@ public class GenerateCpraReport
                 var dojStop = _stopService.CastToDojStop(stop);
                 dojStop.Officer = null;
                 var jsonStop = JsonConvert.SerializeObject(dojStop);
-                
+
                 if (stop.Location.Beat != null)
                 {
                     jsonStop += $"|{stop.Location.Beat.Codes.Text}";
@@ -202,7 +202,7 @@ public class GenerateCpraReport
     {
         BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
         BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
-        
+
         return blobContainerClient;
     }
 }

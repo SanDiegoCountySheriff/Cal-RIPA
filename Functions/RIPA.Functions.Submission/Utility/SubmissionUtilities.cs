@@ -1,7 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.v1;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
@@ -22,6 +22,7 @@ public class SubmissionUtilities
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
     private readonly BlobContainerClient _blobContainerClient;
+
     public SubmissionUtilities(IStopCosmosDbService stopCosmosDbService, ISubmissionCosmosDbService submissionCosmosDbService, ISftpService sftpService, ILogger logger)
     {
         _stopCosmosDbService = stopCosmosDbService;
@@ -48,7 +49,7 @@ public class SubmissionUtilities
         return true;
     }
 
-    public List<string> ValidateStops(IEnumerable<Stop> stops)
+    public List<string> ValidateStops(IEnumerable<IStop> stops)
     {
         List<string> errorList = new List<string>();
 
@@ -102,7 +103,7 @@ public class SubmissionUtilities
         return errorList;
     }
 
-    public async Task<Guid> NewSubmission(IEnumerable<Stop> stops, UserProfile userProfile)
+    public async Task<Guid> NewSubmission(IEnumerable<IStop> stops, IUserProfile userProfile)
     {
         InitializeBlobContainer();
         Guid submissionId = Guid.NewGuid();

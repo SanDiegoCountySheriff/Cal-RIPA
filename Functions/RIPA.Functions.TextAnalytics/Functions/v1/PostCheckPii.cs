@@ -12,7 +12,6 @@ using RIPA.Functions.Security;
 using RIPA.Functions.TextAnalytics.Models;
 using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +19,7 @@ using System.Net;
 using System.Threading.Tasks;
 
 
-namespace RIPA.Functions.TextAnalytics.Functions;
+namespace RIPA.Functions.TextAnalytics.Functions.v1;
 
 public class PostCheckPii
 {
@@ -29,6 +28,7 @@ public class PostCheckPii
     private const double minimumConfidenceScore = .80;
     private readonly string[] allowedCategories = new string[] { "Address", "Age", "Email", "Person", "PhoneNumber", "Organization" };
     private readonly string[] _allowedCategories;
+
     public PostCheckPii(IPiiTextAnalyticsService piiTextAnalyticsService)
     {
         _piiTextAnalyticsService = piiTextAnalyticsService;
@@ -42,7 +42,7 @@ public class PostCheckPii
         }
         try
         {
-            _allowedCategories = ((IEnumerable)Environment.GetEnvironmentVariable("AllowedCategories").Split(",")).Cast<object>().Select(x => x.ToString()).ToArray();
+            _allowedCategories = Environment.GetEnvironmentVariable("AllowedCategories").Split(",").Cast<object>().Select(x => x.ToString()).ToArray();
         }
         catch
         {
@@ -50,16 +50,16 @@ public class PostCheckPii
         }
     }
 
-    [FunctionName("PostCheckPii")]
+    [FunctionName("v1/PostCheckPii")]
 
-    [OpenApiOperation(operationId: "PostCheckPii", tags: new[] { "name" })]
+    [OpenApiOperation(operationId: "v1/PostCheckPii", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(PiiRequest), Deprecated = false, Description = "Document is the input string you would like to be analyzed", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(PiiResponse), Description = "Responds with a list of Pii Entities that may be PII and a redactiedText string. Uses Beta Nuget 5.1.0-beta.5")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostCheckPii")] HttpRequest req, ILogger log)
     {
         log.LogInformation("Calling PostCheckPii");
 
@@ -101,7 +101,7 @@ public class PostCheckPii
                 AllowedCategories = _allowedCategories
             };
 
-            foreach (var entity in piiEntities.Where(x => (x.ConfidenceScore > _minimumConfidenceScore) && _allowedCategories.Any(x.Category.ToString().Equals)))
+            foreach (var entity in piiEntities.Where(x => x.ConfidenceScore > _minimumConfidenceScore && _allowedCategories.Any(x.Category.ToString().Equals)))
             {
                 piiResponse.PiiEntities.Add(new PiiEntity
                 {

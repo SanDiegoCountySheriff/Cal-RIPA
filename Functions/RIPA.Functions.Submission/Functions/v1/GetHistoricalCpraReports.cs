@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,37 +11,36 @@ using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Utility;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
-public class DownloadCpraReport
+public class GetHistoricalCpraReports
 {
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
     private readonly BlobContainerClient _blobContainerClient;
-    private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public DownloadCpraReport()
+    public GetHistoricalCpraReports()
     {
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
         _blobContainerClient = GetBlobContainerClient();
     }
 
-    [FunctionName("DownloadCpraReport")]
-    [OpenApiOperation(operationId: "DownloadCpraReport", tags: new[] { "name" })]
+    [FunctionName("v1/GetHistoricalCpraReports")]
+    [OpenApiOperation(operationId: "v1/GetHistoricalCpraReports", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiParameter(name: "FileName", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The FileName parameter")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/octet-stream", bodyType: typeof(FileContentResult), Description = "The file")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetHistoricalCpraReports")] HttpRequest req,
         ILogger log)
     {
-        log.LogInformation("Downloading CPRA report");
-        
+        log.LogInformation("Getting Historical CPRA Reports");
+
         try
         {
             if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -51,33 +51,37 @@ public class DownloadCpraReport
         catch (Exception ex)
         {
             log.LogError(ex.Message);
-            
+
             return new UnauthorizedResult();
         }
 
-        var fileName = req.Query["FileName"];
+        await _blobContainerClient.CreateIfNotExistsAsync();
+        var response = new List<string>();
 
         try
         {
-            var resultFile = await blobUtilities.GetBlob(fileName, _blobContainerClient);
-            
-            return new FileContentResult(resultFile.Value.Content.ToArray(), "application/octet-stream")
+            var blobs = _blobContainerClient.GetBlobsAsync();
+
+            await foreach (BlobItem blob in blobs)
             {
-                FileDownloadName = fileName
-            };
+                response.Add(blob.Name);
+            }
+
+            return new OkObjectResult(response);
         }
         catch (Exception ex)
         {
-            log.LogError($"Error downloading CPRA Report {fileName}: {ex.Message}");
-            return new NotFoundResult();
+            log.LogError($"Error getting historical CPRA report: {ex.Message}");
+            return new BadRequestObjectResult($"Error getting historical CPRA report: {ex.Message}");
         }
+
     }
 
     private BlobContainerClient GetBlobContainerClient()
     {
         BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
         BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
-        
+
         return blobContainerClient;
     }
 }

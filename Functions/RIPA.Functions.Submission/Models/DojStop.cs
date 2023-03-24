@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using RIPA.Functions.Common.Models.Interfaces;
 
 namespace RIPA.Functions.Submission.Models;
 
@@ -13,7 +12,7 @@ public class DojStop
     public string SDate { get; set; }
     public string STime { get; set; }
     public string SDur { get; set; }
-    [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public Officer Officer { get; set; }
     public Location Location { get; set; }
     public string Is_ServCall { get; set; }

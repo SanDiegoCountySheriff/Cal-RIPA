@@ -13,7 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 
 
-namespace RIPA.Functions.UserProfile.Functions;
+namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class DeleteUser
 {
@@ -24,15 +24,14 @@ public class DeleteUser
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [OpenApiOperation(operationId: "DeleteUser", tags: new[] { "name" })]
+    [FunctionName("v1/DeleteUser")]
+    [OpenApiOperation(operationId: "v1/DeleteUser", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The User Id")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "User deleted")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "User Id not found")]
-
-    [FunctionName("DeleteUser")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteUser/{Id}")] HttpRequest req, string Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteUser/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("Delete - Delete User requested");
 

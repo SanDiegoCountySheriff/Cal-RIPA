@@ -28,4 +28,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\v2\" />
+  </ItemGroup>
 </Project>

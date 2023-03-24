@@ -18,7 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.UserProfile.Functions;
+namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class PostUpload
 {
@@ -29,8 +29,8 @@ public class PostUpload
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("PostUpload")]
-    [OpenApiOperation(operationId: "PostUpload", tags: new[] { "name" })]
+    [FunctionName("v1/PostUpload")]
+    [OpenApiOperation(operationId: "v1/PostUpload", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "multipart/form-data; boundary=<calculated when request is sent>", bodyType: typeof(string), Deprecated = false, Required = true)]
@@ -38,7 +38,7 @@ public class PostUpload
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.csv")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostUpload")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("Importing user profiles from uploaded csv");

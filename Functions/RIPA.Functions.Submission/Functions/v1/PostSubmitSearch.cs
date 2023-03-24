@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
@@ -27,7 +28,7 @@ using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class PostSubmitSearch
 {
@@ -54,8 +55,8 @@ public class PostSubmitSearch
         _submissionServiceBusService = submissionServiceBusService;
     }
 
-    [FunctionName("PostSubmitSearch")]
-    [OpenApiOperation(operationId: "PostSubmitSearch", tags: new[] { "name" })]
+    [FunctionName("v1/PostSubmitSearch")]
+    [OpenApiOperation(operationId: "v1/PostSubmitSearch", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
     [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
     [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = false, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
@@ -65,7 +66,7 @@ public class PostSubmitSearch
     [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "String ErrorCode: Error code must exist on stop submission to return")]
     [OpenApiParameter(name: "OfficerId", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Returns Submitted Stops where officer id")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Submission Id")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostSubmitSearch")] HttpRequest req, ILogger log)
     {
         log.LogInformation("Submit to DOJ requested - submit search");
         try
@@ -81,11 +82,11 @@ public class PostSubmitSearch
             return new UnauthorizedResult();
         }
 
-        UserProfile userProfile;
+        IUserProfile userProfile = new UserProfile();
         try
         {
             var objectId = await RIPAAuthorization.GetUserId(req, log);
-            userProfile = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId));
+            userProfile = await _userProfileCosmosDbService.GetUserProfileAsync(objectId);
             if (userProfile == null)
             {
                 throw new Exception($"User profile not found for {objectId}");
@@ -98,20 +99,20 @@ public class PostSubmitSearch
             return new BadRequestObjectResult("User profile was not found");
         }
 
-        string stopQueryString = String.Empty;
+        string stopQueryString = string.Empty;
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
             stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            log.LogError("An error occured while evaluating the stop query.",  ex);
+            log.LogError("An error occured while evaluating the stop query.", ex);
             return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
         }
 
-        IEnumerable<Stop> stopResponse;
+        IEnumerable<IStop> stopResponse;
         try
         {
             stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);

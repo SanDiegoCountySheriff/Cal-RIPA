@@ -12,7 +12,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.UserProfile.Functions;
+namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class GetUsers
 {
@@ -23,13 +23,12 @@ public class GetUsers
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("GetUsers")]
-    [OpenApiOperation(operationId: "GetUsers", tags: new[] { "name" })]
+    [FunctionName("v1/GetUsers")]
+    [OpenApiOperation(operationId: "v1/GetUsers", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(System.Collections.Generic.IEnumerable<Common.Models.v1.UserProfile>), Description = "List of User Profiles")]
-
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetUsers")] HttpRequest req, ILogger log)
     {
         log.LogInformation("GET - Get Users requested");
 

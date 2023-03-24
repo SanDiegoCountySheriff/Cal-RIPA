@@ -15,7 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class GetSubmission
 {
@@ -28,8 +28,8 @@ public class GetSubmission
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("GetSubmission")]
-    [OpenApiOperation(operationId: "GetSubmission", tags: new[] { "name" })]
+    [FunctionName("v1/GetSubmission")]
+    [OpenApiOperation(operationId: "v1/GetSubmission", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
@@ -42,7 +42,7 @@ public class GetSubmission
     [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The full text error code to filter the submissions stops by")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("GET - Get Submission requested");
         try

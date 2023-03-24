@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
@@ -25,7 +26,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class PostSubmit
 {
@@ -44,14 +45,14 @@ public class PostSubmit
         _serviceBusService = serviceBusService;
     }
 
-    [FunctionName("PostSubmit")]
-    [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
+    [FunctionName("v1/PostSubmit")]
+    [OpenApiOperation(operationId: "v1/PostSubmit", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(SubmitRequest), Deprecated = false, Description = "list of stop ids to submit to DOJ", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of stops that failed submission")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SubmitRequest submitRequest, HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostSubmit")] SubmitRequest submitRequest, HttpRequest req, ILogger log)
     {
         log.LogInformation("Submit to DOJ requested");
         try
@@ -67,11 +68,11 @@ public class PostSubmit
             return new UnauthorizedResult();
         }
 
-        UserProfile userProfile;
+        IUserProfile userProfile = new UserProfile();
         try
         {
             var objectId = await RIPAAuthorization.GetUserId(req, log);
-            userProfile = (await _userProfileCosmosDbService.GetUserProfileAsync(objectId));
+            userProfile = await _userProfileCosmosDbService.GetUserProfileAsync(objectId);
             if (userProfile == null)
             {
                 throw new Exception($"User profile not found for {objectId}");
@@ -92,7 +93,7 @@ public class PostSubmit
         var where = Environment.NewLine + $"WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')";
         var order = Environment.NewLine + $"ORDER BY c.StopDateTime DESC";
 
-        IEnumerable<Stop> stopResponse;
+        IEnumerable<IStop> stopResponse;
         try
         {
             stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}");

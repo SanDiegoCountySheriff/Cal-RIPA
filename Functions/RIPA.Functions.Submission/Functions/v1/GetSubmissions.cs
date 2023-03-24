@@ -15,7 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class GetSubmissions
 {
@@ -28,8 +28,8 @@ public class GetSubmissions
         _stopCosmosDbService = stopCosmosDbService;
     }
 
-    [FunctionName("GetSubmissions")]
-    [OpenApiOperation(operationId: "GetSubmissions", tags: new[] { "name" })]
+    [FunctionName("v1/GetSubmissions")]
+    [OpenApiOperation(operationId: "v1/GetSubmissions", tags: new[] { "name", "v1" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Models.Submission>), Description = "List of Submissions")]
@@ -40,7 +40,7 @@ public class GetSubmissions
     [OpenApiParameter(name: "OrderBy", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Column name to order the results")]
     [OpenApiParameter(name: "Order", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "ASC or DESC order")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmissions")] HttpRequest req, ILogger log)
     {
         log.LogInformation("GET - Get Submissions requested");
         try

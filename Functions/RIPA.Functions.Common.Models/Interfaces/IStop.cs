@@ -20,4 +20,6 @@ public interface IStop
     IOfficerAssignment OfficerAssignment { get; }
     bool StopInResponseToCFS { get; }
     IPersonStopped[] ListPersonStopped { get; }
+    bool IsPiiFound { get; set; }
+    bool OverridePii { get; set; }
 }
