@@ -96,7 +96,7 @@ public class PostSubmit
         IEnumerable<IStop> stopResponse;
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}");
+            stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}") as IEnumerable<IStop>;
         }
         catch (Exception ex)
         {

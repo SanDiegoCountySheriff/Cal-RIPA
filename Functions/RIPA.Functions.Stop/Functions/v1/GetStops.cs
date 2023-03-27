@@ -83,7 +83,7 @@ public class GetStops
 
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
+            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as IEnumerable<IStop>;
             stopStatusCounts = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
         }
         catch (Exception ex)

@@ -115,7 +115,7 @@ public class PostSubmitSearch
         IEnumerable<IStop> stopResponse;
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
+            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as IEnumerable<IStop>;
         }
         catch (Exception ex)
         {
