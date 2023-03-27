@@ -2,6 +2,7 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
@@ -38,10 +39,10 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddLogging();
         var stopContainer = CreateStopContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IStopCosmosDbService>(sp =>
+        builder.Services.AddSingleton<IStopCosmosDbService<IStop>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService>>();
-            return new StopCosmosDbService(stopContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<IStop>>>();
+            return new StopCosmosDbService<IStop>(stopContainer, logger);
         });
         var stopAuditContainer = CreateStopAuditContainerAsync().GetAwaiter().GetResult();
         builder.Services.AddSingleton<IStopAuditCosmosDbService>(sp =>
@@ -50,10 +51,10 @@ public class Startup : FunctionsStartup
             return new StopAuditCosmosDbService(stopAuditContainer, logger);
         });
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<IUserProfile>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
-            return new UserProfileCosmosDbService(userProfileContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<IUserProfile>>>();
+            return new UserProfileCosmosDbService<IUserProfile>(userProfileContainer, logger);
         });
     }
 

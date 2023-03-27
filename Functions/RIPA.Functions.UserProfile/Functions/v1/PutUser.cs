@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using System;
@@ -19,9 +18,9 @@ namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class PutUser
 {
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
 
-    public PutUser(IUserProfileCosmosDbService userProfileCosmosDbService)
+    public PutUser(IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService)
     {
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
@@ -60,7 +59,7 @@ public class PutUser
             int officerId = 100000000;
             string query = "SELECT VALUE c FROM c ORDER BY c.officerId DESC OFFSET 0 LIMIT 1";
             IEnumerable<dynamic> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
-            IUserProfile maxId = maxOfficer.FirstOrDefault();
+            Common.Models.v1.UserProfile maxId = maxOfficer.FirstOrDefault();
 
             if (maxId != null)
             {

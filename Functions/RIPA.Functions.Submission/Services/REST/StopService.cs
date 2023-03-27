@@ -10,16 +10,16 @@ using System.Linq;
 
 namespace RIPA.Functions.Submission.Services.REST;
 
-public class StopService : IStopService
+public class StopService<T> : IStopService<T> where T : IStop
 {
-    private readonly ILogger<StopService> _logger;
+    private readonly ILogger<StopService<T>> _logger;
 
-    public StopService(ILogger<StopService> logger)
+    public StopService(ILogger<StopService<T>> logger)
     {
         _logger = logger;
     }
 
-    public IStop NewSubmission(IStop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
+    public T NewSubmission(T stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
         stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
 
@@ -43,11 +43,10 @@ public class StopService : IStopService
 
         submissions.Add(submission);
         stop.ListSubmission = submissions.ToArray();
-
         return stop;
     }
 
-    public IStop ErrorSubmission(IStop stop, SubmissionError submissionError, string stopStatus)
+    public T ErrorSubmission(T stop, SubmissionError submissionError, string stopStatus)
     {
         if (stop.ListSubmission == null)
         {
@@ -83,7 +82,7 @@ public class StopService : IStopService
         return stop;
     }
 
-    public DojStop CastToDojStop(IStop stop)
+    public DojStop CastToDojStop(T stop)
     {
         DojStop dojStop = new DojStop
         {
@@ -274,7 +273,7 @@ public class StopService : IStopService
         };
     }
 
-    public string CastToDojTXType(IStop stop)
+    public string CastToDojTXType(T stop)
     {
         if (stop.ListSubmission == null || stop.ListSubmission.Length == 0)
         {

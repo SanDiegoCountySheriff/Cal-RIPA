@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
@@ -21,9 +20,9 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStops
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
 
-    public GetStops(IStopCosmosDbService stopCosmosDbService)
+    public GetStops(IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
     }
@@ -78,12 +77,12 @@ public class GetStops
             return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
         }
 
-        IEnumerable<IStop> stopResponse;
+        IEnumerable<Common.Models.v1.Stop> stopResponse;
         IEnumerable<StopStatusCount> stopStatusCounts;
 
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as IEnumerable<IStop>;
+            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
             stopStatusCounts = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
         }
         catch (Exception ex)

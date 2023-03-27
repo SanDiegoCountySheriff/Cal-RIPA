@@ -699,12 +699,11 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getAdminUsers')
           dispatch('getUser')
         })
         .catch(error => {
           console.log('There was an error saving the user.', error)
-          dispatch('getAdminUsers')
+          dispatch('getUser')
         })
     },
 
@@ -1328,15 +1327,12 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUsers`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUsers`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           const data = response.data.map(item => {
             return {
@@ -1606,15 +1602,12 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           commit('updateUserProfile', response.data)
           commit('updateInvalidUser', false)

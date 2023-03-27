@@ -18,13 +18,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class TimersSubmissionConsumer
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
     private readonly ISftpService _sftpService;
-    private readonly IStopService _stopService;
+    private readonly IStopService<Stop> _stopService;
     readonly ISubmissionServiceBusService _submissionServiceBusService;
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
@@ -32,7 +32,7 @@ public class TimersSubmissionConsumer
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public TimersSubmissionConsumer(IStopCosmosDbService stopCosmosDbService, ISftpService sftpService, IStopService stopService, ISubmissionServiceBusService submissionServiceBusService)
+    public TimersSubmissionConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, ISftpService sftpService, IStopService<Stop> stopService, ISubmissionServiceBusService submissionServiceBusService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _sftpService = sftpService;
@@ -76,7 +76,7 @@ public class TimersSubmissionConsumer
             }
 
             // Get Stop
-            IStop stop = await GetStop(log, submissionMessage.StopId, runId);
+            Stop stop = await GetStop(log, submissionMessage.StopId, runId);
 
             if (stop == null)
             {
@@ -187,7 +187,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<IStop> GetStop(ILogger log, string id, string runId)
+    private async Task<Stop> GetStop(ILogger log, string id, string runId)
     {
         try
         {
@@ -214,7 +214,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private DojStop GetDojStop(ILogger log, IStop stop, string runId)
+    private DojStop GetDojStop(ILogger log, Stop stop, string runId)
     {
         try
         {
@@ -228,7 +228,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandledDojCastError(ILogger log, IStop stop, DateTime date, string fileName, Guid submissionId, string runId)
+    private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
     {
         try
         {
@@ -297,7 +297,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, IStop stop)
+    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Stop stop)
     {
         try
         {
@@ -329,7 +329,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandleDojSubmitSuccess(ILogger log, IStop stop, DateTime date, Guid submissionId, string fileName, string runId)
+    private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
     {
         try
         {
@@ -344,7 +344,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, IStop stop)
+    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Stop stop)
     {
         try
         {

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
-using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
@@ -14,7 +13,6 @@ namespace RIPA.Functions.Submission.Utility;
 
 public class SubmissionUtilities
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
     private readonly ISftpService _sftpService;
     private readonly string _sftpInputPath;
@@ -23,9 +21,8 @@ public class SubmissionUtilities
     private readonly string _storageContainerNamePrefix;
     private readonly BlobContainerClient _blobContainerClient;
 
-    public SubmissionUtilities(IStopCosmosDbService stopCosmosDbService, ISubmissionCosmosDbService submissionCosmosDbService, ISftpService sftpService, ILogger logger)
+    public SubmissionUtilities(ISubmissionCosmosDbService submissionCosmosDbService, ISftpService sftpService, ILogger logger)
     {
-        _stopCosmosDbService = stopCosmosDbService;
         _submissionCosmosDbService = submissionCosmosDbService;
         _sftpService = sftpService;
         _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");

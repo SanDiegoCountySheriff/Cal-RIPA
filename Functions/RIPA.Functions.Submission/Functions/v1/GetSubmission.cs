@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
+using RIPA.Functions.Common.Models.v1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,9 @@ namespace RIPA.Functions.Submission.Functions.v1;
 public class GetSubmission
 {
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
 
-    public GetSubmission(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
+    public GetSubmission(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService)
     {
         _submissionCosmosDbService = submissionCosmosDbService;
         _stopCosmosDbService = stopCosmosDbService;
@@ -45,6 +46,7 @@ public class GetSubmission
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("GET - Get Submission requested");
+
         try
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -62,6 +64,7 @@ public class GetSubmission
         var queryLimit = !string.IsNullOrWhiteSpace(req.Query["limit"]) ? Convert.ToInt32(req.Query["limit"]) : default;
         var queryOffset = !string.IsNullOrWhiteSpace(req.Query["offset"]) ? Convert.ToInt32(req.Query["offset"]) : default;
         var limit = string.Empty;
+
         if (queryLimit != 0)
         {
             limit = Environment.NewLine + $"OFFSET {queryOffset} LIMIT {queryLimit}";
@@ -69,11 +72,12 @@ public class GetSubmission
 
         var queryOrderBy = !string.IsNullOrWhiteSpace(req.Query["OrderBy"]) ? req.Query["OrderBy"] : default;
         var queryOrder = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default;
-
         var order = Environment.NewLine + "ORDER BY c.StopDateTime DESC";
+
         if (!string.IsNullOrWhiteSpace(queryOrderBy))
         {
             order = Environment.NewLine + $"ORDER BY c.{queryOrderBy} ";
+
             if (!string.IsNullOrWhiteSpace(queryOrder))
             {
                 if (queryOrder.ToString().ToUpperInvariant() == "DESC" || queryOrder.ToString().ToUpperInvariant() == "ASC")
@@ -83,7 +87,7 @@ public class GetSubmission
             }
         }
 
-        List<string> whereStatements = new List<string>();
+        List<string> whereStatements = new();
         string join = string.Empty;
         join += Environment.NewLine + "JOIN ListSubmission IN c.ListSubmission";
         whereStatements.Add(Environment.NewLine + $"ListSubmission.Id = '{Id}'");
@@ -95,23 +99,24 @@ public class GetSubmission
         }
 
         string where = string.Empty;
+
         if (whereStatements.Count > 0)
         {
             where = " WHERE ";
+
             foreach (var whereStatement in whereStatements)
             {
                 where += Environment.NewLine + whereStatement;
                 where += Environment.NewLine + "AND";
             }
+
             where = where.Remove(where.Length - 3);
         }
 
         try
         {
             var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
-
             string query = $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
-
             var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
             var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
             var response = new

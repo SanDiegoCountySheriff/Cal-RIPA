@@ -11,14 +11,14 @@ using System.IO;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.ResultServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class ServiceBusResultConsumer
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
-    private readonly IStopService _stopService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IStopService<Stop> _stopService;
 
-    public ServiceBusResultConsumer(IStopCosmosDbService stopCosmosDbService, IStopService stopService)
+    public ServiceBusResultConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _stopService = stopService;

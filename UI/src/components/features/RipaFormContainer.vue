@@ -845,6 +845,7 @@ export default {
     },
 
     handleDone() {
+      console.log('handling done')
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
       this.$router.push(route)

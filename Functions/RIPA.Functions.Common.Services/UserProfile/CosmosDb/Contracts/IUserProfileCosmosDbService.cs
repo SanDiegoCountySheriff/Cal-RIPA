@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 
-public interface IUserProfileCosmosDbService
+public interface IUserProfileCosmosDbService<T>
 {
-    Task<IEnumerable<dynamic>> GetUserProfilesAsync(string queryString);
-    Task<dynamic> GetUserProfileAsync(string id);
-    Task AddUserProfileAsync(IUserProfile userProfile);
-    Task UpdateUserProfileAsync(string id, IUserProfile userProfile);
+    Task<IEnumerable<T>> GetUserProfilesAsync(string queryString);
+    Task<T> GetUserProfileAsync(string id);
+    Task AddUserProfileAsync(T userProfile);
+    Task UpdateUserProfileAsync(string id, T userProfile);
     Task DeleteUserProfileAsync(string id);
 }

@@ -2,6 +2,7 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System;
@@ -32,10 +33,10 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddLogging();
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IUserProfileCosmosDbService>(sp =>
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<IUserProfile>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService>>();
-            return new UserProfileCosmosDbService(userProfileContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<IUserProfile>>>();
+            return new UserProfileCosmosDbService<IUserProfile>(userProfileContainer, logger);
         });
     }
 
