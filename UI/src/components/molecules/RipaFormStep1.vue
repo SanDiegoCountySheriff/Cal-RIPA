@@ -23,11 +23,7 @@
 
     <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
 
-    <ripa-location
-      v-model="model"
-      v-on="$listeners"
-      @pii-check="handlePiiCheck"
-    ></ripa-location>
+    <ripa-location v-model="model" v-on="$listeners"></ripa-location>
 
     <v-spacer></v-spacer>
 
@@ -157,10 +153,6 @@ export default {
         'ripa_form_submitted_api_stop',
         JSON.stringify(parsedApiStop),
       )
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
     },
   },
 }

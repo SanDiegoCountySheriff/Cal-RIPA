@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ public class StopCosmosDbService : IStopCosmosDbService
         _container = container;
     }
 
-    public async Task AddStopAsync(IStop stop)
+    public async Task AddStopAsync(dynamic stop)
     {
         DateTime now = DateTime.Now;
         StringBuilder sb = new StringBuilder();
@@ -40,14 +39,14 @@ public class StopCosmosDbService : IStopCosmosDbService
         await _container.CreateItemAsync(stop, new PartitionKey(stop.Id));
     }
 
-    public async Task UpdateStopAsync(IStop stop)
+    public async Task UpdateStopAsync(dynamic stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(stop.Id));
     }
 
     public async Task DeleteStopAsync(string id)
     {
-        await _container.DeleteItemAsync<IStop>(id, new PartitionKey(id));
+        await _container.DeleteItemAsync<dynamic>(id, new PartitionKey(id));
     }
 
     public async Task<dynamic> GetStopAsync(string id)
@@ -61,9 +60,9 @@ public class StopCosmosDbService : IStopCosmosDbService
         string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
         var queryDefinition = new QueryDefinition(queryString);
 
-        var results = _container.GetItemQueryIterator<Models.v1.Stop>(queryDefinition);
+        var results = _container.GetItemQueryIterator<dynamic>(queryDefinition);
 
-        List<IStop> matchingStops = new();
+        List<dynamic> matchingStops = new();
 
         while (results.HasMoreResults)
         {
@@ -122,7 +121,7 @@ public class StopCosmosDbService : IStopCosmosDbService
         var queryString = $"Select Max(c.StopDateTime) AS MaxStopDateTime, Min(c.StopDateTime) AS MinStopDateTime FROM c JOIN ListSubmission IN c.ListSubmission WHERE ListSubmission.Id = '{id}'";
         var query = _container.GetItemQueryIterator<SubmissionStopDateTimeSummary>(new QueryDefinition(queryString));
         List<SubmissionStopDateTimeSummary> results = new();
-        
+
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();
@@ -135,7 +134,7 @@ public class StopCosmosDbService : IStopCosmosDbService
     public async Task<IEnumerable<DojError>> GetErrorCodes(string inputText, string submissionId)
     {
         var queryString = $"SELECT ListSubmissionError.Code Code, ListSubmissionError.Message Message FROM Code JOIN ListSubmission IN Code.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE CONTAINS(ListSubmissionError.Code, '{inputText}', true) OR CONTAINS(ListSubmissionError.Message, '{inputText}', true)";
-        
+
         if (!string.IsNullOrWhiteSpace(submissionId))
         {
             queryString += $" AND ListSubmission.Id = '{submissionId}'";
@@ -143,7 +142,7 @@ public class StopCosmosDbService : IStopCosmosDbService
 
         var query = _container.GetItemQueryIterator<DojError>(new QueryDefinition(queryString));
         List<DojError> results = new();
-        
+
         while (query.HasMoreResults)
         {
             var response = await query.ReadNextAsync();

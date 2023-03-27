@@ -688,7 +688,7 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
+          `http://localhost:7071/api/v${state.version}/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -699,12 +699,11 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getAdminUsers')
           dispatch('getUser')
         })
         .catch(error => {
           console.log('There was an error saving the user.', error)
-          dispatch('getAdminUsers')
+          dispatch('getUser')
         })
     },
 
@@ -713,7 +712,7 @@ export default new Vuex.Store({
       formData.append('file', usersFile)
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PostUpload?agency=${usersAgency}`,
+          `http://localhost:7071/api/v${state.version}/PostUpload?agency=${usersAgency}`,
           formData,
           {
             headers: {
@@ -882,7 +881,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
+          `http://localhost:7071/api/v${state.version}/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1328,15 +1327,12 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUsers`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`http://localhost:7071/api/v${state.version}/GetUsers`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           const data = response.data.map(item => {
             return {
@@ -1606,15 +1602,12 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`http://localhost:7071/api/v${state.version}/GetUser/${id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           commit('updateUserProfile', response.data)
           commit('updateInvalidUser', false)

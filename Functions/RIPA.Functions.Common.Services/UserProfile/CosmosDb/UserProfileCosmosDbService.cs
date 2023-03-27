@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
         _container = container;
     }
 
-    public async Task AddUserProfileAsync(IUserProfile userProfile)
+    public async Task AddUserProfileAsync(dynamic userProfile)
     {
         _logger.LogInformation($"Adding user profile: {userProfile.OfficerId}");
         await _container.CreateItemAsync(userProfile, new PartitionKey(userProfile.Id));
@@ -28,7 +27,7 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
     public async Task DeleteUserProfileAsync(string id)
     {
         _logger.LogInformation($"Deleting user profile: {id}");
-        await _container.DeleteItemAsync<IUserProfile>(id, new PartitionKey(id));
+        await _container.DeleteItemAsync<dynamic>(id, new PartitionKey(id));
     }
 
     public async Task<dynamic> GetUserProfileAsync(string id)
@@ -52,7 +51,7 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
         return results;
     }
 
-    public async Task UpdateUserProfileAsync(string id, IUserProfile userProfile)
+    public async Task UpdateUserProfileAsync(string id, dynamic userProfile)
     {
         await _container.UpsertItemAsync(userProfile, new PartitionKey(id));
     }

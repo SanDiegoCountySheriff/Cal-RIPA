@@ -83,7 +83,6 @@
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
-                    @pii-check="handlePiiCheck"
                   ></ripa-form-step-1>
                 </template>
               </v-stepper-content>
@@ -124,7 +123,6 @@
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
-                    @pii-check="handlePiiCheck"
                   ></ripa-form-step-3>
                 </template>
               </v-stepper-content>
@@ -144,7 +142,6 @@
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                     @input="handleInput"
-                    @pii-check="handlePiiCheck"
                   ></ripa-form-step-4>
                 </template>
               </v-stepper-content>
@@ -467,10 +464,6 @@ export default {
     handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.$emit('input', this.stop)
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
     },
 
     handleAddPerson() {

@@ -1,5 +1,4 @@
 ﻿using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,8 +9,8 @@ public interface IStopCosmosDbService
     Task<IEnumerable<dynamic>> GetStopsAsync(string queryString);
     Task<dynamic> GetStopAsync(string id);
     Task<bool> CheckForDuplicateStop(string stopId, string ori, string officerId, string date, string time);
-    Task AddStopAsync(IStop stop);
-    Task UpdateStopAsync(IStop stop);
+    Task AddStopAsync(dynamic stop);
+    Task UpdateStopAsync(dynamic stop);
     Task DeleteStopAsync(string id);
     Task<IEnumerable<StopStatusCount>> GetStopStatusCounts(string queryString);
     Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id);
