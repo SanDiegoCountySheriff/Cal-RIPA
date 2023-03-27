@@ -31,17 +31,17 @@ public class UserProfileCosmosDbService : IUserProfileCosmosDbService
         await _container.DeleteItemAsync<IUserProfile>(id, new PartitionKey(id));
     }
 
-    public async Task<IUserProfile> GetUserProfileAsync(string id)
+    public async Task<dynamic> GetUserProfileAsync(string id)
     {
-        ItemResponse<IUserProfile> response = await _container.ReadItemAsync<IUserProfile>(id, new PartitionKey(id));
+        var response = await _container.ReadItemAsync<dynamic>(id, new PartitionKey(id));
 
         return response.Resource;
     }
 
-    public async Task<IEnumerable<IUserProfile>> GetUserProfilesAsync(string queryString)
+    public async Task<IEnumerable<dynamic>> GetUserProfilesAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<IUserProfile>(new QueryDefinition(queryString));
-        List<IUserProfile> results = new();
+        var query = _container.GetItemQueryIterator<dynamic>(new QueryDefinition(queryString));
+        List<dynamic> results = new();
 
         while (query.HasMoreResults)
         {
