@@ -33,10 +33,17 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddLogging();
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IUserProfileCosmosDbService<IUserProfile>>(sp =>
+
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<Common.Models.v1.UserProfile>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<IUserProfile>>>();
-            return new UserProfileCosmosDbService<IUserProfile>(userProfileContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<Common.Models.v1.UserProfile>>>();
+            return new UserProfileCosmosDbService<Common.Models.v1.UserProfile>(userProfileContainer, logger);
+        });
+
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<Common.Models.v2.UserProfile>>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<Common.Models.v2.UserProfile>>>();
+            return new UserProfileCosmosDbService<Common.Models.v2.UserProfile>(userProfileContainer, logger);
         });
     }
 

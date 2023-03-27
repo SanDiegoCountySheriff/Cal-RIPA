@@ -1,5 +1,4 @@
-﻿using RIPA.Functions.Common.Models.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;

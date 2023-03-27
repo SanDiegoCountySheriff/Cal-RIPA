@@ -45,26 +45,43 @@ public class Startup : FunctionsStartup
     public override void Configure(IFunctionsHostBuilder builder)
     {
         builder.Services.AddLogging();
-        builder.Services.AddTransient<IStopService<IStop>, StopService<IStop>>();
+        builder.Services.AddTransient<IStopService<Common.Models.v1.Stop>, StopService<Common.Models.v1.Stop>>();
+        builder.Services.AddTransient<IStopService<Common.Models.v2.Stop>, StopService<Common.Models.v2.Stop>>();
         builder.Services.AddSingleton<ISftpService, SftpService>();
+
         var submissionContainer = CreateSubmissionContainerAsync().GetAwaiter().GetResult();
         builder.Services.AddSingleton<ISubmissionCosmosDbService>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<SubmissionCosmosDbService>>();
             return new SubmissionCosmosDbService(submissionContainer, logger);
         });
+
         var stopContainer = CreateStopContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IStopCosmosDbService<IStop>>(sp =>
+        builder.Services.AddSingleton<IStopCosmosDbService<Common.Models.v1.Stop>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<IStop>>>();
-            return new StopCosmosDbService<IStop>(stopContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<Common.Models.v1.Stop>>>();
+            return new StopCosmosDbService<Common.Models.v1.Stop>(stopContainer, logger);
         });
+
+        builder.Services.AddSingleton<IStopCosmosDbService<Common.Models.v2.Stop>>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<Common.Models.v2.Stop>>>();
+            return new StopCosmosDbService<Common.Models.v2.Stop>(stopContainer, logger);
+        });
+
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IUserProfileCosmosDbService<IUserProfile>>(sp =>
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<Common.Models.v1.UserProfile>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<IUserProfile>>>();
-            return new UserProfileCosmosDbService<IUserProfile>(userProfileContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<Common.Models.v1.UserProfile>>>();
+            return new UserProfileCosmosDbService<Common.Models.v1.UserProfile>(userProfileContainer, logger);
         });
+
+        builder.Services.AddSingleton<IUserProfileCosmosDbService<Common.Models.v2.UserProfile>>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<UserProfileCosmosDbService<Common.Models.v2.UserProfile>>>();
+            return new UserProfileCosmosDbService<Common.Models.v2.UserProfile>(userProfileContainer, logger);
+        });
+
         builder.Services.AddSingleton<ISubmissionServiceBusService, SubmissionServiceBusService>();
         builder.Services.AddSingleton<IResultServiceBusService, ResultServiceBusService>();
     }
