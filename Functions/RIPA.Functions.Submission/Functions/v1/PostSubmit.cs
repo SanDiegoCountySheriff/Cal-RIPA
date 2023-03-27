@@ -32,11 +32,11 @@ public class PostSubmit
 {
     private readonly ISftpService _sftpService;
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService _stopCosmosDbService;
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
     private readonly ISubmissionServiceBusService _serviceBusService;
 
-    public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
+    public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService, IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
     {
         _sftpService = sftpService;
         _submissionCosmosDbService = submissionCosmosDbService;
@@ -68,11 +68,13 @@ public class PostSubmit
             return new UnauthorizedResult();
         }
 
-        IUserProfile userProfile = new UserProfile();
+        UserProfile userProfile = new();
+
         try
         {
             var objectId = await RIPAAuthorization.GetUserId(req, log);
             userProfile = await _userProfileCosmosDbService.GetUserProfileAsync(objectId);
+
             if (userProfile == null)
             {
                 throw new Exception($"User profile not found for {objectId}");
@@ -81,7 +83,6 @@ public class PostSubmit
         catch (Exception ex)
         {
             log.LogError(ex.Message);
-
             return new BadRequestObjectResult("User profile was not found");
         }
 
@@ -93,10 +94,11 @@ public class PostSubmit
         var where = Environment.NewLine + $"WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')";
         var order = Environment.NewLine + $"ORDER BY c.StopDateTime DESC";
 
-        IEnumerable<IStop> stopResponse;
+        IEnumerable<Stop> stopResponse;
+
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}") as IEnumerable<IStop>;
+            stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}");
         }
         catch (Exception ex)
         {
@@ -104,12 +106,13 @@ public class PostSubmit
             return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
         }
 
-        SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, log);
+        SubmissionUtilities submissionUtilities = new SubmissionUtilities(_submissionCosmosDbService, _sftpService, log);
         Guid submissionId;
 
         try
         {
             List<string> errorList = submissionUtilities.ValidateStops(stopResponse);
+
             if (errorList.Any())
             {
                 errorList.Add("Please adjust your filter criteria and try again.");
@@ -125,6 +128,7 @@ public class PostSubmit
         try
         {
             submissionId = await submissionUtilities.NewSubmission(stopResponse, userProfile);
+
             foreach (var stop in stopResponse)
             {
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Pending);
@@ -149,6 +153,7 @@ public class PostSubmit
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
                 await _stopCosmosDbService.UpdateStopAsync(stop);
             }
+
             log.LogError($"Failure submitting stops to service bus: {ex.Message}");
             return new BadRequestObjectResult($"Failure submitting stops: {ex.Message}");
         }

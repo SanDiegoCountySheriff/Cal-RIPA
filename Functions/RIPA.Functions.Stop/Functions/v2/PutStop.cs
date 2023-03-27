@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v2;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
@@ -21,12 +20,12 @@ namespace RIPA.Functions.Stop.Functions.v2;
 
 public class PutStop
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
     private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
 
-    public PutStop(IStopCosmosDbService stopCosmosDbService,
-        IUserProfileCosmosDbService userProfileCosmosDbService,
+    public PutStop(IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService,
+        IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService,
         IStopAuditCosmosDbService stopAuditCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
@@ -110,7 +109,7 @@ public class PutStop
             if (Id != "0")
             {
                 //Protect the submission history
-                IStop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
+                Common.Models.v2.Stop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
                 editingStop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
                 await _stopAuditCosmosDbService.UpdateStopAuditAsync(editingStop.Id, editingStop);
                 log.LogInformation($"Saving stop audit ID: {editingStop.Id}");

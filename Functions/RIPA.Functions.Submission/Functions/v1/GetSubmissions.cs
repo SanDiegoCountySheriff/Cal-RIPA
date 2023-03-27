@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
@@ -20,9 +21,9 @@ namespace RIPA.Functions.Submission.Functions.v1;
 public class GetSubmissions
 {
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
 
-    public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService)
+    public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService)
     {
         _submissionCosmosDbService = submissionCosmosDbService;
         _stopCosmosDbService = stopCosmosDbService;
@@ -43,6 +44,7 @@ public class GetSubmissions
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmissions")] HttpRequest req, ILogger log)
     {
         log.LogInformation("GET - Get Submissions requested");
+
         try
         {
             if (!RIPAAuthorization.ValidateAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -66,41 +68,48 @@ public class GetSubmissions
             Order = !string.IsNullOrWhiteSpace(req.Query["Order"]) ? req.Query["Order"] : default,
         };
 
-        List<string> whereStatements = new List<string>();
-
-        //Date Range
-        //min stop date is less than start and the max stop is greater and start
-        whereStatements.Add(Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}')");
-        //min stop is less than the end and the max stop is greater than the end
-        whereStatements.Add(Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.EndDate:o}')");
-        //min stop date is greater than start and less than end
-        whereStatements.Add(Environment.NewLine + $"(c.MinStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}')");
-        //max stop date is greater than start and less than end
-        whereStatements.Add(Environment.NewLine + $"(c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate <= '{(DateTime)submissionQuery.EndDate:o}')");
+        List<string> whereStatements = new()
+        {
+            //Date Range
+            //min stop date is less than start and the max stop is greater and start
+            Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}')",
+            //min stop is less than the end and the max stop is greater than the end
+            Environment.NewLine + $"(c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}' AND c.MaxStopDate >= '{(DateTime)submissionQuery.EndDate:o}')",
+            //min stop date is greater than start and less than end
+            Environment.NewLine + $"(c.MinStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MinStopDate <= '{(DateTime)submissionQuery.EndDate:o}')",
+            //max stop date is greater than start and less than end
+            Environment.NewLine + $"(c.MaxStopDate >= '{(DateTime)submissionQuery.StartDate:o}' AND c.MaxStopDate <= '{(DateTime)submissionQuery.EndDate:o}')"
+        };
 
         string where = string.Empty;
+
         if (whereStatements.Count > 0)
         {
             where = " WHERE ";
+
             foreach (var whereStatement in whereStatements)
             {
                 where += Environment.NewLine + whereStatement;
                 where += Environment.NewLine + "OR";
             }
+
             where = where.Remove(where.Length - 2);
         }
 
         //limit 
         var limit = string.Empty;
+
         if (submissionQuery.Limit != 0)
         {
             limit = Environment.NewLine + $"OFFSET {submissionQuery.Offset} LIMIT {submissionQuery.Limit}";
         }
 
         var order = Environment.NewLine + "ORDER BY c.dateSubmitted DESC";
+
         if (!string.IsNullOrWhiteSpace(submissionQuery.OrderBy))
         {
             order = Environment.NewLine + $"ORDER BY c.{submissionQuery.OrderBy} ";
+
             if (!string.IsNullOrWhiteSpace(submissionQuery.Order))
             {
                 if (submissionQuery.Order.ToUpperInvariant() == "DESC" || submissionQuery.Order.ToUpperInvariant() == "ASC")
@@ -114,8 +123,7 @@ public class GetSubmissions
         {
             var submissions = await _submissionCosmosDbService.GetSubmissionsAsync($"SELECT * FROM c {where} {order} {limit}");
             var count = await _submissionCosmosDbService.GetSubmissionsCountAsync($"SELECT VALUE Count(1) FROM c {where}");
-
-            List<object> list = new List<object>() { };
+            List<object> list = new() { };
 
             foreach (var submission in submissions)
             {

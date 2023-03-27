@@ -16,9 +16,9 @@ namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class GetUser
 {
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
 
-    public GetUser(IUserProfileCosmosDbService userProfileCosmosDbService)
+    public GetUser(IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService)
     {
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }

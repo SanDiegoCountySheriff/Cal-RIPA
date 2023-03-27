@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
@@ -20,12 +19,12 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class PutStop
 {
-    private readonly IStopCosmosDbService _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
     private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
 
-    public PutStop(IStopCosmosDbService stopCosmosDbService,
-        IUserProfileCosmosDbService userProfileCosmosDbService,
+    public PutStop(IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService,
+        IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService,
         IStopAuditCosmosDbService stopAuditCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
@@ -41,7 +40,7 @@ public class PutStop
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Common.Models.v1.Stop), Deprecated = false, Description = "Stop object", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Common.Models.v1.Stop), Description = "Stop Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Stop failed on insert or replace")]
-    
+
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutStop/{Id}")] Common.Models.v1.Stop stop, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation($"PUT - Put Stop requested, ID: {Id}, OID: {stop.OfficerId}, DATE: {stop.Date}, TIME: {stop.Time}");
@@ -110,7 +109,7 @@ public class PutStop
             if (Id != "0")
             {
                 //Protect the submission history
-                IStop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
+                Common.Models.v1.Stop editingStop = await _stopCosmosDbService.GetStopAsync(Id);
                 editingStop.Id = $"{stop.Id}-{DateTime.UtcNow:yyyyMMddHHmmss}";
                 await _stopAuditCosmosDbService.UpdateStopAuditAsync(editingStop.Id, editingStop);
                 log.LogInformation($"Saving stop audit ID: {editingStop.Id}");

@@ -5,9 +5,9 @@ using System;
 
 namespace RIPA.Functions.Submission.Services.REST.Contracts;
 
-public interface IStopService
+public interface IStopService<T>
 {
-    IStop NewSubmission(IStop stop, DateTime dateSubmitted, Guid submissionId, string fileName);
-    IStop ErrorSubmission(IStop stop, SubmissionError SubmissionError, string stopStatus);
-    DojStop CastToDojStop(IStop stop);
+    T NewSubmission(T stop, DateTime dateSubmitted, Guid submissionId, string fileName);
+    T ErrorSubmission(T stop, SubmissionError SubmissionError, string stopStatus);
+    DojStop CastToDojStop(T stop);
 }

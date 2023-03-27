@@ -17,9 +17,9 @@ namespace RIPA.Functions.UserProfile.Functions.v1;
 
 public class DeleteUser
 {
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
 
-    public DeleteUser(IUserProfileCosmosDbService userProfileCosmosDbService)
+    public DeleteUser(IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService)
     {
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }

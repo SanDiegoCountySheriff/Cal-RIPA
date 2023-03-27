@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +16,15 @@ using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
 namespace RIPA.Functions.Submission.Functions.v1;
@@ -33,25 +32,17 @@ namespace RIPA.Functions.Submission.Functions.v1;
 public class PostSubmitSearch
 {
     private readonly ISftpService _sftpService;
-    private readonly IStopService _stopService;
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService _stopCosmosDbService;
-    private readonly IUserProfileCosmosDbService _userProfileCosmosDbService;
-    private readonly string _sftpInputPath;
-    private readonly string _storageConnectionString;
-    private readonly string _storageContainerNamePrefix;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
     private readonly ISubmissionServiceBusService _submissionServiceBusService;
 
-    public PostSubmitSearch(ISftpService sftpService, IStopService stopService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService stopCosmosDbService, IUserProfileCosmosDbService userProfileCosmosDbService, ISubmissionServiceBusService submissionServiceBusService)
+    public PostSubmitSearch(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService, IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService, ISubmissionServiceBusService submissionServiceBusService)
     {
         _sftpService = sftpService;
-        _stopService = stopService;
         _submissionCosmosDbService = submissionCosmosDbService;
         _stopCosmosDbService = stopCosmosDbService;
         _userProfileCosmosDbService = userProfileCosmosDbService;
-        _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
-        _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
-        _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
         _submissionServiceBusService = submissionServiceBusService;
     }
 
@@ -82,11 +73,13 @@ public class PostSubmitSearch
             return new UnauthorizedResult();
         }
 
-        IUserProfile userProfile = new UserProfile();
+        UserProfile userProfile = new();
+
         try
         {
             var objectId = await RIPAAuthorization.GetUserId(req, log);
             userProfile = await _userProfileCosmosDbService.GetUserProfileAsync(objectId);
+
             if (userProfile == null)
             {
                 throw new Exception($"User profile not found for {objectId}");
@@ -95,11 +88,11 @@ public class PostSubmitSearch
         catch (Exception ex)
         {
             log.LogError(ex.Message);
-
             return new BadRequestObjectResult("User profile was not found");
         }
 
         string stopQueryString = string.Empty;
+
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
@@ -112,10 +105,11 @@ public class PostSubmitSearch
             return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
         }
 
-        IEnumerable<IStop> stopResponse;
+        IEnumerable<Stop> stopResponse;
+
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as IEnumerable<IStop>;
+            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
         }
         catch (Exception ex)
         {
@@ -123,7 +117,7 @@ public class PostSubmitSearch
             return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
         }
 
-        SubmissionUtilities submissionUtilities = new SubmissionUtilities(_stopCosmosDbService, _submissionCosmosDbService, _sftpService, log);
+        SubmissionUtilities submissionUtilities = new SubmissionUtilities(_submissionCosmosDbService, _sftpService, log);
         Guid submissionId;
 
         if (!submissionUtilities.IsValidSFTPConnection())
@@ -134,6 +128,7 @@ public class PostSubmitSearch
         try
         {
             List<string> errorList = submissionUtilities.ValidateStops(stopResponse);
+
             if (errorList.Any())
             {
                 errorList.Add("Please adjust your filter criteria and try again.");
@@ -149,6 +144,7 @@ public class PostSubmitSearch
         try
         {
             submissionId = await submissionUtilities.NewSubmission(stopResponse, userProfile);
+
             foreach (var stop in stopResponse)
             {
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Pending);
@@ -173,6 +169,7 @@ public class PostSubmitSearch
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
                 await _stopCosmosDbService.UpdateStopAsync(stop);
             }
+
             log.LogError($"Failure submitting stops to service bus: {ex.Message}");
             return new BadRequestObjectResult($"Failure submitting stops: {ex.Message}");
         }

@@ -9,7 +9,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Security;
-using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -79,9 +78,8 @@ public class GetHistoricalCpraReports
 
     private BlobContainerClient GetBlobContainerClient()
     {
-        BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
+        BlobServiceClient blobServiceClient = new(_storageConnectionString);
         BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
-
         return blobContainerClient;
     }
 }

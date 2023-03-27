@@ -28,12 +28,12 @@ public class GenerateCpraReport
 {
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
-    private readonly IStopCosmosDbService _stopCosmosDbService;
-    private readonly IStopService _stopService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IStopService<Stop> _stopService;
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public GenerateCpraReport(IStopCosmosDbService stopCosmosDbService, IStopService stopService)
+    public GenerateCpraReport(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
     {
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
