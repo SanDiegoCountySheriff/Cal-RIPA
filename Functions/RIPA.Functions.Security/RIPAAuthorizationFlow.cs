@@ -11,7 +11,7 @@ namespace RIPA.Functions.Security
         {
             this.Implicit = new Microsoft.OpenApi.Models.OpenApiOAuthFlow()
             {
-                AuthorizationUrl = new Uri($"https://login.microsoftonline.com/{AuthorizationConfiguration.RIPATenantId}"),
+                AuthorizationUrl = new Uri($"https://login.microsoftonline.com/{AuthorizationConfiguration.RIPATenantId}/oauth2/v2.0/authorize"),
                  
 
             };

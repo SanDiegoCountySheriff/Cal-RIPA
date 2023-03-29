@@ -2,6 +2,7 @@
 
 public interface IOfficerAssignment
 {
-    string Key { get; }
-    string OtherType { get; }
+    string Key { get; set; }
+    string Type { get; set; }
+    string OtherType { get; set; }
 }

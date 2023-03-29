@@ -1,9 +1,12 @@
-﻿namespace RIPA.Functions.Common.Models.Interfaces;
+﻿using System;
+
+namespace RIPA.Functions.Common.Models.Interfaces;
 
 public interface ISubmission
 {
-    ISubmissionError[] ListSubmissionError { get; set; }
+    DateTime DateSubmitted { get; set; }
     string FileName { get; set; }
+    Guid Id { get; set; }
+    ISubmissionError[] ListSubmissionError { get; set; }
     string Status { get; set; }
 }
-

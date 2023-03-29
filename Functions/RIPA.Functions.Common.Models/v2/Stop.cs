@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
 using System;
 
