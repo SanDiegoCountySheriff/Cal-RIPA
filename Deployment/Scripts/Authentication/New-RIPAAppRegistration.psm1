@@ -1,42 +1,58 @@
-﻿Function New-RIPAAppRegistration
-{
+﻿Function New-RIPAAppRegistration {
     param (
         [Parameter(Mandatory = $true, HelpMessage = "The name of the App Registration that should be created")]
         $DisplayName, 
         [Parameter(Mandatory = $true, HelpMessage = "The description of the group that should be created")]
-		$Description, 
+        $Description, 
         [Parameter(Mandatory = $true, HelpMessage = "The web application reply URI for post authentication")]
-		$ReplyUri
-	)
+        $ReplyUri
+    )
 
     Write-Host "New-RIPAAppRegistration starting"
 
     $manifestJsonFilePath = ".\Ripa-GraphPolicyManifest.json"
     $claimsJsonFilePath = ".\Ripa-ClaimsManifest.json"
     $rolesJsonFilePath = ".\Ripa-RolesManifest.json"
+    $spaRedirectUrlFilePath = ".\Ripa-SpaRedirectUrl.json"
+    $oAuthPermissionsFilePath = ".\Ripa-OAuthPermissions.json"
 
     $waitTime = 30
 	
-    $ErrorActionPreference = "Stop"
+    $ErrorActionPreference = "SilentlyContinue"
 
     Write-Host "Create app with display name $DisplayName"
     $adApplication = az ad app create `
         --display-name $DisplayName `
-        --available-to-other-tenants $false `
-        --oauth2-allow-implicit-flow $true `
+        --sign-in-audience AzureADMyOrg `
+        --enable-id-token-issuance $true `
         --optional-claims $claimsJsonFilePath `
         --app-roles $rolesJsonFilePath `
-        --reply-urls $ReplyUri `
-        | ConvertFrom-Json
+    | ConvertFrom-Json
+
+    $ErrorActionPreference = "Stop"
 
     $appId = $adApplication.appId
 
-    sleep $waitTime
+    $cloud = (az cloud show) | ConvertFrom-Json
+    Write-Host "Connecting to cloud: $cloud"
+    
+    $msGraphBaseUrl = "https://graph.microsoft.com"
+    if ($cloud.name -eq "AzureUSGovernment") {
+        $msGraphBaseUrl = "https://graph.microsoft.us"
+    }
+
+    Write-Host "Setting SPA redirect URL" $ReplyUri
+    $spaRedirectUrlJson = (Get-Content $spaRedirectUrlFilePath).Replace("__SPA_REDIRECT_URL__", $ReplyUri)
+    Set-Content -Force -Path .\spaTemp.json -Value $spaRedirectUrlJson
+    $msGraphUrl = $msGraphBaseUrl + "/v1.0/myorganization/applications/" + $adApplication.id
+    az rest --method patch --url $msGraphUrl --body "@spaTemp.json"
+
+    Start-Sleep -Seconds $waitTime
     Write-Host "Assigning app $adApplication ownership to current user"
-    $currentUserObjectId = (az ad signed-in-user show | ConvertFrom-Json).objectId
+    $currentUserObjectId = (az ad signed-in-user show | ConvertFrom-Json).id
     az ad app owner add --id $appId --owner-object-id $currentUserObjectId
 
-    Write-Host "Waiting $waitTime seconds for app registration to propogate..."
+    Write-Host "Waiting $waitTime seconds for app registration to propagate..."
     Start-Sleep -Seconds $waitTime
 
     
@@ -45,27 +61,34 @@
     $ErrorActionPreference = "Continue"
     $spExists = az ad sp show --id $appId
     $ErrorActionPreference = "Stop"
-    if(!$spExists)
-    {
+    if (!$spExists) {
         Write-Host "Creating service pricipal manually"
         $spExists = az ad sp create --id $appId
     }
 
-    Write-Host "Waiting $waitTime seconds for app required permissions to propogate..."
+    Write-Host "Waiting $waitTime seconds for app required permissions to propagate..."
     Start-Sleep -Seconds $waitTime
 
     Write-Host "Setting app API uri"
     az ad app update --id $appId --identifier-uris "api://$($appId)"
-
+    
+    Write-Host "Setting OAuth User Impersonation Permissions"
+    $oAuthPermissionsJson = Get-Content $oAuthPermissionsFilePath
+    $oAuthPermissionsGuid = New-Guid
+    $oAuthPermissions = $oAuthPermissionsJson.Replace("__PERMISSIONS_GUID__", $oAuthPermissionsGuid)
+    Set-Content -Force -Path .\oauthPremissionsTemp.json -Value $oAuthPermissions
+    $result = (az rest --method patch --url $msGraphUrl --body "@oauthPremissionsTemp.json")
+    Write-Host $result   
+        
     Write-Host "Setting app registration/service principal API permission"
     $graphManifestJson = Get-Content $manifestJsonFilePath
-    $scopeJson = $graphManifestJson.Replace("__APPID__", $appId).Replace("__SCOPEID__", $adApplication.oauth2Permissions.id)
+    $scopeJson = $graphManifestJson.Replace("__APPID__", $appId).Replace("__SCOPEID__", $oAuthPermissionsGuid)
     $adApplication = az ad app update `
         --id $appId `
         --required-resource-access $scopeJson `
-        | ConvertFrom-Json
+    | ConvertFrom-Json
 
-    Write-Host "Waiting $waitTime seconds for app service principal to propogate..."
+    Write-Host "Waiting $waitTime seconds for app service principal to propagate..."
     Start-Sleep -Seconds $waitTime
 
     Write-Host "Turning on role assignment required flag"
@@ -76,8 +99,7 @@
 	
     $cloud = (az cloud show) | ConvertFrom-Json
     Write-Host $cloud
-    if($cloud.name -eq "AzureCloud")
-    {
+    if ($cloud.name -eq "AzureCloud") {
         Write-Host "Apply admin consent for app permissions"
         az ad app permission admin-consent --id $appId
     }
@@ -89,11 +111,11 @@
     $servicePrincipal = az ad sp list --display-name $DisplayName | ConvertFrom-Json
     
     $adApplicationProperties = @{
-        ApplicationId = $adApplication.appId
-        DisplayName = $adApplication.displayName
-	    IdentifierUris = $adApplication.identifierUris
-	    ServicePrincipalId =  $servicePrincipal.objectId
-        ReplyUrls = $ServicePrincipal.replyUrls
+        ApplicationId      = $adApplication.appId
+        DisplayName        = $adApplication.displayName
+        IdentifierUris     = $adApplication.identifierUris
+        ServicePrincipalId = $servicePrincipal.id
+        ReplyUrls          = $ServicePrincipal.replyUrls
     } | ConvertTo-Json
 
     Write-Host "Created app with display name $DisplayName"
