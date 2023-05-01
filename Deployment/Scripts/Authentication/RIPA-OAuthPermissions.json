@@ -1,0 +1,16 @@
+{
+  "api": {
+    "oauth2PermissionScopes": [
+      {
+        "adminConsentDescription": "Allow the application to access RIPA on behalf of the signed-in user.",
+        "adminConsentDisplayName": "Impersonated Access RIPA",
+        "id": "__PERMISSIONS_GUID__",
+        "isEnabled": true,
+        "type": "User",
+        "userConsentDescription": "Allow the application to access RIPA on your behalf.",
+        "userConsentDisplayName": "Allow the application to access RIPA on your behalf.",
+        "value": "user_impersonation"
+      }
+    ]
+  }
+}

@@ -15,7 +15,7 @@
     if($groupExists)
     {
         Write-Host "Group already exists"
-        return $groupExists.objectId
+        return $groupExists.id
     }
 
     Write-Host "Creating group" $GroupName
