@@ -1,5 +1,6 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
+using RIPA.Functions.Common.Models.Utility;
 using System;
 
 namespace RIPA.Functions.Common.Models.v2;
@@ -13,6 +14,7 @@ public class Stop : IStop
     public string OfficerId { get; set; }
     public string OfficerName { get; set; }
     public string ExpYears { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<OfficerAssignment>))]
     public IOfficerAssignment OfficerAssignment { get; set; }
     public string Date { get; set; }
     public string Time { get; set; }
@@ -31,10 +33,13 @@ public class Stop : IStop
         }
         set { }
     }
+    [JsonConverter(typeof(ConcreteConverter<Location>))]
     public ILocation Location { get; set; }
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
     public IPersonStopped[] ListPersonStopped { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<Submission[]>))]
     public ISubmission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }

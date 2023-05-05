@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.Utility;
-using System;
 
-namespace RIPA.Functions.Common.Models.v1;
+namespace RIPA.Functions.Common.Models.v2;
 
 public class Submission : ISubmission
 {
