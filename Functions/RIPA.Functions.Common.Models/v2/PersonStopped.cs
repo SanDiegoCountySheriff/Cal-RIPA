@@ -1,8 +1,6 @@
-﻿using RIPA.Functions.Common.Models.Interfaces;
+﻿namespace RIPA.Functions.Common.Models.v2;
 
-namespace RIPA.Functions.Common.Models.v2;
-
-public class PersonStopped : IPersonStopped
+public class PersonStopped
 {
     public string Id { get; set; }
     public bool IsStudent { get; set; }

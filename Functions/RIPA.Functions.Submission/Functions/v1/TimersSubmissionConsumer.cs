@@ -22,7 +22,7 @@ namespace RIPA.Functions.Submission.Functions.v1;
 
 public class TimersSubmissionConsumer
 {
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IV1StopCosmosDbService<Stop> _stopCosmosDbService;
     private readonly ISftpService _sftpService;
     private readonly IStopService<Stop> _stopService;
     readonly ISubmissionServiceBusService _submissionServiceBusService;
@@ -32,7 +32,7 @@ public class TimersSubmissionConsumer
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public TimersSubmissionConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, ISftpService sftpService, IStopService<Stop> stopService, ISubmissionServiceBusService submissionServiceBusService)
+    public TimersSubmissionConsumer(IV1StopCosmosDbService<Stop> stopCosmosDbService, ISftpService sftpService, IStopService<Stop> stopService, ISubmissionServiceBusService submissionServiceBusService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _sftpService = sftpService;

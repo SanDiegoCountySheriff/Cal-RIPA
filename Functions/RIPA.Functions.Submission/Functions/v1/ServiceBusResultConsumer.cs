@@ -15,10 +15,10 @@ namespace RIPA.Functions.Submission.Functions.v1;
 
 public class ServiceBusResultConsumer
 {
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IV1StopCosmosDbService<Stop> _stopCosmosDbService;
     private readonly IStopService<Stop> _stopService;
 
-    public ServiceBusResultConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
+    public ServiceBusResultConsumer(IV1StopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _stopService = stopService;

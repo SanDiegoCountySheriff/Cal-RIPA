@@ -16,9 +16,9 @@ namespace RIPA.Functions.Stop.Functions.v2;
 
 public class GetStop
 {
-    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
+    private readonly IV1StopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
 
-    public GetStop(IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService)
+    public GetStop(IV1StopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
     }

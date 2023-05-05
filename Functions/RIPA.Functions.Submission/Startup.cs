@@ -57,16 +57,16 @@ public class Startup : FunctionsStartup
         });
 
         var stopContainer = CreateStopContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IStopCosmosDbService<Common.Models.v1.Stop>>(sp =>
+        builder.Services.AddSingleton<IV1StopCosmosDbService<Common.Models.v1.Stop>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<Common.Models.v1.Stop>>>();
-            return new StopCosmosDbService<Common.Models.v1.Stop>(stopContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<V1StopCosmosDbService<Common.Models.v1.Stop>>>();
+            return new V1StopCosmosDbService<Common.Models.v1.Stop>(stopContainer, logger);
         });
 
-        builder.Services.AddSingleton<IStopCosmosDbService<Common.Models.v2.Stop>>(sp =>
+        builder.Services.AddSingleton<IV1StopCosmosDbService<Common.Models.v2.Stop>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<StopCosmosDbService<Common.Models.v2.Stop>>>();
-            return new StopCosmosDbService<Common.Models.v2.Stop>(stopContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<V1StopCosmosDbService<Common.Models.v2.Stop>>>();
+            return new V1StopCosmosDbService<Common.Models.v2.Stop>(stopContainer, logger);
         });
 
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();

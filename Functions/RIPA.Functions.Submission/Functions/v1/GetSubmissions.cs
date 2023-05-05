@@ -21,9 +21,9 @@ namespace RIPA.Functions.Submission.Functions.v1;
 public class GetSubmissions
 {
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IV1StopCosmosDbService<Stop> _stopCosmosDbService;
 
-    public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService)
+    public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IV1StopCosmosDbService<Stop> stopCosmosDbService)
     {
         _submissionCosmosDbService = submissionCosmosDbService;
         _stopCosmosDbService = stopCosmosDbService;

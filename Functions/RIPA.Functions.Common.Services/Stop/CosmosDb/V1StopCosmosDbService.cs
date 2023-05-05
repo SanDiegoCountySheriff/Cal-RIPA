@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using System;
 using System.Collections.Generic;
@@ -11,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Common.Services.Stop.CosmosDb;
 
-public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
+public class V1StopCosmosDbService : IV1StopCosmosDbService
 {
-    private readonly ILogger<StopCosmosDbService<T>> _logger;
+    private readonly ILogger<V1StopCosmosDbService> _logger;
     private readonly Container _container;
     private readonly char[] BASE36_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-    public StopCosmosDbService(Container container, ILogger<StopCosmosDbService<T>> logger)
+    public V1StopCosmosDbService(Container container, ILogger<V1StopCosmosDbService> logger)
     {
         _logger = logger;
         _container = container;
     }
 
-    public async Task AddStopAsync(T stop)
+    public async Task AddStopAsync(Models.v1.Stop stop)
     {
         DateTime now = DateTime.Now;
         StringBuilder sb = new StringBuilder();
@@ -40,19 +39,19 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
         await _container.CreateItemAsync(stop, new PartitionKey(stop.Id));
     }
 
-    public async Task UpdateStopAsync(T stop)
+    public async Task UpdateStopAsync(Models.v1.Stop stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(stop.Id));
     }
 
     public async Task DeleteStopAsync(string id)
     {
-        await _container.DeleteItemAsync<T>(id, new PartitionKey(id));
+        await _container.DeleteItemAsync<Models.v1.Stop>(id, new PartitionKey(id));
     }
 
-    public async Task<T> GetStopAsync(string id)
+    public async Task<Models.v1.Stop> GetStopAsync(string id)
     {
-        ItemResponse<T> response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+        ItemResponse<Models.v1.Stop> response = await _container.ReadItemAsync<Models.v1.Stop>(id, new PartitionKey(id));
         return response.Resource;
     }
 
@@ -61,9 +60,9 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
         string queryString = $"SELECT * FROM c WHERE c.id != '{stopId}' AND c.Ori = '{ori}' AND c.OfficerId = '{officerId}' AND c.Date = '{date}' AND c.Time = '{time}'";
         var queryDefinition = new QueryDefinition(queryString);
 
-        var results = _container.GetItemQueryIterator<T>(queryDefinition);
+        var results = _container.GetItemQueryIterator<Models.v1.Stop>(queryDefinition);
 
-        List<T> matchingStops = new();
+        List<Models.v1.Stop> matchingStops = new();
 
         while (results.HasMoreResults)
         {
@@ -74,10 +73,10 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
         return matchingStops.Count > 0;
     }
 
-    public async Task<IEnumerable<T>> GetStopsAsync(string queryString)
+    public async Task<IEnumerable<Models.v1.Stop>> GetStopsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<T>(new QueryDefinition(queryString));
-        List<T> results = new();
+        var query = _container.GetItemQueryIterator<Models.v1.Stop>(new QueryDefinition(queryString));
+        List<Models.v1.Stop> results = new();
 
         while (query.HasMoreResults)
         {

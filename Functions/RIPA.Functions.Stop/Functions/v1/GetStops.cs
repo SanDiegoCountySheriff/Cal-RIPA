@@ -20,9 +20,9 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStops
 {
-    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
+    private readonly IV1StopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
 
-    public GetStops(IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
+    public GetStops(IV1StopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
     }
