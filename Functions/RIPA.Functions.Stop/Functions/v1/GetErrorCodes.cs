@@ -17,8 +17,8 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetErrorCodes
 {
-    private readonly IV1StopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
-    public GetErrorCodes(IV1StopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
+    public GetErrorCodes(IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
     }

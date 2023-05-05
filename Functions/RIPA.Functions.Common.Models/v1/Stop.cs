@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using RIPA.Functions.Common.Models.Interfaces;
 using System;
 
 namespace RIPA.Functions.Common.Models.v1;
 
-public class Stop
+public class Stop : IStop
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; set; }
@@ -12,7 +13,7 @@ public class Stop
     public string OfficerId { get; set; }
     public string OfficerName { get; set; }
     public string ExpYears { get; set; }
-    public OfficerAssignment OfficerAssignment { get; set; }
+    public IOfficerAssignment OfficerAssignment { get; set; }
     public string Date { get; set; }
     public string Time { get; set; }
     public DateTime StopDateTime
@@ -30,11 +31,11 @@ public class Stop
         }
         set { }
     }
-    public Location Location { get; set; }
+    public ILocation Location { get; set; }
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
-    public PersonStopped[] ListPersonStopped { get; set; }
-    public Submission[] ListSubmission { get; set; }
+    public IPersonStopped[] ListPersonStopped { get; set; }
+    public ISubmission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
     public PiiEntity[] PiiEntities { get; set; }

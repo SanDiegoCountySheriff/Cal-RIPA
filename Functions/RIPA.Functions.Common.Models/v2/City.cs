@@ -1,6 +1,8 @@
-﻿namespace RIPA.Functions.Common.Models.v2;
+﻿using RIPA.Functions.Common.Models.Interfaces;
 
-public class City
+namespace RIPA.Functions.Common.Models.v2;
+
+public class City : ICity
 {
     public Codes Codes { get; set; }
 }

@@ -1,6 +1,8 @@
-﻿namespace RIPA.Functions.Common.Models.v1;
+﻿using RIPA.Functions.Common.Models.Interfaces;
 
-public class GeoLocation
+namespace RIPA.Functions.Common.Models.v1;
+
+public class GeoLocation : IGeoLocation
 {
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }

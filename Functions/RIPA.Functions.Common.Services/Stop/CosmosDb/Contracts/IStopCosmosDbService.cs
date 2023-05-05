@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 
-public interface IV1StopCosmosDbService
+public interface IStopCosmosDbService<T>
 {
-    Task<IEnumerable<Models.v1.Stop>> GetStopsAsync(string queryString);
-    Task<Models.v1.Stop> GetStopAsync(string id);
+    Task<IEnumerable<T>> GetStopsAsync(string queryString);
+    Task<T> GetStopAsync(string id);
     Task<bool> CheckForDuplicateStop(string stopId, string ori, string officerId, string date, string time);
-    Task AddStopAsync(Models.v1.Stop stop);
-    Task UpdateStopAsync(Models.v1.Stop stop);
+    Task AddStopAsync(T stop);
+    Task UpdateStopAsync(T stop);
     Task DeleteStopAsync(string id);
     Task<IEnumerable<StopStatusCount>> GetStopStatusCounts(string queryString);
     Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id);

@@ -32,11 +32,11 @@ public class PostSubmit
 {
     private readonly ISftpService _sftpService;
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IV1StopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
     private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
     private readonly ISubmissionServiceBusService _serviceBusService;
 
-    public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IV1StopCosmosDbService<Stop> stopCosmosDbService, IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
+    public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService, IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
     {
         _sftpService = sftpService;
         _submissionCosmosDbService = submissionCosmosDbService;

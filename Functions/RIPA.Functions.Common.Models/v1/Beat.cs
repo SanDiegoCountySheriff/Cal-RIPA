@@ -1,6 +1,8 @@
-﻿namespace RIPA.Functions.Common.Models.v1;
+﻿using RIPA.Functions.Common.Models.Interfaces;
 
-public class Beat
+namespace RIPA.Functions.Common.Models.v1;
+
+public class Beat : IBeat
 {
     public Codes Codes { get; set; }
 }

@@ -1,6 +1,8 @@
-﻿namespace RIPA.Functions.Common.Models.v2;
+﻿using RIPA.Functions.Common.Models.Interfaces;
 
-public class OfficerAssignment
+namespace RIPA.Functions.Common.Models.v2;
+
+public class OfficerAssignment : IOfficerAssignment
 {
     public string Key { get; set; }
     public string Type { get; set; }

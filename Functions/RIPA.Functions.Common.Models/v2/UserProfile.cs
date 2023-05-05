@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using RIPA.Functions.Common.Models.Interfaces;
 using System;
 
 namespace RIPA.Functions.Common.Models.v2;
 
-public class UserProfile
+public class UserProfile : IUserProfile
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; set; }

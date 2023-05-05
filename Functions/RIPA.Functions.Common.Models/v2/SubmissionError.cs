@@ -1,8 +1,9 @@
 ﻿using System;
+using RIPA.Functions.Common.Models.Interfaces;
 
 namespace RIPA.Functions.Common.Models.v2;
 
-public class SubmissionError
+public class SubmissionError : ISubmissionError
 {
     public string ErrorType { get; set; }
     public string Message { get; set; }
