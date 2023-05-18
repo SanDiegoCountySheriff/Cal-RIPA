@@ -1593,10 +1593,10 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
-          if (error.response.status === 503) {
-            commit('updateApiUnavailable', true)
-          } else {
+          if (error.response?.status === 404) {
             commit('updateInvalidUser', true)
+          } else {
+            commit('updateApiUnavailable', true)
           }
         })
     },

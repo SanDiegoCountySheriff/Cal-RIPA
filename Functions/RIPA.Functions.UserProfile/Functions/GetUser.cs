@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -54,6 +55,17 @@ namespace RIPA.Functions.UserProfile.Functions
             {
                 var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
                 return new OkObjectResult(response);
+            }
+            catch (CosmosException cosmosException)
+            {
+                log.LogError($"Cosmos exception: {cosmosException.Message}");
+
+                if (cosmosException.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new BadRequestObjectResult($"Unable to get user: {cosmosException.Message}");
             }
             catch (Exception ex)
             {
