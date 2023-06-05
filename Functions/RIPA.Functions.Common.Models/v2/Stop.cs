@@ -52,4 +52,5 @@ public class Stop : IStop
     public Telemetry Telemetry { get; set; }
     public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
+    public string StopType { get; set; }
 }

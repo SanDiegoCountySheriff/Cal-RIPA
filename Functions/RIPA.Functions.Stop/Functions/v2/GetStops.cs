@@ -68,7 +68,7 @@ public class GetStops
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true);
+            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
             stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
         }
         catch (Exception ex)
