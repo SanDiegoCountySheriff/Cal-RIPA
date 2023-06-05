@@ -255,7 +255,8 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
+      // viewModel: this.syncModel(this.value),
     }
   },
 
@@ -503,9 +504,9 @@ export default {
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
+    // value(newVal) {
+    //   this.viewModel = this.syncModel(newVal)
+    // },
 
     lastLocation(newVal) {
       if (newVal) {

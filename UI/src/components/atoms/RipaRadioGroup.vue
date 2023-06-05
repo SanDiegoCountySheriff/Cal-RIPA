@@ -1,6 +1,6 @@
 <template>
   <div class="ripa-radio-group">
-    <v-radio-group v-model="model" :rules="rules">
+    <v-radio-group :row="displayInRow" v-model="model" :rules="rules">
       <v-radio
         v-for="(item, index) in items"
         :disabled="disabled"
@@ -11,12 +11,12 @@
     </v-radio-group>
     <template v-if="isClearVisible">
       <v-btn
+        @click="handleClearSelection"
+        :disabled="disabled"
         class="tw-ml-4"
         text
         color="primary"
         x-small
-        :disabled="disabled"
-        @click="handleClearSelection"
         >Clear selection</v-btn
       >
     </template>
@@ -46,6 +46,14 @@ export default {
 
     isClearVisible() {
       return this.viewModel !== null && this.clearSelection
+    },
+
+    displayInRow() {
+      if (this.$vuetify.breakpoint.xs) {
+        return false
+      }
+
+      return this.displayRow
     },
   },
 
@@ -79,6 +87,10 @@ export default {
       default: () => [],
     },
     clearSelection: {
+      type: Boolean,
+      default: false,
+    },
+    displayRow: {
       type: Boolean,
       default: false,
     },

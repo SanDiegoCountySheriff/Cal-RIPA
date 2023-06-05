@@ -15,7 +15,7 @@ export default {
       'setPropertySearchAutomaticallySelected',
     ]),
 
-    syncModel(newValue) {
+    syncModel(newValue, location) {
       const syncedModel = {
         id: newValue.id,
         template: newValue.template,
@@ -23,6 +23,7 @@ export default {
         overridePii: newValue.overridePii || false,
         piiEntities: newValue.piiEntities,
         stepTrace: newValue.stepTrace || [],
+        stopType: newValue.stopType,
         actionsTaken: {
           anyActionsTaken: newValue.actionsTaken?.anyActionsTaken || false,
           actionsTakenDuringStop:
@@ -126,6 +127,8 @@ export default {
         agencyQuestions: newValue.agencyQuestions || [],
         stopVersion: newValue.stopDate?.date >= '2024-01-01' ? 2 : 1,
       }
+
+      console.log('syncing model', location)
 
       return syncedModel
     },

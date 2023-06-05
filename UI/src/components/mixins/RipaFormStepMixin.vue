@@ -19,7 +19,6 @@ export default {
           const form = this.$refs.stepForm
           this.isFormValid = form ? form.validate() : false
         }, 500)
-        this.$emit('input', this.viewModel)
       },
     },
 
@@ -42,7 +41,6 @@ export default {
       if (!this.isFormValid) {
         return
       }
-      this.$emit('input', this.viewModel)
       this.$emit('on-next')
     },
 
