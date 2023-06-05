@@ -185,7 +185,7 @@ export default {
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -371,13 +371,6 @@ export default {
 
   mounted() {
     this.updateModel()
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-      this.updateModel()
-    },
   },
 
   props: {

@@ -23,7 +23,6 @@
     >
     <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
-        <pre>{{ stop }}</pre>
         <template v-if="stepIndex == 0">
           <ripa-template
             v-on="$listeners"

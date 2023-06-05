@@ -42,7 +42,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -57,12 +57,6 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

@@ -45,7 +45,6 @@ export default {
         { name: 'Pedestrian', value: 'Pedestrian' },
       ],
       viewModel: this.value,
-      // viewModel: this.syncModel(this.value, 'ripa-stop-type'),
     }
   },
 
@@ -65,12 +64,6 @@ export default {
       this.$emit('input', this.viewModel)
     },
   },
-
-  // watch: {
-  //   value(newVal) {
-  //     this.viewModel = this.syncModel(newVal, 'ripa-stop-type-watcher')
-  //   },
-  // },
 
   props: {
     value: {

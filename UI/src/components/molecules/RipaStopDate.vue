@@ -104,7 +104,6 @@ export default {
   data() {
     return {
       viewModel: this.value,
-      // viewModel: this.syncModel(this.value, 'ripa-stop-date'),
       devTime: false,
     }
   },
@@ -184,12 +183,6 @@ export default {
       this.$emit('input', this.viewModel)
     },
   },
-
-  // watch: {
-  //   value(newVal) {
-  //     this.viewModel = this.syncModel(newVal, 'ripa-stop-date watcher')
-  //   },
-  // },
 
   props: {
     value: {

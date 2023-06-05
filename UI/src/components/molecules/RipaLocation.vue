@@ -256,7 +256,6 @@ export default {
   data() {
     return {
       viewModel: this.value,
-      // viewModel: this.syncModel(this.value),
     }
   },
 
@@ -504,10 +503,6 @@ export default {
   },
 
   watch: {
-    // value(newVal) {
-    //   this.viewModel = this.syncModel(newVal)
-    // },
-
     lastLocation(newVal) {
       if (newVal) {
         // save off school and school if isSchool is true

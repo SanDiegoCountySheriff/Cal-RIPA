@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       disabilityItems: DISABILITIES,
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -89,12 +89,6 @@ export default {
     handleInput() {
       this.updateModel()
       this.$emit('input', this.viewModel)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

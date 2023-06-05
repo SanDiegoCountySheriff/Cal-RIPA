@@ -72,25 +72,52 @@ export const defaultLocation = () => {
 
 export const defaultStop = () => {
   return {
-    actionsTaken: {
-      anyActionsTaken: true,
-    },
     id: 0,
     internalId: nanoid(),
     template: null,
+    editStopExplanation: null,
+    overridePii: false,
+    piiEntities: [],
     stepTrace: [],
+    stopType: null,
+    actionsTaken: {
+      anyActionsTaken: true,
+      actionsTakenDuringStop: [],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      basisForSearch: [],
+      basisForSearchExplanation: null,
+      basisForSearchPiiFound: false,
+      propertyWasSeized: false,
+      basisForPropertySeizure: [],
+      typeOfPropertySeized: [],
+      anyContraband: false,
+      contrabandOrEvidenceDiscovered: [],
+    },
     location: emptyLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
+      anyDisabilities: false,
+      isStudent: false,
+      perceivedAge: null,
+      perceivedGender: null,
+      genderNonconforming: false,
+      perceivedLimitedEnglish: false,
+      perceivedLgbt: false,
+      perceivedOrKnownDisability: [],
+      perceivedRace: [],
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
+      duration: null,
+      stopInResponseToCFS: false,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
+    stopVersion: new Date() >= new Date(2024, 0, 1) ? 2 : 1,
   }
 }
 
@@ -112,7 +139,19 @@ export const stopReasonGivenTemplate = template => {
     }
   }
 
-  return {}
+  return {
+    reasonForStop: null,
+    educationViolation: null,
+    educationViolationCode: null,
+    trafficViolation: null,
+    trafficViolationCode: null,
+    reasonableSuspicion: [],
+    reasonableSuspicionCode: null,
+    searchOfPerson: null,
+    searchOfProperty: null,
+    reasonForStopExplanation: null,
+    reasonForStopPiiFound: false,
+  }
 }
 
 export const stopResultGivenTemplate = template => {
@@ -147,7 +186,23 @@ export const stopResultGivenTemplate = template => {
   }
 
   return {
-    anyResultsOfStop: true,
+    anyResultsOfStop: false,
+    resultsOfStop2: false,
+    resultsOfStop3: false,
+    resultsOfStop4: false,
+    resultsOfStop5: false,
+    resultsOfStop6: false,
+    resultsOfStop7: false,
+    resultsOfStop8: false,
+    resultsOfStop9: false,
+    resultsOfStop10: false,
+    resultsOfStop11: false,
+    resultsOfStop12: false,
+    resultsOfStop13: false,
+    warningCodes: [],
+    citationCodes: [],
+    infieldCodes: [],
+    custodialArrestCodes: [],
     pullFromReasonCode: false,
   }
 }
