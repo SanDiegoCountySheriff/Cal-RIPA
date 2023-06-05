@@ -210,12 +210,15 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
-  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
-  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
-  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
-  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
+  if (apiStop.stopType !== null) {
+    items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+  }
+  items.push({ id: 'A3', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A4', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -252,6 +255,14 @@ const getSummaryDate = apiStop => {
     level: 1,
     header: 'Date',
     detail: apiStop.date,
+  }
+}
+
+const getSummaryStopType = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop Type',
+    detail: apiStop.stopType,
   }
 }
 
@@ -869,6 +880,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1126,6 +1138,7 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
+    stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,
@@ -1247,6 +1260,7 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+    stopType: fullStop.stopType,
   }
 }
 

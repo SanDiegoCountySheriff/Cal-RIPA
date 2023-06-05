@@ -566,8 +566,7 @@ export default {
       localStorage.setItem('ripa_form_edit_stop', '1')
     },
 
-    handleInput(newVal, location) {
-      console.log(newVal, location)
+    handleInput(newVal) {
       this.stop = Object.assign({}, newVal)
       this.updateFullStop()
     },
@@ -753,7 +752,7 @@ export default {
           stopResult: this.stop?.stopResult || null,
         }
         let updatedFullStop = Object.assign({}, this.fullStop)
-        updatedFullStop.stopType = this.stop.stopType
+        updatedFullStop.stopType = this.getStopType(this.stop)
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
         updatedFullStop.internalId = this.stop.internalId
@@ -793,6 +792,13 @@ export default {
           this.mappedFormStatutes,
         )
       }
+    },
+
+    getStopType(stop) {
+      if (stop.stopVersion === 2) {
+        return stop.stopType
+      }
+      return null
     },
 
     clearLocalStorage() {
@@ -847,7 +853,6 @@ export default {
     },
 
     handleDone() {
-      console.log('handling done')
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
       this.$router.push(route)

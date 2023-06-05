@@ -180,6 +180,11 @@ export default {
 
   methods: {
     handleInput() {
+      if (new Date(this.viewModel.stopDate.date) >= new Date('2024-01-01')) {
+        this.viewModel.stopVersion = 2
+      } else {
+        this.viewModel.stopVersion = 1
+      }
       this.$emit('input', this.viewModel)
     },
   },
