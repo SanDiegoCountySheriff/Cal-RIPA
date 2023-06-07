@@ -210,7 +210,7 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  if (apiStop.stopType !== undefined && apiStop.stopStype !== null) {
+  if (apiStop.stopType !== undefined && apiStop.stopType !== null) {
     items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
   }
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })

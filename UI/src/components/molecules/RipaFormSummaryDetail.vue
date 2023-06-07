@@ -211,7 +211,6 @@ export default {
   props: {
     apiStop: {
       type: Object,
-      default: () => {},
     },
     title: {
       type: String,

@@ -17,14 +17,19 @@ describe('Ripa Contraband', () => {
     wrapper.destroy()
   })
 
-  const factory = (propsData, provide) => {
+  const factory = propsData => {
     return shallowMount(RipaConfirmation, {
       vuetify,
       propsData: {
         ...propsData,
       },
       provide: {
-        ...provide,
+        isAuthenticated() {
+          return true
+        },
+        loading() {
+          return false
+        },
       },
     })
   }
@@ -46,51 +51,19 @@ describe('Ripa Contraband', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should render if not authenticated', () => {
-    wrapper = factory(
-      { value: stop },
-      {
-        isAuthenticated() {
-          return false
-        },
-        loading() {
-          return false
-        },
-      },
-    )
+  it('should call onGoHome', () => {
+    wrapper = factory({ value: stop })
 
-    expect(wrapper.html()).toMatchSnapshot()
+    wrapper.vm.onGoHome()
+
+    expect(wrapper.emitted('go-home')).toBeTruthy()
   })
 
-  it('should render if loading', () => {
-    wrapper = factory(
-      { value: stop },
-      {
-        isAuthenticated() {
-          return true
-        },
-        loading() {
-          return true
-        },
-      },
-    )
+  it('should call onStartNew', () => {
+    wrapper = factory({ value: stop })
 
-    expect(wrapper.html()).toMatchSnapshot()
-  })
+    wrapper.vm.onStartNew()
 
-  it('should render if loading and not authenticated', () => {
-    wrapper = factory(
-      { value: stop },
-      {
-        isAuthenticated() {
-          return false
-        },
-        loading() {
-          return true
-        },
-      },
-    )
-
-    expect(wrapper.html()).toMatchSnapshot()
+    expect(wrapper.emitted('on-start-new')).toBeTruthy()
   })
 })

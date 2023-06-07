@@ -14,36 +14,3 @@ exports[`Ripa Contraband should match snapshot 1`] = `
   </div>
 </div>
 `;
-
-exports[`Ripa Contraband should render if loading 1`] = `
-<div value="[object Object]">
-  <div class="text-center">
-    <v-progress-circular-stub color="primary" indeterminate="true" rotate="0" size="150" width="3" value="0">
-      Submitting Stop <br>
-      Please Wait
-    </v-progress-circular-stub>
-  </div>
-</div>
-`;
-
-exports[`Ripa Contraband should render if loading and not authenticated 1`] = `
-<div value="[object Object]">
-  <div class="text-center">
-    <v-progress-circular-stub color="primary" indeterminate="true" rotate="0" size="150" width="3" value="0">
-      Submitting Stop <br>
-      Please Wait
-    </v-progress-circular-stub>
-  </div>
-</div>
-`;
-
-exports[`Ripa Contraband should render if not authenticated 1`] = `
-<div value="[object Object]">
-  <div class="text-center">
-    <v-progress-circular-stub color="primary" indeterminate="true" rotate="0" size="150" width="3" value="0">
-      Submitting Stop <br>
-      Please Wait
-    </v-progress-circular-stub>
-  </div>
-</div>
-`;

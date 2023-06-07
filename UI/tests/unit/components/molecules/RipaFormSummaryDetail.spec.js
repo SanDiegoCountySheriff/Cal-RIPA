@@ -1,16 +1,21 @@
 import RipaFormSummaryDetail from '@/components/molecules/RipaFormSummaryDetail.vue'
-import { shallowMount, mount } from '@vue/test-utils'
-import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
+import { mount } from '@vue/test-utils'
+import {
+  API_STOP,
+  V2_API_STOP,
+} from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Summary Detail', () => {
   let vuetify
   let wrapper
   let apiStop
+  let v2ApiStop
 
   beforeEach(() => {
     vuetify = new Vuetify()
     apiStop = API_STOP
+    v2ApiStop = V2_API_STOP
   })
 
   afterEach(() => {
@@ -18,7 +23,7 @@ describe('Ripa Form Summary Detail', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaFormSummaryDetail, {
+    return mount(RipaFormSummaryDetail, {
       vuetify,
       propsData: {
         ...propsData,
@@ -27,6 +32,14 @@ describe('Ripa Form Summary Detail', () => {
         onEditAgencyQuestions: jest.fn(),
         onEditStop: jest.fn(),
         onEditPerson: jest.fn(),
+      },
+      provide: {
+        isAdminEditing() {
+          return true
+        },
+        isAdminViewing() {
+          return false
+        },
       },
     })
   }
@@ -53,5 +66,17 @@ describe('Ripa Form Summary Detail', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should not display stop type for legacy stop', () => {
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Stop Type')
+  })
+
+  it('should display stop type for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Stop Type')
   })
 })
