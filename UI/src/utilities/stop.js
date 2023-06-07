@@ -186,7 +186,7 @@ export const stopResultGivenTemplate = template => {
   }
 
   return {
-    anyResultsOfStop: false,
+    anyResultsOfStop: true,
     resultsOfStop2: false,
     resultsOfStop3: false,
     resultsOfStop4: false,
@@ -210,7 +210,6 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  console.log(apiStop)
   if (apiStop.stopType !== undefined && apiStop.stopStype !== null) {
     items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
   }

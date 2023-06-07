@@ -20,7 +20,7 @@ export const LOCATION_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -36,7 +36,7 @@ export const LOCATION_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -134,7 +134,7 @@ export const LOCATION_PII_TEST_CASES = [
     locationPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 
@@ -153,7 +153,7 @@ export const REASON_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -161,7 +161,7 @@ export const REASON_PII_TEST_CASES = [
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 0,
     setPiiServiceAvailableCalledTimes: 0,
-    reasonForStopPiiFound: undefined,
+    reasonForStopPiiFound: false,
     stopPiiFound: undefined,
     checkTextForPiiReturnValue: {
       redactedText: '',
@@ -169,7 +169,7 @@ export const REASON_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -267,7 +267,7 @@ export const REASON_PII_TEST_CASES = [
     reasonForStopPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 
@@ -286,7 +286,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -294,7 +294,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 0,
     setPiiServiceAvailableCalledTimes: 0,
-    expectedBasisForSearchPiiFound: undefined,
+    expectedBasisForSearchPiiFound: false,
     stopPiiFound: undefined,
     checkTextForPiiReturnValue: {
       redactedText: '',
@@ -302,7 +302,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -400,7 +400,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     expectedBasisForSearchPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 

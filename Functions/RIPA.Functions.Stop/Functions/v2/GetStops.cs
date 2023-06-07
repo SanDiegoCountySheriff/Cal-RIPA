@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
@@ -20,11 +21,13 @@ namespace RIPA.Functions.Stop.Functions.v2;
 
 public class GetStops
 {
-    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
 
-    public GetStops(IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService)
+    public GetStops(IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService, IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService)
     {
-        _stopCosmosDbService = stopCosmosDbService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
     }
 
     [FunctionName("GetStops_v2")]
@@ -61,14 +64,16 @@ public class GetStops
             return new UnauthorizedResult();
         }
 
-        string stopQueryString = string.Empty;
+        string stopV1QueryString = string.Empty;
+        string stopV2QueryString = string.Empty;
         string stopSummaryQueryString = string.Empty;
 
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
+            stopV1QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
+            stopV2QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 2);
             stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
         }
         catch (Exception ex)
@@ -77,13 +82,15 @@ public class GetStops
             return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
         }
 
-        IEnumerable<Common.Models.v2.Stop> stopResponse;
+        List<IStop> stopResponse = new();
         IEnumerable<StopStatusCount> stopStatusCounts;
 
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString);
-            stopStatusCounts = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
+            stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(stopV1QueryString));
+            stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(stopV2QueryString));
+
+            stopStatusCounts = await _stopV1CosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
         }
         catch (Exception ex)
         {

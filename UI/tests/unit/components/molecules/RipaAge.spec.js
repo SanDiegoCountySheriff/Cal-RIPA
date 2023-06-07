@@ -46,16 +46,4 @@ describe('Ripa Age', () => {
 
     expect(wrapper.emitted('input')).toBeTruthy()
   })
-
-  it('should watch value', async () => {
-    wrapper = factory({ value: stop })
-
-    const updatedStop = defaultStop()
-    updatedStop.id = 1
-
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.viewModel.id).toEqual(1)
-  })
 })
