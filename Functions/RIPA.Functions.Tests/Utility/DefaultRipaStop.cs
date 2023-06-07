@@ -142,6 +142,7 @@ public static class DefaultRipaStop
             OverridePii = false,
             EditStopExplanation = "EditStopExplanation",
             IsEdited = false,
+            StopVersion = StopVersion.V1,
         };
     }
 }
