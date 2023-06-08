@@ -1,24 +1,22 @@
 <template>
-  <div class="ripa-race tw-pb-4">
+  <div>
     <ripa-form-header
-      title="Perceived Race or Ethnicity"
+      title="Type of Stop"
       required
-      subtitle="§999.226(a)(4)"
+      subtitle="§999.226(a)(2)"
       v-on="$listeners"
-    >
-    </ripa-form-header>
+    ></ripa-form-header>
 
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
-          <ripa-check-group
-            v-model="model.person.perceivedRace"
-            :disabled="disabled"
-            :items="raceItems"
-            :rules="raceRules"
+          <ripa-radio-group
+            v-model="model.stopType"
+            :items="stopTypes"
+            :rules="stopTypeRules"
+            :display-row="true"
             @input="handleInput"
-          >
-          </ripa-check-group>
+          ></ripa-radio-group>
         </v-col>
       </v-row>
     </v-container>
@@ -28,22 +26,24 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin'
-import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import { RACES } from '@/constants/form'
-
+import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 export default {
-  name: 'ripa-race',
+  name: 'ripa-stop-type',
 
   mixins: [RipaModelMixin],
 
   components: {
-    RipaCheckGroup,
     RipaFormHeader,
+    RipaRadioGroup,
   },
 
   data() {
     return {
-      raceItems: RACES,
+      stopTypes: [
+        { name: 'Vehicular', value: 'Vehicular' },
+        { name: 'Bicycle', value: 'Bicycle' },
+        { name: 'Pedestrian', value: 'Pedestrian' },
+      ],
       viewModel: this.value,
     }
   },
@@ -54,10 +54,8 @@ export default {
         return this.viewModel
       },
     },
-
-    raceRules() {
-      const options = this.viewModel.person.perceivedRace
-      return [options.length > 0 || 'At least one race is required']
+    stopTypeRules() {
+      return [v => !!v || 'A stop type is required']
     },
   },
 
@@ -70,11 +68,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
   },
 }

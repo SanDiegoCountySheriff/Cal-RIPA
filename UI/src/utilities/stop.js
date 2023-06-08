@@ -72,25 +72,52 @@ export const defaultLocation = () => {
 
 export const defaultStop = () => {
   return {
-    actionsTaken: {
-      anyActionsTaken: true,
-    },
     id: 0,
     internalId: nanoid(),
     template: null,
+    editStopExplanation: null,
+    overridePii: false,
+    piiEntities: [],
     stepTrace: [],
+    stopType: null,
+    actionsTaken: {
+      anyActionsTaken: true,
+      actionsTakenDuringStop: [],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      basisForSearch: [],
+      basisForSearchExplanation: null,
+      basisForSearchPiiFound: false,
+      propertyWasSeized: false,
+      basisForPropertySeizure: [],
+      typeOfPropertySeized: [],
+      anyContraband: false,
+      contrabandOrEvidenceDiscovered: [],
+    },
     location: emptyLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
+      anyDisabilities: false,
+      isStudent: false,
+      perceivedAge: null,
+      perceivedGender: null,
+      genderNonconforming: false,
+      perceivedLimitedEnglish: false,
+      perceivedLgbt: false,
+      perceivedOrKnownDisability: [],
+      perceivedRace: [],
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
+      duration: null,
+      stopInResponseToCFS: false,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
+    stopVersion: new Date() >= new Date(2024, 0, 1) ? 2 : 1,
   }
 }
 
@@ -112,7 +139,19 @@ export const stopReasonGivenTemplate = template => {
     }
   }
 
-  return {}
+  return {
+    reasonForStop: null,
+    educationViolation: null,
+    educationViolationCode: null,
+    trafficViolation: null,
+    trafficViolationCode: null,
+    reasonableSuspicion: [],
+    reasonableSuspicionCode: null,
+    searchOfPerson: null,
+    searchOfProperty: null,
+    reasonForStopExplanation: null,
+    reasonForStopPiiFound: false,
+  }
 }
 
 export const stopResultGivenTemplate = template => {
@@ -148,6 +187,22 @@ export const stopResultGivenTemplate = template => {
 
   return {
     anyResultsOfStop: true,
+    resultsOfStop2: false,
+    resultsOfStop3: false,
+    resultsOfStop4: false,
+    resultsOfStop5: false,
+    resultsOfStop6: false,
+    resultsOfStop7: false,
+    resultsOfStop8: false,
+    resultsOfStop9: false,
+    resultsOfStop10: false,
+    resultsOfStop11: false,
+    resultsOfStop12: false,
+    resultsOfStop13: false,
+    warningCodes: [],
+    citationCodes: [],
+    infieldCodes: [],
+    custodialArrestCodes: [],
     pullFromReasonCode: false,
   }
 }
@@ -155,12 +210,15 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
-  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
-  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
-  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
-  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
+  if (apiStop.stopType !== undefined && apiStop.stopType !== null) {
+    items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+  }
+  items.push({ id: 'A3', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A4', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -197,6 +255,14 @@ const getSummaryDate = apiStop => {
     level: 1,
     header: 'Date',
     detail: apiStop.date,
+  }
+}
+
+const getSummaryStopType = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop Type',
+    detail: apiStop.stopType,
   }
 }
 
@@ -814,6 +880,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1071,6 +1138,7 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
+    stopType: fullStop.stopType,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,
@@ -1192,6 +1260,7 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+    stopType: fullStop.stopType,
   }
 }
 

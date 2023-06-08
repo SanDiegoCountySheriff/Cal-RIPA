@@ -57,7 +57,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -72,12 +72,6 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

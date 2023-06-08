@@ -82,7 +82,6 @@
                     v-on="$listeners"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-1>
                 </template>
               </v-stepper-content>
@@ -103,7 +102,6 @@
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-2>
                 </template>
               </v-stepper-content>
@@ -122,7 +120,6 @@
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-3>
                 </template>
               </v-stepper-content>
@@ -141,7 +138,6 @@
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-4>
                 </template>
               </v-stepper-content>
@@ -160,7 +156,6 @@
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-5>
                 </template>
               </v-stepper-content>
@@ -173,7 +168,6 @@
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
-                    @input="handleInput"
                   ></ripa-form-step-6>
                 </template>
               </v-stepper-content>
@@ -193,7 +187,6 @@
                     @on-submit="handleSubmit"
                     @on-cancel="handleCancel"
                     @handle-done="handleDone"
-                    @input="handleInput"
                   ></ripa-form-step-7>
                 </template>
               </v-stepper-content>
@@ -459,11 +452,6 @@ export default {
     isEditAgencyQuestions() {
       const value = localStorage.getItem('ripa_form_edit_agency_questions')
       return value ? value === '1' : false
-    },
-
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.$emit('input', this.stop)
     },
 
     handleAddPerson() {

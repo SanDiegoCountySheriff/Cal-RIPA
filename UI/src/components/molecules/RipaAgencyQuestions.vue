@@ -41,7 +41,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -71,12 +71,6 @@ export default {
           (v || '').length <= question.maxLength ||
           `Max ${question.maxLength} characters`,
       ]
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

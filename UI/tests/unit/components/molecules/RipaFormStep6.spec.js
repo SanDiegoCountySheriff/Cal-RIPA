@@ -1,4 +1,5 @@
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6.vue'
+import { STOP } from '../../constants/RipaFormContainerTestConstants'
 import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
@@ -24,7 +25,12 @@ describe('Ripa Form Step 6', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep6, { vuetify })
+    wrapper = mount(RipaFormStep6, {
+      vuetify,
+      propsData: {
+        value: STOP,
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

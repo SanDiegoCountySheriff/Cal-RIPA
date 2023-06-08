@@ -82,7 +82,7 @@ public class GenerateCpraReport
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, true);
+            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
             stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
         }
         catch (Exception ex)

@@ -103,7 +103,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
       devTime: false,
     }
   },
@@ -180,13 +180,12 @@ export default {
 
   methods: {
     handleInput() {
+      if (new Date(this.viewModel.stopDate.date) >= new Date('2024-01-01')) {
+        this.viewModel.stopVersion = 2
+      } else {
+        this.viewModel.stopVersion = 1
+      }
       this.$emit('input', this.viewModel)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

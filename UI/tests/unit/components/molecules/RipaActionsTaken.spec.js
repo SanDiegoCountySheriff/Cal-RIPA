@@ -372,15 +372,4 @@ describe('Ripa Actions Taken', () => {
     expect(wrapper.emitted('pii-check')).toBeTruthy()
     expect(wrapper.emitted('pii-check')[0][0].value).toEqual('test')
   })
-
-  it('should watch value', async () => {
-    wrapper = factory({ value: stop })
-
-    const updatedStop = defaultStop()
-    updatedStop.id = 1
-
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.viewModel.id).toEqual(1)
-  })
 })

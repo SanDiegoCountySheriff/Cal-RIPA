@@ -311,7 +311,7 @@ export default {
   data() {
     return {
       stopResultItems: STOP_RESULTS,
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -523,10 +523,6 @@ export default {
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
-
     lastResult(newVal) {
       if (newVal) {
         this.viewModel.stopResult = newVal

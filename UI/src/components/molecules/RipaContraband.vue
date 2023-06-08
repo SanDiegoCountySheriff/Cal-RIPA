@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -91,10 +91,6 @@ export default {
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
-
     'viewModel.actionsTaken.anyContraband': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
