@@ -567,7 +567,7 @@ export default {
     },
 
     handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
+      this.stop = { ...newVal }
       this.updateFullStop()
     },
 
@@ -1041,9 +1041,9 @@ export default {
       }
     },
 
-    stop(newVal) {
-      this.stop = newVal
-    },
+    // stop(newVal) {
+    //   this.stop = newVal
+    // },
 
     fullStop(newVal) {
       this.fullStop = newVal

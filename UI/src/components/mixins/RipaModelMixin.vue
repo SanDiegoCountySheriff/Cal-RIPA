@@ -216,11 +216,16 @@ export default {
     },
 
     updatePerceivedLgbtModel() {
-      if (
-        this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
-      ) {
-        this.viewModel.person.perceivedLgbt = true
+      if (this.viewModel.stopVersion === 1) {
+        this.viewModel.person.perceivedSexualOrientation = null
+        if (
+          this.viewModel.person.perceivedGender === 3 ||
+          this.viewModel.person.perceivedGender === 4
+        ) {
+          this.viewModel.person.perceivedLgbt = true
+        }
+      } else {
+        this.viewModel.person.perceivedLgbt = null
       }
     },
 

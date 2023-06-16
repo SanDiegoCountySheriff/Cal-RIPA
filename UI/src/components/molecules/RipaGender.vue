@@ -37,7 +37,7 @@
       </v-container>
     </template>
 
-    <template>
+    <template v-if="model.stopVersion === 1">
       <ripa-form-header
         class="tw-mt-8"
         title="Perceived LGBT"
@@ -61,6 +61,31 @@
         </v-row>
       </v-container>
     </template>
+
+    <template v-else>
+      <ripa-form-header
+        class="tw-mt-8"
+        title="Perceived Sexual Orientation"
+        required
+        subtitle="§999.226(a)(6)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-radio-group
+              v-model="model.person.perceivedSexualOrientation"
+              @input="handleInput"
+              :items="orientationItems"
+              :rules="orientationRules"
+              label="Perceived Sexual Orientation"
+            ></ripa-radio-group>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 
@@ -69,7 +94,7 @@ import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { GENDERS } from '@/constants/form'
+import { GENDERS, SEXUAL_ORIENTATIONS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
@@ -86,6 +111,7 @@ export default {
     return {
       genderItems: GENDERS,
       viewModel: this.value,
+      orientationItems: SEXUAL_ORIENTATIONS,
     }
   },
 
@@ -102,6 +128,13 @@ export default {
       const isValid = gender !== null || checked
 
       return [isValid !== false || 'A gender is required']
+    },
+
+    orientationRules() {
+      return [
+        !!this.viewModel.person.perceivedSexualOrientation ||
+          'A perceived orientation is required',
+      ]
     },
 
     isPerceivedLgbtDisabled() {
