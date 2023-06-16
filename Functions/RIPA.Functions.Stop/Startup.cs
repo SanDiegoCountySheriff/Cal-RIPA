@@ -10,6 +10,7 @@ using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Stop.Services;
 using RIPA.Functions.Stop.Services.Contracts;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.Stop.Startup))]
@@ -34,6 +35,10 @@ public class Startup : FunctionsStartup
         CosmosClientOptions clientOptions = new CosmosClientOptions();
 #if DEBUG
         clientOptions.ConnectionMode = ConnectionMode.Gateway;
+        clientOptions.WebProxy = new WebProxy()
+        {
+            BypassProxyOnLocal = true,
+        };
         _client = new CosmosClient(_localConnectionString, clientOptions);
 #else
         _client = new CosmosClient(_account, _key, clientOptions);
