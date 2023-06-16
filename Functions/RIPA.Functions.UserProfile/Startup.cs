@@ -6,6 +6,7 @@ using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.UserProfile.Startup))]
@@ -18,6 +19,9 @@ public class Startup : FunctionsStartup
     private readonly string _userProfileContainerName = Environment.GetEnvironmentVariable("ContainerName");
     private readonly string _account = Environment.GetEnvironmentVariable("Account");
     private readonly string _key = Environment.GetEnvironmentVariable("Key");
+#if DEBUG
+    private readonly string _localConnectionString = Environment.GetEnvironmentVariable("LocalConnectionString");
+#endif
     private readonly CosmosClient _client;
 
     public Startup()
@@ -25,8 +29,14 @@ public class Startup : FunctionsStartup
         CosmosClientOptions clientOptions = new CosmosClientOptions();
 #if DEBUG
         clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
+        clientOptions.WebProxy = new WebProxy()
+        {
+            BypassProxyOnLocal = true,
+        };
+        _client = new CosmosClient(_localConnectionString, clientOptions);
+#else
         _client = new CosmosClient(_account, _key, clientOptions);
+#endif
     }
 
     public override void Configure(IFunctionsHostBuilder builder)

@@ -16,6 +16,7 @@ using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 
@@ -31,6 +32,9 @@ public class Startup : FunctionsStartup
     private readonly string _userProfileContainerName = Environment.GetEnvironmentVariable("UserProfileContainerName");
     private readonly string _account = Environment.GetEnvironmentVariable("Account");
     private readonly string _key = Environment.GetEnvironmentVariable("Key");
+#if DEBUG
+    private readonly string _localConnectionString = Environment.GetEnvironmentVariable("LocalConnectionString");
+#endif
     private readonly CosmosClient _client;
 
     public Startup()
@@ -38,8 +42,14 @@ public class Startup : FunctionsStartup
         CosmosClientOptions clientOptions = new CosmosClientOptions();
 #if DEBUG
         clientOptions.ConnectionMode = ConnectionMode.Gateway;
-#endif
+        clientOptions.WebProxy = new WebProxy()
+        {
+            BypassProxyOnLocal = true,
+        };
+        _client = new CosmosClient(_localConnectionString, clientOptions);
+#else
         _client = new CosmosClient(_account, _key, clientOptions);
+#endif
     }
 
     public override void Configure(IFunctionsHostBuilder builder)
