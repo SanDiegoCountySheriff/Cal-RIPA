@@ -24,7 +24,6 @@
       @on-submit-stop="handleSubmitStop"
       @on-update-user="handleUpdateUser"
       @handle-done="handleDone"
-      @input="handleInput"
       @pii-check="handlePiiCheck"
     ></ripa-form-template>
 
@@ -141,7 +140,7 @@ import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
-  name: 'ripa-home-container',
+  name: 'ripa-form-container',
 
   mixins: [RipaApiStopJobMixin],
 
@@ -566,10 +565,11 @@ export default {
       localStorage.setItem('ripa_form_edit_stop', '1')
     },
 
-    handleInput(newVal) {
-      this.stop = { ...newVal }
-      this.updateFullStop()
-    },
+    // handleInput(newVal) {
+    //   this.stop = { ...newVal }
+    //   console.log('this.stop from handleInput', this.stop)
+    //   this.updateFullStop()
+    // },
 
     async handleGpsLocation() {
       this.loadingGps = true
@@ -1041,9 +1041,14 @@ export default {
       }
     },
 
-    // stop(newVal) {
-    //   this.stop = newVal
-    // },
+    stop: {
+      handler: function (newVal) {
+        if (newVal) {
+          this.updateFullStop()
+        }
+      },
+      deep: true,
+    },
 
     fullStop(newVal) {
       this.fullStop = newVal

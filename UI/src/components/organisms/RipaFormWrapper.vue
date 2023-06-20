@@ -78,7 +78,7 @@
               <v-stepper-content step="1">
                 <template v-if="stepIndex === 1">
                   <ripa-form-step-1
-                    v-model="stop"
+                    v-model="model"
                     v-on="$listeners"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
@@ -95,7 +95,7 @@
                   ></ripa-subheader>
 
                   <ripa-form-step-2
-                    v-model="stop"
+                    v-model="model"
                     v-on="$listeners"
                     :disabled="isFormStep2Disabled"
                     :back-button-visible="getFormStep2BackButtonVisible"
@@ -115,7 +115,7 @@
                   ></ripa-subheader>
 
                   <ripa-form-step-3
-                    v-model="stop"
+                    v-model="model"
                     v-on="$listeners"
                     @on-back="handleBack"
                     @on-next="handleNext"
@@ -133,7 +133,7 @@
                   ></ripa-subheader>
 
                   <ripa-form-step-4
-                    v-model="stop"
+                    v-model="model"
                     v-on="$listeners"
                     @on-back="handleBack"
                     @on-next="handleNext"
@@ -151,7 +151,7 @@
                   ></ripa-subheader>
 
                   <ripa-form-step-5
-                    v-model="stop"
+                    v-model="model"
                     v-on="$listeners"
                     @on-back="handleBack"
                     @on-next="handleNext"
@@ -163,7 +163,7 @@
               <v-stepper-content step="6">
                 <template v-if="stepIndex === 6">
                   <ripa-form-step-6
-                    v-model="stop"
+                    v-model="model"
                     :back-button-visible="getFormStep6BackButtonVisible"
                     @on-back="handleBack"
                     @on-next="handleNext"
@@ -175,7 +175,7 @@
               <v-stepper-content step="7">
                 <template v-if="stepIndex === 7">
                   <ripa-form-step-7
-                    v-model="stop"
+                    v-model="model"
                     :api-stop="getApiStop"
                     @on-add-person="handleAddPerson"
                     @on-back="handleBack"
@@ -357,6 +357,15 @@ export default {
   ],
 
   computed: {
+    model: {
+      get() {
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
+      },
+    },
+
     anyAgencyQuestions() {
       const questions = this.stop?.agencyQuestions || []
       return questions.length > 0
@@ -628,10 +637,6 @@ export default {
   },
 
   watch: {
-    value(newVal) {
-      this.stop = newVal
-    },
-
     formStepIndex(newVal, oldVal) {
       this.updateFormStepNumbers()
       if (newVal !== oldVal) {

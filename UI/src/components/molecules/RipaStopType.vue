@@ -15,7 +15,6 @@
             :items="stopTypes"
             :rules="stopTypeRules"
             :display-row="true"
-            @input="handleInput"
           ></ripa-radio-group>
         </v-col>
       </v-row>
@@ -44,26 +43,38 @@ export default {
         { name: 'Bicycle', value: 'Bicycle' },
         { name: 'Pedestrian', value: 'Pedestrian' },
       ],
-      viewModel: this.value,
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
+
     stopTypeRules() {
       return [v => !!v || 'A stop type is required']
     },
   },
 
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
+
+  // methods: {
+  //   handleInput() {
+  //     this.$emit('input', this.viewModel)
+  //   },
+  // },
 
   props: {
     value: {

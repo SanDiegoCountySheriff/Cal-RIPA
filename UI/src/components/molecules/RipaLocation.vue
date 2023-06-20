@@ -71,7 +71,6 @@
             v-model="model.location.isSchool"
             label="K-12 Public School"
             :max-width="200"
-            @input="handleInput"
           ></ripa-switch>
 
           <template v-if="model.location.isSchool">
@@ -83,7 +82,6 @@
               label="School"
               :items="schools"
               :rules="schoolRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
@@ -115,7 +113,6 @@
               :rules="blockNumberRules"
               numbers-only
               prevent-paste
-              @input="handleInput"
             >
             </ripa-text-input>
           </div>
@@ -152,7 +149,6 @@
             v-model="model.location.toggleLocationOptions"
             label="More Location Options"
             :max-width="225"
-            @input="handleInput"
           ></ripa-switch>
 
           <template v-if="model.location.toggleLocationOptions">
@@ -202,7 +198,6 @@
               label="City"
               :items="getCities"
               :rules="cityRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </div>
         </v-col>
@@ -220,7 +215,6 @@
                 :items="beats"
                 :rules="beatRules"
                 :disabled="model.location.outOfCounty"
-                @input="handleInput"
               ></ripa-autocomplete>
             </div>
           </v-col>
@@ -253,12 +247,6 @@ export default {
     RipaTextInput,
   },
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   inject: [
     'beats',
     'countyCities',
@@ -275,7 +263,17 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (!newVal.location.isSchool) {
+          newVal.location.school = null
+          newVal.person.isStudent = false
+          newVal.stopResult.resultsOfStop12 = false
+          newVal.stopResult.resultsOfStop13 = false
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
@@ -284,26 +282,26 @@ export default {
     },
 
     getCities() {
-      const checked = this.viewModel.location.outOfCounty
+      const checked = this.model.location.outOfCounty
 
       return checked ? this.nonCountyCities : this.countyCities
     },
 
     schoolRules() {
-      const checked = this.viewModel.location.isSchool
-      const school = this.viewModel.location.school
+      const checked = this.model.location.isSchool
+      const school = this.model.location.school
 
       return [(checked && school !== null) || 'A school is required']
     },
 
     cityRules() {
-      const city = this.viewModel.location.city
+      const city = this.model.location.city
 
       return [city !== null || 'A city is required']
     },
 
     beatRules() {
-      const beat = this.viewModel.location.beat
+      const beat = this.model.location.beat
 
       return [
         !this.displayBeatInput ||
@@ -313,8 +311,8 @@ export default {
     },
 
     blockNumberRules() {
-      const streetName = this.viewModel.location.streetName
-      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.model.location.streetName
+      const blockNumber = this.model.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
@@ -327,8 +325,8 @@ export default {
     },
 
     streetNameRules() {
-      const streetName = this.viewModel.location.streetName
-      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.model.location.streetName
+      const blockNumber = this.model.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
@@ -341,7 +339,7 @@ export default {
     },
 
     intersectionRules() {
-      const intersection = this.viewModel.location.intersection
+      const intersection = this.model.location.intersection
 
       return [
         this.isLocationOptionsFilled ||
@@ -354,9 +352,9 @@ export default {
     },
 
     highwayRules() {
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
@@ -373,9 +371,9 @@ export default {
     },
 
     landmarkRules() {
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
@@ -392,12 +390,12 @@ export default {
     },
 
     isLocationOptionsFilled() {
-      const blockNumber = this.viewModel.location.blockNumber
-      const streetName = this.viewModel.location.streetName
-      const intersection = this.viewModel.location.intersection
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const blockNumber = this.model.location.blockNumber
+      const streetName = this.model.location.streetName
+      const intersection = this.model.location.intersection
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       const isValid =
         (blockNumber !== null &&
@@ -446,11 +444,6 @@ export default {
       }
     },
 
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
-    },
-
     handlePiiCheck(event) {
       if (event) {
         const textValue = `${this.model.location.streetName ?? ''}, ${
@@ -466,7 +459,7 @@ export default {
     },
 
     handleInputOutOfCounty(newVal) {
-      const currentVal = this.viewModel.location.outOfCounty
+      const currentVal = this.model.location.outOfCounty
       if (newVal !== currentVal) {
         this.handleInput()
       }
@@ -481,24 +474,22 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-location-favorite', this.viewModel.location)
+      this.$emit('on-save-location-favorite', this.model.location)
     },
 
     handleOutOfCountyToggle() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = '999'
-        this.viewModel.location.city = null
+      if (this.model.location.outOfCounty) {
+        this.model.location.beat = '999'
+        this.model.location.city = null
       }
 
       if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === '999'
+        !this.model.location.outOfCounty &&
+        this.model.location.beat === '999'
       ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
+        this.model.location.beat = null
+        this.model.location.city = null
       }
-
-      this.handleInput()
     },
   },
 
@@ -506,17 +497,15 @@ export default {
     lastLocation(newVal) {
       if (newVal) {
         // save off school and school if isSchool is true
-        const isSchool = this.viewModel.location?.isSchool || false
-        const school = this.viewModel.location?.school || null
+        const isSchool = this.model.location?.isSchool || false
+        const school = this.model.location?.school || null
         // assign new location
-        this.viewModel.location = newVal.newLocation
+        this.model.location = newVal.newLocation
         // add back school and school - only if isSchool was true
         if (newVal.persistSchool && isSchool) {
-          this.viewModel.location.isSchool = isSchool
-          this.viewModel.location.school = school
+          this.model.location.isSchool = isSchool
+          this.model.location.school = school
         }
-        // call handleInput
-        this.handleInput()
       }
     },
   },
