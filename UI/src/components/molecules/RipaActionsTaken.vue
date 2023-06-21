@@ -145,7 +145,6 @@
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -160,8 +159,6 @@ import {
 
 export default {
   name: 'ripa-action-taken',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -380,14 +377,14 @@ export default {
       let actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
 
       if (actionsTaken.includes(18) && !this.model.stopReason.searchOfPerson) {
-        this.setPersonSearchAutomaticallySelected(false)
+        this.$emit('on-set-person-search-automatically-selected', false)
       }
 
       if (
         actionsTaken.includes(20) &&
         !this.model.stopReason.searchOfProperty
       ) {
-        this.setPropertySearchAutomaticallySelected(false)
+        this.$emit('on-set-property-search-automatically-selected', false)
       }
 
       if (this.model.stopReason) {
@@ -399,7 +396,7 @@ export default {
               this.model.actionsTaken.actionsTakenDuringStop = []
             }
             this.model.actionsTaken.actionsTakenDuringStop.push(18)
-            this.setPersonSearchAutomaticallySelected(true)
+            this.$emit('on-set-person-search-automatically-selected', true)
           }
         }
         if (this.model.stopReason.searchOfProperty) {
@@ -410,7 +407,7 @@ export default {
               this.model.actionsTaken.actionsTakenDuringStop = []
             }
             this.model.actionsTaken.actionsTakenDuringStop.push(20)
-            this.setPropertySearchAutomaticallySelected(true)
+            this.$emit('on-set-property-search-automatically-selected', true)
           }
         }
       }

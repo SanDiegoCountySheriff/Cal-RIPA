@@ -16,7 +16,6 @@
             label="Any Contraband or Evidence Discovered?"
             :disabled="isAnyContrabandDisabled"
             :max-width="350"
-            @input="handleInput"
           ></ripa-switch>
 
           <template v-if="model.actionsTaken.anyContraband">
@@ -24,7 +23,6 @@
               v-model="model.actionsTaken.contrabandOrEvidenceDiscovered"
               :items="contrabandItems"
               :rules="contrabandRules"
-              @input="handleInput"
             >
             </ripa-check-group>
           </template>
@@ -36,15 +34,12 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { CONTRABAND_TYPES } from '@/constants/form'
 
 export default {
   name: 'ripa-contraband',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -55,20 +50,22 @@ export default {
   data() {
     return {
       contrabandItems: CONTRABAND_TYPES,
-      viewModel: this.value,
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
     contrabandRules() {
-      const checked = this.viewModel.actionsTaken.anyContraband
-      const options = this.viewModel.actionsTaken.contrabandOrEvidenceDiscovered
+      const checked = this.model.actionsTaken.anyContraband
+      const options = this.model.actionsTaken.contrabandOrEvidenceDiscovered
       return [
         (checked && options.length > 0) ||
           'At least one contraband is required',
@@ -77,26 +74,28 @@ export default {
 
     isAnyContrabandDisabled() {
       return (
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(2) ||
-        this.viewModel.actionsTaken.basisForPropertySeizure.includes(3)
+        this.model.actionsTaken.basisForPropertySeizure.includes(2) ||
+        this.model.actionsTaken.basisForPropertySeizure.includes(3)
       )
     },
   },
 
-  methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
-    },
-  },
-
   watch: {
-    'viewModel.actionsTaken.anyContraband': {
+    'model.actionsTaken.anyContraband': {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
-          this.clearContrabandOrEvidenceDiscoveredModel()
+          this.$nextTick(() => {
+            this.model.actionsTaken.contrabandOrEvidenceDiscovered = []
+          })
         }
       },
+    },
+
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

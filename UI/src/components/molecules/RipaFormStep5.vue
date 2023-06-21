@@ -63,8 +63,7 @@ export default {
 
   methods: {
     handleStep5Next() {
-      const anyResultsOfStop =
-        this.viewModel.stopResult?.anyResultsOfStop || false
+      const anyResultsOfStop = this.model.stopResult?.anyResultsOfStop || false
       if (!anyResultsOfStop) {
         this.showConfirmDialog = true
       } else {

@@ -42,13 +42,10 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-override-pii',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaSwitch,

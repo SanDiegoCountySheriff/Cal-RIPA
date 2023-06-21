@@ -168,7 +168,6 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -184,8 +183,6 @@ import {
 
 export default {
   name: 'ripa-stop-reason',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -220,6 +217,8 @@ export default {
     'lastReason',
     'loadingPiiStep3',
     'statutes',
+    'personSearchAutomaticallySelected',
+    'propertySearchAutomaticallySelected',
   ],
 
   created() {

@@ -72,7 +72,6 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -86,8 +85,6 @@ import {
 
 export default {
   name: 'ripa-stop-date',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,

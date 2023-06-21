@@ -24,12 +24,9 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 export default {
   name: 'ripa-stop-type',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -69,12 +66,6 @@ export default {
       deep: true,
     },
   },
-
-  // methods: {
-  //   handleInput() {
-  //     this.$emit('input', this.viewModel)
-  //   },
-  // },
 
   props: {
     value: {

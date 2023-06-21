@@ -229,15 +229,12 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-location',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,

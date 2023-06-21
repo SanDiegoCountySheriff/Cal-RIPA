@@ -23,6 +23,12 @@
       @on-step-index-change="handleStepIndexChange"
       @on-submit-stop="handleSubmitStop"
       @on-update-user="handleUpdateUser"
+      @on-set-person-search-automatically-selected="
+        handleSetPersonSearchAutomaticallySelected
+      "
+      @on-set-property-search-automatically-selected="
+        handleSetPropertySearchAutomaticallySelected
+      "
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
     ></ripa-form-template>
@@ -216,6 +222,12 @@ export default {
       user: computed(() => this.mappedUser),
       validLastLocation: this.isLastLocationValid,
       stopTemplates: this.stopTemplates,
+      personSearchAutomaticallySelected: computed(
+        () => this.personSearchAutomaticallySelected,
+      ),
+      propertySearchAutomaticallySelected: computed(
+        () => this.propertySearchAutomaticallySelected,
+      ),
     }
   },
 
@@ -239,6 +251,8 @@ export default {
       'isAdmin',
       'displayReportingEmail',
       'reportingEmailAddress',
+      'personSearchAutomaticallySelected',
+      'propertySearchAutomaticallySelected',
     ]),
 
     getMappedUser() {
@@ -276,7 +290,17 @@ export default {
       'setUserFavoriteResults',
       'setResetPagination',
       'setStopsWithErrors',
+      'setPersonSearchAutomaticallySelected',
+      'setPropertySearchAutomaticallySelected',
     ]),
+
+    handleSetPersonSearchAutomaticallySelected() {
+      this.setPersonSearchAutomaticallySelected()
+    },
+
+    handleSetPropertySearchAutomaticallySelected() {
+      this.setPropertySearchAutomaticallySelected()
+    },
 
     addApiStop(apiStop) {
       this.isLocked = true
@@ -564,12 +588,6 @@ export default {
       )
       localStorage.setItem('ripa_form_edit_stop', '1')
     },
-
-    // handleInput(newVal) {
-    //   this.stop = { ...newVal }
-    //   console.log('this.stop from handleInput', this.stop)
-    //   this.updateFullStop()
-    // },
 
     async handleGpsLocation() {
       this.loadingGps = true
