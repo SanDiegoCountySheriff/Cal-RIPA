@@ -85,7 +85,7 @@ export default {
       if (!this.isFormValid) {
         return
       }
-      this.$emit('input', this.viewModel)
+      this.$emit('input', this.model)
       this.$emit('on-submit')
     },
 
