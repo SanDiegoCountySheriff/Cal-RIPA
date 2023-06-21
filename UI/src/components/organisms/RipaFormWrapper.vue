@@ -246,7 +246,7 @@
     </v-card>
 
     <ripa-json-viewer-dialog
-      :stop="stop"
+      :stop="model"
       :api-stop="getApiStop"
       :show-dialog="showDialog"
       @on-close="handleCloseDialog"
