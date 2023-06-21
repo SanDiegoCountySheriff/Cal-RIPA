@@ -52,6 +52,16 @@ export default {
             newVal.stopReason.educationViolation = null
             newVal.stopReason.educationViolationCode = null
           }
+
+          if (
+            newVal.actionsTaken.actionsTakenDuringStop !== null &&
+            newVal.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            newVal.actionsTaken.actionsTakenDuringStop =
+              newVal.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 23,
+              )
+          }
         }
 
         this.$emit('input', newVal)

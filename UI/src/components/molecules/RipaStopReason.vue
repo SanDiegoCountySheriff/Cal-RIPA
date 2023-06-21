@@ -322,9 +322,7 @@ export default {
     },
 
     handlePiiCheck(textValue) {
-      if (textValue !== this.model.stopReason.reasonForStopExplanation) {
-        this.$emit('pii-check', { source: 'reason', value: textValue })
-      }
+      this.$emit('pii-check', { source: 'reason', value: textValue })
     },
 
     handleUpdateModel() {
