@@ -367,12 +367,12 @@ export default {
     },
 
     anyAgencyQuestions() {
-      const questions = this.stop?.agencyQuestions || []
+      const questions = this.model?.agencyQuestions || []
       return questions.length > 0
     },
 
     getEditPersonText() {
-      const personIndex = this.stop.person?.index || 1
+      const personIndex = this.model.person?.index || 1
       return `Person: ${personIndex}`
     },
 
@@ -535,7 +535,7 @@ export default {
     getNextStepIndex() {
       if (!this.isCreateForm()) {
         if (this.isEditStop() && !this.isEditPerson()) {
-          const stopReason = this.stop?.stopReason?.reasonForStop || null
+          const stopReason = this.model?.stopReason?.reasonForStop || null
           const validReason = stopReason !== null
           if (!validReason) {
             localStorage.removeItem('ripa_form_edit_stop')
@@ -597,7 +597,7 @@ export default {
     updateStepTrace(endTimeStamp) {
       if (!this.isAdminEditing && this.stepTrace) {
         this.stepTrace.endTimeStamp = endTimeStamp
-        this.stop.stepTrace.push(this.stepTrace)
+        this.model.stepTrace.push(this.stepTrace)
       }
     },
 

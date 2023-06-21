@@ -113,6 +113,7 @@
               :rules="blockNumberRules"
               numbers-only
               prevent-paste
+              @blur="handleBlockNumber"
             >
             </ripa-text-input>
           </div>
@@ -125,7 +126,7 @@
               label="Street Name"
               :loading="loadingPiiStep1"
               :rules="streetNameRules"
-              @input="handleInput($event), handlePiiCheck($event)"
+              @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
           </div>
@@ -141,7 +142,7 @@
             label="Closest Intersection"
             :loading="loadingPiiStep1"
             :rules="intersectionRules"
-            @input="handleInput($event), handlePiiCheck($event)"
+            @blur="handlePiiCheck($event)"
           >
           </ripa-text-input>
 
@@ -159,7 +160,7 @@
               label="Highway and closest exit"
               :loading="loadingPiiStep1"
               :rules="highwayRules"
-              @input="handleInput($event), handlePiiCheck($event)"
+              @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
 
@@ -170,7 +171,7 @@
               label="Road marker, landmark, or other"
               :loading="loadingPiiStep1"
               :rules="landmarkRules"
-              @input="handleInput($event), handlePiiCheck($event)"
+              @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
           </template>
@@ -272,6 +273,19 @@ export default {
           newVal.stopResult.resultsOfStop12 = false
           newVal.stopResult.resultsOfStop13 = false
         }
+
+        if (!newVal.location.toggleLocationOptions) {
+          newVal.location.highwayExit = null
+          newVal.location.landmark = null
+        }
+
+        const streetName = newVal.location?.streetName || ''
+        const highwayExit = newVal.location?.highwayExit || ''
+        const intersection = newVal.location?.intersection || ''
+        const landMark = newVal.location?.landMark || ''
+        const fullAddress =
+          streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+        newVal.location.fullAddress = fullAddress
 
         this.$emit('input', newVal)
       },
@@ -444,6 +458,27 @@ export default {
       }
     },
 
+    handleOutOfCountyToggle() {
+      if (this.model.location.outOfCounty) {
+        this.model.location.beat = '999'
+        this.model.location.city = null
+      }
+
+      if (
+        !this.model.location.outOfCounty &&
+        this.model.location.beat === '999'
+      ) {
+        this.model.location.beat = null
+        this.model.location.city = null
+      }
+    },
+
+    handleBlockNumber() {
+      this.model.location.blockNumber = this.parseBlockNumber(
+        this.model.location.blockNumber,
+      )
+    },
+
     handlePiiCheck(event) {
       if (event) {
         const textValue = `${this.model.location.streetName ?? ''}, ${
@@ -458,11 +493,20 @@ export default {
       }
     },
 
-    handleInputOutOfCounty(newVal) {
-      const currentVal = this.model.location.outOfCounty
-      if (newVal !== currentVal) {
-        this.handleInput()
+    parseBlockNumber(value) {
+      let blockNumber = value
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
+        blockNumber = calcBlockNumber
       }
+
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
     },
 
     handleLastLocation() {
@@ -475,21 +519,6 @@ export default {
 
     handleSaveFavorite() {
       this.$emit('on-save-location-favorite', this.model.location)
-    },
-
-    handleOutOfCountyToggle() {
-      if (this.model.location.outOfCounty) {
-        this.model.location.beat = '999'
-        this.model.location.city = null
-      }
-
-      if (
-        !this.model.location.outOfCounty &&
-        this.model.location.beat === '999'
-      ) {
-        this.model.location.beat = null
-        this.model.location.city = null
-      }
     },
   },
 
@@ -507,6 +536,13 @@ export default {
           this.model.location.school = school
         }
       }
+    },
+
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

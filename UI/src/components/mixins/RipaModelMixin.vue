@@ -21,16 +21,16 @@ export default {
     },
 
     updateModel() {
-      this.updateSchoolModel()
+      // this.updateSchoolModel()
       this.updateStudentModel()
-      this.updateMoreLocationOptionsModel()
+      // this.updateMoreLocationOptionsModel()
       this.updatePerceivedDisabilityModel()
       this.updateActionsTakenModel()
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
-      this.updateBlockNumberModel()
-      this.updateFullAddressModel()
+      // this.updateBlockNumberModel()
+      // this.updateFullAddressModel()
       this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
       this.updateStopReasonSearchModel()
@@ -38,12 +38,12 @@ export default {
       this.updateStopResultModel()
     },
 
-    updateMoreLocationOptionsModel() {
-      if (!this.viewModel.location.toggleLocationOptions) {
-        this.viewModel.location.highwayExit = null
-        this.viewModel.location.landmark = null
-      }
-    },
+    // updateMoreLocationOptionsModel() {
+    //   if (!this.viewModel.location.toggleLocationOptions) {
+    //     this.viewModel.location.highwayExit = null
+    //     this.viewModel.location.landmark = null
+    //   }
+    // },
 
     updateActionsTakenModel() {
       if (!this.viewModel.actionsTaken.anyActionsTaken) {
@@ -183,37 +183,37 @@ export default {
       }
     },
 
-    parseBlockNumber(value) {
-      let blockNumber = value
-      if (blockNumber !== null && blockNumber.length > 0) {
-        const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
-        blockNumber = calcBlockNumber
-      }
+    // parseBlockNumber(value) {
+    //   let blockNumber = value
+    //   if (blockNumber !== null && blockNumber.length > 0) {
+    //     const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
+    //     blockNumber = calcBlockNumber
+    //   }
 
-      const result =
-        typeof blockNumber === 'string' ||
-        (typeof blockNumber === 'number' && !isNaN(blockNumber))
-          ? blockNumber.toString()
-          : null
+    //   const result =
+    //     typeof blockNumber === 'string' ||
+    //     (typeof blockNumber === 'number' && !isNaN(blockNumber))
+    //       ? blockNumber.toString()
+    //       : null
 
-      return result
-    },
+    //   return result
+    // },
 
-    updateBlockNumberModel() {
-      this.viewModel.location.blockNumber = this.parseBlockNumber(
-        this.viewModel.location.blockNumber,
-      )
-    },
+    // updateBlockNumberModel() {
+    //   this.viewModel.location.blockNumber = this.parseBlockNumber(
+    //     this.viewModel.location.blockNumber,
+    //   )
+    // },
 
-    updateFullAddressModel() {
-      const streetName = this.viewModel.location?.streetName || ''
-      const highwayExit = this.viewModel.location?.highwayExit || ''
-      const intersection = this.viewModel.location?.intersection || ''
-      const landMark = this.viewModel.location?.landMark || ''
-      const fullAddress =
-        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
-      this.viewModel.location.fullAddress = fullAddress
-    },
+    // updateFullAddressModel() {
+    //   const streetName = this.viewModel.location?.streetName || ''
+    //   const highwayExit = this.viewModel.location?.highwayExit || ''
+    //   const intersection = this.viewModel.location?.intersection || ''
+    //   const landMark = this.viewModel.location?.landMark || ''
+    //   const fullAddress =
+    //     streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+    //   this.viewModel.location.fullAddress = fullAddress
+    // },
 
     updatePerceivedLgbtModel() {
       if (this.viewModel.stopVersion === 1) {
@@ -248,14 +248,14 @@ export default {
       }
     },
 
-    updateSchoolModel() {
-      if (!this.viewModel.location.isSchool) {
-        this.viewModel.location.school = null
-        this.viewModel.person.isStudent = false
-        this.viewModel.stopResult.resultsOfStop12 = false
-        this.viewModel.stopResult.resultsOfStop13 = false
-      }
-    },
+    // updateSchoolModel() {
+    //   if (!this.viewModel.location.isSchool) {
+    //     this.viewModel.location.school = null
+    //     this.viewModel.person.isStudent = false
+    //     this.viewModel.stopResult.resultsOfStop12 = false
+    //     this.viewModel.stopResult.resultsOfStop13 = false
+    //   }
+    // },
 
     updateStudentModel() {
       if (!this.viewModel.person.isStudent) {
