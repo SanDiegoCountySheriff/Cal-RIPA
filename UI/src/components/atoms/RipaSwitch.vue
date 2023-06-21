@@ -24,7 +24,7 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
 
       set(newVal) {

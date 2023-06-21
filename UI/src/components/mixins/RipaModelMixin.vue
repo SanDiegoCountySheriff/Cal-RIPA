@@ -22,16 +22,16 @@ export default {
 
     updateModel() {
       // this.updateSchoolModel()
-      this.updateStudentModel()
+      // this.updateStudentModel()
       // this.updateMoreLocationOptionsModel()
-      this.updatePerceivedDisabilityModel()
+      // this.updatePerceivedDisabilityModel()
       this.updateActionsTakenModel()
       this.updateActionsTakenSearchModel()
       this.updateBasisForSearchModel()
       this.updateBasisForPropertySeizureModel()
       // this.updateBlockNumberModel()
       // this.updateFullAddressModel()
-      this.updatePerceivedLgbtModel()
+      // this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
       this.updateStopReasonSearchModel()
       this.updateStopReasonModel()
@@ -215,19 +215,19 @@ export default {
     //   this.viewModel.location.fullAddress = fullAddress
     // },
 
-    updatePerceivedLgbtModel() {
-      if (this.viewModel.stopVersion === 1) {
-        this.viewModel.person.perceivedSexualOrientation = null
-        if (
-          this.viewModel.person.perceivedGender === 3 ||
-          this.viewModel.person.perceivedGender === 4
-        ) {
-          this.viewModel.person.perceivedLgbt = true
-        }
-      } else {
-        this.viewModel.person.perceivedLgbt = null
-      }
-    },
+    // updatePerceivedLgbtModel() {
+    //   if (this.viewModel.stopVersion === 1) {
+    //     this.viewModel.person.perceivedSexualOrientation = null
+    //     if (
+    //       this.viewModel.person.perceivedGender === 3 ||
+    //       this.viewModel.person.perceivedGender === 4
+    //     ) {
+    //       this.viewModel.person.perceivedLgbt = true
+    //     }
+    //   } else {
+    //     this.viewModel.person.perceivedLgbt = null
+    //   }
+    // },
 
     updatePropertyWasSeizedModel() {
       const actionsTaken =
@@ -257,28 +257,28 @@ export default {
     //   }
     // },
 
-    updateStudentModel() {
-      if (!this.viewModel.person.isStudent) {
-        this.viewModel.stopResult.resultsOfStop12 = false
-        this.viewModel.stopResult.resultsOfStop13 = false
-      }
-    },
+    // updateStudentModel() {
+    //   if (!this.viewModel.person.isStudent) {
+    //     this.viewModel.stopResult.resultsOfStop12 = false
+    //     this.viewModel.stopResult.resultsOfStop13 = false
+    //   }
+    // },
 
-    updatePerceivedDisabilityModel() {
-      if (!this.viewModel.person.isStudent) {
-        const options = this.viewModel.person?.perceivedOrKnownDisability || []
-        const studentOptionFound = options.includes(7)
-        if (studentOptionFound) {
-          this.viewModel.person.perceivedOrKnownDisability = options.filter(
-            item => item !== 7,
-          )
-        }
-      }
+    // updatePerceivedDisabilityModel() {
+    //   if (!this.viewModel.person.isStudent) {
+    //     const options = this.viewModel.person?.perceivedOrKnownDisability || []
+    //     const studentOptionFound = options.includes(7)
+    //     if (studentOptionFound) {
+    //       this.viewModel.person.perceivedOrKnownDisability = options.filter(
+    //         item => item !== 7,
+    //       )
+    //     }
+    //   }
 
-      if (!this.viewModel.person.anyDisabilities) {
-        this.viewModel.person.perceivedOrKnownDisability = []
-      }
-    },
+    //   if (!this.viewModel.person.anyDisabilities) {
+    //     this.viewModel.person.perceivedOrKnownDisability = []
+    //   }
+    // },
 
     removeActionsTakenPersonSearch() {
       this.viewModel.actionsTaken.actionsTakenDuringStop =

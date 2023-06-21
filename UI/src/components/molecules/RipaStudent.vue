@@ -15,7 +15,6 @@
             v-model="model.person.isStudent"
             label="K-12 Public School Student"
             :max-width="250"
-            @input="handleInput"
           ></ripa-switch>
         </v-col>
       </v-row>
@@ -25,37 +24,38 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-student',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaSwitch,
     RipaFormHeader,
   },
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (!newVal.person.isStudent) {
+          newVal.stopResult.resultsOfStop12 = false
+          newVal.stopResult.resultsOfStop13 = false
+        }
+
+        this.$emit('input', newVal)
       },
     },
   },
 
-  methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

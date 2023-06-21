@@ -15,7 +15,6 @@
             label="Limited or no English fluency"
             :disabled="disabled"
             :max-width="300"
-            @input="handleInput"
           ></ripa-switch>
         </v-col>
       </v-row>
@@ -25,36 +24,33 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-limited-english',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
     RipaSwitch,
   },
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
   },
 
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

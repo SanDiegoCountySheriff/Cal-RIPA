@@ -18,7 +18,6 @@
               :items="genderItems"
               :rules="genderRules"
               clear-selection
-              @input="handleGenderInput"
             >
             </ripa-radio-group>
           </v-col>
@@ -30,7 +29,6 @@
               :disabled="disabled"
               :max-width="250"
               :rules="genderRules"
-              @input="handleInput"
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -55,7 +53,6 @@
               label="Perceived as LGBT"
               :max-width="200"
               :disabled="isPerceivedLgbtDisabled"
-              @input="handleInput"
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -77,7 +74,6 @@
           <v-col cols="12" sm="12">
             <ripa-radio-group
               v-model="model.person.perceivedSexualOrientation"
-              @input="handleInput"
               :items="orientationItems"
               :rules="orientationRules"
               label="Perceived Sexual Orientation"
@@ -91,15 +87,12 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { GENDERS, SEXUAL_ORIENTATIONS } from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -110,7 +103,6 @@ export default {
   data() {
     return {
       genderItems: GENDERS,
-      viewModel: this.value,
       orientationItems: SEXUAL_ORIENTATIONS,
     }
   },
@@ -118,13 +110,34 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (newVal.stopVersion === 1) {
+          newVal.person.perceivedSexualOrientation = null
+          if (
+            newVal.person.perceivedGender === 3 ||
+            newVal.person.perceivedGender === 4
+          ) {
+            newVal.person.perceivedLgbt = true
+          }
+          if (
+            newVal.person.perceivedGender === 1 ||
+            newVal.person.perceivedGender === 2
+          ) {
+            newVal.person.perceivedLgbt = false
+          }
+        } else {
+          newVal.person.perceivedLgbt = null
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
     genderRules() {
-      const gender = this.viewModel.person.perceivedGender
-      const checked = this.viewModel.person.genderNonconforming
+      const gender = this.model.person.perceivedGender
+      const checked = this.model.person.genderNonconforming
       const isValid = gender !== null || checked
 
       return [isValid !== false || 'A gender is required']
@@ -132,7 +145,7 @@ export default {
 
     orientationRules() {
       return [
-        !!this.viewModel.person.perceivedSexualOrientation ||
+        !!this.model.person.perceivedSexualOrientation ||
           'A perceived orientation is required',
       ]
     },
@@ -140,26 +153,18 @@ export default {
     isPerceivedLgbtDisabled() {
       return (
         this.disabled ||
-        this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
+        this.model.person.perceivedGender === 3 ||
+        this.model.person.perceivedGender === 4
       )
     },
   },
 
-  methods: {
-    handleGenderInput() {
-      if (
-        this.viewModel.person.perceivedGender === 1 ||
-        this.viewModel.person.perceivedGender === 2
-      ) {
-        this.viewModel.person.perceivedLgbt = false
-      }
-      this.handleInput()
-    },
-
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 
