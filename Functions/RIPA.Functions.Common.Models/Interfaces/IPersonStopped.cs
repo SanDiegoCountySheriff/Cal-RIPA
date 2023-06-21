@@ -17,7 +17,6 @@ public interface IPersonStopped
     TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
     int PerceivedAge { get; set; }
     string PerceivedGender { get; set; }
-    bool PerceivedLgbt { get; set; }
     bool PerceivedLimitedEnglish { get; set; }
     bool PersonSearchConsentGiven { get; set; }
     bool PropertySearchConsentGiven { get; set; }

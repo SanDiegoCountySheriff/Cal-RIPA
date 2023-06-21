@@ -12,7 +12,7 @@ public class PersonStopped : IPersonStopped
     public int PerceivedAge { get; set; }
     public string PerceivedGender { get; set; }
     public bool GenderNonconforming { get; set; }
-    public bool PerceivedLgbt { get; set; }
+    public string PerceivedSexualOrientation { get; set; }
     public ReasonForStop ReasonForStop { get; set; }
     public string ReasonForStopExplanation { get; set; }
     public bool ReasonForStopPiiFound { get; set; }

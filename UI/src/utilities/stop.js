@@ -212,7 +212,7 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  if (apiStop.stopType !== undefined && apiStop.stopType !== null) {
+  if (apiStop.stopVersion === 2) {
     items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
   }
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })
@@ -398,10 +398,10 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
     items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
-    if (person.perceivedOrientation) {
+    if (apiStop.stopVersion === 2) {
       items.push({ id: 'B5', content: getSummaryPerceivedOrientation(person) })
     }
-    if (person.perceivedLgbt !== null) {
+    if (apiStop.stopVersion === 1) {
       items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
     }
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
@@ -468,7 +468,7 @@ const getSummaryPerceivedOrientation = person => {
   return {
     level: 1,
     header: 'Perceived Orientation',
-    detail: person.perceivedOrientation,
+    detail: person.perceivedSexualOrientation,
   }
 }
 
@@ -896,6 +896,7 @@ export const apiStopToFullStop = apiStop => {
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
     stopType: apiStop.stopType,
+    stopVersion: apiStop.stopVersion,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -967,7 +968,7 @@ const getFullStopPeopleListed = apiStop => {
       genderNonconforming: getPerceivedOrientationCode(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedLgbt: person.perceivedLgbt,
-      perceivedOrientation: person.perceivedOrientation,
+      perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
@@ -1155,6 +1156,7 @@ export const fullStopToStop = fullStop => {
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
     stopType: fullStop.stopType,
+    stopVersion: fullStop.stopVersion,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,
@@ -1162,7 +1164,8 @@ export const fullStopToStop = fullStop => {
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
-      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLgbt: person.perceivedLgbt,
+      perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
@@ -1440,7 +1443,7 @@ const getPerceivedGender = person => {
 }
 
 const getPerceivedOrientation = person => {
-  const orientation = person.perceivedOrientation || null
+  const orientation = person.perceivedSexualOrientation || null
   if (orientation) {
     const [filteredOrientationValue] = SEXUAL_ORIENTATIONS.filter(
       item => item.value === orientation,
