@@ -43,6 +43,15 @@ export default {
         if (!newVal.person.isStudent) {
           newVal.stopResult.resultsOfStop12 = false
           newVal.stopResult.resultsOfStop13 = false
+
+          if (
+            newVal.stopReason.reasonForStop === 7 ||
+            newVal.stopReason.reasonForStop === 8
+          ) {
+            newVal.stopReason.reasonForStop = null
+            newVal.stopReason.educationViolation = null
+            newVal.stopReason.educationViolationCode = null
+          }
         }
 
         this.$emit('input', newVal)

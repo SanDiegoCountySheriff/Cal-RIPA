@@ -104,7 +104,6 @@ export default {
   watch: {
     model: {
       handler: function (newVal) {
-        console.log('watching disability model')
         this.model = newVal
       },
       deep: true,

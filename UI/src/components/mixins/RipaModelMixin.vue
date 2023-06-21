@@ -33,8 +33,8 @@ export default {
       // this.updateFullAddressModel()
       // this.updatePerceivedLgbtModel()
       this.updatePropertyWasSeizedModel()
-      this.updateStopReasonSearchModel()
-      this.updateStopReasonModel()
+      // stop = this.updateStopReasonSearchModel(stop)
+      // this.updateStopReasonModel()
       this.updateStopResultModel()
     },
 
@@ -280,162 +280,161 @@ export default {
     //   }
     // },
 
-    removeActionsTakenPersonSearch() {
-      this.viewModel.actionsTaken.actionsTakenDuringStop =
-        this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-          item => item !== 18,
-        )
-    },
+    // removeActionsTakenPersonSearch() {
+    //   this.viewModel.actionsTaken.actionsTakenDuringStop =
+    //     this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+    //       item => item !== 18,
+    //     )
+    // },
 
-    removeActionsTakenPropertySearch() {
-      this.viewModel.actionsTaken.actionsTakenDuringStop =
-        this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-          item => item !== 20,
-        )
-    },
+    // removeActionsTakenPropertySearch() {
+    //   this.viewModel.actionsTaken.actionsTakenDuringStop =
+    //     this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+    //       item => item !== 20,
+    //     )
+    // },
 
-    updateStopReasonModel() {
-      if (!this.viewModel.person.isStudent) {
-        if (
-          this.viewModel.stopReason.reasonForStop === 7 ||
-          this.viewModel.stopReason.reasonForStop === 8
-        ) {
-          this.viewModel.stopReason.reasonForStop = null
-          this.viewModel.stopReason.educationViolation = null
-          this.viewModel.stopReason.educationViolationCode = null
-        }
-      }
+    // updateStopReasonModel() {
+    //   // if (!this.viewModel.person.isStudent) {
+    //   //   if (
+    //   //     this.viewModel.stopReason.reasonForStop === 7 ||
+    //   //     this.viewModel.stopReason.reasonForStop === 8
+    //   //   ) {
+    //   //     this.viewModel.stopReason.reasonForStop = null
+    //   //     this.viewModel.stopReason.educationViolation = null
+    //   //     this.viewModel.stopReason.educationViolationCode = null
+    //   //   }
+    //   // }
 
-      if (this.viewModel.stopReason.reasonForStop === 1) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = []
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
+    //   if (this.viewModel.stopReason.reasonForStop === 1) {
+    //     this.viewModel.stopReason.educationViolation = null
+    //     this.viewModel.stopReason.educationViolationCode = null
+    //     this.viewModel.stopReason.reasonableSuspicion = []
+    //     this.viewModel.stopReason.reasonableSuspicionCode = null
+    //     if (this.personSearchAutomaticallySelected) {
+    //       this.removeActionsTakenPersonSearch()
+    //     }
+    //     if (this.propertySearchAutomaticallySelected) {
+    //       this.removeActionsTakenPropertySearch()
+    //     }
+    //   }
 
-      if (this.viewModel.stopReason.reasonForStop === 2) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
+    //   if (this.viewModel.stopReason.reasonForStop === 2) {
+    //     this.viewModel.stopReason.educationViolation = null
+    //     this.viewModel.stopReason.educationViolationCode = null
+    //     this.viewModel.stopReason.trafficViolation = null
+    //     this.viewModel.stopReason.trafficViolationCode = null
+    //     if (this.personSearchAutomaticallySelected) {
+    //       this.removeActionsTakenPersonSearch()
+    //     }
+    //     if (this.propertySearchAutomaticallySelected) {
+    //       this.removeActionsTakenPropertySearch()
+    //     }
+    //   }
 
-      if (this.viewModel.stopReason.reasonForStop === 7) {
-        this.viewModel.stopReason.reasonableSuspicion = []
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
+    //   if (this.viewModel.stopReason.reasonForStop === 7) {
+    //     this.viewModel.stopReason.reasonableSuspicion = []
+    //     this.viewModel.stopReason.reasonableSuspicionCode = null
+    //     this.viewModel.stopReason.trafficViolation = null
+    //     this.viewModel.stopReason.trafficViolationCode = null
+    //     if (this.personSearchAutomaticallySelected) {
+    //       this.removeActionsTakenPersonSearch()
+    //     }
+    //     if (this.propertySearchAutomaticallySelected) {
+    //       this.removeActionsTakenPropertySearch()
+    //     }
+    //   }
 
-      if (this.viewModel.stopReason.reasonForStop === 7) {
-        if (this.viewModel.stopReason.educationViolation !== 1) {
-          this.viewModel.stopReason.educationViolationCode = null
-        }
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
+    //   if (this.viewModel.stopReason.reasonForStop === 7) {
+    //     if (this.viewModel.stopReason.educationViolation !== 1) {
+    //       this.viewModel.stopReason.educationViolationCode = null
+    //     }
+    //     if (this.personSearchAutomaticallySelected) {
+    //       this.removeActionsTakenPersonSearch()
+    //     }
+    //     if (this.propertySearchAutomaticallySelected) {
+    //       this.removeActionsTakenPropertySearch()
+    //     }
+    //   }
 
-      if (
-        this.viewModel.stopReason.reasonForStop === 3 ||
-        this.viewModel.stopReason.reasonForStop === 4 ||
-        this.viewModel.stopReason.reasonForStop === 5 ||
-        this.viewModel.stopReason.reasonForStop === 8
-      ) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = []
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.removeActionsTakenPersonSearch()
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.removeActionsTakenPropertySearch()
-        }
-      }
+    //   if (
+    //     this.viewModel.stopReason.reasonForStop === 3 ||
+    //     this.viewModel.stopReason.reasonForStop === 4 ||
+    //     this.viewModel.stopReason.reasonForStop === 5 ||
+    //     this.viewModel.stopReason.reasonForStop === 8
+    //   ) {
+    //     this.viewModel.stopReason.educationViolation = null
+    //     this.viewModel.stopReason.educationViolationCode = null
+    //     this.viewModel.stopReason.reasonableSuspicion = []
+    //     this.viewModel.stopReason.reasonableSuspicionCode = null
+    //     this.viewModel.stopReason.trafficViolation = null
+    //     this.viewModel.stopReason.trafficViolationCode = null
+    //     if (this.personSearchAutomaticallySelected) {
+    //       this.removeActionsTakenPersonSearch()
+    //     }
+    //     if (this.propertySearchAutomaticallySelected) {
+    //       this.removeActionsTakenPropertySearch()
+    //     }
+    //   }
 
-      if (this.viewModel.stopReason.reasonForStop === 6) {
-        this.viewModel.stopReason.educationViolation = null
-        this.viewModel.stopReason.educationViolationCode = null
-        this.viewModel.stopReason.reasonableSuspicion = []
-        this.viewModel.stopReason.reasonableSuspicionCode = null
-        this.viewModel.stopReason.trafficViolation = null
-        this.viewModel.stopReason.trafficViolationCode = null
-      }
-    },
+    //   if (this.viewModel.stopReason.reasonForStop === 6) {
+    //     this.viewModel.stopReason.educationViolation = null
+    //     this.viewModel.stopReason.educationViolationCode = null
+    //     this.viewModel.stopReason.reasonableSuspicion = []
+    //     this.viewModel.stopReason.reasonableSuspicionCode = null
+    //     this.viewModel.stopReason.trafficViolation = null
+    //     this.viewModel.stopReason.trafficViolationCode = null
+    //   }
+    // },
 
-    updateStopReasonSearchModel() {
-      if (this.viewModel.stopReason.reasonForStop !== 6) {
-        this.viewModel.stopReason.searchOfPerson = false
-        this.viewModel.stopReason.searchOfProperty = false
-      }
+    // updateStopReasonSearchModel(stop) {
+    //   if (stop.stopReason.reasonForStop !== 6) {
+    //     stop.stopReason.searchOfPerson = false
+    //     stop.stopReason.searchOfProperty = false
+    //   }
 
-      if (this.viewModel.stopReason.reasonForStop === 6) {
-        const actionsTaken =
-          this.viewModel.actionsTaken?.actionsTakenDuringStop || []
-        if (this.viewModel.stopReason.searchOfPerson) {
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(18)) {
-            if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
-              this.viewModel.actionsTaken.actionsTakenDuringStop = []
-            }
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(18)
-          }
-        } else {
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop !== null &&
-            this.viewModel.actionsTaken.actionsTakenDuringStop.length > 0
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop =
-              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-                item => item !== 18,
-              )
-          }
-        }
-        if (this.viewModel.stopReason.searchOfProperty) {
-          this.viewModel.actionsTaken.anyActionsTaken = true
-          if (!actionsTaken.includes(20)) {
-            if (this.viewModel.actionsTaken.actionsTakenDuringStop === null) {
-              this.viewModel.actionsTaken.actionsTakenDuringStop = []
-            }
-            this.viewModel.actionsTaken.actionsTakenDuringStop.push(20)
-          }
-        } else {
-          if (
-            this.viewModel.actionsTaken.actionsTakenDuringStop !== null &&
-            this.viewModel.actionsTaken.actionsTakenDuringStop.length > 0
-          ) {
-            this.viewModel.actionsTaken.actionsTakenDuringStop =
-              this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
-                item => item !== 20,
-              )
-          }
-        }
-      }
-    },
+    //   if (stop.stopReason.reasonForStop === 6) {
+    //     const actionsTaken = stop.actionsTaken?.actionsTakenDuringStop || []
+    //     if (stop.stopReason.searchOfPerson) {
+    //       stop.actionsTaken.anyActionsTaken = true
+    //       if (!actionsTaken.includes(18)) {
+    //         if (stop.actionsTaken.actionsTakenDuringStop === null) {
+    //           stop.actionsTaken.actionsTakenDuringStop = []
+    //         }
+    //         stop.actionsTaken.actionsTakenDuringStop.push(18)
+    //       }
+    //     } else {
+    //       if (
+    //         stop.actionsTaken.actionsTakenDuringStop !== null &&
+    //         stop.actionsTaken.actionsTakenDuringStop.length > 0
+    //       ) {
+    //         stop.actionsTaken.actionsTakenDuringStop =
+    //           stop.actionsTaken.actionsTakenDuringStop.filter(
+    //             item => item !== 18,
+    //           )
+    //       }
+    //     }
+    //     if (stop.stopReason.searchOfProperty) {
+    //       stop.actionsTaken.anyActionsTaken = true
+    //       if (!actionsTaken.includes(20)) {
+    //         if (stop.actionsTaken.actionsTakenDuringStop === null) {
+    //           stop.actionsTaken.actionsTakenDuringStop = []
+    //         }
+    //         stop.actionsTaken.actionsTakenDuringStop.push(20)
+    //       }
+    //     } else {
+    //       if (
+    //         stop.actionsTaken.actionsTakenDuringStop !== null &&
+    //         stop.actionsTaken.actionsTakenDuringStop.length > 0
+    //       ) {
+    //         stop.actionsTaken.actionsTakenDuringStop =
+    //           stop.actionsTaken.actionsTakenDuringStop.filter(
+    //             item => item !== 20,
+    //           )
+    //       }
+    //     }
+    //   }
+    // },
 
     updateStopResultModel() {
       if (!this.viewModel.stopResult.anyResultsOfStop) {
