@@ -35,16 +35,6 @@ describe('Ripa Switch', () => {
     wrapper.vm.model = 'New Value'
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.viewModel).toEqual('New Value')
     expect(wrapper.emitted('input')).toBeTruthy()
-  })
-
-  it('should watch value', async () => {
-    wrapper = factory()
-
-    wrapper.vm.value = 'New Value'
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.viewModel).toEqual('New Value')
   })
 })

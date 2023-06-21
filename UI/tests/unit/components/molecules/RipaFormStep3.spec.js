@@ -42,6 +42,12 @@ describe('Ripa Form Step 3', () => {
         lastReason() {
           return {}
         },
+        personSearchAutomaticallySelected() {
+          return false
+        },
+        propertySearchAutomaticallySelected() {
+          return false
+        },
         loadingPiiStep3: computed(() => false),
         statutes: computed(() => []),
       },

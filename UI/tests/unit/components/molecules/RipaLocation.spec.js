@@ -109,7 +109,7 @@ describe('Ripa Location', () => {
 
       stop.location.isSchool = true
       stop.location.school = test.school
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
       expect(wrapper.vm.schoolRules).toEqual(test.expected)
     })
@@ -124,7 +124,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.blockNumber = '1000'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.blockNumberRules).toStrictEqual([true, true])
   })
@@ -138,7 +138,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
   })
@@ -152,7 +152,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.intersection = ''
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.intersectionRules).toEqual([
       'An intersection is required',
@@ -160,19 +160,19 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
 
     stop.location.intersection = null
     stop.location.blockNumber = '1000'
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
   })
@@ -186,7 +186,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.highwayExit = 'Exit 1A'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.highwayRules).toStrictEqual([true, true])
   })
@@ -200,17 +200,9 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.landmark = 'Exit 1A'
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     expect(wrapper.vm.landmarkRules).toStrictEqual([true, true])
-  })
-
-  it('should handle input', () => {
-    wrapper = factory({ value: stop })
-
-    wrapper.vm.handleInput()
-
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
   })
 
   it.todo('should handle input out of county')

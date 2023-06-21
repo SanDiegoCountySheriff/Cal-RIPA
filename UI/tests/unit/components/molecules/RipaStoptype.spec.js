@@ -33,11 +33,14 @@ describe('Ripa Stop Type', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should handleInput', () => {
+  it('should set model', () => {
     wrapper = factory({ value: stop })
 
-    wrapper.vm.handleInput()
+    wrapper.vm.model = { test: 'test' }
 
     expect(wrapper.emitted('input')).toBeTruthy()
+    expect(wrapper.emitted('input')[0]).toEqual([{ test: 'test' }])
   })
+
+  it.todo('should watch model')
 })
