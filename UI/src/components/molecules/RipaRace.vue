@@ -16,7 +16,6 @@
             :disabled="disabled"
             :items="raceItems"
             :rules="raceRules"
-            @input="handleInput"
           >
           </ripa-check-group>
         </v-col>
@@ -27,14 +26,11 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import { RACES } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaCheckGroup,
@@ -44,26 +40,31 @@ export default {
   data() {
     return {
       raceItems: RACES,
-      viewModel: this.value,
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
     raceRules() {
-      const options = this.viewModel.person.perceivedRace
+      const options = this.model.person.perceivedRace
       return [options.length > 0 || 'At least one race is required']
     },
   },
 
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

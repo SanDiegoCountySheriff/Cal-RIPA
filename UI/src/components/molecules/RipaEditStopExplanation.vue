@@ -22,13 +22,10 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-edit-stop-explanation',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,

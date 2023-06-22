@@ -18,7 +18,6 @@
               :rules="dateRules"
               :min="getMinDate"
               :max="getMaxDate"
-              @input="handleInput"
             >
             </ripa-date-picker>
           </div>
@@ -30,7 +29,6 @@
               v-model="model.stopDate.time"
               label="Time of Stop"
               :rules="timeRules"
-              @input="handleInput"
             >
             </ripa-time-picker>
           </div>
@@ -44,7 +42,6 @@
             :min="1"
             :max="1440"
             :rules="durationRules"
-            @input="handleInput"
           >
           </ripa-number-input>
         </v-col>
@@ -66,7 +63,6 @@
             v-model="model.stopDate.stopInResponseToCFS"
             label="Stop in response to Call for Service"
             :max-width="300"
-            @input="handleInput"
           ></ripa-switch>
         </v-col>
       </v-row>
@@ -76,7 +72,6 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -91,8 +86,6 @@ import {
 export default {
   name: 'ripa-stop-date',
 
-  mixins: [RipaModelMixin],
-
   components: {
     RipaFormHeader,
     RipaDatePicker,
@@ -103,7 +96,6 @@ export default {
 
   data() {
     return {
-      viewModel: this.value,
       devTime: false,
     }
   },
@@ -113,7 +105,16 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (new Date(newVal.stopDate.date) >= new Date('2024-01-01')) {
+          newVal.stopVersion = 2
+        } else {
+          newVal.stopVersion = 1
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
@@ -153,8 +154,8 @@ export default {
     },
 
     isValidDateTime() {
-      const dateStr = this.viewModel.stopDate.date
-      const timeStr = this.viewModel.stopDate.time
+      const dateStr = this.model.stopDate.date
+      const timeStr = this.model.stopDate.time
 
       if (this.devTime) {
         return true
@@ -178,14 +179,12 @@ export default {
     },
   },
 
-  methods: {
-    handleInput() {
-      if (new Date(this.viewModel.stopDate.date) >= new Date('2024-01-01')) {
-        this.viewModel.stopVersion = 2
-      } else {
-        this.viewModel.stopVersion = 1
-      }
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

@@ -154,7 +154,6 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
@@ -168,8 +167,6 @@ import {
 
 export default {
   name: 'ripa-officer',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaDatePicker,

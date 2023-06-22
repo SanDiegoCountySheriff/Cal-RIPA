@@ -123,7 +123,7 @@ export default {
 
   methods: {
     handleStep1Next() {
-      const piiFound = this.viewModel.location?.piiFound || false
+      const piiFound = this.model.location?.piiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {

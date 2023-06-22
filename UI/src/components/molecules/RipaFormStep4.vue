@@ -1,10 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-actions-taken
-      v-model="model"
-      v-on="$listeners"
-      @pii-check="handlePiiCheck"
-    ></ripa-actions-taken>
+    <ripa-actions-taken v-model="model" v-on="$listeners"></ripa-actions-taken>
 
     <ripa-contraband v-model="model" v-on="$listeners"></ripa-contraband>
 
@@ -71,8 +67,7 @@ export default {
 
   methods: {
     handleStep4Next() {
-      const piiFound =
-        this.viewModel.actionsTaken?.basisForSearchPiiFound || false
+      const piiFound = this.model.actionsTaken?.basisForSearchPiiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {
@@ -82,10 +77,6 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
     },
   },
 }

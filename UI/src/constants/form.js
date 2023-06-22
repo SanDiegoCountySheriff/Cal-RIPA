@@ -34,6 +34,11 @@ export const GENDERS = [
   { name: 'Transgender Female', value: 4 },
 ]
 
+export const SEXUAL_ORIENTATIONS = [
+  { name: 'Straight/Heterosexual', value: 1 },
+  { name: 'LGB+', value: 2 },
+]
+
 export const RACES = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },

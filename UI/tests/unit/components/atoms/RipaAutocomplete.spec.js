@@ -65,7 +65,6 @@ describe('Ripa Autocomplete', () => {
     wrapper.vm.handleRemoveItem({ test: 'test' })
 
     expect(wrapper.emitted('remove-item')).toBeTruthy()
-    console.log(wrapper.emitted('remove-item'))
     expect(wrapper.emitted('remove-item')[0]).toEqual([{ test: 'test' }])
   })
 })

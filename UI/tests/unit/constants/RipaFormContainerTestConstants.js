@@ -419,6 +419,7 @@ export const API_STOP = {
   date: '2022-01-01',
   time: '13:00',
   stopDateTime: '2022-01-01T12:00:00',
+  stopVersion: 1,
   location: {
     toggleLocationOptions: false,
     intersection: '',
@@ -567,6 +568,7 @@ export const V2_API_STOP = {
   time: '13:00',
   stopDateTime: '2022-01-01T12:00:00',
   stopType: 'Vehicular',
+  stopVersion: 2,
   location: {
     toggleLocationOptions: false,
     intersection: '',

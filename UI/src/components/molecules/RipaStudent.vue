@@ -15,7 +15,6 @@
             v-model="model.person.isStudent"
             label="K-12 Public School Student"
             :max-width="250"
-            @input="handleInput"
           ></ripa-switch>
         </v-col>
       </v-row>
@@ -25,37 +24,57 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 
 export default {
   name: 'ripa-student',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaSwitch,
     RipaFormHeader,
   },
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (!newVal.person.isStudent) {
+          newVal.stopResult.resultsOfStop12 = false
+          newVal.stopResult.resultsOfStop13 = false
+
+          if (
+            newVal.stopReason.reasonForStop === 7 ||
+            newVal.stopReason.reasonForStop === 8
+          ) {
+            newVal.stopReason.reasonForStop = null
+            newVal.stopReason.educationViolation = null
+            newVal.stopReason.educationViolationCode = null
+          }
+
+          if (
+            newVal.actionsTaken.actionsTakenDuringStop !== null &&
+            newVal.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            newVal.actionsTaken.actionsTakenDuringStop =
+              newVal.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 23,
+              )
+          }
+        }
+
+        this.$emit('input', newVal)
       },
     },
   },
 
-  methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

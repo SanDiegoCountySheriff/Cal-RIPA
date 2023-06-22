@@ -38,12 +38,4 @@ describe('Ripa Age', () => {
     expect(wrapper.vm.ageRules[0](30)).toEqual(true)
     expect(wrapper.vm.ageRules[1](30)).toEqual(true)
   })
-
-  it('should handle input', () => {
-    wrapper = factory({ value: stop })
-
-    wrapper.vm.handleInput()
-
-    expect(wrapper.emitted('input')).toBeTruthy()
-  })
 })

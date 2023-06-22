@@ -47,15 +47,15 @@
           <ripa-switch
             v-model="model.stopResult.anyResultsOfStop"
             :max-width="200"
-            @input="handleInput"
             label="Any Results of Stop?"
+            @input="handleUpdateModel"
           ></ripa-switch>
 
           <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop2"
               :rules="actionsTakenRules"
-              @input="handleInput"
+              @input="handleUpdateModel"
               label="Warning (verbal or written)"
               hide-details
             ></ripa-checkbox>
@@ -67,7 +67,7 @@
                 :max-selections="5"
                 :rules="warningRules"
                 @remove-item="removeItem('warningCodes', $event)"
-                @input="handleInput"
+                @input="handleUpdateModel"
                 hint="Select Up To 5 Offense Codes (required)"
                 persistent-hint
                 label="Offense Code"
@@ -95,7 +95,7 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop3"
               :rules="actionsTakenRules"
-              @input="handleInput"
+              @input="handleUpdateModel"
               label="Citation for infraction"
               hide-details
             ></ripa-checkbox>
@@ -107,7 +107,6 @@
                 :max-selections="5"
                 :rules="citationRules"
                 @remove-item="removeItem('citationCodes', $event)"
-                @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
                 persistent-hint
                 item-text="fullName"
@@ -134,7 +133,7 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop4"
               :rules="actionsTakenRules"
-              @input="handleInput"
+              @input="handleUpdateModel"
               label="In-field cite and release"
               hide-details
             ></ripa-checkbox>
@@ -146,7 +145,6 @@
                 :max-selections="5"
                 :rules="infieldRules"
                 @remove-item="removeItem('infieldCodes', $event)"
-                @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
                 persistent-hint
                 item-text="fullName"
@@ -173,7 +171,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop5"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Custodial arrest pursurant to outstanding warrant"
               hide-details
             ></ripa-checkbox>
@@ -181,7 +178,7 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop6"
               :rules="actionsTakenRules"
-              @input="handleInput"
+              @input="handleUpdateModel"
               label="Custodial arrest without warrant"
               hide-details
             ></ripa-checkbox>
@@ -193,7 +190,6 @@
                 :max-selections="5"
                 :rules="custodialArrestRules"
                 @remove-item="removeItem('custodialArrestCodes', $event)"
-                @input="handleInput"
                 hint="Select Up to 5 Offense Codes (required)"
                 persistent-hint
                 item-text="fullName"
@@ -220,7 +216,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop7"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Field interview card completed"
               hide-details
             ></ripa-checkbox>
@@ -228,7 +223,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop8"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Noncriminal transport or caretaking transport"
               hide-details
             ></ripa-checkbox>
@@ -236,7 +230,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop9"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Contacted parent/legal guardian or other person responsible for the minor"
               hide-details
             ></ripa-checkbox>
@@ -244,7 +237,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop10"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Psychiatric hold"
               hide-details
             ></ripa-checkbox>
@@ -253,14 +245,12 @@
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop12"
                 :rules="actionsTakenRules"
-                @input="handleInput"
                 label="Referral to school administrator"
                 hide-details
               ></ripa-checkbox>
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop13"
                 :rules="actionsTakenRules"
-                @input="handleInput"
                 label="Referral to school counselor or other support staff"
                 hide-details
               ></ripa-checkbox>
@@ -269,7 +259,6 @@
             <ripa-checkbox
               v-model="model.stopResult.resultsOfStop11"
               :rules="actionsTakenRules"
-              @input="handleInput"
               label="Contacted U.S. Department of Homeland Security"
             ></ripa-checkbox>
 
@@ -291,14 +280,11 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { STOP_RESULTS } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -311,7 +297,6 @@ export default {
   data() {
     return {
       stopResultItems: STOP_RESULTS,
-      viewModel: this.value,
     }
   },
 
@@ -320,73 +305,72 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
-    isHomelandSecuritySelected() {
-      return this.viewModel.stopResult.resultsOfStop10
-    },
-
     isPullReasonCodeValid() {
-      const reasonForStop = this.viewModel.stopReason?.reasonForStop || []
+      const reasonForStop = this.model.stopReason?.reasonForStop || []
       return [1, 2, 3, 5].includes(reasonForStop)
     },
 
     isPullReasonCodeWarningVisible() {
-      const codes = this.viewModel.stopResult?.warningCodes || []
+      const codes = this.model.stopResult?.warningCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeCitationVisible() {
-      const codes = this.viewModel.stopResult?.citationCodes || []
+      const codes = this.model.stopResult?.citationCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeInfieldVisible() {
-      const codes = this.viewModel.stopResult?.infieldCodes || []
+      const codes = this.model.stopResult?.infieldCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeCustodialArrestVisible() {
-      const codes = this.viewModel.stopResult?.custodialArrestCodes || []
+      const codes = this.model.stopResult?.custodialArrestCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeWarningDisabled() {
-      return this.viewModel.stopResult?.warningCodes.length >= 5
+      return this.model.stopResult?.warningCodes.length >= 5
     },
 
     isPullReasonCodeCitationDisabled() {
-      return this.viewModel.stopResult?.citationCodes.length >= 5
+      return this.model.stopResult?.citationCodes.length >= 5
     },
 
     isPullReasonCodeInfieldDisable() {
-      return this.viewModel.stopResult?.infieldCodes.length >= 5
+      return this.model.stopResult?.infieldCodes.length >= 5
     },
 
     isPullReasonCodeCustodialArrestDisabled() {
-      return this.viewModel.stopResult?.custodialArrestCodes.length >= 5
+      return this.model.stopResult?.custodialArrestCodes.length >= 5
     },
 
     actionsTakenRules() {
-      const checked = this.viewModel.stopResult.anyResultsOfStop
-      const value2 = this.viewModel.stopResult.resultsOfStop2
-      const value3 = this.viewModel.stopResult.resultsOfStop3
-      const value4 = this.viewModel.stopResult.resultsOfStop4
-      const value5 = this.viewModel.stopResult.resultsOfStop5
-      const value6 = this.viewModel.stopResult.resultsOfStop6
-      const value7 = this.viewModel.stopResult.resultsOfStop7
-      const value8 = this.viewModel.stopResult.resultsOfStop8
-      const value9 = this.viewModel.stopResult.resultsOfStop9
-      const value10 = this.viewModel.stopResult.resultsOfStop10
-      const value11 = this.viewModel.stopResult.resultsOfStop11
-      const value12 = this.viewModel.stopResult.resultsOfStop12
-      const value13 = this.viewModel.stopResult.resultsOfStop13
+      const checked = this.model.stopResult.anyResultsOfStop
+      const value2 = this.model.stopResult.resultsOfStop2
+      const value3 = this.model.stopResult.resultsOfStop3
+      const value4 = this.model.stopResult.resultsOfStop4
+      const value5 = this.model.stopResult.resultsOfStop5
+      const value6 = this.model.stopResult.resultsOfStop6
+      const value7 = this.model.stopResult.resultsOfStop7
+      const value8 = this.model.stopResult.resultsOfStop8
+      const value9 = this.model.stopResult.resultsOfStop9
+      const value10 = this.model.stopResult.resultsOfStop10
+      const value11 = this.model.stopResult.resultsOfStop11
+      const value12 = this.model.stopResult.resultsOfStop12
+      const value13 = this.model.stopResult.resultsOfStop13
 
       return [
         (checked &&
@@ -407,9 +391,9 @@ export default {
     },
 
     warningRules() {
-      const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop2
-      const options = this.viewModel.stopResult.warningCodes
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop2
+      const options = this.model.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
@@ -417,9 +401,9 @@ export default {
     },
 
     citationRules() {
-      const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop3
-      const options = this.viewModel.stopResult.citationCodes
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop3
+      const options = this.model.stopResult.citationCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
@@ -427,9 +411,9 @@ export default {
     },
 
     infieldRules() {
-      const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop4
-      const options = this.viewModel.stopResult.infieldCodes
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop4
+      const options = this.model.stopResult.infieldCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
@@ -437,9 +421,9 @@ export default {
     },
 
     custodialArrestRules() {
-      const checked1 = this.viewModel.stopResult.anyResultsOfStop
-      const checked2 = this.viewModel.stopResult.resultsOfStop6
-      const options = this.viewModel.stopResult.custodialArrestCodes
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop6
+      const options = this.model.stopResult.custodialArrestCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
@@ -448,23 +432,51 @@ export default {
   },
 
   methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+    handleUpdateModel() {
+      if (!this.model.stopResult.anyResultsOfStop) {
+        this.model.stopResult.resultsOfStop2 = false
+        this.model.stopResult.resultsOfStop3 = false
+        this.model.stopResult.resultsOfStop4 = false
+        this.model.stopResult.resultsOfStop5 = false
+        this.model.stopResult.resultsOfStop6 = false
+        this.model.stopResult.resultsOfStop7 = false
+        this.model.stopResult.resultsOfStop8 = false
+        this.model.stopResult.resultsOfStop9 = false
+        this.model.stopResult.resultsOfStop10 = false
+        this.model.stopResult.resultsOfStop11 = false
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+      }
+
+      if (!this.model.stopResult.resultsOfStop2) {
+        this.model.stopResult.warningCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop3) {
+        this.model.stopResult.citationCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop4) {
+        this.model.stopResult.infieldCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop6) {
+        this.model.stopResult.custodialArrestCodes = []
+      }
     },
 
     removeItem(list, statute) {
-      this.viewModel.stopResult[list] = this.viewModel.stopResult[list].filter(
+      this.model.stopResult[list] = this.model.stopResult[list].filter(
         code => code !== statute.item.code,
       )
-      this.handleInput()
+      this.handleUpdateModel()
     },
 
     getReasonCode() {
       const trafficViolationCode =
-        this.viewModel.stopReason?.trafficViolationCode || null
+        this.model.stopReason?.trafficViolationCode || null
       const reasonableSuspicionCode =
-        this.viewModel.stopReason?.reasonableSuspicionCode || null
+        this.model.stopReason?.reasonableSuspicionCode || null
 
       if (trafficViolationCode) {
         return trafficViolationCode
@@ -480,32 +492,32 @@ export default {
     handlePullReasonCodeWarning() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
-        this.viewModel.stopResult.pullFromReasonCode = true
-        this.viewModel.stopResult.warningCodes.push(reasonCode)
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.warningCodes.push(reasonCode)
       }
     },
 
     handlePullReasonCodeCitation() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
-        this.viewModel.stopResult.pullFromReasonCode = true
-        this.viewModel.stopResult.citationCodes.push(reasonCode)
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.citationCodes.push(reasonCode)
       }
     },
 
     handlePullReasonCodeInfield() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
-        this.viewModel.stopResult.pullFromReasonCode = true
-        this.viewModel.stopResult.infieldCodes.push(reasonCode)
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.infieldCodes.push(reasonCode)
       }
     },
 
     handlePullReasonCodeCustodialArrest() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
-        this.viewModel.stopResult.pullFromReasonCode = true
-        this.viewModel.stopResult.custodialArrestCodes.push(reasonCode)
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.custodialArrestCodes.push(reasonCode)
       }
     },
 
@@ -514,20 +526,16 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-result-favorite', this.viewModel.stopResult)
-    },
-
-    handleOpenStatute() {
-      this.$emit('on-open-statute')
+      this.$emit('on-save-result-favorite', this.model.stopResult)
     },
   },
 
   watch: {
-    lastResult(newVal) {
-      if (newVal) {
-        this.viewModel.stopResult = newVal
-        this.handleInput()
-      }
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 
