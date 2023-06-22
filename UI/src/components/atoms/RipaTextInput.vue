@@ -3,7 +3,7 @@
     <template v-if="preventPaste">
       <v-text-field
         ref="ripaTextInput"
-        v-model="viewModel"
+        v-model="model"
         :label="label"
         :loading="loading"
         :hint="hint"
@@ -19,7 +19,7 @@
     <template v-if="!preventPaste">
       <v-text-field
         ref="ripaTextInput"
-        v-model="viewModel"
+        v-model="model"
         :label="label"
         :loading="loading"
         :hint="hint"
@@ -36,10 +36,15 @@
 export default {
   name: 'ripa-text-input',
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
+  computed: {
+    model: {
+      get() {
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
+      },
+    },
   },
 
   methods: {
@@ -61,9 +66,8 @@ export default {
     },
 
     handleBlur(event) {
-      const oldVal = this.value
-      this.viewModel = this.parseText(event.target.value)
-      this.handleInput(this.viewModel, oldVal)
+      this.model = this.parseText(event.target.value)
+      this.$emit('blur', event.target.value)
     },
 
     parseText(newVal) {
@@ -75,26 +79,6 @@ export default {
         )
         .trim()
       return parsedText
-    },
-
-    handleInput(newVal, oldVal) {
-      this.$nextTick(() => {
-        this.viewModel = newVal
-        if (oldVal !== newVal) {
-          this.$emit('input', this.viewModel)
-        }
-        this.updateViewModel(this.value)
-      })
-    },
-
-    updateViewModel(value) {
-      this.viewModel = value
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = newVal
     },
   },
 

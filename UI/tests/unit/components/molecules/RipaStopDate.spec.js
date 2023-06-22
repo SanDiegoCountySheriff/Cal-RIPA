@@ -92,12 +92,12 @@ describe('Ripa Stop Date', () => {
       wrapper = factory({ value: stop })
 
       stop.stopDate.date = test.date
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
-      expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
+      expect(wrapper.vm.dateRules[0](wrapper.vm.model.stopDate.date)).toBe(
         test.expectedFirstCase,
       )
-      expect(wrapper.vm.dateRules[1](wrapper.vm.viewModel.stopDate.date)).toBe(
+      expect(wrapper.vm.dateRules[1](wrapper.vm.model.stopDate.date)).toBe(
         test.expectedSecondCase,
       )
     })
@@ -131,10 +131,10 @@ describe('Ripa Stop Date', () => {
     const inputDate = createDate(-2, 0, 0)
 
     stop.stopDate.date = inputDate
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     wrapper.vm.dateRules.forEach(x =>
-      expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
+      expect(x(wrapper.vm.model.stopDate.date)).toBe(true),
     )
   })
 
@@ -148,12 +148,12 @@ describe('Ripa Stop Date', () => {
         stop.stopDate.date = createDate(1, 0, 0)
       }
 
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
-      expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
+      expect(wrapper.vm.timeRules[0](wrapper.vm.model.stopDate.time)).toBe(
         test.expectedFirstCase,
       )
-      expect(wrapper.vm.timeRules[1](wrapper.vm.viewModel.stopDate.time)).toBe(
+      expect(wrapper.vm.timeRules[1](wrapper.vm.model.stopDate.time)).toBe(
         test.expectedSecondCase,
       )
     })
@@ -164,33 +164,15 @@ describe('Ripa Stop Date', () => {
       wrapper = factory({ value: stop })
 
       stop.stopDate.duration = test.duration
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
       expect(
-        wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
+        wrapper.vm.durationRules[0](wrapper.vm.model.stopDate.duration),
       ).toBe(test.expectedFirstCase)
       expect(
-        wrapper.vm.durationRules[1](wrapper.vm.viewModel.stopDate.duration),
+        wrapper.vm.durationRules[1](wrapper.vm.model.stopDate.duration),
       ).toBe(test.expectedSecondCase)
     })
-  })
-
-  it('should handle input', () => {
-    wrapper = factory({ value: stop })
-
-    wrapper.vm.handleInput()
-
-    expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
-  })
-
-  it('should watch value', async () => {
-    wrapper = factory({ value: stop })
-    const updatedStop = defaultStop()
-    updatedStop.id = 1
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.viewModel.id).toEqual(1)
   })
 })
 

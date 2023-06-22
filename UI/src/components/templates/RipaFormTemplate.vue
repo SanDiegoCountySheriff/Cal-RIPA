@@ -1,10 +1,6 @@
 <template>
   <div class="ripa-form-template">
-    <ripa-form-wrapper
-      v-model="stop"
-      v-on="$listeners"
-      @input="handleInput"
-    ></ripa-form-wrapper>
+    <ripa-form-wrapper v-model="model" v-on="$listeners"></ripa-form-wrapper>
   </div>
 </template>
 
@@ -18,22 +14,14 @@ export default {
     RipaFormWrapper,
   },
 
-  data() {
-    return {
-      stop: this.value,
-    }
-  },
-
-  methods: {
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.$emit('input', this.stop)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.stop = newVal
+  computed: {
+    model: {
+      get() {
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
+      },
     },
   },
 

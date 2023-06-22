@@ -5,7 +5,6 @@
         v-model="model"
         v-on="$listeners"
         :disabled="disabled"
-        toggle
       ></ripa-student>
     </template>
 
@@ -93,7 +92,7 @@ export default {
 
   computed: {
     isSchool() {
-      return this.viewModel?.location?.isSchool || false
+      return this.model?.location?.isSchool || false
     },
   },
 

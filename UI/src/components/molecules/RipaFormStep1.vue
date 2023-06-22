@@ -7,6 +7,10 @@
         @on-update-user="handleUpdateStopUser"
       ></ripa-officer>
 
+      <template v-if="model.stopVersion === 2">
+        <ripa-stop-type v-model="model" v-on="$listeners"></ripa-stop-type>
+      </template>
+
       <ripa-user-dialog
         admin-editing
         :is-invalid-user="false"
@@ -22,6 +26,10 @@
     </template>
 
     <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
+
+    <template v-if="model.stopVersion === 2">
+      <ripa-stop-type v-model="model" v-on="$listeners"></ripa-stop-type>
+    </template>
 
     <ripa-location v-model="model" v-on="$listeners"></ripa-location>
 
@@ -66,6 +74,7 @@ import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
+import RipaStopType from '@/components/molecules/RipaStopType'
 import { getOfficerAssignment } from '@/utilities/stop'
 
 export default {
@@ -80,6 +89,7 @@ export default {
     RipaStopDate,
     RipaLocation,
     RipaUserDialog,
+    RipaStopType,
   },
 
   data() {
@@ -113,7 +123,7 @@ export default {
 
   methods: {
     handleStep1Next() {
-      const piiFound = this.viewModel.location?.piiFound || false
+      const piiFound = this.model.location?.piiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {

@@ -50,7 +50,7 @@
             label="Reason"
             :items="getReasonItems"
             :rules="reasonRules"
-            @input="handleInput"
+            @input="handleUpdateModel"
           ></ripa-select>
 
           <template v-if="model.stopReason.reasonForStop === 7">
@@ -58,7 +58,6 @@
               v-model="model.stopReason.educationViolation"
               :items="educationViolationItems"
               :rules="educationViolationRules"
-              @input="handleInput"
             ></ripa-radio-group>
 
             <template v-if="model.stopReason.educationViolation === 1">
@@ -73,7 +72,6 @@
                 label="Education Code"
                 :items="educationCodeSectionItems"
                 :rules="educationViolationCodeRules"
-                @input="handleInput"
               ></ripa-autocomplete>
             </template>
           </template>
@@ -83,7 +81,6 @@
               v-model="model.stopReason.trafficViolation"
               :items="trafficViolationItems"
               :rules="trafficViolationRules"
-              @input="handleInput"
             ></ripa-radio-group>
 
             <div class="tw-mt-2"></div>
@@ -97,7 +94,6 @@
               label="Offense Code"
               :items="statutes"
               :rules="trafficViolationCodeRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
@@ -106,7 +102,6 @@
               v-model="model.stopReason.reasonableSuspicion"
               :items="reasonableSuspicionItems"
               :rules="reasonableSuspicionRules"
-              @input="handleInput"
             ></ripa-check-group>
 
             <ripa-autocomplete
@@ -118,7 +113,6 @@
               label="Offense Code"
               :items="statutes"
               :rules="reasonableSuspicionCodeRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
@@ -132,16 +126,16 @@
               v-model="model.stopReason.searchOfPerson"
               label="Search of person was conducted"
               :max-width="300"
-              @input="handleInput"
               :rules="searchRules"
+              @input="handleUpdateModel"
             ></ripa-switch>
 
             <ripa-switch
               v-model="model.stopReason.searchOfProperty"
               label="Search of property was conducted"
               :max-width="300"
-              @input="handleInput"
               :rules="searchRules"
+              @input="handleUpdateModel"
             ></ripa-switch>
           </template>
 
@@ -161,7 +155,7 @@
             label="Brief Explanation"
             :loading="loadingPiiStep3"
             :rules="explanationRules"
-            @input="handleInput($event), handlePiiCheck($event)"
+            @blur="handlePiiCheck($event)"
           ></ripa-text-input>
         </v-col>
       </v-row>
@@ -174,7 +168,6 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -190,8 +183,6 @@ import {
 
 export default {
   name: 'ripa-stop-reason',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -218,7 +209,6 @@ export default {
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: this.syncModel(this.value),
     }
   },
 
@@ -227,23 +217,28 @@ export default {
     'lastReason',
     'loadingPiiStep3',
     'statutes',
+    'personSearchAutomaticallySelected',
+    'propertySearchAutomaticallySelected',
   ],
 
   created() {
-    if (this.viewModel.stopReason.reasonForStopExplanation) {
-      this.handlePiiCheck(this.viewModel.stopReason.reasonForStopExplanation)
+    if (this.model.stopReason.reasonForStopExplanation) {
+      this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
     getReasonItems() {
-      if (this.viewModel.person.isStudent) {
+      if (this.model.person.isStudent) {
         return this.reasonItems
       }
 
@@ -253,8 +248,8 @@ export default {
     },
 
     educationViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 7
-      const options = this.viewModel.stopReason.educationViolation
+      const checked = this.model.stopReason.reasonForStop === 7
+      const options = this.model.stopReason.educationViolation
       return [
         (checked && options !== null) ||
           'An education violation type is required',
@@ -262,9 +257,9 @@ export default {
     },
 
     educationViolationCodeRules() {
-      const checked1 = this.viewModel.stopReason.reasonForStop === 7
-      const checked2 = this.viewModel.stopReason.educationViolation === 1
-      const code = this.viewModel.stopReason.educationViolationCode
+      const checked1 = this.model.stopReason.reasonForStop === 7
+      const checked2 = this.model.stopReason.educationViolation === 1
+      const code = this.model.stopReason.educationViolationCode
       return [
         (checked1 && checked2 && code !== null) ||
           'An offense code is required',
@@ -272,22 +267,22 @@ export default {
     },
 
     trafficViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
-      const options = this.viewModel.stopReason.trafficViolation
+      const checked = this.model.stopReason.reasonForStop === 1
+      const options = this.model.stopReason.trafficViolation
       return [
         (checked && options !== null) || 'A traffic violation type is required',
       ]
     },
 
     trafficViolationCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
-      const code = this.viewModel.stopReason.trafficViolationCode
+      const checked = this.model.stopReason.reasonForStop === 1
+      const code = this.model.stopReason.trafficViolationCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
     reasonableSuspicionRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
-      const options = this.viewModel.stopReason.reasonableSuspicion
+      const checked = this.model.stopReason.reasonForStop === 2
+      const options = this.model.stopReason.reasonableSuspicion
       return [
         (checked && options !== null && options.length > 0) ||
           'A reasonable suspicion type is required',
@@ -295,15 +290,15 @@ export default {
     },
 
     reasonableSuspicionCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
-      const code = this.viewModel.stopReason.reasonableSuspicionCode
+      const checked = this.model.stopReason.reasonForStop === 2
+      const code = this.model.stopReason.reasonableSuspicionCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
     searchRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 6
-      const checkedPerson = this.viewModel.stopReason.searchOfPerson
-      const checkedProperty = this.viewModel.stopReason.searchOfProperty
+      const checked = this.model.stopReason.reasonForStop === 6
+      const checkedPerson = this.model.stopReason.searchOfPerson
+      const checkedProperty = this.model.stopReason.searchOfProperty
       if (checked) {
         return [
           checkedPerson ||
@@ -317,34 +312,185 @@ export default {
   },
 
   methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
-    },
-
     handleOpenFavorites() {
       this.$emit('on-open-reason-favorites')
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-reason-favorite', this.viewModel.stopReason)
+      this.$emit('on-save-reason-favorite', this.model.stopReason)
     },
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'reason', value: textValue })
     },
+
+    handleUpdateModel() {
+      if (this.model.stopReason.reasonForStop !== 6) {
+        this.model.stopReason.searchOfPerson = false
+        this.model.stopReason.searchOfProperty = false
+      }
+
+      if (this.model.stopReason.reasonForStop === 6) {
+        const actionsTaken =
+          this.model.actionsTaken?.actionsTakenDuringStop || []
+        if (this.model.stopReason.searchOfPerson) {
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(18)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(18)
+          }
+        } else {
+          if (
+            this.model.actionsTaken.actionsTakenDuringStop !== null &&
+            this.model.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            this.model.actionsTaken.actionsTakenDuringStop =
+              this.model.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 18,
+              )
+          }
+        }
+        if (this.model.stopReason.searchOfProperty) {
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(20)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(20)
+          }
+        } else {
+          if (
+            this.model.actionsTaken.actionsTakenDuringStop !== null &&
+            this.model.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            this.model.actionsTaken.actionsTakenDuringStop =
+              this.model.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 20,
+              )
+          }
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 1) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 2) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 7) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 7) {
+        if (this.model.stopReason.educationViolation !== 1) {
+          this.model.stopReason.educationViolationCode = null
+        }
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 3 ||
+        this.model.stopReason.reasonForStop === 4 ||
+        this.model.stopReason.reasonForStop === 5 ||
+        this.model.stopReason.reasonForStop === 8
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 6) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+      }
+    },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
-
-    lastReason(newVal) {
-      if (newVal) {
-        this.viewModel.stopReason = newVal
-        this.handleInput()
-      }
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

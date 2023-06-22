@@ -1,10 +1,6 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-reason
-      v-model="model"
-      v-on="$listeners"
-      @pii-check="handlePiiCheck"
-    ></ripa-stop-reason>
+    <ripa-stop-reason v-model="model" v-on="$listeners"></ripa-stop-reason>
 
     <v-spacer></v-spacer>
 
@@ -63,7 +59,7 @@ export default {
 
   methods: {
     handleStep3Next() {
-      const piiFound = this.viewModel.stopReason?.reasonForStopPiiFound || false
+      const piiFound = this.model.stopReason?.reasonForStopPiiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {
@@ -73,10 +69,6 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
     },
   },
 }

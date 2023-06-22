@@ -17,6 +17,7 @@ import {
   CONTRABAND_TYPES,
   SEIZED_PROPERTY_TYPES,
   STOP_RESULTS,
+  SEXUAL_ORIENTATIONS,
 } from '@/constants/form'
 
 const getAgencyQuestionsFromLocalStorage = () => {
@@ -72,25 +73,53 @@ export const defaultLocation = () => {
 
 export const defaultStop = () => {
   return {
-    actionsTaken: {
-      anyActionsTaken: true,
-    },
     id: 0,
     internalId: nanoid(),
     template: null,
+    editStopExplanation: null,
+    overridePii: false,
+    piiEntities: [],
     stepTrace: [],
+    stopType: null,
+    actionsTaken: {
+      anyActionsTaken: true,
+      actionsTakenDuringStop: [],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      basisForSearch: [],
+      basisForSearchExplanation: null,
+      basisForSearchPiiFound: false,
+      propertyWasSeized: false,
+      basisForPropertySeizure: [],
+      typeOfPropertySeized: [],
+      anyContraband: false,
+      contrabandOrEvidenceDiscovered: [],
+    },
     location: emptyLocation(),
     person: {
       id: new Date().getTime(),
       index: 1,
+      anyDisabilities: false,
+      isStudent: false,
+      perceivedAge: null,
+      perceivedGender: null,
+      genderNonconforming: false,
+      perceivedLimitedEnglish: false,
+      perceivedLgbt: new Date() >= new Date(2024, 0, 1) ? null : false,
+      perceivedSexualOrientation: null,
+      perceivedOrKnownDisability: [],
+      perceivedRace: [],
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
       time: format(new Date(), 'kk:mm'),
+      duration: null,
+      stopInResponseToCFS: false,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
+    stopVersion: new Date() >= new Date(2024, 0, 1) ? 2 : 1,
   }
 }
 
@@ -112,7 +141,19 @@ export const stopReasonGivenTemplate = template => {
     }
   }
 
-  return {}
+  return {
+    reasonForStop: null,
+    educationViolation: null,
+    educationViolationCode: null,
+    trafficViolation: null,
+    trafficViolationCode: null,
+    reasonableSuspicion: [],
+    reasonableSuspicionCode: null,
+    searchOfPerson: null,
+    searchOfProperty: null,
+    reasonForStopExplanation: null,
+    reasonForStopPiiFound: false,
+  }
 }
 
 export const stopResultGivenTemplate = template => {
@@ -148,6 +189,22 @@ export const stopResultGivenTemplate = template => {
 
   return {
     anyResultsOfStop: true,
+    resultsOfStop2: false,
+    resultsOfStop3: false,
+    resultsOfStop4: false,
+    resultsOfStop5: false,
+    resultsOfStop6: false,
+    resultsOfStop7: false,
+    resultsOfStop8: false,
+    resultsOfStop9: false,
+    resultsOfStop10: false,
+    resultsOfStop11: false,
+    resultsOfStop12: false,
+    resultsOfStop13: false,
+    warningCodes: [],
+    citationCodes: [],
+    infieldCodes: [],
+    custodialArrestCodes: [],
     pullFromReasonCode: false,
   }
 }
@@ -155,12 +212,15 @@ export const stopResultGivenTemplate = template => {
 export const apiStopStopSummary = apiStop => {
   const items = []
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
-  items.push({ id: 'A2', content: getSummaryDate(apiStop) })
-  items.push({ id: 'A3', content: getSummaryTime(apiStop) })
-  items.push({ id: 'A4', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A5', content: getSummaryOfficer(apiStop) })
-  items.push({ id: 'A6', content: getSummaryDuration(apiStop) })
-  items.push({ id: 'A7', content: getSummaryStopInResponseToCfs(apiStop) })
+  if (apiStop.stopVersion === 2) {
+    items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+  }
+  items.push({ id: 'A3', content: getSummaryDate(apiStop) })
+  items.push({ id: 'A4', content: getSummaryTime(apiStop) })
+  items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
+  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
+  items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
 }
 
@@ -197,6 +257,14 @@ const getSummaryDate = apiStop => {
     level: 1,
     header: 'Date',
     detail: apiStop.date,
+  }
+}
+
+const getSummaryStopType = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop Type',
+    detail: apiStop.stopType,
   }
 }
 
@@ -330,7 +398,12 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
     items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
-    items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B5', content: getSummaryPerceivedOrientation(person) })
+    }
+    if (apiStop.stopVersion === 1) {
+      items.push({ id: 'B5', content: getSummaryPerceivedLgbt(person) })
+    }
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
     items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
     items.push({
@@ -388,6 +461,14 @@ const getSummaryPerceivedGender = person => {
     level: 1,
     header: 'Perceived Gender',
     detail: person.perceivedGender,
+  }
+}
+
+const getSummaryPerceivedOrientation = person => {
+  return {
+    level: 1,
+    header: 'Perceived Orientation',
+    detail: person.perceivedSexualOrientation,
   }
 }
 
@@ -814,6 +895,8 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
+    stopVersion: apiStop.stopVersion,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -882,9 +965,10 @@ const getFullStopPeopleListed = apiStop => {
       isStudent: person.isStudent || false,
       perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
-      genderNonconforming: person.genderNonconforming,
+      genderNonconforming: getPerceivedOrientationCode(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedLgbt: person.perceivedLgbt,
+      perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
@@ -1071,6 +1155,8 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
+    stopType: fullStop.stopType,
+    stopVersion: fullStop.stopVersion,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       genderNonconforming: person.genderNonconforming || false,
@@ -1078,7 +1164,8 @@ export const fullStopToStop = fullStop => {
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
-      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLgbt: person.perceivedLgbt,
+      perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
@@ -1192,6 +1279,7 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+    stopType: fullStop.stopType,
   }
 }
 
@@ -1217,7 +1305,8 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       listTypeOfPropertySeized: getTypeOfPropertySeized(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
-      perceivedLgbt: person.perceivedLgbt || false,
+      perceivedLgbt: person.perceivedLgbt,
+      perceivedSexualOrientation: getPerceivedOrientationText(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       personSearchConsentGiven:
         person.actionsTaken?.personSearchConsentGiven || false,
@@ -1353,14 +1442,43 @@ const getPerceivedGender = person => {
   return null
 }
 
+const getPerceivedOrientation = person => {
+  const orientation = person.perceivedSexualOrientation || null
+  if (orientation) {
+    const [filteredOrientationValue] = SEXUAL_ORIENTATIONS.filter(
+      item => item.value === orientation,
+    )
+    const [filteredOrientationName] = SEXUAL_ORIENTATIONS.filter(
+      item => item.name === orientation,
+    )
+    const filteredOrientation =
+      filteredOrientationValue || filteredOrientationName
+
+    return {
+      code: filteredOrientation?.value || null,
+      text: filteredOrientation?.name || '',
+    }
+  }
+}
+
 const getPerceivedGenderCode = person => {
   const gender = getPerceivedGender(person)
   return gender?.code || null
 }
 
+const getPerceivedOrientationCode = person => {
+  const orientation = getPerceivedOrientation(person)
+  return orientation?.code || null
+}
+
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
   return gender?.text || ''
+}
+
+const getPerceivedOrientationText = person => {
+  const orientation = getPerceivedOrientation(person)
+  return orientation?.text || null
 }
 
 const getPerceivedOrKnownDisability = person => {

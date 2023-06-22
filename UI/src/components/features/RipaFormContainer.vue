@@ -23,8 +23,13 @@
       @on-step-index-change="handleStepIndexChange"
       @on-submit-stop="handleSubmitStop"
       @on-update-user="handleUpdateUser"
+      @on-set-person-search-automatically-selected="
+        handleSetPersonSearchAutomaticallySelected
+      "
+      @on-set-property-search-automatically-selected="
+        handleSetPropertySearchAutomaticallySelected
+      "
       @handle-done="handleDone"
-      @input="handleInput"
       @pii-check="handlePiiCheck"
     ></ripa-form-template>
 
@@ -141,7 +146,7 @@ import { format } from 'date-fns'
 import { getStatuteContent } from '@/utilities/statutes'
 
 export default {
-  name: 'ripa-home-container',
+  name: 'ripa-form-container',
 
   mixins: [RipaApiStopJobMixin],
 
@@ -217,6 +222,12 @@ export default {
       user: computed(() => this.mappedUser),
       validLastLocation: this.isLastLocationValid,
       stopTemplates: this.stopTemplates,
+      personSearchAutomaticallySelected: computed(
+        () => this.personSearchAutomaticallySelected,
+      ),
+      propertySearchAutomaticallySelected: computed(
+        () => this.propertySearchAutomaticallySelected,
+      ),
     }
   },
 
@@ -240,6 +251,8 @@ export default {
       'isAdmin',
       'displayReportingEmail',
       'reportingEmailAddress',
+      'personSearchAutomaticallySelected',
+      'propertySearchAutomaticallySelected',
     ]),
 
     getMappedUser() {
@@ -277,7 +290,17 @@ export default {
       'setUserFavoriteResults',
       'setResetPagination',
       'setStopsWithErrors',
+      'setPersonSearchAutomaticallySelected',
+      'setPropertySearchAutomaticallySelected',
     ]),
+
+    handleSetPersonSearchAutomaticallySelected() {
+      this.setPersonSearchAutomaticallySelected()
+    },
+
+    handleSetPropertySearchAutomaticallySelected() {
+      this.setPropertySearchAutomaticallySelected()
+    },
 
     addApiStop(apiStop) {
       this.isLocked = true
@@ -566,11 +589,6 @@ export default {
       localStorage.setItem('ripa_form_edit_stop', '1')
     },
 
-    handleInput(newVal) {
-      this.stop = Object.assign({}, newVal)
-      this.updateFullStop()
-    },
-
     async handleGpsLocation() {
       this.loadingGps = true
       const result = await this.checkGpsLocation()
@@ -752,6 +770,7 @@ export default {
           stopResult: this.stop?.stopResult || null,
         }
         let updatedFullStop = Object.assign({}, this.fullStop)
+        updatedFullStop.stopType = this.getStopType(this.stop)
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
         updatedFullStop.internalId = this.stop.internalId
@@ -791,6 +810,13 @@ export default {
           this.mappedFormStatutes,
         )
       }
+    },
+
+    getStopType(stop) {
+      if (stop.stopVersion === 2) {
+        return stop.stopType
+      }
+      return null
     },
 
     clearLocalStorage() {
@@ -845,7 +871,6 @@ export default {
     },
 
     handleDone() {
-      console.log('handling done')
       const route = localStorage.getItem('ripa_form_edit_route')
       this.clearLocalStorage()
       this.$router.push(route)
@@ -1034,8 +1059,13 @@ export default {
       }
     },
 
-    stop(newVal) {
-      this.stop = newVal
+    stop: {
+      handler: function (newVal) {
+        if (newVal) {
+          this.updateFullStop()
+        }
+      },
+      deep: true,
     },
 
     fullStop(newVal) {

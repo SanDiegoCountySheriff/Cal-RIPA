@@ -195,7 +195,6 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
@@ -213,8 +212,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ripa-officer',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaDatePicker,

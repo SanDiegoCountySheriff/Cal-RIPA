@@ -42,7 +42,7 @@ public class StopQueryUtility
         return stopQuery;
     }
 
-    public string GetStopsQueryString(StopQuery stopQuery, Boolean isVisible, Boolean forCpraReport = false)
+    public string GetStopsQueryString(StopQuery stopQuery, bool isVisible, int version, bool forCpraReport = false)
     {
         List<string> whereStatements = new List<string>();
         string join = string.Empty;
@@ -114,6 +114,9 @@ public class StopQueryUtility
         {
             whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
         }
+
+        //Version
+        whereStatements.Add(Environment.NewLine + $"c.StopVersion = {version}");
 
         string where = string.Empty;
 

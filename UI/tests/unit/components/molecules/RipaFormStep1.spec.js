@@ -1,13 +1,16 @@
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1.vue'
 import { shallowMount } from '@vue/test-utils'
+import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
 describe('Ripa Form Step 1', () => {
   let vuetify
+  let stop
   let wrapper
 
   beforeEach(() => {
     vuetify = new Vuetify()
+    stop = defaultStop()
   })
 
   const factory = propsData => {
@@ -44,7 +47,7 @@ describe('Ripa Form Step 1', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = factory()
+    wrapper = factory({ value: stop })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

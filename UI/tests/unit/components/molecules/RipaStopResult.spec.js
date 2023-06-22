@@ -57,6 +57,9 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should display custom chip', async () => {
+    stop.stopResult.resultsOfStop2 = true
+    stop.stopResult.warningCodes = [1]
+
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop },
@@ -70,23 +73,15 @@ describe('Ripa Stop Result', () => {
         statutes: computed(() => statutes),
       },
     })
-
-    let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-
-    updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1]
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
 
     expect(wrapper.html()).toContain('Statute Code 1')
     expect(wrapper.html()).not.toContain('Statute Code 1 - Statute Text 1')
   })
 
   it('should pull from reason code', async () => {
+    stop.stopReason.trafficViolationCode = 1
+    stop.stopResult.resultsOfStop2 = true
+
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop },
@@ -100,12 +95,6 @@ describe('Ripa Stop Result', () => {
         statutes: computed(() => statutes),
       },
     })
-
-    const updatedStop = defaultStop()
-    updatedStop.stopReason.trafficViolationCode = 1
-    updatedStop.stopResult.resultsOfStop2 = true
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
 
     wrapper.vm.handlePullReasonCodeWarning()
 
@@ -116,6 +105,9 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should remove item when deleting chip', async () => {
+    stop.stopResult.resultsOfStop2 = true
+    stop.stopResult.warningCodes = [1, 2]
+
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop },
@@ -129,17 +121,6 @@ describe('Ripa Stop Result', () => {
         statutes: computed(() => statutes),
       },
     })
-
-    let updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-
-    updatedStop = defaultStop()
-    updatedStop.stopResult.resultsOfStop2 = true
-    updatedStop.stopResult.warningCodes = [1, 2]
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
 
     wrapper.vm.removeItem('warningCodes', { item: { code: 1 } })
 

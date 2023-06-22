@@ -22,13 +22,10 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-edit-stop-explanation',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -42,7 +39,7 @@ export default {
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -57,12 +54,6 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

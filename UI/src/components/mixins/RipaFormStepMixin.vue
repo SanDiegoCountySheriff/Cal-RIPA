@@ -3,7 +3,6 @@ export default {
   data() {
     return {
       isFormValid: true,
-      viewModel: this.value || {},
       showConfirmDialog: false,
     }
   },
@@ -11,15 +10,14 @@ export default {
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
       set(newVal) {
-        this.viewModel = Object.assign({}, newVal)
+        this.$emit('input', newVal)
         setTimeout(() => {
           const form = this.$refs.stepForm
           this.isFormValid = form ? form.validate() : false
         }, 500)
-        this.$emit('input', this.viewModel)
       },
     },
 
@@ -42,7 +40,6 @@ export default {
       if (!this.isFormValid) {
         return
       }
-      this.$emit('input', this.viewModel)
       this.$emit('on-next')
     },
 
@@ -51,16 +48,10 @@ export default {
     },
   },
 
-  watch: {
-    value(newVal) {
-      this.viewModel = newVal
-    },
-  },
-
   props: {
     value: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }

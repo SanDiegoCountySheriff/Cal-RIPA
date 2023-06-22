@@ -21,28 +21,15 @@
 export default {
   name: 'ripa-switch',
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
 
       set(newVal) {
-        this.viewModel = newVal
         this.$emit('input', newVal)
       },
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = newVal
     },
   },
 

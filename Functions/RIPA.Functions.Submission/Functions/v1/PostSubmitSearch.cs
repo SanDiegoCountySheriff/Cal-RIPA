@@ -97,7 +97,7 @@ public class PostSubmitSearch
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false);
+            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, false, 1);
         }
         catch (Exception ex)
         {

@@ -1,25 +1,21 @@
 <template>
-  <div class="ripa-age tw-pb-4">
+  <div>
     <ripa-form-header
-      title="Perceived Age"
+      title="Type of Stop"
       required
-      subtitle="§999.226(a)(7)"
+      subtitle="§999.226(a)(2)"
       v-on="$listeners"
-    >
-    </ripa-form-header>
+    ></ripa-form-header>
 
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
-          <ripa-number-input
-            v-model="model.person.perceivedAge"
-            label="Perceived Age"
-            :disabled="disabled"
-            :min="1"
-            :max="1250"
-            :rules="ageRules"
-          >
-          </ripa-number-input>
+          <ripa-radio-group
+            v-model="model.stopType"
+            :items="stopTypes"
+            :rules="stopTypeRules"
+            :display-row="true"
+          ></ripa-radio-group>
         </v-col>
       </v-row>
     </v-container>
@@ -28,14 +24,23 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaNumberInput from '@/components/atoms/RipaNumberInput'
-
+import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 export default {
-  name: 'ripa-age',
+  name: 'ripa-stop-type',
 
   components: {
     RipaFormHeader,
-    RipaNumberInput,
+    RipaRadioGroup,
+  },
+
+  data() {
+    return {
+      stopTypes: [
+        { name: 'Vehicular', value: 'Vehicular' },
+        { name: 'Bicycle', value: 'Bicycle' },
+        { name: 'Pedestrian', value: 'Pedestrian' },
+      ],
+    }
   },
 
   computed: {
@@ -48,11 +53,8 @@ export default {
       },
     },
 
-    ageRules() {
-      return [
-        v => !!v || 'An age is required',
-        v => (v >= 1 && v <= 120) || 'Age must be between 1 and 120 years',
-      ]
+    stopTypeRules() {
+      return [v => !!v || 'A stop type is required']
     },
   },
 
@@ -69,10 +71,6 @@ export default {
     value: {
       type: Object,
       required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
     },
   },
 }

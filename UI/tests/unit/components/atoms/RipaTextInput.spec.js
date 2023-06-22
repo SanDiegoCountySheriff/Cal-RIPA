@@ -60,6 +60,15 @@ describe('Ripa Text Input', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
+  it('should set model', () => {
+    wrapper = factory()
+
+    wrapper.vm.model = { test: 'test' }
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+    expect(wrapper.emitted('input')[0]).toEqual([{ test: 'test' }])
+  })
+
   it('should handle drop', () => {
     wrapper = factory()
     const event = {
@@ -100,13 +109,12 @@ describe('Ripa Text Input', () => {
       },
     }
     const parseText = jest.spyOn(wrapper.vm, 'parseText')
-    const handleInput = jest.spyOn(wrapper.vm, 'handleInput')
 
     wrapper.vm.handleBlur(event)
 
     expect(parseText).toHaveBeenCalledTimes(1)
-    expect(handleInput).toHaveBeenCalledTimes(1)
-    expect(wrapper.vm.viewModel).toEqual('New Value')
+    expect(wrapper.emitted('blur')).toBeTruthy()
+    expect(wrapper.emitted('blur')[0]).toEqual(['New Value'])
   })
 
   it('should parse text', () => {
@@ -119,28 +127,5 @@ describe('Ripa Text Input', () => {
     actualValue = wrapper.vm.parseText('Text')
 
     expect(actualValue).toEqual('Text')
-  })
-
-  it('should handle input', async () => {
-    wrapper = factory()
-
-    wrapper.vm.handleInput('oldVal', 'oldVal')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.emitted('input')).toBeFalsy()
-
-    wrapper.vm.handleInput('newVal', 'oldVal')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.emitted('input')).toBeTruthy()
-  })
-
-  it('should watch value', async () => {
-    wrapper = factory()
-
-    wrapper.vm.value = 'New Value'
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.viewModel).toEqual('New Value')
   })
 })

@@ -20,7 +20,7 @@ export const LOCATION_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -36,7 +36,7 @@ export const LOCATION_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -134,7 +134,7 @@ export const LOCATION_PII_TEST_CASES = [
     locationPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 
@@ -153,7 +153,7 @@ export const REASON_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -161,7 +161,7 @@ export const REASON_PII_TEST_CASES = [
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 0,
     setPiiServiceAvailableCalledTimes: 0,
-    reasonForStopPiiFound: undefined,
+    reasonForStopPiiFound: false,
     stopPiiFound: undefined,
     checkTextForPiiReturnValue: {
       redactedText: '',
@@ -169,7 +169,7 @@ export const REASON_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -267,7 +267,7 @@ export const REASON_PII_TEST_CASES = [
     reasonForStopPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 
@@ -286,7 +286,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 2,
@@ -294,7 +294,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 0,
     setPiiServiceAvailableCalledTimes: 0,
-    expectedBasisForSearchPiiFound: undefined,
+    expectedBasisForSearchPiiFound: false,
     stopPiiFound: undefined,
     checkTextForPiiReturnValue: {
       redactedText: '',
@@ -302,7 +302,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
       allowedCategories: [],
       piiEntities: [],
     },
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
   {
     testNumber: 3,
@@ -400,7 +400,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     expectedBasisForSearchPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: undefined,
+    expectedPiiEntities: [],
   },
 ]
 
@@ -419,6 +419,156 @@ export const API_STOP = {
   date: '2022-01-01',
   time: '13:00',
   stopDateTime: '2022-01-01T12:00:00',
+  stopVersion: 1,
+  location: {
+    toggleLocationOptions: false,
+    intersection: '',
+    blockNumber: '100',
+    landMark: '',
+    streetName: 'Anystreet',
+    highwayExit: '',
+    city: {
+      codes: {
+        code: 'SAN DIEGO',
+        text: 'SAN DIEGO',
+      },
+    },
+    beat: {
+      codes: {
+        code: '009',
+        text: '009 SAN DIEGO (NON-CONTRACT CITIES)',
+      },
+    },
+    school: false,
+    schoolName: null,
+    outOfCounty: false,
+    piiFound: false,
+    geoLocation: {
+      latitude: null,
+      longitude: null,
+    },
+  },
+  stopDuration: 1,
+  stopInResponseToCFS: false,
+  listPersonStopped: [
+    {
+      id: '1',
+      isStudent: false,
+      listPerceivedRace: [
+        {
+          race: 'Asian',
+          key: 1,
+        },
+      ],
+      perceivedLimitedEnglish: false,
+      listPerceivedOrKnownDisability: [
+        {
+          disability: 'None',
+          key: '8',
+        },
+      ],
+      perceivedAge: 10,
+      perceivedGender: 'Male',
+      genderNonconforming: false,
+      perceivedLgbt: false,
+      reasonForStop: {
+        key: '5',
+        reason: 'Investigation to determine whether the person was truant',
+        listDetail: [],
+        listCodes: [],
+      },
+      reasonForStopExplanation: 'Explanation',
+      reasonForStopPiiFound: false,
+      listActionTakenDuringStop: [
+        {
+          action: 'None',
+          key: '24',
+        },
+      ],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      listContrabandOrEvidenceDiscovered: [
+        {
+          contraband: 'None',
+          key: '1',
+        },
+      ],
+      listBasisForSearch: [],
+      basisForSearchBrief: null,
+      basisForSearchPiiFound: false,
+      listBasisForPropertySeizure: [],
+      listTypeOfPropertySeized: [],
+      listResultOfStop: [
+        {
+          result: 'None',
+          listCodes: null,
+          key: '1',
+        },
+      ],
+    },
+  ],
+  listSubmission: null,
+  status: 'Unsubmitted',
+  isPiiFound: false,
+  piiEntities: null,
+  overridePii: false,
+  editStopExplanation: 'edit',
+  editStopOfficerId: '100000002',
+  isEdited: false,
+  telemetry: {
+    template: null,
+    formCached: false,
+    offline: false,
+    listStepTrace: [
+      {
+        index: 1,
+        startTimeStamp: '2022-01-01T12:00:00.000Z',
+        endTimeStamp: '2022-01-01T12:01:00.000Z',
+      },
+      {
+        index: 2,
+        startTimeStamp: '2022-01-01T12:01:00.000Z',
+        endTimeStamp: '2022-01-01T12:02:00.000Z',
+      },
+      {
+        index: 3,
+        startTimeStamp: '2022-01-01T12:02:00.000Z',
+        endTimeStamp: '2022-01-01T12:03:00.000Z',
+      },
+      {
+        index: 4,
+        startTimeStamp: '2022-01-01T12:03:00.000Z',
+        endTimeStamp: '2022-01-01T12:04:00.000Z',
+      },
+      {
+        index: 5,
+        startTimeStamp: '2022-01-01T12:04:00.000Z',
+        endTimeStamp: '2022-01-01T12:05:00.000Z',
+      },
+    ],
+    lookupCacheDate: '2022-02-11 11:13',
+    pullFromReasonCode: false,
+  },
+  listAgencyQuestion: [],
+}
+
+export const V2_API_STOP = {
+  id: '1111111111111',
+  ori: 'CA0370000',
+  agency: 'SDSD',
+  officerId: '111111111',
+  officerName: 'Name',
+  expYears: '1',
+  officerAssignment: {
+    key: '10',
+    type: 'Other',
+    otherType: 'Data Services',
+  },
+  date: '2022-01-01',
+  time: '13:00',
+  stopDateTime: '2022-01-01T12:00:00',
+  stopType: 'Vehicular',
+  stopVersion: 2,
   location: {
     toggleLocationOptions: false,
     intersection: '',

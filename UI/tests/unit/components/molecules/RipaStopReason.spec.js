@@ -37,6 +37,12 @@ describe('Ripa Stop Reason', () => {
         lastReason() {
           return {}
         },
+        personSearchAutomaticallySelected() {
+          return false
+        },
+        propertySearchAutomaticallySelected() {
+          return false
+        },
         statutes: computed(() => []),
       },
     })

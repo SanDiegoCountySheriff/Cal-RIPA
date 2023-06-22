@@ -13,9 +13,11 @@ exports[`Ripa Form Step 1 should match snapshot 1`] = `
         return fn.apply(this, arguments);
       }">
   <ripa-officer-stub user="[object Object]"></ripa-officer-stub>
+  <!---->
   <ripa-user-dialog-stub adminediting="true" isrowkeydisabled="true" formtitle="Manage User" user="[object Object]"></ripa-user-dialog-stub>
   <!---->
   <ripa-stop-date-stub value="[object Object]"></ripa-stop-date-stub>
+  <!---->
   <ripa-location-stub value="[object Object]"></ripa-location-stub>
   <v-spacer-stub tag="div"></v-spacer-stub>
   <!---->
