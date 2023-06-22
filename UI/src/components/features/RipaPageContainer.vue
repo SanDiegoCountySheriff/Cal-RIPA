@@ -114,6 +114,7 @@ export default {
       showUserDialog: false,
       dataReady: false,
       apiStopJobLoading: false,
+      snackbarUpdateUser: false,
     }
   },
 

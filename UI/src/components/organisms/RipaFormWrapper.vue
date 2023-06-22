@@ -294,10 +294,19 @@
       subtitle="Are you sure you want to submit the form?"
     >
     </ripa-confirm-dialog>
+
+    <ripa-user-dialog
+      :show-dialog="showUserDialog"
+      @on-close="handleCloseDialog"
+      @on-save="handleSaveUser"
+      title="Incomplete User Info"
+      subtitle="Please enter your race and gender"
+    ></ripa-user-dialog>
   </div>
 </template>
 
 <script>
+import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
@@ -317,6 +326,7 @@ export default {
   name: 'ripa-form-wrapper',
 
   components: {
+    RipaUserDialog,
     RipaAlert,
     RipaConfirmation,
     RipaConfirmDialog,
@@ -338,6 +348,7 @@ export default {
       confirmationStepIndex: 8,
       stop: this.value,
       stepTrace: null,
+      showUserDialog: false,
       showDialog: false,
       showCancelFormDialog: false,
       showCancelActionDialog: false,
@@ -431,11 +442,16 @@ export default {
     },
 
     handleCloseDialog() {
+      this.showUserDialog = false
       this.showDialog = false
       this.showConfirmDialog = false
       this.showCancelFormDialog = false
       this.showCancelActionDialog = false
       this.showDeletePersonDialog = false
+    },
+
+    handleSaveUser(user) {
+      this.editOfficerUser(user)
     },
 
     isCreateForm() {
@@ -576,7 +592,13 @@ export default {
     },
 
     handleSubmit() {
-      this.showConfirmDialog = true
+      this.showUserDialog = true
+
+      // if (Date.now() >= '2024-01-01') {
+      //   this.showUserDialog = true
+      // } else {
+      //   this.showConfirmDialog = true
+      // }
     },
 
     handleConfirmSubmit() {

@@ -326,6 +326,10 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
+
+    version: state => {
+      return state.version
+    }
   },
 
   mutations: {
@@ -1606,7 +1610,8 @@ export default new Vuex.Store({
       const id = state.user.oid
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
+          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
+          `http://localhost:7071/api/v${state.version}/GetUser/${id}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1616,6 +1621,7 @@ export default new Vuex.Store({
         )
         .then(response => {
           commit('updateUserProfile', response.data)
+          // condition for missing properties
           commit('updateInvalidUser', false)
         })
         .catch(error => {
