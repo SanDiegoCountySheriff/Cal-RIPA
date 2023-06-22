@@ -154,22 +154,18 @@
           <ripa-form-header title=" Race" required> </ripa-form-header>
           <v-col cols="12" sm="12" md="12">
             <ripa-radio-group
+              v-model="model.race"
               :items="raceItems"
+              :rules="raceRules"
               itemText="name"
               itemValue="value"
+              clear-selection
+              @input="handleInput"
+              label="Race"
             ></ripa-radio-group>
           </v-col>
 
           <ripa-form-header title=" Gender" required> </ripa-form-header>
-          <v-col cols="12" sm="12" md="12">
-            <ripa-radio-group
-              :items="genderItems"
-              itemText="name"
-              itemValue="value"
-              clear-selection
-            >
-            </ripa-radio-group>
-          </v-col>
         </v-row>
 
         <v-container>
@@ -266,11 +262,7 @@ export default {
     },
 
     raceRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
-      const options = this.viewModel.stopReason.trafficViolation
-      return [
-        (checked && options !== null) || 'A traffic violation type is required',
-      ]
+      return [v => !!v || 'A race is required']
     },
 
     startDateRules() {

@@ -199,6 +199,8 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
+        gender: state.user.gender,
+        race: state.user.race,
       }
     },
     stopTemplates: state => {
@@ -329,7 +331,7 @@ export default new Vuex.Store({
 
     version: state => {
       return state.version
-    }
+    },
   },
 
   mutations: {
@@ -692,7 +694,8 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
+          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
+          `http://localhost:7071/api/v2/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -881,11 +884,14 @@ export default new Vuex.Store({
         otherType: mappedUser.otherType,
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
+        gender: mappedUser.gender,
+        race: mappedUser.race,
       }
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
+          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
+          `http://localhost:7071/api/v2/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1611,7 +1617,7 @@ export default new Vuex.Store({
       return axios
         .get(
           // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
-          `http://localhost:7071/api/v${state.version}/GetUser/${id}`,
+          `http://localhost:7071/api/v2/GetUser/${id}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
