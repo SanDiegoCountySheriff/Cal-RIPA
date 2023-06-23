@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import RipaPerceivedUnhoused from '@/components/molecules/RipaPerceivedUnhoused'
 import RipaAge from '@/components/molecules/RipaAge'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaDisability from '@/components/molecules/RipaDisability'
@@ -88,6 +89,7 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+    RipaPerceivedUnhoused,
   },
 
   computed: {

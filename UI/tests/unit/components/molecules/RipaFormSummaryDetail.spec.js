@@ -79,4 +79,8 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Stop Type')
   })
+
+  it.todo('should not display perceived unhoused for legacy stop')
+
+  it.todo('should display perceived unhouse for v2 stop')
 })

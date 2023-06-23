@@ -174,6 +174,10 @@ describe('Ripa Stop Date', () => {
       ).toBe(test.expectedSecondCase)
     })
   })
+
+  it.todo('should set perceived unhoused to null for v1 stops')
+
+  it.todo('should set perceived unhoused to false for v2 stops')
 })
 
 function createDate(days, months, years) {

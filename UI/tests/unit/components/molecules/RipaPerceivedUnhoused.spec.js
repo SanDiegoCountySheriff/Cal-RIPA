@@ -1,22 +1,20 @@
-import RipaFormStep6 from '@/components/molecules/RipaFormStep6.vue'
-import { V1_STOP } from '../../constants/RipaFormContainerTestConstants'
+import RipaPerceivedUnhoused from '@/components/molecules/RipaPerceivedUnhoused.vue'
 import { shallowMount, mount } from '@vue/test-utils'
+import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 
-describe('Ripa Form Step 6', () => {
+describe('Ripa Perceived Unhoused', () => {
   let vuetify
   let wrapper
+  let stop
 
   beforeEach(() => {
     vuetify = new Vuetify()
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
+    stop = defaultStop()
   })
 
   const factory = propsData => {
-    return shallowMount(RipaFormStep6, {
+    return shallowMount(RipaPerceivedUnhoused, {
       vuetify,
       propsData: {
         ...propsData,
@@ -25,13 +23,17 @@ describe('Ripa Form Step 6', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFormStep6, {
+    wrapper = mount(RipaPerceivedUnhoused, {
       vuetify,
       propsData: {
-        value: V1_STOP,
+        value: stop,
       },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it.todo('should set model')
+
+  it.todo('should watch model')
 })

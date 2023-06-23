@@ -1,6 +1,6 @@
 import RipaFormStep3 from '@/components/molecules/RipaFormStep3.vue'
 import { shallowMount, mount } from '@vue/test-utils'
-import { STOP } from '../../constants/RipaFormContainerTestConstants'
+import { V1_STOP } from '../../constants/RipaFormContainerTestConstants'
 import { computed } from 'vue'
 import Vuetify from 'vuetify'
 
@@ -31,7 +31,7 @@ describe('Ripa Form Step 3', () => {
     wrapper = mount(RipaFormStep3, {
       vuetify,
       propsData: {
-        value: STOP,
+        value: V1_STOP,
         onOpenFavorites: jest.fn(),
         onSaveFavorite: jest.fn(),
       },
