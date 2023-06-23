@@ -12,6 +12,7 @@
       <v-row no-gutters>
         <v-col>
           <ripa-switch
+            v-model="model.person.perceivedUnhoused"
             label="Perceived Unhoused"
             :max-width="200"
           ></ripa-switch>
@@ -31,6 +32,33 @@ export default {
   components: {
     RipaFormHeader,
     RipaSwitch,
+  },
+
+  computed: {
+    model: {
+      get() {
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
+      },
+    },
+  },
+
+  watch: {
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
+    },
+  },
+
+  props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
   },
 }
 </script>

@@ -110,8 +110,10 @@ export default {
       set(newVal) {
         if (new Date(newVal.stopDate.date) >= new Date('2024-01-01')) {
           newVal.stopVersion = 2
+          newVal.person.perceivedUnhoused = false
         } else {
           newVal.stopVersion = 1
+          newVal.person.perceivedUnhoused = null
         }
 
         this.$emit('input', newVal)

@@ -38,7 +38,25 @@ describe('Ripa Form Step 2', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it.todo('should display perceived unhoused for v2 stop')
+  it('should display perceived unhoused for v2 stop', () => {
+    wrapper = mount(RipaFormStep2, {
+      vuetify,
+      propsData: {
+        value: V2_STOP,
+      },
+    })
 
-  it.todo('should not display perceived unhoused for legacy stop')
+    expect(wrapper.html()).toContain('Perceived Unhoused')
+  })
+
+  it('should not display perceived unhoused for legacy stop', () => {
+    wrapper = mount(RipaFormStep2, {
+      vuetify,
+      propsData: {
+        value: V1_STOP,
+      },
+    })
+
+    expect(wrapper.html()).not.toContain('Perceived Unhoused')
+  })
 })

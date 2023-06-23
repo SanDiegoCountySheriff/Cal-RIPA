@@ -80,7 +80,15 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Stop Type')
   })
 
-  it.todo('should not display perceived unhoused for legacy stop')
+  it('should not display perceived unhoused for legacy stop', () => {
+    wrapper = factory({ apiStop })
 
-  it.todo('should display perceived unhouse for v2 stop')
+    expect(wrapper.html()).not.toContain('Perceived Unhoused')
+  })
+
+  it('should display perceived unhouse for v2 stop', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Perceived Unhoused')
+  })
 })

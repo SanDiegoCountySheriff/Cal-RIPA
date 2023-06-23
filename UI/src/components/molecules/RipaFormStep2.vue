@@ -28,6 +28,15 @@
       :disabled="disabled"
     ></ripa-limited-english>
 
+    <template v-if="model.stopVersion === 2">
+      <ripa-perceived-unhoused
+        v-model="model"
+        v-on="$listeners"
+        :disabled="disabled"
+      >
+      </ripa-perceived-unhoused>
+    </template>
+
     <ripa-disability
       v-model="model"
       v-on="$listeners"

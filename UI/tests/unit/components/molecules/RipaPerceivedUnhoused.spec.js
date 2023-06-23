@@ -33,7 +33,23 @@ describe('Ripa Perceived Unhoused', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it.todo('should set model')
+  it('should set model', () => {
+    wrapper = factory({ value: stop })
 
-  it.todo('should watch model')
+    wrapper.vm.model = { test: 'test' }
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+    expect(wrapper.emitted('input')[0]).toEqual([{ test: 'test' }])
+  })
+
+  it('should watch model', async () => {
+    stop.person.perceivedUnhoused = false
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.model.person.perceivedUnhoused = true
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+  })
 })
