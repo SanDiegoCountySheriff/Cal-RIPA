@@ -8,6 +8,7 @@ public class PersonStopped : IPersonStopped
     public bool IsStudent { get; set; }
     public PerceivedRace[] ListPerceivedRace { get; set; }
     public bool PerceivedLimitedEnglish { get; set; }
+    public bool PerceivedUnhoused { get; set; }
     public PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
     public int PerceivedAge { get; set; }
     public string PerceivedGender { get; set; }
