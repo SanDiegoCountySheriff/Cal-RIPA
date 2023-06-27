@@ -1,6 +1,6 @@
 import RipaFormStep4 from '@/components/molecules/RipaFormStep4.vue'
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
-import { STOP } from '../../constants/RipaFormContainerTestConstants'
+import { V1_STOP } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 
@@ -43,7 +43,7 @@ describe('Ripa Form Step 4', () => {
       store,
       localVue,
       propsData: {
-        value: STOP,
+        value: V1_STOP,
       },
       provide: {
         loadingPiiStep4() {

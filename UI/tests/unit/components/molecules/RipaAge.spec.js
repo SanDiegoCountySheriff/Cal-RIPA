@@ -38,4 +38,14 @@ describe('Ripa Age', () => {
     expect(wrapper.vm.ageRules[0](30)).toEqual(true)
     expect(wrapper.vm.ageRules[1](30)).toEqual(true)
   })
+
+  it('should watch model', async () => {
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.model.person.perceivedAge = 33
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('input')).toBeTruthy()
+  })
 })

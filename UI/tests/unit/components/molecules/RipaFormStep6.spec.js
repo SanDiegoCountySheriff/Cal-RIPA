@@ -1,5 +1,5 @@
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6.vue'
-import { STOP } from '../../constants/RipaFormContainerTestConstants'
+import { V1_STOP } from '../../constants/RipaFormContainerTestConstants'
 import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
@@ -28,7 +28,7 @@ describe('Ripa Form Step 6', () => {
     wrapper = mount(RipaFormStep6, {
       vuetify,
       propsData: {
-        value: STOP,
+        value: V1_STOP,
       },
     })
 

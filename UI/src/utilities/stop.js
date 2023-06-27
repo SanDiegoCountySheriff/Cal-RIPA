@@ -418,6 +418,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     }
     items.push({ id: 'B6', content: getSummaryPerceivedAge(person) })
     items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
+    }
     items.push({
       id: 'B8',
       content: getSummaryPerceivedOrKnownDisability(person),
@@ -513,6 +516,14 @@ const getSummaryLimitedEnglish = person => {
     level: 1,
     header: 'Limited English',
     detail: person.perceivedLimitedEnglish,
+  }
+}
+
+const getSummaryPerceivedUnhoused = person => {
+  return {
+    level: 1,
+    header: 'Perceived Unhoused',
+    detail: person.perceivedUnhoused,
   }
 }
 
@@ -979,6 +990,7 @@ const getFullStopPeopleListed = apiStop => {
       perceivedGender: getPerceivedGenderCode(person),
       genderNonconforming: getPerceivedOrientationCode(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLgbt: person.perceivedLgbt,
       perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
@@ -1179,6 +1191,7 @@ export const fullStopToStop = fullStop => {
       perceivedLgbt: person.perceivedLgbt,
       perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      perceivedUnhoused: person.perceivedUnhoused,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
     },
@@ -1325,6 +1338,7 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedLgbt: person.perceivedLgbt,
       perceivedSexualOrientation: getPerceivedOrientationText(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      perceivedUnhoused: person.perceivedUnhoused,
       personSearchConsentGiven:
         person.actionsTaken?.personSearchConsentGiven || false,
       propertySearchConsentGiven:

@@ -28,6 +28,15 @@
       :disabled="disabled"
     ></ripa-limited-english>
 
+    <template v-if="model.stopVersion === 2">
+      <ripa-perceived-unhoused
+        v-model="model"
+        v-on="$listeners"
+        :disabled="disabled"
+      >
+      </ripa-perceived-unhoused>
+    </template>
+
     <ripa-disability
       v-model="model"
       v-on="$listeners"
@@ -66,6 +75,7 @@
 </template>
 
 <script>
+import RipaPerceivedUnhoused from '@/components/molecules/RipaPerceivedUnhoused'
 import RipaAge from '@/components/molecules/RipaAge'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaDisability from '@/components/molecules/RipaDisability'
@@ -88,6 +98,7 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+    RipaPerceivedUnhoused,
   },
 
   computed: {

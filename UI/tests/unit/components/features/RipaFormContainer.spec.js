@@ -7,7 +7,7 @@ import {
   BASIS_FOR_SEARCH_PII_TEST_CASES,
   API_STOP,
   FULL_STOP,
-  STOP,
+  V1_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
@@ -430,7 +430,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(
@@ -464,7 +464,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(
@@ -512,7 +512,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(

@@ -174,6 +174,29 @@ describe('Ripa Stop Date', () => {
       ).toBe(test.expectedSecondCase)
     })
   })
+
+  it('should set perceived unhoused to null for v1 stops', async () => {
+    // arrange
+    wrapper = factory({ value: stop })
+
+    // act
+    wrapper.vm.model.stopDate.date = '2023-01-01'
+
+    await wrapper.vm.$nextTick()
+
+    // assert
+    expect(wrapper.vm.model.person.perceivedUnhoused).toEqual(null)
+  })
+
+  it('should set perceived unhoused to false for v2 stops', async () => {
+    wrapper = factory({ value: stop })
+
+    wrapper.vm.model.stopDate.date = '2024-02-02'
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.model.person.perceivedUnhoused).toEqual(false)
+  })
 })
 
 function createDate(days, months, years) {
