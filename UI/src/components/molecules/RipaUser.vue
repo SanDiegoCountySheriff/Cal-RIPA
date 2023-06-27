@@ -202,8 +202,6 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
-import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
-// import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
@@ -225,10 +223,8 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
-    RipaRadioGroup,
     RipaFormHeader,
     RipaSwitch,
-    // RipaCheckGroup,
   },
 
   data() {
