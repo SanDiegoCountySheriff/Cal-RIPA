@@ -56,6 +56,9 @@ public class UserProfile : IUserProfile
     public string Gender { get; set; }
 
     [JsonProperty(PropertyName = "race")]
-    //public string Race { get; set; }
-    public PerceivedRace[] Race { get; set; }
+    public string Race { get; set; }
+    //public PerceivedRace[] Race { get; set; }
+
+    [JsonProperty(PropertyName = "officerGenderNonConforming")]
+    public bool OfficerGenderNonConforming { get; set; }
 }

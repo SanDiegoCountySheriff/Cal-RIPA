@@ -368,6 +368,18 @@ const getSummaryOfficer = apiStop => {
         header: 'Other Type',
         detail: apiStop.officerAssignment.otherType,
       },
+      {
+        header: 'Race',
+        detail: apiStop.race,
+      },
+      {
+        header: 'Gender',
+        detail: apiStop.gender,
+      },
+      {
+        header: 'OfficerGenderNonConforming',
+        detail: apiStop.officerGenderNonConforming,
+      },
     ],
   }
 }
@@ -1272,6 +1284,11 @@ export const fullStopToApiStop = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
+    race: parsedApiStop ? parsedApiStop.race : officer.race,
+    gender: parsedApiStop ? parsedApiStop.gender : officer.gender,
+    officerGenderNonConforming: parsedApiStop
+      ? parsedApiStop.officerGenderNonConforming
+      : officer.officerGenderNonConforming,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),

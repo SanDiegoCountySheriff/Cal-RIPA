@@ -57,6 +57,9 @@ export default new Vuex.Store({
       officerName: null,
       assignment: null,
       otherType: null,
+      race: null,
+      gender: null,
+      officerGenderNonConforming: null,
     },
     apiConfig: null,
     piiDate: null,
@@ -201,6 +204,7 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
         gender: state.user.gender,
         race: state.user.race,
+        officerGenderNonConforming: state.user.officerGenderNonConforming,
       }
     },
     stopTemplates: state => {
@@ -474,6 +478,9 @@ export default new Vuex.Store({
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
+        race: value.race,
+        gender: value.gender,
+        officerGenderNonConforming: value.officerGenderNonConforming,
       }
 
       const officer = {
@@ -484,6 +491,9 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
+        race: state.user.race,
+        gender: state.user.gender,
+        officerGenderNonConforming: state.user.officerGenderNonConforming,
       }
 
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
@@ -884,8 +894,9 @@ export default new Vuex.Store({
         otherType: mappedUser.otherType,
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
-        gender: mappedUser.gender,
         race: mappedUser.race,
+        gender: mappedUser.gender,
+        officerGenderNonConforming: mappedUser.officerGenderNonConforming,
       }
 
       return axios
@@ -1628,7 +1639,18 @@ export default new Vuex.Store({
         .then(response => {
           commit('updateUserProfile', response.data)
           // condition for missing properties
-          commit('updateInvalidUser', false)
+          // commit('updateInvalidUser', false)
+
+          if (
+            !response.data.race ||
+            (!response.data.gender && !response.data.officerGenderNonConforming)
+          ) {
+            commit('updateInvalidUser', true)
+            return true
+          } else {
+            commit('updateInvalidUser', false)
+            return false
+          }
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)

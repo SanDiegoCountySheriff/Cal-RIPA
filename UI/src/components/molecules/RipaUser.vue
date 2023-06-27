@@ -151,34 +151,44 @@
 
       <template v-if="version === 1">
         <v-row no-gutters>
-          <ripa-form-header title=" Race" required> </ripa-form-header>
+          <ripa-form-header title="Race" required v-on="$listeners">
+          </ripa-form-header>
           <v-col cols="12" sm="12" md="12">
-            <ripa-radio-group
+            <ripa-select
               v-model="model.race"
+              label="Officer Race"
               :items="raceItems"
-              :rules="raceRules"
               itemText="name"
-              itemValue="value"
-              clear-selection
+              itemValue="name"
+              :rules="raceRules"
               @input="handleInput"
-              label="Race"
-            ></ripa-radio-group>
+              clear
+            ></ripa-select>
           </v-col>
 
-          <ripa-form-header title=" Gender" required> </ripa-form-header>
+          <ripa-form-header title="Gender" required> </ripa-form-header>
         </v-row>
 
         <v-container>
           <v-row no-gutters>
             <v-col cols="12" sm="12">
-              <ripa-radio-group :items="genderItems" clear-selection>
-              </ripa-radio-group>
+              <ripa-select
+                v-model="model.gender"
+                label="Officer Gender"
+                :items="genderItems"
+                itemText="name"
+                itemValue="name"
+                :rules="genderRules"
+                @input="handleInput"
+              ></ripa-select>
             </v-col>
 
             <v-col cols="12" sm="12">
               <ripa-switch
+                v-model="model.officerGenderNonConforming"
                 label="Gender Nonconforming"
                 :max-width="250"
+                :rules="genderRules"
                 @input="handleInput"
               ></ripa-switch>
             </v-col>
@@ -193,6 +203,7 @@
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
+// import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
@@ -217,6 +228,7 @@ export default {
     RipaRadioGroup,
     RipaFormHeader,
     RipaSwitch,
+    // RipaCheckGroup,
   },
 
   data() {
@@ -262,7 +274,15 @@ export default {
     },
 
     raceRules() {
-      return [v => !!v || 'A race is required']
+      return [v => !!v || 'An officer race is required']
+    },
+
+    genderRules() {
+      const gender = this.model.gender
+      const checked = this.model.officerGenderNonConforming
+      const isValid = gender || checked
+
+      return [!!isValid || 'A gender is required']
     },
 
     startDateRules() {

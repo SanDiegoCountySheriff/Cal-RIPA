@@ -156,6 +156,9 @@ export default {
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
+        race: this.mappedUser.race,
+        gender: this.mappedUser.gender,
+        officerGenderNonConforming: this.mappedUser.officerGenderNonConforming,
       }
     },
   },
