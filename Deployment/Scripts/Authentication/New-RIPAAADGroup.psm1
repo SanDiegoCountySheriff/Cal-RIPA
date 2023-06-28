@@ -21,7 +21,9 @@
     Write-Host "Creating group" $GroupName
     $adminGroup = az ad group create --display-name $GroupName  --mail-nickname $GroupName --description $Description | ConvertFrom-Json
     
-    return $adminGroup.objectId
+    Write-Host "Using group ID:" $adminGroup.id
+    
+    return $adminGroup.id
 }
 
 Export-ModuleMember -Function New-RIPAAADGroup
