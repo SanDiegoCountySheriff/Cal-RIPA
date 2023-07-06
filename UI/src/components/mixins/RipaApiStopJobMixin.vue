@@ -9,8 +9,11 @@ export default {
       basisForSearchSource: 'Basis for Search Person: ',
       stopReasonSource: 'Stop Reason Person: ',
       snackbarText: '',
+      officerGenderRaceText:
+        'Recent regulation changes require the collection of officer race and gender. Please input these values now.',
       snackbarNoErrorsVisible: false,
       snackbarErrorsVisible: false,
+      snackbarOfficerRaceGender: '',
     }
   },
 

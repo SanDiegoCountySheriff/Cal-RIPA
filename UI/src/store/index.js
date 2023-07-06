@@ -59,7 +59,7 @@ export default new Vuex.Store({
       otherType: null,
       race: null,
       gender: null,
-      officerGenderNonConforming: null,
+      officerNonBinary: null,
     },
     apiConfig: null,
     piiDate: null,
@@ -204,7 +204,7 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
         gender: state.user.gender,
         race: state.user.race,
-        officerGenderNonConforming: state.user.officerGenderNonConforming,
+        officerNonBinary: state.user.officerNonBinary,
       }
     },
     stopTemplates: state => {
@@ -480,7 +480,7 @@ export default new Vuex.Store({
         yearsExperience,
         race: value.race,
         gender: value.gender,
-        officerGenderNonConforming: value.officerGenderNonConforming,
+        officerNonBinary: value.officerNonBinary,
       }
 
       const officer = {
@@ -493,7 +493,7 @@ export default new Vuex.Store({
         yearsExperience: state.user.yearsExperience,
         race: state.user.race,
         gender: state.user.gender,
-        officerGenderNonConforming: state.user.officerGenderNonConforming,
+        officerNonBinary: state.user.officerNonBinary,
       }
 
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
@@ -704,8 +704,7 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
-          `http://localhost:7071/api/v2/PutUser/${updatedUser.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -896,13 +895,12 @@ export default new Vuex.Store({
         yearsExperience: mappedUser.yearsExperience,
         race: mappedUser.race,
         gender: mappedUser.gender,
-        officerGenderNonConforming: mappedUser.officerGenderNonConforming,
+        officerNonBinary: mappedUser.officerNonBinary,
       }
 
       return axios
         .put(
-          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
-          `http://localhost:7071/api/v2/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1627,8 +1625,7 @@ export default new Vuex.Store({
       const id = state.user.oid
       return axios
         .get(
-          // `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
-          `http://localhost:7071/api/v2/GetUser/${id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1642,8 +1639,9 @@ export default new Vuex.Store({
           // commit('updateInvalidUser', false)
 
           if (
-            !response.data.race ||
-            (!response.data.gender && !response.data.officerGenderNonConforming)
+            state.version === 2 &&
+            (!response.data.race ||
+              (!response.data.gender && !response.data.officerNonBinary))
           ) {
             commit('updateInvalidUser', true)
             return true

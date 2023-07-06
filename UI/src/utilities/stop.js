@@ -218,7 +218,11 @@ export const apiStopStopSummary = apiStop => {
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })
   items.push({ id: 'A4', content: getSummaryTime(apiStop) })
   items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  if (apiStop.stopVersion === 2) {
+    items.push({ id: 'A6', content: getSummaryOfficerV2(apiStop) })
+  } else {
+    items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  }
   items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
   items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
@@ -368,17 +372,44 @@ const getSummaryOfficer = apiStop => {
         header: 'Other Type',
         detail: apiStop.officerAssignment.otherType,
       },
+    ],
+  }
+}
+
+const getSummaryOfficerV2 = apiStop => {
+  return {
+    level: 3,
+    header: 'Officer',
+    children: [
       {
-        header: 'Race',
+        header: 'Agency',
+        detail: apiStop.agency,
+      },
+      {
+        header: 'Officer ID',
+        detail: apiStop.officerId,
+      },
+      {
+        header: 'Officer Name',
+        detail: apiStop.officerName,
+      },
+      { header: 'Years Experience', detail: apiStop.expYears },
+      { header: 'Assignment', detail: apiStop.officerAssignment.type },
+      {
+        header: 'Other Type',
+        detail: apiStop.officerAssignment.otherType,
+      },
+      {
+        header: 'Officer Race',
         detail: apiStop.race,
       },
       {
-        header: 'Gender',
+        header: 'Officer Gender',
         detail: apiStop.gender,
       },
       {
-        header: 'OfficerGenderNonConforming',
-        detail: apiStop.officerGenderNonConforming,
+        header: 'Officer Nonbinary',
+        detail: apiStop.officerNonBinary,
       },
     ],
   }
@@ -1299,9 +1330,9 @@ export const fullStopToApiStop = (
       : officer.officerName,
     race: parsedApiStop ? parsedApiStop.race : officer.race,
     gender: parsedApiStop ? parsedApiStop.gender : officer.gender,
-    officerGenderNonConforming: parsedApiStop
-      ? parsedApiStop.officerGenderNonConforming
-      : officer.officerGenderNonConforming,
+    officerNonBinary: parsedApiStop
+      ? parsedApiStop.officerNonBinary
+      : officer.officerNonBinary,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),

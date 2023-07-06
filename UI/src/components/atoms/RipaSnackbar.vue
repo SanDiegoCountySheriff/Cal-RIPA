@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="model" :timeout="timeout">
+  <v-snackbar v-model="model" :timeout="timeout" :top="top">
     {{ text }}
 
     <template v-slot:action="{ attrs }">
@@ -72,6 +72,10 @@ export default {
       default: true,
     },
     viewButtonVisible: {
+      type: Boolean,
+      default: false,
+    },
+    top: {
       type: Boolean,
       default: false,
     },

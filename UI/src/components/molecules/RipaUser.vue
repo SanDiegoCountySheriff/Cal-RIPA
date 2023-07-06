@@ -144,56 +144,54 @@
                 @input="handleInput"
               >
               </ripa-text-input>
+              {{ version }}
             </v-col>
           </v-row>
         </template>
       </template>
 
-      <template v-if="version === 1">
+      <template v-if="version === 2">
         <v-row no-gutters>
-          <ripa-form-header title="Race" required v-on="$listeners">
-          </ripa-form-header>
-          <v-col cols="12" sm="12" md="12">
-            <ripa-select
-              v-model="model.race"
-              label="Officer Race"
-              :items="raceItems"
-              itemText="name"
-              itemValue="name"
-              :rules="raceRules"
-              @input="handleInput"
-              clear
-            ></ripa-select>
-          </v-col>
-
-          <ripa-form-header title="Gender" required> </ripa-form-header>
-        </v-row>
-
-        <v-container>
-          <v-row no-gutters>
-            <v-col cols="12" sm="12">
+          <v-col cols="12" sm="12" md="6">
+            <div class="md:tw-mr-4">
               <ripa-select
-                v-model="model.gender"
-                label="Officer Gender"
-                :items="genderItems"
+                v-model="model.race"
+                label="Officer Race"
+                :items="raceItems"
                 itemText="name"
                 itemValue="name"
-                :rules="genderRules"
+                :rules="raceRules"
                 @input="handleInput"
+                clearable
               ></ripa-select>
-            </v-col>
+            </div>
+          </v-col>
 
-            <v-col cols="12" sm="12">
-              <ripa-switch
-                v-model="model.officerGenderNonConforming"
-                label="Gender Nonconforming"
-                :max-width="250"
-                :rules="genderRules"
-                @input="handleInput"
-              ></ripa-switch>
-            </v-col>
-          </v-row>
-        </v-container>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-select
+              v-model="model.gender"
+              label="Officer Gender"
+              :items="genderItems"
+              itemText="name"
+              itemValue="name"
+              :rules="genderRules"
+              @input="handleInput"
+              clearable
+            ></ripa-select>
+          </v-col>
+        </v-row>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6"></v-col>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-switch
+              v-model="model.officerNonBinary"
+              label="Nonbinary Person"
+              :max-width="250"
+              :rules="genderRules"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
       </template>
     </v-container>
   </div>
@@ -204,7 +202,6 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { OFFICER_ASSIGNMENTS, GENDERS_V2, RACES_V2 } from '@/constants/form'
 import {
@@ -213,7 +210,6 @@ import {
   formatShortDate,
   formatToIsoCurrentDate,
 } from '@/utilities/dates'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'ripa-officer',
@@ -223,7 +219,6 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
-    RipaFormHeader,
     RipaSwitch,
   },
 
@@ -236,8 +231,9 @@ export default {
     }
   },
 
+  inject: ['version'],
+
   computed: {
-    ...mapGetters(['version']),
     model: {
       get() {
         return this.viewModel
@@ -275,10 +271,12 @@ export default {
 
     genderRules() {
       const gender = this.model.gender
-      const checked = this.model.officerGenderNonConforming
+      const checked = this.model.officerNonBinary
       const isValid = gender || checked
 
-      return [!!isValid || 'A gender is required']
+      return [
+        !!isValid || 'If no gender is selected, nonbinary must be selected',
+      ]
     },
 
     startDateRules() {
