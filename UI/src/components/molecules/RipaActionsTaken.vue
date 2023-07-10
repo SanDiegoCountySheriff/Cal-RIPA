@@ -342,6 +342,13 @@ export default {
         return false
       }
 
+      if (
+        this.model.actionsTaken.basisForSearch.length === 1 &&
+        this.model.actionsTaken.basisForSearch.includes(4)
+      ) {
+        return false
+      }
+
       return this.wasSearchOfPersonOrPropertyConducted
     },
   },
