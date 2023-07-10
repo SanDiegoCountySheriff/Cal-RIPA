@@ -244,8 +244,6 @@ export default {
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
-      vehicularStoptypeItems: VEHICULAR_PASSANGER,
-      pedestrianStopTypeItems: PEDESTRIAN,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
     }
   },
