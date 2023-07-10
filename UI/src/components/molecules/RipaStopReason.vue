@@ -157,6 +157,40 @@
             :rules="explanationRules"
             @blur="handlePiiCheck($event)"
           ></ripa-text-input>
+          <template v-if="model.stopType === 'Vehicular'">
+            <ripa-form-header
+              title="The stopped person is a passenger in a vehicle"
+              v-on="$listeners"
+            >
+            </ripa-form-header>
+
+            <ripa-switch
+              label="The stopped person is a passenger in a vehicle"
+            ></ripa-switch>
+
+            <v-container>
+              <v-row no-gutters>
+                <v-col cols="12" sm="12"> </v-col>
+              </v-row>
+            </v-container>
+          </template>
+          <template v-if="model.stopType === 'Pedestrian'">
+            <ripa-form-header
+              title="The stopped person was inside a residence..."
+              v-on="$listeners"
+            >
+            </ripa-form-header>
+
+            <ripa-switch
+              label="The stopped person was inside a residence..."
+            ></ripa-switch>
+
+            <v-container>
+              <v-row no-gutters>
+                <v-col cols="12" sm="12"> </v-col>
+              </v-row>
+            </v-container>
+          </template>
         </v-col>
       </v-row>
     </v-container>
@@ -177,6 +211,8 @@ import {
   STOP_REASONS,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
+  VEHICULAR_PASSANGER,
+  PEDESTRIAN,
   REASONABLE_SUSPICIONS,
   EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
@@ -208,6 +244,8 @@ export default {
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
+      vehicularStoptypeItems: VEHICULAR_PASSANGER,
+      pedestrianStopTypeItems: PEDESTRIAN,
       reasonableSuspicionItems: REASONABLE_SUSPICIONS,
     }
   },
