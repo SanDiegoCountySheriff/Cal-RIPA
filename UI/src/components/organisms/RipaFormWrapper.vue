@@ -304,7 +304,7 @@ import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
 import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaTemplate from '@/components/molecules/RipaTemplate'
-import { fullStopToApiStop } from '@/utilities/stop'
+import { fullStopToApiStop, fullStopToApiStopV2 } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -385,15 +385,33 @@ export default {
     },
 
     getApiStop() {
-      return fullStopToApiStop(
-        this.isOnlineAndAuthenticated,
-        this.fullStop,
-        this.beats,
-        this.countyCities,
-        this.nonCountyCities,
-        this.schools,
-        this.statutes,
-      )
+      if (this.fullStop?.stopVersion) {
+        let apiStop
+
+        this.fullStop.stopVersion === 1
+          ? (apiStop = fullStopToApiStop(
+              this.isOnlineAndAuthenticated,
+              this.fullStop,
+              this.beats,
+              this.countyCities,
+              this.nonCountyCities,
+              this.schools,
+              this.statutes,
+            ))
+          : (apiStop = fullStopToApiStopV2(
+              this.isOnlineAndAuthenticated,
+              this.fullStop,
+              this.beats,
+              this.countyCities,
+              this.nonCountyCities,
+              this.schools,
+              this.statutes,
+            ))
+
+        return apiStop
+      }
+
+      return {}
     },
 
     isFormStep2Disabled() {
