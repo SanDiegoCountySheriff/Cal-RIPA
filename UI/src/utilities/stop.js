@@ -11,6 +11,7 @@ import {
   EDUCATION_CODE_SECTIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  REASONABLE_SUSPICIONS_V2,
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
@@ -1250,7 +1251,11 @@ export const fullStopToApiStop = (
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
     overridePii: fullStop.overridePii || false,
     piiEntities: fullStop.piiEntities,
-    listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
+    listPersonStopped: getApiStopPeopleListed(
+      fullStop,
+      statutes,
+      fullStop.stopVersion,
+    ),
     location: {
       beat: getBeat(fullStop, beats),
       blockNumber: blockNumber && streetName ? blockNumber : '',
@@ -1296,7 +1301,7 @@ export const fullStopToApiStop = (
   }
 }
 
-export const getApiStopPeopleListed = (fullStop, statutes) => {
+export const getApiStopPeopleListed = (fullStop, statutes, stopVersion) => {
   return fullStop.people.map((person, index) => {
     return {
       basisForSearchBrief:
@@ -1326,7 +1331,10 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
         person.actionsTaken?.personSearchConsentGiven || false,
       propertySearchConsentGiven:
         person.actionsTaken?.propertySearchConsentGiven || false,
-      reasonForStop: getReasonForStop(person, statutes),
+      reasonForStop:
+        stopVersion === 2
+          ? getReasonForStopV2(person, statutes)
+          : getReasonForStop(person, statutes),
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
@@ -1538,12 +1546,43 @@ const getReasonForStop = (person, statutes) => {
   return null
 }
 
+const getReasonForStopV2 = (person, statutes) => {
+  const reason = person.stopReason?.reasonForStop || null
+
+  if (reason) {
+    const [filteredReason] = STOP_REASONS.filter(item => item.value === reason)
+
+    return {
+      key: reason.toString(),
+      reason: filteredReason?.name || '',
+      listDetail: getReasonForStopDetailsV2(reason, person),
+      listCodes: getReasonForStopCodes(reason, person, statutes),
+    }
+  }
+
+  return null
+}
+
 const getReasonForStopDetails = (reasonKey, person) => {
   if (reasonKey === 1) {
     return [getTrafficViolation(person)]
   }
   if (reasonKey === 2) {
     return getReasonableSuspicion(person)
+  }
+  if (reasonKey === 7) {
+    return [getEducationViolation(person)]
+  }
+
+  return []
+}
+
+const getReasonForStopDetailsV2 = (reasonKey, person) => {
+  if (reasonKey === 1) {
+    return [getTrafficViolation(person)]
+  }
+  if (reasonKey === 2) {
+    return getReasonableSuspicionV2(person)
   }
   if (reasonKey === 7) {
     return [getEducationViolation(person)]
@@ -1653,6 +1692,20 @@ const getReasonableSuspicion = person => {
   const suspicion = person.stopReason?.reasonableSuspicion || []
   return suspicion.map(item => {
     const [filteredSuspicion] = REASONABLE_SUSPICIONS.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      reason: filteredSuspicion?.name || '',
+    }
+  })
+}
+
+const getReasonableSuspicionV2 = person => {
+  const suspicion = person.stopReason?.reasonableSuspicion || []
+  return suspicion.map(item => {
+    const [filteredSuspicion] = REASONABLE_SUSPICIONS_V2.filter(
       item2 => item2.value === item,
     )
 
