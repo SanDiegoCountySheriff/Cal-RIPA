@@ -139,6 +139,7 @@ import {
   defaultLocation,
   defaultStop,
   fullStopToApiStop,
+  fullStopToApiStopV2,
   stopReasonGivenTemplate,
   stopResultGivenTemplate,
 } from '@/utilities/stop'
@@ -800,15 +801,27 @@ export default {
             }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
-        this.apiStop = fullStopToApiStop(
-          this.isOnlineAndAuthenticated,
-          this.fullStop,
-          this.mappedFormBeats,
-          this.mappedFormCountyCities,
-          this.mappedFormNonCountyCities,
-          this.mappedFormSchools,
-          this.mappedFormStatutes,
-        )
+
+        this.apiStop =
+          this.fullStop.stopVersion === 1
+            ? fullStopToApiStop(
+                this.isOnlineAndAuthenticated,
+                this.fullStop,
+                this.mappedFormBeats,
+                this.mappedFormCountyCities,
+                this.mappedFormNonCountyCities,
+                this.mappedFormSchools,
+                this.mappedFormStatutes,
+              )
+            : fullStopToApiStopV2(
+                this.isOnlineAndAuthenticated,
+                this.fullStop,
+                this.mappedFormBeats,
+                this.mappedFormCountyCities,
+                this.mappedFormNonCountyCities,
+                this.mappedFormSchools,
+                this.mappedFormStatutes,
+              )
       }
     },
 

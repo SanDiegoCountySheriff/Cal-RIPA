@@ -921,7 +921,6 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
-    stopType: apiStop.stopType,
     stopVersion: apiStop.stopVersion,
     location: {
       isSchool: apiStop.location?.school || false,
@@ -946,6 +945,49 @@ export const apiStopToFullStop = apiStop => {
       stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
     },
     people: getFullStopPeopleListed(apiStop),
+  }
+}
+
+export const apiStopToFullStopV2 = apiStop => {
+  const blockNumber = apiStop.location?.blockNumber || null
+  const streetName = apiStop.location?.streetName || null
+  const schoolNumber = apiStop.location?.schoolName?.codes?.code || null
+  const cityName = apiStop.location?.city?.codes?.code || null
+  const beatNumber = apiStop.location?.beat?.codes?.code || null
+
+  return {
+    agencyQuestions: apiStop.listAgencyQuestion || [],
+    id: apiStop.id,
+    internalId: nanoid(),
+    template: apiStop.telemetry?.template || null,
+    stepTrace: apiStop.telemetry?.listStepTrace || [],
+    isPiiFound: apiStop.isPiiFound || false,
+    piiEntities: apiStop.piiEntities,
+    stopType: apiStop.stopType,
+    stopVersion: apiStop.stopVersion,
+    location: {
+      isSchool: apiStop.location?.school || false,
+      school: schoolNumber,
+      blockNumber: blockNumber && streetName ? blockNumber : null,
+      streetName: blockNumber && streetName ? streetName : null,
+      intersection: apiStop.location?.intersection || null,
+      toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
+      highwayExit: apiStop.location?.highwayExit || null,
+      landmark: apiStop.location?.landMark || null,
+      piiFound: apiStop.location?.piiFound || false,
+      outOfCounty: apiStop.location?.outOfCounty || false,
+      city: cityName || null,
+      beat: beatNumber ? beatNumber.toString() : null,
+      latitude: apiStop.location?.geoLocation?.latitude || null,
+      longitude: apiStop.location?.geoLocation?.longitude || null,
+    },
+    stopDate: {
+      date: apiStop.date,
+      time: apiStop.time,
+      duration: Number(apiStop.stopDuration),
+      stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
+    },
+    people: getFullStopPeopleListedV2(apiStop),
   }
 }
 
@@ -991,11 +1033,124 @@ const getFullStopPeopleListed = apiStop => {
       isStudent: person.isStudent || false,
       perceivedAge: Number(person.perceivedAge),
       perceivedGender: getPerceivedGenderCode(person),
-      genderNonconforming: getPerceivedOrientationCode(person),
+      genderNonconforming: person.genderNonconforming,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
-      perceivedUnhoused: person.perceivedUnhoused,
       perceivedLgbt: person.perceivedLgbt,
-      perceivedSexualOrientation: person.perceivedSexualOrientation,
+      perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
+      perceivedRace: getKeyArray(person.listPerceivedRace),
+      actionsTaken: {
+        anyActionsTaken,
+        actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
+        personSearchConsentGiven: person.personSearchConsentGiven,
+        propertySearchConsentGiven: person.propertySearchConsentGiven,
+        basisForSearch: getKeyArray(person.listBasisForSearch),
+        basisForSearchExplanation: person.basisForSearchBrief,
+        basisForSearchPiiFound: person.basisForSearchPiiFound || false,
+        propertyWasSeized:
+          person.listBasisForPropertySeizure.length > 0 ||
+          person.listTypeOfPropertySeized.length > 0,
+        basisForPropertySeizure: getKeyArray(
+          person.listBasisForPropertySeizure,
+        ),
+        typeOfPropertySeized: getKeyArray(person.listTypeOfPropertySeized),
+        anyContraband,
+        contrabandOrEvidenceDiscovered: getKeyArray(
+          contrabandOrEvidenceDiscovered,
+        ),
+      },
+      stopReason: {
+        reasonForStop: Number(person.reasonForStop.key),
+        educationViolation: getEducationViolationDetailKey(
+          person.reasonForStop,
+        ),
+        educationViolationCode: getEducationViolationDetailCode(
+          person.reasonForStop,
+        ),
+        trafficViolation: getTrafficViolationDetailKey(person.reasonForStop),
+        trafficViolationCode: getTrafficViolationDetailCode(
+          person.reasonForStop,
+        ),
+        reasonableSuspicion: getReasonableSuspicionDetailKeys(
+          person.reasonForStop,
+        ),
+        reasonableSuspicionCode: getReasonableSuspicionDetailCode(
+          person.reasonForStop,
+        ),
+        reasonForStopExplanation: person.reasonForStopExplanation,
+        reasonForStopPiiFound: person.reasonForStopPiiFound || false,
+        searchOfPerson: getStopReasonSearchOfPerson(person),
+        searchOfProperty: getStopReasonSearchOfProperty(person),
+      },
+      stopResult: {
+        anyResultsOfStop,
+        resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
+        resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
+        resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
+        resultsOfStop5: getKeyFoundInArray(resultsOfStop, 5),
+        resultsOfStop6: getKeyFoundInArray(resultsOfStop, 6),
+        resultsOfStop7: getKeyFoundInArray(resultsOfStop, 7),
+        resultsOfStop8: getKeyFoundInArray(resultsOfStop, 8),
+        resultsOfStop9: getKeyFoundInArray(resultsOfStop, 9),
+        resultsOfStop10: getKeyFoundInArray(resultsOfStop, 10),
+        resultsOfStop11: getKeyFoundInArray(resultsOfStop, 11),
+        resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
+        resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
+        warningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
+        citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
+        infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
+        custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 6),
+        pullFromReasonCode: telemetry?.pullFromReasonCode || false,
+      },
+    }
+  })
+}
+
+const getFullStopPeopleListedV2 = apiStop => {
+  const telemetry = apiStop.telemetry || null
+  const people = apiStop.listPersonStopped
+
+  return people.map((person, index) => {
+    const anyDisabilities =
+      person.listPerceivedOrKnownDisability.length > 0 &&
+      person.listPerceivedOrKnownDisability[0].key !== '8'
+
+    const anyActionsTaken =
+      person.listActionTakenDuringStop.length > 0 &&
+      person.listActionTakenDuringStop[0].key !== '24'
+
+    const anyContraband =
+      person.listContrabandOrEvidenceDiscovered.length > 0 &&
+      person.listContrabandOrEvidenceDiscovered[0].key !== '1'
+
+    const anyResultsOfStop =
+      person.listResultOfStop.length > 0 &&
+      person.listResultOfStop[0].key !== '1'
+
+    const perceivedOrKnownDisability = anyDisabilities
+      ? person.listPerceivedOrKnownDisability
+      : []
+
+    const actionTakenDuringStop = anyActionsTaken
+      ? person.listActionTakenDuringStop
+      : []
+
+    const contrabandOrEvidenceDiscovered = anyContraband
+      ? person.listContrabandOrEvidenceDiscovered
+      : []
+
+    const resultsOfStop = anyResultsOfStop ? person.listResultOfStop : []
+
+    return {
+      anyDisabilities,
+      id: Number(person.id),
+      index: index + 1,
+      isStudent: person.isStudent || false,
+      perceivedAge: Number(person.perceivedAge),
+      perceivedGender: getPerceivedGenderCode(person),
+      genderNonconforming: person.genderNonconforming,
+      perceivedSexualOrientation: getPerceivedOrientationCode(person),
+      perceivedUnhoused: person.perceivedUnhoused,
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
       actionsTaken: {
@@ -1182,7 +1337,6 @@ export const fullStopToStop = fullStop => {
     stepTrace: fullStop.stepTrace,
     actionsTaken: person.actionsTaken || {},
     location: fullStop.location,
-    stopType: fullStop.stopType,
     stopVersion: fullStop.stopVersion,
     person: {
       anyDisabilities: person.anyDisabilities || false,
@@ -1192,6 +1346,39 @@ export const fullStopToStop = fullStop => {
       perceivedAge: person.perceivedAge || null,
       perceivedGender: person.perceivedGender || null,
       perceivedLgbt: person.perceivedLgbt,
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
+      perceivedRace: person.perceivedRace || [],
+    },
+    stopDate: fullStop.stopDate,
+    stopReason: person.stopReason || {},
+    stopResult: person.stopResult || {},
+    agencyQuestions: fullStop.agencyQuestions,
+  }
+}
+
+export const fullStopToStopV2 = fullStop => {
+  const person = fullStop.people.length > 0 ? fullStop.people[0] : null
+  return {
+    id: fullStop.id,
+    internalId: fullStop.id,
+    template: fullStop.template,
+    editStopExplanation: null,
+    isPiiFound: fullStop.isPiiFound || false,
+    overridePii: false,
+    piiEntities: fullStop.piiEntities,
+    stepTrace: fullStop.stepTrace,
+    actionsTaken: person.actionsTaken || {},
+    location: fullStop.location,
+    stopType: fullStop.stopType,
+    stopVersion: fullStop.stopVersion,
+    person: {
+      anyDisabilities: person.anyDisabilities || false,
+      genderNonconforming: person.genderNonconforming || false,
+      id: person.id,
+      isStudent: person.isStudent || false,
+      perceivedAge: person.perceivedAge || null,
+      perceivedGender: person.perceivedGender || null,
       perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
@@ -1307,6 +1494,106 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+  }
+}
+
+export const fullStopToApiStopV2 = (
+  onlineAndAuthenticated,
+  fullStop,
+  beats,
+  countyCities,
+  nonCountyCities,
+  schools,
+  statutes,
+) => {
+  if (!fullStop) {
+    return {}
+  }
+
+  if (fullStop && Object.keys(fullStop).length === 0) {
+    return {}
+  }
+
+  const officer = getOfficerFromLocalStorage()
+  const assignment = getOfficerAssignment(officer.assignment)
+  const outOfCounty = fullStop.location?.outOfCounty || false
+  const duration = fullStop.stopDate?.duration || null
+  const lookupCacheDate = localStorage.getItem('ripa_cache_date')
+  const formCached = localStorage.getItem('ripa_form_cached')
+  const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
+  const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
+  const blockNumber = fullStop.location?.blockNumber || null
+  const streetName = fullStop.location?.streetName || null
+
+  return {
+    agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
+    date: fullStop.stopDate.date,
+    editStopExplanation: parsedApiStop ? fullStop.editStopExplanation : null,
+    editStopOfficerId: parsedApiStop ? officer.officerId : null,
+    expYears: parsedApiStop
+      ? parsedApiStop.expYears
+      : officer.yearsExperience?.toString() || '',
+    id: fullStop.id,
+    telemetry: {
+      offline: !onlineAndAuthenticated,
+      template: fullStop.template || null,
+      formCached: formCached === '1',
+      listStepTrace: fullStop.stepTrace,
+      lookupCacheDate:
+        parsedApiStop && parsedApiStop.telemetry
+          ? parsedApiStop.telemetry.lookupCacheDate
+          : lookupCacheDate
+          ? format(new Date(lookupCacheDate), 'yyyy-MM-dd kk:mm')
+          : null,
+      pullFromReasonCode:
+        fullStop.people.filter(item => item.pullFromReasonCode).length > 0,
+    },
+    listAgencyQuestion: fullStop.agencyQuestions || [],
+    isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
+    overridePii: fullStop.overridePii || false,
+    piiEntities: fullStop.piiEntities,
+    listPersonStopped: getApiStopPeopleListedV2(fullStop, statutes),
+    location: {
+      beat: getBeat(fullStop, beats),
+      blockNumber: blockNumber && streetName ? blockNumber : '',
+      city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
+      fullAddress: fullStop.location?.fullAddress || '',
+      highwayExit: fullStop.location?.highwayExit || '',
+      intersection: fullStop.location?.intersection || '',
+      landMark: fullStop.location?.landmark || '',
+      outOfCounty,
+      piiFound: fullStop.location?.piiFound || false,
+      school: fullStop.location?.isSchool || false,
+      schoolName: getSchool(fullStop, schools),
+      streetName: blockNumber && streetName ? streetName : '',
+      toggleLocationOptions: fullStop.location?.toggleLocationOptions || false,
+      geoLocation: {
+        latitude: fullStop.location?.latitude || null,
+        longitude: fullStop.location?.longitude || null,
+      },
+    },
+    officerAssignment: {
+      key: parsedApiStop
+        ? parsedApiStop.officerAssignment.key
+        : assignment.code.toString(),
+      otherType: parsedApiStop
+        ? parsedApiStop.officerAssignment.otherType
+        : officer?.otherType || '',
+      type: parsedApiStop
+        ? parsedApiStop.officerAssignment.type
+        : assignment.text,
+    },
+    officerId: parsedApiStop ? parsedApiStop.officerId : officer.officerId,
+    officerName: parsedApiStop
+      ? parsedApiStop.officerName
+      : officer.officerName,
+    stopDateTime: new Date(
+      formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
+    ),
+    stopDuration: duration ? duration.toString() : null,
+    stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
+    time: fullStop.stopDate.time,
+    stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,
   }
 }
@@ -1334,6 +1621,41 @@ export const getApiStopPeopleListed = (fullStop, statutes) => {
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       perceivedLgbt: person.perceivedLgbt,
+      perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
+      personSearchConsentGiven:
+        person.actionsTaken?.personSearchConsentGiven || false,
+      propertySearchConsentGiven:
+        person.actionsTaken?.propertySearchConsentGiven || false,
+      reasonForStop: getReasonForStop(person, statutes),
+      reasonForStopExplanation:
+        person.stopReason?.reasonForStopExplanation || null,
+      reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
+    }
+  })
+}
+
+export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
+  return fullStop.people.map((person, index) => {
+    return {
+      basisForSearchBrief:
+        person.actionsTaken?.basisForSearchExplanation || null,
+      basisForSearchPiiFound:
+        person.actionsTaken?.basisForSearchPiiFound || false,
+      id: index + 1,
+      index: index + 1,
+      isStudent: person.isStudent || false,
+      listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      listBasisForPropertySeizure: getBasisForPropertySeizure(person),
+      listBasisForSearch: getBasisForSearch(person),
+      listContrabandOrEvidenceDiscovered:
+        getContrabandOrEvidenceDiscovered(person),
+      listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
+      listPerceivedRace: getPerceivedRace(person),
+      listResultOfStop: getResultOfStop(person, statutes),
+      listTypeOfPropertySeized: getTypeOfPropertySeized(person),
+      perceivedAge: person.perceivedAge?.toString() || null,
+      perceivedGender: getPerceivedGenderText(person),
+      genderNonconforming: person.genderNonconforming || false,
       perceivedSexualOrientation: getPerceivedOrientationText(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
