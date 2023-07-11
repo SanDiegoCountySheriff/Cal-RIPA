@@ -294,7 +294,7 @@ export default {
 
       return [
         (checked && consentGiven) ||
-          '"Basis for Search" indicates "Consent Given" but Person search consent or Property search consent has not been selected',
+          'Must select either consent given when "Basis for Search" indicates "Consent Given"',
       ]
     },
 
