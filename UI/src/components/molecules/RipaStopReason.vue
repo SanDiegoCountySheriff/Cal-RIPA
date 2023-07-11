@@ -183,6 +183,7 @@
             </ripa-form-header>
 
             <ripa-switch
+              v-model="model.person.insideResidence"
               label="The stopped person was inside a residence..."
             ></ripa-switch>
 

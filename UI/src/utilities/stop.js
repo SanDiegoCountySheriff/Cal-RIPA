@@ -409,6 +409,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
       items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
+      items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
     }
     items.push({
       id: 'B8',
@@ -521,6 +522,14 @@ const getSummaryPassengerInVehicle = person => {
     level: 1,
     header: 'Passenger In Vehicle',
     detail: person.passengerInVehicle,
+  }
+}
+
+const getSummaryInsideResidence = person => {
+  return {
+    level: 1,
+    header: 'Inside Residence',
+    detail: person.insideResidence,
   }
 }
 
@@ -1144,6 +1153,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       genderNonconforming: person.genderNonconforming,
       perceivedSexualOrientation: getPerceivedOrientationCode(person),
       passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
@@ -1378,6 +1388,7 @@ export const fullStopToStopV2 = fullStop => {
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
       passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
     },
@@ -1661,6 +1672,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
         person.actionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStop(person, statutes),
       passengerInVehicle: person.passengerInVehicle || false,
+      insideResidence: person.insideResidence || false,
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
