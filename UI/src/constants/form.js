@@ -200,6 +200,25 @@ export const SEIZED_PROPERTY_TYPES = [
   { name: 'Other contraband or evidence', value: 11 },
 ]
 
+export const STOP_RESULTS_V2 = [
+  { name: 'Verbal Warning', value: 2 },
+  { name: 'Written Warning', value: 3 },
+  { name: 'Citation for infraction', value: 4 },
+  { name: 'In-field cite and release', value: 5 },
+  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 6 },
+  { name: 'Custodial Arrest without warrant', value: 7 },
+  { name: 'Field interview card completed', value: 8 },
+  { name: 'Noncriminal transport or caretaking transport', value: 9 },
+  {
+    name: 'Contacted parent/legal guardian or other person responsible for the minor',
+    value: 10,
+  },
+  { name: 'Psychiatric hold', value: 11 },
+  { name: 'Contacted U.S. Department of Homeland Security', value: 12 },
+  { name: 'Referral to school administrator', value: 13 },
+  { name: 'Referral to school counselor or other support staff', value: 14 },
+]
+
 export const STOP_RESULTS = [
   { name: 'Warning (verbal or written)', value: 2 },
   { name: 'Citation for infraction', value: 3 },

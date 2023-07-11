@@ -390,9 +390,64 @@ export default {
       ]
     },
 
+    actionsTakenRulesV2() {
+      const checked = this.model.stopResult.anyResultsOfStop
+      const value2 = this.model.stopResult.resultsOfStop2
+      const value3 = this.model.stopResult.resultsOfStop3
+      const value4 = this.model.stopResult.resultsOfStop4
+      const value5 = this.model.stopResult.resultsOfStop5
+      const value6 = this.model.stopResult.resultsOfStop6
+      const value7 = this.model.stopResult.resultsOfStop7
+      const value8 = this.model.stopResult.resultsOfStop8
+      const value9 = this.model.stopResult.resultsOfStop9
+      const value10 = this.model.stopResult.resultsOfStop10
+      const value11 = this.model.stopResult.resultsOfStop11
+      const value12 = this.model.stopResult.resultsOfStop12
+      const value13 = this.model.stopResult.resultsOfStop13
+      const value14 = this.model.stopResult.resultsOfStop14
+
+      return [
+        (checked &&
+          (value2 ||
+            value3 ||
+            value4 ||
+            value5 ||
+            value6 ||
+            value7 ||
+            value8 ||
+            value9 ||
+            value10 ||
+            value11 ||
+            value12 ||
+            value13 ||
+            value14)) ||
+          'An action taken is required',
+      ]
+    },
+
     warningRules() {
       const checked1 = this.model.stopResult.anyResultsOfStop
       const checked2 = this.model.stopResult.resultsOfStop2
+      const options = this.model.stopResult.warningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
+    verbalWarningRulesV2() {
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop2
+      const options = this.model.stopResult.warningCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
+    writtenWarningRulesV2() {
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop3
       const options = this.model.stopResult.warningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -410,6 +465,16 @@ export default {
       ]
     },
 
+    citationRulesV2() {
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop4
+      const options = this.model.stopResult.citationCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
     infieldRules() {
       const checked1 = this.model.stopResult.anyResultsOfStop
       const checked2 = this.model.stopResult.resultsOfStop4
@@ -420,9 +485,29 @@ export default {
       ]
     },
 
+    infieldRulesV2() {
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop5
+      const options = this.model.stopResult.infieldCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
     custodialArrestRules() {
       const checked1 = this.model.stopResult.anyResultsOfStop
       const checked2 = this.model.stopResult.resultsOfStop6
+      const options = this.model.stopResult.custodialArrestCodes
+      return [
+        (checked1 && checked2 && options !== null && options.length > 0) ||
+          'An offense code is required',
+      ]
+    },
+
+    custodialArrestRulesV2() {
+      const checked1 = this.model.stopResult.anyResultsOfStop
+      const checked2 = this.model.stopResult.resultsOfStop7
       const options = this.model.stopResult.custodialArrestCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
@@ -465,11 +550,56 @@ export default {
       }
     },
 
+    handleUpdateModelV2() {
+      if (!this.model.stopResult.anyResultsOfStop) {
+        this.model.stopResult.resultsOfStop2 = false
+        this.model.stopResult.resultsOfStop3 = false
+        this.model.stopResult.resultsOfStop4 = false
+        this.model.stopResult.resultsOfStop5 = false
+        this.model.stopResult.resultsOfStop6 = false
+        this.model.stopResult.resultsOfStop7 = false
+        this.model.stopResult.resultsOfStop8 = false
+        this.model.stopResult.resultsOfStop9 = false
+        this.model.stopResult.resultsOfStop10 = false
+        this.model.stopResult.resultsOfStop11 = false
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+        this.model.stopResult.resultsOfStop14 = false
+      }
+
+      if (!this.model.stopResult.resultsOfStop2) {
+        this.model.stopResult.verbalWarningCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop3) {
+        this.model.stopResult.writtenWarningCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop4) {
+        this.model.stopResult.citationCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop5) {
+        this.model.stopResult.infieldCodes = []
+      }
+
+      if (!this.model.stopResult.resultsOfStop7) {
+        this.model.stopResult.custodialArrestCodes = []
+      }
+    },
+
     removeItem(list, statute) {
       this.model.stopResult[list] = this.model.stopResult[list].filter(
         code => code !== statute.item.code,
       )
       this.handleUpdateModel()
+    },
+
+    removeItemV2(list, statute) {
+      this.model.stopResult[list] = this.model.stopResult[list].filter(
+        code => code !== statute.item.code,
+      )
+      this.handleUpdateModelV2()
     },
 
     getReasonCode() {
