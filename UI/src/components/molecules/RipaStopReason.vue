@@ -165,6 +165,7 @@
             </ripa-form-header>
 
             <ripa-switch
+              v-model="model.person.passengerInVehicle"
               label="The stopped person is a passenger in a vehicle"
             ></ripa-switch>
 
@@ -211,8 +212,6 @@ import {
   STOP_REASONS,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
-  VEHICULAR_PASSANGER,
-  PEDESTRIAN,
   REASONABLE_SUSPICIONS,
   EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
