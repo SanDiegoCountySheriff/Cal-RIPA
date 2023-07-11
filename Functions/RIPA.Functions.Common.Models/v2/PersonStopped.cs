@@ -16,8 +16,8 @@ public class PersonStopped : IPersonStopped
     public string PerceivedSexualOrientation { get; set; }
     public ReasonForStop ReasonForStop { get; set; }
     public string ReasonForStopExplanation { get; set; }
-    public bool PassengerInVehicle {get; set;}
-    public bool InsideResidence { get; set; }
+    public bool? PassengerInVehicle { get; set; }
+    public bool? InsideResidence { get; set; }
     public bool ReasonForStopPiiFound { get; set; }
     public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
     public bool PersonSearchConsentGiven { get; set; }
