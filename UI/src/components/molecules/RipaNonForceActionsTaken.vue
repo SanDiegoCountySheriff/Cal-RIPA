@@ -187,6 +187,18 @@ export default {
     }
   },
 
+  inject: ['loadingPiiStep4'],
+
+  created() {
+    this.updateModel()
+
+    if (this.model.nonForceActionsTaken.basisForSearchExplanation) {
+      this.handlePiiCheck(
+        this.model.nonForceActionsTaken.basisForSearchExplanation,
+      )
+    }
+  },
+
   computed: {
     model: {
       get() {
@@ -335,12 +347,34 @@ export default {
           'At least one action taken is required',
       ]
     },
+
+    explanationRules() {
+      return [
+        v => (v || '').length > 0 || 'Explanation is required',
+        v => (v || '').length <= 250 || 'Max 250 characters',
+        v => (v || '').length >= 5 || 'Min 5 characters',
+      ]
+    },
+
+    typeOfPropertySeizedRules() {
+      const checked = this.model.nonForceActionsTaken.propertyWasSeized
+      const options = this.model.nonForceActionsTaken.typeOfPropertySeized || []
+
+      return [
+        (checked && options.length > 0) ||
+          'At least one type of property seized is required',
+      ]
+    },
   },
 
   methods: {
     handleInput() {
       this.updateModel()
       this.$emit('input', this.model)
+    },
+
+    handlePiiCheck(textValue) {
+      this.$emit('pii-check', { source: 'search', value: textValue })
     },
 
     updateModel() {
@@ -479,7 +513,7 @@ export default {
 
       if (!this.model.nonForceActionsTaken.propertyWasSeized) {
         this.model.nonForceActionsTaken.basisForPropertySeizure = []
-        this.model.nonForceActionsTaken.typeOfPropertySeized = null
+        this.model.nonForceActionsTaken.typeOfPropertySeized = []
         this.model.nonForceActionsTaken.actionsTakenDuringStop =
           actionsTaken.filter(item => item !== 12)
       } else {

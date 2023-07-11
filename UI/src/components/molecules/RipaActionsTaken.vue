@@ -412,30 +412,28 @@ export default {
         }
       }
 
-      
       if (!actionsTaken.includes(17)) {
         this.model.actionsTaken.personSearchConsentGiven = false
       }
-      
+
       if (!actionsTaken.includes(19)) {
         this.model.actionsTaken.propertySearchConsentGiven = false
       }
-      
+
       if (!actionsTaken.includes(18) && !actionsTaken.includes(20)) {
         this.model.actionsTaken.basisForSearch = []
         this.model.actionsTaken.basisForSearchExplanation = null
         this.model.actionsTaken.basisForSearchPiiFound = false
       }
-      
+
       if (
         this.model.actionsTaken.basisForSearch !== null &&
         this.model.actionsTaken.basisForSearch.length === 1 &&
         this.model.actionsTaken.basisForSearch.includes(4)
-        ) {
-          this.model.actionsTaken.basisForSearchExplanation = null
-          this.model.actionsTaken.basisForSearchPiiFound = false
-        }
-        // completed to here
+      ) {
+        this.model.actionsTaken.basisForSearchExplanation = null
+        this.model.actionsTaken.basisForSearchPiiFound = false
+      }
 
       actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
 
