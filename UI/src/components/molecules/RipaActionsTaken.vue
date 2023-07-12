@@ -480,7 +480,7 @@ export default {
 
       if (!this.model.actionsTaken.propertyWasSeized) {
         this.model.actionsTaken.basisForPropertySeizure = []
-        this.model.actionsTaken.typeOfPropertySeized = null
+        this.model.actionsTaken.typeOfPropertySeized = []
         this.model.actionsTaken.actionsTakenDuringStop = actionsTaken.filter(
           item => item !== 21,
         )

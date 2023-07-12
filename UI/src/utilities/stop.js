@@ -440,17 +440,27 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     if (apiStop.stopVersion === 1) {
       items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
     }
-    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
-    items.push({
-      id: 'B13',
-      content: getSummaryBasisForSearchExplanation(person),
-    })
-    items.push({
-      id: 'B14',
-      content: getSummaryBasisForPropertySeizure(person),
-    })
-    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B19', content: getSummaryNonForceActionsTaken(person) })
+    }
+    if (person.listBasisForSearch.length > 0) {
+      items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+      items.push({
+        id: 'B13',
+        content: getSummaryBasisForSearchExplanation(person),
+      })
+    }
+    if (person.listBasisForPropertySeizure.length > 0) {
+      items.push({
+        id: 'B14',
+        content: getSummaryBasisForPropertySeizure(person),
+      })
+      items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    }
     items.push({ id: 'B16', content: getSummaryContraband(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B20', content: getSummaryForceActionsTaken(person) })
+    }
     items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
     return items
   }
@@ -602,6 +612,38 @@ const getSummaryActionsTaken = person => {
   return {
     level: 2,
     header: 'Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryNonForceActionsTaken = person => {
+  const actions = person.listNonForceActionsTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Non-Force Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryForceActionsTaken = person => {
+  const actions = person.listForceActionsTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Force Actions Taken During Stop',
     children: actions,
   }
 }
