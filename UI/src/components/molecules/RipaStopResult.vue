@@ -627,6 +627,22 @@ export default {
       }
     },
 
+    handlePullReasonCodeVerbalWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.verbalWarningCodes.push(reasonCode)
+      }
+    },
+
+    handlePullReasonCodeWrittenWarning() {
+      const reasonCode = this.getReasonCode()
+      if (reasonCode) {
+        this.model.stopResult.pullFromReasonCode = true
+        this.model.stopResult.writtenWarningCodes.push(reasonCode)
+      }
+    },
+
     handlePullReasonCodeCitation() {
       const reasonCode = this.getReasonCode()
       if (reasonCode) {
