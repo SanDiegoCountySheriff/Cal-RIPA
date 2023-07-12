@@ -889,7 +889,15 @@ export default {
     },
 
     getFormSummaryStepText() {
-      return this.anyAgencyQuestions ? '7' : '6'
+      if (this.agencyQuestions && this.model.stopVersion === 1) {
+        return '7'
+      } else if (this.agencyQuestions && this.model.stopVersion === 2) {
+        return '8'
+      } else if (!this.agencyQuestions && this.model.stopVersion === 1) {
+        return '6'
+      } else if (!this.agencyQuestions && this.model.stopVersion === 2) {
+        return '7'
+      }
     },
 
     updateFormStepNumbers() {
@@ -939,6 +947,12 @@ export default {
       }
       this.stepIndex = newVal
       this.$emit('on-step-index-change', this.stepIndex)
+    },
+
+    'model.stopVersion'(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.updateFormStepNumbers()
+      }
     },
   },
 

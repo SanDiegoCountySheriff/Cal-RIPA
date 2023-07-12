@@ -13,7 +13,7 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.nonForceActionsTaken.anyNonForceActionsTaken"
-            label="Any Actions Taken?"
+            label="Any Non-Force Actions Taken?"
             :disabled="isAnyActionsTakenDisabled1 || isAnyActionsTakenDisabled2"
             :max-width="200"
             @input="handleInput"
