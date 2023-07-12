@@ -33,7 +33,10 @@
             "
           ></ripa-template>
         </template>
-        <template v-if="stepIndex >= 1 && stepIndex <= 7">
+
+        <template
+          v-if="stepIndex >= 1 && stepIndex <= 7 && model.stopVersion === 1"
+        >
           <v-stepper v-model="stepIndex">
             <v-stepper-header>
               <v-stepper-step :complete="stepIndex > 1" step="1">
@@ -236,6 +239,222 @@
             <v-btn class="tw-mt-3" text @click="handleDebugger">Debugger</v-btn>
           </template>
         </template>
+
+        <template
+          v-if="stepIndex >= 1 && stepIndex <= 7 && model.stopVersion === 2"
+        >
+          <v-stepper v-model="stepIndex">
+            <v-stepper-header>
+              <v-stepper-step :complete="stepIndex > 1" step="1">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 2" step="2">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 3" step="3">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 4" step="4">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 5" step="5">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <template v-if="anyAgencyQuestions">
+                <v-stepper-step :complete="stepIndex > 7" step="7">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                class="ripa-form-wrapper--summary-step-top"
+                step="8"
+              ></v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <template v-if="stepIndex === 1">
+                  <ripa-form-step-1
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-1>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <template v-if="stepIndex === 2">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-2
+                    v-model="model"
+                    v-on="$listeners"
+                    :disabled="isFormStep2Disabled"
+                    :back-button-visible="getFormStep2BackButtonVisible"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-2>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <template v-if="stepIndex === 3">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-3
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-3>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="4">
+                <template v-if="stepIndex === 4">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-4
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-4>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="6">
+                <template v-if="stepIndex === 6">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-5
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-5>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="7">
+                <template v-if="stepIndex === 7">
+                  <ripa-form-step-6
+                    v-model="model"
+                    :back-button-visible="getFormStep6BackButtonVisible"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-6>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="8">
+                <template v-if="stepIndex === 8">
+                  <ripa-form-step-7
+                    v-model="model"
+                    :api-stop="getApiStop"
+                    @on-add-person="handleAddPerson"
+                    @on-back="handleBack"
+                    @on-copy-person="handleCopyPerson"
+                    @on-delete-person="handleCallDeletePerson"
+                    @on-edit-agency-questions="handleEditAgencyQuestions"
+                    @on-edit-person="handleEditPerson"
+                    @on-edit-stop="handleEditStop"
+                    @on-submit="handleSubmit"
+                    @on-cancel="handleCancel"
+                    @handle-done="handleDone"
+                  ></ripa-form-step-7>
+                </template>
+              </v-stepper-content>
+            </v-stepper-items>
+
+            <v-stepper-header>
+              <v-stepper-step :complete="stepIndex > 1" step="1">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 2" step="2">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 3" step="3">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 4" step="4">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 5" step="5">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="stepIndex > 6" step="6">
+              </v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <template v-if="anyAgencyQuestions">
+                <v-stepper-step :complete="stepIndex > 7" step="7">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                class="ripa-form-wrapper--summary-step-bottom"
+                step="8"
+              ></v-stepper-step>
+            </v-stepper-header>
+          </v-stepper>
+
+          <template v-if="displayDebugger">
+            <v-btn class="tw-mt-3" text @click="handleDebugger">Debugger</v-btn>
+          </template>
+        </template>
+
         <template v-if="stepIndex === confirmationStepIndex">
           <ripa-confirmation
             @on-start-new="handleStartNew"
@@ -328,7 +547,7 @@ export default {
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 8,
+      confirmationStepIndex: 9,
       stop: this.value,
       stepTrace: null,
       showDialog: false,
@@ -545,7 +764,7 @@ export default {
     },
 
     handleEditAgencyQuestions() {
-      this.stepIndex = 6
+      this.stepIndex = this.model.stopVersion === 1 ? 6 : 7
       this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
