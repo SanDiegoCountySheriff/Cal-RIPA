@@ -100,7 +100,7 @@
           <template v-if="model.stopReason.reasonForStop === 2">
             <ripa-check-group
               v-model="model.stopReason.reasonableSuspicion"
-              :items="reasonableSuspicionItems"
+              :items="getReasonableSuspicionItems"
               :rules="reasonableSuspicionRules"
             ></ripa-check-group>
 
@@ -178,6 +178,7 @@ import {
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  REASONABLE_SUSPICIONS_V2,
   EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
 
@@ -208,8 +209,9 @@ export default {
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
-      reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-    }
+      reasonableSuspicionCodesV1: REASONABLE_SUSPICIONS,
+      reasonableSuspicionCodesV2: REASONABLE_SUSPICIONS_V2,
+   }
   },
 
   inject: [
@@ -234,7 +236,11 @@ export default {
       },
       set(newVal) {
         this.$emit('input', newVal)
-      },
+      }
+    },
+
+    getReasonableSuspicionItems() {
+      return this.model.stopVersion === 1 ? this.reasonableSuspicionCodesV1 : this.reasonableSuspicionCodesV2
     },
 
     getReasonItems() {
