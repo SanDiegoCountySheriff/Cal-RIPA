@@ -1438,11 +1438,7 @@ export const fullStopToApiStop = (
     isPiiFound: getPiiFound(parsedApiStop, fullStop, onlineAndAuthenticated),
     overridePii: fullStop.overridePii || false,
     piiEntities: fullStop.piiEntities,
-    listPersonStopped: getApiStopPeopleListed(
-      fullStop,
-      statutes,
-      fullStop.stopVersion,
-    ),
+    listPersonStopped: getApiStopPeopleListed(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
       blockNumber: blockNumber && streetName ? blockNumber : '',
@@ -1588,7 +1584,7 @@ export const fullStopToApiStopV2 = (
   }
 }
 
-export const getApiStopPeopleListed = (fullStop, statutes, stopVersion) => {
+export const getApiStopPeopleListed = (fullStop, statutes) => {
   return fullStop.people.map((person, index) => {
     return {
       basisForSearchBrief:
@@ -1653,10 +1649,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
         person.actionsTaken?.personSearchConsentGiven || false,
       propertySearchConsentGiven:
         person.actionsTaken?.propertySearchConsentGiven || false,
-      reasonForStop:
-        stopVersion === 2
-          ? getReasonForStopV2(person, statutes)
-          : getReasonForStop(person, statutes),
+      reasonForStop: getReasonForStopV2(person, statutes),
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
