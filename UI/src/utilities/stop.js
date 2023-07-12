@@ -408,8 +408,12 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
-      items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
-      items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
+      if (person.passengerInVehicle !== null) {
+        items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
+      }
+      if (person.insideResidence !== null) {
+        items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
+      }
     }
     items.push({
       id: 'B8',
@@ -1671,8 +1675,8 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       propertySearchConsentGiven:
         person.actionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStop(person, statutes),
-      passengerInVehicle: person.passengerInVehicle || false,
-      insideResidence: person.insideResidence || false,
+      passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
