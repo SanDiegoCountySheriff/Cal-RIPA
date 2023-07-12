@@ -241,7 +241,7 @@
         </template>
 
         <template
-          v-if="stepIndex >= 1 && stepIndex <= 7 && model.stopVersion === 2"
+          v-if="stepIndex >= 1 && stepIndex <= 8 && model.stopVersion === 2"
         >
           <v-stepper v-model="stepIndex">
             <v-stepper-header>
@@ -352,6 +352,24 @@
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
                   ></ripa-form-step-4>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content step="5">
+                <template v-if="stepIndex === 5">
+                  <ripa-subheader
+                    class="tw-text-right"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-force-actions
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-force-actions>
                 </template>
               </v-stepper-content>
 
@@ -520,6 +538,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
+import RipaFormStepForceActions from '@/components/molecules/RipaFormStepForceActions'
 import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaTemplate from '@/components/molecules/RipaTemplate'
@@ -539,6 +558,7 @@ export default {
     RipaFormStep5,
     RipaFormStep6,
     RipaFormStep7,
+    RipaFormStepForceActions,
     RipaJsonViewerDialog,
     RipaSubheader,
     RipaTemplate,
@@ -778,19 +798,49 @@ export default {
             localStorage.removeItem('ripa_form_edit_stop')
             localStorage.setItem('ripa_form_edit_person', '1')
             return 3
-          } else {
+          } else if (this.model.stopVersion === 1) {
             return 7
+          } else if (this.model.stopVersion === 2) {
+            return 6
           }
         }
 
-        if (!this.isEditStop() && this.isEditPerson() && this.stepIndex === 5) {
+        if (
+          !this.isEditStop() &&
+          this.isEditPerson() &&
+          this.stepIndex === 5 &&
+          this.model.stopVersion === 1
+        ) {
           return 7
+        } else if (
+          !this.isEditStop() &&
+          this.isEditPerson() &&
+          this.stepIndex === 5 &&
+          this.model.stopVersion === 2
+        ) {
+          return 6
         }
       }
 
       if (this.isCreateForm()) {
-        if (!this.anyAgencyQuestions && this.stepIndex === 5) {
+        if (
+          !this.anyAgencyQuestions &&
+          this.stepIndex === 5 &&
+          this.model.stopVersion === 1
+        ) {
           return 7
+        } else if (
+          !this.anyAgencyQuestions &&
+          this.stepIndex === 5 &&
+          this.model.stopVersion === 2
+        ) {
+          return 6
+        } else if (
+          !this.anyAgencyQuestions &&
+          this.stepIndex === 6 &&
+          this.model.stopVersion === 2
+        ) {
+          return 8
         }
       }
 
