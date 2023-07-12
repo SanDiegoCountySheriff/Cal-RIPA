@@ -69,7 +69,7 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 300px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-48" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -81,6 +81,9 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
                 </div><label for="input-48" class="v-label theme--light" style="left: 0px; position: relative;">
                   Stop in response to Call for Service
                 </label>
+              </div>
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
               </div>
             </div>
           </div>

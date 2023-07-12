@@ -91,4 +91,10 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Perceived Unhoused')
   })
+
+  it.todo(
+    'should display non force actions and force actions taken for v2 stops',
+  )
+
+  it.todo('should display actions taken for legacy stops')
 })

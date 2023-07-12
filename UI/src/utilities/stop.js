@@ -1789,10 +1789,10 @@ const getPiiFound = (parsedApiStop, fullStop) => {
     const person = people[index]
     if (!reasonForStopPiiFound && !basisForSearchPiiFound) {
       reasonForStopPiiFound = person.stopReason?.reasonForStopPiiFound || false
-      if (parsedApiStop.stopVersion === 1) {
+      if (fullStop.stopVersion === 1) {
         basisForSearchPiiFound =
           person.actionsTaken?.basisForSearchPiiFound || false
-      } else if (parsedApiStop.stopVersion === 2) {
+      } else if (fullStop.stopVersion === 2) {
         basisForSearchPiiFound =
           person.nonForceActionsTaken?.basisForSearchPiiFound || false
       }
