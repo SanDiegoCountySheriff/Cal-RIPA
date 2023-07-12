@@ -190,6 +190,7 @@ export default {
   inject: ['loadingPiiStep4'],
 
   created() {
+    this.model.actionsTaken = null
     this.updateModel()
 
     if (this.model.nonForceActionsTaken.basisForSearchExplanation) {
@@ -266,7 +267,8 @@ export default {
     },
 
     getBasisForSearchItems() {
-      const actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
+      const actionsTaken =
+        this.model.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
       let filteredItems = this.basisForSearchItems
 
       if (!this.model.person.isStudent) {
@@ -344,7 +346,7 @@ export default {
 
       return [
         (checked && options.length > 0) ||
-          'At least one action taken is required',
+          'At least one non-force action taken is required',
       ]
     },
 
@@ -509,19 +511,24 @@ export default {
       }
 
       actionsTaken =
-        this.model.nonForceActionsTaken?.actionsTakenDuringStop || []
+        this.model.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
 
       if (!this.model.nonForceActionsTaken.propertyWasSeized) {
         this.model.nonForceActionsTaken.basisForPropertySeizure = []
         this.model.nonForceActionsTaken.typeOfPropertySeized = []
-        this.model.nonForceActionsTaken.actionsTakenDuringStop =
+        this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
           actionsTaken.filter(item => item !== 12)
       } else {
         if (!actionsTaken.includes(12)) {
-          if (this.model.nonForceActionsTaken.actionsTakenDuringStop === null) {
-            this.model.nonForceActionsTaken.actionsTakenDuringStop = []
+          if (
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop ===
+            null
+          ) {
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop = []
           }
-          this.model.nonForceActionsTaken.actionsTakenDuringStop.push(12)
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.push(
+            12,
+          )
         }
       }
     },

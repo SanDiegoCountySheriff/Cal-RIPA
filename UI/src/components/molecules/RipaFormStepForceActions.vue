@@ -50,5 +50,12 @@ export default {
   },
 
   mixins: [RipaFormStepMixin],
+
+  props: {
+    backButtonVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
 }
 </script>

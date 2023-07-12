@@ -17,6 +17,16 @@
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
+
+          <template v-if="model.forceActionsTaken.anyForceActionsTaken">
+            <ripa-check-group
+              v-model="model.forceActionsTaken.forceActionsTakenDuringStop"
+              :items="forceActionsTakenItems"
+              :rules="forceActionsTakenRules"
+              @input="handleInput"
+            >
+            </ripa-check-group>
+          </template>
         </v-col>
       </v-row>
     </v-container>
@@ -26,12 +36,16 @@
 <script>
 import { FORCE_ACTIONS_TAKEN } from '@/constants/form'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
+import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 
 export default {
   name: 'ripa-force-actions-taken',
 
   components: {
     RipaSwitch,
+    RipaCheckGroup,
+    RipaFormHeader,
   },
 
   data() {
@@ -40,10 +54,39 @@ export default {
     }
   },
 
+  computed: {
+    model: {
+      get() {
+        return this.value
+      },
+    },
+
+    forceActionsTakenRules() {
+      const checked = this.model.forceActionsTaken.anyForceActionsTaken
+      return [
+        (checked &&
+          this.model.forceActionsTaken.forceActionsTakenDuringStop.length >
+            0) ||
+          'At least one force action taken is required',
+      ]
+    },
+  },
+
   methods: {
     handleInput() {
+      if (!this.model.forceActionsTaken.anyForceActionsTaken) {
+        this.model.forceActionsTaken.forceActionsTakenDuringStop = []
+      }
 
-    }
-  }
+      this.$emit('input', this.model)
+    },
+  },
+
+  props: {
+    value: {
+      type: Object,
+      required: true,
+    },
+  },
 }
 </script>

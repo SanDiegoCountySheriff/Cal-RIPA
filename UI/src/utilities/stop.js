@@ -19,6 +19,7 @@ import {
   STOP_RESULTS,
   SEXUAL_ORIENTATIONS,
 } from '@/constants/form'
+import { FORCE_ACTIONS_TAKEN, NON_FORCE_ACTIONS_TAKEN } from '../constants/form'
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')
@@ -95,7 +96,10 @@ export const defaultStop = () => {
       anyContraband: false,
       contrabandOrEvidenceDiscovered: [],
     },
-    forceActionsTaken: {},
+    forceActionsTaken: {
+      anyForceActionsTaken: false,
+      forceActionsTakenDuringStop: [],
+    },
     actionsTaken: {
       anyActionsTaken: true,
       actionsTakenDuringStop: [],
@@ -433,7 +437,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       id: 'B10',
       content: getSummaryReasonForStopExplanation(person),
     })
-    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
+    if (apiStop.stopVersion === 1) {
+      items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
+    }
     items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
     items.push({
       id: 'B13',
@@ -1644,7 +1650,10 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
-      listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      // listActionTakenDuringStop: getActionsTakenDuringStop(person),
+      listNonForceActionsTakenDuringStop:
+        getNonForceActionsTakenDuringStop(person),
+      listForceActionsTakenDuringStop: getForceActionsTakenDuringStop(person),
       listBasisForPropertySeizure: getBasisForPropertySeizure(person),
       listBasisForSearch: getBasisForSearch(person),
       listContrabandOrEvidenceDiscovered:
@@ -2030,6 +2039,60 @@ const getActionsTakenDuringStop = person => {
   return [
     {
       key: '24',
+      action: 'None',
+    },
+  ]
+}
+
+const getNonForceActionsTakenDuringStop = person => {
+  const actions =
+    person.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = NON_FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = {
+      key: item.toString(),
+      action: filteredAction?.name || '',
+    }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '17',
+      action: 'None',
+    },
+  ]
+}
+
+const getForceActionsTakenDuringStop = person => {
+  const actions = person.forceActionsTaken?.forceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = { key: item.toString(), action: filteredAction?.name || '' }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '18',
       action: 'None',
     },
   ]

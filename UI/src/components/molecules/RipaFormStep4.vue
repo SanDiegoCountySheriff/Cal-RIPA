@@ -81,7 +81,10 @@ export default {
 
   methods: {
     handleStep4Next() {
-      const piiFound = this.model.actionsTaken?.basisForSearchPiiFound || false
+      const piiFound =
+        this.model.actionsTaken?.basisForSearchPiiFound ||
+        this.model.nonForceActionsTaken?.basisForSearchPiiFound ||
+        false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {

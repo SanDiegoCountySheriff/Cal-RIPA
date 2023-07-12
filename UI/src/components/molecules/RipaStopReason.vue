@@ -330,7 +330,10 @@ export default {
         this.model.stopReason.searchOfProperty = false
       }
 
-      if (this.model.stopReason.reasonForStop === 6) {
+      if (
+        this.model.stopReason.reasonForStop === 6 &&
+        this.model.stopVersion === 1
+      ) {
         const actionsTaken =
           this.model.actionsTaken?.actionsTakenDuringStop || []
         if (this.model.stopReason.searchOfPerson) {
@@ -373,67 +376,76 @@ export default {
         }
       }
 
-      if (this.model.stopReason.reasonForStop === 1) {
+      if (
+        this.model.stopReason.reasonForStop === 6 &&
+        this.model.stopVersion === 2
+      ) {
+        const actionsTaken =
+          this.model.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
+        if (this.model.stopReason.searchOfPerson) {
+          this.model.nonForceActionsTaken.anyNonForceActionsTaken = true
+          if (!actionsTaken.includes(14)) {
+            if (
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop ===
+              null
+            ) {
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+                []
+            }
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.push(
+              14,
+            )
+          }
+        } else {
+          if (
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop !==
+              null &&
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop
+              .length > 0
+          ) {
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+                item => item !== 14,
+              )
+          }
+        }
+        if (this.model.stopReason.searchOfProperty) {
+          this.model.nonForceActionsTaken.anyNonForceActionsTaken = true
+          if (!actionsTaken.includes(15)) {
+            if (
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop ===
+              null
+            ) {
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+                []
+            }
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.push(
+              15,
+            )
+          }
+        } else {
+          if (
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop !==
+              null &&
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop
+              .length > 0
+          ) {
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+                item => item !== 15,
+              )
+          }
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 1 &&
+        this.model.stopVersion === 1
+      ) {
         this.model.stopReason.educationViolation = null
         this.model.stopReason.educationViolationCode = null
         this.model.stopReason.reasonableSuspicion = []
         this.model.stopReason.reasonableSuspicionCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 18,
-            )
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 20,
-            )
-        }
-      }
-
-      if (this.model.stopReason.reasonForStop === 2) {
-        this.model.stopReason.educationViolation = null
-        this.model.stopReason.educationViolationCode = null
-        this.model.stopReason.trafficViolation = null
-        this.model.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 18,
-            )
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 20,
-            )
-        }
-      }
-
-      if (this.model.stopReason.reasonForStop === 7) {
-        this.model.stopReason.reasonableSuspicion = []
-        this.model.stopReason.reasonableSuspicionCode = null
-        this.model.stopReason.trafficViolation = null
-        this.model.stopReason.trafficViolationCode = null
-        if (this.personSearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 18,
-            )
-        }
-        if (this.propertySearchAutomaticallySelected) {
-          this.model.actionsTaken.actionsTakenDuringStop =
-            this.model.actionsTaken.actionsTakenDuringStop.filter(
-              item => item !== 20,
-            )
-        }
-      }
-
-      if (this.model.stopReason.reasonForStop === 7) {
-        if (this.model.stopReason.educationViolation !== 1) {
-          this.model.stopReason.educationViolationCode = null
-        }
         if (this.personSearchAutomaticallySelected) {
           this.model.actionsTaken.actionsTakenDuringStop =
             this.model.actionsTaken.actionsTakenDuringStop.filter(
@@ -449,10 +461,133 @@ export default {
       }
 
       if (
-        this.model.stopReason.reasonForStop === 3 ||
-        this.model.stopReason.reasonForStop === 4 ||
-        this.model.stopReason.reasonForStop === 5 ||
-        this.model.stopReason.reasonForStop === 8
+        this.model.stopReason.reasonForStop === 1 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 2 &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 2 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 7 &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+
+        if (this.model.stopReason.educationViolation !== 1) {
+          this.model.stopReason.educationViolationCode = null
+        }
+
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 7 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+
+        if (this.model.stopReason.educationViolation !== 1) {
+          this.model.stopReason.educationViolationCode = null
+        }
+
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        (this.model.stopReason.reasonForStop === 3 ||
+          this.model.stopReason.reasonForStop === 4 ||
+          this.model.stopReason.reasonForStop === 5 ||
+          this.model.stopReason.reasonForStop === 8) &&
+        this.model.stopVersion === 1
       ) {
         this.model.stopReason.educationViolation = null
         this.model.stopReason.educationViolationCode = null
@@ -470,6 +605,33 @@ export default {
           this.model.actionsTaken.actionsTakenDuringStop =
             this.model.actionsTaken.actionsTakenDuringStop.filter(
               item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        (this.model.stopReason.reasonForStop === 3 ||
+          this.model.stopReason.reasonForStop === 4 ||
+          this.model.stopReason.reasonForStop === 5 ||
+          this.model.stopReason.reasonForStop === 8) &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
             )
         }
       }
