@@ -317,10 +317,27 @@ export default {
       return [1, 2, 3, 5].includes(reasonForStop)
     },
 
+    isPullReasonCodeValidV2() {
+      const reasonForStop = this.model.stopReason?.reasonForStop || []
+      return [1, 2, 3, 4, 6].includes(reasonForStop)
+    },
+
     isPullReasonCodeWarningVisible() {
       const codes = this.model.stopResult?.warningCodes || []
       const reasonCode = this.getReasonCode()
       return this.isPullReasonCodeValid && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeVerbalWarningVisible() {
+      const codes = this.model.stopResult?.verbalWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValidV2 && !codes.includes(reasonCode)
+    },
+
+    isPullReasonCodeWrittenWarningVisible() {
+      const codes = this.model.stopResult?.writtenWarningCodes || []
+      const reasonCode = this.getReasonCode()
+      return this.isPullReasonCodeValidV2 && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeCitationVisible() {
@@ -343,6 +360,14 @@ export default {
 
     isPullReasonCodeWarningDisabled() {
       return this.model.stopResult?.warningCodes.length >= 5
+    },
+
+    isPullReasonCodeVerbalWarningDisabled() {
+      return this.model.stopResult?.verbalWarningCodes.length >= 5
+    },
+
+    isPullReasonCodeWrittenWarningDisabled() {
+      return this.model.stopResult?.writtenWarningCodes.length >= 5
     },
 
     isPullReasonCodeCitationDisabled() {
@@ -438,7 +463,7 @@ export default {
     verbalWarningRulesV2() {
       const checked1 = this.model.stopResult.anyResultsOfStop
       const checked2 = this.model.stopResult.resultsOfStop2
-      const options = this.model.stopResult.warningCodes
+      const options = this.model.stopResult.verbalWarningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
@@ -448,7 +473,7 @@ export default {
     writtenWarningRulesV2() {
       const checked1 = this.model.stopResult.anyResultsOfStop
       const checked2 = this.model.stopResult.resultsOfStop3
-      const options = this.model.stopResult.warningCodes
+      const options = this.model.stopResult.writtenWarningCodes
       return [
         (checked1 && checked2 && options !== null && options.length > 0) ||
           'An offense code is required',
