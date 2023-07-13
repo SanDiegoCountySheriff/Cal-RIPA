@@ -312,7 +312,7 @@
               v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop5"
               :rules="actionsTakenRules"
-              label="Custodial arrest pursurant to outstanding warrant"
+              label="Custodial arrest pursuant to outstanding warrant"
               hide-details
             ></ripa-checkbox>
 
@@ -369,7 +369,7 @@
               v-else-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop6"
               :rules="actionsTakenRules"
-              label="Custodial arrest pursurant to outstanding warrant"
+              label="Custodial arrest pursuant to outstanding warrant"
               hide-details
             ></ripa-checkbox>
 
