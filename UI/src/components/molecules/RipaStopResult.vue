@@ -53,6 +53,7 @@
 
           <template v-if="model.stopResult.anyResultsOfStop">
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop2"
               :rules="actionsTakenRules"
               @input="handleUpdateModel"
@@ -60,7 +61,18 @@
               hide-details
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop2">
+            <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop2"
+              :rules="actionsTakenRules"
+              @input="handleUpdateModel"
+              label="Verbal Warning"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop2 && model.stopVersion === 1"
+            >
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
                 :items="statutes"
@@ -92,7 +104,44 @@
               </template>
             </template>
 
+            <template
+              v-else-if="
+                model.stopResult.resultsOfStop2 && model.stopVersion === 2
+              "
+            >
+              <ripa-autocomplete
+                v-model="model.stopResult.verbalWarningCodes"
+                :items="statutes"
+                :max-selections="5"
+                :rules="verbalWarningRulesV2"
+                @remove-item="removeItem('verbalWarningCodes', $event)"
+                @input="handleUpdateModelV2"
+                hint="Select Up To 5 Offense Codes (required)"
+                persistent-hint
+                label="Offense Code"
+                item-text="fullName"
+                item-value="code"
+                multiple
+                custom-chip
+              >
+              </ripa-autocomplete>
+              <template v-if="isPullReasonCodeVerbalWarningVisible">
+                <div class="tw-mt-4 tw-text-content">
+                  <v-btn
+                    :disabled="isPullReasonCodeVerbalWarningDisabled"
+                    @click="handlePullReasonCodeVerbalWarning"
+                    x-small
+                    outlined
+                    color="primary"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop3"
               :rules="actionsTakenRules"
               @input="handleUpdateModel"
@@ -100,7 +149,18 @@
               hide-details
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop3">
+            <ripa-checkbox
+              v-else-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop3"
+              :rules="actionsTakenRules"
+              @input="handleUpdateModelV2"
+              label="Written Warning"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop3 && model.stopVersion === 1"
+            >
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
                 :items="statutes"
@@ -130,7 +190,42 @@
               </template>
             </template>
 
+            <template
+              v-else-if="
+                model.stopResult.resultsOfStop3 && model.stopVersion === 2
+              "
+            >
+              <ripa-autocomplete
+                v-model="model.stopResult.writtenWarningCodes"
+                :items="statutes"
+                :max-selections="5"
+                :rules="writtenWarningRulesV2"
+                @remove-item="removeItem('writtenWarningCodes', $event)"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
+              ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeWrittenWarningVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    :disabled="isPullReasonCodeWrittenWarningDisabled"
+                    @click="handlePullReasonCodeWrittenWarning"
+                    x-small
+                    outlined
+                    color="primary"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop4"
               :rules="actionsTakenRules"
               @input="handleUpdateModel"
@@ -138,7 +233,18 @@
               hide-details
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop4">
+            <ripa-checkbox
+              v-else-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop4"
+              :rules="actionsTakenRules"
+              @input="handleUpdateModelV2"
+              label="Citation for infraction"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop4 && model.stopVersion === 1"
+            >
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
                 :items="statutes"
@@ -168,7 +274,42 @@
               </template>
             </template>
 
+            <template
+              v-else-if="
+                model.stopResult.resultsOfStop4 && model.stopVersion === 2
+              "
+            >
+              <ripa-autocomplete
+                v-model="model.stopResult.citationCodes"
+                :items="statutes"
+                :max-selections="5"
+                :rules="citationRulesV2"
+                @remove-item="removeItem('citationCodes', $event)"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
+              ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeCitationVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    :disabled="isPullReasonCodeCitationDisabled"
+                    @click="handlePullReasonCodeCitation"
+                    x-small
+                    outlined
+                    color="primary"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop5"
               :rules="actionsTakenRules"
               label="Custodial arrest pursurant to outstanding warrant"
@@ -176,6 +317,47 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
+              v-else-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop5"
+              :rules="actionsTakenRules"
+              label="In-field cite and release"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop5 && model.stopVersion === 2"
+            >
+              <ripa-autocomplete
+                v-model="model.stopResult.infieldCodes"
+                :items="statutes"
+                :max-selections="5"
+                :rules="infieldRulesV2"
+                @remove-item="removeItem('infieldCodes', $event)"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
+              ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeInfieldVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    :disabled="isPullReasonCodeInfieldDisable"
+                    @click="handlePullReasonCodeInfield"
+                    x-small
+                    outlined
+                    color="primary"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
+            <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop6"
               :rules="actionsTakenRules"
               @input="handleUpdateModel"
@@ -183,7 +365,17 @@
               hide-details
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop6">
+            <ripa-checkbox
+              v-else-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop6"
+              :rules="actionsTakenRules"
+              label="Custodial arrest pursurant to outstanding warrant"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop6 && model.stopVersion === 1"
+            >
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
                 :items="statutes"
@@ -214,6 +406,7 @@
             </template>
 
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop7"
               :rules="actionsTakenRules"
               label="Field interview card completed"
@@ -221,6 +414,48 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
+              v-else-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop7"
+              :rules="actionsTakenRules"
+              @input="handleUpdateModelV2"
+              label="Custodial arrest without warrant"
+              hide-details
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop7 && model.stopVersion === 2"
+            >
+              <ripa-autocomplete
+                v-model="model.stopResult.custodialArrestCodes"
+                :items="statutes"
+                :max-selections="5"
+                :rules="custodialArrestRulesV2"
+                @remove-item="removeItem('custodialArrestCodes', $event)"
+                hint="Select Up to 5 Offense Codes (required)"
+                persistent-hint
+                item-text="fullName"
+                item-value="code"
+                label="Offense Code"
+                multiple
+                custom-chip
+              ></ripa-autocomplete>
+              <template v-if="isPullReasonCodeCustodialArrestVisible">
+                <div class="tw-mt-2 tw-text-content">
+                  <v-btn
+                    :disabled="isPullReasonCodeCustodialArrestDisabled"
+                    @click="handlePullReasonCodeCustodialArrest"
+                    x-small
+                    outlined
+                    color="primary"
+                  >
+                    Pull from Reason Code
+                  </v-btn>
+                </div>
+              </template>
+            </template>
+
+            <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop8"
               :rules="actionsTakenRules"
               label="Noncriminal transport or caretaking transport"
@@ -228,6 +463,15 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop8"
+              :rules="actionsTakenRules"
+              label="Field interview card completed"
+              hide-details
+            ></ripa-checkbox>
+
+            <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop9"
               :rules="actionsTakenRules"
               label="Contacted parent/legal guardian or other person responsible for the minor"
@@ -235,13 +479,38 @@
             ></ripa-checkbox>
 
             <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop9"
+              :rules="actionsTakenRules"
+              label="Noncriminal transport or caretaking transport"
+              hide-details
+            ></ripa-checkbox>
+
+            <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop10"
               :rules="actionsTakenRules"
               label="Psychiatric hold"
               hide-details
             ></ripa-checkbox>
 
-            <template v-if="model.person.isStudent">
+            <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop10"
+              :rules="actionsTakenRules"
+              label="Contacted parent/legal guardian or other person responsible for the minor"
+              hide-details
+            ></ripa-checkbox>
+
+            <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop11"
+              :rules="actionsTakenRules"
+              label="Psychiatric hold"
+              hide-details
+            ></ripa-checkbox>
+
+            <template v-if="model.person.isStudent && model.stopVersion === 1">
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop12"
                 :rules="actionsTakenRules"
@@ -256,13 +525,46 @@
               ></ripa-checkbox>
             </template>
 
+            <template v-if="model.person.isStudent && model.stopVersion === 2">
+              <ripa-checkbox
+                v-model="model.stopResult.resultsOfStop13"
+                :rules="actionsTakenRules"
+                label="Referral to school administrator"
+                hide-details
+              ></ripa-checkbox>
+              <ripa-checkbox
+                v-model="model.stopResult.resultsOfStop14"
+                :rules="actionsTakenRules"
+                label="Referral to school counselor or other support staff"
+                hide-details
+              ></ripa-checkbox>
+            </template>
+
             <ripa-checkbox
+              v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop11"
               :rules="actionsTakenRules"
               label="Contacted U.S. Department of Homeland Security"
             ></ripa-checkbox>
 
-            <template v-if="model.stopResult.resultsOfStop11">
+            <ripa-checkbox
+              v-if="model.stopVersion === 2"
+              v-model="model.stopResult.resultsOfStop12"
+              :rules="actionsTakenRules"
+              label="Contacted U.S. Department of Homeland Security"
+            ></ripa-checkbox>
+
+            <template
+              v-if="model.stopResult.resultsOfStop11 && model.stopVersion === 1"
+            >
+              <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
+                Are you sure you want to select 'Contacted U.S. Department of
+                Homeland Security?'
+              </ripa-alert>
+            </template>
+            <template
+              v-if="model.stopResult.resultsOfStop12 && model.stopVersion === 2"
+            >
               <ripa-alert class="tw-mt-8" alert-outlined alert-type="error">
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
@@ -317,11 +619,6 @@ export default {
       return [1, 2, 3, 5].includes(reasonForStop)
     },
 
-    isPullReasonCodeValidV2() {
-      const reasonForStop = this.model.stopReason?.reasonForStop || []
-      return [1, 2, 3, 4, 6].includes(reasonForStop)
-    },
-
     isPullReasonCodeWarningVisible() {
       const codes = this.model.stopResult?.warningCodes || []
       const reasonCode = this.getReasonCode()
@@ -331,13 +628,13 @@ export default {
     isPullReasonCodeVerbalWarningVisible() {
       const codes = this.model.stopResult?.verbalWarningCodes || []
       const reasonCode = this.getReasonCode()
-      return this.isPullReasonCodeValidV2 && !codes.includes(reasonCode)
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeWrittenWarningVisible() {
       const codes = this.model.stopResult?.writtenWarningCodes || []
       const reasonCode = this.getReasonCode()
-      return this.isPullReasonCodeValidV2 && !codes.includes(reasonCode)
+      return this.isPullReasonCodeValid && !codes.includes(reasonCode)
     },
 
     isPullReasonCodeCitationVisible() {
