@@ -81,7 +81,7 @@ exports[`Ripa Actions Taken should match snapshot 1`] = `
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 200px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--switch primary--text">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--switch primary--text">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-input--selection-controls__input"><input aria-checked="true" id="input-8" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -94,9 +94,6 @@ exports[`Ripa Actions Taken should match snapshot 1`] = `
                   Any Actions Taken?
                 </label>
               </div>
-              <div class="v-messages theme--light primary--text">
-                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-              </div>
             </div>
           </div>
         </div>
@@ -104,153 +101,153 @@ exports[`Ripa Actions Taken should match snapshot 1`] = `
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-13" role="checkbox" type="checkbox" value="1">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-11" role="checkbox" type="checkbox" value="1">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-13" class="v-label theme--light" style="left: 0px; position: relative;">Person removed from vehicle by order</label>
+                </div><label for="input-11" class="v-label theme--light" style="left: 0px; position: relative;">Person removed from vehicle by order</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-15" role="checkbox" type="checkbox" value="2">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-13" role="checkbox" type="checkbox" value="2">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;">Person removed from vehicle by physical contact</label>
+                </div><label for="input-13" class="v-label theme--light" style="left: 0px; position: relative;">Person removed from vehicle by physical contact</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-17" role="checkbox" type="checkbox" value="3">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-15" role="checkbox" type="checkbox" value="3">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;">Field sobriety test conducted</label>
+                </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;">Field sobriety test conducted</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-19" role="checkbox" type="checkbox" value="4">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-17" role="checkbox" type="checkbox" value="4">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-19" class="v-label theme--light" style="left: 0px; position: relative;">Curbside detention</label>
+                </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;">Curbside detention</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-21" role="checkbox" type="checkbox" value="5">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-19" role="checkbox" type="checkbox" value="5">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-21" class="v-label theme--light" style="left: 0px; position: relative;">Handcuffed or flex cuffed</label>
+                </div><label for="input-19" class="v-label theme--light" style="left: 0px; position: relative;">Handcuffed or flex cuffed</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-23" role="checkbox" type="checkbox" value="6">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-21" role="checkbox" type="checkbox" value="6">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-23" class="v-label theme--light" style="left: 0px; position: relative;">Patrol car detention</label>
+                </div><label for="input-21" class="v-label theme--light" style="left: 0px; position: relative;">Patrol car detention</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-25" role="checkbox" type="checkbox" value="7">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-23" role="checkbox" type="checkbox" value="7">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-25" class="v-label theme--light" style="left: 0px; position: relative;">Canine removed from vehicle or used to search</label>
+                </div><label for="input-23" class="v-label theme--light" style="left: 0px; position: relative;">Canine removed from vehicle or used to search</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-27" role="checkbox" type="checkbox" value="8">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-25" role="checkbox" type="checkbox" value="8">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-27" class="v-label theme--light" style="left: 0px; position: relative;">Firearm pointed at person</label>
+                </div><label for="input-25" class="v-label theme--light" style="left: 0px; position: relative;">Firearm pointed at person</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-29" role="checkbox" type="checkbox" value="9">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-27" role="checkbox" type="checkbox" value="9">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-29" class="v-label theme--light" style="left: 0px; position: relative;">Firearm discharged or used</label>
+                </div><label for="input-27" class="v-label theme--light" style="left: 0px; position: relative;">Firearm discharged or used</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-31" role="checkbox" type="checkbox" value="10">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-29" role="checkbox" type="checkbox" value="10">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-31" class="v-label theme--light" style="left: 0px; position: relative;">Electronic control device used</label>
+                </div><label for="input-29" class="v-label theme--light" style="left: 0px; position: relative;">Electronic control device used</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-33" role="checkbox" type="checkbox" value="11">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-31" role="checkbox" type="checkbox" value="11">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-33" class="v-label theme--light" style="left: 0px; position: relative;">Impact projectile discharged or used</label>
+                </div><label for="input-31" class="v-label theme--light" style="left: 0px; position: relative;">Impact projectile discharged or used</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-35" role="checkbox" type="checkbox" value="12">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-33" role="checkbox" type="checkbox" value="12">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-35" class="v-label theme--light" style="left: 0px; position: relative;">Canine bit or held person</label>
+                </div><label for="input-33" class="v-label theme--light" style="left: 0px; position: relative;">Canine bit or held person</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-37" role="checkbox" type="checkbox" value="13">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-35" role="checkbox" type="checkbox" value="13">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">Baton or other impact weapon used</label>
+                </div><label for="input-35" class="v-label theme--light" style="left: 0px; position: relative;">Baton or other impact weapon used</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-39" role="checkbox" type="checkbox" value="14">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-37" role="checkbox" type="checkbox" value="14">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;">Chemical spray used</label>
+                </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">Chemical spray used</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-41" role="checkbox" type="checkbox" value="15">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-39" role="checkbox" type="checkbox" value="15">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-41" class="v-label theme--light" style="left: 0px; position: relative;">Physical or vehicle contact</label>
+                </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;">Physical or vehicle contact</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-43" role="checkbox" type="checkbox" value="16">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-41" role="checkbox" type="checkbox" value="16">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-43" class="v-label theme--light" style="left: 0px; position: relative;">Person photographed</label>
+                </div><label for="input-41" class="v-label theme--light" style="left: 0px; position: relative;">Person photographed</label>
               </div>
             </div>
           </div>
           <div class="v-input theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-45" role="checkbox" type="checkbox" value="22">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-43" role="checkbox" type="checkbox" value="22">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-45" class="v-label theme--light" style="left: 0px; position: relative;">Vehicle impounded</label>
+                </div><label for="input-43" class="v-label theme--light" style="left: 0px; position: relative;">Vehicle impounded</label>
               </div>
               <div class="v-messages theme--light">
                 <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -265,36 +262,36 @@ exports[`Ripa Actions Taken should match snapshot 1`] = `
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-52" role="checkbox" type="checkbox" value="17">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-50" role="checkbox" type="checkbox" value="17">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-52" class="v-label theme--light" style="left: 0px; position: relative;">Asked for consent to search person</label>
+                </div><label for="input-50" class="v-label theme--light" style="left: 0px; position: relative;">Asked for consent to search person</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-54" role="checkbox" type="checkbox" value="18">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-52" role="checkbox" type="checkbox" value="18">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-54" class="v-label theme--light" style="left: 0px; position: relative;">Search of person was conducted</label>
+                </div><label for="input-52" class="v-label theme--light" style="left: 0px; position: relative;">Search of person was conducted</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-56" role="checkbox" type="checkbox" value="19">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-54" role="checkbox" type="checkbox" value="19">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-56" class="v-label theme--light" style="left: 0px; position: relative;">Asked for consent to search property</label>
+                </div><label for="input-54" class="v-label theme--light" style="left: 0px; position: relative;">Asked for consent to search property</label>
               </div>
             </div>
           </div>
           <div class="v-input theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-58" role="checkbox" type="checkbox" value="20">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-56" role="checkbox" type="checkbox" value="20">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-58" class="v-label theme--light" style="left: 0px; position: relative;">Search of property was conducted</label>
+                </div><label for="input-56" class="v-label theme--light" style="left: 0px; position: relative;">Search of property was conducted</label>
               </div>
               <div class="v-messages theme--light">
                 <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -309,21 +306,18 @@ exports[`Ripa Actions Taken should match snapshot 1`] = `
     Seizure
   </span></div>
         <div class="ripa-switch" style="max-width: 200px;">
-          <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-65" role="switch" type="checkbox" aria-disabled="false" value="">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-63" role="switch" type="checkbox" aria-disabled="false" value="">
                   <div class="v-input--selection-controls__ripple"></div>
                   <div class="v-input--switch__track theme--light"></div>
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-65" class="v-label theme--light" style="left: 0px; position: relative;">
+                </div><label for="input-63" class="v-label theme--light" style="left: 0px; position: relative;">
                   Property was Seized
                 </label>
-              </div>
-              <div class="v-messages theme--light">
-                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
               </div>
             </div>
           </div>
