@@ -5,8 +5,9 @@
       class="v-input--reverse v-input--expand"
       :disabled="disabled"
       :hint="hint"
-      :rules="rules"
       :persistent-hint="hint.length > 0"
+      :rules="rules"
+      :hide-details="rules.length === 0"
       validate-on-blur
     >
       <template #label>
