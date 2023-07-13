@@ -2293,7 +2293,7 @@ const getWarningCodes = (person, statutes) => {
 }
 
 const getVerbalWarningCodes = (person, statutes) => {
-  const codes = person.stopResult?.warningCodes || []
+  const codes = person.stopResult?.verbalWarningCodes || []
 
   return codes.map(code => {
     return getStatute(code, statutes)
@@ -2301,7 +2301,7 @@ const getVerbalWarningCodes = (person, statutes) => {
 }
 
 const getWrittenWarningCodes = (person, statutes) => {
-  const codes = person.stopResult?.warningCodes || []
+  const codes = person.stopResult?.writtenWarningCodes || []
 
   return codes.map(code => {
     return getStatute(code, statutes)
