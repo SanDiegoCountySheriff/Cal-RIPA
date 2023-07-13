@@ -819,6 +819,13 @@ export default {
           this.model.stopVersion === 2
         ) {
           return 6
+        } else if (
+          !this.isEditStop() &&
+          this.isEditPerson() &&
+          this.stepIndex === 6 &&
+          this.model.stopVersion === 2
+        ) {
+          return 8
         }
       }
 

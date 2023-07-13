@@ -423,9 +423,38 @@ export default {
       localStorage.setItem('ripa_form_edit_person', '1')
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
-      this.stop.actionsTaken = {}
-      this.stop.nonForceActionsTaken = {}
-      this.stop.forceActionsTaken = {}
+      this.stop.actionsTaken = {
+        anyActionsTaken: true,
+        actionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.nonForceActionsTaken = {
+        anyNonForceActionsTaken: true,
+        nonForceActionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.forceActionsTaken = {
+        anyForceActionsTaken: false,
+        forceActionsTakenDuringStop: [],
+      }
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
