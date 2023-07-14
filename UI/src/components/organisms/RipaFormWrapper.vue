@@ -590,12 +590,6 @@ export default {
 
     handleSubmit() {
       this.showUserDialog = true
-
-      // if (Date.now() >= '2024-01-01') {
-      //   this.showUserDialog = true
-      // } else {
-      //   this.showConfirmDialog = true
-      // }
     },
 
     handleConfirmSubmit() {

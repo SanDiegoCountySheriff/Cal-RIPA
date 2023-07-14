@@ -1635,8 +1635,6 @@ export default new Vuex.Store({
         )
         .then(response => {
           commit('updateUserProfile', response.data)
-          // condition for missing properties
-          // commit('updateInvalidUser', false)
 
           if (
             state.version === 2 &&
