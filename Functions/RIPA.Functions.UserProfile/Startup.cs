@@ -2,7 +2,6 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using System;

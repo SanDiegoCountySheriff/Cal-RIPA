@@ -17,7 +17,8 @@ public class PersonStopped : IPersonStopped
     public ReasonForStop ReasonForStop { get; set; }
     public string ReasonForStopExplanation { get; set; }
     public bool ReasonForStopPiiFound { get; set; }
-    public ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
+    public NonForceActionsTakenDuringStop[] ListNonForceActionsTakenDuringStop { get; set; }
+    public ForceActionsTakenDuringStop[] ListForceActionsTakenDuringStop { get; set; }
     public bool PersonSearchConsentGiven { get; set; }
     public bool PropertySearchConsentGiven { get; set; }
     public ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }

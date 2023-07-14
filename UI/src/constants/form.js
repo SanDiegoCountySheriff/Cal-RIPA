@@ -167,6 +167,61 @@ export const ACTIONS_TAKEN = [
   { name: 'Admission or written statement obtained from student', value: 23 },
 ]
 
+export const NON_FORCE_ACTIONS_TAKEN = [
+  { name: 'Admission or written statement obtained from student', value: 1 },
+  { name: 'Asked for consent to search person', value: 2 },
+  { name: 'Asked for consent to search property', value: 3 },
+  { name: "Asked for identification of stopped person's passenger", value: 4 },
+  {
+    name: 'Asked whether the person is on parole, probation, PRCS, or some other form of mandatory supervision',
+    value: 5,
+  },
+  { name: 'Curbside detention', value: 6 },
+  { name: 'Field sobriety test conducted', value: 7 },
+  { name: 'Patrol car detention', value: 8 },
+  {
+    name: "Peace officer's canine used to search for, location, and/or detect contraband",
+    value: 9,
+  },
+  { name: 'Person Photographed', value: 10 },
+  { name: 'Person removed from vehicle by order', value: 11 },
+  { name: 'Property was seized', value: 12 },
+  { name: "Ran name of stopped person's passenger", value: 13 },
+  { name: 'Search of person was conducted', value: 14 },
+  { name: 'Search of property was conducted', value: 15 },
+  {
+    name: "Terry v. Ohio frisk/pat search of person's outer clothing was conducted",
+    value: 16,
+  },
+  { name: 'Vehicle was impounded', value: 17 },
+]
+
+export const FORCE_ACTIONS_TAKEN = [
+  { name: 'Handcuffed or flex cuffed', value: 1 },
+  { name: 'Baton or other impact weapon drawn', value: 2 },
+  {
+    name: 'Baton or other impact weapon used or other object (including a firearm) to strike or prod',
+    value: 3,
+  },
+  { name: 'Chemical spray used', value: 4 },
+  { name: 'Electronic control device pointed at person or sparked', value: 5 },
+  { name: 'Electronic control device used in drive-stun mode', value: 6 },
+  { name: 'Electronic control device used in dart-mode', value: 7 },
+  { name: 'Firearm unholstered', value: 8 },
+  { name: 'Firearm pointed at person', value: 9 },
+  { name: 'Firearm discharged', value: 10 },
+  { name: 'Impact projectile weapon pointed at person', value: 11 },
+  { name: 'Impact projectile discharged or used', value: 12 },
+  {
+    name: "Peace officer's canine removed from patrol vehicle to gain compliance and/or for purposes of apprehending stopped person",
+    value: 13,
+  },
+  { name: "Peace officer's canine bit or held person", value: 14 },
+  { name: 'Person removed from vehicle by physical contact', value: 15 },
+  { name: 'Physical compliance tactics and techniques', value: 16 },
+  { name: 'Use of vehicle in apprehension of stopped person', value: 17 },
+]
+
 export const BASIS_FOR_SEARCH = [
   { name: 'Consent given', value: 1 },
   { name: 'Officer safety/safety of others', value: 2 },
