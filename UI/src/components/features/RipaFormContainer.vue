@@ -139,6 +139,7 @@ import {
   defaultLocation,
   defaultStop,
   fullStopToApiStop,
+  fullStopToApiStopV2,
   stopReasonGivenTemplate,
   stopResultGivenTemplate,
 } from '@/utilities/stop'
@@ -426,10 +427,52 @@ export default {
       localStorage.setItem('ripa_form_edit_person', '1')
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
-      this.stop.actionsTaken = {}
+      this.stop.actionsTaken = {
+        anyActionsTaken: true,
+        actionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.nonForceActionsTaken = {
+        anyNonForceActionsTaken: true,
+        nonForceActionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.forceActionsTaken = {
+        anyForceActionsTaken: false,
+        forceActionsTakenDuringStop: [],
+      }
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
+        isStudent: false,
+        anyDisabilities: false,
+        perceivedAge: null,
+        perceivedGender: null,
+        genderNonconforming: false,
+        perceivedLimitedEnglish: false,
+        perceivedLgbt: false,
+        perceivedSexualOrientation: null,
+        perceivedOrKnownDisability: [],
+        perceivedRace: [],
+        perceivedUnhoused: false,
       }
       this.stop.stopReason = stopReasonGivenTemplate(this.stop.template)
       this.stop.stopResult = stopResultGivenTemplate(this.stop.template)
@@ -460,10 +503,22 @@ export default {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.actionsTaken = filteredPerson?.actionsTaken || {}
+      this.stop.nonForceActionsTaken = filteredPerson?.nonForceActionsTaken
+      this.stop.forceActionsTaken = filteredPerson?.forceActionsTaken
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
         isStudent: filteredPerson?.isStudent || false,
+        anyDisabilities: false,
+        perceivedAge: null,
+        perceivedGender: null,
+        genderNonconforming: false,
+        perceivedLimitedEnglish: false,
+        perceivedLgbt: false,
+        perceivedSexualOrientation: null,
+        perceivedOrKnownDisability: [],
+        perceivedRace: [],
+        perceivedUnhoused: false,
       }
       this.stop.stopReason = filteredPerson?.stopReason || {}
       this.stop.stopResult = filteredPerson?.stopResult || {}
@@ -564,6 +619,8 @@ export default {
       this.stop = {
         ...this.stop,
         actionsTaken: filteredPerson?.actionsTaken || {},
+        nonForceActionsTaken: filteredPerson?.nonForceActionsTaken,
+        forceActionsTaken: filteredPerson?.forceActionsTaken,
         person: {
           anyDisabilities: filteredPerson?.anyDisabilities || false,
           genderNonconforming: filteredPerson?.genderNonconforming || false,
@@ -573,6 +630,9 @@ export default {
           perceivedAge: filteredPerson?.perceivedAge || null,
           perceivedGender: filteredPerson?.perceivedGender || null,
           perceivedLgbt: filteredPerson?.perceivedLgbt || false,
+          perceivedSexualOrientation:
+            filteredPerson?.perceivedSexualOrientation || null,
+          perceivedUnhoused: filteredPerson?.perceivedUnhoused,
           perceivedLimitedEnglish:
             filteredPerson?.perceivedLimitedEnglish || false,
           perceivedOrKnownDisability:
@@ -770,6 +830,8 @@ export default {
           id: this.stop?.person.id,
           index: this.stop?.person.index,
           actionsTaken: this.stop?.actionsTaken || null,
+          nonForceActionsTaken: this.stop?.nonForceActionsTaken || null,
+          forceActionsTaken: this.stop?.forceActionsTaken || null,
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
         }
@@ -804,15 +866,27 @@ export default {
             }),
         }
         this.fullStop = Object.assign({}, updatedFullStop)
-        this.apiStop = fullStopToApiStop(
-          this.isOnlineAndAuthenticated,
-          this.fullStop,
-          this.mappedFormBeats,
-          this.mappedFormCountyCities,
-          this.mappedFormNonCountyCities,
-          this.mappedFormSchools,
-          this.mappedFormStatutes,
-        )
+
+        this.apiStop =
+          this.fullStop.stopVersion === 1
+            ? fullStopToApiStop(
+                this.isOnlineAndAuthenticated,
+                this.fullStop,
+                this.mappedFormBeats,
+                this.mappedFormCountyCities,
+                this.mappedFormNonCountyCities,
+                this.mappedFormSchools,
+                this.mappedFormStatutes,
+              )
+            : fullStopToApiStopV2(
+                this.isOnlineAndAuthenticated,
+                this.fullStop,
+                this.mappedFormBeats,
+                this.mappedFormCountyCities,
+                this.mappedFormNonCountyCities,
+                this.mappedFormSchools,
+                this.mappedFormStatutes,
+              )
       }
     },
 
@@ -1008,6 +1082,7 @@ export default {
 
     async validateBasisForSearchForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
+
       if (
         this.isOnlineAndAuthenticated &&
         !this.invalidUser &&
@@ -1016,35 +1091,73 @@ export default {
         this.loadingPiiStep4 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-        this.stop.actionsTaken.basisForSearchPiiFound =
-          response && response.piiEntities && response.piiEntities.length > 0
-        this.stop.isPiiFound =
-          this.stop.isPiiFound || this.stop.actionsTaken.basisForSearchPiiFound
 
-        if (
-          !this.stop.actionsTaken.basisForSearchPiiFound &&
-          this.stop.piiEntities?.length > 0
-        ) {
-          this.stop.piiEntities = this.stop.piiEntities.filter(
-            e =>
-              e.source !== this.basisForSearchSource + this.stop.person.index,
-          )
-        }
-        if (!response && trimmedTextValue.length > 0) {
-          await this.setPiiServiceAvailable(false)
-        } else if (response.piiEntities.length > 0) {
-          this.stop.piiEntities = this.stop.piiEntities
-            ? this.stop.piiEntities.filter(
-                e =>
-                  e.source !==
-                  this.basisForSearchSource + this.stop.person.index,
-              )
-            : []
-          for (const entity of response.piiEntities) {
-            entity.source = this.basisForSearchSource + this.stop.person.index
-            this.stop.piiEntities.push(entity)
+        if (this.stop.stopVersion === 1) {
+          this.stop.actionsTaken.basisForSearchPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
+
+          if (
+            !this.stop.actionsTaken.basisForSearchPiiFound &&
+            this.stop.piiEntities?.length > 0
+          ) {
+            this.stop.piiEntities = this.stop.piiEntities.filter(
+              e =>
+                e.source !== this.basisForSearchSource + this.stop.person.index,
+            )
+          }
+
+          if (!response && trimmedTextValue.length > 0) {
+            await this.setPiiServiceAvailable(false)
+          } else if (response.piiEntities.length > 0) {
+            this.stop.piiEntities = this.stop.piiEntities
+              ? this.stop.piiEntities.filter(
+                  e =>
+                    e.source !==
+                    this.basisForSearchSource + this.stop.person.index,
+                )
+              : []
+            for (const entity of response.piiEntities) {
+              entity.source = this.basisForSearchSource + this.stop.person.index
+              this.stop.piiEntities.push(entity)
+            }
+          }
+        } else {
+          this.stop.nonForceActionsTaken.basisForSearchPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.nonForceActionsTaken.basisForSearchPiiFound
+
+          if (
+            !this.stop.nonForceActionsTaken.basisForSearchPiiFound &&
+            this.stop.piiEntities?.length > 0
+          ) {
+            this.stop.piiEntities = this.stop.piiEntities.filter(
+              e =>
+                e.source !== this.basisForSearchSource + this.stop.person.index,
+            )
+          }
+
+          if (!response && trimmedTextValue.length > 0) {
+            await this.setPiiServiceAvailable(false)
+          } else if (response.piiEntities.length > 0) {
+            this.stop.piiEntities = this.stop.piiEntities
+              ? this.stop.piiEntities.filter(
+                  e =>
+                    e.source !==
+                    this.basisForSearchSource + this.stop.person.index,
+                )
+              : []
+            for (const entity of response.piiEntities) {
+              entity.source = this.basisForSearchSource + this.stop.person.index
+              this.stop.piiEntities.push(entity)
+            }
           }
         }
+
         this.loadingPiiStep4 = false
         this.updateFullStop()
       }

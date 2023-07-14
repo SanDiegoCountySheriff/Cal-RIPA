@@ -633,10 +633,16 @@ export const V2_API_STOP = {
       },
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
-      listActionTakenDuringStop: [
+      listNonForceActionsTakenDuringStop: [
         {
           action: 'None',
-          key: '24',
+          key: '17',
+        },
+      ],
+      listForceActionsTakenDuringStop: [
+        {
+          action: 'None',
+          key: '18',
         },
       ],
       personSearchConsentGiven: false,
@@ -982,9 +988,9 @@ export const V2_STOP = {
       endTimeStamp: '2022-01-01T12:05:00.000Z',
     },
   ],
-  actionsTaken: {
-    anyActionsTaken: true,
-    actionsTakenDuringStop: [],
+  nonForceActionsTaken: {
+    anyNonForceActionsTaken: true,
+    nonForceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
     basisForSearch: [],
@@ -995,6 +1001,10 @@ export const V2_STOP = {
     typeOfPropertySeized: [],
     anyContraband: false,
     contrabandOrEvidenceDiscovered: [],
+  },
+  forceActionsTaken: {
+    anyForceActionsTaken: true,
+    forceActionsTakenDuringStop: [],
   },
   location: {
     isSchool: false,
