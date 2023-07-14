@@ -34,8 +34,8 @@
 
     <ripa-snackbar
       :text="officerGenderRaceText"
+      :auto-close="true"
       v-model="snackbarOfficerRaceGender"
-      :auto-close="false"
       multi-line
       top
     ></ripa-snackbar>
@@ -123,6 +123,9 @@ export default {
       dataReady: false,
       apiStopJobLoading: false,
       snackbarUpdateUser: false,
+      officerGenderRaceText:
+        'Recent regulation changes require the collection of officer race and gender. Please input these values now.',
+      snackbarOfficerRaceGender: false,
     }
   },
 
@@ -138,7 +141,6 @@ export default {
       isApiUnavailable: computed(() => this.isApiUnavailable),
       stopsWithErrors: computed(() => this.mappedStopsWithErrors),
       apiStopJobLoading: computed(() => this.apiStopJobLoading),
-      snackbarOfficerRaceGender: computed(() => this.snackbarOfficerRaceGender),
       version: computed(() => this.version),
     }
   },
@@ -364,14 +366,10 @@ export default {
             this.mappedStopSubmissionFailedStops,
           )
         }
-
-        this.officerGenderRaceText =
-          'Recent regulation changes require the collection of officer race and gender. Please input these values now.'
       }
     },
 
     async getUserData() {
-      await Promise.all([this.getUser()])
       this.snackbarOfficerRaceGender = await this.getUser()
     },
 

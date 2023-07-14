@@ -144,7 +144,6 @@
                 @input="handleInput"
               >
               </ripa-text-input>
-              {{ version }}
             </v-col>
           </v-row>
         </template>
