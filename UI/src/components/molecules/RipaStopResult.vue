@@ -64,8 +64,8 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop2"
-              :rules="actionsTakenRules"
-              @input="handleUpdateModel"
+              :rules="actionsTakenRulesV2"
+              @input="handleUpdateModelV2"
               label="Verbal Warning"
               hide-details
             ></ripa-checkbox>
@@ -152,7 +152,7 @@
             <ripa-checkbox
               v-else-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop3"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               @input="handleUpdateModelV2"
               label="Written Warning"
               hide-details
@@ -236,7 +236,7 @@
             <ripa-checkbox
               v-else-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop4"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               @input="handleUpdateModelV2"
               label="Citation for infraction"
               hide-details
@@ -319,7 +319,7 @@
             <ripa-checkbox
               v-else-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop5"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="In-field cite and release"
               hide-details
             ></ripa-checkbox>
@@ -368,7 +368,7 @@
             <ripa-checkbox
               v-else-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop6"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Custodial arrest pursuant to outstanding warrant"
               hide-details
             ></ripa-checkbox>
@@ -465,7 +465,7 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop8"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Field interview card completed"
               hide-details
             ></ripa-checkbox>
@@ -481,7 +481,7 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop9"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Noncriminal transport or caretaking transport"
               hide-details
             ></ripa-checkbox>
@@ -497,7 +497,7 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop10"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Contacted parent/legal guardian or other person responsible for the minor"
               hide-details
             ></ripa-checkbox>
@@ -505,7 +505,7 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop11"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Psychiatric hold"
               hide-details
             ></ripa-checkbox>
@@ -528,13 +528,13 @@
             <template v-if="model.person.isStudent && model.stopVersion === 2">
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop13"
-                :rules="actionsTakenRules"
+                :rules="actionsTakenRulesV2"
                 label="Referral to school administrator"
                 hide-details
               ></ripa-checkbox>
               <ripa-checkbox
                 v-model="model.stopResult.resultsOfStop14"
-                :rules="actionsTakenRules"
+                :rules="actionsTakenRulesV2"
                 label="Referral to school counselor or other support staff"
                 hide-details
               ></ripa-checkbox>
@@ -550,7 +550,7 @@
             <ripa-checkbox
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop12"
-              :rules="actionsTakenRules"
+              :rules="actionsTakenRulesV2"
               label="Contacted U.S. Department of Homeland Security"
             ></ripa-checkbox>
 
@@ -583,7 +583,7 @@ import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { STOP_RESULTS } from '@/constants/form'
+import { STOP_RESULTS, STOP_RESULTS_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
@@ -598,7 +598,8 @@ export default {
 
   data() {
     return {
-      stopResultItems: STOP_RESULTS,
+      stopResultItems:
+        new Date() >= new Date('2024-01-01') ? STOP_RESULTS_V2 : STOP_RESULTS,
     }
   },
 
