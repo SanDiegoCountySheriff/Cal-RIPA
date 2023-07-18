@@ -5,11 +5,6 @@
     <UserSecretsId>81bf2225-559e-46d9-af96-af8b4d216835</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Functions\v2\NewFolder\**" />
-    <EmbeddedResource Remove="Functions\v2\NewFolder\**" />
-    <None Remove="Functions\v2\NewFolder\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Remove="C:\Users\LPOPE\.nuget\packages\microsoft.azure.cosmos\3.17.0\contentFiles\any\netstandard2.0\ThirdPartyNotice.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -32,5 +27,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Functions\v2\" />
   </ItemGroup>
 </Project>
