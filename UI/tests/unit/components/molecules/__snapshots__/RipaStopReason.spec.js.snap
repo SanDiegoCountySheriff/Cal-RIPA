@@ -29,7 +29,10 @@ exports[`Ripa Stop Reason should match snapshot 1`] = `
           <div class="v-input__control">
             <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-10" class="v-input__slot">
               <div class="v-select__slot"><label for="input-10" class="v-label theme--light" style="left: 0px; position: absolute;">Reason</label>
-                <div class="v-select__selections"><input clerable="" required="required" id="input-10" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                <div class="v-select__selections"><input required="required" id="input-10" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                <div class="v-input__append-inner">
+                  <div></div>
+                </div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
                 </div><input type="hidden">

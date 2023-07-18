@@ -31,6 +31,21 @@ exports[`Ripa Page Container should match snapshot 1`] = `
     <div class="v-dialog__container">
       <!---->
     </div>
+    <div class="v-snack v-snack--has-background v-snack--top" multi-line="">
+      <transition-stub name="v-snack-transition">
+        <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
+          <div role="status" aria-live="polite" class="v-snack__content">
+            Recent regulation changes require the collection of officer race and gender. Please input these values now.
+
+          </div>
+          <div class="v-snack__action ">
+            <!----> <button type="button" class="v-btn v-btn--text theme--dark v-size--default blue--text v-snack__btn"><span class="v-btn__content">
+      Close
+    </span></button>
+          </div>
+        </div>
+      </transition-stub>
+    </div>
     <div class="v-dialog__container">
       <!---->
     </div>

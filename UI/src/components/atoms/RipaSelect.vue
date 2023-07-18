@@ -1,7 +1,7 @@
 <template>
   <v-select
     v-model="model"
-    clerable
+    clearable
     flat
     :disabled="disabled"
     :item-text="itemText"

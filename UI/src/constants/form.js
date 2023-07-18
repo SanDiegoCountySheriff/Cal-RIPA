@@ -49,6 +49,23 @@ export const RACES = [
   { name: 'White', value: 7 },
 ]
 
+export const GENDERS_V2 = [
+  { name: 'Cisgender Man', value: 1 },
+  { name: 'Cisgender Woman', value: 2 },
+  { name: 'Transgender Man', value: 3 },
+  { name: 'Transgender Woman', value: 4 },
+]
+
+export const RACES_V2 = [
+  { name: 'Asian', value: 1 },
+  { name: 'Black/African American', value: 2 },
+  { name: 'Hispanic/Latine(x)', value: 3 },
+  { name: 'Middle Eastern or South Asian', value: 4 },
+  { name: 'Native American', value: 5 },
+  { name: 'Pacific Islander', value: 6 },
+  { name: 'White', value: 7 },
+]
+
 export const STOP_REASONS = [
   { name: 'Traffic Violation', value: 1 },
   { name: 'Reasonable Suspicion', value: 2 },
