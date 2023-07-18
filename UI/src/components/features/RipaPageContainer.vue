@@ -34,7 +34,7 @@
 
     <ripa-snackbar
       :text="officerGenderRaceText"
-      :auto-close="true"
+      :auto-close="false"
       v-model="snackbarOfficerRaceGender"
       multi-line
       top
