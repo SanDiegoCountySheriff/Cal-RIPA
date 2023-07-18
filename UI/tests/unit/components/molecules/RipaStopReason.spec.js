@@ -54,9 +54,8 @@ describe('Ripa Stop Reason', () => {
   })
 
   it('should display old suspicion types for V1 stop', () => {
-    //set stop.stopreason = suspicion type
     stop.stopReason.reasonForStop = 2
-    stop.stopReason.reasonableSuspicion = true
+    stop.stopReason.reasonableSuspicion = []
     wrapper = mount(RipaStopReason, {
       vuetify,
       propsData: {
@@ -92,9 +91,8 @@ describe('Ripa Stop Reason', () => {
   })
 
   it('should display new suspicion types for V2 stop', () => {
-    //set stopv2.stopreason = suspicion type
     stopV2.stopReason.reasonForStop = 2
-    stopV2.stopReason.reasonableSuspicion = true
+    stopV2.stopReason.reasonableSuspicion = []
     wrapper = mount(RipaStopReason, {
       vuetify,
       propsData: {
