@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="model" :timeout="timeout" :top="top">
+  <v-snackbar v-model="model" :timeout="getTimeout" :top="top">
     {{ text }}
 
     <template v-slot:action="{ attrs }">
@@ -37,7 +37,7 @@ export default {
     },
 
     getTimeout() {
-      return this.autoClose ? this.timeout : null
+      return this.autoClose ? this.timeout : -1
     },
   },
 
