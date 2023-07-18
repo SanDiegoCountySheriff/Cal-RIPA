@@ -20,7 +20,7 @@ import {
   STOP_RESULTS,
   SEXUAL_ORIENTATIONS,
 } from '@/constants/form'
-import { FORCE_ACTIONS_TAKEN, NON_FORCE_ACTIONS_TAKEN } from '../constants/form'
+import { BASIS_FOR_SEARCH_V2, FORCE_ACTIONS_TAKEN, NON_FORCE_ACTIONS_TAKEN } from '../constants/form'
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')
@@ -2310,7 +2310,7 @@ const getBasisForSearchV2 = person => {
   const basis = person.nonForceActionsTaken?.basisForSearch || []
 
   return basis.map(item => {
-    const [filteredBasis] = BASIS_FOR_SEARCH.filter(
+    const [filteredBasis] = BASIS_FOR_SEARCH_V2.filter(
       item2 => item2.value === item,
     )
 

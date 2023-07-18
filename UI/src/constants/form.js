@@ -258,6 +258,27 @@ export const BASIS_FOR_SEARCH = [
   { name: 'Suspected violation of school policy', value: 13 },
 ]
 
+export const BASIS_FOR_SEARCH_V2 = [
+  { name: 'Verbal Consent given', value: 1 },
+  { name: 'Written Consent given', value: 14 },
+  { name: 'Consent implied by conduct', value: 15 },
+  { name: 'Officer safety/safety of others', value: 2 },
+  { name: 'Search warrant', value: 3 },
+  {
+    name: 'Condition of parole / probation/ PRCS / mandatory supervision',
+    value: 4,
+  },
+  { name: 'Suspected weapons', value: 5 },
+  { name: 'Visible contraband', value: 6 },
+  { name: 'Odor of contraband', value: 7 },
+  { name: 'Canine detection', value: 8 },
+  { name: 'Evidence of crime', value: 9 },
+  { name: 'Incident to arrest', value: 10 },
+  { name: 'Exigent circumstances/emergency', value: 11 },
+  { name: 'Vehicle inventory', value: 12 },
+  { name: 'Suspected violation of school policy', value: 13 },
+]
+
 export const BASIS_FOR_PROPERTY_SEIZURE = [
   { name: 'Safekeeping as allowed by law/statute', value: 1 },
   { name: 'Contraband', value: 2 },
