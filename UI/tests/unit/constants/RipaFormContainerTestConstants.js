@@ -558,12 +558,16 @@ export const V2_API_STOP = {
   agency: 'SDSD',
   officerId: '111111111',
   officerName: 'Name',
+  race: 'Asian',
+  gender: 'Cisgender man',
+  officerNonBinary: false,
   expYears: '1',
   officerAssignment: {
     key: '10',
     type: 'Other',
     otherType: 'Data Services',
   },
+  startDate: '2014-10-10',
   date: '2022-01-01',
   time: '13:00',
   stopDateTime: '2022-01-01T12:00:00',
@@ -629,10 +633,16 @@ export const V2_API_STOP = {
       },
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
-      listActionTakenDuringStop: [
+      listNonForceActionsTakenDuringStop: [
         {
           action: 'None',
-          key: '24',
+          key: '17',
+        },
+      ],
+      listForceActionsTakenDuringStop: [
+        {
+          action: 'None',
+          key: '18',
         },
       ],
       personSearchConsentGiven: false,
@@ -978,9 +988,9 @@ export const V2_STOP = {
       endTimeStamp: '2022-01-01T12:05:00.000Z',
     },
   ],
-  actionsTaken: {
-    anyActionsTaken: true,
-    actionsTakenDuringStop: [],
+  nonForceActionsTaken: {
+    anyNonForceActionsTaken: true,
+    nonForceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
     basisForSearch: [],
@@ -991,6 +1001,10 @@ export const V2_STOP = {
     typeOfPropertySeized: [],
     anyContraband: false,
     contrabandOrEvidenceDiscovered: [],
+  },
+  forceActionsTaken: {
+    anyForceActionsTaken: true,
+    forceActionsTakenDuringStop: [],
   },
   location: {
     isSchool: false,

@@ -1,6 +1,18 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-actions-taken v-model="model" v-on="$listeners"></ripa-actions-taken>
+    <template v-if="model.stopVersion === 1">
+      <ripa-actions-taken
+        v-model="model"
+        v-on="$listeners"
+      ></ripa-actions-taken>
+    </template>
+
+    <template v-else>
+      <ripa-non-force-actions-taken
+        v-model="model"
+        v-on="$listeners"
+      ></ripa-non-force-actions-taken>
+    </template>
 
     <ripa-contraband v-model="model" v-on="$listeners"></ripa-contraband>
 
@@ -48,6 +60,7 @@
 
 <script>
 import RipaActionsTaken from '@/components/molecules/RipaActionsTaken'
+import RipaNonForceActionsTaken from '@/components/molecules/RipaNonForceActionsTaken'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaContraband from '@/components/molecules/RipaContraband'
@@ -60,6 +73,7 @@ export default {
 
   components: {
     RipaActionsTaken,
+    RipaNonForceActionsTaken,
     RipaAlert,
     RipaConfirmDialog,
     RipaContraband,
@@ -67,7 +81,10 @@ export default {
 
   methods: {
     handleStep4Next() {
-      const piiFound = this.model.actionsTaken?.basisForSearchPiiFound || false
+      const piiFound =
+        this.model.actionsTaken?.basisForSearchPiiFound ||
+        this.model.nonForceActionsTaken?.basisForSearchPiiFound ||
+        false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {

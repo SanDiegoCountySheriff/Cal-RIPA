@@ -11,6 +11,7 @@ import {
   EDUCATION_CODE_SECTIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  REASONABLE_SUSPICIONS_V2,
   ACTIONS_TAKEN,
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
@@ -19,7 +20,11 @@ import {
   STOP_RESULTS,
   SEXUAL_ORIENTATIONS,
 } from '@/constants/form'
-import { STOP_RESULTS_V2 } from '../constants/form'
+import {
+  FORCE_ACTIONS_TAKEN,
+  NON_FORCE_ACTIONS_TAKEN,
+  STOP_RESULTS_V2,
+} from '../constants/form'
 
 const getAgencyQuestionsFromLocalStorage = () => {
   const questions = localStorage.getItem('ripa_agency_questions')
@@ -82,6 +87,24 @@ export const defaultStop = () => {
     piiEntities: [],
     stepTrace: [],
     stopType: null,
+    nonForceActionsTaken: {
+      anyNonForceActionsTaken: true,
+      nonForceActionsTakenDuringStop: [],
+      personSearchConsentGiven: false,
+      propertySearchConsentGiven: false,
+      basisForSearch: [],
+      basisForSearchExplanation: null,
+      basisForSearchPiiFound: false,
+      propertyWasSeized: false,
+      basisForPropertySeizure: [],
+      typeOfPropertySeized: [],
+      anyContraband: false,
+      contrabandOrEvidenceDiscovered: [],
+    },
+    forceActionsTaken: {
+      anyForceActionsTaken: false,
+      forceActionsTakenDuringStop: [],
+    },
     actionsTaken: {
       anyActionsTaken: true,
       actionsTakenDuringStop: [],
@@ -224,7 +247,11 @@ export const apiStopStopSummary = apiStop => {
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })
   items.push({ id: 'A4', content: getSummaryTime(apiStop) })
   items.push({ id: 'A5', content: getSummaryLocation(apiStop) })
-  items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  if (apiStop.stopVersion === 2) {
+    items.push({ id: 'A6', content: getSummaryOfficerV2(apiStop) })
+  } else {
+    items.push({ id: 'A6', content: getSummaryOfficer(apiStop) })
+  }
   items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
   items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
   return items
@@ -378,6 +405,45 @@ const getSummaryOfficer = apiStop => {
   }
 }
 
+const getSummaryOfficerV2 = apiStop => {
+  return {
+    level: 3,
+    header: 'Officer',
+    children: [
+      {
+        header: 'Agency',
+        detail: apiStop.agency,
+      },
+      {
+        header: 'Officer ID',
+        detail: apiStop.officerId,
+      },
+      {
+        header: 'Officer Name',
+        detail: apiStop.officerName,
+      },
+      { header: 'Years Experience', detail: apiStop.expYears },
+      { header: 'Assignment', detail: apiStop.officerAssignment.type },
+      {
+        header: 'Other Type',
+        detail: apiStop.officerAssignment.otherType,
+      },
+      {
+        header: 'Officer Race',
+        detail: apiStop.race,
+      },
+      {
+        header: 'Officer Gender',
+        detail: apiStop.gender,
+      },
+      {
+        header: 'Officer Nonbinary',
+        detail: apiStop.officerNonBinary,
+      },
+    ],
+  }
+}
+
 const getSummaryDuration = apiStop => {
   return {
     level: 1,
@@ -424,18 +490,30 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       id: 'B10',
       content: getSummaryReasonForStopExplanation(person),
     })
-    items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
-    items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
-    items.push({
-      id: 'B13',
-      content: getSummaryBasisForSearchExplanation(person),
-    })
-    items.push({
-      id: 'B14',
-      content: getSummaryBasisForPropertySeizure(person),
-    })
-    items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    if (apiStop.stopVersion === 1) {
+      items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
+    }
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B19', content: getSummaryNonForceActionsTaken(person) })
+    }
+    if (person.listBasisForSearch.length > 0) {
+      items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
+      items.push({
+        id: 'B13',
+        content: getSummaryBasisForSearchExplanation(person),
+      })
+    }
+    if (person.listBasisForPropertySeizure.length > 0) {
+      items.push({
+        id: 'B14',
+        content: getSummaryBasisForPropertySeizure(person),
+      })
+      items.push({ id: 'B15', content: getSummaryTypeOfPropertySeized(person) })
+    }
     items.push({ id: 'B16', content: getSummaryContraband(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B20', content: getSummaryForceActionsTaken(person) })
+    }
     items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
     return items
   }
@@ -587,6 +665,38 @@ const getSummaryActionsTaken = person => {
   return {
     level: 2,
     header: 'Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryNonForceActionsTaken = person => {
+  const actions = person.listNonForceActionsTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Non-Force Actions Taken During Stop',
+    children: actions,
+  }
+}
+
+const getSummaryForceActionsTaken = person => {
+  const actions = person.listForceActionsTakenDuringStop
+    .map(item => item.action)
+    .map(item => {
+      return {
+        detail: item,
+      }
+    })
+
+  return {
+    level: 2,
+    header: 'Force Actions Taken During Stop',
     children: actions,
   }
 }
@@ -1105,9 +1215,13 @@ const getFullStopPeopleListedV2 = apiStop => {
       person.listPerceivedOrKnownDisability.length > 0 &&
       person.listPerceivedOrKnownDisability[0].key !== '8'
 
-    const anyActionsTaken =
-      person.listActionTakenDuringStop.length > 0 &&
-      person.listActionTakenDuringStop[0].key !== '24'
+    const anyNonForceActionsTaken =
+      person.listNonForceActionsTakenDuringStop.length > 0 &&
+      person.listNonForceActionsTakenDuringStop[0].key !== '17'
+
+    const anyForceActionsTaken =
+      person.listForceActionsTakenDuringStop.length > 0 &&
+      person.listForceActionsTakenDuringStop[0].key !== '18'
 
     const anyContraband =
       person.listContrabandOrEvidenceDiscovered.length > 0 &&
@@ -1121,8 +1235,12 @@ const getFullStopPeopleListedV2 = apiStop => {
       ? person.listPerceivedOrKnownDisability
       : []
 
-    const actionTakenDuringStop = anyActionsTaken
-      ? person.listActionTakenDuringStop
+    const nonForceActionsTakenDuringStop = anyNonForceActionsTaken
+      ? person.listNonForceActionsTakenDuringStop
+      : []
+
+    const forceActionsTakenDuringStop = anyForceActionsTaken
+      ? person.listForceActionsTakenDuringStop
       : []
 
     const contrabandOrEvidenceDiscovered = anyContraband
@@ -1144,9 +1262,11 @@ const getFullStopPeopleListedV2 = apiStop => {
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
       perceivedRace: getKeyArray(person.listPerceivedRace),
-      actionsTaken: {
-        anyActionsTaken,
-        actionsTakenDuringStop: getKeyArray(actionTakenDuringStop),
+      nonForceActionsTaken: {
+        anyNonForceActionsTaken,
+        nonForcectionsTakenDuringStop: getKeyArray(
+          nonForceActionsTakenDuringStop,
+        ),
         personSearchConsentGiven: person.personSearchConsentGiven,
         propertySearchConsentGiven: person.propertySearchConsentGiven,
         basisForSearch: getKeyArray(person.listBasisForSearch),
@@ -1163,6 +1283,10 @@ const getFullStopPeopleListedV2 = apiStop => {
         contrabandOrEvidenceDiscovered: getKeyArray(
           contrabandOrEvidenceDiscovered,
         ),
+      },
+      forceActionsTaken: {
+        anyForceActionsTaken,
+        forceActionsTakenDuringStop: getKeyArray(forceActionsTakenDuringStop),
       },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
@@ -1184,8 +1308,8 @@ const getFullStopPeopleListedV2 = apiStop => {
         ),
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
-        searchOfPerson: getStopReasonSearchOfPerson(person),
-        searchOfProperty: getStopReasonSearchOfProperty(person),
+        searchOfPerson: getStopReasonSearchOfPersonV2(person),
+        searchOfProperty: getStopReasonSearchOfPropertyV2(person),
       },
       stopResult: {
         anyResultsOfStop,
@@ -1232,12 +1356,50 @@ const getStopReasonSearchOfPerson = person => {
   return false
 }
 
+const getStopReasonSearchOfPersonV2 = person => {
+  const reasonForStop = Number(person.reasonForStop.key)
+  const anyActionsTaken =
+    person.listNonForceActionTakenDuringStop.length > 0 &&
+    person.listNonForceActionTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listNonForceActionTakenDuringStop || []
+  const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+
+  if (reasonForStop === 6) {
+    if (anyActionsTaken) {
+      if (mappedActionsTaken.includes(18)) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
 const getStopReasonSearchOfProperty = person => {
   const reasonForStop = Number(person.reasonForStop.key)
   const anyActionsTaken =
     person.listActionTakenDuringStop.length > 0 &&
     person.listActionTakenDuringStop[0].key !== '24'
   const actionsTaken = person.listActionTakenDuringStop || []
+  const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
+
+  if (reasonForStop === 6) {
+    if (anyActionsTaken) {
+      if (mappedActionsTaken.includes(20)) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+const getStopReasonSearchOfPropertyV2 = person => {
+  const reasonForStop = Number(person.reasonForStop.key)
+  const anyActionsTaken =
+    person.listNonForceActionTakenDuringStop.length > 0 &&
+    person.listNonForceActionTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listNonForceActionTakenDuringStop || []
   const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
 
   if (reasonForStop === 6) {
@@ -1361,7 +1523,8 @@ export const fullStopToStopV2 = fullStop => {
     overridePii: false,
     piiEntities: fullStop.piiEntities,
     stepTrace: fullStop.stepTrace,
-    actionsTaken: person.actionsTaken || {},
+    nonForceActionsTaken: person.nonForceActionsTaken,
+    forceActionsTaken: person.forceActionsTaken,
     location: fullStop.location,
     stopType: fullStop.stopType,
     stopVersion: fullStop.stopVersion,
@@ -1480,6 +1643,11 @@ export const fullStopToApiStop = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
+    race: parsedApiStop ? parsedApiStop.race : officer.race,
+    gender: parsedApiStop ? parsedApiStop.gender : officer.gender,
+    officerNonBinary: parsedApiStop
+      ? parsedApiStop.officerNonBinary
+      : officer.officerNonBinary,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
@@ -1631,21 +1799,23 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
   return fullStop.people.map((person, index) => {
     return {
       basisForSearchBrief:
-        person.actionsTaken?.basisForSearchExplanation || null,
+        person.nonForceActionsTaken?.basisForSearchExplanation || null,
       basisForSearchPiiFound:
-        person.actionsTaken?.basisForSearchPiiFound || false,
+        person.nonForceActionsTaken?.basisForSearchPiiFound || false,
       id: index + 1,
       index: index + 1,
       isStudent: person.isStudent || false,
-      listActionTakenDuringStop: getActionsTakenDuringStop(person),
-      listBasisForPropertySeizure: getBasisForPropertySeizure(person),
-      listBasisForSearch: getBasisForSearch(person),
+      listNonForceActionsTakenDuringStop:
+        getNonForceActionsTakenDuringStop(person),
+      listForceActionsTakenDuringStop: getForceActionsTakenDuringStop(person),
+      listBasisForPropertySeizure: getBasisForPropertySeizureV2(person),
+      listBasisForSearch: getBasisForSearchV2(person),
       listContrabandOrEvidenceDiscovered:
-        getContrabandOrEvidenceDiscovered(person),
+        getContrabandOrEvidenceDiscoveredV2(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
       listPerceivedRace: getPerceivedRace(person),
       listResultOfStop: getResultOfStopV2(person, statutes),
-      listTypeOfPropertySeized: getTypeOfPropertySeized(person),
+      listTypeOfPropertySeized: getTypeOfPropertySeizedV2(person),
       perceivedAge: person.perceivedAge?.toString() || null,
       perceivedGender: getPerceivedGenderText(person),
       genderNonconforming: person.genderNonconforming || false,
@@ -1653,10 +1823,10 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
       personSearchConsentGiven:
-        person.actionsTaken?.personSearchConsentGiven || false,
+        person.nonForceActionsTaken?.personSearchConsentGiven || false,
       propertySearchConsentGiven:
-        person.actionsTaken?.propertySearchConsentGiven || false,
-      reasonForStop: getReasonForStop(person, statutes),
+        person.nonForceActionsTaken?.propertySearchConsentGiven || false,
+      reasonForStop: getReasonForStopV2(person, statutes),
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
@@ -1679,8 +1849,13 @@ const getPiiFound = (parsedApiStop, fullStop) => {
     const person = people[index]
     if (!reasonForStopPiiFound && !basisForSearchPiiFound) {
       reasonForStopPiiFound = person.stopReason?.reasonForStopPiiFound || false
-      basisForSearchPiiFound =
-        person.actionsTaken?.basisForSearchPiiFound || false
+      if (fullStop.stopVersion === 1) {
+        basisForSearchPiiFound =
+          person.actionsTaken?.basisForSearchPiiFound || false
+      } else if (fullStop.stopVersion === 2) {
+        basisForSearchPiiFound =
+          person.nonForceActionsTaken?.basisForSearchPiiFound || false
+      }
     }
   }
 
@@ -1868,12 +2043,43 @@ const getReasonForStop = (person, statutes) => {
   return null
 }
 
+const getReasonForStopV2 = (person, statutes) => {
+  const reason = person.stopReason?.reasonForStop || null
+
+  if (reason) {
+    const [filteredReason] = STOP_REASONS.filter(item => item.value === reason)
+
+    return {
+      key: reason.toString(),
+      reason: filteredReason?.name || '',
+      listDetail: getReasonForStopDetailsV2(reason, person),
+      listCodes: getReasonForStopCodes(reason, person, statutes),
+    }
+  }
+
+  return null
+}
+
 const getReasonForStopDetails = (reasonKey, person) => {
   if (reasonKey === 1) {
     return [getTrafficViolation(person)]
   }
   if (reasonKey === 2) {
     return getReasonableSuspicion(person)
+  }
+  if (reasonKey === 7) {
+    return [getEducationViolation(person)]
+  }
+
+  return []
+}
+
+const getReasonForStopDetailsV2 = (reasonKey, person) => {
+  if (reasonKey === 1) {
+    return [getTrafficViolation(person)]
+  }
+  if (reasonKey === 2) {
+    return getReasonableSuspicionV2(person)
   }
   if (reasonKey === 7) {
     return [getEducationViolation(person)]
@@ -1993,6 +2199,20 @@ const getReasonableSuspicion = person => {
   })
 }
 
+const getReasonableSuspicionV2 = person => {
+  const suspicion = person.stopReason?.reasonableSuspicion || []
+  return suspicion.map(item => {
+    const [filteredSuspicion] = REASONABLE_SUSPICIONS_V2.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      reason: filteredSuspicion?.name || '',
+    }
+  })
+}
+
 const getReasonableSuspicionCode = (person, statutes) => {
   const code = person.stopReason?.reasonableSuspicionCode || null
   if (code) {
@@ -2028,8 +2248,77 @@ const getActionsTakenDuringStop = person => {
   ]
 }
 
+const getNonForceActionsTakenDuringStop = person => {
+  const actions =
+    person.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = NON_FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = {
+      key: item.toString(),
+      action: filteredAction?.name || '',
+    }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '17',
+      action: 'None',
+    },
+  ]
+}
+
+const getForceActionsTakenDuringStop = person => {
+  const actions = person.forceActionsTaken?.forceActionsTakenDuringStop || []
+
+  const mappedItems = actions.map(item => {
+    const [filteredAction] = FORCE_ACTIONS_TAKEN.filter(
+      item2 => item2.value === item,
+    )
+
+    const action = { key: item.toString(), action: filteredAction?.name || '' }
+
+    return action
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '18',
+      action: 'None',
+    },
+  ]
+}
+
 const getBasisForSearch = person => {
   const basis = person.actionsTaken?.basisForSearch || []
+
+  return basis.map(item => {
+    const [filteredBasis] = BASIS_FOR_SEARCH.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      basis: filteredBasis?.name || '',
+    }
+  })
+}
+
+const getBasisForSearchV2 = person => {
+  const basis = person.nonForceActionsTaken?.basisForSearch || []
 
   return basis.map(item => {
     const [filteredBasis] = BASIS_FOR_SEARCH.filter(
@@ -2058,8 +2347,38 @@ const getBasisForPropertySeizure = person => {
   })
 }
 
+const getBasisForPropertySeizureV2 = person => {
+  const basis = person.nonForceActionsTaken?.basisForPropertySeizure || []
+
+  return basis.map(item => {
+    const [filteredBasis] = BASIS_FOR_PROPERTY_SEIZURE.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      basis: filteredBasis?.name || '',
+    }
+  })
+}
+
 const getTypeOfPropertySeized = person => {
   const types = person.actionsTaken?.typeOfPropertySeized || []
+
+  return types.map(item => {
+    const [filteredType] = SEIZED_PROPERTY_TYPES.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      type: filteredType?.name || '',
+    }
+  })
+}
+
+const getTypeOfPropertySeizedV2 = person => {
+  const types = person.nonForceActionsTaken?.typeOfPropertySeized || []
 
   return types.map(item => {
     const [filteredType] = SEIZED_PROPERTY_TYPES.filter(
@@ -2191,6 +2510,33 @@ const getResultOfStopV2 = (person, statutes) => {
     {
       key: '1',
       result: 'None',
+    },
+  ]
+}
+
+const getContrabandOrEvidenceDiscoveredV2 = person => {
+  const contrabands =
+    person.nonForceActionsTaken?.contrabandOrEvidenceDiscovered || []
+
+  const mappedItems = contrabands.map(item => {
+    const [filteredType] = CONTRABAND_TYPES.filter(
+      item2 => item2.value === item,
+    )
+
+    return {
+      key: item.toString(),
+      contraband: filteredType?.name || '',
+    }
+  })
+
+  if (mappedItems.length > 0) {
+    return mappedItems
+  }
+
+  return [
+    {
+      key: '1',
+      contraband: 'None',
     },
   ]
 }

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Force Actions Taken should match snapshot 1`] = `
+<div class="tw-pb-4">
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Force Actions Taken During Stop</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 200px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-8" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--switch__track theme--light"></div>
+                  <div class="v-input--switch__thumb theme--light">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-8" class="v-label theme--light" style="left: 0px; position: relative;">
+                  Any Force Actions Taken?
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!---->
+      </div>
+    </div>
+  </div>
+</div>
+`;

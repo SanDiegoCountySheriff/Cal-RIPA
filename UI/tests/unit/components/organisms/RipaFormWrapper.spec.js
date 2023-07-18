@@ -94,6 +94,14 @@ describe('Ripa Form Wrapper', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
+  it.todo('should display non force actions for v2 stops')
+
+  it.todo('should display actions taken for legacy stops')
+
+  it.todo('should display force actions taken for v2 stops')
+
+  it.todo('should not display force actions taken for legacy stops')
+
   it.skip('should reset reasonableSuspicion when changing reasonForStop', async () => {
     const updatedStop = createStartOfFormStepIndexThreeStop(stop)
     wrapper = factory({ value: updatedStop }, { formStepIndex: 3 })

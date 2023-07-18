@@ -148,6 +148,50 @@
           </v-row>
         </template>
       </template>
+
+      <template v-if="version === 2">
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6">
+            <div class="md:tw-mr-4">
+              <ripa-select
+                v-model="model.race"
+                label="Officer Race"
+                :items="raceItems"
+                itemText="name"
+                itemValue="name"
+                :rules="raceRules"
+                @input="handleInput"
+                clearable
+              ></ripa-select>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <ripa-select
+              v-model="model.gender"
+              label="Officer Gender"
+              :items="genderItems"
+              itemText="name"
+              itemValue="name"
+              :rules="genderRules"
+              @input="handleInput"
+              clearable
+            ></ripa-select>
+          </v-col>
+        </v-row>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6"></v-col>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-switch
+              v-model="model.officerNonBinary"
+              label="Nonbinary Person"
+              :max-width="250"
+              :rules="genderRules"
+              @input="handleInput"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </template>
     </v-container>
   </div>
 </template>
@@ -157,7 +201,8 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import { OFFICER_ASSIGNMENTS, GENDERS_V2, RACES_V2 } from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
@@ -173,14 +218,19 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
+    RipaSwitch,
   },
 
   data() {
     return {
       assignmentItems: OFFICER_ASSIGNMENTS,
+      genderItems: GENDERS_V2,
+      raceItems: RACES_V2,
       viewModel: this.value,
     }
   },
+
+  inject: ['version'],
 
   computed: {
     model: {
@@ -212,6 +262,20 @@ export default {
 
     lastNameRules() {
       return [v => !!v || 'A last name is required']
+    },
+
+    raceRules() {
+      return [v => !!v || 'An officer race is required']
+    },
+
+    genderRules() {
+      const gender = this.model.gender
+      const checked = this.model.officerNonBinary
+      const isValid = gender || checked
+
+      return [
+        !!isValid || 'If no gender is selected, nonbinary must be selected',
+      ]
     },
 
     startDateRules() {

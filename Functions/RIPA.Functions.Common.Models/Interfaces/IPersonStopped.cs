@@ -1,4 +1,6 @@
-﻿namespace RIPA.Functions.Common.Models.Interfaces;
+﻿using RIPA.Functions.Common.Models.v1;
+
+namespace RIPA.Functions.Common.Models.Interfaces;
 
 public interface IPersonStopped
 {
@@ -7,7 +9,6 @@ public interface IPersonStopped
     bool GenderNonconforming { get; set; }
     string Id { get; set; }
     bool IsStudent { get; set; }
-    ActionTakenDuringStop[] ListActionTakenDuringStop { get; set; }
     BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
     BasisForSearch[] ListBasisForSearch { get; set; }
     ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }

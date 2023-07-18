@@ -91,4 +91,32 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Perceived Unhoused')
   })
+
+  it('should display officer race and gender details for v2 officer', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Officer Race')
+    expect(wrapper.html()).toContain('Officer Gender')
+  })
+
+  it('should not display officer race and gender details for legacy stop', () => {
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Officer Race')
+    expect(wrapper.html()).not.toContain('Officer Gender')
+  })
+
+  it('should display non force actions and force actions taken for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Force')
+    expect(wrapper.html()).toContain('Non-Force')
+  })
+
+  it('should display actions taken for legacy stops', () => {
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Force')
+    expect(wrapper.html()).not.toContain('Non-Force')
+  })
 })
