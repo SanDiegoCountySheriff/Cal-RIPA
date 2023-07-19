@@ -617,7 +617,7 @@ export default {
 
     isPullReasonCodeValid() {
       const reasonForStop = this.model.stopReason?.reasonForStop || []
-      return [1, 2, 3, 5].includes(reasonForStop)
+      return [1, 2].includes(reasonForStop)
     },
 
     isPullReasonCodeWarningVisible() {
