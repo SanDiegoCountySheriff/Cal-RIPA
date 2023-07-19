@@ -174,6 +174,38 @@
               @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
+
+            <template v-if="this.model.stopVersion === 2">
+              <ripa-subheader text="-- or --"></ripa-subheader>
+
+              <v-row no-gutters>
+                <v-col cols="12" sm="12" md="6">
+                  <div class="md:tw-mr-4">
+                    <ripa-text-input
+                      v-model="model.location.latitude"
+                      label="Latitude"
+                      :loading="loadingPiiStep1"
+                      :rules="latitudeRules"
+                      @blur="handleBlockNumber"
+                    >
+                    </ripa-text-input>
+                  </div>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="6">
+                  <div>
+                    <ripa-text-input
+                      v-model="model.location.longitude"
+                      label="Longitude"
+                      :loading="loadingPiiStep1"
+                      :rules="longitudeRules"
+                      @blur="handlePiiCheck($event)"
+                    >
+                    </ripa-text-input>
+                  </div>
+                </v-col>
+              </v-row>
+            </template>
           </template>
 
           <div class="tw-mt-8">
@@ -335,6 +367,32 @@ export default {
       ]
     },
 
+    latitudeRules() {
+      const lat = this.model.location.latitude
+      const latAbsoluteVal = '' + Math.abs(parseFloat(lat))
+
+      return [
+        (lat &&
+          isFinite(parseFloat(lat)) &&
+          Math.abs(parseFloat(lat)) <= 90 &&
+          latAbsoluteVal.length <= 6) ||
+          'A valid latitude coordinate is required',
+      ]
+    },
+
+    longitudeRules() {
+      const long = this.model.location.longitude
+      const longAbsoluteVal = '' + Math.abs(parseFloat(long))
+
+      return [
+        (long &&
+          isFinite(parseFloat(long)) &&
+          Math.abs(parseFloat(long)) <= 180 &&
+          longAbsoluteVal.length <= 7) ||
+          'A valid longitude coordinate is required',
+      ]
+    },
+
     streetNameRules() {
       const streetName = this.model.location.streetName
       const blockNumber = this.model.location.blockNumber
@@ -407,6 +465,8 @@ export default {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
+      const latCoord = this.model.location.latitude
+      const longCoord = this.model.location.longitude
 
       const isValid =
         (blockNumber !== null &&
@@ -421,7 +481,8 @@ export default {
         (checked &&
           landmark !== null &&
           landmark.length >= 5 &&
-          landmark.length <= 250)
+          landmark.length <= 250) ||
+        (checked && latCoord !== null && longCoord !== null)
 
       return isValid
     },
