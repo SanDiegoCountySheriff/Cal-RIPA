@@ -10,6 +10,5 @@ exports[`Ripa Form Wrapper should match snapshot 1`] = `
   <ripa-confirm-dialog-stub title="Confirm Cancel" subtitle="Are you sure you want to cancel the action? You will lose all changes."></ripa-confirm-dialog-stub>
   <ripa-confirm-dialog-stub title="Confirm Delete" subtitle="Are you sure you want to delete the person?"></ripa-confirm-dialog-stub>
   <ripa-confirm-dialog-stub title="Confirm Submission" subtitle="Are you sure you want to submit the form?"></ripa-confirm-dialog-stub>
-  <ripa-user-dialog-stub isrowkeydisabled="true" formtitle="Manage User" title="Incomplete User Info" subtitle="Please enter your race and gender"></ripa-user-dialog-stub>
 </div>
 `;
