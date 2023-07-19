@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid'
 import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
+  OFFICER_ASSIGNMENTS_V2,
   RACES,
   GENDERS,
   DISABILITIES,
@@ -1858,6 +1859,17 @@ const getPiiFound = (parsedApiStop, fullStop) => {
 
 export const getOfficerAssignment = assignment => {
   const [filteredAssignment] = OFFICER_ASSIGNMENTS.filter(
+    item => item.value === assignment,
+  )
+
+  return {
+    code: assignment.toString(),
+    text: filteredAssignment?.name || '',
+  }
+}
+
+export const getOfficerAssignmentV2 = assignment => {
+  const [filteredAssignment] = OFFICER_ASSIGNMENTS_V2.filter(
     item => item.value === assignment,
   )
 
