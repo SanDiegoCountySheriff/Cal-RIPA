@@ -56,6 +56,13 @@ export const GENDERS_V2 = [
   { name: 'Transgender Woman', value: 4 },
 ]
 
+export const PERSON_GENDERS_V2 = [
+  { name: 'Cisgender Man/Boy', value: 1 },
+  { name: 'Cisgender Woman/Girl', value: 2 },
+  { name: 'Transgender Man/Boy', value: 3 },
+  { name: 'Transgender Woman/Girl', value: 4 },
+]
+
 export const RACES_V2 = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },

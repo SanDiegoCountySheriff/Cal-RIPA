@@ -25,6 +25,7 @@ import {
   BASIS_FOR_SEARCH_V2,
   FORCE_ACTIONS_TAKEN,
   NON_FORCE_ACTIONS_TAKEN,
+  PERSON_GENDERS_V2,
   STOP_RESULTS_V2,
 } from '../constants/form'
 
@@ -129,7 +130,8 @@ export const defaultStop = () => {
       isStudent: false,
       perceivedAge: null,
       perceivedGender: null,
-      genderNonconforming: false,
+      genderNonconforming: null,
+      nonBinaryPerson: null,
       perceivedLimitedEnglish: false,
       perceivedLgbt: new Date() >= new Date(2024, 0, 1) ? null : false,
       perceivedSexualOrientation: null,
@@ -471,7 +473,12 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     const items = []
     items.push({ id: 'B1', content: getSummaryStudent(person) })
     items.push({ id: 'B2', content: getSummaryPerceivedRace(person) })
-    items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    if (apiStop.stopVersion === 1) {
+      items.push({ id: 'B3', content: getSummaryGenderNonconforming(person) })
+    }
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: 'B3', content: getSummaryNonbinaryPerson(person) })
+    }
     items.push({ id: 'B4', content: getSummaryPerceivedGender(person) })
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B5', content: getSummaryPerceivedOrientation(person) })
@@ -565,8 +572,16 @@ const getSummaryPerceivedOrientation = person => {
 const getSummaryGenderNonconforming = person => {
   return {
     level: 1,
-    header: 'Gender Noncomforning',
+    header: 'Gender Nonconforming',
     detail: person.genderNonconforming,
+  }
+}
+
+const getSummaryNonbinaryPerson = person => {
+  return {
+    level: 1,
+    header: 'Nonbinary Person',
+    detail: person.nonBinaryPerson,
   }
 }
 
@@ -1258,8 +1273,8 @@ const getFullStopPeopleListedV2 = apiStop => {
       index: index + 1,
       isStudent: person.isStudent || false,
       perceivedAge: Number(person.perceivedAge),
-      perceivedGender: getPerceivedGenderCode(person),
-      genderNonconforming: person.genderNonconforming,
+      perceivedGender: getPerceivedGenderCodeV2(person),
+      nonBinaryPerson: person.nonBinaryPerson,
       perceivedSexualOrientation: getPerceivedOrientationCode(person),
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
@@ -1533,7 +1548,7 @@ export const fullStopToStopV2 = fullStop => {
     stopVersion: fullStop.stopVersion,
     person: {
       anyDisabilities: person.anyDisabilities || false,
-      genderNonconforming: person.genderNonconforming || false,
+      nonBinaryPerson: person.nonBinaryPerson || false,
       id: person.id,
       isStudent: person.isStudent || false,
       perceivedAge: person.perceivedAge || null,
@@ -1820,8 +1835,8 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       listResultOfStop: getResultOfStopV2(person, statutes),
       listTypeOfPropertySeized: getTypeOfPropertySeizedV2(person),
       perceivedAge: person.perceivedAge?.toString() || null,
-      perceivedGender: getPerceivedGenderText(person),
-      genderNonconforming: person.genderNonconforming || false,
+      perceivedGender: getPerceivedGenderTextV2(person),
+      nonBinaryPerson: person.nonBinaryPerson || false,
       perceivedSexualOrientation: getPerceivedOrientationText(person),
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
@@ -1977,6 +1992,26 @@ const getPerceivedGender = person => {
   return null
 }
 
+const getPerceivedGenderV2 = person => {
+  const gender = person.perceivedGender || null
+  if (gender) {
+    const [filteredGenderValue] = PERSON_GENDERS_V2.filter(
+      item => item.value === gender,
+    )
+    const [filteredGenderName] = PERSON_GENDERS_V2.filter(
+      item => item.name === gender,
+    )
+    const filteredGender = filteredGenderValue || filteredGenderName
+
+    return {
+      code: filteredGender?.value || null,
+      text: filteredGender?.name || '',
+    }
+  }
+
+  return null
+}
+
 const getPerceivedOrientation = person => {
   const orientation = person.perceivedSexualOrientation || null
   if (orientation) {
@@ -2001,6 +2036,11 @@ const getPerceivedGenderCode = person => {
   return gender?.code || null
 }
 
+const getPerceivedGenderCodeV2 = person => {
+  const gender = getPerceivedGenderV2(person)
+  return gender?.code || null
+}
+
 const getPerceivedOrientationCode = person => {
   const orientation = getPerceivedOrientation(person)
   return orientation?.code || null
@@ -2008,6 +2048,11 @@ const getPerceivedOrientationCode = person => {
 
 const getPerceivedGenderText = person => {
   const gender = getPerceivedGender(person)
+  return gender?.text || ''
+}
+
+const getPerceivedGenderTextV2 = person => {
+  const gender = getPerceivedGenderV2(person)
   return gender?.text || ''
 }
 
