@@ -995,7 +995,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-result-favorite', this.model.stopResult)
+      this.$emit(
+        'on-save-result-favorite',
+        this.model.stopResult,
+        this.model.stopVersion,
+      )
     },
   },
 

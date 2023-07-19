@@ -6,6 +6,10 @@
       </v-card-title>
 
       <v-card-text>
+        <v-alert v-if="favoritesCodeExpired" color="error"
+          >You have favorites with expired statute codes. To update, save a
+          favorite with the same name.</v-alert
+        >
         <v-container>
           <v-row>
             <v-col cols="12">
@@ -53,6 +57,12 @@ export default {
         }
         this.viewModel = newValue
       },
+    },
+
+    favoritesCodeExpired() {
+      return this.favorites.some(favorite => {
+        return favorite.favoritesCodeExpired === true
+      })
     },
   },
 

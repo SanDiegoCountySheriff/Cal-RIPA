@@ -65,11 +65,14 @@
           </v-card>
         </v-dialog>
       </template>
+      <template v-slot:item.name="{ item }">
+        <span class="mr-4">{{ item.name }} </span>
+        <span class="red--text text-no-wrap">
+          {{ item.favoritesCodeExpired ? 'Expired Statute' : '' }}
+        </span>
+      </template>
       <template v-slot:item.actions="{ item }">
         <template v-if="isOnlineAndAuthenticated">
-          <v-icon small class="tw-mr-2" @click="editItem($event, item)">
-            mdi-pencil
-          </v-icon>
           <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
         </template>
       </template>
