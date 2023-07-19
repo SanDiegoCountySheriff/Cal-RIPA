@@ -301,7 +301,7 @@ export default {
     otherTypeRules() {
       const assignment = this.viewModel.assignment
       const otherType = this.viewModel.otherType
-      if (assignment !== 10) {
+      if (assignment !== 10 && assignment !== 11 && assignment !== 12) {
         return []
       }
 
