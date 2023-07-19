@@ -1265,7 +1265,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       perceivedRace: getKeyArray(person.listPerceivedRace),
       nonForceActionsTaken: {
         anyNonForceActionsTaken,
-        nonForcectionsTakenDuringStop: getKeyArray(
+        nonForceActionsTakenDuringStop: getKeyArray(
           nonForceActionsTakenDuringStop,
         ),
         personSearchConsentGiven: person.personSearchConsentGiven,
@@ -1360,9 +1360,9 @@ const getStopReasonSearchOfPerson = person => {
 const getStopReasonSearchOfPersonV2 = person => {
   const reasonForStop = Number(person.reasonForStop.key)
   const anyActionsTaken =
-    person.listNonForceActionTakenDuringStop.length > 0 &&
-    person.listNonForceActionTakenDuringStop[0].key !== '24'
-  const actionsTaken = person.listNonForceActionTakenDuringStop || []
+    person.listNonForceActionsTakenDuringStop.length > 0 &&
+    person.listNonForceActionsTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listNonForceActionsTakenDuringStop || []
   const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
 
   if (reasonForStop === 6) {
@@ -1398,9 +1398,9 @@ const getStopReasonSearchOfProperty = person => {
 const getStopReasonSearchOfPropertyV2 = person => {
   const reasonForStop = Number(person.reasonForStop.key)
   const anyActionsTaken =
-    person.listNonForceActionTakenDuringStop.length > 0 &&
-    person.listNonForceActionTakenDuringStop[0].key !== '24'
-  const actionsTaken = person.listNonForceActionTakenDuringStop || []
+    person.listNonForceActionsTakenDuringStop.length > 0 &&
+    person.listNonForceActionsTakenDuringStop[0].key !== '24'
+  const actionsTaken = person.listNonForceActionsTakenDuringStop || []
   const mappedActionsTaken = actionsTaken.map(item => Number(item.key))
 
   if (reasonForStop === 6) {
@@ -2252,7 +2252,6 @@ const getActionsTakenDuringStop = person => {
 const getNonForceActionsTakenDuringStop = person => {
   const actions =
     person.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
-
   const mappedItems = actions.map(item => {
     const [filteredAction] = NON_FORCE_ACTIONS_TAKEN.filter(
       item2 => item2.value === item,
