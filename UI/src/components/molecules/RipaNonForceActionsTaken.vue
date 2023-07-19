@@ -154,6 +154,7 @@ import {
   BASIS_FOR_SEARCH,
   BASIS_FOR_PROPERTY_SEIZURE,
   SEIZED_PROPERTY_TYPES,
+  BASIS_FOR_SEARCH_V2,
 } from '@/constants/form'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
@@ -179,7 +180,6 @@ export default {
   data() {
     return {
       nonForceActionsTakenItems: NON_FORCE_ACTIONS_TAKEN,
-      basisForSearchItems: BASIS_FOR_SEARCH,
       basisForPropertySeizureItems: BASIS_FOR_PROPERTY_SEIZURE,
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
@@ -207,15 +207,16 @@ export default {
       },
     },
 
-    isBasisForSearchExplanationVisible() {
-      if (this.model.nonForceActionsTaken.basisForSearch.length === 0) {
-        return false
+    basisForSearchItems() {
+      if (this.model.stopVersion === 1) {
+        return BASIS_FOR_SEARCH
       }
 
-      if (
-        this.model.nonForceActionsTaken.basisForSearch.length === 1 &&
-        this.model.nonForceActionsTaken.basisForSearch.includes(4)
-      ) {
+      return BASIS_FOR_SEARCH_V2
+    },
+
+    isBasisForSearchExplanationVisible() {
+      if (this.model.nonForceActionsTaken.basisForSearch.length === 0) {
         return false
       }
 
@@ -223,7 +224,9 @@ export default {
     },
 
     basisForSearchRules() {
-      const consentGiven = this.wasAskedForConsent
+      const consentGiven =
+        this.wasAskedForConsentToSearchPerson ||
+        this.wasAskedForConsentToSearchProperty
       const searchConducted = this.wasSearchOfPersonOrPropertyConducted
       const options = this.model.nonForceActionsTaken.basisForSearch || []
 
@@ -232,9 +235,11 @@ export default {
           'At least one basis for search is required',
         !consentGiven ||
           (consentGiven &&
-            this.model.nonForceActionsTaken.basisForSearch !== null &&
-            this.model.nonForceActionsTaken.basisForSearch.length > 0 &&
-            this.model.nonForceActionsTaken.basisForSearch.includes(1)) ||
+            options !== null &&
+            options.length > 0 &&
+            (options.includes(1) ||
+              options.includes(14) ||
+              options.includes(15))) ||
           'Consent given must be selected if person or property consent was given.',
       ]
     },
@@ -288,7 +293,10 @@ export default {
         this.model.nonForceActionsTaken.propertySearchConsentGiven
       const basisForSearch =
         this.model.nonForceActionsTaken?.basisForSearch || []
-      const consentGiven = basisForSearch.includes(1)
+      const consentGiven =
+        basisForSearch.includes(1) ||
+        basisForSearch.includes(14) ||
+        basisForSearch.includes(15)
 
       if (!consentGiven) {
         return []
