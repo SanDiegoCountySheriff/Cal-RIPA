@@ -16,7 +16,7 @@
               v-model="model.person.perceivedGender"
               :disabled="disabled"
               :items="genderItems"
-              :rules="genderRules"
+              :rules="model.stopVersion === 1 ? genderRules : genderRulesV2"
               clear-selection
             >
             </ripa-radio-group>
@@ -24,11 +24,21 @@
 
           <v-col cols="12" sm="12">
             <ripa-switch
+              v-if="model.stopVersion === 1"
               v-model="model.person.genderNonconforming"
               label="Gender Nonconforming"
               :disabled="disabled"
               :max-width="250"
               :rules="genderRules"
+            ></ripa-switch>
+
+            <ripa-switch
+              v-if="model.stopVersion === 2"
+              v-model="model.person.nonBinaryPerson"
+              label="Nonbinary person"
+              :disabled="disabled"
+              :max-width="250"
+              :rules="genderRulesV2"
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -89,7 +99,11 @@
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { GENDERS, SEXUAL_ORIENTATIONS } from '@/constants/form'
+import {
+  GENDERS,
+  PERSON_GENDERS_V2,
+  SEXUAL_ORIENTATIONS,
+} from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
@@ -102,7 +116,6 @@ export default {
 
   data() {
     return {
-      genderItems: GENDERS,
       orientationItems: SEXUAL_ORIENTATIONS,
     }
   },
@@ -135,9 +148,25 @@ export default {
       },
     },
 
+    genderItems() {
+      if (this.model.stopVersion === 1) {
+        return GENDERS
+      }
+
+      return PERSON_GENDERS_V2
+    },
+
     genderRules() {
       const gender = this.model.person.perceivedGender
       const checked = this.model.person.genderNonconforming
+      const isValid = gender !== null || checked
+
+      return [isValid !== false || 'A gender is required']
+    },
+
+    genderRulesV2() {
+      const gender = this.model.person.perceivedGender
+      const checked = this.model.person.nonBinaryPerson
       const isValid = gender !== null || checked
 
       return [isValid !== false || 'A gender is required']

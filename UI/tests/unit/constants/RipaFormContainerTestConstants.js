@@ -624,6 +624,7 @@ export const V2_API_STOP = {
       perceivedAge: 10,
       perceivedGender: 'Male',
       genderNonconforming: false,
+      nonBinaryPerson: false,
       perceivedLgbt: false,
       reasonForStop: {
         key: '5',
@@ -1024,7 +1025,7 @@ export const V2_STOP = {
   },
   person: {
     anyDisabilities: false,
-    genderNonconforming: false,
+    nonBinaryPerson: false,
     id: 1,
     isStudent: false,
     perceivedAge: 33,

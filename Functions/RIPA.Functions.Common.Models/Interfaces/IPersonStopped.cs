@@ -6,7 +6,7 @@ public interface IPersonStopped
 {
     string BasisForSearchBrief { get; set; }
     bool BasisForSearchPiiFound { get; set; }
-    bool GenderNonconforming { get; set; }
+    bool NonBinaryPerson { get; set; }
     string Id { get; set; }
     bool IsStudent { get; set; }
     BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }

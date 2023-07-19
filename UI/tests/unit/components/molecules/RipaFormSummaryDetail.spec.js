@@ -119,4 +119,22 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).not.toContain('Force')
     expect(wrapper.html()).not.toContain('Non-Force')
   })
+
+  it('should display nonbinary person on v2 stops', () => {
+    v2ApiStop.listPersonStopped[0].nonBinaryPerson = true
+
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Nonbinary Person')
+    expect(wrapper.html()).not.toContain('Gender Nonconforming')
+  })
+
+  it('should display gender nonconforming on legacy stops', () => {
+    v2ApiStop.listPersonStopped[0].genderNonConforming = true
+
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Nonbinary Person')
+    expect(wrapper.html()).toContain('Gender Nonconforming')
+  })
 })
