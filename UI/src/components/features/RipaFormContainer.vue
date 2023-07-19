@@ -403,6 +403,8 @@ export default {
               },
             )
 
+            console.log('updatedWarningCodes', updatedWarningCodes)
+
             if (
               updatedWarningCodes.length !== result.result.citationCodes.length
             ) {
@@ -535,7 +537,14 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const reasons = this.getFavoriteReasons()
-      reasons.push(reason)
+      const index = reasons.findIndex(r => r.name === reason.name)
+
+      if (index === -1) {
+        reasons.push(reason)
+      } else {
+        reasons[index] = reason
+      }
+
       this.setFavoriteReasons(reasons)
       this.savedReason = null
     },
@@ -549,7 +558,14 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const results = this.getFavoriteResults()
-      results.push(result)
+      const index = results.findIndex(r => r.name === result.name)
+
+      if (index === -1) {
+        results.push(result)
+      } else {
+        results[index] = result
+      }
+
       this.setFavoriteResults(results)
       this.savedResult = null
     },
@@ -669,8 +685,8 @@ export default {
 
     handleDeleteReasonFavorite(id) {
       const reasons = this.getFavoriteReasons()
-      const filteredResons = reasons.filter(item => item.id !== id)
-      this.setFavoriteReasons(filteredResons)
+      const filteredReasons = reasons.filter(item => item.id !== id)
+      this.setFavoriteReasons(filteredReasons)
     },
 
     handleDeleteResultFavorite(id) {
