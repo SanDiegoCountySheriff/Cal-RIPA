@@ -403,10 +403,8 @@ export default {
               },
             )
 
-            console.log('updatedWarningCodes', updatedWarningCodes)
-
             if (
-              updatedWarningCodes.length !== result.result.citationCodes.length
+              updatedWarningCodes.length !== result.result.warningCodes.length
             ) {
               result.favoritesCodeExpired = true
             }
