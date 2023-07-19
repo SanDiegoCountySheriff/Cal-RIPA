@@ -27,7 +27,7 @@
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import { RACES } from '@/constants/form'
+import { RACES, RACES_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
@@ -35,12 +35,6 @@ export default {
   components: {
     RipaCheckGroup,
     RipaFormHeader,
-  },
-
-  data() {
-    return {
-      raceItems: RACES,
-    }
   },
 
   computed: {
@@ -56,6 +50,13 @@ export default {
     raceRules() {
       const options = this.model.person.perceivedRace
       return [options.length > 0 || 'At least one race is required']
+    },
+
+    raceItems() {
+      if (this.model.stopVersion === 1) {
+        return RACES
+      }
+      return RACES_V2
     },
   },
 
