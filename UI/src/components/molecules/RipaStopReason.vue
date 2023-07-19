@@ -325,7 +325,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-reason-favorite', this.model.stopReason)
+      this.$emit(
+        'on-save-reason-favorite',
+        this.model.stopReason,
+        this.model.stopVersion,
+      )
     },
 
     handlePiiCheck(textValue) {

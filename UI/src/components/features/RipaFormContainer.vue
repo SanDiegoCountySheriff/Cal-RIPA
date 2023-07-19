@@ -176,6 +176,7 @@ export default {
       loadingPiiStep4: false,
       savedLocation: null,
       savedReason: null,
+      savedReasonVersion: null,
       savedResult: null,
       showAddLocationFavoriteDialog: false,
       showAddReasonFavoriteDialog: false,
@@ -355,8 +356,34 @@ export default {
     },
 
     getFavoriteReasons() {
-      const locations = localStorage.getItem('ripa_favorite_reasons')
-      return locations ? JSON.parse(locations) : []
+      const reasons = localStorage.getItem('ripa_favorite_reasons')
+      return reasons
+        ? JSON.parse(reasons).filter(reason => {
+            if (!reason.version) {
+              reason.version = 1
+            }
+
+            const codes = [
+              reason.reason.reasonableSuspicionCode,
+              reason.reason.educationViolationCode,
+              reason.reason.trafficViolationCode,
+            ]
+
+            const codeNotExpired = codes.some(code => {
+              return this.mappedFormStatutes.some(statute => {
+                return statute.code === code
+              })
+            })
+
+            if (!codeNotExpired) {
+              reason.reason.reasonableSuspicionCode = null
+              reason.reason.educationViolationCode = null
+              reason.reason.trafficViolationCode = null
+            }
+
+            return reason.version === this.version
+          })
+        : []
     },
 
     getFavoriteResults() {
@@ -399,6 +426,7 @@ export default {
         id: new Date().getTime(),
         name,
         reason: this.savedReason,
+        version: this.savedReasonVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const reasons = this.getFavoriteReasons()
@@ -733,8 +761,9 @@ export default {
       this.showAddLocationFavoriteDialog = true
     },
 
-    handleSaveReasonFavorite(reason) {
+    handleSaveReasonFavorite(reason, version) {
       this.savedReason = reason
+      this.savedReasonVersion = version
       this.showAddReasonFavoriteDialog = true
     },
 
