@@ -99,6 +99,7 @@ describe('Ripa User', () => {
   })
 
   it('should display officer race and gender inputs if current date > 01/01/24', () => {
+    
     wrapper = factory(
       {
         value: ripaUserV2,

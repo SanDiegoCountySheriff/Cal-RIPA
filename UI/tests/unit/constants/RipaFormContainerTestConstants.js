@@ -907,7 +907,7 @@ export const V1_STOP = {
     perceivedLgbt: false,
     perceivedLimitedEnglish: false,
     perceivedOrKnownDisability: [],
-    perceivedRace: [1],
+    perceivedRace: [3],
   },
   stopDate: {
     date: '2022-01-01',
@@ -1032,7 +1032,7 @@ export const V2_STOP = {
     perceivedLgbt: false,
     perceivedLimitedEnglish: false,
     perceivedOrKnownDisability: [],
-    perceivedRace: [1],
+    perceivedRace: [3],
   },
   stopDate: {
     date: '2022-01-01',

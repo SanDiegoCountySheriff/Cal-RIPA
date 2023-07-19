@@ -13,11 +13,11 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
           <div class="ripa-check-group">
-            <div class="v-input v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--checkbox primary--text">
+            <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text"></i><input aria-checked="true" id="input-10" role="checkbox" type="checkbox" value="1">
-                    <div class="v-input--selection-controls__ripple primary--text"></div>
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-10" role="checkbox" type="checkbox" value="1">
+                    <div class="v-input--selection-controls__ripple"></div>
                   </div><label for="input-10" class="v-label theme--light" style="left: 0px; position: relative;">Asian</label>
                 </div>
               </div>
@@ -31,11 +31,11 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                 </div>
               </div>
             </div>
-            <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
+            <div class="v-input v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--checkbox primary--text">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-14" role="checkbox" type="checkbox" value="3">
-                    <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text"></i><input aria-checked="true" id="input-14" role="checkbox" type="checkbox" value="3">
+                    <div class="v-input--selection-controls__ripple primary--text"></div>
                   </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latino(a)</label>
                 </div>
               </div>

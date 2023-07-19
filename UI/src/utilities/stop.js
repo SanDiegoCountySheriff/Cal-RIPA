@@ -4,6 +4,7 @@ import { formatDateTime } from '@/utilities/dates'
 import {
   OFFICER_ASSIGNMENTS,
   RACES,
+  RACES_V2,
   GENDERS,
   DISABILITIES,
   STOP_REASONS,
@@ -1813,7 +1814,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       listContrabandOrEvidenceDiscovered:
         getContrabandOrEvidenceDiscoveredV2(person),
       listPerceivedOrKnownDisability: getPerceivedOrKnownDisability(person),
-      listPerceivedRace: getPerceivedRace(person),
+      listPerceivedRace: getPerceivedRaceV2(person),
       listResultOfStop: getResultOfStopV2(person, statutes),
       listTypeOfPropertySeized: getTypeOfPropertySeizedV2(person),
       perceivedAge: person.perceivedAge?.toString() || null,
@@ -1937,6 +1938,19 @@ const getPerceivedRace = person => {
 
   return race.map(item => {
     const [filteredRace] = RACES.filter(item2 => item2.value === item)
+
+    return {
+      key: item.toString(),
+      race: filteredRace?.name || '',
+    }
+  })
+}
+
+const getPerceivedRaceV2 = person => {
+  const race = person.perceivedRace || []
+
+  return race.map(item => {
+    const [filteredRace] = RACES_V2.filter(item2 => item2.value === item)
 
     return {
       key: item.toString(),
