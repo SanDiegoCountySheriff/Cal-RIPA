@@ -119,4 +119,33 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).not.toContain('Force')
     expect(wrapper.html()).not.toContain('Non-Force')
   })
+
+  it('should display verbal and written warning for v2 stops', () => {
+    v2ApiStop.listPersonStopped[0].listResultOfStop = [
+      {
+        key: '2',
+        result: 'Verbal Warning',
+        listCodes: [
+          {
+            code: '31286',
+            text: '10085.5 BP - ADV FEE/SECURE LOAN (M) 31286',
+          },
+        ],
+      },
+      {
+        key: '3',
+        result: 'Written Warning',
+        listCodes: [
+          {
+            code: '31286',
+            text: '10085.5 BP - ADV FEE/SECURE LOAN (M) 31286',
+          },
+        ],
+      },
+    ]
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Verbal Warning')
+    expect(wrapper.html()).toContain('Written Warning')
+  })
 })
