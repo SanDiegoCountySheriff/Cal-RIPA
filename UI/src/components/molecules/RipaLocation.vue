@@ -515,7 +515,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-location-favorite', this.model.location)
+      this.$emit(
+        'on-save-location-favorite',
+        this.model.location,
+        this.model.stopVersion,
+      )
     },
   },
 

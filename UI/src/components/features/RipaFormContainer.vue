@@ -175,6 +175,7 @@ export default {
       loadingPiiStep3: false,
       loadingPiiStep4: false,
       savedLocation: null,
+      savedLocationVersion: null,
       savedReason: null,
       savedReasonVersion: null,
       savedResult: null,
@@ -353,7 +354,48 @@ export default {
 
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
+      return locations
+        ? JSON.parse(locations).filter(location => {
+            if (!location.version) {
+              location.version = 1
+            }
+
+            if (!location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormCountyCities.some(city => {
+                return city.fullName === location.location.city
+              })
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            } else if (location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormNonCountyCities.some(
+                city => {
+                  return city.fullName === location.location.city
+                },
+              )
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            }
+
+            if (location.location.isSchool) {
+              const schoolNotExpired = this.mappedFormSchools.some(school => {
+                return school.name === location.location.school
+              })
+
+              if (!schoolNotExpired) {
+                location.location.school = ''
+                location.favoritesSchoolExpired = true
+              }
+            }
+
+            return location.version === this.version
+          })
+        : []
     },
 
     getFavoriteReasons() {
@@ -380,6 +422,7 @@ export default {
               reason.reason.reasonableSuspicionCode = null
               reason.reason.educationViolationCode = null
               reason.reason.trafficViolationCode = null
+              reason.favoritesCodeExpired = true
             }
 
             return reason.version === this.version
@@ -519,11 +562,21 @@ export default {
         id: new Date().getTime(),
         name,
         location: this.savedLocation,
+        version: this.savedLocationVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const locations = this.getFavoriteLocations()
-      locations.push(location)
+      const index = locations.findIndex(l => l.name === location.name)
+
+      if (index === -1) {
+        console.log('making a new one')
+        locations.push(location)
+      } else {
+        console.log('replacing')
+        locations[index] = location
+      }
       this.setFavoriteLocations(locations)
+      this.savedLocation = null
     },
 
     handleAddReasonFavorite(name) {
@@ -878,8 +931,9 @@ export default {
       this.showStatuteDialog = true
     },
 
-    handleSaveLocationFavorite(location) {
+    handleSaveLocationFavorite(location, version) {
       this.savedLocation = location
+      this.savedLocationVersion = version
       this.showAddLocationFavoriteDialog = true
     },
 

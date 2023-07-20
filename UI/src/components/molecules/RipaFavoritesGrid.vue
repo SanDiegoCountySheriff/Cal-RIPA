@@ -69,6 +69,21 @@
         <span class="mr-4">{{ item.name }} </span>
         <span class="red--text text-no-wrap">
           {{ item.favoritesCodeExpired ? 'Expired Statute' : '' }}
+          {{
+            item.favoritesCityExpired && !item.favoritesSchoolExpired
+              ? 'Expired City'
+              : ''
+          }}
+          {{
+            item.favoritesSchoolExpired && !item.favoritesCityExpired
+              ? 'Expired School'
+              : ''
+          }}
+          {{
+            item.favoritesSchoolExpired && item.favoritesCityExpired
+              ? 'Expired City and School'
+              : ''
+          }}
         </span>
       </template>
       <template v-slot:item.actions="{ item }">
