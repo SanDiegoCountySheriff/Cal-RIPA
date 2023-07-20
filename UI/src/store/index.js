@@ -704,7 +704,7 @@ export default new Vuex.Store({
       }
       return axios
         .put(
-          `http://localhost:7071/api/v${state.version}/PutUser/${updatedUser.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -728,7 +728,7 @@ export default new Vuex.Store({
       formData.append('file', usersFile)
       return axios
         .post(
-          `http://localhost:7071/api/v${state.version}/PostUpload?agency=${usersAgency}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PostUpload?agency=${usersAgency}`,
           formData,
           {
             headers: {
@@ -900,7 +900,7 @@ export default new Vuex.Store({
 
       return axios
         .put(
-          `http://localhost:7071/api/v${state.version}/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -1346,7 +1346,7 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`http://localhost:7071/api/v${state.version}/GetUsers`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
@@ -1621,7 +1621,7 @@ export default new Vuex.Store({
     getUser({ commit, state }) {
       const id = state.user.oid
       return axios
-        .get(`http://localhost:7071/api/v${state.version}/GetUser/${id}`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v${state.version}/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
