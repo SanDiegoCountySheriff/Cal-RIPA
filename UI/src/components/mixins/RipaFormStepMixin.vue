@@ -7,6 +7,8 @@ export default {
     }
   },
 
+  inject: ['loadingPiiStep1', 'loadingPiiStep3', 'loadingPiiStep4'],
+
   computed: {
     model: {
       get() {
@@ -22,7 +24,12 @@ export default {
     },
 
     isBackNextDisabled() {
-      return this.loadingGps || this.loadingPii
+      return (
+        this.loadingGps ||
+        this.loadingPiiStep1 ||
+        this.loadingPiiStep3 ||
+        this.loadingPiiStep4
+      )
     },
   },
 
