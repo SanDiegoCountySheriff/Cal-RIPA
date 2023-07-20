@@ -11,6 +11,21 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Other', value: 10 },
 ]
 
+export const OFFICER_ASSIGNMENTS_V2 = [
+  { name: 'Patrol, traffic enforcement, field operations', value: 1 },
+  { name: 'Gang enforcement', value: 2 },
+  { name: 'Compliance check', value: 3 },
+  { name: 'Special events', value: 4 },
+  { name: 'Roadblock or DUI sobriety checkpoint', value: 5 },
+  { name: 'Narcotics/vice', value: 6 },
+  { name: 'Task force', value: 7 },
+  { name: 'K-12 public school', value: 8 },
+  { name: 'Investigative/detective', value: 9 },
+  { name: 'Other', value: 10 },
+  { name: 'Off duty and/or working private event', value: 11 },
+  { name: 'Contracted by another law enforcement agency', value: 12 },
+]
+
 export const DISABILITIES = [
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },

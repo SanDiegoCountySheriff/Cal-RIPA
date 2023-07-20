@@ -15,8 +15,11 @@
           <v-alert outlined dense type="info">
             <v-row align="center">
               <v-col class="grow">
-                <template v-if="isValidUser">
+                <template v-if="isValidUser && version === 1">
                   {{ getOfficerInfo }}
+                </template>
+                <template v-if="isValidUser && version === 2">
+                  {{ getOfficerInfoV2 }}
                 </template>
                 <template v-if="!isValidUser">
                   <v-progress-circular
@@ -40,7 +43,7 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import { OFFICER_ASSIGNMENTS, OFFICER_ASSIGNMENTS_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-officer',
@@ -55,7 +58,7 @@ export default {
     }
   },
 
-  inject: ['user'],
+  inject: ['user','version'],
 
   computed: {
     isValidUser() {
@@ -74,12 +77,36 @@ export default {
 
       return 'Officer information is missing. Please open user dialog and update.'
     },
+
+    getOfficerInfoV2() {
+      if (this.user) {
+        const otherType =
+          this.user.assignment === 10 ? this.user.otherType : null
+        const otherTypeText = otherType ? ` - ${otherType} - ` : ' - '
+        return `${this.getOfficerAssignmentTextV2()} ${otherTypeText} ${
+          this.user.yearsExperience
+        } Years`
+      }
+
+      return 'Officer information is missing. Please open user dialog and update.'
+    },
   },
 
   methods: {
     getOfficerAssignmentText() {
       if (this.user && this.user.assignment) {
         const [assignment] = OFFICER_ASSIGNMENTS.filter(
+          item => item.value === this.user.assignment,
+        )
+        return assignment.name
+      }
+
+      return ''
+    },
+
+    getOfficerAssignmentTextV2() {
+      if (this.user && this.user.assignment) {
+        const [assignment] = OFFICER_ASSIGNMENTS_V2.filter(
           item => item.value === this.user.assignment,
         )
         return assignment.name

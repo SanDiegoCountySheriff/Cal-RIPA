@@ -123,6 +123,45 @@ describe('Ripa User', () => {
     expect(wrapper.html()).not.toContain('Officer Race')
   })
 
+  it('should display new assignment off duty for v2 stop', () => {
+    ripaUserV2.assignment = 11
+    wrapper = factory(
+      {
+        value: ripaUserV2,
+      },
+      2,
+    )
+    expect(wrapper.html()).toContain('Off duty and/or working private event')
+  })
+
+  it('should display new assignment contracte by another agency for v2 stop', () => {
+    ripaUserV2.assignment = 12
+    wrapper = factory(
+      {
+        value: ripaUserV2,
+      },
+      2,
+    )
+    expect(wrapper.html()).toContain(
+      'Contracted by another law enforcement agency',
+    )
+  })
+
+  it('should not display new assignment types for v1 stop', () => {
+    wrapper = factory(
+      {
+        value: ripaUser,
+      },
+      1,
+    )
+    expect(wrapper.html()).not.toContain(
+      'Off duty and/or working private event',
+    )
+    expect(wrapper.html()).not.toContain(
+      'Contracted by another law enforcement agency',
+    )
+  })
+
   it.todo('should validate years experience rules')
 
   it.todo('should validate agency rules')
