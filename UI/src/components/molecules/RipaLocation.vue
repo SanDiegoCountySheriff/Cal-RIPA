@@ -370,26 +370,36 @@ export default {
     latitudeRules() {
       const lat = this.model.location.latitude
       const latAbsoluteVal = '' + Math.abs(parseFloat(lat))
+      let decimal
+      if (lat !== null) {
+        decimal = String(lat).slice(String(lat).lastIndexOf('.') + 1)
+      }
 
       return [
         (lat &&
           isFinite(parseFloat(lat)) &&
           Math.abs(parseFloat(lat)) <= 90 &&
-          latAbsoluteVal.length <= 6) ||
-          'A valid latitude coordinate is required',
+          latAbsoluteVal.length <= 6 &&
+          decimal.length <= 3) ||
+          'A valid latitude with a maximum of 3 digits after the decimal is required',
       ]
     },
 
     longitudeRules() {
       const long = this.model.location.longitude
       const longAbsoluteVal = '' + Math.abs(parseFloat(long))
+      let decimal
+      if (long !== null) {
+        decimal = String(long).slice(String(long).lastIndexOf('.') + 1)
+      }
 
       return [
         (long &&
           isFinite(parseFloat(long)) &&
           Math.abs(parseFloat(long)) <= 180 &&
-          longAbsoluteVal.length <= 7) ||
-          'A valid longitude coordinate is required',
+          longAbsoluteVal.length <= 7 &&
+          decimal.length <= 3) ||
+          'A valid longitude with a maximum of 3 digits after the decimal is required',
       ]
     },
 
