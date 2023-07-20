@@ -10,6 +10,10 @@
           >You have favorites with expired statute codes. To update, save a
           favorite with the same name.</v-alert
         >
+        <v-alert v-if="this.version === 2" color="primary"
+          >Due to recent regulation changes, old favorites are obsolete. Please
+          recreate your favorites.</v-alert
+        >
         <v-container>
           <v-row>
             <v-col cols="12">
@@ -39,6 +43,8 @@ export default {
   components: {
     RipaFavoritesGrid,
   },
+
+  inject: ['version'],
 
   data() {
     return {
