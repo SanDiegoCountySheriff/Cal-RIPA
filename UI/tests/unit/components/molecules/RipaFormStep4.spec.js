@@ -3,6 +3,7 @@ import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import { V1_STOP } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
+import { computed } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -46,9 +47,7 @@ describe('Ripa Form Step 4', () => {
         value: V1_STOP,
       },
       provide: {
-        loadingPiiStep4() {
-          return false
-        },
+        loadingPiiStep4: computed(() => false),
       },
     })
 

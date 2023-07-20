@@ -7,8 +7,6 @@ export default {
     }
   },
 
-  inject: ['loadingPiiStep1', 'loadingPiiStep3', 'loadingPiiStep4'],
-
   computed: {
     model: {
       get() {
