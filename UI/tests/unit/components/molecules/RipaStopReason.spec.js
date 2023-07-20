@@ -126,4 +126,32 @@ describe('Ripa Stop Reason', () => {
       'Witness or victim identified stopped person as a suspect of a crime',
     )
   })
+
+  it('should display new reason for stops for V2 stop', () => {
+    stopV2.stopReason.reasonForStop = 9
+    stopV2.stopReason.probableCauseType = [1]
+    wrapper = mount(RipaStopReason, {
+      vuetify,
+      propsData: {
+        value: stopV2,
+      },
+      provide: {
+        loadingPiiStep3: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        personSearchAutomaticallySelected() {
+          return false
+        },
+        propertySearchAutomaticallySelected() {
+          return false
+        },
+        statutes: computed(() => []),
+      },
+    })
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })

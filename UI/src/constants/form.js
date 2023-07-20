@@ -88,6 +88,43 @@ export const STOP_REASONS = [
   },
   { name: 'Determine whether the student violated school policy', value: 8 },
 ]
+export const STOP_REASONS_V2 = [
+  { name: 'Traffic Violation', value: 1 },
+  { name: 'Reasonable Suspicion', value: 2 },
+  {
+    name: 'Known to be on Parole / Probation / PRCS / Mandatory Supervision',
+    value: 3,
+  },
+  {
+    name: 'Knowledge of outstanding arrest warrant/wanted person',
+    value: 4,
+  },
+  {
+    name: 'Investigation to determine whether the person was truant',
+    value: 5,
+  },
+  { name: 'Consensual Encounter resulting in a search', value: 6 },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+    value: 7,
+  },
+  { name: 'Determine whether the student violated school policy', value: 8 },
+  { name: 'Probable cause to arrest or search', value: 9 },
+  { name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150', value: 10 },
+]
+
+export const PROBABLE_CAUSE_TYPES = [
+  { name: 'Officer witnessed commission of a crime', value: 1 },
+  { name: 'Matched suspect description', value: 2 },
+  { name: 'Witness or victim identified stopped person as a suspect of a crime', value: 3 },
+  { name: 'Carrying suspicious object', value: 4 },
+  { name: 'Actions indicative of casing a victim or location', value: 5 },
+  { name: 'Suspected of acting as a lookout', value: 6 },
+  { name: 'Actions indicative of a drug transaction', value: 7 },
+  { name: 'Actions indicative of engaging in a violent crime', value: 8 },
+  { name: 'Other reasonable suspicion or probable cause that a crime has occurred', value: 9 },
+  { name: 'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime', value: 10 },
+]
 
 export const EDUCATION_VIOLATIONS = [
   { name: '48900 - Suspension or expulsion (select subsection)', value: 1 },

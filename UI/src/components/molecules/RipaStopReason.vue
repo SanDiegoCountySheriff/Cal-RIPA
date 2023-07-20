@@ -139,6 +139,22 @@
             ></ripa-switch>
           </template>
 
+          <template v-if="model.stopReason.reasonForStop === 9">
+            <ripa-check-group
+              v-model="model.stopReason.probableCauseType"
+              :items="getProbableCauseTypeItems"
+              :rules="probableCauseTypeRules"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseTypeCode"
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code (Optional)"
+              :items="statutes"
+            ></ripa-autocomplete>
+          </template>
+
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
@@ -175,6 +191,8 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
+  STOP_REASONS_V2,
+  PROBABLE_CAUSE_TYPES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
@@ -206,12 +224,14 @@ export default {
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
+      reasonItemsV2: STOP_REASONS_V2,
+      probableCauseTypes: PROBABLE_CAUSE_TYPES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionCodesV1: REASONABLE_SUSPICIONS,
       reasonableSuspicionCodesV2: REASONABLE_SUSPICIONS_V2,
-   }
+    }
   },
 
   inject: [
@@ -236,21 +256,29 @@ export default {
       },
       set(newVal) {
         this.$emit('input', newVal)
-      }
+      },
     },
 
     getReasonableSuspicionItems() {
-      return this.model.stopVersion === 1 ? this.reasonableSuspicionCodesV1 : this.reasonableSuspicionCodesV2
+      return this.model.stopVersion === 1
+        ? this.reasonableSuspicionCodesV1
+        : this.reasonableSuspicionCodesV2
+    },
+
+    getProbableCauseTypeItems() {
+      return this.probableCauseTypes
     },
 
     getReasonItems() {
+        var reasonItems = this.model.stopVersion === 1
+        ? this.reasonItems
+        : this.reasonItemsV2
+
       if (this.model.person.isStudent) {
-        return this.reasonItems
+        return reasonItems
       }
 
-      return this.reasonItems.filter(
-        item => item.value !== 7 && item.value !== 8,
-      )
+      return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
     },
 
     educationViolationRules() {
@@ -295,6 +323,15 @@ export default {
       ]
     },
 
+    probableCauseTypeRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const options = this.model.stopReason.probableCauseType
+      return [
+        (checked && options !== null && options?.length > 0) ||
+          'A probable cause type is required',
+      ]
+    },
+
     reasonableSuspicionCodeRules() {
       const checked = this.model.stopReason.reasonForStop === 2
       const code = this.model.stopReason.reasonableSuspicionCode
@@ -334,6 +371,15 @@ export default {
       if (this.model.stopReason.reasonForStop !== 6) {
         this.model.stopReason.searchOfPerson = false
         this.model.stopReason.searchOfProperty = false
+      }
+      if (this.model.stopReason.reasonForStop !== 2) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.model.stopReason.reasonForStop !== 9) {
+        this.model.stopReason.probableCauseType = []
+        this.model.stopReason.probableCauseTypeCode = null
       }
 
       if (
