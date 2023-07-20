@@ -334,7 +334,7 @@ export default {
     },
 
     updateOtherTypeModel() {
-      if (this.viewModel.assignment !== 10) {
+      if (this.viewModel.assignment !== 10 && assignment !== 11 && assignment !== 12) {
         this.viewModel.otherType = null
       }
     },

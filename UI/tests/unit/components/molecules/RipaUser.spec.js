@@ -146,7 +146,7 @@ describe('Ripa User', () => {
     )
   })
 
-  it('shuld not display new assignment types for v1 stop', () => {
+  it('should not display new assignment types for v1 stop', () => {
     wrapper = factory(
       {
         value: ripaUser,
