@@ -569,10 +569,8 @@ export default {
       const index = locations.findIndex(l => l.name === location.name)
 
       if (index === -1) {
-        console.log('making a new one')
         locations.push(location)
       } else {
-        console.log('replacing')
         locations[index] = location
       }
       this.setFavoriteLocations(locations)
