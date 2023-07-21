@@ -211,7 +211,7 @@ export default {
       trafficViolationItems: TRAFFIC_VIOLATIONS,
       reasonableSuspicionCodesV1: REASONABLE_SUSPICIONS,
       reasonableSuspicionCodesV2: REASONABLE_SUSPICIONS_V2,
-   }
+    }
   },
 
   inject: [
@@ -236,11 +236,13 @@ export default {
       },
       set(newVal) {
         this.$emit('input', newVal)
-      }
+      },
     },
 
     getReasonableSuspicionItems() {
-      return this.model.stopVersion === 1 ? this.reasonableSuspicionCodesV1 : this.reasonableSuspicionCodesV2
+      return this.model.stopVersion === 1
+        ? this.reasonableSuspicionCodesV1
+        : this.reasonableSuspicionCodesV2
     },
 
     getReasonItems() {
@@ -323,7 +325,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-reason-favorite', this.model.stopReason)
+      this.$emit(
+        'on-save-reason-favorite',
+        this.model.stopReason,
+        this.model.stopVersion,
+      )
     },
 
     handlePiiCheck(textValue) {
@@ -654,6 +660,12 @@ export default {
   },
 
   watch: {
+    lastReason(newVal) {
+      if (newVal) {
+        this.model.stopReason = newVal
+      }
+    },
+
     model: {
       handler: function (newVal) {
         this.model = newVal
