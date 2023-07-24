@@ -174,6 +174,15 @@
               @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
+
+            <ripa-text-input
+              v-model="model.location.cityName"
+              label="City or Unincorporated Area"
+              :loading="loadingPiiStep1"
+              :rules="cityRules"
+              @blur="handlePiiCheck($event)"
+            >
+            </ripa-text-input>
           </template>
 
           <div class="tw-mt-8">
