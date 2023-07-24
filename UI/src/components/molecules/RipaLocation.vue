@@ -133,6 +133,38 @@
         </v-col>
       </v-row>
 
+      <template v-if="this.model.stopVersion === 2 && isGeolocationAvailable">
+        <ripa-subheader text="-- or --"></ripa-subheader>
+
+        <v-row no-gutters>
+          <v-col cols="12" sm="12" md="6">
+            <div class="md:tw-mr-4">
+              <ripa-text-input
+                v-model="model.location.latitude"
+                label="Latitude"
+                :loading="loadingPiiStep1"
+                :rules="latitudeRules"
+                @blur="handleBlockNumber"
+              >
+              </ripa-text-input>
+            </div>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <div>
+              <ripa-text-input
+                v-model="model.location.longitude"
+                label="Longitude"
+                :loading="loadingPiiStep1"
+                :rules="longitudeRules"
+                @blur="handlePiiCheck($event)"
+              >
+              </ripa-text-input>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+
       <v-row no-gutters>
         <v-col cols="12" sm="12">
           <ripa-subheader text="-- or --"></ripa-subheader>
@@ -174,38 +206,6 @@
               @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
-
-            <template v-if="this.model.stopVersion === 2">
-              <ripa-subheader text="-- or --"></ripa-subheader>
-
-              <v-row no-gutters>
-                <v-col cols="12" sm="12" md="6">
-                  <div class="md:tw-mr-4">
-                    <ripa-text-input
-                      v-model="model.location.latitude"
-                      label="Latitude"
-                      :loading="loadingPiiStep1"
-                      :rules="latitudeRules"
-                      @blur="handleBlockNumber"
-                    >
-                    </ripa-text-input>
-                  </div>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="6">
-                  <div>
-                    <ripa-text-input
-                      v-model="model.location.longitude"
-                      label="Longitude"
-                      :loading="loadingPiiStep1"
-                      :rules="longitudeRules"
-                      @blur="handlePiiCheck($event)"
-                    >
-                    </ripa-text-input>
-                  </div>
-                </v-col>
-              </v-row>
-            </template>
           </template>
 
           <div class="tw-mt-8">
@@ -492,7 +492,7 @@ export default {
           landmark !== null &&
           landmark.length >= 5 &&
           landmark.length <= 250) ||
-        (checked && latCoord !== null && longCoord !== null)
+        (latCoord !== null && longCoord !== null)
 
       return isValid
     },
