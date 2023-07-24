@@ -9,6 +9,13 @@ describe('Ripa Location', () => {
   let wrapper
   let stop
 
+  const mockGeolocation = {
+    getCurrentPosition: jest.fn().mockReturnValue(200),
+    watchPosition: jest.fn(),
+  }
+
+  global.navigator.geolocation = mockGeolocation
+
   const schoolsList = JSON.parse('[{"cdsCode":"1","fullName":"High School"}]')
   const countyCitiesList = JSON.parse('[{"id":"1","fullName":"CountyCity"}]')
   const nonCountyCitiesList = JSON.parse(
@@ -26,7 +33,7 @@ describe('Ripa Location', () => {
   })
 
   const factory = propsData => {
-    return shallowMount(RipaLocation, {
+    return mount(RipaLocation, {
       vuetify,
       propsData: {
         ...propsData,
@@ -229,6 +236,17 @@ describe('Ripa Location', () => {
     wrapper.vm.model = stop
 
     expect(wrapper.vm.longitudeRules).toStrictEqual([true])
+  })
+
+  it('should return the geolocation score', () => {
+    wrapper = factory({ value: stop })
+    const getCurrPos = jest.spyOn(
+      global.navigator.geolocation,
+      'getCurrentPosition',
+    )
+    wrapper.vm.isGeolocationAvailable()
+
+    expect(getCurrPos).toHaveBeenCalled()
   })
 
   it.todo('should handle input out of county')

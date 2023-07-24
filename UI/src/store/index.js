@@ -279,7 +279,7 @@ export default new Vuex.Store({
       const longitude = state.gpsLocationAddress?.longitude || null
 
       return {
-        blockNumber: parsedBlockNumber,
+        blockNumber: String(parsedBlockNumber),
         streetName: parsedStreetName,
         city: parsedCity,
         latitude,
@@ -622,13 +622,46 @@ export default new Vuex.Store({
             const latLong = `${position.coords.longitude},${position.coords.latitude}`
             const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
 
+            let latDecimal
+            let longDecimal
+            let latTrimmed
+            let longTrimmed
+
             fetch(url)
               .then(response => response.json())
               .then(data => {
+                if (position.coords.latitude !== null) {
+                  latDecimal = String(position.coords.latitude).slice(
+                    String(position.coords.latitude).lastIndexOf('.') + 1,
+                  )
+                }
+
+                if (position.coords.longitude !== null) {
+                  longDecimal = String(position.coords.longitude).slice(
+                    String(position.coords.longitude).lastIndexOf('.') + 1,
+                  )
+                }
+
+                console.log(latDecimal)
+
+                if (latDecimal.length > 3) {
+                  latTrimmed = String(position.coords.latitude).substring(
+                    0,
+                    String(position.coords.latitude).length - 1,
+                  )
+                } else latTrimmed = position.coords.latitude
+
+                if (longDecimal.length > 3) {
+                  longTrimmed = String(position.coords.longitude).substring(
+                    0,
+                    String(position.coords.longitude).length - 1,
+                  )
+                } else longTrimmed = position.coords.longitude
+
                 const dataIncludingLatLong = {
                   ...data,
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
+                  latitude: String(latTrimmed),
+                  longitude: String(longTrimmed),
                 }
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
                 resolve(data)

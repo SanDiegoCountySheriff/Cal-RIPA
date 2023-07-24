@@ -11,19 +11,18 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <template v-if="isGeolocationAvailable">
-            <div class="tw-mr-2 tw-mt-4">
-              <v-btn
-                class="tw-w-full"
-                color="primary"
-                small
-                :loading="loadingGps"
-                @click="handleCurrentLocation"
-              >
-                Current Location
-              </v-btn>
-            </div>
-          </template>
+          <div class="tw-mr-2 tw-mt-4">
+            <v-btn
+              class="tw-w-full"
+              color="primary"
+              small
+              :loading="loadingGps"
+              :disabled="!geolocationAvailable"
+              @click="handleCurrentLocation"
+            >
+              Current Location
+            </v-btn>
+          </div>
         </v-col>
         <v-col cols="12" sm="6" md="3" class="tw-pr-2">
           <div class="tw-mr-2 tw-mt-4">
@@ -104,6 +103,17 @@
           </div>
         </v-col>
 
+        <v-col cols="12" sm="12">
+          <div class="md:tw-mr-4">
+            <template v-if="!geolocationAvailable">
+              <ripa-alert alert-outlined alert-type="warning">
+                Location services on this device are currently inaccurate and
+                have been disabled.
+              </ripa-alert>
+            </template>
+          </div>
+        </v-col>
+
         <v-col cols="12" sm="12" md="6">
           <div class="md:tw-mr-4">
             <ripa-text-input
@@ -133,7 +143,7 @@
         </v-col>
       </v-row>
 
-      <template v-if="this.model.stopVersion === 2 && isGeolocationAvailable">
+      <template v-if="this.model.stopVersion === 2">
         <ripa-subheader text="-- or --"></ripa-subheader>
 
         <v-row no-gutters>
@@ -277,6 +287,12 @@ export default {
     RipaTextInput,
   },
 
+  data() {
+    return {
+      geolocationAvailable: true,
+    }
+  },
+
   inject: [
     'beats',
     'countyCities',
@@ -320,9 +336,16 @@ export default {
       },
     },
 
-    isGeolocationAvailable() {
-      return navigator.geolocation
-    },
+    // isGeolocationAvailable() {
+    //   let isAvail
+    //   navigator.geolocation.getCurrentPosition(position => {
+    //     const accuracyScore = position.coords.accuracy
+    //     console.log(accuracyScore)
+    //     isAvail = !(accuracyScore > 200)
+    //     return isAvail
+    //   })
+    //   return isAvail
+    // },
 
     getCities() {
       const checked = this.model.location.outOfCounty
@@ -498,7 +521,7 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     if (
       this.model.location.streetName !== null ||
       this.model.location.intersection !== null ||
@@ -515,6 +538,9 @@ export default {
         value: textValue.replace('.', ''),
       })
     }
+
+    this.geolocationAvailable = await this.isGeolocationAvailable()
+    console.log('geoavail:', this.geolocationAvailable)
   },
 
   methods: {
@@ -587,6 +613,17 @@ export default {
 
     handleSaveFavorite() {
       this.$emit('on-save-location-favorite', this.model.location)
+    },
+
+    isGeolocationAvailable() {
+      return new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(position => {
+          const accuracyScore = position.coords.accuracy
+          console.log(accuracyScore)
+          const isAvail = !(accuracyScore > 200)
+          resolve(isAvail)
+        })
+      })
     },
   },
 
