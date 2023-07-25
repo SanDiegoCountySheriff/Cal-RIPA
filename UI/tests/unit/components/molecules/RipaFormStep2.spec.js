@@ -24,6 +24,11 @@ describe('Ripa Form Step 2', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        loadingPiiStep1() {
+          return false
+        },
+      },
     })
   }
 
@@ -32,6 +37,11 @@ describe('Ripa Form Step 2', () => {
       vuetify,
       propsData: {
         value: V1_STOP,
+      },
+      provide: {
+        loadingPiiStep1() {
+          return false
+        },
       },
     })
 

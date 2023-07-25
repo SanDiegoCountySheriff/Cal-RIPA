@@ -558,12 +558,16 @@ export const V2_API_STOP = {
   agency: 'SDSD',
   officerId: '111111111',
   officerName: 'Name',
+  race: 'Asian',
+  gender: 'Cisgender man',
+  officerNonBinary: false,
   expYears: '1',
   officerAssignment: {
     key: '10',
     type: 'Other',
     otherType: 'Data Services',
   },
+  startDate: '2014-10-10',
   date: '2022-01-01',
   time: '13:00',
   stopDateTime: '2022-01-01T12:00:00',
@@ -620,6 +624,7 @@ export const V2_API_STOP = {
       perceivedAge: 10,
       perceivedGender: 'Male',
       genderNonconforming: false,
+      nonBinaryPerson: false,
       perceivedLgbt: false,
       reasonForStop: {
         key: '5',
@@ -629,10 +634,16 @@ export const V2_API_STOP = {
       },
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
-      listActionTakenDuringStop: [
+      listNonForceActionsTakenDuringStop: [
         {
           action: 'None',
-          key: '24',
+          key: '17',
+        },
+      ],
+      listForceActionsTakenDuringStop: [
+        {
+          action: 'None',
+          key: '18',
         },
       ],
       personSearchConsentGiven: false,
@@ -897,7 +908,7 @@ export const V1_STOP = {
     perceivedLgbt: false,
     perceivedLimitedEnglish: false,
     perceivedOrKnownDisability: [],
-    perceivedRace: [1],
+    perceivedRace: [3],
   },
   stopDate: {
     date: '2022-01-01',
@@ -978,9 +989,9 @@ export const V2_STOP = {
       endTimeStamp: '2022-01-01T12:05:00.000Z',
     },
   ],
-  actionsTaken: {
-    anyActionsTaken: true,
-    actionsTakenDuringStop: [],
+  nonForceActionsTaken: {
+    anyNonForceActionsTaken: true,
+    nonForceActionsTakenDuringStop: [],
     personSearchConsentGiven: false,
     propertySearchConsentGiven: false,
     basisForSearch: [],
@@ -991,6 +1002,10 @@ export const V2_STOP = {
     typeOfPropertySeized: [],
     anyContraband: false,
     contrabandOrEvidenceDiscovered: [],
+  },
+  forceActionsTaken: {
+    anyForceActionsTaken: true,
+    forceActionsTakenDuringStop: [],
   },
   location: {
     isSchool: false,
@@ -1010,7 +1025,7 @@ export const V2_STOP = {
   },
   person: {
     anyDisabilities: false,
-    genderNonconforming: false,
+    nonBinaryPerson: false,
     id: 1,
     isStudent: false,
     perceivedAge: 33,
@@ -1018,7 +1033,7 @@ export const V2_STOP = {
     perceivedLgbt: false,
     perceivedLimitedEnglish: false,
     perceivedOrKnownDisability: [],
-    perceivedRace: [1],
+    perceivedRace: [3],
   },
   stopDate: {
     date: '2022-01-01',
@@ -1053,7 +1068,9 @@ export const V2_STOP = {
     resultsOfStop11: false,
     resultsOfStop12: false,
     resultsOfStop13: false,
-    warningCodes: null,
+    resultsOfStop14: false,
+    verbalWarningCodes: null,
+    writtenWarningCodes: null,
     citationCodes: null,
     infieldCodes: null,
     custodialArrestCodes: null,

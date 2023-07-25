@@ -32,6 +32,14 @@
       @on-save="handleSaveUser"
     ></ripa-user-dialog>
 
+    <ripa-snackbar
+      :text="officerGenderRaceText"
+      :auto-close="false"
+      v-model="snackbarOfficerRaceGender"
+      multi-line
+      top
+    ></ripa-snackbar>
+
     <ripa-invalid-user-dialog
       :show-dialog="showInvalidUserDialog"
     ></ripa-invalid-user-dialog>
@@ -114,6 +122,10 @@ export default {
       showUserDialog: false,
       dataReady: false,
       apiStopJobLoading: false,
+      snackbarUpdateUser: false,
+      officerGenderRaceText:
+        'Recent regulation changes require the collection of officer race and gender. Please input these values now.',
+      snackbarOfficerRaceGender: false,
     }
   },
 
@@ -129,6 +141,7 @@ export default {
       isApiUnavailable: computed(() => this.isApiUnavailable),
       stopsWithErrors: computed(() => this.mappedStopsWithErrors),
       apiStopJobLoading: computed(() => this.apiStopJobLoading),
+      version: computed(() => this.version),
     }
   },
 
@@ -146,6 +159,7 @@ export default {
       'isApiUnavailable',
       'piiServiceAvailable',
       'mappedStopsWithErrors',
+      'version',
     ]),
 
     getMappedUser() {
@@ -155,6 +169,9 @@ export default {
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
+        race: this.mappedUser.race,
+        gender: this.mappedUser.gender,
+        officerNonBinary: this.mappedUser.officerNonBinary,
       }
     },
   },
@@ -353,7 +370,7 @@ export default {
     },
 
     async getUserData() {
-      await Promise.all([this.getUser()])
+      this.snackbarOfficerRaceGender = await this.getUser()
     },
 
     async getFormData() {
@@ -386,6 +403,7 @@ export default {
     },
 
     handleSaveUser(user) {
+      this.snackbarOfficerRaceGender = false
       this.editOfficerUser(user)
     },
 

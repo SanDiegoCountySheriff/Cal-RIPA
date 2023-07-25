@@ -175,8 +175,11 @@ export default {
       loadingPiiStep3: false,
       loadingPiiStep4: false,
       savedLocation: null,
+      savedLocationVersion: null,
       savedReason: null,
+      savedReasonVersion: null,
       savedResult: null,
+      savedResultVersion: null,
       showAddLocationFavoriteDialog: false,
       showAddReasonFavoriteDialog: false,
       showAddResultFavoriteDialog: false,
@@ -229,6 +232,7 @@ export default {
       propertySearchAutomaticallySelected: computed(
         () => this.propertySearchAutomaticallySelected,
       ),
+      version: computed(() => this.version),
     }
   },
 
@@ -254,6 +258,7 @@ export default {
       'reportingEmailAddress',
       'personSearchAutomaticallySelected',
       'propertySearchAutomaticallySelected',
+      'version',
     ]),
 
     getMappedUser() {
@@ -263,6 +268,8 @@ export default {
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
+        race: this.mappedUser.race,
+        gender: this.mappedUser.gender,
       }
     },
 
@@ -347,17 +354,189 @@ export default {
 
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
+      return locations
+        ? JSON.parse(locations).filter(location => {
+            if (!location.version) {
+              location.version = 1
+            }
+
+            if (!location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormCountyCities.some(city => {
+                return city.fullName === location.location.city
+              })
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            } else if (location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormNonCountyCities.some(
+                city => {
+                  return city.fullName === location.location.city
+                },
+              )
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            }
+
+            if (location.location.isSchool) {
+              const schoolNotExpired = this.mappedFormSchools.some(school => {
+                return school.name === location.location.school
+              })
+
+              if (!schoolNotExpired) {
+                location.location.school = ''
+                location.favoritesSchoolExpired = true
+              }
+            }
+
+            return location.version === this.version
+          })
+        : []
     },
 
     getFavoriteReasons() {
-      const locations = localStorage.getItem('ripa_favorite_reasons')
-      return locations ? JSON.parse(locations) : []
+      const reasons = localStorage.getItem('ripa_favorite_reasons')
+      return reasons
+        ? JSON.parse(reasons).filter(reason => {
+            if (!reason.version) {
+              reason.version = 1
+            }
+
+            const codes = [
+              reason.reason.reasonableSuspicionCode,
+              reason.reason.educationViolationCode,
+              reason.reason.trafficViolationCode,
+            ]
+
+            const codeNotExpired = codes.some(code => {
+              return this.mappedFormStatutes.some(statute => {
+                return statute.code === code
+              })
+            })
+
+            if (!codeNotExpired) {
+              reason.reason.reasonableSuspicionCode = null
+              reason.reason.educationViolationCode = null
+              reason.reason.trafficViolationCode = null
+              reason.favoritesCodeExpired = true
+            }
+
+            return reason.version === this.version
+          })
+        : []
     },
 
     getFavoriteResults() {
-      const locations = localStorage.getItem('ripa_favorite_results')
-      return locations ? JSON.parse(locations) : []
+      const results = localStorage.getItem('ripa_favorite_results')
+      return results
+        ? JSON.parse(results).filter(result => {
+            if (!result.version) {
+              result.version = 1
+            }
+
+            const updatedWarningCodes = result.result.warningCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedWarningCodes.length !== result.result.warningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.warningCodes = updatedWarningCodes
+
+            const updatedVerbalWarningCodes =
+              result.result.verbalWarningCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedVerbalWarningCodes.length !==
+              result.result.verbalWarningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.verbalWarningCodes = updatedVerbalWarningCodes
+
+            const updatedWrittenWarningCodes =
+              result.result.writtenWarningCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedWrittenWarningCodes.length !==
+              result.result.writtenWarningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.writtenWarningCodes = updatedWrittenWarningCodes
+
+            const updatedCitationCodes = result.result.citationCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedCitationCodes.length !== result.result.citationCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.citationCodes = updatedCitationCodes
+
+            const updatedInfieldCodes = result.result.infieldCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedInfieldCodes.length !== result.result.infieldCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.infieldCodes = updatedInfieldCodes
+
+            const updatedCustodialArrestCodes =
+              result.result.custodialArrestCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedCustodialArrestCodes.length !==
+              result.result.custodialArrestCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.custodialArrestCodes = updatedCustodialArrestCodes
+
+            return result.version === this.version
+          })
+        : []
     },
 
     getLastLocation() {
@@ -383,11 +562,19 @@ export default {
         id: new Date().getTime(),
         name,
         location: this.savedLocation,
+        version: this.savedLocationVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const locations = this.getFavoriteLocations()
-      locations.push(location)
+      const index = locations.findIndex(l => l.name === location.name)
+
+      if (index === -1) {
+        locations.push(location)
+      } else {
+        locations[index] = location
+      }
       this.setFavoriteLocations(locations)
+      this.savedLocation = null
     },
 
     handleAddReasonFavorite(name) {
@@ -395,11 +582,20 @@ export default {
         id: new Date().getTime(),
         name,
         reason: this.savedReason,
+        version: this.savedReasonVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const reasons = this.getFavoriteReasons()
-      reasons.push(reason)
+      const index = reasons.findIndex(r => r.name === reason.name)
+
+      if (index === -1) {
+        reasons.push(reason)
+      } else {
+        reasons[index] = reason
+      }
+
       this.setFavoriteReasons(reasons)
+      this.savedReason = null
     },
 
     handleAddResultFavorite(name) {
@@ -407,11 +603,20 @@ export default {
         id: new Date().getTime(),
         name,
         result: this.savedResult,
+        version: this.savedResultVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const results = this.getFavoriteResults()
-      results.push(result)
+      const index = results.findIndex(r => r.name === result.name)
+
+      if (index === -1) {
+        results.push(result)
+      } else {
+        results[index] = result
+      }
+
       this.setFavoriteResults(results)
+      this.savedResult = null
     },
 
     handleAddPerson() {
@@ -423,10 +628,52 @@ export default {
       localStorage.setItem('ripa_form_edit_person', '1')
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
-      this.stop.actionsTaken = {}
+      this.stop.actionsTaken = {
+        anyActionsTaken: true,
+        actionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.nonForceActionsTaken = {
+        anyNonForceActionsTaken: true,
+        nonForceActionsTakenDuringStop: [],
+        personSearchConsentGiven: false,
+        propertySearchConsentGiven: false,
+        basisForSearch: [],
+        basisForSearchExplanation: null,
+        basisForSearchPiiFound: false,
+        propertyWasSeized: false,
+        basisForPropertySeizure: [],
+        typeOfPropertySeized: [],
+        anyContraband: false,
+        contrabandOrEvidenceDiscovered: [],
+      }
+      this.stop.forceActionsTaken = {
+        anyForceActionsTaken: false,
+        forceActionsTakenDuringStop: [],
+      }
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
+        isStudent: false,
+        anyDisabilities: false,
+        perceivedAge: null,
+        perceivedGender: null,
+        genderNonconforming: false,
+        perceivedLimitedEnglish: false,
+        perceivedLgbt: false,
+        perceivedSexualOrientation: null,
+        perceivedOrKnownDisability: [],
+        perceivedRace: [],
+        perceivedUnhoused: false,
       }
       this.stop.stopReason = stopReasonGivenTemplate(this.stop.template)
       this.stop.stopResult = stopResultGivenTemplate(this.stop.template)
@@ -457,10 +704,22 @@ export default {
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
       this.stop.actionsTaken = filteredPerson?.actionsTaken || {}
+      this.stop.nonForceActionsTaken = filteredPerson?.nonForceActionsTaken
+      this.stop.forceActionsTaken = filteredPerson?.forceActionsTaken
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
         isStudent: filteredPerson?.isStudent || false,
+        anyDisabilities: false,
+        perceivedAge: null,
+        perceivedGender: null,
+        genderNonconforming: false,
+        perceivedLimitedEnglish: false,
+        perceivedLgbt: false,
+        perceivedSexualOrientation: null,
+        perceivedOrKnownDisability: [],
+        perceivedRace: [],
+        perceivedUnhoused: false,
       }
       this.stop.stopReason = filteredPerson?.stopReason || {}
       this.stop.stopResult = filteredPerson?.stopResult || {}
@@ -475,8 +734,8 @@ export default {
 
     handleDeleteReasonFavorite(id) {
       const reasons = this.getFavoriteReasons()
-      const filteredResons = reasons.filter(item => item.id !== id)
-      this.setFavoriteReasons(filteredResons)
+      const filteredReasons = reasons.filter(item => item.id !== id)
+      this.setFavoriteReasons(filteredReasons)
     },
 
     handleDeleteResultFavorite(id) {
@@ -561,6 +820,8 @@ export default {
       this.stop = {
         ...this.stop,
         actionsTaken: filteredPerson?.actionsTaken || {},
+        nonForceActionsTaken: filteredPerson?.nonForceActionsTaken,
+        forceActionsTaken: filteredPerson?.forceActionsTaken,
         person: {
           anyDisabilities: filteredPerson?.anyDisabilities || false,
           genderNonconforming: filteredPerson?.genderNonconforming || false,
@@ -570,6 +831,9 @@ export default {
           perceivedAge: filteredPerson?.perceivedAge || null,
           perceivedGender: filteredPerson?.perceivedGender || null,
           perceivedLgbt: filteredPerson?.perceivedLgbt || false,
+          perceivedSexualOrientation:
+            filteredPerson?.perceivedSexualOrientation || null,
+          perceivedUnhoused: filteredPerson?.perceivedUnhoused,
           perceivedLimitedEnglish:
             filteredPerson?.perceivedLimitedEnglish || false,
           perceivedOrKnownDisability:
@@ -665,18 +929,21 @@ export default {
       this.showStatuteDialog = true
     },
 
-    handleSaveLocationFavorite(location) {
+    handleSaveLocationFavorite(location, version) {
       this.savedLocation = location
+      this.savedLocationVersion = version
       this.showAddLocationFavoriteDialog = true
     },
 
-    handleSaveReasonFavorite(reason) {
+    handleSaveReasonFavorite(reason, version) {
       this.savedReason = reason
+      this.savedReasonVersion = version
       this.showAddReasonFavoriteDialog = true
     },
 
-    handleSaveResultFavorite(result) {
+    handleSaveResultFavorite(result, version) {
       this.savedResult = result
+      this.savedResultVersion = version
       this.showAddResultFavoriteDialog = true
     },
 
@@ -767,6 +1034,8 @@ export default {
           id: this.stop?.person.id,
           index: this.stop?.person.index,
           actionsTaken: this.stop?.actionsTaken || null,
+          nonForceActionsTaken: this.stop?.nonForceActionsTaken || null,
+          forceActionsTaken: this.stop?.forceActionsTaken || null,
           stopReason: this.stop?.stopReason || null,
           stopResult: this.stop?.stopResult || null,
         }
@@ -1017,6 +1286,7 @@ export default {
 
     async validateBasisForSearchForPii(textValue) {
       const trimmedTextValue = textValue ? textValue.trim() : ''
+
       if (
         this.isOnlineAndAuthenticated &&
         !this.invalidUser &&
@@ -1025,35 +1295,73 @@ export default {
         this.loadingPiiStep4 = true
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
-        this.stop.actionsTaken.basisForSearchPiiFound =
-          response && response.piiEntities && response.piiEntities.length > 0
-        this.stop.isPiiFound =
-          this.stop.isPiiFound || this.stop.actionsTaken.basisForSearchPiiFound
 
-        if (
-          !this.stop.actionsTaken.basisForSearchPiiFound &&
-          this.stop.piiEntities?.length > 0
-        ) {
-          this.stop.piiEntities = this.stop.piiEntities.filter(
-            e =>
-              e.source !== this.basisForSearchSource + this.stop.person.index,
-          )
-        }
-        if (!response && trimmedTextValue.length > 0) {
-          await this.setPiiServiceAvailable(false)
-        } else if (response.piiEntities.length > 0) {
-          this.stop.piiEntities = this.stop.piiEntities
-            ? this.stop.piiEntities.filter(
-                e =>
-                  e.source !==
-                  this.basisForSearchSource + this.stop.person.index,
-              )
-            : []
-          for (const entity of response.piiEntities) {
-            entity.source = this.basisForSearchSource + this.stop.person.index
-            this.stop.piiEntities.push(entity)
+        if (this.stop.stopVersion === 1) {
+          this.stop.actionsTaken.basisForSearchPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound
+
+          if (
+            !this.stop.actionsTaken.basisForSearchPiiFound &&
+            this.stop.piiEntities?.length > 0
+          ) {
+            this.stop.piiEntities = this.stop.piiEntities.filter(
+              e =>
+                e.source !== this.basisForSearchSource + this.stop.person.index,
+            )
+          }
+
+          if (!response && trimmedTextValue.length > 0) {
+            await this.setPiiServiceAvailable(false)
+          } else if (response.piiEntities.length > 0) {
+            this.stop.piiEntities = this.stop.piiEntities
+              ? this.stop.piiEntities.filter(
+                  e =>
+                    e.source !==
+                    this.basisForSearchSource + this.stop.person.index,
+                )
+              : []
+            for (const entity of response.piiEntities) {
+              entity.source = this.basisForSearchSource + this.stop.person.index
+              this.stop.piiEntities.push(entity)
+            }
+          }
+        } else {
+          this.stop.nonForceActionsTaken.basisForSearchPiiFound =
+            response && response.piiEntities && response.piiEntities.length > 0
+          this.stop.isPiiFound =
+            this.stop.isPiiFound ||
+            this.stop.nonForceActionsTaken.basisForSearchPiiFound
+
+          if (
+            !this.stop.nonForceActionsTaken.basisForSearchPiiFound &&
+            this.stop.piiEntities?.length > 0
+          ) {
+            this.stop.piiEntities = this.stop.piiEntities.filter(
+              e =>
+                e.source !== this.basisForSearchSource + this.stop.person.index,
+            )
+          }
+
+          if (!response && trimmedTextValue.length > 0) {
+            await this.setPiiServiceAvailable(false)
+          } else if (response.piiEntities.length > 0) {
+            this.stop.piiEntities = this.stop.piiEntities
+              ? this.stop.piiEntities.filter(
+                  e =>
+                    e.source !==
+                    this.basisForSearchSource + this.stop.person.index,
+                )
+              : []
+            for (const entity of response.piiEntities) {
+              entity.source = this.basisForSearchSource + this.stop.person.index
+              this.stop.piiEntities.push(entity)
+            }
           }
         }
+
         this.loadingPiiStep4 = false
         this.updateFullStop()
       }

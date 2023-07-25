@@ -1,4 +1,4 @@
-﻿namespace RIPA.Functions.Common.Models;
+﻿namespace RIPA.Functions.Common.Models.v1;
 
 public class ActionTakenDuringStop
 {

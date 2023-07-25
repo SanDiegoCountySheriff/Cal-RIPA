@@ -25,7 +25,11 @@ export default {
           ? fullStopToStop(fullStop)
           : fullStopToStopV2(fullStop)
 
-      localStorage.setItem('ripa_form_step_index', '7')
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_admin_editing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -92,7 +96,7 @@ export default {
           new Date(a.dateReported).getTime(),
       )
       const fullStop =
-        apiStop.stopVerison === 1
+        apiStop.stopVersion === 1
           ? apiStopToFullStop(apiStop)
           : apiStopToFullStopV2(apiStop)
 

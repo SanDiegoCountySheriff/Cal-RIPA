@@ -47,7 +47,7 @@ describe('Ripa Snackbar', () => {
     wrapper.setProps({ autoClose: false })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.getTimeout).toEqual(null)
+    expect(wrapper.vm.getTimeout).toEqual(-1)
   })
 
   it('should handle view click', async () => {
