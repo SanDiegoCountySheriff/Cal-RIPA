@@ -176,7 +176,7 @@
             </ripa-text-input>
 
             <ripa-text-input
-              v-model="model.location.cityName"
+              v-model="model.location.city"
               label="City or Unincorporated Area"
               :loading="loadingPiiStep1"
               :rules="cityRules"
@@ -317,7 +317,7 @@ export default {
     cityRules() {
       const city = this.model.location.city
 
-      return [city !== null || 'A city is required']
+      return [city !== null || 'A city or unincorporated area is required']
     },
 
     beatRules() {
