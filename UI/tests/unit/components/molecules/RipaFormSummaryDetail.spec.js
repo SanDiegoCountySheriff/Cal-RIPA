@@ -93,13 +93,21 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Perceived Unhoused')
   })
 
-  it('should display person inside residence', () => {
-    wrapper = factory({ apiStop: v2ApiStop })
+  it('should display person inside residence only when stop type is pedestrian', () => {
+    const updatedStop = v2ApiStop
+    updatedStop.stopType = 'pedestrian'
+    updatedStop.listPersonStopped[0].insideResidence = true
+
+    wrapper = factory({ apiStop: updatedStop })
 
     expect(wrapper.html()).toContain('Inside Residence')
   })
-  it('should display person passenger in vehicle', () => {
-    wrapper = factory({ apiStop: v2ApiStop })
+  it('should display person passenger in vehicle only when stop type is vehicular', () => {
+    const updatedStop = v2ApiStop
+    updatedStop.stopType = 'Vehicular'
+    updatedStop.listPersonStopped[0].passengerInVehicle = true
+
+    wrapper = factory({ apiStop: updatedStop })
 
     expect(wrapper.html()).toContain('Passenger In Vehicle')
   })
