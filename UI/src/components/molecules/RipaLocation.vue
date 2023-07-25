@@ -174,15 +174,6 @@
               @blur="handlePiiCheck($event)"
             >
             </ripa-text-input>
-
-            <ripa-text-input
-              v-model="model.location.city"
-              label="City or Unincorporated Area"
-              :loading="loadingPiiStep1"
-              :rules="cityRules"
-              @blur="handlePiiCheck($event)"
-            >
-            </ripa-text-input>
           </template>
 
           <div class="tw-mt-8">
@@ -205,7 +196,9 @@
               persistent-hint
               item-text="fullName"
               item-value="id"
-              label="City"
+              :label="
+                model.stopVersion === 1 ? 'City' : 'City or Unincorporated Area'
+              "
               :items="getCities"
               :rules="cityRules"
             ></ripa-autocomplete>
@@ -317,7 +310,7 @@ export default {
     cityRules() {
       const city = this.model.location.city
 
-      return [city !== null || 'A city or unincorporated area is required']
+      return [city !== null || 'A city is required']
     },
 
     beatRules() {
