@@ -491,10 +491,12 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
-      if (person.passengerInVehicle !== null) {
+      if (
+        person.passengerInVehicle === true || person.passengerInVehicle === false
+      ) {
         items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
       }
-      if (person.insideResidence !== null) {
+      if (person.insideResidence === true || person.insideResidence === false) {
         items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
       }
     }

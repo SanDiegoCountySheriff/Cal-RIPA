@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import {
   API_STOP,
   V2_API_STOP,
+  V2_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 
@@ -92,6 +93,17 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Perceived Unhoused')
   })
 
+  it('should display person inside residence', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Inside Residence')
+  })
+  it('should display person passenger in vehicle', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Passenger In Vehicle')
+  })
+
   it('should display officer race and gender details for v2 officer', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
@@ -137,7 +149,7 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).not.toContain('Nonbinary Person')
     expect(wrapper.html()).toContain('Gender Nonconforming')
   })
-  
+
   it('should display verbal and written warning for v2 stops', () => {
     v2ApiStop.listPersonStopped[0].listResultOfStop = [
       {
