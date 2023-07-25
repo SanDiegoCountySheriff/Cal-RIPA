@@ -102,6 +102,7 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).toContain('Inside Residence')
   })
+
   it('should display person passenger in vehicle only when stop type is vehicular', () => {
     const updatedStop = v2ApiStop
     updatedStop.stopType = 'Vehicular'
