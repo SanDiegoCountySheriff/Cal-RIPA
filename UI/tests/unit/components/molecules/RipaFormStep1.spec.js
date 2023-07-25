@@ -2,6 +2,7 @@ import RipaFormStep1 from '@/components/molecules/RipaFormStep1.vue'
 import { shallowMount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Form Step 1', () => {
   let vuetify
@@ -42,6 +43,7 @@ describe('Ripa Form Step 1', () => {
         isOnlineAndAuthenticated() {
           return true
         },
+        loadingPiiStep1: computed(() => false),
       },
     })
   }

@@ -121,6 +121,7 @@ describe('Ripa Form Container', () => {
       },
       provide: {
         formStepIndex: computed(() => 0),
+        version: computed(() => 1),
       },
       mixins: [RipaApiStopJobMixin],
     })
@@ -134,6 +135,9 @@ describe('Ripa Form Container', () => {
       propsData: {
         ...propsData,
         formStepIndex: 1,
+      },
+      provide: {
+        version: computed(() => 1),
       },
       mixins: [RipaApiStopJobMixin],
       computed: {
@@ -154,6 +158,9 @@ describe('Ripa Form Container', () => {
       propsData: {
         ...propsData,
         formStepIndex: 1,
+      },
+      provide: {
+        version: computed(() => 1),
       },
       computed: {
         mappedFormBeats: () => [{ id: 'test' }],
