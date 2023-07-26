@@ -545,6 +545,7 @@
               v-model="model.stopResult.resultsOfStop11"
               :rules="actionsTakenRules"
               label="Contacted U.S. Department of Homeland Security"
+              @input="handleHomelandSecurityCheck"
             ></ripa-checkbox>
 
             <ripa-checkbox
@@ -552,6 +553,7 @@
               v-model="model.stopResult.resultsOfStop12"
               :rules="actionsTakenRulesV2"
               label="Contacted U.S. Department of Homeland Security"
+              @input="handleHomelandSecurityCheck"
             ></ripa-checkbox>
 
             <template
@@ -561,6 +563,15 @@
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
               </ripa-alert>
+              <ripa-confirm-dialog
+                :show-dialog="showConfirmDialog"
+                title="Confirm"
+                subtitle="Are you sure you want to select 'Contacted U.S. Department of
+                Homeland Security?''"
+                @on-close="handleCloseDialog"
+                @on-confirm="handleConfirm"
+              >
+              </ripa-confirm-dialog>
             </template>
             <template
               v-if="model.stopResult.resultsOfStop12 && model.stopVersion === 2"
@@ -569,6 +580,15 @@
                 Are you sure you want to select 'Contacted U.S. Department of
                 Homeland Security?'
               </ripa-alert>
+              <ripa-confirm-dialog
+                :show-dialog="showConfirmDialog"
+                title="Confirm"
+                subtitle="Are you sure you want to select 'Contacted U.S. Department of
+                Homeland Security?''"
+                @on-close="handleCloseDialog"
+                @on-confirm="handleConfirm"
+              >
+              </ripa-confirm-dialog>
             </template>
           </template>
         </v-col>
@@ -581,17 +601,22 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { STOP_RESULTS, STOP_RESULTS_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-result',
 
+  mixins: [RipaFormStepMixin],
+
   components: {
     RipaAlert,
     RipaAutocomplete,
     RipaCheckbox,
+    RipaConfirmDialog,
     RipaFormHeader,
     RipaSwitch,
   },
@@ -1000,6 +1025,22 @@ export default {
         this.model.stopResult,
         this.model.stopVersion,
       )
+    },
+
+    handleHomelandSecurityCheck() {
+      const isHomelandSecurityChecked =
+        (this.model?.stopResult?.resultsOfStop11 &&
+          this.model.stopVersion === 1) ||
+        (this.model?.stopResult?.resultsOfStop12 &&
+          this.model.stopVersion === 2)
+
+      if (isHomelandSecurityChecked) {
+        this.showConfirmDialog = true
+      }
+    },
+
+    handleCloseDialog() {
+      this.showConfirmDialog = false
     },
   },
 
