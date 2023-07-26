@@ -336,17 +336,6 @@ export default {
       },
     },
 
-    // isGeolocationAvailable() {
-    //   let isAvail
-    //   navigator.geolocation.getCurrentPosition(position => {
-    //     const accuracyScore = position.coords.accuracy
-    //     console.log(accuracyScore)
-    //     isAvail = !(accuracyScore > 200)
-    //     return isAvail
-    //   })
-    //   return isAvail
-    // },
-
     getCities() {
       const checked = this.model.location.outOfCounty
 
@@ -393,17 +382,20 @@ export default {
     latitudeRules() {
       const lat = this.model.location.latitude
       const latAbsoluteVal = '' + Math.abs(parseFloat(lat))
-      let decimal
+      let latitudeDecimal
       if (lat !== null) {
-        decimal = String(lat).slice(String(lat).lastIndexOf('.') + 1)
+        latitudeDecimal = String(latAbsoluteVal).slice(
+          String(latAbsoluteVal).lastIndexOf('.') + 1,
+        )
       }
 
       return [
-        (lat &&
-          isFinite(parseFloat(lat)) &&
-          Math.abs(parseFloat(lat)) <= 90 &&
-          latAbsoluteVal.length <= 6 &&
-          decimal.length <= 3) ||
+        this.isLocationOptionsFilled ||
+          (lat &&
+            isFinite(parseFloat(lat)) &&
+            Math.abs(parseFloat(lat)) <= 90 &&
+            latAbsoluteVal.length <= 6 &&
+            latitudeDecimal.length <= 3) ||
           'A valid latitude with a maximum of 3 digits after the decimal is required',
       ]
     },
@@ -411,17 +403,20 @@ export default {
     longitudeRules() {
       const long = this.model.location.longitude
       const longAbsoluteVal = '' + Math.abs(parseFloat(long))
-      let decimal
+      let longitudeDecimal
       if (long !== null) {
-        decimal = String(long).slice(String(long).lastIndexOf('.') + 1)
+        longitudeDecimal = String(longAbsoluteVal).slice(
+          String(longAbsoluteVal).lastIndexOf('.') + 1,
+        )
       }
 
       return [
-        (long &&
-          isFinite(parseFloat(long)) &&
-          Math.abs(parseFloat(long)) <= 180 &&
-          longAbsoluteVal.length <= 7 &&
-          decimal.length <= 3) ||
+        this.isLocationOptionsFilled ||
+          (long &&
+            isFinite(parseFloat(long)) &&
+            Math.abs(parseFloat(long)) <= 180 &&
+            longAbsoluteVal.length <= 7 &&
+            longitudeDecimal.length <= 3) ||
           'A valid longitude with a maximum of 3 digits after the decimal is required',
       ]
     },
@@ -498,8 +493,24 @@ export default {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
-      const latCoord = this.model.location.latitude
+
       const longCoord = this.model.location.longitude
+      const longAbsoluteVal = '' + Math.abs(parseFloat(longCoord))
+      let longDecimal
+      if (longCoord !== null) {
+        longDecimal = String(longAbsoluteVal).slice(
+          String(longAbsoluteVal).lastIndexOf('.') + 1,
+        )
+      }
+
+      const latCoord = this.model.location.latitude
+      const latAbsoluteVal = '' + Math.abs(parseFloat(latCoord))
+      let latDecimal
+      if (latCoord !== null) {
+        latDecimal = String(latAbsoluteVal).slice(
+          String(latAbsoluteVal).lastIndexOf('.') + 1,
+        )
+      }
 
       const isValid =
         (blockNumber !== null &&
@@ -515,7 +526,16 @@ export default {
           landmark !== null &&
           landmark.length >= 5 &&
           landmark.length <= 250) ||
-        (latCoord !== null && longCoord !== null)
+        (latCoord !== null &&
+          isFinite(parseFloat(latCoord)) &&
+          Math.abs(parseFloat(latCoord)) <= 90 &&
+          latAbsoluteVal.length <= 6 &&
+          String(latDecimal).length <= 3 &&
+          longCoord !== null &&
+          isFinite(parseFloat(longCoord)) &&
+          Math.abs(parseFloat(longCoord)) <= 180 &&
+          longAbsoluteVal.length <= 7 &&
+          String(longDecimal).length <= 3)
 
       return isValid
     },
@@ -540,7 +560,6 @@ export default {
     }
 
     this.geolocationAvailable = await this.isGeolocationAvailable()
-    console.log('geoavail:', this.geolocationAvailable)
   },
 
   methods: {
@@ -619,7 +638,6 @@ export default {
       return new Promise(resolve => {
         navigator.geolocation.getCurrentPosition(position => {
           const accuracyScore = position.coords.accuracy
-          console.log(accuracyScore)
           const isAvail = !(accuracyScore > 200)
           resolve(isAvail)
         })
