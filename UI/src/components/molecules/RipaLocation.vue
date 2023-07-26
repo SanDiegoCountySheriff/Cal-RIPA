@@ -196,7 +196,9 @@
               persistent-hint
               item-text="fullName"
               item-value="id"
-              label="City"
+              :label="
+                model.stopVersion === 1 ? 'City' : 'City or Unincorporated Area'
+              "
               :items="getCities"
               :rules="cityRules"
             ></ripa-autocomplete>
