@@ -172,4 +172,44 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).not.toContain('Verbal Warning')
     expect(wrapper.html()).not.toContain('Written Warning')
   })
+
+  it('should display a confirmation dialogue pop-up when "Contacted US Dept. of Homeland Security" is checked for legacy stops', () => {
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: stop },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastResult() {
+          return {}
+        },
+        statutes: computed(() => statutes),
+      },
+    })
+
+    expect(wrapper.html()).not.toContain('Verbal Warning')
+    expect(wrapper.html()).not.toContain('Written Warning')
+  })
+
+  it('should display a confirmation dialogue pop-up when "Contacted US Dept. of Homeland Security" is checked for v2 stops', () => {
+    const v2stop = V2_STOP
+    v2stop.stopResult.anyResultsOfStop = true
+    wrapper = mount(RipaStopResult, {
+      vuetify,
+      propsData: { value: v2stop },
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastResult() {
+          return {}
+        },
+        statutes: computed(() => statutes),
+      },
+    })
+
+    expect(wrapper.html()).toContain('Verbal Warning')
+    expect(wrapper.html()).toContain('Written Warning')
+  })
 })
