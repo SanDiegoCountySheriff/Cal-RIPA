@@ -8,64 +8,50 @@
     >
     </ripa-form-header>
 
-    <v-container>
-      <v-row no-gutters>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              color="primary"
-              small
-              :loading="loadingGps"
-              :disabled="!geolocationAvailable"
-              @click="handleCurrentLocation"
-            >
-              Current Location
-            </v-btn>
-          </div>
+    <v-container class="mt-5">
+      <v-row>
+        <v-col cols="12" sm="6" md="3">
+          <v-btn
+            :loading="loadingGps"
+            :disabled="!geolocationAvailable"
+            @click="handleCurrentLocation"
+            color="primary"
+            block
+            small
+          >
+            Current Location
+          </v-btn>
         </v-col>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              color="primary"
-              small
-              :disabled="!validLastLocation"
-              @click="handleLastLocation"
-              >Last Location
-            </v-btn>
-          </div>
+
+        <v-col cols="12" sm="6" md="3">
+          <v-btn
+            :disabled="!validLastLocation"
+            @click="handleLastLocation"
+            color="primary"
+            block
+            small
+            >Last Location
+          </v-btn>
         </v-col>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              color="primary"
-              small
-              @click="handleOpenFavorites"
-            >
-              Open Favorites
-            </v-btn>
-          </div>
+
+        <v-col cols="12" sm="6" md="3">
+          <v-btn @click="handleOpenFavorites" color="primary" block small>
+            Open Favorites
+          </v-btn>
         </v-col>
+
         <v-col cols="12" sm="6" md="3">
           <template v-if="isOnlineAndAuthenticated">
-            <div class="tw-mr-2 tw-mt-4">
-              <v-btn
-                class="tw-w-full"
-                color="primary"
-                small
-                @click="handleSaveFavorite"
-              >
-                Save Location
-              </v-btn>
-            </div>
+            <v-btn @click="handleSaveFavorite" color="primary" block small>
+              Save Location
+            </v-btn>
           </template>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row>
         <v-col cols="12" sm="12">
+          {{ value.location.isSchool }}
           <ripa-switch
             v-model="model.location.isSchool"
             label="K-12 Public School"
@@ -84,114 +70,102 @@
             ></ripa-autocomplete>
           </template>
 
-          <ripa-alert class="tw-mt-8" alert-outlined alert-type="info">
+          <ripa-alert alert-outlined alert-type="info" class="mt-4">
             Note: Do not provide a street address if the location is a
             residence.
+          </ripa-alert>
+
+          <ripa-alert
+            v-if="model.location.piiFound"
+            alert-outlined
+            alert-type="warning"
+          >
+            The address may contain personally identifying information. Please
+            remove if possible.
+          </ripa-alert>
+
+          <ripa-alert
+            v-if="!geolocationAvailable"
+            alert-outlined
+            alert-type="warning"
+          >
+            Location services on this device are currently inaccurate and have
+            been disabled.
           </ripa-alert>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12">
-          <div class="md:tw-mr-4">
-            <template v-if="model.location.piiFound">
-              <ripa-alert alert-outlined alert-type="warning">
-                The address may contain personally identifying information.
-                Please remove if possible.
-              </ripa-alert>
-            </template>
-          </div>
-        </v-col>
-
-        <v-col cols="12" sm="12">
-          <div class="md:tw-mr-4">
-            <template v-if="!geolocationAvailable">
-              <ripa-alert alert-outlined alert-type="warning">
-                Location services on this device are currently inaccurate and
-                have been disabled.
-              </ripa-alert>
-            </template>
-          </div>
+      <v-row>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-text-input
+            v-model="model.location.blockNumber"
+            :loading="loadingPiiStep1"
+            :rules="blockNumberRules"
+            @blur="handleBlockNumber"
+            label="Block Number"
+            numbers-only
+            prevent-paste
+          >
+          </ripa-text-input>
         </v-col>
 
         <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-text-input
-              v-model="model.location.blockNumber"
-              label="Block Number"
-              :loading="loadingPiiStep1"
-              :rules="blockNumberRules"
-              numbers-only
-              prevent-paste
-              @blur="handleBlockNumber"
-            >
-            </ripa-text-input>
-          </div>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <div>
-            <ripa-text-input
-              v-model="model.location.streetName"
-              label="Street Name"
-              :loading="loadingPiiStep1"
-              :rules="streetNameRules"
-              @blur="handlePiiCheck($event)"
-            >
-            </ripa-text-input>
-          </div>
+          <ripa-text-input
+            v-model="model.location.streetName"
+            :loading="loadingPiiStep1"
+            :rules="streetNameRules"
+            @blur="handlePiiCheck($event)"
+            label="Street Name"
+          >
+          </ripa-text-input>
         </v-col>
       </v-row>
 
       <template v-if="this.model.stopVersion === 2">
         <ripa-subheader text="-- or --"></ripa-subheader>
 
-        <v-row no-gutters>
+        <v-row>
           <v-col cols="12" sm="12" md="6">
-            <div class="md:tw-mr-4">
-              <ripa-text-input
-                v-model="model.location.latitude"
-                label="Latitude"
-                :loading="loadingPiiStep1"
-                :rules="latitudeRules"
-                @blur="handleBlockNumber"
-              >
-              </ripa-text-input>
-            </div>
+            <ripa-text-input
+              v-model="model.location.latitude"
+              :loading="loadingPiiStep1"
+              :rules="latitudeRules"
+              @blur="handleBlockNumber"
+              label="Latitude"
+            >
+            </ripa-text-input>
           </v-col>
 
           <v-col cols="12" sm="12" md="6">
-            <div>
-              <ripa-text-input
-                v-model="model.location.longitude"
-                label="Longitude"
-                :loading="loadingPiiStep1"
-                :rules="longitudeRules"
-                @blur="handlePiiCheck($event)"
-              >
-              </ripa-text-input>
-            </div>
+            <ripa-text-input
+              v-model="model.location.longitude"
+              :loading="loadingPiiStep1"
+              :rules="longitudeRules"
+              @blur="handlePiiCheck($event)"
+              label="Longitude"
+            >
+            </ripa-text-input>
           </v-col>
         </v-row>
       </template>
 
-      <v-row no-gutters>
+      <v-row>
         <v-col cols="12" sm="12">
           <ripa-subheader text="-- or --"></ripa-subheader>
 
           <ripa-text-input
             v-model="model.location.intersection"
-            label="Closest Intersection"
             :loading="loadingPiiStep1"
             :rules="intersectionRules"
             @blur="handlePiiCheck($event)"
+            label="Closest Intersection"
           >
           </ripa-text-input>
 
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
-            label="More Location Options"
             :max-width="225"
+            label="More Location Options"
           ></ripa-switch>
 
           <template v-if="model.location.toggleLocationOptions">
@@ -199,10 +173,10 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
-              label="Highway and closest exit"
               :loading="loadingPiiStep1"
               :rules="highwayRules"
               @blur="handlePiiCheck($event)"
+              label="Highway and closest exit"
             >
             </ripa-text-input>
 
@@ -210,10 +184,10 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
-              label="Road marker, landmark, or other"
               :loading="loadingPiiStep1"
               :rules="landmarkRules"
               @blur="handlePiiCheck($event)"
+              label="Road marker, landmark, or other"
             >
             </ripa-text-input>
           </template>
@@ -221,45 +195,41 @@
           <div class="tw-mt-8">
             <ripa-switch
               v-model="model.location.outOfCounty"
-              label="City Out of County?"
               :max-width="200"
               @input="handleOutOfCountyToggle"
+              label="City Out of County?"
             ></ripa-switch>
           </div>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row>
         <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-autocomplete
-              v-model="model.location.city"
-              hint="Select 1 City (required)"
-              persistent-hint
-              item-text="fullName"
-              item-value="id"
-              label="City"
-              :items="getCities"
-              :rules="cityRules"
-            ></ripa-autocomplete>
-          </div>
+          <ripa-autocomplete
+            v-model="model.location.city"
+            hint="Select 1 City (required)"
+            persistent-hint
+            item-text="fullName"
+            item-value="id"
+            label="City"
+            :items="getCities"
+            :rules="cityRules"
+          ></ripa-autocomplete>
         </v-col>
 
         <template v-if="displayBeatInput">
           <v-col cols="12" sm="12" md="6">
-            <div>
-              <ripa-autocomplete
-                v-model="model.location.beat"
-                hint="Select 1 Beat (required)"
-                persistent-hint
-                item-text="fullName"
-                item-value="id"
-                label="Beat"
-                :items="beats"
-                :rules="beatRules"
-                :disabled="model.location.outOfCounty"
-              ></ripa-autocomplete>
-            </div>
+            <ripa-autocomplete
+              v-model="model.location.beat"
+              hint="Select 1 Beat (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="id"
+              label="Beat"
+              :items="beats"
+              :rules="beatRules"
+              :disabled="model.location.outOfCounty"
+            ></ripa-autocomplete>
           </v-col>
         </template>
       </v-row>
@@ -312,6 +282,7 @@ export default {
         return this.value
       },
       set(newVal) {
+        console.log('is school from setter', this.model.location.isSchool)
         if (!newVal.location.isSchool) {
           newVal.location.school = null
           newVal.person.isStudent = false
@@ -559,15 +530,13 @@ export default {
       })
     }
 
-    this.geolocationAvailable = await this.isGeolocationAvailable()
+    this.geolocationAvailable = true
   },
 
   methods: {
     handleCurrentLocation() {
       if (navigator.geolocation) {
         this.$emit('on-gps-location')
-      } else {
-        console.log('Geolocation is not supported by this browser.')
       }
     },
 
@@ -643,26 +612,63 @@ export default {
         })
       })
     },
+
+    async setSchool(isSchool, school) {
+      await this.$nextTick()
+      this.model.location.isSchool = isSchool
+      await this.$nextTick()
+      this.model.location.school = school
+    },
   },
 
   watch: {
-    lastLocation(newVal) {
-      if (newVal) {
-        // save off school and school if isSchool is true
-        const isSchool = this.model.location?.isSchool || false
-        const school = this.model.location?.school || null
-        // assign new location
-        this.model.location = newVal.newLocation
-        // add back school and school - only if isSchool was true
-        if (newVal.persistSchool && isSchool) {
-          this.model.location.isSchool = isSchool
-          this.model.location.school = school
+    lastLocation: {
+      handler: async function (newVal) {
+        if (newVal) {
+          console.log('watching lastLocation', newVal.newLocation)
+          console.log('isSchool', this.model.location.isSchool)
+          console.log('school', this.model.location.school)
+          // save off school and school if isSchool is true
+          const isSchool = this.model.location.isSchool || false
+          const school = this.model.location.school
+          // assign new location
+          this.model.location = newVal.newLocation
+          await this.$nextTick()
+          // add back school and school - only if isSchool was true
+          if (newVal.persistSchool && isSchool) {
+            await this.setSchool(isSchool, school)
+            console.log('persisting school', isSchool)
+            // this.model.location.isSchool = isSchool
+            // this.model.location.school = school
+            console.log(this.model.location)
+          }
         }
-      }
+      },
+      deep: true,
     },
+    // lastLocation(newVal) {
+    //   if (newVal) {
+    //     console.log('watching lastLocation', newVal.newLocation)
+    //     console.log('isSchool', this.model.location.isSchool)
+    //     console.log('school', this.model.location.school)
+    //     // save off school and school if isSchool is true
+    //     const isSchool = this.model.location.isSchool || false
+    //     const school = this.model.location.school
+    //     // assign new location
+    //     this.model.location = newVal.newLocation
+    //     // add back school and school - only if isSchool was true
+    //     if (newVal.persistSchool && isSchool) {
+    //       console.log('persisting school', isSchool)
+    //       this.model.location.isSchool = isSchool
+    //       this.model.location.school = school
+    //       console.log(this.model.location)
+    //     }
+    //   }
+    // },
 
     model: {
       handler: function (newVal) {
+        console.log('watching model')
         this.model = newVal
       },
       deep: true,

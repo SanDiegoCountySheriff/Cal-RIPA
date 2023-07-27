@@ -278,13 +278,18 @@ export default new Vuex.Store({
       const latitude = state.gpsLocationAddress?.latitude || null
       const longitude = state.gpsLocationAddress?.longitude || null
 
-      return {
+      const returnValue = {
         blockNumber: String(parsedBlockNumber),
         streetName: parsedStreetName,
         city: parsedCity,
         latitude,
         longitude,
       }
+
+      console.log('returnValue not spread inside getter', returnValue)
+      console.log('returnValue inside getter', { ...returnValue })
+
+      return returnValue
     },
     mappedErrorCodeAdminSearch: state => {
       return state.errorCodeAdminSearch
