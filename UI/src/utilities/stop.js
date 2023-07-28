@@ -620,7 +620,6 @@ const getSummaryReasonForStop = person => {
     }
   })
   reasons.push(...keys)
-  
   const listCodes = person.reasonForStop?.listCodes || []
 
   const codes = listCodes.map(item => {
@@ -1299,6 +1298,12 @@ const getFullStopPeopleListedV2 = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
+        probableCauseType: getProbableCauseTypeDetailKeys(
+          person.reasonForStop,
+        ),
+        probableCauseCode: getProbableCauseDetailCode(
+          person.reasonForStop,
+        ),
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
         searchOfPerson: getStopReasonSearchOfPersonV2(person),
@@ -1430,6 +1435,22 @@ const getReasonableSuspicionDetailKeys = stopReason => {
 
 const getReasonableSuspicionDetailCode = stopReason => {
   if (stopReason.key && Number(stopReason.key) === 2) {
+    return Number(stopReason.listCodes[0].code)
+  }
+
+  return null
+}
+
+const getProbableCauseTypeDetailKeys = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 9) {
+    return stopReason.listDetail.map(item => Number(item.key))
+  }
+
+  return null
+}
+
+const getProbableCauseDetailCode = stopReason => {
+  if (stopReason.key && Number(stopReason.key) === 9) {
     return Number(stopReason.listCodes[0].code)
   }
 
@@ -2078,7 +2099,7 @@ const getReasonForStopDetailsV2 = (reasonKey, person) => {
     return [getEducationViolation(person)]
   }
   if (reasonKey === 9) {
-    return [getProbableCause(person)]
+    return getProbableCause(person)
   }
   return []
 }
@@ -2225,9 +2246,9 @@ const getProbableCause = person => {
   return probableCause.map(item => {
     const [filteredProbableCause] = PROBABLE_CAUSE_TYPES.filter(
       item2 => item2.value === item,
-    )
-    return {
-      key: item.toString(),
+      )
+      return {
+        key: item.toString(),
       reason: filteredProbableCause?.name || '',
     }
   })
