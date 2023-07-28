@@ -160,6 +160,7 @@
           <template v-if="model.stopType === 'Vehicular'">
             <ripa-form-header
               title="The stopped person is a passenger in a vehicle"
+              required
               :items="statutes"
               subtitle="§999.226(a)(10)"
               v-on="$listeners"
@@ -180,6 +181,7 @@
           <template v-if="model.stopType === 'Pedestrian'">
             <ripa-form-header
               title="The stopped person was inside a residence..."
+              required
               :items="statutes"
               subtitle="§999.226(a)(10)"
               v-on="$listeners"
