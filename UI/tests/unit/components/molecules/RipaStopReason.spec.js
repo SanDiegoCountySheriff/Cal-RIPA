@@ -89,7 +89,7 @@ describe('Ripa Stop Reason', () => {
     )
   })
 
-  it('stop type is vechiular show this question "Passenger in vehicle"', () => {
+  it('stop type is vehicular show this question "Passenger in vehicle"', () => {
     const updatedStop = V2_STOP
     updatedStop.stopType = 'Vehicular'
 
@@ -118,7 +118,7 @@ describe('Ripa Stop Reason', () => {
     expect(wrapper.html()).not.toContain('person in residence')
   })
 
-  it('stop type is vechiular show this question "Person was inside a residence"', () => {
+  it('stop type is pedestrian show this question "Person was inside a residence"', () => {
     const updatedStop = V2_STOP
     updatedStop.stopType = 'Pedestrian'
 
