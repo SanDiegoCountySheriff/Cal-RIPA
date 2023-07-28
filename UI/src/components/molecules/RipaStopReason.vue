@@ -157,7 +157,9 @@
             :rules="explanationRules"
             @blur="handlePiiCheck($event)"
           ></ripa-text-input>
-          <template v-if="model.stopType === 'Vehicular'">
+          <template
+            v-if="model.stopType === 'Vehicular' && model.stopVersion === 2"
+          >
             <ripa-form-header
               title="The stopped person is a passenger in a vehicle"
               required
@@ -178,7 +180,9 @@
               </v-row>
             </v-container>
           </template>
-          <template v-if="model.stopType === 'Pedestrian'">
+          <template
+            v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2"
+          >
             <ripa-form-header
               title="The stopped person was inside a residence..."
               required
