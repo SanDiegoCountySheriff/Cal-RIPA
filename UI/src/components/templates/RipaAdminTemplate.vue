@@ -31,8 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
-      @handleCreateCpraReport="handleCreateCpraReport"
-      @handleDownloadCpraReport="handleDownloadCpraReport"
+      @handle-create-cpra-report="handleCreateCpraReport"
+      @handle-download-cpra-report="handleDownloadCpraReport"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -138,10 +138,10 @@ export default {
       this.submitAllFilterData = null
     },
     handleCreateCpraReport(reportParameters) {
-      this.$emit('handleCreateCpraReport', reportParameters)
+      this.$emit('handle-create-cpra-report', reportParameters)
     },
     handleDownloadCpraReport(fileName) {
-      this.$emit('handleDownloadCpraReport', fileName)
+      this.$emit('handle-download-cpra-report', fileName)
     },
   },
 

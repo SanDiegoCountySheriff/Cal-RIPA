@@ -62,8 +62,8 @@
               :loading="loading"
               :user="user"
               :items="cpraReportStats"
-              @handleCreateCpraReport="handleCreateCpraReport"
-              @handleDownloadCpraReport="handleDownloadCpraReport"
+              @handle-create-cpra-report="handleCreateCpraReport"
+              @handle-download-cpra-report="handleDownloadCpraReport"
             ></ripa-cpra-report>
           </v-tab-item>
           <v-tab-item>
@@ -336,10 +336,10 @@ export default {
       this.closeFileDialog()
     },
     handleCreateCpraReport(reportParameters) {
-      this.$emit('handleCreateCpraReport', reportParameters)
+      this.$emit('handle-create-cpra-report', reportParameters)
     },
     handleDownloadCpraReport(fileName) {
-      this.$emit('handleDownloadCpraReport', fileName)
+      this.$emit('handle-download-cpra-report', fileName)
     },
   },
 

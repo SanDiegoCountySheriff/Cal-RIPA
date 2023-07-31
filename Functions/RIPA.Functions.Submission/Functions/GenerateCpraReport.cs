@@ -50,11 +50,11 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(string), Deprecated = false, Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CpraResult), Description = "CPRA Report Result")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, bool includeOfficer, bool includeBeat, HttpRequest req,
             ILogger log)
         {
             log.LogInformation("CPRA Report Generation Requested");
-            
+
             try
             {
                 if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -98,7 +98,7 @@ namespace RIPA.Functions.Submission.Functions
             {
                 stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as List<Stop>;
                 stopStatuses = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
-                
+
                 foreach (var stopStatus in stopStatuses)
                 {
                     totalStopCount += stopStatus.Count;
@@ -122,10 +122,15 @@ namespace RIPA.Functions.Submission.Functions
                 foreach (var stop in stopResponse)
                 {
                     var dojStop = _stopService.CastToDojStop(stop);
-                    dojStop.Officer = null;
+
+                    if (!includeOfficer)
+                    {
+                        dojStop.Officer = null;
+                    }
+
                     var jsonStop = JsonConvert.SerializeObject(dojStop);
-                    
-                    if (stop.Location.Beat != null)
+
+                    if (stop.Location.Beat != null && includeBeat)
                     {
                         jsonStop += $"|{stop.Location.Beat.Codes.Text}";
                     }
@@ -190,6 +195,18 @@ namespace RIPA.Functions.Submission.Functions
                         Level = 1,
                         Header = "To Date",
                         Detail = endDate,
+                    },
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "Officer Info Included",
+                        Detail = includeOfficer.ToString(),
+                    },
+                    new CpraListItem()
+                    {
+                        Level = 1,
+                        Header = "Beat Info Included",
+                        Detail = includeBeat.ToString(),
                     }
                 }
             };
@@ -201,7 +218,7 @@ namespace RIPA.Functions.Submission.Functions
         {
             BlobServiceClient blobServiceClient = new BlobServiceClient(_storageConnectionString);
             BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(_storageContainerNamePrefix);
-            
+
             return blobContainerClient;
         }
     }
