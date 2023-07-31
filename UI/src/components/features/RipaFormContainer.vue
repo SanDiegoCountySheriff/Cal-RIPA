@@ -1170,7 +1170,6 @@ export default {
 
   watch: {
     mappedGpsLocationAddress(newVal) {
-      console.log('newVal from form container watcher', newVal)
       this.lastLocation = {
         newLocation: newVal,
         persistSchool: true,

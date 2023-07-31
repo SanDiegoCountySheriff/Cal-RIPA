@@ -625,50 +625,14 @@ export default {
     lastLocation: {
       handler: async function (newVal) {
         if (newVal) {
-          console.log('watching lastLocation', newVal.newLocation)
-          console.log('isSchool', this.model.location.isSchool)
-          console.log('school', this.model.location.school)
-          // save off school and school if isSchool is true
-          const isSchool = this.model.location.isSchool || false
-          const school = this.model.location.school
-          // assign new location
           this.model.location = newVal.newLocation
-          await this.$nextTick()
-          // add back school and school - only if isSchool was true
-          if (newVal.persistSchool && isSchool) {
-            await this.setSchool(isSchool, school)
-            console.log('persisting school', isSchool)
-            // this.model.location.isSchool = isSchool
-            // this.model.location.school = school
-            console.log(this.model.location)
-          }
         }
       },
       deep: true,
     },
-    // lastLocation(newVal) {
-    //   if (newVal) {
-    //     console.log('watching lastLocation', newVal.newLocation)
-    //     console.log('isSchool', this.model.location.isSchool)
-    //     console.log('school', this.model.location.school)
-    //     // save off school and school if isSchool is true
-    //     const isSchool = this.model.location.isSchool || false
-    //     const school = this.model.location.school
-    //     // assign new location
-    //     this.model.location = newVal.newLocation
-    //     // add back school and school - only if isSchool was true
-    //     if (newVal.persistSchool && isSchool) {
-    //       console.log('persisting school', isSchool)
-    //       this.model.location.isSchool = isSchool
-    //       this.model.location.school = school
-    //       console.log(this.model.location)
-    //     }
-    //   }
-    // },
 
     model: {
       handler: function (newVal) {
-        console.log('watching model')
         this.model = newVal
       },
       deep: true,
