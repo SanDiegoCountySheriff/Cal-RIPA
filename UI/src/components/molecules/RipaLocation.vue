@@ -211,7 +211,9 @@
             persistent-hint
             item-text="fullName"
             item-value="id"
-            label="City"
+            :label="
+              model.stopVersion === 1 ? 'City' : 'City or Unincorporated Area'
+            "
             :items="getCities"
             :rules="cityRules"
           ></ripa-autocomplete>
@@ -600,7 +602,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-location-favorite', this.model.location)
+      this.$emit(
+        'on-save-location-favorite',
+        this.model.location,
+        this.model.stopVersion,
+      )
     },
 
     isGeolocationAvailable() {

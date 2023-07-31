@@ -98,7 +98,7 @@ export default {
     }
   },
 
-  inject: ['isAdminEditing', 'isOnlineAndAuthenticated'],
+  inject: ['isAdminEditing', 'isOnlineAndAuthenticated', 'loadingPiiStep1'],
 
   computed: {
     getApiStopUser() {

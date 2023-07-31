@@ -6,6 +6,7 @@ import {
   V2_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Form Step 1', () => {
   let vuetify
@@ -46,6 +47,7 @@ describe('Ripa Form Step 1', () => {
         isOnlineAndAuthenticated() {
           return true
         },
+        loadingPiiStep1: computed(() => false),
       },
     })
   }

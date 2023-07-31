@@ -79,6 +79,8 @@ export default {
     RipaContraband,
   },
 
+  inject: ['loadingPiiStep4'],
+
   methods: {
     handleStep4Next() {
       const piiFound =
