@@ -15,30 +15,23 @@ exports[`Ripa Location should match snapshot 1`] = `
       <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Location</span></div>
     </div>
   </div>
-  <div class="container">
-    <div class="row no-gutters">
-      <div class="tw-pr-2 col-sm-6 col-md-3 col-12">
-        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
-            Current Location
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+          Current Location
+        </span></button></div>
+      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Last Location
+        </span></button></div>
+      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+          Open Favorites
+        </span></button></div>
+      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+            Save Location
           </span></button></div>
-      </div>
-      <div class="tw-pr-2 col-sm-6 col-md-3 col-12">
-        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Last Location
-          </span></button></div>
-      </div>
-      <div class="tw-pr-2 col-sm-6 col-md-3 col-12">
-        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
-            Open Favorites
-          </span></button></div>
-      </div>
-      <div class="col-sm-6 col-md-3 col-12">
-        <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
-              Save Location
-            </span></button></div>
-      </div>
     </div>
-    <div class="row no-gutters">
+    <div class="row">
       <div class="col-sm-12 col-12">
+        false
         <div class="ripa-switch" style="max-width: 200px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
@@ -57,7 +50,7 @@ exports[`Ripa Location should match snapshot 1`] = `
           </div>
         </div>
         <!---->
-        <div role="alert" class="v-alert tw-mt-8 v-sheet v-sheet--outlined theme--light v-alert--dense v-alert--outlined info--text">
+        <div role="alert" class="v-alert mt-4 v-sheet v-sheet--outlined theme--light v-alert--dense v-alert--outlined info--text">
           <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-information theme--light info--text"></i>
             <div class="v-alert__content">
               Note: Do not provide a street address if the location is a
@@ -65,51 +58,39 @@ exports[`Ripa Location should match snapshot 1`] = `
             </div>
           </div>
         </div>
+        <!---->
+        <!---->
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="col-sm-12 col-12">
-        <div class="md:tw-mr-4">
-          <!---->
-        </div>
-      </div>
-      <div class="col-sm-12 col-12">
-        <div class="md:tw-mr-4">
-          <!---->
-        </div>
-      </div>
+    <div class="row">
       <div class="col-sm-12 col-md-6 col-12">
-        <div class="md:tw-mr-4">
-          <div class="ripa-text-input">
-            <div class="v-input theme--light v-text-field">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-18" class="v-label theme--light" style="left: 0px; position: absolute;">Block Number</label><input id="input-18" type="text"></div>
-                </div>
-                <div class="v-text-field__details">
-                  <div class="v-messages theme--light">
-                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                  </div>
+        <div class="ripa-text-input">
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-18" class="v-label theme--light" style="left: 0px; position: absolute;">Block Number</label><input id="input-18" type="text"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
                 </div>
               </div>
             </div>
-            <!---->
           </div>
+          <!---->
         </div>
       </div>
       <div class="col-sm-12 col-md-6 col-12">
-        <div>
-          <div class="ripa-text-input">
-            <!---->
-            <div class="v-input theme--light v-text-field">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-22" class="v-label theme--light" style="left: 0px; position: absolute;">Street Name</label><input id="input-22" type="text"></div>
-                </div>
-                <div class="v-text-field__details">
-                  <div class="v-messages theme--light">
-                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                  </div>
+        <div class="ripa-text-input">
+          <!---->
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-22" class="v-label theme--light" style="left: 0px; position: absolute;">Street Name</label><input id="input-22" type="text"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
                 </div>
               </div>
             </div>
@@ -118,7 +99,7 @@ exports[`Ripa Location should match snapshot 1`] = `
       </div>
     </div>
     <!---->
-    <div class="row no-gutters">
+    <div class="row">
       <div class="col-sm-12 col-12">
         <div class="ripa-label tw-font-bold tw-my-4"><span>
     -- or --
@@ -177,58 +158,54 @@ exports[`Ripa Location should match snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div class="row no-gutters">
+    <div class="row">
       <div class="col-sm-12 col-md-6 col-12">
-        <div class="md:tw-mr-4">
-          <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
-            <div class="v-input__control">
-              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-38" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-38" class="v-label theme--light" style="left: 0px; position: absolute;">City</label><input id="input-38" type="text" autocomplete="off">
-                  <div class="v-input__append-inner">
-                    <div></div>
-                  </div>
-                  <div class="v-input__append-inner">
-                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
-                  </div><input type="hidden">
+        <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
+          <div class="v-input__control">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-38" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-38" class="v-label theme--light" style="left: 0px; position: absolute;">City</label><input id="input-38" type="text" autocomplete="off">
+                <div class="v-input__append-inner">
+                  <div></div>
                 </div>
-                <div class="v-menu">
-                  <!---->
-                </div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                </div><input type="hidden">
               </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
-                    <div class="v-messages__message">Select 1 City (required)</div>
-                  </transition-group-stub>
-                </div>
+              <div class="v-menu">
+                <!---->
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                  <div class="v-messages__message">Select 1 City (required)</div>
+                </transition-group-stub>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-12 col-md-6 col-12">
-        <div>
-          <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
-            <div class="v-input__control">
-              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-44" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-44" class="v-label theme--light" style="left: 0px; position: absolute;">Beat</label><input id="input-44" type="text" autocomplete="off">
-                  <div class="v-input__append-inner">
-                    <div></div>
-                  </div>
-                  <div class="v-input__append-inner">
-                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
-                  </div><input type="hidden">
+        <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
+          <div class="v-input__control">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-44" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-44" class="v-label theme--light" style="left: 0px; position: absolute;">Beat</label><input id="input-44" type="text" autocomplete="off">
+                <div class="v-input__append-inner">
+                  <div></div>
                 </div>
-                <div class="v-menu">
-                  <!---->
-                </div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                </div><input type="hidden">
               </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
-                    <div class="v-messages__message">Select 1 Beat (required)</div>
-                  </transition-group-stub>
-                </div>
+              <div class="v-menu">
+                <!---->
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                  <div class="v-messages__message">Select 1 Beat (required)</div>
+                </transition-group-stub>
               </div>
             </div>
           </div>
