@@ -31,8 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
-      @handleCreateCpraReport="handleCreateCpraReport"
-      @handleDownloadCpraReport="handleDownloadCpraReport"
+      @handle-create-cpra-report="handleCreateCpraReport"
+      @handle-download-cpra-report="handleDownloadCpraReport"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
