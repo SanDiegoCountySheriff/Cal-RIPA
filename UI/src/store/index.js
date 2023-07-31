@@ -81,6 +81,7 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
+    devTime: false,
     version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
@@ -284,6 +285,8 @@ export default new Vuex.Store({
         city: parsedCity,
         latitude,
         longitude,
+        beat: null,
+        school: null,
       }
     },
     mappedErrorCodeAdminSearch: state => {
@@ -332,8 +335,10 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
-
     version: state => {
+      if (state.devTime) {
+        return 2
+      }
       return state.version
     },
   },
@@ -583,6 +588,9 @@ export default new Vuex.Store({
     },
     updateIsAuthenticated(state, value) {
       state.isAuthenticated = value
+    },
+    toggleDevTime(state) {
+      state.devTime = !state.devTime
     },
   },
 
@@ -1871,6 +1879,10 @@ export default new Vuex.Store({
 
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
+    },
+
+    toggleDevTime({ commit }) {
+      commit('toggleDevTime')
     },
   },
 

@@ -51,7 +51,6 @@
 
       <v-row>
         <v-col cols="12" sm="12">
-          {{ value.location.isSchool }}
           <ripa-switch
             v-model="model.location.isSchool"
             label="K-12 Public School"
@@ -284,7 +283,6 @@ export default {
         return this.value
       },
       set(newVal) {
-        console.log('is school from setter', this.model.location.isSchool)
         if (!newVal.location.isSchool) {
           newVal.location.school = null
           newVal.person.isStudent = false

@@ -495,7 +495,8 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
       if (
-        person.passengerInVehicle === true || person.passengerInVehicle === false
+        person.passengerInVehicle === true ||
+        person.passengerInVehicle === false
       ) {
         items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
       }
