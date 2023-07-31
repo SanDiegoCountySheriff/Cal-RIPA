@@ -91,7 +91,13 @@
           </v-col>
         </v-row>
 
-        <template v-if="model.assignment === 10 || model.assignment === 11 || model.assignment === 12">
+        <template
+          v-if="
+            model.assignment === 10 ||
+            model.assignment === 11 ||
+            model.assignment === 12
+          "
+        >
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
@@ -134,7 +140,13 @@
           </v-col>
         </v-row>
 
-        <template v-if="model.assignment === 10 || model.assignment === 11 || model.assignment === 12">
+        <template
+          v-if="
+            model.assignment === 10 ||
+            model.assignment === 11 ||
+            model.assignment === 12
+          "
+        >
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
@@ -202,10 +214,10 @@ import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { 
-  OFFICER_ASSIGNMENTS, 
-  OFFICER_ASSIGNMENTS_V2, 
-  GENDERS_V2, 
+import {
+  OFFICER_ASSIGNMENTS,
+  OFFICER_ASSIGNMENTS_V2,
+  GENDERS_V2,
   RACES_V2,
 } from '@/constants/form'
 import {
@@ -334,7 +346,11 @@ export default {
     },
 
     updateOtherTypeModel() {
-      if (this.viewModel.assignment !== 10 && assignment !== 11 && assignment !== 12) {
+      if (
+        this.viewModel.assignment !== 10 &&
+        this.viewModel.assignment !== 11 &&
+        this.viewModel.assignment !== 12
+      ) {
         this.viewModel.otherType = null
       }
     },
@@ -343,7 +359,7 @@ export default {
   watch: {
     value(newVal) {
       this.viewModel = newVal
-    }
+    },
   },
 
   props: {

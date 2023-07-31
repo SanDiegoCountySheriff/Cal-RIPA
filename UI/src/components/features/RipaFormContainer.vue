@@ -31,6 +31,7 @@
       "
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
+      @on-dev-time="handleDevTime"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -300,6 +301,7 @@ export default {
       'setStopsWithErrors',
       'setPersonSearchAutomaticallySelected',
       'setPropertySearchAutomaticallySelected',
+      'toggleDevTime',
     ]),
 
     handleSetPersonSearchAutomaticallySelected() {
@@ -1369,6 +1371,10 @@ export default {
 
     onViewStopsWithErrors() {
       this.$emit('on-view-stops-with-errors')
+    },
+
+    handleDevTime() {
+      this.toggleDevTime()
     },
   },
 
