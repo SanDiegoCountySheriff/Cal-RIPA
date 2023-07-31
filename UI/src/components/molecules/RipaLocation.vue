@@ -616,13 +616,6 @@ export default {
         })
       })
     },
-
-    async setSchool(isSchool, school) {
-      await this.$nextTick()
-      this.model.location.isSchool = isSchool
-      await this.$nextTick()
-      this.model.location.school = school
-    },
   },
 
   watch: {
