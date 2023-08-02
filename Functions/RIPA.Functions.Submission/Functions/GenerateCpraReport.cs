@@ -45,12 +45,14 @@ namespace RIPA.Functions.Submission.Functions
         [OpenApiOperation(operationId: "GenerateCpraReport", tags: new[] { "name" })]
         [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
         [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-        [OpenApiParameter(name: "StartDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
-        [OpenApiParameter(name: "EndDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Ending DateTime for date range stops query")]
+        [OpenApiParameter(name: "startDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Starting DateTime for date range stops query")]
+        [OpenApiParameter(name: "endDate", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "Ending DateTime for date range stops query")]
+        [OpenApiParameter(name: "includeOfficer", In = ParameterLocation.Query, Required = true, Type = typeof(bool), Description = "Include the officer information in the report")]
+        [OpenApiParameter(name: "includeBeat", In = ParameterLocation.Query, Required = true, Type = typeof(bool), Description = "Include the beat information in the report")]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(string), Deprecated = false, Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CpraResult), Description = "CPRA Report Result")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, bool includeOfficer, bool includeBeat, HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] string officerName, HttpRequest req,
             ILogger log)
         {
             log.LogInformation("CPRA Report Generation Requested");
@@ -71,8 +73,10 @@ namespace RIPA.Functions.Submission.Functions
             await _blobContainerClient.CreateIfNotExistsAsync();
             byte[] fileBytes;
             string tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
-            var startDate = req.Query["StartDate"];
-            var endDate = req.Query["EndDate"];
+            var startDate = req.Query["startDate"];
+            var endDate = req.Query["endDate"];
+            var includeOfficer = req.Query["includeOfficer"] == "true";
+            var includeBeat = req.Query["includeBeat"] == "true";
             var fileName = $"{startDate}-{endDate}-CPRAReport.csv";
             string stopQueryString;
             string stopSummaryQueryString;
