@@ -16,7 +16,7 @@ export const getStatuteContent = statute => {
   const level3 = splitSections.length > 2 ? splitSections[2] : null
   const level4 = splitSections.length > 3 ? splitSections[3] : null
 
-  const [filteredStatute] = STATUTES.filter(item => item.statuteID === base)
+  const [filteredStatute] = statutes.filter(item => item.statuteID === base)
   if (level1) {
     const [filteredLevel1] = filteredStatute.children.filter(
       item => item.id === level1,
