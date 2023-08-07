@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Perceived Age"
       required
-      :subtitle="§999.226(a)(8)"
+      :subtitle="model.stopVersion === 1 ? '§999.226(a)(7)' : '§999.226(a)(8)'"
       v-on="$listeners"
     >
     </ripa-form-header>
