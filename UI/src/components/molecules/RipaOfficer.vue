@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  inject: ['user','version'],
+  inject: ['user', 'version'],
 
   computed: {
     isValidUser() {

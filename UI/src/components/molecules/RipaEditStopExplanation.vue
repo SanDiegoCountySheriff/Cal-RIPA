@@ -27,14 +27,12 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-edit-stop-explanation',
 
   components: {
     RipaFormHeader,
-    RipaTextInput,
   },
 
   data() {

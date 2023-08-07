@@ -574,7 +574,7 @@ export const V2_API_STOP = {
   stopType: 'Vehicular',
   stopVersion: 2,
   location: {
-    toggleLocationOptions: false,
+    toggleLocationOptions: true,
     intersection: '',
     blockNumber: '100',
     landMark: '',
@@ -597,8 +597,8 @@ export const V2_API_STOP = {
     outOfCounty: false,
     piiFound: false,
     geoLocation: {
-      latitude: null,
-      longitude: null,
+      latitude: '-11.654',
+      longitude: '99.098',
     },
   },
   stopDuration: 1,
@@ -1013,7 +1013,7 @@ export const V2_STOP = {
     blockNumber: '100',
     streetName: 'Street Name',
     intersection: null,
-    toggleLocationOptions: false,
+    toggleLocationOptions: true,
     highwayExit: null,
     landmark: null,
     piiFound: false,

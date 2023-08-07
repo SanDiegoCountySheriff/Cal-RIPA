@@ -366,14 +366,17 @@ const getSummaryLocation = apiStop => {
       detail: apiStop.location.beat.codes.text,
     })
   }
-  if (apiStop.location.latitude && apiStop.location.longitude) {
+  if (
+    apiStop.location.geoLocation.latitude &&
+    apiStop.location.geoLocation.longitude
+  ) {
     children.push({
       header: 'Latitude',
-      detail: apiStop.location.latitude,
+      detail: apiStop.location.geoLocation.latitude,
     })
     children.push({
       header: 'Longitude',
-      detail: apiStop.location.longitude,
+      detail: apiStop.location.geoLocation.longitude,
     })
   }
 
@@ -491,6 +494,15 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     items.push({ id: 'B7', content: getSummaryLimitedEnglish(person) })
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B18', content: getSummaryPerceivedUnhoused(person) })
+      if (
+        person.passengerInVehicle === true ||
+        person.passengerInVehicle === false
+      ) {
+        items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
+      }
+      if (person.insideResidence === true || person.insideResidence === false) {
+        items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
+      }
     }
     items.push({
       id: 'B8',
@@ -615,6 +627,22 @@ const getSummaryPerceivedUnhoused = person => {
     level: 1,
     header: 'Perceived Unhoused',
     detail: person.perceivedUnhoused,
+  }
+}
+
+const getSummaryPassengerInVehicle = person => {
+  return {
+    level: 1,
+    header: 'Passenger In Vehicle',
+    detail: person.passengerInVehicle,
+  }
+}
+
+const getSummaryInsideResidence = person => {
+  return {
+    level: 1,
+    header: 'Inside Residence',
+    detail: person.insideResidence,
   }
 }
 
@@ -1277,6 +1305,8 @@ const getFullStopPeopleListedV2 = apiStop => {
       perceivedGender: getPerceivedGenderCodeV2(person),
       nonBinaryPerson: person.nonBinaryPerson,
       perceivedSexualOrientation: getPerceivedOrientationCode(person),
+      passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       perceivedUnhoused: person.perceivedUnhoused,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish,
       perceivedOrKnownDisability: getKeyArray(perceivedOrKnownDisability),
@@ -1557,6 +1587,8 @@ export const fullStopToStopV2 = fullStop => {
       perceivedSexualOrientation: person.perceivedSexualOrientation,
       perceivedLimitedEnglish: person.perceivedLimitedEnglish || false,
       perceivedUnhoused: person.perceivedUnhoused,
+      passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
     },
@@ -1846,6 +1878,8 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       propertySearchConsentGiven:
         person.nonForceActionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStopV2(person, statutes),
+      passengerInVehicle: person.passengerInVehicle,
+      insideResidence: person.insideResidence,
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
