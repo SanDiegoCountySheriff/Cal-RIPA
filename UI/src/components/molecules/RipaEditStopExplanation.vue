@@ -6,14 +6,19 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="12">
-          <ripa-text-input
+          <v-combobox
             v-model="model.editStopExplanation"
             label="Edit Stop Explanation"
-            hint="Please enter an explanation for editing the stop"
+            hint="Please enter an explanation for editing the stop or choose an existing option"
+            :items="[
+              'PII Override - false positive',
+              'Incorrect information added',
+            ]"
+            persistent-hint
             :rules="explanationRules"
             @input="handleInput"
           >
-          </ripa-text-input>
+          </v-combobox>
         </v-col>
       </v-row>
     </v-container>
@@ -22,14 +27,12 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-edit-stop-explanation',
 
   components: {
     RipaFormHeader,
-    RipaTextInput,
   },
 
   data() {

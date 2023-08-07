@@ -57,6 +57,8 @@ export default {
 
   components: { RipaAlert, RipaConfirmDialog, RipaStopReason },
 
+  inject: ['loadingPiiStep3'],
+
   methods: {
     handleStep3Next() {
       const piiFound = this.model.stopReason?.reasonForStopPiiFound || false

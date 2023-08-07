@@ -11,6 +11,21 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Other', value: 10 },
 ]
 
+export const OFFICER_ASSIGNMENTS_V2 = [
+  { name: 'Patrol, traffic enforcement, field operations', value: 1 },
+  { name: 'Gang enforcement', value: 2 },
+  { name: 'Compliance check', value: 3 },
+  { name: 'Special events', value: 4 },
+  { name: 'Roadblock or DUI sobriety checkpoint', value: 5 },
+  { name: 'Narcotics/vice', value: 6 },
+  { name: 'Task force', value: 7 },
+  { name: 'K-12 public school', value: 8 },
+  { name: 'Investigative/detective', value: 9 },
+  { name: 'Other', value: 10 },
+  { name: 'Off duty and/or working private event', value: 11 },
+  { name: 'Contracted by another law enforcement agency', value: 12 },
+]
+
 export const DISABILITIES = [
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },
@@ -54,6 +69,13 @@ export const GENDERS_V2 = [
   { name: 'Cisgender Woman', value: 2 },
   { name: 'Transgender Man', value: 3 },
   { name: 'Transgender Woman', value: 4 },
+]
+
+export const PERSON_GENDERS_V2 = [
+  { name: 'Cisgender Man/Boy', value: 1 },
+  { name: 'Cisgender Woman/Girl', value: 2 },
+  { name: 'Transgender Man/Boy', value: 3 },
+  { name: 'Transgender Woman/Girl', value: 4 },
 ]
 
 export const RACES_V2 = [
@@ -307,6 +329,27 @@ export const BASIS_FOR_SEARCH = [
   { name: 'Suspected violation of school policy', value: 13 },
 ]
 
+export const BASIS_FOR_SEARCH_V2 = [
+  { name: 'Verbal Consent given', value: 1 },
+  { name: 'Written Consent given', value: 14 },
+  { name: 'Consent implied by conduct', value: 15 },
+  { name: 'Officer safety/safety of others', value: 2 },
+  { name: 'Search warrant', value: 3 },
+  {
+    name: 'Condition of parole / probation/ PRCS / mandatory supervision',
+    value: 4,
+  },
+  { name: 'Suspected weapons', value: 5 },
+  { name: 'Visible contraband', value: 6 },
+  { name: 'Odor of contraband', value: 7 },
+  { name: 'Canine detection', value: 8 },
+  { name: 'Evidence of crime', value: 9 },
+  { name: 'Incident to arrest', value: 10 },
+  { name: 'Exigent circumstances/emergency', value: 11 },
+  { name: 'Vehicle inventory', value: 12 },
+  { name: 'Suspected violation of school policy', value: 13 },
+]
+
 export const BASIS_FOR_PROPERTY_SEIZURE = [
   { name: 'Safekeeping as allowed by law/statute', value: 1 },
   { name: 'Contraband', value: 2 },
@@ -341,6 +384,25 @@ export const SEIZED_PROPERTY_TYPES = [
   { name: 'Cell phone(s) or electronic device(s)', value: 9 },
   { name: 'Vehicle', value: 10 },
   { name: 'Other contraband or evidence', value: 11 },
+]
+
+export const STOP_RESULTS_V2 = [
+  { name: 'Verbal Warning', value: 2 },
+  { name: 'Written Warning', value: 3 },
+  { name: 'Citation for infraction', value: 4 },
+  { name: 'In-field cite and release', value: 5 },
+  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 6 },
+  { name: 'Custodial Arrest without warrant', value: 7 },
+  { name: 'Field interview card completed', value: 8 },
+  { name: 'Noncriminal transport or caretaking transport', value: 9 },
+  {
+    name: 'Contacted parent/legal guardian or other person responsible for the minor',
+    value: 10,
+  },
+  { name: 'Psychiatric hold', value: 11 },
+  { name: 'Contacted U.S. Department of Homeland Security', value: 12 },
+  { name: 'Referral to school administrator', value: 13 },
+  { name: 'Referral to school counselor or other support staff', value: 14 },
 ]
 
 export const STOP_RESULTS = [

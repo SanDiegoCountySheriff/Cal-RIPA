@@ -69,6 +69,7 @@ export default {
     },
 
     handleClose() {
+      this.favoriteName = ''
       this.$emit('on-close')
     },
 

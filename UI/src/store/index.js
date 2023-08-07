@@ -81,7 +81,8 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
-    version: Date.now() >= '2024-01-01' ? 2 : 1,
+    devTime: false,
+    version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
   getters: {
@@ -279,11 +280,13 @@ export default new Vuex.Store({
       const longitude = state.gpsLocationAddress?.longitude || null
 
       return {
-        blockNumber: parsedBlockNumber,
+        blockNumber: String(parsedBlockNumber),
         streetName: parsedStreetName,
         city: parsedCity,
         latitude,
         longitude,
+        beat: null,
+        school: null,
       }
     },
     mappedErrorCodeAdminSearch: state => {
@@ -332,8 +335,10 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
-
     version: state => {
+      if (state.devTime) {
+        return 2
+      }
       return state.version
     },
   },
@@ -584,6 +589,9 @@ export default new Vuex.Store({
     updateIsAuthenticated(state, value) {
       state.isAuthenticated = value
     },
+    toggleDevTime(state) {
+      state.devTime = !state.devTime
+    },
   },
 
   actions: {
@@ -622,14 +630,46 @@ export default new Vuex.Store({
             const latLong = `${position.coords.longitude},${position.coords.latitude}`
             const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
 
+            let latDecimal
+            let longDecimal
+            let latTrimmed
+            let longTrimmed
+
             fetch(url)
               .then(response => response.json())
               .then(data => {
+                if (position.coords.latitude !== null) {
+                  latDecimal = String(position.coords.latitude).slice(
+                    String(position.coords.latitude).lastIndexOf('.') + 1,
+                  )
+                }
+
+                if (position.coords.longitude !== null) {
+                  longDecimal = String(position.coords.longitude).slice(
+                    String(position.coords.longitude).lastIndexOf('.') + 1,
+                  )
+                }
+
+                if (latDecimal.length > 3) {
+                  latTrimmed = String(position.coords.latitude).substring(
+                    0,
+                    String(position.coords.latitude).length - 1,
+                  )
+                } else latTrimmed = position.coords.latitude
+
+                if (longDecimal.length > 3) {
+                  longTrimmed = String(position.coords.longitude).substring(
+                    0,
+                    String(position.coords.longitude).length - 1,
+                  )
+                } else longTrimmed = position.coords.longitude
+
                 const dataIncludingLatLong = {
                   ...data,
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
+                  latitude: String(latTrimmed),
+                  longitude: String(longTrimmed),
                 }
+
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
                 resolve(data)
               })
@@ -1839,6 +1879,10 @@ export default new Vuex.Store({
 
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
+    },
+
+    toggleDevTime({ commit }) {
+      commit('toggleDevTime')
     },
   },
 

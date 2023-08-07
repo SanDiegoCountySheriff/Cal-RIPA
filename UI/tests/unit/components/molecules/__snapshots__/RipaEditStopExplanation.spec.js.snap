@@ -11,17 +11,23 @@ exports[`Ripa Edit Stop Explanation should match snapshot 1`] = `
   <div class="container">
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
-        <div class="ripa-text-input">
-          <!---->
-          <div class="v-input theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-7" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-7" type="text"></div>
+        <div class="v-input theme--light v-text-field v-select v-autocomplete">
+          <div class="v-input__control">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-6" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-6" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-6" type="text" autocomplete="off">
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                </div><input type="hidden">
               </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
+              <div class="v-menu">
+                <!---->
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                  <div class="v-messages__message">Please enter an explanation for editing the stop or choose an existing option</div>
+                </transition-group-stub>
               </div>
             </div>
           </div>

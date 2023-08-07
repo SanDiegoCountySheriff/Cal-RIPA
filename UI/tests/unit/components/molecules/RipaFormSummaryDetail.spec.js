@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import {
   API_STOP,
   V2_API_STOP,
+  V2_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
 
@@ -92,6 +93,26 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Perceived Unhoused')
   })
 
+  it('should display person inside residence only when stop type is pedestrian', () => {
+    const updatedStop = v2ApiStop
+    updatedStop.stopType = 'pedestrian'
+    updatedStop.listPersonStopped[0].insideResidence = true
+
+    wrapper = factory({ apiStop: updatedStop })
+
+    expect(wrapper.html()).toContain('Inside Residence')
+  })
+
+  it('should display person passenger in vehicle only when stop type is vehicular', () => {
+    const updatedStop = v2ApiStop
+    updatedStop.stopType = 'Vehicular'
+    updatedStop.listPersonStopped[0].passengerInVehicle = true
+
+    wrapper = factory({ apiStop: updatedStop })
+
+    expect(wrapper.html()).toContain('Passenger In Vehicle')
+  })
+
   it('should display officer race and gender details for v2 officer', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
@@ -118,5 +139,52 @@ describe('Ripa Form Summary Detail', () => {
 
     expect(wrapper.html()).not.toContain('Force')
     expect(wrapper.html()).not.toContain('Non-Force')
+  })
+
+  it('should display nonbinary person on v2 stops', () => {
+    v2ApiStop.listPersonStopped[0].nonBinaryPerson = true
+
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Nonbinary Person')
+    expect(wrapper.html()).not.toContain('Gender Nonconforming')
+  })
+
+  it('should display gender nonconforming on legacy stops', () => {
+    v2ApiStop.listPersonStopped[0].genderNonConforming = true
+
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Nonbinary Person')
+    expect(wrapper.html()).toContain('Gender Nonconforming')
+  })
+
+  it('should display verbal and written warning for v2 stops', () => {
+    v2ApiStop.listPersonStopped[0].listResultOfStop = [
+      {
+        key: '2',
+        result: 'Verbal Warning',
+        listCodes: [
+          {
+            code: '31286',
+            text: '10085.5 BP - ADV FEE/SECURE LOAN (M) 31286',
+          },
+        ],
+      },
+      {
+        key: '3',
+        result: 'Written Warning',
+        listCodes: [
+          {
+            code: '31286',
+            text: '10085.5 BP - ADV FEE/SECURE LOAN (M) 31286',
+          },
+        ],
+      },
+    ]
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Verbal Warning')
+    expect(wrapper.html()).toContain('Written Warning')
   })
 })

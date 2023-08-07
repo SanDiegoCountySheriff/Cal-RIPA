@@ -48,13 +48,9 @@
       </v-row>
 
       <v-row v-if="this.environmentName === 'DEV'">
-        <v-btn
-          @click="devTime = !devTime"
-          class="ml-3 mb-3"
-          small
-          color="primary"
-          >{{ devTime ? 'Turn Off Dev Time' : 'Turn On Dev Time' }}</v-btn
-        >
+        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">{{
+          devTime ? 'Turn Off Dev Time' : 'Turn On Dev Time'
+        }}</v-btn>
       </v-row>
 
       <v-row no-gutters>
@@ -178,6 +174,13 @@ export default {
 
     getMaxDate() {
       return formatToIsoCurrentDate()
+    },
+  },
+
+  methods: {
+    handleDevTime() {
+      this.devTime = !this.devTime
+      this.$emit('on-dev-time')
     },
   },
 

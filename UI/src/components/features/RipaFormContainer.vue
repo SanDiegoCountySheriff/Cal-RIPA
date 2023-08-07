@@ -31,6 +31,7 @@
       "
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
+      @on-dev-time="handleDevTime"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -175,8 +176,11 @@ export default {
       loadingPiiStep3: false,
       loadingPiiStep4: false,
       savedLocation: null,
+      savedLocationVersion: null,
       savedReason: null,
+      savedReasonVersion: null,
       savedResult: null,
+      savedResultVersion: null,
       showAddLocationFavoriteDialog: false,
       showAddReasonFavoriteDialog: false,
       showAddResultFavoriteDialog: false,
@@ -297,6 +301,7 @@ export default {
       'setStopsWithErrors',
       'setPersonSearchAutomaticallySelected',
       'setPropertySearchAutomaticallySelected',
+      'toggleDevTime',
     ]),
 
     handleSetPersonSearchAutomaticallySelected() {
@@ -351,17 +356,189 @@ export default {
 
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
+      return locations
+        ? JSON.parse(locations).filter(location => {
+            if (!location.version) {
+              location.version = 1
+            }
+
+            if (!location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormCountyCities.some(city => {
+                return city.fullName === location.location.city
+              })
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            } else if (location.location.outOfCounty) {
+              const cityNotExpired = this.mappedFormNonCountyCities.some(
+                city => {
+                  return city.fullName === location.location.city
+                },
+              )
+
+              if (!cityNotExpired) {
+                location.location.city = ''
+                location.favoritesCityExpired = true
+              }
+            }
+
+            if (location.location.isSchool) {
+              const schoolNotExpired = this.mappedFormSchools.some(school => {
+                return school.name === location.location.school
+              })
+
+              if (!schoolNotExpired) {
+                location.location.school = ''
+                location.favoritesSchoolExpired = true
+              }
+            }
+
+            return location.version === this.version
+          })
+        : []
     },
 
     getFavoriteReasons() {
-      const locations = localStorage.getItem('ripa_favorite_reasons')
-      return locations ? JSON.parse(locations) : []
+      const reasons = localStorage.getItem('ripa_favorite_reasons')
+      return reasons
+        ? JSON.parse(reasons).filter(reason => {
+            if (!reason.version) {
+              reason.version = 1
+            }
+
+            const codes = [
+              reason.reason.reasonableSuspicionCode,
+              reason.reason.educationViolationCode,
+              reason.reason.trafficViolationCode,
+            ]
+
+            const codeNotExpired = codes.some(code => {
+              return this.mappedFormStatutes.some(statute => {
+                return statute.code === code
+              })
+            })
+
+            if (!codeNotExpired) {
+              reason.reason.reasonableSuspicionCode = null
+              reason.reason.educationViolationCode = null
+              reason.reason.trafficViolationCode = null
+              reason.favoritesCodeExpired = true
+            }
+
+            return reason.version === this.version
+          })
+        : []
     },
 
     getFavoriteResults() {
-      const locations = localStorage.getItem('ripa_favorite_results')
-      return locations ? JSON.parse(locations) : []
+      const results = localStorage.getItem('ripa_favorite_results')
+      return results
+        ? JSON.parse(results).filter(result => {
+            if (!result.version) {
+              result.version = 1
+            }
+
+            const updatedWarningCodes = result.result.warningCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedWarningCodes.length !== result.result.warningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.warningCodes = updatedWarningCodes
+
+            const updatedVerbalWarningCodes =
+              result.result.verbalWarningCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedVerbalWarningCodes.length !==
+              result.result.verbalWarningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.verbalWarningCodes = updatedVerbalWarningCodes
+
+            const updatedWrittenWarningCodes =
+              result.result.writtenWarningCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedWrittenWarningCodes.length !==
+              result.result.writtenWarningCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.writtenWarningCodes = updatedWrittenWarningCodes
+
+            const updatedCitationCodes = result.result.citationCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedCitationCodes.length !== result.result.citationCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.citationCodes = updatedCitationCodes
+
+            const updatedInfieldCodes = result.result.infieldCodes.filter(
+              code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              },
+            )
+
+            if (
+              updatedInfieldCodes.length !== result.result.infieldCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.infieldCodes = updatedInfieldCodes
+
+            const updatedCustodialArrestCodes =
+              result.result.custodialArrestCodes.filter(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+            if (
+              updatedCustodialArrestCodes.length !==
+              result.result.custodialArrestCodes.length
+            ) {
+              result.favoritesCodeExpired = true
+            }
+
+            result.result.custodialArrestCodes = updatedCustodialArrestCodes
+
+            return result.version === this.version
+          })
+        : []
     },
 
     getLastLocation() {
@@ -387,11 +564,19 @@ export default {
         id: new Date().getTime(),
         name,
         location: this.savedLocation,
+        version: this.savedLocationVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const locations = this.getFavoriteLocations()
-      locations.push(location)
+      const index = locations.findIndex(l => l.name === location.name)
+
+      if (index === -1) {
+        locations.push(location)
+      } else {
+        locations[index] = location
+      }
       this.setFavoriteLocations(locations)
+      this.savedLocation = null
     },
 
     handleAddReasonFavorite(name) {
@@ -399,11 +584,20 @@ export default {
         id: new Date().getTime(),
         name,
         reason: this.savedReason,
+        version: this.savedReasonVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const reasons = this.getFavoriteReasons()
-      reasons.push(reason)
+      const index = reasons.findIndex(r => r.name === reason.name)
+
+      if (index === -1) {
+        reasons.push(reason)
+      } else {
+        reasons[index] = reason
+      }
+
       this.setFavoriteReasons(reasons)
+      this.savedReason = null
     },
 
     handleAddResultFavorite(name) {
@@ -411,11 +605,20 @@ export default {
         id: new Date().getTime(),
         name,
         result: this.savedResult,
+        version: this.savedResultVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
       const results = this.getFavoriteResults()
-      results.push(result)
+      const index = results.findIndex(r => r.name === result.name)
+
+      if (index === -1) {
+        results.push(result)
+      } else {
+        results[index] = result
+      }
+
       this.setFavoriteResults(results)
+      this.savedResult = null
     },
 
     handleAddPerson() {
@@ -533,8 +736,8 @@ export default {
 
     handleDeleteReasonFavorite(id) {
       const reasons = this.getFavoriteReasons()
-      const filteredResons = reasons.filter(item => item.id !== id)
-      this.setFavoriteReasons(filteredResons)
+      const filteredReasons = reasons.filter(item => item.id !== id)
+      this.setFavoriteReasons(filteredReasons)
     },
 
     handleDeleteResultFavorite(id) {
@@ -728,18 +931,21 @@ export default {
       this.showStatuteDialog = true
     },
 
-    handleSaveLocationFavorite(location) {
+    handleSaveLocationFavorite(location, version) {
       this.savedLocation = location
+      this.savedLocationVersion = version
       this.showAddLocationFavoriteDialog = true
     },
 
-    handleSaveReasonFavorite(reason) {
+    handleSaveReasonFavorite(reason, version) {
       this.savedReason = reason
+      this.savedReasonVersion = version
       this.showAddReasonFavoriteDialog = true
     },
 
-    handleSaveResultFavorite(result) {
+    handleSaveResultFavorite(result, version) {
       this.savedResult = result
+      this.savedResultVersion = version
       this.showAddResultFavoriteDialog = true
     },
 
@@ -1165,6 +1371,10 @@ export default {
 
     onViewStopsWithErrors() {
       this.$emit('on-view-stops-with-errors')
+    },
+
+    handleDevTime() {
+      this.toggleDevTime()
     },
   },
 

@@ -173,6 +173,52 @@
             :rules="explanationRules"
             @blur="handlePiiCheck($event)"
           ></ripa-text-input>
+          <template
+            v-if="model.stopType === 'Vehicular' && model.stopVersion === 2"
+          >
+            <ripa-form-header
+              title="The stopped person is a passenger in a vehicle"
+              required
+              :items="statutes"
+              subtitle="§999.226(a)(10)"
+              v-on="$listeners"
+            >
+            </ripa-form-header>
+
+            <ripa-switch
+              v-model="model.person.passengerInVehicle"
+              label="The stopped person is a passenger in a vehicle"
+            ></ripa-switch>
+
+            <v-container>
+              <v-row no-gutters>
+                <v-col cols="12" sm="12"> </v-col>
+              </v-row>
+            </v-container>
+          </template>
+          <template
+            v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2"
+          >
+            <ripa-form-header
+              title="The stopped person was inside a residence..."
+              required
+              :items="statutes"
+              subtitle="§999.226(a)(10)"
+              v-on="$listeners"
+            >
+            </ripa-form-header>
+
+            <ripa-switch
+              v-model="model.person.insideResidence"
+              label="The stopped person was inside a residence..."
+            ></ripa-switch>
+
+            <v-container>
+              <v-row no-gutters>
+                <v-col cols="12" sm="12"> </v-col>
+              </v-row>
+            </v-container>
+          </template>
         </v-col>
       </v-row>
     </v-container>
@@ -359,7 +405,11 @@ export default {
     },
 
     handleSaveFavorite() {
-      this.$emit('on-save-reason-favorite', this.model.stopReason)
+      this.$emit(
+        'on-save-reason-favorite',
+        this.model.stopReason,
+        this.model.stopVersion,
+      )
     },
 
     handlePiiCheck(textValue) {
@@ -699,6 +749,12 @@ export default {
   },
 
   watch: {
+    lastReason(newVal) {
+      if (newVal) {
+        this.model.stopReason = newVal
+      }
+    },
+
     model: {
       handler: function (newVal) {
         this.model = newVal

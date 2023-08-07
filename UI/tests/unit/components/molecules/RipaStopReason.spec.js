@@ -78,7 +78,6 @@ describe('Ripa Stop Reason', () => {
         statutes: computed(() => []),
       },
     })
-
     expect(wrapper.html()).not.toContain(
       'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
     )
@@ -88,6 +87,63 @@ describe('Ripa Stop Reason', () => {
     expect(wrapper.html()).not.toContain(
       'Witness or victim identified stopped person as a suspect of a crime',
     )
+  })
+
+  it('stop type is vehicular show this question "Passenger in vehicle"', () => {
+    const updatedStop = V2_STOP
+    updatedStop.stopType = 'Vehicular'
+
+    wrapper = mount(RipaStopReason, {
+      vuetify,
+      propsData: { value: V2_STOP },
+      provide: {
+        loadingPiiStep3: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        personSearchAutomaticallySelected() {
+          return false
+        },
+        propertySearchAutomaticallySelected() {
+          return false
+        },
+        statutes: computed(() => []),
+      },
+    })
+
+    expect(wrapper.html()).toContain('passenger in a vehicle')
+    expect(wrapper.html()).not.toContain('person in residence')
+  })
+
+  it('stop type is pedestrian show this question "Person was inside a residence"', () => {
+    const updatedStop = V2_STOP
+    updatedStop.stopType = 'Pedestrian'
+
+    wrapper = mount(RipaStopReason, {
+      vuetify,
+      propsData: { value: V2_STOP },
+      provide: {
+        loadingPiiStep3: computed(() => false),
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        lastReason() {
+          return {}
+        },
+        personSearchAutomaticallySelected() {
+          return false
+        },
+        propertySearchAutomaticallySelected() {
+          return false
+        },
+        statutes: computed(() => []),
+      },
+    })
+    expect(wrapper.html()).toContain('person was inside a residence')
+    expect(wrapper.html()).not.toContain('passenger in a vehicle')
   })
 
   it('should display new suspicion types for V2 stop', () => {
@@ -115,7 +171,6 @@ describe('Ripa Stop Reason', () => {
         statutes: computed(() => []),
       },
     })
-
     expect(wrapper.html()).toContain(
       'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
     )

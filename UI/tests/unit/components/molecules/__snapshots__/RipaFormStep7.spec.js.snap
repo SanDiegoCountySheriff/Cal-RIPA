@@ -44,17 +44,23 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
     <div class="container">
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
-          <div class="ripa-text-input">
-            <!---->
-            <div class="v-input theme--light v-text-field">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-22" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-22" type="text"></div>
+          <div class="v-input theme--light v-text-field v-select v-autocomplete">
+            <div class="v-input__control">
+              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-21" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-21" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-21" type="text" autocomplete="off">
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                  </div><input type="hidden">
                 </div>
-                <div class="v-text-field__details">
-                  <div class="v-messages theme--light">
-                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                  </div>
+                <div class="v-menu">
+                  <!---->
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                    <div class="v-messages__message">Please enter an explanation for editing the stop or choose an existing option</div>
+                  </transition-group-stub>
                 </div>
               </div>
             </div>
@@ -82,13 +88,13 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
             <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-29" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-30" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-29" class="v-label theme--light" style="left: 0px; position: relative;">
+                  </div><label for="input-30" class="v-label theme--light" style="left: 0px; position: relative;">
                     Override
                   </label>
                 </div>
