@@ -1298,12 +1298,8 @@ const getFullStopPeopleListedV2 = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
-        probableCauseType: getProbableCauseTypeDetailKeys(
-          person.reasonForStop,
-        ),
-        probableCauseCode: getProbableCauseDetailCode(
-          person.reasonForStop,
-        ),
+        probableCauseType: getProbableCauseTypeDetailKeys(person.reasonForStop),
+        probableCauseCode: getProbableCauseDetailCode(person.reasonForStop),
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
         searchOfPerson: getStopReasonSearchOfPersonV2(person),
@@ -2059,7 +2055,9 @@ const getReasonForStopV2 = (person, statutes) => {
   const reason = person.stopReason?.reasonForStop || null
 
   if (reason) {
-    const [filteredReason] = STOP_REASONS_V2.filter(item => item.value === reason)
+    const [filteredReason] = STOP_REASONS_V2.filter(
+      item => item.value === reason,
+    )
     return {
       key: reason.toString(),
       reason: filteredReason?.name || '',
@@ -2113,7 +2111,7 @@ const getReasonForStopCodes = (reasonKey, person, statutes) => {
   }
   if (reasonKey === 7) {
     const educationViolationCode =
-    person.stopReason?.educationViolationCode || null
+      person.stopReason?.educationViolationCode || null
     if (educationViolationCode) {
       return [getEducationViolationCode(person)]
     } else {
@@ -2246,9 +2244,9 @@ const getProbableCause = person => {
   return probableCause.map(item => {
     const [filteredProbableCause] = PROBABLE_CAUSE_TYPES.filter(
       item2 => item2.value === item,
-      )
-      return {
-        key: item.toString(),
+    )
+    return {
+      key: item.toString(),
       reason: filteredProbableCause?.name || '',
     }
   })

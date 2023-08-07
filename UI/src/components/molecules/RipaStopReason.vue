@@ -270,9 +270,8 @@ export default {
     },
 
     getReasonItems() {
-        var reasonItems = this.model.stopVersion === 1
-        ? this.reasonItems
-        : this.reasonItemsV2
+      const reasonItems =
+        this.model.stopVersion === 1 ? this.reasonItems : this.reasonItemsV2
 
       if (this.model.person.isStudent) {
         return reasonItems
