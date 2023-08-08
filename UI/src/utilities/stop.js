@@ -2371,7 +2371,7 @@ const getProbableCause = person => {
 }
 
 const getProbableCauseCode = (person, statutes) => {
-  const code = person.stopReason?.probableCauseTypeCode || null
+  const code = person.stopReason?.probableCauseCode || null
   if (code) {
     return getStatute(code, statutes)
   }
