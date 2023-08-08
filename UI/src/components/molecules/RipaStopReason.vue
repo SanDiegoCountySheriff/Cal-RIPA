@@ -141,13 +141,13 @@
 
           <template v-if="model.stopReason.reasonForStop === 9">
             <ripa-check-group
-              v-model="model.stopReason.probableCauseType"
-              :items="getProbableCauseTypeItems"
-              :rules="probableCauseTypeRules"
+              v-model="model.stopReason.probableCause"
+              :items="getProbableCauseItems"
+              :rules="probableCauseRules"
             ></ripa-check-group>
 
             <ripa-autocomplete
-              v-model="model.stopReason.probableCauseTypeCode"
+              v-model="model.stopReason.probableCauseCode"
               item-text="fullName"
               item-value="code"
               label="Offense Code (Optional)"
@@ -238,7 +238,7 @@ import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
   STOP_REASONS_V2,
-  PROBABLE_CAUSE_TYPES,
+  PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
@@ -271,7 +271,7 @@ export default {
       ],
       reasonItems: STOP_REASONS,
       reasonItemsV2: STOP_REASONS_V2,
-      probableCauseTypes: PROBABLE_CAUSE_TYPES,
+      probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
@@ -311,8 +311,8 @@ export default {
         : this.reasonableSuspicionCodesV2
     },
 
-    getProbableCauseTypeItems() {
-      return this.probableCauseTypes
+    getProbableCauseItems() {
+      return this.probableCauses
     },
 
     getReasonItems() {
@@ -368,9 +368,9 @@ export default {
       ]
     },
 
-    probableCauseTypeRules() {
+    probableCauseRules() {
       const checked = this.model.stopReason.reasonForStop === 9
-      const options = this.model.stopReason.probableCauseType
+      const options = this.model.stopReason.probableCause
       return [
         (checked && options !== null && options?.length > 0) ||
           'A probable cause type is required',
@@ -427,8 +427,8 @@ export default {
       }
 
       if (this.model.stopReason.reasonForStop !== 9) {
-        this.model.stopReason.probableCauseType = []
-        this.model.stopReason.probableCauseTypeCode = null
+        this.model.stopReason.probableCause = []
+        this.model.stopReason.probableCauseCode = null
       }
 
       if (

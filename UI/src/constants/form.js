@@ -138,7 +138,7 @@ export const STOP_REASONS_V2 = [
   },
 ]
 
-export const PROBABLE_CAUSE_TYPES = [
+export const PROBABLE_CAUSES = [
   { name: 'Officer witnessed commission of a crime', value: 1 },
   { name: 'Matched suspect description', value: 2 },
   {
@@ -217,8 +217,8 @@ export const REASONABLE_SUSPICIONS_V2 = [
   { name: 'Carrying Suspicious Object', value: 4 },
   { name: 'Actions indicative of casing a victim or location', value: 5 },
   { name: 'Suspected of Acting as Lookout', value: 6 },
-  { name: 'Actions indicative of drug transaction', value: 7 },
-  { name: 'Actions indicative of engaging in violent crime', value: 8 },
+  { name: 'Actions indicative of a drug transaction', value: 7 },
+  { name: 'Actions indicative of engaging in a violent crime', value: 8 },
   {
     name: 'Other reasonable suspicion or probable cause that a crime has occurred',
     value: 9,

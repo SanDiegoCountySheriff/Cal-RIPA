@@ -184,7 +184,7 @@ describe('Ripa Stop Reason', () => {
 
   it('should display new reason for stops for V2 stop', () => {
     stopV2.stopReason.reasonForStop = 9
-    stopV2.stopReason.probableCauseType = [1]
+    stopV2.stopReason.probableCause = [1]
     wrapper = mount(RipaStopReason, {
       vuetify,
       propsData: {

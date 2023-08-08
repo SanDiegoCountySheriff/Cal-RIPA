@@ -10,7 +10,7 @@ import {
   DISABILITIES,
   STOP_REASONS,
   STOP_REASONS_V2,
-  PROBABLE_CAUSE_TYPES,
+  PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   EDUCATION_CODE_SECTIONS,
   TRAFFIC_VIOLATIONS,
@@ -503,7 +503,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
         items.push({ id: 'B19', content: getSummaryPassengerInVehicle(person) })
       }
       if (person.insideResidence === true || person.insideResidence === false) {
-        items.push({ id: 'B20', content: getSummaryInsideResidence(person) })
+        items.push({ id: 'B22', content: getSummaryInsideResidence(person) })
       }
     }
     items.push({
@@ -1358,7 +1358,7 @@ const getFullStopPeopleListedV2 = apiStop => {
         reasonableSuspicionCode: getReasonableSuspicionDetailCode(
           person.reasonForStop,
         ),
-        probableCauseType: getProbableCauseTypeDetailKeys(person.reasonForStop),
+        probableCause: getProbableCauseDetailKeys(person.reasonForStop),
         probableCauseCode: getProbableCauseDetailCode(person.reasonForStop),
         reasonForStopExplanation: person.reasonForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
@@ -1499,7 +1499,7 @@ const getReasonableSuspicionDetailCode = stopReason => {
   return null
 }
 
-const getProbableCauseTypeDetailKeys = stopReason => {
+const getProbableCauseDetailKeys = stopReason => {
   if (stopReason.key && Number(stopReason.key) === 9) {
     return stopReason.listDetail.map(item => Number(item.key))
   }
@@ -2364,9 +2364,9 @@ const getReasonableSuspicionCode = (person, statutes) => {
 }
 
 const getProbableCause = person => {
-  const probableCause = person.stopReason?.probableCauseType || []
+  const probableCause = person.stopReason?.probableCause || []
   return probableCause.map(item => {
-    const [filteredProbableCause] = PROBABLE_CAUSE_TYPES.filter(
+    const [filteredProbableCause] = PROBABLE_CAUSES.filter(
       item2 => item2.value === item,
     )
     return {

@@ -18,7 +18,7 @@ describe('Ripa Form Step 1', () => {
     stop = defaultStop()
   })
 
-  const factory = propsData => {
+  const shallowFactory = propsData => {
     return shallowMount(RipaFormStep1, {
       vuetify,
       propsData: {
@@ -52,6 +52,51 @@ describe('Ripa Form Step 1', () => {
     })
   }
 
+  const factory = propsData => {
+    return mount(RipaFormStep1, {
+      vuetify,
+      propsData: {
+        ...propsData,
+        onOpenFavorites: jest.fn(),
+        onOpenLastLocation: jest.fn(),
+        onSaveFavorite: jest.fn(),
+        onGpsLocation: jest.fn(),
+        onUpdateUser: jest.fn(),
+      },
+      computed: {
+        getApiStopUser() {
+          return {
+            agency: 'SDSD',
+            assignment: 10,
+            otherType: 'Data Services',
+            startDate: '2014-10-10',
+            yearsExperience: 7,
+          }
+        },
+      },
+      provide: {
+        isAdminEditing() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return true
+        },
+        loadingPiiStep1: computed(() => false),
+        validLastLocation: computed(() => true),
+        loadingGps: computed(() => false),
+        lastLocation: computed(() => null),
+        displayBeatInput: computed(() => true),
+        schools: computed(() => []),
+        nonCountyCities: computed(() => []),
+        countyCities: computed(() => []),
+        beats: computed(() => []),
+        user: computed(() => null),
+        version: computed(() => 1),
+        environmentName: computed(() => 'dev'),
+      },
+    })
+  }
+
   it('should match snapshot', () => {
     wrapper = factory({ value: stop })
 
@@ -59,24 +104,14 @@ describe('Ripa Form Step 1', () => {
   })
 
   it('should display geolocation coordinates for v2 stop', () => {
-    wrapper = mount(RipaFormStep1, {
-      vuetify,
-      propsData: {
-        value: V2_STOP,
-      },
-    })
+    wrapper = factory({ value: V2_STOP })
 
     expect(wrapper.html()).toContain('Latitude')
     expect(wrapper.html()).toContain('Longitude')
   })
 
   it('should not display geolocation coordinates for legacy stop', () => {
-    wrapper = mount(RipaFormStep1, {
-      vuetify,
-      propsData: {
-        value: V1_STOP,
-      },
-    })
+    wrapper = factory({ value: V1_STOP })
 
     expect(wrapper.html()).not.toContain('Latitude')
     expect(wrapper.html()).not.toContain('Longitude')
