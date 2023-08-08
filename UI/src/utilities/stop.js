@@ -519,7 +519,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       items.push({ id: 'B11', content: getSummaryActionsTaken(person) })
     }
     if (apiStop.stopVersion === 2) {
-      items.push({ id: 'B19', content: getSummaryNonForceActionsTaken(person) })
+      items.push({ id: 'B21', content: getSummaryNonForceActionsTaken(person) })
     }
     if (person.listBasisForSearch.length > 0) {
       items.push({ id: 'B12', content: getSummaryBasisForSearch(person) })
@@ -678,13 +678,15 @@ const getSummaryReasonForStop = person => {
   reasons.push(...keys)
   const listCodes = person.reasonForStop?.listCodes || []
 
-  const codes = listCodes.map(item => {
-    return {
-      marginLeft: true,
-      detail: item.text,
-    }
-  })
-  reasons.push(...codes)
+  if (listCodes.length[0]) {
+    const codes = listCodes.map(item => {
+      return {
+        marginLeft: true,
+        detail: item.text,
+      }
+    })
+    reasons.push(...codes)
+  }
 
   return {
     level: 2,
@@ -1506,7 +1508,11 @@ const getProbableCauseTypeDetailKeys = stopReason => {
 }
 
 const getProbableCauseDetailCode = stopReason => {
-  if (stopReason.key && Number(stopReason.key) === 9) {
+  if (
+    stopReason.key &&
+    Number(stopReason.key) === 9 &&
+    stopReason.listCodes[0]
+  ) {
     return Number(stopReason.listCodes[0].code)
   }
 
