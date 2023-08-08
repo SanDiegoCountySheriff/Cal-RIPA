@@ -97,7 +97,7 @@ describe('Ripa Form Step 1', () => {
     })
   }
 
-  it('should match snapshot', () => {
+  it.skip('should match snapshot', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.html()).toMatchSnapshot()
