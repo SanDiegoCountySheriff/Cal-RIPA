@@ -678,7 +678,7 @@ const getSummaryReasonForStop = person => {
   reasons.push(...keys)
   const listCodes = person.reasonForStop?.listCodes || []
 
-  if (listCodes.length[0]) {
+  if (listCodes[0] !== null) {
     const codes = listCodes.map(item => {
       return {
         marginLeft: true,
