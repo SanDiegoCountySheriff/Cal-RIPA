@@ -1,9 +1,11 @@
 import RipaStopReason from '@/components/molecules/RipaStopReason.vue'
 import { shallowMount, mount } from '@vue/test-utils'
-import { defaultStop } from '@/utilities/stop'
 import Vuetify from 'vuetify'
 import { computed } from 'vue'
-import { V2_STOP } from '../../constants/RipaFormContainerTestConstants'
+import {
+  V1_STOP,
+  V2_STOP,
+} from '../../constants/RipaFormContainerTestConstants'
 
 describe('Ripa Stop Reason', () => {
   let vuetify
@@ -13,11 +15,11 @@ describe('Ripa Stop Reason', () => {
 
   beforeEach(() => {
     vuetify = new Vuetify()
-    stop = defaultStop()
+    stop = V1_STOP
     stopV2 = V2_STOP
   })
 
-  const factory = propsData => {
+  const shallowFactory = propsData => {
     return shallowMount(RipaStopReason, {
       vuetify,
       propsData: {
@@ -26,12 +28,10 @@ describe('Ripa Stop Reason', () => {
     })
   }
 
-  it('should match snapshot', () => {
-    wrapper = mount(RipaStopReason, {
+  const factory = propsData => {
+    return mount(RipaStopReason, {
       vuetify,
-      propsData: {
-        value: stop,
-      },
+      propsData,
       provide: {
         loadingPiiStep3: computed(() => false),
         isOnlineAndAuthenticated() {
@@ -49,6 +49,10 @@ describe('Ripa Stop Reason', () => {
         statutes: computed(() => []),
       },
     })
+  }
+
+  it('should match snapshot', () => {
+    wrapper = factory({ value: stop })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -56,28 +60,8 @@ describe('Ripa Stop Reason', () => {
   it('should display old suspicion types for V1 stop', () => {
     stop.stopReason.reasonForStop = 2
     stop.stopReason.reasonableSuspicion = []
-    wrapper = mount(RipaStopReason, {
-      vuetify,
-      propsData: {
-        value: stop,
-      },
-      provide: {
-        loadingPiiStep3: computed(() => false),
-        isOnlineAndAuthenticated() {
-          return true
-        },
-        lastReason() {
-          return {}
-        },
-        personSearchAutomaticallySelected() {
-          return false
-        },
-        propertySearchAutomaticallySelected() {
-          return false
-        },
-        statutes: computed(() => []),
-      },
-    })
+    wrapper = factory({ value: stop })
+
     expect(wrapper.html()).not.toContain(
       'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
     )
@@ -93,26 +77,7 @@ describe('Ripa Stop Reason', () => {
     const updatedStop = V2_STOP
     updatedStop.stopType = 'Vehicular'
 
-    wrapper = mount(RipaStopReason, {
-      vuetify,
-      propsData: { value: V2_STOP },
-      provide: {
-        loadingPiiStep3: computed(() => false),
-        isOnlineAndAuthenticated() {
-          return true
-        },
-        lastReason() {
-          return {}
-        },
-        personSearchAutomaticallySelected() {
-          return false
-        },
-        propertySearchAutomaticallySelected() {
-          return false
-        },
-        statutes: computed(() => []),
-      },
-    })
+    wrapper = factory({ value: updatedStop })
 
     expect(wrapper.html()).toContain('passenger in a vehicle')
     expect(wrapper.html()).not.toContain('person in residence')
@@ -122,26 +87,8 @@ describe('Ripa Stop Reason', () => {
     const updatedStop = V2_STOP
     updatedStop.stopType = 'Pedestrian'
 
-    wrapper = mount(RipaStopReason, {
-      vuetify,
-      propsData: { value: V2_STOP },
-      provide: {
-        loadingPiiStep3: computed(() => false),
-        isOnlineAndAuthenticated() {
-          return true
-        },
-        lastReason() {
-          return {}
-        },
-        personSearchAutomaticallySelected() {
-          return false
-        },
-        propertySearchAutomaticallySelected() {
-          return false
-        },
-        statutes: computed(() => []),
-      },
-    })
+    wrapper = factory({ value: updatedStop })
+
     expect(wrapper.html()).toContain('person was inside a residence')
     expect(wrapper.html()).not.toContain('passenger in a vehicle')
   })
@@ -149,28 +96,9 @@ describe('Ripa Stop Reason', () => {
   it('should display new suspicion types for V2 stop', () => {
     stopV2.stopReason.reasonForStop = 2
     stopV2.stopReason.reasonableSuspicion = []
-    wrapper = mount(RipaStopReason, {
-      vuetify,
-      propsData: {
-        value: stopV2,
-      },
-      provide: {
-        loadingPiiStep3: computed(() => false),
-        isOnlineAndAuthenticated() {
-          return true
-        },
-        lastReason() {
-          return {}
-        },
-        personSearchAutomaticallySelected() {
-          return false
-        },
-        propertySearchAutomaticallySelected() {
-          return false
-        },
-        statutes: computed(() => []),
-      },
-    })
+
+    wrapper = factory({ value: stopV2 })
+
     expect(wrapper.html()).toContain(
       'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
     )
@@ -185,28 +113,21 @@ describe('Ripa Stop Reason', () => {
   it('should display new reason for stops for V2 stop', () => {
     stopV2.stopReason.reasonForStop = 9
     stopV2.stopReason.probableCause = [1]
-    wrapper = mount(RipaStopReason, {
-      vuetify,
-      propsData: {
-        value: stopV2,
-      },
-      provide: {
-        loadingPiiStep3: computed(() => false),
-        isOnlineAndAuthenticated() {
-          return true
-        },
-        lastReason() {
-          return {}
-        },
-        personSearchAutomaticallySelected() {
-          return false
-        },
-        propertySearchAutomaticallySelected() {
-          return false
-        },
-        statutes: computed(() => []),
-      },
-    })
+
+    wrapper = factory({ value: stopV2 })
+
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should display welfare check switch for v2 stops', () => {
+    wrapper = factory({ value: stopV2 })
+
+    expect(wrapper.html()).toContain('Welfare')
+  })
+
+  it('should not display welfare check switch for legacy stops', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.html()).not.toContain('Welfare')
   })
 })

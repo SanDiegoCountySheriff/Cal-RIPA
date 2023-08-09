@@ -187,4 +187,16 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Verbal Warning')
     expect(wrapper.html()).toContain('Written Warning')
   })
+
+  it('should display welfare summary for v2 stops', () => {
+    wrapper = factory({ apiStop: v2ApiStop })
+
+    expect(wrapper.html()).toContain('Welfare')
+  })
+
+  it('should not display welfare summary for legacy stops', () => {
+    wrapper = factory({ apiStop })
+
+    expect(wrapper.html()).not.toContain('Welfare')
+  })
 })
