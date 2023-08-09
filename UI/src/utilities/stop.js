@@ -184,7 +184,6 @@ export const stopReasonGivenTemplate = template => {
     searchOfProperty: null,
     reasonForStopExplanation: null,
     reasonForStopPiiFound: false,
-    welfareCheck: null,
   }
 }
 
@@ -263,6 +262,12 @@ export const apiStopStopSummary = apiStop => {
   }
   items.push({ id: 'A7', content: getSummaryDuration(apiStop) })
   items.push({ id: 'A8', content: getSummaryStopInResponseToCfs(apiStop) })
+  if (apiStop.stopVersion === 2) {
+    items.push({
+      id: 'A9',
+      content: getSummaryStopMadeDuringWelfareCheck(apiStop),
+    })
+  }
   return items
 }
 
@@ -469,6 +474,14 @@ const getSummaryStopInResponseToCfs = apiStop => {
     level: 1,
     header: 'Stop in Response to CFS',
     detail: apiStop.stopInResponseToCFS || false,
+  }
+}
+
+const getSummaryStopMadeDuringWelfareCheck = apiStop => {
+  return {
+    level: 1,
+    header: 'Stop Made During a Welfare or Wellness Check',
+    detail: apiStop.stopMadeDuringWelfareCheck || false,
   }
 }
 
@@ -1117,6 +1130,7 @@ export const apiStopToFullStopV2 = apiStop => {
     piiEntities: apiStop.piiEntities,
     stopType: apiStop.stopType,
     stopVersion: apiStop.stopVersion,
+    stopMadeDuringWelfareCheck: apiStop.stopMadeDuringWelfareCheck,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1603,6 +1617,7 @@ export const fullStopToStopV2 = fullStop => {
     location: fullStop.location,
     stopType: fullStop.stopType,
     stopVersion: fullStop.stopVersion,
+    stopMadeDuringWelfareCheck: fullStop.stopMadeDuringWelfareCheck,
     person: {
       anyDisabilities: person.anyDisabilities || false,
       nonBinaryPerson: person.nonBinaryPerson || false,
@@ -1830,6 +1845,7 @@ export const fullStopToApiStopV2 = (
     ),
     stopDuration: duration ? duration.toString() : null,
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
+    stopMadeDuringWelfareCheck: fullStop.stopMadeDuringWelfareCheck || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,

@@ -37,6 +37,7 @@ public class Stop : IStop
     public ILocation Location { get; set; }
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
+    public bool StopMadeDuringWelfareCheck { get; set; }
     [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
     public IPersonStopped[] ListPersonStopped { get; set; }
     [JsonConverter(typeof(ConcreteConverter<Submission[]>))]

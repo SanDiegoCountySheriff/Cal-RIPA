@@ -235,7 +235,7 @@
         <v-row>
           <v-col>
             <ripa-switch
-              v-model="model.stopReason.welfareCheck"
+              v-model="model.stopMadeDuringWelfareCheck"
               label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
             ></ripa-switch>
           </v-col>
