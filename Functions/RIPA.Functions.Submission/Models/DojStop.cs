@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Submission.Models;
 
@@ -38,7 +39,7 @@ public class Location
 
 public class Listperson_Stopped
 {
-    public Person_Stopped[] Person_Stopped { get; set; }
+    public List<Person_Stopped> Person_Stopped { get; set; }
 }
 
 public class Person_Stopped
@@ -69,12 +70,12 @@ public class Perc
 
 public class Listethn
 {
-    public string[] Ethn { get; set; }
+    public List<string> Ethn { get; set; }
 }
 
 public class Listdisb
 {
-    public string[] Disb { get; set; }
+    public List<string> Disb { get; set; }
 }
 
 public class Primaryreason
@@ -91,12 +92,12 @@ public class Primaryreason
 
 public class Listsusp_T
 {
-    public object[] Susp_T { get; set; }
+    public List<string> Susp_T { get; set; }
 }
 
 public class Listacttak
 {
-    public Acttak[] ActTak { get; set; }
+    public List<Acttak> ActTak { get; set; }
 }
 
 public class Acttak
@@ -107,31 +108,31 @@ public class Acttak
 
 public class Listbassearch
 {
-    public string[] BasSearch { get; set; }
+    public List<string> BasSearch { get; set; }
 }
 
 public class Listbasseiz
 {
-    public string[] BasSeiz { get; set; }
+    public List<string> BasSeiz { get; set; }
 }
 
 public class Listproptype
 {
-    public string[] PropType { get; set; }
+    public List<string> PropType { get; set; }
 }
 
 public class Listcb
 {
-    public string[] Cb { get; set; }
+    public List<string> Cb { get; set; }
 }
 
 public class Listresult
 {
-    public Result[] Result { get; set; }
+    public List<Result> Result { get; set; }
 }
 
 public class Result
 {
     public string ResCD { get; set; }
-    public string[] Res_O_CD { get; set; }
+    public List<string> Res_O_CD { get; set; }
 }

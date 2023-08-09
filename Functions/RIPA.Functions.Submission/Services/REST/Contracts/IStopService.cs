@@ -1,5 +1,5 @@
-﻿using RIPA.Functions.Common.Models.Interfaces;
-using RIPA.Functions.Common.Models.v1;
+﻿using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Submission.Models;
 using System;
 
