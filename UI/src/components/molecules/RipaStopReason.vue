@@ -139,6 +139,22 @@
             ></ripa-switch>
           </template>
 
+          <template v-if="model.stopReason.reasonForStop === 9">
+            <ripa-check-group
+              v-model="model.stopReason.probableCause"
+              :items="getProbableCauseItems"
+              :rules="probableCauseRules"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseCode"
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code (Optional)"
+              :items="statutes"
+            ></ripa-autocomplete>
+          </template>
+
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
@@ -221,6 +237,8 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
+  STOP_REASONS_V2,
+  PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
@@ -252,6 +270,8 @@ export default {
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
+      reasonItemsV2: STOP_REASONS_V2,
+      probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
@@ -291,14 +311,19 @@ export default {
         : this.reasonableSuspicionCodesV2
     },
 
+    getProbableCauseItems() {
+      return this.probableCauses
+    },
+
     getReasonItems() {
+      const reasonItems =
+        this.model.stopVersion === 1 ? this.reasonItems : this.reasonItemsV2
+
       if (this.model.person.isStudent) {
-        return this.reasonItems
+        return reasonItems
       }
 
-      return this.reasonItems.filter(
-        item => item.value !== 7 && item.value !== 8,
-      )
+      return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
     },
 
     educationViolationRules() {
@@ -340,6 +365,15 @@ export default {
       return [
         (checked && options !== null && options.length > 0) ||
           'A reasonable suspicion type is required',
+      ]
+    },
+
+    probableCauseRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const options = this.model.stopReason.probableCause
+      return [
+        (checked && options !== null && options?.length > 0) ||
+          'A probable cause type is required',
       ]
     },
 
@@ -386,6 +420,15 @@ export default {
       if (this.model.stopReason.reasonForStop !== 6) {
         this.model.stopReason.searchOfPerson = false
         this.model.stopReason.searchOfProperty = false
+      }
+      if (this.model.stopReason.reasonForStop !== 2) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.model.stopReason.reasonForStop !== 9) {
+        this.model.stopReason.probableCause = []
+        this.model.stopReason.probableCauseCode = null
       }
 
       if (

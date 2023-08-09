@@ -617,7 +617,7 @@ export default {
 
     isPullReasonCodeValid() {
       const reasonForStop = this.model.stopReason?.reasonForStop || []
-      return [1, 2].includes(reasonForStop)
+      return [1, 2, 9].includes(reasonForStop)
     },
 
     isPullReasonCodeWarningVisible() {
@@ -930,6 +930,8 @@ export default {
         this.model.stopReason?.trafficViolationCode || null
       const reasonableSuspicionCode =
         this.model.stopReason?.reasonableSuspicionCode || null
+      const probableCauseCode =
+        this.model.stopReason?.probableCauseCode || null
 
       if (trafficViolationCode) {
         return trafficViolationCode
@@ -937,6 +939,10 @@ export default {
 
       if (reasonableSuspicionCode) {
         return reasonableSuspicionCode
+      }
+
+      if (probableCauseCode) {
+        return probableCauseCode
       }
 
       return null
