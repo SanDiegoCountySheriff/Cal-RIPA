@@ -801,7 +801,7 @@ export default {
           } else if (this.model.stopVersion === 1) {
             return 7
           } else if (this.model.stopVersion === 2) {
-            return 6
+            return 8
           }
         }
 
