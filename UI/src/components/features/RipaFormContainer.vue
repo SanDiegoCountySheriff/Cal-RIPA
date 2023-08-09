@@ -1052,6 +1052,8 @@ export default {
         updatedFullStop.stopDate = this.stop.stopDate
         updatedFullStop.piiEntities = this.stop.piiEntities
         updatedFullStop.isPiiFound = this.stop.isPiiFound
+        updatedFullStop.stopMadeDuringWelfareCheck =
+          this.stop.stopMadeDuringWelfareCheck
         updatedFullStop.editStopExplanation =
           this.stop.editStopExplanation || null
         updatedFullStop.overridePii = this.stop.overridePii || false

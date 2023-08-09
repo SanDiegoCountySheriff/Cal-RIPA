@@ -173,55 +173,75 @@
             :rules="explanationRules"
             @blur="handlePiiCheck($event)"
           ></ripa-text-input>
-          <template
-            v-if="model.stopType === 'Vehicular' && model.stopVersion === 2"
-          >
-            <ripa-form-header
-              title="The stopped person is a passenger in a vehicle"
-              required
-              :items="statutes"
-              subtitle="§999.226(a)(10)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
+        </v-col>
+      </v-row>
+    </v-container>
 
+    <template v-if="model.stopType === 'Vehicular' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person is a passenger in a vehicle"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
             <ripa-switch
               v-model="model.person.passengerInVehicle"
               label="The stopped person is a passenger in a vehicle"
             ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
 
-            <v-container>
-              <v-row no-gutters>
-                <v-col cols="12" sm="12"> </v-col>
-              </v-row>
-            </v-container>
-          </template>
-          <template
-            v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2"
-          >
-            <ripa-form-header
-              title="The stopped person was inside a residence..."
-              required
-              :items="statutes"
-              subtitle="§999.226(a)(10)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
+    <template v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person was inside a residence"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
 
+      <v-container>
+        <v-row>
+          <v-col>
             <ripa-switch
               v-model="model.person.insideResidence"
-              label="The stopped person was inside a residence..."
+              label="The stopped person was inside a residence"
             ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
 
-            <v-container>
-              <v-row no-gutters>
-                <v-col cols="12" sm="12"> </v-col>
-              </v-row>
-            </v-container>
-          </template>
-        </v-col>
-      </v-row>
-    </v-container>
+    <template v-if="model.stopVersion === 2">
+      <ripa-form-header
+        title="Welfare or Wellness Check"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(13)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.stopMadeDuringWelfareCheck"
+              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 

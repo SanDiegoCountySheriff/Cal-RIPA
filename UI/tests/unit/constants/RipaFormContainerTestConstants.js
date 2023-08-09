@@ -603,6 +603,7 @@ export const V2_API_STOP = {
   },
   stopDuration: 1,
   stopInResponseToCFS: false,
+  stopMadeDuringWelfareCheck: false,
   listPersonStopped: [
     {
       id: '1',
@@ -962,6 +963,7 @@ export const V2_STOP = {
   piiEntities: [],
   isPiiFound: false,
   stopType: null,
+  stopMadeDuringWelfareCheck: false,
   stepTrace: [
     {
       index: 1,

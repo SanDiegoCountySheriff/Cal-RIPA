@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Perceived Unhoused should match snapshot 1`] = `
-<div>
+<div class="tw-pb-4">
   <div class="ripa-form-header">
     <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
       <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Perceived Unhoused</span></div>
@@ -9,8 +9,8 @@ exports[`Ripa Perceived Unhoused should match snapshot 1`] = `
   </div>
   <div class="container">
     <div class="row no-gutters">
-      <div class="col">
-        <div class="ripa-switch" style="max-width: 200px;">
+      <div class="col-sm-12 col-12">
+        <div class="ripa-switch" style="max-width: 300px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">

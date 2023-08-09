@@ -14,7 +14,6 @@
             v-model="model.person.perceivedLimitedEnglish"
             label="Limited or no English fluency"
             :disabled="disabled"
-            :max-width="300"
           ></ripa-switch>
         </v-col>
       </v-row>
