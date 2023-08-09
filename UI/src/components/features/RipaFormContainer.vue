@@ -957,7 +957,11 @@ export default {
         localStorage.removeItem('ripa_form_step_index')
       }
 
-      if (index === 7) {
+      if (this.stop?.stopVersion === 1 && index === 7) {
+        localStorage.removeItem('ripa_form_edit_agency_questions')
+        localStorage.removeItem('ripa_form_edit_person')
+        localStorage.removeItem('ripa_form_edit_stop')
+      } else if (this.stop?.stopVersion === 2 && index === 8) {
         localStorage.removeItem('ripa_form_edit_agency_questions')
         localStorage.removeItem('ripa_form_edit_person')
         localStorage.removeItem('ripa_form_edit_stop')
@@ -1144,15 +1148,19 @@ export default {
       localStorage.removeItem('ripa_form_edit_person')
       localStorage.removeItem('ripa_form_edit_stop')
 
-      const parsedStop = localStorage.getItem('ripa_form_saved_stop')
-      const parsedFullStop = localStorage.getItem('ripa_form_saved_full_stop')
+      const parsedStop = JSON.parse(
+        localStorage.getItem('ripa_form_saved_stop'),
+      )
+      const parsedFullStop = JSON.parse(
+        localStorage.getItem('ripa_form_saved_full_stop'),
+      )
 
       if (parsedStop && parsedFullStop) {
         localStorage.removeItem('ripa_form_saved_stop')
         localStorage.removeItem('ripa_form_saved_full_stop')
-        this.handleStepIndexChange(7)
-        this.stop = JSON.parse(parsedStop)
-        this.fullStop = JSON.parse(parsedFullStop)
+        this.handleStepIndexChange(parsedStop.stopVersion === 2 ? 8 : 7)
+        this.stop = parsedStop
+        this.fullStop = parsedFullStop
       }
     },
 
