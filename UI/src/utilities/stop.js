@@ -184,6 +184,7 @@ export const stopReasonGivenTemplate = template => {
     searchOfProperty: null,
     reasonForStopExplanation: null,
     reasonForStopPiiFound: false,
+    welfareCheck: null,
   }
 }
 

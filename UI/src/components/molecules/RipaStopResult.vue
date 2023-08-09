@@ -930,8 +930,7 @@ export default {
         this.model.stopReason?.trafficViolationCode || null
       const reasonableSuspicionCode =
         this.model.stopReason?.reasonableSuspicionCode || null
-      const probableCauseCode =
-        this.model.stopReason?.probableCauseCode || null
+      const probableCauseCode = this.model.stopReason?.probableCauseCode || null
 
       if (trafficViolationCode) {
         return trafficViolationCode

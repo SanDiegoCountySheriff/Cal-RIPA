@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tw-pb-4">
     <ripa-form-header
       title="Perceived Unhoused"
       required
@@ -10,11 +10,10 @@
 
     <v-container>
       <v-row no-gutters>
-        <v-col>
+        <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.person.perceivedUnhoused"
             label="Perceived Unhoused"
-            :max-width="200"
           ></ripa-switch>
         </v-col>
       </v-row>
