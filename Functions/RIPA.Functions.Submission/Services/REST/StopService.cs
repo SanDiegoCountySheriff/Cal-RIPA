@@ -2,7 +2,7 @@
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
-using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Models.v1;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
 using System.Collections.Generic;
@@ -74,7 +74,7 @@ public class StopService<T> : IStopService<T> where T : IStop
                 ATOth = stop.OfficerAssignment.OtherType,
                 Proxy = ""
             },
-            Location = new Models.Location
+            Location = new Models.v1.Location
             {
                 Loc = CastToDojLocation(stop.Location),
                 City = stop.Location.City?.Codes?.Code,
@@ -208,7 +208,7 @@ public class StopService<T> : IStopService<T> where T : IStop
                 isCon = isPropertySearchConsentGiven ? "Y" : "N";
             }
 
-            Acttak acttak = new Acttak
+            Acttak acttak = new()
             {
                 Act_CD = atds.Key,
                 Is_Con = isCon

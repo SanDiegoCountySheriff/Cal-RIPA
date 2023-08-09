@@ -7,7 +7,7 @@ using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Models.v1;
 using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;

@@ -1,6 +1,6 @@
 ﻿using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
-using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Models.v1;
 using System;
 
 namespace RIPA.Functions.Submission.Services.REST.Contracts;
