@@ -2,7 +2,7 @@
   <div class="ripa-no-english tw-pb-4">
     <ripa-form-header
       title="Limited or No English Fluency"
-      subtitle="§999.226(a)(8)"
+      :subtitle="model.stopVersion === 1 ? '§999.226(a)(8)' : '§999.226(a)(9)'"
       v-on="$listeners"
     >
     </ripa-form-header>

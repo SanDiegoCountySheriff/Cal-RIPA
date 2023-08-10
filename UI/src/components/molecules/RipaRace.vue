@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Perceived Race or Ethnicity"
       required
-      subtitle="§999.226(a)(4)"
+      :subtitle="model.stopVersion === 1 ? '§999.226(a)(4)' : '§999.226(a)(5)'"
       v-on="$listeners"
     >
     </ripa-form-header>

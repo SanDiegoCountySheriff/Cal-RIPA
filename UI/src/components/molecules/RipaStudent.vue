@@ -3,7 +3,9 @@
     <ripa-form-header
       title="Student"
       required
-      subtitle="§999.224(a)(16)"
+      :subtitle="
+        model.stopVersion === 1 ? '§999.224(a)(16)' : '§999.224(a)(22)'
+      "
       v-on="$listeners"
     >
     </ripa-form-header>

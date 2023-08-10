@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Location"
       required
-      subtitle="§999.226(a)(3)"
+      :subtitle="model.stopVersion === 1 ? '§999.226(a)(3)' : '§999.226(a)(4)'"
       v-on="$listeners"
     >
     </ripa-form-header>

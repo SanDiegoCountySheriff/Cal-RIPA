@@ -3,7 +3,9 @@
     <ripa-form-header
       title="Date of Stop"
       required
-      subtitle="§999.226(a)(2)"
+      :subtitle="
+        model.stopVersion === 1 ? '§999.226(a)(2)' : '§999.226(a)(3)(A)'
+      "
       v-on="$listeners"
     >
     </ripa-form-header>

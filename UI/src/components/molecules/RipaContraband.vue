@@ -3,7 +3,9 @@
     <ripa-form-header
       title="Contraband or Evidence Discovered"
       required
-      subtitle="§999.226(a)(12)(C)"
+      :subtitle="
+        model.stopVersion === 1 ? '§999.226(a)(12)(C)' : '§999.226(a)(16)(D)'
+      "
       v-on="$listeners"
     >
     </ripa-form-header>

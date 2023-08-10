@@ -19,7 +19,6 @@
       @on-save-result-favorite="handleSaveResultFavorite"
       @on-open-last-location="handleOpenLastLocation"
       @on-open-statute="handleOpenStatute"
-      @on-open-statuteV2="handleOpenStatuteV2"
       @on-open-template="handleOpenTemplate"
       @on-step-index-change="handleStepIndexChange"
       @on-submit-stop="handleSubmitStop"
@@ -88,12 +87,6 @@
       :statute="statute"
       @on-close="handleCloseDialog"
     ></ripa-statute-dialog>
-
-    <ripa-statuteV2-dialog
-      :show-dialog="showStatuteV2Dialog"
-      :statuteV2="statuteV2"
-      @on-close="handleCloseDialog"
-    ></ripa-statuteV2-dialog>
 
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
@@ -195,10 +188,8 @@ export default {
       showReasonFavoritesDialog: false,
       showResultFavoritesDialog: false,
       showStatuteDialog: false,
-      showStatuteV2Dialog: false,
       showUserDialog: false,
       statute: null,
-      statuteV2: null,
       snackbarNotOnlineVisible: false,
       snackbarGpsVisible: false,
       loading: false,
@@ -215,7 +206,6 @@ export default {
       nonCountyCities: this.mappedFormNonCountyCities,
       schools: this.mappedFormSchools,
       statutes: this.mappedFormStatutes,
-      statutesV2: this.mappedFormStatutesV2,
       displayBeatInput: this.displayBeatInput,
       displayDebugger: this.displayDebugger,
       displayReportingEmail: this.displayReportingEmail,
@@ -258,7 +248,7 @@ export default {
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
-      'mappedFormStatutesV2',
+
       'mappedGpsLocationAddress',
       'mappedUser',
       'displayBeatInput',
@@ -457,11 +447,6 @@ export default {
                   return statute.code === code
                 })
               },
-              code => {
-                return this.mappedFormStatutesV2.some(statute => {
-                  return statute.code === code
-                })
-              },
             )
 
             if (
@@ -472,7 +457,6 @@ export default {
 
             result.result.warningCodes = updatedWarningCodes
 
-            // gonna need to change the logic on this part of the code
             const updatedVerbalWarningCodes =
               result.result.verbalWarningCodes.filter(code => {
                 return this.mappedFormStatutes.some(statute => {
@@ -489,7 +473,6 @@ export default {
 
             result.result.verbalWarningCodes = updatedVerbalWarningCodes
 
-            // same with this part of the code
             const updatedWrittenWarningCodes =
               result.result.writtenWarningCodes.filter(code => {
                 return this.mappedFormStatutes.some(statute => {
@@ -506,7 +489,6 @@ export default {
 
             result.result.writtenWarningCodes = updatedWrittenWarningCodes
 
-            // same with this maybe
             const updatedCitationCodes = result.result.citationCodes.filter(
               code => {
                 return this.mappedFormStatutes.some(statute => {
@@ -709,7 +691,6 @@ export default {
       this.showReasonFavoritesDialog = false
       this.showResultFavoritesDialog = false
       this.showStatuteDialog = false
-      this.showStatute_V2Dialog = false
       this.showUserDialog = false
     },
 
@@ -943,20 +924,12 @@ export default {
       }
     },
 
-    handleOpenStatute(statute) {
+    handleOpenStatute(statute, version) {
       this.statute = {
         statute,
-        content: getStatuteContent(statute),
+        content: getStatuteContent(statute, version),
       }
       this.showStatuteDialog = true
-    },
-
-    handleOpenStatuteV2(statuteV2) {
-      this.statuteV2 = {
-        statuteV2,
-        content: getStatuteContent(statuteV2),
-      }
-      this.showStatute_V2Dialog = true
     },
 
     handleSaveLocationFavorite(location, version) {
@@ -1111,7 +1084,6 @@ export default {
                 this.mappedFormNonCountyCities,
                 this.mappedFormSchools,
                 this.mappedFormStatutes,
-                this.mappedFormStatutes_V2,
               )
             : fullStopToApiStopV2(
                 this.isOnlineAndAuthenticated,
@@ -1121,7 +1093,6 @@ export default {
                 this.mappedFormNonCountyCities,
                 this.mappedFormSchools,
                 this.mappedFormStatutes,
-                this.mappedFormStatutes_V2,
               )
       }
     },
