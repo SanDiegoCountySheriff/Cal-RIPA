@@ -46,7 +46,7 @@ exports[`Ripa Gender should match snapshot 1`] = `
         </div>
       </div>
       <div class="col-sm-12 col-12">
-        <div class="ripa-switch" style="max-width: 250px;">
+        <div class="ripa-switch" style="max-width: 300px;">
           <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">
@@ -78,7 +78,7 @@ exports[`Ripa Gender should match snapshot 1`] = `
   <div class="container">
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
-        <div class="ripa-switch" style="max-width: 200px;">
+        <div class="ripa-switch" style="max-width: 300px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">

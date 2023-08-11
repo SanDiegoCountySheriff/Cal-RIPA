@@ -1,5 +1,5 @@
 <template>
-  <div class="ripa-disability tw-pb-4">
+  <div class="tw-pb-4">
     <ripa-form-header
       title="Perceived or Known Disability"
       required
@@ -15,7 +15,6 @@
             v-model="model.person.anyDisabilities"
             label="Any Disabilities?"
             :disabled="disabled"
-            :max-width="200"
             @input="handleAnyDisabilitiesInput"
           ></ripa-switch>
 

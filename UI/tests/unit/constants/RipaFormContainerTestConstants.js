@@ -603,6 +603,7 @@ export const V2_API_STOP = {
   },
   stopDuration: 1,
   stopInResponseToCFS: false,
+  stopMadeDuringWelfareCheck: false,
   listPersonStopped: [
     {
       id: '1',
@@ -726,8 +727,8 @@ export const FULL_STOP = {
     intersection: null,
     isSchool: false,
     landmark: null,
-    latituted: 100,
-    longitude: 100,
+    latituted: '100',
+    longitude: '100',
     outOfCounty: false,
     piiFound: false,
     school: null,
@@ -895,8 +896,8 @@ export const V1_STOP = {
     outOfCounty: false,
     city: 'City',
     beat: '1',
-    latitude: 10,
-    longitude: 10,
+    latitude: '10',
+    longitude: '10',
   },
   person: {
     anyDisabilities: false,
@@ -962,6 +963,7 @@ export const V2_STOP = {
   piiEntities: [],
   isPiiFound: false,
   stopType: null,
+  stopMadeDuringWelfareCheck: false,
   stepTrace: [
     {
       index: 1,
@@ -1020,8 +1022,8 @@ export const V2_STOP = {
     outOfCounty: false,
     city: 'City',
     beat: '1',
-    latitude: 10,
-    longitude: 10,
+    latitude: '10',
+    longitude: '10',
   },
   person: {
     anyDisabilities: false,

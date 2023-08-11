@@ -141,6 +141,22 @@
             ></ripa-switch>
           </template>
 
+          <template v-if="model.stopReason.reasonForStop === 9">
+            <ripa-check-group
+              v-model="model.stopReason.probableCause"
+              :items="getProbableCauseItems"
+              :rules="probableCauseRules"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseCode"
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code (Optional)"
+              :items="statutes"
+            ></ripa-autocomplete>
+          </template>
+
           <ripa-subheader text="-- and --"></ripa-subheader>
 
           <template v-if="model.stopReason.reasonForStopPiiFound">
@@ -159,55 +175,75 @@
             :rules="explanationRules"
             @blur="handlePiiCheck($event)"
           ></ripa-text-input>
-          <template
-            v-if="model.stopType === 'Vehicular' && model.stopVersion === 2"
-          >
-            <ripa-form-header
-              title="The stopped person is a passenger in a vehicle"
-              required
-              :items="statutes"
-              subtitle="§999.226(a)(10)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
+        </v-col>
+      </v-row>
+    </v-container>
 
+    <template v-if="model.stopType === 'Vehicular' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person is a passenger in a vehicle"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
             <ripa-switch
               v-model="model.person.passengerInVehicle"
               label="The stopped person is a passenger in a vehicle"
             ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
 
-            <v-container>
-              <v-row no-gutters>
-                <v-col cols="12" sm="12"> </v-col>
-              </v-row>
-            </v-container>
-          </template>
-          <template
-            v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2"
-          >
-            <ripa-form-header
-              title="The stopped person was inside a residence..."
-              required
-              :items="statutes"
-              subtitle="§999.226(a)(10)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
+    <template v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person was inside a residence"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
 
+      <v-container>
+        <v-row>
+          <v-col>
             <ripa-switch
               v-model="model.person.insideResidence"
-              label="The stopped person was inside a residence..."
+              label="The stopped person was inside a residence"
             ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
 
-            <v-container>
-              <v-row no-gutters>
-                <v-col cols="12" sm="12"> </v-col>
-              </v-row>
-            </v-container>
-          </template>
-        </v-col>
-      </v-row>
-    </v-container>
+    <template v-if="model.stopVersion === 2">
+      <ripa-form-header
+        title="Welfare or Wellness Check"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(13)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.stopMadeDuringWelfareCheck"
+              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 
@@ -223,6 +259,8 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
+  STOP_REASONS_V2,
+  PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
@@ -254,6 +292,8 @@ export default {
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
+      reasonItemsV2: STOP_REASONS_V2,
+      probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
@@ -293,14 +333,19 @@ export default {
         : this.reasonableSuspicionCodesV2
     },
 
+    getProbableCauseItems() {
+      return this.probableCauses
+    },
+
     getReasonItems() {
+      const reasonItems =
+        this.model.stopVersion === 1 ? this.reasonItems : this.reasonItemsV2
+
       if (this.model.person.isStudent) {
-        return this.reasonItems
+        return reasonItems
       }
 
-      return this.reasonItems.filter(
-        item => item.value !== 7 && item.value !== 8,
-      )
+      return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
     },
 
     educationViolationRules() {
@@ -342,6 +387,15 @@ export default {
       return [
         (checked && options !== null && options.length > 0) ||
           'A reasonable suspicion type is required',
+      ]
+    },
+
+    probableCauseRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const options = this.model.stopReason.probableCause
+      return [
+        (checked && options !== null && options?.length > 0) ||
+          'A probable cause type is required',
       ]
     },
 
@@ -388,6 +442,15 @@ export default {
       if (this.model.stopReason.reasonForStop !== 6) {
         this.model.stopReason.searchOfPerson = false
         this.model.stopReason.searchOfProperty = false
+      }
+      if (this.model.stopReason.reasonForStop !== 2) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.model.stopReason.reasonForStop !== 9) {
+        this.model.stopReason.probableCause = []
+        this.model.stopReason.probableCauseCode = null
       }
 
       if (

@@ -30,7 +30,6 @@
               v-model="model.person.genderNonconforming"
               label="Gender Nonconforming"
               :disabled="disabled"
-              :max-width="250"
               :rules="genderRules"
             ></ripa-switch>
 
@@ -39,7 +38,6 @@
               v-model="model.person.nonBinaryPerson"
               label="Nonbinary person"
               :disabled="disabled"
-              :max-width="250"
               :rules="genderRulesV2"
             ></ripa-switch>
           </v-col>
@@ -63,7 +61,6 @@
             <ripa-switch
               v-model="model.person.perceivedLgbt"
               label="Perceived as LGBT"
-              :max-width="200"
               :disabled="isPerceivedLgbtDisabled"
             ></ripa-switch>
           </v-col>

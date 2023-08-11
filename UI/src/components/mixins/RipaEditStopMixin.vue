@@ -67,7 +67,11 @@ export default {
           ? fullStopToStop(fullStop)
           : fullStopToStopV2(fullStop)
 
-      localStorage.setItem('ripa_form_step_index', '7')
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_admin_viewing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -106,7 +110,11 @@ export default {
           : fullStopToStopV2(fullStop)
 
       localStorage.setItem('ripa_errored_stop_internal_id', internalId)
-      localStorage.setItem('ripa_form_step_index', '7')
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_editing_stop_with_error', '1')
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))
