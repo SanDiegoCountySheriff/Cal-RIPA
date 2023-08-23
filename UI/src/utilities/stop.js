@@ -93,6 +93,7 @@ export const defaultStop = () => {
     piiEntities: [],
     stepTrace: [],
     stopType: null,
+    officerWorksWithNonReportingAgency: false,
     nonForceActionsTaken: {
       anyNonForceActionsTaken: true,
       nonForceActionsTakenDuringStop: [],
@@ -251,6 +252,10 @@ export const apiStopStopSummary = apiStop => {
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
   if (apiStop.stopVersion === 2) {
     items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+    items.push({
+      id: 'A10',
+      content: getSummaryOfficerNonReportingAgency(apiStop),
+    })
   }
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })
   items.push({ id: 'A4', content: getSummaryTime(apiStop) })
@@ -312,6 +317,14 @@ const getSummaryStopType = apiStop => {
     level: 1,
     header: 'Stop Type',
     detail: apiStop.stopType,
+  }
+}
+
+const getSummaryOfficerNonReportingAgency = apiStop => {
+  return {
+    level: 1,
+    header: 'Officer Secondary to Non-Reporting Agency',
+    detail: apiStop.officerWorksWithNonReportingAgency,
   }
 }
 
@@ -1129,6 +1142,8 @@ export const apiStopToFullStopV2 = apiStop => {
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
     stopType: apiStop.stopType,
+    officerWorksWithNonReportingAgency:
+      apiStop.officerWorksWithNonReportingAgency,
     stopVersion: apiStop.stopVersion,
     stopMadeDuringWelfareCheck: apiStop.stopMadeDuringWelfareCheck,
     location: {
@@ -1616,6 +1631,8 @@ export const fullStopToStopV2 = fullStop => {
     forceActionsTaken: person.forceActionsTaken,
     location: fullStop.location,
     stopType: fullStop.stopType,
+    officerWorksWithNonReportingAgency:
+      fullStop.officerWorksWithNonReportingAgency,
     stopVersion: fullStop.stopVersion,
     stopMadeDuringWelfareCheck: fullStop.stopMadeDuringWelfareCheck,
     person: {
@@ -1840,6 +1857,8 @@ export const fullStopToApiStopV2 = (
     officerNonBinary: parsedApiStop
       ? parsedApiStop.officerNonBinary
       : officer.officerNonBinary,
+    officerWorksWithNonReportingAgency:
+      fullStop.officerWorksWithNonReportingAgency,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
