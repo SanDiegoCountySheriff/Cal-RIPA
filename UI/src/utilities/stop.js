@@ -1735,11 +1735,6 @@ export const fullStopToApiStop = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
-    race: parsedApiStop ? parsedApiStop.race : officer.race,
-    gender: parsedApiStop ? parsedApiStop.gender : officer.gender,
-    officerNonBinary: parsedApiStop
-      ? parsedApiStop.officerNonBinary
-      : officer.officerNonBinary,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
@@ -1840,6 +1835,11 @@ export const fullStopToApiStopV2 = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
+    officerRace: parsedApiStop ? parsedApiStop.race : officer.race,
+    officerGender: parsedApiStop ? parsedApiStop.gender : officer.gender,
+    officerNonBinary: parsedApiStop
+      ? parsedApiStop.officerNonBinary
+      : officer.officerNonBinary,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),

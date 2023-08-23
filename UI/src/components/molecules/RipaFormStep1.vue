@@ -1,24 +1,11 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
     <template v-if="isAdminEditing">
-      <ripa-officer
-        v-on="$listeners"
-        :user="getApiStopUser"
-        @on-update-user="handleUpdateStopUser"
-      ></ripa-officer>
+      <ripa-officer v-on="$listeners"></ripa-officer>
 
       <template v-if="model.stopVersion === 2">
         <ripa-stop-type v-model="model" v-on="$listeners"></ripa-stop-type>
       </template>
-
-      <ripa-user-dialog
-        admin-editing
-        :is-invalid-user="false"
-        :user="getApiStopUser"
-        :show-dialog="showUserDialog"
-        @on-close="handleCloseDialog"
-        @on-save="handleSaveUser"
-      ></ripa-user-dialog>
     </template>
 
     <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
@@ -73,9 +60,7 @@ import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import RipaStopType from '@/components/molecules/RipaStopType'
-import { getOfficerAssignment } from '@/utilities/stop'
 
 export default {
   name: 'ripa-form-step1',
@@ -88,7 +73,6 @@ export default {
     RipaOfficer,
     RipaStopDate,
     RipaLocation,
-    RipaUserDialog,
     RipaStopType,
   },
 
@@ -100,27 +84,6 @@ export default {
 
   inject: ['isAdminEditing', 'isOnlineAndAuthenticated', 'loadingPiiStep1'],
 
-  computed: {
-    getApiStopUser() {
-      const submittedApiStop = localStorage.getItem(
-        'ripa_form_submitted_api_stop',
-      )
-      const parsedApiStop = submittedApiStop
-        ? JSON.parse(submittedApiStop)
-        : null
-
-      if (parsedApiStop) {
-        return {
-          assignment: Number(parsedApiStop.officerAssignment.key),
-          otherType: parsedApiStop.officerAssignment.otherType,
-          yearsExperience: Number(parsedApiStop.expYears),
-        }
-      }
-
-      return null
-    },
-  },
-
   methods: {
     handleStep1Next() {
       const piiFound = this.model.location?.piiFound || false
@@ -131,38 +94,8 @@ export default {
       }
     },
 
-    handleUpdateStopUser() {
-      this.showUserDialog = true
-    },
-
     handleCloseDialog() {
-      this.showUserDialog = false
       this.showConfirmDialog = false
-    },
-
-    handleSaveUser(user) {
-      // get submitted api stop
-      const submittedApiStop = localStorage.getItem(
-        'ripa_form_submitted_api_stop',
-      )
-      const parsedApiStop = submittedApiStop
-        ? JSON.parse(submittedApiStop)
-        : null
-
-      // update assignment and assign parsed api stop
-      const assignment = getOfficerAssignment(user.assignment)
-      parsedApiStop.officerAssignment = {
-        key: assignment.code.toString(),
-        otherType: user.otherType || '',
-        type: assignment.text,
-      }
-      parsedApiStop.expYears = user.yearsExperience
-
-      // update submitted api stop
-      localStorage.setItem(
-        'ripa_form_submitted_api_stop',
-        JSON.stringify(parsedApiStop),
-      )
     },
   },
 }
