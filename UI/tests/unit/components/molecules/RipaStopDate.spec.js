@@ -23,7 +23,7 @@ describe('Ripa Stop Date', () => {
       },
       provide: {
         isAdminEditing: computed(() => provideData?.isAdminEditing ?? false),
-        environmentName: computed(() => 'DEV'),
+        environmentName: computed(() => 'QA'),
       },
     })
   }
