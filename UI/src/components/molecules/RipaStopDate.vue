@@ -62,6 +62,16 @@
           ></ripa-switch>
         </v-col>
       </v-row>
+
+      <v-row v-if="model.stopVersion === 2" no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.officerWorksWithNonReportingAgency"
+            label="Officer is secondary to a non-reporting agency"
+            :max-width="300"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
