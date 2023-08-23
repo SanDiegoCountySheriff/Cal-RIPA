@@ -605,6 +605,16 @@ export default {
 
   inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
 
+  mounted() {
+    if (
+      this.model.stopVersion === 1 &&
+      this.model.template === 'Motor/Traffic'
+    ) {
+      this.model.stopResult.resultsOfStop4 = false
+      this.model.stopResult.resultsOfStop3 = true
+    }
+  },
+
   computed: {
     model: {
       get() {

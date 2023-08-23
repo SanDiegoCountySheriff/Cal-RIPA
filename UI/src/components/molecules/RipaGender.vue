@@ -156,7 +156,7 @@ export default {
     genderRules() {
       const gender = this.model.person.perceivedGender
       const checked = this.model.person.genderNonconforming
-      const isValid = gender !== null || checked
+      const isValid = !!gender || !!checked
 
       return [isValid !== false || 'A gender is required']
     },
@@ -164,7 +164,7 @@ export default {
     genderRulesV2() {
       const gender = this.model.person.perceivedGender
       const checked = this.model.person.nonBinaryPerson
-      const isValid = gender !== null || checked
+      const isValid = !!gender || !!checked
 
       return [isValid !== false || 'A gender is required']
     },

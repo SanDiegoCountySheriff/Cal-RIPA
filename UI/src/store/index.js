@@ -1367,7 +1367,8 @@ export default new Vuex.Store({
           .then(response => {
             const data = response.data.map(item => {
               const displayName = item.displayName
-              const options = item.stop
+              const options = JSON.parse(item.stop)
+
               return {
                 displayName,
                 ...options,
