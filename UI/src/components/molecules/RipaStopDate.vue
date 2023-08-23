@@ -88,6 +88,7 @@ import {
   formatToIsoCurrentDate,
   formatToIsoDate,
 } from '@/utilities/dates'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-date',
@@ -102,11 +103,17 @@ export default {
 
   data() {
     return {
-      devTime: false,
+      devTime: this.environmentName === 'DEV',
     }
   },
 
   inject: ['isAdminEditing', 'environmentName'],
+
+  mounted() {
+    if (this.devTime) {
+      this.model.stopDate.date = format(new Date('2024-01-03'), 'yyyy-MM-dd')
+    }
+  },
 
   computed: {
     model: {
