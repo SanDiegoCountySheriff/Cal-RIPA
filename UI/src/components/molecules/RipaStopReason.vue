@@ -310,7 +310,10 @@ export default {
   ],
 
   created() {
-    if (this.model.stopReason.reasonForStopExplanation) {
+    if (
+      this.model.stopReason.reasonForStopExplanation &&
+      !this.model.template
+    ) {
       this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
   },
