@@ -13,6 +13,9 @@ public class Stop : IStop
     public string Agency { get; set; }
     public string OfficerId { get; set; }
     public string OfficerName { get; set; }
+    public string OfficerRace { get; set; }
+    public string OfficerGender { get; set; }
+    public bool OfficerNonBinary { get; set; }
     public string ExpYears { get; set; }
     [JsonConverter(typeof(ConcreteConverter<OfficerAssignment>))]
     public IOfficerAssignment OfficerAssignment { get; set; }
