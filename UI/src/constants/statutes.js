@@ -830,7 +830,6 @@ export const STATUTES = [
     ],
   },
 ]
-
 export const STATUTES_V2 = [
   {
     statuteID: '999.224',
@@ -886,11 +885,11 @@ export const STATUTES_V2 = [
             children: [
               {
                 id: 'A',
-                text: "'Date of Stop' refers to the year, month, and day when the stop occurred. It shall be recorded as the date on which the stop began. If the stop extends over two days (e.g., if a stop began at 2330 hours on January 1st and concluded at 0030 hours on January 2nd), the “Date of Stop” should be recorded as the first date (in this example, January 1st).",
+                text: "'Date of Stop' refers to the year, month, and day when the stop occurred. It shall be recorded as the date on which the stop began. If the stop extends over two days (e.g., if a stop began at 2330 hours on January 1st and concluded at 0030 hours on January 2nd), the 'Date of Stop' should be recorded as the first date (in this example, January 1st).",
               },
               {
                 id: 'B',
-                text: "'Time of Stop' refers to the approximate time that the stop began and shall be recorded using a 24-hour clock (i.e., military time). ",
+                text: "'Time of Stop' refers to the approximate time that the stop began and shall be recorded using a 24-hour clock (i.e., military time).",
               },
               {
                 id: 'C',
@@ -1004,7 +1003,7 @@ export const STATUTES_V2 = [
               },
               {
                 id: 'B',
-                text: " “Asian” refers to a person having origins in any of the original peoples of the Far East or Southeast Asia, including for example, Cambodia, China, Japan, Korea, Malaysia, the Philippine Islands, Thailand, and Vietnam, but who does not fall within the definition of 'Middle Eastern or South Asian' or 'Pacific Islander.'",
+                text: "'Asian' refers to a person having origins in any of the original peoples of the Far East or Southeast Asia, including for example, Cambodia, China, Japan, Korea, Malaysia, the Philippine Islands, Thailand, and Vietnam, but who does not fall within the definition of 'Middle Eastern or South Asian' or 'Pacific Islander.'",
               },
               {
                 id: 'C',
@@ -1024,7 +1023,7 @@ export const STATUTES_V2 = [
               },
               {
                 id: 'G',
-                text: "'Pacific Islander' refers to a person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands, but who does not fall within the definition of 'Middle Eastern or South Asian' or 'Asian.' ",
+                text: "'Pacific Islander' refers to a person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands, but who does not fall within the definition of 'Middle Eastern or South Asian' or 'Asian.'",
               },
               {
                 id: 'H',
@@ -1252,7 +1251,7 @@ export const STATUTES_V2 = [
               },
               {
                 id: 'B',
-                text: "When reporting the “Reason for Stop,” the officer shall also provide a brief explanation (250-character maximum) regarding the reason for the stop. This explanation shall include additional detail beyond the general data values selected for the 'Reason for Stop.' If the officer selects 'Stop Made During the Course of Performing a Welfare or Wellness Check or an Officer’s Community Caretaking Function,' this explanation shall include detail regarding the nature of that welfare check or the community caretaking function. If the primary reason for the stop differs from the reason(s) for the stop communicated to the stopped person, this explanation shall include detail regarding the reason why the officer communicated to the stopped person a different reason for the stop than was the actual, primary reason for the stop. If the officer did not communicate to the stopped person a reason for the stop, the officer must explain the facts and circumstances that gave rise to a reasonable belief that withholding the reason for the stop was necessary to protect life or property from imminent threat, as part of their brief explanation in the 'Reason for Stop' narrative field.",
+                text: "When reporting the 'Reason for Stop,' the officer shall also provide a brief explanation (250-character maximum) regarding the reason for the stop. This explanation shall include additional detail beyond the general data values selected for the 'Reason for Stop.' If the officer selects 'Stop Made During the Course of Performing a Welfare or Wellness Check or an Officer’s Community Caretaking Function,' this explanation shall include detail regarding the nature of that welfare check or the community caretaking function. If the primary reason for the stop differs from the reason(s) for the stop communicated to the stopped person, this explanation shall include detail regarding the reason why the officer communicated to the stopped person a different reason for the stop than was the actual, primary reason for the stop. If the officer did not communicate to the stopped person a reason for the stop, the officer must explain the facts and circumstances that gave rise to a reasonable belief that withholding the reason for the stop was necessary to protect life or property from imminent threat, as part of their brief explanation in the 'Reason for Stop' narrative field.",
               },
               {
                 id: 'C',
@@ -1290,7 +1289,7 @@ export const STATUTES_V2 = [
             children: [
               {
                 id: 'A',
-                text: "Example: At 0900 hours, Officer A stops a person walking on a residential street who matches the description of a burglary suspect. Officer A places the person in handcuffs and has the person sit on the curb. Officer A takes both force-related and non-force-related actions towards the stopped person, even after Officer A handcuffs the person. Officer A then places the stopped person in a patrol vehicle at 0945 hours and transports the person to the jail for booking. Officer A must report all non-force related actions taken from the time the person is stopped until the time the person is removed from the scene of the stop. Non-force-related actions must be reported in the 'NonForce-Related Actions Taken by Officer During Stop' data element. Force-related actions must be reported in the 'Force-Related Actions Taken by Officer During Stop' data element.",
+                text: "Example: At 0900 hours, Officer A stops a person walking on a residential street who matches the description of a burglary suspect. Officer A places the person in handcuffs and has the person sit on the curb. Officer A takes both force-related and non-force-related actions towards the stopped person, even after Officer A handcuffs the person. Officer A then places the stopped person in a patrol vehicle at 0945 hours and transports the person to the jail for booking. Officer A must report all non-force related actions taken from the time the person is stopped until the time the person is removed from the scene of the stop. Non-force-related actions must be reported in the 'Non-Force-Related Actions Taken by Officer During Stop' data element. Force-related actions must be reported in the 'Force-Related Actions Taken by Officer During Stop' data element.",
               },
               {
                 id: 'B',
@@ -1476,7 +1475,7 @@ export const STATUTES_V2 = [
                   },
                   {
                     id: '2',
-                    text: "When reporting the 'Basis for Search,' the officer shall also provide a brief explanation (250-character maximum) regarding the basis for the search. This explanation shall include additional detail beyond the general data values selected for 'Basis for Search.' If a consent search is conducted, officers shall include a description of the specific conduct of the stopped person (i.e. the specific verbal statements, physical movements, or other behavior) that was reasonably interpreted by the officer as consent. Officers shall not include any personal identifying information of the persons stopped or Unique Identifying Information of any officer in this explanation. If the basis for the search is “Condition of parole/probation/PRCS/mandatory supervision,” officers shall describe how they learned of the search condition. For example, if the officer learned of the parole/probation/PRCS/mandatory supervision status after checking with dispatch, the officer would indicate that.",
+                    text: "When reporting the 'Basis for Search,' the officer shall also provide a brief explanation (250-character maximum) regarding the basis for the search. This explanation shall include additional detail beyond the general data values selected for 'Basis for Search.' If a consent search is conducted, officers shall include a description of the specific conduct of the stopped person (i.e. the specific verbal statements, physical movements, or other behavior) that was reasonably interpreted by the officer as consent. Officers shall not include any personal identifying information of the persons stopped or Unique Identifying Information of any officer in this explanation. If the basis for the search is 'Condition of parole/probation/PRCS/mandatory supervision,' officers shall describe how they learned of the search condition. For example, if the officer learned of the parole/probation/PRCS/mandatory supervision status after checking with dispatch, the officer would indicate that.",
                     children: [
                       {
                         id: 'a',
