@@ -1,7 +1,7 @@
 import { STATUTES } from '@/constants/statutes'
 import { STATUTES_V2 } from '../constants/statutes'
 
-export const getStatuteContent = statute => version => {
+export const getStatuteContent = statute => {
   const parseStatute = statute.replace('§', '')
   const base = parseStatute.substring(0, 7)
   const sections = parseStatute.substring(7, parseStatute.length)
@@ -9,7 +9,7 @@ export const getStatuteContent = statute => version => {
     return e
   })
 
-  const statutes = version === 1 ? STATUTES : STATUTES_V2
+  const statutes = this.version === 1 ? STATUTES : STATUTES_V2
 
   const level1 = splitSections.length > 0 ? splitSections[0] : null
   const level2 = splitSections.length > 1 ? splitSections[1] : null
