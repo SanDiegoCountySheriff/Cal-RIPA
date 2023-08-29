@@ -171,7 +171,7 @@ export default {
         yearsExperience: this.mappedUser.yearsExperience,
         race: this.mappedUser.race,
         gender: this.mappedUser.gender,
-        officerNonBinary: this.mappedUser.officerNonBinary,
+        officerNonBinary: this.mappedUser.officerNonBinary || false,
       }
     },
   },
