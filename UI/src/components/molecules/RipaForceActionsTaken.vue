@@ -13,7 +13,7 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.forceActionsTaken.anyForceActionsTaken"
-            label="Any Force Actions Taken?"
+            label="Use Of Force?"
             :max-width="200"
             @input="handleInput"
           ></ripa-switch>
