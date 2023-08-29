@@ -81,7 +81,7 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
-    devTime: false,
+    devTime: true,
     version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
@@ -336,11 +336,10 @@ export default new Vuex.Store({
       return state.apiUnavailable
     },
     version: state => {
-      // if (state.devTime) {
-      //   return 2
-      // }
-      // return state.version
-      return 2
+      if (state.devTime) {
+        return 2
+      }
+      return state.version
     },
   },
 
