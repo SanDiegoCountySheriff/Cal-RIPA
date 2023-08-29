@@ -304,7 +304,11 @@ export default {
         return filteredItems
       }
 
-      return filteredItems.filter(item => item.value !== 12)
+      if (!actionsTaken.includes(15)) {
+        return filteredItems.filter(item => item.value !== 12)
+      }
+
+      return filteredItems
     },
 
     personPropertySearchConsentGivenRules() {
