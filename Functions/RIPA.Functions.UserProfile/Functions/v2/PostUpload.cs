@@ -18,19 +18,19 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.UserProfile.Functions.v1;
+namespace RIPA.Functions.UserProfile.Functions.v2;
 
 public class PostUpload
 {
-    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v2.UserProfile> _userProfileCosmosDbService;
 
-    public PostUpload(IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService)
+    public PostUpload(IUserProfileCosmosDbService<Common.Models.v2.UserProfile> userProfileCosmosDbService)
     {
         _userProfileCosmosDbService = userProfileCosmosDbService;
     }
 
-    [FunctionName("PostUpload_v1")]
-    [OpenApiOperation(operationId: "v1/PostUpload", tags: new[] { "name", "v1" })]
+    [FunctionName("PostUpload_v2")]
+    [OpenApiOperation(operationId: "v2/PostUpload", tags: new[] { "name", "v2" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "multipart/form-data; boundary=<calculated when request is sent>", bodyType: typeof(string), Deprecated = false, Required = true)]
@@ -38,7 +38,7 @@ public class PostUpload
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "File Format Error; Please pass form-data with key: 'file' value: filepath.csv")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostUpload")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v2/PostUpload")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("Importing user profiles from uploaded csv");
@@ -64,7 +64,7 @@ public class PostUpload
             {
                 var agency = req.Query["agency"];
                 csv.Context.RegisterClassMap<UserProfileMap>();
-                var records = csv.GetRecords<Common.Models.v1.UserProfile>().ToList();
+                var records = csv.GetRecords<Common.Models.v2.UserProfile>().ToList();
                 count = records.Count();
 
                 foreach (var record in records)
