@@ -21,7 +21,7 @@ exports[`Ripa Force Actions Taken should match snapshot 1`] = `
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
                 </div><label for="input-8" class="v-label theme--light" style="left: 0px; position: relative;">
-                  Any Force Actions Taken?
+                  Use Of Force?
                 </label>
               </div>
             </div>
