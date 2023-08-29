@@ -73,6 +73,27 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <template v-if="model.stopVersion === 2">
+      <ripa-form-header
+        title="Welfare or Wellness Check"
+        required
+        subtitle="§999.226(a)(13)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.stopMadeDuringWelfareCheck"
+              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 

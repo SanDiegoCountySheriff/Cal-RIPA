@@ -4,15 +4,18 @@ import { defaultStop } from '@/utilities/stop.js'
 import { format } from 'date-fns'
 import Vuetify from 'vuetify'
 import { computed } from 'vue'
+import { V2_STOP } from '../../constants/RipaFormContainerTestConstants'
 
 describe('Ripa Stop Date', () => {
   let vuetify
   let stop
   let wrapper = null
+  let stopV2
 
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
+    stopV2 = V2_STOP
   })
 
   const factory = (propsData, provideData) => {
@@ -196,6 +199,18 @@ describe('Ripa Stop Date', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.model.person.perceivedUnhoused).toEqual(false)
+  })
+
+  it('should display welfare check switch for v2 stops', () => {
+    wrapper = factory({ value: stopV2 })
+
+    expect(wrapper.html()).toContain('Welfare')
+  })
+
+  it('should not display welfare check switch for legacy stops', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.html()).not.toContain('Welfare')
   })
 })
 
