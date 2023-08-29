@@ -336,10 +336,11 @@ export default new Vuex.Store({
       return state.apiUnavailable
     },
     version: state => {
-      if (state.devTime) {
-        return 2
-      }
-      return state.version
+      // if (state.devTime) {
+      //   return 2
+      // }
+      // return state.version
+      return 2
     },
   },
 
