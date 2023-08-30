@@ -248,7 +248,6 @@ export default {
       'mappedFormNonCountyCities',
       'mappedFormSchools',
       'mappedFormStatutes',
-
       'mappedGpsLocationAddress',
       'mappedUser',
       'displayBeatInput',
