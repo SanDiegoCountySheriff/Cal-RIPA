@@ -58,6 +58,8 @@ public class StopService : IStopService
 
     public DojStop CastToDojStop(Stop stop)
     {
+        var locationType = CastToDojLocationType(stop.Location as Common.Models.v2.Location);
+
         DojStop dojStop = new()
         {
             LEARecordID = stop.Id,
@@ -82,17 +84,17 @@ public class StopService : IStopService
             },
             Location = new Models.v2.Location
             {
-                LocationType = CastToDojLocationType(stop.Location),
-                Latitude = stop.Location.GeoLocation.Latitude.ToString(),
-                Longitude = stop.Location.GeoLocation.Longitude.ToString(),
-                BlockNumber = stop.Location.BlockNumber,
-                StreetName = stop.Location.StreetName,
+                LocationType = locationType,
+                Latitude = locationType == "1" ? stop.Location.GeoLocation.Latitude.ToString() : string.Empty,
+                Longitude = locationType == "1" ? stop.Location.GeoLocation.Longitude.ToString() : string.Empty,
+                BlockNumber = locationType == "2" ? stop.Location.BlockNumber : string.Empty,
+                StreetName = locationType == "2" ? stop.Location.StreetName : string.Empty,
                 // TODO: This needs to be updated when the stop is updated to capture cross street 1 and 2
-                CrossStreet1 = stop.Location.Intersection,
-                CrossStreet2 = stop.Location.Intersection,
-                Highway = stop.Location.HighwayExit,
-                ClosestExit = stop.Location.HighwayExit,
-                OtherLocation = stop.Location.LandMark,
+                CrossStreet1 = locationType == "3" ? stop.Location.Intersection : string.Empty,
+                CrossStreet2 = locationType == "3" ? stop.Location.Intersection : string.Empty,
+                Highway = locationType == "4" ? stop.Location.HighwayExit : string.Empty,
+                ClosestExit = locationType == "4" ? stop.Location.HighwayExit : string.Empty,
+                OtherLocation = locationType == "5" ? stop.Location.LandMark : string.Empty,
                 City = stop.Location.City?.Codes?.Code,
                 K12_Flag = stop.Location.School ? "Y" : string.Empty,
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
@@ -104,22 +106,48 @@ public class StopService : IStopService
         return dojStop;
     }
 
-    private string CastToDojLocationType(ILocation location)
+    private string CastToDojLocationType(Common.Models.v2.Location location)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        if (location.GeoLocation.Latitude.HasValue && location.GeoLocation.Longitude.HasValue)
+        {
+            return "1";
+        }
+
+        if (!string.IsNullOrEmpty(location.BlockNumber) && !string.IsNullOrEmpty(location.StreetName))
+        {
+            return "2";
+        }
+
+        if (!string.IsNullOrEmpty(location.Intersection))
+        {
+            return "3";
+        }
+
+        if (!string.IsNullOrEmpty(location.HighwayExit))
+        {
+            return "4";
+        }
+
+        return "5";
     }
 
     private string CastToDojStopType(string stopType)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        return stopType switch
+        {
+            "Vehicular" => "1",
+            "Bicycle" => "2",
+            "Pedestrian" => "3",
+            _ => "1",
+        };
     }
 
     private ListOfficerEth CastToDojOfficerRace(string officerRace)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        var officerEthnicities = new ListOfficerEth();
+        // TODO: make this loop once you convert this to a List
+
+        return officerEthnicities;
     }
 
     private Listperson_Stopped CastToDojListPersonStopped(List<IPersonStopped> listPersonStopped, bool isSchool)
@@ -172,20 +200,66 @@ public class StopService : IStopService
 
     private string CastToDojConsentType(List<BasisForSearch> listBasisForSearch)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        foreach (var basisForSearch in listBasisForSearch)
+        {
+            if (basisForSearch.Key == "1")
+            {
+                return "1";
+            }
+
+            if (basisForSearch.Key == "14")
+            {
+                return "2";
+            }
+
+            if (basisForSearch.Key == "15")
+            {
+                return "3";
+            }
+        }
+
+        return string.Empty;
     }
 
     private ListForceActTak CastToDojListForceActTak(List<ForceActionsTakenDuringStop> listForceActionsTakenDuringStop)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        var listForceActionsTaken = new List<string>();
+
+        foreach (var forceActionTaken in listForceActionsTakenDuringStop)
+        {
+            listForceActionsTaken.Add(forceActionTaken.Key);
+        }
+
+        return new ListForceActTak() { ForceActTak = listForceActionsTaken };
     }
 
     private ListNonForceActTak CastToDojListNonForceActTak(List<NonForceActionsTakenDuringStop> listNonForceActionsTakenDuringStop, bool propertySearchConsentGiven, bool personSearchConsentGiven)
     {
-        // TODO: implement
-        throw new NotImplementedException();
+        var listNonForceActionsTaken = new List<NonForceActTak>();
+
+        foreach (var nonForceActionTaken in listNonForceActionsTakenDuringStop)
+        {
+            var isCon = "na";
+
+            if (nonForceActionTaken.Key == "2")
+            {
+                isCon = personSearchConsentGiven ? "Y" : "N";
+            }
+            else if (nonForceActionTaken.Key == "3")
+            {
+                isCon = propertySearchConsentGiven ? "Y" : "N";
+            }
+
+            NonForceActTak nonForceActTak = new()
+            {
+                NonForceAct_CD = nonForceActionTaken.Key,
+                NonForceConsent = isCon,
+            };
+
+            listNonForceActionsTaken.Add(nonForceActTak);
+        }
+
+        return new ListNonForceActTak() { NonForceActTak = listNonForceActionsTaken };
     }
 
     private Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
@@ -221,34 +295,6 @@ public class StopService : IStopService
 
         return primaryReason;
     }
-
-    //public Listacttak CastToDojListActTak(List<ActionTakenDuringStop> listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
-    //{
-    //    var listActionsTaken = new List<Acttak>();
-
-    //    foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
-    //    {
-    //        var isCon = "na";
-
-    //        if (atds.Key == "17")
-    //        {
-    //            isCon = isPersonSearchConsentGiven ? "Y" : "N";
-    //        }
-    //        else if (atds.Key == "19")
-    //        {
-    //            isCon = isPropertySearchConsentGiven ? "Y" : "N";
-    //        }
-
-    //        Acttak acttak = new()
-    //        {
-    //            Act_CD = atds.Key,
-    //            Is_Con = isCon
-    //        };
-    //        listActionsTaken.Add(acttak);
-    //    }
-
-    //    return new Listacttak { ActTak = listActionsTaken };
-    //}
 
     private Listresult CastToDojListResult(List<ResultOfStop> listResultOfStop)
     {
