@@ -7,6 +7,7 @@ public class Perc
     public string Is_LimEng { get; set; }
     public Listdisb ListDisb { get; set; }
     public string Gend { get; set; }
-    public string GendNC { get; set; }
-    public string LGBT { get; set; }
+    public string Nonbinary_Person { get; set; }
+    public string SexualOrientation { get; set; }
+    public string Is_Unhoused { get; set; }
 }

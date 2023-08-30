@@ -10,4 +10,6 @@ public class Primaryreason
     public string EDU_subDiv_CD { get; set; }
     public Listsusp_T ListSusp_T { get; set; }
     public string Susp_O_CD { get; set; }
+    public Listprob_T ListProb_T { get; set; }
+    public string Prob_O_CD { get; set; }
 }

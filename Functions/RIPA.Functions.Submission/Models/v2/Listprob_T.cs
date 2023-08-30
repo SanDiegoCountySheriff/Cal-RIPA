@@ -2,7 +2,7 @@
 
 namespace RIPA.Functions.Submission.Models.v2;
 
-public class Listacttak
+public class Listprob_T
 {
-    public List<Acttak> ActTak { get; set; }
+    public List<string> Prob_T { get; set; }
 }
