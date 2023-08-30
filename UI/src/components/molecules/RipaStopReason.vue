@@ -214,29 +214,7 @@
           <v-col>
             <ripa-switch
               v-model="model.person.insideResidence"
-              label="The stopped person was inside a residence"
-            ></ripa-switch>
-          </v-col>
-        </v-row>
-      </v-container>
-    </template>
-
-    <template v-if="model.stopVersion === 2">
-      <ripa-form-header
-        title="Welfare or Wellness Check"
-        required
-        :items="statutes"
-        subtitle="§999.226(a)(13)"
-        v-on="$listeners"
-      >
-      </ripa-form-header>
-
-      <v-container>
-        <v-row>
-          <v-col>
-            <ripa-switch
-              v-model="model.stopMadeDuringWelfareCheck"
-              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+              label="The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest."
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -310,7 +288,10 @@ export default {
   ],
 
   created() {
-    if (this.model.stopReason.reasonForStopExplanation) {
+    if (
+      this.model.stopReason.reasonForStopExplanation &&
+      !this.model.template
+    ) {
       this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
   },

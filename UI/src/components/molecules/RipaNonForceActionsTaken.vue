@@ -274,17 +274,41 @@ export default {
     getBasisForSearchItems() {
       const actionsTaken =
         this.model.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
+      const basisForSearch =
+        this.model.nonForceActionsTaken?.basisForSearch || []
       let filteredItems = this.basisForSearchItems
 
       if (!this.model.person.isStudent) {
         filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
+      if (basisForSearch.includes(1)) {
+        filteredItems = filteredItems.filter(
+          item => item.value !== 14 && item.value !== 15,
+        )
+      }
+
+      if (basisForSearch.includes(14)) {
+        filteredItems = filteredItems.filter(
+          item => item.value !== 1 && item.value !== 15,
+        )
+      }
+
+      if (basisForSearch.includes(15)) {
+        filteredItems = filteredItems.filter(
+          item => item.value !== 14 && item.value !== 1,
+        )
+      }
+
       if (actionsTaken.includes(20)) {
         return filteredItems
       }
 
-      return filteredItems.filter(item => item.value !== 12)
+      if (!actionsTaken.includes(15)) {
+        return filteredItems.filter(item => item.value !== 12)
+      }
+
+      return filteredItems
     },
 
     personPropertySearchConsentGivenRules() {

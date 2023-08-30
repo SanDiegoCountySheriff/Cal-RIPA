@@ -490,7 +490,7 @@
               v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop10"
               :rules="actionsTakenRules"
-              label="Psychiatric hold"
+              label="Psychiatric hold (pursuant to Welfare & Institutions Code sections 5150 and/or 5585.20)"
               hide-details
             ></ripa-checkbox>
 
@@ -506,7 +506,7 @@
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop11"
               :rules="actionsTakenRulesV2"
-              label="Psychiatric hold"
+              label="Psychiatric hold (pursuant to Welfare & Institutions Code sections 5150 and/or 5585.20)"
               hide-details
             ></ripa-checkbox>
 
@@ -604,6 +604,16 @@ export default {
   },
 
   inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
+
+  mounted() {
+    if (
+      this.model.stopVersion === 1 &&
+      this.model.template === 'Motor/Traffic'
+    ) {
+      this.model.stopResult.resultsOfStop4 = false
+      this.model.stopResult.resultsOfStop3 = true
+    }
+  },
 
   computed: {
     model: {
