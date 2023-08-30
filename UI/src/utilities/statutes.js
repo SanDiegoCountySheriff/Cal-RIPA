@@ -1,5 +1,6 @@
 import { STATUTES } from '@/constants/statutes'
 import { STATUTES_V2 } from '../constants/statutes'
+import { version } from '@/components/features/RipaFormContainer'
 
 export const getStatuteContent = statute => {
   const parseStatute = statute.replace('§', '')
@@ -9,7 +10,6 @@ export const getStatuteContent = statute => {
     return e
   })
 
-  const statutes = this.version === 1 ? STATUTES : STATUTES_V2
 
   const level1 = splitSections.length > 0 ? splitSections[0] : null
   const level2 = splitSections.length > 1 ? splitSections[1] : null
