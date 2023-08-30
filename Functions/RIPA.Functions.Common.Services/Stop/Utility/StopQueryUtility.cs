@@ -71,7 +71,7 @@ public class StopQueryUtility
         }
 
         //Status
-        if (stopQuery.Statuses?.Length > 0 && !forCpraReport)
+        if (stopQuery.Statuses.Any() && !forCpraReport)
         {
             string stopQueryStatement = "(";
 
@@ -190,7 +190,7 @@ public class StopQueryUtility
         }
 
         //Status
-        if (stopQuery.Statuses?.Length > 0)
+        if (stopQuery.Statuses.Any())
         {
             string stopQueryStatement = "(";
 

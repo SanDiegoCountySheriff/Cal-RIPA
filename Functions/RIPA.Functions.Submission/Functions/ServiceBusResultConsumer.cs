@@ -5,20 +5,20 @@ using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Services.REST.Contracts;
+using RIPA.Functions.Submission.Services.REST.v1.Contracts;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.ResultServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions.v1;
+namespace RIPA.Functions.Submission.Functions;
 
 public class ServiceBusResultConsumer
 {
     private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
-    private readonly IStopService<Stop> _stopService;
+    private readonly IStopService _stopService;
 
-    public ServiceBusResultConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
+    public ServiceBusResultConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService stopService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _stopService = stopService;

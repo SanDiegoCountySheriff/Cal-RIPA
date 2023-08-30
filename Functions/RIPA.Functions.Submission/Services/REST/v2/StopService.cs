@@ -1,25 +1,25 @@
 ﻿using Microsoft.Extensions.Logging;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
-using RIPA.Functions.Common.Models.v1;
-using RIPA.Functions.Submission.Models.v1;
-using RIPA.Functions.Submission.Services.REST.Contracts;
+using RIPA.Functions.Common.Models.v2;
+using RIPA.Functions.Submission.Models.v2;
+using RIPA.Functions.Submission.Services.REST.v2.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RIPA.Functions.Submission.Services.REST;
+namespace RIPA.Functions.Submission.Services.REST.v2;
 
-public class StopService<T> : IStopService<T> where T : IStop
+public class StopService : IStopService
 {
-    private readonly ILogger<StopService<T>> _logger;
+    private readonly ILogger<StopService> _logger;
 
-    public StopService(ILogger<StopService<T>> logger)
+    public StopService(ILogger<StopService> logger)
     {
         _logger = logger;
     }
 
-    public T NewSubmission(T stop, DateTime dateSubmitted, Guid submissionId, string fileName)
+    public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
         stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
 
@@ -41,7 +41,7 @@ public class StopService<T> : IStopService<T> where T : IStop
         return stop;
     }
 
-    public T ErrorSubmission(T stop, SubmissionError submissionError, string stopStatus)
+    public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
     {
         var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
 
@@ -56,7 +56,7 @@ public class StopService<T> : IStopService<T> where T : IStop
         return stop;
     }
 
-    public DojStop CastToDojStop(T stop)
+    public DojStop CastToDojStop(Stop stop)
     {
         DojStop dojStop = new()
         {
@@ -66,17 +66,33 @@ public class StopService<T> : IStopService<T> where T : IStop
             SDate = stop.StopDateTime.ToString("MM/dd/yyyy"),
             STime = stop.Time,
             SDur = stop.StopDuration.ToString(),
+            StopType = CastToDojStopType(stop.StopType),
+            Is_WelfareCheck = stop.StopMadeDuringWelfareCheck ? "Y" : "N",
             Officer = new Officer
             {
                 UID = stop.OfficerId,
                 ExpYears = stop.ExpYears,
                 AT = stop.OfficerAssignment.Key,
                 ATOth = stop.OfficerAssignment.OtherType,
-                Proxy = ""
+                Proxy = "",
+                OfficerGend = CastToDojOfficerGender(stop.OfficerGender),
+                ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace),
+                Nonbinary_Officer = stop.OfficerNonBinary ? "5" : string.Empty,
+                NonPrimaryAgency = stop.OfficerWorksWithNonReportingAgency ? "Y" : "N",
             },
-            Location = new Models.v1.Location
+            Location = new Models.v2.Location
             {
-                Loc = CastToDojLocation(stop.Location),
+                LocationType = CastToDojLocationType(stop.Location),
+                Latitude = stop.Location.GeoLocation.Latitude.ToString(),
+                Longitude = stop.Location.GeoLocation.Longitude.ToString(),
+                BlockNumber = stop.Location.BlockNumber,
+                StreetName = stop.Location.StreetName,
+                // TODO: This needs to be updated when the stop is updated to capture cross street 1 and 2
+                CrossStreet1 = stop.Location.Intersection,
+                CrossStreet2 = stop.Location.Intersection,
+                Highway = stop.Location.HighwayExit,
+                ClosestExit = stop.Location.HighwayExit,
+                OtherLocation = stop.Location.LandMark,
                 City = stop.Location.City?.Codes?.Code,
                 K12_Flag = stop.Location.School ? "Y" : string.Empty,
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
@@ -88,34 +104,25 @@ public class StopService<T> : IStopService<T> where T : IStop
         return dojStop;
     }
 
-    public string CastToDojLocation(ILocation location)
+    private string CastToDojLocationType(ILocation location)
     {
-        string dojLocation = location.Intersection;
-
-        if (location.BlockNumber != "")
-        {
-            dojLocation += " " + location.BlockNumber;
-        }
-
-        if (location.LandMark != "")
-        {
-            dojLocation += " " + location.LandMark;
-        }
-
-        if (location.StreetName != "")
-        {
-            dojLocation += " " + location.StreetName;
-        }
-
-        if (location.HighwayExit != "")
-        {
-            dojLocation += " " + location.HighwayExit;
-        }
-
-        return dojLocation;
+        // TODO: implement
+        throw new NotImplementedException();
     }
 
-    public Listperson_Stopped CastToDojListPersonStopped(List<IPersonStopped> listPersonStopped, bool isSchool)
+    private string CastToDojStopType(string stopType)
+    {
+        // TODO: implement
+        throw new NotImplementedException();
+    }
+
+    private ListOfficerEth CastToDojOfficerRace(string officerRace)
+    {
+        // TODO: implement
+        throw new NotImplementedException();
+    }
+
+    private Listperson_Stopped CastToDojListPersonStopped(List<IPersonStopped> listPersonStopped, bool isSchool)
     {
         var listDojPersonStopped = new List<Person_Stopped>();
 
@@ -136,14 +143,19 @@ public class StopService<T> : IStopService<T> where T : IStop
                     {
                         Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToList()
                     },
-                    Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
-                    LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
-                    GendNC = personStopped.GenderNonconforming ? "5" : string.Empty
+                    Gend = CastToDojPerceivedGender(personStopped.PerceivedGender),
+                    Nonbinary_Person = personStopped.NonBinaryPerson ? "5" : string.Empty,
+                    SexualOrientation = personStopped.PerceivedSexualOrientation == "LGB+" ? "1" : "2",
+                    Is_Unhoused = personStopped.PerceivedUnhoused ? "Y" : "N",
                 },
+                Is_Passenger = personStopped.PassengerInVehicle == true ? "Y" : "N",
+                Is_Residence = personStopped.InsideResidence == true ? "Y" : "N",
                 Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
-                ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                ListNonForceActTak = CastToDojListNonForceActTak(personStopped.ListNonForceActionsTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                ListForceActTak = CastToDojListForceActTak(personStopped.ListForceActionsTakenDuringStop),
                 ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
+                ConsentType = CastToDojConsentType(personStopped.ListBasisForSearch),
                 BasSearch_N = personStopped.BasisForSearchBrief,
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
                 ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
@@ -158,7 +170,25 @@ public class StopService<T> : IStopService<T> where T : IStop
         return new Listperson_Stopped { Person_Stopped = listDojPersonStopped };
     }
 
-    public Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
+    private string CastToDojConsentType(List<BasisForSearch> listBasisForSearch)
+    {
+        // TODO: implement
+        throw new NotImplementedException();
+    }
+
+    private ListForceActTak CastToDojListForceActTak(List<ForceActionsTakenDuringStop> listForceActionsTakenDuringStop)
+    {
+        // TODO: implement
+        throw new NotImplementedException();
+    }
+
+    private ListNonForceActTak CastToDojListNonForceActTak(List<NonForceActionsTakenDuringStop> listNonForceActionsTakenDuringStop, bool propertySearchConsentGiven, bool personSearchConsentGiven)
+    {
+        // TODO: implement
+        throw new NotImplementedException();
+    }
+
+    private Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
     {
         var stopReasonKey = personStopped.ReasonForStop?.Key;
 
@@ -170,6 +200,7 @@ public class StopService<T> : IStopService<T> where T : IStop
 
         switch (stopReasonKey)
         {
+            // TODO: add new stuff
             case "1": //Traffic Violation
                 primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
                 primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
@@ -191,35 +222,35 @@ public class StopService<T> : IStopService<T> where T : IStop
         return primaryReason;
     }
 
-    public Listacttak CastToDojListActTak(List<ActionTakenDuringStop> listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
-    {
-        var listActionsTaken = new List<Acttak>();
+    //public Listacttak CastToDojListActTak(List<ActionTakenDuringStop> listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
+    //{
+    //    var listActionsTaken = new List<Acttak>();
 
-        foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
-        {
-            var isCon = "na";
+    //    foreach (ActionTakenDuringStop atds in listActionTakenDuringStop)
+    //    {
+    //        var isCon = "na";
 
-            if (atds.Key == "17")
-            {
-                isCon = isPersonSearchConsentGiven ? "Y" : "N";
-            }
-            else if (atds.Key == "19")
-            {
-                isCon = isPropertySearchConsentGiven ? "Y" : "N";
-            }
+    //        if (atds.Key == "17")
+    //        {
+    //            isCon = isPersonSearchConsentGiven ? "Y" : "N";
+    //        }
+    //        else if (atds.Key == "19")
+    //        {
+    //            isCon = isPropertySearchConsentGiven ? "Y" : "N";
+    //        }
 
-            Acttak acttak = new()
-            {
-                Act_CD = atds.Key,
-                Is_Con = isCon
-            };
-            listActionsTaken.Add(acttak);
-        }
+    //        Acttak acttak = new()
+    //        {
+    //            Act_CD = atds.Key,
+    //            Is_Con = isCon
+    //        };
+    //        listActionsTaken.Add(acttak);
+    //    }
 
-        return new Listacttak { ActTak = listActionsTaken };
-    }
+    //    return new Listacttak { ActTak = listActionsTaken };
+    //}
 
-    public Listresult CastToDojListResult(List<ResultOfStop> listResultOfStop)
+    private Listresult CastToDojListResult(List<ResultOfStop> listResultOfStop)
     {
         var listResults = new List<Result>();
 
@@ -236,19 +267,31 @@ public class StopService<T> : IStopService<T> where T : IStop
         return new Listresult { Result = listResults };
     }
 
-    public string CastToDojPercievedGender(string percievedGender)
+    private string CastToDojPerceivedGender(string perceivedGender)
     {
-        return percievedGender switch
+        return perceivedGender switch
         {
-            "Male" => ((int)PercievedGender.Male).ToString(),
-            "Female" => ((int)PercievedGender.Female).ToString(),
-            "Transgender Male" => ((int)PercievedGender.TransgenderManBoy).ToString(),
-            "Transgender Female" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+            "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
+            "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
+            "Transgender Man/Boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+            "Transgender Woman/Girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
             _ => "",
         };
     }
 
-    public string CastToDojTXType(T stop)
+    private string CastToDojOfficerGender(string perceivedGender)
+    {
+        return perceivedGender switch
+        {
+            "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
+            "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
+            "Transgender Man/Boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+            "Transgender Woman/Girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+            _ => "",
+        };
+    }
+
+    private string CastToDojTXType(Stop stop)
     {
         if (stop.ListSubmission == null || stop.ListSubmission.Count() == 0)
         {

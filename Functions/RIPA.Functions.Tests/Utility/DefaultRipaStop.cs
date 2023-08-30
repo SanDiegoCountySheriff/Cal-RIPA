@@ -79,7 +79,7 @@ public static class DefaultRipaStop
                     {
                         Key = "1",
                         Reason = "Stop Reason",
-                        ListDetail = new Detail[]
+                        ListDetail = new List<Detail>
                         {
                             new Detail()
                             {
@@ -87,7 +87,7 @@ public static class DefaultRipaStop
                                 Reason = "Detail Reason"
                             }
                         },
-                        ListCodes = new Codes[]
+                        ListCodes = new List<Codes>
                         {
                             new Codes()
                             {
@@ -113,7 +113,7 @@ public static class DefaultRipaStop
                         {
                             Key = "1",
                             Result = "Result",
-                            ListCodes = new Codes[]
+                            ListCodes = new List<Codes>
                             {
                                 new Codes()
                                 {
