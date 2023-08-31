@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Common.Models.v2;
 
@@ -56,7 +57,7 @@ public class UserProfile : IUserProfile
     public string Gender { get; set; }
 
     [JsonProperty(PropertyName = "race")]
-    public string Race { get; set; }
+    public List<string> Race { get; set; }
 
     [JsonProperty(PropertyName = "officerNonBinary")]
     public bool OfficerNonBinary { get; set; }

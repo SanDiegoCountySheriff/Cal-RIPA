@@ -77,7 +77,7 @@ public class StopService : IStopService
                 AT = stop.OfficerAssignment.Key,
                 ATOth = stop.OfficerAssignment.OtherType,
                 Proxy = "",
-                OfficerGend = CastToDojOfficerGender(stop.OfficerGender),
+                OfficerGend = CastToDojGender(stop.OfficerGender),
                 ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace),
                 Nonbinary_Officer = stop.OfficerNonBinary ? "5" : string.Empty,
                 NonPrimaryAgency = stop.OfficerWorksWithNonReportingAgency ? "Y" : "N",
@@ -142,12 +142,23 @@ public class StopService : IStopService
         };
     }
 
-    private ListOfficerEth CastToDojOfficerRace(string officerRace)
+    private ListOfficerEth CastToDojOfficerRace(List<string> officerRace)
     {
-        var officerEthnicities = new ListOfficerEth();
-        // TODO: make this loop once you convert this to a List
+        var officerEthnicities = new List<string>();
 
-        return officerEthnicities;
+        foreach (var race in officerRace)
+        {
+            switch (race)
+            {
+                case "White":
+                    officerEthnicities.Add("1");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return new ListOfficerEth() { OfficerEth = officerEthnicities };
     }
 
     private Listperson_Stopped CastToDojListPersonStopped(List<IPersonStopped> listPersonStopped, bool isSchool)
@@ -171,7 +182,7 @@ public class StopService : IStopService
                     {
                         Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToList()
                     },
-                    Gend = CastToDojPerceivedGender(personStopped.PerceivedGender),
+                    Gend = CastToDojGender(personStopped.PerceivedGender),
                     Nonbinary_Person = personStopped.NonBinaryPerson ? "5" : string.Empty,
                     SexualOrientation = personStopped.PerceivedSexualOrientation == "LGB+" ? "1" : "2",
                     Is_Unhoused = personStopped.PerceivedUnhoused ? "Y" : "N",
@@ -202,20 +213,13 @@ public class StopService : IStopService
     {
         foreach (var basisForSearch in listBasisForSearch)
         {
-            if (basisForSearch.Key == "1")
+            return basisForSearch.Key switch
             {
-                return "1";
-            }
-
-            if (basisForSearch.Key == "14")
-            {
-                return "2";
-            }
-
-            if (basisForSearch.Key == "15")
-            {
-                return "3";
-            }
+                "1" => "1",
+                "14" => "2",
+                "15" => "3",
+                _ => string.Empty
+            };
         }
 
         return string.Empty;
@@ -313,21 +317,9 @@ public class StopService : IStopService
         return new Listresult { Result = listResults };
     }
 
-    private string CastToDojPerceivedGender(string perceivedGender)
+    private string CastToDojGender(string gender)
     {
-        return perceivedGender switch
-        {
-            "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
-            "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
-            "Transgender Man/Boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
-            "Transgender Woman/Girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
-            _ => "",
-        };
-    }
-
-    private string CastToDojOfficerGender(string perceivedGender)
-    {
-        return perceivedGender switch
+        return gender switch
         {
             "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
             "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),

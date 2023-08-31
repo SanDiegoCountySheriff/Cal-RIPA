@@ -57,7 +57,7 @@ export default new Vuex.Store({
       officerName: null,
       assignment: null,
       otherType: null,
-      race: null,
+      race: [],
       gender: null,
       officerNonBinary: null,
     },
