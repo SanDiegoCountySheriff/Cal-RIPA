@@ -181,7 +181,7 @@
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
             <ripa-select
-              v-model="model.gender"
+              v-model="model.officerGender"
               :items="genderItems"
               :rules="genderRules"
               @input="handleInput"
@@ -288,7 +288,7 @@ export default {
     },
 
     genderRules() {
-      const gender = this.model.gender
+      const gender = this.model.officerGender
       const checked = this.model.officerNonBinary
       const isValid = gender || checked
 
