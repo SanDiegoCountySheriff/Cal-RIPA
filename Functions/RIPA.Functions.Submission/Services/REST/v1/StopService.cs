@@ -76,7 +76,7 @@ public class StopService : IStopService
             },
             Location = new Models.v1.Location
             {
-                Loc = CastToDojLocation(stop.Location),
+                Loc = CastToDojLocation(stop.Location as Common.Models.v1.Location),
                 City = stop.Location.City?.Codes?.Code,
                 K12_Flag = stop.Location.School ? "Y" : string.Empty,
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
@@ -88,7 +88,7 @@ public class StopService : IStopService
         return dojStop;
     }
 
-    public string CastToDojLocation(ILocation location)
+    public string CastToDojLocation(Common.Models.v1.Location location)
     {
         string dojLocation = location.Intersection;
 

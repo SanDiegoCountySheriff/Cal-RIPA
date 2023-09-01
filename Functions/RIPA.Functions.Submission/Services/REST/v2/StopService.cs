@@ -59,6 +59,7 @@ public class StopService : IStopService
     public DojStop CastToDojStop(Stop stop)
     {
         var locationType = CastToDojLocationType(stop.Location as Common.Models.v2.Location);
+        Common.Models.v2.Location stopLocation = stop.Location as Common.Models.v2.Location;
 
         DojStop dojStop = new()
         {
@@ -85,22 +86,21 @@ public class StopService : IStopService
             Location = new Models.v2.Location
             {
                 LocationType = locationType,
-                Latitude = locationType == "1" ? stop.Location.GeoLocation.Latitude.ToString() : string.Empty,
-                Longitude = locationType == "1" ? stop.Location.GeoLocation.Longitude.ToString() : string.Empty,
-                BlockNumber = locationType == "2" ? stop.Location.BlockNumber : string.Empty,
-                StreetName = locationType == "2" ? stop.Location.StreetName : string.Empty,
-                // TODO: This needs to be updated when the stop is updated to capture cross street 1 and 2
-                CrossStreet1 = locationType == "3" ? stop.Location.Intersection : string.Empty,
-                CrossStreet2 = locationType == "3" ? stop.Location.Intersection : string.Empty,
-                Highway = locationType == "4" ? stop.Location.HighwayExit : string.Empty,
-                ClosestExit = locationType == "4" ? stop.Location.HighwayExit : string.Empty,
-                OtherLocation = locationType == "5" ? stop.Location.LandMark : string.Empty,
-                City = stop.Location.City?.Codes?.Code,
-                K12_Flag = stop.Location.School ? "Y" : string.Empty,
-                K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
+                Latitude = locationType == "1" ? stopLocation.GeoLocation.Latitude.ToString() : string.Empty,
+                Longitude = locationType == "1" ? stopLocation.GeoLocation.Longitude.ToString() : string.Empty,
+                BlockNumber = locationType == "2" ? stopLocation.BlockNumber : string.Empty,
+                StreetName = locationType == "2" ? stopLocation.StreetName : string.Empty,
+                CrossStreet1 = locationType == "3" ? stopLocation.CrossStreet1 : string.Empty,
+                CrossStreet2 = locationType == "3" ? stopLocation.CrossStreet2 : string.Empty,
+                Highway = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
+                ClosestExit = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
+                OtherLocation = locationType == "5" ? stopLocation.LandMark : string.Empty,
+                City = stopLocation.City?.Codes?.Code,
+                K12_Flag = stopLocation.School ? "Y" : string.Empty,
+                K12Code = stopLocation.School ? stopLocation.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stopLocation.School) : null
         };
 
         return dojStop;
@@ -118,7 +118,7 @@ public class StopService : IStopService
             return "2";
         }
 
-        if (!string.IsNullOrEmpty(location.Intersection))
+        if (!string.IsNullOrEmpty(location.CrossStreet2) && !string.IsNullOrEmpty(location.CrossStreet2))
         {
             return "3";
         }
