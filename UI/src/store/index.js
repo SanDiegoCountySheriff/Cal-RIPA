@@ -204,7 +204,7 @@ export default new Vuex.Store({
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
         gender: state.user.gender,
-        race: state.user.race,
+        race: state.user.race || [],
         officerNonBinary: state.user.officerNonBinary,
       }
     },
@@ -335,7 +335,7 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
-    version: state => {
+    mappedVersion: state => {
       if (state.devTime) {
         return 2
       }
@@ -1659,7 +1659,7 @@ export default new Vuex.Store({
         })
     },
 
-    getUser({ commit, state }) {
+    getUser({ commit, state, getters }) {
       const id = state.user.oid
       return axios
         .get(`${state.apiConfig.apiBaseUrl}userprofile/v2/GetUser/${id}`, {
@@ -1670,9 +1670,8 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
-
           if (
-            state.version === 2 &&
+            getters.mappedVersion === 2 &&
             (!response.data.race ||
               (!response.data.gender && !response.data.officerNonBinary))
           ) {

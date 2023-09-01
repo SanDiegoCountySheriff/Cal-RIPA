@@ -141,7 +141,7 @@ export default {
       isApiUnavailable: computed(() => this.isApiUnavailable),
       stopsWithErrors: computed(() => this.mappedStopsWithErrors),
       apiStopJobLoading: computed(() => this.apiStopJobLoading),
-      version: computed(() => this.version),
+      version: computed(() => this.mappedVersion),
     }
   },
 
@@ -159,7 +159,7 @@ export default {
       'isApiUnavailable',
       'piiServiceAvailable',
       'mappedStopsWithErrors',
-      'version',
+      'mappedVersion',
     ]),
 
     getMappedUser() {

@@ -284,7 +284,7 @@ export default {
     },
 
     raceRules() {
-      return [v => !!v || 'An officer race is required']
+      return [v => v.length > 0 || 'An officer race is required']
     },
 
     genderRules() {

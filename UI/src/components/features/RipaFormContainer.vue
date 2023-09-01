@@ -233,7 +233,7 @@ export default {
       propertySearchAutomaticallySelected: computed(
         () => this.propertySearchAutomaticallySelected,
       ),
-      version: computed(() => this.version),
+      version: computed(() => this.mappedVersion),
     }
   },
 
@@ -259,7 +259,7 @@ export default {
       'reportingEmailAddress',
       'personSearchAutomaticallySelected',
       'propertySearchAutomaticallySelected',
-      'version',
+      'mappedVersion',
     ]),
 
     getMappedUser() {

@@ -150,8 +150,26 @@ public class StopService : IStopService
         {
             switch (race)
             {
-                case "White":
+                case "Asian":
                     officerEthnicities.Add("1");
+                    break;
+                case "Black/African American":
+                    officerEthnicities.Add("2");
+                    break;
+                case "Hispanic/Latine(x)":
+                    officerEthnicities.Add("3");
+                    break;
+                case "Middle Eastern or South Asian":
+                    officerEthnicities.Add("4");
+                    break;
+                case "Native American":
+                    officerEthnicities.Add("5");
+                    break;
+                case "Pacific Islander":
+                    officerEthnicities.Add("6");
+                    break;
+                case "White":
+                    officerEthnicities.Add("7");
                     break;
                 default:
                     break;
