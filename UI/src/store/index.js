@@ -57,8 +57,8 @@ export default new Vuex.Store({
       officerName: null,
       assignment: null,
       otherType: null,
-      race: [],
-      gender: null,
+      officerRace: [],
+      officerGender: null,
       officerNonBinary: null,
     },
     apiConfig: null,
@@ -203,8 +203,8 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
-        gender: state.user.gender,
-        race: state.user.race || [],
+        officerGender: state.user.officerGender,
+        officerRace: state.user.officerRace || [],
         officerNonBinary: state.user.officerNonBinary,
       }
     },
@@ -483,8 +483,8 @@ export default new Vuex.Store({
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
-        race: value.race,
-        gender: value.gender,
+        officerRace: value.officerRace,
+        officerGender: value.officerGender,
         officerNonBinary: value.officerNonBinary,
       }
 
@@ -496,8 +496,8 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
-        race: state.user.race,
-        gender: state.user.gender,
+        officerRace: state.user.officerRace,
+        officerGender: state.user.officerGender,
         officerNonBinary: state.user.officerNonBinary,
       }
 
@@ -743,17 +743,13 @@ export default new Vuex.Store({
         favoriteResults: state.user.favoriteResults,
       }
       return axios
-        .put(
-          `http://localhost:7071/api/v2/PutUser/${updatedUser.id}`,
-          user,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`http://localhost:7071/api/v2/PutUser/${updatedUser.id}`, user, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getUser')
         })
@@ -933,23 +929,19 @@ export default new Vuex.Store({
         otherType: mappedUser.otherType,
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
-        race: mappedUser.race,
-        gender: mappedUser.gender,
+        officerRace: mappedUser.officerRace,
+        officerGender: mappedUser.officerGender,
         officerNonBinary: mappedUser.officerNonBinary,
       }
 
       return axios
-        .put(
-          `http://localhost:7071/api/v2/PutUser/${userId}`,
-          user,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`http://localhost:7071/api/v2/PutUser/${userId}`, user, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getUser')
         })
@@ -1672,8 +1664,8 @@ export default new Vuex.Store({
           commit('updateUserProfile', response.data)
           if (
             getters.mappedVersion === 2 &&
-            (!response.data.race ||
-              (!response.data.gender && !response.data.officerNonBinary))
+            (!response.data.officerRace ||
+              (!response.data.officerGender && !response.data.officerNonBinary))
           ) {
             commit('updateInvalidUser', true)
             return true

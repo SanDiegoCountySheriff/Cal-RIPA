@@ -165,7 +165,7 @@
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="12">
             <ripa-select
-              v-model="model.race"
+              v-model="model.officerRace"
               :items="raceItems"
               :rules="raceRules"
               @input="handleInput"
@@ -284,7 +284,7 @@ export default {
     },
 
     raceRules() {
-      return [v => v.length > 0 || 'An officer race is required']
+      return [v => v?.length > 0 || 'An officer race is required']
     },
 
     genderRules() {

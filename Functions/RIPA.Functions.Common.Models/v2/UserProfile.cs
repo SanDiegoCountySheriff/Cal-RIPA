@@ -53,11 +53,11 @@ public class UserProfile : IUserProfile
     [JsonProperty(PropertyName = "favoriteResults")]
     public string FavoriteResults { get; set; }
 
-    [JsonProperty(PropertyName = "gender")]
-    public string Gender { get; set; }
+    [JsonProperty(PropertyName = "officerGender")]
+    public string OfficerGender { get; set; }
 
-    [JsonProperty(PropertyName = "race")]
-    public List<string> Race { get; set; }
+    [JsonProperty(PropertyName = "officerRace")]
+    public List<string> OfficerRace { get; set; }
 
     [JsonProperty(PropertyName = "officerNonBinary")]
     public bool OfficerNonBinary { get; set; }
