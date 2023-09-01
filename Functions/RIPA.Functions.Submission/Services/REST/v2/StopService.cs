@@ -296,7 +296,6 @@ public class StopService : IStopService
 
         switch (stopReasonKey)
         {
-            // TODO: add new stuff
             case "1": //Traffic Violation
                 primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
                 primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
@@ -309,6 +308,11 @@ public class StopService : IStopService
             case "7": //Education Code
                 primaryReason.EDU_sec_CD = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
                 primaryReason.EDU_subDiv_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
+                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new List<string>() };
+                break;
+            case "9": //Probable Cause
+                primaryReason.ListProb_T = new Listprob_T { Prob_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToList() };
+                primaryReason.Prob_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null; ;
                 primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new List<string>() };
                 break;
             default: //All other stop reason keys
