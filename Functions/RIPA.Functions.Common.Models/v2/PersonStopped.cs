@@ -15,7 +15,9 @@ public class PersonStopped : IPersonStopped
     public bool NonBinaryPerson { get; set; }
     public string PerceivedSexualOrientation { get; set; }
     public ReasonForStop ReasonForStop { get; set; }
+    public ReasonGivenForStop ReasonGivenForStop { get; set; }
     public string ReasonForStopExplanation { get; set; }
+    public string ReasonGivenForStopExplanation { get; set; }
     public bool? PassengerInVehicle { get; set; }
     public bool? InsideResidence { get; set; }
     public bool ReasonForStopPiiFound { get; set; }

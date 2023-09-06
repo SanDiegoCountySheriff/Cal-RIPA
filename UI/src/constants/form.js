@@ -138,6 +138,89 @@ export const STOP_REASONS_V2 = [
   },
 ]
 
+export const GIVEN_STOP_REASONS_V2 = [
+  {
+    name: 'Traffic Violation - Moving Violation',
+    value: 1,
+    abbreviation: 'MV',
+  },
+  { name: 'Traffic Violation - Equipment Violation', value: 2 },
+  {
+    name: 'Traffic Violation - Non-moving Violation',
+    value: 3,
+  },
+  {
+    name: 'Officer witnessed commission of a crime',
+    value: 4,
+  },
+  {
+    name: 'Matched suspect description',
+    value: 5,
+  },
+  {
+    name: "Matched description of suspect's vehicle or vehicle observed at the scene of a crime",
+    value: 6,
+  },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
+    value: 7,
+  },
+  { name: 'Carrying suspicious object', value: 8 },
+  { name: 'Actions indicative of casing a vactim or location', value: 9 },
+  {
+    name: 'Suspected of acting as a lookout',
+    value: 10,
+  },
+  {
+    name: 'Actions indicative of a drug transaction',
+    value: 11,
+  },
+  {
+    name: 'Actions indicative of engaging in a violent crime',
+    value: 12,
+  },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 13,
+  },
+  {
+    name: 'Probable cause to arrest or search',
+    value: 14,
+  },
+  {
+    name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150',
+    value: 15,
+  },
+  {
+    name: 'Known to be on parole/probation/PRCS/mandatory supervision',
+    value: 16,
+  },
+  {
+    name: 'Knowledge of outstanding arrest warrant / wanted person',
+    value: 17,
+  },
+  {
+    name: 'Investigation to determine whether the person is truant',
+    value: 18,
+  },
+  {
+    name: 'Consensual encounter resulting in a search',
+    value: 19,
+  },
+  {
+    name: 'Possible conduct warranting disciple under Education Code sections 48900, 48900.2, 48900.3, 48900.4, and 48900.7',
+    value: 20,
+  },
+  {
+    name: 'Determine whether the student violated school policy',
+    value: 21,
+  },
+  {
+    name: 'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect',
+    value: 22,
+  },
+]
+
 export const PROBABLE_CAUSES = [
   { name: 'Officer witnessed commission of a crime', value: 1 },
   { name: 'Matched suspect description', value: 2 },

@@ -27,6 +27,7 @@ import {
 import {
   BASIS_FOR_SEARCH_V2,
   FORCE_ACTIONS_TAKEN,
+  GIVEN_STOP_REASONS_V2,
   NON_FORCE_ACTIONS_TAKEN,
   PERSON_GENDERS_V2,
   STOP_RESULTS_V2,
@@ -175,6 +176,7 @@ export const stopReasonGivenTemplate = template => {
 
   return {
     reasonForStop: null,
+    reasonGivenForStop: null,
     educationViolation: null,
     educationViolationCode: null,
     trafficViolation: null,
@@ -184,6 +186,7 @@ export const stopReasonGivenTemplate = template => {
     searchOfPerson: null,
     searchOfProperty: null,
     reasonForStopExplanation: null,
+    reasonGivenForStopExplanation: null,
     reasonForStopPiiFound: false,
   }
 }
@@ -1372,6 +1375,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
+        reasonGivenForStop: Number(person.reasonGivenForStop.key),
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
@@ -1391,6 +1395,7 @@ const getFullStopPeopleListedV2 = apiStop => {
         probableCause: getProbableCauseDetailKeys(person.reasonForStop),
         probableCauseCode: getProbableCauseDetailCode(person.reasonForStop),
         reasonForStopExplanation: person.reasonForStopExplanation,
+        reasonGivenForStopExplanation: person.reasonGivenForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
         searchOfPerson: getStopReasonSearchOfPersonV2(person),
         searchOfProperty: getStopReasonSearchOfPropertyV2(person),
@@ -1939,10 +1944,13 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       propertySearchConsentGiven:
         person.nonForceActionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStopV2(person, statutes),
+      reasonGivenForStop: getReasonGivenForStopV2(person, statutes),
       passengerInVehicle: person.passengerInVehicle,
       insideResidence: person.insideResidence,
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
+      reasonGivenForStopExplanation:
+        person.stopReason?.reasonGivenForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
     }
   })
@@ -2227,6 +2235,26 @@ const getReasonForStopV2 = (person, statutes) => {
   }
 
   return null
+}
+
+const getReasonGivenForStopV2 = person => {
+  const reasons = person.stopReason?.reasonGivenForStop || []
+
+  if (reasons.length > 0) {
+    const selectedReasons = reasons.map(reason => {
+      const [filteredReason] = GIVEN_STOP_REASONS_V2.filter(
+        item => item.value === reason,
+      )
+      return {
+        key: reason.toString(),
+        reason: filteredReason?.name || '',
+        abbreviation: filteredReason?.abbreviation || '',
+      }
+    })
+    return selectedReasons
+  } else {
+    return null
+  }
 }
 
 const getReasonForStopDetails = (reasonKey, person) => {
