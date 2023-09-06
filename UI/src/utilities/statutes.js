@@ -10,6 +10,7 @@ export const getStatuteContent = statute => {
     return e
   })
 
+  const statutes = version === 1 ? STATUTES : STATUTES_V2
 
   const level1 = splitSections.length > 0 ? splitSections[0] : null
   const level2 = splitSections.length > 1 ? splitSections[1] : null
