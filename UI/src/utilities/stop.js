@@ -2248,7 +2248,6 @@ const getReasonGivenForStopV2 = person => {
       return {
         key: reason.toString(),
         reason: filteredReason?.name || '',
-        abbreviation: filteredReason?.abbreviation || '',
       }
     })
     return selectedReasons
