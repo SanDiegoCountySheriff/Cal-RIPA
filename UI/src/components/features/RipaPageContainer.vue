@@ -141,7 +141,7 @@ export default {
       isApiUnavailable: computed(() => this.isApiUnavailable),
       stopsWithErrors: computed(() => this.mappedStopsWithErrors),
       apiStopJobLoading: computed(() => this.apiStopJobLoading),
-      version: computed(() => this.mappedVersion),
+      version: computed(() => this.version),
     }
   },
 
@@ -159,7 +159,7 @@ export default {
       'isApiUnavailable',
       'piiServiceAvailable',
       'mappedStopsWithErrors',
-      'mappedVersion',
+      'version',
     ]),
 
     getMappedUser() {
@@ -169,8 +169,8 @@ export default {
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
-        officerRace: this.mappedUser.officerRace,
-        officerGender: this.mappedUser.officerGender,
+        race: this.mappedUser.race,
+        gender: this.mappedUser.gender,
         officerNonBinary: this.mappedUser.officerNonBinary || false,
       }
     },

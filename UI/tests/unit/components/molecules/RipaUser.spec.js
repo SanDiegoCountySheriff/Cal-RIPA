@@ -16,8 +16,8 @@ describe('Ripa User', () => {
       otherType: 'Data Services',
       startDate: '2014-10-10',
       yearsExperience: 7,
-      officerRace: ['Asian'],
-      officerGender: 'Cisgender man',
+      race: 'Asian',
+      gender: 'Cisgender man',
       officerNonBinary: false,
     }
     ripaUser = {
@@ -51,7 +51,7 @@ describe('Ripa User', () => {
           otherType: 'Data Services',
           startDate: '2014-10-10',
           yearsExperience: 7,
-          race: ['Asian'],
+          race: 'Asian',
           gender: 'Cisgender man',
           officerNonBinary: false,
         },
@@ -73,7 +73,7 @@ describe('Ripa User', () => {
     )
 
     expect(wrapper.vm.raceRules[0](null)).toEqual('An officer race is required')
-    expect(wrapper.vm.raceRules[0](['test'])).toEqual(true)
+    expect(wrapper.vm.raceRules[0]('test')).toEqual(true)
   })
 
   it('should validate officer gender rules', () => {
@@ -85,7 +85,7 @@ describe('Ripa User', () => {
           otherType: 'Data Services',
           startDate: '2014-10-10',
           yearsExperience: 7,
-          race: ['Asian'],
+          race: 'Asian',
           gender: null,
           officerNonBinary: false,
         },
@@ -99,6 +99,7 @@ describe('Ripa User', () => {
   })
 
   it('should display officer race and gender inputs if current date > 01/01/24', () => {
+    
     wrapper = factory(
       {
         value: ripaUserV2,
@@ -133,7 +134,7 @@ describe('Ripa User', () => {
     expect(wrapper.html()).toContain('Off duty and/or working private event')
   })
 
-  it('should display new assignment contracted by another agency for v2 stop', () => {
+  it('should display new assignment contracte by another agency for v2 stop', () => {
     ripaUserV2.assignment = 12
     wrapper = factory(
       {

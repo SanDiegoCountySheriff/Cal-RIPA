@@ -63,8 +63,6 @@ const emptyLocation = () => {
     blockNumber: null,
     streetName: null,
     intersection: null,
-    crossStreet1: null,
-    crossStreet2: null,
     toggleLocationOptions: false,
     highwayExit: null,
     landmark: null,
@@ -365,18 +363,6 @@ const getSummaryLocation = apiStop => {
       detail: apiStop.location.intersection,
     })
   }
-  if (apiStop.location.crossStreet1) {
-    children.push({
-      header: 'Cross Street 1',
-      detail: apiStop.location.crossStreet1,
-    })
-  }
-  if (apiStop.location.crossStreet2) {
-    children.push({
-      header: 'Cross Street 2',
-      detail: apiStop.location.crossStreet2,
-    })
-  }
   if (apiStop.location.highwayExit) {
     children.push({
       header: 'Highway Exit',
@@ -474,11 +460,11 @@ const getSummaryOfficerV2 = apiStop => {
       },
       {
         header: 'Officer Race',
-        detail: getOfficerRace(apiStop.officerRace),
+        detail: apiStop.race,
       },
       {
         header: 'Officer Gender',
-        detail: apiStop.officerGender,
+        detail: apiStop.gender,
       },
       {
         header: 'Officer Nonbinary',
@@ -486,16 +472,6 @@ const getSummaryOfficerV2 = apiStop => {
       },
     ],
   }
-}
-
-const getOfficerRace = officerRace => {
-  let raceString = ''
-
-  for (const race of officerRace) {
-    raceString += race + ', '
-  }
-
-  return raceString.slice(0, -2)
 }
 
 const getSummaryDuration = apiStop => {
@@ -1175,8 +1151,7 @@ export const apiStopToFullStopV2 = apiStop => {
       school: schoolNumber,
       blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
-      crossStreet1: apiStop.location?.crossStreet1 || null,
-      crossStreet2: apiStop.location?.crossStreet2 || null,
+      intersection: apiStop.location?.intersection || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
       landmark: apiStop.location?.landMark || null,
@@ -1849,8 +1824,7 @@ export const fullStopToApiStopV2 = (
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
-      crossStreet1: fullStop.location?.crossStreet1 || '',
-      crossStreet2: fullStop.location?.crossStreet2 || '',
+      intersection: fullStop.location?.intersection || '',
       landMark: fullStop.location?.landmark || '',
       outOfCounty,
       piiFound: fullStop.location?.piiFound || false,
@@ -1878,8 +1852,8 @@ export const fullStopToApiStopV2 = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
-    officerRace: parsedApiStop ? parsedApiStop.officerRace : officer.officerRace,
-    officerGender: parsedApiStop ? parsedApiStop.officerGender : officer.officerGender,
+    officerRace: parsedApiStop ? parsedApiStop.race : officer.race,
+    officerGender: parsedApiStop ? parsedApiStop.gender : officer.gender,
     officerNonBinary: parsedApiStop
       ? parsedApiStop.officerNonBinary
       : officer.officerNonBinary,

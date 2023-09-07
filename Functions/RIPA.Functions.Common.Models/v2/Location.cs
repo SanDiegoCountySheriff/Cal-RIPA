@@ -7,8 +7,7 @@ namespace RIPA.Functions.Common.Models.v2;
 public class Location : ILocation
 {
     public bool ToggleLocationOptions { get; set; }
-    public string CrossStreet1 { get; set; }
-    public string CrossStreet2 { get; set; }
+    public string Intersection { get; set; }
     public string BlockNumber { get; set; }
     public string LandMark { get; set; }
     public string StreetName { get; set; }

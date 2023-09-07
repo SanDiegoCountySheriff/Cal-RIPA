@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using RIPA.Functions.Common.Models.v1;
 
 namespace RIPA.Functions.Common.Models.Interfaces;
 
@@ -8,13 +8,13 @@ public interface IPersonStopped
     bool BasisForSearchPiiFound { get; set; }
     string Id { get; set; }
     bool IsStudent { get; set; }
-    List<BasisForPropertySeizure> ListBasisForPropertySeizure { get; set; }
-    List<BasisForSearch> ListBasisForSearch { get; set; }
-    List<ContrabandOrEvidenceDiscovered> ListContrabandOrEvidenceDiscovered { get; set; }
-    List<PerceivedOrKnownDisability> ListPerceivedOrKnownDisability { get; set; }
-    List<PerceivedRace> ListPerceivedRace { get; set; }
-    List<ResultOfStop> ListResultOfStop { get; set; }
-    List<TypeOfPropertySeized> ListTypeOfPropertySeized { get; set; }
+    BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
+    BasisForSearch[] ListBasisForSearch { get; set; }
+    ContrabandOrEvidenceDiscovered[] ListContrabandOrEvidenceDiscovered { get; set; }
+    PerceivedOrKnownDisability[] ListPerceivedOrKnownDisability { get; set; }
+    PerceivedRace[] ListPerceivedRace { get; set; }
+    ResultOfStop[] ListResultOfStop { get; set; }
+    TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
     int PerceivedAge { get; set; }
     string PerceivedGender { get; set; }
     bool PerceivedLimitedEnglish { get; set; }

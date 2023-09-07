@@ -4,9 +4,11 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
+using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Models.v1;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
+using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
@@ -16,13 +18,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions;
+namespace RIPA.Functions.Submission.Functions.v1;
 
 public class TimersSubmissionConsumer
 {
-    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
     private readonly ISftpService _sftpService;
-    private readonly IStopService _stopService;
+    private readonly IStopService<Stop> _stopService;
     readonly ISubmissionServiceBusService _submissionServiceBusService;
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
@@ -30,12 +32,7 @@ public class TimersSubmissionConsumer
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public TimersSubmissionConsumer(
-        IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService,
-        ISftpService sftpService,
-        IStopService stopService,
-        ISubmissionServiceBusService submissionServiceBusService
-    )
+    public TimersSubmissionConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, ISftpService sftpService, IStopService<Stop> stopService, ISubmissionServiceBusService submissionServiceBusService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _sftpService = sftpService;
@@ -79,7 +76,7 @@ public class TimersSubmissionConsumer
             }
 
             // Get Stop
-            Common.Models.v1.Stop stop = await GetStop(log, submissionMessage.StopId, runId);
+            Stop stop = await GetStop(log, submissionMessage.StopId, runId);
 
             if (stop == null)
             {
@@ -190,7 +187,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<Common.Models.v1.Stop> GetStop(ILogger log, string id, string runId)
+    private async Task<Stop> GetStop(ILogger log, string id, string runId)
     {
         try
         {
@@ -217,7 +214,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private DojStop GetDojStop(ILogger log, Common.Models.v1.Stop stop, string runId)
+    private DojStop GetDojStop(ILogger log, Stop stop, string runId)
     {
         try
         {
@@ -231,7 +228,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandledDojCastError(ILogger log, Common.Models.v1.Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
+    private async Task<bool> HandledDojCastError(ILogger log, Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
     {
         try
         {
@@ -300,7 +297,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Common.Models.v1.Stop stop)
+    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Stop stop)
     {
         try
         {
@@ -332,7 +329,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandleDojSubmitSuccess(ILogger log, Common.Models.v1.Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
+    private async Task<bool> HandleDojSubmitSuccess(ILogger log, Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
     {
         try
         {
@@ -347,7 +344,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Common.Models.v1.Stop stop)
+    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Stop stop)
     {
         try
         {

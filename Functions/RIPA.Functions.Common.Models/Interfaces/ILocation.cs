@@ -7,6 +7,7 @@ public interface ILocation
     ICity City { get; set; }
     IGeoLocation GeoLocation { get; set; }
     string HighwayExit { get; set; }
+    string Intersection { get; set; }
     string LandMark { get; set; }
     bool OutOfCounty { get; set; }
     bool PiiFound { get; set; }

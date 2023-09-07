@@ -2,33 +2,38 @@
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
-using RIPA.Functions.Submission.Models.v1;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
+using RIPA.Functions.Submission.Models;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RIPA.Functions.Submission.Services.REST.v1;
+namespace RIPA.Functions.Submission.Services.REST;
 
-public class StopService : IStopService
+public class StopService<T> : IStopService<T> where T : IStop
 {
-    private readonly ILogger<StopService> _logger;
+    private readonly ILogger<StopService<T>> _logger;
 
-    public StopService(ILogger<StopService> logger)
+    public StopService(ILogger<StopService<T>> logger)
     {
         _logger = logger;
     }
 
-    public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
+    public T NewSubmission(T stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
         stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
 
-        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || !x.ListSubmissionError.Any() || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
+        }
+        else if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
         }
 
-        var submission = new Common.Models.Submission
+        var submissions = stop.ListSubmission.ToList();
+        ISubmission submission = new Common.Models.v1.Submission
         {
             DateSubmitted = dateSubmitted,
             Id = submissionId,
@@ -36,29 +41,50 @@ public class StopService : IStopService
             FileName = fileName
         };
 
-        stop.ListSubmission.Add(submission);
-
+        submissions.Add(submission);
+        stop.ListSubmission = submissions.ToArray();
         return stop;
     }
 
-    public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
+    public T ErrorSubmission(T stop, SubmissionError submissionError, string stopStatus)
     {
+        if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new Common.Models.v1.Submission[0];
+            ISubmission submission = new Common.Models.v1.Submission
+            {
+                DateSubmitted = submissionError.DateReported,
+                Id = submissionError.SubmissionId,
+                Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted),
+                FileName = submissionError.FileName
+            };
+            var submissions = stop.ListSubmission.ToList();
+            submissions.Add(submission);
+            stop.ListSubmission = submissions.ToArray();
+        }
+
         var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
 
         foreach (var submission in pendingSubmissions)
         {
-            submission.ListSubmissionError.Add(submissionError);
+            List<ISubmissionError> listSubmissionError = new List<ISubmissionError>();
+            if (submission.ListSubmissionError != null)
+            {
+                listSubmissionError = submission.ListSubmissionError.ToList();
+            }
+            listSubmissionError.Add(submissionError);
+            submission.ListSubmissionError = listSubmissionError.ToArray();
+
             submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
         }
 
         stop.Status = stopStatus;
-
         return stop;
     }
 
-    public DojStop CastToDojStop(Stop stop)
+    public DojStop CastToDojStop(T stop)
     {
-        DojStop dojStop = new()
+        DojStop dojStop = new DojStop
         {
             LEARecordID = stop.Id,
             ORI = stop.Ori,
@@ -74,9 +100,9 @@ public class StopService : IStopService
                 ATOth = stop.OfficerAssignment.OtherType,
                 Proxy = ""
             },
-            Location = new Models.v1.Location
+            Location = new Models.Location
             {
-                Loc = CastToDojLocation(stop.Location as Common.Models.v1.Location),
+                Loc = CastToDojLocation(stop.Location),
                 City = stop.Location.City?.Codes?.Code,
                 K12_Flag = stop.Location.School ? "Y" : string.Empty,
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
@@ -88,7 +114,7 @@ public class StopService : IStopService
         return dojStop;
     }
 
-    public string CastToDojLocation(Common.Models.v1.Location location)
+    public string CastToDojLocation(ILocation location)
     {
         string dojLocation = location.Intersection;
 
@@ -115,26 +141,26 @@ public class StopService : IStopService
         return dojLocation;
     }
 
-    public Listperson_Stopped CastToDojListPersonStopped(List<IPersonStopped> listPersonStopped, bool isSchool)
+    public Listperson_Stopped CastToDojListPersonStopped(IPersonStopped[] listPersonStopped, bool isSchool)
     {
-        var listDojPersonStopped = new List<Person_Stopped>();
+        var listDojPersonStopped = new Person_Stopped[0].ToList();
 
-        foreach (PersonStopped personStopped in listPersonStopped.Cast<PersonStopped>())
+        foreach (PersonStopped personStopped in listPersonStopped)
         {
-            Person_Stopped dojPersonStopped = new()
+            Person_Stopped dojPersonStopped = new Person_Stopped
             {
                 PID = personStopped.Id,
                 Perc = new Perc
                 {
                     ListEthn = new Listethn
                     {
-                        Ethn = personStopped.ListPerceivedRace.Select(x => x.Key.ToString()).ToList()
+                        Ethn = personStopped.ListPerceivedRace.Select(x => x.Key.ToString()).ToArray()
                     },
                     Age = personStopped.PerceivedAge.ToString(),
                     Is_LimEng = personStopped.PerceivedLimitedEnglish ? "Y" : "N",
                     ListDisb = new Listdisb
                     {
-                        Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToList()
+                        Disb = personStopped.ListPerceivedOrKnownDisability.Select(x => x.Key.ToString()).ToArray()
                     },
                     Gend = CastToDojPercievedGender(personStopped.PerceivedGender),
                     LGBT = personStopped.PerceivedLgbt ? "Y" : "N",
@@ -143,11 +169,11 @@ public class StopService : IStopService
                 Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
                 ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
-                ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
+                ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToArray() },
                 BasSearch_N = personStopped.BasisForSearchBrief,
-                ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
-                ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
-                ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToList() },
+                ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToArray() },
+                ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToArray() },
+                ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToArray() },
                 ListResult = CastToDojListResult(personStopped.ListResultOfStop)
 
             };
@@ -155,14 +181,13 @@ public class StopService : IStopService
             listDojPersonStopped.Add(dojPersonStopped);
         }
 
-        return new Listperson_Stopped { Person_Stopped = listDojPersonStopped };
+        return new Listperson_Stopped { Person_Stopped = listDojPersonStopped.ToArray() };
     }
 
     public Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
     {
         var stopReasonKey = personStopped.ReasonForStop?.Key;
-
-        Primaryreason primaryReason = new()
+        Primaryreason primaryReason = new Primaryreason
         {
             StReas = stopReasonKey,
             StReas_N = personStopped.ReasonForStopExplanation,
@@ -173,16 +198,16 @@ public class StopService : IStopService
             case "1": //Traffic Violation
                 primaryReason.Tr_ID = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
                 primaryReason.Tr_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
-                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new List<string>() };
+                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                 break;
             case "2": //Reasonable Suspicion
-                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToList() };
+                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = personStopped.ReasonForStop.ListDetail.Select(x => x.Key).ToArray() };
                 primaryReason.Susp_O_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
                 break;
             case "7": //Education Code
                 primaryReason.EDU_sec_CD = personStopped.ReasonForStop.ListDetail.Any() ? personStopped.ReasonForStop.ListDetail.FirstOrDefault().Key : null;
                 primaryReason.EDU_subDiv_CD = personStopped.ReasonForStop.ListCodes.Any() ? personStopped.ReasonForStop.ListCodes.FirstOrDefault().Code : null;
-                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new List<string>() };
+                primaryReason.ListSusp_T = new Listsusp_T { Susp_T = new string[0] };
                 break;
             default: //All other stop reason keys
                 break;
@@ -191,7 +216,7 @@ public class StopService : IStopService
         return primaryReason;
     }
 
-    public Listacttak CastToDojListActTak(List<ActionTakenDuringStop> listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
+    public Listacttak CastToDojListActTak(ActionTakenDuringStop[] listActionTakenDuringStop, bool isPropertySearchConsentGiven, bool isPersonSearchConsentGiven)
     {
         var listActionsTaken = new List<Acttak>();
 
@@ -208,7 +233,7 @@ public class StopService : IStopService
                 isCon = isPropertySearchConsentGiven ? "Y" : "N";
             }
 
-            Acttak acttak = new()
+            Acttak acttak = new Acttak
             {
                 Act_CD = atds.Key,
                 Is_Con = isCon
@@ -216,24 +241,24 @@ public class StopService : IStopService
             listActionsTaken.Add(acttak);
         }
 
-        return new Listacttak { ActTak = listActionsTaken };
+        return new Listacttak { ActTak = listActionsTaken.ToArray() };
     }
 
-    public Listresult CastToDojListResult(List<ResultOfStop> listResultOfStop)
+    public Listresult CastToDojListResult(ResultOfStop[] listResultOfStop)
     {
         var listResults = new List<Result>();
 
         foreach (ResultOfStop ros in listResultOfStop)
         {
-            Result result = new()
+            Result result = new Result
             {
                 ResCD = ros.Key,
-                Res_O_CD = ros.ListCodes?.Select(x => x.Code).ToList()
+                Res_O_CD = ros.ListCodes?.Select(x => x.Code).ToArray()
             };
             listResults.Add(result);
         }
 
-        return new Listresult { Result = listResults };
+        return new Listresult { Result = listResults.ToArray() };
     }
 
     public string CastToDojPercievedGender(string percievedGender)
@@ -248,14 +273,14 @@ public class StopService : IStopService
         };
     }
 
-    public string CastToDojTXType(Stop stop)
+    public string CastToDojTXType(T stop)
     {
-        if (stop.ListSubmission == null || stop.ListSubmission.Count() == 0)
+        if (stop.ListSubmission == null || stop.ListSubmission.Length == 0)
         {
             return "I"; // no submissions 
         }
 
-        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count() == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Length == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             return "U"; // has successful submission(s) to the doj, submission(s) that were not Fatal Errors
         }
