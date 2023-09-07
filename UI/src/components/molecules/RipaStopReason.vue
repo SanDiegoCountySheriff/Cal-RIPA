@@ -215,18 +215,6 @@
               </v-chip>
             </template>
           </v-select>
-
-          <ripa-subheader text="-- and --"></ripa-subheader>
-
-          <ripa-text-input
-            v-model="model.stopReason.reasonGivenForStopExplanation"
-            hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
-            persistent-hint
-            label="Brief Explanation"
-            :loading="loadingPiiStep3"
-            :rules="explanationRules"
-            @blur="handlePiiCheck($event)"
-          ></ripa-text-input>
         </v-col>
       </v-row>
     </v-container>

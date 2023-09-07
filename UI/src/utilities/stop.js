@@ -186,7 +186,6 @@ export const stopReasonGivenTemplate = template => {
     searchOfPerson: null,
     searchOfProperty: null,
     reasonForStopExplanation: null,
-    reasonGivenForStopExplanation: null,
     reasonForStopPiiFound: false,
   }
 }
@@ -541,6 +540,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       content: getSummaryPerceivedOrKnownDisability(person),
     })
     items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: '22', content: getSummaryReasonGivenForStop(person) })
+    }
     items.push({
       id: 'B10',
       content: getSummaryReasonForStopExplanation(person),
@@ -730,6 +732,19 @@ const getSummaryReasonForStopExplanation = person => {
     level: 1,
     header: 'Reason for Stop Explanation',
     detail: person.reasonForStopExplanation,
+  }
+}
+
+const getSummaryReasonGivenForStop = person => {
+  const reasons = person.reasonGivenForStop.map(obj => {
+    return {
+      detail: obj.reason,
+    }
+  })
+  return {
+    level: 2,
+    header: 'Reason Given to Stopped Person',
+    children: reasons,
   }
 }
 
@@ -1395,7 +1410,6 @@ const getFullStopPeopleListedV2 = apiStop => {
         probableCause: getProbableCauseDetailKeys(person.reasonForStop),
         probableCauseCode: getProbableCauseDetailCode(person.reasonForStop),
         reasonForStopExplanation: person.reasonForStopExplanation,
-        reasonGivenForStopExplanation: person.reasonGivenForStopExplanation,
         reasonForStopPiiFound: person.reasonForStopPiiFound || false,
         searchOfPerson: getStopReasonSearchOfPersonV2(person),
         searchOfProperty: getStopReasonSearchOfPropertyV2(person),
@@ -1949,8 +1963,6 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       insideResidence: person.insideResidence,
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
-      reasonGivenForStopExplanation:
-        person.stopReason?.reasonGivenForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
     }
   })
