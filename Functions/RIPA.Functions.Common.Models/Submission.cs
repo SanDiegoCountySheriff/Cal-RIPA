@@ -11,6 +11,5 @@ public class Submission
     public DateTime DateSubmitted { get; set; }
     public string Status { get; set; }
     public string FileName { get; set; }
-    [JsonConverter(typeof(ConcreteConverter<SubmissionError[]>))]
     public List<SubmissionError> ListSubmissionError { get; set; }
 }
