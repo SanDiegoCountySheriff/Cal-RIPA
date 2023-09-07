@@ -185,6 +185,8 @@ describe('Ripa Form Container', () => {
     const expectedUser = {
       agency: 'SDSD',
       assignment: 1,
+      officerGender: undefined,
+      officerRace: [],
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,

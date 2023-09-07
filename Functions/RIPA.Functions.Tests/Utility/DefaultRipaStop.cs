@@ -1,5 +1,7 @@
 ﻿using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v1;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Tests.Utility;
 
@@ -47,12 +49,12 @@ public static class DefaultRipaStop
             },
             StopDuration = 10,
             StopInResponseToCFS = false,
-            ListPersonStopped = new PersonStopped[] {
+            ListPersonStopped = new List<IPersonStopped> {
                 new PersonStopped()
                 {
                     Id = "1",
                     IsStudent = false,
-                    ListPerceivedRace = new PerceivedRace[]
+                    ListPerceivedRace = new List<PerceivedRace>
                     {
                         new PerceivedRace()
                         {
@@ -61,7 +63,7 @@ public static class DefaultRipaStop
                         }
                     },
                     PerceivedLimitedEnglish = false,
-                    ListPerceivedOrKnownDisability = new PerceivedOrKnownDisability[]
+                    ListPerceivedOrKnownDisability = new List<PerceivedOrKnownDisability>
                     {
                         new PerceivedOrKnownDisability()
                         {
@@ -77,7 +79,7 @@ public static class DefaultRipaStop
                     {
                         Key = "1",
                         Reason = "Stop Reason",
-                        ListDetail = new Detail[]
+                        ListDetail = new List<Detail>
                         {
                             new Detail()
                             {
@@ -85,7 +87,7 @@ public static class DefaultRipaStop
                                 Reason = "Detail Reason"
                             }
                         },
-                        ListCodes = new Codes[]
+                        ListCodes = new List<Codes>
                         {
                             new Codes()
                             {
@@ -96,36 +98,22 @@ public static class DefaultRipaStop
                     },
                     ReasonForStopExplanation = "Explanation",
                     ReasonForStopPiiFound = false,
-                    ListActionTakenDuringStop = new ActionTakenDuringStop[]
-                    {
-                        new ActionTakenDuringStop()
-                        {
-                            Key = "1",
-                            Action = "Action"
-                        }
-                    },
+                    ListActionTakenDuringStop = new List < ActionTakenDuringStop > { new ActionTakenDuringStop() { Key = "1", Action = "Action" } },
                     PersonSearchConsentGiven = false,
                     PropertySearchConsentGiven = false,
-                    ListContrabandOrEvidenceDiscovered = new ContrabandOrEvidenceDiscovered[]
-                    {
-                        new ContrabandOrEvidenceDiscovered()
-                        {
-                            Key = "1",
-                            Contraband = "None"
-                        }
-                    },
-                    ListBasisForSearch = new BasisForSearch[] { },
+                    ListContrabandOrEvidenceDiscovered = new List < ContrabandOrEvidenceDiscovered > { new ContrabandOrEvidenceDiscovered() { Key = "1", Contraband = "None" } },
+                    ListBasisForSearch = new List<BasisForSearch>(),
                     BasisForSearchBrief = null,
                     BasisForSearchPiiFound = false,
-                    ListBasisForPropertySeizure = new BasisForPropertySeizure[] { },
-                    ListTypeOfPropertySeized = new TypeOfPropertySeized[] { },
-                    ListResultOfStop = new ResultOfStop[]
+                    ListBasisForPropertySeizure = new List < BasisForPropertySeizure >(),
+                    ListTypeOfPropertySeized = new List < TypeOfPropertySeized >(),
+                    ListResultOfStop = new List<ResultOfStop>
                     {
                         new ResultOfStop()
                         {
                             Key = "1",
                             Result = "Result",
-                            ListCodes = new Codes[]
+                            ListCodes = new List<Codes>
                             {
                                 new Codes()
                                 {
