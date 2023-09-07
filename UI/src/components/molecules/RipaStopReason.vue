@@ -211,7 +211,7 @@
                 small
                 @click:close="handleRemoveItem(item)"
               >
-                {{ item.name }}
+                {{ item.abbreviation }}
               </v-chip>
             </template>
           </v-select>
