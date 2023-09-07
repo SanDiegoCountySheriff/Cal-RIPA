@@ -36,7 +36,7 @@ public class StopService : IStopService
             FileName = fileName
         };
 
-        stop.ListSubmission.Add(submission);
+        stop.ListSubmission.ToList().Add(submission);
 
         return stop;
     }
@@ -82,7 +82,7 @@ public class StopService : IStopService
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stop.Location.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stop.Location.School) : null
         };
 
         return dojStop;
@@ -142,13 +142,13 @@ public class StopService : IStopService
                 },
                 Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
-                ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                ListActTak = CastToDojListActTak(personStopped.ListActionTakenDuringStop.ToList(), personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
                 ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
                 BasSearch_N = personStopped.BasisForSearchBrief,
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
                 ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
                 ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToList() },
-                ListResult = CastToDojListResult(personStopped.ListResultOfStop)
+                ListResult = CastToDojListResult(personStopped.ListResultOfStop.ToList())
 
             };
 

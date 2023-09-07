@@ -13,16 +13,16 @@ public interface IStop
     string Id { get; set; }
     bool IsEdited { get; set; }
     bool IsPiiFound { get; set; }
-    List<AgencyQuestion> ListAgencyQuestion { get; set; }
-    List<IPersonStopped> ListPersonStopped { get; set; }
-    List<Submission> ListSubmission { get; set; }
+    AgencyQuestion[] ListAgencyQuestion { get; set; }
+    IPersonStopped[] ListPersonStopped { get; set; }
+    Submission[] ListSubmission { get; set; }
     ILocation Location { get; set; }
     IOfficerAssignment OfficerAssignment { get; set; }
     string OfficerId { get; set; }
     string OfficerName { get; set; }
     string Ori { get; set; }
     bool OverridePii { get; set; }
-    List<PiiEntity> PiiEntities { get; set; }
+    PiiEntity[] PiiEntities { get; set; }
     string Status { get; set; }
     DateTime StopDateTime { get; set; }
     int StopDuration { get; set; }

@@ -14,7 +14,7 @@ public class Stop : IStop
     public string Agency { get; set; }
     public string OfficerId { get; set; }
     public string OfficerName { get; set; }
-    public List<string> OfficerRace { get; set; }
+    public string[] OfficerRace { get; set; }
     public string OfficerGender { get; set; }
     public bool OfficerNonBinary { get; set; }
     public bool OfficerWorksWithNonReportingAgency { get; set; }
@@ -43,19 +43,19 @@ public class Stop : IStop
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
     public bool StopMadeDuringWelfareCheck { get; set; }
-    [JsonConverter(typeof(ConcreteConverter<List<PersonStopped>>))]
-    public List<IPersonStopped> ListPersonStopped { get; set; }
-    public List<Submission> ListSubmission { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
+    public IPersonStopped[] ListPersonStopped { get; set; }
+    public Submission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
-    public List<PiiEntity> PiiEntities { get; set; }
+    public PiiEntity[] PiiEntities { get; set; }
     public bool OverridePii { get; set; }
     public string EditStopExplanation { get; set; }
     public string EditStopOfficerId { get; set; }
     public bool IsEdited { get; set; }
     [JsonProperty(PropertyName = "telemetry")]
     public Telemetry Telemetry { get; set; }
-    public List<AgencyQuestion> ListAgencyQuestion { get; set; }
+    public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
     public string StopType { get; set; }
 }

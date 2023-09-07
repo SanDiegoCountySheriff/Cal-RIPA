@@ -38,18 +38,18 @@ public class Stop : IStop
     public ILocation Location { get; set; }
     public int StopDuration { get; set; }
     public bool StopInResponseToCFS { get; set; }
-    [JsonConverter(typeof(ConcreteConverter<List<PersonStopped>>))]
-    public List<IPersonStopped> ListPersonStopped { get; set; }
-    public List<Submission> ListSubmission { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
+    public IPersonStopped[] ListPersonStopped { get; set; }
+    public Submission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
-    public List<PiiEntity> PiiEntities { get; set; }
+    public PiiEntity[] PiiEntities { get; set; }
     public bool OverridePii { get; set; }
     public string EditStopExplanation { get; set; }
     public string EditStopOfficerId { get; set; }
     public bool IsEdited { get; set; }
     [JsonProperty(PropertyName = "telemetry")]
     public Telemetry Telemetry { get; set; }
-    public List<AgencyQuestion> ListAgencyQuestion { get; set; }
+    public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
 }

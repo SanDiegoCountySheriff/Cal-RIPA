@@ -49,12 +49,12 @@ public static class DefaultRipaStop
             },
             StopDuration = 10,
             StopInResponseToCFS = false,
-            ListPersonStopped = new List<IPersonStopped> {
+            ListPersonStopped = new IPersonStopped[] {
                 new PersonStopped()
                 {
                     Id = "1",
                     IsStudent = false,
-                    ListPerceivedRace = new List<PerceivedRace>
+                    ListPerceivedRace = new PerceivedRace[]
                     {
                         new PerceivedRace()
                         {
@@ -63,7 +63,7 @@ public static class DefaultRipaStop
                         }
                     },
                     PerceivedLimitedEnglish = false,
-                    ListPerceivedOrKnownDisability = new List<PerceivedOrKnownDisability>
+                    ListPerceivedOrKnownDisability = new PerceivedOrKnownDisability[]
                     {
                         new PerceivedOrKnownDisability()
                         {
@@ -98,16 +98,16 @@ public static class DefaultRipaStop
                     },
                     ReasonForStopExplanation = "Explanation",
                     ReasonForStopPiiFound = false,
-                    ListActionTakenDuringStop = new List < ActionTakenDuringStop > { new ActionTakenDuringStop() { Key = "1", Action = "Action" } },
+                    ListActionTakenDuringStop =  new ActionTakenDuringStop[] { new ActionTakenDuringStop() { Key = "1", Action = "Action" } },
                     PersonSearchConsentGiven = false,
                     PropertySearchConsentGiven = false,
-                    ListContrabandOrEvidenceDiscovered = new List < ContrabandOrEvidenceDiscovered > { new ContrabandOrEvidenceDiscovered() { Key = "1", Contraband = "None" } },
-                    ListBasisForSearch = new List<BasisForSearch>(),
+                    ListContrabandOrEvidenceDiscovered = new  ContrabandOrEvidenceDiscovered [] { new ContrabandOrEvidenceDiscovered() { Key = "1", Contraband = "None" } },
+                    ListBasisForSearch = new BasisForSearch[0],
                     BasisForSearchBrief = null,
                     BasisForSearchPiiFound = false,
-                    ListBasisForPropertySeizure = new List < BasisForPropertySeizure >(),
-                    ListTypeOfPropertySeized = new List < TypeOfPropertySeized >(),
-                    ListResultOfStop = new List<ResultOfStop>
+                    ListBasisForPropertySeizure = new BasisForPropertySeizure[0],
+                    ListTypeOfPropertySeized = new  TypeOfPropertySeized[0],
+                    ListResultOfStop = new ResultOfStop[]
                     {
                         new ResultOfStop()
                         {
