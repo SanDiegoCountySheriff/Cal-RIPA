@@ -16,7 +16,7 @@ public class StopQueryUtility
             StartDate = !string.IsNullOrWhiteSpace(req.Query["StartDate"]) ? DateTime.Parse(req.Query["StartDate"]) : default,
             EndDate = !string.IsNullOrWhiteSpace(req.Query["EndDate"]) ? DateTime.Parse(req.Query["EndDate"]) : default,
             ErrorCode = !string.IsNullOrWhiteSpace(req.Query["ErrorCode"]) ? req.Query["ErrorCode"] : default,
-            Statuses = !string.IsNullOrWhiteSpace(req.Query["Statuses"]) ? req.Query["Statuses"].ToString().Split(',').ToList() : default,
+            Statuses = !string.IsNullOrWhiteSpace(req.Query["Statuses"]) ? req.Query["Statuses"].ToString().Split(',') : default,
             OfficerId = !string.IsNullOrWhiteSpace(req.Query["OfficerId"]) ? req.Query["OfficerId"] : default,
             Offset = !string.IsNullOrWhiteSpace(req.Query["Offset"]) ? Convert.ToInt32(req.Query["Offset"]) : default,
             Limit = !string.IsNullOrWhiteSpace(req.Query["Limit"]) ? Convert.ToInt32(req.Query["Limit"]) : default,
@@ -71,7 +71,7 @@ public class StopQueryUtility
         }
 
         //Status
-        if (stopQuery.Statuses.Any() && !forCpraReport)
+        if (stopQuery.Statuses?.Length > 0 && !forCpraReport)
         {
             string stopQueryStatement = "(";
 
@@ -190,7 +190,7 @@ public class StopQueryUtility
         }
 
         //Status
-        if (stopQuery.Statuses.Any())
+        if (stopQuery.Statuses?.Length > 0)
         {
             string stopQueryStatement = "(";
 

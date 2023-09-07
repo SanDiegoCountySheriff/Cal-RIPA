@@ -2,12 +2,15 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Services.CosmosDb;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
+using RIPA.Functions.Submission.Services.REST;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP;
@@ -52,8 +55,8 @@ public class Startup : FunctionsStartup
     public override void Configure(IFunctionsHostBuilder builder)
     {
         builder.Services.AddLogging();
-        builder.Services.AddTransient<Services.REST.v1.Contracts.IStopService, Services.REST.v1.StopService>();
-        builder.Services.AddTransient<Services.REST.v2.Contracts.IStopService, Services.REST.v2.StopService>();
+        builder.Services.AddTransient<IStopService<Common.Models.v1.Stop>, StopService<Common.Models.v1.Stop>>();
+        builder.Services.AddTransient<IStopService<Common.Models.v2.Stop>, StopService<Common.Models.v2.Stop>>();
         builder.Services.AddSingleton<ISftpService, SftpService>();
 
         var submissionContainer = CreateSubmissionContainerAsync().GetAwaiter().GetResult();

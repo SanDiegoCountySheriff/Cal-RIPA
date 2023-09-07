@@ -13,7 +13,7 @@ using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
+using RIPA.Functions.Submission.Services.REST.Contracts;
 using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
@@ -29,11 +29,11 @@ public class GenerateCpraReport
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
     private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
-    private readonly IStopService _stopService;
+    private readonly IStopService<Stop> _stopService;
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public GenerateCpraReport(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService stopService)
+    public GenerateCpraReport(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService<Stop> stopService)
     {
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");

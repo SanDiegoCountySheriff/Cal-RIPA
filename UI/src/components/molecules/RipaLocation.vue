@@ -152,41 +152,14 @@
         <v-col cols="12" sm="12">
           <ripa-subheader text="-- or --"></ripa-subheader>
 
-          <v-row>
-            <template v-if="model.stopVersion === 1">
-              <v-col cols="12" sm="12">
-                <ripa-text-input
-                  v-model="model.location.intersection"
-                  :loading="loadingPiiStep1"
-                  :rules="intersectionRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Closest Intersection"
-                >
-                </ripa-text-input>
-              </v-col>
-            </template>
-
-            <template v-else-if="model.stopVersion === 2">
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet1"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 1"
-                ></ripa-text-input>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet2"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 2"
-                ></ripa-text-input>
-              </v-col>
-            </template>
-          </v-row>
+          <ripa-text-input
+            v-model="model.location.intersection"
+            :loading="loadingPiiStep1"
+            :rules="intersectionRules"
+            @blur="handlePiiCheck($event)"
+            label="Closest Intersection"
+          >
+          </ripa-text-input>
 
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
@@ -446,21 +419,6 @@ export default {
       ]
     },
 
-    crossStreetRules() {
-      const crossStreet1 = this.model.location.crossStreet1
-      const crossStreet2 = this.model.location.crossStreet2
-
-      return [
-        this.isLocationOptionsFilled ||
-          (!!crossStreet1 && !!crossStreet2) ||
-          'Must fill out both cross streets in order to use cross streets',
-        (this.isLocationOptionsFilled &&
-          crossStreet1.length < 50 &&
-          crossStreet2.length < 50) ||
-          'Cross streets must be 50 characters or less',
-      ]
-    },
-
     highwayRules() {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
@@ -503,8 +461,6 @@ export default {
       const blockNumber = this.model.location.blockNumber
       const streetName = this.model.location.streetName
       const intersection = this.model.location.intersection
-      const crossStreet1 = this.model.location.crossStreet1
-      const crossStreet2 = this.model.location.crossStreet2
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
@@ -532,10 +488,7 @@ export default {
           streetName &&
           streetName.length > 0 &&
           (blockNumber + streetName).length >= 5) ||
-        (intersection &&
-          intersection.length >= 5 &&
-          this.model.stopVersion === 1) ||
-        (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
+        (intersection && intersection.length >= 5) ||
         (checked &&
           highwayExit !== null &&
           highwayExit.length >= 5 &&

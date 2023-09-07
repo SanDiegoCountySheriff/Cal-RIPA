@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace RIPA.Functions.Common.Models.v1;
+namespace RIPA.Functions.Common.Models;
 
 public enum PercievedGender
 {
