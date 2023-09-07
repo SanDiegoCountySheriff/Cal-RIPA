@@ -11,6 +11,8 @@
     :items="items"
     :rules="rules"
     validate-on-blur
+    :chips="chips"
+    :multiple="multiple"
   ></v-select>
 </template>
 
@@ -44,7 +46,7 @@ export default {
 
   props: {
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null,
     },
     disabled: {
@@ -74,6 +76,14 @@ export default {
     rules: {
       type: Array,
       default: () => [],
+    },
+    chips: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
   },
 }

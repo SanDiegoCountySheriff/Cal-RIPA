@@ -57,8 +57,8 @@ export default new Vuex.Store({
       officerName: null,
       assignment: null,
       otherType: null,
-      race: null,
-      gender: null,
+      officerRace: [],
+      officerGender: null,
       officerNonBinary: null,
     },
     apiConfig: null,
@@ -203,8 +203,8 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
-        gender: state.user.gender,
-        race: state.user.race,
+        officerGender: state.user.officerGender,
+        officerRace: state.user.officerRace || [],
         officerNonBinary: state.user.officerNonBinary,
       }
     },
@@ -335,7 +335,7 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
-    version: state => {
+    mappedVersion: state => {
       if (state.devTime) {
         return 2
       }
@@ -483,8 +483,8 @@ export default new Vuex.Store({
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
-        race: value.race,
-        gender: value.gender,
+        officerRace: value.officerRace,
+        officerGender: value.officerGender,
         officerNonBinary: value.officerNonBinary,
       }
 
@@ -496,8 +496,8 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
-        race: state.user.race,
-        gender: state.user.gender,
+        officerRace: state.user.officerRace,
+        officerGender: state.user.officerGender,
         officerNonBinary: state.user.officerNonBinary,
       }
 
@@ -933,8 +933,8 @@ export default new Vuex.Store({
         otherType: mappedUser.otherType,
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
-        race: mappedUser.race,
-        gender: mappedUser.gender,
+        officerRace: mappedUser.officerRace,
+        officerGender: mappedUser.officerGender,
         officerNonBinary: mappedUser.officerNonBinary,
       }
 
@@ -1659,7 +1659,7 @@ export default new Vuex.Store({
         })
     },
 
-    getUser({ commit, state }) {
+    getUser({ commit, state, getters }) {
       const id = state.user.oid
       return axios
         .get(`${state.apiConfig.apiBaseUrl}userprofile/v2/GetUser/${id}`, {
@@ -1670,11 +1670,10 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
-
           if (
-            state.version === 2 &&
-            (!response.data.race ||
-              (!response.data.gender && !response.data.officerNonBinary))
+            getters.mappedVersion === 2 &&
+            (!response.data.officerRace ||
+              (!response.data.officerGender && !response.data.officerNonBinary))
           ) {
             commit('updateInvalidUser', true)
             return true
