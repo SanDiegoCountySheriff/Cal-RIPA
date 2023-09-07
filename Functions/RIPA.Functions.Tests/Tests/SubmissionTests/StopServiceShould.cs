@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using RIPA.Functions.Common.Models.Interfaces;
-using RIPA.Functions.Submission.Services.REST;
+using RIPA.Functions.Submission.Services.REST.v1;
 using RIPA.Functions.Tests.Utility;
 using Xunit;
 
@@ -9,11 +8,11 @@ namespace RIPA.Functions.Tests.Tests.SubmissionTests;
 
 public class StopServiceShould
 {
-    private readonly StopService<IStop> sut;
+    private readonly StopService sut;
 
     public StopServiceShould()
     {
-        sut = new StopService<IStop>(Mock.Of<ILogger<StopService<IStop>>>());
+        sut = new StopService(Mock.Of<ILogger<StopService>>());
     }
 
     [Fact]

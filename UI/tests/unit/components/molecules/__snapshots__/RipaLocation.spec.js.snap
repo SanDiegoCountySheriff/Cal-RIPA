@@ -103,16 +103,20 @@ exports[`Ripa Location should match snapshot 1`] = `
         <div class="ripa-label tw-font-bold tw-my-4"><span>
     -- or --
   </span></div>
-        <div class="ripa-text-input">
-          <!---->
-          <div class="v-input theme--light v-text-field">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Closest Intersection</label><input id="input-28" type="text"></div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+        <div class="row">
+          <div class="col-sm-12 col-12">
+            <div class="ripa-text-input">
+              <!---->
+              <div class="v-input theme--light v-text-field">
+                <div class="v-input__control">
+                  <div class="v-input__slot">
+                    <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Closest Intersection</label><input id="input-28" type="text"></div>
+                  </div>
+                  <div class="v-text-field__details">
+                    <div class="v-messages theme--light">
+                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

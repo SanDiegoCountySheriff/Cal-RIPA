@@ -163,43 +163,42 @@
 
       <template v-if="version === 2">
         <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <div class="md:tw-mr-4">
-              <ripa-select
-                v-model="model.race"
-                label="Officer Race"
-                :items="raceItems"
-                itemText="name"
-                itemValue="name"
-                :rules="raceRules"
-                @input="handleInput"
-                clearable
-              ></ripa-select>
-            </div>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
+          <v-col cols="12" sm="12" md="12">
             <ripa-select
-              v-model="model.gender"
-              label="Officer Gender"
-              :items="genderItems"
-              itemText="name"
-              itemValue="name"
-              :rules="genderRules"
+              v-model="model.officerRace"
+              :items="raceItems"
+              :rules="raceRules"
               @input="handleInput"
+              label="Officer Race"
+              itemValue="name"
+              itemText="name"
               clearable
+              multiple
             ></ripa-select>
           </v-col>
         </v-row>
+
         <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6"></v-col>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-select
+              v-model="model.officerGender"
+              :items="genderItems"
+              :rules="genderRules"
+              @input="handleInput"
+              label="Officer Gender"
+              class="md:tw-mr-4"
+              itemValue="name"
+              itemText="name"
+              clearable
+            ></ripa-select>
+          </v-col>
           <v-col cols="12" sm="12" md="6">
             <ripa-switch
               v-model="model.officerNonBinary"
-              label="Nonbinary Person"
-              :max-width="250"
               :rules="genderRules"
+              :max-width="250"
               @input="handleInput"
+              label="Nonbinary Person"
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -285,11 +284,11 @@ export default {
     },
 
     raceRules() {
-      return [v => !!v || 'An officer race is required']
+      return [v => v?.length > 0 || 'An officer race is required']
     },
 
     genderRules() {
-      const gender = this.model.gender
+      const gender = this.model.officerGender
       const checked = this.model.officerNonBinary
       const isValid = gender || checked
 
