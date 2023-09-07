@@ -12,8 +12,7 @@ public class ConcreteConverter<T> : JsonConverter
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        var returnItem = serializer.Deserialize<T>(reader);
-        return returnItem;
+        return serializer.Deserialize<T>(reader);
     }
 
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

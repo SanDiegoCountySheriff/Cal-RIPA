@@ -36,7 +36,7 @@ public class StopService : IStopService
             FileName = fileName
         };
 
-        stop.ListSubmission.Add(submission);
+        stop.ListSubmission.ToList().Add(submission);
 
         return stop;
     }
@@ -79,7 +79,7 @@ public class StopService : IStopService
                 ATOth = stop.OfficerAssignment.OtherType,
                 Proxy = "",
                 OfficerGend = CastToDojGender(stop.OfficerGender),
-                ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace),
+                ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace.ToList()),
                 Nonbinary_Officer = stop.OfficerNonBinary ? "5" : string.Empty,
                 NonPrimaryAgency = stop.OfficerWorksWithNonReportingAgency ? "Y" : "N",
             },
@@ -100,7 +100,7 @@ public class StopService : IStopService
                 K12Code = stopLocation.School ? stopLocation.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped, stopLocation.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stopLocation.School) : null
         };
 
         return dojStop;
@@ -209,15 +209,15 @@ public class StopService : IStopService
                 Is_Residence = personStopped.InsideResidence == true ? "Y" : "N",
                 Is_Stud = isSchool ? personStopped.IsStudent ? "Y" : "N" : string.Empty,
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
-                ListNonForceActTak = CastToDojListNonForceActTak(personStopped.ListNonForceActionsTakenDuringStop, personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
-                ListForceActTak = CastToDojListForceActTak(personStopped.ListForceActionsTakenDuringStop),
+                ListNonForceActTak = CastToDojListNonForceActTak(personStopped.ListNonForceActionsTakenDuringStop.ToList(), personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
+                ListForceActTak = CastToDojListForceActTak(personStopped.ListForceActionsTakenDuringStop.ToList()),
                 ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
-                ConsentType = CastToDojConsentType(personStopped.ListBasisForSearch),
+                ConsentType = CastToDojConsentType(personStopped.ListBasisForSearch.ToList()),
                 BasSearch_N = personStopped.BasisForSearchBrief,
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
                 ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
                 ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToList() },
-                ListResult = CastToDojListResult(personStopped.ListResultOfStop)
+                ListResult = CastToDojListResult(personStopped.ListResultOfStop.ToList())
 
             };
 
