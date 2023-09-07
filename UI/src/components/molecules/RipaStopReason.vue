@@ -202,7 +202,6 @@
             :items="getGivenReasonItems"
             :rules="givenReasonRules"
             @input="handleUpdateModel"
-          ></v-select>
           >
             <template #selection="{ item }">
               <v-chip
