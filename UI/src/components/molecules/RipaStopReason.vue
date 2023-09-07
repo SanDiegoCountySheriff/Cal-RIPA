@@ -203,6 +203,19 @@
             :rules="givenReasonRules"
             @input="handleUpdateModel"
           ></v-select>
+          >
+            <template #selection="{ item }">
+              <v-chip
+                v-bind="item.attrs"
+                :input-value="item.selected"
+                close
+                small
+                @click:close="handleRemoveItem(item)"
+              >
+                {{ item.name }}
+              </v-chip>
+            </template>
+          </v-select>
 
           <ripa-subheader text="-- and --"></ripa-subheader>
 
@@ -471,6 +484,13 @@ export default {
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'reason', value: textValue })
+    },
+
+    handleRemoveItem(item) {
+      const index = this.model.stopReason.reasonGivenForStop.indexOf(item.value)
+      if (index !== -1) {
+        this.model.stopReason.reasonGivenForStop.splice(index, 1)
+      }
     },
 
     handleUpdateModel() {
