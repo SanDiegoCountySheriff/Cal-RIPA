@@ -213,6 +213,7 @@ export default {
       formStepIndex: computed(() => this.formStepIndex),
       fullStop: computed(() => this.fullStop),
       isOnline: this.isOnline,
+      online: computed(() => this.isOnline),
       isAuthenticated: this.isAuthenticated,
       isOnlineAndAuthenticated: this.isOnlineAndAuthenticated,
       isApiUnavailable: this.isApiUnavailable,
