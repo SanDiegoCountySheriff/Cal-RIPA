@@ -138,6 +138,119 @@ export const STOP_REASONS_V2 = [
   },
 ]
 
+export const GIVEN_STOP_REASONS_V2 = [
+  {
+    name: 'Traffic Violation - Moving Violation',
+    value: 1,
+    abbreviation: 'Traff - Moving',
+  },
+  {
+    name: 'Traffic Violation - Equipment Violation',
+    value: 2,
+    abbreviation: 'Traff - Equipment',
+  },
+  {
+    name: 'Traffic Violation - Non-moving Violation',
+    value: 3,
+    abbreviation: 'Traff - Non-moving',
+  },
+  {
+    name: 'Officer witnessed commission of a crime',
+    value: 4,
+    abbreviation: 'Witnessed crime',
+  },
+  {
+    name: 'Matched suspect description',
+    value: 5,
+    abbreviation: 'Matched suspect desc',
+  },
+  {
+    name: "Matched description of suspect's vehicle or vehicle observed at the scene of a crime",
+    value: 6,
+    abbreviation: 'Matched desc of suspect vehicle',
+  },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
+    value: 7,
+    abbreviation: 'Suspect of crime',
+  },
+  {
+    name: 'Carrying suspicious object',
+    value: 8,
+    abbreviation: 'Carrying susp obj',
+  },
+  {
+    name: 'Actions indicative of casing a victim or location',
+    value: 9,
+    abbreviation: 'Casing victim or location',
+  },
+  {
+    name: 'Suspected of acting as a lookout',
+    value: 10,
+    abbreviation: 'Susp of acting as lookout',
+  },
+  {
+    name: 'Actions indicative of a drug transaction',
+    value: 11,
+    abbreviation: 'Indic of drug transaction',
+  },
+  {
+    name: 'Actions indicative of engaging in a violent crime',
+    value: 12,
+    abbreviation: 'Indic of violent crime',
+  },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 13,
+    abbreviation: 'Reasonable suspicion',
+  },
+  {
+    name: 'Probable cause to arrest or search',
+    value: 14,
+    abbreviation: 'Probable cause arrest/search',
+  },
+  {
+    name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150',
+    value: 15,
+    abbreviation: 'Probable cause sec 5150',
+  },
+  {
+    name: 'Known to be on parole/probation/PRCS/mandatory supervision',
+    value: 16,
+    abbreviation: 'Known parole/probation',
+  },
+  {
+    name: 'Knowledge of outstanding arrest warrant / wanted person',
+    value: 17,
+    abbreviation: 'Knowledge of wanted person/warrant',
+  },
+  {
+    name: 'Investigation to determine whether the person is truant',
+    value: 18,
+    abbreviation: 'Truancy investigation',
+  },
+  {
+    name: 'Consensual encounter resulting in a search',
+    value: 19,
+    abbreviation: 'Consenual encounter',
+  },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4, and 48900.7',
+    value: 20,
+    abbreviation: 'Conduct warranting discipline',
+  },
+  {
+    name: 'Determine whether the student violated school policy',
+    value: 21,
+    abbreviation: 'Determ violation school policy',
+  },
+  {
+    name: 'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect',
+    value: 22,
+    abbreviation: 'Withheld for officer safety',
+  },
+]
+
 export const PROBABLE_CAUSES = [
   { name: 'Officer witnessed commission of a crime', value: 1 },
   { name: 'Matched suspect description', value: 2 },

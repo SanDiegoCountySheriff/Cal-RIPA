@@ -27,6 +27,7 @@ import {
 import {
   BASIS_FOR_SEARCH_V2,
   FORCE_ACTIONS_TAKEN,
+  GIVEN_STOP_REASONS_V2,
   NON_FORCE_ACTIONS_TAKEN,
   PERSON_GENDERS_V2,
   STOP_RESULTS_V2,
@@ -177,6 +178,7 @@ export const stopReasonGivenTemplate = template => {
 
   return {
     reasonForStop: null,
+    reasonGivenForStop: null,
     educationViolation: null,
     educationViolationCode: null,
     trafficViolation: null,
@@ -562,6 +564,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       content: getSummaryPerceivedOrKnownDisability(person),
     })
     items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: '22', content: getSummaryReasonGivenForStop(person) })
+    }
     items.push({
       id: 'B10',
       content: getSummaryReasonForStopExplanation(person),
@@ -751,6 +756,19 @@ const getSummaryReasonForStopExplanation = person => {
     level: 1,
     header: 'Reason for Stop Explanation',
     detail: person.reasonForStopExplanation,
+  }
+}
+
+const getSummaryReasonGivenForStop = person => {
+  const reasons = person.reasonGivenForStop.map(obj => {
+    return {
+      detail: obj.reason,
+    }
+  })
+  return {
+    level: 2,
+    header: 'Reason Given to Stopped Person',
+    children: reasons,
   }
 }
 
@@ -1397,6 +1415,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
+        reasonGivenForStop: Number(person.reasonGivenForStop.key),
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
@@ -1965,6 +1984,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       propertySearchConsentGiven:
         person.nonForceActionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStopV2(person, statutes),
+      reasonGivenForStop: getReasonGivenForStopV2(person, statutes),
       passengerInVehicle: person.passengerInVehicle,
       insideResidence: person.insideResidence,
       reasonForStopExplanation:
@@ -2253,6 +2273,25 @@ const getReasonForStopV2 = (person, statutes) => {
   }
 
   return null
+}
+
+const getReasonGivenForStopV2 = person => {
+  const reasons = person.stopReason?.reasonGivenForStop || []
+
+  if (reasons.length > 0) {
+    const selectedReasons = reasons.map(reason => {
+      const [filteredReason] = GIVEN_STOP_REASONS_V2.filter(
+        item => item.value === reason,
+      )
+      return {
+        key: reason.toString(),
+        reason: filteredReason?.name || '',
+      }
+    })
+    return selectedReasons
+  } else {
+    return null
+  }
 }
 
 const getReasonForStopDetails = (reasonKey, person) => {

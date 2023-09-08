@@ -177,6 +177,48 @@
       </v-row>
     </v-container>
 
+    <ripa-form-header
+      v-if="model.stopVersion === 2"
+      title="Reason given to the stopped person"
+      required
+      subtitle="§999.226(a)(10)"
+      v-on="$listeners"
+    ></ripa-form-header>
+
+    <v-container v-if="model.stopVersion === 2">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <v-select
+            v-model="model.stopReason.reasonGivenForStop"
+            item-text="name"
+            item-value="value"
+            label="Reason"
+            multiple
+            required
+            :items="getGivenReasonItems"
+            :rules="givenReasonRules"
+            @input="handleUpdateModel"
+          >
+            <template #selection="{ item }">
+              <v-chip
+                v-bind="item.attrs"
+                :input-value="item.selected"
+                close
+                small
+                @click:close="handleRemoveItem(item)"
+              >
+                {{ item.abbreviation }}
+              </v-chip>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <template v-if="model.stopType === 'Vehicular' && model.stopVersion === 2">
       <ripa-form-header
         title="The stopped person is a passenger in a vehicle"
@@ -236,6 +278,7 @@ import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
   STOP_REASONS_V2,
+  GIVEN_STOP_REASONS_V2,
   PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
@@ -262,6 +305,9 @@ export default {
   data() {
     return {
       reasonRules: [v => !!v || 'Stop reason is required'],
+      givenReasonRules: [
+        v => (v !== null && v !== undefined) || 'Given stop reason is required',
+      ],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
@@ -269,6 +315,7 @@ export default {
       ],
       reasonItems: STOP_REASONS,
       reasonItemsV2: STOP_REASONS_V2,
+      givenReasonItemsV2: GIVEN_STOP_REASONS_V2,
       probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
@@ -325,6 +372,17 @@ export default {
       }
 
       return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
+    },
+
+    getGivenReasonItems() {
+      const givenReasonItems = this.givenReasonItemsV2
+      if (this.model.person.isStudent) {
+        return givenReasonItems
+      }
+
+      return givenReasonItems.filter(
+        item => item.value !== 20 && item.value !== 21,
+      )
     },
 
     educationViolationRules() {
@@ -415,6 +473,13 @@ export default {
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'reason', value: textValue })
+    },
+
+    handleRemoveItem(item) {
+      const index = this.model.stopReason.reasonGivenForStop.indexOf(item.value)
+      if (index !== -1) {
+        this.model.stopReason.reasonGivenForStop.splice(index, 1)
+      }
     },
 
     handleUpdateModel() {
