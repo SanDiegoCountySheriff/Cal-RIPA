@@ -447,8 +447,8 @@ export default {
     },
 
     crossStreetRules() {
-      const crossStreet1 = this.model.location.crossStreet1
-      const crossStreet2 = this.model.location.crossStreet2
+      const crossStreet1 = this.model.location.crossStreet1 || ''
+      const crossStreet2 = this.model.location.crossStreet2 || ''
 
       return [
         this.isLocationOptionsFilled ||
