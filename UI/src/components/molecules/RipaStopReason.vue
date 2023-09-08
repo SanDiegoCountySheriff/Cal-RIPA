@@ -184,7 +184,9 @@
         title="The stopped person is a passenger in a vehicle"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="
+          model.stopVersion === 1 ? '§999.226(a)(14)' : '§999.226(a)(14)(D)(1)'
+        "
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -206,7 +208,9 @@
         title="The stopped person was inside a residence"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="
+          model.stopVersion === 1 ? '§999.226(a)(14)' : '§999.226(a)(14)(D)(2)'
+        "
         v-on="$listeners"
       >
       </ripa-form-header>
