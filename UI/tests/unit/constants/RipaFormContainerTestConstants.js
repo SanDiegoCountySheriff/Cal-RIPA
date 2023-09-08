@@ -633,6 +633,17 @@ export const V2_API_STOP = {
         listDetail: [],
         listCodes: [],
       },
+      reasonGivenForStop: [
+        {
+          Key: '22',
+          Reason:
+            'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect',
+        },
+        {
+          Key: '17',
+          Reason: 'Knowledge of outstanding arrest warrant / wanted person',
+        },
+      ],
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
       listNonForceActionsTakenDuringStop: [

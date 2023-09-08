@@ -1897,8 +1897,12 @@ export const fullStopToApiStopV2 = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
-    officerRace: parsedApiStop ? parsedApiStop.officerRace : officer.officerRace,
-    officerGender: parsedApiStop ? parsedApiStop.officerGender : officer.officerGender,
+    officerRace: parsedApiStop
+      ? parsedApiStop.officerRace
+      : officer.officerRace,
+    officerGender: parsedApiStop
+      ? parsedApiStop.officerGender
+      : officer.officerGender,
     officerNonBinary: parsedApiStop
       ? parsedApiStop.officerNonBinary
       : officer.officerNonBinary,
