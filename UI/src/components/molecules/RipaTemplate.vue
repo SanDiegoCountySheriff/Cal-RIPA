@@ -3,11 +3,11 @@
     <v-card-text>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
-          <ripa-alert alert-type="error" v-if="!isOnline && isAuthenticated">
+          <ripa-alert alert-type="error" v-if="!online && isAuthenticated">
             You are currently offline. You may create stops but MUST log in to
             submit them.
           </ripa-alert>
-          <ripa-alert alert-type="error" v-if="!isOnline && !isAuthenticated">
+          <ripa-alert alert-type="error" v-if="!online && !isAuthenticated">
             You are currently offline. You must log in to create stops.
           </ripa-alert>
           <v-row no-gutters dense>
@@ -93,7 +93,7 @@ export default {
   inject: [
     'displayReportingEmail',
     'reportingEmailAddress',
-    'isOnline',
+    'online',
     'isAuthenticated',
     'stopTemplates',
   ],

@@ -38,7 +38,7 @@ describe('Ripa Template', () => {
         reportingEmailAddress() {
           return ''
         },
-        isOnline() {
+        online() {
           return true
         },
         isAuthenticated() {
