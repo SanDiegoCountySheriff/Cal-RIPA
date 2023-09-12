@@ -306,7 +306,7 @@ export default {
     return {
       reasonRules: [v => !!v || 'Stop reason is required'],
       givenReasonRules: [
-        v => (v !== null && v !== undefined) || 'Given stop reason is required',
+        v => (!!v && v.length > 0) || 'Given stop reason is required',
       ],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
