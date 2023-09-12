@@ -1415,7 +1415,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
-        reasonGivenForStop: Number(person.reasonGivenForStop.key),
+        reasonGivenForStop: getKeyArray(person.reasonGivenForStop),
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
