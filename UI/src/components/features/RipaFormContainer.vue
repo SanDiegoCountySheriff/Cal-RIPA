@@ -151,6 +151,7 @@ export default {
   name: 'ripa-form-container',
 
   mixins: [RipaApiStopJobMixin],
+  inject: ['version'],
 
   components: {
     RipaAddFavoriteDialog,
@@ -395,7 +396,6 @@ export default {
                 location.favoritesSchoolExpired = true
               }
             }
-
             return location.version === this.version
           })
         : []
@@ -427,7 +427,6 @@ export default {
               reason.reason.trafficViolationCode = null
               reason.favoritesCodeExpired = true
             }
-
             return reason.version === this.version
           })
         : []
@@ -560,65 +559,84 @@ export default {
       return null
     },
 
+    getAllStoredLocations() {
+      const locations = localStorage.getItem('ripa_favorite_locations')
+      return locations ? JSON.parse(locations) : []
+    },
+
+    getAllStoredReasons() {
+      const reasons = localStorage.getItem('ripa_favorite_reasons')
+      return reasons ? JSON.parse(reasons) : []
+    },
+
+    getAllStoredResults() {
+      const results = localStorage.getItem('ripa_favorite_results')
+      return results ? JSON.parse(results) : []
+    },
+
     handleAddLocationFavorite(name) {
-      const location = {
+      const newLocation = {
         id: new Date().getTime(),
         name,
         location: this.savedLocation,
         version: this.savedLocationVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
-      const locations = this.getFavoriteLocations()
-      const index = locations.findIndex(l => l.name === location.name)
+
+      const allLocations = this.getAllStoredLocations()
+
+      const index = allLocations.findIndex(l => l.name === newLocation.name)
 
       if (index === -1) {
-        locations.push(location)
+        allLocations.push(newLocation)
       } else {
-        locations[index] = location
+        allLocations[index] = newLocation
       }
-      this.setFavoriteLocations(locations)
+
+      this.setFavoriteLocations(allLocations)
       this.savedLocation = null
     },
 
     handleAddReasonFavorite(name) {
-      const reason = {
+      const newReason = {
         id: new Date().getTime(),
         name,
         reason: this.savedReason,
         version: this.savedReasonVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
-      const reasons = this.getFavoriteReasons()
-      const index = reasons.findIndex(r => r.name === reason.name)
+
+      const allReasons = this.getAllStoredReasons()
+      const index = allReasons.findIndex(r => r.name === newReason.name)
 
       if (index === -1) {
-        reasons.push(reason)
+        allReasons.push(newReason)
       } else {
-        reasons[index] = reason
+        allReasons[index] = newReason
       }
-
-      this.setFavoriteReasons(reasons)
+      this.setFavoriteReasons(allReasons)
       this.savedReason = null
     },
 
     handleAddResultFavorite(name) {
-      const result = {
+      const newResult = {
         id: new Date().getTime(),
         name,
         result: this.savedResult,
         version: this.savedResultVersion,
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
-      const results = this.getFavoriteResults()
-      const index = results.findIndex(r => r.name === result.name)
+
+      const allResults = this.getAllStoredResults()
+      const index = allResults.findIndex(r => r.name === newResult.name)
 
       if (index === -1) {
-        results.push(result)
+        allResults.push(newResult)
       } else {
-        results[index] = result
+        allResults[index] = newResult
       }
 
-      this.setFavoriteResults(results)
+      this.setFavoriteResults(allResults)
       this.savedResult = null
     },
 
