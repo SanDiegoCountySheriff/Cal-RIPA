@@ -345,12 +345,18 @@ export default {
     },
 
     getNonForceActionsTakenGeneralItems() {
-      const filteredItems = this.nonForceActionsTakenItems.filter(
+      let filteredItems = this.nonForceActionsTakenItems.filter(
         item => ![2, 3, 12, 14, 15].includes(item.value),
       )
 
+      if (this.model.stopType !== 'Vehicular') {
+        filteredItems = filteredItems.filter(
+          item => ![4, 13].includes(item.value),
+        )
+      }
+
       if (!this.model.person.isStudent) {
-        return filteredItems.filter(item => item.value !== 1)
+        filteredItems = filteredItems.filter(item => item.value !== 1)
       }
 
       return filteredItems
