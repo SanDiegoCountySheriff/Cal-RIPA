@@ -359,185 +359,215 @@ export default {
     getFavoriteLocations() {
       const locations = localStorage.getItem('ripa_favorite_locations')
       return locations
-        ? JSON.parse(locations).filter(location => {
-            if (!location.version) {
-              location.version = 1
-            }
-
-            if (!location.location.outOfCounty) {
-              const cityNotExpired = this.mappedFormCountyCities.some(city => {
-                return city.fullName === location.location.city
-              })
-
-              if (!cityNotExpired) {
-                location.location.city = ''
-                location.favoritesCityExpired = true
+        ? JSON.parse(locations)
+            .filter(location => {
+              if (!location.version) {
+                location.version = 1
               }
-            } else if (location.location.outOfCounty) {
-              const cityNotExpired = this.mappedFormNonCountyCities.some(
-                city => {
-                  return city.fullName === location.location.city
-                },
-              )
 
-              if (!cityNotExpired) {
-                location.location.city = ''
-                location.favoritesCityExpired = true
+              if (!location.location.outOfCounty) {
+                const cityNotExpired = this.mappedFormCountyCities.some(
+                  city => {
+                    return city.fullName === location.location.city
+                  },
+                )
+
+                if (!cityNotExpired) {
+                  location.location.city = ''
+                  location.favoritesCityExpired = true
+                }
+              } else if (location.location.outOfCounty) {
+                const cityNotExpired = this.mappedFormNonCountyCities.some(
+                  city => {
+                    return city.fullName === location.location.city
+                  },
+                )
+
+                if (!cityNotExpired) {
+                  location.location.city = ''
+                  location.favoritesCityExpired = true
+                }
               }
-            }
 
-            if (location.location.isSchool) {
-              const schoolNotExpired = this.mappedFormSchools.some(school => {
-                return school.cdsCode === location.location.school
-              })
+              if (location.location.isSchool) {
+                const schoolNotExpired = this.mappedFormSchools.some(school => {
+                  return school.cdsCode === location.location.school
+                })
 
-              if (!schoolNotExpired) {
-                location.location.school = ''
-                location.favoritesSchoolExpired = true
+                if (!schoolNotExpired) {
+                  location.location.school = ''
+                  location.favoritesSchoolExpired = true
+                }
               }
-            }
-            return location.version === this.version
-          })
+              return location.version === this.version
+            })
+            .sort((a, b) => {
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+              return 0
+            })
         : []
     },
 
     getFavoriteReasons() {
       const reasons = localStorage.getItem('ripa_favorite_reasons')
       return reasons
-        ? JSON.parse(reasons).filter(reason => {
-            if (!reason.version) {
-              reason.version = 1
-            }
+        ? JSON.parse(reasons)
+            .filter(reason => {
+              if (!reason.version) {
+                reason.version = 1
+              }
 
-            const codes = [
-              reason.reason.reasonableSuspicionCode,
-              reason.reason.educationViolationCode,
-              reason.reason.trafficViolationCode,
-            ]
+              const codes = [
+                reason.reason.reasonableSuspicionCode,
+                reason.reason.educationViolationCode,
+                reason.reason.trafficViolationCode,
+              ]
 
-            const codeNotExpired = codes.some(code => {
-              return this.mappedFormStatutes.some(statute => {
-                return statute.code === code
+              const codeNotExpired = codes.some(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
               })
-            })
 
-            if (!codeNotExpired) {
-              reason.reason.reasonableSuspicionCode = null
-              reason.reason.educationViolationCode = null
-              reason.reason.trafficViolationCode = null
-              reason.favoritesCodeExpired = true
-            }
-            return reason.version === this.version
-          })
+              if (!codeNotExpired) {
+                reason.reason.reasonableSuspicionCode = null
+                reason.reason.educationViolationCode = null
+                reason.reason.trafficViolationCode = null
+                reason.favoritesCodeExpired = true
+              }
+              return reason.version === this.version
+            })
+            .sort((a, b) => {
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+              return 0
+            })
         : []
     },
 
     getFavoriteResults() {
       const results = localStorage.getItem('ripa_favorite_results')
       return results
-        ? JSON.parse(results).filter(result => {
-            if (!result.version) {
-              result.version = 1
-            }
+        ? JSON.parse(results)
+            .filter(result => {
+              if (!result.version) {
+                result.version = 1
+              }
 
-            const updatedWarningCodes = result.result.warningCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
+              const updatedWarningCodes = result.result.warningCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedWarningCodes.length !== result.result.warningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.warningCodes = updatedWarningCodes
+
+              const updatedVerbalWarningCodes =
+                result.result.verbalWarningCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
                 })
-              },
-            )
 
-            if (
-              updatedWarningCodes.length !== result.result.warningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
+              if (
+                updatedVerbalWarningCodes.length !==
+                result.result.verbalWarningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
 
-            result.result.warningCodes = updatedWarningCodes
+              result.result.verbalWarningCodes = updatedVerbalWarningCodes
 
-            const updatedVerbalWarningCodes =
-              result.result.verbalWarningCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
+              const updatedWrittenWarningCodes =
+                result.result.writtenWarningCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
                 })
-              })
 
-            if (
-              updatedVerbalWarningCodes.length !==
-              result.result.verbalWarningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
+              if (
+                updatedWrittenWarningCodes.length !==
+                result.result.writtenWarningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
 
-            result.result.verbalWarningCodes = updatedVerbalWarningCodes
+              result.result.writtenWarningCodes = updatedWrittenWarningCodes
 
-            const updatedWrittenWarningCodes =
-              result.result.writtenWarningCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
+              const updatedCitationCodes = result.result.citationCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedCitationCodes.length !==
+                result.result.citationCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.citationCodes = updatedCitationCodes
+
+              const updatedInfieldCodes = result.result.infieldCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedInfieldCodes.length !== result.result.infieldCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.infieldCodes = updatedInfieldCodes
+
+              const updatedCustodialArrestCodes =
+                result.result.custodialArrestCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
                 })
-              })
 
-            if (
-              updatedWrittenWarningCodes.length !==
-              result.result.writtenWarningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
+              if (
+                updatedCustodialArrestCodes.length !==
+                result.result.custodialArrestCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
 
-            result.result.writtenWarningCodes = updatedWrittenWarningCodes
+              result.result.custodialArrestCodes = updatedCustodialArrestCodes
 
-            const updatedCitationCodes = result.result.citationCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              },
-            )
-
-            if (
-              updatedCitationCodes.length !== result.result.citationCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.citationCodes = updatedCitationCodes
-
-            const updatedInfieldCodes = result.result.infieldCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              },
-            )
-
-            if (
-              updatedInfieldCodes.length !== result.result.infieldCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.infieldCodes = updatedInfieldCodes
-
-            const updatedCustodialArrestCodes =
-              result.result.custodialArrestCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              })
-
-            if (
-              updatedCustodialArrestCodes.length !==
-              result.result.custodialArrestCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.custodialArrestCodes = updatedCustodialArrestCodes
-
-            return result.version === this.version
-          })
+              return result.version === this.version
+            })
+            .sort((a, b) => {
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+              return 0
+            })
         : []
     },
 
