@@ -388,7 +388,7 @@ export default {
 
             if (location.location.isSchool) {
               const schoolNotExpired = this.mappedFormSchools.some(school => {
-                return school.name === location.location.school
+                return school.cdsCode === location.location.school
               })
 
               if (!schoolNotExpired) {
