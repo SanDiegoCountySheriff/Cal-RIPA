@@ -1,7 +1,9 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,6 +52,93 @@ public class UserProfileCosmosDbService<T> : IUserProfileCosmosDbService<T> wher
         }
 
         return results;
+    }
+
+    public async Task UpdateFavoriteLocationCount(string favoriteName, string id)
+    {
+        var query = _container.GetItemQueryIterator<T>(new QueryDefinition($"SELECT * FROM c WHERE c.officerId = '{id}'"));
+        Models.v2.UserProfile result = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            result = response.FirstOrDefault() as Models.v2.UserProfile;
+        }
+
+        var favoriteLocations = JsonConvert.DeserializeObject<dynamic[]>(result.FavoriteLocations);
+        var favoriteLocation = favoriteLocations.Where(l => l.name == favoriteName).FirstOrDefault();
+        var index = Array.IndexOf(favoriteLocations, favoriteLocation);
+        if (favoriteLocation.count != null)
+        {
+            favoriteLocation.count = (int)favoriteLocation.count + 1;
+        }
+        else
+        {
+            favoriteLocation.count = 1;
+        }
+        favoriteLocations[index] = favoriteLocation;
+        string serializedFavorite = JsonConvert.SerializeObject(favoriteLocations);
+        result.FavoriteLocations = serializedFavorite;
+
+        await _container.UpsertItemAsync(result, new PartitionKey(result.Id));
+    }
+
+    public async Task UpdateFavoriteReasonCount(string favoriteName, string id)
+    {
+        var query = _container.GetItemQueryIterator<T>(new QueryDefinition($"SELECT * FROM c WHERE c.officerId = '{id}'"));
+        Models.v2.UserProfile result = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            result = response.FirstOrDefault() as Models.v2.UserProfile;
+        }
+
+        var favoriteReasons = JsonConvert.DeserializeObject<dynamic[]>(result.FavoriteReasons);
+        var favoriteReason = favoriteReasons.Where(l => l.name == favoriteName).FirstOrDefault();
+        var index = Array.IndexOf(favoriteReasons, favoriteReason);
+        if (favoriteReason.count != null)
+        {
+            favoriteReason.count = (int)favoriteReason.count + 1;
+        }
+        else
+        {
+            favoriteReason.count = 1;
+        }
+        favoriteReasons[index] = favoriteReason;
+        string serializedFavorite = JsonConvert.SerializeObject(favoriteReasons);
+        result.FavoriteReasons = serializedFavorite;
+
+        await _container.UpsertItemAsync(result, new PartitionKey(result.Id));
+    }
+
+    public async Task UpdateFavoriteResultCount(string favoriteName, string id)
+    {
+        var query = _container.GetItemQueryIterator<T>(new QueryDefinition($"SELECT * FROM c WHERE c.officerId = '{id}'"));
+        Models.v2.UserProfile result = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            result = response.FirstOrDefault() as Models.v2.UserProfile;
+        }
+
+        var favoriteResults = JsonConvert.DeserializeObject<dynamic[]>(result.FavoriteResults);
+        var favoriteResult = favoriteResults.Where(l => l.name == favoriteName).FirstOrDefault();
+        var index = Array.IndexOf(favoriteResults, favoriteResult);
+        if (favoriteResult.count != null)
+        {
+            favoriteResult.count = (int)favoriteResult.count + 1;
+        }
+        else
+        {
+            favoriteResult.count = 1;
+        }
+        favoriteResults[index] = favoriteResult;
+        string serializedFavorite = JsonConvert.SerializeObject(favoriteResults);
+        result.FavoriteResults = serializedFavorite;
+
+        await _container.UpsertItemAsync(result, new PartitionKey(result.Id));
     }
 
     public async Task UpdateUserProfileAsync(string id, T userProfile)

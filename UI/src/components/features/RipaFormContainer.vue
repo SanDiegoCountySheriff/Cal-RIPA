@@ -891,6 +891,7 @@ export default {
       if (favorite) {
         this.stop.location.isSchool = false
         this.stop.location.school = null
+        this.stop.favoriteLocationName = favorite.name
         this.updateFullStop()
         this.lastLocation = {
           newLocation: favorite.location,
@@ -904,6 +905,7 @@ export default {
       const favorites = this.getFavoriteReasons()
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
+        this.stop.favoriteReasonName = favorite.name
         this.lastReason = favorite.reason
       }
     },
@@ -913,6 +915,7 @@ export default {
       const favorites = this.getFavoriteResults()
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
+        this.stop.favoriteResultName = favorite.name
         this.lastResult = favorite.result
       }
     },
@@ -1066,6 +1069,10 @@ export default {
         }
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.stopType = this.getStopType(this.stop)
+        updatedFullStop.favoriteLocationName =
+          this.stop.favoriteLocationName || ''
+        updatedFullStop.favoriteReasonName = this.stop.favoriteReasonName || ''
+        updatedFullStop.favoriteResultName = this.stop.favoriteResultName || ''
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
         updatedFullStop.internalId = this.stop.internalId
