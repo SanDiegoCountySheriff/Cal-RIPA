@@ -20,8 +20,17 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
             </span></button></div>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
@@ -279,8 +288,17 @@ exports[`Ripa Stop Reason should match snapshot 1`] = `
             </span></button></div>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">

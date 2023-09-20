@@ -115,6 +115,21 @@ public class PutStop
                 log.LogInformation($"Saving stop audit ID: {editingStop.Id}");
                 stop.ListSubmission = editingStop.ListSubmission;
             }
+
+            if (!string.IsNullOrEmpty(stop.FavoriteLocationName))
+            {
+                await _userProfileCosmosDbService.UpdateFavoriteLocationCount(stop.FavoriteLocationName, stop.OfficerId);
+            }
+
+            if (!string.IsNullOrEmpty(stop.FavoriteReasonName))
+            {
+                await _userProfileCosmosDbService.UpdateFavoriteReasonCount(stop.FavoriteReasonName, stop.OfficerId);
+            }
+
+            if (!string.IsNullOrEmpty(stop.FavoriteResultName))
+            {
+                await _userProfileCosmosDbService.UpdateFavoriteResultCount(stop.FavoriteResultName, stop.OfficerId);
+            }
         }
         catch (Exception ex)
         {

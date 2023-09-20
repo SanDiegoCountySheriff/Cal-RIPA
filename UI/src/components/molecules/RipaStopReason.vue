@@ -37,8 +37,55 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      <v-row>
+        <v-col v-if="favoriteReasons[0]" class="text-center">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-chip
+            v-if="favoriteReasons[0]"
+            @click="handleFavoriteClick(favoriteReasons[0])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[0].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[1]"
+            @click="handleFavoriteClick(favoriteReasons[1])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[1].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[2]"
+            @click="handleFavoriteClick(favoriteReasons[2])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[2].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[3]"
+            @click="handleFavoriteClick(favoriteReasons[3])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[3].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[4]"
+            @click="handleFavoriteClick(favoriteReasons[4])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[4].name }}
+          </v-chip>
+        </v-col>
       </v-row>
 
       <v-row no-gutters>
@@ -332,6 +379,7 @@ export default {
     'statutes',
     'personSearchAutomaticallySelected',
     'propertySearchAutomaticallySelected',
+    'favoriteReasons',
   ],
 
   created() {
@@ -812,12 +860,16 @@ export default {
         this.model.stopReason.trafficViolationCode = null
       }
     },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-reason', favorite.id)
+    },
   },
 
   watch: {
     lastReason(newVal) {
       if (newVal) {
-        this.model.stopReason = newVal
+        this.model.stopReason = { ...newVal }
       }
     },
 
