@@ -240,7 +240,7 @@ export default {
       ),
       version: computed(() => this.mappedVersion),
       favoriteLocations: this.getFavoriteLocations,
-      favoriteReasons: computed(() => this.getFavoriteReasons),
+      favoriteReasons: this.getFavoriteReasons,
       favoriteResults: this.getFavoriteResults,
     }
   },
