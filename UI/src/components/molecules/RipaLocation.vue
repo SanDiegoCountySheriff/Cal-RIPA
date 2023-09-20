@@ -50,6 +50,57 @@
       </v-row>
 
       <v-row>
+        <v-col v-if="favoriteLocations[0]" class="text-center">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-chip
+            v-if="favoriteLocations[0]"
+            @click="handleFavoriteClick(favoriteLocations[0])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteLocations[0].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteLocations[1]"
+            @click="handleFavoriteClick(favoriteLocations[1])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteLocations[1].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteLocations[2]"
+            @click="handleFavoriteClick(favoriteLocations[2])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteLocations[2].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteLocations[3]"
+            @click="handleFavoriteClick(favoriteLocations[3])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteLocations[3].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteLocations[4]"
+            @click="handleFavoriteClick(favoriteLocations[4])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteLocations[4].name }}
+          </v-chip>
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
@@ -302,6 +353,7 @@ export default {
     'loadingGps',
     'loadingPiiStep1',
     'validLastLocation',
+    'favoriteLocations',
   ],
 
   computed: {
@@ -663,13 +715,17 @@ export default {
         })
       })
     },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-location', favorite.id)
+    },
   },
 
   watch: {
     lastLocation: {
       handler: async function (newVal) {
         if (newVal) {
-          this.model.location = newVal.newLocation
+          this.model.location = { ...newVal.newLocation }
         }
       },
       deep: true,

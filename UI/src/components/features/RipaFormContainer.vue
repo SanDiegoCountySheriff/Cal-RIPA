@@ -32,6 +32,9 @@
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
       @on-dev-time="handleDevTime"
+      @on-open-favorite-location="handleOpenLocationFavorite"
+      @on-open-favorite-reason="handleOpenReasonFavorite"
+      @on-open-favorite-result="handleOpenResultFavorite"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -236,6 +239,9 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
+      favoriteLocations: this.getFavoriteLocations,
+      favoriteReasons: computed(() => this.getFavoriteReasons),
+      favoriteResults: this.getFavoriteResults,
     }
   },
 
@@ -262,6 +268,9 @@ export default {
       'personSearchAutomaticallySelected',
       'propertySearchAutomaticallySelected',
       'mappedVersion',
+      'favoriteLocations',
+      'favoriteReasons',
+      'favoriteResults',
     ]),
 
     getMappedUser() {
@@ -289,77 +298,10 @@ export default {
     isLastLocationValid() {
       return this.getLastLocation !== null
     },
-  },
-
-  methods: {
-    ...mapActions([
-      'checkGpsLocation',
-      'editOfficerUser',
-      'editUser',
-      'setUserFavoriteLocations',
-      'setUserFavoriteReasons',
-      'setUserFavoriteResults',
-      'setResetPagination',
-      'setStopsWithErrors',
-      'setPersonSearchAutomaticallySelected',
-      'setPropertySearchAutomaticallySelected',
-      'toggleDevTime',
-    ]),
-
-    handleSetPersonSearchAutomaticallySelected() {
-      this.setPersonSearchAutomaticallySelected()
-    },
-
-    handleSetPropertySearchAutomaticallySelected() {
-      this.setPropertySearchAutomaticallySelected()
-    },
-
-    addApiStop(apiStop) {
-      this.isLocked = true
-      const apiStops = this.getApiStopsFromLocalStorage()
-      apiStops.push(apiStop)
-      this.setApiStopsToLocalStorage(apiStops)
-      this.isLocked = false
-    },
-
-    setApiStopsToLocalStorage(apiStops) {
-      localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
-    },
-
-    async submitOfficerStopOnline(apiStop) {
-      this.resetStopSubmissionStatus()
-
-      await this.submitOfficerStop(apiStop)
-
-      let stopIdsPassedStr = ''
-      if (this.mappedStopSubmissionPassedIds.length > 0) {
-        stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
-          ', ',
-        )}.`
-      }
-
-      // update snackbarText regardless if errors or not
-      this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
-
-      // display no errors snackbar which closes automatically
-      if (this.mappedStopSubmissionFailedStops.length === 0) {
-        this.snackbarNoErrorsVisible = true
-      }
-
-      if (this.mappedStopSubmissionFailedStops.length > 0) {
-        // display errors snackbar which remains open
-        this.snackbarErrorsVisible = true
-        // if there are failed ids, update error stops key
-        this.pushFailedStopsToStopsWithErrors(
-          this.mappedStopSubmissionFailedStops,
-        )
-      }
-    },
 
     getFavoriteLocations() {
-      const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations
-        ? JSON.parse(locations)
+      return this.favoriteLocations
+        ? JSON.parse(this.favoriteLocations)
             .filter(location => {
               if (!location.version) {
                 location.version = 1
@@ -402,20 +344,28 @@ export default {
               return location.version === this.version
             })
             .sort((a, b) => {
+              if (!a.count) {
+                a.count = 1
+              }
+
+              if (!b.count) {
+                b.count = 1
+              }
+
               if (a.count > b.count) {
                 return -1
               } else if (a.count < b.count) {
                 return 1
               }
+
               return 0
             })
         : []
     },
 
     getFavoriteReasons() {
-      const reasons = localStorage.getItem('ripa_favorite_reasons')
-      return reasons
-        ? JSON.parse(reasons)
+      return this.favoriteReasons
+        ? JSON.parse(this.favoriteReasons)
             .filter(reason => {
               if (!reason.version) {
                 reason.version = 1
@@ -453,9 +403,8 @@ export default {
     },
 
     getFavoriteResults() {
-      const results = localStorage.getItem('ripa_favorite_results')
-      return results
-        ? JSON.parse(results)
+      return this.favoriteResults
+        ? JSON.parse(this.favoriteResults)
             .filter(result => {
               if (!result.version) {
                 result.version = 1
@@ -570,6 +519,72 @@ export default {
             })
         : []
     },
+  },
+
+  methods: {
+    ...mapActions([
+      'checkGpsLocation',
+      'editOfficerUser',
+      'editUser',
+      'setUserFavoriteLocations',
+      'setUserFavoriteReasons',
+      'setUserFavoriteResults',
+      'setResetPagination',
+      'setStopsWithErrors',
+      'setPersonSearchAutomaticallySelected',
+      'setPropertySearchAutomaticallySelected',
+      'toggleDevTime',
+    ]),
+
+    handleSetPersonSearchAutomaticallySelected() {
+      this.setPersonSearchAutomaticallySelected()
+    },
+
+    handleSetPropertySearchAutomaticallySelected() {
+      this.setPropertySearchAutomaticallySelected()
+    },
+
+    addApiStop(apiStop) {
+      this.isLocked = true
+      const apiStops = this.getApiStopsFromLocalStorage()
+      apiStops.push(apiStop)
+      this.setApiStopsToLocalStorage(apiStops)
+      this.isLocked = false
+    },
+
+    setApiStopsToLocalStorage(apiStops) {
+      localStorage.setItem('ripa_submitted_api_stops', JSON.stringify(apiStops))
+    },
+
+    async submitOfficerStopOnline(apiStop) {
+      this.resetStopSubmissionStatus()
+
+      await this.submitOfficerStop(apiStop)
+
+      let stopIdsPassedStr = ''
+      if (this.mappedStopSubmissionPassedIds.length > 0) {
+        stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+          ', ',
+        )}.`
+      }
+
+      // update snackbarText regardless if errors or not
+      this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
+
+      // display no errors snackbar which closes automatically
+      if (this.mappedStopSubmissionFailedStops.length === 0) {
+        this.snackbarNoErrorsVisible = true
+      }
+
+      if (this.mappedStopSubmissionFailedStops.length > 0) {
+        // display errors snackbar which remains open
+        this.snackbarErrorsVisible = true
+        // if there are failed ids, update error stops key
+        this.pushFailedStopsToStopsWithErrors(
+          this.mappedStopSubmissionFailedStops,
+        )
+      }
+    },
 
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
@@ -589,21 +604,6 @@ export default {
       return null
     },
 
-    getAllStoredLocations() {
-      const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
-    },
-
-    getAllStoredReasons() {
-      const reasons = localStorage.getItem('ripa_favorite_reasons')
-      return reasons ? JSON.parse(reasons) : []
-    },
-
-    getAllStoredResults() {
-      const results = localStorage.getItem('ripa_favorite_results')
-      return results ? JSON.parse(results) : []
-    },
-
     handleAddLocationFavorite(name) {
       const newLocation = {
         id: new Date().getTime(),
@@ -613,7 +613,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allLocations = this.getAllStoredLocations()
+      const allLocations = this.getFavoriteLocations
 
       const index = allLocations.findIndex(l => l.name === newLocation.name)
 
@@ -636,7 +636,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allReasons = this.getAllStoredReasons()
+      const allReasons = this.getFavoriteReasons
       const index = allReasons.findIndex(r => r.name === newReason.name)
 
       if (index === -1) {
@@ -657,7 +657,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allResults = this.getAllStoredResults()
+      const allResults = this.getFavoriteResults
       const index = allResults.findIndex(r => r.name === newResult.name)
 
       if (index === -1) {
@@ -778,7 +778,7 @@ export default {
     },
 
     handleDeleteLocationFavorite(id) {
-      const locations = this.getFavoriteLocations()
+      const locations = this.getFavoriteLocations
       const filteredLocations = locations.filter(item => item.id !== id)
       this.setFavoriteLocations(filteredLocations)
     },
@@ -796,7 +796,6 @@ export default {
     },
 
     handleDeletePerson(index) {
-      // update fullStop
       const filteredPeople = this.fullStop.people.filter(
         item => item.index.toString() !== index.toString(),
       )
@@ -810,8 +809,8 @@ export default {
         }),
       }
       this.fullStop = Object.assign({}, updatedFullStop)
-      // update stop
       const filteredPerson = this.fullStop.people[0]
+
       if (filteredPerson) {
         this.stop = {
           ...this.stop,
@@ -823,7 +822,7 @@ export default {
     handleEditLocationFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const locations = this.getFavoriteLocations()
+      const locations = this.getFavoriteLocations
       const filteredLocations = locations.filter(
         item => item.id !== updatedFav.id,
       )
@@ -834,7 +833,7 @@ export default {
     handleEditReasonFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const reasons = this.getFavoriteReasons()
+      const reasons = this.getFavoriteReasons
       const filteredReasons = reasons.filter(item => item.id !== updatedFav.id)
       filteredReasons.push(updatedFav)
       this.setFavoriteReasons(filteredReasons)
@@ -843,7 +842,7 @@ export default {
     handleEditResultFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const results = this.getFavoriteResults()
+      const results = this.getFavoriteResults
       const filteredResults = results.filter(item => item.id !== updatedFav.id)
       filteredResults.push(updatedFav)
       this.setFavoriteResults(filteredResults)
@@ -916,7 +915,7 @@ export default {
 
     handleOpenLocationFavorite(id) {
       this.showLocationFavoritesDialog = false
-      const favorites = this.getFavoriteLocations()
+      const favorites = this.getFavoriteLocations
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
         this.stop.location.isSchool = false
@@ -931,8 +930,9 @@ export default {
     },
 
     handleOpenReasonFavorite(id) {
+      this.lastReason = null
       this.showReasonFavoritesDialog = false
-      const favorites = this.getFavoriteReasons()
+      const favorites = this.getFavoriteReasons
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
         this.stop.favoriteReasonName = favorite.name
@@ -941,8 +941,9 @@ export default {
     },
 
     handleOpenResultFavorite(id) {
+      this.lastResult = null
       this.showResultFavoritesDialog = false
-      const favorites = this.getFavoriteResults()
+      const favorites = this.getFavoriteResults
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
         this.stop.favoriteResultName = favorite.name
@@ -951,17 +952,17 @@ export default {
     },
 
     handleOpenLocationFavorites() {
-      this.favorites = this.getFavoriteLocations()
+      this.favorites = this.getFavoriteLocations
       this.showLocationFavoritesDialog = true
     },
 
     handleOpenReasonFavorites() {
-      this.favorites = this.getFavoriteReasons()
+      this.favorites = this.getFavoriteReasons
       this.showReasonFavoritesDialog = true
     },
 
     handleOpenResultFavorites() {
-      this.favorites = this.getFavoriteResults()
+      this.favorites = this.getFavoriteResults
       this.showResultFavoritesDialog = true
     },
 
@@ -1057,7 +1058,6 @@ export default {
     setFavoriteLocations(locations) {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)
-        localStorage.setItem('ripa_favorite_locations', strLocations)
         this.setUserFavoriteLocations(strLocations)
         this.editUser(this.mappedUser)
       }
@@ -1066,7 +1066,6 @@ export default {
     setFavoriteReasons(reasons) {
       if (this.isOnlineAndAuthenticated) {
         const strReasons = JSON.stringify(reasons)
-        localStorage.setItem('ripa_favorite_reasons', strReasons)
         this.setUserFavoriteReasons(strReasons)
         this.editUser(this.mappedUser)
       }
@@ -1075,7 +1074,6 @@ export default {
     setFavoriteResults(results) {
       if (this.isOnlineAndAuthenticated) {
         const strResults = JSON.stringify(results)
-        localStorage.setItem('ripa_favorite_results', strResults)
         this.setUserFavoriteResults(strResults)
         this.editUser(this.mappedUser)
       }

@@ -61,6 +61,9 @@ export default new Vuex.Store({
       officerGender: null,
       officerNonBinary: null,
     },
+    favoriteLocations: '',
+    favoriteReasons: '',
+    favoriteResults: '',
     apiConfig: null,
     piiDate: null,
     officerStops: [],
@@ -341,6 +344,15 @@ export default new Vuex.Store({
       }
       return state.version
     },
+    favoriteLocations: state => {
+      return state.favoriteLocations
+    },
+    favoriteReasons: state => {
+      return state.favoriteReasons
+    },
+    favoriteResults: state => {
+      return state.favoriteResults
+    },
   },
 
   mutations: {
@@ -502,21 +514,21 @@ export default new Vuex.Store({
       }
 
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
-      localStorage.setItem(
-        'ripa_favorite_locations',
-        state.user.favoriteLocations,
-      )
-      localStorage.setItem('ripa_favorite_reasons', state.user.favoriteReasons)
-      localStorage.setItem('ripa_favorite_results', state.user.favoriteResults)
+      state.favoriteLocations = state.user.favoriteLocations
+      state.favoriteReasons = state.user.favoriteReasons
+      state.favoriteResults = state.user.favoriteResults
     },
     updateUserFavoriteLocations(state, locations) {
       state.user.favoriteLocations = locations
+      state.favoriteLocations = locations
     },
     updateUserFavoriteReasons(state, reasons) {
       state.user.favoriteReasons = reasons
+      state.favoriteReasons = reasons
     },
     updateUserFavoriteResults(state, results) {
       state.user.favoriteResults = results
+      state.favoriteResults = results
     },
     updateErrorCodeAdminSearch(state, value) {
       state.errorCodeAdminSearch = {
@@ -738,22 +750,18 @@ export default new Vuex.Store({
     editUser({ dispatch, state }, user) {
       const updatedUser = {
         ...user,
-        favoriteLocations: state.user.favoriteLocations,
-        favoriteReasons: state.user.favoriteReasons,
-        favoriteResults: state.user.favoriteResults,
+        favoriteLocations: state.favoriteLocations,
+        favoriteReasons: state.favoriteReasons,
+        favoriteResults: state.favoriteResults,
       }
       return axios
-        .put(
-          `http://localhost:7072/api/v2/PutUser/${updatedUser.id}`,
-          user,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`http://localhost:7072/api/v2/PutUser/${updatedUser.id}`, user, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getUser')
         })
@@ -939,17 +947,13 @@ export default new Vuex.Store({
       }
 
       return axios
-        .put(
-          `http://localhost:7072/api/v2/PutUser/${userId}`,
-          user,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`http://localhost:7072/api/v2/PutUser/${userId}`, user, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getUser')
         })
