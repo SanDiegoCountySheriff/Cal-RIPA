@@ -47,6 +47,7 @@ describe('Ripa Stop Reason', () => {
           return false
         },
         statutes: computed(() => []),
+        favoriteReasons: computed(() => []),
       },
     })
   }

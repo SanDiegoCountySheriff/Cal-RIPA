@@ -33,6 +33,7 @@ describe('Ripa Stop Result', () => {
       },
       provide: {
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
   }
@@ -51,6 +52,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
@@ -72,6 +74,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
@@ -94,6 +97,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
@@ -120,6 +124,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
@@ -147,6 +152,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
@@ -166,6 +172,7 @@ describe('Ripa Stop Result', () => {
           return {}
         },
         statutes: computed(() => statutes),
+        favoriteResults: computed(() => []),
       },
     })
 
