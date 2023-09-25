@@ -40,8 +40,55 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      <v-row>
+        <v-col v-if="favoriteResults[0]" class="text-center">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-chip
+            v-if="favoriteResults[0]"
+            @click="handleFavoriteClick(favoriteResults[0])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[0].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[1]"
+            @click="handleFavoriteClick(favoriteResults[1])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[1].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[2]"
+            @click="handleFavoriteClick(favoriteResults[2])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[2].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[3]"
+            @click="handleFavoriteClick(favoriteResults[3])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[3].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[4]"
+            @click="handleFavoriteClick(favoriteResults[4])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[4].name }}
+          </v-chip>
+        </v-col>
       </v-row>
 
       <v-row no-gutters>
@@ -492,7 +539,7 @@
               v-if="model.stopVersion === 1"
               v-model="model.stopResult.resultsOfStop10"
               :rules="actionsTakenRules"
-              label="Psychiatric hold"
+              label="Psychiatric hold (pursuant to Welfare & Institutions Code sections 5150 and/or 5585.20)"
               hide-details
             ></ripa-checkbox>
 
@@ -508,7 +555,7 @@
               v-if="model.stopVersion === 2"
               v-model="model.stopResult.resultsOfStop11"
               :rules="actionsTakenRulesV2"
-              label="Psychiatric hold"
+              label="Psychiatric hold (pursuant to Welfare & Institutions Code sections 5150 and/or 5585.20)"
               hide-details
             ></ripa-checkbox>
 
@@ -605,7 +652,22 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
+  inject: [
+    'isOnlineAndAuthenticated',
+    'lastResult',
+    'statutes',
+    'favoriteResults',
+  ],
+
+  mounted() {
+    if (
+      this.model.stopVersion === 1 &&
+      this.model.template === 'Motor/Traffic'
+    ) {
+      this.model.stopResult.resultsOfStop4 = false
+      this.model.stopResult.resultsOfStop3 = true
+    }
+  },
 
   computed: {
     model: {
@@ -1008,12 +1070,16 @@ export default {
         this.model.stopVersion,
       )
     },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-result', favorite.id)
+    },
   },
 
   watch: {
     lastResult(newVal) {
       if (newVal) {
-        this.model.stopResult = newVal
+        this.model.stopResult = { ...newVal }
       }
     },
 

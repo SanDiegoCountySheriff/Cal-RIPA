@@ -64,7 +64,38 @@
           ></ripa-switch>
         </v-col>
       </v-row>
+
+      <v-row v-if="model.stopVersion === 2" no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.officerWorksWithNonReportingAgency"
+            label="Officer is secondary to a non-reporting agency"
+            :max-width="300"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
     </v-container>
+
+    <template v-if="model.stopVersion === 2">
+      <ripa-form-header
+        title="Welfare or Wellness Check"
+        required
+        subtitle="§999.226(a)(13)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.stopMadeDuringWelfareCheck"
+              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 
@@ -80,6 +111,7 @@ import {
   formatToIsoCurrentDate,
   formatToIsoDate,
 } from '@/utilities/dates'
+import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-date',
@@ -94,11 +126,17 @@ export default {
 
   data() {
     return {
-      devTime: false,
+      devTime: this.environmentName === 'DEV',
     }
   },
 
   inject: ['isAdminEditing', 'environmentName'],
+
+  mounted() {
+    if (this.devTime) {
+      this.model.stopDate.date = format(new Date('2024-01-03'), 'yyyy-MM-dd')
+    }
+  },
 
   computed: {
     model: {

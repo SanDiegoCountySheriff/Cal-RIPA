@@ -1,4 +1,5 @@
 ﻿using RIPA.Functions.Common.Models.Interfaces;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Common.Models.v2;
 
@@ -15,6 +16,7 @@ public class PersonStopped : IPersonStopped
     public bool NonBinaryPerson { get; set; }
     public string PerceivedSexualOrientation { get; set; }
     public ReasonForStop ReasonForStop { get; set; }
+    public ReasonGivenForStop[] ReasonGivenForStop { get; set; }
     public string ReasonForStopExplanation { get; set; }
     public bool? PassengerInVehicle { get; set; }
     public bool? InsideResidence { get; set; }

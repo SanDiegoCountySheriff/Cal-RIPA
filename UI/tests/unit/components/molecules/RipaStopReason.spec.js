@@ -47,6 +47,7 @@ describe('Ripa Stop Reason', () => {
           return false
         },
         statutes: computed(() => []),
+        favoriteReasons: computed(() => []),
       },
     })
   }
@@ -117,17 +118,5 @@ describe('Ripa Stop Reason', () => {
     wrapper = factory({ value: stopV2 })
 
     expect(wrapper.html()).toMatchSnapshot()
-  })
-
-  it('should display welfare check switch for v2 stops', () => {
-    wrapper = factory({ value: stopV2 })
-
-    expect(wrapper.html()).toContain('Welfare')
-  })
-
-  it('should not display welfare check switch for legacy stops', () => {
-    wrapper = factory({ value: stop })
-
-    expect(wrapper.html()).not.toContain('Welfare')
   })
 })

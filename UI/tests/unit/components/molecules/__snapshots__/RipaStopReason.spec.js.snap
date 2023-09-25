@@ -20,17 +20,26 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
             </span></button></div>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
         <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--solo-flat v-select">
           <div class="v-input__control">
-            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-339" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-339" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Reason</label>
+            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-345" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-345" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Reason</label>
                 <div class="v-select__selections">
-                  <div class="v-select__selection v-select__selection--comma">Probable cause to arrest or search</div><input required="required" id="input-339" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
+                  <div class="v-select__selection v-select__selection--comma">Probable cause to arrest or search</div><input required="required" id="input-345" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
                 </div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" tabindex="-1" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
@@ -58,90 +67,90 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
           <div class="v-input v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--checkbox primary--text">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text"></i><input aria-checked="true" id="input-346" role="checkbox" type="checkbox" value="1">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text"></i><input aria-checked="true" id="input-352" role="checkbox" type="checkbox" value="1">
                   <div class="v-input--selection-controls__ripple primary--text"></div>
-                </div><label for="input-346" class="v-label theme--light" style="left: 0px; position: relative;">Officer witnessed commission of a crime</label>
+                </div><label for="input-352" class="v-label theme--light" style="left: 0px; position: relative;">Officer witnessed commission of a crime</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-348" role="checkbox" type="checkbox" value="2">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-354" role="checkbox" type="checkbox" value="2">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-348" class="v-label theme--light" style="left: 0px; position: relative;">Matched suspect description</label>
+                </div><label for="input-354" class="v-label theme--light" style="left: 0px; position: relative;">Matched suspect description</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-350" role="checkbox" type="checkbox" value="3">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-356" role="checkbox" type="checkbox" value="3">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-350" class="v-label theme--light" style="left: 0px; position: relative;">Witness or victim identified stopped person as a suspect of a crime</label>
+                </div><label for="input-356" class="v-label theme--light" style="left: 0px; position: relative;">Witness or victim identified stopped person as a suspect of a crime</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-352" role="checkbox" type="checkbox" value="4">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-358" role="checkbox" type="checkbox" value="4">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-352" class="v-label theme--light" style="left: 0px; position: relative;">Carrying suspicious object</label>
+                </div><label for="input-358" class="v-label theme--light" style="left: 0px; position: relative;">Carrying suspicious object</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-354" role="checkbox" type="checkbox" value="5">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-360" role="checkbox" type="checkbox" value="5">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-354" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of casing a victim or location</label>
+                </div><label for="input-360" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of casing a victim or location</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-356" role="checkbox" type="checkbox" value="6">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-362" role="checkbox" type="checkbox" value="6">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-356" class="v-label theme--light" style="left: 0px; position: relative;">Suspected of acting as a lookout</label>
+                </div><label for="input-362" class="v-label theme--light" style="left: 0px; position: relative;">Suspected of acting as a lookout</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-358" role="checkbox" type="checkbox" value="7">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-364" role="checkbox" type="checkbox" value="7">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-358" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of a drug transaction</label>
+                </div><label for="input-364" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of a drug transaction</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-360" role="checkbox" type="checkbox" value="8">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-366" role="checkbox" type="checkbox" value="8">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-360" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of engaging in a violent crime</label>
+                </div><label for="input-366" class="v-label theme--light" style="left: 0px; position: relative;">Actions indicative of engaging in a violent crime</label>
               </div>
             </div>
           </div>
           <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-362" role="checkbox" type="checkbox" value="9">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-368" role="checkbox" type="checkbox" value="9">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-362" class="v-label theme--light" style="left: 0px; position: relative;">Other reasonable suspicion or probable cause that a crime has occurred</label>
+                </div><label for="input-368" class="v-label theme--light" style="left: 0px; position: relative;">Other reasonable suspicion or probable cause that a crime has occurred</label>
               </div>
             </div>
           </div>
           <div class="v-input theme--light v-input--selection-controls v-input--checkbox">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-364" role="checkbox" type="checkbox" value="10">
+                <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-370" role="checkbox" type="checkbox" value="10">
                   <div class="v-input--selection-controls__ripple"></div>
-                </div><label for="input-364" class="v-label theme--light" style="left: 0px; position: relative;">Matched description of suspect’s vehicle or vehicle observed at the scene of a crime</label>
+                </div><label for="input-370" class="v-label theme--light" style="left: 0px; position: relative;">Matched description of suspect’s vehicle or vehicle observed at the scene of a crime</label>
               </div>
               <div class="v-messages theme--light">
                 <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -151,8 +160,8 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
         </div>
         <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
           <div class="v-input__control">
-            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-369" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-369" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code (Optional)</label><input id="input-369" type="text" autocomplete="off">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-375" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-375" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code (Optional)</label><input id="input-375" type="text" autocomplete="off">
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>
@@ -180,12 +189,46 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
           <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-377" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-377" type="text"></div>
+                <div class="v-text-field__slot"><label for="input-383" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-383" type="text"></div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">
                   <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ripa-form-header">
+    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Reason given to the stopped person</span></div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row no-gutters">
+      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-sm-12 col-12">
+        <div class="v-input theme--light v-text-field v-select v-select--is-multi">
+          <div class="v-input__control">
+            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-391" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-391" class="v-label theme--light" style="left: 0px; position: absolute;">Reason</label>
+                <div class="v-select__selections"><input required="required" id="input-391" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                </div><input type="hidden">
+              </div>
+              <div class="v-menu">
+                <!---->
+              </div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
               </div>
             </div>
           </div>
@@ -206,42 +249,14 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-386" role="switch" type="checkbox" aria-disabled="false" value="">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-402" role="switch" type="checkbox" aria-disabled="false" value="">
                   <div class="v-input--selection-controls__ripple"></div>
                   <div class="v-input--switch__track theme--light"></div>
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-386" class="v-label theme--light" style="left: 0px; position: relative;">
-                  The stopped person was inside a residence
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="ripa-form-header" items="">
-    <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
-      <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Welfare or Wellness Check</span></div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <div class="ripa-switch" style="max-width: 300px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-394" role="switch" type="checkbox" aria-disabled="false" value="">
-                  <div class="v-input--selection-controls__ripple"></div>
-                  <div class="v-input--switch__track theme--light"></div>
-                  <div class="v-input--switch__thumb theme--light">
-                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
-                  </div>
-                </div><label for="input-394" class="v-label theme--light" style="left: 0px; position: relative;">
-                  Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function.
+                </div><label for="input-402" class="v-label theme--light" style="left: 0px; position: relative;">
+                  The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest.
                 </label>
               </div>
             </div>
@@ -273,8 +288,17 @@ exports[`Ripa Stop Reason should match snapshot 1`] = `
             </span></button></div>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
@@ -383,6 +407,7 @@ exports[`Ripa Stop Reason should match snapshot 1`] = `
       </div>
     </div>
   </div>
+  <!---->
   <!---->
   <!---->
   <!---->

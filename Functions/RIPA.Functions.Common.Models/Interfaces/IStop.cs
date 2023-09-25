@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Common.Models.Interfaces;
 
@@ -14,7 +15,7 @@ public interface IStop
     bool IsPiiFound { get; set; }
     AgencyQuestion[] ListAgencyQuestion { get; set; }
     IPersonStopped[] ListPersonStopped { get; set; }
-    ISubmission[] ListSubmission { get; set; }
+    Submission[] ListSubmission { get; set; }
     ILocation Location { get; set; }
     IOfficerAssignment OfficerAssignment { get; set; }
     string OfficerId { get; set; }

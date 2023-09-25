@@ -88,6 +88,9 @@ describe('Ripa Form Container', () => {
       mappedStopSubmissionFailedIds: jest.fn().mockReturnValue([]),
       mappedStopSubmissionStatus: jest.fn(),
       mappedStopSubmissionFailedStops: jest.fn().mockReturnValue([]),
+      favoriteLocations: jest.fn().mockReturnValue(''),
+      favoriteReasons: jest.fn().mockReturnValue(''),
+      favoriteResults: jest.fn().mockReturnValue(''),
     }
     mutations = {
       setIsOnline: (state, value) => {
@@ -122,6 +125,9 @@ describe('Ripa Form Container', () => {
       provide: {
         formStepIndex: computed(() => 0),
         version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
       },
       mixins: [RipaApiStopJobMixin],
     })
@@ -138,6 +144,9 @@ describe('Ripa Form Container', () => {
       },
       provide: {
         version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
       },
       mixins: [RipaApiStopJobMixin],
       computed: {
@@ -161,6 +170,9 @@ describe('Ripa Form Container', () => {
       },
       provide: {
         version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
       },
       computed: {
         mappedFormBeats: () => [{ id: 'test' }],
@@ -185,6 +197,8 @@ describe('Ripa Form Container', () => {
     const expectedUser = {
       agency: 'SDSD',
       assignment: 1,
+      officerGender: undefined,
+      officerRace: [],
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,

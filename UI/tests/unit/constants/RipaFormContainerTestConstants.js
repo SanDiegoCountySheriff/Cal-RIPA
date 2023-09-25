@@ -558,8 +558,8 @@ export const V2_API_STOP = {
   agency: 'SDSD',
   officerId: '111111111',
   officerName: 'Name',
-  race: 'Asian',
-  gender: 'Cisgender man',
+  officerRace: ['Asian'],
+  officerGender: 'Cisgender man',
   officerNonBinary: false,
   expYears: '1',
   officerAssignment: {
@@ -633,6 +633,17 @@ export const V2_API_STOP = {
         listDetail: [],
         listCodes: [],
       },
+      reasonGivenForStop: [
+        {
+          Key: '22',
+          Reason:
+            'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect',
+        },
+        {
+          Key: '17',
+          Reason: 'Knowledge of outstanding arrest warrant / wanted person',
+        },
+      ],
       reasonForStopExplanation: 'Explanation',
       reasonForStopPiiFound: false,
       listNonForceActionsTakenDuringStop: [
@@ -1015,6 +1026,8 @@ export const V2_STOP = {
     blockNumber: '100',
     streetName: 'Street Name',
     intersection: null,
+    crossStreet1: '',
+    crossStreet2: '',
     toggleLocationOptions: true,
     highwayExit: null,
     landmark: null,

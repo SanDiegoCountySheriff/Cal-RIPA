@@ -1,4 +1,4 @@
-﻿using RIPA.Functions.Common.Models.v1;
+﻿using System.Collections.Generic;
 
 namespace RIPA.Functions.Common.Models.Interfaces;
 

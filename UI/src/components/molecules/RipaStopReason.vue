@@ -39,8 +39,55 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      <v-row>
+        <v-col v-if="favoriteReasons[0]" class="text-center">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-chip
+            v-if="favoriteReasons[0]"
+            @click="handleFavoriteClick(favoriteReasons[0])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[0].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[1]"
+            @click="handleFavoriteClick(favoriteReasons[1])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[1].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[2]"
+            @click="handleFavoriteClick(favoriteReasons[2])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[2].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[3]"
+            @click="handleFavoriteClick(favoriteReasons[3])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[3].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteReasons[4]"
+            @click="handleFavoriteClick(favoriteReasons[4])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteReasons[4].name }}
+          </v-chip>
+        </v-col>
       </v-row>
 
       <v-row no-gutters>
@@ -179,6 +226,48 @@
       </v-row>
     </v-container>
 
+    <ripa-form-header
+      v-if="model.stopVersion === 2"
+      title="Reason given to the stopped person"
+      required
+      subtitle="§999.226(a)(10)"
+      v-on="$listeners"
+    ></ripa-form-header>
+
+    <v-container v-if="model.stopVersion === 2">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <v-select
+            v-model="model.stopReason.reasonGivenForStop"
+            item-text="name"
+            item-value="value"
+            label="Reason"
+            multiple
+            required
+            :items="getGivenReasonItems"
+            :rules="givenReasonRules"
+            @input="handleUpdateModel"
+          >
+            <template #selection="{ item }">
+              <v-chip
+                v-bind="item.attrs"
+                :input-value="item.selected"
+                close
+                small
+                @click:close="handleRemoveItem(item)"
+              >
+                {{ item.abbreviation }}
+              </v-chip>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <template v-if="model.stopType === 'Vehicular' && model.stopVersion === 2">
       <ripa-form-header
         title="The stopped person is a passenger in a vehicle"
@@ -220,29 +309,7 @@
           <v-col>
             <ripa-switch
               v-model="model.person.insideResidence"
-              label="The stopped person was inside a residence"
-            ></ripa-switch>
-          </v-col>
-        </v-row>
-      </v-container>
-    </template>
-
-    <template v-if="model.stopVersion === 2">
-      <ripa-form-header
-        title="Welfare or Wellness Check"
-        required
-        :items="statutes"
-        subtitle="§999.226(a)(13)"
-        v-on="$listeners"
-      >
-      </ripa-form-header>
-
-      <v-container>
-        <v-row>
-          <v-col>
-            <ripa-switch
-              v-model="model.stopMadeDuringWelfareCheck"
-              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+              label="The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest."
             ></ripa-switch>
           </v-col>
         </v-row>
@@ -264,6 +331,7 @@ import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
   STOP_REASONS_V2,
+  GIVEN_STOP_REASONS_V2,
   PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
@@ -290,6 +358,9 @@ export default {
   data() {
     return {
       reasonRules: [v => !!v || 'Stop reason is required'],
+      givenReasonRules: [
+        v => (!!v && v.length > 0) || 'Given stop reason is required',
+      ],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
@@ -297,6 +368,7 @@ export default {
       ],
       reasonItems: STOP_REASONS,
       reasonItemsV2: STOP_REASONS_V2,
+      givenReasonItemsV2: GIVEN_STOP_REASONS_V2,
       probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
@@ -313,10 +385,14 @@ export default {
     'statutes',
     'personSearchAutomaticallySelected',
     'propertySearchAutomaticallySelected',
+    'favoriteReasons',
   ],
 
   created() {
-    if (this.model.stopReason.reasonForStopExplanation) {
+    if (
+      this.model.stopReason.reasonForStopExplanation &&
+      !this.model.template
+    ) {
       this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
   },
@@ -350,6 +426,17 @@ export default {
       }
 
       return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
+    },
+
+    getGivenReasonItems() {
+      const givenReasonItems = this.givenReasonItemsV2
+      if (this.model.person.isStudent) {
+        return givenReasonItems
+      }
+
+      return givenReasonItems.filter(
+        item => item.value !== 20 && item.value !== 21,
+      )
     },
 
     educationViolationRules() {
@@ -440,6 +527,13 @@ export default {
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'reason', value: textValue })
+    },
+
+    handleRemoveItem(item) {
+      const index = this.model.stopReason.reasonGivenForStop.indexOf(item.value)
+      if (index !== -1) {
+        this.model.stopReason.reasonGivenForStop.splice(index, 1)
+      }
     },
 
     handleUpdateModel() {
@@ -772,12 +866,16 @@ export default {
         this.model.stopReason.trafficViolationCode = null
       }
     },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-reason', favorite.id)
+    },
   },
 
   watch: {
     lastReason(newVal) {
       if (newVal) {
-        this.model.stopReason = newVal
+        this.model.stopReason = { ...newVal }
       }
     },
 

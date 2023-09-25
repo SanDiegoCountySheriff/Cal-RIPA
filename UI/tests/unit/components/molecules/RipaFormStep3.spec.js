@@ -50,6 +50,7 @@ describe('Ripa Form Step 3', () => {
         },
         loadingPiiStep3: computed(() => false),
         statutes: computed(() => []),
+        favoriteReasons: computed(() => []),
       },
     })
 

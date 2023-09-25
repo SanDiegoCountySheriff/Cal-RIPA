@@ -27,6 +27,7 @@ import {
 import {
   BASIS_FOR_SEARCH_V2,
   FORCE_ACTIONS_TAKEN,
+  GIVEN_STOP_REASONS_V2,
   NON_FORCE_ACTIONS_TAKEN,
   PERSON_GENDERS_V2,
   STOP_RESULTS_V2,
@@ -63,6 +64,8 @@ const emptyLocation = () => {
     blockNumber: null,
     streetName: null,
     intersection: null,
+    crossStreet1: null,
+    crossStreet2: null,
     toggleLocationOptions: false,
     highwayExit: null,
     landmark: null,
@@ -93,6 +96,7 @@ export const defaultStop = () => {
     piiEntities: [],
     stepTrace: [],
     stopType: null,
+    officerWorksWithNonReportingAgency: false,
     nonForceActionsTaken: {
       anyNonForceActionsTaken: true,
       nonForceActionsTakenDuringStop: [],
@@ -174,6 +178,7 @@ export const stopReasonGivenTemplate = template => {
 
   return {
     reasonForStop: null,
+    reasonGivenForStop: null,
     educationViolation: null,
     educationViolationCode: null,
     trafficViolation: null,
@@ -251,6 +256,10 @@ export const apiStopStopSummary = apiStop => {
   items.push({ id: 'A1', content: getSummaryPersonCount(apiStop) })
   if (apiStop.stopVersion === 2) {
     items.push({ id: 'A2', content: getSummaryStopType(apiStop) })
+    items.push({
+      id: 'A10',
+      content: getSummaryOfficerNonReportingAgency(apiStop),
+    })
   }
   items.push({ id: 'A3', content: getSummaryDate(apiStop) })
   items.push({ id: 'A4', content: getSummaryTime(apiStop) })
@@ -315,6 +324,14 @@ const getSummaryStopType = apiStop => {
   }
 }
 
+const getSummaryOfficerNonReportingAgency = apiStop => {
+  return {
+    level: 1,
+    header: 'Officer Secondary to Non-Reporting Agency',
+    detail: apiStop.officerWorksWithNonReportingAgency,
+  }
+}
+
 const getSummaryTime = apiStop => {
   return {
     level: 1,
@@ -348,6 +365,18 @@ const getSummaryLocation = apiStop => {
     children.push({
       header: 'Intersection',
       detail: apiStop.location.intersection,
+    })
+  }
+  if (apiStop.location.crossStreet1) {
+    children.push({
+      header: 'Cross Street 1',
+      detail: apiStop.location.crossStreet1,
+    })
+  }
+  if (apiStop.location.crossStreet2) {
+    children.push({
+      header: 'Cross Street 2',
+      detail: apiStop.location.crossStreet2,
     })
   }
   if (apiStop.location.highwayExit) {
@@ -447,11 +476,11 @@ const getSummaryOfficerV2 = apiStop => {
       },
       {
         header: 'Officer Race',
-        detail: apiStop.race,
+        detail: getOfficerRace(apiStop.officerRace),
       },
       {
         header: 'Officer Gender',
-        detail: apiStop.gender,
+        detail: apiStop.officerGender,
       },
       {
         header: 'Officer Nonbinary',
@@ -459,6 +488,16 @@ const getSummaryOfficerV2 = apiStop => {
       },
     ],
   }
+}
+
+const getOfficerRace = officerRace => {
+  let raceString = ''
+
+  for (const race of officerRace) {
+    raceString += race + ', '
+  }
+
+  return raceString.slice(0, -2)
 }
 
 const getSummaryDuration = apiStop => {
@@ -525,6 +564,9 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       content: getSummaryPerceivedOrKnownDisability(person),
     })
     items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    if (apiStop.stopVersion === 2) {
+      items.push({ id: '22', content: getSummaryReasonGivenForStop(person) })
+    }
     items.push({
       id: 'B10',
       content: getSummaryReasonForStopExplanation(person),
@@ -714,6 +756,19 @@ const getSummaryReasonForStopExplanation = person => {
     level: 1,
     header: 'Reason for Stop Explanation',
     detail: person.reasonForStopExplanation,
+  }
+}
+
+const getSummaryReasonGivenForStop = person => {
+  const reasons = person.reasonGivenForStop.map(obj => {
+    return {
+      detail: obj.reason,
+    }
+  })
+  return {
+    level: 2,
+    header: 'Reason Given to Stopped Person',
+    children: reasons,
   }
 }
 
@@ -1129,6 +1184,8 @@ export const apiStopToFullStopV2 = apiStop => {
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
     stopType: apiStop.stopType,
+    officerWorksWithNonReportingAgency:
+      apiStop.officerWorksWithNonReportingAgency,
     stopVersion: apiStop.stopVersion,
     stopMadeDuringWelfareCheck: apiStop.stopMadeDuringWelfareCheck,
     location: {
@@ -1136,7 +1193,8 @@ export const apiStopToFullStopV2 = apiStop => {
       school: schoolNumber,
       blockNumber: blockNumber && streetName ? blockNumber : null,
       streetName: blockNumber && streetName ? streetName : null,
-      intersection: apiStop.location?.intersection || null,
+      crossStreet1: apiStop.location?.crossStreet1 || null,
+      crossStreet2: apiStop.location?.crossStreet2 || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
       highwayExit: apiStop.location?.highwayExit || null,
       landmark: apiStop.location?.landMark || null,
@@ -1357,6 +1415,7 @@ const getFullStopPeopleListedV2 = apiStop => {
       },
       stopReason: {
         reasonForStop: Number(person.reasonForStop.key),
+        reasonGivenForStop: getKeyArray(person.reasonGivenForStop),
         educationViolation: getEducationViolationDetailKey(
           person.reasonForStop,
         ),
@@ -1616,6 +1675,8 @@ export const fullStopToStopV2 = fullStop => {
     forceActionsTaken: person.forceActionsTaken,
     location: fullStop.location,
     stopType: fullStop.stopType,
+    officerWorksWithNonReportingAgency:
+      fullStop.officerWorksWithNonReportingAgency,
     stopVersion: fullStop.stopVersion,
     stopMadeDuringWelfareCheck: fullStop.stopMadeDuringWelfareCheck,
     person: {
@@ -1735,11 +1796,6 @@ export const fullStopToApiStop = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
-    race: parsedApiStop ? parsedApiStop.race : officer.race,
-    gender: parsedApiStop ? parsedApiStop.gender : officer.gender,
-    officerNonBinary: parsedApiStop
-      ? parsedApiStop.officerNonBinary
-      : officer.officerNonBinary,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
@@ -1812,7 +1868,8 @@ export const fullStopToApiStopV2 = (
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highwayExit: fullStop.location?.highwayExit || '',
-      intersection: fullStop.location?.intersection || '',
+      crossStreet1: fullStop.location?.crossStreet1 || '',
+      crossStreet2: fullStop.location?.crossStreet2 || '',
       landMark: fullStop.location?.landmark || '',
       outOfCounty,
       piiFound: fullStop.location?.piiFound || false,
@@ -1840,6 +1897,17 @@ export const fullStopToApiStopV2 = (
     officerName: parsedApiStop
       ? parsedApiStop.officerName
       : officer.officerName,
+    officerRace: parsedApiStop
+      ? parsedApiStop.officerRace
+      : officer.officerRace,
+    officerGender: parsedApiStop
+      ? parsedApiStop.officerGender
+      : officer.officerGender,
+    officerNonBinary: parsedApiStop
+      ? parsedApiStop.officerNonBinary
+      : officer.officerNonBinary,
+    officerWorksWithNonReportingAgency:
+      fullStop.officerWorksWithNonReportingAgency,
     stopDateTime: new Date(
       formatDateTime(fullStop.stopDate.date, fullStop.stopDate.time),
     ),
@@ -1849,6 +1917,9 @@ export const fullStopToApiStopV2 = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,
+    favoriteLocationName: fullStop.favoriteLocationName,
+    favoriteReasonName: fullStop.favoriteReasonName,
+    favoriteResultName: fullStop.favoriteResultName,
   }
 }
 
@@ -1920,6 +1991,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       propertySearchConsentGiven:
         person.nonForceActionsTaken?.propertySearchConsentGiven || false,
       reasonForStop: getReasonForStopV2(person, statutes),
+      reasonGivenForStop: getReasonGivenForStopV2(person, statutes),
       passengerInVehicle: person.passengerInVehicle,
       insideResidence: person.insideResidence,
       reasonForStopExplanation:
@@ -2208,6 +2280,25 @@ const getReasonForStopV2 = (person, statutes) => {
   }
 
   return null
+}
+
+const getReasonGivenForStopV2 = person => {
+  const reasons = person.stopReason?.reasonGivenForStop || []
+
+  if (reasons.length > 0) {
+    const selectedReasons = reasons.map(reason => {
+      const [filteredReason] = GIVEN_STOP_REASONS_V2.filter(
+        item => item.value === reason,
+      )
+      return {
+        key: reason.toString(),
+        reason: filteredReason?.name || '',
+      }
+    })
+    return selectedReasons
+  } else {
+    return null
+  }
 }
 
 const getReasonForStopDetails = (reasonKey, person) => {

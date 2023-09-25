@@ -2,6 +2,7 @@
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace RIPA.Functions.Common.Models.v2;
 
@@ -13,6 +14,10 @@ public class Stop : IStop
     public string Agency { get; set; }
     public string OfficerId { get; set; }
     public string OfficerName { get; set; }
+    public string[] OfficerRace { get; set; }
+    public string OfficerGender { get; set; }
+    public bool OfficerNonBinary { get; set; }
+    public bool OfficerWorksWithNonReportingAgency { get; set; }
     public string ExpYears { get; set; }
     [JsonConverter(typeof(ConcreteConverter<OfficerAssignment>))]
     public IOfficerAssignment OfficerAssignment { get; set; }
@@ -40,8 +45,7 @@ public class Stop : IStop
     public bool StopMadeDuringWelfareCheck { get; set; }
     [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
     public IPersonStopped[] ListPersonStopped { get; set; }
-    [JsonConverter(typeof(ConcreteConverter<Submission[]>))]
-    public ISubmission[] ListSubmission { get; set; }
+    public Submission[] ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
     public PiiEntity[] PiiEntities { get; set; }
@@ -54,4 +58,7 @@ public class Stop : IStop
     public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
     public string StopType { get; set; }
+    public string FavoriteLocationName { get; set; }
+    public string FavoriteReasonName { get; set; }
+    public string FavoriteResultName { get; set; }
 }

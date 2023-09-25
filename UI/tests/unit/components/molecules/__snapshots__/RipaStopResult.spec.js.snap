@@ -20,8 +20,17 @@ exports[`Ripa Stop Result should match snapshot 1`] = `
             </span></button></div>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="tw-mb-4 col-sm-12 col-12"></div>
+    <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
@@ -128,7 +137,7 @@ exports[`Ripa Stop Result should match snapshot 1`] = `
             <div class="v-input__slot">
               <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-37" role="checkbox" type="checkbox" value="">
                 <div class="v-input--selection-controls__ripple"></div>
-              </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">Psychiatric hold</label>
+              </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">Psychiatric hold (pursuant to Welfare &amp; Institutions Code sections 5150 and/or 5585.20)</label>
             </div>
           </div>
         </div>
