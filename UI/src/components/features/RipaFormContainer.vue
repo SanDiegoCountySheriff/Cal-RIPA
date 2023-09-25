@@ -923,10 +923,10 @@ export default {
       }
     },
 
-    handleOpenStatute(statute, version) {
+    handleOpenStatute(statute) {
       this.statute = {
         statute,
-        content: getStatuteContent(statute, version),
+        content: getStatuteContent(statute, this.version),
       }
       this.showStatuteDialog = true
     },
