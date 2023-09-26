@@ -1917,6 +1917,9 @@ export const fullStopToApiStopV2 = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,
+    favoriteLocationName: fullStop.favoriteLocationName,
+    favoriteReasonName: fullStop.favoriteReasonName,
+    favoriteResultName: fullStop.favoriteResultName,
   }
 }
 

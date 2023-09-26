@@ -58,4 +58,7 @@ public class Stop : IStop
     public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
     public string StopType { get; set; }
+    public string FavoriteLocationName { get; set; }
+    public string FavoriteReasonName { get; set; }
+    public string FavoriteResultName { get; set; }
 }

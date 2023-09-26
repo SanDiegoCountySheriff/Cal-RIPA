@@ -30,6 +30,18 @@ exports[`Ripa Location should match snapshot 1`] = `
           </span></button></div>
     </div>
     <div class="row">
+      <!---->
+    </div>
+    <div class="row">
+      <div class="text-center col">
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div class="row">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 200px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">

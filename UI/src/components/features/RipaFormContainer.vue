@@ -32,6 +32,9 @@
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
       @on-dev-time="handleDevTime"
+      @on-open-favorite-location="handleOpenLocationFavorite"
+      @on-open-favorite-reason="handleOpenReasonFavorite"
+      @on-open-favorite-result="handleOpenResultFavorite"
     ></ripa-form-template>
 
     <ripa-favorites-dialog
@@ -236,6 +239,9 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
+      favoriteLocations: this.getFavoriteLocations,
+      favoriteReasons: this.getFavoriteReasons,
+      favoriteResults: this.getFavoriteResults,
     }
   },
 
@@ -262,6 +268,9 @@ export default {
       'personSearchAutomaticallySelected',
       'propertySearchAutomaticallySelected',
       'mappedVersion',
+      'favoriteLocations',
+      'favoriteReasons',
+      'favoriteResults',
     ]),
 
     getMappedUser() {
@@ -288,6 +297,227 @@ export default {
 
     isLastLocationValid() {
       return this.getLastLocation !== null
+    },
+
+    getFavoriteLocations() {
+      return this.favoriteLocations
+        ? JSON.parse(this.favoriteLocations)
+            .filter(location => {
+              if (!location.version) {
+                location.version = 1
+              }
+
+              if (!location.location.outOfCounty) {
+                const cityNotExpired = this.mappedFormCountyCities.some(
+                  city => {
+                    return city.fullName === location.location.city
+                  },
+                )
+
+                if (!cityNotExpired) {
+                  location.location.city = ''
+                  location.favoritesCityExpired = true
+                }
+              } else if (location.location.outOfCounty) {
+                const cityNotExpired = this.mappedFormNonCountyCities.some(
+                  city => {
+                    return city.fullName === location.location.city
+                  },
+                )
+
+                if (!cityNotExpired) {
+                  location.location.city = ''
+                  location.favoritesCityExpired = true
+                }
+              }
+
+              if (location.location.isSchool) {
+                const schoolNotExpired = this.mappedFormSchools.some(school => {
+                  return school.cdsCode === location.location.school
+                })
+
+                if (!schoolNotExpired) {
+                  location.location.school = ''
+                  location.favoritesSchoolExpired = true
+                }
+              }
+              return location.version === this.version
+            })
+            .sort((a, b) => {
+              if (!a.count) {
+                a.count = 1
+              }
+
+              if (!b.count) {
+                b.count = 1
+              }
+
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+
+              return 0
+            })
+        : []
+    },
+
+    getFavoriteReasons() {
+      return this.favoriteReasons
+        ? JSON.parse(this.favoriteReasons)
+            .filter(reason => {
+              if (!reason.version) {
+                reason.version = 1
+              }
+
+              const codes = [
+                reason.reason.reasonableSuspicionCode,
+                reason.reason.educationViolationCode,
+                reason.reason.trafficViolationCode,
+              ]
+
+              const codeNotExpired = codes.some(code => {
+                return this.mappedFormStatutes.some(statute => {
+                  return statute.code === code
+                })
+              })
+
+              if (!codeNotExpired) {
+                reason.reason.reasonableSuspicionCode = null
+                reason.reason.educationViolationCode = null
+                reason.reason.trafficViolationCode = null
+                reason.favoritesCodeExpired = true
+              }
+              return reason.version === this.version
+            })
+            .sort((a, b) => {
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+              return 0
+            })
+        : []
+    },
+
+    getFavoriteResults() {
+      return this.favoriteResults
+        ? JSON.parse(this.favoriteResults)
+            .filter(result => {
+              if (!result.version) {
+                result.version = 1
+              }
+
+              const updatedWarningCodes = result.result.warningCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedWarningCodes.length !== result.result.warningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.warningCodes = updatedWarningCodes
+
+              const updatedVerbalWarningCodes =
+                result.result.verbalWarningCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                })
+
+              if (
+                updatedVerbalWarningCodes.length !==
+                result.result.verbalWarningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.verbalWarningCodes = updatedVerbalWarningCodes
+
+              const updatedWrittenWarningCodes =
+                result.result.writtenWarningCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                })
+
+              if (
+                updatedWrittenWarningCodes.length !==
+                result.result.writtenWarningCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.writtenWarningCodes = updatedWrittenWarningCodes
+
+              const updatedCitationCodes = result.result.citationCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedCitationCodes.length !==
+                result.result.citationCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.citationCodes = updatedCitationCodes
+
+              const updatedInfieldCodes = result.result.infieldCodes.filter(
+                code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                },
+              )
+
+              if (
+                updatedInfieldCodes.length !== result.result.infieldCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.infieldCodes = updatedInfieldCodes
+
+              const updatedCustodialArrestCodes =
+                result.result.custodialArrestCodes.filter(code => {
+                  return this.mappedFormStatutes.some(statute => {
+                    return statute.code === code
+                  })
+                })
+
+              if (
+                updatedCustodialArrestCodes.length !==
+                result.result.custodialArrestCodes.length
+              ) {
+                result.favoritesCodeExpired = true
+              }
+
+              result.result.custodialArrestCodes = updatedCustodialArrestCodes
+
+              return result.version === this.version
+            })
+            .sort((a, b) => {
+              if (a.count > b.count) {
+                return -1
+              } else if (a.count < b.count) {
+                return 1
+              }
+              return 0
+            })
+        : []
     },
   },
 
@@ -356,191 +586,6 @@ export default {
       }
     },
 
-    getFavoriteLocations() {
-      const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations
-        ? JSON.parse(locations).filter(location => {
-            if (!location.version) {
-              location.version = 1
-            }
-
-            if (!location.location.outOfCounty) {
-              const cityNotExpired = this.mappedFormCountyCities.some(city => {
-                return city.fullName === location.location.city
-              })
-
-              if (!cityNotExpired) {
-                location.location.city = ''
-                location.favoritesCityExpired = true
-              }
-            } else if (location.location.outOfCounty) {
-              const cityNotExpired = this.mappedFormNonCountyCities.some(
-                city => {
-                  return city.fullName === location.location.city
-                },
-              )
-
-              if (!cityNotExpired) {
-                location.location.city = ''
-                location.favoritesCityExpired = true
-              }
-            }
-
-            if (location.location.isSchool) {
-              const schoolNotExpired = this.mappedFormSchools.some(school => {
-                return school.name === location.location.school
-              })
-
-              if (!schoolNotExpired) {
-                location.location.school = ''
-                location.favoritesSchoolExpired = true
-              }
-            }
-            return location.version === this.version
-          })
-        : []
-    },
-
-    getFavoriteReasons() {
-      const reasons = localStorage.getItem('ripa_favorite_reasons')
-      return reasons
-        ? JSON.parse(reasons).filter(reason => {
-            if (!reason.version) {
-              reason.version = 1
-            }
-
-            const codes = [
-              reason.reason.reasonableSuspicionCode,
-              reason.reason.educationViolationCode,
-              reason.reason.trafficViolationCode,
-            ]
-
-            const codeNotExpired = codes.some(code => {
-              return this.mappedFormStatutes.some(statute => {
-                return statute.code === code
-              })
-            })
-
-            if (!codeNotExpired) {
-              reason.reason.reasonableSuspicionCode = null
-              reason.reason.educationViolationCode = null
-              reason.reason.trafficViolationCode = null
-              reason.favoritesCodeExpired = true
-            }
-            return reason.version === this.version
-          })
-        : []
-    },
-
-    getFavoriteResults() {
-      const results = localStorage.getItem('ripa_favorite_results')
-      return results
-        ? JSON.parse(results).filter(result => {
-            if (!result.version) {
-              result.version = 1
-            }
-
-            const updatedWarningCodes = result.result.warningCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              },
-            )
-
-            if (
-              updatedWarningCodes.length !== result.result.warningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.warningCodes = updatedWarningCodes
-
-            const updatedVerbalWarningCodes =
-              result.result.verbalWarningCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              })
-
-            if (
-              updatedVerbalWarningCodes.length !==
-              result.result.verbalWarningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.verbalWarningCodes = updatedVerbalWarningCodes
-
-            const updatedWrittenWarningCodes =
-              result.result.writtenWarningCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              })
-
-            if (
-              updatedWrittenWarningCodes.length !==
-              result.result.writtenWarningCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.writtenWarningCodes = updatedWrittenWarningCodes
-
-            const updatedCitationCodes = result.result.citationCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              },
-            )
-
-            if (
-              updatedCitationCodes.length !== result.result.citationCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.citationCodes = updatedCitationCodes
-
-            const updatedInfieldCodes = result.result.infieldCodes.filter(
-              code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              },
-            )
-
-            if (
-              updatedInfieldCodes.length !== result.result.infieldCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.infieldCodes = updatedInfieldCodes
-
-            const updatedCustodialArrestCodes =
-              result.result.custodialArrestCodes.filter(code => {
-                return this.mappedFormStatutes.some(statute => {
-                  return statute.code === code
-                })
-              })
-
-            if (
-              updatedCustodialArrestCodes.length !==
-              result.result.custodialArrestCodes.length
-            ) {
-              result.favoritesCodeExpired = true
-            }
-
-            result.result.custodialArrestCodes = updatedCustodialArrestCodes
-
-            return result.version === this.version
-          })
-        : []
-    },
-
     getLastLocation() {
       const lastLocation = localStorage.getItem('ripa_last_location')
       if (lastLocation) {
@@ -559,21 +604,6 @@ export default {
       return null
     },
 
-    getAllStoredLocations() {
-      const locations = localStorage.getItem('ripa_favorite_locations')
-      return locations ? JSON.parse(locations) : []
-    },
-
-    getAllStoredReasons() {
-      const reasons = localStorage.getItem('ripa_favorite_reasons')
-      return reasons ? JSON.parse(reasons) : []
-    },
-
-    getAllStoredResults() {
-      const results = localStorage.getItem('ripa_favorite_results')
-      return results ? JSON.parse(results) : []
-    },
-
     handleAddLocationFavorite(name) {
       const newLocation = {
         id: new Date().getTime(),
@@ -583,7 +613,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allLocations = this.getAllStoredLocations()
+      const allLocations = this.getFavoriteLocations
 
       const index = allLocations.findIndex(l => l.name === newLocation.name)
 
@@ -606,7 +636,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allReasons = this.getAllStoredReasons()
+      const allReasons = this.getFavoriteReasons
       const index = allReasons.findIndex(r => r.name === newReason.name)
 
       if (index === -1) {
@@ -627,7 +657,7 @@ export default {
         updateDate: format(new Date(), 'yyyy-MM-dd'),
       }
 
-      const allResults = this.getAllStoredResults()
+      const allResults = this.getFavoriteResults
       const index = allResults.findIndex(r => r.name === newResult.name)
 
       if (index === -1) {
@@ -748,7 +778,7 @@ export default {
     },
 
     handleDeleteLocationFavorite(id) {
-      const locations = this.getFavoriteLocations()
+      const locations = this.getFavoriteLocations
       const filteredLocations = locations.filter(item => item.id !== id)
       this.setFavoriteLocations(filteredLocations)
     },
@@ -766,7 +796,6 @@ export default {
     },
 
     handleDeletePerson(index) {
-      // update fullStop
       const filteredPeople = this.fullStop.people.filter(
         item => item.index.toString() !== index.toString(),
       )
@@ -780,8 +809,8 @@ export default {
         }),
       }
       this.fullStop = Object.assign({}, updatedFullStop)
-      // update stop
       const filteredPerson = this.fullStop.people[0]
+
       if (filteredPerson) {
         this.stop = {
           ...this.stop,
@@ -793,7 +822,7 @@ export default {
     handleEditLocationFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const locations = this.getFavoriteLocations()
+      const locations = this.getFavoriteLocations
       const filteredLocations = locations.filter(
         item => item.id !== updatedFav.id,
       )
@@ -804,7 +833,7 @@ export default {
     handleEditReasonFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const reasons = this.getFavoriteReasons()
+      const reasons = this.getFavoriteReasons
       const filteredReasons = reasons.filter(item => item.id !== updatedFav.id)
       filteredReasons.push(updatedFav)
       this.setFavoriteReasons(filteredReasons)
@@ -813,7 +842,7 @@ export default {
     handleEditResultFavorite(favorite) {
       const updatedFav = Object.assign({}, favorite)
       updatedFav.updateDate = format(new Date(), 'yyyy-MM-dd')
-      const results = this.getFavoriteResults()
+      const results = this.getFavoriteResults
       const filteredResults = results.filter(item => item.id !== updatedFav.id)
       filteredResults.push(updatedFav)
       this.setFavoriteResults(filteredResults)
@@ -886,11 +915,12 @@ export default {
 
     handleOpenLocationFavorite(id) {
       this.showLocationFavoritesDialog = false
-      const favorites = this.getFavoriteLocations()
+      const favorites = this.getFavoriteLocations
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
         this.stop.location.isSchool = false
         this.stop.location.school = null
+        this.stop.favoriteLocationName = favorite.name
         this.updateFullStop()
         this.lastLocation = {
           newLocation: favorite.location,
@@ -900,35 +930,39 @@ export default {
     },
 
     handleOpenReasonFavorite(id) {
+      this.lastReason = null
       this.showReasonFavoritesDialog = false
-      const favorites = this.getFavoriteReasons()
+      const favorites = this.getFavoriteReasons
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
+        this.stop.favoriteReasonName = favorite.name
         this.lastReason = favorite.reason
       }
     },
 
     handleOpenResultFavorite(id) {
+      this.lastResult = null
       this.showResultFavoritesDialog = false
-      const favorites = this.getFavoriteResults()
+      const favorites = this.getFavoriteResults
       const [favorite] = favorites.filter(item => item.id === id)
       if (favorite) {
+        this.stop.favoriteResultName = favorite.name
         this.lastResult = favorite.result
       }
     },
 
     handleOpenLocationFavorites() {
-      this.favorites = this.getFavoriteLocations()
+      this.favorites = this.getFavoriteLocations
       this.showLocationFavoritesDialog = true
     },
 
     handleOpenReasonFavorites() {
-      this.favorites = this.getFavoriteReasons()
+      this.favorites = this.getFavoriteReasons
       this.showReasonFavoritesDialog = true
     },
 
     handleOpenResultFavorites() {
-      this.favorites = this.getFavoriteResults()
+      this.favorites = this.getFavoriteResults
       this.showResultFavoritesDialog = true
     },
 
@@ -1024,7 +1058,6 @@ export default {
     setFavoriteLocations(locations) {
       if (this.isOnlineAndAuthenticated) {
         const strLocations = JSON.stringify(locations)
-        localStorage.setItem('ripa_favorite_locations', strLocations)
         this.setUserFavoriteLocations(strLocations)
         this.editUser(this.mappedUser)
       }
@@ -1033,7 +1066,6 @@ export default {
     setFavoriteReasons(reasons) {
       if (this.isOnlineAndAuthenticated) {
         const strReasons = JSON.stringify(reasons)
-        localStorage.setItem('ripa_favorite_reasons', strReasons)
         this.setUserFavoriteReasons(strReasons)
         this.editUser(this.mappedUser)
       }
@@ -1042,7 +1074,6 @@ export default {
     setFavoriteResults(results) {
       if (this.isOnlineAndAuthenticated) {
         const strResults = JSON.stringify(results)
-        localStorage.setItem('ripa_favorite_results', strResults)
         this.setUserFavoriteResults(strResults)
         this.editUser(this.mappedUser)
       }
@@ -1066,6 +1097,10 @@ export default {
         }
         let updatedFullStop = Object.assign({}, this.fullStop)
         updatedFullStop.stopType = this.getStopType(this.stop)
+        updatedFullStop.favoriteLocationName =
+          this.stop.favoriteLocationName || ''
+        updatedFullStop.favoriteReasonName = this.stop.favoriteReasonName || ''
+        updatedFullStop.favoriteResultName = this.stop.favoriteResultName || ''
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
         updatedFullStop.internalId = this.stop.internalId

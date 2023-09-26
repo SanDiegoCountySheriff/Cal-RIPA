@@ -48,6 +48,7 @@ describe('Ripa Form Step 1', () => {
           return true
         },
         loadingPiiStep1: computed(() => false),
+        favoriteLocations: computed(() => []),
       },
     })
   }
@@ -93,6 +94,7 @@ describe('Ripa Form Step 1', () => {
         user: computed(() => null),
         version: computed(() => 1),
         environmentName: computed(() => 'dev'),
+        favoriteLocations: computed(() => []),
       },
     })
   }

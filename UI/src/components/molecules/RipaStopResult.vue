@@ -38,8 +38,55 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      <v-row>
+        <v-col v-if="favoriteResults[0]" class="text-center">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-chip
+            v-if="favoriteResults[0]"
+            @click="handleFavoriteClick(favoriteResults[0])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[0].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[1]"
+            @click="handleFavoriteClick(favoriteResults[1])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[1].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[2]"
+            @click="handleFavoriteClick(favoriteResults[2])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[2].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[3]"
+            @click="handleFavoriteClick(favoriteResults[3])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[3].name }}
+          </v-chip>
+          <v-chip
+            v-if="favoriteResults[4]"
+            @click="handleFavoriteClick(favoriteResults[4])"
+            color="primary"
+            class="mr-3 mb-2"
+          >
+            {{ favoriteResults[4].name }}
+          </v-chip>
+        </v-col>
       </v-row>
 
       <v-row no-gutters>
@@ -603,7 +650,12 @@ export default {
     }
   },
 
-  inject: ['isOnlineAndAuthenticated', 'lastResult', 'statutes'],
+  inject: [
+    'isOnlineAndAuthenticated',
+    'lastResult',
+    'statutes',
+    'favoriteResults',
+  ],
 
   mounted() {
     if (
@@ -1016,12 +1068,16 @@ export default {
         this.model.stopVersion,
       )
     },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-result', favorite.id)
+    },
   },
 
   watch: {
     lastResult(newVal) {
       if (newVal) {
-        this.model.stopResult = newVal
+        this.model.stopResult = { ...newVal }
       }
     },
 

@@ -43,6 +43,7 @@ describe('Ripa Form Step 5', () => {
           return {}
         },
         statutes: computed(() => []),
+        favoriteResults: computed(() => []),
       },
     })
 

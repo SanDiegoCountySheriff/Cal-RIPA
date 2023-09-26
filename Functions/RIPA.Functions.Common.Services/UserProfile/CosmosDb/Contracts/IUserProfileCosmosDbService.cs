@@ -10,4 +10,7 @@ public interface IUserProfileCosmosDbService<T>
     Task AddUserProfileAsync(T userProfile);
     Task UpdateUserProfileAsync(string id, T userProfile);
     Task DeleteUserProfileAsync(string id);
+    Task UpdateFavoriteLocationCount(string favoriteName, string id);
+    Task UpdateFavoriteReasonCount(string favoriteName, string id);
+    Task UpdateFavoriteResultCount(string favoriteName, string id);
 }
