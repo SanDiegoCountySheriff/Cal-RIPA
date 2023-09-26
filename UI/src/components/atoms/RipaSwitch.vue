@@ -2,6 +2,7 @@
   <div class="ripa-switch" :style="{ maxWidth: maxWidth + 'px' }">
     <v-switch
       v-model="model"
+      inset
       class="v-input--reverse v-input--expand"
       :disabled="disabled"
       :hint="hint"
@@ -11,7 +12,15 @@
       validate-on-blur
     >
       <template #label>
-        {{ label }}
+        <span class="main-label">
+          {{ label }}
+        </span>
+        <span
+          class="switch-label"
+          :style="{ right: model ? '-27px' : '-45px' }"
+        >
+          {{ model ? 'Yes' : 'No' }}
+        </span>
       </template>
     </v-switch>
   </div>
@@ -85,5 +94,15 @@ export default {
     display: block;
     flex: 1;
   }
+}
+
+.switch-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 1000;
+  pointer-events: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 </style>
