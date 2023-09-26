@@ -32,7 +32,7 @@ exports[`Ripa Location should match snapshot 1`] = `
     <div class="row">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 200px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-12" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -41,9 +41,11 @@ exports[`Ripa Location should match snapshot 1`] = `
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-12" class="v-label theme--light" style="left: 0px; position: relative;">
-                  K-12 Public School
-                </label>
+                </div><label for="input-12" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        K-12 Public School
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
               </div>
             </div>
           </div>
@@ -123,7 +125,7 @@ exports[`Ripa Location should match snapshot 1`] = `
           </div>
         </div>
         <div class="ripa-switch" style="max-width: 225px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-32" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -132,9 +134,11 @@ exports[`Ripa Location should match snapshot 1`] = `
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-32" class="v-label theme--light" style="left: 0px; position: relative;">
-                  More Location Options
-                </label>
+                </div><label for="input-32" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        More Location Options
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
               </div>
             </div>
           </div>
@@ -142,7 +146,7 @@ exports[`Ripa Location should match snapshot 1`] = `
         <!---->
         <div class="tw-mt-8">
           <div class="ripa-switch" style="max-width: 200px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
                   <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-35" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -151,9 +155,11 @@ exports[`Ripa Location should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-35" class="v-label theme--light" style="left: 0px; position: relative;">
-                    City Out of County?
-                  </label>
+                  </div><label for="input-35" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        City Out of County?
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
