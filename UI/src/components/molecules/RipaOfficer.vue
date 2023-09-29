@@ -3,9 +3,7 @@
     <ripa-form-header
       title="Officer Years of Experience"
       required
-      :subtitle="
-        model.stopVersion === 1 ? '§999.226(a)(15)' : '§999.226(a)(20)'
-      "
+      :subtitle="version === 1 ? '§999.226(a)(15)' : '§999.226(a)(20)'"
       class="tw-mb-4"
       v-on="$listeners"
     >

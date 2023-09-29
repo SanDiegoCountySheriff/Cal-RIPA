@@ -880,6 +880,10 @@ export const STATUTES_V2 = [
             text: "'ORI number' is the data element that refers to the reporting agency’s Originating Agency Identifier, a unique identification code number assigned by the Federal Bureau of Investigation.",
           },
           {
+            id: '2',
+            text: "'Type of Stop' requires an officer to differentiate the nature of the officer’s stop based on the stopped person’s activities, and primarily on their mode of transit during the stop. A 'Vehicular Stop' is any interaction that involves stopping an individual in a Vehicle, as defined in these regulations. A 'Bicycle Stop' is any interaction that involves stopping an individual on a bicycle. Any other stop constitutes a 'Pedestrian Stop,' including stopping passengers on a bus or train.",
+          },
+          {
             id: '3',
             text: 'Date, Time, and Duration of Stop',
             children: [
@@ -1144,6 +1148,28 @@ export const STATUTES_V2 = [
           {
             id: '12',
             text: "'Stop Made During the Course of Responding to a Call for Service.' The officer shall only select this data element if the stop was made during the course of responding to a call for service, radio call, or dispatch. An interaction that occurs when an officer responds to a call for service is only reportable if the interaction meets the definition of 'stop,' as specified in section 999.224, subdivision (a)(19). A call for service is not a reason for a stop. This data element is not mutually exclusive with the data element 'Stop Made During the Course of a Welfare or Wellness Check or an Officer’s Community Caretaking Function.' If a stop was made during the course of conducting a welfare or wellness check or the officer’s community caretaking function as well as during the course of responding to a call for service, an officer must select both data elements.",
+          },
+          {
+            id: '13',
+            text: "'Stop Made During the Course of Performing a Welfare or Wellness Check or an Officer’s Community Caretaking Function.' The officer shall only select this data element if the stop was made during the course of performing a welfare or wellness check or the officer’s community caretaking function. A welfare or wellness check or an officer’s community caretaking function cannot be selected as a reason for a stop. This data element is not mutually exclusive with the data element 'Stop Made During the Course of Responding to a Call for Service.' If a stop was made during the course of responding to a call for service as well as during the course of conducting a welfare or wellness check or the officer’s community caretaking function, an officer must select both data elements.",
+            children: [
+              {
+                id: 'A',
+                text: "If an officer selects this data element, the officer shall include the facts that formed the basis for conducting the welfare or wellness check or the community caretaking function as part of their brief explanation in the 'Reason for Stop' narrative field.",
+              },
+              {
+                id: '1',
+                text: "Example: Officer A responded to a call for service that a person was behaving erratically on a public street. Officer A interacts with the person and determines that he has a knife and then threatens to stab the officer. Officer A arrests the person. Officer A completes a stop data entry for this interaction and selects the data element 'Stop Made During the Course of Performing a Welfare or Wellness Check or an Officer’s Community Caretaking Function.' Under 'Reason for Stop,' Officer A selects 'Probable Cause to Arrest or Search.' In the narrative field under 'Reason for Stop,' Officer A states that while performing a welfare check on a person acting erratically on the street in response to a call for service, the subject displayed a knife and threatened to stab the officer. The individual was then arrested.",
+              },
+              {
+                id: '2',
+                text: 'Example: Officer B is in their patrol vehicle and observes a person lying down on the side of the street. Officer B interacts with the person and determines the person is having a seizure. Officer B requests an ambulance to transport the person to the hospital. Officer B does not need to report this interaction.',
+              },
+              {
+                id: '3',
+                text: "Example: Officer C responds to a call for service where a car has driven off the highway into a ditch. Officer C arrives on scene and evacuates two children. After contacting the driver, the officer smells a strong odor of alcohol and conducts field sobriety tests, which the driver fails. Officer C then arrests the driver. Under 'Reason for Stop,' Officer C selects 'Reasonable suspicion that the person was engaged in criminal activity.' In the narrative field under 'Reason for Stop,' Officer C states that while engaging in a call for service at the scene of an automobile accident the officer determined that the driver was driving under the influence of alcohol. The driver was then arrested following failed field sobriety tests.",
+              },
+            ],
           },
           {
             id: '14',
