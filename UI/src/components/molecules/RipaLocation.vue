@@ -440,7 +440,7 @@ export default {
       return [
         v => this.isLocationOptionsFilled || !!v || 'Longitude is required',
         v =>
-          (this.isLocationOptionsFilled && regex.test(v)) ||
+          regex.test(v) ||
           'A valid negative longitude with a maximum of 3 digits after the decimal is required',
       ]
     },
