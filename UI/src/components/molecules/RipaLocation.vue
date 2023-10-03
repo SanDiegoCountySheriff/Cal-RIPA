@@ -415,7 +415,7 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          blockNumber !== null ||
+          (blockNumber !== null && blockNumber !== '') ||
           'A block number is required',
         this.isLocationOptionsFilled ||
           (streetName + blockNumber).length >= 5 ||
@@ -547,6 +547,7 @@ export default {
 
       const isValid =
         (blockNumber !== null &&
+          blockNumber !== '' &&
           streetName &&
           streetName.length > 0 &&
           (blockNumber + streetName).length >= 5) ||
