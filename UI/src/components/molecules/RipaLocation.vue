@@ -13,7 +13,7 @@
         <v-col cols="12" sm="6" md="3">
           <v-btn
             :loading="loadingGps"
-            :disabled="!geolocationAvailable"
+            :disabled="!isGeolocationAvailable"
             @click="handleCurrentLocation"
             color="primary"
             block
@@ -135,7 +135,7 @@
           </ripa-alert>
 
           <ripa-alert
-            v-if="!geolocationAvailable"
+            v-if="!isGeolocationAvailable"
             alert-outlined
             alert-type="warning"
           >
@@ -170,34 +170,6 @@
           </ripa-text-input>
         </v-col>
       </v-row>
-
-      <template v-if="this.model.stopVersion === 2">
-        <ripa-subheader text="-- or --"></ripa-subheader>
-
-        <v-row>
-          <v-col cols="12" sm="12" md="6">
-            <ripa-text-input
-              v-model="model.location.latitude"
-              :loading="loadingPiiStep1"
-              :rules="latitudeRules"
-              @blur="handleBlockNumber"
-              label="Latitude"
-            >
-            </ripa-text-input>
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
-            <ripa-text-input
-              v-model="model.location.longitude"
-              :loading="loadingPiiStep1"
-              :rules="longitudeRules"
-              @blur="handlePiiCheck($event)"
-              label="Longitude"
-            >
-            </ripa-text-input>
-          </v-col>
-        </v-row>
-      </template>
 
       <v-row>
         <v-col cols="12" sm="12">
@@ -246,6 +218,34 @@
           ></ripa-switch>
 
           <template v-if="model.location.toggleLocationOptions">
+            <template v-if="this.model.stopVersion === 2">
+              <ripa-subheader text="-- or --"></ripa-subheader>
+
+              <v-row>
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.latitude"
+                    :loading="loadingPiiStep1"
+                    :rules="latitudeRules"
+                    @blur="handleBlockNumber"
+                    label="Latitude"
+                  >
+                  </ripa-text-input>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.longitude"
+                    :loading="loadingPiiStep1"
+                    :rules="longitudeRules"
+                    @blur="handlePiiCheck($event)"
+                    label="Longitude"
+                  >
+                  </ripa-text-input>
+                </v-col>
+              </v-row>
+            </template>
+
             <ripa-subheader text="-- or --"></ripa-subheader>
 
             <ripa-text-input
@@ -334,12 +334,6 @@ export default {
     RipaSubheader,
     RipaSwitch,
     RipaTextInput,
-  },
-
-  data() {
-    return {
-      geolocationAvailable: true,
-    }
   },
 
   inject: [
@@ -628,8 +622,6 @@ export default {
         value: textValue.replace('.', ''),
       })
     }
-
-    this.geolocationAvailable = true
   },
 
   methods: {

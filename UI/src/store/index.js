@@ -263,11 +263,12 @@ export default new Vuex.Store({
         }
       }
 
-      const blockNumber = state.gpsLocationAddress.address.AddNum
-      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const blockNumber =
+        Math.floor(Number(state.gpsLocationAddress.address.AddNum) / 100) * 100
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : 0
       const streetName = state.gpsLocationAddress.address.Address
       const parsedStreetName = streetName
-        ? streetName.replace(blockNumber, '').trim()
+        ? streetName.replace(state.gpsLocationAddress.address.AddNum, '').trim()
         : null
       const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
       const upperCaseCity = city ? city.toUpperCase() : city
@@ -642,44 +643,13 @@ export default new Vuex.Store({
             const latLong = `${position.coords.longitude},${position.coords.latitude}`
             const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
 
-            let latDecimal
-            let longDecimal
-            let latTrimmed
-            let longTrimmed
-
             fetch(url)
               .then(response => response.json())
               .then(data => {
-                if (position.coords.latitude !== null) {
-                  latDecimal = String(position.coords.latitude).slice(
-                    String(position.coords.latitude).lastIndexOf('.') + 1,
-                  )
-                }
-
-                if (position.coords.longitude !== null) {
-                  longDecimal = String(position.coords.longitude).slice(
-                    String(position.coords.longitude).lastIndexOf('.') + 1,
-                  )
-                }
-
-                if (latDecimal.length > 3) {
-                  latTrimmed = String(position.coords.latitude).substring(
-                    0,
-                    String(position.coords.latitude).length - 1,
-                  )
-                } else latTrimmed = position.coords.latitude
-
-                if (longDecimal.length > 3) {
-                  longTrimmed = String(position.coords.longitude).substring(
-                    0,
-                    String(position.coords.longitude).length - 1,
-                  )
-                } else longTrimmed = position.coords.longitude
-
                 const dataIncludingLatLong = {
                   ...data,
-                  latitude: String(latTrimmed),
-                  longitude: String(longTrimmed),
+                  latitude: position.coords.latitude.toFixed(3),
+                  longitude: position.coords.longitude.toFixed(3),
                 }
 
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
