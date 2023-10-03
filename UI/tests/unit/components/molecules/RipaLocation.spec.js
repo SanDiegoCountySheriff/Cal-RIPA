@@ -216,28 +216,36 @@ describe('Ripa Location', () => {
 
   it('should validate latitude coordinate for v2 stop', () => {
     wrapper = factory({ value: stop })
-    stop.location.toggleLocationOptions = true
-    expect(wrapper.vm.latitudeRules).toEqual([
+
+    expect(wrapper.vm.latitudeRules[0]('')).toEqual('Latitude is required')
+    expect(wrapper.vm.latitudeRules[1]('')).toEqual(true)
+    expect(wrapper.vm.latitudeRules[0]('-11.230')).toEqual(true)
+    expect(wrapper.vm.latitudeRules[1]('-11.230')).toEqual(
       'A valid latitude with a maximum of 3 digits after the decimal is required',
-    ])
-
-    stop.location.latitude = '-11.230'
-    wrapper.vm.model = stop
-
-    expect(wrapper.vm.latitudeRules).toStrictEqual([true])
+    )
+    expect(wrapper.vm.latitudeRules[0]('11.2301')).toEqual(true)
+    expect(wrapper.vm.latitudeRules[1]('11.2301')).toEqual(
+      'A valid latitude with a maximum of 3 digits after the decimal is required',
+    )
+    expect(wrapper.vm.latitudeRules[0]('11.230')).toEqual(true)
+    expect(wrapper.vm.latitudeRules[1]('11.230')).toEqual(true)
   })
 
   it('should validate longitude coordinate for v2 stop', () => {
     wrapper = factory({ value: stop })
-    stop.location.toggleLocationOptions = true
-    expect(wrapper.vm.longitudeRules).toEqual([
-      'A valid longitude with a maximum of 3 digits after the decimal is required',
-    ])
 
-    stop.location.longitude = '-11.230'
-    wrapper.vm.model = stop
-
-    expect(wrapper.vm.longitudeRules).toStrictEqual([true])
+    expect(wrapper.vm.longitudeRules[0]('')).toEqual('Longitude is required')
+    expect(wrapper.vm.longitudeRules[1]('')).toEqual(true)
+    expect(wrapper.vm.longitudeRules[0]('123.123')).toEqual(true)
+    expect(wrapper.vm.longitudeRules[1]('123.123')).toEqual(
+      'A valid negative longitude with a maximum of 3 digits after the decimal is required',
+    )
+    expect(wrapper.vm.longitudeRules[0]('-123.1231')).toEqual(true)
+    expect(wrapper.vm.longitudeRules[1]('-123.1231')).toEqual(
+      'A valid negative longitude with a maximum of 3 digits after the decimal is required',
+    )
+    expect(wrapper.vm.longitudeRules[0]('-123.123')).toEqual(true)
+    expect(wrapper.vm.longitudeRules[1]('-123.123')).toEqual(true)
   })
 
   it('should return the geolocation score', () => {

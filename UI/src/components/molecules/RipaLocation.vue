@@ -415,7 +415,7 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          blockNumber !== null ||
+          (blockNumber !== null && blockNumber !== '') ||
           'A block number is required',
         this.isLocationOptionsFilled ||
           (streetName + blockNumber).length >= 5 ||
@@ -424,44 +424,24 @@ export default {
     },
 
     latitudeRules() {
-      const lat = this.model.location.latitude
-      const latAbsoluteVal = '' + Math.abs(parseFloat(lat))
-      let latitudeDecimal
-      if (lat !== null) {
-        latitudeDecimal = String(latAbsoluteVal).slice(
-          String(latAbsoluteVal).lastIndexOf('.') + 1,
-        )
-      }
+      const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
 
       return [
-        this.isLocationOptionsFilled ||
-          (lat &&
-            isFinite(parseFloat(lat)) &&
-            Math.abs(parseFloat(lat)) <= 90 &&
-            latAbsoluteVal.length <= 6 &&
-            latitudeDecimal.length <= 3) ||
+        v => this.isLocationOptionsFilled || !!v || 'Latitude is required',
+        v =>
+          regex.test(v) ||
           'A valid latitude with a maximum of 3 digits after the decimal is required',
       ]
     },
 
     longitudeRules() {
-      const long = this.model.location.longitude
-      const longAbsoluteVal = '' + Math.abs(parseFloat(long))
-      let longitudeDecimal
-      if (long !== null) {
-        longitudeDecimal = String(longAbsoluteVal).slice(
-          String(longAbsoluteVal).lastIndexOf('.') + 1,
-        )
-      }
+      const regex = /^(-\d{3}\.\d{0,3})?$/
 
       return [
-        this.isLocationOptionsFilled ||
-          (long &&
-            isFinite(parseFloat(long)) &&
-            Math.abs(parseFloat(long)) <= 180 &&
-            longAbsoluteVal.length <= 7 &&
-            longitudeDecimal.length <= 3) ||
-          'A valid longitude with a maximum of 3 digits after the decimal is required',
+        v => this.isLocationOptionsFilled || !!v || 'Longitude is required',
+        v =>
+          regex.test(v) ||
+          'A valid negative longitude with a maximum of 3 digits after the decimal is required',
       ]
     },
 
@@ -555,26 +535,19 @@ export default {
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
 
-      const longCoord = this.model.location.longitude
-      const longAbsoluteVal = '' + Math.abs(parseFloat(longCoord))
-      let longDecimal
-      if (longCoord !== null) {
-        longDecimal = String(longAbsoluteVal).slice(
-          String(longAbsoluteVal).lastIndexOf('.') + 1,
-        )
-      }
+      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
+      const isLatitudeValid =
+        latitudeRegex.test(this.model.location.latitude) &&
+        this.model.location.latitude
 
-      const latCoord = this.model.location.latitude
-      const latAbsoluteVal = '' + Math.abs(parseFloat(latCoord))
-      let latDecimal
-      if (latCoord !== null) {
-        latDecimal = String(latAbsoluteVal).slice(
-          String(latAbsoluteVal).lastIndexOf('.') + 1,
-        )
-      }
+      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
+      const isLongitudeValid = longitudeRegex.test(
+        this.model.location.longitude,
+      )
 
       const isValid =
         (blockNumber !== null &&
+          blockNumber !== '' &&
           streetName &&
           streetName.length > 0 &&
           (blockNumber + streetName).length >= 5) ||
@@ -590,16 +563,7 @@ export default {
           landmark !== null &&
           landmark.length >= 5 &&
           landmark.length <= 250) ||
-        (latCoord !== null &&
-          isFinite(parseFloat(latCoord)) &&
-          Math.abs(parseFloat(latCoord)) <= 90 &&
-          latAbsoluteVal.length <= 6 &&
-          String(latDecimal).length <= 3 &&
-          longCoord !== null &&
-          isFinite(parseFloat(longCoord)) &&
-          Math.abs(parseFloat(longCoord)) <= 180 &&
-          longAbsoluteVal.length <= 7 &&
-          String(longDecimal).length <= 3)
+        (isLatitudeValid && isLongitudeValid)
 
       return isValid
     },
