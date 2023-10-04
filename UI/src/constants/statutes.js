@@ -882,6 +882,16 @@ export const STATUTES_V2 = [
           {
             id: '2',
             text: "'Type of Stop' requires an officer to differentiate the nature of the officer’s stop based on the stopped person’s activities, and primarily on their mode of transit during the stop. A 'Vehicular Stop' is any interaction that involves stopping an individual in a Vehicle, as defined in these regulations. A 'Bicycle Stop' is any interaction that involves stopping an individual on a bicycle. Any other stop constitutes a 'Pedestrian Stop,' including stopping passengers on a bus or train.",
+            children: [
+              {
+                id: '1',
+                text: "Example: Officer A stops a person on a skateboard for a Vehicle Code violation. Because the stop involved neither a person in a Vehicle, as defined in the regulations, nor on a bicycle, Officer A must select 'Pedestrian Stop' under Type of Stop.",
+              },
+              {
+                id: '2',
+                text: "Example: Officer B stops a person on a scooter powered by an electric motor for a Vehicle Code violation. When recording this stop, Officer B must select 'Vehicle Stop' under Type of Stop because the stopped person rode a 'motorized scooter' as defined in Vehicle Code Section 407.5, which qualifies as a 'Vehicle.' ",
+              },
+            ],
           },
           {
             id: '3',
@@ -1146,6 +1156,10 @@ export const STATUTES_V2 = [
             ],
           },
           {
+            id: '11',
+            text: "'Person Stopped Perceived to be Unhoused' refers to the officer’s perception that the person stopped is unhoused. When reporting this data element, the officer shall make their determination based on personal observation only, recognizing that the officer’s observation may not reflect the actual housing status of the stopped person.",
+          },
+          {
             id: '12',
             text: "'Stop Made During the Course of Responding to a Call for Service.' The officer shall only select this data element if the stop was made during the course of responding to a call for service, radio call, or dispatch. An interaction that occurs when an officer responds to a call for service is only reportable if the interaction meets the definition of 'stop,' as specified in section 999.224, subdivision (a)(19). A call for service is not a reason for a stop. This data element is not mutually exclusive with the data element 'Stop Made During the Course of a Welfare or Wellness Check or an Officer’s Community Caretaking Function.' If a stop was made during the course of conducting a welfare or wellness check or the officer’s community caretaking function as well as during the course of responding to a call for service, an officer must select both data elements.",
           },
@@ -1304,6 +1318,98 @@ export const STATUTES_V2 = [
                   {
                     id: '2',
                     text: 'The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest.',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: '15',
+            text: "'Reason Given to the Stopped Person' refers to the reason for the stop the officer communicated to the stopped person at the time of the stop, as required under Vehicle Code section 2806.5. The reason communicated to the stopped person may be different from, or the same as, the actual primary reason why the officer made the stop, as selected among the data values under the Reason for Stop data element. If the data value(s) selected under this data element differ from the data value selected under 'Reason for Stop,' the officer must explain why the officer communicated a different reason for the stop than was the actual, primary reason for the stop, as part of their brief explanation in the 'Reason for Stop' narrative field. If the officer did not communicate to the stopped person a reason for the stop, the officer must explain the facts and circumstances that gave rise to a reasonable belief that withholding the reason for the stop was necessary to protect life or property from imminent threat, as part of their brief explanation in the 'Reason for Stop' narrative field.",
+            children: [
+              {
+                id: 'A',
+                text: "When reporting this data element, the officer shall identify the reason communicated to the stopped person, by selecting all of the following data values that apply. The officer should select the data value that best describes the reason communicated to the stopped person. Example: Officer A stopped a person who matched the description of a suspected child abductor. Officer A did not provide the person with the reason for the stop at the time of the stop because Officer A was aware of an Amber Alert that gave rise to the reasonable belief that withholding the reason for the stop was necessary to protect life of surrounding bystandersthe missing child from imminent threat. Under the Reason Given to Person Stopped data element, Officer A selected the data value, entitled 'Reason not provided to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect life or property from imminent threat.' Under the Reason for Stop data element, Officer A selected the data value, entitled 'Reasonable suspicion that the person was engaged in criminal activity.' Officer A would then provide an explanation for the difference in the 'Reason for Stop' narrative field.",
+                children: [
+                  {
+                    id: '1',
+                    text: 'Traffic violation- Moving violation',
+                  },
+                  {
+                    id: '2',
+                    text: 'Traffic violation- Equipment violation',
+                  },
+                  {
+                    id: '3',
+                    text: 'Traffic violation- Non-moving violation',
+                  },
+                  {
+                    id: '4',
+                    text: 'Officer witnessed commission of a crime',
+                  },
+                  {
+                    id: '5',
+                    text: 'Matched suspect description',
+                  },
+                  {
+                    id: '6',
+                    text: 'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
+                  },
+                  {
+                    id: '7',
+                    text: 'Witness or victim identified stopped person as a suspect of a crime.',
+                  },
+                  {
+                    id: '8',
+                    text: 'Carrying suspicious object',
+                  },
+                  {
+                    id: '9',
+                    text: 'Actions indicative of casing a victim or location',
+                  },
+                  {
+                    id: '10',
+                    text: 'Suspected of acting as a lookout',
+                  },
+                  {
+                    id: '11',
+                    text: 'Actions indicative of a drug transaction',
+                  },
+                  {
+                    id: '12',
+                    text: 'Actions indicative of engaging in a violent crime',
+                  },
+                  {
+                    id: '13',
+                    text: 'Other reasonable suspicion or probable cause that a crime has occurred',
+                  },
+                  {
+                    id: '14',
+                    text: 'Probable cause to arrest or search.',
+                  },
+                  {
+                    id: '15',
+                    text: 'Probable cause to take into custody under Welfare and Institutions Code section 5150.',
+                  },
+                  {
+                    id: '16',
+                    text: 'Known to be on parole/probation/PRCS/mandatory supervision.',
+                  },
+                  {
+                    id: '17',
+                    text: 'Knowledge of outstanding arrest warrant/wanted person.',
+                  },
+                  {
+                    id: '18',
+                    text: 'Investigation to determine whether the person is truant.',
+                  },
+                  {
+                    id: '19',
+                    text: 'Consensual encounter resulting in a search.',
+                  },
+                  {
+                    id: '20',
+                    text: 'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect life or property from imminent threat.',
                   },
                 ],
               },

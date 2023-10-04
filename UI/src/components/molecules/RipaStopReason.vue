@@ -230,7 +230,7 @@
       v-if="model.stopVersion === 2"
       title="Reason given to the stopped person"
       required
-      subtitle="§999.226(a)(10)"
+      subtitle="§999.226(a)(15)"
       v-on="$listeners"
     ></ripa-form-header>
 

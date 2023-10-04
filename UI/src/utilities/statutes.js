@@ -1,7 +1,6 @@
 import { STATUTES, STATUTES_V2 } from '@/constants/statutes'
 
 export const getStatuteContent = (statute, version) => {
-  console.log(statute, version)
   const parseStatute = statute.replace('§', '')
   const base = parseStatute.substring(0, 7)
   const sections = parseStatute.substring(7, parseStatute.length)
