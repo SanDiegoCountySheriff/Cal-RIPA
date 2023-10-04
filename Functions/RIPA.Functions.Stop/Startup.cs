@@ -63,10 +63,16 @@ public class Startup : FunctionsStartup
         });
 
         var stopAuditContainer = CreateStopAuditContainerAsync().GetAwaiter().GetResult();
-        builder.Services.AddSingleton<IStopAuditCosmosDbService>(sp =>
+        builder.Services.AddSingleton<IStopAuditCosmosDbService<Common.Models.v1.Stop>>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<StopAuditCosmosDbService>>();
-            return new StopAuditCosmosDbService(stopAuditContainer, logger);
+            var logger = sp.GetRequiredService<ILogger<StopAuditCosmosDbService<Common.Models.v1.Stop>>>();
+            return new StopAuditCosmosDbService<Common.Models.v1.Stop>(stopAuditContainer, logger);
+        });
+
+        builder.Services.AddSingleton<IStopAuditCosmosDbService<Common.Models.v2.Stop>>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<StopAuditCosmosDbService<Common.Models.v2.Stop>>>();
+            return new StopAuditCosmosDbService<Common.Models.v2.Stop>(stopAuditContainer, logger);
         });
 
         var userProfileContainer = CreateUserProfileContainerAsync().GetAwaiter().GetResult();
