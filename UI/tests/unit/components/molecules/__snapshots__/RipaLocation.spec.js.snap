@@ -20,7 +20,8 @@ exports[`Ripa Location should match snapshot 1`] = `
       <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
           Current Location
         </span></button></div>
-      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Last Location
+      <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+          Last Location
         </span></button></div>
       <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
           Open Favorites
