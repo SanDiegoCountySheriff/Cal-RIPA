@@ -185,6 +185,7 @@ export const stopReasonGivenTemplate = template => {
     trafficViolationCode: null,
     reasonableSuspicion: [],
     reasonableSuspicionCode: null,
+    probableCauseCode: null,
     searchOfPerson: null,
     searchOfProperty: null,
     reasonForStopExplanation: null,

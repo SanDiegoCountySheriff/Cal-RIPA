@@ -197,8 +197,9 @@
               v-model="model.stopReason.probableCauseCode"
               item-text="fullName"
               item-value="code"
-              label="Offense Code (Optional)"
+              label="Offense Code"
               :items="statutes"
+              :rules="probableCauseCodeRules"
             ></ripa-autocomplete>
           </template>
 
@@ -482,6 +483,12 @@ export default {
         (checked && options !== null && options?.length > 0) ||
           'A probable cause type is required',
       ]
+    },
+
+    probableCauseCodeRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const code = this.model.stopReason.probableCauseCode
+      return [(checked && code !== null) || 'An offense code is required']
     },
 
     reasonableSuspicionCodeRules() {
