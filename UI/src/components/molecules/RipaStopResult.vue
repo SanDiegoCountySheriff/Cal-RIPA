@@ -39,53 +39,63 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteResults[0]" class="text-center">
+        <v-col v-if="favoriteResults[0]" class="text-center py-0">
           Top 5 Favorites
         </v-col>
       </v-row>
 
       <v-row>
         <v-col class="text-center">
-          <v-chip
+          <v-btn
             v-if="favoriteResults[0]"
             @click="handleFavoriteClick(favoriteResults[0])"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
             {{ favoriteResults[0].name }}
-          </v-chip>
-          <v-chip
+          </v-btn>
+          <v-btn
             v-if="favoriteResults[1]"
             @click="handleFavoriteClick(favoriteResults[1])"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
             {{ favoriteResults[1].name }}
-          </v-chip>
-          <v-chip
+          </v-btn>
+          <v-btn
             v-if="favoriteResults[2]"
             @click="handleFavoriteClick(favoriteResults[2])"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
             {{ favoriteResults[2].name }}
-          </v-chip>
-          <v-chip
+          </v-btn>
+          <v-btn
             v-if="favoriteResults[3]"
             @click="handleFavoriteClick(favoriteResults[3])"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
             {{ favoriteResults[3].name }}
-          </v-chip>
-          <v-chip
+          </v-btn>
+          <v-btn
             v-if="favoriteResults[4]"
             @click="handleFavoriteClick(favoriteResults[4])"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
             {{ favoriteResults[4].name }}
-          </v-chip>
+          </v-btn>
         </v-col>
       </v-row>
 
