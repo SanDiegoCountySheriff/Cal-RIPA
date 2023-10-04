@@ -161,7 +161,7 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
         <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
           <div class="v-input__control">
             <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-375" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-375" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code (Optional)</label><input id="input-375" type="text" autocomplete="off">
+              <div class="v-select__slot"><label for="input-375" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code</label><input id="input-375" type="text" autocomplete="off">
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>
