@@ -38,7 +38,7 @@
           v-if="stepIndex >= 1 && stepIndex <= 7 && model.stopVersion === 1"
         >
           <v-stepper v-model="stepIndex">
-            <v-stepper-header>
+            <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
               <v-stepper-step :complete="stepIndex > 1" step="1">
               </v-stepper-step>
 
@@ -92,7 +92,9 @@
               <v-stepper-content step="2">
                 <template v-if="stepIndex === 2">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -112,7 +114,9 @@
               <v-stepper-content step="3">
                 <template v-if="stepIndex === 3">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -130,7 +134,9 @@
               <v-stepper-content step="4">
                 <template v-if="stepIndex === 4">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -148,7 +154,9 @@
               <v-stepper-content step="5">
                 <template v-if="stepIndex === 5">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -244,7 +252,7 @@
           v-if="stepIndex >= 1 && stepIndex <= 8 && model.stopVersion === 2"
         >
           <v-stepper v-model="stepIndex">
-            <v-stepper-header>
+            <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
               <v-stepper-step :complete="stepIndex > 1" step="1">
               </v-stepper-step>
 
@@ -302,7 +310,9 @@
               <v-stepper-content step="2">
                 <template v-if="stepIndex === 2">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -322,7 +332,9 @@
               <v-stepper-content step="3">
                 <template v-if="stepIndex === 3">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -340,7 +352,9 @@
               <v-stepper-content step="4">
                 <template v-if="stepIndex === 4">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -358,7 +372,9 @@
               <v-stepper-content step="5">
                 <template v-if="stepIndex === 5">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -376,7 +392,9 @@
               <v-stepper-content step="6">
                 <template v-if="stepIndex === 6">
                   <ripa-subheader
-                    class="tw-text-right"
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
                     :text="getEditPersonText"
                     no-margins
                   ></ripa-subheader>
@@ -727,7 +745,11 @@ export default {
     },
 
     handleBack() {
-      this.stepIndex = this.stepIndex - 1
+      if (this.stepIndex === 8 && !this.anyAgencyQuestions) {
+        this.stepIndex = this.stepIndex - 2
+      } else {
+        this.stepIndex = this.stepIndex - 1
+      }
       this.$emit('on-step-index-change', this.stepIndex)
       window.scrollTo(0, 0)
     },

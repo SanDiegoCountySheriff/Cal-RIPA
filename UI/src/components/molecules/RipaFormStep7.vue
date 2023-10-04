@@ -45,6 +45,7 @@
 
     <template v-else>
       <div class="tw-flex tw-mt-8 tw-justify-center">
+        <v-btn color="primary" class="tw-mr-2" @click="handleBack">Back</v-btn>
         <v-btn color="error" class="tw-mr-2" @click="handleCancel">
           Cancel
         </v-btn>

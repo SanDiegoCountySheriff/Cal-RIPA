@@ -1,5 +1,22 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
+    <div
+      v-if="$vuetify.breakpoint.mobile"
+      class="tw-flex tw-mb-5 tw-justify-center"
+    >
+      <template v-if="backButtonVisible">
+        <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+          Back
+        </v-btn>
+      </template>
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
+        Next
+      </v-btn>
+    </div>
+
     <template v-if="isSchool">
       <ripa-student
         v-model="model"
@@ -54,20 +71,14 @@
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
       <template v-if="backButtonVisible">
-        <v-btn
-          outlined
-          color="primary"
-          class="tw-mr-2"
-          :disabled="isBackNextDisabled"
-          @click="handleBack"
-        >
+        <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
           Back
         </v-btn>
       </template>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="isBackNextDisabled" @click="handleNext">
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
         Next
       </v-btn>
     </div>

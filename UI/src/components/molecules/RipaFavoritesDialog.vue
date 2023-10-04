@@ -6,19 +6,19 @@
       </v-card-title>
 
       <v-card-text>
-        <v-alert v-if="favoritesCodeExpired" color="error"
+        <v-alert v-if="favoritesCodeExpired" color="error" outlined
           >You have favorites with expired statute codes. To update, save a
           favorite with the same name.</v-alert
         >
-        <v-alert v-if="favoritesCityExpired" color="error"
+        <v-alert v-if="favoritesCityExpired" color="error" outlined
           >You have favorites with an expired city. To update, save a favorite
           with the same name.</v-alert
         >
-        <v-alert v-if="favoritesSchoolExpired" color="error"
+        <v-alert v-if="favoritesSchoolExpired" color="error" outlined
           >You have favorites with an expired school. To update, save a favorite
           with the same name.</v-alert
         >
-        <v-alert v-if="this.version === 2" color="primary"
+        <v-alert v-if="this.version === 2" color="warning" outlined
           >Due to recent regulation changes, old favorites are obsolete. Please
           recreate your favorites.</v-alert
         >

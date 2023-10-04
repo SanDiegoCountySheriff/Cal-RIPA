@@ -5,12 +5,7 @@
       <div class="tw-mb-3">
         <span class="tw-text-base tw-font-bold">{{ getApiStopId }}</span>
         <template v-if="editButtons">
-          <v-btn
-            class="tw-ml-4"
-            color="primary"
-            x-small
-            @click="handleEditStop"
-          >
+          <v-btn class="tw-ml-4" color="primary" small @click="handleEditStop">
             Edit
           </v-btn>
         </template>
@@ -30,7 +25,7 @@
             <v-btn
               class="tw-ml-4"
               color="primary"
-              x-small
+              small
               @click="handleEditPerson($event, person.index)"
             >
               Edit
@@ -39,7 +34,7 @@
               <v-btn
                 class="tw-ml-2"
                 color="primary"
-                x-small
+                small
                 @click="handleCopyPerson($event, person.index)"
               >
                 Copy
@@ -51,7 +46,7 @@
               <v-btn
                 class="tw-ml-2"
                 color="primary"
-                x-small
+                small
                 @click="handleDeletePerson($event, person.index)"
               >
                 Delete
@@ -72,7 +67,7 @@
             <v-btn
               class="tw-ml-4"
               color="primary"
-              x-small
+              small
               @click="handleEditAgencyQuestions"
             >
               Edit
