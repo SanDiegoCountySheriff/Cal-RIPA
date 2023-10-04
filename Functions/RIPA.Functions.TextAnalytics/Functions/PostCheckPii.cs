@@ -19,7 +19,7 @@ using System.Net;
 using System.Threading.Tasks;
 
 
-namespace RIPA.Functions.TextAnalytics.Functions.v1;
+namespace RIPA.Functions.TextAnalytics.Functions;
 
 public class PostCheckPii
 {
@@ -50,16 +50,16 @@ public class PostCheckPii
         }
     }
 
-    [FunctionName("PostCheckPii_v1")]
+    [FunctionName("PostCheckPii")]
 
-    [OpenApiOperation(operationId: "v1/PostCheckPii", tags: new[] { "name", "v1" })]
+    [OpenApiOperation(operationId: "PostCheckPii", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(PiiRequest), Deprecated = false, Description = "Document is the input string you would like to be analyzed", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(PiiResponse), Description = "Responds with a list of Pii Entities that may be PII and a redactiedText string. Uses Beta Nuget 5.1.0-beta.5")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostCheckPii")] HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "PostCheckPii")] HttpRequest req, ILogger log)
     {
         log.LogInformation("Calling PostCheckPii");
 
@@ -79,6 +79,7 @@ public class PostCheckPii
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         dynamic data = JsonConvert.DeserializeObject(requestBody);
         string document = data?.Document;
+
         if (string.IsNullOrEmpty(document))
         {
             document = data?.document;
@@ -118,7 +119,6 @@ public class PostCheckPii
             log.LogError("There was an error checking for PII: ", ex.Message, ex.InnerException);
             return new BadRequestObjectResult(ex.Message);
         }
-
     }
 
     public class PiiResponse

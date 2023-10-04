@@ -615,7 +615,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}textanalytics/v${state.version}/PostCheckPii`,
+          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
           document,
           {
             headers: {

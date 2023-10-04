@@ -21,12 +21,12 @@ namespace RIPA.Functions.Stop.Functions.v2;
 public class PutStop
 {
     private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
-    private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
+    private readonly IStopAuditCosmosDbService<Common.Models.v2.Stop> _stopAuditCosmosDbService;
     private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
 
     public PutStop(IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService,
         IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService,
-        IStopAuditCosmosDbService stopAuditCosmosDbService)
+        IStopAuditCosmosDbService<Common.Models.v2.Stop> stopAuditCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _userProfileCosmosDbService = userProfileCosmosDbService;
