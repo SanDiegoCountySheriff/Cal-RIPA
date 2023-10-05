@@ -1,5 +1,7 @@
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
@@ -26,31 +28,36 @@ public class ServiceBusResultConsumer
 
     [FunctionName("ServiceBusResultConsumer")]
     public async Task Run(
-        [ServiceBusTrigger("result", Connection = "ServiceBusConnection")] string myQueueItem, int deliveryCount,
-        MessageReceiver messageReceiver, string lockToken,
+        [ServiceBusTrigger("result", Connection = "ServiceBusConnection")]
+        ServiceBusReceivedMessage[] messages,
+        ServiceBusMessageActions messageReceiver,
         ILogger log)
     {
-        log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
-
-        try
+        foreach (var message in messages) 
         {
-            ResultMessage submissionMessage = JsonConvert.DeserializeObject<ResultMessage>(myQueueItem);
-            if (submissionMessage.ErrorType == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError))
-            {
-                await ProcessFileLevelFatalErrors(submissionMessage.Error);
-            }
-            else
-            {
-                await ProcessRecordLevelErrors(submissionMessage.Error, submissionMessage.ErrorType);
-            }
+            log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.MessageId}");
         }
-        catch (Exception ex)
-        {
-            log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
-            await messageReceiver.DeadLetterAsync(lockToken);
-        }
+        // log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
 
-        await messageReceiver.CompleteAsync(lockToken);
+        // try
+        // {
+        //     ResultMessage submissionMessage = JsonConvert.DeserializeObject<ResultMessage>(myQueueItem);
+        //     if (submissionMessage.ErrorType == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError))
+        //     {
+        //         await ProcessFileLevelFatalErrors(submissionMessage.Error);
+        //     }
+        //     else
+        //     {
+        //         await ProcessRecordLevelErrors(submissionMessage.Error, submissionMessage.ErrorType);
+        //     }
+        // }
+        // catch (Exception ex)
+        // {
+        //     log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
+        //     await messageReceiver.DeadLetterMessageAsync(lockToken);
+        // }
+
+        // await messageReceiver.CompleteMessageAsync(lockToken);
     }
 
     public async Task ProcessFileLevelFatalErrors(string fileLevelFatalErrors)

@@ -48,7 +48,7 @@ public class TimersSubmissionConsumer
     }
 
     [FunctionName("TimersSubmissionConsumer")]
-    public async Task Run([TimerTrigger("*/10 * * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task Run([TimerTrigger("*/10 * * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
     {
         Stopwatch runStopwatch = new Stopwatch();
         runStopwatch.Start();

@@ -29,7 +29,7 @@ public class SftpService : ISftpService
             Key = Environment.GetEnvironmentVariable("SftpKey")
         };
 #if DEBUG
-        _config.Key = File.ReadAllText(@"PATH/TO/lplp.ppk");
+        _config.Key = File.ReadAllText(@"/Users/jacobkellas/source/repos/lplp.ppk");
 #endif
         _logger = logger;
         var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
