@@ -102,9 +102,9 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
         return results;
     }
 
-    public async Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id)
+    public async Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id, int version)
     {
-        var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' GROUP BY ListSubmissionError.Code";
+        var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' AND c.StopVersion = {version} GROUP BY ListSubmissionError.Code";
         var query = _container.GetItemQueryIterator<SubmissionErrorSummary>(new QueryDefinition(queryString));
         List<SubmissionErrorSummary> results = new();
 
