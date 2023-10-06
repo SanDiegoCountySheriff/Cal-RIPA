@@ -144,7 +144,7 @@ public class GetSubmission
             stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(queryV2));
             List<SubmissionErrorSummary> submissionErrorSummaries = new();
             submissionErrorSummaries.AddRange(await _stopV1CosmosDbService.GetSubmissionErrorSummaries(Id, 1));
-            submissionErrorSummaries.AddRange(await _stopV2CosmosDbService.GetSubmissionErrorSummaries(Id, 2ds));
+            submissionErrorSummaries.AddRange(await _stopV2CosmosDbService.GetSubmissionErrorSummaries(Id, 2));
             var response = new
             {
                 submission = new

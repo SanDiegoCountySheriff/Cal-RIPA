@@ -13,7 +13,7 @@ public interface IStopCosmosDbService<T>
     Task UpdateStopAsync(T stop);
     Task DeleteStopAsync(string id);
     Task<IEnumerable<StopStatusCount>> GetStopStatusCounts(string queryString);
-    Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id, int id);
+    Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id, int version);
     Task<IEnumerable<SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id);
     Task<IEnumerable<DojError>> GetErrorCodes(string inputText, string submissionId);
 }
