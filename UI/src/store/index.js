@@ -1571,7 +1571,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmissions${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1621,7 +1621,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmission/${pageData.id}${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1702,7 +1702,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmit`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
           { stopIds: stops },
           {
             headers: {
@@ -1770,7 +1770,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmitSearch?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {

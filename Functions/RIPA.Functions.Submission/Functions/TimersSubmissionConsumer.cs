@@ -4,9 +4,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
+using RIPA.Functions.Submission.Models.Interfaces;
 using RIPA.Functions.Submission.Models.v1;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
@@ -20,9 +21,11 @@ namespace RIPA.Functions.Submission.Functions;
 
 public class TimersSubmissionConsumer
 {
-    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
     private readonly ISftpService _sftpService;
-    private readonly IStopService _stopService;
+    private readonly Services.REST.v1.Contracts.IStopService _stopV1Service;
+    private readonly Services.REST.v2.Contracts.IStopService _stopV2Service;
     readonly ISubmissionServiceBusService _submissionServiceBusService;
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
@@ -31,15 +34,19 @@ public class TimersSubmissionConsumer
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
     public TimersSubmissionConsumer(
-        IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService,
+        IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
+        IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService,
         ISftpService sftpService,
-        IStopService stopService,
+        Services.REST.v1.Contracts.IStopService stopV1Service,
+        Services.REST.v2.Contracts.IStopService stopV2Service,
         ISubmissionServiceBusService submissionServiceBusService
     )
     {
-        _stopCosmosDbService = stopCosmosDbService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
         _sftpService = sftpService;
-        _stopService = stopService;
+        _stopV1Service = stopV1Service;
+        _stopV2Service = stopV2Service;
         _submissionServiceBusService = submissionServiceBusService;
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
@@ -48,7 +55,7 @@ public class TimersSubmissionConsumer
     }
 
     [FunctionName("TimersSubmissionConsumer")]
-    public async Task Run([TimerTrigger("*/10 * * * * *")] TimerInfo myTimer, ILogger log)
+    public async Task Run([TimerTrigger("*/10 * * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
     {
         Stopwatch runStopwatch = new Stopwatch();
         runStopwatch.Start();
@@ -79,7 +86,7 @@ public class TimersSubmissionConsumer
             }
 
             // Get Stop
-            Common.Models.v1.Stop stop = await GetStop(log, submissionMessage.StopId, runId);
+            IStop stop = await GetStop(log, submissionMessage.StopId, runId, submissionMessage.StopVersion);
 
             if (stop == null)
             {
@@ -102,7 +109,7 @@ public class TimersSubmissionConsumer
             }
 
             // Get Doj Stop
-            DojStop dojStop = GetDojStop(log, stop, runId);
+            IDojStop dojStop = GetDojStop(log, stop, runId);
 
             if (dojStop == null)
             {
@@ -190,12 +197,20 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<Common.Models.v1.Stop> GetStop(ILogger log, string id, string runId)
+    private async Task<IStop> GetStop(ILogger log, string id, string runId, int stopVersion)
     {
         try
         {
             log.LogInformation($"GetStop: {id} : {runId}");
-            return await _stopCosmosDbService.GetStopAsync(id);
+
+            if (stopVersion == 2)
+            {
+                return await _stopV2CosmosDbService.GetStopAsync(id);
+            }
+            else
+            {
+                return await _stopV1CosmosDbService.GetStopAsync(id);
+            }
         }
         catch (Exception ex)
         {
@@ -217,12 +232,20 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private DojStop GetDojStop(ILogger log, Common.Models.v1.Stop stop, string runId)
+    private IDojStop GetDojStop(ILogger log, IStop stop, string runId)
     {
         try
         {
             log.LogInformation($"Casting Stop to DoJStop: {stop.Id} : {runId}");
-            return _stopService.CastToDojStop(stop);
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                return _stopV2Service.CastToDojStop((Common.Models.v2.Stop)stop);
+            }
+            else
+            {
+                return _stopV1Service.CastToDojStop((Common.Models.v1.Stop)stop);
+            }
         }
         catch (Exception ex)
         {
@@ -231,7 +254,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandledDojCastError(ILogger log, Common.Models.v1.Stop stop, DateTime date, string fileName, Guid submissionId, string runId)
+    private async Task<bool> HandledDojCastError(ILogger log, IStop stop, DateTime date, string fileName, Guid submissionId, string runId)
     {
         try
         {
@@ -245,7 +268,16 @@ public class TimersSubmissionConsumer
                 FileName = fileName,
                 SubmissionId = submissionId
             };
-            await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
+
             return true;
         }
         catch (Exception ex)
@@ -255,7 +287,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private static byte[] GetFileBytes(ILogger log, DojStop dojStop, string runId)
+    private static byte[] GetFileBytes(ILogger log, IDojStop dojStop, string runId)
     {
         try
         {
@@ -300,7 +332,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, Common.Models.v1.Stop stop)
+    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, IStop stop)
     {
         try
         {
@@ -312,7 +344,16 @@ public class TimersSubmissionConsumer
         {
             log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId} : {runId}");
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
-            await _stopCosmosDbService.UpdateStopAsync(stop);
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
+            }
+
             return false;
         }
     }
@@ -332,12 +373,21 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task<bool> HandleDojSubmitSuccess(ILogger log, Common.Models.v1.Stop stop, DateTime date, Guid submissionId, string fileName, string runId)
+    private async Task<bool> HandleDojSubmitSuccess(ILogger log, IStop stop, DateTime date, Guid submissionId, string fileName, string runId)
     {
         try
         {
             log.LogInformation($"Handling DoJ submission success: {stop.Id} : {runId}");
-            await _stopCosmosDbService.UpdateStopAsync(_stopService.NewSubmission(stop, date, submissionId, fileName));
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.NewSubmission((Common.Models.v2.Stop)stop, date, submissionId, fileName));
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.NewSubmission((Common.Models.v1.Stop)stop, date, submissionId, fileName));
+            }
+
             return true;
         }
         catch (Exception ex)
@@ -360,7 +410,7 @@ public class TimersSubmissionConsumer
                 FileName = fileName,
                 SubmissionId = submissionId
             };
-            await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+            await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
             return;
         }
         catch (Exception)

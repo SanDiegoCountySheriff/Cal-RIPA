@@ -1,11 +1,11 @@
-using Microsoft.Azure.ServiceBus.Core;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.v1;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,53 +15,75 @@ namespace RIPA.Functions.Submission.Functions;
 
 public class ServiceBusResultConsumer
 {
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
-    private readonly IStopService _stopService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
+    private readonly Services.REST.v1.Contracts.IStopService _stopV1Service;
+    private readonly Services.REST.v2.Contracts.IStopService _stopV2Service;
 
-    public ServiceBusResultConsumer(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService stopService)
+    public ServiceBusResultConsumer(
+        IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
+        IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService,
+        Services.REST.v1.Contracts.IStopService stopV1Service,
+        Services.REST.v2.Contracts.IStopService stopV2Service
+    )
     {
-        _stopCosmosDbService = stopCosmosDbService;
-        _stopService = stopService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
+        _stopV1Service = stopV1Service;
+        _stopV2Service = stopV2Service;
     }
 
     [FunctionName("ServiceBusResultConsumer")]
     public async Task Run(
-        [ServiceBusTrigger("result", Connection = "ServiceBusConnection")] string myQueueItem, int deliveryCount,
-        MessageReceiver messageReceiver, string lockToken,
+        [ServiceBusTrigger("result", Connection = "ServiceBusConnection")]
+        ServiceBusReceivedMessage[] messages,
+        ServiceBusMessageActions messageReceiver,
         ILogger log)
     {
-        log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
 
-        try
+        foreach (var message in messages)
         {
-            ResultMessage submissionMessage = JsonConvert.DeserializeObject<ResultMessage>(myQueueItem);
-            if (submissionMessage.ErrorType == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError))
+            try
             {
-                await ProcessFileLevelFatalErrors(submissionMessage.Error);
-            }
-            else
-            {
-                await ProcessRecordLevelErrors(submissionMessage.Error, submissionMessage.ErrorType);
-            }
-        }
-        catch (Exception ex)
-        {
-            log.LogError($"Failed to process result error message: {myQueueItem}, {ex}");
-            await messageReceiver.DeadLetterAsync(lockToken);
-        }
+                log.LogInformation($"C# ServiceBus queue trigger function processed message: {message.MessageId}");
 
-        await messageReceiver.CompleteAsync(lockToken);
+                ResultMessage submissionMessage = JsonConvert.DeserializeObject<ResultMessage>(message.Body.ToString());
+
+                if (submissionMessage.ErrorType == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.FileLevelFatalError))
+                {
+                    await ProcessFileLevelFatalErrors(submissionMessage.Error);
+                }
+                else
+                {
+                    await ProcessRecordLevelErrors(submissionMessage.Error, submissionMessage.ErrorType);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Failed to process result error message: {message.MessageId}, {ex}");
+                await messageReceiver.DeadLetterMessageAsync(message);
+            }
+
+            await messageReceiver.CompleteMessageAsync(message);
+        }
     }
 
     public async Task ProcessFileLevelFatalErrors(string fileLevelFatalErrors)
     {
         using StringReader reader = new StringReader(fileLevelFatalErrors);
         string line;
+
         while ((line = reader.ReadLine()) != null)
         {
             var fileLevelFatalError = DeserializeFileLevelFatalError(line);
             var stopId = fileLevelFatalError.FileName.Split("_")[2].Replace(".json", string.Empty);
-            var stop = await _stopCosmosDbService.GetStopAsync(stopId);
+            IStop stop = await _stopV1CosmosDbService.GetStopAsync(stopId);
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                stop = await _stopV2CosmosDbService.GetStopAsync(stopId);
+            }
+
             SubmissionError submissionError = new SubmissionError
             {
                 DateReported = DateTime.UtcNow,
@@ -71,8 +93,14 @@ public class ServiceBusResultConsumer
                 FileName = fileLevelFatalError.FileName
             };
 
-            // Determine if stop is a duplicate, if so update SubmissionStatus to duplicate.
-            await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
         }
     }
 
@@ -80,10 +108,17 @@ public class ServiceBusResultConsumer
     {
         using StringReader reader = new StringReader(recordLevelErrors);
         string line;
+
         while ((line = reader.ReadLine()) != null)
         {
             var recordLevelError = DeserializeRecordLevelError(line);
-            var stop = await _stopCosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
+            IStop stop = await _stopV1CosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                stop = await _stopV2CosmosDbService.GetStopAsync(recordLevelError.LeaRecordId);
+            }
+
             SubmissionError submissionError = new SubmissionError
             {
                 DateReported = DateTime.UtcNow,
@@ -92,7 +127,15 @@ public class ServiceBusResultConsumer
                 Message = type == Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelFatalError) ? recordLevelError.ErrorList : recordLevelError.ErrorList.Split("::")[1],
                 FileName = recordLevelError.FileName
             };
-            await _stopCosmosDbService.UpdateStopAsync(_stopService.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+            }
         }
     }
 

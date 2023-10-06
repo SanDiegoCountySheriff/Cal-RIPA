@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.v1;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
@@ -25,33 +25,42 @@ using System.Text;
 using System.Threading.Tasks;
 using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusService;
 
-namespace RIPA.Functions.Submission.Functions.v1;
+namespace RIPA.Functions.Submission.Functions;
 
 public class PostSubmit
 {
     private readonly ISftpService _sftpService;
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
-    private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
+    private readonly IUserProfileCosmosDbService<Common.Models.v1.UserProfile> _userProfileCosmosDbService;
     private readonly ISubmissionServiceBusService _serviceBusService;
 
-    public PostSubmit(ISftpService sftpService, ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService, IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService, ISubmissionServiceBusService serviceBusService)
+    public PostSubmit(
+        ISftpService sftpService,
+        ISubmissionCosmosDbService submissionCosmosDbService,
+        IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
+        IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService,
+        IUserProfileCosmosDbService<Common.Models.v1.UserProfile> userProfileCosmosDbService,
+        ISubmissionServiceBusService serviceBusService
+    )
     {
         _sftpService = sftpService;
         _submissionCosmosDbService = submissionCosmosDbService;
-        _stopCosmosDbService = stopCosmosDbService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
         _userProfileCosmosDbService = userProfileCosmosDbService;
         _serviceBusService = serviceBusService;
     }
 
-    [FunctionName("PostSubmit_v1")]
-    [OpenApiOperation(operationId: "v1/PostSubmit", tags: new[] { "name", "v1" })]
+    [FunctionName("PostSubmit")]
+    [OpenApiOperation(operationId: "PostSubmit", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(SubmitRequest), Deprecated = false, Description = "list of stop ids to submit to DOJ", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "List of stops that failed submission")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/PostSubmit")] SubmitRequest submitRequest, HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "PostSubmit")] SubmitRequest submitRequest, HttpRequest req, ILogger log)
     {
         log.LogInformation("Submit to DOJ requested");
         try
@@ -67,7 +76,7 @@ public class PostSubmit
             return new UnauthorizedResult();
         }
 
-        UserProfile userProfile = new();
+        IUserProfile userProfile;
 
         try
         {
@@ -90,14 +99,15 @@ public class PostSubmit
             return new BadRequestObjectResult("stop ids are required");
         }
 
-        var where = Environment.NewLine + $"WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}')";
-        var order = Environment.NewLine + $"ORDER BY c.StopDateTime DESC";
+        var stopV1QueryString = $"SELECT VALUE c FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}') AND c.StopVersion = 1 ORDER BY c.StopDateTime DESC";
+        var stopV2QueryString = $"SELECT VALUE c FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}') AND c.StopVersion = 2 ORDER BY c.StopDateTime DESC"; ;
 
-        IEnumerable<Stop> stopResponse;
+        List<IStop> stopResponse = new();
 
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync($"SELECT VALUE c FROM c {where} {order}");
+            stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(stopV1QueryString));
+            stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(stopV2QueryString));
         }
         catch (Exception ex)
         {
@@ -131,7 +141,15 @@ public class PostSubmit
             foreach (var stop in stopResponse)
             {
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Pending);
-                await _stopCosmosDbService.UpdateStopAsync(stop);
+
+                if (stop.StopVersion == StopVersion.V2)
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);
+                }
+                else
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
+                }
             }
         }
         catch (Exception ex)
@@ -142,7 +160,7 @@ public class PostSubmit
 
         try
         {
-            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, SubmissionId = submissionId })))).ToList());
+            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, StopVersion = (int)x.StopVersion, SubmissionId = submissionId })))).ToList());
             return new OkObjectResult(new { submissionId });
         }
         catch (Exception ex)
@@ -150,7 +168,14 @@ public class PostSubmit
             foreach (var stop in stopResponse)
             {
                 stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
-                await _stopCosmosDbService.UpdateStopAsync(stop);
+                if (stop.StopVersion == StopVersion.V2)
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);
+                }
+                else
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
+                }
             }
 
             log.LogError($"Failure submitting stops to service bus: {ex.Message}");

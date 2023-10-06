@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
@@ -16,21 +15,27 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions.v1;
+namespace RIPA.Functions.Submission.Functions;
 
 public class GetSubmissions
 {
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
 
-    public GetSubmissions(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService)
+    public GetSubmissions(
+        ISubmissionCosmosDbService submissionCosmosDbService, 
+        IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
+        IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService
+    )
     {
         _submissionCosmosDbService = submissionCosmosDbService;
-        _stopCosmosDbService = stopCosmosDbService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
     }
 
-    [FunctionName("GetSubmissions_v1")]
-    [OpenApiOperation(operationId: "v1/GetSubmissions", tags: new[] { "name", "v1" })]
+    [FunctionName("GetSubmissions")]
+    [OpenApiOperation(operationId: "GetSubmissions", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Models.Submission>), Description = "List of Submissions")]
@@ -41,7 +46,7 @@ public class GetSubmissions
     [OpenApiParameter(name: "OrderBy", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "Column name to order the results")]
     [OpenApiParameter(name: "Order", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "ASC or DESC order")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmissions")] HttpRequest req, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmissions")] HttpRequest req, ILogger log)
     {
         log.LogInformation("GET - Get Submissions requested");
 
@@ -127,6 +132,10 @@ public class GetSubmissions
 
             foreach (var submission in submissions)
             {
+                int errorCount = 0;
+                errorCount += (await _stopV1CosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString(), 1)).Sum(x => x.Count);
+                errorCount += (await _stopV2CosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString(), 2)).Sum(x => x.Count);
+
                 list.Add(new
                 {
                     submission.Id,
@@ -136,7 +145,7 @@ public class GetSubmissions
                     submission.OfficerId,
                     submission.MaxStopDate,
                     submission.MinStopDate,
-                    ErrorCount = (await _stopCosmosDbService.GetSubmissionErrorSummaries(submission.Id.ToString())).Sum(x => x.Count)
+                    ErrorCount = errorCount
                 });
             }
 

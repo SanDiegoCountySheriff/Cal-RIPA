@@ -344,9 +344,13 @@ public class StopService : IStopService
         return gender switch
         {
             "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
+            "Cisgender Man" => ((int)PercievedGender.CisgenderManBoy).ToString(),
             "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
+            "Cisgender Woman" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
             "Transgender Man/Boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+            "Transgender Man" => ((int)PercievedGender.TransgenderManBoy).ToString(),
             "Transgender Woman/Girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+            "Transgender Woman" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
             _ => "",
         };
     }
