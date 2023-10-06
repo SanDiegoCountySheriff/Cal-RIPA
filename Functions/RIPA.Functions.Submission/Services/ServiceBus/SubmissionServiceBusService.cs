@@ -29,6 +29,7 @@ public class SubmissionServiceBusService : ISubmissionServiceBusService
     public class SubmissionMessage
     {
         public string StopId { get; set; }
+        public int StopVersion { get; set; }
         public Guid SubmissionId { get; set; }
     }
 

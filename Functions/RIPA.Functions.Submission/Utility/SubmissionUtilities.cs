@@ -102,7 +102,7 @@ public class SubmissionUtilities
 
     public async Task<Guid> NewSubmission(IEnumerable<IStop> stops, IUserProfile userProfile)
     {
-        InitializeBlobContainer();
+        await InitializeBlobContainer();
         Guid submissionId = Guid.NewGuid();
         Models.Submission submission = new Models.Submission
         {
@@ -126,7 +126,7 @@ public class SubmissionUtilities
         return blobContainerClient;
     }
 
-    public async void InitializeBlobContainer()
+    public async Task InitializeBlobContainer()
     {
         await _blobContainerClient.CreateIfNotExistsAsync();
     }

@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using RIPA.Functions.Submission.Models.Interfaces;
 
 namespace RIPA.Functions.Submission.Models.v2;
 
-public class DojStop
+public class DojStop : IDojStop
 {
     public string LEARecordID { get; set; }
     public string BatchID { get; set; }
