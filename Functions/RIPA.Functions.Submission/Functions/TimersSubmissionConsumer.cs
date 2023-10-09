@@ -377,7 +377,7 @@ public class TimersSubmissionConsumer
     {
         try
         {
-            log.LogInformation($"Handling DoJ submission success: {stop.Id} : {runId}");
+            log.LogInformation($"Handling DoJ submission success: {stop.Id} : {runId}: {date} : {submissionId} : {fileName}");
 
             if (stop.StopVersion == StopVersion.V2)
             {
