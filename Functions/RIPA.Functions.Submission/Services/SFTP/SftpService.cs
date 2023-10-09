@@ -44,10 +44,20 @@ public class SftpService : ISftpService
             }
         }
 
-        byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
-        using MemoryStream stream = new MemoryStream(byteArray);
+        _logger.LogInformation("Starting SftpClient");
 
-        _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new PrivateKeyFile(stream, _config.Password));
+        try
+        {
+            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
+            using MemoryStream stream = new MemoryStream(byteArray);
+
+            _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new PrivateKeyFile(stream, _config.Password));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("SftpClient failed: ", ex.Message);
+        }
+
     }
 
     public void Connect()
