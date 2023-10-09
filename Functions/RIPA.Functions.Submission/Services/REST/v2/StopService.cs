@@ -23,7 +23,7 @@ public class StopService : IStopService
     {
         stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
 
-        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || !x.ListSubmissionError.Any() || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
         }
