@@ -27,6 +27,10 @@ public class StopService : IStopService
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
         }
+        else if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = Array.Empty<Common.Models.Submission>();
+        }
 
         var submission = new Common.Models.Submission
         {
