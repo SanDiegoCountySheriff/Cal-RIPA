@@ -1,6 +1,7 @@
 using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
@@ -19,7 +20,7 @@ using static RIPA.Functions.Submission.Services.ServiceBus.SubmissionServiceBusS
 
 namespace RIPA.Functions.Submission.Functions;
 
-public class TimersSubmissionConsumer
+public class SubmissionConsumer
 {
     private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
     private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
@@ -33,7 +34,7 @@ public class TimersSubmissionConsumer
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public TimersSubmissionConsumer(
+    public SubmissionConsumer(
         IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
         IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService,
         ISftpService sftpService,
@@ -54,8 +55,12 @@ public class TimersSubmissionConsumer
         _blobContainerClient = GetBlobContainerClient();
     }
 
-    [FunctionName("TimersSubmissionConsumer")]
-    public async Task Run([TimerTrigger("*/10 * * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+    [FunctionName("SubmissionConsumer")]
+    public async Task Run(
+        [ServiceBusTrigger("submission", Connection = "ServiceBusConnection")]
+        ServiceBusReceivedMessage[] messages,
+        ServiceBusMessageActions MessageActions,
+        ILogger log)
     {
         Stopwatch runStopwatch = new Stopwatch();
         runStopwatch.Start();
@@ -64,23 +69,20 @@ public class TimersSubmissionConsumer
 
         log.LogInformation($"TimersSubmissionConsumer function executing: {runId}");
 
-        ServiceBusReceiver serviceBusReceiver = _submissionServiceBusService.SubmissionServiceBusClient.CreateReceiver("submission");
-        var messages = await _submissionServiceBusService.ReceiveMessagesAsync(serviceBusReceiver);
-
-        log.LogInformation($"Received message count: {messages.Count} : {runId}");
+        log.LogInformation($"Received message count: {messages.Length} : {runId}");
 
         foreach (var message in messages)
         {
             Stopwatch stopStopwatch = new Stopwatch();
             stopStopwatch.Start();
 
-            await serviceBusReceiver.RenewMessageLockAsync(message);
+            await MessageActions.RenewMessageLockAsync(message);
 
             SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(message.Body));
 
             if (submissionMessage == null)
             {
-                await serviceBusReceiver.DeadLetterMessageAsync(message);
+                await MessageActions.DeadLetterMessageAsync(message);
 
                 continue;
             }
@@ -91,7 +93,7 @@ public class TimersSubmissionConsumer
             if (stop == null)
             {
                 log.LogWarning($"Failed to find stop: {submissionMessage.StopId} : {runId}");
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
@@ -103,7 +105,7 @@ public class TimersSubmissionConsumer
             log.LogInformation($"Using filename: {fileName} : {runId}");
             if (fileName == null)
             {
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
@@ -116,13 +118,13 @@ public class TimersSubmissionConsumer
                 // if the cast error fails report, retry the message
                 if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId, runId))
                 {
-                    await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                    await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                     continue;
                 }
                 else
                 {
-                    await serviceBusReceiver.CompleteMessageAsync(message); // message complete
+                    await MessageActions.CompleteMessageAsync(message); // message complete
 
                     continue;
                 }
@@ -134,7 +136,7 @@ public class TimersSubmissionConsumer
             if (bytes == null)
             {
                 log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID} : {runId}");
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
@@ -143,7 +145,8 @@ public class TimersSubmissionConsumer
             if (!await UploadBlob(log, bytes, fileName, stop.Id, runId))
             {
                 log.LogWarning($"Failed to upload blob: {stop.Id} : {runId}");
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await HandleFailedToSubmit(log, DateTime.Now, fileName, submissionMessage.SubmissionId, stop);
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
@@ -152,7 +155,8 @@ public class TimersSubmissionConsumer
             {
                 log.LogWarning($"Failed to upload to FTP: {stop.Id} : {runId}");
                 await RemoveBlob(log, fileName, stop.Id, runId); // delete the blob to clean up the failed run
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await HandleFailedToSubmit(log, DateTime.Now, fileName, submissionMessage.SubmissionId, stop);
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
@@ -161,12 +165,12 @@ public class TimersSubmissionConsumer
             {
                 log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
                 RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated. 
-                await serviceBusReceiver.AbandonMessageAsync(message); // allows for retry to occur. 
+                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
             }
 
-            await serviceBusReceiver.CompleteMessageAsync(message); // message complete
+            await MessageActions.CompleteMessageAsync(message); // message complete
 
             stopStopwatch.Stop();
             log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
@@ -397,7 +401,7 @@ public class TimersSubmissionConsumer
         }
     }
 
-    private async Task HandleFailedToSubmit(ILogger lod, DateTime date, string fileName, Guid submissionId, Common.Models.v1.Stop stop)
+    private async Task HandleFailedToSubmit(ILogger log, DateTime date, string fileName, Guid submissionId, IStop stop)
     {
         try
         {
@@ -410,7 +414,15 @@ public class TimersSubmissionConsumer
                 FileName = fileName,
                 SubmissionId = submissionId
             };
-            await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission(stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+            }
+            else
+            {
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+            }
             return;
         }
         catch (Exception)

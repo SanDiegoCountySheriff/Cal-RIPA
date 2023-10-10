@@ -29,7 +29,7 @@ public class StopService : IStopService
         }
         else if (stop.ListSubmission == null)
         {
-            stop.ListSubmission = Array.Empty<Common.Models.Submission>();
+            stop.ListSubmission = new List<Common.Models.Submission>();
         }
 
         var submission = new Common.Models.Submission
@@ -40,7 +40,7 @@ public class StopService : IStopService
             FileName = fileName
         };
 
-        stop.ListSubmission.ToList().Add(submission);
+        stop.ListSubmission.Add(submission);
 
         return stop;
     }

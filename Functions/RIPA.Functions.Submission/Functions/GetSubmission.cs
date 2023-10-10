@@ -26,7 +26,7 @@ public class GetSubmission
     private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
 
     public GetSubmission(
-        ISubmissionCosmosDbService submissionCosmosDbService, 
+        ISubmissionCosmosDbService submissionCosmosDbService,
         IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
         IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService
     )
@@ -36,8 +36,8 @@ public class GetSubmission
         _stopV2CosmosDbService = stopV2CosmosDbService;
     }
 
-    [FunctionName("GetSubmission_v1")]
-    [OpenApiOperation(operationId: "v1/GetSubmission", tags: new[] { "name", "v1" })]
+    [FunctionName("GetSubmission")]
+    [OpenApiOperation(operationId: "GetSubmission", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
@@ -50,7 +50,7 @@ public class GetSubmission
     [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The full text error code to filter the submissions stops by")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("GET - Get Submission requested");
 
@@ -105,33 +105,29 @@ public class GetSubmission
             whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{req.Query["ErrorCode"]}'");
         }
 
-        string whereV1 = string.Empty;
-        string whereV2 = string.Empty;
+        string whereV1 = "WHERE ";
+        string whereV2 = "WHERE ";
 
         if (whereStatements.Count > 0)
         {
-            whereV1 = " WHERE c.StopVersion = 1 ";
-
             foreach (var whereStatement in whereStatements)
             {
                 whereV1 += Environment.NewLine + whereStatement;
                 whereV1 += Environment.NewLine + "AND";
             }
 
-            whereV1 = whereV1.Remove(whereV1.Length - 3);
+            whereV1 += " c.StopVersion = 1";
         }
 
         if (whereStatements.Count > 0)
         {
-            whereV2 = " WHERE c.StopVersion = 2 ";
-
             foreach (var whereStatement in whereStatements)
             {
                 whereV2 += Environment.NewLine + whereStatement;
                 whereV2 += Environment.NewLine + "AND";
             }
 
-            whereV2 = whereV2.Remove(whereV2.Length - 3);
+            whereV2 += " c.StopVersion = 2";
         }
 
         try

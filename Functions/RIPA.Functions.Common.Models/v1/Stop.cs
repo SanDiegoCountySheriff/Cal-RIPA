@@ -40,7 +40,7 @@ public class Stop : IStop
     public bool StopInResponseToCFS { get; set; }
     [JsonConverter(typeof(ConcreteConverter<PersonStopped[]>))]
     public IPersonStopped[] ListPersonStopped { get; set; }
-    public Submission[] ListSubmission { get; set; }
+    public List<Submission> ListSubmission { get; set; }
     public string Status { get; set; }
     public bool IsPiiFound { get; set; }
     public PiiEntity[] PiiEntities { get; set; }
