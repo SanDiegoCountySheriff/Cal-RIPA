@@ -1341,7 +1341,7 @@ const getFullStopPeopleListedV2 = apiStop => {
 
     const anyNonForceActionsTaken =
       person.listNonForceActionsTakenDuringStop.length > 0 &&
-      person.listNonForceActionsTakenDuringStop[0].key !== '17'
+      person.listNonForceActionsTakenDuringStop[0].key !== '18'
 
     const anyForceActionsTaken =
       person.listForceActionsTakenDuringStop.length > 0 &&
@@ -2542,7 +2542,7 @@ const getNonForceActionsTakenDuringStop = person => {
 
   return [
     {
-      key: '17',
+      key: '18',
       action: 'None',
     },
   ]
