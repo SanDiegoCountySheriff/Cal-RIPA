@@ -1,14 +1,14 @@
 <template>
   <div class="ripa-check-group">
     <v-checkbox
-      v-for="(item, index) in checkBoxItems"
+      v-for="(item, index) in items"
       :key="index"
       v-model="model"
       :disabled="disabled || item.disabled || false"
       :label="item.name"
       :value="item.value"
       :rules="rules"
-      :hide-details="index < checkBoxItems.length - 1"
+      :hide-details="index < items.length - 1"
       validate-on-blur
       multiple
     ></v-checkbox>
@@ -27,10 +27,6 @@ export default {
       set(newVal) {
         this.$emit('input', newVal)
       },
-    },
-
-    checkBoxItems() {
-      return this.items
     },
   },
 
