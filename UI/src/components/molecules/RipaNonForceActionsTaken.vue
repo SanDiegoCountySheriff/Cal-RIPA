@@ -47,7 +47,6 @@
                 v-model="model.nonForceActionsTaken.personSearchConsentGiven"
                 label="Person Search Consent Given"
                 :max-width="300"
-                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -57,7 +56,6 @@
                 v-model="model.nonForceActionsTaken.propertySearchConsentGiven"
                 label="Property Search Consent Given"
                 :max-width="300"
-                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -74,6 +72,7 @@
                 v-model="model.nonForceActionsTaken.basisForSearch"
                 :items="getBasisForSearchItems"
                 :rules="basisForSearchRules"
+                :name="'Basis For Search'"
                 @input="handleInput"
               >
               </ripa-check-group>
@@ -212,11 +211,12 @@ export default {
         return BASIS_FOR_SEARCH
       }
 
+      console.log('BASIS_FOR', BASIS_FOR_SEARCH_V2)
       return BASIS_FOR_SEARCH_V2
     },
 
     isBasisForSearchExplanationVisible() {
-      if (this.model.nonForceActionsTaken.basisForSearch.length === 0) {
+      if (this.model.nonForceActionsTaken.basisForSearch?.length === 0) {
         return false
       }
 
@@ -282,6 +282,12 @@ export default {
         filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
+      if (!this.model.nonForceActionsTaken.personSearchConsentGiven) {
+        filteredItems = filteredItems.filter(
+          item => item.value !== 1 && item.value !== 14 && item.value !== 15,
+        )
+      }
+
       if (basisForSearch.includes(1)) {
         filteredItems = filteredItems.filter(
           item => item.value !== 14 && item.value !== 15,
@@ -300,9 +306,10 @@ export default {
         )
       }
 
-      if (actionsTaken.includes(20)) {
-        return filteredItems
-      }
+      // TODO: Verify what the heck this is doing
+      // if (actionsTaken.includes(20)) {
+      //   return filteredItems
+      // }
 
       if (!actionsTaken.includes(15)) {
         return filteredItems.filter(item => item.value !== 12)
@@ -311,26 +318,26 @@ export default {
       return filteredItems
     },
 
-    personPropertySearchConsentGivenRules() {
-      const checked =
-        this.model.nonForceActionsTaken.personSearchConsentGiven ||
-        this.model.nonForceActionsTaken.propertySearchConsentGiven
-      const basisForSearch =
-        this.model.nonForceActionsTaken?.basisForSearch || []
-      const consentGiven =
-        basisForSearch.includes(1) ||
-        basisForSearch.includes(14) ||
-        basisForSearch.includes(15)
+    // personPropertySearchConsentGivenRules() {
+    //   const checked =
+    //     this.model.nonForceActionsTaken.personSearchConsentGiven ||
+    //     this.model.nonForceActionsTaken.propertySearchConsentGiven
+    //   const basisForSearch =
+    //     this.model.nonForceActionsTaken?.basisForSearch || []
+    //   const consentGiven =
+    //     basisForSearch.includes(1) ||
+    //     basisForSearch.includes(14) ||
+    //     basisForSearch.includes(15)
 
-      if (!consentGiven) {
-        return []
-      }
+    //   if (!consentGiven) {
+    //     return []
+    //   }
 
-      return [
-        (checked && consentGiven) ||
-          'Must select either consent given when "Basis for Search" indicates "Consent Given"',
-      ]
-    },
+    //   return [
+    //     (checked && consentGiven) ||
+    //       'Must select either consent given when "Basis for Search" indicates "Consent Given"',
+    //   ]
+    // },
 
     wasAskedForConsentToSearchPerson() {
       return this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
