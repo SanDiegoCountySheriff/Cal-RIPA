@@ -40,7 +40,10 @@ describe('Ripa Stop Type', () => {
 
     expect(wrapper.emitted('input')).toBeTruthy()
     expect(wrapper.emitted('input')[0]).toEqual([
-      { test: 'test', person: { insideResidence: null } },
+      {
+        test: 'test',
+        person: { insideResidence: null, passengerInVehicle: null },
+      },
     ])
   })
 
