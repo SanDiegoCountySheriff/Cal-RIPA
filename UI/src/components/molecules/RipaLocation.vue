@@ -172,14 +172,27 @@
         </v-col>
 
         <v-col cols="12" sm="12" md="6">
-          <ripa-text-input
-            v-model="model.location.streetName"
-            :loading="loadingPiiStep1"
-            :rules="streetNameRules"
-            @blur="handlePiiCheck($event)"
-            label="Street Name"
-          >
-          </ripa-text-input>
+          <template v-if="model.stopVersion === 1">
+            <ripa-text-input
+              v-model="model.location.streetName"
+              :loading="loadingPiiStep1"
+              :rules="streetNameRules"
+              @blur="handlePiiCheck($event)"
+              label="Street Name"
+            >
+            </ripa-text-input>
+          </template>
+
+          <template v-if="model.stopVersion === 2">
+            <ripa-text-input
+              v-model="model.location.streetName"
+              :loading="loadingPiiStep1"
+              :rules="streetNameRulesV2"
+              @blur="handlePiiCheck($event)"
+              label="Street Name"
+            >
+            </ripa-text-input>
+          </template>
         </v-col>
       </v-row>
 
@@ -470,6 +483,24 @@ export default {
         this.isLocationOptionsFilled ||
           (streetName + blockNumber).length >= 5 ||
           'Block number plus street name must be between 5 and 250 characters',
+      ]
+    },
+
+    streetNameRulesV2() {
+      return [
+        () => {
+          const streetName = this.model.location.streetName
+          return (
+            (streetName && streetName.length > 0) || 'A street name is required'
+          )
+        },
+        () => {
+          const streetName = this.model.location.streetName
+          return (
+            (streetName.length >= 1 && streetName.length <= 50) ||
+            'Street name must be between 1 to 50 characters'
+          )
+        },
       ]
     },
 
