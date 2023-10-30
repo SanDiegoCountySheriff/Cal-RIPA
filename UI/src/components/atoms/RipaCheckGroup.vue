@@ -1,6 +1,5 @@
 <template>
   <div class="ripa-check-group">
-    {{ model }}
     <v-checkbox
       v-for="(item, index) in checkBoxItems"
       :key="index"
@@ -11,6 +10,7 @@
       :rules="rules"
       :hide-details="index < checkBoxItems.length - 1"
       validate-on-blur
+      multiple
     ></v-checkbox>
   </div>
 </template>
@@ -22,17 +22,9 @@ export default {
   computed: {
     model: {
       get() {
-        if (this.name === 'Basis For Search') {
-          console.log('model getter from ripa-check-group', this.value)
-        }
         return this.value
       },
       set(newVal) {
-        if (this.name === 'Basis For Search') {
-          console.log('model setter from ripa-check-group', newVal)
-          console.log('here is the model', this.model)
-        }
-
         this.$emit('input', newVal)
       },
     },
@@ -58,10 +50,6 @@ export default {
     rules: {
       type: Array,
       default: () => [],
-    },
-    name: {
-      type: String,
-      default: 'None',
     },
   },
 }

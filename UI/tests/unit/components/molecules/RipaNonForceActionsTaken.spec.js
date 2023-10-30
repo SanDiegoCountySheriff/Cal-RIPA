@@ -39,6 +39,4 @@ describe('Ripa Non Force Actions Taken', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
-
-  it.todo('should only display three consent boxes if consent was given')
 })
