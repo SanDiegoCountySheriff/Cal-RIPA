@@ -36,10 +36,43 @@ describe('Ripa Stop Type', () => {
   it('should set model', () => {
     wrapper = factory({ value: stop })
 
-    wrapper.vm.model = { test: 'test' }
+    wrapper.vm.model = { test: 'test', person: { insideResidence: true } }
 
     expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input')[0]).toEqual([{ test: 'test' }])
+    expect(wrapper.emitted('input')[0]).toEqual([
+      {
+        test: 'test',
+        person: { insideResidence: null, passengerInVehicle: null },
+      },
+    ])
+  })
+
+  it('should reset insideResidence when setting to type other than pedestrian', async () => {
+    const updatedStop = stop
+    updatedStop.person.insideResidence = true
+    updatedStop.stopType = 'Pedestrian'
+
+    wrapper = factory({ value: updatedStop })
+
+    wrapper.vm.model.stopType = 'Bicycle'
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.model.person.insideResidence).toEqual(null)
+  })
+
+  it('should reset passengerInVehicle when setting to type other than vehicle', async () => {
+    const updatedStop = stop
+    updatedStop.person.passengerInVehicle = true
+    updatedStop.stopType = 'Vehicular'
+
+    wrapper = factory({ value: updatedStop })
+
+    wrapper.vm.model.stopType = 'Pedestrian'
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.model.person.passengerInVehicle).toEqual(null)
   })
 
   it.todo('should watch model')

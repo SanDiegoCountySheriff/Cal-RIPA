@@ -144,6 +144,8 @@ export const defaultStop = () => {
       perceivedSexualOrientation: null,
       perceivedOrKnownDisability: [],
       perceivedRace: [],
+      insideResidence: null,
+      passengerInVehicle: null,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),

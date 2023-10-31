@@ -49,6 +49,12 @@ export default {
         return this.value
       },
       set(newVal) {
+        if (newVal.stopType !== 'Pedestrian') {
+          newVal.person.insideResidence = null
+        }
+        if (newVal.stopType !== 'Vehicular') {
+          newVal.person.passengerInVehicle = null
+        }
         this.$emit('input', newVal)
       },
     },
