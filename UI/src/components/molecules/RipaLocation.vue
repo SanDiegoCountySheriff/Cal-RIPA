@@ -175,7 +175,9 @@
           <ripa-text-input
             v-model="model.location.streetName"
             :loading="loadingPiiStep1"
-            :rules="streetNameRules"
+            :rules="
+              model.stopVersion === 1 ? streetNameRules : streetNameRulesV2
+            "
             @blur="handlePiiCheck($event)"
             label="Street Name"
           >
@@ -470,6 +472,19 @@ export default {
         this.isLocationOptionsFilled ||
           (streetName + blockNumber).length >= 5 ||
           'Block number plus street name must be between 5 and 250 characters',
+      ]
+    },
+
+    streetNameRulesV2() {
+      const streetName = this.model.location.streetName
+
+      return [
+        this.isLocationOptionsFilled ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+        this.isLocationOptionsFilled ||
+          (streetName.length >= 1 && streetName.length <= 50) ||
+          'Block number plus street name must be between 1 and 50 characters',
       ]
     },
 
