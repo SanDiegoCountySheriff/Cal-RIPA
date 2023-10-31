@@ -484,7 +484,7 @@ export default {
           'A street name is required',
         this.isLocationOptionsFilled ||
           (streetName.length >= 1 && streetName.length <= 50) ||
-          'Block number plus street name must be between 5 and 250 characters',
+          'Block number plus street name must be between 1 and 50 characters',
       ]
     },
 
