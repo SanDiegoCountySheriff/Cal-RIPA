@@ -215,7 +215,7 @@ public class StopService : IStopService
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
                 ListNonForceActTak = CastToDojListNonForceActTak(personStopped.ListNonForceActionsTakenDuringStop.ToList(), personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
                 ListForceActTak = CastToDojListForceActTak(personStopped.ListForceActionsTakenDuringStop.ToList()),
-                ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
+                ListBasSearch = CastToDojListbassearch(personStopped.ListBasisForSearch.ToList()),
                 ConsentType = CastToDojConsentType(personStopped.ListBasisForSearch.ToList()),
                 BasSearch_N = personStopped.BasisForSearchBrief,
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
@@ -229,6 +229,24 @@ public class StopService : IStopService
         }
 
         return new Listperson_Stopped { Person_Stopped = listDojPersonStopped };
+    }
+
+    private Listbassearch CastToDojListbassearch(List<BasisForSearch> listBasisForSearch)
+    {
+        return new Listbassearch
+        {
+            BasSearch = listBasisForSearch.Select(x =>
+            {
+                if (x.Key == "14" || x.Key == "15")
+                {
+                    return "1";
+                }
+                else
+                {
+                    return x.Key;
+                }
+            }).ToList()
+        };
     }
 
     private string CastToDojConsentType(List<BasisForSearch> listBasisForSearch)
