@@ -429,9 +429,10 @@ export default {
         this.isLocationOptionsFilled ||
           (blockNumber !== null && blockNumber !== '') ||
           'A block number is required',
-        this.isLocationOptionsFilled ||
-          (streetName + blockNumber).length >= 5 ||
-          'Block number plus street name must be between 5 and 250 characters',
+        (this.isLocationOptionsFilled &&
+          (streetName + blockNumber).length >= 5 &&
+          (streetName + blockNumber).length <= 150) ||
+          'Block number plus street name must be between 5 and 150 characters',
       ]
     },
 
@@ -467,9 +468,10 @@ export default {
         this.isLocationOptionsFilled ||
           (streetName && streetName.length > 0) ||
           'A street name is required',
-        this.isLocationOptionsFilled ||
-          (streetName + blockNumber).length >= 5 ||
-          'Block number plus street name must be between 5 and 250 characters',
+        (this.isLocationOptionsFilled &&
+          (streetName + blockNumber).length >= 5 &&
+          (streetName + blockNumber).length <= 150) ||
+          'Block number plus street name must be between 5 and 150 characters',
       ]
     },
 

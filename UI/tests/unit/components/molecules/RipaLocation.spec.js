@@ -129,7 +129,7 @@ describe('Ripa Location', () => {
 
     expect(wrapper.vm.blockNumberRules).toEqual([
       'A block number is required',
-      'Block number plus street name must be between 5 and 250 characters',
+      'Block number plus street name must be between 5 and 150 characters',
     ])
 
     stop.location.blockNumber = '1000'
@@ -143,7 +143,7 @@ describe('Ripa Location', () => {
 
     expect(wrapper.vm.streetNameRules).toEqual([
       'A street name is required',
-      'Block number plus street name must be between 5 and 250 characters',
+      'Block number plus street name must be between 5 and 150 characters',
     ])
 
     stop.location.streetName = 'Anystreet St'
