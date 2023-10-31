@@ -431,8 +431,8 @@ export default {
           'A block number is required',
         (this.isLocationOptionsFilled &&
           (streetName + blockNumber).length >= 5 &&
-          (streetName + blockNumber).length <= 150) ||
-          'Block number plus street name must be between 5 and 150 characters',
+          (streetName + blockNumber).length <= 250) ||
+          'Block number plus street name must be between 5 and 250 characters',
       ]
     },
 
@@ -470,8 +470,8 @@ export default {
           'A street name is required',
         (this.isLocationOptionsFilled &&
           (streetName + blockNumber).length >= 5 &&
-          (streetName + blockNumber).length <= 150) ||
-          'Block number plus street name must be between 5 and 150 characters',
+          (streetName + blockNumber).length <= 250) ||
+          'Block number plus street name must be between 5 and 250 characters',
       ]
     },
 
@@ -535,9 +535,9 @@ export default {
           (checked &&
             landmark &&
             landmark.length >= 5 &&
-            landmark.length <= 250 &&
+            landmark.length <= 150 &&
             highwayExit !== null) ||
-          'Road marker, landmark or other description must be between 5 and 250 characters',
+          'Road marker, landmark or other description must be between 5 and 150 characters',
       ]
     },
 
