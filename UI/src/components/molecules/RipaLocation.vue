@@ -162,7 +162,9 @@
           <ripa-text-input
             v-model="model.location.blockNumber"
             :loading="loadingPiiStep1"
-            :rules="blockNumberRules"
+            :rules="
+              model.stopVersion === 1 ? blockNumberRules : blockNumberRulesV2
+            "
             @blur="handleBlockNumber"
             label="Block Number"
             numbers-only
@@ -437,6 +439,19 @@ export default {
       ]
     },
 
+    blockNumberRulesV2() {
+      const blockNumber = this.model.location.blockNumber
+
+      return [
+        this.isLocationOptionsFilled ||
+          (blockNumber !== null && blockNumber !== '') ||
+          'A block number is required',
+        this.isLocationOptionsFilled ||
+          (blockNumber.length >= 1 && blockNumber.length <= 8) ||
+          'Block number must be between 1 and 8 characters',
+      ]
+    },
+
     latitudeRules() {
       const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
 
@@ -640,9 +655,15 @@ export default {
     },
 
     handleBlockNumber() {
-      this.model.location.blockNumber = this.parseBlockNumber(
-        this.model.location.blockNumber,
-      )
+      if (this.model.stopVersion === 1) {
+        this.model.location.blockNumber = this.parseBlockNumber(
+          this.model.location.blockNumber,
+        )
+      } else {
+        this.model.location.blockNumber = this.parseBlockNumberV2(
+          this.model.location.blockNumber,
+        )
+      }
     },
 
     handlePiiCheck(event) {
@@ -664,6 +685,36 @@ export default {
       if (blockNumber !== null && blockNumber.length > 0) {
         const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
         blockNumber = calcBlockNumber
+      }
+
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
+    },
+
+    parseBlockNumberV2(value) {
+      let blockNumber = value
+
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const numDigits = blockNumber.length
+
+        if (numDigits < 1 || numDigits > 8) {
+          blockNumber = null
+        } else if (numDigits <= 2) {
+          if (blockNumber < 10) {
+            blockNumber = 0
+          } else {
+            const lastDigit = parseInt(blockNumber.toString().slice(-1))
+            blockNumber -= lastDigit
+          }
+        } else {
+          const lastTwoDigits = parseInt(blockNumber.toString().slice(-2))
+          blockNumber -= lastTwoDigits % 100
+        }
       }
 
       const result =
