@@ -586,7 +586,7 @@ export default {
       )
       return [
         this.isLocationOptionsFilledV2 ||
-          (checked && landmark !== null) ||
+          (checked && landmark !== null && landmark !== '') ||
           'A road marker, landmark, or other description is required',
         this.isLocationOptionsFilledV2 ||
           (checked &&
