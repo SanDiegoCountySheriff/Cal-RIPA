@@ -33,47 +33,47 @@ describe('Ripa Stop Type', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should set model', () => {
+  it('should reset insideResidence when setting to type other than pedestrian', () => {
+    stop.person.insideResidence = true
+    stop.stopType = 'Pedestrian'
+
     wrapper = factory({ value: stop })
 
-    wrapper.vm.model = { test: 'test', person: { insideResidence: true } }
-
-    expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted('input')[0]).toEqual([
-      {
-        test: 'test',
-        person: { insideResidence: null, passengerInVehicle: null },
-      },
-    ])
-  })
-
-  it('should reset insideResidence when setting to type other than pedestrian', async () => {
     const updatedStop = stop
-    updatedStop.person.insideResidence = true
-    updatedStop.stopType = 'Pedestrian'
-
-    wrapper = factory({ value: updatedStop })
-
-    wrapper.vm.model.stopType = 'Bicycle'
-
-    await wrapper.vm.$nextTick()
+    updatedStop.stopType = 'Bicycle'
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
 
     expect(wrapper.vm.model.person.insideResidence).toEqual(null)
   })
 
-  it('should reset passengerInVehicle when setting to type other than vehicle', async () => {
+  it('should reset passengerInVehicle when setting to type other than vehicle', () => {
+    stop.person.passengerInVehicle = true
+    stop.stopType = 'Vehicular'
+
+    wrapper = factory({ value: stop })
+
     const updatedStop = stop
-    updatedStop.person.passengerInVehicle = true
-    updatedStop.stopType = 'Vehicular'
-
-    wrapper = factory({ value: updatedStop })
-
-    wrapper.vm.model.stopType = 'Pedestrian'
-
-    await wrapper.vm.$nextTick()
+    updatedStop.stopType = 'Pedestrian'
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
 
     expect(wrapper.vm.model.person.passengerInVehicle).toEqual(null)
   })
 
-  it.todo('should watch model')
+  it('should reset non force actions taken 4 and 13 when setting to type other than vehicular', () => {
+    stop.nonForceActionsTaken.nonForceActionsTakenDuringStop = [4, 13]
+    stop.stopType = 'Vehicular'
+
+    wrapper = factory({ value: stop })
+
+    const updatedStop = stop
+    updatedStop.stopType = 'Pedestrian'
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(
+      wrapper.vm.model.nonForceActionsTaken.nonForceActionsTakenDuringStop,
+    ).toEqual([])
+  })
 })
