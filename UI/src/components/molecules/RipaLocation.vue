@@ -575,15 +575,6 @@ export default {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
-      window.console.log(
-        checked &&
-          landmark !== null &&
-          landmark !== '' &&
-          landmark.length >= 5 &&
-          landmark.length <= 150 &&
-          highwayExit !== null &&
-          highwayExit !== '',
-      )
       return [
         this.isLocationOptionsFilledV2 ||
           (checked && landmark !== null && landmark !== '') ||
