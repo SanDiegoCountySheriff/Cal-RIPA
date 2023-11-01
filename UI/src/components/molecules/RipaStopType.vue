@@ -74,10 +74,6 @@ export default {
       },
     },
 
-    stopType() {
-      return this.model.stopType
-    },
-
     stopTypeRules() {
       return [v => !!v || 'A stop type is required']
     },
