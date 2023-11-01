@@ -276,7 +276,7 @@
             <ripa-text-input
               v-model="model.location.landmark"
               :loading="loadingPiiStep1"
-              :rules="landmarkRules"
+              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
               @blur="handlePiiCheck($event)"
               label="Road marker, landmark, or other"
             >
@@ -538,6 +538,25 @@ export default {
     },
 
     landmarkRules() {
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+
+      return [
+        this.isLocationOptionsFilled ||
+          (checked && landmark !== null) ||
+          'A road marker, landmark, or other description is required',
+        this.isLocationOptionsFilled ||
+          (checked &&
+            landmark &&
+            landmark.length >= 5 &&
+            landmark.length <= 250 &&
+            highwayExit !== null) ||
+          'Road marker, landmark or other description must be between 5 and 250 characters',
+      ]
+    },
+
+    landmarkRulesV2() {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
