@@ -443,10 +443,10 @@ export default {
       const blockNumber = this.model.location.blockNumber
 
       return [
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (blockNumber !== null && blockNumber !== '') ||
           'A block number is required',
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (blockNumber.length >= 1 && blockNumber.length <= 8) ||
           'Block number must be between 1 and 8 characters',
       ]
@@ -494,10 +494,10 @@ export default {
       const streetName = this.model.location.streetName
 
       return [
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (streetName && streetName.length > 0) ||
           'A street name is required',
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (streetName.length >= 1 && streetName.length <= 50) ||
           'Street name must be between 1 and 50 characters',
       ]
@@ -521,10 +521,10 @@ export default {
       const crossStreet2 = this.model.location.crossStreet2 || ''
 
       return [
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (!!crossStreet1 && !!crossStreet2) ||
           'Must fill out both cross streets in order to use cross streets',
-        (this.isLocationOptionsFilled &&
+        (this.isLocationOptionsFilledV2 &&
           crossStreet1.length < 50 &&
           crossStreet2.length < 50) ||
           'Cross streets must be 50 characters or less',
@@ -597,6 +597,52 @@ export default {
           streetName &&
           streetName.length > 0 &&
           (blockNumber + streetName).length >= 5) ||
+        (intersection &&
+          intersection.length >= 5 &&
+          this.model.stopVersion === 1) ||
+        (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
+        (checked &&
+          highwayExit !== null &&
+          highwayExit.length >= 5 &&
+          highwayExit.length <= 250) ||
+        (checked &&
+          landmark !== null &&
+          landmark.length >= 5 &&
+          landmark.length <= 250) ||
+        (isLatitudeValid && isLongitudeValid)
+
+      return isValid
+    },
+
+    isLocationOptionsFilledV2() {
+      const blockNumber = this.model.location.blockNumber
+      const streetName = this.model.location.streetName
+      const intersection = this.model.location.intersection
+      const crossStreet1 = this.model.location.crossStreet1
+      const crossStreet2 = this.model.location.crossStreet2
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+
+      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
+      const isLatitudeValid =
+        latitudeRegex.test(this.model.location.latitude) &&
+        this.model.location.latitude
+
+      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
+      const isLongitudeValid = longitudeRegex.test(
+        this.model.location.longitude,
+      )
+
+      const isValid =
+        (blockNumber !== null &&
+          blockNumber !== '' &&
+          streetName &&
+          streetName.length > 0 &&
+          blockNumber.length >= 1 &&
+          blockNumber.length <= 8 &&
+          streetName.length >= 1 &&
+          streetName.length <= 50) ||
         (intersection &&
           intersection.length >= 5 &&
           this.model.stopVersion === 1) ||
