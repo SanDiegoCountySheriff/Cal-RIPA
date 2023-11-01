@@ -244,6 +244,20 @@ describe('Ripa Location', () => {
     expect(wrapper.vm.landmarkRules).toStrictEqual([true, true])
   })
 
+  it('should validate V2 landmark', () => {
+    stop.location.toggleLocationOptions = true
+    wrapper = factory({ value: stop })
+    expect(wrapper.vm.landmarkRulesV2).toEqual([
+      'A road marker, landmark, or other description is required',
+      'Road marker, landmark or other description must be between 5 and 150 characters',
+    ])
+
+    stop.location.landmark = 'Exit 1A'
+    wrapper.vm.model = stop
+
+    expect(wrapper.vm.landmarkRulesV2).toStrictEqual([true, true])
+  })
+
   it('should validate latitude coordinate for v2 stop', () => {
     wrapper = factory({ value: stop })
 

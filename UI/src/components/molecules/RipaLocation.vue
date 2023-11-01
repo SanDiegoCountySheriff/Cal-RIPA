@@ -278,7 +278,7 @@
             <ripa-text-input
               v-model="model.location.landmark"
               :loading="loadingPiiStep1"
-              :rules="landmarkRules"
+              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
               @blur="handlePiiCheck($event)"
               label="Road marker, landmark, or other"
             >
@@ -571,6 +571,35 @@ export default {
       ]
     },
 
+    landmarkRulesV2() {
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+      window.console.log(
+        checked &&
+          landmark !== null &&
+          landmark !== '' &&
+          landmark.length >= 5 &&
+          landmark.length <= 150 &&
+          highwayExit !== null &&
+          highwayExit !== '',
+      )
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (checked && landmark !== null) ||
+          'A road marker, landmark, or other description is required',
+        this.isLocationOptionsFilledV2 ||
+          (checked &&
+            landmark !== null &&
+            landmark !== '' &&
+            landmark.length >= 5 &&
+            landmark.length <= 150 &&
+            highwayExit !== null &&
+            highwayExit !== '') ||
+          'Road marker, landmark or other description must be between 5 and 150 characters',
+      ]
+    },
+
     isLocationOptionsFilled() {
       const blockNumber = this.model.location.blockNumber
       const streetName = this.model.location.streetName
@@ -653,8 +682,9 @@ export default {
           highwayExit.length <= 250) ||
         (checked &&
           landmark !== null &&
+          landmark !== '' &&
           landmark.length >= 5 &&
-          landmark.length <= 250) ||
+          landmark.length <= 150) ||
         (isLatitudeValid && isLongitudeValid)
 
       return isValid
@@ -750,9 +780,7 @@ export default {
       if (blockNumber !== null && blockNumber.length > 0) {
         const numDigits = blockNumber.length
 
-        if (numDigits < 1 || numDigits > 8) {
-          blockNumber = null
-        } else if (numDigits <= 2) {
+        if (numDigits <= 2) {
           if (blockNumber < 10) {
             blockNumber = 0
           } else {
