@@ -523,14 +523,15 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && highwayExit !== null) ||
+          (checked && highwayExit !== null && highwayExit !== '') ||
           'A highway and closest exit is required',
         this.isLocationOptionsFilled ||
           (checked &&
             highwayExit &&
             highwayExit.length >= 5 &&
             highwayExit.length <= 250 &&
-            landmark !== null) ||
+            landmark !== null &&
+            landmark !== '') ||
           'Highway and closest exit must be between 5 and 250 characters',
       ]
     },
@@ -542,14 +543,15 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && landmark !== null) ||
+          (checked && landmark !== null && landmark !== '') ||
           'A road marker, landmark, or other description is required',
         this.isLocationOptionsFilled ||
           (checked &&
             landmark &&
             landmark.length >= 5 &&
             landmark.length <= 250 &&
-            highwayExit !== null) ||
+            highwayExit !== null &&
+            highwayExit !== '') ||
           'Road marker, landmark or other description must be between 5 and 250 characters',
       ]
     },
