@@ -731,6 +731,18 @@ export default {
     },
   },
 
+  watch: {
+    lastLocation: {
+      handler: async function (newVal) {
+        if (newVal) {
+          this.model.location = { ...newVal.newLocation }
+          this.handleInput()
+        }
+      },
+      deep: true,
+    },
+  },
+
   props: {
     value: {
       type: Object,
