@@ -139,6 +139,21 @@ describe('Ripa Location', () => {
     expect(wrapper.vm.blockNumberRules).toStrictEqual([true, true])
   })
 
+  it('should validate V2 block number', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.blockNumberRulesV2).toEqual([
+      'A block number is required',
+      'Block number must be between 1 and 8 characters',
+    ])
+
+    stop.location.blockNumber = '12'
+    stop.location.streetName = 'V2 Test'
+    wrapper.vm.model = stop
+
+    expect(wrapper.vm.blockNumberRulesV2).toStrictEqual([true, true])
+  })
+
   it('should validate street name', () => {
     wrapper = factory({ value: stop })
 
@@ -151,6 +166,20 @@ describe('Ripa Location', () => {
     wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
+  })
+
+  it('should validate V2 street name', () => {
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.streetNameRulesV2).toEqual([
+      'A street name is required',
+      'Street name must be between 1 and 50 characters',
+    ])
+
+    stop.location.streetName = 'Anystreet St'
+    wrapper.vm.model = stop
+
+    expect(wrapper.vm.streetNameRulesV2).toStrictEqual([true, true])
   })
 
   it('should validate intersection', () => {
