@@ -117,17 +117,17 @@ public class StopService : IStopService
             return "1";
         }
 
-        if (!string.IsNullOrEmpty(location.BlockNumber) && !string.IsNullOrEmpty(location.StreetName))
+        if (!string.IsNullOrWhiteSpace(location.BlockNumber) && !string.IsNullOrWhiteSpace(location.StreetName))
         {
             return "2";
         }
 
-        if (!string.IsNullOrEmpty(location.CrossStreet2) && !string.IsNullOrEmpty(location.CrossStreet2))
+        if (!string.IsNullOrWhiteSpace(location.CrossStreet2) && !string.IsNullOrWhiteSpace(location.CrossStreet2))
         {
             return "3";
         }
 
-        if (!string.IsNullOrEmpty(location.HighwayExit))
+        if (!string.IsNullOrWhiteSpace(location.HighwayExit))
         {
             return "4";
         }

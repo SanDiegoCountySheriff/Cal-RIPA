@@ -133,6 +133,7 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.blockNumber = '1000'
+    stop.location.streetName = 'Test'
     wrapper.vm.model = stop
 
     expect(wrapper.vm.blockNumberRules).toStrictEqual([true, true])
