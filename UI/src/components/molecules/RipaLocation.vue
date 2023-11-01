@@ -116,6 +116,7 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
+            @input="handleInput"
             label="K-12 Public School"
             :max-width="200"
           ></ripa-switch>
@@ -123,6 +124,7 @@
           <template v-if="model.location.isSchool">
             <ripa-autocomplete
               v-model="model.location.school"
+              @input="handleInput"
               hint="Select 1 School (required)"
               item-text="fullName"
               item-value="cdsCode"
@@ -139,6 +141,7 @@
 
           <ripa-alert
             v-if="model.location.piiFound"
+            @input="handleInput"
             alert-outlined
             alert-type="warning"
           >
@@ -161,6 +164,7 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-text-input
             v-model="model.location.blockNumber"
+            @input="handleInput"
             :loading="loadingPiiStep1"
             :rules="blockNumberRules"
             @blur="handleBlockNumber"
@@ -174,6 +178,7 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-text-input
             v-model="model.location.streetName"
+            @input="handleInput"
             :loading="loadingPiiStep1"
             :rules="
               model.stopVersion === 1 ? streetNameRules : streetNameRulesV2
@@ -194,6 +199,7 @@
               <v-col cols="12" sm="12">
                 <ripa-text-input
                   v-model="model.location.intersection"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="intersectionRules"
                   @blur="handlePiiCheck($event)"
@@ -207,6 +213,7 @@
               <v-col cols="12" sm="6">
                 <ripa-text-input
                   v-model="model.location.crossStreet1"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="crossStreetRules"
                   @blur="handlePiiCheck($event)"
@@ -216,6 +223,7 @@
               <v-col cols="12" sm="6">
                 <ripa-text-input
                   v-model="model.location.crossStreet2"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="crossStreetRules"
                   @blur="handlePiiCheck($event)"
@@ -227,6 +235,7 @@
 
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
+            @input="handleInput"
             :max-width="225"
             label="More Location Options"
           ></ripa-switch>
@@ -239,6 +248,7 @@
                 <v-col cols="12" sm="12" md="6">
                   <ripa-text-input
                     v-model="model.location.latitude"
+                    @input="handleInput"
                     :loading="loadingPiiStep1"
                     :rules="latitudeRules"
                     @blur="handleBlockNumber"
@@ -250,6 +260,7 @@
                 <v-col cols="12" sm="12" md="6">
                   <ripa-text-input
                     v-model="model.location.longitude"
+                    @input="handleInput"
                     :loading="loadingPiiStep1"
                     :rules="longitudeRules"
                     @blur="handlePiiCheck($event)"
@@ -264,6 +275,7 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
+              @input="handleInput"
               :loading="loadingPiiStep1"
               :rules="highwayRules"
               @blur="handlePiiCheck($event)"
@@ -275,6 +287,7 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
+              @input="handleInput"
               :loading="loadingPiiStep1"
               :rules="landmarkRules"
               @blur="handlePiiCheck($event)"
@@ -287,7 +300,7 @@
             <ripa-switch
               v-model="model.location.outOfCounty"
               :max-width="200"
-              @input="handleOutOfCountyToggle"
+              @input="handleOutOfCountyToggle, handleInput"
               label="City Out of County?"
             ></ripa-switch>
           </div>
@@ -298,6 +311,7 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-autocomplete
             v-model="model.location.city"
+            @input="handleInput"
             hint="Select 1 City (required)"
             persistent-hint
             item-text="fullName"
@@ -314,6 +328,7 @@
           <v-col cols="12" sm="12" md="6">
             <ripa-autocomplete
               v-model="model.location.beat"
+              @input="handleInput"
               hint="Select 1 Beat (required)"
               persistent-hint
               item-text="fullName"
@@ -368,29 +383,6 @@ export default {
     model: {
       get() {
         return this.value
-      },
-      set(newVal) {
-        if (!newVal.location.isSchool) {
-          newVal.location.school = null
-          newVal.person.isStudent = false
-          newVal.stopResult.resultsOfStop12 = false
-          newVal.stopResult.resultsOfStop13 = false
-        }
-
-        if (!newVal.location.toggleLocationOptions) {
-          newVal.location.highwayExit = null
-          newVal.location.landmark = null
-        }
-
-        const streetName = newVal.location?.streetName || ''
-        const highwayExit = newVal.location?.highwayExit || ''
-        const intersection = newVal.location?.intersection || ''
-        const landMark = newVal.location?.landMark || ''
-        const fullAddress =
-          streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
-        newVal.location.fullAddress = fullAddress
-
-        this.$emit('input', newVal)
       },
     },
 
@@ -620,6 +612,37 @@ export default {
   },
 
   methods: {
+    handleInput() {
+      this.updateModel()
+      this.$emit('input', this.model)
+    },
+
+    updateModel() {
+      if (!this.model.location.isSchool) {
+        this.model.location.school = null
+        this.model.person.isStudent = false
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+        this.model.person.perceivedOrKnownDisability =
+          this.model.person.perceivedOrKnownDisability.filter(
+            disability => disability !== 7,
+          )
+      }
+
+      if (!this.model.location.toggleLocationOptions) {
+        this.model.location.highwayExit = null
+        this.model.location.landmark = null
+      }
+
+      const streetName = this.model.location?.streetName || ''
+      const highwayExit = this.model.location?.highwayExit || ''
+      const intersection = this.model.location?.intersection || ''
+      const landMark = this.model.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.model.location.fullAddress = fullAddress
+    },
+
     handleCurrentLocation() {
       if (navigator.geolocation) {
         this.$emit('on-gps-location')
@@ -705,24 +728,6 @@ export default {
 
     handleFavoriteClick(favorite) {
       this.$emit('on-open-favorite-location', favorite.id)
-    },
-  },
-
-  watch: {
-    lastLocation: {
-      handler: async function (newVal) {
-        if (newVal) {
-          this.model.location = { ...newVal.newLocation }
-        }
-      },
-      deep: true,
-    },
-
-    model: {
-      handler: function (newVal) {
-        this.model = newVal
-      },
-      deep: true,
     },
   },
 
