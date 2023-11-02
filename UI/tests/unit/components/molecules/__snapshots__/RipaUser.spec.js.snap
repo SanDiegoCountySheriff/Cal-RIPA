@@ -99,7 +99,7 @@ exports[`Ripa User should match snapshot 1`] = `
           <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-24" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Other Type</label><input id="input-24" type="text"></div>
+                <div class="v-text-field__slot"><label for="input-24" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Description of Assignment</label><input id="input-24" type="text"></div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">

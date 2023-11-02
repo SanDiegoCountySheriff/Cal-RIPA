@@ -91,18 +91,12 @@
           </v-col>
         </v-row>
 
-        <template
-          v-if="
-            model.assignment === 10 ||
-            model.assignment === 11 ||
-            model.assignment === 12
-          "
-        >
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -140,18 +134,12 @@
           </v-col>
         </v-row>
 
-        <template
-          v-if="
-            model.assignment === 10 ||
-            model.assignment === 11 ||
-            model.assignment === 12
-          "
-        >
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -312,7 +300,7 @@ export default {
     otherTypeRules() {
       const assignment = this.viewModel.assignment
       const otherType = this.viewModel.otherType
-      if (assignment !== 10 && assignment !== 11 && assignment !== 12) {
+      if (assignment !== 10 && assignment !== 11) {
         return []
       }
 
