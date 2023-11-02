@@ -231,7 +231,6 @@ describe('Ripa Location', () => {
 
     const updatedStop = stop
 
-    // set highway, leave exit empty
     updatedStop.location.highway = 'Valid Highway'
     updatedStop.location.exit = ''
 
