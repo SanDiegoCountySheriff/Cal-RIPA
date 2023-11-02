@@ -14,7 +14,9 @@ public class Location : ILocation
     public string BlockNumber { get; set; }
     public string LandMark { get; set; }
     public string StreetName { get; set; }
-    public string HighwayExit { get; set; }
+    public string Highway { get; set; }
+    [JsonConverter(typeof(ConcreteConverter<City>))]
+    public string Exit { get; set; }
     [JsonConverter(typeof(ConcreteConverter<City>))]
     public ICity City { get; set; }
     [JsonConverter(typeof(ConcreteConverter<Beat>))]

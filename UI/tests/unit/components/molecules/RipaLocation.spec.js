@@ -111,14 +111,12 @@ describe('Ripa Location', () => {
 
   schoolTestCases.forEach(test => {
     it(`should validate school: ${test.school} as: ${test.expected}`, () => {
+      stop.location.isSchool = true
+      stop.location.school = test.school
       wrapper = factory({
         value: stop,
         schools: schoolsList,
       })
-
-      stop.location.isSchool = true
-      stop.location.school = test.school
-      wrapper.vm.model = stop
 
       expect(wrapper.vm.schoolRules).toEqual(test.expected)
     })
@@ -134,7 +132,6 @@ describe('Ripa Location', () => {
 
     stop.location.blockNumber = '1000'
     stop.location.streetName = 'Test'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.blockNumberRules).toStrictEqual([true, true])
   })
@@ -149,7 +146,6 @@ describe('Ripa Location', () => {
 
     stop.location.blockNumber = '12'
     stop.location.streetName = 'V2 Test'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.blockNumberRulesV2).toStrictEqual([true, true])
   })
@@ -163,7 +159,6 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
   })
@@ -177,7 +172,6 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRulesV2).toStrictEqual([true, true])
   })
@@ -191,7 +185,6 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.intersection = ''
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.intersectionRules).toEqual([
       'An intersection is required',
@@ -199,19 +192,16 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
 
     stop.location.intersection = null
     stop.location.blockNumber = '1000'
     stop.location.streetName = 'Anystreet St'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
 
     stop.location.intersection = '5th and Main'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.streetNameRules).toStrictEqual([true, true])
   })
@@ -225,9 +215,92 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.highwayExit = 'Exit 1A'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.highwayRules).toStrictEqual([true, true])
+  })
+
+  it('should validate highway V2', () => {
+    stop.location.toggleLocationOptions = true
+    wrapper = factory({ value: stop })
+
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      'Must fill out both highway and exit in order to use highway and exit',
+      'Highway must be between 1 and 75 characters',
+      'Closest exit must be between 1 and 50 characters',
+    ])
+
+    const updatedStop = stop
+
+    // set highway, leave exit empty
+    updatedStop.location.highway = 'Valid Highway'
+    updatedStop.location.exit = ''
+
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      'Must fill out both highway and exit in order to use highway and exit',
+      true,
+      'Closest exit must be between 1 and 50 characters',
+    ])
+
+    updatedStop.location.exit = 'Valid Exit'
+    updatedStop.location.highway = ''
+
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      'Must fill out both highway and exit in order to use highway and exit',
+      'Highway must be between 1 and 75 characters',
+      true,
+    ])
+
+    updatedStop.location.exit = 'x'.repeat(51)
+    updatedStop.location.highway = 'Valid Highway'
+
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      true,
+      true,
+      'Closest exit must be between 1 and 50 characters',
+    ])
+
+    updatedStop.location.highway = 'x'.repeat(76)
+    updatedStop.location.exit = 'Valid Exit'
+
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      true,
+      'Highway must be between 1 and 75 characters',
+      true,
+    ])
+
+    updatedStop.location.highway = 'Highway'
+    updatedStop.location.exit = 'Exit'
+    wrapper.vm.propsData = { value: updatedStop }
+    wrapper.vm.handleInput()
+
+    expect(wrapper.vm.highwayRulesV2).toStrictEqual([true, true, true])
+  })
+
+  it.skip('should validate exit V2', () => {
+    wrapper = factory({ value: stop })
+    stop.location.toggleLocationOptions = true
+    expect(wrapper.vm.highwayRulesV2).toEqual([
+      'Must fill out both highway and exit in order to use highway and exit',
+      'Highway must be between 1 and 75 characters',
+      'Closest exit must be between 1 and 50 characters',
+    ])
+
+    stop.location.exit = 'Exit'
+    wrapper.vm.model = stop
+
+    expect(wrapper.vm.highwayRulesV2).toStrictEqual([true, true])
   })
 
   it('should validate landmark', () => {
@@ -239,7 +312,6 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.landmark = 'Exit 1A'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.landmarkRules).toStrictEqual([true, true])
   })
@@ -253,7 +325,6 @@ describe('Ripa Location', () => {
     ])
 
     stop.location.landmark = 'Exit 1A'
-    wrapper.vm.model = stop
 
     expect(wrapper.vm.landmarkRulesV2).toStrictEqual([true, true])
   })
