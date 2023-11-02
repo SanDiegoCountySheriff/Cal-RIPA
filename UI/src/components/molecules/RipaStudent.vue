@@ -49,7 +49,10 @@ export default {
           this.model.person.perceivedOrKnownDisability.filter(
             disability => disability !== 7,
           )
-
+        this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+            item => item !== 1,
+          )
         if (
           this.model.stopReason.reasonForStop === 7 ||
           this.model.stopReason.reasonForStop === 8
@@ -60,8 +63,8 @@ export default {
         }
 
         if (
-          this.model.actionsTaken.actionsTakenDuringStop !== null &&
-          this.model.actionsTaken.actionsTakenDuringStop.length > 0
+          this.model.actionsTaken?.actionsTakenDuringStop !== null &&
+          this.model.actionsTaken?.actionsTakenDuringStop.length > 0
         ) {
           this.model.actionsTaken.actionsTakenDuringStop =
             this.model.actionsTaken.actionsTakenDuringStop.filter(
