@@ -404,7 +404,7 @@ export default {
     cityRules() {
       const city = this.model.location.city
 
-      return [city !== null || 'A city is required']
+      return [(city !== null && city !== '') || 'A city is required']
     },
 
     beatRules() {
