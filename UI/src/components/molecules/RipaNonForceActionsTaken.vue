@@ -342,7 +342,6 @@ export default {
       if (!this.model.person.isStudent) {
         filteredItems = filteredItems.filter(item => item.value !== 1)
       }
-      console.log(filteredItems)
 
       if (
         this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
