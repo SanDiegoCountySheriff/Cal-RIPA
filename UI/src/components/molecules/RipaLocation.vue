@@ -116,6 +116,7 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
+            @input="handleInput"
             label="K-12 Public School"
             :max-width="200"
           ></ripa-switch>
@@ -123,6 +124,7 @@
           <template v-if="model.location.isSchool">
             <ripa-autocomplete
               v-model="model.location.school"
+              @input="handleInput"
               hint="Select 1 School (required)"
               item-text="fullName"
               item-value="cdsCode"
@@ -139,6 +141,7 @@
 
           <ripa-alert
             v-if="model.location.piiFound"
+            @input="handleInput"
             alert-outlined
             alert-type="warning"
           >
@@ -161,8 +164,11 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-text-input
             v-model="model.location.blockNumber"
+            @input="handleInput"
             :loading="loadingPiiStep1"
-            :rules="blockNumberRules"
+            :rules="
+              model.stopVersion === 1 ? blockNumberRules : blockNumberRulesV2
+            "
             @blur="handleBlockNumber"
             label="Block Number"
             numbers-only
@@ -174,8 +180,11 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-text-input
             v-model="model.location.streetName"
+            @input="handleInput"
             :loading="loadingPiiStep1"
-            :rules="streetNameRules"
+            :rules="
+              model.stopVersion === 1 ? streetNameRules : streetNameRulesV2
+            "
             @blur="handlePiiCheck($event)"
             label="Street Name"
           >
@@ -192,6 +201,7 @@
               <v-col cols="12" sm="12">
                 <ripa-text-input
                   v-model="model.location.intersection"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="intersectionRules"
                   @blur="handlePiiCheck($event)"
@@ -205,6 +215,7 @@
               <v-col cols="12" sm="6">
                 <ripa-text-input
                   v-model="model.location.crossStreet1"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="crossStreetRules"
                   @blur="handlePiiCheck($event)"
@@ -214,6 +225,7 @@
               <v-col cols="12" sm="6">
                 <ripa-text-input
                   v-model="model.location.crossStreet2"
+                  @input="handleInput"
                   :loading="loadingPiiStep1"
                   :rules="crossStreetRules"
                   @blur="handlePiiCheck($event)"
@@ -225,6 +237,7 @@
 
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
+            @input="handleInput"
             :max-width="225"
             label="More Location Options"
           ></ripa-switch>
@@ -237,6 +250,7 @@
                 <v-col cols="12" sm="12" md="6">
                   <ripa-text-input
                     v-model="model.location.latitude"
+                    @input="handleInput"
                     :loading="loadingPiiStep1"
                     :rules="latitudeRules"
                     @blur="handleBlockNumber"
@@ -248,6 +262,7 @@
                 <v-col cols="12" sm="12" md="6">
                   <ripa-text-input
                     v-model="model.location.longitude"
+                    @input="handleInput"
                     :loading="loadingPiiStep1"
                     :rules="longitudeRules"
                     @blur="handlePiiCheck($event)"
@@ -262,6 +277,7 @@
 
             <ripa-text-input
               v-model="model.location.highwayExit"
+              @input="handleInput"
               :loading="loadingPiiStep1"
               :rules="highwayRules"
               @blur="handlePiiCheck($event)"
@@ -273,8 +289,9 @@
 
             <ripa-text-input
               v-model="model.location.landmark"
+              @input="handleInput"
               :loading="loadingPiiStep1"
-              :rules="landmarkRules"
+              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
               @blur="handlePiiCheck($event)"
               label="Road marker, landmark, or other"
             >
@@ -285,7 +302,7 @@
             <ripa-switch
               v-model="model.location.outOfCounty"
               :max-width="200"
-              @input="handleOutOfCountyToggle"
+              @input="handleOutOfCountyToggle, handleInput"
               label="City Out of County?"
             ></ripa-switch>
           </div>
@@ -296,6 +313,7 @@
         <v-col cols="12" sm="12" md="6">
           <ripa-autocomplete
             v-model="model.location.city"
+            @input="handleInput"
             hint="Select 1 City (required)"
             persistent-hint
             item-text="fullName"
@@ -312,6 +330,7 @@
           <v-col cols="12" sm="12" md="6">
             <ripa-autocomplete
               v-model="model.location.beat"
+              @input="handleInput"
               hint="Select 1 Beat (required)"
               persistent-hint
               item-text="fullName"
@@ -367,29 +386,6 @@ export default {
       get() {
         return this.value
       },
-      set(newVal) {
-        if (!newVal.location.isSchool) {
-          newVal.location.school = null
-          newVal.person.isStudent = false
-          newVal.stopResult.resultsOfStop12 = false
-          newVal.stopResult.resultsOfStop13 = false
-        }
-
-        if (!newVal.location.toggleLocationOptions) {
-          newVal.location.highwayExit = null
-          newVal.location.landmark = null
-        }
-
-        const streetName = newVal.location?.streetName || ''
-        const highwayExit = newVal.location?.highwayExit || ''
-        const intersection = newVal.location?.intersection || ''
-        const landMark = newVal.location?.landMark || ''
-        const fullAddress =
-          streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
-        newVal.location.fullAddress = fullAddress
-
-        this.$emit('input', newVal)
-      },
     },
 
     getCities() {
@@ -435,6 +431,19 @@ export default {
       ]
     },
 
+    blockNumberRulesV2() {
+      const blockNumber = this.model.location.blockNumber
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (blockNumber !== null && blockNumber !== '') ||
+          'A block number is required',
+        this.isLocationOptionsFilledV2 ||
+          (blockNumber.length >= 1 && blockNumber.length <= 8) ||
+          'Block number must be between 1 and 8 characters',
+      ]
+    },
+
     latitudeRules() {
       const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
 
@@ -473,6 +482,19 @@ export default {
       ]
     },
 
+    streetNameRulesV2() {
+      const streetName = this.model.location.streetName
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+        this.isLocationOptionsFilledV2 ||
+          (streetName.length >= 1 && streetName.length <= 50) ||
+          'Street name must be between 1 and 50 characters',
+      ]
+    },
+
     intersectionRules() {
       const intersection = this.model.location.intersection
 
@@ -491,10 +513,10 @@ export default {
       const crossStreet2 = this.model.location.crossStreet2 || ''
 
       return [
-        this.isLocationOptionsFilled ||
+        this.isLocationOptionsFilledV2 ||
           (!!crossStreet1 && !!crossStreet2) ||
           'Must fill out both cross streets in order to use cross streets',
-        (this.isLocationOptionsFilled &&
+        (this.isLocationOptionsFilledV2 &&
           crossStreet1.length < 50 &&
           crossStreet2.length < 50) ||
           'Cross streets must be 50 characters or less',
@@ -508,14 +530,15 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && highwayExit !== null) ||
+          (checked && highwayExit !== null && highwayExit !== '') ||
           'A highway and closest exit is required',
         this.isLocationOptionsFilled ||
           (checked &&
             highwayExit &&
             highwayExit.length >= 5 &&
             highwayExit.length <= 250 &&
-            landmark !== null) ||
+            landmark !== null &&
+            landmark !== '') ||
           'Highway and closest exit must be between 5 and 250 characters',
       ]
     },
@@ -527,15 +550,36 @@ export default {
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && landmark !== null) ||
+          (checked && landmark !== null && landmark !== '') ||
           'A road marker, landmark, or other description is required',
         this.isLocationOptionsFilled ||
           (checked &&
             landmark &&
             landmark.length >= 5 &&
             landmark.length <= 250 &&
-            highwayExit !== null) ||
+            highwayExit !== null &&
+            highwayExit !== '') ||
           'Road marker, landmark or other description must be between 5 and 250 characters',
+      ]
+    },
+
+    landmarkRulesV2() {
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (checked && landmark !== null && landmark !== '') ||
+          'A road marker, landmark, or other description is required',
+        this.isLocationOptionsFilledV2 ||
+          (checked &&
+            landmark !== null &&
+            landmark !== '' &&
+            landmark.length >= 5 &&
+            landmark.length <= 150 &&
+            highwayExit !== null &&
+            highwayExit !== '') ||
+          'Road marker, landmark or other description must be between 5 and 150 characters',
       ]
     },
 
@@ -581,6 +625,53 @@ export default {
 
       return isValid
     },
+
+    isLocationOptionsFilledV2() {
+      const blockNumber = this.model.location.blockNumber
+      const streetName = this.model.location.streetName
+      const intersection = this.model.location.intersection
+      const crossStreet1 = this.model.location.crossStreet1
+      const crossStreet2 = this.model.location.crossStreet2
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+
+      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
+      const isLatitudeValid =
+        latitudeRegex.test(this.model.location.latitude) &&
+        this.model.location.latitude
+
+      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
+      const isLongitudeValid = longitudeRegex.test(
+        this.model.location.longitude,
+      )
+
+      const isValid =
+        (blockNumber !== null &&
+          blockNumber !== '' &&
+          streetName &&
+          streetName.length > 0 &&
+          blockNumber.length >= 1 &&
+          blockNumber.length <= 8 &&
+          streetName.length >= 1 &&
+          streetName.length <= 50) ||
+        (intersection &&
+          intersection.length >= 5 &&
+          this.model.stopVersion === 1) ||
+        (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
+        (checked &&
+          highwayExit !== null &&
+          highwayExit.length >= 5 &&
+          highwayExit.length <= 250) ||
+        (checked &&
+          landmark !== null &&
+          landmark !== '' &&
+          landmark.length >= 5 &&
+          landmark.length <= 150) ||
+        (isLatitudeValid && isLongitudeValid)
+
+      return isValid
+    },
   },
 
   async created() {
@@ -603,6 +694,37 @@ export default {
   },
 
   methods: {
+    handleInput() {
+      this.updateModel()
+      this.$emit('input', this.model)
+    },
+
+    updateModel() {
+      if (!this.model.location.isSchool) {
+        this.model.location.school = null
+        this.model.person.isStudent = false
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+        this.model.person.perceivedOrKnownDisability =
+          this.model.person.perceivedOrKnownDisability.filter(
+            disability => disability !== 7,
+          )
+      }
+
+      if (!this.model.location.toggleLocationOptions) {
+        this.model.location.highwayExit = null
+        this.model.location.landmark = null
+      }
+
+      const streetName = this.model.location?.streetName || ''
+      const highwayExit = this.model.location?.highwayExit || ''
+      const intersection = this.model.location?.intersection || ''
+      const landMark = this.model.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.model.location.fullAddress = fullAddress
+    },
+
     handleCurrentLocation() {
       if (navigator.geolocation) {
         this.$emit('on-gps-location')
@@ -625,9 +747,15 @@ export default {
     },
 
     handleBlockNumber() {
-      this.model.location.blockNumber = this.parseBlockNumber(
-        this.model.location.blockNumber,
-      )
+      if (this.model.stopVersion === 1) {
+        this.model.location.blockNumber = this.parseBlockNumber(
+          this.model.location.blockNumber,
+        )
+      } else {
+        this.model.location.blockNumber = this.parseBlockNumberV2(
+          this.model.location.blockNumber,
+        )
+      }
     },
 
     handlePiiCheck(event) {
@@ -649,6 +777,34 @@ export default {
       if (blockNumber !== null && blockNumber.length > 0) {
         const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
         blockNumber = calcBlockNumber
+      }
+
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
+    },
+
+    parseBlockNumberV2(value) {
+      let blockNumber = value
+
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const numDigits = blockNumber.length
+
+        if (numDigits <= 2) {
+          if (blockNumber < 10) {
+            blockNumber = 0
+          } else {
+            const lastDigit = parseInt(blockNumber.toString().slice(-1))
+            blockNumber -= lastDigit
+          }
+        } else {
+          const lastTwoDigits = parseInt(blockNumber.toString().slice(-2))
+          blockNumber -= lastTwoDigits % 100
+        }
       }
 
       const result =
@@ -696,14 +852,8 @@ export default {
       handler: async function (newVal) {
         if (newVal) {
           this.model.location = { ...newVal.newLocation }
+          this.handleInput()
         }
-      },
-      deep: true,
-    },
-
-    model: {
-      handler: function (newVal) {
-        this.model = newVal
       },
       deep: true,
     },

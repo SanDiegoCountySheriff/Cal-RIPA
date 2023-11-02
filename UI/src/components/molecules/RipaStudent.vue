@@ -13,8 +13,9 @@
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.person.isStudent"
-            label="K-12 Public School Student"
             :max-width="250"
+            @input="handleInput"
+            label="K-12 Public School Student"
           ></ripa-switch>
         </v-col>
       </v-row>
@@ -34,47 +35,48 @@ export default {
     RipaFormHeader,
   },
 
+  methods: {
+    handleInput() {
+      this.updateModel()
+      this.$emit('input', this.model)
+    },
+
+    updateModel() {
+      if (!this.model.person.isStudent) {
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+        this.model.person.perceivedOrKnownDisability =
+          this.model.person.perceivedOrKnownDisability.filter(
+            disability => disability !== 7,
+          )
+
+        if (
+          this.model.stopReason.reasonForStop === 7 ||
+          this.model.stopReason.reasonForStop === 8
+        ) {
+          this.model.stopReason.reasonForStop = null
+          this.model.stopReason.educationViolation = null
+          this.model.stopReason.educationViolationCode = null
+        }
+
+        if (
+          this.model.actionsTaken.actionsTakenDuringStop !== null &&
+          this.model.actionsTaken.actionsTakenDuringStop.length > 0
+        ) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 23,
+            )
+        }
+      }
+    },
+  },
+
   computed: {
     model: {
       get() {
         return this.value
       },
-      set(newVal) {
-        if (!newVal.person.isStudent) {
-          newVal.stopResult.resultsOfStop12 = false
-          newVal.stopResult.resultsOfStop13 = false
-
-          if (
-            newVal.stopReason.reasonForStop === 7 ||
-            newVal.stopReason.reasonForStop === 8
-          ) {
-            newVal.stopReason.reasonForStop = null
-            newVal.stopReason.educationViolation = null
-            newVal.stopReason.educationViolationCode = null
-          }
-
-          if (
-            newVal.actionsTaken.actionsTakenDuringStop !== null &&
-            newVal.actionsTaken.actionsTakenDuringStop.length > 0
-          ) {
-            newVal.actionsTaken.actionsTakenDuringStop =
-              newVal.actionsTaken.actionsTakenDuringStop.filter(
-                item => item !== 23,
-              )
-          }
-        }
-
-        this.$emit('input', newVal)
-      },
-    },
-  },
-
-  watch: {
-    model: {
-      handler: function (newVal) {
-        this.model = newVal
-      },
-      deep: true,
     },
   },
 
