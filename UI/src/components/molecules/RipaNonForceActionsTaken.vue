@@ -343,12 +343,29 @@ export default {
         filteredItems = filteredItems.filter(item => item.value !== 1)
       }
 
+      if (
+        this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
+          14,
+        )
+      ) {
+        filteredItems = filteredItems.filter(item => item.value !== 16)
+      }
+
       return filteredItems
     },
 
     getNonForceActionsTakenSearchItems() {
       return this.nonForceActionsTakenItems
-        .filter(item => [2, 3, 14, 15].includes(item.value))
+        .filter(item => {
+          if (
+            !this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
+              16,
+            )
+          ) {
+            return [2, 3, 14, 15].includes(item.value)
+          }
+          return [2, 3, 15].includes(item.value)
+        })
         .map(item => {
           return {
             ...item,
