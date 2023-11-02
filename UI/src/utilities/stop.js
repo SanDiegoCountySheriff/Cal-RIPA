@@ -146,7 +146,7 @@ export const defaultStop = () => {
       perceivedRace: [],
       insideResidence: null,
       passengerInVehicle: null,
-      perceivedUnhoused: null,
+      perceivedUnhoused: false,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
