@@ -96,8 +96,8 @@ public class StopService : IStopService
                 StreetName = locationType == "2" ? stopLocation.StreetName : string.Empty,
                 CrossStreet1 = locationType == "3" ? stopLocation.CrossStreet1 : string.Empty,
                 CrossStreet2 = locationType == "3" ? stopLocation.CrossStreet2 : string.Empty,
-                Highway = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
-                ClosestExit = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
+                Highway = locationType == "4" ? stopLocation.Highway : string.Empty,
+                ClosestExit = locationType == "4" ? stopLocation.Exit : string.Empty,
                 OtherLocation = locationType == "5" ? stopLocation.LandMark : string.Empty,
                 City = stopLocation.City?.Codes?.Code,
                 K12_Flag = stopLocation.School ? "Y" : string.Empty,
@@ -127,7 +127,7 @@ public class StopService : IStopService
             return "3";
         }
 
-        if (!string.IsNullOrWhiteSpace(location.HighwayExit))
+        if (!string.IsNullOrWhiteSpace(location.Highway) && !string.IsNullOrWhiteSpace(location.Exit))
         {
             return "4";
         }
