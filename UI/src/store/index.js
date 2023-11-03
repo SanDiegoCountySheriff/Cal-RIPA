@@ -291,6 +291,8 @@ export default new Vuex.Store({
         longitude,
         beat: null,
         school: null,
+        highway: '',
+        exit: '',
       }
     },
     mappedErrorCodeAdminSearch: state => {

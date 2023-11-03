@@ -252,9 +252,7 @@
                     v-model="model.location.latitude"
                     @input="handleInput"
                     :loading="loadingPiiStep1"
-                    :rules="
-                      model.stopVersion === 1 ? latitudeRules : latitudeRulesV2
-                    "
+                    :rules="latitudeRules"
                     @blur="handleBlockNumber"
                     label="Latitude"
                   >
@@ -266,11 +264,7 @@
                     v-model="model.location.longitude"
                     @input="handleInput"
                     :loading="loadingPiiStep1"
-                    :rules="
-                      model.stopVersion === 1
-                        ? longitudeRules
-                        : longitudeRulesV2
-                    "
+                    :rules="longitudeRules"
                     @blur="handlePiiCheck($event)"
                     label="Longitude"
                   >
@@ -484,18 +478,6 @@ export default {
       const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
 
       return [
-        v => this.isLocationOptionsFilled || !!v || 'Latitude is required',
-        v =>
-          this.isLocationOptionsFilled ||
-          regex.test(v) ||
-          'A valid latitude with a maximum of 3 digits after the decimal is required',
-      ]
-    },
-
-    latitudeRulesV2() {
-      const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
-
-      return [
         v => this.isLocationOptionsFilledV2 || !!v || 'Latitude is required',
         v =>
           this.isLocationOptionsFilledV2 ||
@@ -505,18 +487,6 @@ export default {
     },
 
     longitudeRules() {
-      const regex = /^(-\d{3}\.\d{0,3})?$/
-
-      return [
-        v => this.isLocationOptionsFilled || !!v || 'Longitude is required',
-        v =>
-          this.isLocationOptionsFilled ||
-          regex.test(v) ||
-          'A valid negative longitude with a maximum of 3 digits after the decimal is required',
-      ]
-    },
-
-    longitudeRulesV2() {
       const regex = /^(-\d{3}\.\d{0,3})?$/
 
       return [
@@ -671,16 +641,6 @@ export default {
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
 
-      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
-      const isLatitudeValid =
-        latitudeRegex.test(this.model.location.latitude) &&
-        this.model.location.latitude
-
-      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
-      const isLongitudeValid = longitudeRegex.test(
-        this.model.location.longitude,
-      )
-
       const isValid =
         (blockNumber !== null &&
           blockNumber !== '' &&
@@ -698,8 +658,7 @@ export default {
         (checked &&
           landmark !== null &&
           landmark.length >= 5 &&
-          landmark.length <= 250) ||
-        (isLatitudeValid && isLongitudeValid)
+          landmark.length <= 250)
 
       return isValid
     },
