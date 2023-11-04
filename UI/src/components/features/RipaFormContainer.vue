@@ -239,9 +239,9 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
-      favoriteLocations: this.getFavoriteLocations,
-      favoriteReasons: this.getFavoriteReasons,
-      favoriteResults: this.getFavoriteResults,
+      favoriteLocations: computed(() => this.getFavoriteLocations),
+      favoriteReasons: computed(() => this.getFavoriteReasons),
+      favoriteResults: computed(() => this.getFavoriteResults),
     }
   },
 
@@ -341,7 +341,9 @@ export default {
                   location.favoritesSchoolExpired = true
                 }
               }
-              return location.version === this.version
+
+             return location
+             
             })
             .sort((a, b) => {
               if (!a.count) {
@@ -951,8 +953,8 @@ export default {
       }
     },
 
-    handleOpenLocationFavorites() {
-      this.favorites = this.getFavoriteLocations
+    handleOpenLocationFavorites(stopVersion) {
+      this.favorites = this.getFavoriteLocations.filter(item=>item.version === stopVersion)
       this.showLocationFavoritesDialog = true
     },
 

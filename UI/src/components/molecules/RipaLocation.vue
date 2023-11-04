@@ -51,63 +51,22 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteLocations[0]" class="text-center py-0">
-          Top 5 Favorites
+        <v-col v-if="favoriteLocations.length>0" class="text-center py-0">
+        Top 5 Favorites
         </v-col>
       </v-row>
-
+      
       <v-row>
         <v-col class="text-center">
           <v-btn
-            v-if="favoriteLocations[0]"
-            @click="handleFavoriteClick(favoriteLocations[0])"
+           v-for="(item, i) in favoriteLocations.filter(item=>item.version === model.stopVersion).slice(0,5)"
+            @click="handleFavoriteClick(item)"
             color="primary"
             class="mr-3 mb-2"
             small
             outlined
           >
-            {{ favoriteLocations[0].name }}
-          </v-btn>
-          <v-btn
-            v-if="favoriteLocations[1]"
-            @click="handleFavoriteClick(favoriteLocations[1])"
-            color="primary"
-            text-color="white"
-            class="mr-3 mb-2"
-            small
-            outlined
-          >
-            {{ favoriteLocations[1].name }}
-          </v-btn>
-          <v-btn
-            v-if="favoriteLocations[2]"
-            @click="handleFavoriteClick(favoriteLocations[2])"
-            color="primary"
-            class="mr-3 mb-2"
-            small
-            outlined
-          >
-            {{ favoriteLocations[2].name }}
-          </v-btn>
-          <v-btn
-            v-if="favoriteLocations[3]"
-            @click="handleFavoriteClick(favoriteLocations[3])"
-            color="primary"
-            class="mr-3 mb-2"
-            small
-            outlined
-          >
-            {{ favoriteLocations[3].name }}
-          </v-btn>
-          <v-btn
-            v-if="favoriteLocations[4]"
-            @click="handleFavoriteClick(favoriteLocations[4])"
-            color="primary"
-            class="mr-3 mb-2"
-            small
-            outlined
-          >
-            {{ favoriteLocations[4].name }}
+            {{ item.name }}
           </v-btn>
         </v-col>
       </v-row>
@@ -821,7 +780,7 @@ export default {
     },
 
     handleOpenFavorites() {
-      this.$emit('on-open-location-favorites')
+      this.$emit('on-open-location-favorites', this.model.stopVersion)
     },
 
     handleSaveFavorite() {

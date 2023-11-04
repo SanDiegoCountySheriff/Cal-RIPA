@@ -339,6 +339,7 @@ export default new Vuex.Store({
     isApiUnavailable: state => {
       return state.apiUnavailable
     },
+    // jmojicsh bookmark
     mappedVersion: state => {
       if (state.devTime) {
         return 2
@@ -1856,7 +1857,7 @@ export default new Vuex.Store({
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
     },
-
+    
     toggleDevTime({ commit }) {
       commit('toggleDevTime')
     },
