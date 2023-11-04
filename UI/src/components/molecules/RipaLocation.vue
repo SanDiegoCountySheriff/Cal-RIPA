@@ -51,7 +51,7 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteLocations.length>0" class="text-center py-0">
+        <v-col v-if="favoriteLocations.filter(item=>item.version === model.stopVersion).length>0" class="text-center py-0">
         Top 5 Favorites
         </v-col>
       </v-row>

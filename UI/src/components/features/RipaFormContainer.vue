@@ -391,7 +391,7 @@ export default {
                 reason.reason.trafficViolationCode = null
                 reason.favoritesCodeExpired = true
               }
-              return reason.version === this.version
+              return reason
             })
             .sort((a, b) => {
               if (a.count > b.count) {
@@ -958,8 +958,8 @@ export default {
       this.showLocationFavoritesDialog = true
     },
 
-    handleOpenReasonFavorites() {
-      this.favorites = this.getFavoriteReasons
+    handleOpenReasonFavorites(stopVersion) {
+      this.favorites = this.getFavoriteReasons.filter(item=>item.version === stopVersion)
       this.showReasonFavoritesDialog = true
     },
 
