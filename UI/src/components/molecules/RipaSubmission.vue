@@ -104,7 +104,7 @@
                 mdi-pencil
               </v-icon>
             </template>
-            <template #item.error="{ item }">
+            <template v-slot:item.error="{ item }">
               <div class="stopError" v-html="item.error"></div>
             </template>
             <template v-slot:item.edited="{ item }">

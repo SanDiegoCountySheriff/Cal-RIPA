@@ -234,15 +234,45 @@
 
             <ripa-subheader text="-- or --"></ripa-subheader>
 
-            <ripa-text-input
-              v-model="model.location.highwayExit"
-              @input="handleInput"
-              :loading="loadingPiiStep1"
-              :rules="highwayRules"
-              @blur="handlePiiCheck($event)"
-              label="Highway and closest exit"
-            >
-            </ripa-text-input>
+            <template v-if="model.stopVersion === 1">
+              <ripa-text-input
+                v-model="model.location.highwayExit"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="highwayRules"
+                @blur="handlePiiCheck($event)"
+                label="Highway and closest exit"
+              >
+              </ripa-text-input>
+            </template>
+
+            <template v-else-if="model.stopVersion === 2">
+              <v-row>
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.highway"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="highwayRulesV2"
+                    @blur="handlePiiCheck($event)"
+                    label="Highway"
+                  >
+                  </ripa-text-input>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.exit"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="highwayRulesV2"
+                    @blur="handlePiiCheck($event)"
+                    label="Closest Exit"
+                  >
+                  </ripa-text-input>
+                </v-col>
+              </v-row>
+            </template>
 
             <ripa-subheader text="-- or --"></ripa-subheader>
 
@@ -407,9 +437,9 @@ export default {
       const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
 
       return [
-        v => this.isLocationOptionsFilled || !!v || 'Latitude is required',
+        v => this.isLocationOptionsFilledV2 || !!v || 'Latitude is required',
         v =>
-          this.isLocationOptionsFilled ||
+          this.isLocationOptionsFilledV2 ||
           regex.test(v) ||
           'A valid latitude with a maximum of 3 digits after the decimal is required',
       ]
@@ -419,9 +449,9 @@ export default {
       const regex = /^(-\d{3}\.\d{0,3})?$/
 
       return [
-        v => this.isLocationOptionsFilled || !!v || 'Longitude is required',
+        v => this.isLocationOptionsFilledV2 || !!v || 'Longitude is required',
         v =>
-          this.isLocationOptionsFilled ||
+          this.isLocationOptionsFilledV2 ||
           regex.test(v) ||
           'A valid negative longitude with a maximum of 3 digits after the decimal is required',
       ]
@@ -502,6 +532,24 @@ export default {
       ]
     },
 
+    highwayRulesV2() {
+      const checked = this.model.location.toggleLocationOptions
+      const highway = this.model.location.highway || ''
+      const exit = this.model.location.exit || ''
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (!!highway && highway !== '' && !!exit && exit !== '') ||
+          'Must fill out both highway and exit in order to use highway and exit',
+        this.isLocationOptionsFilledV2 ||
+          (checked && highway && highway.length >= 1 && highway.length <= 75) ||
+          'Highway must be between 1 and 75 characters',
+        this.isLocationOptionsFilledV2 ||
+          (checked && exit && exit.length >= 1 && exit.length <= 50) ||
+          'Closest exit must be between 1 and 50 characters',
+      ]
+    },
+
     landmarkRules() {
       const checked = this.model.location.toggleLocationOptions
       const highwayExit = this.model.location.highwayExit
@@ -552,16 +600,6 @@ export default {
       const highwayExit = this.model.location.highwayExit
       const landmark = this.model.location.landmark
 
-      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
-      const isLatitudeValid =
-        latitudeRegex.test(this.model.location.latitude) &&
-        this.model.location.latitude
-
-      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
-      const isLongitudeValid = longitudeRegex.test(
-        this.model.location.longitude,
-      )
-
       const isValid =
         (blockNumber !== null &&
           blockNumber !== '' &&
@@ -579,8 +617,7 @@ export default {
         (checked &&
           landmark !== null &&
           landmark.length >= 5 &&
-          landmark.length <= 250) ||
-        (isLatitudeValid && isLongitudeValid)
+          landmark.length <= 250)
 
       return isValid
     },
@@ -592,7 +629,8 @@ export default {
       const crossStreet1 = this.model.location.crossStreet1
       const crossStreet2 = this.model.location.crossStreet2
       const checked = this.model.location.toggleLocationOptions
-      const highwayExit = this.model.location.highwayExit
+      const highway = this.model.location.highway
+      const exit = this.model.location.exit
       const landmark = this.model.location.landmark
 
       const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
@@ -619,9 +657,14 @@ export default {
           this.model.stopVersion === 1) ||
         (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
         (checked &&
-          highwayExit !== null &&
-          highwayExit.length >= 5 &&
-          highwayExit.length <= 250) ||
+          highway !== null &&
+          highway !== '' &&
+          highway.length >= 1 &&
+          highway.length <= 75 &&
+          exit !== null &&
+          exit !== '' &&
+          exit.length >= 1 &&
+          exit.length <= 50) ||
         (checked &&
           landmark !== null &&
           landmark !== '' &&

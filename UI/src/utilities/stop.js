@@ -68,6 +68,8 @@ const emptyLocation = () => {
     crossStreet2: '',
     toggleLocationOptions: false,
     highwayExit: '',
+    highway: '',
+    exit: '',
     landmark: '',
     outOfCounty: false,
     city: null,
@@ -387,6 +389,18 @@ const getSummaryLocation = apiStop => {
     children.push({
       header: 'Highway Exit',
       detail: apiStop.location.highwayExit,
+    })
+  }
+  if (apiStop.location.highway) {
+    children.push({
+      header: 'Highway',
+      detail: apiStop.location.highway,
+    })
+  }
+  if (apiStop.location.exit) {
+    children.push({
+      header: 'Closest Exit',
+      detail: apiStop.location.exit,
     })
   }
   if (apiStop.location.landMark) {
@@ -1200,7 +1214,8 @@ export const apiStopToFullStopV2 = apiStop => {
       crossStreet1: apiStop.location?.crossStreet1 || null,
       crossStreet2: apiStop.location?.crossStreet2 || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
-      highwayExit: apiStop.location?.highwayExit || null,
+      highway: apiStop.location?.highway || null,
+      exit: apiStop.location?.exit || null,
       landmark: apiStop.location?.landMark || null,
       piiFound: apiStop.location?.piiFound || false,
       outOfCounty: apiStop.location?.outOfCounty || false,
@@ -1871,7 +1886,8 @@ export const fullStopToApiStopV2 = (
       blockNumber: blockNumber && streetName ? blockNumber : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
-      highwayExit: fullStop.location?.highwayExit || '',
+      highway: fullStop.location?.highway || '',
+      exit: fullStop.location?.exit || '',
       crossStreet1: fullStop.location?.crossStreet1 || '',
       crossStreet2: fullStop.location?.crossStreet2 || '',
       landMark: fullStop.location?.landmark || '',
