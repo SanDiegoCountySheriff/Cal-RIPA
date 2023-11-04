@@ -509,7 +509,7 @@ export default {
 
               result.result.custodialArrestCodes = updatedCustodialArrestCodes
 
-              return result.version === this.version
+              return result
             })
             .sort((a, b) => {
               if (a.count > b.count) {
@@ -963,8 +963,8 @@ export default {
       this.showReasonFavoritesDialog = true
     },
 
-    handleOpenResultFavorites() {
-      this.favorites = this.getFavoriteResults
+    handleOpenResultFavorites(stopVersion) {
+      this.favorites = this.getFavoriteResults.filter(item=>item.version === stopVersion)
       this.showResultFavoritesDialog = true
     },
 
