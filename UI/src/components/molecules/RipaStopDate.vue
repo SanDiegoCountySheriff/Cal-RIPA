@@ -129,7 +129,6 @@ export default {
   },
 
   inject: ['isAdminEditing', 'environmentName'],
-
   mounted() {
     if (this.devTime) {
       this.model.stopDate.date = format(new Date('2024-01-03'), 'yyyy-MM-dd')

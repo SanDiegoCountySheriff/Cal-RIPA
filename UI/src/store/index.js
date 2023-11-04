@@ -1858,7 +1858,7 @@ export default new Vuex.Store({
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
     },
-
+    
     toggleDevTime({ commit }) {
       commit('toggleDevTime')
     },

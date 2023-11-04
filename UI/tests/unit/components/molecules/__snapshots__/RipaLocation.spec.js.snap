@@ -34,13 +34,7 @@ exports[`Ripa Location should match snapshot 1`] = `
       <!---->
     </div>
     <div class="row">
-      <div class="text-center col">
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-      </div>
+      <div class="text-center col"></div>
     </div>
     <div class="row">
       <div class="col-sm-12 col-12">
