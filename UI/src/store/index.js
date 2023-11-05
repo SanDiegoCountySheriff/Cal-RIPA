@@ -947,7 +947,7 @@ export default new Vuex.Store({
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
         .put(
-          `http://localhost:7071/api/v${stop.stopVersion}/PutStop/${stop.id}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${stop.stopVersion}/PutStop/${stop.id}`,
           stop,
           {
             headers: {
@@ -1400,7 +1400,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `http://localhost:7071/api/v${state.version}/GetStops?officerId=${officerId}&limit=10`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops?officerId=${officerId}&limit=10`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1490,7 +1490,7 @@ export default new Vuex.Store({
       }
       return axios
         .get(
-          `http://localhost:7071/api/v${state.version}/GetStops${queryString}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1516,7 +1516,7 @@ export default new Vuex.Store({
     getAdminStopAudits({ state }, stopId) {
       return axios
         .get(
-          `http://localhost:7071/api/v${state.version}/GetStopAudits?id=${stopId}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStopAudits?id=${stopId}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -1681,7 +1681,7 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `http://localhost:7071/api/v${state.version}/GetErrorCodes?search=${value}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
