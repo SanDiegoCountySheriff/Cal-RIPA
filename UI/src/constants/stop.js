@@ -24,4 +24,24 @@ export const SUBMISSION_STATUSES = [
     value: 'Pending',
     isEditable: false,
   },
+  {
+    text: 'Pending NFIA',
+    value: 'Pending_NFIA',
+    isEditable: false,
+  },
+  {
+    text: 'Unsubmitted NFIA',
+    value: 'Unsubmitted_NFIA',
+    isEditable: true,
+  },
+  {
+    text: 'Submitted NFIA',
+    value: 'Submitted_NFIA',
+    isEditable: false,
+  },
+  {
+    text: 'Failed NFIA',
+    value: 'Failed_NFIA',
+    isEditable: true,
+  },
 ]

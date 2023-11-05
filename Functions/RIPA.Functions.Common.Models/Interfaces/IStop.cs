@@ -30,4 +30,5 @@ public interface IStop
     StopVersion? StopVersion { get; set; }
     Telemetry Telemetry { get; set; }
     string Time { get; set; }
+    bool? Nfia { get; set; }
 }

@@ -169,7 +169,7 @@
           <template v-slot:item.actions="{ item }">
             <v-tooltip
               top
-              v-if="statuses.find(s => s.text === item.status).isEditable"
+              v-if="statuses.find(s => s.value === item.status).isEditable"
               content-class="custom-tooltip"
               open-delay="500"
             >
