@@ -149,48 +149,46 @@
         </template>
       </template>
 
-      <template v-if="version === 2">
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="12">
-            <ripa-select
-              v-model="model.officerRace"
-              :items="raceItems"
-              :rules="raceRules"
-              @input="handleInput"
-              label="Officer Race"
-              itemValue="name"
-              itemText="name"
-              clearable
-              multiple
-            ></ripa-select>
-          </v-col>
-        </v-row>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="12">
+          <ripa-select
+            v-model="model.officerRace"
+            :items="raceItems"
+            :rules="raceRules"
+            @input="handleInput"
+            label="Officer Race"
+            itemValue="name"
+            itemText="name"
+            clearable
+            multiple
+          ></ripa-select>
+        </v-col>
+      </v-row>
 
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <ripa-select
-              v-model="model.officerGender"
-              :items="genderItems"
-              :rules="genderRules"
-              @input="handleInput"
-              label="Officer Gender"
-              class="md:tw-mr-4"
-              itemValue="name"
-              itemText="name"
-              clearable
-            ></ripa-select>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <ripa-switch
-              v-model="model.officerNonBinary"
-              :rules="genderRules"
-              :max-width="250"
-              @input="handleInput"
-              label="Nonbinary Person"
-            ></ripa-switch>
-          </v-col>
-        </v-row>
-      </template>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-select
+            v-model="model.officerGender"
+            :items="genderItems"
+            :rules="genderRules"
+            @input="handleInput"
+            label="Officer Gender"
+            class="md:tw-mr-4"
+            itemValue="name"
+            itemText="name"
+            clearable
+          ></ripa-select>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-switch
+            v-model="model.officerNonBinary"
+            :rules="genderRules"
+            :max-width="250"
+            @input="handleInput"
+            label="Nonbinary Person"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>

@@ -35,7 +35,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
       <transition-stub name="v-snack-transition">
         <div class="v-snack__wrapper v-sheet theme--dark" style="display: none;">
           <div role="status" aria-live="polite" class="v-snack__content">
-            Recent regulation changes require the collection of officer race and gender. Please input these values now.
+            In order to prepare for the January 1st, 2024 regulation changes please input your race and gender information. This information will not be included on stops until January 1st, 2024.
 
           </div>
           <div class="v-snack__action ">
