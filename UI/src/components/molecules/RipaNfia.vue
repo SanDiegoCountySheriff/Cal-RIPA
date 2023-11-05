@@ -32,7 +32,7 @@
         </v-col>
         <v-col cols="12" sm="12">
           <ripa-switch
-            v-model="model.nfia"
+            v-model="viewModel.nfia"
             label="NFIA"
             :max-width="250"
             @input="handleInput"

@@ -21,9 +21,16 @@ public class StopService : IStopService
 
     public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
-        stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+        if (stop.Status == SubmissionStatus.Pending.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted.ToString();
+        }
+        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted_NFIA.ToString();
+        }
 
-        if (stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.Status != SubmissionStatus.Submitted_NFIA.ToString() && stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
         }

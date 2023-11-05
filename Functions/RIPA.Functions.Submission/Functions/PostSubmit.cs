@@ -140,7 +140,14 @@ public class PostSubmit
 
             foreach (var stop in stopResponse)
             {
-                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Pending);
+                if (stop.Status == SubmissionStatus.Unsubmitted.ToString())
+                {
+                    stop.Status = SubmissionStatus.Pending.ToString();
+                }
+                else if (stop.Status == SubmissionStatus.Unsubmitted_NFIA.ToString())
+                {
+                    stop.Status = SubmissionStatus.Pending_NFIA.ToString();
+                }
 
                 if (stop.StopVersion == StopVersion.V2)
                 {
@@ -167,7 +174,15 @@ public class PostSubmit
         {
             foreach (var stop in stopResponse)
             {
-                stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
+                if (stop.Status == SubmissionStatus.Pending.ToString())
+                {
+                    stop.Status = SubmissionStatus.Unsubmitted.ToString();
+                }
+                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+                {
+                    stop.Status = SubmissionStatus.Unsubmitted_NFIA.ToString();
+                }
+
                 if (stop.StopVersion == StopVersion.V2)
                 {
                     await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);

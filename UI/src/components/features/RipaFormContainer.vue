@@ -1103,7 +1103,7 @@ export default {
         updatedFullStop.favoriteResultName = this.stop.favoriteResultName || ''
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
-        updatedFullStop.nfia = this.stop.nifa
+        updatedFullStop.nfia = this.stop.nfia
         updatedFullStop.internalId = this.stop.internalId
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace

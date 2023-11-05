@@ -275,11 +275,25 @@ public class SubmissionConsumer
 
             if (stop.StopVersion == StopVersion.V2)
             {
-                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+                if (stop.Status == SubmissionStatus.Pending.ToString())
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Failed.ToString()));
+                }
+                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Failed_NFIA.ToString()));
+                }
             }
             else
             {
-                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed)));
+                if (stop.Status == SubmissionStatus.Pending.ToString())
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Failed.ToString()));
+                }
+                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Failed_NFIA.ToString()));
+                }
             }
 
             return true;
@@ -417,11 +431,25 @@ public class SubmissionConsumer
 
             if (stop.StopVersion == StopVersion.V2)
             {
-                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+                if (stop.Status == SubmissionStatus.Pending.ToString())
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Unsubmitted.ToString()));
+                }
+                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+                {
+                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Unsubmitted_NFIA.ToString()));
+                }
             }
             else
             {
-                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted)));
+                if (stop.Status == SubmissionStatus.Pending.ToString())
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Unsubmitted.ToString()));
+                }
+                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+                {
+                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Unsubmitted_NFIA.ToString()));
+                }
             }
             return;
         }
