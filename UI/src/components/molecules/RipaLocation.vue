@@ -51,15 +51,24 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteLocations.filter(item=>item.version === model.stopVersion).length>0" class="text-center py-0">
-        Top 5 Favorites
+        <v-col
+          v-if="
+            favoriteLocations.filter(item => item.version === model.stopVersion)
+              .length > 0
+          "
+          class="text-center py-0"
+        >
+          Top 5 Favorites
         </v-col>
       </v-row>
-      
+
       <v-row>
         <v-col class="text-center">
           <v-btn
-           v-for="(item, i) in favoriteLocations.filter(item=>item.version === model.stopVersion).slice(0,5)"
+            v-for="(item, index) in favoriteLocations
+              .filter(item => item.version === model.stopVersion)
+              .slice(0, 5)"
+            :key="index"
             @click="handleFavoriteClick(item)"
             color="primary"
             class="mr-3 mb-2"

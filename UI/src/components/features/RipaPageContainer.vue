@@ -124,7 +124,7 @@ export default {
       apiStopJobLoading: false,
       snackbarUpdateUser: false,
       officerGenderRaceText:
-        'Recent regulation changes require the collection of officer race and gender. Please input these values now.',
+        'In order to prepare for the January 1st, 2024 regulation changes please input your race and gender information.  This information will not be included on stops until January 1st, 2024.',
       snackbarOfficerRaceGender: false,
     }
   },

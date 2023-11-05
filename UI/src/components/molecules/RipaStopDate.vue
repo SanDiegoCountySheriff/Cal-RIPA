@@ -109,7 +109,6 @@ import {
   formatToIsoCurrentDate,
   formatToIsoDate,
 } from '@/utilities/dates'
-import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-date',
@@ -124,16 +123,11 @@ export default {
 
   data() {
     return {
-      devTime: this.environmentName === 'DEV',
+      devTime: false,
     }
   },
 
   inject: ['isAdminEditing', 'environmentName'],
-  mounted() {
-    if (this.devTime) {
-      this.model.stopDate.date = format(new Date('2024-01-03'), 'yyyy-MM-dd')
-    }
-  },
 
   computed: {
     model: {
@@ -141,7 +135,10 @@ export default {
         return this.value
       },
       set(newVal) {
-        if (new Date(newVal.stopDate.date) >= new Date('2024-01-01')) {
+        if (
+          new Date(newVal.stopDate.date) >= new Date('2024-01-01') ||
+          this.devTime
+        ) {
           newVal.stopVersion = 2
         } else {
           newVal.stopVersion = 1
@@ -152,10 +149,6 @@ export default {
     },
 
     dateRules() {
-      if (this.devTime) {
-        return [v => !!v || 'A date is required']
-      }
-
       return [
         v => !!v || 'A date is required',
         v =>
@@ -165,10 +158,6 @@ export default {
     },
 
     timeRules() {
-      if (this.devTime) {
-        return [v => !!v || 'A time is required']
-      }
-
       return [
         v => !!v || 'A time is required',
         v =>
@@ -189,10 +178,6 @@ export default {
     isValidDateTime() {
       const dateStr = this.model.stopDate.date
       const timeStr = this.model.stopDate.time
-
-      if (this.devTime) {
-        return true
-      }
 
       if (!this.isAdminEditing) {
         return (
@@ -215,6 +200,13 @@ export default {
   methods: {
     handleDevTime() {
       this.devTime = !this.devTime
+
+      if (this.devTime) {
+        this.model.stopVersion = 2
+      } else if (!this.devTime) {
+        this.model.stopVersion = 1
+      }
+
       this.$emit('on-dev-time')
     },
   },

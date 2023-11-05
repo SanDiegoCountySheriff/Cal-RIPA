@@ -84,7 +84,6 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
-    devTime: true,
     version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
@@ -342,9 +341,6 @@ export default new Vuex.Store({
       return state.apiUnavailable
     },
     mappedVersion: state => {
-      if (state.devTime) {
-        return 2
-      }
       return state.version
     },
     favoriteLocations: state => {
@@ -603,9 +599,6 @@ export default new Vuex.Store({
     },
     updateIsAuthenticated(state, value) {
       state.isAuthenticated = value
-    },
-    toggleDevTime(state) {
-      state.devTime = !state.devTime
     },
   },
 
@@ -1655,9 +1648,8 @@ export default new Vuex.Store({
         .then(response => {
           commit('updateUserProfile', response.data)
           if (
-            getters.mappedVersion === 2 &&
-            (!response.data.officerRace ||
-              (!response.data.officerGender && !response.data.officerNonBinary))
+            !response.data.officerRace ||
+            (!response.data.officerGender && !response.data.officerNonBinary)
           ) {
             commit('updateInvalidUser', true)
             return true
@@ -1857,10 +1849,6 @@ export default new Vuex.Store({
 
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
-    },
-    
-    toggleDevTime({ commit }) {
-      commit('toggleDevTime')
     },
   },
 

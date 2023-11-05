@@ -31,7 +31,6 @@
       "
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
-      @on-dev-time="handleDevTime"
       @on-open-favorite-location="handleOpenLocationFavorite"
       @on-open-favorite-reason="handleOpenReasonFavorite"
       @on-open-favorite-result="handleOpenResultFavorite"
@@ -535,7 +534,6 @@ export default {
       'setStopsWithErrors',
       'setPersonSearchAutomaticallySelected',
       'setPropertySearchAutomaticallySelected',
-      'toggleDevTime',
     ]),
 
     handleSetPersonSearchAutomaticallySelected() {
@@ -1440,10 +1438,6 @@ export default {
 
     onViewStopsWithErrors() {
       this.$emit('on-view-stops-with-errors')
-    },
-
-    handleDevTime() {
-      this.toggleDevTime()
     },
   },
 
