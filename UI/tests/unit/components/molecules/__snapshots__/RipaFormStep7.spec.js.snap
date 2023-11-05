@@ -34,33 +34,37 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
     </div>
   </div>
   <div class="spacer"></div>
-  <div class="ripa-race tw-py-4">
-    <div class="ripa-form-header">
-      <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span>
-        <!---->
-        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Edit Stop Explanation</span></div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row no-gutters">
-        <div class="col-sm-12 col-12">
-          <div class="v-input theme--light v-text-field v-select v-autocomplete">
-            <div class="v-input__control">
-              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-21" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-21" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-21" type="text" autocomplete="off">
-                  <div class="v-input__append-inner">
-                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
-                  </div><input type="hidden">
-                </div>
-                <div class="v-menu">
-                  <!---->
-                </div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
-                    <div class="v-messages__message">Please enter an explanation for editing the stop or choose an existing option</div>
-                  </transition-group-stub>
+  <div class="row">
+    <div class="col">
+      <div class="ripa-race tw-py-4">
+        <div class="ripa-form-header">
+          <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span>
+            <!---->
+            <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Edit Stop Explanation</span></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col-sm-12 col-12">
+              <div class="v-input theme--light v-text-field v-select v-autocomplete">
+                <div class="v-input__control">
+                  <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-21" class="v-input__slot">
+                    <div class="v-select__slot"><label for="input-21" class="v-label theme--light" style="left: 0px; position: absolute;">Edit Stop Explanation</label><input id="input-21" type="text" autocomplete="off">
+                      <div class="v-input__append-inner">
+                        <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                      </div><input type="hidden">
+                    </div>
+                    <div class="v-menu">
+                      <!---->
+                    </div>
+                  </div>
+                  <div class="v-text-field__details">
+                    <div class="v-messages theme--light">
+                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                        <div class="v-messages__message">Please enter an explanation for editing the stop or choose an existing option</div>
+                      </transition-group-stub>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -69,36 +73,82 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
       </div>
     </div>
   </div>
-  <div class="ripa-override-pii tw-pb-4">
-    <div class="ripa-form-header">
-      <div class="row tw-ml-1 tw-mt-1">
-        <!---->
-        <!---->
-        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Override PII</span></div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row no-gutters">
-        <div class="col-sm-12 col-12">
-          Is PII Found: false
+  <div class="row">
+    <div class="col col-6">
+      <div class="ripa-override-pii tw-pb-4">
+        <div class="ripa-form-header">
+          <div class="row tw-ml-1 tw-mt-1">
+            <!---->
+            <!---->
+            <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Override PII</span></div>
+          </div>
         </div>
-        <!---->
-        <div class="col-sm-12 col-12">
-          <div class="ripa-switch" style="max-width: 250px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-30" role="switch" type="checkbox" aria-disabled="false" value="">
-                    <div class="v-input--selection-controls__ripple"></div>
-                    <div class="v-input--switch__track theme--light"></div>
-                    <div class="v-input--switch__thumb theme--light">
-                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
-                    </div>
-                  </div><label for="input-30" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col-sm-12 col-12">
+              Is PII Found: false
+            </div>
+            <!---->
+            <div class="col-sm-12 col-12">
+              <div class="ripa-switch" style="max-width: 250px;">
+                <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+                  <div class="v-input__control">
+                    <div class="v-input__slot">
+                      <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-30" role="switch" type="checkbox" aria-disabled="false" value="">
+                        <div class="v-input--selection-controls__ripple"></div>
+                        <div class="v-input--switch__track theme--light"></div>
+                        <div class="v-input--switch__thumb theme--light">
+                          <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                        </div>
+                      </div><label for="input-30" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
         Override
       </span> <span class="switch-label" style="right: -45px;">
         No
       </span></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col col-6">
+      <div>
+        <div class="ripa-form-header">
+          <div class="row tw-ml-1 tw-mt-1">
+            <!---->
+            <!---->
+            <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Mark Record as NFIA</span></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col">
+              Mark as "No Further Information Available"
+              <div class="v-dialog__container"><button type="button" class="v-btn v-btn--icon v-btn--round theme--light v-size--x-small" role="button" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content"><i aria-hidden="true" class="v-icon notranslate mdi mdi-information-slab-circle-outline theme--light"></i></span></button>
+                <!---->
+              </div>
+            </div>
+            <div class="col-sm-12 col-12">
+              <div class="ripa-switch" style="max-width: 250px;">
+                <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+                  <div class="v-input__control">
+                    <div class="v-input__slot">
+                      <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-39" role="switch" type="checkbox" aria-disabled="false" value="">
+                        <div class="v-input--selection-controls__ripple"></div>
+                        <div class="v-input--switch__track theme--light"></div>
+                        <div class="v-input--switch__thumb theme--light">
+                          <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                        </div>
+                      </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        NFIA
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -108,6 +158,7 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
     </div>
   </div>
   <div class="spacer"></div>
+  <!---->
   <!---->
   <!---->
   <div class="tw-flex tw-mt-8 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
