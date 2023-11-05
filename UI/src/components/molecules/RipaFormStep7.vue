@@ -25,7 +25,7 @@
           ></ripa-override-pii>
         </v-col>
         <v-col cols="6">
-          <template v-if="true">
+          <template v-if="isStopErrored">
             <ripa-nfia v-model="model"></ripa-nfia>
           </template>
         </v-col>
