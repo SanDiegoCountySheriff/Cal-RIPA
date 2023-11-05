@@ -1822,6 +1822,7 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+    nfia: fullStop.nfia,
   }
 }
 
@@ -1937,6 +1938,7 @@ export const fullStopToApiStopV2 = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,
+    nfia: fullStop.nfia,
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,

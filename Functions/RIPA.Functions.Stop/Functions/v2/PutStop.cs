@@ -86,9 +86,13 @@ public class PutStop
             return new BadRequestObjectResult("City is required");
         }
 
-        if (stop.Status == null)
+        if (stop.Status == null && !stop.Nfia == true)
         {
             stop.Status = SubmissionStatus.Unsubmitted.ToString();
+        }
+        else if (stop.Nfia == true)
+        {
+            stop.Status = SubmissionStatus.NFIA.ToString();
         }
 
         stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...

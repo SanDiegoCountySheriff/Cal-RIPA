@@ -86,7 +86,8 @@ public class StopService : IStopService
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stop.Location.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stop.Location.School) : null,
+            Is_NFIA = stop.Nfia == true ? "Y" : string.Empty
         };
 
         return dojStop;

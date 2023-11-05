@@ -25,7 +25,7 @@
           ></ripa-override-pii>
         </v-col>
         <v-col cols="6">
-          <template v-if="isStopErrored">
+          <template v-if="true">
             <ripa-nfia v-model="model"></ripa-nfia>
           </template>
         </v-col>
@@ -33,6 +33,13 @@
     </template>
 
     <v-spacer></v-spacer>
+
+    <template v-if="model.nfia">
+      <ripa-alert alert-type="error">
+        Are you sure you want to mark the record as NFIA? The record will remain
+        in errored state and cannot be updated further.
+      </ripa-alert>
+    </template>
 
     <template v-if="!isFormValid">
       <ripa-alert alert-type="error">

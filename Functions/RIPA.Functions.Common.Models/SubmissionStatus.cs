@@ -14,4 +14,6 @@ public enum SubmissionStatus
     Failed,
     [EnumMember(Value = "Pending")]
     Pending,
+    [EnumMember(Value = "NFIA")]
+    NFIA,
 }
