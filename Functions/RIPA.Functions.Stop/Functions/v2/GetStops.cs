@@ -63,29 +63,23 @@ public class GetStops
             log.LogError(ex.Message);
             return new UnauthorizedResult();
         }
+
         List<IStop> stopResponse = new();
         IEnumerable<StopStatusCount> stopStatusCounts;
         string stopV1QueryString = string.Empty;
         string stopV2QueryString = string.Empty;
         string stopSummaryQueryString = string.Empty;
-        int Limit = !string.IsNullOrWhiteSpace(req.Query["Limit"]) ? Convert.ToInt32(req.Query["Limit"]) : default;
+
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-
-
-
             try
             {
                 stopV1QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
                 stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(stopV1QueryString));
-
-
-
                 stopV2QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 2, false, stopResponse.Count);
                 stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(stopV2QueryString));
-
                 stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
                 stopStatusCounts = await _stopV1CosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
             }
@@ -94,7 +88,6 @@ public class GetStops
                 log.LogError(ex, "An error occurred getting stops requested.");
                 return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
             }
-
         }
         catch (Exception ex)
         {
