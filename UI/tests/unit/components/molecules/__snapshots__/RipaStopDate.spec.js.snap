@@ -65,7 +65,9 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div class="row"><button type="button" class="ml-3 mb-3 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Turn On Dev Time</span></button></div>
+    <div class="row"><button type="button" class="ml-3 mb-3 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+        Convert to Version 2 Stop
+      </span></button></div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 300px;">

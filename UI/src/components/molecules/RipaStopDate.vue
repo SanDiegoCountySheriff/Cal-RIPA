@@ -48,9 +48,9 @@
       </v-row>
 
       <v-row v-if="this.environmentName === 'DEV'">
-        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">{{
-          devTime ? 'Turn Off Dev Time' : 'Turn On Dev Time'
-        }}</v-btn>
+        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">
+          Convert to Version {{ model.stopVersion === 1 ? '2' : '1' }} Stop
+        </v-btn>
       </v-row>
 
       <v-row no-gutters>
@@ -123,7 +123,7 @@ export default {
 
   data() {
     return {
-      devTime: false,
+      devTime: this.value.stopVersion === 2,
     }
   },
 
