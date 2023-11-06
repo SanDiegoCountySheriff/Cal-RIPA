@@ -443,7 +443,7 @@ export default {
     },
 
     latitudeRules() {
-      const regex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
+      const regex = /^(\d{2}\.\d{0,3}|\d{2})$/
 
       return [
         v => this.isLocationOptionsFilledV2 || !!v || 'Latitude is required',
@@ -455,7 +455,7 @@ export default {
     },
 
     longitudeRules() {
-      const regex = /^(-\d{3}\.\d{0,3})?$/
+      const regex = /^(-\d{3}\.\d{0,3}|-\d{3})$/
 
       return [
         v => this.isLocationOptionsFilledV2 || !!v || 'Longitude is required',
@@ -642,12 +642,12 @@ export default {
       const exit = this.model.location.exit
       const landmark = this.model.location.landmark
 
-      const latitudeRegex = /^(\d{0,2}\.\d{0,3}|\d{0,2})$/
+      const latitudeRegex = /^(\d{2}\.\d{0,3}|\d{2})$/
       const isLatitudeValid =
         latitudeRegex.test(this.model.location.latitude) &&
         this.model.location.latitude
 
-      const longitudeRegex = /^-\d{3}\.\d{0,3}$/
+      const longitudeRegex = /^(-\d{3}\.\d{0,3}|-\d{3})$/
       const isLongitudeValid = longitudeRegex.test(
         this.model.location.longitude,
       )
