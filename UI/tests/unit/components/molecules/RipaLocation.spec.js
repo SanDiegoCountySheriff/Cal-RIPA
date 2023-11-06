@@ -332,7 +332,9 @@ describe('Ripa Location', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.vm.latitudeRules[0]('')).toEqual('Latitude is required')
-    expect(wrapper.vm.latitudeRules[1]('')).toEqual(true)
+    expect(wrapper.vm.latitudeRules[1]('')).toEqual(
+      'A valid latitude with a maximum of 3 digits after the decimal is required',
+    )
     expect(wrapper.vm.latitudeRules[0]('-11.230')).toEqual(true)
     expect(wrapper.vm.latitudeRules[1]('-11.230')).toEqual(
       'A valid latitude with a maximum of 3 digits after the decimal is required',
@@ -349,7 +351,9 @@ describe('Ripa Location', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.vm.longitudeRules[0]('')).toEqual('Longitude is required')
-    expect(wrapper.vm.longitudeRules[1]('')).toEqual(true)
+    expect(wrapper.vm.longitudeRules[1]('')).toEqual(
+      'A valid negative longitude with a maximum of 3 digits after the decimal is required',
+    )
     expect(wrapper.vm.longitudeRules[0]('123.123')).toEqual(true)
     expect(wrapper.vm.longitudeRules[1]('123.123')).toEqual(
       'A valid negative longitude with a maximum of 3 digits after the decimal is required',

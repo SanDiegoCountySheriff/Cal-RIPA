@@ -652,6 +652,22 @@ export default {
         this.model.location.longitude,
       )
 
+      if (
+        !isLongitudeValid &&
+        this.model.location.longitude !== '' &&
+        this.model.location.longitude !== null
+      ) {
+        return false
+      }
+
+      if (
+        !isLatitudeValid &&
+        this.model.location.latitude !== '' &&
+        this.model.location.latitude !== null
+      ) {
+        return false
+      }
+
       const isValid =
         (blockNumber !== null &&
           blockNumber !== '' &&
