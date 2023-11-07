@@ -30,6 +30,11 @@ describe('Ripa JSON Viewer Dialog', () => {
       propsData: {
         onClose: jest.fn(),
       },
+      provide: {
+        fullStop() {
+          return {}
+        },
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

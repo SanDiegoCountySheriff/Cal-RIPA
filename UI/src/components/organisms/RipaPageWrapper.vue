@@ -1,18 +1,7 @@
 <template>
   <div class="ripa-page-wrapper">
     <ripa-app-bar
-      :admin="admin"
-      :environment-name="environmentName"
-      :online="online"
-      :authenticated="authenticated"
-      :invalidUser="invalidUser"
-      :is-api-unavailable="isApiUnavailable"
-      :dark="dark"
-      :on-update-dark="onUpdateDark"
-      :on-update-user="onUpdateUser"
-      :on-view-stops-with-errors="onViewStopsWithErrors"
-      :stops-with-errors="stopsWithErrors"
-      :api-stop-job-loading="apiStopJobLoading"
+      v-on="$listeners"
       @handleLogOut="handleLogOut"
       @handleLogIn="handleLogIn"
     ></ripa-app-bar>
@@ -73,55 +62,7 @@ export default {
   },
 
   props: {
-    admin: {
-      type: Boolean,
-      default: false,
-    },
-    dark: {
-      type: Boolean,
-      default: false,
-    },
-    environmentName: {
-      type: String,
-      default: '',
-    },
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    online: {
-      type: Boolean,
-      default: false,
-    },
-    isApiUnavailable: {
-      type: Boolean,
-      default: false,
-    },
-    onUpdateDark: {
-      type: Function,
-      default: () => {},
-    },
-    onUpdateUser: {
-      type: Function,
-      default: () => {},
-    },
-    onViewStopsWithErrors: {
-      type: Function,
-      default: () => {},
-    },
-    invalidUser: {
-      type: Boolean,
-      default: false,
-    },
-    authenticated: {
-      type: Boolean,
-      default: false,
-    },
-    stopsWithErrors: {
-      type: Array,
-      default: () => [],
-    },
-    apiStopJobLoading: {
       type: Boolean,
       default: false,
     },

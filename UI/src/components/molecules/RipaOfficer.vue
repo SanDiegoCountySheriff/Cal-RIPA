@@ -5,7 +5,7 @@
       required
       subtitle="§999.226(a)(15)"
       class="tw-mb-4"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -15,8 +15,11 @@
           <v-alert outlined dense type="info">
             <v-row align="center">
               <v-col class="grow">
-                <template v-if="isValidUser">
+                <template v-if="isValidUser && version === 1">
                   {{ getOfficerInfo }}
+                </template>
+                <template v-if="isValidUser && version === 2">
+                  {{ getOfficerInfoV2 }}
                 </template>
                 <template v-if="!isValidUser">
                   <v-progress-circular
@@ -40,13 +43,10 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import { OFFICER_ASSIGNMENTS, OFFICER_ASSIGNMENTS_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-officer',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -57,6 +57,8 @@ export default {
       viewModelUser: this.user,
     }
   },
+
+  inject: ['user', 'version'],
 
   computed: {
     isValidUser() {
@@ -69,6 +71,19 @@ export default {
           this.user.assignment === 10 ? this.user.otherType : null
         const otherTypeText = otherType ? ` - ${otherType} - ` : ' - '
         return `${this.getOfficerAssignmentText()} ${otherTypeText} ${
+          this.user.yearsExperience
+        } Years`
+      }
+
+      return 'Officer information is missing. Please open user dialog and update.'
+    },
+
+    getOfficerInfoV2() {
+      if (this.user) {
+        const otherType =
+          this.user.assignment === 10 ? this.user.otherType : null
+        const otherTypeText = otherType ? ` - ${otherType} - ` : ' - '
+        return `${this.getOfficerAssignmentTextV2()} ${otherTypeText} ${
           this.user.yearsExperience
         } Years`
       }
@@ -89,27 +104,25 @@ export default {
       return ''
     },
 
-    handleUpdateUser() {
-      if (this.onUpdateUser) {
-        this.onUpdateUser()
+    getOfficerAssignmentTextV2() {
+      if (this.user && this.user.assignment) {
+        const [assignment] = OFFICER_ASSIGNMENTS_V2.filter(
+          item => item.value === this.user.assignment,
+        )
+        return assignment.name
       }
+
+      return ''
+    },
+
+    handleUpdateUser() {
+      this.$emit('on-update-user')
     },
   },
 
   watch: {
     user(newValue) {
       this.viewModelUser = newValue
-    },
-  },
-
-  props: {
-    user: {
-      type: Object,
-      default: () => {},
-    },
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

@@ -30,6 +30,6 @@ describe('Ripa Interval', () => {
     wrapper.destroy()
 
     expect(clearInterval).toBeCalledTimes(1)
-    expect(clearInterval).toHaveBeenCalledWith(2)
+    expect(clearInterval).toHaveBeenCalledWith(1000000000001)
   })
 })

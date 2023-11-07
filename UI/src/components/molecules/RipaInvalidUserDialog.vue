@@ -32,21 +32,8 @@ export default {
         return this.viewModel
       },
       set(newValue) {
-        if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
-        }
         this.viewModel = newValue
       },
-    },
-  },
-
-  methods: {
-    handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
     },
   },
 
@@ -60,10 +47,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      default: () => {},
     },
   },
 }

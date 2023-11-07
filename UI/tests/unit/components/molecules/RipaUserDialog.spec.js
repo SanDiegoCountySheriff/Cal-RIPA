@@ -35,6 +35,9 @@ describe('Ripa User Dialog', () => {
         onClose: jest.fn(),
         onSave: jest.fn(),
       },
+      provide: {
+        user: () => {},
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

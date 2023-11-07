@@ -3,6 +3,6 @@
 exports[`Ripa Admin Container should match snapshot 1`] = `
 <div>
   <ripa-admin-template-stub beats="" cities="" schools="" statutes="" users="" historicalcprareports="" ondeletebeat="[Function]" oneditbeat="[Function]" onedituser="[Function]" onuploadusers="[Function]" ontabchange="[Function]" onuploaddomain="[Function]"></ripa-admin-template-stub>
-  <ripa-snackbar-stub timeout="6000" autoclose="true" onview="[Function]"></ripa-snackbar-stub>
+  <ripa-snackbar-stub timeout="6000" autoclose="true"></ripa-snackbar-stub>
 </div>
 `;

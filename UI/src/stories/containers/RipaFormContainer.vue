@@ -1,7 +1,5 @@
 <template>
   <ripa-page-container :admin="admin">
-    <vue-confirm-dialog></vue-confirm-dialog>
-
     <ripa-form-template
       v-model="stop"
       :admin-editing="isAdminEditing"

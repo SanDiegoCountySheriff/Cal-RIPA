@@ -39,13 +39,4 @@ describe('Ripa Check Group', () => {
     expect(wrapper.emitted('input')).toBeTruthy()
     expect(wrapper.emitted('input').length).toBe(1)
   })
-
-  it('should watch value', async () => {
-    wrapper = factory()
-
-    wrapper.setProps({ value: ['Test1', 'Test2'] })
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.viewModel).toEqual(['Test1', 'Test2'])
-  })
 })

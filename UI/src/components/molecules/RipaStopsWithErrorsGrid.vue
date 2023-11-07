@@ -85,16 +85,12 @@ export default {
 
     deleteItemConfirm() {
       this.stopsWithErrors.splice(this.editedIndex, 1)
-      if (this.onDeleteStop) {
-        this.onDeleteStop(this.editedItem.internalId)
-      }
+      this.$emit('on-delete-stop', this.editedItem.internalId)
       this.closeDelete()
     },
 
     handleRowClick(item) {
-      if (this.onEditStop) {
-        this.onEditStop(item.internalId)
-      }
+      this.$emit('on-edit-stop', item.internalId)
     },
 
     closeDelete() {
@@ -125,14 +121,6 @@ export default {
     items: {
       type: Array,
       default: () => [],
-    },
-    onEditStop: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteStop: {
-      type: Function,
-      default: () => {},
     },
   },
 }

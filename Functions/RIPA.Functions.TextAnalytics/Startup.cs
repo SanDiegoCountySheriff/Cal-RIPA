@@ -5,14 +5,13 @@ using RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
 
 [assembly: FunctionsStartup(typeof(RIPA.Functions.TextAnalytics.Startup))]
 
-namespace RIPA.Functions.TextAnalytics
+namespace RIPA.Functions.TextAnalytics;
+
+public class Startup : FunctionsStartup
 {
-    public class Startup : FunctionsStartup
+    public override void Configure(IFunctionsHostBuilder builder)
     {
-        public override void Configure(IFunctionsHostBuilder builder)
-        {
-            builder.Services.AddLogging();
-            builder.Services.AddSingleton<IPiiTextAnalyticsService, PiiTextAnalyticsService>();
-        }
+        builder.Services.AddLogging();
+        builder.Services.AddSingleton<IPiiTextAnalyticsService, PiiTextAnalyticsService>();
     }
 }

@@ -1,16 +1,21 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <ripa-stop-reason
-      v-model="model"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-reason="lastReason"
-      :loading-pii="loadingPii"
-      :statutes="getStatutes"
-      :on-open-favorites="onOpenFavorites"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
-      @pii-check="handlePiiCheck"
-    ></ripa-stop-reason>
+    <div
+      v-if="$vuetify.breakpoint.mobile"
+      class="tw-flex tw-mb-5 tw-justify-center"
+    >
+      <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+        Back
+      </v-btn>
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep3Next">
+        Next
+      </v-btn>
+    </div>
+
+    <ripa-stop-reason v-model="model" v-on="$listeners"></ripa-stop-reason>
 
     <v-spacer></v-spacer>
 
@@ -22,23 +27,13 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn
-        outlined
-        color="primary"
-        class="tw-mr-2"
-        :disabled="isBackNextDisabled"
-        @click="handleBack"
-      >
+      <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
         Back
       </v-btn>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn
-        color="primary"
-        :disabled="isBackNextDisabled"
-        @click="handleStep3Next"
-      >
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep3Next">
         Next
       </v-btn>
     </div>
@@ -47,8 +42,8 @@
       :show-dialog="showConfirmDialog"
       title="Confirm Continue"
       subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirm"
     >
     </ripa-confirm-dialog>
   </v-form>
@@ -67,9 +62,11 @@ export default {
 
   components: { RipaAlert, RipaConfirmDialog, RipaStopReason },
 
+  inject: ['loadingPiiStep3'],
+
   methods: {
     handleStep3Next() {
-      const piiFound = this.viewModel.stopReason?.reasonForStopPiiFound || false
+      const piiFound = this.model.stopReason?.reasonForStopPiiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {
@@ -79,35 +76,6 @@ export default {
 
     handleCloseDialog() {
       this.showConfirmDialog = false
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
-    },
-  },
-
-  computed: {
-    getStatutes() {
-      return this.statutes
-    },
-  },
-
-  props: {
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastReason: {
-      type: Object,
-      default: () => {},
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
     },
   },
 }

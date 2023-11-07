@@ -58,4 +58,13 @@ describe('Ripa Autocomplete', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.viewModel).toEqual('New Value')
   })
+
+  it('should handleRemoveItem', () => {
+    wrapper = factory({ items: testItems })
+
+    wrapper.vm.handleRemoveItem({ test: 'test' })
+
+    expect(wrapper.emitted('remove-item')).toBeTruthy()
+    expect(wrapper.emitted('remove-item')[0]).toEqual([{ test: 'test' }])
+  })
 })

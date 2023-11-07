@@ -1,10 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Summary Detail should match snapshot 1`] = `
-<div>
+<div ondeleteperson="function () {
+        return fn.apply(this, arguments);
+      }" oncopyperson="function () {
+        return fn.apply(this, arguments);
+      }" oneditagencyquestions="function () {
+        return fn.apply(this, arguments);
+      }" oneditstop="function () {
+        return fn.apply(this, arguments);
+      }" oneditperson="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="v-card__title tw-uppercase">Review, Edit and Submit</div>
   <div class="v-card__text">
-    <div class="tw-mb-3"><span class="tw-text-base tw-font-bold">111111111111</span>
+    <div class="tw-mb-3"><span class="tw-text-base tw-font-bold">1111111111111</span>
       <!---->
     </div>
     <div>
@@ -310,7 +320,87 @@ exports[`Ripa Form Summary Detail should match snapshot 1`] = `
     <div class="tw-mt-4 tw-mb-2">
       <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
     </div>
-    <!---->
+    <div class="tw-my-4 tw-text-base tw-font-bold"><span class="tw-text-base tw-font-bold">Telemetry</span></div>
+    <div class="">
+      Reason for Edit
+      <span class="tw-ml-2" style="color: rgb(33, 150, 243);">edit</span>
+      <!---->
+      <!---->
+    </div>
+    <div>
+      <div class="">
+        Editing Officer ID
+        <span class="tw-ml-2" style="color: rgb(33, 150, 243);">100000002</span>
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div>
+      <div class="">
+        Template
+        <span class="tw-ml-2" style="color: rgb(33, 150, 243);"></span>
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div>
+      <div class="">
+        Lookup Cache Date
+        <span class="tw-ml-2" style="color: rgb(33, 150, 243);">2022-02-11 11:13</span>
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div>
+      <div class="">
+        Pull From Reason Code
+        <span class="tw-ml-2" style="color: rgb(33, 150, 243);">false</span>
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div>
+      <div class="">
+        Form Cached
+        <span class="tw-ml-2" style="color: rgb(33, 150, 243);">false</span>
+        <!---->
+        <!---->
+      </div>
+    </div>
+    <div>
+      <div class="">
+        <!---->
+        <div>
+          Step Track
+        </div>
+        <div class="tw-ml-8">
+          <div class="tw-ml-4"><span style="color: rgb(33, 150, 243);">
+          Step: 1 / Start: 2022-01-01 04:00:00 / End: 2022-01-01 04:01:00
+        </span></div>
+        </div>
+        <div class="tw-ml-8">
+          <div class="tw-ml-4"><span style="color: rgb(33, 150, 243);">
+          Step: 2 / Start: 2022-01-01 04:01:00 / End: 2022-01-01 04:02:00
+        </span></div>
+        </div>
+        <div class="tw-ml-8">
+          <div class="tw-ml-4"><span style="color: rgb(33, 150, 243);">
+          Step: 3 / Start: 2022-01-01 04:02:00 / End: 2022-01-01 04:03:00
+        </span></div>
+        </div>
+        <div class="tw-ml-8">
+          <div class="tw-ml-4"><span style="color: rgb(33, 150, 243);">
+          Step: 4 / Start: 2022-01-01 04:03:00 / End: 2022-01-01 04:04:00
+        </span></div>
+        </div>
+        <div class="tw-ml-8">
+          <div class="tw-ml-4"><span style="color: rgb(33, 150, 243);">
+          Step: 5 / Start: 2022-01-01 04:04:00 / End: 2022-01-01 04:05:00
+        </span></div>
+        </div>
+        <!---->
+      </div>
+    </div>
   </div>
 </div>
 `;

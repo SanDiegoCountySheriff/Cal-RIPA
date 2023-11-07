@@ -24,7 +24,14 @@ describe('Ripa Favorites Grid', () => {
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFavoritesGrid, { vuetify })
+    wrapper = mount(RipaFavoritesGrid, {
+      vuetify,
+      provide: {
+        isOnlineAndAuthenticated() {
+          return true
+        },
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

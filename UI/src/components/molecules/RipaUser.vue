@@ -81,7 +81,7 @@
             <ripa-select
               v-model="model.assignment"
               label="Officer Assignment"
-              :items="assignmentItems"
+              :items="getAssignmentItems"
               itemText="name"
               itemValue="value"
               :rules="assignmentRules"
@@ -91,12 +91,12 @@
           </v-col>
         </v-row>
 
-        <template v-if="model.assignment === 10">
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -124,7 +124,7 @@
             <ripa-select
               v-model="model.assignment"
               label="Officer Assignment"
-              :items="assignmentItems"
+              :items="getAssignmentItems"
               itemText="name"
               itemValue="value"
               :rules="assignmentRules"
@@ -134,12 +134,12 @@
           </v-col>
         </v-row>
 
-        <template v-if="model.assignment === 10">
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -148,17 +148,63 @@
           </v-row>
         </template>
       </template>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="12">
+          <ripa-select
+            v-model="model.officerRace"
+            :items="raceItems"
+            :rules="raceRules"
+            @input="handleInput"
+            label="Officer Race"
+            itemValue="name"
+            itemText="name"
+            clearable
+            multiple
+          ></ripa-select>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-select
+            v-model="model.officerGender"
+            :items="genderItems"
+            :rules="genderRules"
+            @input="handleInput"
+            label="Officer Gender"
+            class="md:tw-mr-4"
+            itemValue="name"
+            itemText="name"
+            clearable
+          ></ripa-select>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-switch
+            v-model="model.officerNonBinary"
+            :rules="genderRules"
+            :max-width="250"
+            @input="handleInput"
+            label="Nonbinary Person"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import { OFFICER_ASSIGNMENTS } from '@/constants/form'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
+import {
+  OFFICER_ASSIGNMENTS,
+  OFFICER_ASSIGNMENTS_V2,
+  GENDERS_V2,
+  RACES_V2,
+} from '@/constants/form'
 import {
   isValidDate,
   dateNotInFuture,
@@ -169,27 +215,33 @@ import {
 export default {
   name: 'ripa-officer',
 
-  mixins: [RipaModelMixin],
-
   components: {
     RipaDatePicker,
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
+    RipaSwitch,
   },
 
   data() {
     return {
-      assignmentItems: OFFICER_ASSIGNMENTS,
+      genderItems: GENDERS_V2,
+      raceItems: RACES_V2,
       viewModel: this.value,
     }
   },
+
+  inject: ['version'],
 
   computed: {
     model: {
       get() {
         return this.viewModel
       },
+    },
+
+    getAssignmentItems() {
+      return this.version === 2 ? OFFICER_ASSIGNMENTS_V2 : OFFICER_ASSIGNMENTS
     },
 
     yearsExperienceRules() {
@@ -217,6 +269,20 @@ export default {
       return [v => !!v || 'A last name is required']
     },
 
+    raceRules() {
+      return [v => v?.length > 0 || 'An officer race is required']
+    },
+
+    genderRules() {
+      const gender = this.model.officerGender
+      const checked = this.model.officerNonBinary
+      const isValid = gender || checked
+
+      return [
+        !!isValid || 'If no gender is selected, nonbinary must be selected',
+      ]
+    },
+
     startDateRules() {
       const startDate = this.viewModel.startDate
       const isValid = isValidDate(startDate)
@@ -232,7 +298,7 @@ export default {
     otherTypeRules() {
       const assignment = this.viewModel.assignment
       const otherType = this.viewModel.otherType
-      if (assignment !== 10) {
+      if (assignment !== 10 && assignment !== 11) {
         return []
       }
 
@@ -265,7 +331,11 @@ export default {
     },
 
     updateOtherTypeModel() {
-      if (this.viewModel.assignment !== 10) {
+      if (
+        this.viewModel.assignment !== 10 &&
+        this.viewModel.assignment !== 11 &&
+        this.viewModel.assignment !== 12
+      ) {
         this.viewModel.otherType = null
       }
     },

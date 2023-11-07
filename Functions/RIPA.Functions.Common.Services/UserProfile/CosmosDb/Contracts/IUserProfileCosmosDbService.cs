@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts
+namespace RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
+
+public interface IUserProfileCosmosDbService<T>
 {
-    public interface IUserProfileCosmosDbService
-    {
-        Task<IEnumerable<Models.UserProfile>> GetUserProfilesAsync(string queryString);
-        Task<Models.UserProfile> GetUserProfileAsync(string id);
-        Task AddUserProfileAsync(Models.UserProfile userProfile);
-        Task UpdateUserProfileAsync(string id, Models.UserProfile userProfile);
-        Task DeleteUserProfileAsync(string id);
-    }
+    Task<IEnumerable<T>> GetUserProfilesAsync(string queryString);
+    Task<T> GetUserProfileAsync(string id);
+    Task AddUserProfileAsync(T userProfile);
+    Task UpdateUserProfileAsync(string id, T userProfile);
+    Task DeleteUserProfileAsync(string id);
+    Task UpdateFavoriteLocationCount(string favoriteName, string id);
+    Task UpdateFavoriteReasonCount(string favoriteName, string id);
+    Task UpdateFavoriteResultCount(string favoriteName, string id);
 }

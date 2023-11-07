@@ -1,10 +1,10 @@
 <template>
-  <div class="ripa-disability tw-pb-4">
+  <div class="tw-pb-4">
     <ripa-form-header
       title="Perceived or Known Disability"
       required
       subtitle="§999.226(a)(9)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -15,8 +15,7 @@
             v-model="model.person.anyDisabilities"
             label="Any Disabilities?"
             :disabled="disabled"
-            :max-width="200"
-            @input="handleInput"
+            @input="handleAnyDisabilitiesInput"
           ></ripa-switch>
 
           <template v-if="model.person.anyDisabilities">
@@ -25,7 +24,6 @@
               :disabled="disabled"
               :items="getDisabilityItems"
               :rules="disabilityRules"
-              @input="handleInput"
             >
             </ripa-check-group>
           </template>
@@ -37,15 +35,12 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { DISABILITIES } from '@/constants/form'
 
 export default {
   name: 'ripa-disability',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -56,19 +51,31 @@ export default {
   data() {
     return {
       disabilityItems: DISABILITIES,
-      viewModel: this.syncModel(this.value),
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (!newVal.person.isStudent) {
+          const options = newVal.person?.perceivedOrKnownDisability || []
+          const studentOptionFound = options.includes(7)
+          if (studentOptionFound) {
+            newVal.person.perceivedOrKnownDisability = options.filter(
+              item => item !== 7,
+            )
+          }
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
     getDisabilityItems() {
-      if (this.viewModel.person.isStudent) {
+      if (this.model.person.isStudent) {
         return this.disabilityItems
       }
 
@@ -76,8 +83,8 @@ export default {
     },
 
     disabilityRules() {
-      const checked = this.viewModel.person.anyDisabilities
-      const options = this.viewModel.person.perceivedOrKnownDisability
+      const checked = this.model.person.anyDisabilities
+      const options = this.model.person.perceivedOrKnownDisability
       return [
         (checked && options.length > 0) ||
           'At least one disability is required',
@@ -86,15 +93,19 @@ export default {
   },
 
   methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+    handleAnyDisabilitiesInput() {
+      if (!this.model.person.anyDisabilities) {
+        this.model.person.perceivedOrKnownDisability = []
+      }
     },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

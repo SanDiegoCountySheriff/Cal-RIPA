@@ -4,7 +4,7 @@
       title="Reason for Stop"
       required
       subtitle="§999.226(a)(10)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     ></ripa-form-header>
 
     <v-container>
@@ -15,7 +15,7 @@
               class="tw-w-full"
               color="primary"
               small
-              @click="onOpenFavorites"
+              @click="handleOpenFavorites"
             >
               Open Favorites
             </v-btn>
@@ -37,8 +37,25 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      <v-row>
+        <v-col v-if="favoriteReasons.filter(item=>item.version === model.stopVersion).length > 0" class="text-center py-0">
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-btn
+          v-for="(item, i) in favoriteReasons.filter(item=>item.version === model.stopVersion).slice(0,5)"
+            @click="handleFavoriteClick(item)"
+            color="primary"
+            class="mr-3 mb-2"
+            small
+            outlined
+          >
+            {{ item.name }}
+          </v-btn>
+        </v-col>
       </v-row>
 
       <v-row no-gutters>
@@ -50,7 +67,7 @@
             label="Reason"
             :items="getReasonItems"
             :rules="reasonRules"
-            @input="handleInput"
+            @input="handleUpdateModel"
           ></ripa-select>
 
           <template v-if="model.stopReason.reasonForStop === 7">
@@ -58,7 +75,6 @@
               v-model="model.stopReason.educationViolation"
               :items="educationViolationItems"
               :rules="educationViolationRules"
-              @input="handleInput"
             ></ripa-radio-group>
 
             <template v-if="model.stopReason.educationViolation === 1">
@@ -73,7 +89,6 @@
                 label="Education Code"
                 :items="educationCodeSectionItems"
                 :rules="educationViolationCodeRules"
-                @input="handleInput"
               ></ripa-autocomplete>
             </template>
           </template>
@@ -83,7 +98,6 @@
               v-model="model.stopReason.trafficViolation"
               :items="trafficViolationItems"
               :rules="trafficViolationRules"
-              @input="handleInput"
             ></ripa-radio-group>
 
             <div class="tw-mt-2"></div>
@@ -97,16 +111,14 @@
               label="Offense Code"
               :items="statutes"
               :rules="trafficViolationCodeRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
           <template v-if="model.stopReason.reasonForStop === 2">
             <ripa-check-group
               v-model="model.stopReason.reasonableSuspicion"
-              :items="reasonableSuspicionItems"
+              :items="getReasonableSuspicionItems"
               :rules="reasonableSuspicionRules"
-              @input="handleInput"
             ></ripa-check-group>
 
             <ripa-autocomplete
@@ -118,7 +130,6 @@
               label="Offense Code"
               :items="statutes"
               :rules="reasonableSuspicionCodeRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
@@ -132,17 +143,34 @@
               v-model="model.stopReason.searchOfPerson"
               label="Search of person was conducted"
               :max-width="300"
-              @input="handleInput"
               :rules="searchRules"
+              @input="handleUpdateModel"
             ></ripa-switch>
 
             <ripa-switch
               v-model="model.stopReason.searchOfProperty"
               label="Search of property was conducted"
               :max-width="300"
-              @input="handleInput"
               :rules="searchRules"
+              @input="handleUpdateModel"
             ></ripa-switch>
+          </template>
+
+          <template v-if="model.stopReason.reasonForStop === 9">
+            <ripa-check-group
+              v-model="model.stopReason.probableCause"
+              :items="getProbableCauseItems"
+              :rules="probableCauseRules"
+            ></ripa-check-group>
+
+            <ripa-autocomplete
+              v-model="model.stopReason.probableCauseCode"
+              item-text="fullName"
+              item-value="code"
+              label="Offense Code"
+              :items="statutes"
+              :rules="probableCauseCodeRules"
+            ></ripa-autocomplete>
           </template>
 
           <ripa-subheader text="-- and --"></ripa-subheader>
@@ -159,13 +187,99 @@
             hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
             persistent-hint
             label="Brief Explanation"
-            :loading="loadingPii"
+            :loading="loadingPiiStep3"
             :rules="explanationRules"
-            @input="handleInput($event), handlePiiCheck($event)"
+            @blur="handlePiiCheck($event)"
           ></ripa-text-input>
         </v-col>
       </v-row>
     </v-container>
+
+    <ripa-form-header
+      v-if="model.stopVersion === 2"
+      title="Reason given to the stopped person"
+      required
+      subtitle="§999.226(a)(10)"
+      v-on="$listeners"
+    ></ripa-form-header>
+
+    <v-container v-if="model.stopVersion === 2">
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" class="tw-mb-4"> </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12" sm="12">
+          <v-select
+            v-model="model.stopReason.reasonGivenForStop"
+            item-text="name"
+            item-value="value"
+            label="Reason"
+            multiple
+            required
+            :items="getGivenReasonItems"
+            :rules="givenReasonRules"
+            @input="handleUpdateModel"
+          >
+            <template #selection="{ item }">
+              <v-chip
+                v-bind="item.attrs"
+                :input-value="item.selected"
+                close
+                small
+                @click:close="handleRemoveItem(item)"
+              >
+                {{ item.abbreviation }}
+              </v-chip>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <template v-if="model.stopType === 'Vehicular' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person is a passenger in a vehicle"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.person.passengerInVehicle"
+              label="The stopped person is a passenger in a vehicle"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
+
+    <template v-if="model.stopType === 'Pedestrian' && model.stopVersion === 2">
+      <ripa-form-header
+        title="The stopped person was inside a residence"
+        required
+        :items="statutes"
+        subtitle="§999.226(a)(14)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.person.insideResidence"
+              label="The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 
@@ -174,7 +288,6 @@ import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -182,16 +295,18 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import {
   STOP_REASONS,
+  STOP_REASONS_V2,
+  GIVEN_STOP_REASONS_V2,
+  PROBABLE_CAUSES,
   EDUCATION_VIOLATIONS,
   TRAFFIC_VIOLATIONS,
   REASONABLE_SUSPICIONS,
+  REASONABLE_SUSPICIONS_V2,
   EDUCATION_CODE_SECTIONS,
 } from '@/constants/form'
 
 export default {
   name: 'ripa-stop-reason',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -208,46 +323,90 @@ export default {
   data() {
     return {
       reasonRules: [v => !!v || 'Stop reason is required'],
+      givenReasonRules: [
+        v => (!!v && v.length > 0) || 'Given stop reason is required',
+      ],
       explanationRules: [
         v => (v || '').length > 0 || 'Explanation is required',
         v => (v || '').length <= 250 || 'Max 250 characters',
         v => (v || '').length >= 5 || 'Min 5 characters',
       ],
       reasonItems: STOP_REASONS,
+      reasonItemsV2: STOP_REASONS_V2,
+      givenReasonItemsV2: GIVEN_STOP_REASONS_V2,
+      probableCauses: PROBABLE_CAUSES,
       educationCodeSectionItems: EDUCATION_CODE_SECTIONS,
       educationViolationItems: EDUCATION_VIOLATIONS,
       trafficViolationItems: TRAFFIC_VIOLATIONS,
-      reasonableSuspicionItems: REASONABLE_SUSPICIONS,
-      viewModel: this.syncModel(this.value),
+      reasonableSuspicionCodesV1: REASONABLE_SUSPICIONS,
+      reasonableSuspicionCodesV2: REASONABLE_SUSPICIONS_V2,
     }
   },
 
+  inject: [
+    'isOnlineAndAuthenticated',
+    'lastReason',
+    'loadingPiiStep3',
+    'statutes',
+    'personSearchAutomaticallySelected',
+    'propertySearchAutomaticallySelected',
+    'favoriteReasons',
+  ],
+
   created() {
-    if (this.viewModel.stopReason.reasonForStopExplanation) {
-      this.handlePiiCheck(this.viewModel.stopReason.reasonForStopExplanation)
+    if (
+      this.model.stopReason.reasonForStopExplanation &&
+      !this.model.template
+    ) {
+      this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
+    getReasonableSuspicionItems() {
+      return this.model.stopVersion === 1
+        ? this.reasonableSuspicionCodesV1
+        : this.reasonableSuspicionCodesV2
+    },
+
+    getProbableCauseItems() {
+      return this.probableCauses
+    },
+
     getReasonItems() {
-      if (this.viewModel.person.isStudent) {
-        return this.reasonItems
+      const reasonItems =
+        this.model.stopVersion === 1 ? this.reasonItems : this.reasonItemsV2
+
+      if (this.model.person.isStudent) {
+        return reasonItems
       }
 
-      return this.reasonItems.filter(
-        item => item.value !== 7 && item.value !== 8,
+      return reasonItems.filter(item => item.value !== 7 && item.value !== 8)
+    },
+
+    getGivenReasonItems() {
+      const givenReasonItems = this.givenReasonItemsV2
+      if (this.model.person.isStudent) {
+        return givenReasonItems
+      }
+
+      return givenReasonItems.filter(
+        item => item.value !== 20 && item.value !== 21,
       )
     },
 
     educationViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 7
-      const options = this.viewModel.stopReason.educationViolation
+      const checked = this.model.stopReason.reasonForStop === 7
+      const options = this.model.stopReason.educationViolation
       return [
         (checked && options !== null) ||
           'An education violation type is required',
@@ -255,9 +414,9 @@ export default {
     },
 
     educationViolationCodeRules() {
-      const checked1 = this.viewModel.stopReason.reasonForStop === 7
-      const checked2 = this.viewModel.stopReason.educationViolation === 1
-      const code = this.viewModel.stopReason.educationViolationCode
+      const checked1 = this.model.stopReason.reasonForStop === 7
+      const checked2 = this.model.stopReason.educationViolation === 1
+      const code = this.model.stopReason.educationViolationCode
       return [
         (checked1 && checked2 && code !== null) ||
           'An offense code is required',
@@ -265,38 +424,53 @@ export default {
     },
 
     trafficViolationRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
-      const options = this.viewModel.stopReason.trafficViolation
+      const checked = this.model.stopReason.reasonForStop === 1
+      const options = this.model.stopReason.trafficViolation
       return [
         (checked && options !== null) || 'A traffic violation type is required',
       ]
     },
 
     trafficViolationCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 1
-      const code = this.viewModel.stopReason.trafficViolationCode
+      const checked = this.model.stopReason.reasonForStop === 1
+      const code = this.model.stopReason.trafficViolationCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
     reasonableSuspicionRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
-      const options = this.viewModel.stopReason.reasonableSuspicion
+      const checked = this.model.stopReason.reasonForStop === 2
+      const options = this.model.stopReason.reasonableSuspicion
       return [
         (checked && options !== null && options.length > 0) ||
           'A reasonable suspicion type is required',
       ]
     },
 
+    probableCauseRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const options = this.model.stopReason.probableCause
+      return [
+        (checked && options !== null && options?.length > 0) ||
+          'A probable cause type is required',
+      ]
+    },
+
+    probableCauseCodeRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const code = this.model.stopReason.probableCauseCode
+      return [(checked && code !== null) || 'An offense code is required']
+    },
+
     reasonableSuspicionCodeRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 2
-      const code = this.viewModel.stopReason.reasonableSuspicionCode
+      const checked = this.model.stopReason.reasonForStop === 2
+      const code = this.model.stopReason.reasonableSuspicionCode
       return [(checked && code !== null) || 'An offense code is required']
     },
 
     searchRules() {
-      const checked = this.viewModel.stopReason.reasonForStop === 6
-      const checkedPerson = this.viewModel.stopReason.searchOfPerson
-      const checkedProperty = this.viewModel.stopReason.searchOfProperty
+      const checked = this.model.stopReason.reasonForStop === 6
+      const checkedPerson = this.model.stopReason.searchOfPerson
+      const checkedProperty = this.model.stopReason.searchOfProperty
       if (checked) {
         return [
           checkedPerson ||
@@ -310,62 +484,383 @@ export default {
   },
 
   methods: {
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+    handleOpenFavorites() {
+      this.$emit('on-open-reason-favorites', this.model.stopVersion)
     },
 
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.stopReason)
-      }
+      this.$emit(
+        'on-save-reason-favorite',
+        this.model.stopReason,
+        this.model.stopVersion,
+      )
     },
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'reason', value: textValue })
     },
+
+    handleRemoveItem(item) {
+      const index = this.model.stopReason.reasonGivenForStop.indexOf(item.value)
+      if (index !== -1) {
+        this.model.stopReason.reasonGivenForStop.splice(index, 1)
+      }
+    },
+
+    handleUpdateModel() {
+      if (this.model.stopReason.reasonForStop !== 6) {
+        this.model.stopReason.searchOfPerson = false
+        this.model.stopReason.searchOfProperty = false
+      }
+      if (this.model.stopReason.reasonForStop !== 2) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+      }
+
+      if (this.model.stopReason.reasonForStop !== 9) {
+        this.model.stopReason.probableCause = []
+        this.model.stopReason.probableCauseCode = null
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 6 &&
+        this.model.stopVersion === 1
+      ) {
+        const actionsTaken =
+          this.model.actionsTaken?.actionsTakenDuringStop || []
+        if (this.model.stopReason.searchOfPerson) {
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(18)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(18)
+          }
+        } else {
+          if (
+            this.model.actionsTaken.actionsTakenDuringStop !== null &&
+            this.model.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            this.model.actionsTaken.actionsTakenDuringStop =
+              this.model.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 18,
+              )
+          }
+        }
+        if (this.model.stopReason.searchOfProperty) {
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(20)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(20)
+          }
+        } else {
+          if (
+            this.model.actionsTaken.actionsTakenDuringStop !== null &&
+            this.model.actionsTaken.actionsTakenDuringStop.length > 0
+          ) {
+            this.model.actionsTaken.actionsTakenDuringStop =
+              this.model.actionsTaken.actionsTakenDuringStop.filter(
+                item => item !== 20,
+              )
+          }
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 6 &&
+        this.model.stopVersion === 2
+      ) {
+        const actionsTaken =
+          this.model.nonForceActionsTaken?.nonForceActionsTakenDuringStop || []
+        if (this.model.stopReason.searchOfPerson) {
+          this.model.nonForceActionsTaken.anyNonForceActionsTaken = true
+          if (!actionsTaken.includes(14)) {
+            if (
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop ===
+              null
+            ) {
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+                []
+            }
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.push(
+              14,
+            )
+          }
+        } else {
+          if (
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop !==
+              null &&
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop
+              .length > 0
+          ) {
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+                item => item !== 14,
+              )
+          }
+        }
+        if (this.model.stopReason.searchOfProperty) {
+          this.model.nonForceActionsTaken.anyNonForceActionsTaken = true
+          if (!actionsTaken.includes(15)) {
+            if (
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop ===
+              null
+            ) {
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+                []
+            }
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.push(
+              15,
+            )
+          }
+        } else {
+          if (
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop !==
+              null &&
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop
+              .length > 0
+          ) {
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+              this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+                item => item !== 15,
+              )
+          }
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 1 &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 1 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 2 &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 2 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 7 &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+
+        if (this.model.stopReason.educationViolation !== 1) {
+          this.model.stopReason.educationViolationCode = null
+        }
+
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        this.model.stopReason.reasonForStop === 7 &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+
+        if (this.model.stopReason.educationViolation !== 1) {
+          this.model.stopReason.educationViolationCode = null
+        }
+
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (
+        (this.model.stopReason.reasonForStop === 3 ||
+          this.model.stopReason.reasonForStop === 4 ||
+          this.model.stopReason.reasonForStop === 5 ||
+          this.model.stopReason.reasonForStop === 8) &&
+        this.model.stopVersion === 1
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 18,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.actionsTaken.actionsTakenDuringStop =
+            this.model.actionsTaken.actionsTakenDuringStop.filter(
+              item => item !== 20,
+            )
+        }
+      }
+
+      if (
+        (this.model.stopReason.reasonForStop === 3 ||
+          this.model.stopReason.reasonForStop === 4 ||
+          this.model.stopReason.reasonForStop === 5 ||
+          this.model.stopReason.reasonForStop === 8) &&
+        this.model.stopVersion === 2
+      ) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+        if (this.personSearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 14,
+            )
+        }
+        if (this.propertySearchAutomaticallySelected) {
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+            this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+              item => item !== 15,
+            )
+        }
+      }
+
+      if (this.model.stopReason.reasonForStop === 6) {
+        this.model.stopReason.educationViolation = null
+        this.model.stopReason.educationViolationCode = null
+        this.model.stopReason.reasonableSuspicion = []
+        this.model.stopReason.reasonableSuspicionCode = null
+        this.model.stopReason.trafficViolation = null
+        this.model.stopReason.trafficViolationCode = null
+      }
+    },
+
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-reason', favorite.id)
+    },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
-
     lastReason(newVal) {
       if (newVal) {
-        this.viewModel.stopReason = newVal
-        this.handleInput()
+        this.model.stopReason = { ...newVal }
       }
+    },
+
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 
   props: {
     value: {
       type: Object,
-      default: () => {},
-    },
-    lastReason: {
-      type: Object,
-      default: () => {},
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    statutes: {
-      type: Array,
-      default: () => [],
-    },
-    onOpenFavorites: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
       default: () => {},
     },
   },

@@ -26,6 +26,10 @@ describe('Ripa Officer', () => {
       propsData: {
         onUpdateUser: jest.fn(),
       },
+      provide: {
+        user: () => {},
+        version: () => 1,
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()

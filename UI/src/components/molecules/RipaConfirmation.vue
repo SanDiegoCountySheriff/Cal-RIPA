@@ -37,22 +37,13 @@ export default {
     onGoHome() {
       this.$emit('go-home')
     },
+
+    onStartNew() {
+      this.$emit('on-start-new')
+    },
   },
 
-  props: {
-    onStartNew: {
-      type: Function,
-      required: true,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  inject: ['isAuthenticated', 'loading'],
 }
 </script>
 

@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Officer should match snapshot 1`] = `
-<div class="ripa-officer tw-pb-4">
+<div class="ripa-officer tw-pb-4" onupdateuser="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="ripa-form-header tw-mb-4">
     <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
       <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Officer Years of Experience</span></div>
@@ -15,6 +17,7 @@ exports[`Ripa Officer should match snapshot 1`] = `
             <div class="v-alert__content">
               <div class="row align-center">
                 <div class="grow col">
+                  <!---->
                   <!---->
                   <div role="progressbar" aria-valuemin="0" aria-valuemax="100" class="v-progress-circular v-progress-circular--visible v-progress-circular--indeterminate primary--text" style="height: 32px; width: 32px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="22.857142857142858 22.857142857142858 45.714285714285715 45.714285714285715" style="transform: rotate(0deg);">
                       <circle fill="transparent" cx="45.714285714285715" cy="45.714285714285715" r="20" stroke-width="5.714285714285714" stroke-dasharray="125.664" stroke-dashoffset="125.66370614359172px" class="v-progress-circular__overlay"></circle>

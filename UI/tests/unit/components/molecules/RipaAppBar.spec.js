@@ -1,5 +1,6 @@
 import RipaAppBar from '@/components/molecules/RipaAppBar'
 import { shallowMount, mount } from '@vue/test-utils'
+import { computed } from 'vue'
 import Vuetify from 'vuetify'
 
 describe('Ripa App Bar', () => {
@@ -19,26 +20,44 @@ describe('Ripa App Bar', () => {
     global.window = window
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return shallowMount(RipaAppBar, {
       vuetify,
       propsData: {
         ...propsData,
-        onUpdateDark: jest.fn(),
-        onUpdateUser: jest.fn(),
-        onViewStopsWithErrors: jest.fn(),
       },
+      provide: {
+        admin: computed(() => provideData?.admin ?? false),
+        authenticated: computed(() => provideData?.authenticated ?? true),
+        dark: computed(() => provideData?.dark ?? false),
+        environmentName: computed(() => provideData?.environmentName ?? ''),
+        invalidUser: computed(() => provideData?.invalidUser ?? false),
+        online: computed(() => provideData?.online ?? true),
+        isApiUnavailable: computed(
+          () => provideData?.isApiUnavailable ?? false,
+        ),
+        stopsWithErrors: computed(() => []),
+        apiStopJobLoading: computed(() => false),
+      },
+      stubs: ['router-link'],
     })
   }
 
   it('should match snapshot', () => {
     wrapper = mount(RipaAppBar, {
       vuetify,
-      propsData: {
-        onUpdateDark: jest.fn(),
-        onUpdateUser: jest.fn(),
-        onViewStopsWithErrors: jest.fn(),
+      provide: {
+        admin: computed(() => false),
+        authenticated: computed(() => true),
+        dark: computed(() => false),
+        environmentName: computed(() => ''),
+        invalidUser: computed(() => false),
+        online: computed(() => true),
+        isApiUnavailable: computed(() => false),
+        stopsWithErrors: computed(() => []),
+        apiStopJobLoading: computed(() => false),
       },
+      stubs: ['router-link'],
     })
 
     expect(wrapper.html()).toMatchSnapshot()
@@ -62,69 +81,56 @@ describe('Ripa App Bar', () => {
 
   it('should get app title', async () => {
     wrapper = factory()
-
     expect(wrapper.vm.getAppTitle).toEqual('RIPA')
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'QA' })
-    await wrapper.vm.$nextTick()
-
+    wrapper = factory({}, { environmentName: 'QA' })
     expect(wrapper.vm.getAppTitle).toEqual('RIPA (QA)')
-    wrapper.setProps({ environmentName: 'DEV' })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
 
+    wrapper = factory({}, { environmentName: 'DEV' })
     expect(wrapper.vm.getAppTitle).toEqual('RIPA (DEV)')
   })
 
   it('should get admin', async () => {
     wrapper = factory()
-
-    wrapper.setProps({ admin: false })
-    await wrapper.vm.$nextTick()
     expect(wrapper.vm.getAdmin).toBeFalsy()
+    wrapper.destroy()
 
-    wrapper.setProps({ admin: true })
-    await wrapper.vm.$nextTick()
+    wrapper = factory({}, { admin: true })
     expect(wrapper.vm.getAdmin).toBeTruthy()
   })
 
   it('should get online icon', async () => {
-    wrapper = factory()
-
+    wrapper = factory({}, { online: false })
     expect(wrapper.vm.getOnlineIcon).toEqual('mdi-wifi-strength-off')
-    wrapper.setProps({ online: true })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
 
+    wrapper = factory({}, { online: true })
     expect(wrapper.vm.getOnlineIcon).toEqual('mdi-wifi')
   })
 
   it('should get app bar background class', async () => {
     wrapper = factory()
-
-    wrapper.setProps({ environmentName: '' })
-    await wrapper.vm.$nextTick()
-
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual('')
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'DEV' })
-    await wrapper.vm.$nextTick()
+    wrapper = factory({}, { environmentName: 'DEV' })
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--dev-light',
     )
-
     wrapper.vm.$vuetify.theme.dark = true
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--dev-dark',
     )
+    wrapper.destroy()
 
-    wrapper.setProps({ environmentName: 'QA' })
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.getAppBarBackgroundClass).toEqual('ripa-app-bar--qa-dark')
-
-    wrapper.vm.$vuetify.theme.dark = false
+    wrapper = factory({}, { environmentName: 'QA' })
     expect(wrapper.vm.getAppBarBackgroundClass).toEqual(
       'ripa-app-bar--qa-light',
     )
+    wrapper.vm.$vuetify.theme.dark = true
+    expect(wrapper.vm.getAppBarBackgroundClass).toEqual('ripa-app-bar--qa-dark')
   })
 
   it('should handle view stops with errors', () => {
@@ -132,7 +138,7 @@ describe('Ripa App Bar', () => {
 
     wrapper.vm.handleViewStopsWithErrors()
 
-    expect(wrapper.vm.onViewStopsWithErrors).toHaveBeenCalled()
+    expect(wrapper.emitted('on-view-stops-with-errors')).toBeTruthy()
   })
 
   it('should handle theme change', () => {
@@ -141,16 +147,17 @@ describe('Ripa App Bar', () => {
     wrapper.vm.handleThemeChange()
 
     expect(wrapper.vm.$vuetify.theme.dark).toBeTruthy()
-    expect(wrapper.vm.onUpdateDark).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-update-dark')).toBeTruthy()
+    expect(wrapper.emitted('on-update-dark').length).toEqual(1)
 
     wrapper.vm.handleThemeChange()
 
     expect(wrapper.vm.$vuetify.theme.dark).toBeFalsy()
-    expect(wrapper.vm.onUpdateDark).toHaveBeenCalledTimes(2)
+    expect(wrapper.emitted('on-update-dark').length).toEqual(2)
   })
 
   it('should handle auth', async () => {
-    wrapper = factory()
+    wrapper = factory({}, { authenticated: false })
 
     wrapper.vm.handleLogIn = jest.fn()
     wrapper.vm.handleLogOut = jest.fn()
@@ -159,11 +166,15 @@ describe('Ripa App Bar', () => {
     expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(1)
     expect(wrapper.vm.handleLogOut).toHaveBeenCalledTimes(0)
 
-    wrapper.setProps({ authenticated: true })
-    await wrapper.vm.$nextTick()
+    wrapper.destroy()
+
+    wrapper = factory({}, { authenticated: true })
+
+    wrapper.vm.handleLogIn = jest.fn()
+    wrapper.vm.handleLogOut = jest.fn()
     wrapper.vm.handleAuth()
 
-    expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.handleLogIn).toHaveBeenCalledTimes(0)
     expect(wrapper.vm.handleLogOut).toHaveBeenCalledTimes(1)
   })
 
@@ -188,7 +199,7 @@ describe('Ripa App Bar', () => {
 
     wrapper.vm.handleUserChange()
 
-    expect(wrapper.vm.onUpdateUser).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-update-user')).toBeTruthy()
   })
 
   it('should handle before destroy', () => {

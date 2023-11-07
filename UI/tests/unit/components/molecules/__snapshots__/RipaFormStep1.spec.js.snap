@@ -1,21 +1,357 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Step 1 should match snapshot 1`] = `
-<v-form-stub lazyvalidation="true">
-  <!---->
-  <!---->
-  <ripa-stop-date-stub onopenstatute="[Function]" value="[object Object]"></ripa-stop-date-stub>
-  <ripa-location-stub onopenstatute="[Function]" value="[object Object]" schools="" beats="" countycities="" noncountycities="" onopenfavorites="[Function]" onopenlastlocation="[Function]" onsavefavorite="[Function]" ongpslocation="[Function]"></ripa-location-stub>
-  <v-spacer-stub></v-spacer-stub>
-  <!---->
-  <div class="tw-flex tw-mt-8 tw-justify-center">
-    <v-btn-stub color="error" outlined="true" tag="button" activeclass="" type="button" class="tw-mr-2">
-      Cancel
-    </v-btn-stub>
-    <v-btn-stub color="primary" tag="button" activeclass="" type="button">
-      Next
-    </v-btn-stub>
+<form novalidate="novalidate" class="v-form" onopenfavorites="function () {
+        return fn.apply(this, arguments);
+      }" onopenlastlocation="function () {
+        return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
+      }" ongpslocation="function () {
+        return fn.apply(this, arguments);
+      }" onupdateuser="function () {
+        return fn.apply(this, arguments);
+      }">
+  <div class="ripa-officer tw-pb-4" user="[object Object]">
+    <div class="ripa-form-header tw-mb-4">
+      <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Officer Years of Experience</span></div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-12">
+          <div role="alert" class="v-alert v-sheet v-sheet--outlined theme--light v-alert--dense v-alert--outlined info--text">
+            <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-information theme--light info--text"></i>
+              <div class="v-alert__content">
+                <div class="row align-center">
+                  <div class="grow col">
+                    <!---->
+                    <!---->
+                    <div role="progressbar" aria-valuemin="0" aria-valuemax="100" class="v-progress-circular v-progress-circular--visible v-progress-circular--indeterminate primary--text" style="height: 32px; width: 32px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="22.857142857142858 22.857142857142858 45.714285714285715 45.714285714285715" style="transform: rotate(0deg);">
+                        <circle fill="transparent" cx="45.714285714285715" cy="45.714285714285715" r="20" stroke-width="5.714285714285714" stroke-dasharray="125.664" stroke-dashoffset="125.66370614359172px" class="v-progress-circular__overlay"></circle>
+                      </svg>
+                      <div class="v-progress-circular__info"></div>
+                    </div>
+                  </div>
+                  <div class="shrink col"><button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+                Update
+              </span></button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <ripa-confirm-dialog-stub title="Confirm Continue" subtitle="This page may contain personally identifying information. Are you sure you want to continue?" onclose="[Function]" onconfirm="[Function]"></ripa-confirm-dialog-stub>
-</v-form-stub>
+  <!---->
+  <div class="v-dialog__container" user="[object Object]">
+    <!---->
+  </div>
+  <!---->
+  <div class="ripa-stop-date tw-pb-4">
+    <div class="ripa-form-header">
+      <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Date of Stop</span></div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-md-4 col-12">
+          <div class="md:tw-mr-4">
+            <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field" min="2018-02-01T23:59:59.999-08:00" max="2023-08-08T23:59:59.999-07:00">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-22" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Date of Stop</label><input id="input-22" type="date"></div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" tabindex="-1" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
+                  </div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+                  </div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-12">
+          <div class="md:tw-mr-4">
+            <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-28" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Time of Stop</label><input id="input-28" type="time"></div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-clock-time-four-outline theme--light"></i></div>
+                  </div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-12">
+          <div class="v-input theme--light v-text-field" min="1" max="1440">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-33" class="v-label theme--light" style="left: 0px; position: absolute;">Stop Duration</label><input inputmode="numeric" min="0" id="input-33" type="number"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <div class="row no-gutters">
+        <div class="col-sm-12 col-12">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-37" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">
+                    Stop in response to Call for Service
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!---->
+  <div class="ripa-location tw-pb-4">
+    <div class="ripa-form-header">
+      <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
+        <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Location</span></div>
+      </div>
+    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+          Current Location
+        </span></button></div>
+        <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">Last Location
+        </span></button></div>
+        <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+          Open Favorites
+        </span></button></div>
+        <div class="col-sm-6 col-md-3 col-12"><button type="button" class="v-btn v-btn--block v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+            Save Location
+          </span></button></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-12">
+          <div class="ripa-switch" style="max-width: 200px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-50" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-50" class="v-label theme--light" style="left: 0px; position: relative;">
+                    K-12 Public School
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div role="alert" class="v-alert mt-4 v-sheet v-sheet--outlined theme--light v-alert--dense v-alert--outlined info--text">
+            <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-information theme--light info--text"></i>
+              <div class="v-alert__content">
+                Note: Do not provide a street address if the location is a
+                residence.
+              </div>
+            </div>
+          </div>
+          <!---->
+          <!---->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="ripa-text-input">
+            <div class="v-input theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-56" class="v-label theme--light" style="left: 0px; position: absolute;">Block Number</label><input id="input-56" type="text"></div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!---->
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="ripa-text-input">
+            <!---->
+            <div class="v-input theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-60" class="v-label theme--light" style="left: 0px; position: absolute;">Street Name</label><input id="input-60" type="text"></div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <div class="row">
+        <div class="col-sm-12 col-12">
+          <div class="ripa-label tw-font-bold tw-my-4"><span>
+    -- or --
+  </span></div>
+          <div class="ripa-text-input">
+            <!---->
+            <div class="v-input theme--light v-text-field">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-text-field__slot"><label for="input-66" class="v-label theme--light" style="left: 0px; position: absolute;">Closest Intersection</label><input id="input-66" type="text"></div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ripa-switch" style="max-width: 225px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-70" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-70" class="v-label theme--light" style="left: 0px; position: relative;">
+                    More Location Options
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div class="tw-mt-8">
+            <div class="ripa-switch" style="max-width: 200px;">
+              <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+                <div class="v-input__control">
+                  <div class="v-input__slot">
+                    <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-73" role="switch" type="checkbox" aria-disabled="false" value="">
+                      <div class="v-input--selection-controls__ripple"></div>
+                      <div class="v-input--switch__track theme--light"></div>
+                      <div class="v-input--switch__thumb theme--light">
+                        <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                      </div>
+                    </div><label for="input-73" class="v-label theme--light" style="left: 0px; position: relative;">
+                      City Out of County?
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
+            <div class="v-input__control">
+              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-76" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-76" class="v-label theme--light" style="left: 0px; position: absolute;">City</label><input id="input-76" type="text" autocomplete="off">
+                  <div class="v-input__append-inner">
+                    <div></div>
+                  </div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                  </div><input type="hidden">
+                </div>
+                <div class="v-menu">
+                  <!---->
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                    <div class="v-messages__message">Select 1 City (required)</div>
+                  </transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-12">
+          <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
+            <div class="v-input__control">
+              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-82" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-82" class="v-label theme--light" style="left: 0px; position: absolute;">Beat</label><input id="input-82" type="text" autocomplete="off">
+                  <div class="v-input__append-inner">
+                    <div></div>
+                  </div>
+                  <div class="v-input__append-inner">
+                    <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
+                  </div><input type="hidden">
+                </div>
+                <div class="v-menu">
+                  <!---->
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper">
+                    <div class="v-messages__message">Select 1 Beat (required)</div>
+                  </transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <!---->
+  <div class="tw-flex tw-mt-8 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
+  <div class="v-dialog__container">
+    <!---->
+  </div>
+</form>
 `;

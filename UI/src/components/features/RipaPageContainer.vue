@@ -1,18 +1,9 @@
 <template v-if="dataReady">
   <ripa-page-wrapper
-    :admin="isAdmin"
-    :authenticated="isAuthenticated"
-    :dark="isDark"
-    :environment-name="environmentName"
-    :invalidUser="invalidUser"
     :loading="loading"
-    :online="isOnline"
-    :is-api-unavailable="isApiUnavailable"
-    :on-update-dark="handleUpdateDark"
-    :on-update-user="handleUpdateUser"
-    :on-view-stops-with-errors="handleViewStopsWithErrors"
-    :stops-with-errors="mappedStopsWithErrors"
-    :api-stop-job-loading="apiStopJobLoading"
+    @on-update-dark="handleUpdateDark"
+    @on-update-user="handleUpdateUser"
+    @on-view-stops-with-errors="handleViewStopsWithErrors"
     @handleLogOut="handleLogOut"
     @handleLogIn="handleLogIn"
   >
@@ -36,11 +27,18 @@
     <ripa-user-dialog
       :is-invalid-user="isOnlineAndAuthenticated && invalidUser"
       :loading="loading"
-      :user="getMappedUser"
       :show-dialog="showUserDialog"
-      :on-close="handleCloseDialog"
-      :on-save="handleSaveUser"
+      @on-close="handleCloseDialog"
+      @on-save="handleSaveUser"
     ></ripa-user-dialog>
+
+    <ripa-snackbar
+      :text="officerGenderRaceText"
+      :auto-close="false"
+      v-model="snackbarOfficerRaceGender"
+      multi-line
+      top
+    ></ripa-snackbar>
 
     <ripa-invalid-user-dialog
       :show-dialog="showInvalidUserDialog"
@@ -59,7 +57,7 @@
       multi-line
       :auto-close="false"
       view-button-visible
-      :on-view="handleViewStopsWithErrors"
+      @on-view="handleViewStopsWithErrors"
     >
     </ripa-snackbar>
 
@@ -74,11 +72,10 @@
     ></ripa-interval>
 
     <ripa-stops-with-errors-dialog
-      :stops-with-errors="mappedStopsWithErrors"
       :show-dialog="showStopsWithErrorsDialog"
-      :on-close="handleCloseDialog"
-      :on-edit-stop="handleOpenStopWithError"
-      :on-delete-stop="handleDeleteStopWithError"
+      @on-close="handleCloseDialog"
+      @on-edit-stop="handleOpenStopWithError"
+      @on-delete-stop="handleDeleteStopWithError"
     ></ripa-stops-with-errors-dialog>
   </ripa-page-wrapper>
 </template>
@@ -96,6 +93,7 @@ import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import { mapGetters, mapActions } from 'vuex'
 import differenceInHours from 'date-fns/differenceInHours'
 import authentication from '@/authentication'
+import { computed } from 'vue'
 
 export default {
   name: 'ripa-page-container',
@@ -123,6 +121,27 @@ export default {
       showStopsWithErrorsDialog: false,
       showUserDialog: false,
       dataReady: false,
+      apiStopJobLoading: false,
+      snackbarUpdateUser: false,
+      officerGenderRaceText:
+        'In order to prepare for the January 1st, 2024 regulation changes please input your race and gender information.  This information will not be included on stops until January 1st, 2024.',
+      snackbarOfficerRaceGender: false,
+    }
+  },
+
+  provide() {
+    return {
+      user: computed(() => this.getMappedUser),
+      admin: computed(() => this.isAdmin),
+      authenticated: computed(() => this.isAuthenticated),
+      dark: computed(() => this.isDark),
+      environmentName: computed(() => this.environmentName),
+      invalidUser: computed(() => this.invalidUser),
+      online: computed(() => this.isOnline),
+      isApiUnavailable: computed(() => this.isApiUnavailable),
+      stopsWithErrors: computed(() => this.mappedStopsWithErrors),
+      apiStopJobLoading: computed(() => this.apiStopJobLoading),
+      version: computed(() => this.mappedVersion),
     }
   },
 
@@ -138,6 +157,9 @@ export default {
       'apiConfig',
       'mappedUser',
       'isApiUnavailable',
+      'piiServiceAvailable',
+      'mappedStopsWithErrors',
+      'mappedVersion',
     ]),
 
     getMappedUser() {
@@ -147,6 +169,9 @@ export default {
         otherType: this.mappedUser.otherType,
         startDate: this.mappedUser.startDate,
         yearsExperience: this.mappedUser.yearsExperience,
+        officerRace: this.mappedUser.officerRace,
+        officerGender: this.mappedUser.officerGender,
+        officerNonBinary: this.mappedUser.officerNonBinary || false,
       }
     },
   },
@@ -164,8 +189,188 @@ export default {
       'setStopsWithErrors',
     ]),
 
+    async runApiStopsJob(apiStops) {
+      if (this.isOnlineAndAuthenticated) {
+        // reset stop submission status in store
+        this.resetStopSubmissionStatus()
+
+        // iterate through each apiStop
+        for (let index = 0; index < apiStops.length; index++) {
+          const apiStop = apiStops[index]
+          if (apiStop.telemetry.offline && !apiStop.overridePii) {
+            for (const person of apiStop.listPersonStopped) {
+              // check basisForSearch
+              let trimmedTextValue = person.basisForSearchBrief
+                ? person.basisForSearchBrief.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const response = await this.checkTextForPii(trimmedTextValue)
+                person.basisForSearchPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.basisForSearchPiiFound
+                if (
+                  !person.basisForSearchPiiFound &&
+                  apiStop.piiEntities?.length > 0
+                ) {
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.basisForSearchSource + person.index,
+                  )
+                }
+                if (!response) {
+                  await this.setPiiServiceAvailable(false)
+                  person.basisForSearchPiiFound =
+                    person.basisForSearchPiiFound || false
+                } else if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e =>
+                          e.source !== this.basisForSearchSource + person.index,
+                      )
+                    : []
+                  for (const entity of response.piiEntities) {
+                    entity.source = this.basisForSearchSource + person.index
+                    apiStop.piiEntities.push(entity)
+                  }
+                }
+              }
+              // check reasonForStopExplanation
+              trimmedTextValue = person.reasonForStopExplanation
+                ? person.reasonForStopExplanation.trim()
+                : ''
+              if (
+                this.isOnlineAndAuthenticated &&
+                !this.invalidUser &&
+                trimmedTextValue.length > 0
+              ) {
+                const response = await this.checkTextForPii(trimmedTextValue)
+                person.reasonForStopPiiFound =
+                  response &&
+                  response.piiEntities &&
+                  response.piiEntities.length > 0
+                apiStop.isPiiFound =
+                  apiStop.isPiiFound || person.reasonForStopPiiFound
+                if (
+                  !person.reasonForStopPiiFound &&
+                  apiStop.piiEntities?.length > 0
+                ) {
+                  apiStop.piiEntities = apiStop.piiEntities.filter(
+                    e => e.source !== this.stopReasonSource + person.index,
+                  )
+                }
+                if (!response) {
+                  await this.setPiiServiceAvailable(false)
+                  person.reasonForStopPiiFound =
+                    person.reasonForStopPiiFound || false
+                } else if (response.piiEntities.length > 0) {
+                  apiStop.piiEntities = apiStop.piiEntities
+                    ? apiStop.piiEntities.filter(
+                        e => e.source !== this.stopReasonSource + person.index,
+                      )
+                    : []
+                  for (const entity of response.piiEntities) {
+                    entity.source = this.stopReasonSource + person.index
+                    apiStop.piiEntities.push(entity)
+                  }
+                }
+              }
+            }
+            // check location
+            const trimmedTextValue = apiStop.location.fullAddress
+              ? apiStop.location.fullAddress.trim()
+              : ''
+            if (
+              this.isOnlineAndAuthenticated &&
+              !this.invalidUser &&
+              trimmedTextValue.length > 0
+            ) {
+              const response = await this.checkTextForPii(trimmedTextValue)
+              apiStop.location.piiFound =
+                response &&
+                response.piiEntities &&
+                response.piiEntities.length > 0
+              apiStop.isPiiFound =
+                apiStop.isPiiFound || apiStop.location.piiFound
+              if (
+                !apiStop.location.piiFound &&
+                apiStop.piiEntities?.length > 0
+              ) {
+                apiStop.piiEntities = apiStop.piiEntities.filter(
+                  e => e.source !== this.locationSource,
+                )
+              }
+              if (!response) {
+                await this.setPiiServiceAvailable(false)
+                apiStop.location.piiFound = apiStop.location.piiFound || false
+              } else if (response.piiEntities.length > 0) {
+                apiStop.piiEntities = apiStop.piiEntities
+                  ? apiStop.piiEntities.filter(
+                      e => e.source !== this.locationSource,
+                    )
+                  : []
+                for (const entity of response.piiEntities) {
+                  entity.source = this.locationSource
+                  apiStop.piiEntities.push(entity)
+                }
+              }
+            }
+          }
+
+          if (!this.piiServiceAvailable && !apiStop.overridePii) {
+            apiStop.isPiiFound = true
+            apiStop.piiEntities = [
+              {
+                entityText:
+                  'Text analytics service was unavailable, please review the stop for PII',
+              },
+            ]
+          }
+
+          await this.timeout(1500)
+          if (!this.isOnlineAndAuthenticated) {
+            return
+          }
+          await this.submitOfficerStop(apiStop)
+          this.removeSingleApiStopFromLocalStorage(apiStop)
+          await this.timeout(1500)
+        }
+
+        this.removeApiStopsFromLocalStorage()
+
+        let stopIdsPassedStr = ''
+        if (this.mappedStopSubmissionPassedIds.length > 0) {
+          stopIdsPassedStr = `Stop ID(s) submitted successfully: ${this.mappedStopSubmissionPassedIds.join(
+            ', ',
+          )}.`
+        }
+
+        // update snackbarText regardless if errors or not
+        this.snackbarText = `${this.mappedStopSubmissionStatus}. ${stopIdsPassedStr}`
+
+        // display no errors snackbar which closes automatically
+        if (this.mappedStopSubmissionFailedStops.length === 0) {
+          this.snackbarNoErrorsVisible = true
+        }
+
+        if (this.mappedStopSubmissionFailedStops.length > 0) {
+          // display errors snackbar which remains open
+          this.snackbarErrorsVisible = true
+          // if there are failed ids, update error stops key
+          this.pushFailedStopsToStopsWithErrors(
+            this.mappedStopSubmissionFailedStops,
+          )
+        }
+      }
+    },
+
     async getUserData() {
-      await Promise.all([this.getUser()])
+      this.snackbarOfficerRaceGender = await this.getUser()
     },
 
     async getFormData() {
@@ -198,6 +403,7 @@ export default {
     },
 
     handleSaveUser(user) {
+      this.snackbarOfficerRaceGender = false
       this.editOfficerUser(user)
     },
 
@@ -252,6 +458,29 @@ export default {
       }
     },
 
+    async checkLocalStorage() {
+      if (!this.isLocked && this.isOnlineAndAuthenticated) {
+        this.isLocked = true
+        const apiStops = this.getApiStopsFromLocalStorage()
+        if (apiStops.length > 0) {
+          this.apiStopJobLoading = true
+          await this.runApiStopsJob(apiStops)
+          this.apiStopJobLoading = false
+        }
+        const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+        this.setStopsWithErrors(apiStopsWithErrors)
+        this.isLocked = false
+      }
+    },
+
+    getStopWithErrorGivenInternalId(internalId) {
+      const apiStopsWithErrors = this.getApiStopsWithErrorsFromLocalStorage()
+      const [filteredApiStopWithStop] = apiStopsWithErrors.filter(
+        item => item.internalId === internalId,
+      )
+      return filteredApiStopWithStop?.apiStop || null
+    },
+
     clearLocalStorage() {
       localStorage.removeItem('ripa_beats')
       localStorage.removeItem('ripa_county_cities')
@@ -261,6 +490,26 @@ export default {
       localStorage.removeItem('ripa_agency_questions')
       localStorage.removeItem('ripa_templates')
       localStorage.setItem('ripa_cache_date', new Date())
+    },
+
+    removeApiStopsFromLocalStorage() {
+      localStorage.removeItem('ripa_submitted_api_stops')
+    },
+
+    removeSingleApiStopFromLocalStorage(apiStop) {
+      const apiStops = JSON.parse(
+        localStorage.getItem('ripa_submitted_api_stops'),
+      )
+
+      const index = apiStops.findIndex(s => s.time === apiStop.time)
+
+      if (index > -1) {
+        apiStops.splice(index, 1)
+        localStorage.setItem(
+          'ripa_submitted_api_stops',
+          JSON.stringify(apiStops),
+        )
+      }
     },
 
     async updateAuthenticatedData() {
@@ -298,10 +547,30 @@ export default {
 
     async isWebsiteReachable(url) {
       try {
-        const resp = await fetch(url, { method: 'HEAD', mode: 'no-cors' })
-        return resp && (resp.ok || resp.type === 'opaque')
+        const response = await this.fetchWithRetry(url)
+        return response
       } catch (err) {
         console.warn('[conn test failure]:', err)
+      }
+    },
+
+    async fetchWithRetry(url, depth = 0) {
+      this.loading = true
+      try {
+        const resp = await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+        })
+        this.loading = false
+        return resp && (resp.ok || resp.type === 'opaque')
+      } catch (e) {
+        if (depth > 7) {
+          this.loading = false
+          throw e
+        }
+        setTimeout(async () => {
+          await this.fetchWithRetry(url, depth + 1)
+        }, 2 ** depth * 10)
       }
     },
 

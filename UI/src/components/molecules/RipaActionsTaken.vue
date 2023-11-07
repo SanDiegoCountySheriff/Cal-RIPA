@@ -1,10 +1,10 @@
 <template>
-  <div class="ripa-action-taken tw-pb-4">
+  <div class="tw-pb-4">
     <ripa-form-header
       title="Actions Taken During Stop"
       required
       subtitle="§999.226(a)(12)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -63,7 +63,7 @@
                 title="Basis for Search"
                 required
                 subtitle="§999.226(a)(12)(B)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -87,9 +87,10 @@
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
                   label="Brief Explanation"
-                  :loading="loadingPii"
+                  :loading="loadingPiiStep4"
                   :rules="explanationRules"
-                  @input="handleInput($event), handlePiiCheck($event)"
+                  @input="handleInput"
+                  @blur="handlePiiCheck($event)"
                 ></ripa-text-input>
               </template>
             </template>
@@ -108,7 +109,7 @@
                 title="Basis for Property Seizure"
                 required
                 subtitle="§999.226(a)(12)(D)(1)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -123,7 +124,7 @@
                 title="Types of Property Seized"
                 required
                 subtitle="§999.226(a)(12)(D)(2)"
-                :on-open-statute="onOpenStatute"
+                v-on="$listeners"
               ></ripa-form-subheader>
 
               <ripa-check-group
@@ -144,7 +145,6 @@
 <script>
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
 import RipaFormSubheader from '@/components/molecules/RipaFormSubheader'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -159,8 +159,6 @@ import {
 
 export default {
   name: 'ripa-action-taken',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -185,26 +183,27 @@ export default {
       isAnyActionsTakenDisabled1: false,
       isAnyActionsTakenDisabled2: false,
       propertySeizedTypeItems: SEIZED_PROPERTY_TYPES,
-      viewModel: this.syncModel(this.value),
     }
   },
 
+  inject: ['loadingPiiStep4'],
+
   created() {
-    if (this.viewModel.actionsTaken.basisForSearchExplanation) {
-      this.handlePiiCheck(this.viewModel.actionsTaken.basisForSearchExplanation)
+    if (this.model.actionsTaken.basisForSearchExplanation) {
+      this.handlePiiCheck(this.model.actionsTaken.basisForSearchExplanation)
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
     },
 
     actionsTakenRules() {
-      const checked = this.viewModel.actionsTaken.anyActionsTaken
-      const options = this.viewModel.actionsTaken.actionsTakenDuringStop.filter(
+      const checked = this.model.actionsTaken.anyActionsTaken
+      const options = this.model.actionsTaken.actionsTakenDuringStop.filter(
         item => item !== 21,
       )
 
@@ -217,23 +216,23 @@ export default {
     basisForSearchRules() {
       const consentGiven = this.wasAskedForConsent
       const searchConducted = this.wasSearchOfPersonOrPropertyConducted
-      const options = this.viewModel.actionsTaken.basisForSearch
+      const options = this.model.actionsTaken.basisForSearch || []
 
       return [
         (searchConducted && options.length > 0) ||
           'At least one basis for search is required',
         !consentGiven ||
           (consentGiven &&
-            this.viewModel.actionsTaken.basisForSearch !== null &&
-            this.viewModel.actionsTaken.basisForSearch.length > 0 &&
-            this.viewModel.actionsTaken.basisForSearch.includes(1)) ||
+            this.model.actionsTaken.basisForSearch !== null &&
+            this.model.actionsTaken.basisForSearch.length > 0 &&
+            this.model.actionsTaken.basisForSearch.includes(1)) ||
           'Consent given must be selected if person or property consent was given.',
       ]
     },
 
     basisForPropertySeizureRules() {
-      const checked = this.viewModel.actionsTaken.propertyWasSeized
-      const options = this.viewModel.actionsTaken.basisForPropertySeizure
+      const checked = this.model.actionsTaken.propertyWasSeized
+      const options = this.model.actionsTaken.basisForPropertySeizure || []
 
       return [
         (checked && options.length > 0) ||
@@ -243,9 +242,9 @@ export default {
 
     personPropertySearchConsentGivenRules() {
       const checked =
-        this.viewModel.actionsTaken.personSearchConsentGiven ||
-        this.viewModel.actionsTaken.propertySearchConsentGiven
-      const basisForSearch = this.viewModel.actionsTaken?.basisForSearch || []
+        this.model.actionsTaken.personSearchConsentGiven ||
+        this.model.actionsTaken.propertySearchConsentGiven
+      const basisForSearch = this.model.actionsTaken?.basisForSearch || []
       const consentGiven = basisForSearch.includes(1)
 
       if (!consentGiven) {
@@ -259,8 +258,8 @@ export default {
     },
 
     typeOfPropertySeizedRules() {
-      const checked = this.viewModel.actionsTaken.propertyWasSeized
-      const options = this.viewModel.actionsTaken.typeOfPropertySeized
+      const checked = this.model.actionsTaken.propertyWasSeized
+      const options = this.model.actionsTaken.typeOfPropertySeized || []
 
       return [
         (checked && options.length > 0) ||
@@ -273,7 +272,7 @@ export default {
         item => ![17, 18, 19, 20, 21].includes(item.value),
       )
 
-      if (!this.viewModel.person.isStudent) {
+      if (!this.model.person.isStudent) {
         return filteredItems.filter(item => item.value !== 23)
       }
 
@@ -294,11 +293,10 @@ export default {
     },
 
     getBasisForSearchItems() {
-      const actionsTaken =
-        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      const actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
       let filteredItems = this.basisForSearchItems
 
-      if (!this.viewModel.person.isStudent) {
+      if (!this.model.person.isStudent) {
         filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
@@ -312,7 +310,7 @@ export default {
     getBasisForPropertySeizureItems() {
       let filteredItems = this.basisForPropertySeizureItems
 
-      if (!this.viewModel.person.isStudent) {
+      if (!this.model.person.isStudent) {
         filteredItems = filteredItems.filter(item => item.value !== 6)
       }
 
@@ -320,34 +318,33 @@ export default {
     },
 
     wasSearchOfPersonOrPropertyConducted() {
-      const actionsTaken =
-        this.viewModel.actionsTaken?.actionsTakenDuringStop || []
+      const actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
       return actionsTaken.includes(18) || actionsTaken.includes(20)
     },
 
     wasAskedForConsent() {
       return (
-        this.viewModel.actionsTaken.personSearchConsentGiven ||
-        this.viewModel.actionsTaken.propertySearchConsentGiven
+        this.model.actionsTaken.personSearchConsentGiven ||
+        this.model.actionsTaken.propertySearchConsentGiven
       )
     },
 
     wasAskedForConsentToSearchPerson() {
-      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(17)
+      return this.model.actionsTaken.actionsTakenDuringStop.includes(17)
     },
 
     wasAskedForConsentToSearchProperty() {
-      return this.viewModel.actionsTaken.actionsTakenDuringStop.includes(19)
+      return this.model.actionsTaken.actionsTakenDuringStop.includes(19)
     },
 
     isBasisForSearchExplanationVisible() {
-      if (this.viewModel.actionsTaken.basisForSearch.length === 0) {
+      if (this.model.actionsTaken.basisForSearch.length === 0) {
         return false
       }
 
       if (
-        this.viewModel.actionsTaken.basisForSearch.length === 1 &&
-        this.viewModel.actionsTaken.basisForSearch.includes(4)
+        this.model.actionsTaken.basisForSearch.length === 1 &&
+        this.model.actionsTaken.basisForSearch.includes(4)
       ) {
         return false
       }
@@ -359,11 +356,142 @@ export default {
   methods: {
     handleInput() {
       this.updateModel()
-      this.$emit('input', this.viewModel)
+      this.$emit('input', this.model)
     },
 
     handlePiiCheck(textValue) {
       this.$emit('pii-check', { source: 'search', value: textValue })
+    },
+
+    updateModel() {
+      if (!this.model.actionsTaken.anyActionsTaken) {
+        this.model.actionsTaken.actionsTakenDuringStop = null
+        this.model.actionsTaken.propertyWasSeized = false
+        this.model.actionsTaken.personSearchConsentGiven = false
+        this.model.actionsTaken.propertySearchConsentGiven = false
+        this.model.actionsTaken.basisForSearch = []
+        this.model.actionsTaken.basisForSearchExplanation = null
+        this.model.actionsTaken.basisForSearchPiiFound = false
+      }
+
+      let actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
+
+      if (actionsTaken.includes(18) && !this.model.stopReason.searchOfPerson) {
+        this.$emit('on-set-person-search-automatically-selected', false)
+      }
+
+      if (
+        actionsTaken.includes(20) &&
+        !this.model.stopReason.searchOfProperty
+      ) {
+        this.$emit('on-set-property-search-automatically-selected', false)
+      }
+
+      if (this.model.stopReason) {
+        if (this.model.stopReason.searchOfPerson) {
+          this.isAnyActionsTakenDisabled1 = true
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(18)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(18)
+            this.$emit('on-set-person-search-automatically-selected', true)
+          }
+        }
+        if (this.model.stopReason.searchOfProperty) {
+          this.isAnyActionsTakenDisabled2 = true
+          this.model.actionsTaken.anyActionsTaken = true
+          if (!actionsTaken.includes(20)) {
+            if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+              this.model.actionsTaken.actionsTakenDuringStop = []
+            }
+            this.model.actionsTaken.actionsTakenDuringStop.push(20)
+            this.$emit('on-set-property-search-automatically-selected', true)
+          }
+        }
+      }
+
+      if (!actionsTaken.includes(17)) {
+        this.model.actionsTaken.personSearchConsentGiven = false
+      }
+
+      if (!actionsTaken.includes(19)) {
+        this.model.actionsTaken.propertySearchConsentGiven = false
+      }
+
+      if (!actionsTaken.includes(18) && !actionsTaken.includes(20)) {
+        this.model.actionsTaken.basisForSearch = []
+        this.model.actionsTaken.basisForSearchExplanation = null
+        this.model.actionsTaken.basisForSearchPiiFound = false
+      }
+
+      if (
+        this.model.actionsTaken.basisForSearch !== null &&
+        this.model.actionsTaken.basisForSearch.length === 1 &&
+        this.model.actionsTaken.basisForSearch.includes(4)
+      ) {
+        this.model.actionsTaken.basisForSearchExplanation = null
+        this.model.actionsTaken.basisForSearchPiiFound = false
+      }
+
+      actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
+
+      if (
+        !actionsTaken.includes(20) &&
+        this.model.actionsTaken.basisForSearch !== null &&
+        this.model.actionsTaken.basisForSearch.length > 0
+      ) {
+        this.model.actionsTaken.basisForSearch =
+          this.model.actionsTaken.basisForSearch.filter(item => item !== 12)
+      }
+
+      if (!this.model.actionsTaken.basisForPropertySeizure) {
+        return
+      }
+
+      if (
+        this.model.actionsTaken.basisForPropertySeizure.includes(2) ||
+        this.model.actionsTaken.basisForPropertySeizure.includes(3)
+      ) {
+        this.model.actionsTaken.anyContraband = true
+      }
+
+      if (!this.model.person.isStudent) {
+        if (
+          this.model.actionsTaken.basisForSearch !== null &&
+          this.model.actionsTaken.basisForSearch.length > 0
+        ) {
+          this.model.actionsTaken.basisForSearch =
+            this.model.actionsTaken.basisForSearch.filter(item => item !== 13)
+        }
+        if (
+          this.model.actionsTaken.basisForPropertySeizure !== null &&
+          this.model.actionsTaken.basisForPropertySeizure.length > 0
+        ) {
+          this.model.actionsTaken.basisForPropertySeizure =
+            this.model.actionsTaken.basisForPropertySeizure.filter(
+              item => item !== 6,
+            )
+        }
+      }
+
+      actionsTaken = this.model.actionsTaken?.actionsTakenDuringStop || []
+
+      if (!this.model.actionsTaken.propertyWasSeized) {
+        this.model.actionsTaken.basisForPropertySeizure = []
+        this.model.actionsTaken.typeOfPropertySeized = []
+        this.model.actionsTaken.actionsTakenDuringStop = actionsTaken.filter(
+          item => item !== 21,
+        )
+      } else {
+        if (!actionsTaken.includes(21)) {
+          if (this.model.actionsTaken.actionsTakenDuringStop === null) {
+            this.model.actionsTaken.actionsTakenDuringStop = []
+          }
+          this.model.actionsTaken.actionsTakenDuringStop.push(21)
+        }
+      }
     },
   },
 
@@ -371,21 +499,10 @@ export default {
     this.updateModel()
   },
 
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-      this.updateModel()
-    },
-  },
-
   props: {
     value: {
       type: Object,
       required: true,
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
     },
   },
 }

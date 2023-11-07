@@ -4,7 +4,7 @@
       title="Perceived Age"
       required
       subtitle="§999.226(a)(7)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -18,7 +18,6 @@
             :min="1"
             :max="1250"
             :rules="ageRules"
-            @input="handleInput"
           >
           </ripa-number-input>
         </v-col>
@@ -29,29 +28,23 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 
 export default {
   name: 'ripa-age',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
     RipaNumberInput,
   },
 
-  data() {
-    return {
-      viewModel: this.syncModel(this.value),
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
@@ -63,15 +56,12 @@ export default {
     },
   },
 
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
-    },
-  },
-
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 
