@@ -11,6 +11,21 @@ export const OFFICER_ASSIGNMENTS = [
   { name: 'Other', value: 10 },
 ]
 
+export const OFFICER_ASSIGNMENTS_V2 = [
+  { name: 'Patrol, traffic enforcement, field operations', value: 1 },
+  { name: 'Gang enforcement', value: 2 },
+  { name: 'Compliance check', value: 3 },
+  { name: 'Special events', value: 4 },
+  { name: 'Roadblock or DUI sobriety checkpoint', value: 5 },
+  { name: 'Narcotics/vice', value: 6 },
+  { name: 'Task force', value: 7 },
+  { name: 'K-12 public school', value: 8 },
+  { name: 'Investigative/detective', value: 9 },
+  { name: 'Other', value: 10 },
+  { name: 'Off duty and/or working private event', value: 11 },
+  { name: 'Contracted by another law enforcement agency', value: 12 },
+]
+
 export const DISABILITIES = [
   { name: 'Deafness or difficulty hearing', value: 1 },
   { name: 'Speech impairment or limited use of language', value: 2 },
@@ -34,10 +49,39 @@ export const GENDERS = [
   { name: 'Transgender Female', value: 4 },
 ]
 
+export const SEXUAL_ORIENTATIONS = [
+  { name: 'Straight/Heterosexual', value: 1 },
+  { name: 'LGB+', value: 2 },
+]
+
 export const RACES = [
   { name: 'Asian', value: 1 },
   { name: 'Black/African American', value: 2 },
   { name: 'Hispanic/Latino(a)', value: 3 },
+  { name: 'Middle Eastern or South Asian', value: 4 },
+  { name: 'Native American', value: 5 },
+  { name: 'Pacific Islander', value: 6 },
+  { name: 'White', value: 7 },
+]
+
+export const GENDERS_V2 = [
+  { name: 'Cisgender Man', value: 1 },
+  { name: 'Cisgender Woman', value: 2 },
+  { name: 'Transgender Man', value: 3 },
+  { name: 'Transgender Woman', value: 4 },
+]
+
+export const PERSON_GENDERS_V2 = [
+  { name: 'Cisgender Man/Boy', value: 1 },
+  { name: 'Cisgender Woman/Girl', value: 2 },
+  { name: 'Transgender Man/Boy', value: 3 },
+  { name: 'Transgender Woman/Girl', value: 4 },
+]
+
+export const RACES_V2 = [
+  { name: 'Asian', value: 1 },
+  { name: 'Black/African American', value: 2 },
+  { name: 'Hispanic/Latine(x)', value: 3 },
   { name: 'Middle Eastern or South Asian', value: 4 },
   { name: 'Native American', value: 5 },
   { name: 'Pacific Islander', value: 6 },
@@ -65,6 +109,168 @@ export const STOP_REASONS = [
     value: 7,
   },
   { name: 'Determine whether the student violated school policy', value: 8 },
+]
+export const STOP_REASONS_V2 = [
+  { name: 'Traffic Violation', value: 1 },
+  { name: 'Reasonable Suspicion', value: 2 },
+  {
+    name: 'Known to be on Parole / Probation / PRCS / Mandatory Supervision',
+    value: 3,
+  },
+  {
+    name: 'Knowledge of outstanding arrest warrant/wanted person',
+    value: 4,
+  },
+  {
+    name: 'Investigation to determine whether the person was truant',
+    value: 5,
+  },
+  { name: 'Consensual Encounter resulting in a search', value: 6 },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7',
+    value: 7,
+  },
+  { name: 'Determine whether the student violated school policy', value: 8 },
+  { name: 'Probable cause to arrest or search', value: 9 },
+  {
+    name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150',
+    value: 10,
+  },
+]
+
+export const GIVEN_STOP_REASONS_V2 = [
+  {
+    name: 'Traffic Violation - Moving Violation',
+    value: 1,
+    abbreviation: 'Traff - Moving',
+  },
+  {
+    name: 'Traffic Violation - Equipment Violation',
+    value: 2,
+    abbreviation: 'Traff - Equipment',
+  },
+  {
+    name: 'Traffic Violation - Non-moving Violation',
+    value: 3,
+    abbreviation: 'Traff - Non-moving',
+  },
+  {
+    name: 'Officer witnessed commission of a crime',
+    value: 4,
+    abbreviation: 'Witnessed crime',
+  },
+  {
+    name: 'Matched suspect description',
+    value: 5,
+    abbreviation: 'Matched suspect desc',
+  },
+  {
+    name: "Matched description of suspect's vehicle or vehicle observed at the scene of a crime",
+    value: 6,
+    abbreviation: 'Matched desc of suspect vehicle',
+  },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
+    value: 7,
+    abbreviation: 'Suspect of crime',
+  },
+  {
+    name: 'Carrying suspicious object',
+    value: 8,
+    abbreviation: 'Carrying susp obj',
+  },
+  {
+    name: 'Actions indicative of casing a victim or location',
+    value: 9,
+    abbreviation: 'Casing victim or location',
+  },
+  {
+    name: 'Suspected of acting as a lookout',
+    value: 10,
+    abbreviation: 'Susp of acting as lookout',
+  },
+  {
+    name: 'Actions indicative of a drug transaction',
+    value: 11,
+    abbreviation: 'Indic of drug transaction',
+  },
+  {
+    name: 'Actions indicative of engaging in a violent crime',
+    value: 12,
+    abbreviation: 'Indic of violent crime',
+  },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 13,
+    abbreviation: 'Reasonable suspicion',
+  },
+  {
+    name: 'Probable cause to arrest or search',
+    value: 14,
+    abbreviation: 'Probable cause arrest/search',
+  },
+  {
+    name: 'Probable cause to take into custody under Welfare and Institutions Code section 5150',
+    value: 15,
+    abbreviation: 'Probable cause sec 5150',
+  },
+  {
+    name: 'Known to be on parole/probation/PRCS/mandatory supervision',
+    value: 16,
+    abbreviation: 'Known parole/probation',
+  },
+  {
+    name: 'Knowledge of outstanding arrest warrant / wanted person',
+    value: 17,
+    abbreviation: 'Knowledge of wanted person/warrant',
+  },
+  {
+    name: 'Investigation to determine whether the person is truant',
+    value: 18,
+    abbreviation: 'Truancy investigation',
+  },
+  {
+    name: 'Consensual encounter resulting in a search',
+    value: 19,
+    abbreviation: 'Consenual encounter',
+  },
+  {
+    name: 'Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4, and 48900.7',
+    value: 20,
+    abbreviation: 'Conduct warranting discipline',
+  },
+  {
+    name: 'Determine whether the student violated school policy',
+    value: 21,
+    abbreviation: 'Determ violation school policy',
+  },
+  {
+    name: 'Reason not communicated to the stopped person because the officer reasonably believed that withholding the reason for the stop was necessary to protect',
+    value: 22,
+    abbreviation: 'Withheld for officer safety',
+  },
+]
+
+export const PROBABLE_CAUSES = [
+  { name: 'Officer witnessed commission of a crime', value: 1 },
+  { name: 'Matched suspect description', value: 2 },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
+    value: 3,
+  },
+  { name: 'Carrying suspicious object', value: 4 },
+  { name: 'Actions indicative of casing a victim or location', value: 5 },
+  { name: 'Suspected of acting as a lookout', value: 6 },
+  { name: 'Actions indicative of a drug transaction', value: 7 },
+  { name: 'Actions indicative of engaging in a violent crime', value: 8 },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 9,
+  },
+  {
+    name: 'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
+    value: 10,
+  },
 ]
 
 export const EDUCATION_VIOLATIONS = [
@@ -114,6 +320,28 @@ export const REASONABLE_SUSPICIONS = [
   { name: 'Other Reasonable Suspicion of a crime', value: 9 },
 ]
 
+export const REASONABLE_SUSPICIONS_V2 = [
+  { name: 'Officer witnessed commission of a crime', value: 1 },
+  { name: 'Matched suspect description', value: 2 },
+  {
+    name: 'Witness or victim identified stopped person as a suspect of a crime',
+    value: 3,
+  },
+  { name: 'Carrying Suspicious Object', value: 4 },
+  { name: 'Actions indicative of casing a victim or location', value: 5 },
+  { name: 'Suspected of Acting as Lookout', value: 6 },
+  { name: 'Actions indicative of a drug transaction', value: 7 },
+  { name: 'Actions indicative of engaging in a violent crime', value: 8 },
+  {
+    name: 'Other reasonable suspicion or probable cause that a crime has occurred',
+    value: 9,
+  },
+  {
+    name: 'Matched description of suspect’s vehicle or vehicle observed at the scene of a crime',
+    value: 10,
+  },
+]
+
 export const ACTIONS_TAKEN = [
   { name: 'Person removed from vehicle by order', value: 1 },
   { name: 'Person removed from vehicle by physical contact', value: 2 },
@@ -140,8 +368,84 @@ export const ACTIONS_TAKEN = [
   { name: 'Admission or written statement obtained from student', value: 23 },
 ]
 
+export const NON_FORCE_ACTIONS_TAKEN = [
+  { name: 'Admission or written statement obtained from student', value: 1 },
+  { name: 'Asked for consent to search person', value: 2 },
+  { name: 'Asked for consent to search property', value: 3 },
+  { name: "Asked for identification of stopped person's passenger", value: 4 },
+  {
+    name: 'Asked whether the person is on parole, probation, PRCS, or some other form of mandatory supervision',
+    value: 5,
+  },
+  { name: 'Curbside detention', value: 6 },
+  { name: 'Field sobriety test conducted', value: 7 },
+  { name: 'Patrol car detention', value: 8 },
+  {
+    name: "Peace officer's canine used to search for, location, and/or detect contraband",
+    value: 9,
+  },
+  { name: 'Person Photographed', value: 10 },
+  { name: 'Person removed from vehicle by order', value: 11 },
+  { name: 'Property was seized', value: 12 },
+  { name: "Ran name of stopped person's passenger", value: 13 },
+  { name: 'Search of person was conducted', value: 14 },
+  { name: 'Search of property was conducted', value: 15 },
+  {
+    name: "Terry v. Ohio frisk/pat search of person's outer clothing was conducted",
+    value: 16,
+  },
+  { name: 'Vehicle was impounded', value: 17 },
+]
+
+export const FORCE_ACTIONS_TAKEN = [
+  { name: 'Handcuffed or flex cuffed', value: 1 },
+  { name: 'Baton or other impact weapon drawn', value: 2 },
+  {
+    name: 'Baton or other impact weapon used or other object (including a firearm) to strike or prod',
+    value: 3,
+  },
+  { name: 'Chemical spray used', value: 4 },
+  { name: 'Electronic control device pointed at person or sparked', value: 5 },
+  { name: 'Electronic control device used in drive-stun mode', value: 6 },
+  { name: 'Electronic control device used in dart-mode', value: 7 },
+  { name: 'Firearm unholstered', value: 8 },
+  { name: 'Firearm pointed at person', value: 9 },
+  { name: 'Firearm discharged', value: 10 },
+  { name: 'Impact projectile weapon pointed at person', value: 11 },
+  { name: 'Impact projectile discharged or used', value: 12 },
+  {
+    name: "Peace officer's canine removed from patrol vehicle to gain compliance and/or for purposes of apprehending stopped person",
+    value: 13,
+  },
+  { name: "Peace officer's canine bit or held person", value: 14 },
+  { name: 'Person removed from vehicle by physical contact', value: 15 },
+  { name: 'Physical compliance tactics and techniques', value: 16 },
+  { name: 'Use of vehicle in apprehension of stopped person', value: 17 },
+]
+
 export const BASIS_FOR_SEARCH = [
   { name: 'Consent given', value: 1 },
+  { name: 'Officer safety/safety of others', value: 2 },
+  { name: 'Search warrant', value: 3 },
+  {
+    name: 'Condition of parole / probation/ PRCS / mandatory supervision',
+    value: 4,
+  },
+  { name: 'Suspected weapons', value: 5 },
+  { name: 'Visible contraband', value: 6 },
+  { name: 'Odor of contraband', value: 7 },
+  { name: 'Canine detection', value: 8 },
+  { name: 'Evidence of crime', value: 9 },
+  { name: 'Incident to arrest', value: 10 },
+  { name: 'Exigent circumstances/emergency', value: 11 },
+  { name: 'Vehicle inventory', value: 12 },
+  { name: 'Suspected violation of school policy', value: 13 },
+]
+
+export const BASIS_FOR_SEARCH_V2 = [
+  { name: 'Verbal Consent given', value: 1 },
+  { name: 'Written Consent given', value: 14 },
+  { name: 'Consent implied by conduct', value: 15 },
   { name: 'Officer safety/safety of others', value: 2 },
   { name: 'Search warrant', value: 3 },
   {
@@ -193,6 +497,25 @@ export const SEIZED_PROPERTY_TYPES = [
   { name: 'Cell phone(s) or electronic device(s)', value: 9 },
   { name: 'Vehicle', value: 10 },
   { name: 'Other contraband or evidence', value: 11 },
+]
+
+export const STOP_RESULTS_V2 = [
+  { name: 'Verbal Warning', value: 14 },
+  { name: 'Written Warning', value: 15 },
+  { name: 'Citation for infraction', value: 3 },
+  { name: 'In-field cite and release', value: 4 },
+  { name: 'Custodial Arrest pursuant to outstanding warrant', value: 5 },
+  { name: 'Custodial Arrest without warrant', value: 6 },
+  { name: 'Field interview card completed', value: 7 },
+  { name: 'Noncriminal transport or caretaking transport', value: 8 },
+  {
+    name: 'Contacted parent/legal guardian or other person responsible for the minor',
+    value: 9,
+  },
+  { name: 'Psychiatric hold', value: 10 },
+  { name: 'Contacted U.S. Department of Homeland Security', value: 11 },
+  { name: 'Referral to school administrator', value: 12 },
+  { name: 'Referral to school counselor or other support staff', value: 13 },
 ]
 
 export const STOP_RESULTS = [

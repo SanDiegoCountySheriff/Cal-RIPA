@@ -1,7 +1,6 @@
-﻿namespace RIPA.Functions.TextAnalytics.Models
+﻿namespace RIPA.Functions.TextAnalytics.Models;
+
+public class PiiRequest
 {
-    public class PiiRequest
-    {
-        public string Document { get; set; }
-    }
+    public string Document { get; set; }
 }

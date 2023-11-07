@@ -6,15 +6,28 @@
       </v-card-title>
 
       <v-card-text>
+        <v-alert v-if="favoritesCodeExpired" color="error" outlined
+          >You have favorites with expired statute codes. To update, save a
+          favorite with the same name.</v-alert
+        >
+        <v-alert v-if="favoritesCityExpired" color="error" outlined
+          >You have favorites with an expired city. To update, save a favorite
+          with the same name.</v-alert
+        >
+        <v-alert v-if="favoritesSchoolExpired" color="error" outlined
+          >You have favorites with an expired school. To update, save a favorite
+          with the same name.</v-alert
+        >
+        <v-alert v-if="this.version === 2" color="warning" outlined
+          >Due to recent regulation changes, old favorites are obsolete. Please
+          recreate your favorites.</v-alert
+        >
         <v-container>
           <v-row>
             <v-col cols="12">
               <ripa-favorites-grid
                 :items="favorites"
-                :is-online-and-authenticated="isOnlineAndAuthenticated"
-                :on-delete-favorite="onDeleteFavorite"
-                :on-edit-favorite="onEditFavorite"
-                :on-open-favorite="onOpenFavorite"
+                v-on="$listeners"
               ></ripa-favorites-grid>
             </v-col>
           </v-row>
@@ -39,6 +52,8 @@ export default {
     RipaFavoritesGrid,
   },
 
+  inject: ['version'],
+
   data() {
     return {
       viewModel: this.showDialog,
@@ -52,20 +67,34 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModel = newValue
       },
+    },
+
+    favoritesCodeExpired() {
+      return this.favorites.some(favorite => {
+        return favorite.favoritesCodeExpired === true
+      })
+    },
+
+    favoritesCityExpired() {
+      return this.favorites.some(favorite => {
+        return favorite.favoritesCityExpired === true
+      })
+    },
+
+    favoritesSchoolExpired() {
+      return this.favorites.some(favorite => {
+        return favorite.favoritesSchoolExpired === true
+      })
     },
   },
 
   methods: {
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.$emit('on-close')
     },
     getTitle() {
       return 'Favorite ' + this.title
@@ -87,33 +116,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      default: () => {},
-    },
-    onDeleteFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onEditFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onSaveFavorite: {
-      type: Function,
-      default: () => {},
     },
   },
 }

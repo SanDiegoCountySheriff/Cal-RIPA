@@ -1,55 +1,36 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
-    <template v-if="adminEditing">
-      <ripa-officer
-        :user="getApiStopUser"
-        :on-open-statute="onOpenStatute"
-        :on-update-user="handleUpdateStopUser"
-      ></ripa-officer>
+    <div
+      v-if="$vuetify.breakpoint.mobile"
+      class="tw-flex tw-mb-5 tw-justify-center"
+    >
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
+        Next
+      </v-btn>
+    </div>
 
-      <ripa-user-dialog
-        admin-editing
-        :is-invalid-user="false"
-        :user="getApiStopUser"
-        :show-dialog="showUserDialog"
-        :on-close="handleCloseDialog"
-        :on-save="handleSaveUser"
-      ></ripa-user-dialog>
+    <template v-if="isAdminEditing">
+      <ripa-officer v-on="$listeners"></ripa-officer>
+
+      <template v-if="model.stopVersion === 2">
+        <ripa-stop-type v-model="model" v-on="$listeners"></ripa-stop-type>
+      </template>
     </template>
 
-    <template v-if="!adminEditing && isOnlineAndAuthenticated">
-      <ripa-officer
-        :user="user"
-        :on-open-statute="onOpenStatute"
-        :on-update-user="onUpdateUser"
-      ></ripa-officer>
+    <template v-if="!isAdminEditing && isOnlineAndAuthenticated">
+      <ripa-officer v-on="$listeners"></ripa-officer>
     </template>
 
-    <ripa-stop-date
-      v-model="model"
-      :admin-editing="adminEditing"
-      :on-open-statute="onOpenStatute"
-    ></ripa-stop-date>
+    <ripa-stop-date v-model="model" v-on="$listeners"></ripa-stop-date>
 
-    <ripa-location
-      v-model="model"
-      :schools="schools"
-      :beats="beats"
-      :county-cities="countyCities"
-      :display-beat-input="displayBeatInput"
-      :isOnlineAndAuthenticated="isOnlineAndAuthenticated"
-      :last-location="lastLocation"
-      :loading-gps="loadingGps"
-      :loading-pii="loadingPii"
-      :non-county-cities="nonCountyCities"
-      :valid-last-location="validLastLocation"
-      :on-open-favorites="onOpenFavorites"
-      :on-open-last-location="onOpenLastLocation"
-      :on-open-statute="onOpenStatute"
-      :on-save-favorite="onSaveFavorite"
-      :on-gps-location="onGpsLocation"
-      @pii-check="handlePiiCheck"
-    ></ripa-location>
+    <template v-if="model.stopVersion === 2">
+      <ripa-stop-type v-model="model" v-on="$listeners"></ripa-stop-type>
+    </template>
+
+    <ripa-location v-model="model" v-on="$listeners"></ripa-location>
 
     <v-spacer></v-spacer>
 
@@ -64,11 +45,7 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn
-        color="primary"
-        :disabled="isBackNextDisabled"
-        @click="handleStep1Next"
-      >
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
         Next
       </v-btn>
     </div>
@@ -77,8 +54,8 @@
       :show-dialog="showConfirmDialog"
       title="Confirm Continue"
       subtitle="This page may contain personally identifying information. Are you sure you want to continue?"
-      :on-close="handleCloseDialog"
-      :on-confirm="handleConfirm"
+      @on-close="handleCloseDialog"
+      @on-confirm="handleConfirm"
     >
     </ripa-confirm-dialog>
   </v-form>
@@ -91,8 +68,7 @@ import RipaOfficer from '@/components/molecules/RipaOfficer'
 import RipaStopDate from '@/components/molecules/RipaStopDate'
 import RipaLocation from '@/components/molecules/RipaLocation'
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaUserDialog from '@/components/molecules/RipaUserDialog'
-import { getOfficerAssignment } from '@/utilities/stop'
+import RipaStopType from '@/components/molecules/RipaStopType'
 
 export default {
   name: 'ripa-form-step1',
@@ -105,7 +81,7 @@ export default {
     RipaOfficer,
     RipaStopDate,
     RipaLocation,
-    RipaUserDialog,
+    RipaStopType,
   },
 
   data() {
@@ -114,30 +90,11 @@ export default {
     }
   },
 
-  computed: {
-    getApiStopUser() {
-      const submittedApiStop = localStorage.getItem(
-        'ripa_form_submitted_api_stop',
-      )
-      const parsedApiStop = submittedApiStop
-        ? JSON.parse(submittedApiStop)
-        : null
-
-      if (parsedApiStop) {
-        return {
-          assignment: Number(parsedApiStop.officerAssignment.key),
-          otherType: parsedApiStop.officerAssignment.otherType,
-          yearsExperience: Number(parsedApiStop.expYears),
-        }
-      }
-
-      return null
-    },
-  },
+  inject: ['isAdminEditing', 'isOnlineAndAuthenticated', 'loadingPiiStep1'],
 
   methods: {
     handleStep1Next() {
-      const piiFound = this.viewModel.location?.piiFound || false
+      const piiFound = this.model.location?.piiFound || false
       if (piiFound) {
         this.showConfirmDialog = true
       } else {
@@ -145,105 +102,8 @@ export default {
       }
     },
 
-    handleUpdateStopUser() {
-      this.showUserDialog = true
-    },
-
     handleCloseDialog() {
-      this.showUserDialog = false
       this.showConfirmDialog = false
-    },
-
-    handleSaveUser(user) {
-      // get submitted api stop
-      const submittedApiStop = localStorage.getItem(
-        'ripa_form_submitted_api_stop',
-      )
-      const parsedApiStop = submittedApiStop
-        ? JSON.parse(submittedApiStop)
-        : null
-
-      // update assignment and assign parsed api stop
-      const assignment = getOfficerAssignment(user.assignment)
-      parsedApiStop.officerAssignment = {
-        key: assignment.code.toString(),
-        otherType: user.otherType || '',
-        type: assignment.text,
-      }
-      parsedApiStop.expYears = user.yearsExperience
-
-      // update submitted api stop
-      localStorage.setItem(
-        'ripa_form_submitted_api_stop',
-        JSON.stringify(parsedApiStop),
-      )
-    },
-
-    handlePiiCheck({ source, value }) {
-      this.$emit('pii-check', { source, value })
-    },
-  },
-
-  props: {
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
-    displayBeatInput: {
-      type: Boolean,
-      default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
-    schools: {
-      type: Array,
-      default: () => [],
-    },
-    user: {
-      type: Object,
-      default: () => {},
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
-      type: Function,
-      required: true,
-    },
-    onUpdateUser: {
-      type: Function,
-      required: true,
     },
   },
 }

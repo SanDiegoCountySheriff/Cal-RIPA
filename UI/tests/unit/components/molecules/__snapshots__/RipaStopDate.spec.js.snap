@@ -16,7 +16,7 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
               <div class="v-input__slot">
                 <div class="v-text-field__slot"><label for="input-29" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Date of Stop</label><input id="input-29" type="date"></div>
                 <div class="v-input__append-inner">
-                  <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
+                  <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" tabindex="-1" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
                 </div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
@@ -51,43 +51,48 @@ exports[`Ripa Stop Date should match snapshot 1`] = `
         </div>
       </div>
       <div class="col-sm-12 col-md-4 col-12">
-        <div class="md:tw-mr-4">
-          <div class="v-input theme--light v-text-field" min="1" max="1440">
-            <div class="v-input__control">
-              <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-40" class="v-label theme--light" style="left: 0px; position: absolute;">Stop Duration</label><input inputmode="numeric" min="0" id="input-40" type="number"></div>
-              </div>
-              <div class="v-text-field__details">
-                <div class="v-messages theme--light">
-                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                </div>
+        <div class="v-input theme--light v-text-field" min="1" max="1440">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-text-field__slot"><label for="input-40" class="v-label theme--light" style="left: 0px; position: absolute;">Stop Duration</label><input inputmode="numeric" min="0" id="input-40" type="number"></div>
+            </div>
+            <div class="v-text-field__details">
+              <div class="v-messages theme--light">
+                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="row"><button type="button" class="ml-3 mb-3 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+        Convert to Version 2 Stop
+      </span></button></div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
         <div class="ripa-switch" style="max-width: 300px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-44" role="switch" type="checkbox" aria-disabled="false" value="">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-45" role="switch" type="checkbox" aria-disabled="false" value="">
                   <div class="v-input--selection-controls__ripple"></div>
                   <div class="v-input--switch__track theme--light"></div>
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-44" class="v-label theme--light" style="left: 0px; position: relative;">
-                  Stop in response to Call for Service
-                </label>
+                </div><label for="input-45" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Stop in response to Call for Service
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!---->
   </div>
+  <!---->
 </div>
 `;

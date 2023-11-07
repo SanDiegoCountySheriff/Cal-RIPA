@@ -1,7 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Form Step 5 should match snapshot 1`] = `
-<form novalidate="novalidate" class="v-form">
+<form novalidate="novalidate" class="v-form" onopenfavorites="function () {
+        return fn.apply(this, arguments);
+      }" onsavefavorite="function () {
+        return fn.apply(this, arguments);
+      }">
+  <div class="tw-flex tw-mb-5 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+      Back
+    </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
   <div class="ripa-action-taken tw-pb-4">
     <div class="ripa-form-header">
       <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
@@ -16,27 +27,34 @@ exports[`Ripa Form Step 5 should match snapshot 1`] = `
           </span></button></div>
         </div>
         <div class="col-sm-6 col-md-6 col-12">
-          <!---->
+          <div class="tw-mr-2 tw-mt-4"><button type="button" class="tw-w-full v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary"><span class="v-btn__content">
+              Save Result
+            </span></button></div>
         </div>
       </div>
-      <div class="row no-gutters">
-        <div class="tw-mb-4 col-sm-12 col-12"></div>
+      <div class="row">
+        <!---->
+      </div>
+      <div class="row">
+        <div class="text-center col"></div>
       </div>
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
           <div class="ripa-switch" style="max-width: 200px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-11" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-15" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-11" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Any Results of Stop?
-                  </label>
+                  </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Any Results of Stop?
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
@@ -55,7 +73,7 @@ exports[`Ripa Form Step 5 should match snapshot 1`] = `
     </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
       Next
     </span></button></div>
-  <div role="dialog" class="v-dialog__container">
+  <div class="v-dialog__container">
     <!---->
   </div>
 </form>

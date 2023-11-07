@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RIPA.Functions.UserProfile": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7072"
+    }
+  }
+}

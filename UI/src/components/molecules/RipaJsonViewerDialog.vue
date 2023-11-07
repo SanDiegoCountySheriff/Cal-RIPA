@@ -49,6 +49,8 @@ export default {
     }
   },
 
+  inject: ['fullStop'],
+
   computed: {
     model: {
       get() {
@@ -56,9 +58,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          if (this.onClose) {
-            this.onClose()
-          }
+          this.handleClose()
         }
         this.viewModel = newValue
       },
@@ -67,9 +67,7 @@ export default {
 
   methods: {
     handleClose() {
-      if (this.onClose) {
-        this.onClose()
-      }
+      this.$emit('on-close')
     },
   },
 
@@ -84,10 +82,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    fullStop: {
-      type: Object,
-      default: () => {},
-    },
     apiStop: {
       type: Object,
       default: () => {},
@@ -95,10 +89,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onClose: {
-      type: Function,
-      required: true,
     },
   },
 }

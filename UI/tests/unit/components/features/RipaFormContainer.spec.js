@@ -7,13 +7,13 @@ import {
   BASIS_FOR_SEARCH_PII_TEST_CASES,
   API_STOP,
   FULL_STOP,
-  STOP,
+  V1_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import { defaultStop } from '@/utilities/stop.js'
 import RipaApiStopJobMixin from '@/components/mixins/RipaApiStopJobMixin'
-import RipaFormContainerMixin from '@/components/mixins/RipaFormContainerMixin'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -88,6 +88,9 @@ describe('Ripa Form Container', () => {
       mappedStopSubmissionFailedIds: jest.fn().mockReturnValue([]),
       mappedStopSubmissionStatus: jest.fn(),
       mappedStopSubmissionFailedStops: jest.fn().mockReturnValue([]),
+      favoriteLocations: jest.fn().mockReturnValue(''),
+      favoriteReasons: jest.fn().mockReturnValue(''),
+      favoriteResults: jest.fn().mockReturnValue(''),
     }
     mutations = {
       setIsOnline: (state, value) => {
@@ -119,7 +122,14 @@ describe('Ripa Form Container', () => {
       propsData: {
         ...propsData,
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      provide: {
+        formStepIndex: computed(() => 0),
+        version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
+      },
+      mixins: [RipaApiStopJobMixin],
     })
   }
 
@@ -130,8 +140,15 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      provide: {
+        version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
+      },
+      mixins: [RipaApiStopJobMixin],
       computed: {
         isAdminEditing: {
           get() {
@@ -149,8 +166,22 @@ describe('Ripa Form Container', () => {
       localVue,
       propsData: {
         ...propsData,
+        formStepIndex: 1,
       },
-      mixins: [RipaApiStopJobMixin, RipaFormContainerMixin],
+      provide: {
+        version: computed(() => 1),
+        favoriteLocations: computed(() => []),
+        favoriteReasons: computed(() => []),
+        favoriteResults: computed(() => []),
+      },
+      computed: {
+        mappedFormBeats: () => [{ id: 'test' }],
+        mappedFormCountyCities: () => [{ id: 'test' }],
+        mappedFormNonCountyCities: () => [{ id: 'test' }],
+        mappedFormSchools: () => [{ id: 'test' }],
+        mappedFormStatutes: () => [{ id: 'test' }],
+      },
+      mixins: [RipaApiStopJobMixin],
     })
   }
 
@@ -166,6 +197,8 @@ describe('Ripa Form Container', () => {
     const expectedUser = {
       agency: 'SDSD',
       assignment: 1,
+      officerGender: undefined,
+      officerRace: [],
       otherType: null,
       startDate: '2020-12-12',
       yearsExperience: 10,
@@ -264,7 +297,7 @@ describe('Ripa Form Container', () => {
         'validateBasisForSearchForPii',
       )
 
-      await wrapper.vm.handlePiiCheck({ source: source, value: testValue })
+      await wrapper.vm.handlePiiCheck({ source, value: testValue })
 
       expect(validateLocationForPii).toHaveBeenCalledTimes(
         test.expectedCalls[0],
@@ -418,7 +451,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(
@@ -452,7 +485,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(
@@ -500,7 +533,7 @@ describe('Ripa Form Container', () => {
     localStorage.setItem('ripa_form_step_index', '7')
     localStorage.setItem('ripa_form_editing', '1')
     localStorage.setItem('ripa_form_editing_stop_with_error', '1')
-    localStorage.setItem('ripa_form_stop', JSON.stringify(STOP))
+    localStorage.setItem('ripa_form_stop', JSON.stringify(V1_STOP))
     localStorage.setItem('ripa_form_full_stop', JSON.stringify(FULL_STOP))
     localStorage.setItem('ripa_form_api_stop', JSON.stringify(API_STOP))
     localStorage.setItem(

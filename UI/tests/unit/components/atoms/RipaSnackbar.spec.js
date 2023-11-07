@@ -47,16 +47,15 @@ describe('Ripa Snackbar', () => {
     wrapper.setProps({ autoClose: false })
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.vm.getTimeout).toEqual(null)
+    expect(wrapper.vm.getTimeout).toEqual(-1)
   })
 
   it('should handle view click', async () => {
     wrapper = factory()
-    const onView = jest.spyOn(wrapper.vm, 'onView')
 
     wrapper.vm.handleViewClick()
 
-    expect(onView).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted('on-view')).toBeTruthy()
     expect(wrapper.vm.model).toBeFalsy()
   })
 

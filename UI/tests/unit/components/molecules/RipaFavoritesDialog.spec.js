@@ -14,17 +14,36 @@ describe('Ripa Favorites Dialog', () => {
     wrapper.destroy()
   })
 
-  const factory = propsData => {
+  const shallowFactory = propsData => {
     return shallowMount(RipaFavoritesDialog, {
       vuetify,
       propsData: {
         ...propsData,
       },
+      provide: {
+        version() {
+          return 1
+        },
+      },
+    })
+  }
+
+  const factory = propsData => {
+    return mount(RipaFavoritesDialog, {
+      vuetify,
+      propsData: {
+        ...propsData,
+      },
+      provide: {
+        version() {
+          return 1
+        },
+      },
     })
   }
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaFavoritesDialog, { vuetify })
+    wrapper = factory()
 
     expect(wrapper.html()).toMatchSnapshot()
   })

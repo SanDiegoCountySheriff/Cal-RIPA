@@ -26,13 +26,10 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-agency-questions',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -41,7 +38,7 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      viewModel: this.value,
     }
   },
 
@@ -71,12 +68,6 @@ export default {
           (v || '').length <= question.maxLength ||
           `Max ${question.maxLength} characters`,
       ]
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
     },
   },
 

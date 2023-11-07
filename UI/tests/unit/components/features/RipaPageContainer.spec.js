@@ -4,6 +4,7 @@ import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import router from '@/router'
 import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
+import { computed } from 'vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -62,6 +63,10 @@ describe('Ripa Page Container', () => {
       router,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        user: () => {},
+        stopsWithErrors: computed(() => []),
       },
     })
   }

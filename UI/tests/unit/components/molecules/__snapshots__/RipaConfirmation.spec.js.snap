@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ripa Contraband should match snapshot 1`] = `
+<div value="[object Object]">
+  <div class="text-center">
+    <div role="progressbar" aria-valuemin="0" aria-valuemax="100" class="v-progress-circular v-progress-circular--visible v-progress-circular--indeterminate primary--text" style="height: 150px; width: 150px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="20.408163265306122 20.408163265306122 40.816326530612244 40.816326530612244" style="transform: rotate(0deg);">
+        <circle fill="transparent" cx="40.816326530612244" cy="40.816326530612244" r="20" stroke-width="0.8163265306122449" stroke-dasharray="125.664" stroke-dashoffset="125.66370614359172px" class="v-progress-circular__overlay"></circle>
+      </svg>
+      <div class="v-progress-circular__info">
+        Submitting Stop <br>
+        Please Wait
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,18 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa Template should match snapshot 1`] = `
-<div class="mx-auto v-card v-card--flat v-sheet theme--light" style="max-width: 500px;">
+<div class="mx-auto v-card v-card--flat v-sheet theme--light" style="max-width: 500px;" onopentemplate="function () {
+        return fn.apply(this, arguments);
+      }">
   <div class="v-card__text">
     <div class="tw-mt-4 tw-mb-4">
       <div class="container container--fluid">
         <!---->
-        <div role="alert" class="v-alert v-sheet theme--dark v-alert--dense error">
-          <div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-alert theme--dark"></i>
-            <div class="v-alert__content">
-              You are currently offline. You must log in to create stops.
-            </div>
-          </div>
-        </div>
+        <!---->
         <div class="row no-gutters row--dense">
           <div class="tw-mt-4 tw-text-center col-sm-12 col-12"><button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
               BASIC STOP
@@ -39,7 +35,12 @@ exports[`Ripa Template should match snapshot 1`] = `
       <a href="https://oag.ca.gov/ab953/regulations" target="_blank" rel="noopener noreferrer">
         AG's Website </a>.
     </p>
-    <!---->
+    <p>
+      If you experience issues please contact us at
+      <a>reportingEmailAddress() {
+        return '';
+        }</a>
+    </p>
     <hr role="separator" aria-orientation="horizontal" class="v-divider theme--light">
   </div>
 </div>

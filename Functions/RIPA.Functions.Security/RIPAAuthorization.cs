@@ -75,7 +75,7 @@ namespace RIPA.Functions.Security
 
         private static void ValidateTokenAudience(SecurityToken securityToken)
         {
-            var audiences = ((System.IdentityModel.Tokens.Jwt.JwtSecurityToken)securityToken).Audiences;
+            var audiences = ((JwtSecurityToken)securityToken).Audiences;
             bool ripaAudience = audiences.Contains(AuthorizationConfiguration.RIPAAppClientID);
 
             if (!ripaAudience)

@@ -5,7 +5,7 @@
         title="Perceived Gender"
         required
         subtitle="§999.226(a)(5)"
-        :on-open-statute="onOpenStatute"
+        v-on="$listeners"
       >
       </ripa-form-header>
 
@@ -16,34 +16,40 @@
               v-model="model.person.perceivedGender"
               :disabled="disabled"
               :items="genderItems"
-              :rules="genderRules"
+              :rules="model.stopVersion === 1 ? genderRules : genderRulesV2"
               clear-selection
-              @input="handleGenderInput"
             >
             </ripa-radio-group>
           </v-col>
 
           <v-col cols="12" sm="12">
             <ripa-switch
+              v-if="model.stopVersion === 1"
               v-model="model.person.genderNonconforming"
               label="Gender Nonconforming"
               :disabled="disabled"
-              :max-width="250"
               :rules="genderRules"
-              @input="handleInput"
+            ></ripa-switch>
+
+            <ripa-switch
+              v-if="model.stopVersion === 2"
+              v-model="model.person.nonBinaryPerson"
+              label="Nonbinary person"
+              :disabled="disabled"
+              :rules="genderRulesV2"
             ></ripa-switch>
           </v-col>
         </v-row>
       </v-container>
     </template>
 
-    <template>
+    <template v-if="model.stopVersion === 1">
       <ripa-form-header
         class="tw-mt-8"
         title="Perceived LGBT"
         required
         subtitle="§999.226(a)(6)"
-        :on-open-statute="onOpenStatute"
+        v-on="$listeners"
       >
       </ripa-form-header>
 
@@ -53,10 +59,32 @@
             <ripa-switch
               v-model="model.person.perceivedLgbt"
               label="Perceived as LGBT"
-              :max-width="200"
               :disabled="isPerceivedLgbtDisabled"
-              @input="handleInput"
             ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
+
+    <template v-else>
+      <ripa-form-header
+        class="tw-mt-8"
+        title="Perceived Sexual Orientation"
+        required
+        subtitle="§999.226(a)(6)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="12" sm="12">
+            <ripa-radio-group
+              v-model="model.person.perceivedSexualOrientation"
+              :items="orientationItems"
+              :rules="orientationRules"
+              label="Perceived Sexual Orientation"
+            ></ripa-radio-group>
           </v-col>
         </v-row>
       </v-container>
@@ -66,15 +94,16 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaRadioGroup from '@/components/atoms/RipaRadioGroup'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
-import { GENDERS } from '@/constants/form'
+import {
+  GENDERS,
+  PERSON_GENDERS_V2,
+  SEXUAL_ORIENTATIONS,
+} from '@/constants/form'
 
 export default {
   name: 'ripa-gender',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaFormHeader,
@@ -84,55 +113,84 @@ export default {
 
   data() {
     return {
-      genderItems: GENDERS,
-      viewModel: this.syncModel(this.value),
+      orientationItems: SEXUAL_ORIENTATIONS,
     }
   },
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (newVal.stopVersion === 1) {
+          newVal.person.perceivedSexualOrientation = null
+          if (
+            newVal.person.perceivedGender === 3 ||
+            newVal.person.perceivedGender === 4
+          ) {
+            newVal.person.perceivedLgbt = true
+          }
+          if (
+            newVal.person.perceivedGender === 1 ||
+            newVal.person.perceivedGender === 2
+          ) {
+            newVal.person.perceivedLgbt = false
+          }
+        } else {
+          newVal.person.perceivedLgbt = null
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
+    genderItems() {
+      if (this.model.stopVersion === 1) {
+        return GENDERS
+      }
+
+      return PERSON_GENDERS_V2
+    },
+
     genderRules() {
-      const gender = this.viewModel.person.perceivedGender
-      const checked = this.viewModel.person.genderNonconforming
-      const isValid = gender !== null || checked
+      const gender = this.model.person.perceivedGender
+      const checked = this.model.person.genderNonconforming
+      const isValid = !!gender || !!checked
 
       return [isValid !== false || 'A gender is required']
+    },
+
+    genderRulesV2() {
+      const gender = this.model.person.perceivedGender
+      const checked = this.model.person.nonBinaryPerson
+      const isValid = !!gender || !!checked
+
+      return [isValid !== false || 'A gender is required']
+    },
+
+    orientationRules() {
+      return [
+        !!this.model.person.perceivedSexualOrientation ||
+          'A perceived orientation is required',
+      ]
     },
 
     isPerceivedLgbtDisabled() {
       return (
         this.disabled ||
-        this.viewModel.person.perceivedGender === 3 ||
-        this.viewModel.person.perceivedGender === 4
+        this.model.person.perceivedGender === 3 ||
+        this.model.person.perceivedGender === 4
       )
     },
   },
 
-  methods: {
-    handleGenderInput() {
-      if (
-        this.viewModel.person.perceivedGender === 1 ||
-        this.viewModel.person.perceivedGender === 2
-      ) {
-        this.viewModel.person.perceivedLgbt = false
-      }
-      this.handleInput()
-    },
-
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
-    },
-  },
-
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

@@ -2,6 +2,13 @@
 
 exports[`Ripa Form Step 6 should match snapshot 1`] = `
 <form novalidate="novalidate" class="v-form">
+  <div class="tw-flex tw-mb-5 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+        Back
+      </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
   <div class="ripa-agency-questions tw-pb-4">
     <div class="ripa-form-header">
       <div class="row tw-ml-1 tw-mt-1">

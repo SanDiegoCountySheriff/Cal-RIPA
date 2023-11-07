@@ -1,11 +1,10 @@
 ﻿using Azure.AI.TextAnalytics;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts
+namespace RIPA.Functions.TextAnalytics.Services.TextAnalytics.Contracts;
+
+public interface IPiiTextAnalyticsService
 {
-    public interface IPiiTextAnalyticsService
-    {
-        Task<CategorizedEntityCollection> GetCategorizedEntities(string document);
-        Task<PiiEntityCollection> GetPiiEntities(string document);
-    }
+    Task<CategorizedEntityCollection> GetCategorizedEntities(string document);
+    Task<PiiEntityCollection> GetPiiEntities(string document);
 }

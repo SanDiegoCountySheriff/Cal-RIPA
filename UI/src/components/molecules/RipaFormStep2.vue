@@ -1,42 +1,63 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
+    <div
+      v-if="$vuetify.breakpoint.mobile"
+      class="tw-flex tw-mb-5 tw-justify-center"
+    >
+      <template v-if="backButtonVisible">
+        <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
+          Back
+        </v-btn>
+      </template>
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
+        Next
+      </v-btn>
+    </div>
+
     <template v-if="isSchool">
       <ripa-student
         v-model="model"
+        v-on="$listeners"
         :disabled="disabled"
-        toggle
-        :on-open-statute="onOpenStatute"
       ></ripa-student>
     </template>
 
     <ripa-race
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-race>
 
     <ripa-gender
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-gender>
 
-    <ripa-age
-      v-model="model"
-      :disabled="disabled"
-      :on-open-statute="onOpenStatute"
-    ></ripa-age>
+    <ripa-age v-model="model" v-on="$listeners" :disabled="disabled"></ripa-age>
 
     <ripa-limited-english
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-limited-english>
+
+    <template v-if="model.stopVersion === 2">
+      <ripa-perceived-unhoused
+        v-model="model"
+        v-on="$listeners"
+        :disabled="disabled"
+      >
+      </ripa-perceived-unhoused>
+    </template>
 
     <ripa-disability
       v-model="model"
+      v-on="$listeners"
       :disabled="disabled"
-      :on-open-statute="onOpenStatute"
     ></ripa-disability>
 
     <v-spacer></v-spacer>
@@ -50,20 +71,14 @@
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
       <template v-if="backButtonVisible">
-        <v-btn
-          outlined
-          color="primary"
-          class="tw-mr-2"
-          :disabled="isBackNextDisabled"
-          @click="handleBack"
-        >
+        <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">
           Back
         </v-btn>
       </template>
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="isBackNextDisabled" @click="handleNext">
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
         Next
       </v-btn>
     </div>
@@ -71,6 +86,7 @@
 </template>
 
 <script>
+import RipaPerceivedUnhoused from '@/components/molecules/RipaPerceivedUnhoused'
 import RipaAge from '@/components/molecules/RipaAge'
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaDisability from '@/components/molecules/RipaDisability'
@@ -93,11 +109,12 @@ export default {
     RipaLimitedEnglish,
     RipaRace,
     RipaStudent,
+    RipaPerceivedUnhoused,
   },
 
   computed: {
     isSchool() {
-      return this.viewModel?.location?.isSchool || false
+      return this.model?.location?.isSchool || false
     },
   },
 

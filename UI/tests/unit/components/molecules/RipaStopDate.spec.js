@@ -3,22 +3,30 @@ import { shallowMount, mount } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import { format } from 'date-fns'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
+import { V2_STOP } from '../../constants/RipaFormContainerTestConstants'
 
 describe('Ripa Stop Date', () => {
   let vuetify
   let stop
   let wrapper = null
+  let stopV2
 
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
+    stopV2 = V2_STOP
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return shallowMount(RipaStopDate, {
       vuetify,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        isAdminEditing: computed(() => provideData?.isAdminEditing ?? false),
+        environmentName: computed(() => 'QA'),
       },
     })
   }
@@ -87,12 +95,12 @@ describe('Ripa Stop Date', () => {
       wrapper = factory({ value: stop })
 
       stop.stopDate.date = test.date
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
-      expect(wrapper.vm.dateRules[0](wrapper.vm.viewModel.stopDate.date)).toBe(
+      expect(wrapper.vm.dateRules[0](wrapper.vm.model.stopDate.date)).toBe(
         test.expectedFirstCase,
       )
-      expect(wrapper.vm.dateRules[1](wrapper.vm.viewModel.stopDate.date)).toBe(
+      expect(wrapper.vm.dateRules[1](wrapper.vm.model.stopDate.date)).toBe(
         test.expectedSecondCase,
       )
     })
@@ -112,20 +120,24 @@ describe('Ripa Stop Date', () => {
           return '2019-12-31'
         }),
       },
+      provide: {
+        isAdminEditing: computed(() => false),
+        environmentName: computed(() => 'DEV'),
+      },
     })
 
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('should validate admin date', () => {
-    wrapper = factory({ value: stop, adminEditing: true })
+    wrapper = factory({ value: stop }, { isAdminEditing: true })
     const inputDate = createDate(-2, 0, 0)
 
     stop.stopDate.date = inputDate
-    wrapper.vm.$data.viewModel = stop
+    wrapper.vm.model = stop
 
     wrapper.vm.dateRules.forEach(x =>
-      expect(x(wrapper.vm.viewModel.stopDate.date)).toBe(true),
+      expect(x(wrapper.vm.model.stopDate.date)).toBe(true),
     )
   })
 
@@ -139,12 +151,12 @@ describe('Ripa Stop Date', () => {
         stop.stopDate.date = createDate(1, 0, 0)
       }
 
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
-      expect(wrapper.vm.timeRules[0](wrapper.vm.viewModel.stopDate.time)).toBe(
+      expect(wrapper.vm.timeRules[0](wrapper.vm.model.stopDate.time)).toBe(
         test.expectedFirstCase,
       )
-      expect(wrapper.vm.timeRules[1](wrapper.vm.viewModel.stopDate.time)).toBe(
+      expect(wrapper.vm.timeRules[1](wrapper.vm.model.stopDate.time)).toBe(
         test.expectedSecondCase,
       )
     })
@@ -155,33 +167,27 @@ describe('Ripa Stop Date', () => {
       wrapper = factory({ value: stop })
 
       stop.stopDate.duration = test.duration
-      wrapper.vm.$data.viewModel = stop
+      wrapper.vm.model = stop
 
       expect(
-        wrapper.vm.durationRules[0](wrapper.vm.viewModel.stopDate.duration),
+        wrapper.vm.durationRules[0](wrapper.vm.model.stopDate.duration),
       ).toBe(test.expectedFirstCase)
       expect(
-        wrapper.vm.durationRules[1](wrapper.vm.viewModel.stopDate.duration),
+        wrapper.vm.durationRules[1](wrapper.vm.model.stopDate.duration),
       ).toBe(test.expectedSecondCase)
     })
   })
 
-  it('should handle input', () => {
-    wrapper = factory({ value: stop })
+  it('should display welfare check switch for v2 stops', () => {
+    wrapper = factory({ value: stopV2 })
 
-    wrapper.vm.handleInput()
-
-    expect(wrapper.emitted('input')).toBeTruthy()
-    expect(wrapper.emitted().input[0][0]).toEqual(wrapper.vm.$data.viewModel)
+    expect(wrapper.html()).toContain('Welfare')
   })
 
-  it('should watch value', async () => {
+  it('should not display welfare check switch for legacy stops', () => {
     wrapper = factory({ value: stop })
-    const updatedStop = defaultStop()
-    updatedStop.id = 1
-    wrapper.setProps({ value: updatedStop })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.viewModel.id).toEqual(1)
+
+    expect(wrapper.html()).not.toContain('Welfare')
   })
 })
 

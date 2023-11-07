@@ -4,177 +4,294 @@
       title="Location"
       required
       subtitle="§999.226(a)(3)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
-    <v-container>
-      <v-row no-gutters>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <template v-if="isGeolocationAvailable">
-            <div class="tw-mr-2 tw-mt-4">
-              <v-btn
-                class="tw-w-full"
-                color="primary"
-                small
-                :loading="loadingGps"
-                @click="handleCurrentLocation"
-              >
-                Current Location
-              </v-btn>
-            </div>
-          </template>
+    <v-container class="mt-5">
+      <v-row>
+        <v-col cols="12" sm="6" md="3">
+          <v-btn
+            :loading="loadingGps"
+            :disabled="!isGeolocationAvailable"
+            @click="handleCurrentLocation"
+            color="primary"
+            block
+            small
+          >
+            Current Location
+          </v-btn>
         </v-col>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              color="primary"
-              small
-              :disabled="!validLastLocation"
-              @click="handleLastLocation"
-              >Last Location
-            </v-btn>
-          </div>
+
+        <v-col cols="12" sm="6" md="3">
+          <v-btn
+            :disabled="!validLastLocation"
+            @click="handleLastLocation"
+            color="primary"
+            block
+            small
+          >
+            Last Location
+          </v-btn>
         </v-col>
-        <v-col cols="12" sm="6" md="3" class="tw-pr-2">
-          <div class="tw-mr-2 tw-mt-4">
-            <v-btn
-              class="tw-w-full"
-              color="primary"
-              small
-              @click="handleOpenFavorites"
-            >
-              Open Favorites
-            </v-btn>
-          </div>
+
+        <v-col cols="12" sm="6" md="3">
+          <v-btn @click="handleOpenFavorites" color="primary" block small>
+            Open Favorites
+          </v-btn>
         </v-col>
+
         <v-col cols="12" sm="6" md="3">
           <template v-if="isOnlineAndAuthenticated">
-            <div class="tw-mr-2 tw-mt-4">
-              <v-btn
-                class="tw-w-full"
-                color="primary"
-                small
-                @click="handleSaveFavorite"
-              >
-                Save Location
-              </v-btn>
-            </div>
+            <v-btn @click="handleSaveFavorite" color="primary" block small>
+              Save Location
+            </v-btn>
           </template>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row>
+        <v-col
+          v-if="
+            favoriteLocations.filter(item => item.version === model.stopVersion)
+              .length > 0
+          "
+          class="text-center py-0"
+        >
+          Top 5 Favorites
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="text-center">
+          <v-btn
+            v-for="(item, index) in favoriteLocations
+              .filter(item => item.version === model.stopVersion)
+              .slice(0, 5)"
+            :key="index"
+            @click="handleFavoriteClick(item)"
+            color="primary"
+            class="mr-3 mb-2"
+            small
+            outlined
+          >
+            {{ item.name }}
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col cols="12" sm="12">
           <ripa-switch
             v-model="model.location.isSchool"
+            @input="handleInput"
             label="K-12 Public School"
             :max-width="200"
-            @input="handleInput"
           ></ripa-switch>
 
           <template v-if="model.location.isSchool">
             <ripa-autocomplete
               v-model="model.location.school"
+              @input="handleInput"
               hint="Select 1 School (required)"
               item-text="fullName"
               item-value="cdsCode"
               label="School"
               :items="schools"
               :rules="schoolRules"
-              @input="handleInput"
             ></ripa-autocomplete>
           </template>
 
-          <ripa-alert class="tw-mt-8" alert-outlined alert-type="info">
+          <ripa-alert alert-outlined alert-type="info" class="mt-4">
             Note: Do not provide a street address if the location is a
             residence.
+          </ripa-alert>
+
+          <ripa-alert
+            v-if="model.location.piiFound"
+            @input="handleInput"
+            alert-outlined
+            alert-type="warning"
+          >
+            The address may contain personally identifying information. Please
+            remove if possible.
+          </ripa-alert>
+
+          <ripa-alert
+            v-if="!isGeolocationAvailable"
+            alert-outlined
+            alert-type="warning"
+          >
+            Location services on this device are currently inaccurate and have
+            been disabled.
           </ripa-alert>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" sm="12">
-          <div class="md:tw-mr-4">
-            <template v-if="model.location.piiFound">
-              <ripa-alert alert-outlined alert-type="warning">
-                The address may contain personally identifying information.
-                Please remove if possible.
-              </ripa-alert>
-            </template>
-          </div>
+      <v-row>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-text-input
+            v-model="model.location.blockNumber"
+            @input="handleInput"
+            :loading="loadingPiiStep1"
+            :rules="
+              model.stopVersion === 1 ? blockNumberRules : blockNumberRulesV2
+            "
+            @blur="handleBlockNumber"
+            label="Block Number"
+            numbers-only
+            prevent-paste
+          >
+          </ripa-text-input>
         </v-col>
 
         <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-text-input
-              v-model="model.location.blockNumber"
-              label="Block Number"
-              :loading="loadingPii"
-              :rules="blockNumberRules"
-              numbers-only
-              prevent-paste
-              @input="handleInput"
-            >
-            </ripa-text-input>
-          </div>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <div>
-            <ripa-text-input
-              v-model="model.location.streetName"
-              label="Street Name"
-              :loading="loadingPii"
-              :rules="streetNameRules"
-              @input="handleInput($event), handlePiiCheck($event)"
-            >
-            </ripa-text-input>
-          </div>
+          <ripa-text-input
+            v-model="model.location.streetName"
+            @input="handleInput"
+            :loading="loadingPiiStep1"
+            :rules="
+              model.stopVersion === 1 ? streetNameRules : streetNameRulesV2
+            "
+            @blur="handlePiiCheck($event)"
+            label="Street Name"
+          >
+          </ripa-text-input>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row>
         <v-col cols="12" sm="12">
           <ripa-subheader text="-- or --"></ripa-subheader>
 
-          <ripa-text-input
-            v-model="model.location.intersection"
-            label="Closest Intersection"
-            :loading="loadingPii"
-            :rules="intersectionRules"
-            @input="handleInput($event), handlePiiCheck($event)"
-          >
-          </ripa-text-input>
+          <v-row>
+            <template v-if="model.stopVersion === 1">
+              <v-col cols="12" sm="12">
+                <ripa-text-input
+                  v-model="model.location.intersection"
+                  @input="handleInput"
+                  :loading="loadingPiiStep1"
+                  :rules="intersectionRules"
+                  @blur="handlePiiCheck($event)"
+                  label="Closest Intersection"
+                >
+                </ripa-text-input>
+              </v-col>
+            </template>
+
+            <template v-else-if="model.stopVersion === 2">
+              <v-col cols="12" sm="6">
+                <ripa-text-input
+                  v-model="model.location.crossStreet1"
+                  @input="handleInput"
+                  :loading="loadingPiiStep1"
+                  :rules="crossStreetRules"
+                  @blur="handlePiiCheck($event)"
+                  label="Cross Street 1"
+                ></ripa-text-input>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <ripa-text-input
+                  v-model="model.location.crossStreet2"
+                  @input="handleInput"
+                  :loading="loadingPiiStep1"
+                  :rules="crossStreetRules"
+                  @blur="handlePiiCheck($event)"
+                  label="Cross Street 2"
+                ></ripa-text-input>
+              </v-col>
+            </template>
+          </v-row>
 
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
-            label="More Location Options"
-            :max-width="225"
             @input="handleInput"
+            :max-width="225"
+            label="More Location Options"
           ></ripa-switch>
 
           <template v-if="model.location.toggleLocationOptions">
+            <template v-if="this.model.stopVersion === 2">
+              <ripa-subheader text="-- or --"></ripa-subheader>
+
+              <v-row>
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.latitude"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="latitudeRules"
+                    @blur="handleBlockNumber"
+                    label="Latitude"
+                  >
+                  </ripa-text-input>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.longitude"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="longitudeRules"
+                    @blur="handlePiiCheck($event)"
+                    label="Longitude"
+                  >
+                  </ripa-text-input>
+                </v-col>
+              </v-row>
+            </template>
+
             <ripa-subheader text="-- or --"></ripa-subheader>
 
-            <ripa-text-input
-              v-model="model.location.highwayExit"
-              label="Highway and closest exit"
-              :loading="loadingPii"
-              :rules="highwayRules"
-              @input="handleInput($event), handlePiiCheck($event)"
-            >
-            </ripa-text-input>
+            <template v-if="model.stopVersion === 1">
+              <ripa-text-input
+                v-model="model.location.highwayExit"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="highwayRules"
+                @blur="handlePiiCheck($event)"
+                label="Highway and closest exit"
+              >
+              </ripa-text-input>
+            </template>
+
+            <template v-else-if="model.stopVersion === 2">
+              <v-row>
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.highway"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="highwayRulesV2"
+                    @blur="handlePiiCheck($event)"
+                    label="Highway"
+                  >
+                  </ripa-text-input>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="6">
+                  <ripa-text-input
+                    v-model="model.location.exit"
+                    @input="handleInput"
+                    :loading="loadingPiiStep1"
+                    :rules="highwayRulesV2"
+                    @blur="handlePiiCheck($event)"
+                    label="Closest Exit"
+                  >
+                  </ripa-text-input>
+                </v-col>
+              </v-row>
+            </template>
 
             <ripa-subheader text="-- or --"></ripa-subheader>
 
             <ripa-text-input
               v-model="model.location.landmark"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
+              @blur="handlePiiCheck($event)"
               label="Road marker, landmark, or other"
-              :loading="loadingPii"
-              :rules="landmarkRules"
-              @input="handleInput($event), handlePiiCheck($event)"
             >
             </ripa-text-input>
           </template>
@@ -182,47 +299,45 @@
           <div class="tw-mt-8">
             <ripa-switch
               v-model="model.location.outOfCounty"
-              label="City Out of County?"
               :max-width="200"
-              @input="handleOutOfCountyToggle"
+              @input="handleOutOfCountyToggle, handleInput"
+              label="City Out of County?"
             ></ripa-switch>
           </div>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row>
         <v-col cols="12" sm="12" md="6">
-          <div class="md:tw-mr-4">
-            <ripa-autocomplete
-              v-model="model.location.city"
-              hint="Select 1 City (required)"
-              persistent-hint
-              item-text="fullName"
-              item-value="id"
-              label="City"
-              :items="getCities"
-              :rules="cityRules"
-              @input="handleInput"
-            ></ripa-autocomplete>
-          </div>
+          <ripa-autocomplete
+            v-model="model.location.city"
+            @input="handleInput"
+            hint="Select 1 City (required)"
+            persistent-hint
+            item-text="fullName"
+            item-value="id"
+            :label="
+              model.stopVersion === 1 ? 'City' : 'City or Unincorporated Area'
+            "
+            :items="getCities"
+            :rules="cityRules"
+          ></ripa-autocomplete>
         </v-col>
 
         <template v-if="displayBeatInput">
           <v-col cols="12" sm="12" md="6">
-            <div>
-              <ripa-autocomplete
-                v-model="model.location.beat"
-                hint="Select 1 Beat (required)"
-                persistent-hint
-                item-text="fullName"
-                item-value="id"
-                label="Beat"
-                :items="beats"
-                :rules="beatRules"
-                :disabled="model.location.outOfCounty"
-                @input="handleInput"
-              ></ripa-autocomplete>
-            </div>
+            <ripa-autocomplete
+              v-model="model.location.beat"
+              @input="handleInput"
+              hint="Select 1 Beat (required)"
+              persistent-hint
+              item-text="fullName"
+              item-value="id"
+              label="Beat"
+              :items="beats"
+              :rules="beatRules"
+              :disabled="model.location.outOfCounty"
+            ></ripa-autocomplete>
           </v-col>
         </template>
       </v-row>
@@ -234,15 +349,12 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete'
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 
 export default {
   name: 'ripa-location',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaAlert,
@@ -253,44 +365,48 @@ export default {
     RipaTextInput,
   },
 
-  data() {
-    return {
-      viewModel: this.syncModel(this.value),
-    }
-  },
+  inject: [
+    'beats',
+    'countyCities',
+    'nonCountyCities',
+    'schools',
+    'displayBeatInput',
+    'isOnlineAndAuthenticated',
+    'lastLocation',
+    'loadingGps',
+    'loadingPiiStep1',
+    'validLastLocation',
+    'favoriteLocations',
+  ],
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
     },
 
-    isGeolocationAvailable() {
-      return navigator.geolocation
-    },
-
     getCities() {
-      const checked = this.viewModel.location.outOfCounty
+      const checked = this.model.location.outOfCounty
 
       return checked ? this.nonCountyCities : this.countyCities
     },
 
     schoolRules() {
-      const checked = this.viewModel.location.isSchool
-      const school = this.viewModel.location.school
+      const checked = this.model.location.isSchool
+      const school = this.model.location.school
 
       return [(checked && school !== null) || 'A school is required']
     },
 
     cityRules() {
-      const city = this.viewModel.location.city
+      const city = this.model.location.city
 
-      return [city !== null || 'A city is required']
+      return [(city !== null && city !== '') || 'A city is required']
     },
 
     beatRules() {
-      const beat = this.viewModel.location.beat
+      const beat = this.model.location.beat
 
       return [
         !this.displayBeatInput ||
@@ -300,12 +416,12 @@ export default {
     },
 
     blockNumberRules() {
-      const streetName = this.viewModel.location.streetName
-      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.model.location.streetName
+      const blockNumber = this.model.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
-          blockNumber !== null ||
+          (blockNumber !== null && blockNumber !== '') ||
           'A block number is required',
         this.isLocationOptionsFilled ||
           (streetName + blockNumber).length >= 5 ||
@@ -313,9 +429,46 @@ export default {
       ]
     },
 
+    blockNumberRulesV2() {
+      const blockNumber = this.model.location.blockNumber
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (blockNumber !== null && blockNumber !== '') ||
+          'A block number is required',
+        this.isLocationOptionsFilledV2 ||
+          (blockNumber.length >= 1 && blockNumber.length <= 8) ||
+          'Block number must be between 1 and 8 characters',
+      ]
+    },
+
+    latitudeRules() {
+      const regex = /^(\d{2}\.\d{0,3}|\d{2})$/
+
+      return [
+        v => this.isLocationOptionsFilledV2 || !!v || 'Latitude is required',
+        v =>
+          this.isLocationOptionsFilledV2 ||
+          regex.test(v) ||
+          'A valid latitude with a maximum of 3 digits after the decimal is required',
+      ]
+    },
+
+    longitudeRules() {
+      const regex = /^(-\d{3}\.\d{0,3}|-\d{3})$/
+
+      return [
+        v => this.isLocationOptionsFilledV2 || !!v || 'Longitude is required',
+        v =>
+          this.isLocationOptionsFilledV2 ||
+          regex.test(v) ||
+          'A valid negative longitude with a maximum of 3 digits after the decimal is required',
+      ]
+    },
+
     streetNameRules() {
-      const streetName = this.viewModel.location.streetName
-      const blockNumber = this.viewModel.location.blockNumber
+      const streetName = this.model.location.streetName
+      const blockNumber = this.model.location.blockNumber
 
       return [
         this.isLocationOptionsFilled ||
@@ -327,8 +480,21 @@ export default {
       ]
     },
 
+    streetNameRulesV2() {
+      const streetName = this.model.location.streetName
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (streetName && streetName.length > 0) ||
+          'A street name is required',
+        this.isLocationOptionsFilledV2 ||
+          (streetName.length >= 1 && streetName.length <= 50) ||
+          'Street name must be between 1 and 50 characters',
+      ]
+    },
+
     intersectionRules() {
-      const intersection = this.viewModel.location.intersection
+      const intersection = this.model.location.intersection
 
       return [
         this.isLocationOptionsFilled ||
@@ -340,58 +506,119 @@ export default {
       ]
     },
 
+    crossStreetRules() {
+      const crossStreet1 = this.model.location.crossStreet1 || ''
+      const crossStreet2 = this.model.location.crossStreet2 || ''
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (!!crossStreet1 && !!crossStreet2) ||
+          'Must fill out both cross streets in order to use cross streets',
+        (this.isLocationOptionsFilledV2 &&
+          crossStreet1.length < 50 &&
+          crossStreet2.length < 50) ||
+          'Cross streets must be 50 characters or less',
+      ]
+    },
+
     highwayRules() {
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && highwayExit !== null) ||
+          (checked && highwayExit !== null && highwayExit !== '') ||
           'A highway and closest exit is required',
         this.isLocationOptionsFilled ||
           (checked &&
             highwayExit &&
             highwayExit.length >= 5 &&
             highwayExit.length <= 250 &&
-            landmark !== null) ||
+            landmark !== null &&
+            landmark !== '') ||
           'Highway and closest exit must be between 5 and 250 characters',
       ]
     },
 
+    highwayRulesV2() {
+      const checked = this.model.location.toggleLocationOptions
+      const highway = this.model.location.highway || ''
+      const exit = this.model.location.exit || ''
+
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (!!highway && highway !== '' && !!exit && exit !== '') ||
+          'Must fill out both highway and exit in order to use highway and exit',
+        this.isLocationOptionsFilledV2 ||
+          (checked && highway && highway.length >= 1 && highway.length <= 75) ||
+          'Highway must be between 1 and 75 characters',
+        this.isLocationOptionsFilledV2 ||
+          (checked && exit && exit.length >= 1 && exit.length <= 50) ||
+          'Closest exit must be between 1 and 50 characters',
+      ]
+    },
+
     landmarkRules() {
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       return [
         this.isLocationOptionsFilled ||
-          (checked && landmark !== null) ||
+          (checked && landmark !== null && landmark !== '') ||
           'A road marker, landmark, or other description is required',
         this.isLocationOptionsFilled ||
           (checked &&
             landmark &&
             landmark.length >= 5 &&
             landmark.length <= 250 &&
-            highwayExit !== null) ||
+            highwayExit !== null &&
+            highwayExit !== '') ||
           'Road marker, landmark or other description must be between 5 and 250 characters',
       ]
     },
 
+    landmarkRulesV2() {
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
+      return [
+        this.isLocationOptionsFilledV2 ||
+          (checked && landmark !== null && landmark !== '') ||
+          'A road marker, landmark, or other description is required',
+        this.isLocationOptionsFilledV2 ||
+          (checked &&
+            landmark !== null &&
+            landmark !== '' &&
+            landmark.length >= 5 &&
+            landmark.length <= 150 &&
+            highwayExit !== null &&
+            highwayExit !== '') ||
+          'Road marker, landmark or other description must be between 5 and 150 characters',
+      ]
+    },
+
     isLocationOptionsFilled() {
-      const blockNumber = this.viewModel.location.blockNumber
-      const streetName = this.viewModel.location.streetName
-      const intersection = this.viewModel.location.intersection
-      const checked = this.viewModel.location.toggleLocationOptions
-      const highwayExit = this.viewModel.location.highwayExit
-      const landmark = this.viewModel.location.landmark
+      const blockNumber = this.model.location.blockNumber
+      const streetName = this.model.location.streetName
+      const intersection = this.model.location.intersection
+      const crossStreet1 = this.model.location.crossStreet1
+      const crossStreet2 = this.model.location.crossStreet2
+      const checked = this.model.location.toggleLocationOptions
+      const highwayExit = this.model.location.highwayExit
+      const landmark = this.model.location.landmark
 
       const isValid =
         (blockNumber !== null &&
+          blockNumber !== '' &&
           streetName &&
           streetName.length > 0 &&
           (blockNumber + streetName).length >= 5) ||
-        (intersection && intersection.length >= 5) ||
+        (intersection &&
+          intersection.length >= 5 &&
+          this.model.stopVersion === 1) ||
+        (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
         (checked &&
           highwayExit !== null &&
           highwayExit.length >= 5 &&
@@ -403,9 +630,78 @@ export default {
 
       return isValid
     },
+
+    isLocationOptionsFilledV2() {
+      const blockNumber = this.model.location.blockNumber
+      const streetName = this.model.location.streetName
+      const intersection = this.model.location.intersection
+      const crossStreet1 = this.model.location.crossStreet1
+      const crossStreet2 = this.model.location.crossStreet2
+      const checked = this.model.location.toggleLocationOptions
+      const highway = this.model.location.highway
+      const exit = this.model.location.exit
+      const landmark = this.model.location.landmark
+
+      const latitudeRegex = /^(\d{2}\.\d{0,3}|\d{2})$/
+      const isLatitudeValid =
+        latitudeRegex.test(this.model.location.latitude) &&
+        this.model.location.latitude
+
+      const longitudeRegex = /^(-\d{3}\.\d{0,3}|-\d{3})$/
+      const isLongitudeValid = longitudeRegex.test(
+        this.model.location.longitude,
+      )
+
+      if (
+        !isLongitudeValid &&
+        this.model.location.longitude !== '' &&
+        this.model.location.longitude !== null
+      ) {
+        return false
+      }
+
+      if (
+        !isLatitudeValid &&
+        this.model.location.latitude !== '' &&
+        this.model.location.latitude !== null
+      ) {
+        return false
+      }
+
+      const isValid =
+        (blockNumber !== null &&
+          blockNumber !== '' &&
+          streetName &&
+          streetName.length > 0 &&
+          blockNumber.length >= 1 &&
+          blockNumber.length <= 8 &&
+          streetName.length >= 1 &&
+          streetName.length <= 50) ||
+        (intersection &&
+          intersection.length >= 5 &&
+          this.model.stopVersion === 1) ||
+        (crossStreet1 && crossStreet2 && this.model.stopVersion === 2) ||
+        (checked &&
+          highway !== null &&
+          highway !== '' &&
+          highway.length >= 1 &&
+          highway.length <= 75 &&
+          exit !== null &&
+          exit !== '' &&
+          exit.length >= 1 &&
+          exit.length <= 50) ||
+        (checked &&
+          landmark !== null &&
+          landmark !== '' &&
+          landmark.length >= 5 &&
+          landmark.length <= 150) ||
+        (isLatitudeValid && isLongitudeValid)
+
+      return isValid
+    },
   },
 
-  created() {
+  async created() {
     if (
       this.model.location.streetName !== null ||
       this.model.location.intersection !== null ||
@@ -425,19 +721,68 @@ export default {
   },
 
   methods: {
+    handleInput() {
+      this.updateModel()
+      this.$emit('input', this.model)
+    },
+
+    updateModel() {
+      if (!this.model.location.isSchool) {
+        this.model.location.school = null
+        this.model.person.isStudent = false
+        this.model.stopResult.resultsOfStop12 = false
+        this.model.stopResult.resultsOfStop13 = false
+        this.model.person.perceivedOrKnownDisability =
+          this.model.person.perceivedOrKnownDisability.filter(
+            disability => disability !== 7,
+          )
+      }
+
+      if (!this.model.location.toggleLocationOptions) {
+        this.model.location.highwayExit = null
+        this.model.location.landmark = null
+      }
+
+      const streetName = this.model.location?.streetName || ''
+      const highwayExit = this.model.location?.highwayExit || ''
+      const intersection = this.model.location?.intersection || ''
+      const landMark = this.model.location?.landMark || ''
+      const fullAddress =
+        streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
+      this.model.location.fullAddress = fullAddress
+    },
+
     handleCurrentLocation() {
       if (navigator.geolocation) {
-        if (this.onGpsLocation) {
-          this.onGpsLocation()
-        }
-      } else {
-        console.log('Geolocation is not supported by this browser.')
+        this.$emit('on-gps-location')
       }
     },
 
-    handleInput() {
-      this.updateModel()
-      this.$emit('input', this.viewModel)
+    handleOutOfCountyToggle() {
+      if (this.model.location.outOfCounty) {
+        this.model.location.beat = '999'
+        this.model.location.city = null
+      }
+
+      if (
+        !this.model.location.outOfCounty &&
+        this.model.location.beat === '999'
+      ) {
+        this.model.location.beat = null
+        this.model.location.city = null
+      }
+    },
+
+    handleBlockNumber() {
+      if (this.model.stopVersion === 1) {
+        this.model.location.blockNumber = this.parseBlockNumber(
+          this.model.location.blockNumber,
+        )
+      } else {
+        this.model.location.blockNumber = this.parseBlockNumberV2(
+          this.model.location.blockNumber,
+        )
+      }
     },
 
     handlePiiCheck(event) {
@@ -454,69 +799,90 @@ export default {
       }
     },
 
-    handleInputOutOfCounty(newVal) {
-      const currentVal = this.viewModel.location.outOfCounty
-      if (newVal !== currentVal) {
-        this.handleInput()
+    parseBlockNumber(value) {
+      let blockNumber = value
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const calcBlockNumber = Math.floor(Number(blockNumber) / 100) * 100
+        blockNumber = calcBlockNumber
       }
+
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
+    },
+
+    parseBlockNumberV2(value) {
+      let blockNumber = value
+
+      if (blockNumber !== null && blockNumber.length > 0) {
+        const numDigits = blockNumber.length
+
+        if (numDigits <= 2) {
+          if (blockNumber < 10) {
+            blockNumber = 0
+          } else {
+            const lastDigit = parseInt(blockNumber.toString().slice(-1))
+            blockNumber -= lastDigit
+          }
+        } else {
+          const lastTwoDigits = parseInt(blockNumber.toString().slice(-2))
+          blockNumber -= lastTwoDigits % 100
+        }
+      }
+
+      const result =
+        typeof blockNumber === 'string' ||
+        (typeof blockNumber === 'number' && !isNaN(blockNumber))
+          ? blockNumber.toString()
+          : null
+
+      return result
     },
 
     handleLastLocation() {
-      if (this.onOpenLastLocation) {
-        this.onOpenLastLocation()
-      }
+      this.$emit('on-open-last-location')
     },
 
     handleOpenFavorites() {
-      if (this.onOpenFavorites) {
-        this.onOpenFavorites()
-      }
+      this.$emit('on-open-location-favorites', this.model.stopVersion)
     },
 
     handleSaveFavorite() {
-      if (this.onSaveFavorite) {
-        this.onSaveFavorite(this.viewModel.location)
-      }
+      this.$emit(
+        'on-save-location-favorite',
+        this.model.location,
+        this.model.stopVersion,
+      )
     },
 
-    handleOutOfCountyToggle() {
-      if (this.viewModel.location.outOfCounty) {
-        this.viewModel.location.beat = '999'
-        this.viewModel.location.city = null
-      }
+    isGeolocationAvailable() {
+      return new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(position => {
+          const accuracyScore = position.coords.accuracy
+          const isAvail = !(accuracyScore > 200)
+          resolve(isAvail)
+        })
+      })
+    },
 
-      if (
-        !this.viewModel.location.outOfCounty &&
-        this.viewModel.location.beat === '999'
-      ) {
-        this.viewModel.location.beat = null
-        this.viewModel.location.city = null
-      }
-
-      this.handleInput()
+    handleFavoriteClick(favorite) {
+      this.$emit('on-open-favorite-location', favorite.id)
     },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
-    },
-
-    lastLocation(newVal) {
-      if (newVal) {
-        // save off school and school if isSchool is true
-        const isSchool = this.viewModel.location?.isSchool || false
-        const school = this.viewModel.location?.school || null
-        // assign new location
-        this.viewModel.location = newVal.newLocation
-        // add back school and school - only if isSchool was true
-        if (newVal.persistSchool && isSchool) {
-          this.viewModel.location.isSchool = isSchool
-          this.viewModel.location.school = school
+    lastLocation: {
+      handler: async function (newVal) {
+        if (newVal) {
+          this.model.location = { ...newVal.newLocation }
+          this.handleInput()
         }
-        // call handleInput
-        this.handleInput()
-      }
+      },
+      deep: true,
     },
   },
 
@@ -525,61 +891,9 @@ export default {
       type: Object,
       required: true,
     },
-    schools: {
-      type: Array,
-      default: () => [],
-    },
-    beats: {
-      type: Array,
-      default: () => [],
-    },
-    countyCities: {
-      type: Array,
-      default: () => [],
-    },
     displayBeatInput: {
       type: Boolean,
       default: false,
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    lastLocation: {
-      type: Object,
-      default: () => {},
-    },
-    loadingGps: {
-      type: Boolean,
-      default: false,
-    },
-    loadingPii: {
-      type: Boolean,
-      default: false,
-    },
-    nonCountyCities: {
-      type: Array,
-      default: () => [],
-    },
-    validLastLocation: {
-      type: Boolean,
-      default: false,
-    },
-    onOpenFavorites: {
-      type: Function,
-      required: true,
-    },
-    onOpenLastLocation: {
-      type: Function,
-      required: true,
-    },
-    onSaveFavorite: {
-      type: Function,
-      required: true,
-    },
-    onGpsLocation: {
-      type: Function,
-      required: true,
     },
   },
 }

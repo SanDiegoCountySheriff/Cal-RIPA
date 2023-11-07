@@ -2,6 +2,13 @@
 
 exports[`Ripa Form Step 2 should match snapshot 1`] = `
 <form novalidate="novalidate" class="v-form">
+  <div class="tw-flex tw-mb-5 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+        Back
+      </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
   <!---->
   <div class="ripa-race tw-pb-4">
     <div class="ripa-form-header">
@@ -16,63 +23,63 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
             <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-10" role="checkbox" type="checkbox" value="1">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-13" role="checkbox" type="checkbox" value="1">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-10" class="v-label theme--light" style="left: 0px; position: relative;">Asian</label>
+                  </div><label for="input-13" class="v-label theme--light" style="left: 0px; position: relative;">Asian</label>
                 </div>
               </div>
             </div>
             <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-12" role="checkbox" type="checkbox" value="2">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-15" role="checkbox" type="checkbox" value="2">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-12" class="v-label theme--light" style="left: 0px; position: relative;">Black/African American</label>
+                  </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;">Black/African American</label>
+                </div>
+              </div>
+            </div>
+            <div class="v-input v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--checkbox primary--text">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text"></i><input aria-checked="true" id="input-17" role="checkbox" type="checkbox" value="3">
+                    <div class="v-input--selection-controls__ripple primary--text"></div>
+                  </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latino(a)</label>
                 </div>
               </div>
             </div>
             <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-14" role="checkbox" type="checkbox" value="3">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-19" role="checkbox" type="checkbox" value="4">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">Hispanic/Latino(a)</label>
+                  </div><label for="input-19" class="v-label theme--light" style="left: 0px; position: relative;">Middle Eastern or South Asian</label>
                 </div>
               </div>
             </div>
             <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-16" role="checkbox" type="checkbox" value="4">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-21" role="checkbox" type="checkbox" value="5">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-16" class="v-label theme--light" style="left: 0px; position: relative;">Middle Eastern or South Asian</label>
+                  </div><label for="input-21" class="v-label theme--light" style="left: 0px; position: relative;">Native American</label>
                 </div>
               </div>
             </div>
             <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-18" role="checkbox" type="checkbox" value="5">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-23" role="checkbox" type="checkbox" value="6">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-18" class="v-label theme--light" style="left: 0px; position: relative;">Native American</label>
-                </div>
-              </div>
-            </div>
-            <div class="v-input v-input--hide-details theme--light v-input--selection-controls v-input--checkbox">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-20" role="checkbox" type="checkbox" value="6">
-                    <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-20" class="v-label theme--light" style="left: 0px; position: relative;">Pacific Islander</label>
+                  </div><label for="input-23" class="v-label theme--light" style="left: 0px; position: relative;">Pacific Islander</label>
                 </div>
               </div>
             </div>
             <div class="v-input theme--light v-input--selection-controls v-input--checkbox">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-22" role="checkbox" type="checkbox" value="7">
+                  <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i><input aria-checked="false" id="input-25" role="checkbox" type="checkbox" value="7">
                     <div class="v-input--selection-controls__ripple"></div>
-                  </div><label for="input-22" class="v-label theme--light" style="left: 0px; position: relative;">White</label>
+                  </div><label for="input-25" class="v-label theme--light" style="left: 0px; position: relative;">White</label>
                 </div>
                 <div class="v-messages theme--light">
                   <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -94,29 +101,29 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
           <div class="ripa-radio-group">
-            <div class="v-input theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--column">
+            <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--column">
               <div class="v-input__control">
                 <div class="v-input__slot" style="height: auto;">
-                  <div role="radiogroup" aria-labelledby="input-33" class="v-input--radio-group__input">
-                    <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-34" role="radio" type="radio" name="radio-33" value="1">
-                        <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-34" class="v-label theme--light" style="left: 0px; position: relative;">Male</label>
+                  <div role="radiogroup" aria-labelledby="input-36" class="v-input--radio-group__input">
+                    <div class="v-radio theme--light v-item--active">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-marked theme--light primary--text"></i><input aria-checked="true" id="input-37" role="radio" type="radio" name="radio-36" value="1">
+                        <div class="v-input--selection-controls__ripple primary--text"></div>
+                      </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;">Male</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-36" role="radio" type="radio" name="radio-33" value="2">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-39" role="radio" type="radio" name="radio-36" value="2">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;">Female</label>
+                      </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;">Female</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-38" role="radio" type="radio" name="radio-33" value="3">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-41" role="radio" type="radio" name="radio-36" value="3">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Male</label>
+                      </div><label for="input-41" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Male</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-40" role="radio" type="radio" name="radio-33" value="4">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-43" role="radio" type="radio" name="radio-36" value="4">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-40" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Female</label>
+                      </div><label for="input-43" class="v-label theme--light" style="left: 0px; position: relative;">Transgender Female</label>
                     </div>
                   </div>
                 </div>
@@ -124,24 +131,25 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                   <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
                 </div>
               </div>
-            </div>
-            <!---->
+            </div> <button type="button" class="tw-ml-4 v-btn v-btn--text theme--light v-size--x-small primary--text"><span class="v-btn__content">Clear selection</span></button>
           </div>
         </div>
         <div class="col-sm-12 col-12">
-          <div class="ripa-switch" style="max-width: 250px;">
-            <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-45" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-49" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-45" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Gender Nonconforming
-                  </label>
+                  </div><label for="input-49" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Gender Nonconforming
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
                 <div class="v-messages theme--light">
                   <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -149,6 +157,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
               </div>
             </div>
           </div>
+          <!---->
         </div>
       </div>
     </div>
@@ -160,19 +169,21 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
     <div class="container">
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
-          <div class="ripa-switch" style="max-width: 200px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-55" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-59" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-55" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Perceived as LGBT
-                  </label>
+                  </div><label for="input-59" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Perceived as LGBT
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
@@ -190,10 +201,10 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
     <div class="container">
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
-          <div class="v-input theme--light v-text-field" min="1" max="1250">
+          <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field" min="1" max="1250">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-text-field__slot"><label for="input-64" class="v-label theme--light" style="left: 0px; position: absolute;">Perceived Age</label><input inputmode="numeric" min="0" id="input-64" type="number"></div>
+                <div class="v-text-field__slot"><label for="input-68" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Perceived Age</label><input inputmode="numeric" min="0" id="input-68" type="number"></div>
               </div>
               <div class="v-text-field__details">
                 <div class="v-messages theme--light">
@@ -217,18 +228,20 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
           <div class="ripa-switch" style="max-width: 300px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-72" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-76" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-72" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Limited or no English fluency
-                  </label>
+                  </div><label for="input-76" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Limited or no English fluency
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
@@ -237,7 +250,8 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
       </div>
     </div>
   </div>
-  <div class="ripa-disability tw-pb-4">
+  <!---->
+  <div class="tw-pb-4">
     <div class="ripa-form-header">
       <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
         <div class="ripa-header"><span class="tw-text-base md:tw-text-lg tw-uppercase">Perceived or Known Disability</span></div>
@@ -246,19 +260,21 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
     <div class="container">
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
-          <div class="ripa-switch" style="max-width: 200px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-81" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-85" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-81" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Any Disabilities?
-                  </label>
+                  </div><label for="input-85" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Any Disabilities?
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>

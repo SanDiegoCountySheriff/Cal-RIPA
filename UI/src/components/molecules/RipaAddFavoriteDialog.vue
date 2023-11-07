@@ -53,7 +53,7 @@ export default {
       },
       set(newValue) {
         if (!newValue) {
-          this.onClose()
+          this.handleClose()
         }
         this.viewModel = newValue
       },
@@ -69,11 +69,12 @@ export default {
     },
 
     handleClose() {
-      this.onClose()
+      this.favoriteName = ''
+      this.$emit('on-close')
     },
 
     handleSave() {
-      this.onAddFavorite(this.favoriteName)
+      this.$emit('on-add-favorite', this.favoriteName)
       this.handleClose()
     },
   },
@@ -92,14 +93,6 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
-    },
-    onAddFavorite: {
-      type: Function,
-      required: true,
-    },
-    onClose: {
-      type: Function,
-      required: true,
     },
   },
 }

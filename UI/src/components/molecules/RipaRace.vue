@@ -4,7 +4,7 @@
       title="Perceived Race or Ethnicity"
       required
       subtitle="§999.226(a)(4)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -16,7 +16,6 @@
             :disabled="disabled"
             :items="raceItems"
             :rules="raceRules"
-            @input="handleInput"
           >
           </ripa-check-group>
         </v-col>
@@ -27,49 +26,46 @@
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaCheckGroup from '@/components/atoms/RipaCheckGroup'
-import { RACES } from '@/constants/form'
+import { RACES, RACES_V2 } from '@/constants/form'
 
 export default {
   name: 'ripa-race',
-
-  mixins: [RipaModelMixin],
 
   components: {
     RipaCheckGroup,
     RipaFormHeader,
   },
 
-  data() {
-    return {
-      raceItems: RACES,
-      viewModel: this.syncModel(this.value),
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        this.$emit('input', newVal)
       },
     },
 
     raceRules() {
-      const options = this.viewModel.person.perceivedRace
+      const options = this.model.person.perceivedRace
       return [options.length > 0 || 'At least one race is required']
     },
-  },
 
-  methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
+    raceItems() {
+      if (this.model.stopVersion === 1) {
+        return RACES
+      }
+      return RACES_V2
     },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 

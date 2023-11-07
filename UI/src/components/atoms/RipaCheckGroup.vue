@@ -10,6 +10,7 @@
       :rules="rules"
       :hide-details="index < items.length - 1"
       validate-on-blur
+      multiple
     ></v-checkbox>
   </div>
 </template>
@@ -18,27 +19,14 @@
 export default {
   name: 'ripa-check-group',
 
-  data() {
-    return {
-      viewModel: this.value,
-    }
-  },
-
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
       },
       set(newVal) {
-        this.viewModel = newVal
         this.$emit('input', newVal)
       },
-    },
-  },
-
-  watch: {
-    value(newVal) {
-      this.viewModel = newVal
     },
   },
 

@@ -57,7 +57,13 @@ export default new Vuex.Store({
       officerName: null,
       assignment: null,
       otherType: null,
+      officerRace: [],
+      officerGender: null,
+      officerNonBinary: null,
     },
+    favoriteLocations: '',
+    favoriteReasons: '',
+    favoriteResults: '',
     apiConfig: null,
     piiDate: null,
     officerStops: [],
@@ -78,6 +84,7 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
+    version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
   getters: {
@@ -198,6 +205,9 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
+        officerGender: state.user.officerGender,
+        officerRace: state.user.officerRace || [],
+        officerNonBinary: state.user.officerNonBinary,
       }
     },
     stopTemplates: state => {
@@ -252,11 +262,12 @@ export default new Vuex.Store({
         }
       }
 
-      const blockNumber = state.gpsLocationAddress.address.AddNum
-      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const blockNumber =
+        Math.floor(Number(state.gpsLocationAddress.address.AddNum) / 100) * 100
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : 0
       const streetName = state.gpsLocationAddress.address.Address
       const parsedStreetName = streetName
-        ? streetName.replace(blockNumber, '').trim()
+        ? streetName.replace(state.gpsLocationAddress.address.AddNum, '').trim()
         : null
       const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
       const upperCaseCity = city ? city.toUpperCase() : city
@@ -272,11 +283,15 @@ export default new Vuex.Store({
       const longitude = state.gpsLocationAddress?.longitude || null
 
       return {
-        blockNumber: parsedBlockNumber,
+        blockNumber: String(parsedBlockNumber),
         streetName: parsedStreetName,
         city: parsedCity,
         latitude,
         longitude,
+        beat: null,
+        school: null,
+        highway: '',
+        exit: '',
       }
     },
     mappedErrorCodeAdminSearch: state => {
@@ -324,6 +339,18 @@ export default new Vuex.Store({
     },
     isApiUnavailable: state => {
       return state.apiUnavailable
+    },
+    mappedVersion: state => {
+      return state.version
+    },
+    favoriteLocations: state => {
+      return state.favoriteLocations
+    },
+    favoriteReasons: state => {
+      return state.favoriteReasons
+    },
+    favoriteResults: state => {
+      return state.favoriteResults
     },
   },
 
@@ -467,6 +494,9 @@ export default new Vuex.Store({
         otherType: value.otherType ? value.otherType : null,
         startDate: value.startDate,
         yearsExperience,
+        officerRace: value.officerRace,
+        officerGender: value.officerGender,
+        officerNonBinary: value.officerNonBinary,
       }
 
       const officer = {
@@ -477,24 +507,27 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
+        officerRace: state.user.officerRace,
+        officerGender: state.user.officerGender,
+        officerNonBinary: state.user.officerNonBinary,
       }
 
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
-      localStorage.setItem(
-        'ripa_favorite_locations',
-        state.user.favoriteLocations,
-      )
-      localStorage.setItem('ripa_favorite_reasons', state.user.favoriteReasons)
-      localStorage.setItem('ripa_favorite_results', state.user.favoriteResults)
+      state.favoriteLocations = state.user.favoriteLocations
+      state.favoriteReasons = state.user.favoriteReasons
+      state.favoriteResults = state.user.favoriteResults
     },
     updateUserFavoriteLocations(state, locations) {
       state.user.favoriteLocations = locations
+      state.favoriteLocations = locations
     },
     updateUserFavoriteReasons(state, reasons) {
       state.user.favoriteReasons = reasons
+      state.favoriteReasons = reasons
     },
     updateUserFavoriteResults(state, results) {
       state.user.favoriteResults = results
+      state.favoriteResults = results
     },
     updateErrorCodeAdminSearch(state, value) {
       state.errorCodeAdminSearch = {
@@ -610,9 +643,10 @@ export default new Vuex.Store({
               .then(data => {
                 const dataIncludingLatLong = {
                   ...data,
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude.toFixed(3),
+                  longitude: position.coords.longitude.toFixed(3),
                 }
+
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
                 resolve(data)
               })
@@ -638,12 +672,15 @@ export default new Vuex.Store({
 
     deleteBeat({ dispatch, state }, beat) {
       return axios
-        .delete(`${state.apiConfig.apiBaseUrl}domain/DeleteBeat/${beat.id}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .delete(
+          `${state.apiConfig.apiBaseUrl}domain/v1/DeleteBeat/${beat.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -655,13 +692,17 @@ export default new Vuex.Store({
 
     editBeat({ dispatch, state }, beat) {
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}domain/PutBeat/${beat.id}`, beat, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .put(
+          `${state.apiConfig.apiBaseUrl}domain/v1/PutBeat/${beat.id}`,
+          beat,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -674,13 +715,13 @@ export default new Vuex.Store({
     editUser({ dispatch, state }, user) {
       const updatedUser = {
         ...user,
-        favoriteLocations: state.user.favoriteLocations,
-        favoriteReasons: state.user.favoriteReasons,
-        favoriteResults: state.user.favoriteResults,
+        favoriteLocations: state.favoriteLocations,
+        favoriteReasons: state.favoriteReasons,
+        favoriteResults: state.favoriteResults,
       }
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${updatedUser.id}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v2/PutUser/${updatedUser.id}`,
           user,
           {
             headers: {
@@ -691,12 +732,11 @@ export default new Vuex.Store({
           },
         )
         .then(() => {
-          dispatch('getAdminUsers')
           dispatch('getUser')
         })
         .catch(error => {
           console.log('There was an error saving the user.', error)
-          dispatch('getAdminUsers')
+          dispatch('getUser')
         })
     },
 
@@ -705,7 +745,7 @@ export default new Vuex.Store({
       formData.append('file', usersFile)
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}userprofile/PostUpload?agency=${usersAgency}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v2/PostUpload?agency=${usersAgency}`,
           formData,
           {
             headers: {
@@ -731,7 +771,7 @@ export default new Vuex.Store({
       const formData = new FormData()
       formData.append('file', domainFile)
       return axios
-        .post(`${state.apiConfig.apiBaseUrl}domain/PostUpload`, formData, {
+        .post(`${state.apiConfig.apiBaseUrl}domain/v1/PostUpload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -769,7 +809,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/GenerateCpraReport?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GenerateCpraReport?${queryString}`,
           reportParameters.officerName,
           {
             headers: {
@@ -804,7 +844,7 @@ export default new Vuex.Store({
     downloadCpraReport({ state }, fileName) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/DownloadCpraReport?FileName=${fileName}`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/DownloadCpraReport?FileName=${fileName}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -835,7 +875,7 @@ export default new Vuex.Store({
     getHistoricalCpraReports({ state, commit }) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/GetHistoricalCpraReports`,
+          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetHistoricalCpraReports`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -870,11 +910,14 @@ export default new Vuex.Store({
         otherType: mappedUser.otherType,
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
+        officerRace: mappedUser.officerRace,
+        officerGender: mappedUser.officerGender,
+        officerNonBinary: mappedUser.officerNonBinary,
       }
 
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}userprofile/PutUser/${userId}`,
+          `${state.apiConfig.apiBaseUrl}userprofile/v2/PutUser/${userId}`,
           user,
           {
             headers: {
@@ -896,13 +939,17 @@ export default new Vuex.Store({
     submitOfficerStop({ commit, dispatch, state }, stop) {
       commit('updateStopSubmissionStatusTotal', 1)
       return axios
-        .put(`${state.apiConfig.apiBaseUrl}stop/PutStop/${stop.id}`, stop, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .put(
+          `${state.apiConfig.apiBaseUrl}stop/v${stop.stopVersion}/PutStop/${stop.id}`,
+          stop,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           if (response.status === 200) {
             const apiStop = response.data
@@ -957,7 +1004,7 @@ export default new Vuex.Store({
 
     getAdminBeats({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
+        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -995,7 +1042,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetBeats`, {
+          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -1034,7 +1081,7 @@ export default new Vuex.Store({
 
     getAdminCities({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
+        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetCities`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1071,7 +1118,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetCities`, {
+          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetCities`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
@@ -1128,7 +1175,7 @@ export default new Vuex.Store({
 
     getAdminSchools({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
+        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetSchools`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1166,7 +1213,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetSchools`, {
+          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetSchools`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
@@ -1206,7 +1253,7 @@ export default new Vuex.Store({
 
     getAdminStatutes({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
+        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetStatutes`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1237,11 +1284,14 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetStatutes`, {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+          .get(
+            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetStatutes`,
+            {
+              headers: {
+                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              },
             },
-          })
+          )
           .then(response => {
             const data = response.data
               .filter(item => item.offenseRepealed === null)
@@ -1285,7 +1335,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/GetTemplates`, {
+          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetTemplates`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -1294,7 +1344,8 @@ export default new Vuex.Store({
           .then(response => {
             const data = response.data.map(item => {
               const displayName = item.displayName
-              const options = item.stop
+              const options = JSON.parse(item.stop)
+
               return {
                 displayName,
                 ...options,
@@ -1313,7 +1364,7 @@ export default new Vuex.Store({
 
     getAdminUsers({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUsers`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v2/GetUsers`, {
           headers: {
             'Ocp-Apim-Subscription-Key': `${state.apiConfig.apiSubscription}`,
             'Cache-Control': 'no-cache',
@@ -1339,9 +1390,10 @@ export default new Vuex.Store({
 
     getOfficerStops({ commit, state }) {
       const officerId = state.user.officerId
+
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetStops?officerId=${officerId}&limit=10`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops?officerId=${officerId}&limit=10`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1430,12 +1482,15 @@ export default new Vuex.Store({
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc`
       }
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStops${queryString}`, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops${queryString}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           commit('updateAdminStops', {
             summary: response.data.summary,
@@ -1453,13 +1508,16 @@ export default new Vuex.Store({
 
     getAdminStopAudits({ state }, stopId) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}stop/GetStopAudits?id=${stopId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-            'Cache-Control': 'no-cache',
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStopAudits?id=${stopId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
           },
-        })
+        )
         .then(response => {
           return response.data
         })
@@ -1578,10 +1636,10 @@ export default new Vuex.Store({
         })
     },
 
-    getUser({ commit, state }) {
+    getUser({ commit, state, getters }) {
       const id = state.user.oid
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}userprofile/GetUser/${id}`, {
+        .get(`${state.apiConfig.apiBaseUrl}userprofile/v2/GetUser/${id}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -1589,14 +1647,25 @@ export default new Vuex.Store({
         })
         .then(response => {
           commit('updateUserProfile', response.data)
-          commit('updateInvalidUser', false)
+          if (
+            !response.data.officerRace ||
+            (!response.data.officerGender && !response.data.officerNonBinary)
+          ) {
+            commit('updateInvalidUser', true)
+            return true
+          } else {
+            commit('updateInvalidUser', false)
+            return false
+          }
         })
         .catch(error => {
           console.log('There was an error retrieving user.', error)
-          if (error.response?.status === 404) {
-            commit('updateInvalidUser', true)
-          } else {
+          if (error.response.status === 503) {
             commit('updateApiUnavailable', true)
+            return false
+          } else {
+            commit('updateInvalidUser', true)
+            return false
           }
         })
     },
@@ -1604,7 +1673,7 @@ export default new Vuex.Store({
     getErrorCodes({ commit, state }, value) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/GetErrorCodes?search=${value}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetErrorCodes?search=${value}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,

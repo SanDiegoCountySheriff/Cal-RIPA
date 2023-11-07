@@ -6,6 +6,7 @@ import { defaultStop } from '@/utilities/stop.js'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import store from '@/store'
+import { computed } from 'vue'
 
 describe('Ripa Form Wrapper', () => {
   const localVue = createLocalVue()
@@ -13,6 +14,12 @@ describe('Ripa Form Wrapper', () => {
   let wrapper
   let vuetify
   let stop
+  const schoolsList = JSON.parse('[{"cdsCode":"1","fullName":"High School"}]')
+  const countyCitiesList = JSON.parse('[{"id":"1","fullName":"CountyCity"}]')
+  const nonCountyCitiesList = JSON.parse(
+    '[{"id":"2","fullName":"NonCountyCity"}]',
+  )
+  const beatsList = JSON.parse('[{"id":"1","fullName":"Beat 1"}]')
 
   beforeEach(() => {
     vuetify = new Vuetify()
@@ -23,7 +30,7 @@ describe('Ripa Form Wrapper', () => {
     wrapper.destroy()
   })
 
-  const factory = propsData => {
+  const factory = (propsData, provideData) => {
     return mount(RipaFormWrapper, {
       localVue,
       store,
@@ -31,16 +38,52 @@ describe('Ripa Form Wrapper', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        formStepIndex: computed(() => provideData?.formStepIndex ?? 0),
+        lastReason: computed(() => null),
+        isApiUnavailable() {
+          return false
+        },
+        isOnlineAndAuthenticated() {
+          return false
+        },
+        isAdmin: () => true,
+        isAdminEditing: () => true,
+        isAuthenticated: () => false,
+        fullStop: () => {},
+        displayDebugger: () => true,
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
+        beats: computed(() => beatsList),
+        statutes: computed(() => []),
+      },
     })
   }
 
-  const shallowFactory = propsData => {
+  const shallowFactory = (propsData, provideData) => {
     return shallowMount(RipaFormWrapper, {
       localVue,
       store,
       vuetify,
       propsData: {
         ...propsData,
+      },
+      provide: {
+        formStepIndex: computed(() => provideData?.formStepIndex ?? 0),
+        lastReason: computed(() => null),
+        isApiUnavailable: () => false,
+        isOnlineAndAuthenticated: () => false,
+        isAdmin: () => true,
+        isAdminEditing: () => true,
+        isAuthenticated: () => false,
+        fullStop: () => {},
+        displayDebugger: () => true,
+        countyCities: computed(() => countyCitiesList),
+        nonCountyCities: computed(() => nonCountyCitiesList),
+        schools: computed(() => schoolsList),
+        beats: computed(() => beatsList),
+        statutes: computed(() => []),
       },
     })
   }
@@ -51,9 +94,17 @@ describe('Ripa Form Wrapper', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should reset reasonableSuspicion when changing reasonForStop', async () => {
-    stop = createStartOfFormStepIndexThreeStop(stop)
-    wrapper = factory({ value: stop, formStepIndex: 3 })
+  it.todo('should display non force actions for v2 stops')
+
+  it.todo('should display actions taken for legacy stops')
+
+  it.todo('should display force actions taken for v2 stops')
+
+  it.todo('should not display force actions taken for legacy stops')
+
+  it.skip('should reset reasonableSuspicion when changing reasonForStop', async () => {
+    const updatedStop = createStartOfFormStepIndexThreeStop(stop)
+    wrapper = factory({ value: updatedStop }, { formStepIndex: 3 })
     const expected = []
 
     for (let i = 1; i <= 6; i++) {

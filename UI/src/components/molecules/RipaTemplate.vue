@@ -3,11 +3,11 @@
     <v-card-text>
       <div class="tw-mt-4 tw-mb-4">
         <v-container fluid>
-          <ripa-alert alert-type="error" v-if="!isOnline && isAuthenticated">
+          <ripa-alert alert-type="error" v-if="!online && isAuthenticated">
             You are currently offline. You may create stops but MUST log in to
             submit them.
           </ripa-alert>
-          <ripa-alert alert-type="error" v-if="!isOnline && !isAuthenticated">
+          <ripa-alert alert-type="error" v-if="!online && !isAuthenticated">
             You are currently offline. You must log in to create stops.
           </ripa-alert>
           <v-row no-gutters dense>
@@ -90,17 +90,21 @@ export default {
     RipaAlert,
   },
 
+  inject: [
+    'displayReportingEmail',
+    'reportingEmailAddress',
+    'online',
+    'isAuthenticated',
+    'stopTemplates',
+  ],
+
   methods: {
     handleDynamicTemplates(name) {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate(name)
-      }
+      this.$emit('on-open-template', name)
     },
 
     handleDefaultTemplate() {
-      if (this.onOpenTemplate) {
-        this.onOpenTemplate()
-      }
+      this.$emit('on-open-template')
     },
 
     handleEmail() {
@@ -111,31 +115,7 @@ export default {
   },
 
   props: {
-    stopTemplates: {
-      type: Array,
-      default: () => [],
-    },
-    onOpenTemplate: {
-      type: Function,
-      required: true,
-    },
     disableButtons: {
-      type: Boolean,
-      default: false,
-    },
-    displayReportingEmail: {
-      type: Boolean,
-      default: false,
-    },
-    reportingEmailAddress: {
-      type: String,
-      default: '',
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isAuthenticated: {
       type: Boolean,
       default: false,
     },

@@ -4,7 +4,7 @@
       title="Date of Stop"
       required
       subtitle="§999.226(a)(2)"
-      :on-open-statute="onOpenStatute"
+      v-on="$listeners"
     >
     </ripa-form-header>
 
@@ -18,7 +18,6 @@
               :rules="dateRules"
               :min="getMinDate"
               :max="getMaxDate"
-              @input="handleInput"
             >
             </ripa-date-picker>
           </div>
@@ -30,26 +29,28 @@
               v-model="model.stopDate.time"
               label="Time of Stop"
               :rules="timeRules"
-              @input="handleInput"
             >
             </ripa-time-picker>
           </div>
         </v-col>
 
         <v-col cols="12" sm="12" md="4">
-          <div class="md:tw-mr-4">
-            <ripa-number-input
-              v-model="model.stopDate.duration"
-              label="Stop Duration"
-              hint="Duration of Stop should be defined in minutes. Maximum of 1440."
-              :min="1"
-              :max="1440"
-              :rules="durationRules"
-              @input="handleInput"
-            >
-            </ripa-number-input>
-          </div>
+          <ripa-number-input
+            v-model="model.stopDate.duration"
+            label="Stop Duration"
+            hint="Duration of Stop should be defined in minutes. Maximum of 1440."
+            :min="1"
+            :max="1440"
+            :rules="durationRules"
+          >
+          </ripa-number-input>
         </v-col>
+      </v-row>
+
+      <v-row v-if="this.environmentName === 'DEV'">
+        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">
+          Convert to Version {{ model.stopVersion === 1 ? '2' : '1' }} Stop
+        </v-btn>
       </v-row>
 
       <v-row no-gutters>
@@ -58,17 +59,46 @@
             v-model="model.stopDate.stopInResponseToCFS"
             label="Stop in response to Call for Service"
             :max-width="300"
-            @input="handleInput"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="model.stopVersion === 2" no-gutters>
+        <v-col cols="12" sm="12">
+          <ripa-switch
+            v-model="model.officerWorksWithNonReportingAgency"
+            label="Officer is secondary to a non-reporting agency"
+            :max-width="300"
           ></ripa-switch>
         </v-col>
       </v-row>
     </v-container>
+
+    <template v-if="model.stopVersion === 2">
+      <ripa-form-header
+        title="Welfare or Wellness Check"
+        required
+        subtitle="§999.226(a)(13)"
+        v-on="$listeners"
+      >
+      </ripa-form-header>
+
+      <v-container>
+        <v-row>
+          <v-col>
+            <ripa-switch
+              v-model="model.stopMadeDuringWelfareCheck"
+              label="Stop made during the course of performing a welfare or wellness check or an officer’s community caretaking function."
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
   </div>
 </template>
 
 <script>
 import RipaFormHeader from '@/components/molecules/RipaFormHeader'
-import RipaModelMixin from '@/components/mixins/RipaModelMixin'
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
@@ -83,8 +113,6 @@ import {
 export default {
   name: 'ripa-stop-date',
 
-  mixins: [RipaModelMixin],
-
   components: {
     RipaFormHeader,
     RipaDatePicker,
@@ -95,14 +123,28 @@ export default {
 
   data() {
     return {
-      viewModel: this.syncModel(this.value),
+      devTime: this.value.stopVersion === 2,
     }
   },
+
+  inject: ['isAdminEditing', 'environmentName'],
 
   computed: {
     model: {
       get() {
-        return this.viewModel
+        return this.value
+      },
+      set(newVal) {
+        if (
+          new Date(newVal.stopDate.date) >= new Date('2024-01-01') ||
+          this.devTime
+        ) {
+          newVal.stopVersion = 2
+        } else {
+          newVal.stopVersion = 1
+        }
+
+        this.$emit('input', newVal)
       },
     },
 
@@ -134,16 +176,15 @@ export default {
     },
 
     isValidDateTime() {
-      const dateStr = this.viewModel.stopDate.date
-      const timeStr = this.viewModel.stopDate.time
+      const dateStr = this.model.stopDate.date
+      const timeStr = this.model.stopDate.time
 
-      if (!this.adminEditing) {
+      if (!this.isAdminEditing) {
         return (
           dateWithinLastHours(dateStr, timeStr, 24) &&
           dateNotInFuture(dateStr, timeStr)
         )
       }
-
       return dateNotInFuture(dateStr, timeStr)
     },
 
@@ -157,14 +198,25 @@ export default {
   },
 
   methods: {
-    handleInput() {
-      this.$emit('input', this.viewModel)
+    handleDevTime() {
+      this.devTime = !this.devTime
+
+      if (this.devTime) {
+        this.model.stopVersion = 2
+      } else if (!this.devTime) {
+        this.model.stopVersion = 1
+      }
+
+      this.$emit('on-dev-time')
     },
   },
 
   watch: {
-    value(newVal) {
-      this.viewModel = this.syncModel(newVal)
+    model: {
+      handler: function (newVal) {
+        this.model = newVal
+      },
+      deep: true,
     },
   },
 
@@ -172,10 +224,6 @@ export default {
     value: {
       type: Object,
       required: true,
-    },
-    adminEditing: {
-      type: Boolean,
-      default: false,
     },
   },
 }

@@ -54,4 +54,20 @@ describe('Ripa Radio Group', () => {
 
     expect(wrapper.vm.viewModel).toEqual('New Value')
   })
+
+  it('should display in row', async () => {
+    wrapper = factory()
+    wrapper.vm.$vuetify.breakpoint.xs = true
+
+    expect(wrapper.vm.displayInRow).toBeFalsy()
+
+    wrapper.vm.$vuetify.breakpoint.xs = false
+
+    expect(wrapper.vm.displayInRow).toBeFalsy()
+
+    wrapper.setProps({ displayRow: true })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.displayInRow).toBeTruthy()
+  })
 })

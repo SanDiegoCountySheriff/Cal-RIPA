@@ -1,5 +1,10 @@
 <script>
-import { apiStopToFullStop, fullStopToStop } from '@/utilities/stop'
+import {
+  apiStopToFullStop,
+  apiStopToFullStopV2,
+  fullStopToStop,
+  fullStopToStopV2,
+} from '@/utilities/stop'
 
 export default {
   methods: {
@@ -10,10 +15,21 @@ export default {
           new Date(b.dateReported).getTime() -
           new Date(a.dateReported).getTime(),
       )
-      const fullStop = apiStopToFullStop(apiStop)
-      const stop = fullStopToStop(fullStop)
+      const fullStop =
+        apiStop.stopVersion === 1
+          ? apiStopToFullStop(apiStop)
+          : apiStopToFullStopV2(apiStop)
 
-      localStorage.setItem('ripa_form_step_index', '7')
+      const stop =
+        fullStop.stopVersion === 1
+          ? fullStopToStop(fullStop)
+          : fullStopToStopV2(fullStop)
+
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_admin_editing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -41,10 +57,21 @@ export default {
           new Date(b.dateReported).getTime() -
           new Date(a.dateReported).getTime(),
       )
-      const fullStop = apiStopToFullStop(apiStop)
-      const stop = fullStopToStop(fullStop)
+      const fullStop =
+        apiStop.stopVersion === 1
+          ? apiStopToFullStop(apiStop)
+          : apiStopToFullStopV2(apiStop)
 
-      localStorage.setItem('ripa_form_step_index', '7')
+      const stop =
+        fullStop.stopVersion === 1
+          ? fullStopToStop(fullStop)
+          : fullStopToStopV2(fullStop)
+
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_admin_viewing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -72,10 +99,22 @@ export default {
           new Date(b.dateReported).getTime() -
           new Date(a.dateReported).getTime(),
       )
-      const fullStop = apiStopToFullStop(apiStop)
-      const stop = fullStopToStop(fullStop)
+      const fullStop =
+        apiStop.stopVersion === 1
+          ? apiStopToFullStop(apiStop)
+          : apiStopToFullStopV2(apiStop)
+
+      const stop =
+        fullStop.stopVersion === 1
+          ? fullStopToStop(fullStop)
+          : fullStopToStopV2(fullStop)
+
       localStorage.setItem('ripa_errored_stop_internal_id', internalId)
-      localStorage.setItem('ripa_form_step_index', '7')
+      if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else {
+        localStorage.setItem('ripa_form_step_index', '8')
+      }
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_editing_stop_with_error', '1')
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))

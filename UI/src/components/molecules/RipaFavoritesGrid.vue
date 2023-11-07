@@ -65,11 +65,29 @@
           </v-card>
         </v-dialog>
       </template>
+      <template v-slot:item.name="{ item }">
+        <span class="mr-4">{{ item.name }} </span>
+        <span class="red--text text-no-wrap">
+          {{ item.favoritesCodeExpired ? 'Expired Statute' : '' }}
+          {{
+            item.favoritesCityExpired && !item.favoritesSchoolExpired
+              ? 'Expired City'
+              : ''
+          }}
+          {{
+            item.favoritesSchoolExpired && !item.favoritesCityExpired
+              ? 'Expired School'
+              : ''
+          }}
+          {{
+            item.favoritesSchoolExpired && item.favoritesCityExpired
+              ? 'Expired City and School'
+              : ''
+          }}
+        </span>
+      </template>
       <template v-slot:item.actions="{ item }">
         <template v-if="isOnlineAndAuthenticated">
-          <v-icon small class="tw-mr-2" @click="editItem($event, item)">
-            mdi-pencil
-          </v-icon>
           <v-icon small @click="deleteItem($event, item)"> mdi-delete </v-icon>
         </template>
       </template>
@@ -112,6 +130,8 @@ export default {
     }
   },
 
+  inject: ['isOnlineAndAuthenticated'],
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -139,9 +159,7 @@ export default {
 
     deleteItemConfirm() {
       this.favorites.splice(this.editedIndex, 1)
-      if (this.onDeleteFavorite) {
-        this.onDeleteFavorite(this.editedItem.id)
-      }
+      this.$emit('on-delete-favorite', this.editedItem.id)
       this.closeDelete()
     },
 
@@ -162,9 +180,7 @@ export default {
     },
 
     handleRowClick(item) {
-      if (this.onOpenFavorite) {
-        this.onOpenFavorite(item.id)
-      }
+      this.$emit('on-open-favorite', item.id)
     },
 
     save() {
@@ -172,12 +188,10 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.favorites[this.editedIndex], this.editedItem)
       } else {
-        this.onDeleteFavorite.push(this.editedItem)
+        this.$emit('on-delete-favorite', this.editedItem.id)
       }
 
-      if (this.onEditFavorite) {
-        this.onEditFavorite(this.editedItem)
-      }
+      this.$emit('on-edit-favorite', this.editedItem)
       this.close()
     },
   },
@@ -206,22 +220,6 @@ export default {
     items: {
       type: Array,
       default: () => [],
-    },
-    isOnlineAndAuthenticated: {
-      type: Boolean,
-      default: false,
-    },
-    onDeleteFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onEditFavorite: {
-      type: Function,
-      default: () => {},
-    },
-    onOpenFavorite: {
-      type: Function,
-      default: () => {},
     },
   },
 }
