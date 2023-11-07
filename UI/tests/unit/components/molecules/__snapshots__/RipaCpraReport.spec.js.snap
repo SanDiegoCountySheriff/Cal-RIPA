@@ -48,8 +48,8 @@ exports[`Ripa CPRA Report should match snapshot 1`] = `
       </div>
       <div class="row">
         <div class="col-lg-3 col-6">
-          <div class="ripa-switch" style="max-width: 250px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
                   <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-14" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -58,17 +58,19 @@ exports[`Ripa CPRA Report should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Include Officer Information
-                  </label>
+                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Include Officer Information
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="col-lg-3 col-6">
-          <div class="ripa-switch" style="max-width: 250px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
                   <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-17" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -77,9 +79,11 @@ exports[`Ripa CPRA Report should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;">
-                    Include Beat Information
-                  </label>
+                  </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        Include Beat Information
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
                 </div>
               </div>
             </div>
