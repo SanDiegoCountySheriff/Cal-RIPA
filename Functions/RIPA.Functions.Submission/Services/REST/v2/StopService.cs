@@ -230,7 +230,6 @@ public class StopService : IStopService
                 ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
                 ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToList() },
                 ListResult = CastToDojListResult(personStopped.ListResultOfStop.ToList()),
-                ListStReas_Given = new ListStReas_Given { StReas_Given = personStopped.ReasonGivenForStop.Select(x => x.Key).ToList() },
             };
 
             listDojPersonStopped.Add(dojPersonStopped);
@@ -316,13 +315,14 @@ public class StopService : IStopService
 
     private Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
     {
-        var stopReasonKey = personStopped.ReasonForStop?.Key;
+        var stopReasonKey = personStopped.ReasonForStop?.Key;;
 
         Primaryreason primaryReason = new()
         {
             StReas = stopReasonKey,
             StReas_N = personStopped.ReasonForStopExplanation,
-        };
+            ListStReas_Given = { StReas_Given = personStopped.ReasonGivenForStop.Select(x => x.Key).ToList() },
+    };
 
         switch (stopReasonKey)
         {
