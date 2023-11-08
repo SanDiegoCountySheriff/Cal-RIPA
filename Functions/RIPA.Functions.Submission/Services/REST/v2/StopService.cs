@@ -58,10 +58,17 @@ public class StopService : IStopService
 
         foreach (var submission in pendingSubmissions)
         {
-            submission.ListSubmissionError = new()
+            if (submission.ListSubmissionError != null)
             {
-                submissionError
-            };
+                submission.ListSubmissionError.Add(submissionError);
+            }
+            else
+            {
+                submission.ListSubmissionError = new()
+                {
+                    submissionError
+                };
+            }
             submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
         }
 
