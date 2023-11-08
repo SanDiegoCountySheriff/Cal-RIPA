@@ -10,6 +10,7 @@ namespace RIPA.Functions.Submission.Services.ServiceBus;
 public class ResultServiceBusService : IResultServiceBusService
 {
     private readonly ServiceBusClient _serviceBusClient;
+    private readonly ServiceBusClientOptions _serviceBusClientOptions;
     private readonly ServiceBusSender _serviceBusSender;
     private const int batchMessageCountLimit = 1000;
     private readonly ILogger<ResultServiceBusService> _logger;
@@ -17,7 +18,11 @@ public class ResultServiceBusService : IResultServiceBusService
     public ResultServiceBusService(ILogger<ResultServiceBusService> logger)
     {
         _logger = logger;
-        _serviceBusClient = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"));
+        _serviceBusClientOptions = new ServiceBusClientOptions();
+#if DEBUG
+        _serviceBusClientOptions.TransportType = ServiceBusTransportType.AmqpWebSockets;
+#endif
+        _serviceBusClient = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"), _serviceBusClientOptions);
         _serviceBusSender = _serviceBusClient.CreateSender("result");
     }
 
