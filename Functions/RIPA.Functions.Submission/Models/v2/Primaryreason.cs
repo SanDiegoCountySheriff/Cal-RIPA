@@ -12,4 +12,5 @@ public class Primaryreason
     public string Susp_O_CD { get; set; }
     public Listprob_T ListProb_T { get; set; }
     public string Prob_O_CD { get; set; }
+    public ListStReas_Given ListStReas_Given { get; set; }
 }
