@@ -322,7 +322,7 @@ public class StopService : IStopService
             StReas = stopReasonKey,
             StReas_N = personStopped.ReasonForStopExplanation,
             ListStReas_Given = { StReas_Given = personStopped.ReasonGivenForStop.Select(x => x.Key).ToList() },
-    };
+        };
 
         switch (stopReasonKey)
         {
