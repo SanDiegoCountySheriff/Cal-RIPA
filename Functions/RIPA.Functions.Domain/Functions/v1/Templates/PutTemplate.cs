@@ -23,7 +23,7 @@ public class PutTemplate
     public PutTemplate(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Statutes");
+        _tableClient = _tableServiceClient.GetTableClient("Templates");
     }
 
     [FunctionName("PutTemplate_v1")]
