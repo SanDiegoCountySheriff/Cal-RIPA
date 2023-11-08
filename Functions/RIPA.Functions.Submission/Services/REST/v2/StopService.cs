@@ -315,7 +315,7 @@ public class StopService : IStopService
 
     private Primaryreason CastToDojPrimaryReason(PersonStopped personStopped)
     {
-        var stopReasonKey = personStopped.ReasonForStop?.Key;;
+        var stopReasonKey = personStopped.ReasonForStop?.Key;
 
         Primaryreason primaryReason = new()
         {
