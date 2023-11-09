@@ -135,11 +135,6 @@ export default {
       ) {
         await this.getAdminSubmission({ id: this.$route.params.submissionId })
       }
-      if (tabIndex === '/admin/stops') {
-        if (!this.mappedAdminStops.stops) {
-          await this.getAdminStops()
-        }
-      }
       if (tabIndex === '/admin/users') {
         await this.getAdminUsers()
       }
