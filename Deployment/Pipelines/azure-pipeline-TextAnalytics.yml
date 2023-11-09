@@ -6,7 +6,7 @@
 trigger:
   branches:
     include:
-      - dev
+      - main
   paths:
     include:
       - Functions/RIPA.Functions.TextAnalytics/*
