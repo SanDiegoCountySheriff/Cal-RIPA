@@ -39,9 +39,9 @@ public class Startup : FunctionsStartup
         {
             BypassProxyOnLocal = true,
         };
-        _client = new CosmosClient(_localConnectionString, clientOptions);
-#else
         _client = new CosmosClient(_account, _key, clientOptions);
+#else
+        _client = new CosmosClient(_localConnectionString, clientOptions);
 #endif
     }
 

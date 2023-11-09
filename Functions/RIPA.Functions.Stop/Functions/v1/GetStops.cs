@@ -69,15 +69,34 @@ public class GetStops
         string stopV1QueryString = string.Empty;
         string stopV2QueryString = string.Empty;
         string stopSummaryQueryString = string.Empty;
+        int returnOffsetOrLimit = 0;
 
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
+            var offsetOrLimit = req.Query["offsetOrLimit"];
+
             try
             {
                 stopV1QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
                 stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(stopV1QueryString));
+
+                if (stopResponse.Count < stopQuery.Limit && stopResponse.Count > 0)
+                {
+                    // set stopQuery.Offset to 0 for next query
+                    stopQuery.Offset = 0;
+                    // return stopQuery.Limit - stopResponse.Count
+                    returnOffsetOrLimit = stopQuery.Limit - stopResponse.Count;
+                }
+                else if (stopResponse.Count == 0)
+                {
+                    // set stopQuery.Offset to incoming variable (limit or whatever)
+                    stopQuery.Offset = stopQuery.Limit + int.Parse(offsetOrLimit);
+                    // return stopQuery.Offset
+                    returnOffsetOrLimit = stopQuery.Offset;
+                }
+
                 stopV2QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 2, false, stopResponse.Count);
                 stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(stopV2QueryString));
                 stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
@@ -106,7 +125,8 @@ public class GetStops
                 Unsubmitted = stopStatusCounts.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
                 Pending = stopStatusCounts.Where(x => x.Status == "Pending").Select(x => x.Count).FirstOrDefault(),
                 Failed = stopStatusCounts.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
-            }
+            },
+            OffsetOrLimit = returnOffsetOrLimit
         };
 
         return new OkObjectResult(response);
