@@ -23,7 +23,7 @@ public class PutTemplate
     public PutTemplate(TableServiceClient tableServiceClient)
     {
         _tableServiceClient = tableServiceClient;
-        _tableClient = _tableServiceClient.GetTableClient("Statutes");
+        _tableClient = _tableServiceClient.GetTableClient("Templates");
     }
 
     [FunctionName("PutTemplate_v1")]
@@ -31,7 +31,7 @@ public class PutTemplate
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The Template Id/Name")]
-    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(Template), Deprecated = false, Description = "Template object", Required = true)]
+    [OpenApiRequestBody(contentType: "application/Json", bodyType: typeof(string), Deprecated = false, Description = "Template object", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Template Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Template failed on insert or replace")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "Put", Route = "v1/PutTemplate/{Id}")] Template template, HttpRequest req, string Id, ILogger log)

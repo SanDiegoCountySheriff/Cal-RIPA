@@ -17,5 +17,4 @@ public class Person_Stopped
     public Listproptype ListPropType { get; set; }
     public Listcb ListCB { get; set; }
     public Listresult ListResult { get; set; }
-    public ListStReas_Given ListStReas_Given { get; set; }
 }
