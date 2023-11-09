@@ -1159,7 +1159,7 @@ export const apiStopToFullStop = apiStop => {
     stepTrace: apiStop.telemetry?.listStepTrace || [],
     isPiiFound: apiStop.isPiiFound || false,
     piiEntities: apiStop.piiEntities,
-    stopVersion: apiStop.stopVersion,
+    stopVersion: apiStop.stopVersion || 1,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,

@@ -116,7 +116,7 @@ public class StopQueryUtility
         }
 
         //Version
-        whereStatements.Add(Environment.NewLine + $"c.StopVersion = {version}");
+        whereStatements.Add(Environment.NewLine + $"(c.StopVersion = {version} OR NOT IS_DEFINED(c.StopVersion))");
 
         string where = string.Empty;
 
