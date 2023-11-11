@@ -146,9 +146,28 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
       <div class="v-data-table adminStopsTable v-data-table--has-top theme--light">
         <header class="v-sheet theme--light v-toolbar v-toolbar--flat" style="height: 64px;">
           <div class="v-toolbar__content" style="height: 64px;">
-            <div class="v-toolbar__title tw-uppercase">Admin: Stops</div> <span class="v-tooltip v-tooltip--top"><!----><button type="button" class="submitAllBtn v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content">
+            <div class="v-toolbar__title tw-uppercase">Admin: Stops</div> <span class="v-tooltip v-tooltip--top"><!----><button type="button" class="ml-5 v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary" aria-haspopup="true" aria-expanded="false"><span class="v-btn__content">
                   Submit All Stops to DOJ
                 </span></button></span>
+            <div class="ripa-switch ml-8" style="max-width: 300px;" color="primary">
+              <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+                <div class="v-input__control">
+                  <div class="v-input__slot">
+                    <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-38" role="switch" type="checkbox" aria-disabled="false" value="">
+                      <div class="v-input--selection-controls__ripple"></div>
+                      <div class="v-input--switch__track theme--light"></div>
+                      <div class="v-input--switch__thumb theme--light">
+                        <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                      </div>
+                    </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+        Show V2 Stops
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="spacer"></div>
             <!---->
           </div>

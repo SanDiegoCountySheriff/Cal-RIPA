@@ -60,7 +60,9 @@ export default {
           new Date(a.dateReported).getTime(),
       )
       const fullStop =
-        apiStop.stopVersion === 1
+        apiStop.stopVersion === 1 ||
+        apiStop.stopVersion === undefined ||
+        apiStop.stopVersion === null
           ? apiStopToFullStop(apiStop)
           : apiStopToFullStopV2(apiStop)
 

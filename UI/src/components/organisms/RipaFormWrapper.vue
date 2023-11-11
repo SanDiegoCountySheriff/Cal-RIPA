@@ -747,6 +747,10 @@ export default {
     handleBack() {
       if (this.stepIndex === 8 && !this.anyAgencyQuestions) {
         this.stepIndex = this.stepIndex - 2
+      } else if (this.model.stopVersion === 2) {
+        this.stepIndex = this.stepIndex - 1
+      } else if (!this.anyAgencyQuestions) {
+        this.stepIndex = this.stepIndex - 2
       } else {
         this.stepIndex = this.stepIndex - 1
       }

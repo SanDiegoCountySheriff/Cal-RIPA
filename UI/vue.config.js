@@ -11,7 +11,7 @@ module.exports = {
   },
   pwa: {
     name: 'RIPA Stops',
-    themeColor: '#42b983',
+    themeColor: '#000000',
     msTileColor: '#000000',
     appleMobileWebAppCache: 'yes',
     appleMobileWebAppStatusBarStyle: '#000000',
