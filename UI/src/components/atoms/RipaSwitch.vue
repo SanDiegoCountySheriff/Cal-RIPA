@@ -12,7 +12,7 @@
       validate-on-blur
     >
       <template #label>
-        <span class="main-label">
+        <span class="main-label mr-3">
           {{ label }}
         </span>
         <span

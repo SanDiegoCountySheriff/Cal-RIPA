@@ -145,7 +145,7 @@
                     v-on="on"
                     @click="handleSubmitAll"
                     color="primary"
-                    class="ml-3"
+                    class="ml-5"
                   >
                     Submit All Stops to DOJ
                   </v-btn>
@@ -156,9 +156,12 @@
                 >
               </v-tooltip>
 
-              <v-btn @click="handleChangeVersion" class="ml-3" color="primary"
-                >Show V{{ version }} Stops</v-btn
-              >
+              <ripa-switch
+                v-model="showingVersionTwoStops"
+                label="Show V2 Stops"
+                color="primary"
+                class="ml-8"
+              ></ripa-switch>
 
               <v-spacer></v-spacer>
 
@@ -257,6 +260,7 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 import _ from 'lodash'
@@ -268,6 +272,7 @@ export default {
 
   components: {
     RipaDatePicker,
+    RipaSwitch,
   },
 
   mixins: [RipaEditStopMixin],
@@ -320,6 +325,7 @@ export default {
       sortBy: 'StopDateTime',
       sortDesc: true,
       version: 1,
+      showingVersionTwoStops: false,
     }
   },
 
@@ -415,15 +421,6 @@ export default {
       }
       if (this.getErrorCodeSearchItems.length === 0) {
         this.callErrorCodeSearch('')
-      }
-    },
-    handleChangeVersion() {
-      if (this.version === 1) {
-        this.version = 2
-        this.handleFilter()
-      } else {
-        this.version = 1
-        this.handleFilter()
       }
     },
     handleNextPage() {
@@ -617,6 +614,15 @@ export default {
         this.currentPage = 1
       } else {
         this.currentPage = newValue.offset / this.itemsPerPage + 1
+      }
+    },
+    showingVersionTwoStops(value) {
+      if (value) {
+        this.version = 2
+        this.handleFilter()
+      } else {
+        this.version = 1
+        this.handleFilter()
       }
     },
   },
