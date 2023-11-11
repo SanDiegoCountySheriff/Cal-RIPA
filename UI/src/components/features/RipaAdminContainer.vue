@@ -178,7 +178,7 @@ export default {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await this.getAdminStops()
+        await this.getAdminStops(pageData.version)
         this.loading = false
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
@@ -208,7 +208,7 @@ export default {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await this.getAdminStops()
+        await this.getAdminStops(pageData.version)
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
       }
@@ -222,7 +222,7 @@ export default {
           filterData.offset = 0
         }
         this.setStopQueryData(filterData)
-        await this.getAdminStops()
+        await this.getAdminStops(filterData.version)
         this.loading = false
         this.setResetPagination(true)
       } else if (filterData.type === 'submission') {

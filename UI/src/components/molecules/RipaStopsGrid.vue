@@ -144,7 +144,8 @@
                     v-bind="attrs"
                     v-on="on"
                     @click="handleSubmitAll"
-                    class="submitAllBtn"
+                    color="primary"
+                    class="ml-3"
                   >
                     Submit All Stops to DOJ
                   </v-btn>
@@ -155,11 +156,15 @@
                 >
               </v-tooltip>
 
+              <v-btn @click="handleChangeVersion" class="ml-3" color="primary"
+                >Show V{{ version }} Stops</v-btn
+              >
+
               <v-spacer></v-spacer>
 
               <v-btn
                 @click="handleSubmitSelected"
-                class="submitSelectedBtn"
+                color="primary"
                 v-if="selectedItems.length > 0"
               >
                 Submit Selected Stops to DOJ ({{ selectedItems.length }})
@@ -314,6 +319,7 @@ export default {
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
       sortDesc: true,
+      version: 1,
     }
   },
 
@@ -411,6 +417,15 @@ export default {
         this.callErrorCodeSearch('')
       }
     },
+    handleChangeVersion() {
+      if (this.version === 1) {
+        this.version = 2
+        this.handleFilter()
+      } else {
+        this.version = 1
+        this.handleFilter()
+      }
+    },
     handleNextPage() {
       // the pagination component updates the current page
       // BEFORE these are called but this math is based on the
@@ -419,6 +434,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handlePreviousPage() {
@@ -426,6 +442,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handleJumpToPage() {
@@ -433,6 +450,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handleRowSelected(item) {
@@ -526,6 +544,7 @@ export default {
               : this.getColumnSortName(),
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
+        version: this.version,
       }
       this.$emit('handleAdminStopsFiltering', filterData)
       if (!this.savedFilters?.offset) {
@@ -633,17 +652,6 @@ export default {
 <style lang="scss">
 .stopsGridContainer {
   margin: 0px;
-
-  .adminStopsTable {
-    .submitAllBtn {
-      margin-left: 20px;
-    }
-
-    .submitAllBtn,
-    .submitSelectedBtn {
-      border: 1px solid #666;
-    }
-  }
 
   .stopsSummary {
     display: flex;

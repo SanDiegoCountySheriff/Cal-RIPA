@@ -1423,7 +1423,7 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state, getters }) {
+    getAdminStops({ commit, state, getters }, version) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
@@ -1491,15 +1491,12 @@ export default new Vuex.Store({
         queryString = `${queryString}?Offset=0&Limit=10&OrderBy=StopDateTime&Order=Desc&OffsetOrLimit=${getters.offsetOrLimit}`
       }
       return axios
-        .get(
-          `http://localhost:7071/api/v${state.version}/GetStops${queryString}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .get(`http://localhost:7071/api/v${version}/GetStops${queryString}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(response => {
           const offsetOrLimit = response.data?.offsetOrLimit
           commit('updateOffsetOrLimit', offsetOrLimit)
