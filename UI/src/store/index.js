@@ -1416,7 +1416,7 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state, getters }, version) {
+    getAdminStops({ commit, state }, version) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
