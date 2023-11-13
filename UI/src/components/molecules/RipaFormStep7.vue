@@ -10,14 +10,36 @@
     <v-spacer></v-spacer>
 
     <template v-if="isAdminEditing">
-      <ripa-edit-stop-explanation v-model="model"></ripa-edit-stop-explanation>
-      <ripa-override-pii
-        :api-stop="apiStop"
-        v-model="model"
-      ></ripa-override-pii>
+      <v-row>
+        <v-col>
+          <ripa-edit-stop-explanation
+            v-model="model"
+          ></ripa-edit-stop-explanation>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <ripa-override-pii
+            :api-stop="apiStop"
+            v-model="model"
+          ></ripa-override-pii>
+        </v-col>
+        <v-col cols="6">
+          <template v-if="isStopErrored">
+            <ripa-nfia v-model="model"></ripa-nfia>
+          </template>
+        </v-col>
+      </v-row>
     </template>
 
     <v-spacer></v-spacer>
+
+    <template v-if="model.nfia">
+      <ripa-alert alert-type="error">
+        Are you sure you want to mark the record as NFIA? The record will remain
+        in errored state and cannot be updated further.
+      </ripa-alert>
+    </template>
 
     <template v-if="!isFormValid">
       <ripa-alert alert-type="error">
@@ -45,6 +67,7 @@
 
     <template v-else>
       <div class="tw-flex tw-mt-8 tw-justify-center">
+        <v-btn color="primary" class="tw-mr-2" @click="handleBack">Back</v-btn>
         <v-btn color="error" class="tw-mr-2" @click="handleCancel">
           Cancel
         </v-btn>
@@ -60,6 +83,7 @@ import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
 import RipaFormSummary from '@/components/molecules/RipaFormSummary'
 import RipaEditStopExplanation from '@/components/molecules/RipaEditStopExplanation'
 import RipaOverridePii from '@/components/molecules/RipaOverridePii'
+import RipaNfia from '@/components/molecules/RipaNfia'
 
 export default {
   name: 'ripa-form-step7',
@@ -71,6 +95,7 @@ export default {
     RipaFormSummary,
     RipaEditStopExplanation,
     RipaOverridePii,
+    RipaNfia,
   },
 
   inject: ['isAdminEditing', 'isAdminViewing'],
@@ -91,6 +116,16 @@ export default {
 
     handleDone() {
       this.$emit('handle-done')
+    },
+  },
+
+  computed: {
+    isStopErrored() {
+      return (
+        this.apiStop.listSubmission?.some(s => {
+          return s.listSubmissionError?.some(l => !!l)
+        }) || false
+      )
     },
   },
 

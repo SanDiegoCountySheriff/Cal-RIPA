@@ -21,22 +21,33 @@ public class StopService : IStopService
 
     public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
-        stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+        if (stop.Status == SubmissionStatus.Pending.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted.ToString();
+        }
+        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted_NFIA.ToString();
+        }
 
-        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || !x.ListSubmissionError.Any() || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.Status != SubmissionStatus.Submitted_NFIA.ToString() && stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
+        }
+        else if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new List<Common.Models.Submission>();
         }
 
         var submission = new Common.Models.Submission
         {
             DateSubmitted = dateSubmitted,
             Id = submissionId,
-            Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted),
+            Status = SubmissionStatus.Submitted.ToString(),
             FileName = fileName
         };
 
-        stop.ListSubmission.ToList().Add(submission);
+        stop.ListSubmission.Add(submission);
 
         return stop;
     }
@@ -82,7 +93,8 @@ public class StopService : IStopService
                 K12Code = stop.Location.School ? stop.Location.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stop.Location.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stop.Location.School) : null,
+            Is_NFIA = stop.Nfia == true ? "Y" : string.Empty
         };
 
         return dojStop;

@@ -18,11 +18,14 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStopAudits
 {
-    private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
+    private readonly IStopAuditCosmosDbService<Common.Models.v1.Stop> _stopV1AuditCosmosDbService;
+    private readonly IStopAuditCosmosDbService<Common.Models.v2.Stop> _stopV2AuditCosmosDbService;
 
-    public GetStopAudits(IStopAuditCosmosDbService stopAuditCosmosDbService)
+    public GetStopAudits(IStopAuditCosmosDbService<Common.Models.v1.Stop> stopAuditCosmosDbService, IStopAuditCosmosDbService<Common.Models.v2.Stop> stopV2AuditCosmosDbService)
     {
-        _stopAuditCosmosDbService = stopAuditCosmosDbService;
+        _stopV1AuditCosmosDbService = stopAuditCosmosDbService;
+        _stopV2AuditCosmosDbService = stopV2AuditCosmosDbService;
+
     }
 
     [FunctionName("GetStopAudits_v1")]
@@ -51,12 +54,14 @@ public class GetStopAudits
         }
 
         string id = req.Query["id"];
-        string queryString = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\"";
-        IEnumerable<IStop> stopResponse;
+        string queryStringV1 = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\" AND c.StopVersion = 1";
+        string queryStringV2 = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\" AND c.StopVersion = 2";
+        List<IStop> stopResponse = new();
 
         try
         {
-            stopResponse = await _stopAuditCosmosDbService.GetStopAuditsAsync(queryString);
+            stopResponse.AddRange(await _stopV1AuditCosmosDbService.GetStopAuditsAsync(queryStringV1));
+            stopResponse.AddRange(await _stopV2AuditCosmosDbService.GetStopAuditsAsync(queryStringV2));
             return new OkObjectResult(stopResponse);
         }
         catch (Exception ex)

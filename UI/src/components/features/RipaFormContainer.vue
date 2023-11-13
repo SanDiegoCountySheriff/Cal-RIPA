@@ -31,7 +31,6 @@
       "
       @handle-done="handleDone"
       @pii-check="handlePiiCheck"
-      @on-dev-time="handleDevTime"
       @on-open-favorite-location="handleOpenLocationFavorite"
       @on-open-favorite-reason="handleOpenReasonFavorite"
       @on-open-favorite-result="handleOpenResultFavorite"
@@ -239,9 +238,9 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
-      favoriteLocations: this.getFavoriteLocations,
-      favoriteReasons: this.getFavoriteReasons,
-      favoriteResults: this.getFavoriteResults,
+      favoriteLocations: computed(() => this.getFavoriteLocations),
+      favoriteReasons: computed(() => this.getFavoriteReasons),
+      favoriteResults: computed(() => this.getFavoriteResults),
     }
   },
 
@@ -341,7 +340,9 @@ export default {
                   location.favoritesSchoolExpired = true
                 }
               }
-              return location.version === this.version
+
+             return location
+             
             })
             .sort((a, b) => {
               if (!a.count) {
@@ -389,7 +390,7 @@ export default {
                 reason.reason.trafficViolationCode = null
                 reason.favoritesCodeExpired = true
               }
-              return reason.version === this.version
+              return reason
             })
             .sort((a, b) => {
               if (a.count > b.count) {
@@ -507,7 +508,7 @@ export default {
 
               result.result.custodialArrestCodes = updatedCustodialArrestCodes
 
-              return result.version === this.version
+              return result
             })
             .sort((a, b) => {
               if (a.count > b.count) {
@@ -533,7 +534,6 @@ export default {
       'setStopsWithErrors',
       'setPersonSearchAutomaticallySelected',
       'setPropertySearchAutomaticallySelected',
-      'toggleDevTime',
     ]),
 
     handleSetPersonSearchAutomaticallySelected() {
@@ -951,18 +951,18 @@ export default {
       }
     },
 
-    handleOpenLocationFavorites() {
-      this.favorites = this.getFavoriteLocations
+    handleOpenLocationFavorites(stopVersion) {
+      this.favorites = this.getFavoriteLocations.filter(item=>item.version === stopVersion)
       this.showLocationFavoritesDialog = true
     },
 
-    handleOpenReasonFavorites() {
-      this.favorites = this.getFavoriteReasons
+    handleOpenReasonFavorites(stopVersion) {
+      this.favorites = this.getFavoriteReasons.filter(item=>item.version === stopVersion)
       this.showReasonFavoritesDialog = true
     },
 
-    handleOpenResultFavorites() {
-      this.favorites = this.getFavoriteResults
+    handleOpenResultFavorites(stopVersion) {
+      this.favorites = this.getFavoriteResults.filter(item=>item.version === stopVersion)
       this.showResultFavoritesDialog = true
     },
 
@@ -1103,6 +1103,7 @@ export default {
         updatedFullStop.favoriteResultName = this.stop.favoriteResultName || ''
         updatedFullStop.agencyQuestions = this.stop.agencyQuestions || []
         updatedFullStop.id = this.stop.id
+        updatedFullStop.nfia = this.stop.nfia
         updatedFullStop.internalId = this.stop.internalId
         updatedFullStop.template = this.stop.template
         updatedFullStop.stepTrace = this.stop.stepTrace
@@ -1437,10 +1438,6 @@ export default {
 
     onViewStopsWithErrors() {
       this.$emit('on-view-stops-with-errors')
-    },
-
-    handleDevTime() {
-      this.toggleDevTime()
     },
   },
 

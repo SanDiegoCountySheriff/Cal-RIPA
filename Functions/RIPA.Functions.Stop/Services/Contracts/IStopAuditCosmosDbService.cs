@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Stop.Services.Contracts;
 
-public interface IStopAuditCosmosDbService
+public interface IStopAuditCosmosDbService<T>
 {
-    Task UpdateStopAuditAsync(string id, IStop stop);
-    Task<IEnumerable<IStop>> GetStopAuditsAsync(string queryString);
+    Task UpdateStopAuditAsync(string id, T stop);
+    Task<IEnumerable<T>> GetStopAuditsAsync(string queryString);
 }

@@ -1,61 +1,84 @@
 <template>
-  <v-container class="tw-mt-2" fluid>
-    <v-layout row align-center nowrap class="tw-m-0">
-      <v-flex xs12 md2>
-        <div class="tw-ml-2">
-          <ripa-date-picker
-            label="From Date"
-            class="tw-ml-2"
-            @input="fromDateChange"
-            :rules="dateRules"
-          ></ripa-date-picker>
-        </div>
-      </v-flex>
-
-      <v-flex xs12 md2>
-        <div class="tw-ml-2">
-          <ripa-date-picker
-            label="To Date"
-            class="tw-ml-2"
-            @input="toDateChange"
-            :rules="dateRules"
-          ></ripa-date-picker>
-        </div>
-      </v-flex>
-
-      <v-flex xs12 md2>
-        <div class="tw-ml-2">
-          <v-btn
-            small
-            color="primary"
-            class="tw-ml-2"
-            @click="createCpraReport(reportDates)"
-            :disabled="!isValidDateRange"
-            >Create</v-btn
-          >
-        </div>
-      </v-flex>
-    </v-layout>
-    <v-card :loading="this.loading" class="cpra-report" flat>
-      <v-card-title>CPRA Report</v-card-title>
-      <v-card-text
-        >Only stops accepted by the California DOJ are included on the
-        report.</v-card-text
-      >
+  <v-container fluid>
+    <v-card flat>
       <v-card-text>
-        <div v-for="(item, index) in cpraItems" :key="index">
-          <ripa-list :item="item"></ripa-list>
-        </div>
+        <v-row>
+          <v-col cols="6" lg="3">
+            <ripa-date-picker
+              v-model="fromDate"
+              :rules="dateRules"
+              label="From Date"
+            ></ripa-date-picker>
+          </v-col>
+
+          <v-col cols="6" lg="3">
+            <ripa-date-picker
+              v-model="toDate"
+              :rules="dateRules"
+              label="To Date"
+            ></ripa-date-picker>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="6" lg="3">
+            <ripa-switch
+              v-model="includeOfficer"
+              label="Include Officer Information"
+            ></ripa-switch>
+          </v-col>
+
+          <v-col cols="6" lg="3">
+            <ripa-switch
+              v-model="includeBeat"
+              label="Include Beat Information"
+            ></ripa-switch>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-btn
+              :disabled="!isValidDateRange"
+              @click="createCpraReport"
+              color="primary"
+            >
+              Create
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12" lg="6">
+            <v-card :loading="this.loading" outlined>
+              <v-card-title>CPRA Report</v-card-title>
+
+              <v-card-text>
+                Only stops accepted by the California DOJ are included on the
+                report.
+              </v-card-text>
+
+              <v-card-text>
+                <div v-for="(item, index) in cpraItems" :key="index">
+                  <ripa-list :item="item"></ripa-list>
+                </div>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  @click="downloadReport(reportStats.fileName)"
+                  v-show="reportHasFilename"
+                  text
+                  color="primary"
+                >
+                  Download Report
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-card-text>
-      <div class="tw-ml-4 tw-mb-4">
-        <v-btn
-          @click="downloadReport(reportStats.fileName)"
-          v-show="reportHasFilename"
-          small
-          color="primary"
-          >Download Report</v-btn
-        >
-      </div>
     </v-card>
   </v-container>
 </template>
@@ -63,18 +86,21 @@
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaList from '@/components/molecules/RipaList'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { dateNotInFuture } from '@/utilities/dates'
 
 export default {
   name: 'ripa-cpra-report',
 
-  components: { RipaDatePicker, RipaList },
+  components: { RipaDatePicker, RipaList, RipaSwitch },
 
   data() {
     return {
       fromDate: null,
       toDate: null,
       reportStats: {},
+      includeOfficer: false,
+      includeBeat: false,
     }
   },
 
@@ -97,13 +123,6 @@ export default {
       )
     },
 
-    reportDates() {
-      return {
-        fromDate: this.fromDate,
-        toDate: this.toDate,
-      }
-    },
-
     cpraItems() {
       return this.reportStats?.cpraItems?.length > 0
         ? this.reportStats.cpraItems
@@ -120,24 +139,18 @@ export default {
       this.reportStats = this.items
     },
 
-    fromDateChange(val) {
-      this.fromDate = val
-    },
-
-    toDateChange(val) {
-      this.toDate = val
-    },
-
-    createCpraReport(reportDates) {
+    createCpraReport() {
       const reportParameters = {
-        reportDates,
+        reportDates: { fromDate: this.fromDate, toDate: this.toDate },
         officerName: `${this.user.firstName} ${this.user.lastName}`,
+        includeOfficer: this.includeOfficer,
+        includeBeat: this.includeBeat,
       }
-      this.$emit('handleCreateCpraReport', reportParameters)
+      this.$emit('handle-create-cpra-report', reportParameters)
     },
 
     downloadReport(fileName) {
-      this.$emit('handleDownloadCpraReport', fileName)
+      this.$emit('handle-download-cpra-report', fileName)
     },
   },
 
@@ -167,10 +180,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.cpra-report {
-  width: 45%;
-  border: 1px solid #ccc !important;
-}
-</style>

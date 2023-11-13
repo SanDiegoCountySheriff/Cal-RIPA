@@ -14,7 +14,8 @@
             v-model="model.stopType"
             :items="stopTypes"
             :rules="stopTypeRules"
-            :display-row="true"
+            @input="handleInput"
+            display-row
           ></ripa-radio-group>
         </v-col>
       </v-row>
@@ -43,27 +44,38 @@ export default {
     }
   },
 
+  methods: {
+    handleInput() {
+      this.updateModel()
+      this.$emit('input', this.model)
+    },
+
+    updateModel() {
+      if (this.model.stopType !== 'Pedestrian') {
+        this.model.person.insideResidence = null
+      }
+
+      if (this.model.stopType !== 'Vehicular') {
+        this.model.person.passengerInVehicle = null
+        this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop =
+          this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.filter(
+            action => {
+              return action !== 4 && action !== 13
+            },
+          )
+      }
+    },
+  },
+
   computed: {
     model: {
       get() {
         return this.value
       },
-      set(newVal) {
-        this.$emit('input', newVal)
-      },
     },
 
     stopTypeRules() {
       return [v => !!v || 'A stop type is required']
-    },
-  },
-
-  watch: {
-    model: {
-      handler: function (newVal) {
-        this.model = newVal
-      },
-      deep: true,
     },
   },
 

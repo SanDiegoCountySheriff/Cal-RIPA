@@ -40,53 +40,23 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteReasons[0]" class="text-center">
+        <v-col v-if="favoriteReasons.filter(item=>item.version === model.stopVersion).length > 0" class="text-center py-0">
           Top 5 Favorites
         </v-col>
       </v-row>
 
       <v-row>
         <v-col class="text-center">
-          <v-chip
-            v-if="favoriteReasons[0]"
-            @click="handleFavoriteClick(favoriteReasons[0])"
+          <v-btn
+          v-for="(item, i) in favoriteReasons.filter(item=>item.version === model.stopVersion).slice(0,5)"
+            @click="handleFavoriteClick(item)"
             color="primary"
             class="mr-3 mb-2"
+            small
+            outlined
           >
-            {{ favoriteReasons[0].name }}
-          </v-chip>
-          <v-chip
-            v-if="favoriteReasons[1]"
-            @click="handleFavoriteClick(favoriteReasons[1])"
-            color="primary"
-            class="mr-3 mb-2"
-          >
-            {{ favoriteReasons[1].name }}
-          </v-chip>
-          <v-chip
-            v-if="favoriteReasons[2]"
-            @click="handleFavoriteClick(favoriteReasons[2])"
-            color="primary"
-            class="mr-3 mb-2"
-          >
-            {{ favoriteReasons[2].name }}
-          </v-chip>
-          <v-chip
-            v-if="favoriteReasons[3]"
-            @click="handleFavoriteClick(favoriteReasons[3])"
-            color="primary"
-            class="mr-3 mb-2"
-          >
-            {{ favoriteReasons[3].name }}
-          </v-chip>
-          <v-chip
-            v-if="favoriteReasons[4]"
-            @click="handleFavoriteClick(favoriteReasons[4])"
-            color="primary"
-            class="mr-3 mb-2"
-          >
-            {{ favoriteReasons[4].name }}
-          </v-chip>
+            {{ item.name }}
+          </v-btn>
         </v-col>
       </v-row>
 
@@ -199,8 +169,9 @@
               v-model="model.stopReason.probableCauseCode"
               item-text="fullName"
               item-value="code"
-              label="Offense Code (Optional)"
+              label="Offense Code"
               :items="statutes"
+              :rules="probableCauseCodeRules"
             ></ripa-autocomplete>
           </template>
 
@@ -490,6 +461,12 @@ export default {
       ]
     },
 
+    probableCauseCodeRules() {
+      const checked = this.model.stopReason.reasonForStop === 9
+      const code = this.model.stopReason.probableCauseCode
+      return [(checked && code !== null) || 'An offense code is required']
+    },
+
     reasonableSuspicionCodeRules() {
       const checked = this.model.stopReason.reasonForStop === 2
       const code = this.model.stopReason.reasonableSuspicionCode
@@ -514,7 +491,7 @@ export default {
 
   methods: {
     handleOpenFavorites() {
-      this.$emit('on-open-reason-favorites')
+      this.$emit('on-open-reason-favorites', this.model.stopVersion)
     },
 
     handleSaveFavorite() {

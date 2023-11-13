@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace RIPA.Functions.Stop.Services;
 
-public class StopAuditCosmosDbService : IStopAuditCosmosDbService
+public class StopAuditCosmosDbService<T> : IStopAuditCosmosDbService<T> where T : IStop
 {
-    private readonly ILogger<StopAuditCosmosDbService> _logger;
+    private readonly ILogger<StopAuditCosmosDbService<T>> _logger;
     private readonly Container _container;
 
-    public StopAuditCosmosDbService(Container container, ILogger<StopAuditCosmosDbService> logger)
+    public StopAuditCosmosDbService(Container container, ILogger<StopAuditCosmosDbService<T>> logger)
     {
         _logger = logger;
         _container = container;
     }
 
-    public async Task<IEnumerable<IStop>> GetStopAuditsAsync(string queryString)
+    public async Task<IEnumerable<T>> GetStopAuditsAsync(string queryString)
     {
-        var query = _container.GetItemQueryIterator<IStop>(new QueryDefinition(queryString));
-        List<IStop> results = new();
+        var query = _container.GetItemQueryIterator<T>(new QueryDefinition(queryString));
+        List<T> results = new();
 
         while (query.HasMoreResults)
         {
@@ -33,7 +33,7 @@ public class StopAuditCosmosDbService : IStopAuditCosmosDbService
         return results;
     }
 
-    public async Task UpdateStopAuditAsync(string id, IStop stop)
+    public async Task UpdateStopAuditAsync(string id, T stop)
     {
         await _container.UpsertItemAsync(stop, new PartitionKey(id));
     }

@@ -1,0 +1,14 @@
+{
+  "spa": {
+    "redirectUris": ["__SPA_REDIRECT_URL__"]
+  },
+  "publicClient": {
+    "redirectUris": []
+  },
+  "web": {
+    "redirectUris": [],
+    "implicitGrantSettings": {
+      "enableIdTokenIssuance": true
+    }
+  }
+}

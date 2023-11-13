@@ -15,13 +15,15 @@
     if($groupExists)
     {
         Write-Host "Group already exists"
-        return $groupExists.objectId
+        return $groupExists.id
     }
 
     Write-Host "Creating group" $GroupName
     $adminGroup = az ad group create --display-name $GroupName  --mail-nickname $GroupName --description $Description | ConvertFrom-Json
     
-    return $adminGroup.objectId
+    Write-Host "Using group ID:" $adminGroup.id
+    
+    return $adminGroup.id
 }
 
 Export-ModuleMember -Function New-RIPAAADGroup

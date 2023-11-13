@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RIPA.Functions.Submission": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7073"
+    }
+  }
+}

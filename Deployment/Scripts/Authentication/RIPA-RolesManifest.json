@@ -1,24 +1,20 @@
 [
-	{
-		"allowedMemberTypes": [
-			"User"
-		],
-		"description": "RIPA-ADMINS-ROLE",
-		"displayName": "RIPA-ADMINS-ROLE",
-		"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-		"isEnabled": true,
-		"origin": "Application",
-		"value": "RIPA-ADMINS-ROLE"
-	},
-	{
-		"allowedMemberTypes": [
-			"User"
-		],
-		"description": "RIPA-USERS-ROLE",
-		"displayName": "RIPA-USERS-ROLE",
-		"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-		"isEnabled": true,
-		"origin": "Application",
-		"value": "RIPA-USERS-ROLE"
-	}
+  {
+    "allowedMemberTypes": ["User"],
+    "description": "RIPA-ADMINS-ROLE",
+    "displayName": "RIPA-ADMINS-ROLE",
+    "id": "624d1ecc-933a-4d68-8b4c-b9a8ce343824",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "RIPA-ADMINS-ROLE"
+  },
+  {
+    "allowedMemberTypes": ["User"],
+    "description": "RIPA-USERS-ROLE",
+    "displayName": "RIPA-USERS-ROLE",
+    "id": "bd1f63c5-7525-4db1-bd97-09def6c07edf",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "RIPA-USERS-ROLE"
+  }
 ]

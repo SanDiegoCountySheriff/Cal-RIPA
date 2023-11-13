@@ -24,13 +24,7 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
       <!---->
     </div>
     <div class="row">
-      <div class="text-center col">
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-      </div>
+      <div class="text-center col"></div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">
@@ -161,7 +155,7 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
         <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
           <div class="v-input__control">
             <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-375" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-375" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code (Optional)</label><input id="input-375" type="text" autocomplete="off">
+              <div class="v-select__slot"><label for="input-375" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code</label><input id="input-375" type="text" autocomplete="off">
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>
@@ -246,7 +240,7 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
     <div class="row">
       <div class="col">
         <div class="ripa-switch" style="max-width: 300px;">
-          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
                 <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-402" role="switch" type="checkbox" aria-disabled="false" value="">
@@ -255,9 +249,11 @@ exports[`Ripa Stop Reason should display new reason for stops for V2 stop 1`] = 
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-402" class="v-label theme--light" style="left: 0px; position: relative;">
-                  The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest.
-                </label>
+                </div><label for="input-402" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+        The stopped person is inside a residence, where an officer was executing a search or arrest warrant naming or identifying another person, conducting a search pursuant to a condition of another person’s parole, probation, PRCS, or mandatory supervision, or conducting a compliance check on another person under home detention or house arrest.
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
               </div>
             </div>
           </div>
@@ -292,13 +288,7 @@ exports[`Ripa Stop Reason should match snapshot 1`] = `
       <!---->
     </div>
     <div class="row">
-      <div class="text-center col">
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-        <!---->
-      </div>
+      <div class="text-center col"></div>
     </div>
     <div class="row no-gutters">
       <div class="col-sm-12 col-12">

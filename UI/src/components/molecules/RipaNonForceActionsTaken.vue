@@ -49,7 +49,6 @@
                 v-model="model.nonForceActionsTaken.personSearchConsentGiven"
                 label="Person Search Consent Given"
                 :max-width="300"
-                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -59,7 +58,6 @@
                 v-model="model.nonForceActionsTaken.propertySearchConsentGiven"
                 label="Property Search Consent Given"
                 :max-width="300"
-                :rules="personPropertySearchConsentGivenRules"
                 @input="handleInput"
               ></ripa-switch>
             </template>
@@ -91,6 +89,11 @@
                 </template>
 
                 <ripa-text-input
+                  v-if="
+                    !this.model.nonForceActionsTaken.basisForSearch.every(
+                      reasonForSearchVal => reasonForSearchVal === 4,
+                    )
+                  "
                   v-model="model.nonForceActionsTaken.basisForSearchExplanation"
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
@@ -218,7 +221,7 @@ export default {
     },
 
     isBasisForSearchExplanationVisible() {
-      if (this.model.nonForceActionsTaken.basisForSearch.length === 0) {
+      if (this.model.nonForceActionsTaken.basisForSearch?.length === 0) {
         return false
       }
 
@@ -227,8 +230,8 @@ export default {
 
     basisForSearchRules() {
       const consentGiven =
-        this.wasAskedForConsentToSearchPerson ||
-        this.wasAskedForConsentToSearchProperty
+        this.model.nonForceActionsTaken.personSearchConsentGiven ||
+        this.model.nonForceActionsTaken.propertySearchConsentGiven
       const searchConducted = this.wasSearchOfPersonOrPropertyConducted
       const options = this.model.nonForceActionsTaken.basisForSearch || []
 
@@ -236,12 +239,9 @@ export default {
         (searchConducted && options.length > 0) ||
           'At least one basis for search is required',
         !consentGiven ||
-          (consentGiven &&
-            options !== null &&
-            options.length > 0 &&
-            (options.includes(1) ||
-              options.includes(14) ||
-              options.includes(15))) ||
+          options.includes(1) ||
+          options.includes(14) ||
+          options.includes(15) ||
           'Consent given must be selected if person or property consent was given.',
       ]
     },
@@ -284,6 +284,15 @@ export default {
         filteredItems = filteredItems.filter(item => item.value !== 13)
       }
 
+      if (
+        !this.model.nonForceActionsTaken.personSearchConsentGiven &&
+        !this.model.nonForceActionsTaken.propertySearchConsentGiven
+      ) {
+        filteredItems = filteredItems.filter(
+          item => item.value !== 1 && item.value !== 14 && item.value !== 15,
+        )
+      }
+
       if (basisForSearch.includes(1)) {
         filteredItems = filteredItems.filter(
           item => item.value !== 14 && item.value !== 15,
@@ -302,36 +311,11 @@ export default {
         )
       }
 
-      if (actionsTaken.includes(20)) {
-        return filteredItems
-      }
-
       if (!actionsTaken.includes(15)) {
         return filteredItems.filter(item => item.value !== 12)
       }
 
       return filteredItems
-    },
-
-    personPropertySearchConsentGivenRules() {
-      const checked =
-        this.model.nonForceActionsTaken.personSearchConsentGiven ||
-        this.model.nonForceActionsTaken.propertySearchConsentGiven
-      const basisForSearch =
-        this.model.nonForceActionsTaken?.basisForSearch || []
-      const consentGiven =
-        basisForSearch.includes(1) ||
-        basisForSearch.includes(14) ||
-        basisForSearch.includes(15)
-
-      if (!consentGiven) {
-        return []
-      }
-
-      return [
-        (checked && consentGiven) ||
-          'Must select either consent given when "Basis for Search" indicates "Consent Given"',
-      ]
     },
 
     wasAskedForConsentToSearchPerson() {
@@ -361,12 +345,29 @@ export default {
         filteredItems = filteredItems.filter(item => item.value !== 1)
       }
 
+      if (
+        this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
+          14,
+        )
+      ) {
+        filteredItems = filteredItems.filter(item => item.value !== 16)
+      }
+
       return filteredItems
     },
 
     getNonForceActionsTakenSearchItems() {
       return this.nonForceActionsTakenItems
-        .filter(item => [2, 3, 14, 15].includes(item.value))
+        .filter(item => {
+          if (
+            !this.model.nonForceActionsTaken.nonForceActionsTakenDuringStop.includes(
+              16,
+            )
+          ) {
+            return [2, 3, 14, 15].includes(item.value)
+          }
+          return [2, 3, 15].includes(item.value)
+        })
         .map(item => {
           return {
             ...item,
@@ -428,6 +429,16 @@ export default {
         this.model.nonForceActionsTaken.basisForSearch = []
         this.model.nonForceActionsTaken.basisForSearchExplanation = null
         this.model.nonForceActionsTaken.basisForSearchPiiFound = false
+      }
+
+      if (
+        !this.model.nonForceActionsTaken.propertySearchConsentGiven &&
+        !this.model.nonForceActionsTaken.personSearchConsentGiven
+      ) {
+        this.model.nonForceActionsTaken.basisForSearch =
+          this.model.nonForceActionsTaken.basisForSearch.filter(basis => {
+            return basis !== 1 && basis !== 14 && basis !== 15
+          })
       }
 
       let actionsTaken =

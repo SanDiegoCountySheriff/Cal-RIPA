@@ -6,31 +6,38 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RIPA.Functions.Common.Models;
+using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Security;
 using RIPA.Functions.Submission.Services.CosmosDb.Contracts;
-using RIPA.Functions.Common.Models.v1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RIPA.Functions.Submission.Functions.v1;
+namespace RIPA.Functions.Submission.Functions;
 
 public class GetSubmission
 {
     private readonly ISubmissionCosmosDbService _submissionCosmosDbService;
-    private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
 
-    public GetSubmission(ISubmissionCosmosDbService submissionCosmosDbService, IStopCosmosDbService<Stop> stopCosmosDbService)
+    public GetSubmission(
+        ISubmissionCosmosDbService submissionCosmosDbService,
+        IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
+        IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService
+    )
     {
         _submissionCosmosDbService = submissionCosmosDbService;
-        _stopCosmosDbService = stopCosmosDbService;
+        _stopV1CosmosDbService = stopV1CosmosDbService;
+        _stopV2CosmosDbService = stopV2CosmosDbService;
     }
 
-    [FunctionName("GetSubmission_v1")]
-    [OpenApiOperation(operationId: "v1/GetSubmission", tags: new[] { "name", "v1" })]
+    [FunctionName("GetSubmission")]
+    [OpenApiOperation(operationId: "GetSubmission", tags: new[] { "name" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
     [OpenApiParameter(name: "Id", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The Submission Id")]
@@ -43,7 +50,7 @@ public class GetSubmission
     [OpenApiParameter(name: "ErrorCode", In = ParameterLocation.Query, Required = false, Type = typeof(string), Description = "The full text error code to filter the submissions stops by")]
 
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetSubmission/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("GET - Get Submission requested");
 
@@ -98,27 +105,42 @@ public class GetSubmission
             whereStatements.Add(Environment.NewLine + $"ListSubmissionError.Code = '{req.Query["ErrorCode"]}'");
         }
 
-        string where = string.Empty;
+        string whereV1 = "WHERE ";
+        string whereV2 = "WHERE ";
 
         if (whereStatements.Count > 0)
         {
-            where = " WHERE ";
-
             foreach (var whereStatement in whereStatements)
             {
-                where += Environment.NewLine + whereStatement;
-                where += Environment.NewLine + "AND";
+                whereV1 += Environment.NewLine + whereStatement;
+                whereV1 += Environment.NewLine + "AND";
             }
 
-            where = where.Remove(where.Length - 3);
+            whereV1 += " c.StopVersion = 1";
+        }
+
+        if (whereStatements.Count > 0)
+        {
+            foreach (var whereStatement in whereStatements)
+            {
+                whereV2 += Environment.NewLine + whereStatement;
+                whereV2 += Environment.NewLine + "AND";
+            }
+
+            whereV2 += " c.StopVersion = 2";
         }
 
         try
         {
             var submissionResponse = await _submissionCosmosDbService.GetSubmissionAsync(Id);
-            string query = $"SELECT VALUE c FROM c {join} {where} {order} {limit}";
-            var stopResponse = await _stopCosmosDbService.GetStopsAsync(query);
-            var getSubmissionErrorSummariesResponse = await _stopCosmosDbService.GetSubmissionErrorSummaries(Id);
+            string queryV1 = $"SELECT VALUE c FROM c {join} {whereV1} {order} {limit}";
+            string queryV2 = $"SELECT VALUE c FROM c {join} {whereV2} {order} {limit}";
+            List<IStop> stopResponse = new();
+            stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(queryV1));
+            stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(queryV2));
+            List<SubmissionErrorSummary> submissionErrorSummaries = new();
+            submissionErrorSummaries.AddRange(await _stopV1CosmosDbService.GetSubmissionErrorSummaries(Id, 1));
+            submissionErrorSummaries.AddRange(await _stopV2CosmosDbService.GetSubmissionErrorSummaries(Id, 2));
             var response = new
             {
                 submission = new
@@ -130,10 +152,10 @@ public class GetSubmission
                     submissionResponse.OfficerName,
                     submissionResponse.MaxStopDate,
                     submissionResponse.MinStopDate,
-                    ErrorCount = getSubmissionErrorSummariesResponse.Sum(x => x.Count)
+                    ErrorCount = submissionErrorSummaries.Sum(x => x.Count)
                 },
                 stops = stopResponse,
-                summary = getSubmissionErrorSummariesResponse
+                summary = submissionErrorSummaries
 
             };
 

@@ -91,18 +91,12 @@
           </v-col>
         </v-row>
 
-        <template
-          v-if="
-            model.assignment === 10 ||
-            model.assignment === 11 ||
-            model.assignment === 12
-          "
-        >
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -140,18 +134,12 @@
           </v-col>
         </v-row>
 
-        <template
-          v-if="
-            model.assignment === 10 ||
-            model.assignment === 11 ||
-            model.assignment === 12
-          "
-        >
+        <template v-if="model.assignment === 10 || model.assignment === 11">
           <v-row no-gutters>
             <v-col cols="12" sm="12">
               <ripa-text-input
                 v-model="model.otherType"
-                label="Other Type"
+                label="Description of Assignment"
                 :rules="otherTypeRules"
                 @input="handleInput"
               >
@@ -161,48 +149,46 @@
         </template>
       </template>
 
-      <template v-if="version === 2">
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="12">
-            <ripa-select
-              v-model="model.officerRace"
-              :items="raceItems"
-              :rules="raceRules"
-              @input="handleInput"
-              label="Officer Race"
-              itemValue="name"
-              itemText="name"
-              clearable
-              multiple
-            ></ripa-select>
-          </v-col>
-        </v-row>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="12">
+          <ripa-select
+            v-model="model.officerRace"
+            :items="raceItems"
+            :rules="raceRules"
+            @input="handleInput"
+            label="Officer Race"
+            itemValue="name"
+            itemText="name"
+            clearable
+            multiple
+          ></ripa-select>
+        </v-col>
+      </v-row>
 
-        <v-row no-gutters>
-          <v-col cols="12" sm="12" md="6">
-            <ripa-select
-              v-model="model.officerGender"
-              :items="genderItems"
-              :rules="genderRules"
-              @input="handleInput"
-              label="Officer Gender"
-              class="md:tw-mr-4"
-              itemValue="name"
-              itemText="name"
-              clearable
-            ></ripa-select>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <ripa-switch
-              v-model="model.officerNonBinary"
-              :rules="genderRules"
-              :max-width="250"
-              @input="handleInput"
-              label="Nonbinary Person"
-            ></ripa-switch>
-          </v-col>
-        </v-row>
-      </template>
+      <v-row no-gutters>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-select
+            v-model="model.officerGender"
+            :items="genderItems"
+            :rules="genderRules"
+            @input="handleInput"
+            label="Officer Gender"
+            class="md:tw-mr-4"
+            itemValue="name"
+            itemText="name"
+            clearable
+          ></ripa-select>
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <ripa-switch
+            v-model="model.officerNonBinary"
+            :rules="genderRules"
+            :max-width="250"
+            @input="handleInput"
+            label="Nonbinary Person"
+          ></ripa-switch>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -312,7 +298,7 @@ export default {
     otherTypeRules() {
       const assignment = this.viewModel.assignment
       const otherType = this.viewModel.otherType
-      if (assignment !== 10 && assignment !== 11 && assignment !== 12) {
+      if (assignment !== 10 && assignment !== 11) {
         return []
       }
 

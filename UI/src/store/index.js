@@ -84,7 +84,6 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
-    devTime: true,
     version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
   },
 
@@ -263,11 +262,12 @@ export default new Vuex.Store({
         }
       }
 
-      const blockNumber = state.gpsLocationAddress.address.AddNum
-      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : null
+      const blockNumber =
+        Math.floor(Number(state.gpsLocationAddress.address.AddNum) / 100) * 100
+      const parsedBlockNumber = blockNumber ? parseInt(blockNumber) : 0
       const streetName = state.gpsLocationAddress.address.Address
       const parsedStreetName = streetName
-        ? streetName.replace(blockNumber, '').trim()
+        ? streetName.replace(state.gpsLocationAddress.address.AddNum, '').trim()
         : null
       const city = state.gpsLocationAddress?.address?.City || 'NO CITY'
       const upperCaseCity = city ? city.toUpperCase() : city
@@ -290,6 +290,8 @@ export default new Vuex.Store({
         longitude,
         beat: null,
         school: null,
+        highway: '',
+        exit: '',
       }
     },
     mappedErrorCodeAdminSearch: state => {
@@ -339,9 +341,6 @@ export default new Vuex.Store({
       return state.apiUnavailable
     },
     mappedVersion: state => {
-      if (state.devTime) {
-        return 2
-      }
       return state.version
     },
     favoriteLocations: state => {
@@ -601,9 +600,6 @@ export default new Vuex.Store({
     updateIsAuthenticated(state, value) {
       state.isAuthenticated = value
     },
-    toggleDevTime(state) {
-      state.devTime = !state.devTime
-    },
   },
 
   actions: {
@@ -614,7 +610,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}textanalytics/v${state.version}/PostCheckPii`,
+          `${state.apiConfig.apiBaseUrl}textanalytics/PostCheckPii`,
           document,
           {
             headers: {
@@ -642,44 +638,13 @@ export default new Vuex.Store({
             const latLong = `${position.coords.longitude},${position.coords.latitude}`
             const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${latLong}&f=json`
 
-            let latDecimal
-            let longDecimal
-            let latTrimmed
-            let longTrimmed
-
             fetch(url)
               .then(response => response.json())
               .then(data => {
-                if (position.coords.latitude !== null) {
-                  latDecimal = String(position.coords.latitude).slice(
-                    String(position.coords.latitude).lastIndexOf('.') + 1,
-                  )
-                }
-
-                if (position.coords.longitude !== null) {
-                  longDecimal = String(position.coords.longitude).slice(
-                    String(position.coords.longitude).lastIndexOf('.') + 1,
-                  )
-                }
-
-                if (latDecimal.length > 3) {
-                  latTrimmed = String(position.coords.latitude).substring(
-                    0,
-                    String(position.coords.latitude).length - 1,
-                  )
-                } else latTrimmed = position.coords.latitude
-
-                if (longDecimal.length > 3) {
-                  longTrimmed = String(position.coords.longitude).substring(
-                    0,
-                    String(position.coords.longitude).length - 1,
-                  )
-                } else longTrimmed = position.coords.longitude
-
                 const dataIncludingLatLong = {
                   ...data,
-                  latitude: String(latTrimmed),
-                  longitude: String(longTrimmed),
+                  latitude: position.coords.latitude.toFixed(3),
+                  longitude: position.coords.longitude.toFixed(3),
                 }
 
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
@@ -840,7 +805,7 @@ export default new Vuex.Store({
       const formattedToDate = new Date(
         `${reportParameters.reportDates.toDate} 23:59:59Z`,
       ).toISOString()
-      const queryString = `StartDate=${formattedFromDate}&EndDate=${formattedToDate}`
+      const queryString = `startDate=${formattedFromDate}&endDate=${formattedToDate}&includeOfficer=${reportParameters.includeOfficer}&includeBeat=${reportParameters.includeBeat}`
 
       return axios
         .post(
@@ -1601,7 +1566,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmissions${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmissions${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1651,7 +1616,7 @@ export default new Vuex.Store({
 
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetSubmission/${pageData.id}${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/GetSubmission/${pageData.id}${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1683,9 +1648,8 @@ export default new Vuex.Store({
         .then(response => {
           commit('updateUserProfile', response.data)
           if (
-            getters.mappedVersion === 2 &&
-            (!response.data.officerRace ||
-              (!response.data.officerGender && !response.data.officerNonBinary))
+            !response.data.officerRace ||
+            (!response.data.officerGender && !response.data.officerNonBinary)
           ) {
             commit('updateInvalidUser', true)
             return true
@@ -1732,7 +1696,7 @@ export default new Vuex.Store({
     submitStops({ state }, stops) {
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmit`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmit`,
           { stopIds: stops },
           {
             headers: {
@@ -1800,7 +1764,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/PostSubmitSearch?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/PostSubmitSearch?${queryString}`,
           null,
           {
             headers: {
@@ -1885,10 +1849,6 @@ export default new Vuex.Store({
 
     setIsAuthenticated({ commit }, value) {
       commit('updateIsAuthenticated', value)
-    },
-
-    toggleDevTime({ commit }) {
-      commit('toggleDevTime')
     },
   },
 

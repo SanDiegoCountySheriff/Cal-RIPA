@@ -53,6 +53,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.isFormValid = this.$refs.stepForm.validate()
+  },
+
   props: {
     value: {
       type: Object,

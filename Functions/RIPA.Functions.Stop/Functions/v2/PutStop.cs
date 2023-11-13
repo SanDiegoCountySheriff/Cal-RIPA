@@ -21,12 +21,12 @@ namespace RIPA.Functions.Stop.Functions.v2;
 public class PutStop
 {
     private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbService;
-    private readonly IStopAuditCosmosDbService _stopAuditCosmosDbService;
+    private readonly IStopAuditCosmosDbService<Common.Models.v2.Stop> _stopAuditCosmosDbService;
     private readonly IUserProfileCosmosDbService<UserProfile> _userProfileCosmosDbService;
 
     public PutStop(IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbService,
         IUserProfileCosmosDbService<UserProfile> userProfileCosmosDbService,
-        IStopAuditCosmosDbService stopAuditCosmosDbService)
+        IStopAuditCosmosDbService<Common.Models.v2.Stop> stopAuditCosmosDbService)
     {
         _stopCosmosDbService = stopCosmosDbService;
         _userProfileCosmosDbService = userProfileCosmosDbService;
@@ -86,9 +86,13 @@ public class PutStop
             return new BadRequestObjectResult("City is required");
         }
 
-        if (stop.Status == null)
+        if (stop.Status == null && stop.Nfia != true)
         {
             stop.Status = SubmissionStatus.Unsubmitted.ToString();
+        }
+        else if (stop.Nfia == true)
+        {
+            stop.Status = SubmissionStatus.Unsubmitted_NFIA.ToString();
         }
 
         stop.Ori = Environment.GetEnvironmentVariable("ORI"); //What is an Originating Agency Identification (ORI) Number? A nine-character identifier assigned to an agency. Agencies must identify their ORI Number...

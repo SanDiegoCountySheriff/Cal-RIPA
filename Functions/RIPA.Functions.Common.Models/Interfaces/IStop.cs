@@ -15,7 +15,7 @@ public interface IStop
     bool IsPiiFound { get; set; }
     AgencyQuestion[] ListAgencyQuestion { get; set; }
     IPersonStopped[] ListPersonStopped { get; set; }
-    Submission[] ListSubmission { get; set; }
+    List<Submission> ListSubmission { get; set; }
     ILocation Location { get; set; }
     IOfficerAssignment OfficerAssignment { get; set; }
     string OfficerId { get; set; }
@@ -30,4 +30,5 @@ public interface IStop
     StopVersion? StopVersion { get; set; }
     Telemetry Telemetry { get; set; }
     string Time { get; set; }
+    bool? Nfia { get; set; }
 }

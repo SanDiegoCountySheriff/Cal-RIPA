@@ -110,18 +110,6 @@ describe('Ripa User', () => {
     expect(wrapper.html()).toContain('Officer Race')
   })
 
-  it('should hide officer race and gender inputs if current date < 01/01/24', () => {
-    wrapper = factory(
-      {
-        value: ripaUser,
-      },
-      1,
-    )
-
-    expect(wrapper.html()).not.toContain('Officer Gender')
-    expect(wrapper.html()).not.toContain('Officer Race')
-  })
-
   it('should display new assignment off duty for v2 stop', () => {
     ripaUserV2.assignment = 11
     wrapper = factory(

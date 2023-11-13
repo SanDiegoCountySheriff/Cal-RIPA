@@ -6,6 +6,13 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
       }" onsavefavorite="function () {
         return fn.apply(this, arguments);
       }">
+  <div class="tw-flex tw-mb-5 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+      Back
+    </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
+      Cancel
+    </span></button> <button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary"><span class="v-btn__content">
+      Next
+    </span></button></div>
   <div class="ripa-stop-reason tw-pb-4">
     <div class="ripa-form-header">
       <div class="row tw-ml-1 tw-mt-1"><span class="v-tooltip v-tooltip--top"><!----><i aria-hidden="true" aria-haspopup="true" aria-expanded="false" class="v-icon notranslate mdi mdi-alert theme--light error--text" style="font-size: 16px;"></i></span> <button type="button" class="v-icon notranslate icon v-icon--link mdi mdi-scale-balance theme--light primary--text" style="font-size: 16px;"></button>
@@ -29,22 +36,16 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
         <!---->
       </div>
       <div class="row">
-        <div class="text-center col">
-          <!---->
-          <!---->
-          <!---->
-          <!---->
-          <!---->
-        </div>
+        <div class="text-center col"></div>
       </div>
       <div class="row no-gutters">
         <div class="col-sm-12 col-12">
           <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field v-text-field--solo-flat v-select">
             <div class="v-input__control">
-              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-12" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-12" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Reason</label>
+              <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-15" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-15" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Reason</label>
                   <div class="v-select__selections">
-                    <div class="v-select__selection v-select__selection--comma">Traffic Violation</div><input required="required" id="input-12" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
+                    <div class="v-select__selection v-select__selection--comma">Traffic Violation</div><input required="required" id="input-15" readonly="readonly" type="text" aria-readonly="false" autocomplete="off">
                   </div>
                   <div class="v-input__append-inner">
                     <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" tabindex="-1" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
@@ -69,21 +70,21 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
             <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--radio-group v-input--radio-group--column">
               <div class="v-input__control">
                 <div class="v-input__slot" style="height: auto;">
-                  <div role="radiogroup" aria-labelledby="input-19" class="v-input--radio-group__input">
+                  <div role="radiogroup" aria-labelledby="input-22" class="v-input--radio-group__input">
                     <div class="v-radio theme--light v-item--active">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-marked theme--light primary--text"></i><input aria-checked="true" id="input-20" role="radio" type="radio" name="radio-19" value="1">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-marked theme--light primary--text"></i><input aria-checked="true" id="input-23" role="radio" type="radio" name="radio-22" value="1">
                         <div class="v-input--selection-controls__ripple primary--text"></div>
-                      </div><label for="input-20" class="v-label theme--light" style="left: 0px; position: relative;">Moving Violation</label>
+                      </div><label for="input-23" class="v-label theme--light" style="left: 0px; position: relative;">Moving Violation</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-22" role="radio" type="radio" name="radio-19" value="2">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-25" role="radio" type="radio" name="radio-22" value="2">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-22" class="v-label theme--light" style="left: 0px; position: relative;">Equipment Violation</label>
+                      </div><label for="input-25" class="v-label theme--light" style="left: 0px; position: relative;">Equipment Violation</label>
                     </div>
                     <div class="v-radio theme--light">
-                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-24" role="radio" type="radio" name="radio-19" value="3">
+                      <div class="v-input--selection-controls__input"><i aria-hidden="true" class="v-icon notranslate mdi mdi-radiobox-blank theme--light"></i><input aria-checked="false" id="input-27" role="radio" type="radio" name="radio-22" value="3">
                         <div class="v-input--selection-controls__ripple"></div>
-                      </div><label for="input-24" class="v-label theme--light" style="left: 0px; position: relative;">Non-moving Violation, including Registration Violation</label>
+                      </div><label for="input-27" class="v-label theme--light" style="left: 0px; position: relative;">Non-moving Violation, including Registration Violation</label>
                     </div>
                   </div>
                 </div>
@@ -97,8 +98,8 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
           <div class="tw-mt-2"></div>
           <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
             <div class="v-input__control">
-              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-29" class="v-input__slot">
-                <div class="v-select__slot"><label for="input-29" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code</label><input id="input-29" type="text" autocomplete="off">
+              <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-32" class="v-input__slot">
+                <div class="v-select__slot"><label for="input-32" class="v-label theme--light" style="left: 0px; position: absolute;">Offense Code</label><input id="input-32" type="text" autocomplete="off">
                   <div class="v-input__append-inner">
                     <div></div>
                   </div>
@@ -131,7 +132,7 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
             <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-text-field__slot"><label for="input-37" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-37" type="text"></div>
+                  <div class="v-text-field__slot"><label for="input-40" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">Brief Explanation</label><input id="input-40" type="text"></div>
                 </div>
                 <div class="v-text-field__details">
                   <div class="v-messages theme--light">

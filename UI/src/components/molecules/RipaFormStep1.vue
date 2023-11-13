@@ -1,5 +1,17 @@
 <template>
   <v-form ref="stepForm" lazy-validation>
+    <div
+      v-if="$vuetify.breakpoint.mobile"
+      class="tw-flex tw-mb-5 tw-justify-center"
+    >
+      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+        Cancel
+      </v-btn>
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
+        Next
+      </v-btn>
+    </div>
+
     <template v-if="isAdminEditing">
       <ripa-officer v-on="$listeners"></ripa-officer>
 
@@ -33,11 +45,7 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn
-        color="primary"
-        :disabled="isBackNextDisabled"
-        @click="handleStep1Next"
-      >
+      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
         Next
       </v-btn>
     </div>

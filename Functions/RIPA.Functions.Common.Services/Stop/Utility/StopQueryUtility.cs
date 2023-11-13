@@ -42,7 +42,7 @@ public class StopQueryUtility
         return stopQuery;
     }
 
-    public string GetStopsQueryString(StopQuery stopQuery, bool isVisible, int version, bool forCpraReport = false)
+    public string GetStopsQueryString(StopQuery stopQuery, bool isVisible, int version, bool forCpraReport = false, int v1Count = 0)
     {
         List<string> whereStatements = new List<string>();
         string join = string.Empty;
@@ -141,7 +141,7 @@ public class StopQueryUtility
             // Limit and Offset
             if (stopQuery.Limit != 0)
             {
-                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
+                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit - v1Count}";
             }
 
             // Order and OrderBy               

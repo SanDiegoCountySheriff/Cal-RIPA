@@ -61,14 +61,16 @@ const emptyLocation = () => {
     isSchool: false,
     school: null,
     fullAddress: '',
-    blockNumber: null,
-    streetName: null,
-    intersection: null,
-    crossStreet1: null,
-    crossStreet2: null,
+    blockNumber: '',
+    streetName: '',
+    intersection: '',
+    crossStreet1: '',
+    crossStreet2: '',
     toggleLocationOptions: false,
-    highwayExit: null,
-    landmark: null,
+    highwayExit: '',
+    highway: '',
+    exit: '',
+    landmark: '',
     outOfCounty: false,
     city: null,
     beat: null,
@@ -144,6 +146,9 @@ export const defaultStop = () => {
       perceivedSexualOrientation: null,
       perceivedOrKnownDisability: [],
       perceivedRace: [],
+      insideResidence: null,
+      passengerInVehicle: null,
+      perceivedUnhoused: false,
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -185,6 +190,7 @@ export const stopReasonGivenTemplate = template => {
     trafficViolationCode: null,
     reasonableSuspicion: [],
     reasonableSuspicionCode: null,
+    probableCauseCode: null,
     searchOfPerson: null,
     searchOfProperty: null,
     reasonForStopExplanation: null,
@@ -383,6 +389,18 @@ const getSummaryLocation = apiStop => {
     children.push({
       header: 'Highway Exit',
       detail: apiStop.location.highwayExit,
+    })
+  }
+  if (apiStop.location.highway) {
+    children.push({
+      header: 'Highway',
+      detail: apiStop.location.highway,
+    })
+  }
+  if (apiStop.location.exit) {
+    children.push({
+      header: 'Closest Exit',
+      detail: apiStop.location.exit,
     })
   }
   if (apiStop.location.landMark) {
@@ -1196,7 +1214,8 @@ export const apiStopToFullStopV2 = apiStop => {
       crossStreet1: apiStop.location?.crossStreet1 || null,
       crossStreet2: apiStop.location?.crossStreet2 || null,
       toggleLocationOptions: apiStop.location?.toggleLocationOptions || false,
-      highwayExit: apiStop.location?.highwayExit || null,
+      highway: apiStop.location?.highway || null,
+      exit: apiStop.location?.exit || null,
       landmark: apiStop.location?.landMark || null,
       piiFound: apiStop.location?.piiFound || false,
       outOfCounty: apiStop.location?.outOfCounty || false,
@@ -1340,7 +1359,7 @@ const getFullStopPeopleListedV2 = apiStop => {
 
     const anyNonForceActionsTaken =
       person.listNonForceActionsTakenDuringStop.length > 0 &&
-      person.listNonForceActionsTakenDuringStop[0].key !== '17'
+      person.listNonForceActionsTakenDuringStop[0].key !== '18'
 
     const anyForceActionsTaken =
       person.listForceActionsTakenDuringStop.length > 0 &&
@@ -1441,7 +1460,6 @@ const getFullStopPeopleListedV2 = apiStop => {
       },
       stopResult: {
         anyResultsOfStop,
-        resultsOfStop2: getKeyFoundInArray(resultsOfStop, 2),
         resultsOfStop3: getKeyFoundInArray(resultsOfStop, 3),
         resultsOfStop4: getKeyFoundInArray(resultsOfStop, 4),
         resultsOfStop5: getKeyFoundInArray(resultsOfStop, 5),
@@ -1454,11 +1472,12 @@ const getFullStopPeopleListedV2 = apiStop => {
         resultsOfStop12: getKeyFoundInArray(resultsOfStop, 12),
         resultsOfStop13: getKeyFoundInArray(resultsOfStop, 13),
         resultsOfStop14: getKeyFoundInArray(resultsOfStop, 14),
-        verbalWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 2),
-        writtenWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
-        citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
-        infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 5),
-        custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 7),
+        resultsOfStop15: getKeyFoundInArray(resultsOfStop, 15),
+        verbalWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 14),
+        writtenWarningCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 15),
+        citationCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 3),
+        infieldCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 4),
+        custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 6),
         pullFromReasonCode: telemetry?.pullFromReasonCode || false,
       },
     }
@@ -1803,6 +1822,7 @@ export const fullStopToApiStop = (
     stopInResponseToCFS: fullStop.stopDate?.stopInResponseToCFS || false,
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
+    nfia: fullStop.nfia,
   }
 }
 
@@ -1867,7 +1887,8 @@ export const fullStopToApiStopV2 = (
       blockNumber: blockNumber && streetName ? blockNumber : '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
-      highwayExit: fullStop.location?.highwayExit || '',
+      highway: fullStop.location?.highway || '',
+      exit: fullStop.location?.exit || '',
       crossStreet1: fullStop.location?.crossStreet1 || '',
       crossStreet2: fullStop.location?.crossStreet2 || '',
       landMark: fullStop.location?.landmark || '',
@@ -1917,6 +1938,7 @@ export const fullStopToApiStopV2 = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     stopType: fullStop.stopType,
+    nfia: fullStop.nfia,
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
@@ -2541,7 +2563,7 @@ const getNonForceActionsTakenDuringStop = person => {
 
   return [
     {
-      key: '17',
+      key: '18',
       action: 'None',
     },
   ]
@@ -2690,7 +2712,6 @@ const getContrabandOrEvidenceDiscovered = person => {
 
 const getResultOfStopV2 = (person, statutes) => {
   const types = []
-  const resultsOfStop2 = person.stopResult?.resultsOfStop2 || false
   const resultsOfStop3 = person.stopResult?.resultsOfStop3 || false
   const resultsOfStop4 = person.stopResult?.resultsOfStop4 || false
   const resultsOfStop5 = person.stopResult?.resultsOfStop5 || false
@@ -2703,10 +2724,8 @@ const getResultOfStopV2 = (person, statutes) => {
   const resultsOfStop12 = person.stopResult?.resultsOfStop12 || false
   const resultsOfStop13 = person.stopResult?.resultsOfStop13 || false
   const resultsOfStop14 = person.stopResult?.resultsOfStop14 || false
+  const resultsOfStop15 = person.stopResult?.resultsOfStop15 || false
 
-  if (resultsOfStop2) {
-    types.push(2)
-  }
   if (resultsOfStop3) {
     types.push(3)
   }
@@ -2744,6 +2763,10 @@ const getResultOfStopV2 = (person, statutes) => {
     types.push(14)
   }
 
+  if (resultsOfStop15) {
+    types.push(15)
+  }
+
   const mappedItems = types.map(item => {
     const [filteredStopResult] = STOP_RESULTS_V2.filter(
       item2 => item2.value === item,
@@ -2753,20 +2776,20 @@ const getResultOfStopV2 = (person, statutes) => {
       key: item.toString(),
       result: filteredStopResult?.name || '',
     }
-    if (item === 2) {
-      stopResult.listCodes = getVerbalWarningCodes(person, statutes)
-    }
     if (item === 3) {
-      stopResult.listCodes = getWrittenWarningCodes(person, statutes)
-    }
-    if (item === 4) {
       stopResult.listCodes = getCitationCodes(person, statutes)
     }
-    if (item === 5) {
+    if (item === 4) {
       stopResult.listCodes = getInfieldCodes(person, statutes)
     }
-    if (item === 7) {
+    if (item === 6) {
       stopResult.listCodes = getCustodialArrestCodes(person, statutes)
+    }
+    if (item === 14) {
+      stopResult.listCodes = getVerbalWarningCodes(person, statutes)
+    }
+    if (item === 15) {
+      stopResult.listCodes = getWrittenWarningCodes(person, statutes)
     }
 
     return stopResult

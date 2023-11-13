@@ -39,4 +39,22 @@ describe('Ripa Non Force Actions Taken', () => {
 
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  it('should filter search of person was conducted when selecting terry v. ohio frisk', () => {
+    stop.nonForceActionsTaken.nonForceActionsTakenDuringStop = [16]
+    wrapper = factory({ value: stop })
+
+    const result = wrapper.vm.getNonForceActionsTakenSearchItems
+
+    expect(result.includes(14)).toBeFalsy()
+  })
+
+  it('should filter terry v. ohio frisk if search of person was conducted', () => {
+    stop.nonForceActionsTaken.nonForceActionsTakenDuringStop = [14]
+    wrapper = factory({ value: stop })
+
+    const result = wrapper.vm.getNonForceActionsTakenGeneralItems
+
+    expect(result.includes(16)).toBeFalsy()
+  })
 })

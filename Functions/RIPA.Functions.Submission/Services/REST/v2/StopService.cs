@@ -21,11 +21,22 @@ public class StopService : IStopService
 
     public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
-        stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Submitted);
+        if (stop.Status == SubmissionStatus.Pending.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted.ToString();
+        }
+        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+        {
+            stop.Status = SubmissionStatus.Submitted_NFIA.ToString();
+        }
 
-        if (stop.ListSubmission.Any(x => x.ListSubmissionError == null || !x.ListSubmissionError.Any() || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.Status != SubmissionStatus.Submitted_NFIA.ToString() && stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
+        }
+        else if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new List<Common.Models.Submission>();
         }
 
         var submission = new Common.Models.Submission
@@ -36,7 +47,7 @@ public class StopService : IStopService
             FileName = fileName
         };
 
-        stop.ListSubmission.ToList().Add(submission);
+        stop.ListSubmission.Add(submission);
 
         return stop;
     }
@@ -92,15 +103,16 @@ public class StopService : IStopService
                 StreetName = locationType == "2" ? stopLocation.StreetName : string.Empty,
                 CrossStreet1 = locationType == "3" ? stopLocation.CrossStreet1 : string.Empty,
                 CrossStreet2 = locationType == "3" ? stopLocation.CrossStreet2 : string.Empty,
-                Highway = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
-                ClosestExit = locationType == "4" ? stopLocation.HighwayExit : string.Empty,
+                Highway = locationType == "4" ? stopLocation.Highway : string.Empty,
+                ClosestExit = locationType == "4" ? stopLocation.Exit : string.Empty,
                 OtherLocation = locationType == "5" ? stopLocation.LandMark : string.Empty,
                 City = stopLocation.City?.Codes?.Code,
                 K12_Flag = stopLocation.School ? "Y" : string.Empty,
                 K12Code = stopLocation.School ? stopLocation.SchoolName.Codes.Code : string.Empty
             },
             Is_ServCall = stop.StopInResponseToCFS ? "Y" : "N",
-            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stopLocation.School) : null
+            ListPerson_Stopped = stop.ListPersonStopped.Any() ? CastToDojListPersonStopped(stop.ListPersonStopped.ToList(), stopLocation.School) : null,
+            Is_NFIA = stop.Nfia == true ? "Y" : string.Empty
         };
 
         return dojStop;
@@ -113,17 +125,17 @@ public class StopService : IStopService
             return "1";
         }
 
-        if (!string.IsNullOrEmpty(location.BlockNumber) && !string.IsNullOrEmpty(location.StreetName))
+        if (!string.IsNullOrWhiteSpace(location.BlockNumber) && !string.IsNullOrWhiteSpace(location.StreetName))
         {
             return "2";
         }
 
-        if (!string.IsNullOrEmpty(location.CrossStreet2) && !string.IsNullOrEmpty(location.CrossStreet2))
+        if (!string.IsNullOrWhiteSpace(location.CrossStreet2) && !string.IsNullOrWhiteSpace(location.CrossStreet2))
         {
             return "3";
         }
 
-        if (!string.IsNullOrEmpty(location.HighwayExit))
+        if (!string.IsNullOrWhiteSpace(location.Highway) && !string.IsNullOrWhiteSpace(location.Exit))
         {
             return "4";
         }
@@ -211,7 +223,7 @@ public class StopService : IStopService
                 PrimaryReason = CastToDojPrimaryReason(personStopped),
                 ListNonForceActTak = CastToDojListNonForceActTak(personStopped.ListNonForceActionsTakenDuringStop.ToList(), personStopped.PropertySearchConsentGiven, personStopped.PersonSearchConsentGiven),
                 ListForceActTak = CastToDojListForceActTak(personStopped.ListForceActionsTakenDuringStop.ToList()),
-                ListBasSearch = new Listbassearch { BasSearch = personStopped.ListBasisForSearch.Select(x => x.Key).ToList() },
+                ListBasSearch = CastToDojListbassearch(personStopped.ListBasisForSearch.ToList()),
                 ConsentType = CastToDojConsentType(personStopped.ListBasisForSearch.ToList()),
                 BasSearch_N = personStopped.BasisForSearchBrief,
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
@@ -225,6 +237,24 @@ public class StopService : IStopService
         }
 
         return new Listperson_Stopped { Person_Stopped = listDojPersonStopped };
+    }
+
+    private Listbassearch CastToDojListbassearch(List<BasisForSearch> listBasisForSearch)
+    {
+        return new Listbassearch
+        {
+            BasSearch = listBasisForSearch.Select(x =>
+            {
+                if (x.Key == "14" || x.Key == "15")
+                {
+                    return "1";
+                }
+                else
+                {
+                    return x.Key;
+                }
+            }).ToList()
+        };
     }
 
     private string CastToDojConsentType(List<BasisForSearch> listBasisForSearch)
@@ -344,9 +374,13 @@ public class StopService : IStopService
         return gender switch
         {
             "Cisgender Man/Boy" => ((int)PercievedGender.CisgenderManBoy).ToString(),
+            "Cisgender Man" => ((int)PercievedGender.CisgenderManBoy).ToString(),
             "Cisgender Woman/Girl" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
+            "Cisgender Woman" => ((int)PercievedGender.CisgenderWomanGirl).ToString(),
             "Transgender Man/Boy" => ((int)PercievedGender.TransgenderManBoy).ToString(),
+            "Transgender Man" => ((int)PercievedGender.TransgenderManBoy).ToString(),
             "Transgender Woman/Girl" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
+            "Transgender Woman" => ((int)PercievedGender.TransgenderWomanGirl).ToString(),
             _ => "",
         };
     }

@@ -124,7 +124,7 @@ export default {
       apiStopJobLoading: false,
       snackbarUpdateUser: false,
       officerGenderRaceText:
-        'Recent regulation changes require the collection of officer race and gender. Please input these values now.',
+        'In order to prepare for the January 1st, 2024 regulation changes please input your race and gender information.  This information will not be included on stops until January 1st, 2024.',
       snackbarOfficerRaceGender: false,
     }
   },
@@ -547,10 +547,30 @@ export default {
 
     async isWebsiteReachable(url) {
       try {
-        const resp = await fetch(url, { method: 'HEAD', mode: 'no-cors' })
-        return resp && (resp.ok || resp.type === 'opaque')
+        const response = await this.fetchWithRetry(url)
+        return response
       } catch (err) {
         console.warn('[conn test failure]:', err)
+      }
+    },
+
+    async fetchWithRetry(url, depth = 0) {
+      this.loading = true
+      try {
+        const resp = await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+        })
+        this.loading = false
+        return resp && (resp.ok || resp.type === 'opaque')
+      } catch (e) {
+        if (depth > 7) {
+          this.loading = false
+          throw e
+        }
+        setTimeout(async () => {
+          await this.fetchWithRetry(url, depth + 1)
+        }, 2 ** depth * 10)
       }
     },
 

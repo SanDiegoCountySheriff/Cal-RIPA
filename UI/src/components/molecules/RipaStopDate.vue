@@ -50,9 +50,9 @@
       </v-row>
 
       <v-row v-if="this.environmentName === 'DEV'">
-        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">{{
-          devTime ? 'Turn Off Dev Time' : 'Turn On Dev Time'
-        }}</v-btn>
+        <v-btn @click="handleDevTime" class="ml-3 mb-3" small color="primary">
+          Convert to Version {{ model.stopVersion === 1 ? '2' : '1' }} Stop
+        </v-btn>
       </v-row>
 
       <v-row no-gutters>
@@ -111,7 +111,6 @@ import {
   formatToIsoCurrentDate,
   formatToIsoDate,
 } from '@/utilities/dates'
-import { format } from 'date-fns'
 
 export default {
   name: 'ripa-stop-date',
@@ -126,17 +125,11 @@ export default {
 
   data() {
     return {
-      devTime: this.environmentName === 'DEV',
+      devTime: this.value.stopVersion === 2,
     }
   },
 
   inject: ['isAdminEditing', 'environmentName'],
-
-  mounted() {
-    if (this.devTime) {
-      this.model.stopDate.date = format(new Date('2024-01-03'), 'yyyy-MM-dd')
-    }
-  },
 
   computed: {
     model: {
@@ -144,12 +137,13 @@ export default {
         return this.value
       },
       set(newVal) {
-        if (new Date(newVal.stopDate.date) >= new Date('2024-01-01')) {
+        if (
+          new Date(newVal.stopDate.date) >= new Date('2024-01-01') ||
+          this.devTime
+        ) {
           newVal.stopVersion = 2
-          newVal.person.perceivedUnhoused = false
         } else {
           newVal.stopVersion = 1
-          newVal.person.perceivedUnhoused = null
         }
 
         this.$emit('input', newVal)
@@ -157,10 +151,6 @@ export default {
     },
 
     dateRules() {
-      if (this.devTime) {
-        return [v => !!v || 'A date is required']
-      }
-
       return [
         v => !!v || 'A date is required',
         v =>
@@ -170,10 +160,6 @@ export default {
     },
 
     timeRules() {
-      if (this.devTime) {
-        return [v => !!v || 'A time is required']
-      }
-
       return [
         v => !!v || 'A time is required',
         v =>
@@ -194,10 +180,6 @@ export default {
     isValidDateTime() {
       const dateStr = this.model.stopDate.date
       const timeStr = this.model.stopDate.time
-
-      if (this.devTime) {
-        return true
-      }
 
       if (!this.isAdminEditing) {
         return (
@@ -220,6 +202,13 @@ export default {
   methods: {
     handleDevTime() {
       this.devTime = !this.devTime
+
+      if (this.devTime) {
+        this.model.stopVersion = 2
+      } else if (!this.devTime) {
+        this.model.stopVersion = 1
+      }
+
       this.$emit('on-dev-time')
     },
   },
