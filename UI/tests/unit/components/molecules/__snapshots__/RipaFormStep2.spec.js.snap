@@ -145,7 +145,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-49" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-49" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Gender Nonconforming
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -179,7 +179,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-59" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-59" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Perceived as LGBT
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -237,7 +237,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-76" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-76" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Limited or no English fluency
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -270,7 +270,7 @@ exports[`Ripa Form Step 2 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-85" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-85" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Any Disabilities?
       </span> <span class="switch-label" style="right: -45px;">
         No

@@ -58,7 +58,17 @@ public class StopService : IStopService
 
         foreach (var submission in pendingSubmissions)
         {
-            submission.ListSubmissionError.Add(submissionError);
+            if (submission.ListSubmissionError != null)
+            {
+                submission.ListSubmissionError.Add(submissionError);
+            }
+            else
+            {
+                submission.ListSubmissionError = new()
+                {
+                    submissionError
+                };
+            }
             submission.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Failed);
         }
 
@@ -229,8 +239,7 @@ public class StopService : IStopService
                 ListBasSeiz = new Listbasseiz { BasSeiz = personStopped.ListBasisForPropertySeizure.Select(x => x.Key).ToList() },
                 ListPropType = new Listproptype { PropType = personStopped.ListTypeOfPropertySeized.Select(x => x.Key).ToList() },
                 ListCB = new Listcb { Cb = personStopped.ListContrabandOrEvidenceDiscovered.Select(x => x.Key).ToList() },
-                ListResult = CastToDojListResult(personStopped.ListResultOfStop.ToList())
-
+                ListResult = CastToDojListResult(personStopped.ListResultOfStop.ToList()),
             };
 
             listDojPersonStopped.Add(dojPersonStopped);
@@ -322,6 +331,7 @@ public class StopService : IStopService
         {
             StReas = stopReasonKey,
             StReas_N = personStopped.ReasonForStopExplanation,
+            ListStReas_Given = new() { StReas_Given = personStopped.ReasonGivenForStop.Select(x => x.Key).ToList() },
         };
 
         switch (stopReasonKey)

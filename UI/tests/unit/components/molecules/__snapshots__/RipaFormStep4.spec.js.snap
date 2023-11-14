@@ -28,7 +28,7 @@ exports[`Ripa Form Step 4 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light primary--text">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-15" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Any Actions Taken?
       </span> <span class="switch-label" style="right: -27px;">
         Yes
@@ -255,7 +255,7 @@ exports[`Ripa Form Step 4 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-70" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-70" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Property was Seized
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -288,7 +288,7 @@ exports[`Ripa Form Step 4 should match snapshot 1`] = `
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-79" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                  </div><label for="input-79" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Any Contraband or Evidence Discovered?
       </span> <span class="switch-label" style="right: -45px;">
         No

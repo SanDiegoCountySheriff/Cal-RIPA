@@ -1416,7 +1416,7 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }) {
+    getAdminStops({ commit, state }, version) {
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
@@ -1483,7 +1483,7 @@ export default new Vuex.Store({
       }
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/v${state.version}/GetStops${queryString}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${version}/GetStops${queryString}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
