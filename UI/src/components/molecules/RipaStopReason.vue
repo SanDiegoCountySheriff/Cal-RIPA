@@ -3,7 +3,9 @@
     <ripa-form-header
       title="Reason for Stop"
       required
-      subtitle="§999.226(a)(10)"
+      :subtitle="
+        model.stopVersion === 1 ? '§999.226(a)(10)' : '§999.226(a)(14)'
+      "
       v-on="$listeners"
     ></ripa-form-header>
 
@@ -208,7 +210,7 @@
       v-if="model.stopVersion === 2"
       title="Reason given to the stopped person"
       required
-      subtitle="§999.226(a)(10)"
+      subtitle="§999.226(a)(21)"
       v-on="$listeners"
     ></ripa-form-header>
 
@@ -251,7 +253,7 @@
         title="The stopped person is a passenger in a vehicle"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="'§999.226(a)(14)(D)'"
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -273,7 +275,7 @@
         title="The stopped person was inside a residence"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="'§999.226(a)(14)(D)'"
         v-on="$listeners"
       >
       </ripa-form-header>

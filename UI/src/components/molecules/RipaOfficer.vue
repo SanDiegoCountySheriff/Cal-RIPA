@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Officer Years of Experience"
       required
-      subtitle="§999.226(a)(15)"
+      :subtitle="stopVersion === 1 ? '§999.226(a)(15)' : '§999.226(a)(19)'"
       class="tw-mb-4"
       v-on="$listeners"
     >
@@ -15,10 +15,10 @@
           <v-alert outlined dense type="info">
             <v-row align="center">
               <v-col class="grow">
-                <template v-if="isValidUser && version === 1">
+                <template v-if="isValidUser && stopVersion === 1">
                   {{ getOfficerInfo }}
                 </template>
-                <template v-if="isValidUser && version === 2">
+                <template v-if="isValidUser && stopVersion === 2">
                   {{ getOfficerInfoV2 }}
                 </template>
                 <template v-if="!isValidUser">
@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  inject: ['user', 'version'],
+  inject: ['user', 'stopVersion'],
 
   computed: {
     isValidUser() {

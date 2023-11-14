@@ -238,6 +238,7 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
+      stopVersion: computed(() => this.stop.stopVersion),
       favoriteLocations: computed(() => this.getFavoriteLocations),
       favoriteReasons: computed(() => this.getFavoriteReasons),
       favoriteResults: computed(() => this.getFavoriteResults),
@@ -984,7 +985,7 @@ export default {
     handleOpenStatute(statute) {
       this.statute = {
         statute,
-        content: getStatuteContent(statute),
+        content: getStatuteContent(statute, this.stop.stopVersion),
       }
       this.showStatuteDialog = true
     },
