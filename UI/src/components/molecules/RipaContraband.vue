@@ -4,7 +4,7 @@
       title="Contraband or Evidence Discovered"
       required
       :subtitle="
-        model.stopVersion === 1 ? '§999.226(a)(12)(C)' : '§999.226(a)(16)(D)'
+        model.stopVersion === 1 ? '§999.226(a)(12)(C)' : '§999.226(a)(15)(D)'
       "
       v-on="$listeners"
     >

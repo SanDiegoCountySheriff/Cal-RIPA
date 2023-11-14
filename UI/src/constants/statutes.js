@@ -1324,7 +1324,7 @@ export const STATUTES_V2 = [
             ],
           },
           {
-            id: '15',
+            id: '21',
             text: "'Reason Given to the Stopped Person' refers to the reason for the stop the officer communicated to the stopped person at the time of the stop, as required under Vehicle Code section 2806.5. The reason communicated to the stopped person may be different from, or the same as, the actual primary reason why the officer made the stop, as selected among the data values under the Reason for Stop data element. If the data value(s) selected under this data element differ from the data value selected under 'Reason for Stop,' the officer must explain why the officer communicated a different reason for the stop than was the actual, primary reason for the stop, as part of their brief explanation in the 'Reason for Stop' narrative field. If the officer did not communicate to the stopped person a reason for the stop, the officer must explain the facts and circumstances that gave rise to a reasonable belief that withholding the reason for the stop was necessary to protect life or property from imminent threat, as part of their brief explanation in the 'Reason for Stop' narrative field.",
             children: [
               {
@@ -1416,7 +1416,7 @@ export const STATUTES_V2 = [
             ],
           },
           {
-            id: '16',
+            id: '15',
             text: "'Non-Force-Related Actions Taken by Officer During Stop' refers to an officer’s actions toward the person stopped that do not relate to the use of force. All non-force related actions taken throughout the entire duration of the stop must be reported. All force-related actions must be reported in the data element, 'Force-related Actions Taken by Officer During Stop'. If the officer does not take any non-force-related actions, the officer must select 'None.'",
             children: [
               {
@@ -1756,7 +1756,7 @@ export const STATUTES_V2 = [
             ],
           },
           {
-            id: '17',
+            id: '16',
             text: "'Force-Related Actions Taken by Officer During Stop' refers to an officer’s actions toward the person stopped that relate to the use of force. All force-related actions taken throughout the entire duration of the stop must be reported. All non-force-related actions must be reported in the data element, 'Non-Force-Related Actions Taken by Officer During Stop.' If the officer does not take any force-related actions, the officer must select 'None.'",
             children: [
               {
@@ -1840,7 +1840,7 @@ export const STATUTES_V2 = [
             ],
           },
           {
-            id: '18',
+            id: '17',
             text: "'Result of Stop' refers to the outcome of the stop. When reporting this data element, the officer shall select all of the following data values that apply. In addition, for warnings, citations, cite and release, and custodial arrests (with the exception of an arrest pursuant to an outstanding warrant) the officer shall also, using the Department’s standard CJIS Offense Table, identify the code, including the section number and appropriate subdivision, that is the basis for the warning, citation, cite and release, or custodial arrest, where applicable. If more than one code section forms the basis for the warning, citation, cite and release or custodial arrest, the officer shall identify all applicable code sections and subdivisions. If the Result of Stop is based on an ordinance, the officer shall select 'local ordinance viol' from the Department’s CJIS Offense Table without the need for the specific section number.",
             children: [
               {
@@ -1894,15 +1894,15 @@ export const STATUTES_V2 = [
             ],
           },
           {
-            id: '19',
+            id: '18',
             text: "'Officer’s Identification (I.D.) Number' refers to a permanent identification number assigned by the reporting agency to the reporting officer, which shall be used for all reporting to the Department required under this chapter. The reporting agency shall not assign the officer a new Officer’s I.D. Number under any circumstances. If an officer leaves the reporting agency, the reporting agency shall not reassign that Officer I.D. Number to any other officer employed by the agency. For purposes of these regulations, an Officer’s I.D. Number shall be considered Unique Identifying Information.",
           },
           {
-            id: '20',
+            id: '19',
             text: "'Officer’s Years of Experience' refers to the officer’s total number of years they have been a peace officer as defined in Chapter 4.5 (commencing with Section 830) of Title 3 of Part 2 of the Penal Code. When reporting this data element, the officer shall count the total number of years they have been a peace officer, and not the number of years at their current agency. If the officer has served as a peace officer intermittently or part-time, they shall only count the time actually worked as a peace officer. In providing this information, the officer shall input an Arabic numeral (e.g., 1, 2, 3, 4) rounded up to the closest whole number.",
           },
           {
-            id: '21',
+            id: '20',
             text: "'Type of Assignment of Officer' refers to the type of assignment to which an officer is assigned at the time of the stop. When reporting this data element, the officer shall select one of the following data values:",
             children: [
               {

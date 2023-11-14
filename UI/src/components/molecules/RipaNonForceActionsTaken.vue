@@ -3,9 +3,7 @@
     <ripa-form-header
       title="Non-Force Actions Taken During Stop"
       required
-      :subtitle="
-        model.stopVersion === 1 ? '§999.226(a)(12)' : '§999.226(a)(16)'
-      "
+      :subtitle="'§999.226(a)(15)'"
       v-on="$listeners"
     >
     </ripa-form-header>
@@ -66,7 +64,7 @@
               <ripa-form-subheader
                 title="Basis for Search"
                 required
-                subtitle="§999.226(a)(12)(B)"
+                subtitle="§999.226(a)(15)(C)"
                 v-on="$listeners"
               ></ripa-form-subheader>
 
@@ -119,7 +117,7 @@
               <ripa-form-subheader
                 title="Basis for Property Seizure"
                 required
-                subtitle="§999.226(a)(12)(D)(1)"
+                subtitle="§999.226(a)(15)(E)(1)"
                 v-on="$listeners"
               ></ripa-form-subheader>
 
@@ -134,7 +132,7 @@
               <ripa-form-subheader
                 title="Types of Property Seized"
                 required
-                subtitle="§999.226(a)(12)(D)(2)"
+                subtitle="§999.226(a)(15)(E)(2)"
                 v-on="$listeners"
               ></ripa-form-subheader>
 

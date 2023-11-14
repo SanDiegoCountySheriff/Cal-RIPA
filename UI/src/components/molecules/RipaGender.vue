@@ -48,11 +48,9 @@
     <template v-if="model.stopVersion === 1">
       <ripa-form-header
         class="tw-mt-8"
-        title="Perceived LGB+"
+        title="Perceived LGBT"
         required
-        :subtitle="
-          model.stopVersion === 1 ? '§999.226(a)(6)' : '§999.226(a)(7)(1)'
-        "
+        :subtitle="'§999.226(a)(6)'"
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -75,9 +73,7 @@
         class="tw-mt-8"
         title="Perceived Sexual Orientation"
         required
-        :subtitle="
-          model.stopVersion === 1 ? '§999.226(a)(6)' : '§999.226(a)(7)'
-        "
+        :subtitle="'§999.226(a)(7)'"
         v-on="$listeners"
       >
       </ripa-form-header>

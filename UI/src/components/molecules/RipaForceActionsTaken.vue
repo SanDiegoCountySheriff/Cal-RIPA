@@ -3,9 +3,7 @@
     <ripa-form-header
       title="Force Actions Taken During Stop"
       required
-      :subtitle="
-        model.stopVersion === 1 ? '§999.226(a)(12)' : '§999.226(a)(17)'
-      "
+      :subtitle="'§999.226(a)(16)'"
       v-on="$listeners"
     >
     </ripa-form-header>

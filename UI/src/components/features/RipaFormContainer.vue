@@ -238,6 +238,7 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
+      stopVersion: computed(() => this.stop.stopVersion),
       favoriteLocations: computed(() => this.getFavoriteLocations),
       favoriteReasons: computed(() => this.getFavoriteReasons),
       favoriteResults: computed(() => this.getFavoriteResults),
@@ -341,8 +342,7 @@ export default {
                 }
               }
 
-             return location
-             
+              return location
             })
             .sort((a, b) => {
               if (!a.count) {
@@ -952,17 +952,23 @@ export default {
     },
 
     handleOpenLocationFavorites(stopVersion) {
-      this.favorites = this.getFavoriteLocations.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteLocations.filter(
+        item => item.version === stopVersion,
+      )
       this.showLocationFavoritesDialog = true
     },
 
     handleOpenReasonFavorites(stopVersion) {
-      this.favorites = this.getFavoriteReasons.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteReasons.filter(
+        item => item.version === stopVersion,
+      )
       this.showReasonFavoritesDialog = true
     },
 
     handleOpenResultFavorites(stopVersion) {
-      this.favorites = this.getFavoriteResults.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteResults.filter(
+        item => item.version === stopVersion,
+      )
       this.showResultFavoritesDialog = true
     },
 
@@ -979,7 +985,7 @@ export default {
     handleOpenStatute(statute) {
       this.statute = {
         statute,
-        content: getStatuteContent(statute, this.version),
+        content: getStatuteContent(statute, this.stop.stopVersion),
       }
       this.showStatuteDialog = true
     },
