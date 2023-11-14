@@ -5,13 +5,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 
-
 var user = UserPrincipal.Current.UserPrincipalName;
 var domain = user.Split("@")[1];
 string filePath = null;
 bool fileExists = File.Exists(filePath);
 string domainInput = null;
-string agency = "";
 
 Console.WriteLine($"Hello {UserPrincipal.Current.GivenName} {UserPrincipal.Current.Surname}");
 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -27,7 +25,6 @@ string sqlQuery = "SELECT \r\nup.[ID] as OfficerId\r\n,[Years] as YearsExperienc
 Console.WriteLine("\nSTEP 1: Use the following query against you on-prem RIPA database and save the results as a CSV.\n");
 Console.ForegroundColor = ConsoleColor.Blue;
 Console.WriteLine(sqlQuery);
-//TypeLine(sqlQuery);
 Console.ResetColor();
 
 Console.WriteLine($"\nPress any key to Continue... \n");
@@ -40,7 +37,7 @@ Console.WriteLine($"This will be used by System.DirectoryServices to look-up Use
 Console.WriteLine($"\nAttributes extracted to CSV:\n Surname (Last Name)\n GivenName (First Name)\n msDS-ExternalDirectoryObjectId (Azure Active Directory ObjectId)");
 Console.ResetColor();
 
-while (String.IsNullOrWhiteSpace(domainInput))
+while (string.IsNullOrWhiteSpace(domainInput))
 {
     Console.Write($"\nAre your users in the ");
     Console.ForegroundColor = ConsoleColor.Green;
@@ -58,7 +55,6 @@ while (String.IsNullOrWhiteSpace(domainInput))
 
     domainInput = Console.ReadLine();
 }
-
 
 if (domainInput.ToLower() != "y")
 {
@@ -89,7 +85,7 @@ Console.ForegroundColor = ConsoleColor.DarkGreen;
 Console.Write("[Enter]");
 Console.ResetColor();
 Console.Write(" to skip: ");
-agency = Console.ReadLine();
+string agency = Console.ReadLine();
 
 if (String.IsNullOrWhiteSpace(agency))
 {
@@ -115,9 +111,10 @@ Console.ForegroundColor = ConsoleColor.Yellow;
 Console.WriteLine("\nEnter the full Network of local File Path for CSV generated in Step 1 (Example: C:\\Users\\username\\Documents\\ripaExtract.csv)");
 
 Console.ResetColor();
+
 while (!fileExists)
 {
-    if (String.IsNullOrEmpty(filePath))
+    if (string.IsNullOrEmpty(filePath))
     {
         Console.Write("\nEnter File Path to CSV: ");
     }
@@ -128,6 +125,7 @@ while (!fileExists)
         Console.ResetColor();
         Console.Write("Enter File Path to CSV:");
     }
+
     filePath = Console.ReadLine();
     fileExists = File.Exists(filePath);
 }
@@ -145,24 +143,20 @@ noUPNReportBuilder.AppendLine("");
 noUPNReportBuilder.AppendLine("Users Not Found in Active Directory");
 noUPNReportBuilder.AppendLine("OfficerID,NTUserName");
 var usersNoOID = 0;
-var NoOIDReportBuilder = new StringBuilder();
-NoOIDReportBuilder.AppendLine("");
-NoOIDReportBuilder.AppendLine("Users in Active Directory but have no Azure Active Directory ObjectID");
-NoOIDReportBuilder.AppendLine("OfficerID,LastName,FirstName,NTUserName");
+var noOIDReportBuilder = new StringBuilder();
+noOIDReportBuilder.AppendLine("");
+noOIDReportBuilder.AppendLine("Users in Active Directory but have no Azure Active Directory ObjectID");
+noOIDReportBuilder.AppendLine("OfficerID,LastName,FirstName,NTUserName");
 
 var lines = File.ReadAllLines(filePath);
 List<string> headers = new List<string>();
 bool setHeaders = false;
-
 var totalLines = lines.Length;
-
 var reportBuilder = new StringBuilder();
-
 var builder = new StringBuilder();
 builder.AppendLine($"Id,OfficerId,FirstName,LastName,YearsExperience,Assignment,OtherType,Agency,NTUserName");
 
 Console.WriteLine($"{totalLines - 1} Users found \n\nPress any key to begin\n");
-
 Console.ReadKey();
 
 var currentline = 0;
@@ -175,58 +169,51 @@ foreach (var line in lines)
         setHeaders = true;
     }
     else
-    {
-
+    { 
         totalusers++;
         var reg = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
         var matches = reg.Matches(line);
         var userData = new List<string>();
+
         foreach (var item in matches)
         {
             userData.Add(item.ToString()/*.Replace("\"", "")*/);
         }
 
-        var NTUserName = userData[headers.IndexOf("NTUserName")].ToUpper();
-        if (NTUserName.Contains(@"\"))
+        var ntUserName = userData[headers.IndexOf("NTUserName")].ToUpper();
+
+        if (ntUserName.Contains(@"\"))
         {
-            NTUserName = NTUserName.Split(@"\")[1];
+            ntUserName = ntUserName.Split(@"\")[1];
         }
-        var aadData = GetAADdata(NTUserName);
+
+        var aadData = GetAADdata(ntUserName);
 
         if (aadData != null)
         {
             if (String.IsNullOrEmpty(aadData.Id))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                //Console.WriteLine($"User: {NTUserName} has no AAD OID");
-                //Console.ResetColor();
-                NoOIDReportBuilder.AppendLine($"{userData[headers.IndexOf("OfficerId")]},{aadData.FirstName},{aadData.LastName},{NTUserName}");
+                noOIDReportBuilder.AppendLine($"{userData[headers.IndexOf("OfficerId")]},{aadData.FirstName},{aadData.LastName},{ntUserName}");
                 usersNoOID++;
             }
             else
             {
-                builder.AppendLine($"{aadData.Id},{userData[headers.IndexOf("OfficerId")]},{aadData.FirstName},{aadData.LastName},{userData[headers.IndexOf("YearsExperience")]},{userData[headers.IndexOf("Assignment")]},{userData[headers.IndexOf("OtherType")]},{agency},{NTUserName}");
+                builder.AppendLine($"{aadData.Id},{userData[headers.IndexOf("OfficerId")]},{aadData.FirstName},{aadData.LastName},{userData[headers.IndexOf("YearsExperience")]},{userData[headers.IndexOf("Assignment")]},{userData[headers.IndexOf("OtherType")]},{agency},{ntUserName}");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                //Console.WriteLine(line);
-                //Console.ResetColor();
                 completeUsers++;
             }
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            //Console.WriteLine(line);
-            //Console.ResetColor();
-            noUPNReportBuilder.AppendLine($"{userData[headers.IndexOf("OfficerId")]},{NTUserName}");
+            noUPNReportBuilder.AppendLine($"{userData[headers.IndexOf("OfficerId")]},{ntUserName}");
             usersNoUpn++;
         }
         currentline++;
     }
 
     Console.ResetColor();
-
-
-
     ProgressBar(currentline, totalLines - 1);
 }
 
@@ -248,7 +235,7 @@ reportBuilder.AppendLine($"Total Users - No AAD ObjectId: {usersNoOID}");
 Console.ResetColor();
 
 reportBuilder.Append(noUPNReportBuilder);
-reportBuilder.Append(NoOIDReportBuilder);
+reportBuilder.Append(noOIDReportBuilder);
 
 await File.WriteAllTextAsync($@"{saveDir}\Report.csv", reportBuilder.ToString(), Encoding.UTF8);
 
@@ -262,35 +249,29 @@ Console.ForegroundColor = ConsoleColor.Green;
 Console.Write($@"'{saveDir}\Report.csv' ");
 Console.ResetColor();
 
-AADData GetAADdata(string NTUserName)
+AADData GetAADdata(string ntUserName)
 {
     AADData aaduser = null;
-    var up = GetUser(NTUserName);
+    var userPrincipal = GetUser(ntUserName);
 
-    if (up != null)
+    if (userPrincipal != null)
     {
         aaduser = new AADData();
-        aaduser.LastName = up.Surname;
-        aaduser.FirstName = up.GivenName;
+        aaduser.LastName = userPrincipal.Surname;
+        aaduser.FirstName = userPrincipal.GivenName;
 
-        if (up.GetUnderlyingObjectType() == typeof(DirectoryEntry))
+        if (userPrincipal.GetUnderlyingObjectType() == typeof(DirectoryEntry))
         {
-            using var entry = (DirectoryEntry)up.GetUnderlyingObject();
+            using var entry = (DirectoryEntry)userPrincipal.GetUnderlyingObject();
             aaduser.Id = entry.Properties["msDS-ExternalDirectoryObjectId"].Value == null ? null : entry.Properties["msDS-ExternalDirectoryObjectId"].Value.ToString().Replace("User_", "");
         }
-
     }
 
     return aaduser;
 }
 
-
-
 UserPrincipal GetUser(string NTUserName)
 {
-
-
-
     UserPrincipal result = null;
     try
     {
@@ -312,19 +293,6 @@ UserPrincipal GetUser(string NTUserName)
 
     return result;
 }
-
-static void TypeLine(string line)
-{
-    //string output = null;
-    char[] characters = line.ToCharArray();
-    for (int i = 0; i < characters.Length; i++)
-    {
-        //output += characters[i];
-        Console.Write(characters[i]);
-        System.Threading.Thread.Sleep(5);
-    }
-}
-
 
 static void ProgressBar(int progress, int total)
 {
@@ -379,5 +347,4 @@ public class AADData
     public string Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
 }
