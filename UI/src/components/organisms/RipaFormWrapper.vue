@@ -749,7 +749,7 @@ export default {
         this.stepIndex = this.stepIndex - 2
       } else if (this.model.stopVersion === 2) {
         this.stepIndex = this.stepIndex - 1
-      } else if (!this.anyAgencyQuestions) {
+      } else if (!this.anyAgencyQuestions && this.stepIndex === 7) {
         this.stepIndex = this.stepIndex - 2
       } else {
         this.stepIndex = this.stepIndex - 1
