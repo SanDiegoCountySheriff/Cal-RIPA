@@ -1219,7 +1219,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[variables('service_ripa_apim_wus2_name')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -1258,7 +1258,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_userprofile_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1275,7 +1275,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_stop_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1292,7 +1292,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_textAnalytics_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1309,7 +1309,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_domain_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1326,7 +1326,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/apis",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/', parameters('apim_apis_submission_name'))]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -1343,7 +1343,7 @@
     },
     {
       "type": "Microsoft.ApiManagement/service/policies",
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2022-08-01",
       "name": "[concat(variables('service_ripa_apim_wus2_name'), '/policy')]",
       "dependsOn": [
         "[resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name'))]"
@@ -2485,7 +2485,7 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2022-08-01','Full').properties.publicIpAddresses),'/32')]",
             "action": "Allow",
             "priority": 100,
             "name": "Apim-publicIp",
@@ -2658,7 +2658,7 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2022-08-01','Full').properties.publicIpAddresses),'/32')]",
             "action": "Allow",
             "priority": 100,
             "name": "Apim-publicIp",
@@ -2868,7 +2868,7 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2022-08-01','Full').properties.publicIpAddresses),'/32')]",
             "action": "Allow",
             "priority": 100,
             "name": "Apim-publicIp",
@@ -3119,7 +3119,7 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2022-08-01','Full').properties.publicIpAddresses),'/32')]",
             "action": "Allow",
             "priority": 100,
             "name": "Apim-publicIp",
@@ -3305,7 +3305,7 @@
         "localMySqlEnabled": false,
         "ipSecurityRestrictions": [
           {
-            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2019-12-01','Full').properties.publicIpAddresses),'/32')]",
+            "ipAddress": "[concat(first(reference(concat('Microsoft.ApiManagement/service/',  variables('service_ripa_apim_wus2_name')), '2022-08-01','Full').properties.publicIpAddresses),'/32')]",
             "action": "Allow",
             "priority": 100,
             "name": "Apim-publicIp",
@@ -3811,7 +3811,7 @@
     },
     "apim_gateway_url": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name')), '2019-12-01', 'Full').properties.gatewayUrl]"
+      "value": "[reference(resourceId('Microsoft.ApiManagement/service', variables('service_ripa_apim_wus2_name')), '2022-08-01', 'Full').properties.gatewayUrl]"
     },
     "cosmosdb_name": {
       "type": "string",
