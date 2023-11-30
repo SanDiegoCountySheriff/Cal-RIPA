@@ -116,7 +116,7 @@ public class GetSubmission
                 whereV1 += Environment.NewLine + "AND";
             }
 
-            whereV1 += " c.StopVersion = 1";
+            whereV1 += " c.StopVersion = 1 OR NOT IS_DEFINED(c.StopVersion)";
         }
 
         if (whereStatements.Count > 0)
