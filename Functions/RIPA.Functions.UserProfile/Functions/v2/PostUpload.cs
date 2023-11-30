@@ -101,7 +101,7 @@ public class PostUpload
     }
 }
 
-public class UserProfileMap : ClassMap<Common.Models.v1.UserProfile>
+public class UserProfileMap : ClassMap<Common.Models.v2.UserProfile>
 {
     public UserProfileMap()
     {
