@@ -238,6 +238,7 @@ export default {
         () => this.propertySearchAutomaticallySelected,
       ),
       version: computed(() => this.mappedVersion),
+      stopVersion: computed(() => this.stop.stopVersion),
       favoriteLocations: computed(() => this.getFavoriteLocations),
       favoriteReasons: computed(() => this.getFavoriteReasons),
       favoriteResults: computed(() => this.getFavoriteResults),
@@ -341,8 +342,7 @@ export default {
                 }
               }
 
-             return location
-             
+              return location
             })
             .sort((a, b) => {
               if (!a.count) {
@@ -411,102 +411,116 @@ export default {
                 result.version = 1
               }
 
-              const updatedWarningCodes = result.result.warningCodes.filter(
-                code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
-                  })
-                },
-              )
+              if (result.result.warningCodes) {
+                const updatedWarningCodes = result.result.warningCodes.filter(
+                  code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
+                  },
+                )
 
-              if (
-                updatedWarningCodes.length !== result.result.warningCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                if (
+                  updatedWarningCodes.length !==
+                  result.result.warningCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
+
+                result.result.warningCodes = updatedWarningCodes
               }
 
-              result.result.warningCodes = updatedWarningCodes
-
-              const updatedVerbalWarningCodes =
-                result.result.verbalWarningCodes.filter(code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
+              if (result.result.verbalWarningCodes) {
+                const updatedVerbalWarningCodes =
+                  result.result.verbalWarningCodes.filter(code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
                   })
-                })
 
-              if (
-                updatedVerbalWarningCodes.length !==
-                result.result.verbalWarningCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                if (
+                  updatedVerbalWarningCodes.length !==
+                  result.result.verbalWarningCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
+
+                result.result.verbalWarningCodes = updatedVerbalWarningCodes
               }
 
-              result.result.verbalWarningCodes = updatedVerbalWarningCodes
-
-              const updatedWrittenWarningCodes =
-                result.result.writtenWarningCodes.filter(code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
+              if (result.result.writtenWarningCodes) {
+                const updatedWrittenWarningCodes =
+                  result.result.writtenWarningCodes.filter(code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
                   })
-                })
 
-              if (
-                updatedWrittenWarningCodes.length !==
-                result.result.writtenWarningCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                if (
+                  updatedWrittenWarningCodes.length !==
+                  result.result.writtenWarningCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
+
+                result.result.writtenWarningCodes = updatedWrittenWarningCodes
               }
 
-              result.result.writtenWarningCodes = updatedWrittenWarningCodes
+              if (result.result.citationCodes) {
+                const updatedCitationCodes = result.result.citationCodes.filter(
+                  code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
+                  },
+                )
 
-              const updatedCitationCodes = result.result.citationCodes.filter(
-                code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
-                  })
-                },
-              )
+                if (
+                  updatedCitationCodes.length !==
+                  result.result.citationCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
 
-              if (
-                updatedCitationCodes.length !==
-                result.result.citationCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                result.result.citationCodes = updatedCitationCodes
               }
 
-              result.result.citationCodes = updatedCitationCodes
+              if (result.result.infieldCodes) {
+                const updatedInfieldCodes = result.result.infieldCodes.filter(
+                  code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
+                  },
+                )
 
-              const updatedInfieldCodes = result.result.infieldCodes.filter(
-                code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
-                  })
-                },
-              )
+                if (
+                  updatedInfieldCodes.length !==
+                  result.result.infieldCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
 
-              if (
-                updatedInfieldCodes.length !== result.result.infieldCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                result.result.infieldCodes = updatedInfieldCodes
               }
 
-              result.result.infieldCodes = updatedInfieldCodes
-
-              const updatedCustodialArrestCodes =
-                result.result.custodialArrestCodes.filter(code => {
-                  return this.mappedFormStatutes.some(statute => {
-                    return statute.code === code
+              if (result.result.custodialArrestCodes) {
+                const updatedCustodialArrestCodes =
+                  result.result.custodialArrestCodes.filter(code => {
+                    return this.mappedFormStatutes.some(statute => {
+                      return statute.code === code
+                    })
                   })
-                })
 
-              if (
-                updatedCustodialArrestCodes.length !==
-                result.result.custodialArrestCodes.length
-              ) {
-                result.favoritesCodeExpired = true
+                if (
+                  updatedCustodialArrestCodes.length !==
+                  result.result.custodialArrestCodes.length
+                ) {
+                  result.favoritesCodeExpired = true
+                }
+
+                result.result.custodialArrestCodes = updatedCustodialArrestCodes
               }
-
-              result.result.custodialArrestCodes = updatedCustodialArrestCodes
 
               return result
             })
@@ -952,17 +966,23 @@ export default {
     },
 
     handleOpenLocationFavorites(stopVersion) {
-      this.favorites = this.getFavoriteLocations.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteLocations.filter(
+        item => item.version === stopVersion,
+      )
       this.showLocationFavoritesDialog = true
     },
 
     handleOpenReasonFavorites(stopVersion) {
-      this.favorites = this.getFavoriteReasons.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteReasons.filter(
+        item => item.version === stopVersion,
+      )
       this.showReasonFavoritesDialog = true
     },
 
     handleOpenResultFavorites(stopVersion) {
-      this.favorites = this.getFavoriteResults.filter(item=>item.version === stopVersion)
+      this.favorites = this.getFavoriteResults.filter(
+        item => item.version === stopVersion,
+      )
       this.showResultFavoritesDialog = true
     },
 
@@ -979,7 +999,7 @@ export default {
     handleOpenStatute(statute) {
       this.statute = {
         statute,
-        content: getStatuteContent(statute),
+        content: getStatuteContent(statute, this.stop.stopVersion),
       }
       this.showStatuteDialog = true
     },

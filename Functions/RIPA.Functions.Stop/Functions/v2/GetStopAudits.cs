@@ -54,7 +54,7 @@ public class GetStopAudits
         }
 
         string id = req.Query["id"];
-        string queryStringV1 = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\" AND c.StopVersion = 1";
+        string queryStringV1 = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\" AND c.StopVersion = 1 OR NOT IS_DEFINED(c.StopVersion)";
         string queryStringV2 = $"SELECT * FROM c WHERE Substring(c.id, 0, 12) = \"{id}\" AND c.StopVersion = 2";
         List<IStop> stopResponse = new();
 

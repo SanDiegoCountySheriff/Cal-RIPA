@@ -42,7 +42,7 @@ public class StopQueryUtility
         return stopQuery;
     }
 
-    public string GetStopsQueryString(StopQuery stopQuery, bool isVisible, int version, bool forCpraReport = false, int v1Count = 0)
+    public string GetStopsQueryString(StopQuery stopQuery, bool isVisible, int version, bool forCpraReport = false)
     {
         List<string> whereStatements = new List<string>();
         string join = string.Empty;
@@ -115,8 +115,10 @@ public class StopQueryUtility
             whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
         }
 
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
+
         //Version
-        whereStatements.Add(Environment.NewLine + $"c.StopVersion = {version}");
+        whereStatements.Add(Environment.NewLine + $"(c.StopVersion = {version} {isNotDefinedWhereStatement})");
 
         string where = string.Empty;
 
@@ -141,7 +143,7 @@ public class StopQueryUtility
             // Limit and Offset
             if (stopQuery.Limit != 0)
             {
-                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit - v1Count}";
+                limit = Environment.NewLine + $"OFFSET {stopQuery.Offset} LIMIT {stopQuery.Limit}";
             }
 
             // Order and OrderBy               
@@ -162,10 +164,15 @@ public class StopQueryUtility
         return $"SELECT DISTINCT VALUE c FROM c {join} {where} {order} {limit}";
     }
 
-    public string GetStopsSummaryQueryString(StopQuery stopQuery)
+    public string GetStopsSummaryQueryString(StopQuery stopQuery, int version)
     {
         List<string> whereStatements = new List<string>();
         string join = string.Empty;
+
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
+
+        //Version
+        whereStatements.Add(Environment.NewLine + $"(c.StopVersion = {version} {isNotDefinedWhereStatement})");
 
         //Date Range
         if (stopQuery.StartDate != default(DateTime))

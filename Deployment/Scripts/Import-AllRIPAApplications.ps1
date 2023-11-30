@@ -58,9 +58,11 @@ az account set -s $env:APP_SUBSCRIPTION_ID
 Write-Host "checking cli login context"
 az account show
 
-$apimInstanceInfo = (az apim list -g $env:APP_RESOURCE_GROUP_NAME --query "[].{Name:name, GatewayUrl:gatewayUrl}") | ConvertFrom-Json
-$apimInstanceName = $apimInstanceInfo.Name
-$apimInstanceUrl = $apimInstanceInfo.GatewayUrl
+$apimResource = (az resource list -g $env:APP_RESOURCE_GROUP_NAME --resource-type "Microsoft.ApiManagement/service") | ConvertFrom-Json
+$apimInstanceInfo = (az apim show -g $env:APP_RESOURCE_GROUP_NAME -n $apimResource[0].name) | ConvertFrom-Json
+
+$apimInstanceName = $apimInstanceInfo.name
+$apimInstanceUrl = $apimInstanceInfo.gatewayUrl
 Write-Host "Using APIM:" $apimInstanceName "-" $apimInstanceUrl
 
 $functionNames = (az functionapp list -g $env:APP_RESOURCE_GROUP_NAME --query "[].{Name:name}" -o json) | ConvertFrom-Json
@@ -92,6 +94,10 @@ foreach ($functionName in $functionNames) {
     Write-Host "Deploying package:" $fileName
     az functionapp deployment source config-zip -g $env:APP_RESOURCE_GROUP_NAME --src "./$fileName" -n $functionName.Name
 
+    Write-Host "Updating Function Runtime"
+    az functionapp config appsettings set --name $functionName.Name --resource-group $env:APP_RESOURCE_GROUP_NAME --settings "FUNCTIONS_EXTENSION_VERSION=~4"
+    az functionapp config set --name $functionName.Name --resource-group $env:APP_RESOURCE_GROUP_NAME --linux-fx-version '"DOTNET|6.0"'
+
     Write-Host "Importing $appName OpenAPI into APIM"
     Import-FunctionApi -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ServiceName $apimInstanceName -FunctionName $functionName.Name -ApiTag $appName
 
@@ -115,8 +121,7 @@ Write-Host "Deploying UI package:" $fileName
 Expand-Archive -Path "./$fileName" -DestinationPath "./" -Force
 az storage blob upload-batch --overwrite true --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
 
-if("True" -eq $env:DEPLOY_WEB_CONFIG_JSON)
-{
+if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     Write-Host "Creating config.json"
     
     Write-Host "AUTH_SP_APP_ID: $env:AUTH_SP_APP_ID"

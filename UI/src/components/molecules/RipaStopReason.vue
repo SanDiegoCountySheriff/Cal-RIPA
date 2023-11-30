@@ -3,7 +3,9 @@
     <ripa-form-header
       title="Reason for Stop"
       required
-      subtitle="§999.226(a)(10)"
+      :subtitle="
+        model.stopVersion === 1 ? '§999.226(a)(10)' : '§999.226(a)(14)'
+      "
       v-on="$listeners"
     ></ripa-form-header>
 
@@ -38,7 +40,13 @@
       </v-row>
 
       <v-row>
-        <v-col v-if="favoriteReasons.filter(item=>item.version === model.stopVersion).length > 0" class="text-center py-0">
+        <v-col
+          v-if="
+            favoriteReasons.filter(item => item.version === model.stopVersion)
+              .length > 0
+          "
+          class="text-center py-0"
+        >
           Top 5 Favorites
         </v-col>
       </v-row>
@@ -46,7 +54,10 @@
       <v-row>
         <v-col class="text-center">
           <v-btn
-          v-for="(item, i) in favoriteReasons.filter(item=>item.version === model.stopVersion).slice(0,5)"
+            v-for="(item, index) in favoriteReasons
+              .filter(item => item.version === model.stopVersion)
+              .slice(0, 5)"
+            :key="index"
             @click="handleFavoriteClick(item)"
             color="primary"
             class="mr-3 mb-2"
@@ -199,7 +210,7 @@
       v-if="model.stopVersion === 2"
       title="Reason given to the stopped person"
       required
-      subtitle="§999.226(a)(10)"
+      subtitle="§999.226(a)(21)"
       v-on="$listeners"
     ></ripa-form-header>
 
@@ -242,7 +253,7 @@
         title="The stopped person is a passenger in a vehicle"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="'§999.226(a)(14)(D)'"
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -264,7 +275,7 @@
         title="The stopped person was inside a residence"
         required
         :items="statutes"
-        subtitle="§999.226(a)(14)"
+        :subtitle="'§999.226(a)(14)(D)'"
         v-on="$listeners"
       >
       </ripa-form-header>

@@ -3,7 +3,7 @@
     <ripa-form-header
       title="Perceived or Known Disability"
       required
-      subtitle="§999.226(a)(9)"
+      :subtitle="model.stopVersion === 1 ? '§999.226(a)(9)' : '§999.226(a)(10)'"
       v-on="$listeners"
     >
     </ripa-form-header>

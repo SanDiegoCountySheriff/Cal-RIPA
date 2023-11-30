@@ -144,7 +144,8 @@
                     v-bind="attrs"
                     v-on="on"
                     @click="handleSubmitAll"
-                    class="submitAllBtn"
+                    color="primary"
+                    class="ml-5"
                   >
                     Submit All Stops to DOJ
                   </v-btn>
@@ -155,11 +156,18 @@
                 >
               </v-tooltip>
 
+              <ripa-switch
+                v-model="showingVersionTwoStops"
+                label="Show V2 Stops"
+                color="primary"
+                class="ml-8"
+              ></ripa-switch>
+
               <v-spacer></v-spacer>
 
               <v-btn
                 @click="handleSubmitSelected"
-                class="submitSelectedBtn"
+                color="primary"
                 v-if="selectedItems.length > 0"
               >
                 Submit Selected Stops to DOJ ({{ selectedItems.length }})
@@ -252,6 +260,7 @@
 
 <script>
 import RipaDatePicker from '@/components/atoms/RipaDatePicker'
+import RipaSwitch from '@/components/atoms/RipaSwitch'
 import { SUBMISSION_STATUSES } from '../../constants/stop'
 import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 import _ from 'lodash'
@@ -263,6 +272,7 @@ export default {
 
   components: {
     RipaDatePicker,
+    RipaSwitch,
   },
 
   mixins: [RipaEditStopMixin],
@@ -314,6 +324,8 @@ export default {
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
       sortDesc: true,
+      version: 1,
+      showingVersionTwoStops: false,
     }
   },
 
@@ -419,6 +431,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handlePreviousPage() {
@@ -426,6 +439,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handleJumpToPage() {
@@ -433,6 +447,7 @@ export default {
         offset: this.itemsPerPage * (this.currentPage - 1),
         limit: this.itemsPerPage,
         filters: this.getFilterStatus,
+        version: this.version,
       })
     },
     handleRowSelected(item) {
@@ -526,6 +541,7 @@ export default {
               : this.getColumnSortName(),
           order: sortOrder || sortOrder === undefined ? 'Desc' : 'Asc',
         },
+        version: this.version,
       }
       this.$emit('handleAdminStopsFiltering', filterData)
       if (!this.savedFilters?.offset) {
@@ -600,6 +616,15 @@ export default {
         this.currentPage = newValue.offset / this.itemsPerPage + 1
       }
     },
+    showingVersionTwoStops(value) {
+      if (value) {
+        this.version = 2
+        this.handleFilter()
+      } else {
+        this.version = 1
+        this.handleFilter()
+      }
+    },
   },
 
   created() {
@@ -633,17 +658,6 @@ export default {
 <style lang="scss">
 .stopsGridContainer {
   margin: 0px;
-
-  .adminStopsTable {
-    .submitAllBtn {
-      margin-left: 20px;
-    }
-
-    .submitAllBtn,
-    .submitSelectedBtn {
-      border: 1px solid #666;
-    }
-  }
 
   .stopsSummary {
     display: flex;

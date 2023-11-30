@@ -20,7 +20,7 @@ exports[`Ripa Perceived Unhoused should match snapshot 1`] = `
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-8" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label">
+                </div><label for="input-8" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Perceived Unhoused
       </span> <span class="switch-label" style="right: -45px;">
         No

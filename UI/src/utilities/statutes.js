@@ -1,6 +1,6 @@
-import { STATUTES } from '@/constants/statutes'
+import { STATUTES, STATUTES_V2 } from '@/constants/statutes'
 
-export const getStatuteContent = statute => {
+export const getStatuteContent = (statute, version) => {
   const parseStatute = statute.replace('§', '')
   const base = parseStatute.substring(0, 7)
   const sections = parseStatute.substring(7, parseStatute.length)
@@ -8,12 +8,14 @@ export const getStatuteContent = statute => {
     return e
   })
 
+  const statutes = version === 1 ? STATUTES : STATUTES_V2
+
   const level1 = splitSections.length > 0 ? splitSections[0] : null
   const level2 = splitSections.length > 1 ? splitSections[1] : null
   const level3 = splitSections.length > 2 ? splitSections[2] : null
   const level4 = splitSections.length > 3 ? splitSections[3] : null
 
-  const [filteredStatute] = STATUTES.filter(item => item.statuteID === base)
+  const [filteredStatute] = statutes.filter(item => item.statuteID === base)
   if (level1) {
     const [filteredLevel1] = filteredStatute.children.filter(
       item => item.id === level1,

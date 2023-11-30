@@ -1,62 +1,118 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Ripa CPRA Report should match snapshot 1`] = `
-<div class="container tw-mt-2 container--fluid">
-  <div class="layout tw-m-0 row align-center nowrap">
-    <div class="flex xs12 md2">
-      <div class="tw-ml-2">
-        <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
-          <div class="v-input__control">
-            <div class="v-input__slot">
-              <div class="v-text-field__slot"><label for="input-3" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">From Date</label><input id="input-3" type="date"></div>
-              <div class="v-input__append-inner">
-                <div></div>
+<div class="container container--fluid">
+  <div class="v-card v-card--flat v-sheet theme--light">
+    <div class="v-card__text">
+      <div class="row">
+        <div class="col-lg-3 col-6">
+          <div class="v-input v-input--is-label-active theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-4" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">From Date</label><input id="input-4" type="date"></div>
+                <div class="v-input__append-inner">
+                  <div></div>
+                </div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+                </div>
               </div>
-              <div class="v-input__append-inner">
-                <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
               </div>
             </div>
-            <div class="v-text-field__details">
-              <div class="v-messages theme--light">
-                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="v-input v-input--is-label-active theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-9" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">To Date</label><input id="input-9" type="date"></div>
+                <div class="v-input__append-inner">
+                  <div></div>
+                </div>
+                <div class="v-input__append-inner">
+                  <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+                </div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="flex xs12 md2">
-      <div class="tw-ml-2">
-        <div class="v-input tw-ml-2 v-input--is-label-active theme--light v-text-field">
-          <div class="v-input__control">
-            <div class="v-input__slot">
-              <div class="v-text-field__slot"><label for="input-8" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">To Date</label><input id="input-8" type="date"></div>
-              <div class="v-input__append-inner">
-                <div></div>
-              </div>
-              <div class="v-input__append-inner">
-                <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
+      <div class="row">
+        <div class="col-lg-3 col-6">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-14" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-14" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+        Include Officer Information
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
+                </div>
               </div>
             </div>
-            <div class="v-text-field__details">
-              <div class="v-messages theme--light">
-                <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="ripa-switch" style="max-width: 300px;">
+            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-17" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__ripple"></div>
+                    <div class="v-input--switch__track theme--light"></div>
+                    <div class="v-input--switch__thumb theme--light">
+                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                    </div>
+                  </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+        Include Beat Information
+      </span> <span class="switch-label" style="right: -45px;">
+        No
+      </span></label>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col"><button type="button" disabled="disabled" class="v-btn v-btn--disabled v-btn--has-bg theme--light v-size--default"><span class="v-btn__content">
+            Create
+          </span></button></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-12">
+          <div class="v-card v-sheet v-sheet--outlined theme--light">
+            <div class="v-card__title">CPRA Report</div>
+            <div class="v-card__text">
+              Only stops accepted by the California DOJ are included on the
+              report.
+            </div>
+            <div class="v-card__text"></div>
+            <div class="v-card__actions">
+              <div class="spacer"></div> <button type="button" class="v-btn v-btn--text theme--light v-size--default primary--text" style="display: none;"><span class="v-btn__content">
+                Download Report
+              </span></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="flex xs12 md2">
-      <div class="tw-ml-2"><button type="button" disabled="disabled" class="tw-ml-2 v-btn v-btn--disabled v-btn--has-bg theme--light v-size--small"><span class="v-btn__content">Create</span></button></div>
-    </div>
-  </div>
-  <div class="cpra-report v-card v-card--flat v-sheet theme--light">
-    <div class="v-card__title">CPRA Report</div>
-    <div class="v-card__text">Only stops accepted by the California DOJ are included on the
-      report.</div>
-    <div class="v-card__text"></div>
-    <div class="tw-ml-4 tw-mb-4"><button type="button" class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--small primary" style="display: none;"><span class="v-btn__content">Download Report</span></button></div>
   </div>
 </div>
 `;

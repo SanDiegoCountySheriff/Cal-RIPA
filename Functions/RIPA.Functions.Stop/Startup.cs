@@ -88,7 +88,7 @@ public class Startup : FunctionsStartup
             return new UserProfileCosmosDbService<Common.Models.v2.UserProfile>(userProfileContainer, logger);
         });
     }
-    
+
     private async Task<Container> CreateStopContainerAsync()
     {
         DatabaseResponse database = await _client.CreateDatabaseIfNotExistsAsync(_databaseName);

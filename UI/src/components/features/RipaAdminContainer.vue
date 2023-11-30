@@ -31,8 +31,8 @@
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
-      @handleCreateCpraReport="handleCreateCpraReport"
-      @handleDownloadCpraReport="handleDownloadCpraReport"
+      @handle-create-cpra-report="handleCreateCpraReport"
+      @handle-download-cpra-report="handleDownloadCpraReport"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -135,11 +135,6 @@ export default {
       ) {
         await this.getAdminSubmission({ id: this.$route.params.submissionId })
       }
-      if (tabIndex === '/admin/stops') {
-        if (!this.mappedAdminStops.stops) {
-          await this.getAdminStops()
-        }
-      }
       if (tabIndex === '/admin/users') {
         await this.getAdminUsers()
       }
@@ -183,7 +178,7 @@ export default {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await this.getAdminStops()
+        await this.getAdminStops(pageData.version)
         this.loading = false
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
@@ -213,7 +208,7 @@ export default {
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
-        await this.getAdminStops()
+        await this.getAdminStops(pageData.version)
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
       }
@@ -227,7 +222,7 @@ export default {
           filterData.offset = 0
         }
         this.setStopQueryData(filterData)
-        await this.getAdminStops()
+        await this.getAdminStops(filterData.version)
         this.loading = false
         this.setResetPagination(true)
       } else if (filterData.type === 'submission') {

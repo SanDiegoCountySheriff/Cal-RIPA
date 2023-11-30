@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RIPA.Functions.Common.Models;
-using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
@@ -21,13 +20,11 @@ namespace RIPA.Functions.Stop.Functions.v1;
 
 public class GetStops
 {
-    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopV1CosmosDbService;
-    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopV2CosmosDbService;
+    private readonly IStopCosmosDbService<Common.Models.v1.Stop> _stopCosmosDbService;
 
-    public GetStops(IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService, IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService)
+    public GetStops(IStopCosmosDbService<Common.Models.v1.Stop> stopCosmosDbService)
     {
-        _stopV1CosmosDbService = stopV1CosmosDbService;
-        _stopV2CosmosDbService = stopV2CosmosDbService;
+        _stopCosmosDbService = stopCosmosDbService;
     }
 
     [FunctionName("GetStops_v1")]
@@ -64,35 +61,33 @@ public class GetStops
             return new UnauthorizedResult();
         }
 
-        List<IStop> stopResponse = new();
+        List<Common.Models.v1.Stop> stopResponse = new();
         IEnumerable<StopStatusCount> stopStatusCounts;
-        string stopV1QueryString = string.Empty;
-        string stopV2QueryString = string.Empty;
+        string stopQueryString = string.Empty;
         string stopSummaryQueryString = string.Empty;
 
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            try
-            {
-                stopV1QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
-                stopResponse.AddRange(await _stopV1CosmosDbService.GetStopsAsync(stopV1QueryString));
-                stopV2QueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 2, false, stopResponse.Count);
-                stopResponse.AddRange(await _stopV2CosmosDbService.GetStopsAsync(stopV2QueryString));
-                stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery);
-                stopStatusCounts = await _stopV1CosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, "An error occurred getting stops requested.");
-                return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
-            }
+            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
+            stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery, 1);
         }
         catch (Exception ex)
         {
             log.LogError("An error occured while evaluating the stop query.", ex);
             return new BadRequestObjectResult("An error occured while evaluating the stop query. Please try again.");
+        }
+
+        try
+        {
+            stopResponse.AddRange(await _stopCosmosDbService.GetStopsAsync(stopQueryString));
+            stopStatusCounts = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
+        }
+        catch (Exception ex)
+        {
+            log.LogError(ex, "An error occurred getting stops requested.");
+            return new BadRequestObjectResult("An error occurred getting stops requested. Please try again.");
         }
 
         var response = new
@@ -106,7 +101,7 @@ public class GetStops
                 Unsubmitted = stopStatusCounts.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
                 Pending = stopStatusCounts.Where(x => x.Status == "Pending").Select(x => x.Count).FirstOrDefault(),
                 Failed = stopStatusCounts.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
-            }
+            },
         };
 
         return new OkObjectResult(response);

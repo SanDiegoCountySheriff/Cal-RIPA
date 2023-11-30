@@ -33,6 +33,8 @@
 
     if($cloud.name -eq "AzureUSGovernment")
     {
+        Write-Host "Using Azure Government configuration"
+        
         $resourceId = "ee62de39-b9b0-4886-aa58-08b89c4e3db3"
         $resourceUrl = "main.iam.ad.ext.azure.us"
     }

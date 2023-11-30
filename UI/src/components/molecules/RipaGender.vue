@@ -4,7 +4,9 @@
       <ripa-form-header
         title="Perceived Gender"
         required
-        subtitle="§999.226(a)(5)"
+        :subtitle="
+          model.stopVersion === 1 ? '§999.226(a)(5)' : '§999.226(a)(6)'
+        "
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -48,7 +50,7 @@
         class="tw-mt-8"
         title="Perceived LGBT"
         required
-        subtitle="§999.226(a)(6)"
+        :subtitle="'§999.226(a)(6)'"
         v-on="$listeners"
       >
       </ripa-form-header>
@@ -71,7 +73,7 @@
         class="tw-mt-8"
         title="Perceived Sexual Orientation"
         required
-        subtitle="§999.226(a)(6)"
+        :subtitle="'§999.226(a)(7)'"
         v-on="$listeners"
       >
       </ripa-form-header>
