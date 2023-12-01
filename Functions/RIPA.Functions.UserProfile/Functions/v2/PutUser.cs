@@ -57,9 +57,15 @@ public class PutUser
         if (string.IsNullOrEmpty(userProfile.OfficerId))
         {
             int officerId = 100000000;
-            string query = "SELECT VALUE c FROM c ORDER BY c.officerId DESC OFFSET 0 LIMIT 1";
-            IEnumerable<dynamic> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
-            Common.Models.v2.UserProfile maxId = maxOfficer.FirstOrDefault();
+            string query = "SELECT VALUE c.officerId FROM c ORDER BY c.officerId DESC";
+            IEnumerable<Common.Models.v2.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
+            Common.Models.v2.UserProfile maxId = maxOfficer.FirstOrDefault(item =>
+            {
+                return item.OfficerId.All(letter =>
+                {
+                    return char.IsDigit(letter);
+                });
+            });
 
             if (maxId != null)
             {
