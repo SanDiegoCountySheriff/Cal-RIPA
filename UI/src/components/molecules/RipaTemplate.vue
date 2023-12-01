@@ -62,7 +62,14 @@
         >
           these regulations
         </a>
-        on November 7, 2017. For more information please see the
+        on November 7, 2017. On January 1, 2024
+        <a
+          href="https://oag.ca.gov/system/files/media/ripa-final-text-of-proposed-regulations.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          >amended regulations</a
+        >
+        will take effect. For more information please see the
         <a
           href="https://oag.ca.gov/ab953/regulations"
           target="_blank"
