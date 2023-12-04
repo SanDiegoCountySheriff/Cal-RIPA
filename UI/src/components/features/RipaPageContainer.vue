@@ -532,45 +532,9 @@ export default {
     },
 
     async updateConnectionStatusInStore() {
+      this.setConnectionStatus(navigator.onLine)
       if (navigator.onLine) {
-        const online = await this.isWebsiteReachable(this.getServerUrl())
-        this.setConnectionStatus(online)
-        await this.initPage()
-      } else if (!navigator.onLine) {
-        this.setConnectionStatus(false)
-      }
-    },
-
-    getServerUrl() {
-      return window.location.origin
-    },
-
-    async isWebsiteReachable(url) {
-      try {
-        const response = await this.fetchWithRetry(url)
-        return response
-      } catch (err) {
-        console.warn('[conn test failure]:', err)
-      }
-    },
-
-    async fetchWithRetry(url, depth = 0) {
-      this.loading = true
-      try {
-        const resp = await fetch(url, {
-          method: 'HEAD',
-          mode: 'no-cors',
-        })
-        this.loading = false
-        return resp && (resp.ok || resp.type === 'opaque')
-      } catch (e) {
-        if (depth > 7) {
-          this.loading = false
-          throw e
-        }
-        setTimeout(async () => {
-          await this.fetchWithRetry(url, depth + 1)
-        }, 2 ** depth * 10)
+        this.initPage()
       }
     },
 
