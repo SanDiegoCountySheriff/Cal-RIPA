@@ -33,6 +33,7 @@ export default {
   methods: {
     async update() {
       this.prompt = false
+      localStorage.clear()
       await this.$workbox.messageSW({ type: 'SKIP_WAITING' })
     },
   },
