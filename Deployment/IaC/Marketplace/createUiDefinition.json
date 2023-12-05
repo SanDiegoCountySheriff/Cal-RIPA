@@ -236,6 +236,15 @@
               }
             },
             {
+              "label": "LONG BEACH POLICE",
+              "value": {
+                "county": "Los Angeles",
+                "abbreviation": "lb",
+                "type": "pd",
+                "ori": "CA0194100"
+              }
+            },
+            {
               "label": "LOS ALTOS POLICE",
               "value": {
                 "county": "Sanata CLara",
@@ -404,6 +413,15 @@
                 "abbreviation": "sbc",
                 "type": "sd",
                 "ori": "CA0360000"
+              }
+            },
+            {
+              "label": "SAN DIEGO HARBOR",
+              "value": {
+                "county": "San Diego",
+                "abbreviation": "sdh",
+                "type": "pd",
+                "ori": "CA0371500"
               }
             },
             {
