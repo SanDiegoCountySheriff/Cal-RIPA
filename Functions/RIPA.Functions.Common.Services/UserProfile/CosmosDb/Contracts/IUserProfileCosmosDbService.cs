@@ -7,6 +7,7 @@ public interface IUserProfileCosmosDbService<T>
 {
     Task<IEnumerable<T>> GetUserProfilesAsync(string queryString);
     Task<T> GetUserProfileAsync(string id);
+    Task<IEnumerable<string>> GetUserProfileIdsAsync(string queryString);
     Task AddUserProfileAsync(T userProfile);
     Task UpdateUserProfileAsync(string id, T userProfile);
     Task DeleteUserProfileAsync(string id);

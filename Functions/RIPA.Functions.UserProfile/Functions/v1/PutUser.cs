@@ -58,18 +58,18 @@ public class PutUser
         {
             int officerId = 100000000;
             string query = "SELECT VALUE c.officerId FROM c ORDER BY c.officerId DESC";
-            IEnumerable<Common.Models.v1.UserProfile> maxOfficer = await _userProfileCosmosDbService.GetUserProfilesAsync(query);
-            Common.Models.v1.UserProfile maxId = maxOfficer.FirstOrDefault(item =>
+            IEnumerable<string> maxOfficer = await _userProfileCosmosDbService.GetUserProfileIdsAsync(query);
+            string maxId = maxOfficer.FirstOrDefault(item =>
             {
-                return item.OfficerId.All(letter =>
-                {      
+                return item.All(letter =>
+                {
                     return char.IsDigit(letter);
                 });
             });
 
             if (maxId != null)
             {
-                officerId = int.Parse(maxId.OfficerId);
+                officerId = int.Parse(maxId);
                 officerId++;
             }
 
