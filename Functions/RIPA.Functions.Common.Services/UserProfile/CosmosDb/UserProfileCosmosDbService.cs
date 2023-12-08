@@ -54,6 +54,20 @@ public class UserProfileCosmosDbService<T> : IUserProfileCosmosDbService<T> wher
         return results;
     }
 
+    public async Task<IEnumerable<string>> GetUserProfileIdsAsync(string queryString)
+    {
+        var query = _container.GetItemQueryIterator<string>(new QueryDefinition(queryString));
+        List<string> results = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            results.AddRange(response.ToList());
+        }
+
+        return results;
+    }
+
     public async Task UpdateFavoriteLocationCount(string favoriteName, string id)
     {
         var query = _container.GetItemQueryIterator<T>(new QueryDefinition($"SELECT * FROM c WHERE c.officerId = '{id}'"));
