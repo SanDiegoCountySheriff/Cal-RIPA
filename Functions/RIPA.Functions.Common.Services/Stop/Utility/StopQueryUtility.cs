@@ -115,7 +115,7 @@ public class StopQueryUtility
             whereStatements.Add(Environment.NewLine + $"c.OfficerId = '{stopQuery.OfficerId}'");
         }
 
-        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)" : "";
 
         //Version
         whereStatements.Add(Environment.NewLine + $"(c.StopVersion = {version} {isNotDefinedWhereStatement})");
@@ -169,7 +169,7 @@ public class StopQueryUtility
         List<string> whereStatements = new List<string>();
         string join = string.Empty;
 
-        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)" : "";
 
         //Version
         whereStatements.Add(Environment.NewLine + $"(c.StopVersion = {version} {isNotDefinedWhereStatement})");
