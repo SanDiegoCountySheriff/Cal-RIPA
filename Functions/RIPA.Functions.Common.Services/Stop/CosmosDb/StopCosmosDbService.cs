@@ -104,7 +104,7 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
 
     public async Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id, int version)
     {
-        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)" : "";
 
         var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' AND (c.StopVersion = {version} {isNotDefinedWhereStatement}) GROUP BY ListSubmissionError.Code";
         var query = _container.GetItemQueryIterator<SubmissionErrorSummary>(new QueryDefinition(queryString));

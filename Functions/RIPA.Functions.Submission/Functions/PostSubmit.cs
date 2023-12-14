@@ -99,7 +99,7 @@ public class PostSubmit
             return new BadRequestObjectResult("stop ids are required");
         }
 
-        var stopV1QueryString = $"SELECT VALUE c FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}') AND (c.StopVersion = 1 OR NOT IS_DEFINED(c.StopVersion)) ORDER BY c.StopDateTime DESC";
+        var stopV1QueryString = $"SELECT VALUE c FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}') AND (c.StopVersion = 1 OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)) ORDER BY c.StopDateTime DESC";
         var stopV2QueryString = $"SELECT VALUE c FROM c WHERE c.id IN ('{string.Join("','", submitRequest.StopIds)}') AND c.StopVersion = 2 ORDER BY c.StopDateTime DESC"; ;
 
         List<IStop> stopResponse = new();
