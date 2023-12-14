@@ -106,7 +106,7 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
     {
         var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion)" : "";
 
-        var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' AND c.StopVersion = {version} {isNotDefinedWhereStatement} GROUP BY ListSubmissionError.Code";
+        var queryString = $"SELECT COUNT(ListSubmissionError.Code) AS Count, ListSubmissionError.Code FROM c JOIN ListSubmission IN c.ListSubmission JOIN ListSubmissionError IN ListSubmission.ListSubmissionError WHERE ListSubmission.Id = '{id}' AND (c.StopVersion = {version} {isNotDefinedWhereStatement}) GROUP BY ListSubmissionError.Code";
         var query = _container.GetItemQueryIterator<SubmissionErrorSummary>(new QueryDefinition(queryString));
         List<SubmissionErrorSummary> results = new();
 
