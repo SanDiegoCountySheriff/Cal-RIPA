@@ -871,7 +871,7 @@
             "toolTip": "This should be an AAD fully qualified domain name of the tenant being used for authentication. I.e. myorganization.gov",
             "constraints": {
               "required": true,
-              "regex": "^([a-zA-Z0-9-]{3,100}\\.[a-zA-Z]{2,10}){1}",
+              "regex": "",
               "validationMessage": ""
             },
             "visible": true
