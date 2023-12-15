@@ -34,7 +34,7 @@ public class DeleteBeat
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Beat deleted")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat Id not found")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteBeat/{Id}")] HttpRequest req, int Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/DeleteBeat/{Id}")] HttpRequest req, string Id, ILogger log)
     {
         try
         {
@@ -51,7 +51,7 @@ public class DeleteBeat
 
         try
         {
-            Beat beat = new Beat { PartitionKey = "CA", RowKey = Id.ToString(), Id = Id };
+            Beat beat = new Beat { PartitionKey = "CA", RowKey = Id, Id = Id };
             var response = await _tableClient.DeleteEntityAsync(beat.PartitionKey, beat.RowKey);
 
             return new OkObjectResult(response.ToString());
