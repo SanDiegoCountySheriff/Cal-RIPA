@@ -8,7 +8,7 @@ namespace RIPA.Functions.Domain.Functions.v1.Beats.Models;
 public class Beat : ITableEntity
 {
     [JsonProperty(PropertyName = "id")]
-    public int Id { get; set; }
+    public string Id { get; set; }
     [JsonProperty(PropertyName = "community")]
     public string Community { get; set; }
     [JsonProperty(PropertyName = "command")]

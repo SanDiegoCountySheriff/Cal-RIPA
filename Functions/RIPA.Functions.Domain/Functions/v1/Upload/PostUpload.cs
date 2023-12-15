@@ -330,7 +330,7 @@ public class PostUpload
         {
             PartitionKey = "CA",
             RowKey = row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString(),
-            Id = Convert.ToInt32(row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString()),
+            Id = row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString(),
             Community = row.ItemArray[BeatTableHeaders.IndexOf("COMMUNITY")].ToString(),
             Command = row.ItemArray[BeatTableHeaders.IndexOf("COMMAND")].ToString(),
          };

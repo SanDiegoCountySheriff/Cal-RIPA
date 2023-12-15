@@ -35,7 +35,7 @@ public class PutBeat
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Beat Created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Beat failed on insert or replace")]
 
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutBeat/{Id}")] Beat beat, HttpRequest req, int Id, ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/PutBeat/{Id}")] Beat beat, HttpRequest req, string Id, ILogger log)
     {
         try
         {
@@ -53,7 +53,7 @@ public class PutBeat
         try
         {
             beat.PartitionKey = "CA";
-            beat.RowKey = Id.ToString();
+            beat.RowKey = Id;
             beat.Id = Id;
 
             var response = _tableClient.UpsertEntity(beat);
