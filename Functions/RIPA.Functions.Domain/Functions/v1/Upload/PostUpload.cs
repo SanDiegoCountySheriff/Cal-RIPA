@@ -333,9 +333,9 @@ public class PostUpload
             Id = row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString(),
             Community = row.ItemArray[BeatTableHeaders.IndexOf("COMMUNITY")].ToString(),
             Command = row.ItemArray[BeatTableHeaders.IndexOf("COMMAND")].ToString(),
-         };
+        };
 
-        if(BeatTableHeaders.IndexOf("COMMANDAUDITGROUP") != -1)
+        if (BeatTableHeaders.IndexOf("COMMANDAUDITGROUP") != -1)
         {
             beat.CommandAuditGroup = row.ItemArray[BeatTableHeaders.IndexOf("COMMANDAUDITGROUP")].ToString();
         }
