@@ -113,12 +113,11 @@
 
           <ripa-user-dialog
             :admin="true"
-            :user="editedItem"
             :showDialog="dialog"
-            :on-close="close"
-            :on-save="save"
             :is-row-key-disabled="isRowKeyDisabled"
             :form-title="formTitle"
+            @on-close="close"
+            @on-save="save"
           >
           </ripa-user-dialog>
         </v-toolbar>
@@ -139,6 +138,7 @@
 import RipaUserDialog from '@/components/molecules/RipaUserDialog'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
 import RipaCheckbox from '@/components/atoms/RipaCheckbox'
+import { computed } from 'vue'
 
 export default {
   name: 'ripa-users-grid',
@@ -196,6 +196,12 @@ export default {
         assignment: 0,
         yearsExperience: '',
       },
+    }
+  },
+
+  provide() {
+    return {
+      user: computed(() => this.editedItem),
     }
   },
 
