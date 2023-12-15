@@ -25,6 +25,7 @@ public class Startup : FunctionsStartup
         await tableServiceClient.CreateTableIfNotExistsAsync("Schools");
         await tableServiceClient.CreateTableIfNotExistsAsync("Cities");
         await tableServiceClient.CreateTableIfNotExistsAsync("Statutes");
+        await tableServiceClient.CreateTableIfNotExistsAsync("Templates");
 
         return tableServiceClient;
     }

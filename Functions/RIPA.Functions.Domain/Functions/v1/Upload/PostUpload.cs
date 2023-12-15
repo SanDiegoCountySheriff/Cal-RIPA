@@ -329,13 +329,22 @@ public class PostUpload
         Beat beat = new Beat
         {
             PartitionKey = "CA",
-            RowKey = row.ItemArray[0].ToString(),
-            Id = Convert.ToInt32(row.ItemArray[0]),
-            Community = row.ItemArray[1].ToString(),
-            Command = row.ItemArray[2].ToString(),
-            CommandAuditGroup = row.ItemArray[3].ToString(),
-            CommandAuditSize = row.ItemArray[4].ToString()
-        };
+            RowKey = row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString(),
+            Id = Convert.ToInt32(row.ItemArray[BeatTableHeaders.IndexOf("ID")].ToString()),
+            Community = row.ItemArray[BeatTableHeaders.IndexOf("COMMUNITY")].ToString(),
+            Command = row.ItemArray[BeatTableHeaders.IndexOf("COMMAND")].ToString(),
+         };
+
+        if(BeatTableHeaders.IndexOf("COMMANDAUDITGROUP") != -1)
+        {
+            beat.CommandAuditGroup = row.ItemArray[BeatTableHeaders.IndexOf("COMMANDAUDITGROUP")].ToString();
+        }
+
+
+        if (BeatTableHeaders.IndexOf("COMMANDAUDITSIZE") != -1)
+        {
+            beat.CommandAuditSize = row.ItemArray[BeatTableHeaders.IndexOf("COMMANDAUDITSIZE")].ToString();
+        }
 
         return beat;
     }
