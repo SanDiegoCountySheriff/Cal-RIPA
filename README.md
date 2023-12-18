@@ -1,3 +1,5 @@
+
+https://github.com/SanDiegoCountySheriff/Cal-RIPA/assets/92050616/8a9f870f-8973-49fb-9f28-825f78f28315
 # Cal-RIPA
 
 ## By CSSA & Insight Digital Innovation
@@ -68,3 +70,9 @@ In this section you will find links & tips to help you get the most out of your 
 12. [Override default PII detection settings](/Documentation/PII-CONFIGURATION.md)
 13. [Application "Environment"](/Documentation/APP-ENVIRONMENT.md)
 14. [Custom STOP templates](/Documentation/STOP-TEMPLATES.md)
+
+## How to Use the App
+
+In this section, you will find a walkthrough video on how to use the RIPA application.
+
+https://github.com/SanDiegoCountySheriff/Cal-RIPA/assets/92050616/9d4174d3-bee7-4a39-8a09-f9d47c84e48f
