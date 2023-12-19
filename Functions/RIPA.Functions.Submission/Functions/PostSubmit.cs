@@ -167,7 +167,7 @@ public class PostSubmit
 
         try
         {
-            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, StopVersion = (int)x.StopVersion, SubmissionId = submissionId })))).ToList());
+            await _serviceBusService.SendServiceBusMessagesAsync(stopResponse.Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SubmissionMessage() { StopId = x.Id, StopVersion = x.StopVersion != null ? (int)x.StopVersion : 1, SubmissionId = submissionId })))).ToList());
             return new OkObjectResult(new { submissionId });
         }
         catch (Exception ex)
