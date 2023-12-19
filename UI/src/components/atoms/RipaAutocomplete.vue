@@ -1,9 +1,6 @@
 <template>
   <v-autocomplete
-    class="tw-my-4"
     v-model="model"
-    clearable
-    flat
     :hint="hint"
     :persistent-hint="persistentHint"
     :item-text="itemText"
@@ -16,15 +13,29 @@
     :deletable-chips="deletableChips"
     :multiple="multiple"
     :rules="rules"
+    class="tw-my-4"
     validate-on-blur
+    clearable
+    flat
     ><template v-if="customChip" v-slot:selection="data">
       <v-chip
-        v-bind="data.attrs"
+        :color="getCustomChipColor(data)"
         :input-value="data.selected"
+        @click:close="handleRemoveItem(data)"
+        v-bind="data.attrs"
         close
         small
-        @click:close="handleRemoveItem(data)"
       >
+        <v-tooltip
+          v-if="getCustomChipColor(data) === 'error'"
+          color="error"
+          bottom
+        >
+          <template #activator="{ on }">
+            <v-icon v-on="on">mdi-alert</v-icon>
+          </template>
+          <span>Statute Expired</span>
+        </v-tooltip>
         {{ getCustomChipLabel(data) }}
       </v-chip>
     </template></v-autocomplete
@@ -41,6 +52,8 @@ export default {
     }
   },
 
+  inject: ['filteredStatutes'],
+
   methods: {
     handleRemoveItem(data) {
       this.$emit('remove-item', data)
@@ -48,6 +61,13 @@ export default {
 
     getCustomChipLabel(data) {
       return data.item.fullName.split('-')[0]
+    },
+
+    getCustomChipColor(data) {
+      return this.filteredStatutes.find(s => s.code === data.item.code)
+        ?.repealed
+        ? 'error'
+        : ''
     },
   },
 
