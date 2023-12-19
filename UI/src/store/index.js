@@ -1740,7 +1740,7 @@ export default new Vuex.Store({
           }
 
           if (queryData.status !== null) {
-            queryString = `${queryString}&Status=${queryData.status}`
+            queryString = `${queryString}&Statuses=${queryData.status}`
           }
 
           if (queryData.isPiiFound !== null) {
