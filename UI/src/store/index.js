@@ -956,7 +956,7 @@ export default new Vuex.Store({
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
             if (router.currentRoute.fullPath === '/admin') {
-              dispatch('getAdminStops')
+              dispatch('getAdminStops', state.stopQueryData.version ?? 1)
             }
             return apiStop
           }

@@ -324,8 +324,8 @@ export default {
       currentOffset: this.currentPage * this.itemsPerPage,
       sortBy: 'StopDateTime',
       sortDesc: true,
-      version: 1,
-      showingVersionTwoStops: false,
+      version: this.savedFilters?.version ?? 1,
+      showingVersionTwoStops: this.savedFilters?.version === 2 || false,
     }
   },
 
