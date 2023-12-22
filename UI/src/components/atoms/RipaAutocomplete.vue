@@ -17,7 +17,9 @@
     validate-on-blur
     clearable
     flat
-    ><template v-if="customChip" v-slot:selection="data">
+    prepend-icon
+  >
+    <template v-if="customChip" v-slot:selection="data">
       <v-chip
         :color="getCustomChipColor(data)"
         :input-value="data.selected"
@@ -38,8 +40,17 @@
         </v-tooltip>
         {{ getCustomChipLabel(data) }}
       </v-chip>
-    </template></v-autocomplete
-  >
+    </template>
+
+    <template v-if="isSingleStatuteExpired && !customChip" #prepend>
+      <v-tooltip color="error" bottom>
+        <template #activator="{ on }">
+          <v-icon v-on="on" color="error">mdi-alert</v-icon>
+        </template>
+        <span>Statute Expired</span>
+      </v-tooltip>
+    </template>
+  </v-autocomplete>
 </template>
 
 <script>
@@ -52,7 +63,7 @@ export default {
     }
   },
 
-  inject: ['filteredStatutes'],
+  inject: ['statutes'],
 
   methods: {
     handleRemoveItem(data) {
@@ -64,8 +75,7 @@ export default {
     },
 
     getCustomChipColor(data) {
-      return this.filteredStatutes.find(s => s.code === data.item.code)
-        ?.repealed
+      return this.statutes.find(s => s.code === data.item.code)?.repealed
         ? 'error'
         : ''
     },
@@ -92,6 +102,10 @@ export default {
       }
 
       return this.items
+    },
+
+    isSingleStatuteExpired() {
+      return this.statutes.find(s => s.code === this.model)?.repealed
     },
   },
 

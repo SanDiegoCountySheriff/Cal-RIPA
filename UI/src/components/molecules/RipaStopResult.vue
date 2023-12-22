@@ -93,7 +93,7 @@
             <template v-if="model.stopResult.resultsOfStop2">
               <ripa-autocomplete
                 v-model="model.stopResult.warningCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="warningRules"
                 @remove-item="removeItem('warningCodes', $event)"
@@ -133,7 +133,7 @@
             <template v-if="model.stopResult.resultsOfStop3">
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="citationRules"
                 @remove-item="removeItem('citationCodes', $event)"
@@ -171,7 +171,7 @@
             <template v-if="model.stopResult.resultsOfStop4">
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="infieldRules"
                 @remove-item="removeItem('infieldCodes', $event)"
@@ -216,7 +216,7 @@
             <template v-if="model.stopResult.resultsOfStop6">
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="custodialArrestRules"
                 @remove-item="removeItem('custodialArrestCodes', $event)"
@@ -316,7 +316,7 @@
             <template v-if="model.stopResult.resultsOfStop14">
               <ripa-autocomplete
                 v-model="model.stopResult.verbalWarningCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="verbalWarningRulesV2"
                 @remove-item="removeItem('verbalWarningCodes', $event)"
@@ -356,7 +356,7 @@
             <template v-if="model.stopResult.resultsOfStop15">
               <ripa-autocomplete
                 v-model="model.stopResult.writtenWarningCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="writtenWarningRulesV2"
                 @remove-item="removeItem('writtenWarningCodes', $event)"
@@ -394,7 +394,7 @@
             <template v-if="model.stopResult.resultsOfStop3">
               <ripa-autocomplete
                 v-model="model.stopResult.citationCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="citationRulesV2"
                 @remove-item="removeItem('citationCodes', $event)"
@@ -431,7 +431,7 @@
             <template v-if="model.stopResult.resultsOfStop4">
               <ripa-autocomplete
                 v-model="model.stopResult.infieldCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="infieldRulesV2"
                 @remove-item="removeItem('infieldCodes', $event)"
@@ -476,7 +476,7 @@
             <template v-if="model.stopResult.resultsOfStop6">
               <ripa-autocomplete
                 v-model="model.stopResult.custodialArrestCodes"
-                :items="filteredStatutes"
+                :items="statutes"
                 :max-selections="5"
                 :rules="custodialArrestRulesV2"
                 @remove-item="removeItem('custodialArrestCodes', $event)"
@@ -592,12 +592,6 @@ export default {
     }
   },
 
-  provide() {
-    return {
-      filteredStatutes: this.filteredStatutes,
-    }
-  },
-
   inject: [
     'isOnlineAndAuthenticated',
     'lastResult',
@@ -624,14 +618,6 @@ export default {
       set(newVal) {
         this.$emit('input', newVal)
       },
-    },
-
-    filteredStatutes() {
-      if (this.isAdminEditing) {
-        return this.statutes
-      } else {
-        return this.statutes.filter(item => !item.repealed)
-      }
     },
 
     isPullReasonCodeValid() {
