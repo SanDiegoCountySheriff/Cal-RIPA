@@ -2,6 +2,7 @@ import RipaFormStep7 from '@/components/molecules/RipaFormStep7.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
 import { defaultStop } from '@/utilities/stop'
+import { computed } from 'vue'
 
 import Vuetify from 'vuetify'
 
@@ -40,6 +41,7 @@ describe('Ripa Form Step 7', () => {
         isAdminViewing() {
           return false
         },
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
 

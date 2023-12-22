@@ -2,6 +2,7 @@ import RipaFormSummary from '@/components/molecules/RipaFormSummary.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import { API_STOP } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Form Summary', () => {
   let vuetify
@@ -44,6 +45,7 @@ describe('Ripa Form Summary', () => {
         isAdminEditing() {
           return false
         },
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
 
