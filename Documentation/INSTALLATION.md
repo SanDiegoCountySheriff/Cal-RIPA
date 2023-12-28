@@ -2,11 +2,36 @@
 
 ## How to install and configure your RIPA application instance
 
-First you should contact the California Department of Justice and request to be setup with sFTP interface for STOP data uploads.
+### Required steps
 
-Next you should follow the [Create Authentication Scheme](./AUTHENTICATION.md) instructions to create an Azure Active Directory OAuth/OpenID-Connect App Registration, Admin & User groups and the associated Roles.
+1. Set up Authentication
 
-Then go to the Azure US Government portal to install RIPA from your "Private" Marketplace offering. You can find detailed instruction here: [Azure Private Marketplace](./MARKETPLACE.md)
+   - First you should follow the [Create Authentication Scheme instructions](./AUTHENTICATION.md) to create an Azure Active Directory OAuth/OpenID-Connect App Registration, Admin & User groups and the associated Roles.
+
+2. Deploy App
+
+   - Then go to the Azure US Government portal to install RIPA from your "Private" Marketplace offering. You can find detailed instruction here: [Azure Private Marketplace](./MARKETPLACE.md)
+
+3. Import CLEW Data
+
+   - Once the app is deployed and can be logged into, it's time to set up the lookup lists for Schoold, Cities and Offense Codes. Follow the [Domain Lists](./DOMAIN-LISTS.md) instructions to import lookup lists.
+
+4. Import Existing Users
+
+   - Before users log in, you must import all existing RIPA users at your agency into the system if you are setting up a production environment. Go to [User Import](./USER-IMPORT.md) for instructions about how to import existing RIPA users.
+
+5. Set up sFTP credentials with DoJ
+
+   - Before you submit stops from your system to CA DoJ you will have to get credentials. Go to [DoJ Configuration](./DOJ-CONFIGURATION.md) for detailed instruction about how to set up your connection to the DoJ sFTP site.
+
+6. Add users to AAD Groups
+   - Add users to "RIPA-USERS" and/or "RIPA-ADMINS" groups in your Azure AD tenant. You may have used different group names when setting up. If you have existing user groups that you would rather use, you can do this mapping in the Azure AD Enterprise App Users and Groups setting. Note that group nesting is not supported.
+
+### Optional steps
+
+- Set up Beats: Follow the [Domain Lists](./DOMAIN-LISTS.md) instructions as well as [Beats](./BEATS.md.md)
+- Set up Agency Questions: [Agency Questions](./DOJ-CONFIGURATION.md)
+- Set up Templates: [Templates](./STOP-TEMPLATES.md). There is additional information about 2024 regulation testing templates here: [2024 Templates](./2024-REGULATION-UPDATE-DOJ-TESTING.md)
 
 ## What if I need to delete my installation and redo
 
