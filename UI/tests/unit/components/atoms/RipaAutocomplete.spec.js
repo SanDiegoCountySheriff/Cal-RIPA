@@ -1,6 +1,7 @@
 import RipaAutocomplete from '@/components/atoms/RipaAutocomplete.vue'
 import { shallowMount, mount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Autocomplete', () => {
   let vuetify
@@ -16,13 +17,21 @@ describe('Ripa Autocomplete', () => {
       propsData: {
         ...propsData,
       },
+      provide: {
+        statutes: computed(() => [{ id: 'test' }]),
+      },
     })
   }
 
   const testItems = ['Item 1', 'Item 2']
 
   it('should match snapshot', () => {
-    wrapper = mount(RipaAutocomplete, { vuetify })
+    wrapper = mount(RipaAutocomplete, {
+      vuetify,
+      provide: {
+        statutes: computed(() => [{ id: 'test' }]),
+      },
+    })
 
     expect(wrapper.html()).toMatchSnapshot()
   })

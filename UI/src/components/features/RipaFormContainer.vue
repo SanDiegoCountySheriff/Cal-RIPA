@@ -208,7 +208,7 @@ export default {
       countyCities: this.mappedFormCountyCities,
       nonCountyCities: this.mappedFormNonCountyCities,
       schools: this.mappedFormSchools,
-      statutes: this.mappedFormStatutes,
+      statutes: this.filteredStatutes,
       displayBeatInput: this.displayBeatInput,
       displayDebugger: this.displayDebugger,
       displayReportingEmail: this.displayReportingEmail,
@@ -272,6 +272,14 @@ export default {
       'favoriteReasons',
       'favoriteResults',
     ]),
+
+    filteredStatutes() {
+      if (this.isAdminEditing) {
+        return this.mappedFormStatutes
+      } else {
+        return this.mappedFormStatutes.filter(item => !item.repealed)
+      }
+    },
 
     getMappedUser() {
       return {

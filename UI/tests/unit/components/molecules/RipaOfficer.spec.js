@@ -28,7 +28,7 @@ describe('Ripa Officer', () => {
       },
       provide: {
         user: () => {},
-        version: () => 1,
+        stopVersion: () => 1,
       },
     })
 

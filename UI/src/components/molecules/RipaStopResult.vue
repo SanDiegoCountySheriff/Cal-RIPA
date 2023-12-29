@@ -597,6 +597,7 @@ export default {
     'lastResult',
     'statutes',
     'favoriteResults',
+    'isAdminEditing',
   ],
 
   mounted() {

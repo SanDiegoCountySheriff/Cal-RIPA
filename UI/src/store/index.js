@@ -1294,15 +1294,16 @@ export default new Vuex.Store({
           )
           .then(response => {
             const data = response.data
-              .filter(item => item.offenseRepealed === null)
               .map(item => {
                 return {
+                  repealed: item.offenseRepealed !== null,
                   code: item.offenseCode,
                   description: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
                 }
               })
               .map(item => {
                 return {
+                  repealed: item.repealed,
                   code: item.code,
                   fullName: `${item.description} ${item.code}`,
                 }

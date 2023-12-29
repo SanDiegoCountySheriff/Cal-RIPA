@@ -130,7 +130,7 @@ export default {
     RipaList,
   },
 
-  inject: ['isAdminEditing', 'isAdminViewing'],
+  inject: ['isAdminEditing', 'isAdminViewing', 'statutes'],
 
   computed: {
     anyAgencyQuestions() {
@@ -174,7 +174,7 @@ export default {
     },
 
     getApiStopPersonSummary(personId) {
-      return apiStopPersonSummary(this.apiStop, personId)
+      return apiStopPersonSummary(this.apiStop, personId, this.statutes)
     },
 
     handleEditStop(event) {

@@ -2,7 +2,7 @@
   <div :class="[getMarginTop, getMarginLeft]">
     <template v-if="item.level === 1">
       {{ item.header }}
-      <span class="tw-ml-2" :style="{ color: getPrimaryColor }">{{
+      <span class="tw-ml-2" :style="{ color: getPrimaryColor() }">{{
         item.detail
       }}</span>
     </template>
@@ -13,7 +13,14 @@
       </div>
       <div class="tw-ml-8" v-for="(child, index) in item.children" :key="index">
         <div :class="getChildMarginLeft(child)">
-          <span :style="{ color: getPrimaryColor }">
+          <span :style="{ color: getPrimaryColor(child.repealed) }">
+            <v-tooltip v-if="child.repealed" color="error" bottom>
+              <template #activator="{ on }">
+                <v-icon v-on="on" color="error">mdi-alert</v-icon>
+              </template>
+              <span>Statute Expired</span>
+            </v-tooltip>
+
             {{ child.detail }}
           </span>
         </div>
@@ -26,7 +33,7 @@
       </div>
       <div class="tw-ml-8" v-for="(child, index) in item.children" :key="index">
         {{ child.header }}
-        <span class="tw-ml-2" :style="{ color: getPrimaryColor }">
+        <span class="tw-ml-2" :style="{ color: getPrimaryColor() }">
           {{ child.detail }}
         </span>
       </div>
@@ -39,10 +46,6 @@ export default {
   name: 'ripa-list',
 
   computed: {
-    getPrimaryColor() {
-      return this.$vuetify.theme.themes.dark.primary
-    },
-
     getMarginTop() {
       return this.item.marginTop ? 'tw-mt-4' : ''
     },
@@ -55,6 +58,12 @@ export default {
   methods: {
     getChildMarginLeft(child) {
       return child.marginLeft ? 'tw-ml-4' : ''
+    },
+
+    getPrimaryColor(repealed = false) {
+      return repealed
+        ? this.$vuetify.theme.themes.dark.error
+        : this.$vuetify.theme.themes.dark.primary
     },
   },
 

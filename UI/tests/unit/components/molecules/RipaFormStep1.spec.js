@@ -95,6 +95,8 @@ describe('Ripa Form Step 1', () => {
         version: computed(() => 1),
         environmentName: computed(() => 'dev'),
         favoriteLocations: computed(() => []),
+        statutes: computed(() => [{ id: 'test' }]),
+        stopVersion: computed(() => 1),
       },
     })
   }

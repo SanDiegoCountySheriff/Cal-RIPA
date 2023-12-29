@@ -44,6 +44,7 @@ describe('Ripa Form Step 5', () => {
         },
         statutes: computed(() => []),
         favoriteResults: computed(() => []),
+        isAdminEditing: computed(() => false),
       },
     })
 
