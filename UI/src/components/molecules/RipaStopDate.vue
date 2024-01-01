@@ -136,8 +136,11 @@ export default {
       },
       set(newVal) {
         if (
-          new Date(newVal.stopDate.date) >= new Date('2024-01-01') ||
-          this.devTime
+          new Date(
+            newVal.stopDate.date.split('-')[0],
+            newVal.stopDate.date.split('-')[1] - 1,
+            newVal.stopDate.date.split('-')[2],
+          ).getFullYear() >= 2024
         ) {
           newVal.stopVersion = 2
         } else {
