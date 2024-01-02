@@ -129,6 +129,13 @@ describe('Ripa Form Container', () => {
         favoriteReasons: computed(() => []),
         favoriteResults: computed(() => []),
       },
+      computed: {
+        mappedFormBeats: () => [{ id: 'test' }],
+        mappedFormCountyCities: () => [{ id: 'test' }],
+        mappedFormNonCountyCities: () => [{ id: 'test' }],
+        mappedFormSchools: () => [{ id: 'test' }],
+        mappedFormStatutes: () => [{ id: 'test' }],
+      },
       mixins: [RipaApiStopJobMixin],
     })
   }
@@ -155,6 +162,11 @@ describe('Ripa Form Container', () => {
             return true
           },
         },
+        mappedFormBeats: () => [{ id: 'test' }],
+        mappedFormCountyCities: () => [{ id: 'test' }],
+        mappedFormNonCountyCities: () => [{ id: 'test' }],
+        mappedFormSchools: () => [{ id: 'test' }],
+        mappedFormStatutes: () => [{ id: 'test' }],
       },
     })
   }

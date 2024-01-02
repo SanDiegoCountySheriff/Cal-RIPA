@@ -542,7 +542,7 @@ const getSummaryStopMadeDuringWelfareCheck = apiStop => {
   }
 }
 
-export const apiStopPersonSummary = (apiStop, personId) => {
+export const apiStopPersonSummary = (apiStop, personId, statutes) => {
   const [person] = apiStop.listPersonStopped.filter(
     item => item.id === personId,
   )
@@ -581,7 +581,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
       id: 'B8',
       content: getSummaryPerceivedOrKnownDisability(person),
     })
-    items.push({ id: 'B9', content: getSummaryReasonForStop(person) })
+    items.push({ id: 'B9', content: getSummaryReasonForStop(person, statutes) })
     if (apiStop.stopVersion === 2) {
       items.push({ id: '22', content: getSummaryReasonGivenForStop(person) })
     }
@@ -613,7 +613,7 @@ export const apiStopPersonSummary = (apiStop, personId) => {
     if (apiStop.stopVersion === 2) {
       items.push({ id: 'B20', content: getSummaryForceActionsTaken(person) })
     }
-    items.push({ id: 'B17', content: getSummaryResultOfStop(person) })
+    items.push({ id: 'B17', content: getSummaryResultOfStop(person, statutes) })
     return items
   }
   return []
@@ -737,7 +737,7 @@ const getSummaryPerceivedOrKnownDisability = person => {
   }
 }
 
-const getSummaryReasonForStop = person => {
+const getSummaryReasonForStop = (person, statutes) => {
   const reasons = []
   reasons.push({
     detail: person.reasonForStop?.reason || null,
@@ -753,10 +753,11 @@ const getSummaryReasonForStop = person => {
   const listCodes = person.reasonForStop?.listCodes || []
 
   if (listCodes[0] !== null) {
-    const codes = listCodes.map(item => {
+    const codes = listCodes.map(code => {
       return {
         marginLeft: true,
-        detail: item.text,
+        detail: code.text,
+        repealed: statutes.find(s => s.code === Number(code.code))?.repealed,
       }
     })
     reasons.push(...codes)
@@ -914,7 +915,7 @@ const getSummaryContraband = person => {
   }
 }
 
-const getSummaryResultOfStop = person => {
+const getSummaryResultOfStop = (person, statutes) => {
   const results = []
   for (let index = 0; index < person.listResultOfStop.length; index++) {
     const item = person.listResultOfStop[index]
@@ -927,6 +928,7 @@ const getSummaryResultOfStop = person => {
         return {
           marginLeft: true,
           detail: code.text,
+          repealed: statutes.find(s => s.code === Number(code.code))?.repealed,
         }
       })
       results.push(...codes)

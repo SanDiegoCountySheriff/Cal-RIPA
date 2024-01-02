@@ -6,6 +6,7 @@ import {
   V2_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
+import { computed } from 'vue'
 
 describe('Ripa Form Summary Detail', () => {
   let vuetify
@@ -41,6 +42,7 @@ describe('Ripa Form Summary Detail', () => {
         isAdminViewing() {
           return false
         },
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
   }
@@ -63,6 +65,7 @@ describe('Ripa Form Summary Detail', () => {
         isAdminViewing() {
           return false
         },
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
 

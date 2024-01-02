@@ -1284,25 +1284,23 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(
-            `${state.apiConfig.apiBaseUrl}domain/v${state.version}/GetStatutes`,
-            {
-              headers: {
-                'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              },
+          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetStatutes`, {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
-          )
+          })
           .then(response => {
             const data = response.data
-              .filter(item => item.offenseRepealed === null)
               .map(item => {
                 return {
+                  repealed: item.offenseRepealed !== null,
                   code: item.offenseCode,
                   description: `${item.offenseStatute} ${item.offenseTypeOfStatuteCD} - ${item.statuteLiteral} (${item.offenseTypeOfCharge})`,
                 }
               })
               .map(item => {
                 return {
+                  repealed: item.repealed,
                   code: item.code,
                   fullName: `${item.description} ${item.code}`,
                 }

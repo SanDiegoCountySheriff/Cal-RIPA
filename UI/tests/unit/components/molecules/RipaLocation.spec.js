@@ -60,6 +60,7 @@ describe('Ripa Location', () => {
         },
         validLastLocation: computed(() => true),
         favoriteLocations: computed(() => []),
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
   }
@@ -103,6 +104,7 @@ describe('Ripa Location', () => {
         },
         validLastLocation: computed(() => true),
         favoriteLocations: computed(() => []),
+        statutes: computed(() => [{ id: 'test' }]),
       },
     })
 
