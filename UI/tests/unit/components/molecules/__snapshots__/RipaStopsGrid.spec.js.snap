@@ -5,12 +5,12 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
   <div class="layout stopsGridContainer row align-center wrap">
     <div class="flex xs12 md2">
       <div class="tw-ml-2">
-        <div class="v-input v-input--is-label-active v-input--is-dirty theme--light v-text-field">
+        <div class="v-input v-input--is-label-active theme--light v-text-field">
           <div class="v-input__control">
             <div class="v-input__slot">
               <div class="v-text-field__slot"><label for="input-3" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">From Date</label><input id="input-3" type="date"></div>
               <div class="v-input__append-inner">
-                <div class="v-input__icon v-input__icon--clear"><button type="button" aria-label="clear icon" tabindex="-1" class="v-icon notranslate v-icon--link mdi mdi-close theme--light"></button></div>
+                <div></div>
               </div>
               <div class="v-input__append-inner">
                 <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-calendar theme--light"></i></div>
@@ -30,7 +30,7 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <div class="v-input v-input--is-label-active theme--light v-text-field">
           <div class="v-input__control">
             <div class="v-input__slot">
-              <div class="v-text-field__slot"><label for="input-9" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">To Date</label><input id="input-9" type="date"></div>
+              <div class="v-text-field__slot"><label for="input-8" class="v-label v-label--active theme--light" style="left: 0px; position: absolute;">To Date</label><input id="input-8" type="date"></div>
               <div class="v-input__append-inner">
                 <div></div>
               </div>
@@ -51,9 +51,9 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
       <div class="tw-ml-2">
         <div class="v-input theme--light v-text-field v-select v-select--chips v-select--chips--small v-select--is-multi">
           <div class="v-input__control">
-            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-13" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-13" class="v-label theme--light" style="left: 0px; position: absolute;">Status</label>
-                <div class="v-select__selections"><input id="input-13" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
+            <div role="button" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-12" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-12" class="v-label theme--light" style="left: 0px; position: absolute;">Status</label>
+                <div class="v-select__selections"><input id="input-12" readonly="readonly" type="text" aria-readonly="false" autocomplete="off"></div>
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>
@@ -79,13 +79,13 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <div class="v-input tw-ml-2 theme--light v-input--selection-controls v-input--switch">
           <div class="v-input__control">
             <div class="v-input__slot">
-              <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-18" role="switch" type="checkbox" aria-disabled="false" value="">
+              <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-17" role="switch" type="checkbox" aria-disabled="false" value="">
                 <div class="v-input--selection-controls__ripple"></div>
                 <div class="v-input--switch__track theme--light"></div>
                 <div class="v-input--switch__thumb theme--light">
                   <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                 </div>
-              </div><label for="input-18" class="v-label theme--light" style="left: 0px; position: relative;">PII Found</label>
+              </div><label for="input-17" class="v-label theme--light" style="left: 0px; position: relative;">PII Found</label>
             </div>
             <div class="v-messages theme--light">
               <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -99,13 +99,13 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         <div class="v-input tw-ml-2 theme--light v-input--selection-controls v-input--switch">
           <div class="v-input__control">
             <div class="v-input__slot">
-              <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-22" role="switch" type="checkbox" aria-disabled="false" value="">
+              <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-21" role="switch" type="checkbox" aria-disabled="false" value="">
                 <div class="v-input--selection-controls__ripple"></div>
                 <div class="v-input--switch__track theme--light"></div>
                 <div class="v-input--switch__thumb theme--light">
                   <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                 </div>
-              </div><label for="input-22" class="v-label theme--light" style="left: 0px; position: relative;">Edited</label>
+              </div><label for="input-21" class="v-label theme--light" style="left: 0px; position: relative;">Edited</label>
             </div>
             <div class="v-messages theme--light">
               <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
@@ -118,9 +118,9 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
       <div class="tw-flex tw-justify-center">
         <div class="v-input theme--light v-text-field v-select v-select--is-multi v-autocomplete">
           <div class="v-input__control">
-            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-26" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-26" class="v-label theme--light" style="left: 0px; position: absolute;">Error Codes</label>
-                <div class="v-select__selections"><input id="input-26" type="text" autocomplete="off"></div>
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-25" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-25" class="v-label theme--light" style="left: 0px; position: absolute;">Error Codes</label>
+                <div class="v-select__selections"><input id="input-25" type="text" autocomplete="off"></div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
                 </div><input type="hidden">
@@ -153,13 +153,13 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
               <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
                 <div class="v-input__control">
                   <div class="v-input__slot">
-                    <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-38" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-37" role="switch" type="checkbox" aria-disabled="false" value="">
                       <div class="v-input--selection-controls__ripple"></div>
                       <div class="v-input--switch__track theme--light"></div>
                       <div class="v-input--switch__thumb theme--light">
                         <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                       </div>
-                    </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+                    </div><label for="input-37" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Show V2 Stops
       </span> <span class="switch-label" style="right: -45px;">
         No
