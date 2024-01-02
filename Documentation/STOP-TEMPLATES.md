@@ -1,6 +1,6 @@
 # Stop Templates
 
-Stop Templates allow you to improve data entry speed and efficienty for specific scenarios. They work best for repetitive situations that always have the same reason, actions and result. An example would be a traffic stop for speeding, or a seat belt violation.
+Stop Templates allow you to improve data entry speed and efficiency for specific scenarios. They work best for repetitive situations that always have the same reason, actions and result. An example would be a traffic stop for speeding, or a seat belt violation.
 
 ![](./assets/templates.png)
 

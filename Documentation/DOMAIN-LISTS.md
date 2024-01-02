@@ -8,7 +8,7 @@ https://oag.ca.gov/law/code-tables
 
 Log into your instance of RIPA with an Admin account and follow these steps:
 
-1. CLick Domains Tab
+1. Click Domains Tab
 1. Click "Upload CLEW Data" button
 1. Click the "Upload CLEW file" field
 1. Select the file you downloaded from DoJ
