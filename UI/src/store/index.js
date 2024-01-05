@@ -673,7 +673,7 @@ export default new Vuex.Store({
     deleteBeat({ dispatch, state }, beat) {
       return axios
         .delete(
-          `${state.apiConfig.apiBaseUrl}domain/v1/DeleteBeat/${beat.id}`,
+          `http://localhost:7071/api/v1/DeleteBeat/${beat.id}`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -693,7 +693,7 @@ export default new Vuex.Store({
     editBeat({ dispatch, state }, beat) {
       return axios
         .put(
-          `${state.apiConfig.apiBaseUrl}domain/v1/PutBeat/${beat.id}`,
+          `http://localhost:7071/api/v1/PutBeat/${beat.id}`,
           beat,
           {
             headers: {
@@ -771,7 +771,7 @@ export default new Vuex.Store({
       const formData = new FormData()
       formData.append('file', domainFile)
       return axios
-        .post(`${state.apiConfig.apiBaseUrl}domain/v1/PostUpload`, formData, {
+        .post(`http://localhost:7071/api/v1/PostUpload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -1004,7 +1004,7 @@ export default new Vuex.Store({
 
     getAdminBeats({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
+        .get(`http://localhost:7071/api/v1/GetBeats`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             'Cache-Control': 'no-cache',
@@ -1042,7 +1042,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
+          .get(`http://localhost:7071/api/v1/GetBeats`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -1081,7 +1081,7 @@ export default new Vuex.Store({
 
     getAdminCities({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetCities`, {
+        .get(`http://localhost:7071/api/v1/GetCities`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1118,7 +1118,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetCities`, {
+          .get(`http://localhost:7071/api/v1/GetCities`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
@@ -1175,7 +1175,7 @@ export default new Vuex.Store({
 
     getAdminSchools({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetSchools`, {
+        .get(`http://localhost:7071/api/v1/GetSchools`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1213,7 +1213,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetSchools`, {
+          .get(`http://localhost:7071/api/v1/GetSchools`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
@@ -1253,7 +1253,7 @@ export default new Vuex.Store({
 
     getAdminStatutes({ commit, state }) {
       return axios
-        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetStatutes`, {
+        .get(`http://localhost:7071/api/v1/GetStatutes`, {
           headers: {
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
           },
@@ -1284,7 +1284,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetStatutes`, {
+          .get(`http://localhost:7071/api/v1/GetStatutes`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
             },
@@ -1333,7 +1333,7 @@ export default new Vuex.Store({
         })
       } else {
         return axios
-          .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetTemplates`, {
+          .get(`http://localhost:7071/api/v1/GetTemplates`, {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',

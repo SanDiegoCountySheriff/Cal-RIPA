@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Security", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Common.Services", "RIPA.Functions.Common.Services\RIPA.Functions.Common.Services.csproj", "{2452C3A2-0A02-4B33-AB34-4F141C2B358B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIPA.Functions.Tests", "RIPA.Functions.Tests\RIPA.Functions.Tests.csproj", "{B4E59A6A-40E6-4BB2-A68D-2F70EC86D246}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIPA.Functions.Tests", "RIPA.Functions.Tests\RIPA.Functions.Tests.csproj", "{B4E59A6A-40E6-4BB2-A68D-2F70EC86D246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

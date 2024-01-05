@@ -12,6 +12,7 @@ using RIPA.Functions.Domain.Functions.v1.Beats.Models;
 using RIPA.Functions.Domain.Functions.v1.Cities.Models;
 using RIPA.Functions.Domain.Functions.v1.Schools.Models;
 using RIPA.Functions.Domain.Functions.v1.Statutes.Models;
+using RIPA.Functions.Domain.Services.Contracts;
 using RIPA.Functions.Security;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,9 @@ public class PostUpload
     private readonly List<string> CityTableHeaders;
     private readonly List<string> SchoolTableHeaders;
     private readonly List<string> StatuteTableHeaders;
+    private readonly IDomainCosmosDbService _domainCosmosDbService;
 
-    public PostUpload(TableServiceClient client)
+    public PostUpload(TableServiceClient client, IDomainCosmosDbService domainCosmosDbService)
     {
         _client = client;
         _batch = new List<TableTransactionAction>();
@@ -41,6 +43,7 @@ public class PostUpload
         CityTableHeaders = new List<string>();
         SchoolTableHeaders = new List<string>();
         StatuteTableHeaders = new List<string>();
+        _domainCosmosDbService = domainCosmosDbService;
     }
 
     [FunctionName("PostUpload_v1")]
@@ -102,6 +105,8 @@ public class PostUpload
             {
                 responseMessage = "No records found";
             }
+
+            await _domainCosmosDbService.SetDomainUploadDate(DateTime.Now.Date);
 
             return new OkObjectResult(responseMessage);
         }
