@@ -187,6 +187,7 @@ export default {
       'getUser',
       'setConnectionStatus',
       'setStopsWithErrors',
+      'getDomainDate',
     ]),
 
     async runApiStopsJob(apiStops) {
@@ -374,6 +375,9 @@ export default {
     },
 
     async getFormData() {
+      const domainDate = await this.getDomainDate()
+      const domainUpdatedDate = localStorage.getItem('ripa_domain_updated_date')
+      
       if (this.displayBeatInput) {
         await Promise.all([
           this.getFormBeats(),
@@ -390,6 +394,9 @@ export default {
           this.getFormTemplates(),
         ])
       }
+
+      const domainUpdatedDate = new Date()
+      localStorage.setItem('ripa_domain_updated_date', domainUpdatedDate)
     },
 
     getDarkFromLocalStorage() {
@@ -514,7 +521,7 @@ export default {
 
     async updateAuthenticatedData() {
       this.loading = true
-      this.checkCache()
+      // this.checkCache()
       await this.getUserData()
       await this.getFormData()
       this.isValidCache = true
@@ -546,15 +553,27 @@ export default {
     },
 
     async initPage() {
+      this.loading = true
+      const domainDate = await this.getDomainDate()
+      const domainUpdatedDate = localStorage.getItem('ripa_domain_updated_date')
+
+      if (
+        new Date(domainDate.date).setHours(0, 0, 0, 0) !==
+        new Date(domainUpdatedDate).setHours(0, 0, 0, 0)
+      ) {
+        console.log('no match!')
+        await this.getFormData()
+      }
+
       if (this.isOnlineAndAuthenticated) {
         await this.updateAuthenticatedData()
-      } else {
-        if (this.isValidCacheState()) {
-          this.loading = true
-          await this.getFormData()
-          this.loading = false
-        }
       }
+      // else {
+      //   // if (this.isValidCacheState()) {
+      //   //   await this.getFormData()
+      //   // }
+      // }
+      this.loading = false
     },
   },
 

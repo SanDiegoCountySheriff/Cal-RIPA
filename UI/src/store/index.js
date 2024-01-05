@@ -672,15 +672,12 @@ export default new Vuex.Store({
 
     deleteBeat({ dispatch, state }, beat) {
       return axios
-        .delete(
-          `http://localhost:7071/api/v1/DeleteBeat/${beat.id}`,
-          {
-            headers: {
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .delete(`http://localhost:7071/api/v1/DeleteBeat/${beat.id}`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -692,17 +689,13 @@ export default new Vuex.Store({
 
     editBeat({ dispatch, state }, beat) {
       return axios
-        .put(
-          `http://localhost:7071/api/v1/PutBeat/${beat.id}`,
-          beat,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
-              'Cache-Control': 'no-cache',
-            },
+        .put(`http://localhost:7071/api/v1/PutBeat/${beat.id}`, beat, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
           },
-        )
+        })
         .then(() => {
           dispatch('getAdminBeats')
         })
@@ -999,6 +992,22 @@ export default new Vuex.Store({
             'There was an error saving the officer stop record.',
             error,
           )
+        })
+    },
+
+    getDomainDate({ state }) {
+      return axios
+        .get(`http://localhost:7071/api/v1/GetDomainDate`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          console.log('There was an error getting the domain date', error)
         })
     },
 
