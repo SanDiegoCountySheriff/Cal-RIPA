@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RIPA.Functions.Domain.Services.Contracts;
 using System;
 using System.Threading.Tasks;
@@ -17,15 +18,28 @@ public class DomainCosmosDbService : IDomainCosmosDbService
         _container = container;
     }
 
-    public async Task<DateTime> GetDomainUploadDate()
+    public async Task<DomainDateTime> GetDomainUploadDate()
     {
-        var response = await _container.ReadItemAsync<DateTime>("1", new PartitionKey("1"));
+        var response = await _container.ReadItemAsync<DomainDateTime>("1", new PartitionKey("1"));
 
         return response.Resource;
     }
 
     public async Task SetDomainUploadDate(DateTime uploadDate)
     {
-        await _container.UpsertItemAsync(uploadDate, new PartitionKey("1"));
+        DomainDateTime domainDateTime = new()
+        {
+            Id = "1",
+            Date = uploadDate
+        };
+        await _container.UpsertItemAsync(domainDateTime, new PartitionKey(domainDateTime.Id));
     }
+}
+
+public class DomainDateTime
+{
+    [JsonProperty("id")]
+    public string Id { get; set; }
+    [JsonProperty("date")]
+    public DateTime Date { get; set; }
 }

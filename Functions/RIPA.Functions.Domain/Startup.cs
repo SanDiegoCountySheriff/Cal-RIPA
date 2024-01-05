@@ -45,7 +45,7 @@ public class Startup : FunctionsStartup
         builder.Services.AddSingleton(InitializeCloudTableClient().GetAwaiter().GetResult());
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-        var domainContainer = await CreateDomainContainerAsync();
+        var domainContainer = CreateDomainContainerAsync().GetAwaiter().GetResult();
         builder.Services.AddSingleton<IDomainCosmosDbService>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DomainCosmosDbService>>();
