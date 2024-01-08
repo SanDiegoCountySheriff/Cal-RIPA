@@ -3227,7 +3227,7 @@
             },
             {
               "name": "AllowedCategories",
-              "value": "Age,Email,Person,PhoneNumber,Organization"
+              "value": "Age,Email,Person,PhoneNumber"
             },
             {
               "name": "MinimumConfidenceScore",
