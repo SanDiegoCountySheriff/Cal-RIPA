@@ -50,23 +50,11 @@ public class GetCities
 
         List<City> response = new List<City>();
 
-        var singleResponse = _tableClient.Query<City>().FirstOrDefault();
-        var etag = singleResponse.ETag;
-        req.HttpContext.Response.Headers.Add("ETag", etag.ToString());
-
-        if (etag == req.Headers["If-None-Match"])
-        {
-            return new StatusCodeResult((int)HttpStatusCode.NotModified);
-        }
-
         try
         {
             var queryResults = _tableClient.Query<City>();
 
-            foreach (var city in queryResults)
-            {
-                response.Add(city);
-            }
+            response.AddRange(queryResults);
         }
         catch (Exception ex)
         {

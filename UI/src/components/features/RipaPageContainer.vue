@@ -187,6 +187,7 @@ export default {
       'getUser',
       'setConnectionStatus',
       'setStopsWithErrors',
+      'getDomainDate',
     ]),
 
     async runApiStopsJob(apiStops) {
@@ -373,20 +374,20 @@ export default {
       this.snackbarOfficerRaceGender = await this.getUser()
     },
 
-    async getFormData() {
+    async getFormData(domainDate, domainUpdatedDate) {
       if (this.displayBeatInput) {
         await Promise.all([
-          this.getFormBeats(),
-          this.getFormCities(),
-          this.getFormSchools(),
-          this.getFormStatutes(),
+          this.getFormBeats({ domainDate, domainUpdatedDate }),
+          this.getFormCities({ domainDate, domainUpdatedDate }),
+          this.getFormSchools({ domainDate, domainUpdatedDate }),
+          this.getFormStatutes({ domainDate, domainUpdatedDate }),
           this.getFormTemplates(),
         ])
       } else {
         await Promise.all([
-          this.getFormCities(),
-          this.getFormSchools(),
-          this.getFormStatutes(),
+          this.getFormCities({ domainDate, domainUpdatedDate }),
+          this.getFormSchools({ domainDate, domainUpdatedDate }),
+          this.getFormStatutes({ domainDate, domainUpdatedDate }),
           this.getFormTemplates(),
         ])
       }
@@ -514,9 +515,7 @@ export default {
 
     async updateAuthenticatedData() {
       this.loading = true
-      this.checkCache()
       await this.getUserData()
-      await this.getFormData()
       this.isValidCache = true
       this.loading = false
     },
@@ -546,15 +545,18 @@ export default {
     },
 
     async initPage() {
+      this.loading = true
+
       if (this.isOnlineAndAuthenticated) {
+        const domainDate = await this.getDomainDate()
+        const domainUpdatedDate = localStorage.getItem(
+          'ripa_domain_updated_date',
+        )
+
+        await this.getFormData(domainDate, domainUpdatedDate)
         await this.updateAuthenticatedData()
-      } else {
-        if (this.isValidCacheState()) {
-          this.loading = true
-          await this.getFormData()
-          this.loading = false
-        }
       }
+      this.loading = false
     },
   },
 

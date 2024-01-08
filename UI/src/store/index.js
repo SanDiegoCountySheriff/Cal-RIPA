@@ -1002,6 +1002,22 @@ export default new Vuex.Store({
         })
     },
 
+    getDomainDate({ state }) {
+      return axios
+        .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetDomainDate`, {
+          headers: {
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          console.log('There was an error getting the domain date', error)
+        })
+    },
+
     getAdminBeats({ commit, state }) {
       return axios
         .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
@@ -1033,14 +1049,20 @@ export default new Vuex.Store({
         })
     },
 
-    getFormBeats({ commit, state }) {
+    getFormBeats({ commit, state }, { domainDate, domainUpdatedDate }) {
       const items = localStorage.getItem('ripa_beats')
-      if (items !== null) {
+      if (
+        items !== null &&
+        (!domainDate ||
+          new Date(domainDate.date).setHours(0, 0, 0, 0) ===
+            new Date(domainUpdatedDate).setHours(0, 0, 0, 0))
+      ) {
         return new Promise(resolve => {
           commit('updateFormBeats', JSON.parse(items))
           resolve()
         })
       } else {
+        localStorage.removeItem('ripa_beats')
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetBeats`, {
             headers: {
@@ -1071,6 +1093,12 @@ export default new Vuex.Store({
               })
             commit('updateFormBeats', data)
             localStorage.setItem('ripa_beats', JSON.stringify(data))
+
+            const newDomainUpdatedDate = new Date()
+            localStorage.setItem(
+              'ripa_domain_updated_date',
+              newDomainUpdatedDate,
+            )
           })
           .catch(error => {
             console.log('There was an error retrieving beats.', error)
@@ -1107,16 +1135,24 @@ export default new Vuex.Store({
         })
     },
 
-    getFormCities({ commit, state }) {
+    getFormCities({ commit, state }, { domainDate, domainUpdatedDate }) {
       const items1 = localStorage.getItem('ripa_county_cities')
       const items2 = localStorage.getItem('ripa_non_county_cities')
-      if (items1 !== null && items2 !== null) {
+      if (
+        items1 !== null &&
+        items2 !== null &&
+        (!domainDate ||
+          new Date(domainDate.date).setHours(0, 0, 0, 0) ===
+            new Date(domainUpdatedDate).setHours(0, 0, 0, 0))
+      ) {
         return new Promise(resolve => {
           commit('updateFormCountyCities', JSON.parse(items1))
           commit('updateFormNonCountyCities', JSON.parse(items2))
           resolve()
         })
       } else {
+        localStorage.removeItem('ripa_county_cities')
+        localStorage.removeItem('ripa_non_county_cities')
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetCities`, {
             headers: {
@@ -1164,6 +1200,12 @@ export default new Vuex.Store({
               'ripa_non_county_cities',
               JSON.stringify(data2),
             )
+
+            const newDomainUpdatedDate = new Date()
+            localStorage.setItem(
+              'ripa_domain_updated_date',
+              newDomainUpdatedDate,
+            )
           })
           .catch(error => {
             console.log('There was an error retrieving cities.', error)
@@ -1183,8 +1225,8 @@ export default new Vuex.Store({
         .then(response => {
           const data = response.data
             .sort((x, y) => {
-              const schoolA = x.name.toUpperCase()
-              const schoolB = y.name.toUpperCase()
+              const schoolA = x.name?.toUpperCase()
+              const schoolB = y.name?.toUpperCase()
               return schoolA < schoolB ? -1 : schoolA > schoolB ? 1 : 0
             })
             .map(item => {
@@ -1204,14 +1246,20 @@ export default new Vuex.Store({
         })
     },
 
-    getFormSchools({ commit, state }) {
+    getFormSchools({ commit, state }, { domainDate, domainUpdatedDate }) {
       const items = localStorage.getItem('ripa_schools')
-      if (items !== null) {
+      if (
+        items !== null &&
+        (!domainDate ||
+          new Date(domainDate.date).setHours(0, 0, 0, 0) ===
+            new Date(domainUpdatedDate).setHours(0, 0, 0, 0))
+      ) {
         return new Promise(resolve => {
           commit('updateFormSchools', JSON.parse(items))
           resolve()
         })
       } else {
+        localStorage.removeItem('ripa_schools')
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetSchools`, {
             headers: {
@@ -1243,6 +1291,12 @@ export default new Vuex.Store({
               })
             commit('updateFormSchools', data)
             localStorage.setItem('ripa_schools', JSON.stringify(data))
+
+            const newDomainUpdatedDate = new Date()
+            localStorage.setItem(
+              'ripa_domain_updated_date',
+              newDomainUpdatedDate,
+            )
           })
           .catch(error => {
             console.log('There was an error retrieving schools.', error)
@@ -1275,14 +1329,20 @@ export default new Vuex.Store({
         })
     },
 
-    getFormStatutes({ commit, state }) {
+    getFormStatutes({ commit, state }, { domainDate, domainUpdatedDate }) {
       const items = localStorage.getItem('ripa_statutes')
-      if (items !== null) {
+      if (
+        items !== null &&
+        (!domainDate ||
+          new Date(domainDate.date).setHours(0, 0, 0, 0) ===
+            new Date(domainUpdatedDate).setHours(0, 0, 0, 0))
+      ) {
         return new Promise(resolve => {
           commit('updateFormStatutes', JSON.parse(items))
           resolve()
         })
       } else {
+        localStorage.removeItem('ripa_statutes')
         return axios
           .get(`${state.apiConfig.apiBaseUrl}domain/v1/GetStatutes`, {
             headers: {
@@ -1316,6 +1376,12 @@ export default new Vuex.Store({
               })
             commit('updateFormStatutes', data)
             localStorage.setItem('ripa_statutes', JSON.stringify(data))
+
+            const newDomainUpdatedDate = new Date()
+            localStorage.setItem(
+              'ripa_domain_updated_date',
+              newDomainUpdatedDate,
+            )
           })
           .catch(error => {
             console.log('There was an error retrieving statutes.', error)
