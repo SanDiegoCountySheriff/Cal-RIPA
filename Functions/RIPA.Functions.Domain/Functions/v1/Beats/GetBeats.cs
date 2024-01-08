@@ -54,10 +54,7 @@ public class GetBeats
         {
             var queryResults = _tableClient.Query<Beat>();
 
-            foreach (var beat in queryResults)
-            {
-                response.Add(beat);
-            }
+            response.AddRange(queryResults);
         }
         catch (Exception ex)
         {

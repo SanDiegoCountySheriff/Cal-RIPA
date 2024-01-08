@@ -50,23 +50,11 @@ public class GetStatutes
 
         List<Statute> response = new List<Statute>();
 
-        var singleResponse = _tableClient.Query<Statute>().FirstOrDefault();
-        var etag = singleResponse.ETag;
-        req.HttpContext.Response.Headers.Add("ETag", etag.ToString());
-
-        if (etag == req.Headers["If-None-Match"])
-        {
-            return new StatusCodeResult((int)HttpStatusCode.NotModified);
-        }
-
         try
         {
             var queryResults = _tableClient.Query<Statute>();
 
-            foreach (var statute in queryResults)
-            {
-                response.Add(statute);
-            }
+            response.AddRange(queryResults);
         }
         catch (Exception ex)
         {

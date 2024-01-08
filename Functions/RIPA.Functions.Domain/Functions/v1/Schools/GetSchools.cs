@@ -50,23 +50,11 @@ public class GetSchools
 
         List<School> response = new List<School>();
 
-        var singleResponse = _tableClient.Query<School>().FirstOrDefault();
-        var etag = singleResponse.ETag;
-        req.HttpContext.Response.Headers.Add("ETag", etag.ToString());
-
-        if (etag == req.Headers["If-None-Match"])
-        {
-            return new StatusCodeResult((int)HttpStatusCode.NotModified);
-        }
-
         try
         {
             var queryResults = _tableClient.Query<School>();
 
-            foreach (var school in queryResults)
-            {
-                response.Add(school);
-            }
+            response.AddRange(queryResults);
         }
         catch (Exception ex)
         {
