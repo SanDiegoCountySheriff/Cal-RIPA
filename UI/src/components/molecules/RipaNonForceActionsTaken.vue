@@ -87,11 +87,6 @@
                 </template>
 
                 <ripa-text-input
-                  v-if="
-                    !this.model.nonForceActionsTaken.basisForSearch.every(
-                      reasonForSearchVal => reasonForSearchVal === 4,
-                    )
-                  "
                   v-model="model.nonForceActionsTaken.basisForSearchExplanation"
                   hint="Important: Do not include personally identifying information, such as names, DOBs, addresses, ID numbers, etc."
                   persistent-hint
@@ -500,15 +495,6 @@ export default {
 
       if (!actionsTaken.includes(14) && !actionsTaken.includes(15)) {
         this.model.nonForceActionsTaken.basisForSearch = []
-        this.model.nonForceActionsTaken.basisForSearchExplanation = null
-        this.model.nonForceActionsTaken.basisForSearchPiiFound = false
-      }
-
-      if (
-        this.model.nonForceActionsTaken.basisForSearch !== null &&
-        this.model.nonForceActionsTaken.basisForSearch.length === 1 &&
-        this.model.nonForceActionsTaken.basisForSearch.includes(4)
-      ) {
         this.model.nonForceActionsTaken.basisForSearchExplanation = null
         this.model.nonForceActionsTaken.basisForSearchPiiFound = false
       }
