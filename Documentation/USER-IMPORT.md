@@ -1,8 +1,8 @@
-# Cal-RIPA User Import
+# User Import
 
 ## Existing User Profile Import
 
-The California Department of Justice (DoJ) requires that unique officer ids be used when submitting data to the DoJ RIPA system. These ids apply to the user for the entire lifetime of their employment/association at an agency. Hence, once an officer id is submitted to the DoJ it must be maintained and used for that user until they are no longer associated with the organization. If you have previously submitted RIPA related data to the DoJ, you will most likely want to maintain the "OfficerId" of employees who have created, managed or submitted said data. This topic provides instructions on how you can "Import" a list of existing user profiles.
+The California Department of Justice (DoJ) requires that unique officer ids be used when submitting data to the DoJ RIPA system. These ids apply to the user for the entire lifetime of their employment/association at an agency. Hence, once an officer id is submitted to the DoJ it must be maintained and used for that user until they are no longer associated with the organization. If you have previously submitted RIPA related data to the DoJ, you will have to maintain the "OfficerId" of employees who have created, managed or submitted said data. This topic provides instructions on how you can "Import" a list of existing user profiles.
 
 This process is NOT required for new users. New users can simply open the application and create their "User Profile". However, you can use this feature to "Pre-load" all of your agency users if you wish.
 
@@ -29,3 +29,11 @@ Below is an example of a basic .csv including only the required columns
 And an example of a complete .csv
 
 ![UploadUserMaximumCSV](https://user-images.githubusercontent.com/83732510/128557449-2bfa3263-a6b9-472c-9c5d-e3d51c5c899a.PNG)
+
+## Import from Legacy RIPA
+
+If you are a legacy RIPA agency we are providing a utility to help with exporting and mapping your users from your on-prem Active Directory with your Azure Active Directory (Entra AD).
+
+You can download it here: [User Export Utility](./assets/RIPAUserMigration_exe.zip)
+
+Run it as admin and follow the on-screen instructions. You will need to have access to the old RIPA database and your on-prem Active Directory.

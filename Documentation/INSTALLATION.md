@@ -1,12 +1,4 @@
-# Cal-RIPA Installation
-
-## How to install and configure your RIPA application instance
-
-First you should contact the California Department of Justice and request to be setup with sFTP interface for STOP data uploads.
-
-Next you should follow the [Create Authentication Scheme](./AUTHENTICATION.md) instructions to create an Azure Active Directory OAuth/OpenID-Connect App Registration, Admin & User groups and the associated Roles.
-
-Then go to the Azure US Government portal to install RIPA from your "Private" Marketplace offering. You can find detailed instruction here: [Azure Private Marketplace](./MARKETPLACE.md)
+# Cal-RIPA Uninstallation
 
 ## What if I need to delete my installation and redo
 
@@ -25,4 +17,4 @@ There are a few services/resources in Azure that do not fully "delete" when you 
 
     // using tools like Postman, Ready-API or Fiddler, send a "DELETE" request to the Azure Management API backplane.
     DELETE https://management.usgovcloudapi.net/subscriptions/{your subscription id}/providers/Microsoft.ApiManagement/locations/usgovarizona/deletedservices/{your apim instance name}?api-version=2020-06-01-preview
-    Authorization: Bearer {the bearer token returned from get--access-toekn response}
+    Authorization: Bearer {the bearer token returned from get--access-token response}

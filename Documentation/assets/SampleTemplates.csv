@@ -1,0 +1,116 @@
+PartitionKey,RowKey,DisplayName,DisplayName@type,Id,Id@type,StopTemplate,StopTemplate@type
+CA,1000,Motor/Traffic,String,1000,String,"{
+  ""displayName"":""Motor/Traffic"",
+  ""options"": {
+      ""stopType"": ""Vehicular"",
+      ""nonForceActionsTaken"": {
+        ""anyNonForceActionsTaken"": false,
+        ""nonForceActionsTakenDuringStop"": [],
+        ""personSearchConsentGiven"": false,
+        ""propertySearchConsentGiven"": false,
+        ""basisForSearch"": [],
+        ""basisForSearchExplanation"": null,
+        ""basisForSearchPiiFound"": false,
+        ""propertyWasSeized"": false,
+        ""basisForPropertySeizure"": [],
+        ""typeOfPropertySeized"": [],
+        ""anyContraband"": false,
+        ""contrabandOrEvidenceDiscovered"": []
+      },
+      ""forceActionsTaken"": {
+        ""anyForceActionsTaken"": false,
+        ""forceActionsTakenDuringStop"": []
+      },
+        ""actionsTaken"": {
+            ""anyActionsTaken"": false,
+""actionsTakenDuringStop"": [],
+        ""personSearchConsentGiven"": false,
+        ""propertySearchConsentGiven"": false,
+        ""basisForSearch"": [],
+        ""basisForSearchExplanation"": null,
+        ""basisForSearchPiiFound"": false,
+        ""propertyWasSeized"": false,
+        ""basisForPropertySeizure"": [],
+        ""typeOfPropertySeized"": [],
+        ""anyContraband"": false,
+        ""contrabandOrEvidenceDiscovered"": []
+        },
+      ""stopReason"": {
+        ""reasonForStop"": 1,
+        ""educationViolation"": null,
+        ""educationViolationCode"": null,
+        ""trafficViolation"": 1,
+        ""trafficViolationCode"": 54106,
+        ""reasonableSuspicion"": [],
+        ""reasonableSuspicionCode"": null,
+        ""searchOfPerson"": false,
+        ""searchOfProperty"": false,
+        ""reasonForStopExplanation"": ""Speeding"",
+        ""reasonForStopPiiFound"": false,
+        ""probableCause"": [],
+        ""probableCauseCode"": null,
+""reasonGivenForStop"": 
+[
+1
+]
+      },
+      ""stopResult"": {
+        ""anyResultsOfStop"": true,
+        ""resultsOfStop4"": true,
+        ""warningCodes"": [],
+        ""verbalWarningCodes"": [],
+        ""writtenWarningCodes"": [],
+        ""citationCodes"": [54106],
+        ""infieldCodes"": [],
+        ""custodialArrestCodes"": [],
+        ""pullFromReasonCode"": true
+      }
+    },
+    ""loadLastLocation"": true}",String
+CA,2000,Probation Contact,String,2000,String,"{
+  ""displayName"": ""Probation Contact"",
+  ""options"": {
+    ""nonForceActionsTaken"": {
+      ""anyNonForceActionsTaken"": true,
+      ""nonForceActionsTakenDuringStop"": [6, 14, 15],
+      ""personSearchConsentGiven"": false,
+      ""propertySearchConsentGiven"": false,
+      ""basisForSearch"": [4],
+      ""basisForSearchExplanation"": ""Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision"",
+      ""basisForSearchPiiFound"": false,
+      ""propertyWasSeized"": false,
+      ""basisForPropertySeizure"": [],
+      ""typeOfPropertySeized"": [],
+      ""anyContraband"": false,
+      ""contrabandOrEvidenceDiscovered"": []
+    },
+    ""forceActionsTaken"": {
+      ""anyForceActionsTaken"": false,
+      ""forceActionsTakenDuringStop"": []
+    },
+    ""stopReason"": {
+      ""reasonForStop"": 3,
+      ""educationViolation"": null,
+      ""educationViolationCode"": null,
+      ""trafficViolation"": null,
+      ""trafficViolationCode"": null,
+      ""reasonableSuspicion"": [],
+      ""reasonableSuspicionCode"": null,
+      ""searchOfPerson"": false,
+      ""searchOfProperty"": false,
+      ""reasonForStopExplanation"": ""Subject/Location known to be Parole / Probation / PRCS / Mandatory Supervision"",
+      ""reasonForStopPiiFound"": false,
+      ""probableCause"": [],
+      ""probableCauseCode"": null
+    },
+    ""stopResult"": {
+      ""anyResultsOfStop"": true,
+      ""warningCodes"": [],
+      ""verbalWarningCodes"": [],
+      ""writtenWarningCodes"": [],
+      ""citationCodes"": [],
+      ""infieldCodes"": [],
+      ""custodialArrestCodes"": [],
+      ""pullFromReasonCode"": false
+    }
+  }}",String
