@@ -629,6 +629,14 @@ export default {
 
   created() {
     this.init()
+    if (new Date() >= new Date(2024, 3, 1, 0, 0, 0, 0) && !this.savedFilters) {
+      this.version = 2
+      this.showingVersionTwoStops = true
+    } else if (!this.savedFilters) {
+      this.version = 1
+      this.showingVersionTwoStops = false
+    }
+    this.handleFilter()
   },
 
   props: {
