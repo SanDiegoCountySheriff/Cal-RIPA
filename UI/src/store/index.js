@@ -1094,10 +1094,9 @@ export default new Vuex.Store({
             commit('updateFormBeats', data)
             localStorage.setItem('ripa_beats', JSON.stringify(data))
 
-            const newDomainUpdatedDate = new Date()
             localStorage.setItem(
               'ripa_domain_updated_date',
-              newDomainUpdatedDate,
+              domainDate ?? new Date(),
             )
           })
           .catch(error => {
@@ -1201,10 +1200,9 @@ export default new Vuex.Store({
               JSON.stringify(data2),
             )
 
-            const newDomainUpdatedDate = new Date()
             localStorage.setItem(
               'ripa_domain_updated_date',
-              newDomainUpdatedDate,
+              domainDate ?? new Date(),
             )
           })
           .catch(error => {
@@ -1292,10 +1290,9 @@ export default new Vuex.Store({
             commit('updateFormSchools', data)
             localStorage.setItem('ripa_schools', JSON.stringify(data))
 
-            const newDomainUpdatedDate = new Date()
             localStorage.setItem(
               'ripa_domain_updated_date',
-              newDomainUpdatedDate,
+              domainDate ?? new Date(),
             )
           })
           .catch(error => {
@@ -1377,10 +1374,9 @@ export default new Vuex.Store({
             commit('updateFormStatutes', data)
             localStorage.setItem('ripa_statutes', JSON.stringify(data))
 
-            const newDomainUpdatedDate = new Date()
             localStorage.setItem(
               'ripa_domain_updated_date',
-              newDomainUpdatedDate,
+              domainDate ?? new Date(),
             )
           })
           .catch(error => {
