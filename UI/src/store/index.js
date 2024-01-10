@@ -1096,7 +1096,7 @@ export default new Vuex.Store({
 
             localStorage.setItem(
               'ripa_domain_updated_date',
-              domainDate ?? new Date(),
+              domainDate.date ?? new Date(),
             )
           })
           .catch(error => {
@@ -1202,7 +1202,7 @@ export default new Vuex.Store({
 
             localStorage.setItem(
               'ripa_domain_updated_date',
-              domainDate ?? new Date(),
+              domainDate.date ?? new Date(),
             )
           })
           .catch(error => {
@@ -1292,7 +1292,7 @@ export default new Vuex.Store({
 
             localStorage.setItem(
               'ripa_domain_updated_date',
-              domainDate ?? new Date(),
+              domainDate.date ?? new Date(),
             )
           })
           .catch(error => {
@@ -1376,7 +1376,7 @@ export default new Vuex.Store({
 
             localStorage.setItem(
               'ripa_domain_updated_date',
-              domainDate ?? new Date(),
+              domainDate.date ?? new Date(),
             )
           })
           .catch(error => {
