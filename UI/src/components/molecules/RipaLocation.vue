@@ -128,6 +128,36 @@
         </v-col>
       </v-row>
 
+      <template v-if="this.model.stopVersion === 2">
+        <v-row>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.latitude"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="latitudeRules"
+              @blur="handleBlockNumber"
+              label="Latitude"
+            >
+            </ripa-text-input>
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.longitude"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="longitudeRules"
+              @blur="handlePiiCheck($event)"
+              label="Longitude"
+            >
+            </ripa-text-input>
+          </v-col>
+        </v-row>
+      </template>
+
+      <ripa-subheader text="-- or --"></ripa-subheader>
+
       <v-row>
         <v-col cols="12" sm="12" md="6">
           <ripa-text-input
@@ -160,152 +190,148 @@
         </v-col>
       </v-row>
 
+      <ripa-subheader text="-- or --"></ripa-subheader>
+
       <v-row>
-        <v-col cols="12" sm="12">
+        <template v-if="model.stopVersion === 1">
+          <v-col cols="12" sm="12">
+            <ripa-text-input
+              v-model="model.location.intersection"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="intersectionRules"
+              @blur="handlePiiCheck($event)"
+              label="Closest Intersection"
+            >
+            </ripa-text-input>
+          </v-col>
+        </template>
+
+        <template v-else-if="model.stopVersion === 2">
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.crossStreet1"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="crossStreetRules"
+              @blur="handlePiiCheck($event)"
+              label="Cross Street 1"
+            ></ripa-text-input>
+          </v-col>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.crossStreet2"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="crossStreetRules"
+              @blur="handlePiiCheck($event)"
+              label="Cross Street 2"
+            ></ripa-text-input>
+          </v-col>
+        </template>
+      </v-row>
+
+      <ripa-switch
+        v-model="model.location.toggleLocationOptions"
+        @input="handleInput"
+        :max-width="225"
+        label="More Location Options"
+      ></ripa-switch>
+
+      <template v-if="model.location.toggleLocationOptions">
+        <!-- <template v-if="this.model.stopVersion === 2">
           <ripa-subheader text="-- or --"></ripa-subheader>
 
           <v-row>
-            <template v-if="model.stopVersion === 1">
-              <v-col cols="12" sm="12">
-                <ripa-text-input
-                  v-model="model.location.intersection"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="intersectionRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Closest Intersection"
-                >
-                </ripa-text-input>
-              </v-col>
-            </template>
-
-            <template v-else-if="model.stopVersion === 2">
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet1"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 1"
-                ></ripa-text-input>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet2"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 2"
-                ></ripa-text-input>
-              </v-col>
-            </template>
-          </v-row>
-
-          <ripa-switch
-            v-model="model.location.toggleLocationOptions"
-            @input="handleInput"
-            :max-width="225"
-            label="More Location Options"
-          ></ripa-switch>
-
-          <template v-if="model.location.toggleLocationOptions">
-            <template v-if="this.model.stopVersion === 2">
-              <ripa-subheader text="-- or --"></ripa-subheader>
-
-              <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.latitude"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="latitudeRules"
-                    @blur="handleBlockNumber"
-                    label="Latitude"
-                  >
-                  </ripa-text-input>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.longitude"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="longitudeRules"
-                    @blur="handlePiiCheck($event)"
-                    label="Longitude"
-                  >
-                  </ripa-text-input>
-                </v-col>
-              </v-row>
-            </template>
-
-            <ripa-subheader text="-- or --"></ripa-subheader>
-
-            <template v-if="model.stopVersion === 1">
+            <v-col cols="12" sm="12" md="6">
               <ripa-text-input
-                v-model="model.location.highwayExit"
+                v-model="model.location.latitude"
                 @input="handleInput"
                 :loading="loadingPiiStep1"
-                :rules="highwayRules"
-                @blur="handlePiiCheck($event)"
-                label="Highway and closest exit"
+                :rules="latitudeRules"
+                @blur="handleBlockNumber"
+                label="Latitude"
               >
               </ripa-text-input>
-            </template>
+            </v-col>
 
-            <template v-else-if="model.stopVersion === 2">
-              <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.highway"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="highwayRulesV2"
-                    @blur="handlePiiCheck($event)"
-                    label="Highway"
-                  >
-                  </ripa-text-input>
-                </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <ripa-text-input
+                v-model="model.location.longitude"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="longitudeRules"
+                @blur="handlePiiCheck($event)"
+                label="Longitude"
+              >
+              </ripa-text-input>
+            </v-col>
+          </v-row>
+        </template> -->
 
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.exit"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="highwayRulesV2"
-                    @blur="handlePiiCheck($event)"
-                    label="Closest Exit"
-                  >
-                  </ripa-text-input>
-                </v-col>
-              </v-row>
-            </template>
+        <ripa-subheader text="-- or --"></ripa-subheader>
 
-            <ripa-subheader text="-- or --"></ripa-subheader>
+        <template v-if="model.stopVersion === 1">
+          <ripa-text-input
+            v-model="model.location.highwayExit"
+            @input="handleInput"
+            :loading="loadingPiiStep1"
+            :rules="highwayRules"
+            @blur="handlePiiCheck($event)"
+            label="Highway and closest exit"
+          >
+          </ripa-text-input>
+        </template>
 
-            <ripa-text-input
-              v-model="model.location.landmark"
-              @input="handleInput"
-              :loading="loadingPiiStep1"
-              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
-              @blur="handlePiiCheck($event)"
-              label="Road marker, landmark, or other"
-            >
-            </ripa-text-input>
-          </template>
+        <template v-else-if="model.stopVersion === 2">
+          <v-row>
+            <v-col cols="12" sm="12" md="6">
+              <ripa-text-input
+                v-model="model.location.highway"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="highwayRulesV2"
+                @blur="handlePiiCheck($event)"
+                label="Highway"
+              >
+              </ripa-text-input>
+            </v-col>
 
-          <div class="tw-mt-8">
-            <ripa-switch
-              v-model="model.location.outOfCounty"
-              :max-width="200"
-              @input="handleOutOfCountyToggle, handleInput"
-              label="City Out of County?"
-            ></ripa-switch>
-          </div>
-        </v-col>
-      </v-row>
+            <v-col cols="12" sm="12" md="6">
+              <ripa-text-input
+                v-model="model.location.exit"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="highwayRulesV2"
+                @blur="handlePiiCheck($event)"
+                label="Closest Exit"
+              >
+              </ripa-text-input>
+            </v-col>
+          </v-row>
+        </template>
+
+        <ripa-subheader text="-- or --"></ripa-subheader>
+
+        <ripa-text-input
+          v-model="model.location.landmark"
+          @input="handleInput"
+          :loading="loadingPiiStep1"
+          :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
+          @blur="handlePiiCheck($event)"
+          label="Road marker, landmark, or other"
+        >
+        </ripa-text-input>
+      </template>
+
+      <div class="tw-mt-8">
+        <ripa-switch
+          v-model="model.location.outOfCounty"
+          :max-width="200"
+          @input="handleOutOfCountyToggle, handleInput"
+          label="City Out of County?"
+        ></ripa-switch>
+      </div>
 
       <v-row>
         <v-col cols="12" sm="12" md="6">
