@@ -38,4 +38,4 @@ You can download it here: [User Export Utility](./assets/RIPAUserMigration_exe.z
 
 Run it as admin and follow the on-screen instructions. You will need to have access to the old RIPA database and your on-prem Active Directory.
 
-You can find more information about the User Export Utlity here: [RIPA User Migration Instructions](./assets/RIPA_User_Migration_Instructions.pdf)
+You can find more information about the User Export Utlity here: [RIPA User Migration Instructions](./RIPA_User_Migration_Instructions.pdf)
