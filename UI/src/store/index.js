@@ -643,8 +643,6 @@ export default new Vuex.Store({
               .then(data => {
                 const dataIncludingLatLong = {
                   ...data,
-                  // latitude: position.coords.latitude.toFixed(3),
-                  // longitude: position.coords.longitude.toFixed(3),
                 }
 
                 commit('updateGpsLocationAddress', dataIncludingLatLong)
