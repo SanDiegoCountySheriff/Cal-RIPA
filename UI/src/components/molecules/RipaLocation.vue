@@ -13,7 +13,7 @@
         <v-col cols="12" sm="6" md="3">
           <v-btn
             :loading="loadingGps"
-            :disabled="!isGeolocationAvailable"
+            :disabled="!isGeolocationAvailable || !online"
             @click="handleCurrentLocation"
             color="primary"
             block
@@ -402,6 +402,7 @@ export default {
     'nonCountyCities',
     'schools',
     'displayBeatInput',
+    'online',
     'isOnlineAndAuthenticated',
     'lastLocation',
     'loadingGps',
