@@ -399,6 +399,7 @@ describe('Ripa Form Container', () => {
     it(`should validate basis for search pii test number ${test.testNumber}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
+      wrapper.vm.stop.stopVersion = 1
       if (test.setStopPiiEntities) {
         wrapper.vm.stop.isPiiFound = true
         wrapper.vm.stop.location.piiFound = true

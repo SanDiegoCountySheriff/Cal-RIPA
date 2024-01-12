@@ -57,6 +57,7 @@ describe('Ripa Gender', () => {
   })
 
   it('should display gender nonconforming for legacy stop', () => {
+    stop.stopVersion = 1
     wrapper = mount(RipaGender, {
       vuetify,
 

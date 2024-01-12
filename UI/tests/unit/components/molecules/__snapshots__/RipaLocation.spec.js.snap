@@ -38,7 +38,7 @@ exports[`Ripa Location should match snapshot 1`] = `
     </div>
     <div class="row">
       <div class="col-sm-12 col-12">
-        <div class="ripa-switch" style="max-width: 200px;">
+        <div class="ripa-switch" style="max-width: 250px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
@@ -106,48 +106,48 @@ exports[`Ripa Location should match snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-12 col-12">
-        <div class="ripa-label tw-font-bold tw-my-4"><span>
+    <div class="ripa-label tw-font-bold tw-my-4"><span>
     -- or --
   </span></div>
-        <div class="row">
-          <div class="col-sm-6 col-12">
-            <div class="ripa-text-input">
-              <!---->
-              <div class="v-input theme--light v-text-field">
-                <div class="v-input__control">
-                  <div class="v-input__slot">
-                    <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 1</label><input id="input-28" type="text"></div>
-                  </div>
-                  <div class="v-text-field__details">
-                    <div class="v-messages theme--light">
-                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                    </div>
-                  </div>
-                </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-12">
+        <div class="ripa-text-input">
+          <!---->
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 1</label><input id="input-28" type="text"></div>
               </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-12">
-            <div class="ripa-text-input">
-              <!---->
-              <div class="v-input theme--light v-text-field">
-                <div class="v-input__control">
-                  <div class="v-input__slot">
-                    <div class="v-text-field__slot"><label for="input-32" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 2</label><input id="input-32" type="text"></div>
-                  </div>
-                  <div class="v-text-field__details">
-                    <div class="v-messages theme--light">
-                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
-                    </div>
-                  </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="ripa-switch" style="max-width: 225px;">
+      </div>
+      <div class="col-sm-12 col-md-6 col-12">
+        <div class="ripa-text-input">
+          <!---->
+          <div class="v-input theme--light v-text-field">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-text-field__slot"><label for="input-32" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 2</label><input id="input-32" type="text"></div>
+              </div>
+              <div class="v-text-field__details">
+                <div class="v-messages theme--light">
+                  <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="ripa-switch" style="max-width: 250px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
@@ -166,24 +166,26 @@ exports[`Ripa Location should match snapshot 1`] = `
             </div>
           </div>
         </div>
-        <!---->
-        <div class="tw-mt-8">
-          <div class="ripa-switch" style="max-width: 200px;">
-            <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
-              <div class="v-input__control">
-                <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-39" role="switch" type="checkbox" aria-disabled="false" value="">
-                    <div class="v-input--selection-controls__ripple"></div>
-                    <div class="v-input--switch__track theme--light"></div>
-                    <div class="v-input--switch__thumb theme--light">
-                      <transition-stub name="fab-transition" mode="out-in"></transition-stub>
-                    </div>
-                  </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+      </div>
+    </div>
+    <!---->
+    <div class="row">
+      <div class="col">
+        <div class="ripa-switch" style="max-width: 250px;">
+          <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
+            <div class="v-input__control">
+              <div class="v-input__slot">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-39" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__ripple"></div>
+                  <div class="v-input--switch__track theme--light"></div>
+                  <div class="v-input--switch__thumb theme--light">
+                    <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                  </div>
+                </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         City Out of County?
       </span> <span class="switch-label" style="right: -45px;">
         No
       </span></label>
-                </div>
               </div>
             </div>
           </div>
@@ -244,6 +246,18 @@ exports[`Ripa Location should match snapshot 1`] = `
         </div>
       </div>
     </div>
+  </div>
+  <div class="v-snack v-snack--bottom v-snack--has-background">
+    <transition-stub name="v-snack-transition">
+      <div class="v-snack__wrapper v-sheet theme--dark warning" style="display: none;">
+        <div role="status" aria-live="polite" class="v-snack__content">
+          There was an error getting GPS data.
+        </div>
+        <div class="v-snack__action "><button type="button" class="v-btn v-btn--text theme--dark v-size--default primary--text v-snack__btn"><span class="v-btn__content">
+        Close
+      </span></button></div>
+      </div>
+    </transition-stub>
   </div>
 </div>
 `;
