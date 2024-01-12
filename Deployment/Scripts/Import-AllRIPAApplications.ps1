@@ -105,6 +105,10 @@ foreach ($functionName in $functionNames) {
     $WebAppConfig = (Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ApiVersion $APIVersion -Name $functionName.Name)
     $WebAppConfig.properties.ipSecurityRestrictions = $existingIpSecurityRestrictions
     $WebAppConfig | Set-AzResource -ApiVersion $APIVersion -Force | Out-Null
+
+    if ("True" -eq $env:UPDATE_APP_SETTINGS -and $function.Name -eq $env:FUNCTION_APP_TO_UPDATE) {
+      az functionapp config appsettings set --name $functionName.Name --resource-group $env:APP_RESOURCE_GROUP_NAME --settings "FUNCTIONS_EXTENSION_VERSION=~4"
+    }
 }
 
 # Get the APIM Context & primary access key

@@ -1,8 +1,7 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "functions": [
-  ],
+  "functions": [],
   "parameters": {
     "utcNowValue": {
       "type": "string",
@@ -53,6 +52,14 @@
           {
             "name": "DEPLOY_WEB_CONFIG_JSON",
             "value": "False"
+          },
+          {
+            "name": "UPDATE_APP_SETTINGS",
+            "value": "True"
+          },
+          {
+            "name": "FUNCTION_APP_TO_UPDATE",
+            "value": "Domain"
           }
         ],
         "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
@@ -73,6 +80,5 @@
       }
     }
   ],
-  "outputs": {
-  }
+  "outputs": {}
 }
