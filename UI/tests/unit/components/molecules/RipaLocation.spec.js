@@ -179,6 +179,7 @@ describe('Ripa Location', () => {
   })
 
   it('should validate intersection', () => {
+    stop.stopVersion = 1
     wrapper = factory({ value: stop })
 
     expect(wrapper.vm.intersectionRules).toEqual([

@@ -62,6 +62,7 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should display custom chip', async () => {
+    stop.stopVersion = 1
     stop.stopResult.resultsOfStop2 = true
     stop.stopResult.warningCodes = [1]
 
@@ -86,6 +87,7 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should pull from reason code', async () => {
+    stop.stopVersion = 1
     stop.stopReason.trafficViolationCode = 1
     stop.stopResult.resultsOfStop2 = true
 
@@ -114,6 +116,7 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should remove item when deleting chip', async () => {
+    stop.stopVersion = 1
     stop.stopResult.resultsOfStop2 = true
     stop.stopResult.warningCodes = [1, 2]
 
@@ -167,6 +170,7 @@ describe('Ripa Stop Result', () => {
   })
 
   it('should not display verbal and written warning for legacy stop', () => {
+    stop.stopVersion = 1
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop },
