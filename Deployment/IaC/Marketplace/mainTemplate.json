@@ -156,7 +156,7 @@
       "type": "bool"
     },
     "linuxFxVersion": {
-      "defaultValue": "dotnet|3.1",
+      "defaultValue": "dotnet|6.0",
       "type": "string"
     },
     "vaults_kv_name": {
@@ -2379,7 +2379,7 @@
           "appSettings": [
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~3"
+              "value": "~4"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -2564,7 +2564,7 @@
           "appSettings": [
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~3"
+              "value": "~4"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -2738,7 +2738,7 @@
           "appSettings": [
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~3"
+              "value": "~4"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -2948,7 +2948,7 @@
           "appSettings": [
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~3"
+              "value": "~4"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -3199,7 +3199,7 @@
           "appSettings": [
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~3"
+              "value": "~4"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
