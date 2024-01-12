@@ -84,7 +84,7 @@ export default new Vuex.Store({
     stopQueryData: null,
     resetPagination: true,
     apiUnavailable: false,
-    version: Date.now() >= new Date('2024-01-01') ? 2 : 1,
+    version: new Date().getFullYear() >= 2024 ? 2 : 1,
   },
 
   getters: {
