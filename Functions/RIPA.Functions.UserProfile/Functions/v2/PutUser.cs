@@ -36,6 +36,7 @@ public class PutUser
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "put", Route = "v2/PutUser/{Id}")] Common.Models.v2.UserProfile userProfile, HttpRequest req, string Id, ILogger log)
     {
         log.LogInformation("PUT - Put User requested");
+
         try
         {
             if (!RIPAAuthorization.ValidateUserOrAdministratorRole(req, log).ConfigureAwait(false).GetAwaiter().GetResult())
@@ -54,33 +55,43 @@ public class PutUser
             return new BadRequestObjectResult("OfficerId must be 9 chars");
         }
 
-        if (string.IsNullOrEmpty(userProfile.OfficerId))
-        {
-            int officerId = 100000000;
-            string query = "SELECT VALUE c.officerId FROM c ORDER BY c.officerId DESC";
-            IEnumerable<string> maxOfficer = await _userProfileCosmosDbService.GetUserProfileIdsAsync(query);
-            string maxId = maxOfficer.FirstOrDefault(item =>
-            {
-                return item.All(letter =>
-                {
-                    return char.IsDigit(letter);
-                });
-            });
-
-            if (maxId != null)
-            {
-                officerId = int.Parse(maxId);
-                officerId++;
-            }
-
-            userProfile.OfficerId = officerId.ToString();
-        }
-
-        userProfile.Id = Id;
-
         try
         {
+            if (string.IsNullOrEmpty(userProfile.OfficerId))
+            {
+                var existingProfile = await _userProfileCosmosDbService.GetUserProfileAsync(userProfile.Id);
+
+                if (existingProfile != null)
+                {
+                    userProfile.OfficerId = existingProfile.OfficerId;
+                }
+                else
+                {
+                    int officerId = 100000000;
+                    string query = "SELECT VALUE c.officerId FROM c ORDER BY c.officerId DESC";
+                    IEnumerable<string> maxOfficer = await _userProfileCosmosDbService.GetUserProfileIdsAsync(query);
+                    string maxId = maxOfficer.FirstOrDefault(item =>
+                    {
+                        return item.All(letter =>
+                        {
+                            return char.IsDigit(letter);
+                        });
+                    });
+
+                    if (maxId != null)
+                    {
+                        officerId = int.Parse(maxId);
+                        officerId++;
+                    }
+
+                    userProfile.OfficerId = officerId.ToString();
+                }
+            }
+
+            userProfile.Id = Id;
+
             await _userProfileCosmosDbService.UpdateUserProfileAsync(Id, userProfile);
+
             return new OkObjectResult(userProfile);
         }
         catch (Exception ex)
