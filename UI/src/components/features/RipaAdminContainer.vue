@@ -284,7 +284,6 @@ export default {
     async handleSubmitStops(stops) {
       this.loading = true
       const submissionResults = await this.submitStops(stops)
-      this.loading = false
       if (!submissionResults.submissionId) {
         // show the error message, no redirect
         this.snackbarText = `Submission error: ${submissionResults}`
@@ -305,12 +304,12 @@ export default {
           )
         }, 4000)
       }
+      this.loading = false
     },
 
     async handleSubmitAll(filterData) {
       this.loading = true
       const submissionResults = await this.submitAllStops(filterData)
-      this.loading = false
       if (!submissionResults.submissionId) {
         this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
@@ -323,8 +322,9 @@ export default {
           this.$router.push(
             `/admin/submissions/${submissionResults.submissionId}`,
           )
-        }, 2000)
+        }, 4000)
       }
+      this.loading = false
     },
   },
 }
