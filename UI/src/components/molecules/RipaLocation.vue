@@ -86,7 +86,7 @@
             v-model="model.location.isSchool"
             @input="handleInput"
             label="K-12 Public School"
-            :max-width="200"
+            :max-width="250"
           ></ripa-switch>
 
           <template v-if="model.location.isSchool">
@@ -160,150 +160,161 @@
         </v-col>
       </v-row>
 
+      <ripa-subheader text="-- or --"></ripa-subheader>
+
       <v-row>
-        <v-col cols="12" sm="12">
-          <ripa-subheader text="-- or --"></ripa-subheader>
+        <template v-if="model.stopVersion === 1">
+          <v-col cols="12" sm="12">
+            <ripa-text-input
+              v-model="model.location.intersection"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="intersectionRules"
+              @blur="handlePiiCheck($event)"
+              label="Closest Intersection"
+            >
+            </ripa-text-input>
+          </v-col>
+        </template>
 
-          <v-row>
-            <template v-if="model.stopVersion === 1">
-              <v-col cols="12" sm="12">
-                <ripa-text-input
-                  v-model="model.location.intersection"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="intersectionRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Closest Intersection"
-                >
-                </ripa-text-input>
-              </v-col>
-            </template>
+        <template v-else-if="model.stopVersion === 2">
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.crossStreet1"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="crossStreetRules"
+              @blur="handlePiiCheck($event)"
+              label="Cross Street 1"
+            ></ripa-text-input>
+          </v-col>
+          <v-col cols="12" sm="12" md="6">
+            <ripa-text-input
+              v-model="model.location.crossStreet2"
+              @input="handleInput"
+              :loading="loadingPiiStep1"
+              :rules="crossStreetRules"
+              @blur="handlePiiCheck($event)"
+              label="Cross Street 2"
+            ></ripa-text-input>
+          </v-col>
+        </template>
+      </v-row>
 
-            <template v-else-if="model.stopVersion === 2">
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet1"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 1"
-                ></ripa-text-input>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <ripa-text-input
-                  v-model="model.location.crossStreet2"
-                  @input="handleInput"
-                  :loading="loadingPiiStep1"
-                  :rules="crossStreetRules"
-                  @blur="handlePiiCheck($event)"
-                  label="Cross Street 2"
-                ></ripa-text-input>
-              </v-col>
-            </template>
-          </v-row>
-
+      <v-row>
+        <v-col>
           <ripa-switch
             v-model="model.location.toggleLocationOptions"
             @input="handleInput"
-            :max-width="225"
+            :max-width="250"
             label="More Location Options"
           ></ripa-switch>
+        </v-col>
+      </v-row>
 
-          <template v-if="model.location.toggleLocationOptions">
-            <template v-if="this.model.stopVersion === 2">
-              <ripa-subheader text="-- or --"></ripa-subheader>
-
-              <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.latitude"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="latitudeRules"
-                    @blur="handleBlockNumber"
-                    label="Latitude"
+      <template v-if="model.location.toggleLocationOptions">
+        <template v-if="this.model.stopVersion === 2">
+          <v-row>
+            <v-col cols="12" sm="12" md="6">
+              <v-text-field
+                v-model="model.location.latitude"
+                :loading="loadingPiiStep1"
+                :rules="latitudeRules"
+                @blur="handleBlockNumber"
+                label="Latitude"
+                disabled
+              >
+                <template #append>
+                  <v-btn
+                    @click="handleGetLatLong"
+                    class="my-1"
+                    color="primary"
+                    x-small
                   >
-                  </ripa-text-input>
-                </v-col>
+                    <v-icon small left> mdi-crosshairs-gps </v-icon>
+                    Get Lat/Long
+                  </v-btn>
+                </template>
+              </v-text-field>
+            </v-col>
 
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.longitude"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="longitudeRules"
-                    @blur="handlePiiCheck($event)"
-                    label="Longitude"
-                  >
-                  </ripa-text-input>
-                </v-col>
-              </v-row>
-            </template>
+            <v-col cols="12" sm="12" md="6">
+              <v-text-field
+                v-model="model.location.longitude"
+                :loading="loadingPiiStep1"
+                :rules="longitudeRules"
+                @blur="handlePiiCheck($event)"
+                label="Longitude"
+                disabled
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </template>
 
-            <ripa-subheader text="-- or --"></ripa-subheader>
+        <ripa-subheader text="-- or --"></ripa-subheader>
 
-            <template v-if="model.stopVersion === 1">
+        <template v-if="model.stopVersion === 1">
+          <ripa-text-input
+            v-model="model.location.highwayExit"
+            @input="handleInput"
+            :loading="loadingPiiStep1"
+            :rules="highwayRules"
+            @blur="handlePiiCheck($event)"
+            label="Highway and closest exit"
+          >
+          </ripa-text-input>
+        </template>
+
+        <template v-else-if="model.stopVersion === 2">
+          <v-row>
+            <v-col cols="12" sm="12" md="6">
               <ripa-text-input
-                v-model="model.location.highwayExit"
+                v-model="model.location.highway"
                 @input="handleInput"
                 :loading="loadingPiiStep1"
-                :rules="highwayRules"
+                :rules="highwayRulesV2"
                 @blur="handlePiiCheck($event)"
-                label="Highway and closest exit"
+                label="Highway"
               >
               </ripa-text-input>
-            </template>
+            </v-col>
 
-            <template v-else-if="model.stopVersion === 2">
-              <v-row>
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.highway"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="highwayRulesV2"
-                    @blur="handlePiiCheck($event)"
-                    label="Highway"
-                  >
-                  </ripa-text-input>
-                </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <ripa-text-input
+                v-model="model.location.exit"
+                @input="handleInput"
+                :loading="loadingPiiStep1"
+                :rules="highwayRulesV2"
+                @blur="handlePiiCheck($event)"
+                label="Closest Exit"
+              >
+              </ripa-text-input>
+            </v-col>
+          </v-row>
+        </template>
 
-                <v-col cols="12" sm="12" md="6">
-                  <ripa-text-input
-                    v-model="model.location.exit"
-                    @input="handleInput"
-                    :loading="loadingPiiStep1"
-                    :rules="highwayRulesV2"
-                    @blur="handlePiiCheck($event)"
-                    label="Closest Exit"
-                  >
-                  </ripa-text-input>
-                </v-col>
-              </v-row>
-            </template>
+        <ripa-subheader text="-- or --"></ripa-subheader>
 
-            <ripa-subheader text="-- or --"></ripa-subheader>
+        <ripa-text-input
+          v-model="model.location.landmark"
+          @input="handleInput"
+          :loading="loadingPiiStep1"
+          :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
+          @blur="handlePiiCheck($event)"
+          label="Road marker, landmark, or other"
+        >
+        </ripa-text-input>
+      </template>
 
-            <ripa-text-input
-              v-model="model.location.landmark"
-              @input="handleInput"
-              :loading="loadingPiiStep1"
-              :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
-              @blur="handlePiiCheck($event)"
-              label="Road marker, landmark, or other"
-            >
-            </ripa-text-input>
-          </template>
-
-          <div class="tw-mt-8">
-            <ripa-switch
-              v-model="model.location.outOfCounty"
-              :max-width="200"
-              @input="handleOutOfCountyToggle, handleInput"
-              label="City Out of County?"
-            ></ripa-switch>
-          </div>
+      <v-row>
+        <v-col>
+          <ripa-switch
+            v-model="model.location.outOfCounty"
+            :max-width="250"
+            @input="handleOutOfCountyToggle, handleInput"
+            label="City Out of County?"
+          ></ripa-switch>
         </v-col>
       </v-row>
 
@@ -342,6 +353,20 @@
         </template>
       </v-row>
     </v-container>
+
+    <v-snackbar color="warning" v-model="gpsSnackbar">
+      There was an error getting GPS data.
+      <template #action="{ attrs }">
+        <v-btn
+          color="primary"
+          text
+          v-bind="attrs"
+          @click="gpsSnackbar = !gpsSnackbar"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -363,6 +388,12 @@ export default {
     RipaSubheader,
     RipaSwitch,
     RipaTextInput,
+  },
+
+  data() {
+    return {
+      gpsSnackbar: false,
+    }
   },
 
   inject: [
@@ -739,6 +770,8 @@ export default {
       }
 
       if (!this.model.location.toggleLocationOptions) {
+        this.model.location.latitude = null
+        this.model.location.longitude = null
         this.model.location.highwayExit = null
         this.model.location.landmark = null
       }
@@ -750,6 +783,34 @@ export default {
       const fullAddress =
         streetName + ' ' + highwayExit + ' ' + intersection + ' ' + landMark
       this.model.location.fullAddress = fullAddress
+    },
+
+    handleGetLatLong() {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.model.location.blockNumber = ''
+          this.model.location.streetName = ''
+          this.model.location.crossStreet1 = ''
+          this.model.location.crossStreet2 = ''
+          this.model.location.highway = ''
+          this.model.location.exit = ''
+          this.model.location.intersection = ''
+          this.model.location.landmark = ''
+          this.model.location.piiFound = false
+          this.model.location.latitude = position.coords.latitude.toFixed(3)
+          this.model.location.longitude = position.coords.longitude.toFixed(3)
+          this.handleInput()
+        },
+        error => {
+          console.log(error)
+          this.gpsSnackbar = true
+        },
+        {
+          timeout: 10000,
+          maximumAge: 10000,
+          enableHighAccuracy: false,
+        },
+      )
     },
 
     handleCurrentLocation() {
@@ -863,7 +924,7 @@ export default {
       return new Promise(resolve => {
         navigator.geolocation.getCurrentPosition(position => {
           const accuracyScore = position.coords.accuracy
-          const isAvail = !(accuracyScore > 200)
+          const isAvail = accuracyScore <= 200
           resolve(isAvail)
         })
       })
@@ -876,9 +937,19 @@ export default {
 
   watch: {
     lastLocation: {
-      handler: async function (newVal) {
+      handler: function (newVal) {
         if (newVal) {
           this.model.location = { ...newVal.newLocation }
+
+          if (
+            this.model.location.highwayExit ||
+            this.model.location.landmark ||
+            this.model.location.latitude ||
+            this.model.location.longitude
+          ) {
+            this.model.location.toggleLocationOptions = true
+          }
+
           this.handleInput()
         }
       },

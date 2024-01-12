@@ -685,11 +685,15 @@ export default {
     },
 
     isDomainDataEmptyUser() {
-      return this.isDomainDataEmpty && !this.isAdmin
+      return (
+        this.isDomainDataEmpty && !this.isAdmin && this.isOnlineAndAuthenticated
+      )
     },
 
     isDomainDataEmptyAdministrator() {
-      return this.isDomainDataEmpty && this.isAdmin
+      return (
+        this.isDomainDataEmpty && this.isAdmin && this.isOnlineAndAuthenticated
+      )
     },
   },
 
