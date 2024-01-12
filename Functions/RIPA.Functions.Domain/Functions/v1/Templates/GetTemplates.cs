@@ -50,19 +50,18 @@ public class GetTemplates
 
         List<Template> response = new List<Template>();
 
-        try
-        {
-            var queryResult = _tableClient.Query<Template>();
+        var queryResult = _tableClient.Query<Template>();
 
-            response.AddRange(queryResult.Where(t => t.DeactivationDate <= DateTime.Now));
-
-            response.OrderBy(t => t.Id);
-        }
-        catch (Exception ex)
+        foreach (var template in queryResult)
         {
-            return new NotFoundObjectResult(ex.Message);
+            if (template?.DeactivationDate <= DateTime.Now)
+            {
+                continue;
+            }
+            response.Add(template);
         }
 
+        response.OrderBy(t => t.Id);
 
         log.LogInformation($"GetTemplates returned {response.Count} templates");
         return new OkObjectResult(response);
