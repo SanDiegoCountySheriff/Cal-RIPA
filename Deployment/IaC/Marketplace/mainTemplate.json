@@ -415,6 +415,10 @@
       "type": "string",
       "defaultValue": "userprofile"
     },
+    "dbaccount_sqlDb_domain_container_name": {
+      "type": "string",
+      "defaultValue": "domain"
+    },
     "dbaccount_sqlDb_stop_container_name": {
       "type": "string",
       "defaultValue": "stop"
@@ -2167,6 +2171,45 @@
         }
       }
     },
+        {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "apiVersion": "2020-09-01",
+      "name": "[concat(variables('databaseAccounts_ripa_cdb_name'), '/', parameters('dbaccount_sqlDb_name'),'/', parameters('dbaccount_sqlDb_domain_container_name'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('databaseAccounts_ripa_cdb_name'), parameters('dbaccount_sqlDb_name'))]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))]"
+      ],
+      "properties": {
+        "resource": {
+          "id": "[parameters('dbaccount_sqlDb_domain_container_name')]",
+          "indexingPolicy": {
+            "indexingMode": "consistent",
+            "automatic": true,
+            "includedPaths": [
+              {
+                "path": "/*"
+              }
+            ],
+            "excludedPaths": [
+              {
+                "path": "/\"_etag\"/?"
+              }
+            ]
+          },
+          "partitionKey": {
+            "paths": [ "/id" ],
+            "kind": "Hash"
+          },
+          "uniqueKeyPolicy": {
+            "uniqueKeys": []
+          },
+          "conflictResolutionPolicy": {
+            "mode": "LastWriterWins",
+            "conflictResolutionPath": "/_ts"
+          }
+        }
+      }
+    },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
       "apiVersion": "2020-09-01",
@@ -2597,6 +2640,22 @@
             {
               "name": "ripa_tenant_name",
               "value": "[parameters('auth_fqdn')]"
+            },
+            {
+              "name": "Account",
+              "value": "[reference(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccounts_ripa_cdb_name'))).documentEndpoint]"
+            },
+            {
+              "name": "ContainerNameDomain",
+              "value": "[parameters('dbaccount_sqlDb_domain_container_name')]"
+            },
+            {
+              "name": "DatabaseName",
+              "value": "[parameters('dbaccount_sqlDb_name')]"
+            },
+            {
+              "name": "Key",
+              "value": "[variables('user_fa_keyvault_referencestring')]"
             }
           ],
           "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
