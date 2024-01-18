@@ -35,9 +35,16 @@ public class UserProfileCosmosDbService<T> : IUserProfileCosmosDbService<T> wher
 
     public async Task<T> GetUserProfileAsync(string id)
     {
-        var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
+        try
+        {
+            var response = await _container.ReadItemAsync<T>(id, new PartitionKey(id));
 
-        return response.Resource;
+            return response.Resource;
+        }
+        catch
+        {
+            return await Task.FromResult<T>(default);
+        }
     }
 
     public async Task<IEnumerable<T>> GetUserProfilesAsync(string queryString)
