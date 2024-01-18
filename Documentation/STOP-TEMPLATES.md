@@ -6,7 +6,7 @@ Stop Templates allow you to improve data entry speed and efficiency for specific
 
 To set up templates, they have to be uploaded to one of the blob storage accounts in a specific format.
 
-Instructions about how to go about this can be found here: [Template Upload Instructions](./assets/RIPATemplateUploadInstructions.pdf)
+Instructions about how to go about this can be found here: [Template Upload Instructions](./assets/Ripa%20Template%20Upload%20Instructions.pdf)
 
 Sample templates are available here and can be modified to your agencies needs: [Sample Templates](./assets/SampleTemplates.csv)
 
