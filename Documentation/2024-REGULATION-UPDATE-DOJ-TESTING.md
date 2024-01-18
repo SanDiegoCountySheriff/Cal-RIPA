@@ -9,7 +9,7 @@ To submit your test stops to DOJ you need to configure the SFTP connection to po
 `Important`: Once you are finished with testing, remove the templates from your production system.
 
 1. First download the templates file here [DoJ Test Case Templates](./assets/TestCaseTemplates.csv)
-1. Then upload them to your system using these instructions [Template Upload Instructions](./assets/RIPATemplateUploadInstructions.pdf)
+1. Then upload them to your system using these instructions [Template Upload Instructions](./assets/Ripa%20Template%20Upload%20Instructions.pdf)
 1. Follow “Test Case Instructions.pdf” [DoJ Testing Instructions](./assets/Test%20Case%20Instructions.pdf)
    1. Annotate the “2024 Amended Regulation Test Cases.xlsx” [DoJ Testing Instructions Spreadsheet](./assets/2024%20Amended%20Regulation%20Test%20Cases.xlsx)
    1. Email the completed spreadsheet to DOJ after you submit your stops via SFTP.
