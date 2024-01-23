@@ -74,7 +74,7 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
     </div>
   </div>
   <div class="row">
-    <div class="col col-6">
+    <div class="col col-12">
       <div class="ripa-override-pii tw-pb-4">
         <div class="ripa-form-header">
           <div class="row tw-ml-1 tw-mt-1">
@@ -114,7 +114,7 @@ exports[`Ripa Form Step 7 should match snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div class="col col-6">
+    <div class="col col-12">
       <!---->
     </div>
   </div>

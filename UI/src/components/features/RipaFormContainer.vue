@@ -271,6 +271,7 @@ export default {
       'favoriteLocations',
       'favoriteReasons',
       'favoriteResults',
+      'piiServiceAvailable',
     ]),
 
     filteredStatutes() {
@@ -1308,6 +1309,7 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep1 = true
+        await this.setPiiServiceAvailable(true)
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         this.stop.location.piiFound =
@@ -1334,6 +1336,16 @@ export default {
             this.stop.piiEntities.push(entity)
           }
         }
+
+        if (!this.piiServiceAvailable && !this.stop.overridePii) {
+          this.stop.isPiiFound = true
+          this.stop.piiEntities.push({
+            entityText:
+              'Text analytics service was unavailable, please review this field for PII',
+            source: this.locationSource,
+          })
+        }
+
         this.loadingPiiStep1 = false
         this.updateFullStop()
       }
@@ -1347,6 +1359,7 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep3 = true
+        await this.setPiiServiceAvailable(true)
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
         this.stop.stopReason.reasonForStopPiiFound =
@@ -1376,6 +1389,16 @@ export default {
             this.stop.piiEntities.push(entity)
           }
         }
+
+        if (!this.piiServiceAvailable && !this.stop.overridePii) {
+          this.stop.isPiiFound = true
+          this.stop.piiEntities.push({
+            entityText:
+              'Text analytics service was unavailable, please review this field for PII',
+            source: this.stopReasonSource + this.stop.person.index,
+          })
+        }
+
         this.loadingPiiStep3 = false
         this.updateFullStop()
       }
@@ -1390,6 +1413,7 @@ export default {
         trimmedTextValue.length > 0
       ) {
         this.loadingPiiStep4 = true
+        await this.setPiiServiceAvailable(true)
         const response = await this.checkTextForPii(trimmedTextValue)
         this.stop = Object.assign({}, this.stop)
 
@@ -1457,6 +1481,15 @@ export default {
               this.stop.piiEntities.push(entity)
             }
           }
+        }
+
+        if (!this.piiServiceAvailable && !this.stop.overridePii) {
+          this.stop.isPiiFound = true
+          this.stop.piiEntities.push({
+            entityText:
+              'Text analytics service was unavailable, please review this field for PII',
+            source: this.basisForSearchSource,
+          })
         }
 
         this.loadingPiiStep4 = false
