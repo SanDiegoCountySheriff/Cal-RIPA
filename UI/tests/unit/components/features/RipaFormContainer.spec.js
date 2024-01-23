@@ -91,6 +91,7 @@ describe('Ripa Form Container', () => {
       favoriteLocations: jest.fn().mockReturnValue(''),
       favoriteReasons: jest.fn().mockReturnValue(''),
       favoriteResults: jest.fn().mockReturnValue(''),
+      piiServiceAvailable: jest.fn().mockReturnValue(true),
     }
     mutations = {
       setIsOnline: (state, value) => {
@@ -154,6 +155,7 @@ describe('Ripa Form Container', () => {
         favoriteLocations: computed(() => []),
         favoriteReasons: computed(() => []),
         favoriteResults: computed(() => []),
+        piiServiceAvailable: computed(() => true),
       },
       mixins: [RipaApiStopJobMixin],
       computed: {
@@ -185,6 +187,7 @@ describe('Ripa Form Container', () => {
         favoriteLocations: computed(() => []),
         favoriteReasons: computed(() => []),
         favoriteResults: computed(() => []),
+        piiServiceAvailable: computed(() => true),
       },
       computed: {
         mappedFormBeats: () => [{ id: 'test' }],

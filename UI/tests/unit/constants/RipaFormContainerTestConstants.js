@@ -11,7 +11,7 @@ export const LOCATION_PII_TEST_CASES = [
     testValue: 'text',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     locationPiiFound: false,
     stopPiiFound: false,
     checkTextForPiiReturnValue: {
@@ -43,7 +43,7 @@ export const LOCATION_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     locationPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -72,7 +72,7 @@ export const LOCATION_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     locationPiiFound: false,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -95,7 +95,7 @@ export const LOCATION_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     locationPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -130,7 +130,7 @@ export const LOCATION_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 1,
+    setPiiServiceAvailableCalledTimes: 2,
     locationPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
@@ -144,7 +144,7 @@ export const REASON_PII_TEST_CASES = [
     testValue: 'text',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     reasonForStopPiiFound: false,
     stopPiiFound: false,
     checkTextForPiiReturnValue: {
@@ -176,7 +176,7 @@ export const REASON_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     reasonForStopPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -205,7 +205,7 @@ export const REASON_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     reasonForStopPiiFound: false,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -228,7 +228,7 @@ export const REASON_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     reasonForStopPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -263,7 +263,7 @@ export const REASON_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 1,
+    setPiiServiceAvailableCalledTimes: 2,
     reasonForStopPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
@@ -277,7 +277,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     testValue: 'text',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     expectedBasisForSearchPiiFound: false,
     stopPiiFound: false,
     checkTextForPiiReturnValue: {
@@ -309,7 +309,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     expectedBasisForSearchPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -338,7 +338,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     expectedBasisForSearchPiiFound: false,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -361,7 +361,7 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     testValue: 'John Smith',
     setStopPiiEntities: true,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 0,
+    setPiiServiceAvailableCalledTimes: 1,
     expectedBasisForSearchPiiFound: true,
     stopPiiFound: true,
     checkTextForPiiReturnValue: {
@@ -396,11 +396,13 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     testValue: 'test',
     setStopPiiEntities: false,
     checkTextForPiiCalledTimes: 1,
-    setPiiServiceAvailableCalledTimes: 1,
+    setPiiServiceAvailableCalledTimes: 2,
     expectedBasisForSearchPiiFound: null,
     stopPiiFound: null,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: [],
+    expectedPiiEntities: [
+
+    ],
   },
 ]
 

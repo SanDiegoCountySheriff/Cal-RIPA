@@ -97,6 +97,7 @@ describe('Ripa Form Step 1', () => {
         favoriteLocations: computed(() => []),
         statutes: computed(() => [{ id: 'test' }]),
         stopVersion: computed(() => 1),
+        online: computed(() => true),
       },
     })
   }
