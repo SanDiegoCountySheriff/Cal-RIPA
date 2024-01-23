@@ -806,13 +806,13 @@ export default {
     },
 
     handleDeleteReasonFavorite(id) {
-      const reasons = this.getFavoriteReasons()
+      const reasons = this.getFavoriteReasons
       const filteredReasons = reasons.filter(item => item.id !== id)
       this.setFavoriteReasons(filteredReasons)
     },
 
     handleDeleteResultFavorite(id) {
-      const results = this.getFavoriteResults()
+      const results = this.getFavoriteResults
       const filteredResults = results.filter(item => item.id !== id)
       this.setFavoriteResults(filteredResults)
     },
