@@ -18,13 +18,13 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="12">
           <ripa-override-pii
             :api-stop="apiStop"
             v-model="model"
           ></ripa-override-pii>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="12">
           <template v-if="isStopErrored">
             <ripa-nfia v-model="model"></ripa-nfia>
           </template>
