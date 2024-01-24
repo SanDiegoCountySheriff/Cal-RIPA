@@ -30,7 +30,7 @@ describe('Ripa Override PII', () => {
       vuetify,
       propsData: {
         value: stop,
-        apiStop: apiStop,
+        apiStop,
       },
     })
 

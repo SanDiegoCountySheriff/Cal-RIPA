@@ -27,7 +27,7 @@ describe('Ripa List', () => {
     wrapper = mount(RipaList, {
       vuetify,
       propsData: {
-        item: item,
+        item,
       },
     })
 
