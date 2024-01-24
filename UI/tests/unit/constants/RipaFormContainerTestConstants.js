@@ -132,7 +132,7 @@ export const LOCATION_PII_TEST_CASES = [
     checkTextForPiiCalledTimes: 1,
     setPiiServiceAvailableCalledTimes: 2,
     locationPiiFound: null,
-    stopPiiFound: null,
+    stopPiiFound: false,
     checkTextForPiiReturnValue: null,
     expectedPiiEntities: [],
   },
@@ -265,7 +265,7 @@ export const REASON_PII_TEST_CASES = [
     checkTextForPiiCalledTimes: 1,
     setPiiServiceAvailableCalledTimes: 2,
     reasonForStopPiiFound: null,
-    stopPiiFound: null,
+    stopPiiFound: false,
     checkTextForPiiReturnValue: null,
     expectedPiiEntities: [],
   },
@@ -398,11 +398,9 @@ export const BASIS_FOR_SEARCH_PII_TEST_CASES = [
     checkTextForPiiCalledTimes: 1,
     setPiiServiceAvailableCalledTimes: 2,
     expectedBasisForSearchPiiFound: null,
-    stopPiiFound: null,
+    stopPiiFound: false,
     checkTextForPiiReturnValue: null,
-    expectedPiiEntities: [
-
-    ],
+    expectedPiiEntities: [],
   },
 ]
 

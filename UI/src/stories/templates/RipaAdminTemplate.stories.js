@@ -23,8 +23,8 @@ export const basic = () => ({
       cities: adminCities(),
       schools: adminSchools(),
       statutes: adminStatutes(),
-      stops: stops,
-      submissions: submissions,
+      stops,
+      submissions,
       users: adminUsers(),
     }
   },

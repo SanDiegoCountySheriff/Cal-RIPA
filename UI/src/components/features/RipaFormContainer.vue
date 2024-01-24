@@ -1315,7 +1315,10 @@ export default {
         this.stop.location.piiFound =
           response && response.piiEntities && response.piiEntities.length > 0
         this.stop.isPiiFound =
-          this.stop.isPiiFound || this.stop.location.piiFound
+          this.stop.stopReason.reasonForStopPiiFound ||
+          this.stop.location.piiFound ||
+          this.stop.actionsTaken.basisForSearchPiiFound ||
+          this.stop.nonForceActionsTaken.basisForSearchPiiFound
 
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
@@ -1365,7 +1368,10 @@ export default {
         this.stop.stopReason.reasonForStopPiiFound =
           response && response.piiEntities && response.piiEntities.length > 0
         this.stop.isPiiFound =
-          this.stop.isPiiFound || this.stop.stopReason.reasonForStopPiiFound
+          this.stop.stopReason.reasonForStopPiiFound ||
+          this.stop.location.piiFound ||
+          this.stop.actionsTaken.basisForSearchPiiFound ||
+          this.stop.nonForceActionsTaken.basisForSearchPiiFound
 
         if (
           !this.stop.stopReason.reasonForStopPiiFound &&
@@ -1375,6 +1381,7 @@ export default {
             e => e.source !== this.stopReasonSource + this.stop.person.index,
           )
         }
+
         if (!response && trimmedTextValue.length > 0) {
           await this.setPiiServiceAvailable(false)
         } else if (response.piiEntities.length > 0) {
@@ -1421,8 +1428,10 @@ export default {
           this.stop.actionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound ||
-            this.stop.actionsTaken.basisForSearchPiiFound
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.location.piiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound ||
+            this.stop.nonForceActionsTaken.basisForSearchPiiFound
 
           if (
             !this.stop.actionsTaken.basisForSearchPiiFound &&
@@ -1453,7 +1462,9 @@ export default {
           this.stop.nonForceActionsTaken.basisForSearchPiiFound =
             response && response.piiEntities && response.piiEntities.length > 0
           this.stop.isPiiFound =
-            this.stop.isPiiFound ||
+            this.stop.stopReason.reasonForStopPiiFound ||
+            this.stop.location.piiFound ||
+            this.stop.actionsTaken.basisForSearchPiiFound ||
             this.stop.nonForceActionsTaken.basisForSearchPiiFound
 
           if (
