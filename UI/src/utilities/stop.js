@@ -1923,12 +1923,12 @@ export const fullStopToApiStopV2 = (
     officerRace: parsedApiStop
       ? parsedApiStop.officerRace
       : officer.officerRace,
-    officerGender: parsedApiStop
-      ? parsedApiStop.officerGender
-      : officer.officerGender,
-    officerNonBinary: parsedApiStop
-      ? parsedApiStop.officerNonBinary
-      : officer.officerNonBinary,
+    // officerGender: parsedApiStop
+    //   ? parsedApiStop.officerGender
+    //   : officer.officerGender,
+    // officerNonBinary: parsedApiStop
+    //   ? parsedApiStop.officerNonBinary
+    //   : officer.officerNonBinary,
     officerWorksWithNonReportingAgency:
       fullStop.officerWorksWithNonReportingAgency,
     stopDateTime: new Date(

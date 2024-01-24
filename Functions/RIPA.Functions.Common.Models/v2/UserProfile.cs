@@ -60,5 +60,5 @@ public class UserProfile : IUserProfile
     public List<string> OfficerRace { get; set; }
 
     [JsonProperty(PropertyName = "officerNonBinary")]
-    public bool OfficerNonBinary { get; set; }
+    public bool? OfficerNonBinary { get; set; }
 }
