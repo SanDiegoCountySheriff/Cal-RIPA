@@ -5,8 +5,8 @@
 		<UserSecretsId>d209ae04-88d3-4417-874f-0994a63d387e</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Core" Version="1.35.0" />
-		<PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
+		<PackageReference Include="Azure.Core" Version="1.37.0" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.8.2" />
 		<PackageReference Include="ExcelDataReader" Version="3.6.0" />
 		<PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
 		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.32.0" />
