@@ -101,7 +101,7 @@ public class StopService : IStopService
                 Proxy = "",
                 OfficerGend = CastToDojGender(stop.OfficerGender),
                 ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace.ToList()),
-                Nonbinary_Officer = stop.OfficerNonBinary ? "5" : string.Empty,
+                Nonbinary_Officer = stop.OfficerNonBinary == true ? "5" : string.Empty,
                 NonPrimaryAgency = stop.OfficerWorksWithNonReportingAgency ? "Y" : "N",
             },
             Location = new Models.v2.Location
