@@ -496,14 +496,14 @@ const getSummaryOfficerV2 = apiStop => {
         header: 'Officer Race',
         detail: getOfficerRace(apiStop.officerRace),
       },
-      {
-        header: 'Officer Gender',
-        detail: apiStop.officerGender,
-      },
-      {
-        header: 'Officer Nonbinary',
-        detail: apiStop.officerNonBinary,
-      },
+      // {
+      //   header: 'Officer Gender',
+      //   detail: apiStop.officerGender,
+      // },
+      // {
+      //   header: 'Officer Nonbinary',
+      //   detail: apiStop.officerNonBinary,
+      // },
     ],
   }
 }
@@ -1923,12 +1923,12 @@ export const fullStopToApiStopV2 = (
     officerRace: parsedApiStop
       ? parsedApiStop.officerRace
       : officer.officerRace,
-    // officerGender: parsedApiStop
-    //   ? parsedApiStop.officerGender
-    //   : officer.officerGender,
-    // officerNonBinary: parsedApiStop
-    //   ? parsedApiStop.officerNonBinary
-    //   : officer.officerNonBinary,
+    officerGender: parsedApiStop
+      ? parsedApiStop.officerGender
+      : officer.officerGender,
+    officerNonBinary: parsedApiStop
+      ? parsedApiStop.officerNonBinary
+      : officer.officerNonBinary,
     officerWorksWithNonReportingAgency:
       fullStop.officerWorksWithNonReportingAgency,
     stopDateTime: new Date(

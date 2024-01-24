@@ -52,6 +52,11 @@ public class GetUser
         {
             var response = await _userProfileCosmosDbService.GetUserProfileAsync(Id);
 
+            if (response is null)
+            {
+                return new NotFoundResult();
+            }
+
             return new OkObjectResult(response);
         }
         catch (Exception ex)

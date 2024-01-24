@@ -198,7 +198,7 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
+// import RipaSwitch from '@/components/atoms/RipaSwitch'
 import {
   OFFICER_ASSIGNMENTS,
   OFFICER_ASSIGNMENTS_V2,
@@ -220,7 +220,7 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
-    RipaSwitch,
+    // RipaSwitch,
   },
 
   data() {
