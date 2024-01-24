@@ -76,7 +76,7 @@ describe('Ripa User', () => {
     expect(wrapper.vm.raceRules[0](['test'])).toEqual(true)
   })
 
-  it('should validate officer gender rules', () => {
+  it.skip('should validate officer gender rules', () => {
     wrapper = factory(
       {
         value: {
@@ -98,7 +98,7 @@ describe('Ripa User', () => {
     ])
   })
 
-  it('should display officer race and gender inputs if current date > 01/01/24', () => {
+  it.skip('should display officer race and gender inputs if current date > 01/01/24', () => {
     wrapper = factory(
       {
         value: ripaUserV2,

@@ -116,7 +116,7 @@ describe('Ripa Form Summary Detail', () => {
     expect(wrapper.html()).toContain('Passenger In Vehicle')
   })
 
-  it('should display officer race and gender details for v2 officer', () => {
+  it.skip('should display officer race and gender details for v2 officer', () => {
     wrapper = factory({ apiStop: v2ApiStop })
 
     expect(wrapper.html()).toContain('Officer Race')

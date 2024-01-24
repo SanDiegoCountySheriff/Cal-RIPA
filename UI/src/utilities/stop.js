@@ -496,14 +496,14 @@ const getSummaryOfficerV2 = apiStop => {
         header: 'Officer Race',
         detail: getOfficerRace(apiStop.officerRace),
       },
-      {
-        header: 'Officer Gender',
-        detail: apiStop.officerGender,
-      },
-      {
-        header: 'Officer Nonbinary',
-        detail: apiStop.officerNonBinary,
-      },
+      // {
+      //   header: 'Officer Gender',
+      //   detail: apiStop.officerGender,
+      // },
+      // {
+      //   header: 'Officer Nonbinary',
+      //   detail: apiStop.officerNonBinary,
+      // },
     ],
   }
 }

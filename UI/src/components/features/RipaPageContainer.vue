@@ -124,7 +124,7 @@ export default {
       apiStopJobLoading: false,
       snackbarUpdateUser: false,
       officerGenderRaceText:
-        'In order to prepare for the January 1st, 2024 regulation changes please input your race and gender information.  This information will not be included on stops until January 1st, 2024.',
+        'In order to prepare for the January 1st, 2024 regulation changes please input your race information.  This information will not be included on stops until January 1st, 2024.',
       snackbarOfficerRaceGender: false,
     }
   },

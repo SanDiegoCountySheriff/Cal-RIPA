@@ -909,8 +909,8 @@ export default new Vuex.Store({
         startDate: mappedUser.startDate,
         yearsExperience: mappedUser.yearsExperience,
         officerRace: mappedUser.officerRace,
-        officerGender: mappedUser.officerGender,
-        officerNonBinary: mappedUser.officerNonBinary,
+        // officerGender: mappedUser.officerGender,
+        // officerNonBinary: mappedUser.officerNonBinary,
       }
 
       return axios
@@ -1706,8 +1706,9 @@ export default new Vuex.Store({
         .then(response => {
           commit('updateUserProfile', response.data)
           if (
-            !response.data.officerRace ||
-            (!response.data.officerGender && !response.data.officerNonBinary)
+            !response.data.officerRace
+            // ||
+            // (!response.data.officerGender && !response.data.officerNonBinary)
           ) {
             commit('updateInvalidUser', true)
             return true

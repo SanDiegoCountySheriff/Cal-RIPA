@@ -165,7 +165,7 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <!-- <v-row no-gutters>
         <v-col cols="12" sm="12" md="6">
           <ripa-select
             v-model="model.officerGender"
@@ -188,7 +188,7 @@
             label="Nonbinary Person"
           ></ripa-switch>
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </div>
 </template>
@@ -198,11 +198,11 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSelect from '@/components/atoms/RipaSelect'
 import RipaTextInput from '@/components/atoms/RipaTextInput'
-import RipaSwitch from '@/components/atoms/RipaSwitch'
+// import RipaSwitch from '@/components/atoms/RipaSwitch'
 import {
   OFFICER_ASSIGNMENTS,
   OFFICER_ASSIGNMENTS_V2,
-  GENDERS_V2,
+  // GENDERS_V2,
   RACES_V2,
 } from '@/constants/form'
 import {
@@ -220,12 +220,12 @@ export default {
     RipaNumberInput,
     RipaSelect,
     RipaTextInput,
-    RipaSwitch,
+    // RipaSwitch,
   },
 
   data() {
     return {
-      genderItems: GENDERS_V2,
+      // genderItems: GENDERS_V2,
       raceItems: RACES_V2,
       viewModel: this.value,
     }
@@ -273,15 +273,15 @@ export default {
       return [v => v?.length > 0 || 'An officer race is required']
     },
 
-    genderRules() {
-      const gender = this.model.officerGender
-      const checked = this.model.officerNonBinary
-      const isValid = gender || checked
+    // genderRules() {
+    //   const gender = this.model.officerGender
+    //   const checked = this.model.officerNonBinary
+    //   const isValid = gender || checked
 
-      return [
-        !!isValid || 'If no gender is selected, nonbinary must be selected',
-      ]
-    },
+    //   return [
+    //     !!isValid || 'If no gender is selected, nonbinary must be selected',
+    //   ]
+    // },
 
     startDateRules() {
       const startDate = this.viewModel.startDate
