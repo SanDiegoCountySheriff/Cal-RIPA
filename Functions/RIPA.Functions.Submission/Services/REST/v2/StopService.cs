@@ -99,9 +99,9 @@ public class StopService : IStopService
                 AT = stop.OfficerAssignment.Key,
                 ATOth = stop.OfficerAssignment.OtherType,
                 Proxy = "",
-                OfficerGend = CastToDojGender(stop.OfficerGender),
+                // OfficerGend = CastToDojGender(stop.OfficerGender),
                 ListOfficerEth = CastToDojOfficerRace(stop.OfficerRace.ToList()),
-                Nonbinary_Officer = stop.OfficerNonBinary == true ? "5" : string.Empty,
+                // Nonbinary_Officer = stop.OfficerNonBinary == true ? "5" : string.Empty,
                 NonPrimaryAgency = stop.OfficerWorksWithNonReportingAgency ? "Y" : "N",
             },
             Location = new Models.v2.Location

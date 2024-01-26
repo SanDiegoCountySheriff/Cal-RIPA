@@ -58,8 +58,8 @@ export default new Vuex.Store({
       assignment: null,
       otherType: null,
       officerRace: [],
-      officerGender: null,
-      officerNonBinary: null,
+      // officerGender: null,
+      // officerNonBinary: null,
     },
     favoriteLocations: '',
     favoriteReasons: '',
@@ -205,9 +205,9 @@ export default new Vuex.Store({
         otherType: state.user.otherType,
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
-        officerGender: state.user.officerGender,
+        // officerGender: state.user.officerGender,
         officerRace: state.user.officerRace || [],
-        officerNonBinary: state.user.officerNonBinary,
+        // officerNonBinary: state.user.officerNonBinary,
       }
     },
     stopTemplates: state => {
@@ -495,8 +495,8 @@ export default new Vuex.Store({
         startDate: value.startDate,
         yearsExperience,
         officerRace: value.officerRace,
-        officerGender: value.officerGender,
-        officerNonBinary: value.officerNonBinary,
+        // officerGender: value.officerGender,
+        // officerNonBinary: value.officerNonBinary,
       }
 
       const officer = {
@@ -508,8 +508,8 @@ export default new Vuex.Store({
         startDate: formatDate(state.user.startDate),
         yearsExperience: state.user.yearsExperience,
         officerRace: state.user.officerRace,
-        officerGender: state.user.officerGender,
-        officerNonBinary: state.user.officerNonBinary,
+        // officerGender: state.user.officerGender,
+        // officerNonBinary: state.user.officerNonBinary,
       }
 
       localStorage.setItem('ripa_officer', JSON.stringify(officer))
