@@ -26,6 +26,7 @@ public class Startup : FunctionsStartup
     public Startup()
     {
         CosmosClientOptions clientOptions = new CosmosClientOptions();
+        clientOptions.AllowBulkExecution = true;
 #if DEBUG
         clientOptions.ConnectionMode = ConnectionMode.Gateway;
         clientOptions.WebProxy = new WebProxy()

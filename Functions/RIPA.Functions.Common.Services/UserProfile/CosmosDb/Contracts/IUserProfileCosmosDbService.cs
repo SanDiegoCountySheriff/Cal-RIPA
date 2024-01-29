@@ -14,4 +14,5 @@ public interface IUserProfileCosmosDbService<T>
     Task UpdateFavoriteLocationCount(string favoriteName, string id);
     Task UpdateFavoriteReasonCount(string favoriteName, string id);
     Task UpdateFavoriteResultCount(string favoriteName, string id);
+    Task RemoveOfficerGender();
 }

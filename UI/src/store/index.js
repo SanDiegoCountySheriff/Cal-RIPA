@@ -738,6 +738,20 @@ export default new Vuex.Store({
         })
     },
 
+    removeOfficerGender({ dispatch, state }) {
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}userprofile/v2/PostRemoveOfficerGender`,
+        )
+        .then(() => {
+          dispatch('getAdminUsers')
+        })
+        .catch(error => {
+          console.log('There was an error saving the user.', error)
+          dispatch('getAdminUsers')
+        })
+    },
+
     uploadUsers({ dispatch, state }, { usersFile, usersAgency }) {
       const formData = new FormData()
       formData.append('file', usersFile)

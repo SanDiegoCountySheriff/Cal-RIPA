@@ -166,4 +166,27 @@ public class UserProfileCosmosDbService<T> : IUserProfileCosmosDbService<T> wher
     {
         await _container.UpsertItemAsync(userProfile, new PartitionKey(id));
     }
+
+    public async Task RemoveOfficerGender()
+    {
+        var query = _container.GetItemQueryIterator<Models.v2.UserProfile>(new QueryDefinition("SELECT * FROM c WHERE IS_DEFINED(c.officerGender) AND NOT IS_NULL(c.officerGender) AND IS_DEFINED(c.officerNonBinary) AND NOT IS_NULL(c.officerNonBinary)"));
+        List<Models.v2.UserProfile> results = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            results.AddRange(response.ToList());
+        }
+
+        var tasks = new List<Task>();
+
+        foreach (var userprofile in results)
+        {
+            userprofile.OfficerGender = null;
+            userprofile.OfficerNonBinary = null;
+            tasks.Add(_container.UpsertItemAsync(userprofile, new PartitionKey(userprofile.Id)));
+        }
+
+        await Task.WhenAll(tasks);
+    }
 }

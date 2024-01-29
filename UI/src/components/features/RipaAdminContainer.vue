@@ -33,6 +33,7 @@
       @handleSubmitAll="handleSubmitAll"
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
+      @handle-remove-officer-gender="handleRemoveOfficerGender"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -104,7 +105,14 @@ export default {
       'getHistoricalCpraReports',
       'setStopQueryData',
       'setResetPagination',
+      'removeOfficerGender',
     ]),
+
+    async handleRemoveOfficerGender() {
+      this.loading = true
+      this.removeOfficerGender()
+      this.loading = false
+    },
 
     async handleCallErrorCodeSearch(val) {
       this.getErrorCodes(val)

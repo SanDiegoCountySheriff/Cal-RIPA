@@ -48,6 +48,7 @@
           :items="users"
           :on-edit-user="onEditUser"
           :on-upload-users="onUploadUsers"
+          @handle-remove-officer-gender="handleRemoveOfficerGender"
         ></ripa-users-grid>
       </v-tab-item>
 
@@ -267,6 +268,9 @@ export default {
   },
 
   methods: {
+    handleRemoveOfficerGender() {
+      this.$emit('handle-remove-officer-gender')
+    },
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
     },
