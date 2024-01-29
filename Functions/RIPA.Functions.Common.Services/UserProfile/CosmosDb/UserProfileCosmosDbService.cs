@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RIPA.Functions.Common.Models.Interfaces;
