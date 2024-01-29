@@ -742,6 +742,14 @@ export default new Vuex.Store({
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}userprofile/v2/PostRemoveOfficerGender`,
+          null,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
         )
         .then(() => {
           dispatch('getAdminUsers')
