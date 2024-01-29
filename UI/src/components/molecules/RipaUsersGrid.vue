@@ -9,6 +9,7 @@
         hide-details
       ></v-text-field>
     </v-card-title>
+
     <v-data-table
       :loading="loading"
       :headers="headers"
@@ -18,21 +19,58 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title class="tw-uppercase"
-            >Admin: Maintain Users</v-toolbar-title
-          >
+          <v-toolbar-title class="tw-uppercase">
+            Admin: Maintain Users
+          </v-toolbar-title>
 
           <v-spacer></v-spacer>
 
+          <v-dialog
+            v-if="doesAnyUserHaveGenderInformation"
+            v-model="genderDialog"
+            max-width="500px"
+            persistent
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn color="primary" class="mr-4" v-bind="attrs" v-on="on">
+                Remove Gender
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title>Remove Officer Gender</v-card-title>
+
+              <v-card-text>
+                This will remove officer gender and officer nonbinary from any
+                existing profiles that entered that data before the temporary
+                restraining order. This is a one-time operation and this button
+                will not show up if there are no profiles with officer gender
+                entered.
+              </v-card-text>
+
+              <v-card-text> Would you like to proceed? </v-card-text>
+
+              <v-card-actions>
+                <v-btn
+                  @click="genderDialog = !genderDialog"
+                  color="primary"
+                  text
+                >
+                  Cancel
+                </v-btn>
+
+                <v-spacer />
+
+                <v-btn @click="handleRemoveOfficerGender" color="primary" text>
+                  Proceed
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
           <v-dialog v-model="fileDialog" max-width="500px" persistent>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="tw-mb-2 mr-4"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-btn color="primary" dark class="mr-4" v-bind="attrs" v-on="on">
                 Import Users
               </v-btn>
             </template>
@@ -122,11 +160,13 @@
           </ripa-user-dialog>
         </v-toolbar>
       </template>
+
       <template v-slot:item.actions="{ item }">
         <v-icon small class="tw-mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
       </template>
+
       <template v-slot:no-data>
         <div>No Users Data</div>
       </template>
@@ -155,6 +195,7 @@ export default {
       users: [],
       dialog: false,
       fileDialog: false,
+      genderDialog: false,
       usersFile: null,
       usersAgency: '',
       agencyIncluded: false,
@@ -251,6 +292,12 @@ export default {
     agencyRules() {
       return [v => (!!v && !this.agencyIncluded) || 'An agency is required']
     },
+
+    doesAnyUserHaveGenderInformation() {
+      return this.users.some(user => {
+        return user.officerGender !== null || user.officerNonBinary !== null
+      })
+    },
   },
 
   methods: {
@@ -286,6 +333,10 @@ export default {
     closeFileDialog() {
       this.fileDialog = false
       this.usersFile = null
+    },
+
+    handleRemoveOfficerGender() {
+      this.$emit('handle-remove-officer-gender')
     },
 
     save() {

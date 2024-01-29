@@ -33,6 +33,7 @@
       @handleSubmitAll="handleSubmitAll"
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
+      @handle-remove-officer-gender="handleRemoveOfficerGender"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -89,6 +90,9 @@ export default {
   },
 
   methods: {
+    handleRemoveOfficerGender() {
+      this.$emit('handle-remove-officer-gender')
+    },
     handleCallErrorCodeSearch(val) {
       this.$emit('handleCallErrorCodeSearch', val)
     },
