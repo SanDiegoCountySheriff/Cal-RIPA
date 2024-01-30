@@ -169,7 +169,7 @@ public class UserProfileCosmosDbService<T> : IUserProfileCosmosDbService<T> wher
 
     public async Task RemoveOfficerGender()
     {
-        var query = _container.GetItemQueryIterator<Models.v2.UserProfile>(new QueryDefinition("SELECT * FROM c WHERE IS_DEFINED(c.officerGender) AND NOT IS_NULL(c.officerGender) AND IS_DEFINED(c.officerNonBinary) AND NOT IS_NULL(c.officerNonBinary)"));
+        var query = _container.GetItemQueryIterator<Models.v2.UserProfile>(new QueryDefinition("SELECT * FROM c WHERE IS_DEFINED(c.officerGender) AND NOT IS_NULL(c.officerGender) OR IS_DEFINED(c.officerNonBinary) AND NOT IS_NULL(c.officerNonBinary)"));
         List<Models.v2.UserProfile> results = new();
 
         while (query.HasMoreResults)
