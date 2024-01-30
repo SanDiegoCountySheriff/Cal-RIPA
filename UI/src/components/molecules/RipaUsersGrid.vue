@@ -41,11 +41,13 @@
               <v-card-title>Remove Officer Gender</v-card-title>
 
               <v-card-text>
-                This will remove officer gender and officer nonbinary from any
-                existing profiles that entered that data before the temporary
-                restraining order. This is a one-time operation and this button
-                will not show up if there are no profiles with officer gender
-                entered.
+                To comply with a temporary restraining order filed with the
+                Superior Court on 01/23/24, this will remove "officer gender"
+                and "officer nonbinary" information from all existing user
+                profiles that have been updated since the RIPA 2024 regulations
+                have taken effect at the beginning of the year. This is a
+                one-time operation and this button will not show up if there are
+                no profiles with officer gender or officer nonbinary entered.
               </v-card-text>
 
               <v-card-text> Would you like to proceed? </v-card-text>
