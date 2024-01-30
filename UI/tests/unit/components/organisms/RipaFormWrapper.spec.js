@@ -57,6 +57,7 @@ describe('Ripa Form Wrapper', () => {
         schools: computed(() => schoolsList),
         beats: computed(() => beatsList),
         statutes: computed(() => []),
+        displayBeatInput: computed(() => true),
       },
     })
   }
@@ -84,6 +85,7 @@ describe('Ripa Form Wrapper', () => {
         schools: computed(() => schoolsList),
         beats: computed(() => beatsList),
         statutes: computed(() => []),
+        displayBeatInput: computed(() => true),
       },
     })
   }

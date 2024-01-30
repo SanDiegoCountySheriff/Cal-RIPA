@@ -611,6 +611,7 @@ export default {
     'isAuthenticated',
     'isOnlineAndAuthenticated',
     'isApiUnavailable',
+    'displayBeatInput',
   ],
 
   computed: {
@@ -676,12 +677,20 @@ export default {
     },
 
     isDomainDataEmpty() {
-      return (
-        this.beats.length === 0 &&
-        this.countyCities.length === 0 &&
-        this.statutes.length === 0 &&
-        this.schools.length === 0
-      )
+      if (this.displayBeatInput) {
+        return (
+          this.beats.length === 0 ||
+          this.countyCities.length === 0 ||
+          this.statutes.length === 0 ||
+          this.schools.length === 0
+        )
+      } else {
+        return (
+          this.countyCities.length === 0 ||
+          this.statutes.length === 0 ||
+          this.schools.length === 0
+        )
+      }
     },
 
     isDomainDataEmptyUser() {
