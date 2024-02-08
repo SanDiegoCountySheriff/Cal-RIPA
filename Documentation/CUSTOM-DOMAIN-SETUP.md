@@ -41,9 +41,9 @@ You will need to import your certificate to the keyvault in your resource group.
 
 Once you've imported the certificate to the keyvault, go back to your custom domain that you created in your endpoint.
 
-### Configuration Prerequisites: 
+### Configuration Prerequisites:
 
-You will need to give the CDN permissions to access the certificate you imported in the Key Vault. 
+You will need to give the CDN permissions to access the certificate you imported in the Key Vault.
 
 1. Register Azure CDN as an app in your Microsoft Entra ID via PowerShell using this command: `New-AzADServicePrincipal -ApplicationId "<application-id-here>"` You will find this command and the correct application ID in the message above the key vault drop down.
 2. Grant Azure CDN service permission to access the secrets in your Key vault where your certificate is located. Go to "Access policies" from your Key vault to add a new policy, then grant "Microsoft.AzureFrontDoor-Cdn" service principal a "get-secret" permission.
@@ -54,12 +54,14 @@ You will need to give the CDN permissions to access the certificate you imported
 2. For certificate management type, select "use my own certificate"
 3. Minimum TLS version: TLS 1.2
 4. Select the key vault where you imported your cert.
-5. For certificate/secret, select the name of your cert that you imported. 
-6. Certificate/Secret version: Latest 
+5. For certificate/secret, select the name of your cert that you imported.
+6. Certificate/Secret version: Latest
 
 After completing these steps, you should be able to access RIPA via your custom domain.
 
 ## Update API Policies
+
+The API policies must be updated to add the new custom domain to the CORS policy.
 
 1. Open the resource group that contains your API Management service.
 2. Click on your API Management service to open it.
