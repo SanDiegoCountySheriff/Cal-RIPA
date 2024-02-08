@@ -7,7 +7,7 @@ To configure a custom domain for RIPA, you need to create a front door and CDN p
 1. Navigate to the resource group where RIPA is installed.
 2. Create a front door and CDN profile.
 3. Open the front door and CDN profile, and create a new endpoint.
-4. For the endpoint name, use the following syntax: `ripa-prd-xyz-cdn-ep`, with `xyz` being your agency abbreviation.
+4. For the endpoint name, use the following syntax: `ripa-prd-xyz-cdn-ep`, with `xyz` being your agency abbreviation. Keep in mind, this example is assuming you're updating your production environment.
 5. For origin type, choose **storage static website**, and for the hostname select the name of your storage account that ends in `ui`. For example, `xyzripaprduisa`
 6. Origin host header should mirror origin hostname, everything else can be left unmodified.
 
