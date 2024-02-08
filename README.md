@@ -98,6 +98,7 @@ In this section you will find links & tips to help you get the most out of your 
 12. [Override default PII detection settings](/Documentation/PII-CONFIGURATION.md)
 13. [Application "Environment"](/Documentation/APP-ENVIRONMENT.md)
 14. [Custom STOP templates](/Documentation/STOP-TEMPLATES.md)
+15. [Custom Domain Setup](/Documentation/CUSTOM-DOMAIN-SETUP.md)
 
 ## How to Use the App
 
