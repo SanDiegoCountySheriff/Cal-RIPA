@@ -19,7 +19,7 @@ To configure a custom domain for RIPA, you need to create a front door and CDN p
 
 After the endpoint has been created, open it and follow these steps to configure a custom domain:
 
-Keep in mind, for this step to work, you must first set up a CNAME record with your DNS provider, which will point to your CDN endpoint.
+For this step to work, you must first set up a CNAME record with your DNS provider, which will point to your CDN endpoint.
 
 1. Click "custom domain" to create a custom domain.
 2. Endpoint hostname gets pre-filled from your CDN endpoint URL, you can't change this value
