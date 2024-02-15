@@ -34,11 +34,12 @@ public class TimerGetSubmitResults
     }
 
     [FunctionName("TimerGetSubmitResults")]
-    public async Task Run([TimerTrigger("0 */15 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+    public async Task Run([TimerTrigger("%ResultsRunTime%", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
     {
-        log.LogInformation($"Timer trigger runs each day at 9:30AM: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
+        log.LogInformation($"Timer trigger runs each day at a time specified in the configuration: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
 
         IEnumerable<Renci.SshNet.Sftp.SftpFile> files = null;
+
         try
         {
             files = _sftpService.ListAllFiles(_sftpOutputPath);
@@ -48,6 +49,7 @@ public class TimerGetSubmitResults
             log.LogError($"Unable to connect to SFTP {e.Message}");
             return;
         }
+
         if (files == null || files.Where(x => x.IsDirectory == false).Count() == 0)
         {
             return; //Nothing to process --> exit
