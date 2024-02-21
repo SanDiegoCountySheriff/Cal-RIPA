@@ -34,7 +34,7 @@ public class TimerGetSubmitResults
     }
 
     [FunctionName("TimerGetSubmitResults")]
-    public async Task Run([TimerTrigger("%ResultsRunTime%", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+    public async Task Run([TimerTrigger("%ResultsRunTime%")] TimerInfo myTimer, ILogger log)
     {
         log.LogInformation($"Timer trigger runs each day at a time specified in the configuration: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
 
