@@ -11,11 +11,13 @@ exports[`Ripa Override PII should match snapshot 1`] = `
   </div>
   <div class="container">
     <div class="row no-gutters">
-      <div class="col-sm-12 col-12">
-        Is PII Found: false
+      <div class="mb-2 col-sm-12 col-12">
+        Is PII Found:
+        false
+        <!---->
       </div>
       <!---->
-      <div class="col-sm-12 col-12">
+      <div class="col-sm-6 col-12">
         <div class="ripa-switch" style="max-width: 250px;">
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
