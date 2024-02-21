@@ -4,8 +4,17 @@
 
     <v-container>
       <v-row no-gutters>
-        <v-col cols="12" sm="12">
-          Is PII Found: {{ apiStop.isPiiFound }}
+        <v-col cols="12" sm="12" class="mb-2">
+          Is PII Found:
+          {{ apiStop.isPiiFound }}
+          <v-btn
+            v-if="apiStop.isPiiFound"
+            @click="handleFalsePositive"
+            class="ml-6"
+            color="primary"
+          >
+            False Positive
+          </v-btn>
         </v-col>
         <v-col v-if="apiStop.isPiiFound" cols="12" sm="12">
           <v-simple-table>
@@ -27,7 +36,7 @@
             </template>
           </v-simple-table>
         </v-col>
-        <v-col cols="12" sm="12">
+        <v-col cols="12" sm="6">
           <ripa-switch
             v-model="model.overridePii"
             label="Override"
@@ -69,6 +78,12 @@ export default {
   methods: {
     handleInput() {
       this.$emit('input', this.viewModel)
+    },
+
+    handleFalsePositive() {
+      this.viewModel.overridePii = true
+      this.viewModel.editStopExplanation = 'PII Override - false positive'
+      this.handleInput()
     },
   },
 
