@@ -8,6 +8,5 @@ public class PiiEntitiesResponse
     [JsonProperty(PropertyName = "id")]
     public string Id { get; set; }
     public string EntityText { get; set; }
-    public string Category { get; set; }
     public string Source { get; set; }
 }

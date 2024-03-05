@@ -48,10 +48,94 @@ public class GetPiiEntities
         }
 
         List<PiiEntitiesResponse> piiEntitiesResponse = new();
+        List<PiiDatabaseResponse> response = new();
 
         try
         {
-            piiEntitiesResponse.AddRange(await _stopCosmosDbService.GetPiiEntitiesResponseAsync(1));
+            response.AddRange(await _stopCosmosDbService.GetPiiEntitiesResponseAsync(1));
+
+            foreach (var piiResponse in response)
+            {
+                if (piiResponse.PiiEntities != null && piiResponse.PiiEntities.Count != 0)
+                {
+                    foreach (var piiEntity in piiResponse.PiiEntities)
+                    {
+                        if (piiEntity.EntityText == "Text analytics service was unavailable, please review the stop for PII")
+                        {
+                            if (!string.IsNullOrEmpty(piiResponse.ReasonForStopExplanation))
+                            {
+                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                                {
+                                    Id = piiResponse.Id,
+                                    EntityText = piiResponse.ReasonForStopExplanation,
+                                    Source = "Reason for stop explanation"
+                                });
+                            }
+
+                            if (!string.IsNullOrEmpty(piiResponse.BasisForSearchBrief))
+                            {
+                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                                {
+                                    Id = piiResponse.Id,
+                                    EntityText = piiResponse.BasisForSearchBrief,
+                                    Source = "Basis for search explanation"
+                                });
+                            }
+
+                            if (!string.IsNullOrEmpty(piiResponse.Location))
+                            {
+                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                                {
+                                    Id = piiResponse.Id,
+                                    EntityText = piiResponse.Location,
+                                    Source = "Location"
+                                });
+                            }
+                        }
+                        else
+                        {
+                            piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                            {
+                                Id = piiResponse.Id,
+                                EntityText = piiEntity.EntityText,
+                                Source = piiEntity.Source,
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(piiResponse.ReasonForStopExplanation))
+                    {
+                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                        {
+                            Id = piiResponse.Id,
+                            EntityText = piiResponse.ReasonForStopExplanation,
+                            Source = "Reason for stop explanation"
+                        });
+                    }
+
+                    if (!string.IsNullOrEmpty(piiResponse.BasisForSearchBrief))
+                    {
+                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                        {
+                            Id = piiResponse.Id,
+                            EntityText = piiResponse.BasisForSearchBrief,
+                            Source = "Basis for search explanation"
+                        });
+                    }
+
+                    if (!string.IsNullOrEmpty(piiResponse.Location))
+                    {
+                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
+                        {
+                            Id = piiResponse.Id,
+                            EntityText = piiResponse.Location,
+                            Source = "Location"
+                        });
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {

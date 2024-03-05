@@ -155,15 +155,17 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
         return results;
     }
 
-    public async Task<IEnumerable<PiiEntitiesResponse>> GetPiiEntitiesResponseAsync(int version)
+    public async Task<IEnumerable<PiiDatabaseResponse>> GetPiiEntitiesResponseAsync(int version)
     {
         var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)" : "";
-        var concatStatement = "";
+        var concatStatement = version == 1 ?
+            "c.Location.StreetName, ' ', c.Location.BlockNumber, ' ', c.Location.LandMark, ' ', c.Location.Intersection, ' ', c.Location.HighwayExit" :
+            "c.Location.StreetName, ' ', c.Location.BlockNumber, ' ', c.Location.LandMark, ' ', c.Location.crossStreet1, ' ', c.Location.crossStreet2, ' ', c.Location.Highway, ' ', c.Location.Exit";
 
-        var queryString = $"SELECT p.EntityText, p.Category, p.Source, c.id FROM c JOIN p IN c.PiiEntities JOIN l IN c.ListPersonStopped WHERE c.IsPiiFound = true AND (c.StopVersion = {version} {isNotDefinedWhereStatement})";
+        var queryString = $"SELECT DISTINCT c.id, c.PiiEntities, l.ReasonForStopExplanation, l.BasisForSearchBrief, CONCAT({concatStatement}) as Location FROM c JOIN l IN c.ListPersonStopped WHERE c.IsPiiFound = true AND (c.StopVersion = {version} {isNotDefinedWhereStatement})";
 
-        var query = _container.GetItemQueryIterator<PiiEntitiesResponse>(new QueryDefinition(queryString));
-        List<PiiEntitiesResponse> results = new();
+        var query = _container.GetItemQueryIterator<PiiDatabaseResponse>(new QueryDefinition(queryString));
+        List<PiiDatabaseResponse> results = new();
 
         while (query.HasMoreResults)
         {

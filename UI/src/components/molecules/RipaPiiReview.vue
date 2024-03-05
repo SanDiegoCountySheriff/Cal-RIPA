@@ -29,7 +29,7 @@
         </template>
 
         <template #[`group.header`]="{ group }">
-          <td class="group" colspan="3">
+          <td style="background: black !important" colspan="3">
             <v-icon color="primary">mdi-arrow-down-bold</v-icon>
             Stop ID: {{ group }}
             <v-btn
@@ -41,6 +41,7 @@
             >
               Mark As False Positive
             </v-btn>
+
             <v-btn
               @click="handleReview(group)"
               class="ml-5"
@@ -72,7 +73,6 @@ export default {
       headers: [
         { text: 'Id', value: 'id' },
         { text: 'Text', value: 'entityText' },
-        { text: 'Category', value: 'category' },
         { text: 'Source', value: 'source' },
       ],
     }
@@ -137,9 +137,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.group {
-  background-color: black;
-}
-</style>
