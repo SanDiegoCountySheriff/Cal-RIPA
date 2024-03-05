@@ -48,92 +48,49 @@ public class GetPiiEntities
         }
 
         List<PiiEntitiesResponse> piiEntitiesResponse = new();
-        List<PiiDatabaseResponse> response = new();
+        List<Common.Models.v1.Stop> response = new();
 
         try
         {
             response.AddRange(await _stopCosmosDbService.GetPiiEntitiesResponseAsync(1));
 
-            foreach (var piiResponse in response)
+            foreach (var stop in response)
             {
-                if (piiResponse.PiiEntities != null && piiResponse.PiiEntities.Count != 0)
+                for (var i = 0; i < stop.ListPersonStopped.Length; i++)
                 {
-                    foreach (var piiEntity in piiResponse.PiiEntities)
+                    if (!string.IsNullOrEmpty(stop.ListPersonStopped[i].ReasonForStopExplanation))
                     {
-                        if (piiEntity.EntityText == "Text analytics service was unavailable, please review the stop for PII")
+                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
                         {
-                            if (!string.IsNullOrEmpty(piiResponse.ReasonForStopExplanation))
-                            {
-                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                                {
-                                    Id = piiResponse.Id,
-                                    EntityText = piiResponse.ReasonForStopExplanation,
-                                    Source = "Reason for stop explanation"
-                                });
-                            }
+                            StopId = stop.Id,
+                            EntityText = stop.ListPersonStopped[i].ReasonForStopExplanation,
+                            Source = $"Person {i + 1}"
+                        });
+                    }
 
-                            if (!string.IsNullOrEmpty(piiResponse.BasisForSearchBrief))
-                            {
-                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                                {
-                                    Id = piiResponse.Id,
-                                    EntityText = piiResponse.BasisForSearchBrief,
-                                    Source = "Basis for search explanation"
-                                });
-                            }
-
-                            if (!string.IsNullOrEmpty(piiResponse.Location))
-                            {
-                                piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                                {
-                                    Id = piiResponse.Id,
-                                    EntityText = piiResponse.Location,
-                                    Source = "Location"
-                                });
-                            }
-                        }
-                        else
+                    if (!string.IsNullOrEmpty(stop.ListPersonStopped[i].BasisForSearchBrief))
+                    {
+                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
                         {
-                            piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                            {
-                                Id = piiResponse.Id,
-                                EntityText = piiEntity.EntityText,
-                                Source = piiEntity.Source,
-                            });
-                        }
+                            StopId = stop.Id,
+                            EntityText = stop.ListPersonStopped[i].BasisForSearchBrief,
+                            Source = $"Person {i + 1}"
+                        });
                     }
                 }
-                else
+
+                var location = stop.Location as Common.Models.v1.Location;
+
+                var locationString = $"{location.StreetName} {location.BlockNumber} {location.LandMark} {location.Intersection} {location.HighwayExit}";
+
+                if (!string.IsNullOrWhiteSpace(locationString))
                 {
-                    if (!string.IsNullOrEmpty(piiResponse.ReasonForStopExplanation))
+                    piiEntitiesResponse.Add(new PiiEntitiesResponse()
                     {
-                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                        {
-                            Id = piiResponse.Id,
-                            EntityText = piiResponse.ReasonForStopExplanation,
-                            Source = "Reason for stop explanation"
-                        });
-                    }
-
-                    if (!string.IsNullOrEmpty(piiResponse.BasisForSearchBrief))
-                    {
-                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                        {
-                            Id = piiResponse.Id,
-                            EntityText = piiResponse.BasisForSearchBrief,
-                            Source = "Basis for search explanation"
-                        });
-                    }
-
-                    if (!string.IsNullOrEmpty(piiResponse.Location))
-                    {
-                        piiEntitiesResponse.Add(new PiiEntitiesResponse()
-                        {
-                            Id = piiResponse.Id,
-                            EntityText = piiResponse.Location,
-                            Source = "Location"
-                        });
-                    }
+                        StopId = stop.Id,
+                        EntityText = locationString,
+                        Source = "Location"
+                    });
                 }
             }
         }

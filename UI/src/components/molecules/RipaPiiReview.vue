@@ -8,7 +8,7 @@
         :items="piiEntities"
         :headers="headers"
         item-key="EntityText"
-        group-by="id"
+        group-by="stopId"
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -71,7 +71,7 @@ export default {
       accept: false,
       version: 1,
       headers: [
-        { text: 'Id', value: 'id' },
+        { text: 'Id', value: 'stopId' },
         { text: 'Text', value: 'entityText' },
         { text: 'Source', value: 'source' },
       ],
