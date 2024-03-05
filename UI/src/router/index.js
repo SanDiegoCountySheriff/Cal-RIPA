@@ -67,6 +67,11 @@ const routes = [
         component: RipaAdminContainer,
         props: true,
       },
+      {
+        path: 'piiReview',
+        component: RipaAdminContainer,
+        props: true,
+      },
     ],
   },
   {

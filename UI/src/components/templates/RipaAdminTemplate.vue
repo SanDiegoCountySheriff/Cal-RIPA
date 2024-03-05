@@ -8,6 +8,7 @@
       :schools="schools"
       :statutes="statutes"
       :stops="stops"
+      :pii-entities="piiEntities"
       :submissions="submissions"
       :currentSubmission="currentSubmission"
       :users="users"
@@ -34,6 +35,9 @@
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
       @handle-remove-officer-gender="handleRemoveOfficerGender"
+      @handle-get-pii-entities="handleGetPiiEntities"
+      @handle-mark-false-positive="handleMarkFalsePositive"
+      @handle-review-stop="handleReviewStop"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -104,6 +108,15 @@ export default {
     },
     handleAdminFiltering(filterData) {
       this.$emit('handleAdminFiltering', filterData)
+    },
+    handleGetPiiEntities(version) {
+      this.$emit('handle-get-pii-entities', version)
+    },
+    handleMarkFalsePositive(id) {
+      this.$emit('handle-mark-false-positive', id)
+    },
+    handleReviewStop(data) {
+      this.$emit('handle-review-stop', data)
     },
     handleUpdateSavedFilter(val) {
       this.$emit('handleUpdateSavedFilter', val)
@@ -179,6 +192,10 @@ export default {
       default: () => [],
     },
     statutes: {
+      type: Array,
+      default: () => [],
+    },
+    piiEntities: {
       type: Array,
       default: () => [],
     },

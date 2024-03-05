@@ -85,6 +85,7 @@ export default new Vuex.Store({
     resetPagination: true,
     apiUnavailable: false,
     version: new Date().getFullYear() >= 2024 ? 2 : 1,
+    piiEntities: [],
   },
 
   getters: {
@@ -352,6 +353,9 @@ export default new Vuex.Store({
     favoriteResults: state => {
       return state.favoriteResults
     },
+    piiEntities: state => {
+      return state.piiEntities
+    },
   },
 
   mutations: {
@@ -411,6 +415,9 @@ export default new Vuex.Store({
     },
     updatePiiDate(state) {
       state.piiDate = new Date()
+    },
+    updatePiiEntities(state, value) {
+      state.piiEntities = value
     },
     updateApiConfig(state, value) {
       state.apiConfig = value
@@ -628,6 +635,56 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error checking for PII.', error)
           return null
+        })
+    },
+
+    getPiiEntities({ commit, state }, version) {
+      return axios
+        .get(`http://localhost:7071/api/v${version}/GetPiiEntities`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+            'Cache-Control': 'no-cache',
+          },
+        })
+        .then(response => {
+          commit('updatePiiEntities', response.data)
+        })
+        .catch(error => {
+          console.log('There was an error checking for PII.', error)
+          return null
+        })
+    },
+
+    markFalsePositive({ commit, state }, data) {
+      let piiEntities = state.piiEntities
+
+      piiEntities = piiEntities.filter(p => {
+        return p.id !== data.id
+      })
+
+      commit('updatePiiEntities', piiEntities)
+
+      return axios
+        .post(
+          `http://localhost:7071/api/v${data.version}/PostMarkPiiFlag/${data.id}`,
+          null,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(
+            'There was an error marking the stop as PII override',
+            error,
+          )
         })
     },
 
@@ -1493,6 +1550,26 @@ export default new Vuex.Store({
         .catch(error => {
           console.log('There was an error retrieving officer stops.', error)
           commit('updateOfficerStops', [])
+        })
+    },
+
+    getAdminStop({ state }, data) {
+      return axios
+        .get(
+          `${state.apiConfig.apiBaseUrl}stop/v${data.version}/GetStop/${data.id}`,
+          {
+            headers: {
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          console.log(response.data)
+          return response.data
+        })
+        .catch(error => {
+          console.log('There was an error getting the stop', error)
         })
     },
 

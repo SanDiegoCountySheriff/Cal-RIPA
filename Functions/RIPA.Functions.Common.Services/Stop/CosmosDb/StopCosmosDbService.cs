@@ -154,4 +154,23 @@ public class StopCosmosDbService<T> : IStopCosmosDbService<T> where T : IStop
 
         return results;
     }
+
+    public async Task<IEnumerable<PiiEntitiesResponse>> GetPiiEntitiesResponseAsync(int version)
+    {
+        var isNotDefinedWhereStatement = version == 1 ? "OR NOT IS_DEFINED(c.StopVersion) OR IS_NULL(c.StopVersion)" : "";
+        var concatStatement = "";
+
+        var queryString = $"SELECT p.EntityText, p.Category, p.Source, c.id FROM c JOIN p IN c.PiiEntities JOIN l IN c.ListPersonStopped WHERE c.IsPiiFound = true AND (c.StopVersion = {version} {isNotDefinedWhereStatement})";
+
+        var query = _container.GetItemQueryIterator<PiiEntitiesResponse>(new QueryDefinition(queryString));
+        List<PiiEntitiesResponse> results = new();
+
+        while (query.HasMoreResults)
+        {
+            var response = await query.ReadNextAsync();
+            results.AddRange(response.ToList());
+        }
+
+        return results;
+    }
 }
