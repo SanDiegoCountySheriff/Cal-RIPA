@@ -640,7 +640,7 @@ export default new Vuex.Store({
 
     getPiiEntities({ commit, state }, version) {
       return axios
-        .get(`http://localhost:7071/api/v${version}/GetPiiEntities`, {
+        .get(`${state.apiConfig.apiBaseUrl}stop/v${version}/GetPiiEntities`, {
           headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
@@ -660,14 +660,14 @@ export default new Vuex.Store({
       let piiEntities = state.piiEntities
 
       piiEntities = piiEntities.filter(p => {
-        return p.id !== data.id
+        return p.stopId !== data.id
       })
 
       commit('updatePiiEntities', piiEntities)
 
       return axios
         .post(
-          `http://localhost:7071/api/v${data.version}/PostMarkPiiFlag/${data.id}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${data.version}/PostMarkPiiFlag/${data.id}`,
           null,
           {
             headers: {
