@@ -6,6 +6,7 @@
       <v-tab to="/admin/users">Users</v-tab>
       <v-tab to="/admin/domains">Domains</v-tab>
       <v-tab to="/admin/cpra">CPRA Report</v-tab>
+      <v-tab to="/admin/piiReview">PII Review</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
@@ -75,6 +76,16 @@
             ></ripa-cpra-report-history>
           </v-tab-item>
         </v-tabs-items>
+      </v-tab-item>
+
+      <v-tab-item value="/admin/piiReview" id="/admin/piiReview">
+        <ripa-pii-review
+          :pii-entities="piiEntities"
+          :loading="loading"
+          @get-pii-entities="handleGetPiiEntities"
+          @handle-mark-false-positive="handleMarkFalsePositive"
+          @handle-review-stop="handleReviewStop"
+        ></ripa-pii-review>
       </v-tab-item>
 
       <v-tab-item value="/admin/domains" id="/admin/domains">
@@ -212,6 +223,7 @@ import RipaSubmissionsGrid from '@/components/molecules/RipaSubmissionsGrid'
 import RipaUsersGrid from '@/components/molecules/RipaUsersGrid'
 import RipaCpraReport from '@/components/molecules/RipaCpraReport'
 import RipaCpraReportHistory from '@/components/molecules/RipaCpraReportHistory'
+import RipaPiiReview from '@/components/molecules/RipaPiiReview'
 
 export default {
   name: 'ripa-admin-wrapper',
@@ -226,6 +238,7 @@ export default {
     RipaUsersGrid,
     RipaCpraReport,
     RipaCpraReportHistory,
+    RipaPiiReview,
   },
 
   data() {
@@ -327,6 +340,12 @@ export default {
     handleSubmitAll(filterData) {
       this.$emit('handleSubmitAll', filterData)
     },
+    handleGetPiiEntities(version) {
+      this.$emit('handle-get-pii-entities', version)
+    },
+    handleMarkFalsePositive(id) {
+      this.$emit('handle-mark-false-positive', id)
+    },
     closeFileDialog() {
       this.fileDialog = false
       this.domainFile = null
@@ -344,6 +363,9 @@ export default {
     },
     handleDownloadCpraReport(fileName) {
       this.$emit('handle-download-cpra-report', fileName)
+    },
+    handleReviewStop(data) {
+      this.$emit('handle-review-stop', data)
     },
   },
 
@@ -383,6 +405,10 @@ export default {
     stops: {
       type: Object,
       default: () => {},
+    },
+    piiEntities: {
+      type: Array,
+      default: () => [],
     },
     submissions: {
       type: Object,

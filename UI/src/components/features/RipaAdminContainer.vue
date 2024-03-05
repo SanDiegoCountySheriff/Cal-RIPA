@@ -8,6 +8,7 @@
       :schools="mappedAdminSchools"
       :statutes="mappedAdminStatutes"
       :stops="mappedAdminStops"
+      :pii-entities="piiEntities"
       :submissions="mappedAdminSubmissions"
       :currentSubmission="mappedAdminSubmission"
       :users="mappedAdminUsers"
@@ -34,6 +35,9 @@
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
       @handle-remove-officer-gender="handleRemoveOfficerGender"
+      @handle-get-pii-entities="handleGetPiiEntities"
+      @handle-mark-false-positive="handleMarkFalsePositive"
+      @handle-review-stop="handleReviewStop"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -44,6 +48,7 @@
 <script>
 import RipaAdminTemplate from '@/components/templates/RipaAdminTemplate'
 import RipaSnackbar from '@/components/atoms/RipaSnackbar'
+import RipaEditStopMixin from '../mixins/RipaEditStopMixin'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -53,6 +58,8 @@ export default {
     RipaAdminTemplate,
     RipaSnackbar,
   },
+
+  mixins: [RipaEditStopMixin],
 
   data() {
     return {
@@ -79,6 +86,7 @@ export default {
       'mappedUser',
       'stopQueryData',
       'resetPagination',
+      'piiEntities',
     ]),
   },
 
@@ -106,6 +114,9 @@ export default {
       'setStopQueryData',
       'setResetPagination',
       'removeOfficerGender',
+      'getPiiEntities',
+      'markFalsePositive',
+      'getAdminStop',
     ]),
 
     async handleRemoveOfficerGender() {
@@ -116,6 +127,27 @@ export default {
 
     async handleCallErrorCodeSearch(val) {
       this.getErrorCodes(val)
+    },
+
+    async handleGetPiiEntities(version) {
+      this.loading = true
+      await this.getPiiEntities(version)
+      this.loading = false
+    },
+
+    async handleReviewStop(data) {
+      this.loading = true
+      const item = await this.getAdminStop({
+        id: data.id,
+        version: data.version,
+      })
+
+      this.handleEditStopByAdmin(item, data.path)
+      this.loading = false
+    },
+
+    async handleMarkFalsePositive(data) {
+      await this.markFalsePositive(data)
     },
 
     async handleTabChange(tabIndex) {

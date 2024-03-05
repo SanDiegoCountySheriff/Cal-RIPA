@@ -133,7 +133,6 @@
           <ripa-text-input
             v-model="model.location.blockNumber"
             @input="handleInput"
-            :loading="loadingPiiStep1"
             :rules="
               model.stopVersion === 1 ? blockNumberRules : blockNumberRulesV2
             "
@@ -149,11 +148,9 @@
           <ripa-text-input
             v-model="model.location.streetName"
             @input="handleInput"
-            :loading="loadingPiiStep1"
             :rules="
               model.stopVersion === 1 ? streetNameRules : streetNameRulesV2
             "
-            @blur="handlePiiCheck($event)"
             label="Street Name"
           >
           </ripa-text-input>
@@ -168,9 +165,7 @@
             <ripa-text-input
               v-model="model.location.intersection"
               @input="handleInput"
-              :loading="loadingPiiStep1"
               :rules="intersectionRules"
-              @blur="handlePiiCheck($event)"
               label="Closest Intersection"
             >
             </ripa-text-input>
@@ -182,9 +177,7 @@
             <ripa-text-input
               v-model="model.location.crossStreet1"
               @input="handleInput"
-              :loading="loadingPiiStep1"
               :rules="crossStreetRules"
-              @blur="handlePiiCheck($event)"
               label="Cross Street 1"
             ></ripa-text-input>
           </v-col>
@@ -192,9 +185,7 @@
             <ripa-text-input
               v-model="model.location.crossStreet2"
               @input="handleInput"
-              :loading="loadingPiiStep1"
               :rules="crossStreetRules"
-              @blur="handlePiiCheck($event)"
               label="Cross Street 2"
             ></ripa-text-input>
           </v-col>
@@ -218,7 +209,6 @@
             <v-col cols="12" sm="12" md="6">
               <v-text-field
                 v-model="model.location.latitude"
-                :loading="loadingPiiStep1"
                 :rules="latitudeRules"
                 @blur="handleBlockNumber"
                 label="Latitude"
@@ -241,9 +231,7 @@
             <v-col cols="12" sm="12" md="6">
               <v-text-field
                 v-model="model.location.longitude"
-                :loading="loadingPiiStep1"
                 :rules="longitudeRules"
-                @blur="handlePiiCheck($event)"
                 label="Longitude"
                 disabled
               >
@@ -258,9 +246,7 @@
           <ripa-text-input
             v-model="model.location.highwayExit"
             @input="handleInput"
-            :loading="loadingPiiStep1"
             :rules="highwayRules"
-            @blur="handlePiiCheck($event)"
             label="Highway and closest exit"
           >
           </ripa-text-input>
@@ -272,9 +258,7 @@
               <ripa-text-input
                 v-model="model.location.highway"
                 @input="handleInput"
-                :loading="loadingPiiStep1"
                 :rules="highwayRulesV2"
-                @blur="handlePiiCheck($event)"
                 label="Highway"
               >
               </ripa-text-input>
@@ -284,9 +268,7 @@
               <ripa-text-input
                 v-model="model.location.exit"
                 @input="handleInput"
-                :loading="loadingPiiStep1"
                 :rules="highwayRulesV2"
-                @blur="handlePiiCheck($event)"
                 label="Closest Exit"
               >
               </ripa-text-input>
@@ -299,9 +281,7 @@
         <ripa-text-input
           v-model="model.location.landmark"
           @input="handleInput"
-          :loading="loadingPiiStep1"
           :rules="model.stopVersion === 1 ? landmarkRules : landmarkRulesV2"
-          @blur="handlePiiCheck($event)"
           label="Road marker, landmark, or other"
         >
         </ripa-text-input>
@@ -406,7 +386,6 @@ export default {
     'isOnlineAndAuthenticated',
     'lastLocation',
     'loadingGps',
-    'loadingPiiStep1',
     'validLastLocation',
     'favoriteLocations',
   ],
@@ -733,25 +712,6 @@ export default {
     },
   },
 
-  async created() {
-    if (
-      this.model.location.streetName !== null ||
-      this.model.location.intersection !== null ||
-      this.model.location.highwayExit !== null ||
-      this.model.location.landmark
-    ) {
-      const textValue = `${this.model.location.streetName ?? ''}, ${
-        this.model.location.intersection ?? ''
-      }, ${this.model.location.highwayExit ?? ''}, ${
-        this.model.location.landmark ?? ''
-      }`
-      this.$emit('pii-check', {
-        source: 'location',
-        value: textValue.replace('.', ''),
-      })
-    }
-  },
-
   methods: {
     handleInput() {
       this.updateModel()
@@ -844,20 +804,6 @@ export default {
         this.model.location.blockNumber = this.parseBlockNumberV2(
           this.model.location.blockNumber,
         )
-      }
-    },
-
-    handlePiiCheck(event) {
-      if (event) {
-        const textValue = `${this.model.location.streetName ?? ''}, ${
-          this.model.location.intersection ?? ''
-        }, ${this.model.location.highwayExit ?? ''}, ${
-          this.model.location.landmark ?? ''
-        }`
-        this.$emit('pii-check', {
-          source: 'location',
-          value: textValue.replace('.', ''),
-        })
       }
     },
 

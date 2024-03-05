@@ -777,13 +777,15 @@ export default {
       )
       const updatedStop = this.stop
       this.stop = Object.assign({}, updatedStop)
-      this.stop.actionsTaken = filteredPerson?.actionsTaken || {}
-      this.stop.nonForceActionsTaken = filteredPerson?.nonForceActionsTaken
-      this.stop.forceActionsTaken = filteredPerson?.forceActionsTaken
+      this.stop.actionsTaken = { ...filteredPerson?.actionsTaken } || {}
+      this.stop.nonForceActionsTaken = {
+        ...filteredPerson?.nonForceActionsTaken,
+      }
+      this.stop.forceActionsTaken = { ...filteredPerson?.forceActionsTaken }
       this.stop.person = {
         id: new Date().getTime(),
         index: this.fullStop.people.length + 1,
-        isStudent: filteredPerson?.isStudent || false,
+        isStudent: filteredPerson?.isStudent === true,
         anyDisabilities: false,
         perceivedAge: null,
         perceivedGender: null,
@@ -795,8 +797,8 @@ export default {
         perceivedRace: [],
         perceivedUnhoused: false,
       }
-      this.stop.stopReason = filteredPerson?.stopReason || {}
-      this.stop.stopResult = filteredPerson?.stopResult || {}
+      this.stop.stopReason = { ...filteredPerson?.stopReason } || {}
+      this.stop.stopResult = { ...filteredPerson?.stopResult } || {}
       this.updateFullStop()
     },
 

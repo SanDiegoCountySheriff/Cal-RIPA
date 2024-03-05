@@ -16,4 +16,5 @@ public interface IStopCosmosDbService<T>
     Task<IEnumerable<SubmissionErrorSummary>> GetSubmissionErrorSummaries(string id, int version);
     Task<IEnumerable<SubmissionStopDateTimeSummary>> GetSubmissionStopDateTimeSummaries(string id);
     Task<IEnumerable<DojError>> GetErrorCodes(string inputText, string submissionId);
+    Task<IEnumerable<T>> GetPiiEntitiesResponseAsync(int version);
 }
