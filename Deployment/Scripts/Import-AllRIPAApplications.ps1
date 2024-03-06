@@ -98,6 +98,8 @@ foreach ($functionName in $functionNames) {
     az functionapp config appsettings set --name $functionName.Name --resource-group $env:APP_RESOURCE_GROUP_NAME --settings "FUNCTIONS_EXTENSION_VERSION=~4"
     az functionapp config set --name $functionName.Name --resource-group $env:APP_RESOURCE_GROUP_NAME --linux-fx-version '"DOTNET|6.0"'
 
+    Start-Sleep -Seconds 45
+
     Write-Host "Importing $appName OpenAPI into APIM"
     Import-FunctionApi -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -ServiceName $apimInstanceName -FunctionName $functionName.Name -ApiTag $appName
 
