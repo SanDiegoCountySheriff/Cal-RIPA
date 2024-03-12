@@ -1319,8 +1319,8 @@ export default {
         this.stop.isPiiFound =
           this.stop.stopReason.reasonForStopPiiFound ||
           this.stop.location.piiFound ||
-          this.stop.actionsTaken.basisForSearchPiiFound ||
-          this.stop.nonForceActionsTaken.basisForSearchPiiFound
+          this.stop.actionsTaken?.basisForSearchPiiFound ||
+          this.stop.nonForceActionsTaken?.basisForSearchPiiFound
 
         if (!this.stop.location.piiFound && this.stop.piiEntities?.length > 0) {
           this.stop.piiEntities = this.stop.piiEntities.filter(
@@ -1372,8 +1372,8 @@ export default {
         this.stop.isPiiFound =
           this.stop.stopReason.reasonForStopPiiFound ||
           this.stop.location.piiFound ||
-          this.stop.actionsTaken.basisForSearchPiiFound ||
-          this.stop.nonForceActionsTaken.basisForSearchPiiFound
+          this.stop.actionsTaken?.basisForSearchPiiFound ||
+          this.stop.nonForceActionsTaken?.basisForSearchPiiFound
 
         if (
           !this.stop.stopReason.reasonForStopPiiFound &&
@@ -1432,11 +1432,11 @@ export default {
           this.stop.isPiiFound =
             this.stop.stopReason.reasonForStopPiiFound ||
             this.stop.location.piiFound ||
-            this.stop.actionsTaken.basisForSearchPiiFound ||
-            this.stop.nonForceActionsTaken.basisForSearchPiiFound
+            this.stop.actionsTaken?.basisForSearchPiiFound ||
+            this.stop.nonForceActionsTaken?.basisForSearchPiiFound
 
           if (
-            !this.stop.actionsTaken.basisForSearchPiiFound &&
+            !this.stop.actionsTaken?.basisForSearchPiiFound &&
             this.stop.piiEntities?.length > 0
           ) {
             this.stop.piiEntities = this.stop.piiEntities.filter(
@@ -1466,11 +1466,11 @@ export default {
           this.stop.isPiiFound =
             this.stop.stopReason.reasonForStopPiiFound ||
             this.stop.location.piiFound ||
-            this.stop.actionsTaken.basisForSearchPiiFound ||
-            this.stop.nonForceActionsTaken.basisForSearchPiiFound
+            this.stop.actionsTaken?.basisForSearchPiiFound ||
+            this.stop.nonForceActionsTaken?.basisForSearchPiiFound
 
           if (
-            !this.stop.nonForceActionsTaken.basisForSearchPiiFound &&
+            !this.stop.nonForceActionsTaken?.basisForSearchPiiFound &&
             this.stop.piiEntities?.length > 0
           ) {
             this.stop.piiEntities = this.stop.piiEntities.filter(
