@@ -4,10 +4,20 @@
       v-if="$vuetify.breakpoint.mobile"
       class="tw-flex tw-mb-5 tw-justify-center"
     >
-      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+      <v-btn
+        :disabled="isBackNextDisabled"
+        outlined
+        color="error"
+        class="tw-mr-2"
+        @click="handleCancel"
+      >
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
+      <v-btn
+        color="primary"
+        :disabled="!isFormValid || isBackNextDisabled"
+        @click="handleStep1Next"
+      >
         Next
       </v-btn>
     </div>
@@ -42,10 +52,20 @@
     </template>
 
     <div class="tw-flex tw-mt-8 tw-justify-center">
-      <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
+      <v-btn
+        :disabled="isBackNextDisabled"
+        outlined
+        color="error"
+        class="tw-mr-2"
+        @click="handleCancel"
+      >
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="!isFormValid" @click="handleStep1Next">
+      <v-btn
+        color="primary"
+        :disabled="!isFormValid || isBackNextDisabled"
+        @click="handleStep1Next"
+      >
         Next
       </v-btn>
     </div>

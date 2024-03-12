@@ -496,10 +496,10 @@ export default {
 
       return [
         this.isLocationOptionsFilledV2 ||
-          (streetName && streetName.length > 0) ||
+          (streetName && streetName?.length > 0) ||
           'A street name is required',
         this.isLocationOptionsFilledV2 ||
-          (streetName.length >= 1 && streetName.length <= 50) ||
+          (streetName?.length >= 1 && streetName?.length <= 50) ||
           'Street name must be between 1 and 50 characters',
       ]
     },
