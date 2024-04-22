@@ -886,7 +886,7 @@ export default new Vuex.Store({
 
       return axios
         .post(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GenerateCpraReport?${queryString}`,
+          `${state.apiConfig.apiBaseUrl}submission/v1/GenerateCpraReport?${queryString}`,
           reportParameters.officerName,
           {
             headers: {
@@ -921,7 +921,7 @@ export default new Vuex.Store({
     downloadCpraReport({ state }, fileName) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/DownloadCpraReport?FileName=${fileName}`,
+          `${state.apiConfig.apiBaseUrl}submission/v1/DownloadCpraReport?FileName=${fileName}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -952,7 +952,7 @@ export default new Vuex.Store({
     getHistoricalCpraReports({ state, commit }) {
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}submission/v${state.version}/GetHistoricalCpraReports`,
+          `${state.apiConfig.apiBaseUrl}submission/v1/GetHistoricalCpraReports`,
           {
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
