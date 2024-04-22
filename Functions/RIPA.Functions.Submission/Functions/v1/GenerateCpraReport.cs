@@ -13,7 +13,6 @@ using RIPA.Functions.Common.Models.v1;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.Stop.Utility;
 using RIPA.Functions.Security;
-using RIPA.Functions.Submission.Services.REST.v1.Contracts;
 using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
@@ -29,17 +28,21 @@ public class GenerateCpraReport
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
     private readonly IStopCosmosDbService<Stop> _stopCosmosDbService;
-    private readonly IStopService _stopService;
+    private readonly IStopCosmosDbService<Common.Models.v2.Stop> _stopCosmosDbServiceV2;
+    private readonly Services.REST.v1.Contracts.IStopService _stopService;
+    private readonly Services.REST.v2.Contracts.IStopService _stopServiceV2;
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
 
-    public GenerateCpraReport(IStopCosmosDbService<Stop> stopCosmosDbService, IStopService stopService)
+    public GenerateCpraReport(IStopCosmosDbService<Stop> stopCosmosDbService, IStopCosmosDbService<Common.Models.v2.Stop> stopCosmosDbServiceV2, Services.REST.v1.Contracts.IStopService stopService, Services.REST.v2.Contracts.IStopService stopServiceV2)
     {
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixCpra");
         _blobContainerClient = GetBlobContainerClient();
         _stopCosmosDbService = stopCosmosDbService;
+        _stopCosmosDbServiceV2 = stopCosmosDbServiceV2;
         _stopService = stopService;
+        _stopServiceV2 = stopServiceV2;
     }
 
     [FunctionName("GenerateCpraReport_v1")]
@@ -75,15 +78,19 @@ public class GenerateCpraReport
         var startDate = req.Query["StartDate"];
         var endDate = req.Query["EndDate"];
         var fileName = $"{startDate}-{endDate}-CPRAReport.csv";
-        string stopQueryString;
-        string stopSummaryQueryString;
+        string stopQueryStringV1;
+        string stopSummaryQueryStringV1;
+        string stopQueryStringV2;
+        string stopSummaryQueryStringV2;
 
         try
         {
             StopQueryUtility stopQueryUtility = new StopQueryUtility();
             StopQuery stopQuery = stopQueryUtility.GetStopQuery(req);
-            stopQueryString = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1);
-            stopSummaryQueryString = stopQueryUtility.GetStopsSummaryQueryString(stopQuery, 1);
+            stopQueryStringV1 = stopQueryUtility.GetStopsQueryString(stopQuery, true, 1, true);
+            stopSummaryQueryStringV1 = stopQueryUtility.GetStopsSummaryQueryString(stopQuery, 1);
+            stopQueryStringV2 = stopQueryUtility.GetStopsQueryString(stopQuery, true, 2, true);
+            stopSummaryQueryStringV2 = stopQueryUtility.GetStopsSummaryQueryString(stopQuery, 2);
         }
         catch (Exception ex)
         {
@@ -91,16 +98,25 @@ public class GenerateCpraReport
             return new BadRequestObjectResult("An error occurred while evaluating the stop query. Please try again.");
         }
 
-        List<Stop> stopResponse;
-        IEnumerable<StopStatusCount> stopStatuses;
+        List<Stop> stopResponseV1;
+        List<Common.Models.v2.Stop> stopResponseV2;
+        IEnumerable<StopStatusCount> stopStatusesV1;
+        IEnumerable<StopStatusCount> stopStatusesV2;
         int totalStopCount = 0;
 
         try
         {
-            stopResponse = await _stopCosmosDbService.GetStopsAsync(stopQueryString) as List<Stop>;
-            stopStatuses = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryString);
+            stopResponseV1 = await _stopCosmosDbService.GetStopsAsync(stopQueryStringV1) as List<Stop>;
+            stopStatusesV1 = await _stopCosmosDbService.GetStopStatusCounts(stopSummaryQueryStringV1);
+            stopResponseV2 = await _stopCosmosDbServiceV2.GetStopsAsync(stopQueryStringV2) as List<Common.Models.v2.Stop>;
+            stopStatusesV2 = await _stopCosmosDbServiceV2.GetStopStatusCounts(stopSummaryQueryStringV2);
 
-            foreach (var stopStatus in stopStatuses)
+            foreach (var stopStatus in stopStatusesV1)
+            {
+                totalStopCount += stopStatus.Count;
+            }
+
+            foreach (var stopStatus in stopStatusesV2)
             {
                 totalStopCount += stopStatus.Count;
             }
@@ -120,9 +136,24 @@ public class GenerateCpraReport
 
         try
         {
-            foreach (var stop in stopResponse)
+            foreach (var stop in stopResponseV1)
             {
                 var dojStop = _stopService.CastToDojStop(stop);
+                dojStop.Officer = null;
+                var jsonStop = JsonConvert.SerializeObject(dojStop);
+
+                if (stop.Location.Beat != null)
+                {
+                    jsonStop += $"|{stop.Location.Beat.Codes.Text}";
+                }
+
+                jsonStop = jsonStop.Replace("\"", "\"\"");
+                builder.AppendLine($"\"{jsonStop}\"");
+            }
+
+            foreach (var stop in stopResponseV2)
+            {
+                var dojStop = _stopServiceV2.CastToDojStop(stop);
                 dojStop.Officer = null;
                 var jsonStop = JsonConvert.SerializeObject(dojStop);
 
@@ -178,7 +209,7 @@ public class GenerateCpraReport
                 {
                     Level = 1,
                     Header = "Submitted stops included on report",
-                    Detail = stopResponse.Count.ToString(),
+                    Detail = (stopResponseV1.Count + stopResponseV2.Count).ToString(),
                 },
                 new CpraListItem()
                 {
