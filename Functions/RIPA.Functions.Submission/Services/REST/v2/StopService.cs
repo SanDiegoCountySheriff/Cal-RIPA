@@ -268,15 +268,20 @@ public class StopService : IStopService
 
     private string CastToDojConsentType(List<BasisForSearch> listBasisForSearch)
     {
+        var consentTypes = new List<string>() { "1", "14", "15" };
+
         foreach (var basisForSearch in listBasisForSearch)
         {
-            return basisForSearch.Key switch
+            if (consentTypes.Contains(basisForSearch.Key))
             {
-                "1" => "1",
-                "14" => "2",
-                "15" => "3",
-                _ => string.Empty
-            };
+                return basisForSearch.Key switch
+                {
+                    "1" => "1",
+                    "14" => "2",
+                    "15" => "3",
+                    _ => string.Empty
+                };
+            }
         }
 
         return string.Empty;
