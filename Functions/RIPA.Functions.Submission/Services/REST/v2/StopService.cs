@@ -140,7 +140,7 @@ public class StopService : IStopService
             return "2";
         }
 
-        if (!string.IsNullOrWhiteSpace(location.CrossStreet2) && !string.IsNullOrWhiteSpace(location.CrossStreet2))
+        if (!string.IsNullOrWhiteSpace(location.CrossStreet1) && !string.IsNullOrWhiteSpace(location.CrossStreet2))
         {
             return "3";
         }
