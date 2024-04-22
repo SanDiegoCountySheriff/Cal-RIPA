@@ -1853,8 +1853,6 @@ export const fullStopToApiStopV2 = (
   const formCached = localStorage.getItem('ripa_form_cached')
   const submittedApiStop = localStorage.getItem('ripa_form_submitted_api_stop')
   const parsedApiStop = submittedApiStop ? JSON.parse(submittedApiStop) : null
-  const blockNumber = fullStop.location?.blockNumber || null
-  const streetName = fullStop.location?.streetName || null
 
   return {
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
@@ -1886,7 +1884,7 @@ export const fullStopToApiStopV2 = (
     listPersonStopped: getApiStopPeopleListedV2(fullStop, statutes),
     location: {
       beat: getBeat(fullStop, beats),
-      blockNumber: blockNumber && streetName ? blockNumber : '',
+      blockNumber: fullStop.location?.blockNumber || '',
       city: getCity(fullStop, outOfCounty ? nonCountyCities : countyCities),
       fullAddress: fullStop.location?.fullAddress || '',
       highway: fullStop.location?.highway || '',
@@ -1898,7 +1896,7 @@ export const fullStopToApiStopV2 = (
       piiFound: fullStop.location?.piiFound || false,
       school: fullStop.location?.isSchool || false,
       schoolName: getSchool(fullStop, schools),
-      streetName: blockNumber && streetName ? streetName : '',
+      streetName: fullStop.location?.streetName || '',
       toggleLocationOptions: fullStop.location?.toggleLocationOptions || false,
       geoLocation: {
         latitude: fullStop.location?.latitude || null,
