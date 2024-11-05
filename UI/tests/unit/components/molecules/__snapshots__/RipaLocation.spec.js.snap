@@ -112,13 +112,30 @@ exports[`Ripa Location should match snapshot 1`] = `
     -- or --
   </span></div>
         <div class="row">
-          <div class="col-sm-12 col-12">
+          <div class="col-sm-6 col-12">
             <div class="ripa-text-input">
               <!---->
               <div class="v-input theme--light v-text-field">
                 <div class="v-input__control">
                   <div class="v-input__slot">
-                    <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Closest Intersection</label><input id="input-28" type="text"></div>
+                    <div class="v-text-field__slot"><label for="input-28" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 1</label><input id="input-28" type="text"></div>
+                  </div>
+                  <div class="v-text-field__details">
+                    <div class="v-messages theme--light">
+                      <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-12">
+            <div class="ripa-text-input">
+              <!---->
+              <div class="v-input theme--light v-text-field">
+                <div class="v-input__control">
+                  <div class="v-input__slot">
+                    <div class="v-text-field__slot"><label for="input-32" class="v-label theme--light" style="left: 0px; position: absolute;">Cross Street 2</label><input id="input-32" type="text"></div>
                   </div>
                   <div class="v-text-field__details">
                     <div class="v-messages theme--light">
@@ -134,13 +151,13 @@ exports[`Ripa Location should match snapshot 1`] = `
           <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
             <div class="v-input__control">
               <div class="v-input__slot">
-                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-32" role="switch" type="checkbox" aria-disabled="false" value="">
+                <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-36" role="switch" type="checkbox" aria-disabled="false" value="">
                   <div class="v-input--selection-controls__ripple"></div>
                   <div class="v-input--switch__track theme--light"></div>
                   <div class="v-input--switch__thumb theme--light">
                     <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                   </div>
-                </div><label for="input-32" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+                </div><label for="input-36" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         More Location Options
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -155,13 +172,13 @@ exports[`Ripa Location should match snapshot 1`] = `
             <div class="v-input v-input--reverse v-input--expand v-input--hide-details theme--light v-input--selection-controls v-input--switch v-input--switch--inset">
               <div class="v-input__control">
                 <div class="v-input__slot">
-                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-35" role="switch" type="checkbox" aria-disabled="false" value="">
+                  <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-39" role="switch" type="checkbox" aria-disabled="false" value="">
                     <div class="v-input--selection-controls__ripple"></div>
                     <div class="v-input--switch__track theme--light"></div>
                     <div class="v-input--switch__thumb theme--light">
                       <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                     </div>
-                  </div><label for="input-35" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+                  </div><label for="input-39" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         City Out of County?
       </span> <span class="switch-label" style="right: -45px;">
         No
@@ -177,8 +194,8 @@ exports[`Ripa Location should match snapshot 1`] = `
       <div class="col-sm-12 col-md-6 col-12">
         <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
           <div class="v-input__control">
-            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-38" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-38" class="v-label theme--light" style="left: 0px; position: absolute;">City</label><input id="input-38" type="text" autocomplete="off">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-42" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-42" class="v-label theme--light" style="left: 0px; position: absolute;">City or Unincorporated Area</label><input id="input-42" type="text" autocomplete="off">
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>
@@ -203,8 +220,8 @@ exports[`Ripa Location should match snapshot 1`] = `
       <div class="col-sm-12 col-md-6 col-12">
         <div class="v-input tw-my-4 theme--light v-text-field v-text-field--solo-flat v-select v-autocomplete">
           <div class="v-input__control">
-            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-44" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-44" class="v-label theme--light" style="left: 0px; position: absolute;">Beat</label><input id="input-44" type="text" autocomplete="off">
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-48" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-48" class="v-label theme--light" style="left: 0px; position: absolute;">Beat</label><input id="input-48" type="text" autocomplete="off">
                 <div class="v-input__append-inner">
                   <div></div>
                 </div>

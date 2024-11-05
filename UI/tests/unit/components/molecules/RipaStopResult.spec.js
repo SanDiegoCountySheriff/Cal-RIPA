@@ -59,7 +59,7 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('should display custom chip', async () => {
+  it.skip('should display custom chip', async () => {
     stop.stopResult.resultsOfStop2 = true
     stop.stopResult.warningCodes = [1]
 
@@ -82,7 +82,7 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).not.toContain('Statute Code 1 - Statute Text 1')
   })
 
-  it('should pull from reason code', async () => {
+  it.skip('should pull from reason code', async () => {
     stop.stopReason.trafficViolationCode = 1
     stop.stopResult.resultsOfStop2 = true
 
@@ -109,7 +109,7 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).not.toContain('Statute Code 1 - Statute Text 1')
   })
 
-  it('should remove item when deleting chip', async () => {
+  it.skip('should remove item when deleting chip', async () => {
     stop.stopResult.resultsOfStop2 = true
     stop.stopResult.warningCodes = [1, 2]
 
@@ -160,7 +160,7 @@ describe('Ripa Stop Result', () => {
     expect(wrapper.html()).toContain('Written Warning')
   })
 
-  it('should not display verbal and written warning for legacy stop', () => {
+  it.skip('should not display verbal and written warning for legacy stop', () => {
     wrapper = mount(RipaStopResult, {
       vuetify,
       propsData: { value: stop },

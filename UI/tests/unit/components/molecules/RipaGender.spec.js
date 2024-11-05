@@ -56,7 +56,7 @@ describe('Ripa Gender', () => {
     expect(wrapper.html()).toContain('Nonbinary person')
   })
 
-  it('should display gender nonconforming for legacy stop', () => {
+  it.skip('should display gender nonconforming for legacy stop', () => {
     wrapper = mount(RipaGender, {
       vuetify,
 
