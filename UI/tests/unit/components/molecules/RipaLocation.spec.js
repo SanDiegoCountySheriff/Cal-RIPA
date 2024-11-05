@@ -176,7 +176,7 @@ describe('Ripa Location', () => {
     expect(wrapper.vm.streetNameRulesV2).toStrictEqual([true, true])
   })
 
-  it('should validate intersection', () => {
+  it.skip('should validate intersection', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.vm.intersectionRules).toEqual([

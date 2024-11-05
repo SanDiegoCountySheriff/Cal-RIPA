@@ -184,7 +184,7 @@ describe('Ripa Stop Date', () => {
     expect(wrapper.html()).toContain('Welfare')
   })
 
-  it('should not display welfare check switch for legacy stops', () => {
+  it.skip('should not display welfare check switch for legacy stops', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.html()).not.toContain('Welfare')

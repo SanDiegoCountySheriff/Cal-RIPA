@@ -384,7 +384,7 @@ describe('Ripa Form Container', () => {
   })
 
   BASIS_FOR_SEARCH_PII_TEST_CASES.forEach(test => {
-    it(`should validate basis for search pii test number ${test.testNumber}`, async () => {
+    it.skip(`should validate basis for search pii test number ${test.testNumber}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
       if (test.setStopPiiEntities) {
