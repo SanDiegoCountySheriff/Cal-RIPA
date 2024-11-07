@@ -126,9 +126,14 @@ export default {
   },
 
   computed: {
+    getSubmissions() {
+      const value = localStorage.getItem('ripa_form_submitted_submissions')
+      return value ? JSON.parse(value) : []
+    },
     isStopErrored() {
+      const submissions = this.getSubmissions
       return (
-        this.apiStop.listSubmission?.some(s => {
+        submissions?.some(s => {
           return s.listSubmissionError?.some(l => !!l)
         }) || false
       )
