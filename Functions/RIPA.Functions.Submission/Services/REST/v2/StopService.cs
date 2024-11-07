@@ -107,8 +107,8 @@ public class StopService : IStopService
             Location = new Models.v2.Location
             {
                 LocationType = locationType,
-                Latitude = locationType == "1" ? stopLocation.GeoLocation.Latitude.ToString() : string.Empty,
-                Longitude = locationType == "1" ? stopLocation.GeoLocation.Longitude.ToString() : string.Empty,
+                Latitude = locationType == "1" ? Math.Round(stopLocation.GeoLocation.Latitude.GetValueOrDefault(), 3).ToString("00.000") : string.Empty,
+                Longitude = locationType == "1" ? Math.Round(stopLocation.GeoLocation.Longitude.GetValueOrDefault(), 3).ToString("000.000") : string.Empty,
                 BlockNumber = locationType == "2" ? stopLocation.BlockNumber : string.Empty,
                 StreetName = locationType == "2" ? stopLocation.StreetName : string.Empty,
                 CrossStreet1 = locationType == "3" ? stopLocation.CrossStreet1 : string.Empty,

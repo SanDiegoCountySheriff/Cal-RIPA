@@ -1942,6 +1942,7 @@ export const fullStopToApiStopV2 = (
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
+    listSubmission: parsedApiStop.listSubmission,
   }
 }
 
