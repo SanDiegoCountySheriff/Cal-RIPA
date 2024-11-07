@@ -294,7 +294,7 @@ describe('Ripa Form Container', () => {
   })
 
   PII_TEST_CASES.forEach(test => {
-    it.skip(`should validate ${test.source}`, async () => {
+    it(`should validate ${test.source}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
       const source = test.source
@@ -327,7 +327,7 @@ describe('Ripa Form Container', () => {
   })
 
   LOCATION_PII_TEST_CASES.forEach(test => {
-    it.skip(`should validate location for pii test number: ${test.testNumber}`, async () => {
+    it(`should validate location for pii test number: ${test.testNumber}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
       if (test.setStopPiiEntities) {
@@ -362,7 +362,7 @@ describe('Ripa Form Container', () => {
   })
 
   REASON_PII_TEST_CASES.forEach(test => {
-    it.skip(`should validate reason for pii test number: ${test.testNumber}`, async () => {
+    it(`should validate reason for pii test number: ${test.testNumber}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
       if (test.setStopPiiEntities) {
@@ -399,7 +399,7 @@ describe('Ripa Form Container', () => {
   })
 
   BASIS_FOR_SEARCH_PII_TEST_CASES.forEach(test => {
-    it.skip(`should validate basis for search pii test number ${test.testNumber}`, async () => {
+    it(`should validate basis for search pii test number ${test.testNumber}`, async () => {
       wrapper = factory()
       wrapper.vm.handleOpenTemplate()
       wrapper.vm.stop.stopVersion = 1
@@ -436,7 +436,7 @@ describe('Ripa Form Container', () => {
     })
   })
 
-  it.skip('should watch mappedGpsLocationAddress', async () => {
+  it('should watch mappedGpsLocationAddress', async () => {
     wrapper = factory()
     wrapper.vm.handleOpenTemplate()
 
