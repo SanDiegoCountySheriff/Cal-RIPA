@@ -1515,7 +1515,7 @@ const getStopReasonSearchOfPersonV2 = person => {
 
   if (reasonForStop === 6) {
     if (anyActionsTaken) {
-      if (mappedActionsTaken.includes(18)) {
+      if (mappedActionsTaken.includes(14)) {
         return true
       }
     }
@@ -1553,7 +1553,7 @@ const getStopReasonSearchOfPropertyV2 = person => {
 
   if (reasonForStop === 6) {
     if (anyActionsTaken) {
-      if (mappedActionsTaken.includes(20)) {
+      if (mappedActionsTaken.includes(15)) {
         return true
       }
     }

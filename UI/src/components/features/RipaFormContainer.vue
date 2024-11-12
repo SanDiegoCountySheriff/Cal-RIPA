@@ -914,6 +914,7 @@ export default {
           perceivedOrKnownDisability:
             filteredPerson?.perceivedOrKnownDisability || [],
           perceivedRace: filteredPerson?.perceivedRace || [],
+          nonBinaryPerson: filteredPerson?.nonBinaryPerson,
         },
         stopReason: filteredPerson?.stopReason || {},
         stopResult: filteredPerson?.stopResult || {},
