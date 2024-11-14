@@ -3,6 +3,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<UserSecretsId>d209ae04-88d3-4417-874f-0994a63d387e</UserSecretsId>
+		<_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Core" Version="1.44.1" />
