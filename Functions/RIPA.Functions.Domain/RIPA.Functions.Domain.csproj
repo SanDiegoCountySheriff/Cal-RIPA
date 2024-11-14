@@ -1,20 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<UserSecretsId>d209ae04-88d3-4417-874f-0994a63d387e</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Core" Version="1.37.0" />
-		<PackageReference Include="Azure.Data.Tables" Version="12.8.2" />
-		<PackageReference Include="ExcelDataReader" Version="3.6.0" />
-		<PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
-		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.32.0" />
+		<PackageReference Include="Azure.Core" Version="1.44.1" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
+		<PackageReference Include="ExcelDataReader" Version="3.7.0" />
+		<PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.45.2" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.1" />
-		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.3.2" />
+		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.6.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="1.5.1" />
+		<PackageReference Include="System.Memory.Data" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj" />
