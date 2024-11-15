@@ -14,9 +14,9 @@
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.3.2" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.6.0" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="1.5.1" />
-		<PackageReference Include="System.Memory.Data" Version="6.0.0" />
+		<PackageReference Include="System.Memory.Data" Version="8.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\RIPA.Functions.Common.Models\RIPA.Functions.Common.Models.csproj" />
