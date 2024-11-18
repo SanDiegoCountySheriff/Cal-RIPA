@@ -92,7 +92,7 @@ public class SftpService : ISftpService
         {
             Connect();
 
-            return (IEnumerable<SftpFile>)_sftpClient.ListDirectory(remoteDirectory);
+            return _sftpClient.ListDirectory(remoteDirectory);
         }
         catch (Exception exception)
         {
