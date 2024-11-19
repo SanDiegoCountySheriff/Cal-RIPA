@@ -305,7 +305,8 @@ export default {
     },
 
     isLastLocationValid() {
-      return this.getLastLocation !== null
+      const lastLocation = this.getLastLocation()
+      return lastLocation !== null
     },
 
     getFavoriteLocations() {

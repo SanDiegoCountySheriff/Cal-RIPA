@@ -441,7 +441,7 @@ export default {
     },
 
     blockNumberRulesV2() {
-      const blockNumber = this.model.location.blockNumber
+      const blockNumber = this.model.location.blockNumber || ''
 
       return [
         this.isLocationOptionsFilledV2 ||
