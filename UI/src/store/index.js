@@ -848,7 +848,7 @@ export default new Vuex.Store({
       const formData = new FormData()
       formData.append('file', domainFile)
       return axios
-        .post(`http://localhost:7071/api/v1/PostUpload`, formData, {
+        .post(`${state.apiConfig.apiBaseUrl}domain/v1/PostUpload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
