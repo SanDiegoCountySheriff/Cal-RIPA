@@ -125,6 +125,24 @@ public class PostUpload
         return dataSet;
     }
 
+    private readonly Dictionary<string, string> ExpectedStatuteHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "OFFENSE_VALIDATION_CD", "OFFENSE VALIDATION CD" },
+        { "OFFENSE_CD", "OFFENSE CODE" },
+        { "TXN_TYPE_CD", "OFFENSE TXN TYPE CD" },
+        { "OFFENSE_STATUTE", "OFFENSE STATUTE" },
+        { "OFFENSE_TYPE_OF_STAT_CD", "OFFENSE TYPE OF STATUTE CD" },
+        { "OFFENSE_LITERAL", "STATUTE LITERAL 25" },
+        { "DEF_TYPE_OF_CHARGE", "OFFENSE DEFAULT TYPE OF CHARGE" },
+        { "OFFENSE_TYPE_OF_CHARGE", "OFFENSE TYPE OF CHARGE" },
+        { "LITERAL_ID_CD", "OFFENSE LITERAL IDENTIFIER CD" },
+        { "DEGREE", "OFFENSE DEGREE" },
+        { "BCS_HIE_CD", "BCS HIERARCHY CD" },
+        { "OFFENSE_ENACTED", "OFFENSE ENACTED" },
+        { "OFFENSE_REPEALED_OR_ INACTIVATED", "OFFENSE REPEALED" },
+        { "ALPCCOGN_CD", "ALPS COGNIZANT CD" },
+    };
+
     private async Task<bool> ExecuteBatch(TableClient table, ILogger log)
     {
         try
@@ -159,31 +177,25 @@ public class PostUpload
 
         foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Take(1))
         {
+
+            var headers = row.ItemArray
+                .Select(columnName => columnName.ToString().ToUpper().Trim()).ToList();
+
+            NormalizeHeaders(headers, ExpectedStatuteHeaders);
+
             switch (table.Name)
             {
                 case "Beats":
-                    foreach (var columnName in row.ItemArray)
-                    {
-                        BeatTableHeaders.Add(columnName.ToString().ToUpper());
-                    }
+                    BeatTableHeaders.AddRange(headers);
                     break;
                 case "Cities":
-                    foreach (var columnName in row.ItemArray)
-                    {
-                        CityTableHeaders.Add(columnName.ToString().ToUpper());
-                    }
+                    CityTableHeaders.AddRange(headers);
                     break;
                 case "Schools":
-                    foreach (var columnName in row.ItemArray)
-                    {
-                        SchoolTableHeaders.Add(columnName.ToString().ToUpper());
-                    }
+                    SchoolTableHeaders.AddRange(headers);
                     break;
                 case "Statutes":
-                    foreach (var columnName in row.ItemArray)
-                    {
-                        StatuteTableHeaders.Add(columnName.ToString().ToUpper());
-                    }
+                    StatuteTableHeaders.AddRange(headers);
                     break;
                 default:
                     break;
@@ -352,6 +364,19 @@ public class PostUpload
         }
 
         return beat;
+    }
+
+    private void NormalizeHeaders(List<string> headers, Dictionary<string, string> expectedHeaders)
+    {
+        for (int i = 0; i < headers.Count; i++)
+        {
+            string header = headers[i].ToUpper().Trim();
+
+            if (expectedHeaders.ContainsKey(header))
+            {
+                headers[i] = expectedHeaders[header];
+            }
+        }
     }
 
     private class UploadRequest
