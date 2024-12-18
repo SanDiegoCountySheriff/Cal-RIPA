@@ -164,7 +164,7 @@ public class SubmissionConsumer
             if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
             {
                 log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
-                RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated. 
+                await RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated. 
                 await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
 
                 continue;
@@ -355,7 +355,7 @@ public class SubmissionConsumer
         try
         {
             log.LogInformation($"Uploading to FTP: {stopId} : {runId}");
-            _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
+            await _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
             return true;
         }
         catch (Exception ex)
@@ -376,12 +376,12 @@ public class SubmissionConsumer
         }
     }
 
-    private bool RemoveSftpFile(ILogger log, string fileName, string stopId, string runId)
+    private async Task<bool> RemoveSftpFile(ILogger log, string fileName, string stopId, string runId)
     {
         try
         {
             log.LogInformation($"Remving from FTP: {stopId} : {runId}");
-            _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+            await _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
             return true;
         }
         catch (Exception ex)
