@@ -60,7 +60,7 @@ public class SftpService : ISftpService
 
     }
 
-    public void Connect()
+    public async Task Connect()
     {
         if (_disabled)
         {
@@ -69,7 +69,20 @@ public class SftpService : ISftpService
 
         if (_sftpClient != null && !_sftpClient.IsConnected)
         {
-            _sftpClient.Connect();
+            int attempts = 1;
+            do
+            {
+                try
+                {
+                    _sftpClient.Connect();
+                }
+                catch (Renci.SshNet.Common.SshConnectionException e)
+                {
+                    attempts++;
+                }
+
+                await Task.Delay(attempts * 1000).ConfigureAwait(false);
+            } while (attempts < 10 && !_sftpClient.IsConnected);
         }
     }
 
@@ -86,11 +99,11 @@ public class SftpService : ISftpService
         }
     }
 
-    public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
+    public async Task<IEnumerable<SftpFile>> ListAllFiles(string remoteDirectory = ".")
     {
         try
         {
-            Connect();
+            await Connect();
 
             return _sftpClient.ListDirectory(remoteDirectory);
         }
@@ -101,11 +114,11 @@ public class SftpService : ISftpService
         }
     }
 
-    public void UploadStop(byte[] bytes, string remoteFilePath)
+    public async Task UploadStop(byte[] bytes, string remoteFilePath)
     {
         try
         {
-            Connect();
+            await Connect();
             using (MemoryStream stream = new MemoryStream(bytes))
             {
                 _sftpClient.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
@@ -126,7 +139,7 @@ public class SftpService : ISftpService
         try
         {
             BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-            Connect();
+            await Connect();
             var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
             var download = await blobClient.DownloadAsync(); //Download blob
             string text;
@@ -149,11 +162,11 @@ public class SftpService : ISftpService
         return null;
     }
 
-    public void DeleteFile(string remoteFilePath)
+    public async Task DeleteFile(string remoteFilePath)
     {
         try
         {
-            Connect();
+            await Connect();
             _sftpClient.DeleteFile(remoteFilePath);
             _logger.LogInformation($"File [{remoteFilePath}] deleted.");
         }

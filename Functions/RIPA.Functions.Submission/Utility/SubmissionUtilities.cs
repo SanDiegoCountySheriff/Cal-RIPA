@@ -32,11 +32,11 @@ public class SubmissionUtilities
         _blobContainerClient = GetBlobContainerClient();
     }
 
-    public bool IsValidSFTPConnection()
+    public async Task<bool> IsValidSFTPConnection()
     {
         try
         {
-            var files = _sftpService.ListAllFiles(_sftpInputPath);
+            var files = await _sftpService.ListAllFiles(_sftpInputPath);
         }
         catch (Exception ex)
         {

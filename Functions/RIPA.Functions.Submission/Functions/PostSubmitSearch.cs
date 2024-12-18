@@ -131,7 +131,7 @@ public class PostSubmitSearch
         SubmissionUtilities submissionUtilities = new SubmissionUtilities(_submissionCosmosDbService, _sftpService, log);
         Guid submissionId;
 
-        if (!submissionUtilities.IsValidSFTPConnection())
+        if (!await submissionUtilities.IsValidSFTPConnection())
         {
             return new BadRequestObjectResult("An error occurred connecting to DOJ SFTP service.");
         }
