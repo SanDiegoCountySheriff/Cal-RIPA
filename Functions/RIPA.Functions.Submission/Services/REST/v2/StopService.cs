@@ -21,11 +21,11 @@ public class StopService : IStopService
 
     public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
-        if (stop.Status == SubmissionStatus.Pending.ToString())
+        if (stop.Status == SubmissionStatus.Pending.ToString() || stop.Status == SubmissionStatus.Unsubmitted.ToString())
         {
             stop.Status = SubmissionStatus.Submitted.ToString();
         }
-        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString() || stop.Status == SubmissionStatus.Unsubmitted_NFIA.ToString())
         {
             stop.Status = SubmissionStatus.Submitted_NFIA.ToString();
         }
