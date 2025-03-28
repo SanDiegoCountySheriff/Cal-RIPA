@@ -2427,6 +2427,10 @@
               "value": "dotnet"
             },
             {
+              "name": "FUNCTIONS_INPROC_NET8_ENABLED",
+              "value": "1"
+            },
+            {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccounts_ripafnsa_name'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ripafnsa_name')), '2019-06-01').keys[0].value,';EndpointSuffix=', parameters('storage_ep_suff'))]"
             },
@@ -2610,6 +2614,10 @@
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "dotnet"
+            },
+            {
+              "name": "FUNCTIONS_INPROC_NET8_ENABLED",
+              "value": "1"
             },
             {
               "name": "AzureWebJobsStorage",
@@ -2800,6 +2808,10 @@
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "dotnet"
+            },
+            {
+              "name": "FUNCTIONS_INPROC_NET8_ENABLED",
+              "value": "1"
             },
             {
               "name": "AzureWebJobsStorage",
@@ -3010,6 +3022,10 @@
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "dotnet"
+            },
+                        {
+              "name": "FUNCTIONS_INPROC_NET8_ENABLED",
+              "value": "1"
             },
             {
               "name": "AzureWebJobs.ServiceBusSubmissionConsumer.Disabled",
@@ -3261,6 +3277,10 @@
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "dotnet"
+            },
+            {
+              "name": "FUNCTIONS_INPROC_NET8_ENABLED",
+              "value": "1"
             },
             {
               "name": "AzureWebJobsStorage",
