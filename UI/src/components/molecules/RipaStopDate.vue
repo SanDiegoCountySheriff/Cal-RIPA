@@ -72,6 +72,25 @@
           ></ripa-switch>
         </v-col>
       </v-row>
+
+      <v-row v-if="isLateStop" class="tw-mt-4">
+        <v-col cols="12">
+          <v-alert type="warning" dense outlined>
+            This stop is being submitted more than 24 hours after it occurred.
+            Please provide an explanation for the late submission.
+          </v-alert>
+
+          <v-text-field
+            v-model="model.lateStopExplanation"
+            label="Explanation for Late Submission"
+            :rules="lateExplanationRules"
+            required
+            outlined
+            dense
+            class="tw-mt-2"
+          />
+        </v-col>
+      </v-row>
     </v-container>
 
     <template v-if="model.stopVersion === 2">
@@ -151,12 +170,26 @@ export default {
       },
     },
 
+    isLateStop() {
+      const dateStr = this.model.stopDate.date
+      const timeStr = this.model.stopDate.time
+      if (!dateStr || !timeStr) return false
+      return (
+        !dateWithinLastHours(dateStr, timeStr, 24) &&
+        dateNotInFuture(dateStr, timeStr)
+      )
+    },
+
     dateRules() {
       return [
         v => !!v || 'A date is required',
         v =>
-          (v && this.isValidDateTime) ||
-          'Date and Time must be within the past 24 hours',
+          (v &&
+            dateNotInFuture(
+              this.model.stopDate.date,
+              this.model.stopDate.time,
+            )) ||
+          'Date and Time cannot be in the future',
       ]
     },
 
@@ -164,8 +197,12 @@ export default {
       return [
         v => !!v || 'A time is required',
         v =>
-          (v && this.isValidDateTime) ||
-          'Date and Time must be within the past 24 hours',
+          (v &&
+            dateNotInFuture(
+              this.model.stopDate.date,
+              this.model.stopDate.time,
+            )) ||
+          'Date and Time cannot be in the future',
       ]
     },
 
@@ -175,6 +212,15 @@ export default {
         v =>
           (v >= 1 && v <= 1440) ||
           'Duration must be between 1 and 1440 minutes',
+      ]
+    },
+
+    lateExplanationRules() {
+      return [
+        v =>
+          !this.isLateStop ||
+          (v && v.length > 4) ||
+          'Explanation is required for late stops',
       ]
     },
 

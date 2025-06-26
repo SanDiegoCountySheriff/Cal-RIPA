@@ -1825,6 +1825,7 @@ export const fullStopToApiStop = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     nfia: fullStop.nfia,
+    lateStopExplanation: fullStop.lateStopExplanation || null,
   }
 }
 
@@ -1942,6 +1943,7 @@ export const fullStopToApiStopV2 = (
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
+    lateStopExplanation: fullStop.lateStopExplanation || null,
   }
 }
 
