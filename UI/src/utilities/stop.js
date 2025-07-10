@@ -155,6 +155,7 @@ export const defaultStop = () => {
       time: format(new Date(), 'kk:mm'),
       duration: null,
       stopInResponseToCFS: false,
+      lateSubmissionExplanation: null,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
@@ -1242,6 +1243,7 @@ export const apiStopToFullStopV2 = apiStop => {
       time: apiStop.time,
       duration: Number(apiStop.stopDuration),
       stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
+      lateSubmissionExplanation: apiStop.lateSubmissionExplanation || null,
     },
     people: getFullStopPeopleListedV2(apiStop),
   }
@@ -1730,6 +1732,7 @@ export const fullStopToStopV2 = fullStop => {
     stopReason: person.stopReason || {},
     stopResult: person.stopResult || {},
     agencyQuestions: fullStop.agencyQuestions,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 

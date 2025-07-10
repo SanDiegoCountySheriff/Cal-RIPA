@@ -248,6 +248,16 @@
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
+          <template v-slot:item.stopDateTime="{ item }">
+            <span>{{ item.stopDateTime }}</span>
+            <v-icon
+              v-if="item.lateSubmissionExplanation"
+              color="warning"
+              small
+              title="Late Submission"
+              >mdi-alert-circle</v-icon
+            >
+          </template>
         </v-data-table>
       </v-flex>
 
