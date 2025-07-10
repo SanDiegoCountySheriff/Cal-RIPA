@@ -283,6 +283,9 @@ export const apiStopStopSummary = apiStop => {
       content: getSummaryStopMadeDuringWelfareCheck(apiStop),
     })
   }
+ 
+    items.push({ id: 'A11', content: getSummaryLateExplanation(apiStop) })
+ 
   return items
 }
 
@@ -319,6 +322,15 @@ const getSummaryDate = apiStop => {
     level: 1,
     header: 'Date',
     detail: apiStop.date,
+  }
+}
+
+const getSummaryLateExplanation = apiStop => {
+  return {
+    marginTop: true,
+    level: 1,
+    header: 'Late Stop Explanation',
+    detail: apiStop.lateStopExplanation,
   }
 }
 
