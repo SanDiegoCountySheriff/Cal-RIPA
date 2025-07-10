@@ -283,7 +283,7 @@ export const apiStopStopSummary = apiStop => {
       content: getSummaryStopMadeDuringWelfareCheck(apiStop),
     })
   }
-  if (apiStop.lateStopExplanation) {
+  if (apiStop.lateSubmissionExplanation) {
     items.push({ id: 'A11', content: getSummaryLateExplanation(apiStop) })
   }
   return items
@@ -328,8 +328,8 @@ const getSummaryDate = apiStop => {
 const getSummaryLateExplanation = apiStop => {
   return {
     level: 1,
-    header: 'Late Stop Explanation',
-    detail: apiStop.lateStopExplanation,
+    header: 'Late Submission Explanation',
+    detail: apiStop.lateSubmissionExplanation,
   }
 }
 
@@ -1836,7 +1836,7 @@ export const fullStopToApiStop = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     nfia: fullStop.nfia,
-    lateStopExplanation: fullStop.lateStopExplanation || null,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 
@@ -1954,7 +1954,7 @@ export const fullStopToApiStopV2 = (
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
-    lateStopExplanation: fullStop.lateStopExplanation || null,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 

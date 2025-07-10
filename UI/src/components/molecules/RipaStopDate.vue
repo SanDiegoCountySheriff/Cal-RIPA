@@ -81,7 +81,7 @@
           </v-alert>
 
           <v-text-field
-            v-model="model.lateStopExplanation"
+            v-model="model.lateSubmissionExplanation"
             label="Explanation for Late Submission"
             :rules="lateExplanationRules"
             required
