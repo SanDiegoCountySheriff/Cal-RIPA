@@ -155,6 +155,7 @@ export const defaultStop = () => {
       time: format(new Date(), 'kk:mm'),
       duration: null,
       stopInResponseToCFS: false,
+      lateSubmissionExplanation: null,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
@@ -283,6 +284,9 @@ export const apiStopStopSummary = apiStop => {
       content: getSummaryStopMadeDuringWelfareCheck(apiStop),
     })
   }
+  if (apiStop.lateSubmissionExplanation) {
+    items.push({ id: 'A11', content: getSummaryLateExplanation(apiStop) })
+  }
   return items
 }
 
@@ -319,6 +323,14 @@ const getSummaryDate = apiStop => {
     level: 1,
     header: 'Date',
     detail: apiStop.date,
+  }
+}
+
+const getSummaryLateExplanation = apiStop => {
+  return {
+    level: 1,
+    header: 'Late Submission Explanation',
+    detail: apiStop.lateSubmissionExplanation,
   }
 }
 
@@ -1231,6 +1243,7 @@ export const apiStopToFullStopV2 = apiStop => {
       time: apiStop.time,
       duration: Number(apiStop.stopDuration),
       stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
+      lateSubmissionExplanation: apiStop.lateSubmissionExplanation || null,
     },
     people: getFullStopPeopleListedV2(apiStop),
   }
@@ -1719,6 +1732,7 @@ export const fullStopToStopV2 = fullStop => {
     stopReason: person.stopReason || {},
     stopResult: person.stopResult || {},
     agencyQuestions: fullStop.agencyQuestions,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 
@@ -1825,6 +1839,7 @@ export const fullStopToApiStop = (
     time: fullStop.stopDate.time,
     stopVersion: fullStop.stopVersion,
     nfia: fullStop.nfia,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 
@@ -1942,6 +1957,7 @@ export const fullStopToApiStopV2 = (
     favoriteLocationName: fullStop.favoriteLocationName,
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
   }
 }
 

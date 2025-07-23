@@ -1142,6 +1142,8 @@ export default {
         updatedFullStop.stepTrace = this.stop.stepTrace
         updatedFullStop.location = this.stop.location
         updatedFullStop.stopDate = this.stop.stopDate
+        updatedFullStop.lateSubmissionExplanation =
+          this.stop.lateSubmissionExplanation || null
         updatedFullStop.piiEntities = this.stop.piiEntities
         updatedFullStop.isPiiFound = this.stop.isPiiFound
         updatedFullStop.officerWorksWithNonReportingAgency =
