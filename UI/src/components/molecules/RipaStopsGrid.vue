@@ -252,10 +252,11 @@
             <span>{{ item.stopDateTime }}</span>
             <v-icon
               v-if="item.lateSubmissionExplanation"
+              title="Late Submission"
+              class="late-submission-icon"
               color="warning"
               small
-              title="Late Submission"
-              >mdi-alert-circle</v-icon
+              >mdi-clock-alert</v-icon
             >
           </template>
         </v-data-table>
@@ -726,5 +727,12 @@ export default {
 .custom-tooltip {
   opacity: var(--v-tooltip-opacity, 1) !important;
   background: var(--v-tooltip-bg, #1976d2) !important;
+}
+
+.late-submission-icon {
+  margin-left: 4px;
+  margin-bottom: 2px;
+  font-size: 18px !important;
+  vertical-align: middle;
 }
 </style>
