@@ -75,19 +75,21 @@
 
       <v-row v-if="isLateStop" class="tw-mt-4">
         <v-col cols="12">
-          <v-alert type="warning" dense outlined>
+          <v-alert type="warning" dense outlined class="mt-2">
             This stop is being submitted more than 24 hours after it occurred.
             Please provide an explanation for the late submission.
           </v-alert>
+        </v-col>
+      </v-row>
 
+      <v-row v-if="isLateStop">
+        <v-col>
           <v-text-field
             v-model="model.lateSubmissionExplanation"
-            label="Explanation for Late Submission"
             :rules="lateExplanationRules"
+            label="Explanation for Late Submission"
             required
-            outlined
             dense
-            class="tw-mt-2"
           />
         </v-col>
       </v-row>
