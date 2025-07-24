@@ -1220,6 +1220,7 @@ export const apiStopToFullStopV2 = apiStop => {
       apiStop.officerWorksWithNonReportingAgency,
     stopVersion: apiStop.stopVersion,
     stopMadeDuringWelfareCheck: apiStop.stopMadeDuringWelfareCheck,
+    lateSubmissionExplanation: apiStop.lateSubmissionExplanation || null,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1243,7 +1244,6 @@ export const apiStopToFullStopV2 = apiStop => {
       time: apiStop.time,
       duration: Number(apiStop.stopDuration),
       stopInResponseToCFS: apiStop.stopInResponseToCFS || false,
-      lateSubmissionExplanation: apiStop.lateSubmissionExplanation || null,
     },
     people: getFullStopPeopleListedV2(apiStop),
   }
