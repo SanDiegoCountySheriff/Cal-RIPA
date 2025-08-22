@@ -77,7 +77,9 @@
         <v-col cols="12">
           <v-alert type="warning" dense outlined class="mt-2">
             This stop is being submitted more than 24 hours after it occurred.
-            Please provide an explanation for the late submission.
+            The RIPA regulation requires stop info to be entered before the end
+            of shift. Please provide an explanation for the late submission for
+            administrative review.
           </v-alert>
         </v-col>
       </v-row>
@@ -126,6 +128,7 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
 import {
   dateWithinLastHours,
+  dateWithinConfigurableLimit,
   dateNotInFuture,
   formatToIsoCurrentDate,
   formatToIsoDate,
@@ -151,6 +154,9 @@ export default {
   inject: ['isAdminEditing', 'environmentName'],
 
   computed: {
+    stopDateLimitDays() {
+      return this.$store.getters.stopDateLimitDays
+    },
     model: {
       get() {
         return this.value
@@ -176,10 +182,23 @@ export default {
       const dateStr = this.model.stopDate.date
       const timeStr = this.model.stopDate.time
       if (!dateStr || !timeStr) return false
-      return (
-        !dateWithinLastHours(dateStr, timeStr, 24) &&
-        dateNotInFuture(dateStr, timeStr)
-      )
+
+      // If stopDateLimitDays is 0, use the original 24-hour check
+      // Otherwise, use the configurable limit
+      if (this.stopDateLimitDays === 0) {
+        return (
+          !dateWithinLastHours(dateStr, timeStr, 24) &&
+          dateNotInFuture(dateStr, timeStr)
+        )
+      } else {
+        return (
+          !dateWithinConfigurableLimit(
+            dateStr,
+            timeStr,
+            this.stopDateLimitDays,
+          ) && dateNotInFuture(dateStr, timeStr)
+        )
+      }
     },
 
     dateRules() {
@@ -231,10 +250,22 @@ export default {
       const timeStr = this.model.stopDate.time
 
       if (!this.isAdminEditing) {
-        return (
-          dateWithinLastHours(dateStr, timeStr, 24) &&
-          dateNotInFuture(dateStr, timeStr)
-        )
+        // If stopDateLimitDays is 0, use the original 24-hour check
+        // Otherwise, use the configurable limit
+        if (this.stopDateLimitDays === 0) {
+          return (
+            dateWithinLastHours(dateStr, timeStr, 24) &&
+            dateNotInFuture(dateStr, timeStr)
+          )
+        } else {
+          return (
+            dateWithinConfigurableLimit(
+              dateStr,
+              timeStr,
+              this.stopDateLimitDays,
+            ) && dateNotInFuture(dateStr, timeStr)
+          )
+        }
       }
       return dateNotInFuture(dateStr, timeStr)
     },

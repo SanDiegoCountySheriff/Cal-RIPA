@@ -251,6 +251,9 @@ export default new Vuex.Store({
           return 'PROD'
       }
     },
+    stopDateLimitDays: state => {
+      return state.apiConfig?.stopDateLimitDays || 0
+    },
     mappedGpsLocationAddress: state => {
       if (
         state.gpsLocationAddress === undefined ||

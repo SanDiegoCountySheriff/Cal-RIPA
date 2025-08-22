@@ -28,6 +28,13 @@ describe('Ripa Stop Date', () => {
         isAdminEditing: computed(() => provideData?.isAdminEditing ?? false),
         environmentName: computed(() => 'QA'),
       },
+      mocks: {
+        $store: {
+          getters: {
+            stopDateLimitDays: 7,
+          },
+        },
+      },
     })
   }
 
@@ -124,6 +131,13 @@ describe('Ripa Stop Date', () => {
       provide: {
         isAdminEditing: computed(() => false),
         environmentName: computed(() => 'DEV'),
+      },
+      mocks: {
+        $store: {
+          getters: {
+            stopDateLimitDays: 7,
+          },
+        },
       },
     })
 
