@@ -49,7 +49,8 @@
             "Subscription": "{Your APIM subscription key}",
             "DefaultCounty": "{The county in which your agency has jurisdiction}",
             "DisplayBeatsInput": "{true or false}",
-            "DisplayDebugger": "{true or false}"
+            "DisplayDebugger": "{true or false}",
+            "StopDateLimitDays": "{Number of additional days beyond 24 hours for stop date limit, or null for no limit}"
         },
         "AgencyQuestions": [ // An array of extra questions to be presented in the STOP form
             {
@@ -78,7 +79,8 @@
             "Subscription": "12345678901234567890123456789012",
             "DefaultCounty": "My County",
             "DisplayBeatsInput": "true",
-            "DisplayDebugger": "true"
+            "DisplayDebugger": "true",
+            "StopDateLimitDays": null
         },
         "AgencyQuestions": [
             {
@@ -99,3 +101,25 @@
             }
         ]
     }
+
+## Configuration Settings
+
+### StopDateLimitDays
+
+The `StopDateLimitDays` setting controls how far back in time users can submit stop reports beyond the initial 24-hour warning period.
+
+**Usage:**
+- Set to `null` (default): No additional limit beyond the 24-hour warning. Users can submit stops from any date in the past.
+- Set to a number: Adds additional days to the 24-hour warning period before preventing submission.
+
+**Examples:**
+- `"StopDateLimitDays": null` - No limit (current behavior)
+- `"StopDateLimitDays": 2` - Total limit of 3 days (24 hours + 2 days)
+- `"StopDateLimitDays": 6` - Total limit of 1 week (24 hours + 6 days)
+- `"StopDateLimitDays": 29` - Total limit of 30 days (24 hours + 29 days)
+
+**Behavior:**
+- The 24-hour warning alert always appears for stops older than 24 hours
+- If a limit is configured and exceeded, users will receive a validation error preventing form submission
+- Admin users can override these limits when editing stops
+- The alert message includes RIPA regulation compliance text

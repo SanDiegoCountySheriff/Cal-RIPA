@@ -21,7 +21,7 @@ describe('Ripa Form Step 1', () => {
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
-    
+
     // Create a mock store
     store = new Vuex.Store({
       getters: {

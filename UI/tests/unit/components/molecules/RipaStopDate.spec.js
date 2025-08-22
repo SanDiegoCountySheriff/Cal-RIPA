@@ -21,7 +21,7 @@ describe('Ripa Stop Date', () => {
     vuetify = new Vuetify()
     stop = defaultStop()
     stopV2 = V2_STOP
-    
+
     // Create a mock store
     store = new Vuex.Store({
       getters: {
@@ -206,6 +206,74 @@ describe('Ripa Stop Date', () => {
     wrapper = factory({ value: stop })
 
     expect(wrapper.html()).not.toContain('Welfare')
+  })
+
+  it('should enforce date limit when StopDateLimitDays is configured', () => {
+    // Test with 7 days limit
+    store = new Vuex.Store({
+      getters: {
+        stopDateLimitDays: () => 7, // 7 additional days beyond 24 hours
+      },
+    })
+
+    wrapper = factory({ value: stop }, { isAdminEditing: false })
+
+    // Set a date that's 10 days old (beyond 24 hours + 7 days limit)
+    const tenDaysAgo = new Date()
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10)
+    stop.stopDate.date = format(tenDaysAgo, 'yyyy-MM-dd')
+    stop.stopDate.time = '12:00'
+    wrapper.vm.model = stop
+
+    // The date rules should return an error message for dates beyond the limit
+    const dateRules = wrapper.vm.dateRules
+    const result = dateRules[2](stop.stopDate.date) // Third rule is the configurable limit rule
+    expect(result).toContain('Date cannot be more than')
+    expect(result).toContain('hours in the past')
+  })
+
+  it('should not enforce date limit when StopDateLimitDays is null', () => {
+    // Test with no limit (null)
+    store = new Vuex.Store({
+      getters: {
+        stopDateLimitDays: () => null,
+      },
+    })
+
+    wrapper = factory({ value: stop }, { isAdminEditing: false })
+
+    // Set a date that's very old
+    const veryOldDate = new Date()
+    veryOldDate.setDate(veryOldDate.getDate() - 100)
+    stop.stopDate.date = format(veryOldDate, 'yyyy-MM-dd')
+    stop.stopDate.time = '12:00'
+    wrapper.vm.model = stop
+
+    // The date rules should not include the configurable limit rule
+    const dateRules = wrapper.vm.dateRules
+    expect(dateRules).toHaveLength(2) // Only required and future date rules
+  })
+
+  it('should not enforce date limit for admin users', () => {
+    // Test with 7 days limit but admin editing
+    store = new Vuex.Store({
+      getters: {
+        stopDateLimitDays: () => 7,
+      },
+    })
+
+    wrapper = factory({ value: stop }, { isAdminEditing: true })
+
+    // Set a date that's 10 days old (beyond limit)
+    const tenDaysAgo = new Date()
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10)
+    stop.stopDate.date = format(tenDaysAgo, 'yyyy-MM-dd')
+    stop.stopDate.time = '12:00'
+    wrapper.vm.model = stop
+
+    // The date rules should not include the configurable limit rule for admin
+    const dateRules = wrapper.vm.dateRules
+    expect(dateRules).toHaveLength(2) // Only required and future date rules
   })
 })
 
