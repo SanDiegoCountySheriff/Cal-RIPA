@@ -1,26 +1,40 @@
 import RipaStopDate from '@/components/molecules/RipaStopDate.vue'
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop.js'
 import { format } from 'date-fns'
 import Vuetify from 'vuetify'
+import Vuex from 'vuex'
 import { computed } from 'vue'
 import { V2_STOP } from '../../constants/RipaFormContainerTestConstants'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 describe('Ripa Stop Date', () => {
   let vuetify
   let stop
   let wrapper = null
   let stopV2
+  let store
 
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
     stopV2 = V2_STOP
+    
+    // Create a mock store
+    store = new Vuex.Store({
+      getters: {
+        stopDateLimitDays: () => null, // Default to no limit
+      },
+    })
   })
 
   const factory = (propsData, provideData) => {
     return shallowMount(RipaStopDate, {
       vuetify,
+      store,
+      localVue,
       propsData: {
         ...propsData,
       },
@@ -110,6 +124,8 @@ describe('Ripa Stop Date', () => {
   it('should match snapshot', () => {
     wrapper = mount(RipaStopDate, {
       vuetify,
+      store,
+      localVue,
       propsData: {
         value: stop,
       },

@@ -46,6 +46,9 @@ export default {
           'TRUE',
         reportingEmailAddress:
           res.data.Configuration.ReportingEmailAddress ?? '',
+        stopDateLimitDays: res.data.Configuration.StopDateLimitDays
+          ? parseInt(res.data.Configuration.StopDateLimitDays)
+          : null,
       })
 
       return new Promise((resolve, reject) => {

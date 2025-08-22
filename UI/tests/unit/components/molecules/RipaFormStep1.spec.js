@@ -1,26 +1,40 @@
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1.vue'
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import { defaultStop } from '@/utilities/stop'
 import {
   V1_STOP,
   V2_STOP,
 } from '../../constants/RipaFormContainerTestConstants'
 import Vuetify from 'vuetify'
+import Vuex from 'vuex'
 import { computed } from 'vue'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 describe('Ripa Form Step 1', () => {
   let vuetify
   let stop
   let wrapper
+  let store
 
   beforeEach(() => {
     vuetify = new Vuetify()
     stop = defaultStop()
+    
+    // Create a mock store
+    store = new Vuex.Store({
+      getters: {
+        stopDateLimitDays: () => null, // Default to no limit
+      },
+    })
   })
 
   const shallowFactory = propsData => {
     return shallowMount(RipaFormStep1, {
       vuetify,
+      store,
+      localVue,
       propsData: {
         ...propsData,
         onOpenFavorites: jest.fn(),
@@ -56,6 +70,8 @@ describe('Ripa Form Step 1', () => {
   const factory = propsData => {
     return mount(RipaFormStep1, {
       vuetify,
+      store,
+      localVue,
       propsData: {
         ...propsData,
         onOpenFavorites: jest.fn(),

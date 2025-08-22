@@ -238,6 +238,9 @@ export default new Vuex.Store({
     displayDebugger: state => {
       return state.apiConfig?.displayDebugger || false
     },
+    stopDateLimitDays: state => {
+      return state.apiConfig?.stopDateLimitDays || null
+    },
     environmentName: state => {
       switch (state.apiConfig.environmentName) {
         case 'PROD':
