@@ -214,6 +214,19 @@ public class StopQueryUtility
             whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
         }
 
+        //IsLateSubmission
+        if (stopQuery.IsLateSubmission != null)
+        {
+            if (stopQuery.IsLateSubmission.Value)
+            {
+                whereStatements.Add(Environment.NewLine + "c.LateSubmissionExplanation != null AND c.LateSubmissionExplanation != ''");
+            }
+            else
+            {
+                whereStatements.Add(Environment.NewLine + "(c.LateSubmissionExplanation = null OR c.LateSubmissionExplanation = '')");
+            }
+        }
+
         //Status
         if (stopQuery.Statuses.Safe().Any())
         {
