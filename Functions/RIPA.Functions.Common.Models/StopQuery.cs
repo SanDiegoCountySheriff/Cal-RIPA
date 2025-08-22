@@ -17,4 +17,5 @@ public class StopQuery
     public string OrderBy { get; set; }
     public string Order { get; set; }
     public bool? IsEdited { get; set; }
+    public bool? IsLateSubmission { get; set; }
 }
