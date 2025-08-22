@@ -77,7 +77,9 @@
         <v-col cols="12">
           <v-alert type="warning" dense outlined class="mt-2">
             This stop is being submitted more than 24 hours after it occurred.
-            Please provide an explanation for the late submission.
+            The RIPA regulation requires stop info to be entered before the end
+            of shift. Please provide an explanation for the late submission for
+            administrative review.
           </v-alert>
         </v-col>
       </v-row>
@@ -124,8 +126,10 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
+import { mapGetters } from 'vuex'
 import {
   dateWithinLastHours,
+  dateWithinConfigurableLimit,
   dateNotInFuture,
   formatToIsoCurrentDate,
   formatToIsoDate,
@@ -151,6 +155,8 @@ export default {
   inject: ['isAdminEditing', 'environmentName'],
 
   computed: {
+    ...mapGetters(['stopDateLimitDays']),
+
     model: {
       get() {
         return this.value
@@ -183,7 +189,7 @@ export default {
     },
 
     dateRules() {
-      return [
+      const rules = [
         v => !!v || 'A date is required',
         v =>
           (v &&
@@ -193,10 +199,32 @@ export default {
             )) ||
           'Date and Time cannot be in the future',
       ]
+
+      // Add validation for configurable date limit if configured
+      if (
+        this.stopDateLimitDays !== null &&
+        this.stopDateLimitDays > 0 &&
+        !this.isAdminEditing
+      ) {
+        rules.push(
+          v =>
+            (v &&
+              dateWithinConfigurableLimit(
+                this.model.stopDate.date,
+                this.model.stopDate.time,
+                this.stopDateLimitDays,
+              )) ||
+            `Date cannot be more than ${
+              24 + this.stopDateLimitDays * 24
+            } hours in the past`,
+        )
+      }
+
+      return rules
     },
 
     timeRules() {
-      return [
+      const rules = [
         v => !!v || 'A time is required',
         v =>
           (v &&
@@ -206,6 +234,28 @@ export default {
             )) ||
           'Date and Time cannot be in the future',
       ]
+
+      // Add validation for configurable date limit if configured
+      if (
+        this.stopDateLimitDays !== null &&
+        this.stopDateLimitDays > 0 &&
+        !this.isAdminEditing
+      ) {
+        rules.push(
+          v =>
+            (v &&
+              dateWithinConfigurableLimit(
+                this.model.stopDate.date,
+                this.model.stopDate.time,
+                this.stopDateLimitDays,
+              )) ||
+            `Date and Time cannot be more than ${
+              24 + this.stopDateLimitDays * 24
+            } hours in the past`,
+        )
+      }
+
+      return rules
     },
 
     durationRules() {
