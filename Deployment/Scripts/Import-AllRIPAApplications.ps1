@@ -141,6 +141,26 @@ if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     Write-Host "REPORTING_EMAIL_ADDRESS": $env:REPORTING_EMAIL_ADDRESS
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
     Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
+    Write-Host "STOP_DATE_LIMIT_DAYS: $env:STOP_DATE_LIMIT_DAYS"
+
+    # Check for existing config.json to preserve StopDateLimitDays setting during updates
+    $existingStopDateLimitDays = $null
+    try {
+        Write-Host "Checking for existing config.json in storage account"
+        $existingConfigPath = "./existing-config.json"
+        az storage blob download --account-name $uiStorageAccountName -c '$web' -n "config.json" -f $existingConfigPath 2>$null
+        if (Test-Path $existingConfigPath) {
+            Write-Host "Found existing config.json, checking for StopDateLimitDays setting"
+            $existingConfig = Get-Content -Path $existingConfigPath | ConvertFrom-Json
+            if ($existingConfig.Configuration.PSObject.Properties.Name -contains "StopDateLimitDays") {
+                $existingStopDateLimitDays = $existingConfig.Configuration.StopDateLimitDays
+                Write-Host "Preserving existing StopDateLimitDays value: $existingStopDateLimitDays"
+            }
+            Remove-Item $existingConfigPath -Force
+        }
+    } catch {
+        Write-Host "No existing config.json found or unable to read it, will use default value"
+    }
 
     $configFilePath = "./$env:TEMPLATE_VERSION_FORMATTED-config.json"
     $configJson = Get-Content -Path $configFilePath
@@ -159,6 +179,22 @@ if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     $configJson = $configJson.Replace("__REPORTING_EMAIL_ADDRESS__", $env:REPORTING_EMAIL_ADDRESS)
     $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
     $configJson = $configJson.Replace("__USE_OFFICER_UPN__", $env:USE_OFFICER_UPN)
+    
+    # Handle StopDateLimitDays - preserve existing value if found, otherwise use environment variable or default to null
+    $stopDateLimitValue = "null"
+    if ($null -ne $existingStopDateLimitDays) {
+        # Preserve existing value (could be null, number, etc.)
+        $stopDateLimitValue = if ($existingStopDateLimitDays -eq $null) { "null" } else { $existingStopDateLimitDays }
+        Write-Host "Using existing StopDateLimitDays value: $stopDateLimitValue"
+    } elseif ($env:STOP_DATE_LIMIT_DAYS) {
+        # Use environment variable if provided
+        $stopDateLimitValue = $env:STOP_DATE_LIMIT_DAYS
+        Write-Host "Using environment variable StopDateLimitDays value: $stopDateLimitValue"
+    } else {
+        # Default to null for new installations
+        Write-Host "Using default StopDateLimitDays value: null"
+    }
+    $configJson = $configJson.Replace('"__STOP_DATE_LIMIT_DAYS__"', $stopDateLimitValue)
 
     Write-Host "Saving config.json"
     Set-Content -Path $configFilePath -Value $configJson -Force

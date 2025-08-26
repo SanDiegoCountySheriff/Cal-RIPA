@@ -41,6 +41,23 @@ export const dateWithinLastHours = (dateStr, timeStr, hours) => {
   return diff < hours
 }
 
+export const dateWithinConfigurableLimit = (
+  dateStr,
+  timeStr,
+  additionalDays = null,
+) => {
+  const date = parseDate(dateStr, timeStr)
+  const diff = differenceInHours(new Date(), date)
+  const baseHours = 24
+
+  if (additionalDays === null || additionalDays === 0) {
+    return true
+  }
+
+  const totalHours = baseHours + additionalDays * 24
+  return diff < totalHours
+}
+
 export const formatDateTime = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}`)
 }
