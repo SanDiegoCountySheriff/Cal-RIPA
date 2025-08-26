@@ -141,6 +141,7 @@ if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     Write-Host "REPORTING_EMAIL_ADDRESS": $env:REPORTING_EMAIL_ADDRESS
     Write-Host "ENABLE_STOP_DEBUGGER: $env:ENABLE_STOP_DEBUGGER"
     Write-Host "USE_OFFICER_UPN: $env:USE_OFFICER_UPN"
+    Write-Host "STOP_DATE_LIMIT_DAYS: $env:STOP_DATE_LIMIT_DAYS"
 
     $configFilePath = "./$env:TEMPLATE_VERSION_FORMATTED-config.json"
     $configJson = Get-Content -Path $configFilePath
@@ -159,6 +160,10 @@ if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     $configJson = $configJson.Replace("__REPORTING_EMAIL_ADDRESS__", $env:REPORTING_EMAIL_ADDRESS)
     $configJson = $configJson.Replace("__ENABLE_STOP_DEBUGGER__", $env:ENABLE_STOP_DEBUGGER)
     $configJson = $configJson.Replace("__USE_OFFICER_UPN__", $env:USE_OFFICER_UPN)
+    
+    # Handle StopDateLimitDays - if not set, default to null
+    $stopDateLimitValue = if ($env:STOP_DATE_LIMIT_DAYS) { $env:STOP_DATE_LIMIT_DAYS } else { "null" }
+    $configJson = $configJson.Replace('"__STOP_DATE_LIMIT_DAYS__"', $stopDateLimitValue)
 
     Write-Host "Saving config.json"
     Set-Content -Path $configFilePath -Value $configJson -Force
