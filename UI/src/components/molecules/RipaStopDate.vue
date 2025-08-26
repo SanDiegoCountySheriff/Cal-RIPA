@@ -200,7 +200,6 @@ export default {
           'Date and Time cannot be in the future',
       ]
 
-      // Add validation for configurable date limit if configured
       if (
         this.stopDateLimitDays !== null &&
         this.stopDateLimitDays > 0 &&
@@ -235,7 +234,6 @@ export default {
           'Date and Time cannot be in the future',
       ]
 
-      // Add validation for configurable date limit if configured
       if (
         this.stopDateLimitDays !== null &&
         this.stopDateLimitDays > 0 &&
