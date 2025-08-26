@@ -76,7 +76,6 @@
       <v-row v-if="isLateStop" class="tw-mt-4">
         <v-col cols="12">
           <v-alert type="warning" dense outlined class="mt-2">
-            This stop is being submitted more than 24 hours after it occurred.
             The RIPA regulation requires stop info to be entered before the end
             of shift. Please provide an explanation for the late submission for
             administrative review.
