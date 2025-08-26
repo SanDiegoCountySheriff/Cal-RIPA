@@ -50,7 +50,6 @@ export const dateWithinConfigurableLimit = (
   const diff = differenceInHours(new Date(), date)
   const baseHours = 24
 
-  // If additionalDays is null or 0, there's no limit beyond the base 24 hours warning
   if (additionalDays === null || additionalDays === 0) {
     return true
   }
