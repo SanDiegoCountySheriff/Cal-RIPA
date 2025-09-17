@@ -114,7 +114,7 @@ public class SftpService : ISftpService
         {
             await Connect();
 
-            return _sftpClient.ListDirectory(remoteDirectory);
+            return (IEnumerable<SftpFile>)_sftpClient.ListDirectory(remoteDirectory);
         }
         catch (Exception exception)
         {
