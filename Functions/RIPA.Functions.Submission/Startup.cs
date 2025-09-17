@@ -54,7 +54,7 @@ public class Startup : FunctionsStartup
         builder.Services.AddLogging();
         builder.Services.AddTransient<Services.REST.v1.Contracts.IStopService, Services.REST.v1.StopService>();
         builder.Services.AddTransient<Services.REST.v2.Contracts.IStopService, Services.REST.v2.StopService>();
-        builder.Services.AddSingleton<ISftpService, SftpService>();
+        builder.Services.AddScoped<ISftpService, SftpService>();
 
         var submissionContainer = CreateSubmissionContainerAsync().GetAwaiter().GetResult();
         builder.Services.AddSingleton<ISubmissionCosmosDbService>(sp =>
