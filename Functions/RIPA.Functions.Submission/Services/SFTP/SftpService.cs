@@ -81,6 +81,11 @@ public class SftpService : ISftpService
                     _logger.LogError("SFTP Connection Failed", e.Message);
                     attempts++;
                 }
+                catch (Renci.SshNet.Common.SshAuthenticationException e)
+                {
+                    _logger.LogError("SFTP Authentication Failed", e.Message);
+                    attempts++;
+                }
                 catch (Exception e)
                 {
                     _logger.LogError("SFTP Connection Failed generic exception", e.Message);
