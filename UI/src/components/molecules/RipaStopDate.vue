@@ -185,6 +185,15 @@ export default {
     dateRules() {
       return [
         v => !!v || 'A date is required',
+        v => {
+          if (!v) return true
+          const selectedYear = parseInt(v.split('-')[0], 10)
+          const currentYear = new Date().getFullYear()
+          return (
+            selectedYear >= currentYear ||
+            `Date cannot be before ${currentYear}`
+          )
+        },
         v =>
           (v &&
             dateNotInFuture(
@@ -240,7 +249,8 @@ export default {
     },
 
     getMinDate() {
-      return formatToIsoDate(new Date(2018, 1, 1, 0, 0, 0))
+      const now = new Date()
+      return formatToIsoDate(new Date(now.getFullYear(), 0, 1, 0, 0, 0))
     },
 
     getMaxDate() {
