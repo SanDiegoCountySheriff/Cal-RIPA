@@ -259,9 +259,6 @@
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
-          <template v-slot:item.isLateSubmission="{ item }">
-            {{ item.isLateSubmission ? 'Yes' : 'No' }}
-          </template>
           <template v-slot:item.stopDateTime="{ item }">
             <span>{{ item.stopDateTime }}</span>
             <v-icon
@@ -313,11 +310,6 @@ export default {
         { text: 'Status', value: 'status', sortName: 'Status' },
         { text: 'Edited', value: 'isEdited', sortName: 'IsEdited' },
         { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
-        {
-          text: 'Late',
-          value: 'isLateSubmission',
-          sortName: 'IsLateSubmission',
-        },
         { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],

@@ -155,7 +155,6 @@ export const defaultStop = () => {
       time: format(new Date(), 'kk:mm'),
       duration: null,
       stopInResponseToCFS: false,
-      lateSubmissionExplanation: null,
     },
     stopReason: stopReasonGivenTemplate(),
     stopResult: stopResultGivenTemplate(),
