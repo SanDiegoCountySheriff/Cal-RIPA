@@ -285,9 +285,7 @@ export const apiStopStopSummary = apiStop => {
       content: getSummaryStopMadeDuringWelfareCheck(apiStop),
     })
   }
-  if (apiStop.lateSubmissionExplanation) {
-    items.push({ id: 'A11', content: getSummaryLateExplanation(apiStop) })
-  }
+  items.push({ id: 'A10', content: getSummaryisLateSubmission(apiStop) })
   return items
 }
 
@@ -552,6 +550,14 @@ const getSummaryStopMadeDuringWelfareCheck = apiStop => {
     level: 1,
     header: 'Stop Made During a Welfare or Wellness Check',
     detail: apiStop.stopMadeDuringWelfareCheck || false,
+  }
+}
+
+const getSummaryisLateSubmission = apiStop => {
+  return {
+    level: 1,
+    header: 'Late Submission',
+    detail: apiStop.isLateSubmission || false,
   }
 }
 
@@ -983,21 +989,24 @@ const getSummaryAgencyQuestion = (question, answer) => {
 export const apiStopTelemetrySummary = apiStop => {
   const items = []
   if (apiStop.telemetry) {
+    if (apiStop.lateSubmissionExplanation) {
+      items.push({ id: 'D1', content: getSummaryLateExplanation(apiStop) })
+    }
     items.push({
-      id: 'D1',
+      id: 'D2',
       content: getSummaryTelemetryEditStopOfficerId(apiStop),
     })
-    items.push({ id: 'D2', content: getSummaryTelemetryTemplate(apiStop) })
+    items.push({ id: 'D3', content: getSummaryTelemetryTemplate(apiStop) })
     items.push({
-      id: 'D3',
+      id: 'D4',
       content: getSummaryTelemetryLookupCacheDate(apiStop),
     })
     items.push({
-      id: 'D4',
+      id: 'D5',
       content: getSummaryTelemetryPullFromReasonCode(apiStop),
     })
-    items.push({ id: 'D5', content: getSummaryTelemetryFormCached(apiStop) })
-    items.push({ id: 'D6', content: getSummaryTelemetryStepTrace(apiStop) })
+    items.push({ id: 'D6', content: getSummaryTelemetryFormCached(apiStop) })
+    items.push({ id: 'D7', content: getSummaryTelemetryStepTrace(apiStop) })
   }
 
   return items
