@@ -271,7 +271,6 @@ export default {
     },
     isLateStop: {
       handler: function (newVal) {
-        // Set isLateSubmission flag based on isLateStop computed property
         this.model.isLateSubmission = newVal
       },
       immediate: true,
