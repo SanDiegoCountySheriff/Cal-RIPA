@@ -32,4 +32,5 @@ public interface IStop
     string Time { get; set; }
     bool? Nfia { get; set; }
     bool IsLateSubmission { get; set; }
+    string LateSubmissionExplanation { get; set; }
 }

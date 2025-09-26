@@ -160,6 +160,8 @@ export const defaultStop = () => {
     stopResult: stopResultGivenTemplate(),
     agencyQuestions: mappedAgencyQuestions(),
     stopVersion: new Date() >= new Date(2024, 0, 1) ? 2 : 1,
+    lateSubmissionExplanation: null,
+    isLateSubmission: false,
   }
 }
 
@@ -1691,6 +1693,8 @@ export const fullStopToStop = fullStop => {
     stopReason: person.stopReason || {},
     stopResult: person.stopResult || {},
     agencyQuestions: fullStop.agencyQuestions,
+    lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
+    isLateSubmission: fullStop.isLateSubmission || false,
   }
 }
 
