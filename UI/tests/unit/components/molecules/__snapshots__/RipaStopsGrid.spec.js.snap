@@ -203,7 +203,6 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
               <col class="">
               <col class="">
               <col class="">
-              <col class="">
             </colgroup>
             <thead class="v-data-table-header">
               <tr>
@@ -219,14 +218,13 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
                 <th role="columnheader" scope="col" aria-label="Status: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Status</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Edited: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Edited</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="PII Found: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>PII Found</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
-                <th role="columnheader" scope="col" aria-label="Late: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Late</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Officer Name: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Officer Name</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Actions" class="text-start" style="width: 100px; min-width: 100px;"><span>Actions</span></th>
               </tr>
             </thead>
             <tbody>
               <tr class="v-data-table__empty-wrapper">
-                <td colspan="9">
+                <td colspan="8">
                   <div>No Data</div>
                 </td>
               </tr>
