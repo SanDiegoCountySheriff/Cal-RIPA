@@ -114,13 +114,33 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div class="flex xs12 md4">
+    <div class="flex xs12 md1">
+      <div class="tw-flex tw-justify-center">
+        <div class="v-input tw-ml-2 theme--light v-input--selection-controls v-input--switch">
+          <div class="v-input__control">
+            <div class="v-input__slot">
+              <div class="v-input--selection-controls__input"><input aria-checked="false" id="input-26" role="switch" type="checkbox" aria-disabled="false" value="">
+                <div class="v-input--selection-controls__ripple"></div>
+                <div class="v-input--switch__track theme--light"></div>
+                <div class="v-input--switch__thumb theme--light">
+                  <transition-stub name="fab-transition" mode="out-in"></transition-stub>
+                </div>
+              </div><label for="input-26" class="v-label theme--light" style="left: 0px; position: relative;">Late</label>
+            </div>
+            <div class="v-messages theme--light">
+              <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex xs12 md3">
       <div class="tw-flex tw-justify-center">
         <div class="v-input theme--light v-text-field v-select v-select--is-multi v-autocomplete">
           <div class="v-input__control">
-            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-26" class="v-input__slot">
-              <div class="v-select__slot"><label for="input-26" class="v-label theme--light" style="left: 0px; position: absolute;">Error Codes</label>
-                <div class="v-select__selections"><input id="input-26" type="text" autocomplete="off"></div>
+            <div role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-owns="list-30" class="v-input__slot">
+              <div class="v-select__slot"><label for="input-30" class="v-label theme--light" style="left: 0px; position: absolute;">Error Codes</label>
+                <div class="v-select__selections"><input id="input-30" type="text" autocomplete="off"></div>
                 <div class="v-input__append-inner">
                   <div class="v-input__icon v-input__icon--append"><i aria-hidden="true" class="v-icon notranslate mdi mdi-menu-down theme--light"></i></div>
                 </div><input type="hidden">
@@ -153,13 +173,13 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
               <div class="v-input v-input--reverse v-input--expand v-input--hide-details v-input--is-label-active v-input--is-dirty theme--light v-input--selection-controls v-input--switch v-input--switch--inset primary--text">
                 <div class="v-input__control">
                   <div class="v-input__slot">
-                    <div class="v-input--selection-controls__input"><input aria-checked="true" id="input-38" role="switch" type="checkbox" aria-disabled="false" value="">
+                    <div class="v-input--selection-controls__input"><input aria-checked="true" id="input-42" role="switch" type="checkbox" aria-disabled="false" value="">
                       <div class="v-input--selection-controls__ripple primary--text"></div>
                       <div class="v-input--switch__track theme--light primary--text"></div>
                       <div class="v-input--switch__thumb theme--light primary--text">
                         <transition-stub name="fab-transition" mode="out-in"></transition-stub>
                       </div>
-                    </div><label for="input-38" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
+                    </div><label for="input-42" class="v-label theme--light" style="left: 0px; position: relative;"><span class="main-label mr-3">
         Show V2 Stops
       </span> <span class="switch-label" style="right: -27px;">
         Yes
@@ -183,6 +203,7 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
               <col class="">
               <col class="">
               <col class="">
+              <col class="">
             </colgroup>
             <thead class="v-data-table-header">
               <tr>
@@ -198,13 +219,14 @@ exports[`Ripa Stops Grid should match snapshot 1`] = `
                 <th role="columnheader" scope="col" aria-label="Status: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Status</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Edited: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Edited</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="PII Found: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>PII Found</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
+                <th role="columnheader" scope="col" aria-label="Late: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Late</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Officer Name: Not sorted. Activate to sort ascending." aria-sort="none" class="text-start sortable"><span>Officer Name</span><i aria-hidden="true" class="v-icon notranslate v-data-table-header__icon mdi mdi-arrow-up theme--light" style="font-size: 18px;"></i></th>
                 <th role="columnheader" scope="col" aria-label="Actions" class="text-start" style="width: 100px; min-width: 100px;"><span>Actions</span></th>
               </tr>
             </thead>
             <tbody>
               <tr class="v-data-table__empty-wrapper">
-                <td colspan="8">
+                <td colspan="9">
                   <div>No Data</div>
                 </td>
               </tr>
