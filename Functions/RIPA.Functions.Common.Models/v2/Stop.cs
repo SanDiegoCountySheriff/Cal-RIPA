@@ -63,4 +63,5 @@ public class Stop : IStop
     public string FavoriteResultName { get; set; }
     public bool? Nfia { get; set; }
     public string LateSubmissionExplanation { get; set; } = null;
+    public bool IsLateSubmission { get; set; } = false;
 }

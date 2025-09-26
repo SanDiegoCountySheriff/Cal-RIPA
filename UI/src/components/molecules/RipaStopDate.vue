@@ -269,6 +269,12 @@ export default {
       },
       deep: true,
     },
+    isLateStop: {
+      handler: function (newVal) {
+        this.model.isLateSubmission = newVal
+      },
+      immediate: true,
+    },
   },
 
   props: {

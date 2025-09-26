@@ -53,4 +53,6 @@ public class Stop : IStop
     public AgencyQuestion[] ListAgencyQuestion { get; set; }
     public StopVersion? StopVersion { get; set; }
     public bool? Nfia { get; set; }
+    public bool IsLateSubmission { get; set; } = false;
+    public string LateSubmissionExplanation { get; set; } = null;
 }
