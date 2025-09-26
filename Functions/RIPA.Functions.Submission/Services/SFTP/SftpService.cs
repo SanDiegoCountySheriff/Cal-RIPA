@@ -128,8 +128,6 @@ public class SftpService : ISftpService
             {
                 _sftpClient.Disconnect();
             }
-
-            _sftpClient.Dispose();
         }
     }
 
