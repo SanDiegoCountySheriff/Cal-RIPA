@@ -1629,6 +1629,10 @@ export default new Vuex.Store({
             queryString = `${queryString}&ErrorCode=${queryData.filters.errorCodes.join()}`
           }
 
+          if (queryData.filters.isLateSubmission !== null) {
+            queryString = `${queryString}&IsLateSubmission=${queryData.filters.isLateSubmission}`
+          }
+
           if (queryData.filters.orderBy) {
             queryString = `${queryString}&OrderBy=${queryData.filters.orderBy}`
             queryString = `${queryString}&Order=${queryData.filters.order}`
