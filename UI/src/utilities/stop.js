@@ -1221,6 +1221,7 @@ export const apiStopToFullStopV2 = apiStop => {
     stopVersion: apiStop.stopVersion,
     stopMadeDuringWelfareCheck: apiStop.stopMadeDuringWelfareCheck,
     lateSubmissionExplanation: apiStop.lateSubmissionExplanation || null,
+    isLateSubmission: apiStop.isLateSubmission || false,
     location: {
       isSchool: apiStop.location?.school || false,
       school: schoolNumber,
@@ -1733,6 +1734,7 @@ export const fullStopToStopV2 = fullStop => {
     stopResult: person.stopResult || {},
     agencyQuestions: fullStop.agencyQuestions,
     lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
+    isLateSubmission: fullStop.isLateSubmission || false,
   }
 }
 
@@ -1840,6 +1842,7 @@ export const fullStopToApiStop = (
     stopVersion: fullStop.stopVersion,
     nfia: fullStop.nfia,
     lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
+    isLateSubmission: fullStop.isLateSubmission || false,
   }
 }
 
@@ -1958,6 +1961,7 @@ export const fullStopToApiStopV2 = (
     favoriteReasonName: fullStop.favoriteReasonName,
     favoriteResultName: fullStop.favoriteResultName,
     lateSubmissionExplanation: fullStop.lateSubmissionExplanation || null,
+    isLateSubmission: fullStop.isLateSubmission || false,
   }
 }
 

@@ -31,4 +31,5 @@ public interface IStop
     Telemetry Telemetry { get; set; }
     string Time { get; set; }
     bool? Nfia { get; set; }
+    bool IsLateSubmission { get; set; }
 }

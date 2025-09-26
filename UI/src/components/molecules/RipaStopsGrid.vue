@@ -58,7 +58,18 @@
         </div>
       </v-flex>
 
-      <v-flex xs12 md4>
+      <v-flex xs12 md1>
+        <div class="tw-flex tw-justify-center">
+          <v-switch
+            v-model="isLateSubmission"
+            class="tw-ml-2"
+            label="Late"
+            @change="lateSubmissionChange"
+          ></v-switch>
+        </div>
+      </v-flex>
+
+      <v-flex xs12 md3>
         <div class="tw-flex tw-justify-center">
           <v-autocomplete
             v-model="selectedErrorCodes"
@@ -248,6 +259,9 @@
           <template v-slot:item.isPiiFound="{ item }">
             {{ item.isPiiFound ? 'Yes' : 'No' }}
           </template>
+          <template v-slot:item.isLateSubmission="{ item }">
+            {{ item.isLateSubmission ? 'Yes' : 'No' }}
+          </template>
           <template v-slot:item.stopDateTime="{ item }">
             <span>{{ item.stopDateTime }}</span>
             <v-icon
@@ -299,6 +313,11 @@ export default {
         { text: 'Status', value: 'status', sortName: 'Status' },
         { text: 'Edited', value: 'isEdited', sortName: 'IsEdited' },
         { text: 'PII Found', value: 'isPiiFound', sortName: 'IsPiiFound' },
+        {
+          text: 'Late',
+          value: 'isLateSubmission',
+          sortName: 'IsLateSubmission',
+        },
         { text: 'Officer Name', value: 'officerName', sortName: 'OfficerName' },
         { text: 'Actions', value: 'actions', sortable: false, width: '100' },
       ],
@@ -308,6 +327,9 @@ export default {
         : null,
       isEdited: this.savedFilters?.filters.isEdited
         ? this.savedFilters?.filters.isEdited
+        : null,
+      isLateSubmission: this.savedFilters?.filters.isLateSubmission
+        ? this.savedFilters?.filters.isLateSubmission
         : null,
       errorsFound: this.savedFilters?.filters.isEdited
         ? this.savedFilters?.filters.isEdited
@@ -396,6 +418,7 @@ export default {
       return {
         isPiiFound: this.isPiiFound,
         isEdited: this.isEdited,
+        isLateSubmission: this.isLateSubmission,
         stopFromDate: this.stopFromDate,
         stopToDate: this.stopToDate,
         status: this.currentStatusFilter,
@@ -526,6 +549,14 @@ export default {
       }
       this.handleFilter()
     },
+    lateSubmissionChange(val) {
+      if (!val) {
+        this.isLateSubmission = null
+      } else {
+        this.isLateSubmission = true
+      }
+      this.handleFilter()
+    },
     handleFilter() {
       // whenever you change a filter, you're going to
       // reset the paging because it would all change with new settings
@@ -543,6 +574,7 @@ export default {
           status: this.currentStatusFilter,
           isPiiFound: this.isPiiFound,
           isEdited: this.isEdited,
+          isLateSubmission: this.isLateSubmission,
           // need to make a comma delimited string out of the error codes
           errorCodes: this.selectedErrorCodes,
           orderBy:
@@ -568,6 +600,7 @@ export default {
         status: this.currentStatusFilter,
         isPiiFound: this.isPiiFound,
         isEdited: this.isEdited,
+        isLateSubmission: this.isLateSubmission,
         // need to make a comma delimited string out of the error codes
         errorCodes: this.selectedErrorCodes.join(),
       }

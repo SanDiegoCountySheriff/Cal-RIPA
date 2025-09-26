@@ -39,6 +39,11 @@ public class StopQueryUtility
             stopQuery.IsEdited = bool.Parse(req.Query["IsEdited"]);
         }
 
+        if (!string.IsNullOrWhiteSpace(req.Query["IsLateSubmission"]))
+        {
+            stopQuery.IsLateSubmission = bool.Parse(req.Query["IsLateSubmission"]);
+        }
+
         return stopQuery;
     }
 
@@ -68,6 +73,12 @@ public class StopQueryUtility
         if (stopQuery.IsEdited != null)
         {
             whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
+        }
+
+        //IsLateSubmission
+        if (stopQuery.IsLateSubmission != null)
+        {
+            whereStatements.Add(Environment.NewLine + $"c.IsLateSubmission = {stopQuery.IsLateSubmission.ToString().ToLowerInvariant()}");
         }
 
         //Status
@@ -194,6 +205,12 @@ public class StopQueryUtility
         if (stopQuery.IsEdited != null)
         {
             whereStatements.Add(Environment.NewLine + $"c.IsEdited = {stopQuery.IsEdited.ToString().ToLowerInvariant()}");
+        }
+
+        //IsLateSubmission
+        if (stopQuery.IsLateSubmission != null)
+        {
+            whereStatements.Add(Environment.NewLine + $"c.IsLateSubmission = {stopQuery.IsLateSubmission.ToString().ToLowerInvariant()}");
         }
 
         //Status
