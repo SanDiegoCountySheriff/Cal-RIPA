@@ -117,6 +117,9 @@ public class SftpService : ISftpService
 
                 await Task.Delay(attempts * 1000).ConfigureAwait(false);
             } while (attempts < 10 && !_sftpClient.IsConnected);
+        } else
+        {
+            _logger.LogInformation("SFTP already connected");
         }
     }
 
@@ -144,10 +147,6 @@ public class SftpService : ISftpService
             _logger.LogError(exception, $"Failed in listing files under [{remoteDirectory}]");
             return null;
         }
-        finally
-        {
-            Dispose();
-        }
     }
 
     public async Task UploadStop(byte[] bytes, string remoteFilePath)
@@ -166,10 +165,6 @@ public class SftpService : ISftpService
         {
             _logger.LogError($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
             throw new Exception($"Failed in uploading stop to [{remoteFilePath}] with exception {exception.Message}");
-        }
-        finally
-        {
-            Dispose();
         }
     }
 
@@ -197,11 +192,6 @@ public class SftpService : ISftpService
         {
             _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
         }
-        finally
-        {
-            Dispose();
-        }
-
 
         return null;
     }
@@ -217,10 +207,6 @@ public class SftpService : ISftpService
         catch (Exception exception)
         {
             _logger.LogError(exception, $"Failed in deleting file [{remoteFilePath}]");
-        }
-        finally
-        {
-            Dispose();
         }
     }
 }
