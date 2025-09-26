@@ -16,7 +16,7 @@ public class SftpService : ISftpService
     public readonly ILogger<SftpService> _logger;
     public readonly SftpConfig _config;
     public readonly bool _disabled;
-    public readonly SftpClient _sftpClient;
+    public SftpClient _sftpClient;
 
     public SftpService(ILogger<SftpService> logger)
     {
@@ -65,6 +65,14 @@ public class SftpService : ISftpService
         if (_disabled)
         {
             throw new Exception("sftp client disabled");
+        }
+
+        if (_sftpClient == null)
+        {
+            byte[] byteArray = Encoding.UTF8.GetBytes(_config.Key);
+            using MemoryStream stream = new MemoryStream(byteArray);
+
+            _sftpClient = new SftpClient(_config.Host, _config.Port == 0 ? 22 : _config.Port, _config.UserName, new PrivateKeyFile(stream, _config.Password));
         }
 
         if (_sftpClient != null && !_sftpClient.IsConnected)
@@ -120,6 +128,8 @@ public class SftpService : ISftpService
             {
                 _sftpClient.Disconnect();
             }
+
+            _sftpClient.Dispose();
         }
     }
 
