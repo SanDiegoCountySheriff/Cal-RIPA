@@ -139,7 +139,7 @@ public class PostUpload
         { "DEGREE", "OFFENSE DEGREE" },
         { "BCS_HIE_CD", "BCS HIERARCHY CD" },
         { "OFFENSE_ENACTED", "OFFENSE ENACTED" },
-        { "OFFENSE_REPEALED_OR_ INACTIVATED", "OFFENSE REPEALED" },
+        { "OFFENSE_REPEALED_OR_INACTIVATED", "OFFENSE REPEALED" },
         { "ALPCCOGN_CD", "ALPS COGNIZANT CD" },
     };
 
@@ -324,12 +324,12 @@ public class PostUpload
 
         if (!string.IsNullOrEmpty(offenseRepealed))
         {
-            if (offenseEnacted.Length == 8)
+            if (offenseEnacted.Length == 8 && offenseRepealed != "99999999")
             {
                 var unspecified = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
                 statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
             }
-            else
+            else if (offenseRepealed != "99999999")
             {
                 var unspecified = DateTime.Parse(offenseRepealed);
                 statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
