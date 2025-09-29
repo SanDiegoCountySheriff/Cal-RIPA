@@ -4,23 +4,27 @@
       v-if="isDomainDataEmptyAdministrator"
       :alert-outlined="false"
       alert-type="error"
-      >In order to finish initializing the RIPA application please upload CLEW
+    >
+      In order to finish initializing the RIPA application please upload CLEW
       data by
       <a
         class="text-decoration-underline white--text font-weight-bold"
         @click="$router.push('/admin/domains')"
-        >clicking here</a
       >
-      and uploading the CLEW spreadsheet including cities, schools and
-      statutes.</ripa-alert
-    >
+        clicking here
+      </a>
+      and uploading the CLEW spreadsheet including cities, schools and statutes.
+    </ripa-alert>
+
     <ripa-alert
       v-if="isDomainDataEmptyUser"
       :alert-outlined="false"
       alert-type="error"
-      >This application is currently not ready for data submission. Please
-      contact your systems administrator before creating RIPA Stops.</ripa-alert
     >
+      This application is currently not ready for data submission. Please
+      contact your systems administrator before creating RIPA Stops.
+    </ripa-alert>
+
     <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
         <template v-if="stepIndex == 0">

@@ -324,12 +324,12 @@ public class PostUpload
 
         if (!string.IsNullOrEmpty(offenseRepealed))
         {
-            if (offenseEnacted.Length == 8)
+            if (offenseEnacted.Length == 8 && offenseRepealed != "99999999")
             {
                 var unspecified = DateTime.ParseExact(offenseRepealed, "yyyyMMdd", CultureInfo.InvariantCulture);
                 statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
             }
-            else
+            else if (offenseRepealed != "99999999")
             {
                 var unspecified = DateTime.Parse(offenseRepealed);
                 statute.OffenseRepealed = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
