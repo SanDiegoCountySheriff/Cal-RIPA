@@ -1033,7 +1033,9 @@ export default new Vuex.Store({
             const apiStopId = apiStop.id
             commit('updateStopSubmissionPassedIds', apiStopId)
             if (router.currentRoute.fullPath === '/admin') {
-              dispatch('getAdminStops', state.stopQueryData?.version ?? 1)
+              dispatch('getAdminStops', {
+                version: state.stopQueryData?.version ?? 1,
+              })
             }
             return apiStop
           }
@@ -1573,7 +1575,9 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }, version) {
+    getAdminStops({ commit, state }, { version, signal } = {}) {
+      const apiVersion =
+        version ?? state.stopQueryData?.version ?? state.version ?? 1
       let queryString = ''
       // if you send no parameter that would mean to just get everything
       // this is typically when you first load the grid.
@@ -1644,8 +1648,9 @@ export default new Vuex.Store({
       }
       return axios
         .get(
-          `${state.apiConfig.apiBaseUrl}stop/v${version}/GetStops${queryString}`,
+          `${state.apiConfig.apiBaseUrl}stop/v${apiVersion}/GetStops${queryString}`,
           {
+            signal,
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -1659,6 +1664,10 @@ export default new Vuex.Store({
           })
         })
         .catch(error => {
+          if (error.code === 'ERR_CANCELED' || error.name === 'CanceledError') {
+            console.log('Admin stops request canceled')
+            return
+          }
           console.log('There was an error retrieving admin stops.', error)
           commit('updateAdminStops', {
             summary: {},
