@@ -36,12 +36,17 @@ public class SubmissionUtilities
     {
         try
         {
-            var files = await _sftpService.ListAllFiles(_sftpInputPath);
+            await _sftpService.Connect();
+            var files = _sftpService.ListAllFiles(_sftpInputPath);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed SFTP Connection Validation");
             return false;
+        }
+        finally
+        {
+            _sftpService.Dispose();
         }
         return true;
     }
