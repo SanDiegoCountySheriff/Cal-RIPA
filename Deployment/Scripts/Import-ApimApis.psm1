@@ -25,7 +25,7 @@ function Import-FunctionApi()
     {
         Write-Host "Function key attempt:" $i
         $functionCode = $null
-        $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name 'RenderOpenApiDocument') | ConvertFrom-Json | Select-Object default).default
+        $functionCode = ((az functionapp function keys list -g $ResourceGroupName -n $functionApp --function-name RenderOpenApiDocument) | ConvertFrom-Json | Select-Object default).default
         if($functionCode)
         {
             break;
