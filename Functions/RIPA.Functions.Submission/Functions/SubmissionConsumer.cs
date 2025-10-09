@@ -71,6 +71,8 @@ public class SubmissionConsumer
 
         log.LogInformation($"Received message count: {messages.Length} : {runId}");
 
+        await _sftpService.Connect();
+        
         foreach (var message in messages)
         {
             Stopwatch stopStopwatch = new Stopwatch();
@@ -175,6 +177,8 @@ public class SubmissionConsumer
             stopStopwatch.Stop();
             log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
         }
+
+        _sftpService.Dispose();
 
         runStopwatch.Stop();
         log.LogInformation($"TimersSubmissionConsumer finished: {runStopwatch.ElapsedMilliseconds} : {runId}");

@@ -134,12 +134,10 @@ public class SftpService : ISftpService
         }
     }
 
-    public async Task<IEnumerable<SftpFile>> ListAllFiles(string remoteDirectory = ".")
+    public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
     {
         try
         {
-            await Connect();
-
             return (IEnumerable<SftpFile>)_sftpClient.ListDirectory(remoteDirectory);
         }
         catch (Exception exception)
@@ -153,7 +151,6 @@ public class SftpService : ISftpService
     {
         try
         {
-            await Connect();
             using (MemoryStream stream = new MemoryStream(bytes))
             {
                 _sftpClient.UploadFile(stream, remoteFilePath); // stream file to DOJ SFTP 
@@ -174,7 +171,6 @@ public class SftpService : ISftpService
         try
         {
             BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-            await Connect();
             var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
             var download = await blobClient.DownloadAsync(); //Download blob
             string text;
@@ -200,7 +196,6 @@ public class SftpService : ISftpService
     {
         try
         {
-            await Connect();
             _sftpClient.DeleteFile(remoteFilePath);
             _logger.LogInformation($"File [{remoteFilePath}] deleted.");
         }

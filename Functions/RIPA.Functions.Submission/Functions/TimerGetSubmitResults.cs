@@ -44,13 +44,15 @@ public class TimerGetSubmitResults
 
         IEnumerable<Renci.SshNet.Sftp.SftpFile> files = null;
 
+        await _sftpService.Connect();
         try
         {
-            files = await _sftpService.ListAllFiles(_sftpOutputPath);
+            files = _sftpService.ListAllFiles(_sftpOutputPath);
         }
         catch (Exception e)
         {
             log.LogError($"Unable to connect to SFTP {e.Message}");
+            _sftpService.Dispose();
             return;
         }
 
@@ -74,14 +76,17 @@ public class TimerGetSubmitResults
                 log.LogInformation($"file text: {fileText}");
                 await ProcessDojResponse(fileText);
                 log.LogInformation("processed DOJ Response");
-                _sftpService.DeleteFile(file.FullName);
+                await _sftpService.DeleteFile(file.FullName);
                 log.LogInformation($"deleted sftp file {file.Name}");
             }
             catch (Exception e)
             {
+                _sftpService.Dispose();
                 log.LogError($"an error occurred processing doj sftp result {e.Message}");
             }
         }
+
+        _sftpService.Dispose();
     }
 
     public async Task ProcessDojResponse(string dojResponse)
