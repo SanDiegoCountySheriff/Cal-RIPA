@@ -91,7 +91,10 @@ function Import-FunctionApi()
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
 	$swaggerUrlOriginal = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
-    Write-Host "Function key (length): $([string]::IsNullOrEmpty($functionCode) ? 0 : $functionCode.Length)"
+    # PowerShell 5.1 compatible evaluation of key length (no ternary operator)
+    $fkLen = 0
+    if(-not [string]::IsNullOrEmpty($functionCode)) { $fkLen = $functionCode.Length }
+    Write-Host "Function key (length): $fkLen"
     if([string]::IsNullOrEmpty($functionCode)) { Write-Warning "Function key retrieved is empty; OpenAPI secured endpoint may fail." }
 
     # Candidate URLs for OpenAPI specification (some frameworks expose different endpoints)
