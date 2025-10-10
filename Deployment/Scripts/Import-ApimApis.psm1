@@ -90,28 +90,73 @@ function Import-FunctionApi()
     $functionCode = Get-RenderOpenApiFunctionKey -ResourceGroupName $ResourceGroupName -FunctionAppName $functionApp -FunctionName 'RenderOpenApiDocument'
 	
     $serviceUrl = "https://$($functionApp).azurewebsites.us/api"
-	$swaggerUrl = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
+	$swaggerUrlOriginal = "$($serviceUrl)/openapi/v3.0?code=$($functionCode)"
+    Write-Host "Function key (length): $([string]::IsNullOrEmpty($functionCode) ? 0 : $functionCode.Length)"
+    if([string]::IsNullOrEmpty($functionCode)) { Write-Warning "Function key retrieved is empty; OpenAPI secured endpoint may fail." }
 
-	Write-Host "Updating ${serviceUrl}"
+    # Candidate URLs for OpenAPI specification (some frameworks expose different endpoints)
+    $openApiCandidateUrls = @(
+        $swaggerUrlOriginal,
+        # Some generators expose .json extension
+        "$($serviceUrl)/openapi/v3.0.json?code=$functionCode",
+        # Legacy swagger
+        "$($serviceUrl)/swagger.json?code=$functionCode",
+        # v2 fallback
+        "$($serviceUrl)/openapi/v2.0?code=$functionCode"
+    ) | Select-Object -Unique
 
-	# import the latest swagger
-	Write-Host "Importing api $ApiTag from $serviceUrl"
-    for ($i = 0; $i -le 5; $i++)
-	{
-        Write-Host "APIM import attempt:" $i
-        Write-Host "ApimCntx: $ApimCntx"
-        Write-Host "swaggerUrl: $swaggerUrl"
-        Write-Host "ApiTag: $ApiTag"
-        $importSuccess = (Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationUrl $swaggerUrl -Path $ApiTag -ApiId $ApiTag)
-        if($importSuccess)
-        {
-            Write-Host "importSuccess:" $importSuccess
-            break;
+    Write-Host "Attempting to download OpenAPI doc from candidates:"; $openApiCandidateUrls | ForEach-Object { Write-Host " - $_" }
+
+    $openApiSpecContent = $null
+    $chosenUrl = $null
+    for($attempt=1; $attempt -le 6 -and -not $openApiSpecContent; $attempt++) {
+        foreach($candidate in $openApiCandidateUrls) {
+            if($openApiSpecContent) { break }
+            try {
+                Write-Host "[OpenAPI] Attempt $attempt GET $candidate"
+                $resp = Invoke-WebRequest -Uri $candidate -UseBasicParsing -TimeoutSec 60 -ErrorAction Stop
+                if($resp.StatusCode -eq 200 -and $resp.Content) {
+                    $openApiSpecContent = $resp.Content
+                    $chosenUrl = $candidate
+                    Write-Host "[OpenAPI] Success from $candidate"
+                } else {
+                    Write-Host "[OpenAPI] Non-success status $($resp.StatusCode) from $candidate"
+                }
+            } catch {
+                Write-Host "[OpenAPI] Failed $candidate : $($_.Exception.Message)"
+            }
         }
-
-        Write-Host "APIM import failed. Sleeping 15 seconds"
-        Start-Sleep -Seconds 15
+        if(-not $openApiSpecContent) {
+            Write-Host "[OpenAPI] All candidates failed on attempt $attempt. Sleeping 10s (cold start / propagation)"
+            Start-Sleep -Seconds 10
+        }
     }
+
+    if(-not $openApiSpecContent) { throw "Unable to retrieve OpenAPI specification from any candidate URL after multiple retries." }
+
+    # Persist spec to temp file for reliable APIM import (avoids query stripping issues)
+    $tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "ripa-openapi"
+    if(-not (Test-Path $tempDir)) { New-Item -ItemType Directory -Path $tempDir | Out-Null }
+    $specFile = Join-Path $tempDir ("$($ApiTag)-$($functionApp)-openapi.json")
+    $openApiSpecContent | Set-Content -Path $specFile -Encoding UTF8
+    Write-Host "[OpenAPI] Saved specification to $specFile (source: $chosenUrl)"
+
+    # Validate JSON minimally
+    try { $null = $openApiSpecContent | ConvertFrom-Json } catch { Write-Warning "[OpenAPI] Spec is not valid JSON according to ConvertFrom-Json: $($_.Exception.Message)" }
+
+    Write-Host "Importing api $ApiTag into APIM from local spec file"
+    $importSuccess = $false
+    for ($i = 0; $i -le 5; $i++) {
+        Write-Host "APIM import attempt: $i (file mode)"
+        try {
+            $result = Import-AzApiManagementApi -Context $ApimCntx -SpecificationFormat "OpenApi" -SpecificationPath $specFile -Path $ApiTag -ApiId $ApiTag -ErrorAction Stop
+            if($result) { Write-Host "importSuccess: $result"; $importSuccess = $true; break }
+        } catch {
+            Write-Host "APIM import attempt $i failed: $($_.Exception.Message)";
+        }
+        Write-Host "APIM import failed. Sleeping 15 seconds before retry"; Start-Sleep -Seconds 15
+    }
+    if(-not $importSuccess) { throw "APIM import failed after retries for $ApiTag" }
 
     Write-Host "**************************** Checking for backend configuration ****************************"
     Write-Host "******************************** Ignore any onscreen errors ********************************"
