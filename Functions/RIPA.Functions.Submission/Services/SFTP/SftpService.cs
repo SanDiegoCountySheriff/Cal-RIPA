@@ -62,6 +62,8 @@ public class SftpService : ISftpService
 
     public async Task Connect()
     {
+        _logger.LogInformation("Connecting to SFTP");
+
         if (_disabled)
         {
             throw new Exception("sftp client disabled");
@@ -125,6 +127,8 @@ public class SftpService : ISftpService
 
     public void Dispose()
     {
+        _logger.LogInformation("Disconnecting from SFTP");
+
         if (_sftpClient != null)
         {
             if (_sftpClient.IsConnected)
