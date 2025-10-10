@@ -27,7 +27,7 @@ function Get-RenderOpenApiFunctionKey {
                 }
             }
             Write-Host "[KeyRetrieval] Attempt $i failed or key empty. Sleeping 5s"; Start-Sleep -Seconds 5
-        } catch { $attemptErrors += "CLI(function keys list) attempt $i: $($_.Exception.Message)" }
+    } catch { $attemptErrors += "CLI(function keys list) attempt $($i): $($_.Exception.Message)" }
     }
 
     # Attempt 2: Host-level keys listing (sometimes function key appears here in newer runtimes)
