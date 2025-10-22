@@ -20,8 +20,6 @@ public class SftpService : ISftpService, IDisposable
     public readonly ILogger<SftpService> _logger;
     public readonly SftpConfig _config;
     public readonly bool _disabled;
-    private SftpClient? _sftpClient;
-    private readonly object _syncRoot = new();
     private bool _disposed;
 
     public SftpService(ILogger<SftpService> logger)
@@ -69,6 +67,11 @@ public class SftpService : ISftpService, IDisposable
 
         _logger.LogInformation("SftpService initialized with host={host}, port={port}, user={user}", _config.Host, _config.Port, _config.UserName);
         ValidateInitialConfig();
+        _lifecycleVerbose = (Environment.GetEnvironmentVariable("SftpLifecycleVerbose")?.Equals("true", StringComparison.OrdinalIgnoreCase)).GetValueOrDefault();
+        if (_lifecycleVerbose)
+        {
+            _logger.LogInformation("SFTP lifecycle verbose logging ENABLED");
+        }
     }
 
     private void ValidateInitialConfig()
@@ -91,9 +94,15 @@ public class SftpService : ISftpService, IDisposable
         }
     }
 
+    /// <summary>
+    /// Health-check style connect. Establishes a connection and immediately disposes it.
+    /// Keeps interface compatibility while preventing lingering sessions.
+    /// </summary>
     public async Task Connect()
     {
-        await EnsureConnectedAsync().ConfigureAwait(false);
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
+        // Optionally perform a noop (like current working directory) to validate.
+        _logger.LogDebug("SFTP health check successful. WorkingDirectory={wd}", client.WorkingDirectory);
     }
 
     private SftpClient BuildClient()
@@ -144,53 +153,40 @@ public class SftpService : ISftpService, IDisposable
         return client;
     }
 
-    private async Task EnsureConnectedAsync(CancellationToken cancellationToken = default)
+    /// <summary>
+    /// Creates, connects and returns a fresh SftpClient. Caller must dispose.
+    /// Ensures no long-lived connections stay open.
+    /// </summary>
+    private readonly bool _lifecycleVerbose;
+
+    private async Task<SftpClient> ConnectNewAsync(CancellationToken cancellationToken = default)
     {
         if (_disabled)
         {
             throw new InvalidOperationException("SFTP client disabled by configuration");
         }
-
         if (_disposed)
         {
             throw new ObjectDisposedException(nameof(SftpService));
         }
 
-        if (_sftpClient != null && _sftpClient.IsConnected)
-        {
-            return;
-        }
-
-        lock (_syncRoot)
-        {
-            if (_sftpClient == null)
-            {
-                _sftpClient = BuildClient();
-            }
-        }
-
-        if (_sftpClient!.IsConnected)
-        {
-            return;
-        }
+        var client = BuildClient();
 
         int attempt = 0;
         const int maxAttempts = 8;
         bool fatal = false;
         Exception? lastException = null;
 
-        while (attempt < maxAttempts && !fatal && !_sftpClient.IsConnected)
+        while (attempt < maxAttempts && !fatal && !client.IsConnected)
         {
             attempt++;
-
             try
             {
-                _logger.LogInformation("Attempting SFTP connection attempt {attempt}/{max}", attempt, maxAttempts);
-                _sftpClient.Connect();
-
-                if (_sftpClient.IsConnected)
+                _logger.LogInformation("[SFTP] Connecting attempt {attempt}/{max} host={host} user={user}", attempt, maxAttempts, _config.Host, _config.UserName);
+                client.Connect();
+                if (client.IsConnected)
                 {
-                    _logger.LogInformation("SFTP connected successfully on attempt {attempt}", attempt);
+                    _logger.LogInformation("[SFTP] Connected (attempt {attempt}) sessionId={sessionId}", attempt, Guid.NewGuid());
                     break;
                 }
             }
@@ -218,7 +214,7 @@ public class SftpService : ISftpService, IDisposable
             catch (InvalidOperationException ex)
             {
                 lastException = ex;
-                _logger.LogError(ex, "SFTP invalid operation (may be fatal) state={connected}", _sftpClient.IsConnected);
+                _logger.LogError(ex, "SFTP invalid operation (may be fatal)");
                 fatal = true;
             }
             catch (Exception ex)
@@ -227,11 +223,10 @@ public class SftpService : ISftpService, IDisposable
                 _logger.LogError(ex, "SFTP unexpected exception");
             }
 
-            if (!_sftpClient.IsConnected && !fatal)
+            if (!client.IsConnected && !fatal)
             {
                 var delayMs = Math.Min(5000, attempt * 1000);
                 _logger.LogDebug("SFTP will retry in {delay}ms", delayMs);
-
                 try
                 {
                     await Task.Delay(delayMs, cancellationToken).ConfigureAwait(false);
@@ -244,10 +239,12 @@ public class SftpService : ISftpService, IDisposable
             }
         }
 
-        if (!_sftpClient.IsConnected)
+        if (!client.IsConnected)
         {
+            client.Dispose();
             throw new SshConnectionException($"Failed to connect to SFTP after {attempt} attempts. Fatal={fatal}. Last error: {lastException?.Message}");
         }
+        return client;
     }
 
     public void Dispose()
@@ -256,43 +253,29 @@ public class SftpService : ISftpService, IDisposable
         {
             return;
         }
-
         _disposed = true;
-
-        _logger.LogInformation("Disposing SftpService and disconnecting SFTP client");
-
-        try
-        {
-            if (_sftpClient != null)
-            {
-                if (_sftpClient.IsConnected)
-                {
-                    _sftpClient.Disconnect();
-                }
-                _sftpClient.Dispose();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception while disposing SFTP client");
-        }
+        _logger.LogInformation("Disposing SftpService (no active SFTP client retained)");
     }
 
     public async Task<IEnumerable<ISftpFile>> ListAllFiles(string remoteDirectory = ".")
     {
-        await EnsureConnectedAsync();
-
-        return _sftpClient!.ListDirectory(remoteDirectory);
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
+        var files = client.ListDirectory(remoteDirectory);
+        if (_lifecycleVerbose)
+        {
+            _logger.LogInformation("[SFTP] Disconnect after ListAllFiles remoteDirectory={remoteDirectory}");
+        }
+        client.Disconnect();
+        return files;
     }
 
     public async Task UploadStop(byte[] bytes, string remoteFilePath)
     {
-        await EnsureConnectedAsync();
-
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
         try
         {
             using var stream = new MemoryStream(bytes, writable: false);
-            _sftpClient!.UploadFile(stream, remoteFilePath); // synchronous SSH.NET API
+            client.UploadFile(stream, remoteFilePath); // synchronous SSH.NET API
             _logger.LogInformation("Uploaded stop file to remote path {path}", remoteFilePath);
         }
         catch (Exception ex)
@@ -300,41 +283,180 @@ public class SftpService : ISftpService, IDisposable
             _logger.LogError(ex, "Failed uploading stop to {path}", remoteFilePath);
             throw;
         }
+        finally
+        {
+            if (client.IsConnected)
+            {
+                if (_lifecycleVerbose)
+                {
+                    _logger.LogInformation("[SFTP] Disconnect after UploadStop path={path}", remoteFilePath);
+                }
+                client.Disconnect();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Upload a batch of stop files reusing a single SFTP connection.
+    /// </summary>
+    public async Task UploadStops(IEnumerable<(byte[] Content, string RemotePath)> files)
+    {
+        // Materialize to avoid multiple enumeration if caller passes LINQ.
+        var fileList = files?.ToList() ?? new List<(byte[] Content, string RemotePath)>();
+        if (!fileList.Any())
+        {
+            _logger.LogWarning("UploadStops invoked with empty file list");
+            return;
+        }
+
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
+        int success = 0;
+        foreach (var (content, remotePath) in fileList)
+        {
+            try
+            {
+                using var ms = new MemoryStream(content, writable: false);
+                client.UploadFile(ms, remotePath);
+                success++;
+                _logger.LogDebug("Uploaded {remotePath}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed uploading batch file {remotePath}");
+                // continue with remaining files
+            }
+        }
+        _logger.LogInformation("Batch upload complete. {success}/{total} files succeeded", success, fileList.Count);
+        if (client.IsConnected)
+        {
+            if (_lifecycleVerbose)
+            {
+                _logger.LogInformation("[SFTP] Disconnect after UploadStops count={count}", fileList.Count);
+            }
+            client.Disconnect();
+        }
     }
 
     public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
     {
-        await EnsureConnectedAsync();
-
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
         BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-        using var remoteStream = _sftpClient!.OpenRead(remoteFilePath);
-
+        using var remoteStream = client.OpenRead(remoteFilePath);
         await blobClient.UploadAsync(remoteStream, overwrite: true).ConfigureAwait(false);
-
         var download = await blobClient.DownloadAsync().ConfigureAwait(false);
-
         using var streamReader = new StreamReader(download.Value.Content, leaveOpen: false);
-
         var text = await streamReader.ReadToEndAsync().ConfigureAwait(false);
-
         _logger.LogInformation("Transferred remote file {remote} to blob {blob}", remoteFilePath, localFilePath);
-
+        if (client.IsConnected)
+        {
+            if (_lifecycleVerbose)
+            {
+                _logger.LogInformation("[SFTP] Disconnect after DownloadFile remote={remote} blob={blob}", remoteFilePath, localFilePath);
+            }
+            client.Disconnect();
+        }
         return text;
     }
 
     public async Task DeleteFile(string remoteFilePath)
     {
-        await EnsureConnectedAsync();
-
+        using var client = await ConnectNewAsync().ConfigureAwait(false);
         try
         {
-            _sftpClient!.DeleteFile(remoteFilePath);
+            client.DeleteFile(remoteFilePath);
             _logger.LogInformation("Deleted remote file {path}", remoteFilePath);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed deleting remote file {path}", remoteFilePath);
             throw;
+        }
+        finally
+        {
+            if (client.IsConnected)
+            {
+                if (_lifecycleVerbose)
+                {
+                    _logger.LogInformation("[SFTP] Disconnect after DeleteFile path={path}", remoteFilePath);
+                }
+                client.Disconnect();
+            }
+        }
+    }
+
+    public async Task<ISftpBatch> BeginBatch()
+    {
+        var client = await ConnectNewAsync().ConfigureAwait(false);
+        return new SftpBatch(_logger, client);
+    }
+}
+
+internal sealed class SftpBatch : ISftpBatch
+{
+    private readonly ILogger _logger;
+    private readonly SftpClient _client;
+    private bool _disposed;
+    private int _uploads;
+    private int _deletes;
+
+    public SftpBatch(ILogger logger, SftpClient client)
+    {
+        _logger = logger;
+        _client = client;
+    }
+
+    public Task UploadStop(byte[] bytes, string remoteFilePath)
+    {
+        if (_disposed) throw new ObjectDisposedException(nameof(SftpBatch));
+        try
+        {
+            using var ms = new MemoryStream(bytes, writable: false);
+            _client.UploadFile(ms, remoteFilePath);
+            _logger.LogInformation("[Batch] Uploaded stop file {path}", remoteFilePath);
+            _uploads++;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[Batch] Failed uploading stop to {path}", remoteFilePath);
+            throw;
+        }
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteFile(string remoteFilePath)
+    {
+        if (_disposed) throw new ObjectDisposedException(nameof(SftpBatch));
+        try
+        {
+            _client.DeleteFile(remoteFilePath);
+            _logger.LogInformation("[Batch] Deleted remote file {path}", remoteFilePath);
+            _deletes++;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[Batch] Failed deleting remote file {path}", remoteFilePath);
+            throw;
+        }
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+        try
+        {
+            if (_client.IsConnected)
+            {
+                _logger.LogInformation("[Batch] Disconnecting SFTP session uploads={uploads} deletes={deletes}", _uploads, _deletes);
+                _client.Disconnect();
+            }
+            _client.Dispose();
+            _logger.LogInformation("Disposed SFTP batch session uploads={uploads} deletes={deletes}", _uploads, _deletes);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error disposing SFTP batch session");
         }
     }
 }
