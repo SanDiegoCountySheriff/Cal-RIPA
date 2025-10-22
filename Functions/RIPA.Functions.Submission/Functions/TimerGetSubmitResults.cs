@@ -42,18 +42,17 @@ public class TimerGetSubmitResults
     {
         log.LogInformation($"Timer trigger runs each day at a time specified in the configuration: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
 
-        IEnumerable<Renci.SshNet.Sftp.SftpFile> files = null;
-
+        IEnumerable<Renci.SshNet.Sftp.ISftpFile> files = null;
+        // Idempotent connect; safe to call every run
         await _sftpService.Connect();
 
         try
         {
-            files = _sftpService.ListAllFiles(_sftpOutputPath);
+            files = await _sftpService.ListAllFiles(_sftpOutputPath);
         }
         catch (Exception e)
         {
-            log.LogError($"Unable to connect to SFTP {e.Message}");
-            _sftpService.Dispose();
+            log.LogError($"Unable to list SFTP directory {_sftpOutputPath}: {e.Message}");
             return;
         }
 
@@ -82,12 +81,9 @@ public class TimerGetSubmitResults
             }
             catch (Exception e)
             {
-                _sftpService.Dispose();
-                log.LogError($"an error occurred processing doj sftp result {e.Message}");
+                log.LogError($"An error occurred processing DOJ SFTP result {e.Message}");
             }
         }
-
-        _sftpService.Dispose();
     }
 
     public async Task ProcessDojResponse(string dojResponse)

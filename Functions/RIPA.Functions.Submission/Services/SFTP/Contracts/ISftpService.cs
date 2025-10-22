@@ -7,7 +7,7 @@ namespace RIPA.Functions.Submission.Services.SFTP.Contracts;
 
 public interface ISftpService
 {
-    IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".");
+    Task<IEnumerable<ISftpFile>> ListAllFiles(string remoteDirectory = ".");
     Task UploadStop(byte[] bytes, string remoteFilePath);
     Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient);
     Task DeleteFile(string remoteFilePath);
