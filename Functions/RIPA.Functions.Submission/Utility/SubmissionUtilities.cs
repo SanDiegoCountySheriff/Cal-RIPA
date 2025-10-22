@@ -36,19 +36,15 @@ public class SubmissionUtilities
     {
         try
         {
-            await _sftpService.Connect();
-            var files = _sftpService.ListAllFiles(_sftpInputPath);
+            await _sftpService.Connect(); // idempotent connect
+            var _ = await _sftpService.ListAllFiles(_sftpInputPath); // basic list to validate
+            return true;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed SFTP Connection Validation");
             return false;
         }
-        finally
-        {
-            _sftpService.Dispose();
-        }
-        return true;
     }
 
     public List<string> ValidateStops(IEnumerable<IStop> stops)
