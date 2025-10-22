@@ -67,6 +67,11 @@ public class SftpService : ISftpService, IDisposable
 
         _logger.LogInformation("SftpService initialized with host={host}, port={port}, user={user}", _config.Host, _config.Port, _config.UserName);
         ValidateInitialConfig();
+        _lifecycleVerbose = (Environment.GetEnvironmentVariable("SftpLifecycleVerbose")?.Equals("true", StringComparison.OrdinalIgnoreCase)).GetValueOrDefault();
+        if (_lifecycleVerbose)
+        {
+            _logger.LogInformation("SFTP lifecycle verbose logging ENABLED");
+        }
     }
 
     private void ValidateInitialConfig()
@@ -152,6 +157,8 @@ public class SftpService : ISftpService, IDisposable
     /// Creates, connects and returns a fresh SftpClient. Caller must dispose.
     /// Ensures no long-lived connections stay open.
     /// </summary>
+    private readonly bool _lifecycleVerbose;
+
     private async Task<SftpClient> ConnectNewAsync(CancellationToken cancellationToken = default)
     {
         if (_disabled)
@@ -175,11 +182,11 @@ public class SftpService : ISftpService, IDisposable
             attempt++;
             try
             {
-                _logger.LogInformation("Attempting SFTP connection attempt {attempt}/{max}", attempt, maxAttempts);
+                _logger.LogInformation("[SFTP] Connecting attempt {attempt}/{max} host={host} user={user}", attempt, maxAttempts, _config.Host, _config.UserName);
                 client.Connect();
                 if (client.IsConnected)
                 {
-                    _logger.LogInformation("SFTP connected successfully on attempt {attempt}", attempt);
+                    _logger.LogInformation("[SFTP] Connected (attempt {attempt}) sessionId={sessionId}", attempt, Guid.NewGuid());
                     break;
                 }
             }
@@ -254,6 +261,10 @@ public class SftpService : ISftpService, IDisposable
     {
         using var client = await ConnectNewAsync().ConfigureAwait(false);
         var files = client.ListDirectory(remoteDirectory);
+        if (_lifecycleVerbose)
+        {
+            _logger.LogInformation("[SFTP] Disconnect after ListAllFiles remoteDirectory={remoteDirectory}");
+        }
         client.Disconnect();
         return files;
     }
@@ -276,6 +287,10 @@ public class SftpService : ISftpService, IDisposable
         {
             if (client.IsConnected)
             {
+                if (_lifecycleVerbose)
+                {
+                    _logger.LogInformation("[SFTP] Disconnect after UploadStop path={path}", remoteFilePath);
+                }
                 client.Disconnect();
             }
         }
@@ -314,6 +329,10 @@ public class SftpService : ISftpService, IDisposable
         _logger.LogInformation("Batch upload complete. {success}/{total} files succeeded", success, fileList.Count);
         if (client.IsConnected)
         {
+            if (_lifecycleVerbose)
+            {
+                _logger.LogInformation("[SFTP] Disconnect after UploadStops count={count}", fileList.Count);
+            }
             client.Disconnect();
         }
     }
@@ -330,6 +349,10 @@ public class SftpService : ISftpService, IDisposable
         _logger.LogInformation("Transferred remote file {remote} to blob {blob}", remoteFilePath, localFilePath);
         if (client.IsConnected)
         {
+            if (_lifecycleVerbose)
+            {
+                _logger.LogInformation("[SFTP] Disconnect after DownloadFile remote={remote} blob={blob}", remoteFilePath, localFilePath);
+            }
             client.Disconnect();
         }
         return text;
@@ -352,6 +375,10 @@ public class SftpService : ISftpService, IDisposable
         {
             if (client.IsConnected)
             {
+                if (_lifecycleVerbose)
+                {
+                    _logger.LogInformation("[SFTP] Disconnect after DeleteFile path={path}", remoteFilePath);
+                }
                 client.Disconnect();
             }
         }
@@ -369,6 +396,8 @@ internal sealed class SftpBatch : ISftpBatch
     private readonly ILogger _logger;
     private readonly SftpClient _client;
     private bool _disposed;
+    private int _uploads;
+    private int _deletes;
 
     public SftpBatch(ILogger logger, SftpClient client)
     {
@@ -384,6 +413,7 @@ internal sealed class SftpBatch : ISftpBatch
             using var ms = new MemoryStream(bytes, writable: false);
             _client.UploadFile(ms, remoteFilePath);
             _logger.LogInformation("[Batch] Uploaded stop file {path}", remoteFilePath);
+            _uploads++;
         }
         catch (Exception ex)
         {
@@ -400,6 +430,7 @@ internal sealed class SftpBatch : ISftpBatch
         {
             _client.DeleteFile(remoteFilePath);
             _logger.LogInformation("[Batch] Deleted remote file {path}", remoteFilePath);
+            _deletes++;
         }
         catch (Exception ex)
         {
@@ -417,10 +448,11 @@ internal sealed class SftpBatch : ISftpBatch
         {
             if (_client.IsConnected)
             {
+                _logger.LogInformation("[Batch] Disconnecting SFTP session uploads={uploads} deletes={deletes}", _uploads, _deletes);
                 _client.Disconnect();
             }
             _client.Dispose();
-            _logger.LogInformation("Disposed SFTP batch session");
+            _logger.LogInformation("Disposed SFTP batch session uploads={uploads} deletes={deletes}", _uploads, _deletes);
         }
         catch (Exception ex)
         {
