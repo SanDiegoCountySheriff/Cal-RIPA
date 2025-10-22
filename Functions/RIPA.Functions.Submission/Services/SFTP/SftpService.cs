@@ -203,17 +203,17 @@ public class SftpService : ISftpService, IDisposable
             catch (SshConnectionException ex)
             {
                 lastException = ex;
-                _logger.LogError(ex, "SFTP connection exception (transient) host={host} port={port}", _config.Host, _config.Port);
+                _logger.LogError(ex, "SFTP connection exception (transient) host={host} port={port} message={message}", _config.Host, _config.Port, ex.Message);
             }
             catch (SocketException ex)
             {
                 lastException = ex;
-                _logger.LogError(ex, "SFTP socket exception (transient) host={host} port={port}", _config.Host, _config.Port);
+                _logger.LogError(ex, "SFTP socket exception (transient) host={host} port={port} message={message}", _config.Host, _config.Port, ex.Message);
             }
             catch (ProxyException ex)
             {
                 lastException = ex;
-                _logger.LogError(ex, "SFTP proxy exception (transient)");
+                _logger.LogError(ex, "SFTP proxy exception (transient) message={message}", ex.Message);
             }
             catch (InvalidOperationException ex)
             {
