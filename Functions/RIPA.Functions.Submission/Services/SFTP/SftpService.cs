@@ -119,7 +119,8 @@ public class SftpService : ISftpService
 
                 await Task.Delay(attempts * 1000).ConfigureAwait(false);
             } while (attempts < 10 && !_sftpClient.IsConnected);
-        } else
+        }
+        else
         {
             _logger.LogInformation("SFTP already connected");
         }
@@ -140,15 +141,7 @@ public class SftpService : ISftpService
 
     public IEnumerable<SftpFile> ListAllFiles(string remoteDirectory = ".")
     {
-        try
-        {
-            return (IEnumerable<SftpFile>)_sftpClient.ListDirectory(remoteDirectory);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, $"Failed in listing files under [{remoteDirectory}]");
-            return null;
-        }
+        return (IEnumerable<SftpFile>)_sftpClient.ListDirectory(remoteDirectory);
     }
 
     public async Task UploadStop(byte[] bytes, string remoteFilePath)
@@ -171,29 +164,19 @@ public class SftpService : ISftpService
 
     public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
     {
+        BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
+        var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
+        var download = await blobClient.DownloadAsync(); //Download blob
+        string text;
 
-        try
+        using (StreamReader streamReader = new StreamReader(download.Value.Content))
         {
-            BlobClient blobClient = blobContainerClient.GetBlobClient(localFilePath);
-            var blobInfo = await blobClient.UploadAsync(_sftpClient.OpenRead(remoteFilePath)); //stream file to Azure Blob
-            var download = await blobClient.DownloadAsync(); //Download blob
-            string text;
-
-            using (StreamReader streamReader = new StreamReader(download.Value.Content))
-            {
-                text = streamReader.ReadToEnd(); //get file content
-            }
-
-            _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
-
-            return text;
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, $"Failed in transferring file [{localFilePath}] from [{remoteFilePath}]");
+            text = streamReader.ReadToEnd(); //get file content
         }
 
-        return null;
+        _logger.LogInformation($"Finished transferring file [{localFilePath}] from [{remoteFilePath}]");
+
+        return text;
     }
 
     public async Task DeleteFile(string remoteFilePath)

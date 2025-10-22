@@ -45,6 +45,7 @@ public class TimerGetSubmitResults
         IEnumerable<Renci.SshNet.Sftp.SftpFile> files = null;
 
         await _sftpService.Connect();
+
         try
         {
             files = _sftpService.ListAllFiles(_sftpOutputPath);
