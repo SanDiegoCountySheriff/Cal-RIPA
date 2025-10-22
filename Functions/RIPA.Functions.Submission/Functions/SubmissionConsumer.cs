@@ -71,7 +71,7 @@ public class SubmissionConsumer
 
         log.LogInformation($"Received message count: {messages.Length} : {runId}");
 
-        await _sftpService.Connect();
+        using var sftpBatch = await _sftpService.BeginBatch();
 
         foreach (var message in messages)
         {
@@ -153,7 +153,7 @@ public class SubmissionConsumer
                 continue;
             }
 
-            if (!await UploadSftpFile(log, bytes, fileName, stop.Id, runId, stop))
+            if (!await UploadSftpFile(log, sftpBatch, bytes, fileName, stop.Id, runId, stop))
             {
                 log.LogWarning($"Failed to upload to FTP: {stop.Id} : {runId}");
                 await RemoveBlob(log, fileName, stop.Id, runId); // delete the blob to clean up the failed run
@@ -352,12 +352,12 @@ public class SubmissionConsumer
         }
     }
 
-    private async Task<bool> UploadSftpFile(ILogger log, byte[] bytes, string fileName, string stopId, string runId, IStop stop)
+    private async Task<bool> UploadSftpFile(ILogger log, ISftpBatch sftpBatch, byte[] bytes, string fileName, string stopId, string runId, IStop stop)
     {
         try
         {
             log.LogInformation($"Uploading to FTP: {stopId} : {runId}");
-            await _sftpService.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
+            await sftpBatch.UploadStop(bytes, $"{_sftpInputPath}{fileName.Split("/")[2]}");
             return true;
         }
         catch (Exception ex)
