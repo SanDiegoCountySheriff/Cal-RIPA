@@ -175,7 +175,11 @@ export default {
     isLateStop() {
       const dateStr = this.model.stopDate.date
       const timeStr = this.model.stopDate.time
-      if (!dateStr || !timeStr) return false
+
+      if (!dateStr || !timeStr || this.isAdminEditing) {
+        return false
+      }
+
       return (
         !dateWithinLastHours(dateStr, timeStr, 24) &&
         dateNotInFuture(dateStr, timeStr)

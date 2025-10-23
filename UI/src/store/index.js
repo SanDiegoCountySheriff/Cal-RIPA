@@ -1575,7 +1575,7 @@ export default new Vuex.Store({
         })
     },
 
-    getAdminStops({ commit, state }, { version, signal } = {}) {
+    getAdminStops({ commit, state }, { version } = {}) {
       const apiVersion =
         version ?? state.stopQueryData?.version ?? state.version ?? 1
       let queryString = ''
@@ -1650,7 +1650,6 @@ export default new Vuex.Store({
         .get(
           `${state.apiConfig.apiBaseUrl}stop/v${apiVersion}/GetStops${queryString}`,
           {
-            signal,
             headers: {
               'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
               'Cache-Control': 'no-cache',
@@ -1664,10 +1663,6 @@ export default new Vuex.Store({
           })
         })
         .catch(error => {
-          if (error.code === 'ERR_CANCELED' || error.name === 'CanceledError') {
-            console.log('Admin stops request canceled')
-            return
-          }
           console.log('There was an error retrieving admin stops.', error)
           commit('updateAdminStops', {
             summary: {},
