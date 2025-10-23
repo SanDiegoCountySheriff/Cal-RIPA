@@ -64,10 +64,8 @@ export default {
   data() {
     return {
       loading: false,
-      fetchingStops: false,
       snackbarText: null,
       snackbarVisible: false,
-      abortController: new AbortController(),
     }
   },
 
@@ -217,24 +215,17 @@ export default {
     },
 
     async handleRedoItemsPerPage(pageData) {
-      if (this.fetchingStops) {
-        this.abortController.abort()
-        this.abortController = new AbortController()
-      }
-      this.fetchingStops = true
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
         await this.getAdminStops({
           version: pageData.version,
-          signal: this.abortController.signal,
         })
         this.loading = false
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
         this.loading = false
       }
-      this.fetchingStops = false
     },
 
     async handleSubmissionDetailItemsPerPage(pageData) {
@@ -256,31 +247,19 @@ export default {
     },
 
     async handlePaginate(pageData) {
-      if (this.fetchingStops) {
-        this.abortController.abort()
-        this.abortController = new AbortController()
-      }
-      this.fetchingStops = true
       this.loading = true
       if (pageData.type === 'stops') {
         this.setStopQueryData(pageData)
         await this.getAdminStops({
           version: pageData.version,
-          signal: this.abortController.signal,
         })
       } else if (pageData.type === 'submission') {
         await this.getAdminSubmissions(pageData)
       }
       this.loading = false
-      this.fetchingStops = false
     },
 
     async handleAdminFiltering(filterData) {
-      if (this.fetchingStops) {
-        this.abortController.abort()
-        this.abortController = new AbortController()
-      }
-      this.fetchingStops = true
       this.loading = true
       if (filterData.type === 'stops') {
         if (this.resetPagination) {
@@ -289,7 +268,6 @@ export default {
         this.setStopQueryData(filterData)
         await this.getAdminStops({
           version: filterData.version,
-          signal: this.abortController.signal,
         })
         this.loading = false
         this.setResetPagination(true)
@@ -297,7 +275,6 @@ export default {
         await this.getAdminSubmissions(filterData)
         this.loading = false
       }
-      this.fetchingStops = false
     },
 
     async handleDeleteBeat(beat) {

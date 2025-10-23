@@ -21,6 +21,8 @@ public class SftpService : ISftpService, IDisposable
     public readonly SftpConfig _config;
     public readonly bool _disabled;
     private bool _disposed;
+    private readonly bool _lifecycleVerbose;
+    private readonly Dictionary<SftpClient, Guid> _activeSessions = new();
 
     public SftpService(ILogger<SftpService> logger)
     {
@@ -94,15 +96,9 @@ public class SftpService : ISftpService, IDisposable
         }
     }
 
-    /// <summary>
-    /// Health-check style connect. Establishes a connection and immediately disposes it.
-    /// Keeps interface compatibility while preventing lingering sessions.
-    /// </summary>
     public async Task Connect()
     {
-        using var client = await ConnectNewAsync().ConfigureAwait(false);
-        // Optionally perform a noop (like current working directory) to validate.
-        _logger.LogDebug("SFTP health check successful. WorkingDirectory={wd}", client.WorkingDirectory);
+        using var client = await ConnectNewAsync();
     }
 
     private SftpClient BuildClient()
@@ -153,12 +149,6 @@ public class SftpService : ISftpService, IDisposable
         return client;
     }
 
-    /// <summary>
-    /// Creates, connects and returns a fresh SftpClient. Caller must dispose.
-    /// Ensures no long-lived connections stay open.
-    /// </summary>
-    private readonly bool _lifecycleVerbose;
-
     private async Task<SftpClient> ConnectNewAsync(CancellationToken cancellationToken = default)
     {
         if (_disabled)
@@ -171,7 +161,6 @@ public class SftpService : ISftpService, IDisposable
         }
 
         var client = BuildClient();
-        // attach a session id via dictionary so we can log consistent disconnect
         var sessionId = Guid.NewGuid();
         _activeSessions[client] = sessionId;
 
@@ -250,9 +239,11 @@ public class SftpService : ISftpService, IDisposable
         }
         return client;
     }
+    private Guid? GetSessionId(SftpClient c)
+    {
+        return _activeSessions.TryGetValue(c, out var id) ? id : null;
+    }
 
-    private readonly Dictionary<SftpClient, Guid> _activeSessions = new();
-    private Guid? GetSessionId(SftpClient c) => _activeSessions.TryGetValue(c, out var id) ? id : null;
     private void EndSession(SftpClient c)
     {
         if (GetSessionId(c) is Guid sid)
@@ -316,12 +307,8 @@ public class SftpService : ISftpService, IDisposable
         }
     }
 
-    /// <summary>
-    /// Upload a batch of stop files reusing a single SFTP connection.
-    /// </summary>
     public async Task UploadStops(IEnumerable<(byte[] Content, string RemotePath)> files)
     {
-        // Materialize to avoid multiple enumeration if caller passes LINQ.
         var fileList = files?.ToList() ?? new List<(byte[] Content, string RemotePath)>();
         if (!fileList.Any())
         {
@@ -343,7 +330,6 @@ public class SftpService : ISftpService, IDisposable
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed uploading batch file {remotePath}");
-                // continue with remaining files
             }
         }
         _logger.LogInformation("Batch upload complete. {success}/{total} files succeeded", success, fileList.Count);
