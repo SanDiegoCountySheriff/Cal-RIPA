@@ -43,8 +43,6 @@ public class TimerGetSubmitResults
         log.LogInformation($"Timer trigger runs each day at a time specified in the configuration: {DateTime.Now} and mytimer isPastDue: {myTimer.IsPastDue}");
 
         IEnumerable<Renci.SshNet.Sftp.ISftpFile> files = null;
-        // Idempotent connect; safe to call every run
-        await _sftpService.Connect();
 
         try
         {

@@ -171,6 +171,9 @@ public class SftpService : ISftpService, IDisposable
         }
 
         var client = BuildClient();
+        // attach a session id via dictionary so we can log consistent disconnect
+        var sessionId = Guid.NewGuid();
+        _activeSessions[client] = sessionId;
 
         int attempt = 0;
         const int maxAttempts = 8;
@@ -182,11 +185,11 @@ public class SftpService : ISftpService, IDisposable
             attempt++;
             try
             {
-                _logger.LogInformation("[SFTP] Connecting attempt {attempt}/{max} host={host} user={user}", attempt, maxAttempts, _config.Host, _config.UserName);
+                _logger.LogInformation("[SFTP] Connecting attempt {attempt}/{max} host={host} user={user} sessionId={sessionId}", attempt, maxAttempts, _config.Host, _config.UserName, sessionId);
                 client.Connect();
                 if (client.IsConnected)
                 {
-                    _logger.LogInformation("[SFTP] Connected (attempt {attempt}) sessionId={sessionId}", attempt, Guid.NewGuid());
+                    _logger.LogInformation("[SFTP] Connected (attempt {attempt}) sessionId={sessionId}", attempt, sessionId);
                     break;
                 }
             }
@@ -241,10 +244,22 @@ public class SftpService : ISftpService, IDisposable
 
         if (!client.IsConnected)
         {
+            _activeSessions.Remove(client);
             client.Dispose();
             throw new SshConnectionException($"Failed to connect to SFTP after {attempt} attempts. Fatal={fatal}. Last error: {lastException?.Message}");
         }
         return client;
+    }
+
+    private readonly Dictionary<SftpClient, Guid> _activeSessions = new();
+    private Guid? GetSessionId(SftpClient c) => _activeSessions.TryGetValue(c, out var id) ? id : null;
+    private void EndSession(SftpClient c)
+    {
+        if (GetSessionId(c) is Guid sid)
+        {
+            _logger.LogInformation("[SFTP] Session closing sessionId={sessionId}", sid);
+            _activeSessions.Remove(c);
+        }
     }
 
     public void Dispose()
@@ -265,7 +280,13 @@ public class SftpService : ISftpService, IDisposable
         {
             _logger.LogInformation("[SFTP] Disconnect after ListAllFiles remoteDirectory={remoteDirectory}");
         }
+        var sid = GetSessionId(client);
         client.Disconnect();
+        if (sid.HasValue)
+        {
+            _logger.LogInformation("[SFTP] Disconnected sessionId={sessionId} after ListAllFiles", sid);
+        }
+        EndSession(client);
         return files;
     }
 
@@ -287,12 +308,11 @@ public class SftpService : ISftpService, IDisposable
         {
             if (client.IsConnected)
             {
-                if (_lifecycleVerbose)
-                {
-                    _logger.LogInformation("[SFTP] Disconnect after UploadStop path={path}", remoteFilePath);
-                }
+                var sid = GetSessionId(client);
                 client.Disconnect();
+                _logger.LogInformation("[SFTP] Disconnected sessionId={sessionId} after UploadStop path={path}", sid, remoteFilePath);
             }
+            EndSession(client);
         }
     }
 
@@ -329,12 +349,11 @@ public class SftpService : ISftpService, IDisposable
         _logger.LogInformation("Batch upload complete. {success}/{total} files succeeded", success, fileList.Count);
         if (client.IsConnected)
         {
-            if (_lifecycleVerbose)
-            {
-                _logger.LogInformation("[SFTP] Disconnect after UploadStops count={count}", fileList.Count);
-            }
+            var sid = GetSessionId(client);
             client.Disconnect();
+            _logger.LogInformation("[SFTP] Disconnected sessionId={sessionId} after UploadStops count={count}", sid, fileList.Count);
         }
+        EndSession(client);
     }
 
     public async Task<string> DownloadFileToBlobAsync(string remoteFilePath, string localFilePath, BlobContainerClient blobContainerClient)
@@ -349,12 +368,11 @@ public class SftpService : ISftpService, IDisposable
         _logger.LogInformation("Transferred remote file {remote} to blob {blob}", remoteFilePath, localFilePath);
         if (client.IsConnected)
         {
-            if (_lifecycleVerbose)
-            {
-                _logger.LogInformation("[SFTP] Disconnect after DownloadFile remote={remote} blob={blob}", remoteFilePath, localFilePath);
-            }
+            var sid = GetSessionId(client);
             client.Disconnect();
+            _logger.LogInformation("[SFTP] Disconnected sessionId={sessionId} after DownloadFile remote={remote} blob={blob}", sid, remoteFilePath, localFilePath);
         }
+        EndSession(client);
         return text;
     }
 
@@ -375,19 +393,19 @@ public class SftpService : ISftpService, IDisposable
         {
             if (client.IsConnected)
             {
-                if (_lifecycleVerbose)
-                {
-                    _logger.LogInformation("[SFTP] Disconnect after DeleteFile path={path}", remoteFilePath);
-                }
+                var sid = GetSessionId(client);
                 client.Disconnect();
+                _logger.LogInformation("[SFTP] Disconnected sessionId={sessionId} after DeleteFile path={path}", sid, remoteFilePath);
             }
+            EndSession(client);
         }
     }
 
     public async Task<ISftpBatch> BeginBatch()
     {
         var client = await ConnectNewAsync().ConfigureAwait(false);
-        return new SftpBatch(_logger, client);
+        var sid = GetSessionId(client) ?? Guid.Empty;
+        return new SftpBatch(_logger, client, sid, EndSession, GetSessionId);
     }
 }
 
@@ -398,11 +416,17 @@ internal sealed class SftpBatch : ISftpBatch
     private bool _disposed;
     private int _uploads;
     private int _deletes;
+    private readonly Guid _sessionId;
+    private readonly Action<SftpClient> _endSession;
+    private readonly Func<SftpClient, Guid?> _getSessionId;
 
-    public SftpBatch(ILogger logger, SftpClient client)
+    public SftpBatch(ILogger logger, SftpClient client, Guid sessionId, Action<SftpClient> endSession, Func<SftpClient, Guid?> getSessionId)
     {
         _logger = logger;
         _client = client;
+        _sessionId = sessionId;
+        _endSession = endSession;
+        _getSessionId = getSessionId;
     }
 
     public Task UploadStop(byte[] bytes, string remoteFilePath)
@@ -412,7 +436,7 @@ internal sealed class SftpBatch : ISftpBatch
         {
             using var ms = new MemoryStream(bytes, writable: false);
             _client.UploadFile(ms, remoteFilePath);
-            _logger.LogInformation("[Batch] Uploaded stop file {path}", remoteFilePath);
+            _logger.LogInformation("[Batch] Uploaded stop file {path} sessionId={sessionId}", remoteFilePath, _sessionId);
             _uploads++;
         }
         catch (Exception ex)
@@ -429,7 +453,7 @@ internal sealed class SftpBatch : ISftpBatch
         try
         {
             _client.DeleteFile(remoteFilePath);
-            _logger.LogInformation("[Batch] Deleted remote file {path}", remoteFilePath);
+            _logger.LogInformation("[Batch] Deleted remote file {path} sessionId={sessionId}", remoteFilePath, _sessionId);
             _deletes++;
         }
         catch (Exception ex)
@@ -448,11 +472,13 @@ internal sealed class SftpBatch : ISftpBatch
         {
             if (_client.IsConnected)
             {
-                _logger.LogInformation("[Batch] Disconnecting SFTP session uploads={uploads} deletes={deletes}", _uploads, _deletes);
+                var sid = _getSessionId(_client) ?? _sessionId;
+                _logger.LogInformation("[Batch] Disconnecting SFTP session sessionId={sessionId} uploads={uploads} deletes={deletes}", sid, _uploads, _deletes);
                 _client.Disconnect();
             }
             _client.Dispose();
-            _logger.LogInformation("Disposed SFTP batch session uploads={uploads} deletes={deletes}", _uploads, _deletes);
+            _logger.LogInformation("Disposed SFTP batch session sessionId={sessionId} uploads={uploads} deletes={deletes}", _sessionId, _uploads, _deletes);
+            _endSession(_client);
         }
         catch (Exception ex)
         {
