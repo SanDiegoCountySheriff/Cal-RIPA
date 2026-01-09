@@ -95,6 +95,20 @@
       </v-flex>
 
       <v-flex xs12>
+        <v-alert
+          v-if="maxBackdateDays > 0"
+          type="info"
+          dense
+          outlined
+          class="tw-mb-4"
+        >
+          <strong>Backdate Configuration:</strong> Stops can be backdated up to
+          {{ maxBackdateDays }} day{{ maxBackdateDays === 1 ? '' : 's' }}.
+          However, a stop can only be submitted to DOJ after
+          {{ maxBackdateDays + 1 }} day{{ maxBackdateDays === 0 ? '' : 's' }}
+          have passed since the stop occurred (to ensure all backdated entries
+          are captured).
+        </v-alert>
         <div v-if="stops.summary" class="stopsSummary">
           <p>
             <span class="label">Total</span>
@@ -277,6 +291,63 @@
         <v-divider></v-divider>
       </v-flex>
     </v-layout>
+
+    <v-dialog v-model="coolingOffDialog" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5">
+          <span v-if="eligibleStopCount === 0">Cannot Submit Selected Stops</span>
+          <span v-else>Partial Submission Warning</span>
+        </v-card-title>
+
+        <v-card-text>
+          <span v-if="eligibleStopCount === 0">
+            None of the selected stops can be submitted yet. Stops must be at least
+            <strong>{{ maxBackdateDays + 1 }} day{{ maxBackdateDays + 1 === 1 ? '' : 's' }}</strong>
+            old to ensure all backdated entries are captured.
+          </span>
+          <span v-else>
+            <strong>{{ tooRecentStopIds.length }}</strong> of the selected stops cannot be submitted yet 
+            (must be at least <strong>{{ maxBackdateDays + 1 }} day{{ maxBackdateDays + 1 === 1 ? '' : 's' }}</strong> old). 
+            Submitting <strong>{{ eligibleStopCount }}</strong> eligible stop{{ eligibleStopCount === 1 ? '' : 's' }}.
+          </span>
+          
+          <div v-if="tooRecentStopIds.length > 0" class="mt-4">
+            <v-divider class="mb-2"></v-divider>
+            <div class="text-subtitle-2 mb-2">Stop IDs that will NOT be submitted:</div>
+            <v-chip
+              v-for="stopId in tooRecentStopIds"
+              :key="stopId"
+              small
+              class="mr-1 mb-1"
+            >
+              {{ stopId }}
+            </v-chip>
+          </div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn 
+            v-if="eligibleStopCount === 0"
+            color="primary" 
+            text 
+            @click="handleCloseCoolingOffDialog"
+          >
+            OK
+          </v-btn>
+
+          <template v-else>
+            <v-btn color="darken-1" text @click="handleCloseCoolingOffDialog">
+              Cancel
+            </v-btn>
+            <v-btn color="primary" text @click="handleCloseCoolingOffDialog">
+              Continue
+            </v-btn>
+          </template>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -304,6 +375,9 @@ export default {
       search: '',
       errorCodesLoading: false,
       stops: [],
+      coolingOffDialog: false,
+      tooRecentStopIds: [],
+      eligibleStopCount: 0,
       headers: [
         { text: 'ID', value: 'id', sortName: 'id' },
         { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
@@ -355,6 +429,14 @@ export default {
   },
 
   computed: {
+    maxBackdateDays() {
+      const configValue = this.$store.state.apiConfig?.MaxBackdateDays
+      if (configValue === undefined || configValue === null) {
+        return 0
+      }
+      const days = parseInt(configValue, 10)
+      return isNaN(days) ? 0 : Math.min(Math.max(days, 0), 30)
+    },
     getStops() {
       if (this.items.stops) {
         return this.items.stops
@@ -599,10 +681,45 @@ export default {
       this.$emit('handleSubmitAll', filterData)
     },
     handleSubmitSelected() {
-      const itemIds = this.selectedItems.map(itemObj => {
-        return itemObj.id
+      if (this.maxBackdateDays === 0) {
+        // No cooling-off period, submit all selected
+        const itemIds = this.selectedItems.map(itemObj => itemObj.id)
+        this.$emit('handleSubmitStops', itemIds)
+        return
+      }
+
+      // Filter out stops that are too recent to submit
+      const now = new Date()
+      const eligibleStops = []
+      const tooRecentStops = []
+
+      this.selectedItems.forEach(stop => {
+        const stopDateTime = new Date(stop.stopDateTime)
+        const daysSinceStop = Math.floor(
+          (now.getTime() - stopDateTime.getTime()) / (1000 * 60 * 60 * 24),
+        )
+
+        if (daysSinceStop > this.maxBackdateDays) {
+          // Cooling-off period has passed, can submit
+          eligibleStops.push(stop.id)
+        } else {
+          tooRecentStops.push(stop)
+        }
       })
-      this.$emit('handleSubmitStops', itemIds)
+
+      if (tooRecentStops.length > 0) {
+        this.tooRecentStopIds = tooRecentStops.map(stop => stop.id)
+        this.eligibleStopCount = eligibleStops.length
+        this.coolingOffDialog = true
+
+        if (eligibleStops.length === 0) {
+          return
+        }
+      }
+
+      if (eligibleStops.length > 0) {
+        this.$emit('handleSubmitStops', eligibleStops)
+      }
     },
     getColumnSortName() {
       const columnName = Array.isArray(this.sortBy)
@@ -616,6 +733,11 @@ export default {
       } else {
         return null
       }
+    },
+    handleCloseCoolingOffDialog() {
+      this.coolingOffDialog = false
+      this.tooRecentStopIds = []
+      this.eligibleStopCount = 0
     },
   },
 
