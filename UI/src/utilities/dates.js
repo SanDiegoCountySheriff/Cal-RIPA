@@ -41,6 +41,23 @@ export const dateWithinLastHours = (dateStr, timeStr, hours) => {
   return diff < hours
 }
 
+export const dateWithinLastDays = (dateStr, timeStr, days) => {
+  const stopDateTime = parseDate(dateStr, timeStr)
+  const now = new Date()
+  const diffMilliseconds = now.getTime() - stopDateTime.getTime()
+  const diffDays = diffMilliseconds / (1000 * 60 * 60 * 24)
+
+  console.log('dateWithinLastDays:', {
+    stopDateTime: stopDateTime.toISOString(),
+    now: now.toISOString(),
+    diffDays: diffDays.toFixed(2),
+    maxDays: days,
+    isWithin: diffDays <= days,
+  })
+
+  return diffDays <= days
+}
+
 export const formatDateTime = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}`)
 }

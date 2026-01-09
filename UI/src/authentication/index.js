@@ -46,6 +46,7 @@ export default {
           'TRUE',
         reportingEmailAddress:
           res.data.Configuration.ReportingEmailAddress ?? '',
+        MaxBackdateDays: parseInt(res.data.Configuration.MaxBackdateDays) || 0,
       })
 
       return new Promise((resolve, reject) => {
