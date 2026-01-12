@@ -31,6 +31,7 @@
       @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
+      @handleSubmitStopsDirectly="handleSubmitStopsDirectly"
       @handleSubmitAll="handleSubmitAll"
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
@@ -134,6 +135,10 @@ export default {
       this.selectedStops = stops
       this.submitSelected = true
       this.submitDialog = true
+    },
+    handleSubmitStopsDirectly(stops) {
+      // Bypass the confirmation dialog and submit directly
+      this.$emit('handleSubmitStops', stops)
     },
     handleSubmitAll(filterData) {
       this.submitAllFilterData = filterData
