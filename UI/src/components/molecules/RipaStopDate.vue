@@ -174,10 +174,12 @@ export default {
 
     maxBackdateDays() {
       const configValue = this.$store.state.apiConfig?.MaxBackdateDays
+      console.log('MaxBackdateDays from config:', configValue)
       if (configValue === undefined || configValue === null) {
         return 0 // Default to 0 (24 hours only)
       }
       const days = parseInt(configValue, 10)
+      console.log('Parsed maxBackdateDays:', days)
       return isNaN(days) ? 0 : Math.min(Math.max(days, 0), 30) // Clamp between 0-30
     },
 
