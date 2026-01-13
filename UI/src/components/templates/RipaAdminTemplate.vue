@@ -164,6 +164,39 @@ export default {
   },
 
   computed: {
+    parseToLocalMidnightDate() {
+      return value => {
+        if (!value) return null
+        if (value instanceof Date && !isNaN(value.getTime())) {
+          return new Date(
+            value.getFullYear(),
+            value.getMonth(),
+            value.getDate(),
+          )
+        }
+
+        if (typeof value !== 'string') return null
+
+        const trimmed = value.trim()
+        if (!trimmed) return null
+
+        const dateOnly = trimmed.includes('T') ? trimmed.split('T')[0] : trimmed
+
+        // YYYY-MM-DD (also accept YYYY-M-D)
+        if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateOnly)) {
+          const [yyyy, mm, dd] = dateOnly.split('-').map(Number)
+          return new Date(yyyy, mm - 1, dd)
+        }
+
+        // MM/DD/YYYY (also accept M/D/YYYY)
+        if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateOnly)) {
+          const [mm, dd, yyyy] = dateOnly.split('/').map(Number)
+          return new Date(yyyy, mm - 1, dd)
+        }
+
+        return null
+      }
+    },
     maxBackdateDays() {
       if (this.submitSelected && this.selectedStops) {
         return this.selectedStops.maxBackdateDays || 0
@@ -194,15 +227,28 @@ export default {
       }
       return 0
     },
-    requiredStopToDate() {
+    requiredStopToDateDate() {
       if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
         return null
       }
       const now = new Date()
       const requiredDate = new Date(
-        now.getTime() - this.cooldownDays * 24 * 60 * 60 * 1000,
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
       )
-      return requiredDate.toISOString().split('T')[0]
+      requiredDate.setDate(requiredDate.getDate() - this.cooldownDays)
+      return requiredDate
+    },
+    requiredStopToDate() {
+      if (!this.requiredStopToDateDate) return null
+      const yyyy = this.requiredStopToDateDate.getFullYear()
+      const mm = String(this.requiredStopToDateDate.getMonth() + 1).padStart(
+        2,
+        '0',
+      )
+      const dd = String(this.requiredStopToDateDate.getDate()).padStart(2, '0')
+      return `${yyyy}-${mm}-${dd}`
     },
     submissionBlockedByCooldown() {
       if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
@@ -213,14 +259,10 @@ export default {
         return this.hasCooldownStops
       }
 
-      const stopToDate = this.submitAllFilterData?.stopToDate
-      if (!stopToDate || !this.requiredStopToDate) {
-        return true
-      }
-
-      // If the filter's To Date is after the cutoff date (or unset), the
-      // range may include stops that are too recent.
-      return stopToDate > this.requiredStopToDate
+      // For submit-all, rely on the cooldown stop IDs computed from the
+      // current result set. This avoids false positives due to To Date formats
+      // and only blocks when there are actually too-recent stops present.
+      return this.hasCooldownStops
     },
   },
 

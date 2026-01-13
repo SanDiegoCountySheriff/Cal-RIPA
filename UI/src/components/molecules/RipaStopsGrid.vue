@@ -398,8 +398,12 @@ export default {
     },
     cooldownDate() {
       if (this.maxBackdateDays === 0) return null
+      // Use a calendar-day cutoff (local midnight) so a stop on the cutoff
+      // date is eligible for submission/selection.
       const now = new Date()
-      return new Date(now.getTime() - this.cooldownDays * 24 * 60 * 60 * 1000)
+      const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      cutoff.setDate(cutoff.getDate() - this.cooldownDays)
+      return cutoff
     },
     getStops() {
       if (this.items.stops) {
@@ -471,7 +475,12 @@ export default {
     isStopInCooldown(stopDateTime) {
       if (this.maxBackdateDays === 0 || !this.cooldownDate) return false
       const stopDate = new Date(stopDateTime)
-      return stopDate > this.cooldownDate
+      const stopDateAtMidnight = new Date(
+        stopDate.getFullYear(),
+        stopDate.getMonth(),
+        stopDate.getDate(),
+      )
+      return stopDateAtMidnight > this.cooldownDate
     },
     getCooldownStopsInfo(stops) {
       if (this.maxBackdateDays === 0) {
