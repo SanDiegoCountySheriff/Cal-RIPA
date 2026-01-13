@@ -131,12 +131,12 @@
         >
           <span class="tw-text-sm">
             Backdate configuration is set to
-            <strong
-              >{{ maxBackdateDays }} day{{ maxBackdateDays === 1 ? '' : 's' }}.
+            <strong>
+              {{ maxBackdateDays }} day{{ maxBackdateDays === 1 ? '' : 's' }}.
             </strong>
             Stops must be at least
-            <strong
-              >{{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+            <strong>
+              {{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
             </strong>
             old before submission.
           </span>
@@ -198,10 +198,10 @@
                   </v-btn>
                 </template>
 
-                <span
-                  >Submit all the stops to the DOJ. Stops with PII or that are
-                  in an error state will not be resubmitted.</span
-                >
+                <span>
+                  Submit all the stops to the DOJ. Stops with PII or that are
+                  in an error state will not be resubmitted.
+                </span>
               </v-tooltip>
 
               <ripa-switch
@@ -304,8 +304,9 @@
               class="late-submission-icon"
               color="warning"
               small
-              >mdi-clock-alert</v-icon
-            >
+              >
+              mdi-clock-alert
+            </v-icon>
           </template>
         </v-data-table>
       </v-flex>
