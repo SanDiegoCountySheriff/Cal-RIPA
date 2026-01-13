@@ -21,6 +21,15 @@ describe('Ripa Stop Date', () => {
   const factory = (propsData, provideData) => {
     return shallowMount(RipaStopDate, {
       vuetify,
+      mocks: {
+        $store: {
+          state: {
+            apiConfig: {
+              MaxBackdateDays: 0,
+            },
+          },
+        },
+      },
       propsData: {
         ...propsData,
       },
@@ -110,6 +119,15 @@ describe('Ripa Stop Date', () => {
   it('should match snapshot', () => {
     wrapper = mount(RipaStopDate, {
       vuetify,
+      mocks: {
+        $store: {
+          state: {
+            apiConfig: {
+              MaxBackdateDays: 0,
+            },
+          },
+        },
+      },
       propsData: {
         value: stop,
       },

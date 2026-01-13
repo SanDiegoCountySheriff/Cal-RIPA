@@ -76,8 +76,7 @@
       <v-row v-if="isLateStop" class="tw-mt-4">
         <v-col cols="12">
           <v-alert type="warning" dense outlined class="mt-2">
-            This stop is being submitted more than 24 hours after it occurred.
-            Please provide an explanation for the late submission.
+            {{ lateStopMessage }}
           </v-alert>
         </v-col>
       </v-row>
@@ -172,6 +171,17 @@ export default {
       },
     },
 
+    maxBackdateDays() {
+      const configValue = this.$store?.state?.apiConfig?.MaxBackdateDays
+
+      if (configValue === undefined || configValue === null) {
+        return 0
+      }
+
+      const days = parseInt(configValue, 10)
+      return isNaN(days) ? 0 : Math.min(Math.max(days, 0), 30)
+    },
+
     isLateStop() {
       const dateStr = this.model.stopDate.date
       const timeStr = this.model.stopDate.time
@@ -180,10 +190,28 @@ export default {
         return false
       }
 
-      return (
-        !dateWithinLastHours(dateStr, timeStr, 24) &&
-        dateNotInFuture(dateStr, timeStr)
-      )
+      if (this.maxBackdateDays === 0) {
+        return false
+      }
+
+      const stopDateTime = new Date(`${dateStr}T${timeStr}`)
+      const now = new Date()
+      const diffMilliseconds = now.getTime() - stopDateTime.getTime()
+      const diffHours = diffMilliseconds / (1000 * 60 * 60)
+      const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
+
+      return diffHours > 24 && diffDays <= this.maxBackdateDays
+    },
+
+    lateStopMessage() {
+      if (this.maxBackdateDays === 0) {
+        return 'This stop is being submitted more than 24 hours after it occurred. Please provide an explanation for the late submission.'
+      }
+      return `This stop is being submitted more than ${
+        this.maxBackdateDays
+      } day${
+        this.maxBackdateDays === 1 ? '' : 's'
+      } after it occurred. Please provide an explanation for the late submission.`
     },
 
     dateRules() {
@@ -205,6 +233,30 @@ export default {
               this.model.stopDate.time,
             )) ||
           'Date and Time cannot be in the future',
+        v => {
+          if (!v || this.isAdminEditing) return true
+
+          const stopDateTime = new Date(
+            `${this.model.stopDate.date}T${this.model.stopDate.time}`,
+          )
+          const now = new Date()
+          const diffMilliseconds = now.getTime() - stopDateTime.getTime()
+          const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
+
+          if (this.maxBackdateDays === 0) {
+            return (
+              (v && this.isValidDateTime) ||
+              'Date and Time must be within the past 24 hours'
+            )
+          } else {
+            return (
+              diffDays <= this.maxBackdateDays ||
+              `Date and Time cannot be more than ${this.maxBackdateDays} day${
+                this.maxBackdateDays === 1 ? '' : 's'
+              } in the past`
+            )
+          }
+        },
       ]
     },
 
@@ -231,11 +283,17 @@ export default {
     },
 
     lateExplanationRules() {
+      const maxDays =
+        this.maxBackdateDays === 0
+          ? '24 hours'
+          : `${this.maxBackdateDays} day${
+              this.maxBackdateDays === 1 ? '' : 's'
+            }`
       return [
         v =>
           !this.isLateStop ||
           (v && v.length > 4) ||
-          'Explanation is required for late stops',
+          `Explanation is required for stops submitted more than ${maxDays} after they occurred`,
       ]
     },
 

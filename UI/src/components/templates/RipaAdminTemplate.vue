@@ -47,15 +47,80 @@
         </v-card-title>
 
         <v-card-text>
-          <span v-if="submitSelected"
-            >This will only submit the stops you have selected to the DOJ.</span
-          >
-          <span v-if="!submitSelected"
-            >This will submit all the stops to the DOJ based on the current
-            filters you have set.</span
-          >
+          <span v-if="submitSelected">
+            This will only submit the stops you have selected to the DOJ.
+          </span>
+          <span v-if="!submitSelected">
+            This will submit all the stops to the DOJ based on the current
+            filters you have set.
+          </span>
           <br /><br />Note: Stops that are in an error state will not be
           re-submitted.
+
+          <template v-if="submissionBlockedByCooldown">
+            <v-divider class="my-4"></v-divider>
+            <v-alert
+              dense
+              text
+              type="error"
+              border="left"
+              colored-border
+              icon="mdi-alert-circle-outline"
+            >
+              <div>
+                Your system is currently configured to allow backdating stops
+                for
+                <strong>
+                  {{ maxBackdateDays }} day{{
+                    maxBackdateDays === 1 ? '' : 's'
+                  }}
+                </strong>.
+              </div>
+
+              <div>
+                Stops must be at least
+                <strong>
+                  {{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+                </strong>
+                old before submission.
+              </div>
+
+              <template v-if="submitSelected">
+                <div class="mt-2">
+                  One or more selected stops are too recent. Unselect them and
+                  try again.
+                </div>
+              </template>
+
+              <template v-else>
+                <div class="mt-2">
+                  Your current filters include stops that may be too recent. Set
+                  the
+                  <strong>To Date</strong> filter to
+                  <strong>{{ requiredStopToDate }}</strong> (or earlier) and try
+                  again.
+                </div>
+              </template>
+
+              <template v-if="submitSelected && cooldownStopIds.length">
+                <v-divider class="my-2"></v-divider>
+                <div>Stops too recent to submit:</div>
+                <v-chip-group column>
+                  <v-chip
+                    v-for="stopId in cooldownStopIds"
+                    :key="stopId"
+                    label
+                    small
+                    outlined
+                    color="primary"
+                    class="mr-2 mb-2"
+                  >
+                    {{ stopId }}
+                  </v-chip>
+                </v-chip-group>
+              </template>
+            </v-alert>
+          </template>
         </v-card-text>
 
         <v-card-actions>
@@ -65,7 +130,12 @@
             Cancel
           </v-btn>
 
-          <v-btn color="darken-1" text @click="handleSubmitDialogConfirm">
+          <v-btn
+            :disabled="submissionBlockedByCooldown"
+            @click="handleSubmitDialogConfirm"
+            color="darken-1"
+            text
+          >
             Submit
           </v-btn>
         </v-card-actions>
@@ -91,6 +161,104 @@ export default {
       selectedStops: [],
       submitAllFilterData: null,
     }
+  },
+
+  computed: {
+    parseToLocalMidnightDate() {
+      return value => {
+        if (!value) return null
+        if (value instanceof Date && !isNaN(value.getTime())) {
+          return new Date(
+            value.getFullYear(),
+            value.getMonth(),
+            value.getDate(),
+          )
+        }
+
+        if (typeof value !== 'string') return null
+
+        const trimmed = value.trim()
+        if (!trimmed) return null
+
+        const dateOnly = trimmed.includes('T') ? trimmed.split('T')[0] : trimmed
+
+        if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateOnly)) {
+          const [yyyy, mm, dd] = dateOnly.split('-').map(Number)
+          return new Date(yyyy, mm - 1, dd)
+        }
+
+        if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateOnly)) {
+          const [mm, dd, yyyy] = dateOnly.split('/').map(Number)
+          return new Date(yyyy, mm - 1, dd)
+        }
+
+        return null
+      }
+    },
+    maxBackdateDays() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.maxBackdateDays || 0
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.maxBackdateDays || 0
+      }
+      return 0
+    },
+    cooldownStopIds() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.cooldownStopIds || []
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.cooldownStopIds || []
+      }
+      return []
+    },
+    hasCooldownStops() {
+      return this.cooldownStopIds.length > 0
+    },
+    cooldownDays() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.cooldownDays || 0
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.cooldownDays || 0
+      }
+      return 0
+    },
+    requiredStopToDateDate() {
+      if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
+        return null
+      }
+      const now = new Date()
+      const requiredDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      )
+      requiredDate.setDate(requiredDate.getDate() - this.cooldownDays)
+      return requiredDate
+    },
+    requiredStopToDate() {
+      if (!this.requiredStopToDateDate) return null
+      const yyyy = this.requiredStopToDateDate.getFullYear()
+      const mm = String(this.requiredStopToDateDate.getMonth() + 1).padStart(
+        2,
+        '0',
+      )
+      const dd = String(this.requiredStopToDateDate.getDate()).padStart(2, '0')
+      return `${yyyy}-${mm}-${dd}`
+    },
+    submissionBlockedByCooldown() {
+      if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
+        return false
+      }
+
+      if (this.submitSelected) {
+        return this.hasCooldownStops
+      }
+
+      return this.hasCooldownStops
+    },
   },
 
   methods: {
@@ -145,8 +313,11 @@ export default {
       this.submitDialog = false
     },
     handleSubmitDialogConfirm() {
-      if (this.submitSelected && this.selectedStops.length > 0) {
-        this.$emit('handleSubmitStops', this.selectedStops)
+      if (this.submissionBlockedByCooldown) {
+        return
+      }
+      if (this.submitSelected && this.selectedStops) {
+        this.$emit('handleSubmitStops', this.selectedStops.stopIds || [])
       } else {
         this.$emit('handleSubmitAll', this.submitAllFilterData)
       }

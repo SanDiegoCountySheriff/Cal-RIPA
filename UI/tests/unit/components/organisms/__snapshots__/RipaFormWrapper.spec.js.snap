@@ -2,11 +2,14 @@
 
 exports[`Ripa Form Wrapper should match snapshot 1`] = `
 <div class="ripa-form-wrapper">
-  <ripa-alert-stub alerttype="error">In order to finish initializing the RIPA application please upload CLEW
+  <ripa-alert-stub alerttype="error">
+    In order to finish initializing the RIPA application please upload CLEW
     data by
-    <a class="text-decoration-underline white--text font-weight-bold">clicking here</a>
-    and uploading the CLEW spreadsheet including cities, schools and
-    statutes.</ripa-alert-stub>
+    <a class="text-decoration-underline white--text font-weight-bold">
+      clicking here
+    </a>
+    and uploading the CLEW spreadsheet including cities, schools and statutes.
+  </ripa-alert-stub>
   <!---->
   <!---->
   <ripa-json-viewer-dialog-stub stop="[object Object]" apistop="[object Object]"></ripa-json-viewer-dialog-stub>

@@ -121,12 +121,31 @@
             <span class="count">{{ stops.summary.failed }}</span>
           </p>
         </div>
-        <v-progress-linear
-          v-if="loading"
-          indeterminate
-          color="cyan"
-        ></v-progress-linear>
+        <v-alert
+          v-if="maxBackdateDays > 0"
+          type="info"
+          dense
+          text
+          border="left"
+          class="tw-mt-2 tw-mb-2"
+        >
+          <span class="tw-text-sm">
+            Backdate configuration is set to
+            <strong>
+              {{ maxBackdateDays }} day{{ maxBackdateDays === 1 ? '' : 's' }}.
+            </strong>
+            Stops must be at least
+            <strong>
+              {{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+            </strong>
+            old before submission.
+          </span>
+        </v-alert>
+
+        <v-progress-linear v-if="loading" indeterminate color="cyan">
+        </v-progress-linear>
       </v-flex>
+
       <v-flex xs12>
         <v-data-table
           v-model="selectedItems"
@@ -138,12 +157,29 @@
           show-select
           :items="getStops"
           :server-items-length="getTotalStops"
-          @item-selected="handleRowSelected"
-          @toggle-select-all="handleToggleSelectAll"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :search="search"
         >
+          <template v-slot:header.data-table-select>
+            <v-simple-checkbox
+              :indeterminate="someSelectableSelected"
+              :value="allSelectableSelected"
+              @input="toggleSelectAll"
+            >
+            </v-simple-checkbox>
+          </template>
+          <template
+            v-slot:item.data-table-select="{ item, isSelected, select }"
+          >
+            <v-checkbox
+              :disabled="isStopInCooldown(item.stopDateTime)"
+              :value="isSelected"
+              @input="select($event)"
+            >
+            </v-checkbox>
+          </template>
+
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title class="tw-uppercase"
@@ -161,10 +197,11 @@
                     Submit All Stops to DOJ
                   </v-btn>
                 </template>
-                <span
-                  >Submit all the stops to the DOJ. Stops with PII or that are
-                  in an error state will not be resubmitted.</span
-                >
+
+                <span>
+                  Submit all the stops to the DOJ. Stops with PII or that are
+                  in an error state will not be resubmitted.
+                </span>
               </v-tooltip>
 
               <ripa-switch
@@ -267,8 +304,9 @@
               class="late-submission-icon"
               color="warning"
               small
-              >mdi-clock-alert</v-icon
-            >
+              >
+              mdi-clock-alert
+            </v-icon>
           </template>
         </v-data-table>
       </v-flex>
@@ -355,6 +393,51 @@ export default {
   },
 
   computed: {
+    maxBackdateDays() {
+      const configValue = this.$store?.state?.apiConfig?.MaxBackdateDays
+      if (configValue === undefined || configValue === null) {
+        return 0
+      }
+      const days = parseInt(configValue, 10)
+      return isNaN(days) ? 0 : days
+    },
+    cooldownDays() {
+      return this.maxBackdateDays > 0 ? this.maxBackdateDays + 1 : 0
+    },
+    cooldownDate() {
+      if (this.maxBackdateDays === 0) {
+        return null
+      }
+
+      const now = new Date()
+      const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      cutoff.setDate(cutoff.getDate() - this.cooldownDays)
+      return cutoff
+    },
+    selectableStops() {
+      return this.getStops.filter(
+        stop => !this.isStopInCooldown(stop.stopDateTime),
+      )
+    },
+    allSelectableSelected() {
+      if (!this.selectableStops.length) {
+        return false
+      }
+
+      const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
+      return this.selectableStops.every(stop => selectedIds.has(stop.id))
+    },
+    someSelectableSelected() {
+      if (!this.selectableStops.length) {
+        return false
+      }
+
+      const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
+      const selectedCount = this.selectableStops.filter(stop =>
+        selectedIds.has(stop.id),
+      ).length
+      return selectedCount > 0 && selectedCount < this.selectableStops.length
+    },
     getStops() {
       if (this.items.stops) {
         return this.items.stops
@@ -422,6 +505,41 @@ export default {
   },
 
   methods: {
+    toggleSelectAll(checked) {
+      if (checked) {
+        this.selectedItems = this.selectableStops
+      } else {
+        this.selectedItems = []
+      }
+    },
+    isStopInCooldown(stopDateTime) {
+      if (this.maxBackdateDays === 0 || !this.cooldownDate) {
+        return false
+      }
+
+      const stopDate = new Date(stopDateTime)
+      const stopDateAtMidnight = new Date(
+        stopDate.getFullYear(),
+        stopDate.getMonth(),
+        stopDate.getDate(),
+      )
+      return stopDateAtMidnight > this.cooldownDate
+    },
+    getCooldownStopsInfo(stops) {
+      if (this.maxBackdateDays === 0) {
+        return { cooldownStops: [], cooldownStopIds: [], allInCooldown: false }
+      }
+      const cooldownStops = stops.filter(stop =>
+        this.isStopInCooldown(stop.stopDateTime),
+      )
+      const cooldownStopIds = cooldownStops.map(stop => stop.id)
+      return {
+        cooldownStops,
+        cooldownStopIds,
+        allInCooldown:
+          cooldownStops.length === stops.length && stops.length > 0,
+      }
+    },
     init() {
       this.stops = this.items
       // if the user has a from date saved in session storage
@@ -476,28 +594,6 @@ export default {
         version: this.version,
       })
     },
-    handleRowSelected(item) {
-      if (item.value) {
-        this.selectedItems.push(item.item)
-      } else {
-        this.selectedItems = this.selectedItems.filter(itemObj => {
-          return itemObj.id !== item.item.id
-        })
-      }
-    },
-
-    handleToggleSelectAll(item) {
-      if (item.value) {
-        this.selectedItems = item.items
-      } else {
-        item.items.forEach(selectedItemObj => {
-          this.selectedItems = this.selectedItems.filter(itemObj => {
-            return itemObj.id !== selectedItemObj.id
-          })
-        })
-      }
-    },
-
     editItem(item) {
       this.handleEditStopByAdmin(item, window.location.pathname)
     },
@@ -596,13 +692,31 @@ export default {
         // need to make a comma delimited string out of the error codes
         errorCodes: this.selectedErrorCodes.join(),
       }
-      this.$emit('handleSubmitAll', filterData)
+
+      const cooldownInfo = this.getCooldownStopsInfo(this.getStops)
+
+      this.$emit('handleSubmitAll', {
+        ...filterData,
+        cooldownStopIds: cooldownInfo.cooldownStopIds,
+        allInCooldown: cooldownInfo.allInCooldown,
+        maxBackdateDays: this.maxBackdateDays,
+        cooldownDays: this.cooldownDays,
+      })
     },
     handleSubmitSelected() {
       const itemIds = this.selectedItems.map(itemObj => {
         return itemObj.id
       })
-      this.$emit('handleSubmitStops', itemIds)
+
+      const cooldownInfo = this.getCooldownStopsInfo(this.selectedItems)
+
+      this.$emit('handleSubmitStops', {
+        stopIds: itemIds,
+        cooldownStopIds: cooldownInfo.cooldownStopIds,
+        allInCooldown: cooldownInfo.allInCooldown,
+        maxBackdateDays: this.maxBackdateDays,
+        cooldownDays: this.cooldownDays,
+      })
     },
     getColumnSortName() {
       const columnName = Array.isArray(this.sortBy)

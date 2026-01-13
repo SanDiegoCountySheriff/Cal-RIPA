@@ -11,12 +11,23 @@ describe('Ripa Stops Grid', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    if (wrapper) {
+      wrapper.destroy()
+    }
   })
 
   const factory = propsData => {
     return shallowMount(RipaStopsGrid, {
       vuetify,
+      mocks: {
+        $store: {
+          state: {
+            apiConfig: {
+              MaxBackdateDays: 0,
+            },
+          },
+        },
+      },
       propsData: {
         ...propsData,
       },
@@ -26,6 +37,15 @@ describe('Ripa Stops Grid', () => {
   it('should match snapshot', () => {
     wrapper = mount(RipaStopsGrid, {
       vuetify,
+      mocks: {
+        $store: {
+          state: {
+            apiConfig: {
+              MaxBackdateDays: 0,
+            },
+          },
+        },
+      },
       propsData: {
         errorCodeSearch: {
           items: [],
