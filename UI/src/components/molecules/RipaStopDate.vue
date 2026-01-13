@@ -172,7 +172,7 @@ export default {
     },
 
     maxBackdateDays() {
-      const configValue = this.$store.state.apiConfig?.MaxBackdateDays
+      const configValue = this.$store?.state?.apiConfig?.MaxBackdateDays
 
       if (configValue === undefined || configValue === null) {
         return 0

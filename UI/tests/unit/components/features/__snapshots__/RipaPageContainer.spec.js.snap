@@ -87,7 +87,7 @@ exports[`Ripa Page Container should match snapshot 1`] = `
   </div>
   <footer class="v-footer v-sheet theme--light v-footer--fixed v-footer--padless" style="left: 0px; right: 0px; bottom: 0px;">
     <div class="text-center col col-12">
-      © 2025 — CSSA — #{TEMPLATE_VERSION}#
+      © 2026 — CSSA — #{TEMPLATE_VERSION}#
     </div>
   </footer>
 </div>
