@@ -57,7 +57,6 @@
           <br /><br />Note: Stops that are in an error state will not be
           re-submitted.
 
-          <!-- Backdate protection -->
           <template v-if="submissionBlockedByCooldown">
             <v-divider class="my-4"></v-divider>
             <v-alert
@@ -132,10 +131,10 @@
           </v-btn>
 
           <v-btn
+            :disabled="submissionBlockedByCooldown"
+            @click="handleSubmitDialogConfirm"
             color="darken-1"
             text
-            @click="handleSubmitDialogConfirm"
-            :disabled="submissionBlockedByCooldown"
           >
             Submit
           </v-btn>
@@ -183,13 +182,11 @@ export default {
 
         const dateOnly = trimmed.includes('T') ? trimmed.split('T')[0] : trimmed
 
-        // YYYY-MM-DD (also accept YYYY-M-D)
         if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateOnly)) {
           const [yyyy, mm, dd] = dateOnly.split('-').map(Number)
           return new Date(yyyy, mm - 1, dd)
         }
 
-        // MM/DD/YYYY (also accept M/D/YYYY)
         if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateOnly)) {
           const [mm, dd, yyyy] = dateOnly.split('/').map(Number)
           return new Date(yyyy, mm - 1, dd)
@@ -260,9 +257,6 @@ export default {
         return this.hasCooldownStops
       }
 
-      // For submit-all, rely on the cooldown stop IDs computed from the
-      // current result set. This avoids false positives due to To Date formats
-      // and only blocks when there are actually too-recent stops present.
       return this.hasCooldownStops
     },
   },

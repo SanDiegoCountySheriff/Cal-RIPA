@@ -125,7 +125,6 @@ import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
 import {
   dateWithinLastHours,
-  dateWithinLastDays,
   dateNotInFuture,
   formatToIsoCurrentDate,
   formatToIsoDate,
@@ -174,13 +173,13 @@ export default {
 
     maxBackdateDays() {
       const configValue = this.$store.state.apiConfig?.MaxBackdateDays
-      console.log('MaxBackdateDays from config:', configValue)
+
       if (configValue === undefined || configValue === null) {
-        return 0 // Default to 0 (24 hours only)
+        return 0
       }
+
       const days = parseInt(configValue, 10)
-      console.log('Parsed maxBackdateDays:', days)
-      return isNaN(days) ? 0 : Math.min(Math.max(days, 0), 30) // Clamp between 0-30
+      return isNaN(days) ? 0 : Math.min(Math.max(days, 0), 30)
     },
 
     isLateStop() {
@@ -191,22 +190,16 @@ export default {
         return false
       }
 
-      // If maxBackdateDays is 0, never show explanation (validation handles it)
       if (this.maxBackdateDays === 0) {
         return false
       }
 
-      // If maxBackdateDays > 0, only show explanation for VALID late stops
-      // (more than 24 hours old BUT within the allowed backdate limit)
       const stopDateTime = new Date(`${dateStr}T${timeStr}`)
       const now = new Date()
       const diffMilliseconds = now.getTime() - stopDateTime.getTime()
       const diffHours = diffMilliseconds / (1000 * 60 * 60)
       const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
 
-      // Show explanation only if:
-      // 1. Stop is more than 24 hours old, AND
-      // 2. Stop is within the allowed backdate limit
       return diffHours > 24 && diffDays <= this.maxBackdateDays
     },
 
@@ -250,21 +243,12 @@ export default {
           const diffMilliseconds = now.getTime() - stopDateTime.getTime()
           const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
 
-          console.log('Date validation:', {
-            stopDateTime: stopDateTime.toISOString(),
-            now: now.toISOString(),
-            diffDays,
-            maxBackdateDays: this.maxBackdateDays,
-          })
-
           if (this.maxBackdateDays === 0) {
-            // Original 24-hour validation
             return (
               (v && this.isValidDateTime) ||
               'Date and Time must be within the past 24 hours'
             )
           } else {
-            // Validate against configured backdate limit (using floor to be more lenient)
             return (
               diffDays <= this.maxBackdateDays ||
               `Date and Time cannot be more than ${this.maxBackdateDays} day${

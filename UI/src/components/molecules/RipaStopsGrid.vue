@@ -142,6 +142,7 @@
             old before submission.
           </span>
         </v-alert>
+
         <v-progress-linear
           v-if="loading"
           indeterminate
@@ -165,20 +166,21 @@
         >
           <template v-slot:header.data-table-select>
             <v-simple-checkbox
-              :value="allSelectableSelected"
               :indeterminate="someSelectableSelected"
+              :value="allSelectableSelected"
               @input="toggleSelectAll"
             ></v-simple-checkbox>
           </template>
           <template
             v-slot:item.data-table-select="{ item, isSelected, select }"
           >
-            <v-simple-checkbox
-              :value="isSelected"
+            <v-checkbox
               :disabled="isStopInCooldown(item.stopDateTime)"
+              :value="isSelected"
               @input="select($event)"
-            ></v-simple-checkbox>
+            ></v-checkbox>
           </template>
+
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title class="tw-uppercase"
@@ -196,6 +198,7 @@
                     Submit All Stops to DOJ
                   </v-btn>
                 </template>
+
                 <span
                   >Submit all the stops to the DOJ. Stops with PII or that are
                   in an error state will not be resubmitted.</span
@@ -402,9 +405,10 @@ export default {
       return this.maxBackdateDays > 0 ? this.maxBackdateDays + 1 : 0
     },
     cooldownDate() {
-      if (this.maxBackdateDays === 0) return null
-      // Use a calendar-day cutoff (local midnight) so a stop on the cutoff
-      // date is eligible for submission/selection.
+      if (this.maxBackdateDays === 0) {
+        return null
+      }
+
       const now = new Date()
       const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate())
       cutoff.setDate(cutoff.getDate() - this.cooldownDays)
@@ -416,12 +420,18 @@ export default {
       )
     },
     allSelectableSelected() {
-      if (!this.selectableStops.length) return false
+      if (!this.selectableStops.length) {
+        return false
+      }
+
       const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
       return this.selectableStops.every(stop => selectedIds.has(stop.id))
     },
     someSelectableSelected() {
-      if (!this.selectableStops.length) return false
+      if (!this.selectableStops.length) {
+        return false
+      }
+
       const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
       const selectedCount = this.selectableStops.filter(stop =>
         selectedIds.has(stop.id),
@@ -503,7 +513,10 @@ export default {
       }
     },
     isStopInCooldown(stopDateTime) {
-      if (this.maxBackdateDays === 0 || !this.cooldownDate) return false
+      if (this.maxBackdateDays === 0 || !this.cooldownDate) {
+        return false
+      }
+
       const stopDate = new Date(stopDateTime)
       const stopDateAtMidnight = new Date(
         stopDate.getFullYear(),
@@ -680,7 +693,6 @@ export default {
         errorCodes: this.selectedErrorCodes.join(),
       }
 
-      // Add cooldown information for all stops in current view
       const cooldownInfo = this.getCooldownStopsInfo(this.getStops)
 
       this.$emit('handleSubmitAll', {
@@ -696,7 +708,6 @@ export default {
         return itemObj.id
       })
 
-      // Add cooldown information for selected stops
       const cooldownInfo = this.getCooldownStopsInfo(this.selectedItems)
 
       this.$emit('handleSubmitStops', {

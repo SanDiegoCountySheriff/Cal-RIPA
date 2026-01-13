@@ -330,7 +330,6 @@ export default {
     async handleSubmitStops(stops) {
       this.loading = true
 
-      // Filter stops array - it's already just IDs from the template
       const stopsToSubmit = Array.isArray(stops) ? stops : []
 
       if (stopsToSubmit.length === 0) {
@@ -342,12 +341,9 @@ export default {
 
       const submissionResults = await this.submitStops(stopsToSubmit)
       if (!submissionResults.submissionId) {
-        // show the error message, no redirect
         this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
       } else {
-        // if the submission goes through (meaning no message was sent back),
-        // set the toast text and automatically redirect
         const notificationText =
           stopsToSubmit.length > 1
             ? `${stopsToSubmit.length} stops were submitted`
@@ -367,11 +363,8 @@ export default {
     async handleSubmitAll(filterData) {
       this.loading = true
 
-      // Create a copy of filterData to modify
       const submissionData = { ...filterData }
 
-      // If there's a cooldown period active, do not allow partial submissions.
-      // Block if the current result set includes any too-recent stops.
       if (
         submissionData.maxBackdateDays &&
         submissionData.maxBackdateDays > 0
@@ -400,13 +393,13 @@ export default {
         }
       }
 
-      // Remove the cooldown metadata before sending to the backend
       delete submissionData.cooldownStopIds
       delete submissionData.allInCooldown
       delete submissionData.maxBackdateDays
       delete submissionData.cooldownDays
 
       const submissionResults = await this.submitAllStops(submissionData)
+
       if (!submissionResults.submissionId) {
         this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
