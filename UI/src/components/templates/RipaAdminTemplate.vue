@@ -94,7 +94,7 @@
 
               <template v-else>
                 <div class="mt-2">
-                  Your current filters include stops that may be too recent. Set
+                  Your current filters include stops that are too recent. Set
                   the
                   <strong>To Date</strong> filter to
                   <strong>{{ requiredStopToDate }}</strong> (or earlier) and try
