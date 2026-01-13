@@ -56,6 +56,71 @@
           >
           <br /><br />Note: Stops that are in an error state will not be
           re-submitted.
+
+          <!-- Backdate protection -->
+          <template v-if="submissionBlockedByCooldown">
+            <v-divider class="my-4"></v-divider>
+            <v-alert
+              dense
+              text
+              type="error"
+              border="left"
+              colored-border
+              icon="mdi-alert-circle-outline"
+            >
+              <div>
+                Your system is currently configured to allow backdating stops
+                for
+                <strong
+                  >{{ maxBackdateDays }} day{{
+                    maxBackdateDays === 1 ? '' : 's'
+                  }}</strong
+                >.
+              </div>
+
+              <div>
+                Stops must be at least
+                <strong
+                  >{{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+                </strong>
+                old before submission.
+              </div>
+
+              <template v-if="submitSelected">
+                <div class="mt-2">
+                  One or more selected stops are too recent. Unselect them and
+                  try again.
+                </div>
+              </template>
+
+              <template v-else>
+                <div class="mt-2">
+                  Your current filters include stops that may be too recent. Set
+                  <strong>To Date</strong> to
+                  <strong>{{ requiredStopToDate }}</strong> (or earlier) and try
+                  again.
+                </div>
+              </template>
+
+              <template v-if="submitSelected && cooldownStopIds.length">
+                <v-divider class="my-2"></v-divider>
+                <div>Stops too recent to submit:</div>
+                <v-chip-group column>
+                  <v-chip
+                    v-for="stopId in cooldownStopIds"
+                    :key="stopId"
+                    label
+                    small
+                    outlined
+                    color="primary"
+                    class="mr-2 mb-2"
+                  >
+                    {{ stopId }}
+                  </v-chip>
+                </v-chip-group>
+              </template>
+            </v-alert>
+          </template>
         </v-card-text>
 
         <v-card-actions>
@@ -65,7 +130,12 @@
             Cancel
           </v-btn>
 
-          <v-btn color="darken-1" text @click="handleSubmitDialogConfirm">
+          <v-btn
+            color="darken-1"
+            text
+            @click="handleSubmitDialogConfirm"
+            :disabled="submissionBlockedByCooldown"
+          >
             Submit
           </v-btn>
         </v-card-actions>
@@ -91,6 +161,67 @@ export default {
       selectedStops: [],
       submitAllFilterData: null,
     }
+  },
+
+  computed: {
+    maxBackdateDays() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.maxBackdateDays || 0
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.maxBackdateDays || 0
+      }
+      return 0
+    },
+    cooldownStopIds() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.cooldownStopIds || []
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.cooldownStopIds || []
+      }
+      return []
+    },
+    hasCooldownStops() {
+      return this.cooldownStopIds.length > 0
+    },
+    cooldownDays() {
+      if (this.submitSelected && this.selectedStops) {
+        return this.selectedStops.cooldownDays || 0
+      }
+      if (!this.submitSelected && this.submitAllFilterData) {
+        return this.submitAllFilterData.cooldownDays || 0
+      }
+      return 0
+    },
+    requiredStopToDate() {
+      if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
+        return null
+      }
+      const now = new Date()
+      const requiredDate = new Date(
+        now.getTime() - this.cooldownDays * 24 * 60 * 60 * 1000,
+      )
+      return requiredDate.toISOString().split('T')[0]
+    },
+    submissionBlockedByCooldown() {
+      if (!this.maxBackdateDays || this.maxBackdateDays <= 0) {
+        return false
+      }
+
+      if (this.submitSelected) {
+        return this.hasCooldownStops
+      }
+
+      const stopToDate = this.submitAllFilterData?.stopToDate
+      if (!stopToDate || !this.requiredStopToDate) {
+        return true
+      }
+
+      // If the filter's To Date is after the cutoff date (or unset), the
+      // range may include stops that are too recent.
+      return stopToDate > this.requiredStopToDate
+    },
   },
 
   methods: {
@@ -145,8 +276,11 @@ export default {
       this.submitDialog = false
     },
     handleSubmitDialogConfirm() {
-      if (this.submitSelected && this.selectedStops.length > 0) {
-        this.$emit('handleSubmitStops', this.selectedStops)
+      if (this.submissionBlockedByCooldown) {
+        return
+      }
+      if (this.submitSelected && this.selectedStops) {
+        this.$emit('handleSubmitStops', this.selectedStops.stopIds || [])
       } else {
         this.$emit('handleSubmitAll', this.submitAllFilterData)
       }

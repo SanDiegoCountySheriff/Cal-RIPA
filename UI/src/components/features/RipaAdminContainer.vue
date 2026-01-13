@@ -329,7 +329,18 @@ export default {
 
     async handleSubmitStops(stops) {
       this.loading = true
-      const submissionResults = await this.submitStops(stops)
+
+      // Filter stops array - it's already just IDs from the template
+      const stopsToSubmit = Array.isArray(stops) ? stops : []
+
+      if (stopsToSubmit.length === 0) {
+        this.snackbarText = 'No stops to submit'
+        this.snackbarVisible = true
+        this.loading = false
+        return
+      }
+
+      const submissionResults = await this.submitStops(stopsToSubmit)
       if (!submissionResults.submissionId) {
         // show the error message, no redirect
         this.snackbarText = `Submission error: ${submissionResults}`
@@ -338,8 +349,8 @@ export default {
         // if the submission goes through (meaning no message was sent back),
         // set the toast text and automatically redirect
         const notificationText =
-          stops.length > 1
-            ? `${stops.length} stops were submitted`
+          stopsToSubmit.length > 1
+            ? `${stopsToSubmit.length} stops were submitted`
             : '1 stop was submitted'
         this.snackbarText = notificationText
         this.snackbarVisible = true
@@ -355,7 +366,41 @@ export default {
 
     async handleSubmitAll(filterData) {
       this.loading = true
-      const submissionResults = await this.submitAllStops(filterData)
+
+      // Create a copy of filterData to modify
+      const submissionData = { ...filterData }
+
+      // If there's a cooldown period active, do not allow partial submissions.
+      // Require the caller to set stopToDate at or before the cutoff date.
+      if (
+        submissionData.maxBackdateDays &&
+        submissionData.maxBackdateDays > 0
+      ) {
+        const cooldownDays = submissionData.maxBackdateDays + 1
+        const now = new Date()
+        const cooldownDate = new Date(
+          now.getTime() - cooldownDays * 24 * 60 * 60 * 1000,
+        )
+        const requiredStopToDate = cooldownDate.toISOString().split('T')[0]
+        const providedStopToDate = submissionData.stopToDate
+
+        if (!providedStopToDate || providedStopToDate > requiredStopToDate) {
+          this.snackbarText = `Stops must be at least ${cooldownDays} day${
+            cooldownDays === 1 ? '' : 's'
+          } old before submission. Set To Date to ${requiredStopToDate} (or earlier) and try again.`
+          this.snackbarVisible = true
+          this.loading = false
+          return
+        }
+      }
+
+      // Remove the cooldown metadata before sending to the backend
+      delete submissionData.cooldownStopIds
+      delete submissionData.allInCooldown
+      delete submissionData.maxBackdateDays
+      delete submissionData.cooldownDays
+
+      const submissionResults = await this.submitAllStops(submissionData)
       if (!submissionResults.submissionId) {
         this.snackbarText = `Submission error: ${submissionResults}`
         this.snackbarVisible = true
