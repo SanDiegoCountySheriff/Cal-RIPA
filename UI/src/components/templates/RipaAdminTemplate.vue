@@ -47,13 +47,13 @@
         </v-card-title>
 
         <v-card-text>
-          <span v-if="submitSelected"
-            >This will only submit the stops you have selected to the DOJ.</span
-          >
-          <span v-if="!submitSelected"
-            >This will submit all the stops to the DOJ based on the current
-            filters you have set.</span
-          >
+          <span v-if="submitSelected">
+            This will only submit the stops you have selected to the DOJ.
+          </span>
+          <span v-if="!submitSelected">
+            This will submit all the stops to the DOJ based on the current
+            filters you have set.
+          </span>
           <br /><br />Note: Stops that are in an error state will not be
           re-submitted.
 
@@ -70,17 +70,17 @@
               <div>
                 Your system is currently configured to allow backdating stops
                 for
-                <strong
-                  >{{ maxBackdateDays }} day{{
+                <strong>
+                  {{ maxBackdateDays }} day{{
                     maxBackdateDays === 1 ? '' : 's'
-                  }}</strong
-                >.
+                  }}
+                </strong>.
               </div>
 
               <div>
                 Stops must be at least
-                <strong
-                  >{{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+                <strong>
+                  {{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
                 </strong>
                 old before submission.
               </div>
