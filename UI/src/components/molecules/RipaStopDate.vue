@@ -201,7 +201,7 @@ export default {
       const diffMilliseconds = now.getTime() - stopDateTime.getTime()
       const diffHours = diffMilliseconds / (1000 * 60 * 60)
       const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
-      
+
       // Show explanation only if:
       // 1. Stop is more than 24 hours old, AND
       // 2. Stop is within the allowed backdate limit

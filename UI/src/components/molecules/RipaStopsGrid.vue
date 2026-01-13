@@ -295,25 +295,41 @@
     <v-dialog v-model="coolingOffDialog" max-width="600">
       <v-card>
         <v-card-title class="text-h5">
-          <span v-if="eligibleStopCount === 0">Cannot Submit Selected Stops</span>
+          <span v-if="eligibleStopCount === 0"
+            >Cannot Submit Selected Stops</span
+          >
           <span v-else>Partial Submission Warning</span>
         </v-card-title>
 
         <v-card-text>
           <span v-if="eligibleStopCount === 0">
-            None of the selected stops can be submitted yet. Stops must be at least
-            <strong>{{ maxBackdateDays + 1 }} day{{ maxBackdateDays + 1 === 1 ? '' : 's' }}</strong>
+            None of the selected stops can be submitted yet. Stops must be at
+            least
+            <strong
+              >{{ maxBackdateDays + 1 }} day{{
+                maxBackdateDays + 1 === 1 ? '' : 's'
+              }}</strong
+            >
             old to ensure all backdated entries are captured.
           </span>
+
           <span v-else>
-            <strong>{{ tooRecentStopIds.length }}</strong> of the selected stops cannot be submitted yet 
-            (must be at least <strong>{{ maxBackdateDays + 1 }} day{{ maxBackdateDays + 1 === 1 ? '' : 's' }}</strong> old). 
-            Submitting <strong>{{ eligibleStopCount }}</strong> eligible stop{{ eligibleStopCount === 1 ? '' : 's' }}.
+            <strong>{{ tooRecentStopIds.length }}</strong> of the selected stops
+            cannot be submitted yet (must be at least
+            <strong
+              >{{ maxBackdateDays + 1 }} day{{
+                maxBackdateDays + 1 === 1 ? '' : 's'
+              }}</strong
+            >
+            old). Submitting <strong>{{ eligibleStopCount }}</strong> eligible
+            stop{{ eligibleStopCount === 1 ? '' : 's' }}.
           </span>
-          
+
           <div v-if="tooRecentStopIds.length > 0" class="mt-4">
             <v-divider class="mb-2"></v-divider>
-            <div class="text-subtitle-2 mb-2">Stop IDs that will NOT be submitted:</div>
+            <div class="text-subtitle-2 mb-2">
+              Stop IDs that will NOT be submitted:
+            </div>
             <v-chip
               v-for="stopId in tooRecentStopIds"
               :key="stopId"
@@ -328,10 +344,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn 
+          <v-btn
             v-if="eligibleStopCount === 0"
-            color="primary" 
-            text 
+            color="primary"
+            text
             @click="handleCloseCoolingOffDialog"
           >
             OK
