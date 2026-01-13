@@ -371,20 +371,26 @@ export default {
       const submissionData = { ...filterData }
 
       // If there's a cooldown period active, do not allow partial submissions.
-      // Require the caller to set stopToDate at or before the cutoff date.
+      // Block if the current result set includes any too-recent stops.
       if (
         submissionData.maxBackdateDays &&
         submissionData.maxBackdateDays > 0
       ) {
         const cooldownDays = submissionData.maxBackdateDays + 1
         const now = new Date()
-        const cooldownDate = new Date(
-          now.getTime() - cooldownDays * 24 * 60 * 60 * 1000,
+        const cutoff = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
         )
-        const requiredStopToDate = cooldownDate.toISOString().split('T')[0]
-        const providedStopToDate = submissionData.stopToDate
+        cutoff.setDate(cutoff.getDate() - cooldownDays)
+        const yyyy = cutoff.getFullYear()
+        const mm = String(cutoff.getMonth() + 1).padStart(2, '0')
+        const dd = String(cutoff.getDate()).padStart(2, '0')
+        const requiredStopToDate = `${yyyy}-${mm}-${dd}`
 
-        if (!providedStopToDate || providedStopToDate > requiredStopToDate) {
+        const cooldownStopIds = submissionData.cooldownStopIds || []
+        if (cooldownStopIds.length > 0) {
           this.snackbarText = `Stops must be at least ${cooldownDays} day${
             cooldownDays === 1 ? '' : 's'
           } old before submission. Set To Date to ${requiredStopToDate} (or earlier) and try again.`

@@ -159,12 +159,17 @@
           show-select
           :items="getStops"
           :server-items-length="getTotalStops"
-          @item-selected="handleRowSelected"
-          @toggle-select-all="handleToggleSelectAll"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :search="search"
         >
+          <template v-slot:header.data-table-select>
+            <v-simple-checkbox
+              :value="allSelectableSelected"
+              :indeterminate="someSelectableSelected"
+              @input="toggleSelectAll"
+            ></v-simple-checkbox>
+          </template>
           <template
             v-slot:item.data-table-select="{ item, isSelected, select }"
           >
@@ -405,6 +410,24 @@ export default {
       cutoff.setDate(cutoff.getDate() - this.cooldownDays)
       return cutoff
     },
+    selectableStops() {
+      return this.getStops.filter(
+        stop => !this.isStopInCooldown(stop.stopDateTime),
+      )
+    },
+    allSelectableSelected() {
+      if (!this.selectableStops.length) return false
+      const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
+      return this.selectableStops.every(stop => selectedIds.has(stop.id))
+    },
+    someSelectableSelected() {
+      if (!this.selectableStops.length) return false
+      const selectedIds = new Set(this.selectedItems.map(stop => stop.id))
+      const selectedCount = this.selectableStops.filter(stop =>
+        selectedIds.has(stop.id),
+      ).length
+      return selectedCount > 0 && selectedCount < this.selectableStops.length
+    },
     getStops() {
       if (this.items.stops) {
         return this.items.stops
@@ -472,6 +495,13 @@ export default {
   },
 
   methods: {
+    toggleSelectAll(checked) {
+      if (checked) {
+        this.selectedItems = this.selectableStops
+      } else {
+        this.selectedItems = []
+      }
+    },
     isStopInCooldown(stopDateTime) {
       if (this.maxBackdateDays === 0 || !this.cooldownDate) return false
       const stopDate = new Date(stopDateTime)
@@ -551,33 +581,6 @@ export default {
         version: this.version,
       })
     },
-    handleRowSelected(item) {
-      if (item?.value && this.isStopInCooldown(item?.item?.stopDateTime)) {
-        return
-      }
-      if (item.value) {
-        this.selectedItems.push(item.item)
-      } else {
-        this.selectedItems = this.selectedItems.filter(itemObj => {
-          return itemObj.id !== item.item.id
-        })
-      }
-    },
-
-    handleToggleSelectAll(item) {
-      if (item.value) {
-        this.selectedItems = item.items.filter(
-          stop => !this.isStopInCooldown(stop.stopDateTime),
-        )
-      } else {
-        item.items.forEach(selectedItemObj => {
-          this.selectedItems = this.selectedItems.filter(itemObj => {
-            return itemObj.id !== selectedItemObj.id
-          })
-        })
-      }
-    },
-
     editItem(item) {
       this.handleEditStopByAdmin(item, window.location.pathname)
     },
