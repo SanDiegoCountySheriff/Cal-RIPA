@@ -194,15 +194,18 @@ export default {
         return false
       }
 
-      // If maxBackdateDays > 0, show explanation for ANY backdated stop
-      // (even if within the allowed limit)
+      // If maxBackdateDays > 0, only show explanation for VALID late stops
+      // (more than 24 hours old BUT within the allowed backdate limit)
       const stopDateTime = new Date(`${dateStr}T${timeStr}`)
       const now = new Date()
       const diffMilliseconds = now.getTime() - stopDateTime.getTime()
       const diffHours = diffMilliseconds / (1000 * 60 * 60)
+      const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
       
-      // Show explanation if stop is more than 24 hours old (but still within max backdate limit)
-      return diffHours > 24
+      // Show explanation only if:
+      // 1. Stop is more than 24 hours old, AND
+      // 2. Stop is within the allowed backdate limit
+      return diffHours > 24 && diffDays <= this.maxBackdateDays
     },
 
     lateStopMessage() {
