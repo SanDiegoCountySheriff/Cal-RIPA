@@ -130,15 +130,14 @@
           class="tw-mt-2 tw-mb-2"
         >
           <span class="tw-text-sm">
-            Backdate Configuration:
+            Backdate configuration is set to
             <strong
-              >{{ maxBackdateDays }} day{{
-                maxBackdateDays === 1 ? '' : 's'
-              }}</strong
-            >. Stops must be at least
+              >{{ maxBackdateDays }} day{{ maxBackdateDays === 1 ? '' : 's' }}.
+            </strong>
+            Stops must be at least
             <strong
-              >{{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}</strong
-            >
+              >{{ cooldownDays }} day{{ cooldownDays === 1 ? '' : 's' }}
+            </strong>
             old before submission.
           </span>
         </v-alert>
