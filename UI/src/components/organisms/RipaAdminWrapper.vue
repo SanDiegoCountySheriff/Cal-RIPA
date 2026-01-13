@@ -22,7 +22,6 @@
           @handleAdminStopsFiltering="handleAdminStopsFiltering"
           @handleUpdateSavedFilter="handleUpdateSavedFilter"
           @handleSubmitStops="handleSubmitStops"
-          @handleSubmitStopsDirectly="handleSubmitStopsDirectly"
           @handleSubmitAll="handleSubmitAll"
         ></ripa-stops-grid>
       </v-tab-item>
@@ -337,9 +336,6 @@ export default {
     },
     handleSubmitStops(stops) {
       this.$emit('handleSubmitStops', stops)
-    },
-    handleSubmitStopsDirectly(stops) {
-      this.$emit('handleSubmitStopsDirectly', stops)
     },
     handleSubmitAll(filterData) {
       this.$emit('handleSubmitAll', filterData)

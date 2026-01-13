@@ -357,8 +357,8 @@
             <v-btn color="darken-1" text @click="handleCloseCoolingOffDialog">
               Cancel
             </v-btn>
-            <v-btn color="primary" text @click="handleConfirmCoolingOffSubmit">
-              Submit
+            <v-btn color="primary" text @click="handleCloseCoolingOffDialog">
+              Continue
             </v-btn>
           </template>
         </v-card-actions>
@@ -394,7 +394,6 @@ export default {
       coolingOffDialog: false,
       tooRecentStopIds: [],
       eligibleStopCount: 0,
-      eligibleStopsToSubmit: [],
       headers: [
         { text: 'ID', value: 'id', sortName: 'id' },
         { text: 'Stop Date', value: 'stopDateTime', sortName: 'StopDateTime' },
@@ -699,7 +698,7 @@ export default {
     },
     handleSubmitSelected() {
       if (this.maxBackdateDays === 0) {
-        // No cooling-off period, show standard confirmation dialog
+        // No cooling-off period, submit all selected
         const itemIds = this.selectedItems.map(itemObj => itemObj.id)
         this.$emit('handleSubmitStops', itemIds)
         return
@@ -724,12 +723,18 @@ export default {
         }
       })
 
-      if (tooRecentStops.length > 0 || eligibleStops.length > 0) {
-        // Store eligible stops for submission after confirmation
-        this.eligibleStopsToSubmit = eligibleStops
+      if (tooRecentStops.length > 0) {
         this.tooRecentStopIds = tooRecentStops.map(stop => stop.id)
         this.eligibleStopCount = eligibleStops.length
         this.coolingOffDialog = true
+
+        if (eligibleStops.length === 0) {
+          return
+        }
+      }
+
+      if (eligibleStops.length > 0) {
+        this.$emit('handleSubmitStops', eligibleStops)
       }
     },
     getColumnSortName() {
@@ -749,14 +754,6 @@ export default {
       this.coolingOffDialog = false
       this.tooRecentStopIds = []
       this.eligibleStopCount = 0
-      this.eligibleStopsToSubmit = []
-    },
-    handleConfirmCoolingOffSubmit() {
-      // Submit eligible stops directly without showing another dialog
-      if (this.eligibleStopsToSubmit.length > 0) {
-        this.$emit('handleSubmitStopsDirectly', this.eligibleStopsToSubmit)
-      }
-      this.handleCloseCoolingOffDialog()
     },
   },
 

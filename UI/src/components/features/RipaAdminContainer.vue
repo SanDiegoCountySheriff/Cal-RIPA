@@ -31,7 +31,6 @@
       @handleSubmissionDetailItemsPerPage="handleSubmissionDetailItemsPerPage"
       @handleSubmissionDetailPaginate="handleSubmissionDetailPaginate"
       @handleSubmitStops="handleSubmitStops"
-      @handleSubmitStopsDirectly="handleSubmitStops"
       @handleSubmitAll="handleSubmitAll"
       @handle-create-cpra-report="handleCreateCpraReport"
       @handle-download-cpra-report="handleDownloadCpraReport"
