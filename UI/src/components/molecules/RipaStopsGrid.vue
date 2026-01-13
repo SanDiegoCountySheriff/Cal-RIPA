@@ -142,12 +142,10 @@
           </span>
         </v-alert>
 
-        <v-progress-linear
-          v-if="loading"
-          indeterminate
-          color="cyan"
-        ></v-progress-linear>
+        <v-progress-linear v-if="loading" indeterminate color="cyan">
+        </v-progress-linear>
       </v-flex>
+
       <v-flex xs12>
         <v-data-table
           v-model="selectedItems"
@@ -168,7 +166,8 @@
               :indeterminate="someSelectableSelected"
               :value="allSelectableSelected"
               @input="toggleSelectAll"
-            ></v-simple-checkbox>
+            >
+            </v-simple-checkbox>
           </template>
           <template
             v-slot:item.data-table-select="{ item, isSelected, select }"
@@ -177,7 +176,8 @@
               :disabled="isStopInCooldown(item.stopDateTime)"
               :value="isSelected"
               @input="select($event)"
-            ></v-checkbox>
+            >
+            </v-checkbox>
           </template>
 
           <template v-slot:top>
