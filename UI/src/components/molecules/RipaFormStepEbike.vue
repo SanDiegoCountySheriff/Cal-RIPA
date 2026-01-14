@@ -79,8 +79,8 @@
         <v-row no-gutters class="tw-mt-4">
           <v-col cols="12">
             <ripa-switch
-              v-model="model.person.ebikeInfo.declinedToProvieOrUncooperative"
-              label="Declined to provie/uncooperative"
+              v-model="model.person.ebikeInfo.declinedToProvideOrUncooperative"
+              label="Declined to provide/uncooperative"
               :disabled="disabled"
             >
             </ripa-switch>
