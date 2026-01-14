@@ -341,8 +341,29 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="3">
+              <!-- AB 2234: E-Bike Step for age < 12 (V2 only) -->
+              <v-stepper-content v-if="showEbikeStep" step="3">
                 <template v-if="stepIndex === 3">
+                  <ripa-subheader
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-step-ebike
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-step-ebike>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content :step="showEbikeStep ? 4 : 3">
+                <template v-if="stepIndex === (showEbikeStep ? 4 : 3)">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -361,8 +382,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="4">
-                <template v-if="stepIndex === 4">
+              <v-stepper-content :step="showEbikeStep ? 5 : 4">
+                <template v-if="stepIndex === (showEbikeStep ? 5 : 4)">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -381,8 +402,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="5">
-                <template v-if="stepIndex === 5">
+              <v-stepper-content :step="showEbikeStep ? 6 : 5">
+                <template v-if="stepIndex === (showEbikeStep ? 6 : 5)">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -401,8 +422,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="6">
-                <template v-if="stepIndex === 6">
+              <v-stepper-content :step="showEbikeStep ? 7 : 6">
+                <template v-if="stepIndex === (showEbikeStep ? 7 : 6)">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -421,8 +442,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="7">
-                <template v-if="stepIndex === 7">
+              <v-stepper-content :step="showEbikeStep ? 8 : 7">
+                <template v-if="stepIndex === (showEbikeStep ? 8 : 7)">
                   <ripa-form-step-6
                     v-model="model"
                     :back-button-visible="getFormStep6BackButtonVisible"
@@ -433,8 +454,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="8">
-                <template v-if="stepIndex === 8">
+              <v-stepper-content :step="showEbikeStep ? 9 : 8">
+                <template v-if="stepIndex === (showEbikeStep ? 9 : 8)">
                   <ripa-form-step-7
                     v-model="model"
                     :api-stop="getApiStop"
@@ -464,28 +485,36 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
+              <!-- AB 2234: E-Bike Step for age < 12 -->
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 4 : 3)" :step="showEbikeStep ? '4' : '3'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 5 : 4)" :step="showEbikeStep ? '5' : '4'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 6 : 5)" :step="showEbikeStep ? '6' : '5'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 7 : 6)" :step="showEbikeStep ? '7' : '6'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 7" step="7">
+                <v-stepper-step :complete="stepIndex > (showEbikeStep ? 8 : 7)" :step="showEbikeStep ? '8' : '7'">
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -493,7 +522,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-bottom"
-                step="8"
+                :step="showEbikeStep ? '9' : '8'"
               ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
@@ -781,7 +810,10 @@ export default {
     },
 
     handleBack() {
-      if (this.stepIndex === 8 && !this.anyAgencyQuestions) {
+      // AB 2234: Account for conditional e-bike step when going back
+      const ebikeOffset = this.showEbikeStep ? 1 : 0
+      
+      if (this.stepIndex === (8 + ebikeOffset) && !this.anyAgencyQuestions) {
         this.stepIndex = this.stepIndex - 2
       } else if (this.model.stopVersion === 2) {
         this.stepIndex = this.stepIndex - 1
@@ -846,12 +878,17 @@ export default {
     },
 
     handleEditAgencyQuestions() {
-      this.stepIndex = this.model.stopVersion === 1 ? 6 : 7
+      // AB 2234: Account for conditional e-bike step
+      const ebikeOffset = this.showEbikeStep ? 1 : 0
+      this.stepIndex = this.model.stopVersion === 1 ? 6 : (7 + ebikeOffset)
       this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
 
     getNextStepIndex() {
+      // AB 2234: Account for conditional e-bike step
+      const ebikeOffset = this.showEbikeStep ? 1 : 0
+      
       if (!this.isCreateForm()) {
         if (this.isEditStop() && !this.isEditPerson()) {
           const stopReason = this.model?.stopReason?.reasonForStop || null
@@ -863,7 +900,7 @@ export default {
           } else if (this.model.stopVersion === 1) {
             return 7
           } else if (this.model.stopVersion === 2) {
-            return 8
+            return 8 + ebikeOffset
           }
         }
 
@@ -877,17 +914,17 @@ export default {
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === 5 &&
+          this.stepIndex === (5 + ebikeOffset) &&
           this.model.stopVersion === 2
         ) {
-          return 6
+          return 6 + ebikeOffset
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === 6 &&
+          this.stepIndex === (6 + ebikeOffset) &&
           this.model.stopVersion === 2
         ) {
-          return 8
+          return 8 + ebikeOffset
         }
       }
 
@@ -900,16 +937,16 @@ export default {
           return 7
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === 5 &&
+          this.stepIndex === (5 + ebikeOffset) &&
           this.model.stopVersion === 2
         ) {
-          return 6
+          return 6 + ebikeOffset
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === 6 &&
+          this.stepIndex === (6 + ebikeOffset) &&
           this.model.stopVersion === 2
         ) {
-          return 8
+          return 8 + ebikeOffset
         }
       }
 

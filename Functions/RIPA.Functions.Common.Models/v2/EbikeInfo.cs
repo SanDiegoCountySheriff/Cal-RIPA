@@ -10,4 +10,7 @@ public class EbikeInfo
     public int? EbikeClass { get; set; }
     public int? VerifiedAge { get; set; }
     public bool? DeclinedToProvieOrUncooperative { get; set; }
+    public bool? CitationIssued { get; set; }
+    public string ViolationCode { get; set; }
+    public bool? TrainingCourseCompleted { get; set; }
 }
