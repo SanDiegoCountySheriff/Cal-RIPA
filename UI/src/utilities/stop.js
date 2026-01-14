@@ -162,6 +162,10 @@ export const defaultStop = () => {
     stopVersion: new Date() >= new Date(2024, 0, 1) ? 2 : 1,
     lateSubmissionExplanation: null,
     isLateSubmission: false,
+    ebike: false,
+    ebikeInfo: {
+      ebikeClass: 0,
+    },
   }
 }
 

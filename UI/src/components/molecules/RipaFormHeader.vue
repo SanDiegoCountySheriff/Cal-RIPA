@@ -4,13 +4,21 @@
       <template v-if="required">
         <v-tooltip top color="error">
           <template v-slot:activator="{ on, attrs }">
-            <v-icon color="error" size="16" v-bind="attrs" v-on="on"
-              >mdi-alert</v-icon
+            <v-icon
+              color="error"
+              size="16"
+              v-bind="attrs"
+              v-on="on"
+              class="mr-1"
             >
+              mdi-alert
+            </v-icon>
           </template>
+
           <span>Required</span>
         </v-tooltip>
       </template>
+
       <template v-if="subtitle.length > 0">
         <v-icon
           class="icon"
@@ -21,6 +29,7 @@
           mdi-scale-balance
         </v-icon>
       </template>
+
       <ripa-header :value="title"></ripa-header>
     </v-row>
   </div>
@@ -61,7 +70,6 @@ export default {
 
 <style>
 .icon {
-  margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 2px;
 }

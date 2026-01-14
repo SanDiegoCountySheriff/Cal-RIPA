@@ -17,15 +17,13 @@
       </v-btn>
     </div>
 
-    <ripa-form-header
-      title="Student"
-      required
-      :subtitle="
-        model.stopVersion === 1 ? '§999.224(a)(16)' : '§999.224(a)(22)'
-      "
-      v-on="$listeners"
-    >
-    </ripa-form-header>
+    {{ model }}
+
+    <ripa-ebike v-model="model" v-on="$listeners" />
+
+    <template v-if="model.ebike">
+      <ripa-ebike-class />
+    </template>
 
     <template v-if="!isFormValid">
       <ripa-alert alert-type="error">
@@ -52,12 +50,18 @@
 
 <script>
 import RipaFormStepMixin from '@/components/mixins/RipaFormStepMixin'
-import RipaFormHeader from '@/components/molecules/RipaFormHeader'
+import RipaEbike from '@/components/molecules/RipaEbike.vue'
+import RipaEbikeClass from '@/components/molecules/RipaEbikeClass.vue'
 
 export default {
   name: 'ripa-form-ebike-step',
 
-  mixins: [RipaFormStepMixin, RipaFormHeader],
+  components: {
+    RipaEbike,
+    RipaEbikeClass,
+  },
+
+  mixins: [RipaFormStepMixin],
 
   props: {
     disabled: {
