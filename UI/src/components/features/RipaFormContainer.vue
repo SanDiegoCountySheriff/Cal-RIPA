@@ -211,6 +211,7 @@ export default {
       statutes: this.filteredStatutes,
       displayBeatInput: this.displayBeatInput,
       displayDebugger: this.displayDebugger,
+      ab2234Enabled: computed(() => this.ab2234Enabled),
       displayReportingEmail: this.displayReportingEmail,
       reportingEmailAddress: this.reportingEmailAddress,
       formStepIndex: computed(() => this.formStepIndex),
@@ -273,6 +274,10 @@ export default {
       'favoriteResults',
       'piiServiceAvailable',
     ]),
+
+    ab2234Enabled() {
+      return this.$store.getters?.ab2234Enabled || false
+    },
 
     filteredStatutes() {
       if (this.isAdminEditing) {

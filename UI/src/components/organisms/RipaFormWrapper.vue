@@ -691,6 +691,7 @@ export default {
     'isOnlineAndAuthenticated',
     'isApiUnavailable',
     'displayBeatInput',
+    'ab2234Enabled',
   ],
 
   computed: {
@@ -709,6 +710,9 @@ export default {
     },
 
     showEbikeStep() {
+      if (!this.ab2234Enabled) {
+        return false
+      }
       // AB 2234: Show E-Bike step for V2 forms when perceived age is less than 12
       if (!this.model || this.model.stopVersion !== 2) {
         return false
