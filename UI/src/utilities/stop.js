@@ -154,9 +154,7 @@ export const defaultStop = () => {
         ebikeClass: null,
         verifiedAge: null,
         declinedToProvideOrUncooperative: null,
-        citationIssued: null, // AB 2234 (d)(1)(B) - Warning vs Citation
         violationCode: null, // AB 2234 (d)(1)(D) - Vehicle Code §21214.7
-        trainingCourseCompleted: null, // AB 2234 (d)(1)(G) - Training in lieu of fine (§894 Streets & Highways Code)
       },
     },
     stopDate: {
@@ -2060,6 +2058,7 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
+      ebikeInfo: person.ebikeInfo || null,
     }
   })
 }

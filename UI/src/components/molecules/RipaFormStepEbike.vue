@@ -37,7 +37,7 @@
       </v-row>
 
       <template v-if="model.person.ebikeInfo.stopInvolvedEbike">
-        <v-row no-gutters class="tw-mt-4">
+        <v-row no-gutters class="tw-mt-6">
           <v-col cols="12">
             <ripa-form-header
               title="E-BIKE CLASS"
@@ -57,7 +57,7 @@
           </v-col>
         </v-row>
 
-        <v-row no-gutters class="tw-mt-4">
+        <v-row no-gutters class="tw-mt-6">
           <v-col cols="12">
             <ripa-form-header
               title="VERIFIED AGE"
@@ -76,7 +76,7 @@
           </v-col>
         </v-row>
 
-        <v-row no-gutters class="tw-mt-4">
+        <v-row no-gutters class="tw-mt-6">
           <v-col cols="12">
             <ripa-switch
               v-model="model.person.ebikeInfo.declinedToProvideOrUncooperative"
@@ -87,24 +87,7 @@
           </v-col>
         </v-row>
 
-        <v-row no-gutters class="tw-mt-4">
-          <v-col cols="12">
-            <ripa-form-header
-              title="CITATION/WARNING"
-              subtitle="§21214.7(c)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
-            <ripa-switch
-              v-model="model.person.ebikeInfo.citationIssued"
-              label="Citation issued (if false, warning issued)"
-              :disabled="disabled"
-            >
-            </ripa-switch>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters class="tw-mt-4">
+        <v-row no-gutters class="tw-mt-6">
           <v-col cols="12">
             <ripa-text-input
               v-model="model.person.ebikeInfo.violationCode"
@@ -113,23 +96,6 @@
               :disabled="disabled"
             >
             </ripa-text-input>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters class="tw-mt-4">
-          <v-col cols="12">
-            <ripa-form-header
-              title="TRAINING COURSE"
-              subtitle="§21214.7(c)(2)"
-              v-on="$listeners"
-            >
-            </ripa-form-header>
-            <ripa-switch
-              v-model="model.person.ebikeInfo.trainingCourseCompleted"
-              label="Person completed e-bike safety training program (§894 Streets & Highways Code) in lieu of fine"
-              :disabled="disabled"
-            >
-            </ripa-switch>
           </v-col>
         </v-row>
       </template>
@@ -189,7 +155,9 @@ export default {
 
     ebikeRules() {
       return [
-        v => v !== null || 'Please indicate if this stop involved an E-Bike',
+        v =>
+          typeof v === 'boolean' ||
+          'Please indicate if this stop involved an E-Bike',
       ]
     },
 

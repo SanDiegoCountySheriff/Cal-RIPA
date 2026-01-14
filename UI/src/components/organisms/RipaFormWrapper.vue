@@ -1025,14 +1025,17 @@ export default {
     },
 
     getFormSummaryStepText() {
-      if (this.agencyQuestions && this.model.stopVersion === 1) {
+      // AB 2234: Account for conditional e-bike step
+      const ebikeOffset = this.showEbikeStep ? 1 : 0
+
+      if (this.anyAgencyQuestions && this.model.stopVersion === 1) {
         return '7'
-      } else if (this.agencyQuestions && this.model.stopVersion === 2) {
-        return '8'
-      } else if (!this.agencyQuestions && this.model.stopVersion === 1) {
+      } else if (this.anyAgencyQuestions && this.model.stopVersion === 2) {
+        return (8 + ebikeOffset).toString()
+      } else if (!this.anyAgencyQuestions && this.model.stopVersion === 1) {
         return '6'
-      } else if (!this.agencyQuestions && this.model.stopVersion === 2) {
-        return '7'
+      } else if (!this.anyAgencyQuestions && this.model.stopVersion === 2) {
+        return (7 + ebikeOffset).toString()
       }
     },
 
