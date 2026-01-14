@@ -267,27 +267,35 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
+              <!-- AB 2234: E-Bike Step for age < 12 -->
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 4 : 3)" :step="showEbikeStep ? '4' : '3'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 5 : 4)" :step="showEbikeStep ? '5' : '4'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 6 : 5)" :step="showEbikeStep ? '6' : '5'">
               </v-stepper-step>
 
               <v-divider></v-divider>
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 7 : 6)" :step="showEbikeStep ? '7' : '6'">
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 7" step="7">
+                <v-stepper-step :complete="stepIndex > (showEbikeStep ? 8 : 7)" :step="showEbikeStep ? '8' : '7'">
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -295,7 +303,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-top"
-                step="8"
+                :step="showEbikeStep ? '9' : '8'"
               ></v-stepper-step>
             </v-stepper-header>
 
@@ -560,6 +568,7 @@ import RipaFormStep4 from '@/components/molecules/RipaFormStep4'
 import RipaFormStep5 from '@/components/molecules/RipaFormStep5'
 import RipaFormStep6 from '@/components/molecules/RipaFormStep6'
 import RipaFormStep7 from '@/components/molecules/RipaFormStep7'
+import RipaFormStepEbike from '@/components/molecules/RipaFormStepEbike'
 import RipaFormStepForceActions from '@/components/molecules/RipaFormStepForceActions'
 import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
@@ -580,6 +589,7 @@ export default {
     RipaFormStep5,
     RipaFormStep6,
     RipaFormStep7,
+    RipaFormStepEbike,
     RipaFormStepForceActions,
     RipaJsonViewerDialog,
     RipaSubheader,
@@ -631,6 +641,15 @@ export default {
     anyAgencyQuestions() {
       const questions = this.model?.agencyQuestions || []
       return questions.length > 0
+    },
+
+    showEbikeStep() {
+      // AB 2234: Show E-Bike step for V2 forms when perceived age is less than 12
+      if (this.model.stopVersion !== 2) {
+        return false
+      }
+      const perceivedAge = this.model.person?.perceivedAge
+      return perceivedAge !== null && perceivedAge < 12
     },
 
     getEditPersonText() {

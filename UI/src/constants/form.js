@@ -618,3 +618,10 @@ export const EDUCATION_CODE_SECTIONS = [
     code: 19,
   },
 ]
+
+// AB 2234 - San Diego Electric Bicycle Safety Pilot Program (Vehicle Code §21214.7)
+export const EBIKE_CLASSES = [
+  { name: 'Class 1', value: 1 },
+  { name: 'Class 2', value: 2 },
+  { name: 'Class 3', value: 3 },
+]

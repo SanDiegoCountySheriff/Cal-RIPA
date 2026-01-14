@@ -149,6 +149,12 @@ export const defaultStop = () => {
       insideResidence: null,
       passengerInVehicle: null,
       perceivedUnhoused: false,
+      ebikeInfo: {
+        stopInvolvedEbike: null,
+        ebikeClass: null,
+        verifiedAge: null,
+        declinedToProvieOrUncooperative: null,
+      },
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
