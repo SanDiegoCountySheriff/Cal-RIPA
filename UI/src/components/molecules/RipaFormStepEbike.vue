@@ -188,12 +188,16 @@ export default {
     },
 
     ebikeRules() {
-      return [v => v !== null || 'Please indicate if this stop involved an E-Bike']
+      return [
+        v => v !== null || 'Please indicate if this stop involved an E-Bike',
+      ]
     },
 
     ebikeClassRules() {
       if (this.model.person.ebikeInfo.stopInvolvedEbike) {
-        return [v => !!v || 'E-Bike class is required when stop involves an E-Bike']
+        return [
+          v => !!v || 'E-Bike class is required when stop involves an E-Bike',
+        ]
       }
       return []
     },

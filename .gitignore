@@ -393,3 +393,6 @@ Functions/__azurite_db_queue__.json
 Functions/__azurite_db_queue_extent__.json
 Functions/__azurite_db_table__.json
 Deployment/IaC/Marketplace/mainTemplate-parameters.json
+node_modules/
+dist/
+.DS_Store

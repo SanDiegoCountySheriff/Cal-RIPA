@@ -275,27 +275,42 @@
                 <v-divider></v-divider>
               </template>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 4 : 3)" :step="showEbikeStep ? '4' : '3'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 4 : 3)"
+                :step="showEbikeStep ? '4' : '3'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 5 : 4)" :step="showEbikeStep ? '5' : '4'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 5 : 4)"
+                :step="showEbikeStep ? '5' : '4'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 6 : 5)" :step="showEbikeStep ? '6' : '5'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 6 : 5)"
+                :step="showEbikeStep ? '6' : '5'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 7 : 6)" :step="showEbikeStep ? '7' : '6'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 7 : 6)"
+                :step="showEbikeStep ? '7' : '6'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > (showEbikeStep ? 8 : 7)" :step="showEbikeStep ? '8' : '7'">
+                <v-stepper-step
+                  :complete="stepIndex > (showEbikeStep ? 8 : 7)"
+                  :step="showEbikeStep ? '8' : '7'"
+                >
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -493,28 +508,43 @@
                 <v-divider></v-divider>
               </template>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 4 : 3)" :step="showEbikeStep ? '4' : '3'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 4 : 3)"
+                :step="showEbikeStep ? '4' : '3'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 5 : 4)" :step="showEbikeStep ? '5' : '4'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 5 : 4)"
+                :step="showEbikeStep ? '5' : '4'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 6 : 5)" :step="showEbikeStep ? '6' : '5'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 6 : 5)"
+                :step="showEbikeStep ? '6' : '5'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > (showEbikeStep ? 7 : 6)" :step="showEbikeStep ? '7' : '6'">
+              <v-stepper-step
+                :complete="stepIndex > (showEbikeStep ? 7 : 6)"
+                :step="showEbikeStep ? '7' : '6'"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > (showEbikeStep ? 8 : 7)" :step="showEbikeStep ? '8' : '7'">
+                <v-stepper-step
+                  :complete="stepIndex > (showEbikeStep ? 8 : 7)"
+                  :step="showEbikeStep ? '8' : '7'"
+                >
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -812,8 +842,8 @@ export default {
     handleBack() {
       // AB 2234: Account for conditional e-bike step when going back
       const ebikeOffset = this.showEbikeStep ? 1 : 0
-      
-      if (this.stepIndex === (8 + ebikeOffset) && !this.anyAgencyQuestions) {
+
+      if (this.stepIndex === 8 + ebikeOffset && !this.anyAgencyQuestions) {
         this.stepIndex = this.stepIndex - 2
       } else if (this.model.stopVersion === 2) {
         this.stepIndex = this.stepIndex - 1
@@ -880,7 +910,7 @@ export default {
     handleEditAgencyQuestions() {
       // AB 2234: Account for conditional e-bike step
       const ebikeOffset = this.showEbikeStep ? 1 : 0
-      this.stepIndex = this.model.stopVersion === 1 ? 6 : (7 + ebikeOffset)
+      this.stepIndex = this.model.stopVersion === 1 ? 6 : 7 + ebikeOffset
       this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
@@ -888,7 +918,7 @@ export default {
     getNextStepIndex() {
       // AB 2234: Account for conditional e-bike step
       const ebikeOffset = this.showEbikeStep ? 1 : 0
-      
+
       if (!this.isCreateForm()) {
         if (this.isEditStop() && !this.isEditPerson()) {
           const stopReason = this.model?.stopReason?.reasonForStop || null
@@ -914,14 +944,14 @@ export default {
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === (5 + ebikeOffset) &&
+          this.stepIndex === 5 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
           return 6 + ebikeOffset
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === (6 + ebikeOffset) &&
+          this.stepIndex === 6 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
           return 8 + ebikeOffset
@@ -937,13 +967,13 @@ export default {
           return 7
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === (5 + ebikeOffset) &&
+          this.stepIndex === 5 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
           return 6 + ebikeOffset
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === (6 + ebikeOffset) &&
+          this.stepIndex === 6 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
           return 8 + ebikeOffset
