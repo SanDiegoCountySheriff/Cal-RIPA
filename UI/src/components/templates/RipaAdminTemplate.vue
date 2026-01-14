@@ -73,8 +73,8 @@
                 <strong>
                   {{ maxBackdateDays }} day{{
                     maxBackdateDays === 1 ? '' : 's'
-                  }}
-                </strong>.
+                  }} </strong
+                >.
               </div>
 
               <div>

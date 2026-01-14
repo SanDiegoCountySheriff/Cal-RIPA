@@ -39,45 +39,61 @@
         </template>
 
         <template
-          v-if="stepIndex >= 1 && stepIndex <= 7 && model.stopVersion === 1"
+          v-if="
+            stepIndex >= 1 &&
+            stepIndex <= v1SummaryStepIndex &&
+            model.stopVersion === 1
+          "
         >
           <v-stepper v-model="stepIndex">
             <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
-              <v-stepper-step :complete="stepIndex > 1" step="1">
-              </v-stepper-step>
+              <v-stepper-step :complete="stepIndex > 1" step="1" />
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 2" step="2">
-              </v-stepper-step>
+              <v-stepper-step :complete="stepIndex > 2" step="2" />
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
-              </v-stepper-step>
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3" />
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                :complete="stepIndex > v1StopReasonStepIndex"
+                :step="v1StopReasonStepIndex"
+              />
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
-              </v-stepper-step>
+              <v-stepper-step
+                :complete="stepIndex > v1Step4Index"
+                :step="v1Step4Index"
+              />
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
-              </v-stepper-step>
+              <v-stepper-step
+                :complete="stepIndex > v1Step5Index"
+                :step="v1Step5Index"
+              />
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 6" step="6">
-                </v-stepper-step>
+                <v-stepper-step
+                  :complete="stepIndex > v1AgencyQuestionsStepIndex"
+                  :step="v1AgencyQuestionsStepIndex"
+                />
 
                 <v-divider></v-divider>
               </template>
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-top"
-                step="7"
+                :step="v1SummaryStepIndex"
               ></v-stepper-step>
             </v-stepper-header>
 
@@ -115,8 +131,28 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="3">
+              <v-stepper-content v-if="showEbikeStep" step="3">
                 <template v-if="stepIndex === 3">
+                  <ripa-subheader
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-ebike-step
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-ebike-step>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content :step="v1StopReasonStepIndex">
+                <template v-if="stepIndex === v1StopReasonStepIndex">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -135,8 +171,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="4">
-                <template v-if="stepIndex === 4">
+              <v-stepper-content :step="v1Step4Index">
+                <template v-if="stepIndex === v1Step4Index">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -155,8 +191,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="5">
-                <template v-if="stepIndex === 5">
+              <v-stepper-content :step="v1Step5Index">
+                <template v-if="stepIndex === v1Step5Index">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -167,7 +203,6 @@
 
                   <ripa-form-step-5
                     v-model="model"
-                    v-on="$listeners"
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
@@ -175,8 +210,11 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="6">
-                <template v-if="stepIndex === 6">
+              <v-stepper-content
+                v-if="anyAgencyQuestions"
+                :step="v1AgencyQuestionsStepIndex"
+              >
+                <template v-if="stepIndex === v1AgencyQuestionsStepIndex">
                   <ripa-form-step-6
                     v-model="model"
                     :back-button-visible="getFormStep6BackButtonVisible"
@@ -187,8 +225,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="7">
-                <template v-if="stepIndex === 7">
+              <v-stepper-content :step="v1SummaryStepIndex">
+                <template v-if="stepIndex === v1SummaryStepIndex">
                   <ripa-form-step-7
                     v-model="model"
                     :api-stop="getApiStop"
@@ -218,23 +256,42 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                :complete="stepIndex > v1StopReasonStepIndex"
+                :step="v1StopReasonStepIndex"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
+              <v-stepper-step
+                :complete="stepIndex > v1Step4Index"
+                :step="v1Step4Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
+              <v-stepper-step
+                :complete="stepIndex > v1Step5Index"
+                :step="v1Step5Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 6" step="6">
+                <v-stepper-step
+                  :complete="stepIndex > v1AgencyQuestionsStepIndex"
+                  :step="v1AgencyQuestionsStepIndex"
+                >
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -242,7 +299,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-bottom"
-                step="7"
+                :step="v1SummaryStepIndex"
               ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
@@ -253,7 +310,11 @@
         </template>
 
         <template
-          v-if="stepIndex >= 1 && stepIndex <= 8 && model.stopVersion === 2"
+          v-if="
+            stepIndex >= 1 &&
+            stepIndex <= v2SummaryStepIndex &&
+            model.stopVersion === 2
+          "
         >
           <v-stepper v-model="stepIndex">
             <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
@@ -267,27 +328,50 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                :complete="stepIndex > v2StopReasonStepIndex"
+                :step="v2StopReasonStepIndex"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
+              <v-stepper-step
+                :complete="stepIndex > v2Step4Index"
+                :step="v2Step4Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
+              <v-stepper-step
+                :complete="stepIndex > v2ForceActionsStepIndex"
+                :step="v2ForceActionsStepIndex"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+
+              <v-stepper-step
+                :complete="stepIndex > v2Step5Index"
+                :step="v2Step5Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 7" step="7">
+                <v-stepper-step
+                  :complete="stepIndex > v2AgencyQuestionsStepIndex"
+                  :step="v2AgencyQuestionsStepIndex"
+                >
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -295,7 +379,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-top"
-                step="8"
+                :step="v2SummaryStepIndex"
               ></v-stepper-step>
             </v-stepper-header>
 
@@ -333,8 +417,28 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="3">
+              <v-stepper-content v-if="showEbikeStep" step="3">
                 <template v-if="stepIndex === 3">
+                  <ripa-subheader
+                    :class="`text-${
+                      $vuetify.breakpoint.mobile ? 'left' : 'right'
+                    }`"
+                    :text="getEditPersonText"
+                    no-margins
+                  ></ripa-subheader>
+
+                  <ripa-form-ebike-step
+                    v-model="model"
+                    v-on="$listeners"
+                    @on-back="handleBack"
+                    @on-next="handleNext"
+                    @on-cancel="handleCancel"
+                  ></ripa-form-ebike-step>
+                </template>
+              </v-stepper-content>
+
+              <v-stepper-content :step="v2StopReasonStepIndex">
+                <template v-if="stepIndex === v2StopReasonStepIndex">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -353,8 +457,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="4">
-                <template v-if="stepIndex === 4">
+              <v-stepper-content :step="v2Step4Index">
+                <template v-if="stepIndex === v2Step4Index">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -373,8 +477,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="5">
-                <template v-if="stepIndex === 5">
+              <v-stepper-content :step="v2ForceActionsStepIndex">
+                <template v-if="stepIndex === v2ForceActionsStepIndex">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -393,8 +497,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="6">
-                <template v-if="stepIndex === 6">
+              <v-stepper-content :step="v2Step5Index">
+                <template v-if="stepIndex === v2Step5Index">
                   <ripa-subheader
                     :class="`text-${
                       $vuetify.breakpoint.mobile ? 'left' : 'right'
@@ -405,7 +509,6 @@
 
                   <ripa-form-step-5
                     v-model="model"
-                    v-on="$listeners"
                     @on-back="handleBack"
                     @on-next="handleNext"
                     @on-cancel="handleCancel"
@@ -413,8 +516,11 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="7">
-                <template v-if="stepIndex === 7">
+              <v-stepper-content
+                v-if="anyAgencyQuestions"
+                :step="v2AgencyQuestionsStepIndex"
+              >
+                <template v-if="stepIndex === v2AgencyQuestionsStepIndex">
                   <ripa-form-step-6
                     v-model="model"
                     :back-button-visible="getFormStep6BackButtonVisible"
@@ -425,8 +531,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content step="8">
-                <template v-if="stepIndex === 8">
+              <v-stepper-content :step="v2SummaryStepIndex">
+                <template v-if="stepIndex === v2SummaryStepIndex">
                   <ripa-form-step-7
                     v-model="model"
                     :api-stop="getApiStop"
@@ -456,28 +562,50 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 3" step="3">
+              <template v-if="showEbikeStep">
+                <v-stepper-step :complete="stepIndex > 3" step="3">
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+              </template>
+
+              <v-stepper-step
+                :complete="stepIndex > v2StopReasonStepIndex"
+                :step="v2StopReasonStepIndex"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 4" step="4">
+              <v-stepper-step
+                :complete="stepIndex > v2Step4Index"
+                :step="v2Step4Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 5" step="5">
+              <v-stepper-step
+                :complete="stepIndex > v2ForceActionsStepIndex"
+                :step="v2ForceActionsStepIndex"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="stepIndex > 6" step="6">
+              <v-stepper-step
+                :complete="stepIndex > v2Step5Index"
+                :step="v2Step5Index"
+              >
               </v-stepper-step>
 
               <v-divider></v-divider>
 
               <template v-if="anyAgencyQuestions">
-                <v-stepper-step :complete="stepIndex > 7" step="7">
+                <v-stepper-step
+                  :complete="stepIndex > v2AgencyQuestionsStepIndex"
+                  :step="v2AgencyQuestionsStepIndex"
+                >
                 </v-stepper-step>
 
                 <v-divider></v-divider>
@@ -485,7 +613,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-bottom"
-                step="8"
+                :step="v2SummaryStepIndex"
               ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
@@ -553,6 +681,7 @@
 import RipaAlert from '@/components/atoms/RipaAlert'
 import RipaConfirmation from '@/components/molecules/RipaConfirmation'
 import RipaConfirmDialog from '@/components/atoms/RipaConfirmDialog'
+import RipaFormEbikeStep from '@/components/molecules/RipaFormEbikeStep.vue'
 import RipaFormStep1 from '@/components/molecules/RipaFormStep1'
 import RipaFormStep2 from '@/components/molecules/RipaFormStep2'
 import RipaFormStep3 from '@/components/molecules/RipaFormStep3'
@@ -584,12 +713,12 @@ export default {
     RipaJsonViewerDialog,
     RipaSubheader,
     RipaTemplate,
+    RipaFormEbikeStep,
   },
 
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 9,
       stop: this.value,
       stepTrace: null,
       showDialog: false,
@@ -631,6 +760,70 @@ export default {
     anyAgencyQuestions() {
       const questions = this.model?.agencyQuestions || []
       return questions.length > 0
+    },
+
+    perceivedAge() {
+      const rawAge = this.model?.person?.perceivedAge
+      const numericAge = Number(rawAge)
+      return Number.isFinite(numericAge) ? numericAge : null
+    },
+
+    showEbikeStep() {
+      return this.perceivedAge !== null && this.perceivedAge < 12
+    },
+
+    v1StopReasonStepIndex() {
+      return this.showEbikeStep ? 4 : 3
+    },
+
+    v1Step4Index() {
+      return this.showEbikeStep ? 5 : 4
+    },
+
+    v1Step5Index() {
+      return this.showEbikeStep ? 6 : 5
+    },
+
+    v1AgencyQuestionsStepIndex() {
+      return this.showEbikeStep ? 7 : 6
+    },
+
+    v1SummaryStepIndex() {
+      return this.showEbikeStep ? 8 : 7
+    },
+
+    v2StopReasonStepIndex() {
+      return this.showEbikeStep ? 4 : 3
+    },
+
+    v2Step4Index() {
+      return this.showEbikeStep ? 5 : 4
+    },
+
+    v2ForceActionsStepIndex() {
+      return this.showEbikeStep ? 6 : 5
+    },
+
+    v2Step5Index() {
+      return this.showEbikeStep ? 7 : 6
+    },
+
+    v2AgencyQuestionsStepIndex() {
+      return this.showEbikeStep ? 8 : 7
+    },
+
+    v2SummaryStepIndex() {
+      return this.showEbikeStep ? 9 : 8
+    },
+
+    summaryStepIndex() {
+      return this.model.stopVersion === 1
+        ? this.v1SummaryStepIndex
+        : this.v2SummaryStepIndex
+    },
+
+    confirmationStepIndex() {
+      return this.summaryStepIndex + 1
     },
 
     getEditPersonText() {
@@ -762,11 +955,12 @@ export default {
     },
 
     handleBack() {
-      if (this.stepIndex === 8 && !this.anyAgencyQuestions) {
-        this.stepIndex = this.stepIndex - 2
-      } else if (this.model.stopVersion === 2) {
-        this.stepIndex = this.stepIndex - 1
-      } else if (!this.anyAgencyQuestions && this.stepIndex === 7) {
+      const currentSummaryStepIndex = this.summaryStepIndex
+
+      if (
+        this.stepIndex === currentSummaryStepIndex &&
+        !this.anyAgencyQuestions
+      ) {
         this.stepIndex = this.stepIndex - 2
       } else {
         this.stepIndex = this.stepIndex - 1
@@ -827,7 +1021,10 @@ export default {
     },
 
     handleEditAgencyQuestions() {
-      this.stepIndex = this.model.stopVersion === 1 ? 6 : 7
+      this.stepIndex =
+        this.model.stopVersion === 1
+          ? this.v1AgencyQuestionsStepIndex
+          : this.v2AgencyQuestionsStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
@@ -840,57 +1037,57 @@ export default {
           if (!validReason) {
             localStorage.removeItem('ripa_form_edit_stop')
             localStorage.setItem('ripa_form_edit_person', '1')
-            return 3
+            return this.v1StopReasonStepIndex
           } else if (this.model.stopVersion === 1) {
-            return 7
+            return this.v1SummaryStepIndex
           } else if (this.model.stopVersion === 2) {
-            return 8
+            return this.v2SummaryStepIndex
           }
         }
 
         if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === 5 &&
+          this.stepIndex === this.v1Step5Index &&
           this.model.stopVersion === 1
         ) {
-          return 7
+          return this.v1SummaryStepIndex
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === 5 &&
+          this.stepIndex === this.v2ForceActionsStepIndex &&
           this.model.stopVersion === 2
         ) {
-          return 6
+          return this.v2Step5Index
         } else if (
           !this.isEditStop() &&
           this.isEditPerson() &&
-          this.stepIndex === 6 &&
+          this.stepIndex === this.v2Step5Index &&
           this.model.stopVersion === 2
         ) {
-          return 8
+          return this.v2SummaryStepIndex
         }
       }
 
       if (this.isCreateForm()) {
         if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === 5 &&
+          this.stepIndex === this.v1Step5Index &&
           this.model.stopVersion === 1
         ) {
-          return 7
+          return this.v1SummaryStepIndex
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === 5 &&
+          this.stepIndex === this.v2ForceActionsStepIndex &&
           this.model.stopVersion === 2
         ) {
-          return 6
+          return this.v2Step5Index
         } else if (
           !this.anyAgencyQuestions &&
-          this.stepIndex === 6 &&
+          this.stepIndex === this.v2Step5Index &&
           this.model.stopVersion === 2
         ) {
-          return 8
+          return this.v2SummaryStepIndex
         }
       }
 
@@ -939,15 +1136,9 @@ export default {
     },
 
     getFormSummaryStepText() {
-      if (this.agencyQuestions && this.model.stopVersion === 1) {
-        return '7'
-      } else if (this.agencyQuestions && this.model.stopVersion === 2) {
-        return '8'
-      } else if (!this.agencyQuestions && this.model.stopVersion === 1) {
-        return '6'
-      } else if (!this.agencyQuestions && this.model.stopVersion === 2) {
-        return '7'
-      }
+      const displayNumber =
+        this.summaryStepIndex - (this.anyAgencyQuestions ? 0 : 1)
+      return displayNumber.toString()
     },
 
     updateFormStepNumbers() {
@@ -985,10 +1176,10 @@ export default {
     formStepIndex(newVal, oldVal) {
       this.updateFormStepNumbers()
       if (newVal !== oldVal) {
-        if (newVal > 0 && oldVal > 0 && oldVal < 7) {
+        if (newVal > 0 && oldVal > 0 && oldVal < this.summaryStepIndex) {
           this.updateStepTrace(new Date())
         }
-        if (newVal > 0 && newVal < 7) {
+        if (newVal > 0 && newVal < this.summaryStepIndex) {
           this.createStepTrace(newVal, new Date())
         }
         if (newVal === 0) {
@@ -997,6 +1188,37 @@ export default {
       }
       this.stepIndex = newVal
       this.$emit('on-step-index-change', this.stepIndex)
+    },
+
+    showEbikeStep(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return
+      }
+
+      this.updateFormStepNumbers()
+
+      // Keep the user on the same semantic step when the Ebike step is
+      // inserted/removed after they change perceived age.
+      if (newVal && !oldVal) {
+        if (
+          this.stepIndex >= 3 &&
+          this.stepIndex < this.confirmationStepIndex
+        ) {
+          this.stepIndex = this.stepIndex + 1
+          this.$emit('on-step-index-change', this.stepIndex)
+        }
+      } else if (!newVal && oldVal) {
+        if (this.stepIndex === 3) {
+          this.stepIndex = 2
+          this.$emit('on-step-index-change', this.stepIndex)
+        } else if (
+          this.stepIndex > 3 &&
+          this.stepIndex < this.confirmationStepIndex
+        ) {
+          this.stepIndex = this.stepIndex - 1
+          this.$emit('on-step-index-change', this.stepIndex)
+        }
+      }
     },
 
     'model.stopVersion'(newVal, oldVal) {

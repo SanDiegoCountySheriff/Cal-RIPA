@@ -199,8 +199,8 @@
                 </template>
 
                 <span>
-                  Submit all the stops to the DOJ. Stops with PII or that are
-                  in an error state will not be resubmitted.
+                  Submit all the stops to the DOJ. Stops with PII or that are in
+                  an error state will not be resubmitted.
                 </span>
               </v-tooltip>
 
@@ -304,7 +304,7 @@
               class="late-submission-icon"
               color="warning"
               small
-              >
+            >
               mdi-clock-alert
             </v-icon>
           </template>
