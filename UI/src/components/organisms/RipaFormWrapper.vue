@@ -253,7 +253,11 @@
         </template>
 
         <template
-          v-if="stepIndex >= 1 && stepIndex <= 8 && model.stopVersion === 2"
+          v-if="
+            stepIndex >= 1 &&
+            stepIndex <= (showEbikeStep ? 9 : 8) &&
+            model.stopVersion === 2
+          "
         >
           <v-stepper v-model="stepIndex">
             <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
@@ -658,7 +662,9 @@ export default {
   data() {
     return {
       stepIndex: this.formStepIndex,
-      confirmationStepIndex: 9,
+      // Keep this beyond any possible form step index.
+      // V2 with the conditional AB 2234 E-bike step can reach stepIndex 9 (summary).
+      confirmationStepIndex: 10,
       stop: this.value,
       stepTrace: null,
       showDialog: false,
@@ -704,7 +710,7 @@ export default {
 
     showEbikeStep() {
       // AB 2234: Show E-Bike step for V2 forms when perceived age is less than 12
-      if (this.model.stopVersion !== 2) {
+      if (!this.model || this.model.stopVersion !== 2) {
         return false
       }
       const perceivedAge = this.model.person?.perceivedAge
@@ -1000,6 +1006,9 @@ export default {
     },
 
     handleConfirmSubmit() {
+      // Close the dialog immediately so the user sees the confirmation/loading UI
+      // even if submission triggers model resets or navigation.
+      this.showConfirmDialog = false
       this.stepIndex = this.confirmationStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
       const apiStop = this.getApiStop

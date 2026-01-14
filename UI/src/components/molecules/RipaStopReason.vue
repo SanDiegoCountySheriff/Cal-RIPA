@@ -371,6 +371,8 @@ export default {
     ) {
       this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
+
+    this.syncEbikeViolationCodeFromStopReason()
   },
 
   computed: {
@@ -495,6 +497,45 @@ export default {
   },
 
   methods: {
+    getReasonCode() {
+      const trafficViolationCode =
+        this.model.stopReason?.trafficViolationCode || null
+      const reasonableSuspicionCode =
+        this.model.stopReason?.reasonableSuspicionCode || null
+      const probableCauseCode = this.model.stopReason?.probableCauseCode || null
+
+      if (trafficViolationCode) {
+        return trafficViolationCode
+      }
+
+      if (reasonableSuspicionCode) {
+        return reasonableSuspicionCode
+      }
+
+      if (probableCauseCode) {
+        return probableCauseCode
+      }
+
+      return null
+    },
+
+    syncEbikeViolationCodeFromStopReason() {
+      const ebikeInfo = this.model?.person?.ebikeInfo
+      if (!ebikeInfo) {
+        return
+      }
+
+      const nextViolationCode = ebikeInfo.stopInvolvedEbike
+        ? this.getReasonCode()
+        : null
+
+      if (ebikeInfo.violationCode === nextViolationCode) {
+        return
+      }
+
+      ebikeInfo.violationCode = nextViolationCode
+    },
+
     handleOpenFavorites() {
       this.$emit('on-open-reason-favorites', this.model.stopVersion)
     },
@@ -847,6 +888,8 @@ export default {
         this.model.stopReason.trafficViolation = null
         this.model.stopReason.trafficViolationCode = null
       }
+
+      this.syncEbikeViolationCodeFromStopReason()
     },
 
     handleFavoriteClick(favorite) {
@@ -855,6 +898,26 @@ export default {
   },
 
   watch: {
+    'model.stopReason.reasonForStop'() {
+      this.syncEbikeViolationCodeFromStopReason()
+    },
+
+    'model.stopReason.trafficViolationCode'() {
+      this.syncEbikeViolationCodeFromStopReason()
+    },
+
+    'model.stopReason.reasonableSuspicionCode'() {
+      this.syncEbikeViolationCodeFromStopReason()
+    },
+
+    'model.stopReason.probableCauseCode'() {
+      this.syncEbikeViolationCodeFromStopReason()
+    },
+
+    'model.person.ebikeInfo.stopInvolvedEbike'() {
+      this.syncEbikeViolationCodeFromStopReason()
+    },
+
     lastReason(newVal) {
       if (newVal) {
         this.model.stopReason = { ...newVal }
