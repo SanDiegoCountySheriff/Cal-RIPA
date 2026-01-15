@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="stepForm" lazy-validation>
+  <v-form ref="stepForm" v-model="isFormValid" lazy-validation>
     <div
       v-if="$vuetify.breakpoint.mobile"
       class="tw-flex tw-mb-4 tw-justify-center"
@@ -10,7 +10,11 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
+      <v-btn
+        color="primary"
+        :disabled="!isFormValid || isBackNextDisabled"
+        @click="handleNext"
+      >
         Next
       </v-btn>
     </div>
@@ -134,7 +138,11 @@
       <v-btn outlined color="error" class="tw-mr-2" @click="handleCancel">
         Cancel
       </v-btn>
-      <v-btn color="primary" :disabled="!isFormValid" @click="handleNext">
+      <v-btn
+        color="primary"
+        :disabled="!isFormValid || isBackNextDisabled"
+        @click="handleNext"
+      >
         Next
       </v-btn>
     </div>
@@ -231,6 +239,49 @@ export default {
   },
 
   watch: {
+    'model.person.ebikeInfo.stopInvolvedEbike'(newVal) {
+      if (newVal !== true) {
+        this.model.person.ebikeInfo.ebikeClass = null
+        this.model.person.ebikeInfo.verifiedAge = null
+        this.model.person.ebikeInfo.declinedToProvideOrUncooperative = null
+
+        this.$nextTick(() => {
+          const form = this.$refs.stepForm
+          if (form) {
+            form.resetValidation()
+          }
+          this.isFormValid = true
+        })
+
+        return
+      }
+
+      this.$nextTick(() => {
+        const form = this.$refs.stepForm
+        if (form && !this.isFormValid) {
+          this.isFormValid = form.validate()
+        }
+      })
+    },
+
+    'model.person.ebikeInfo.ebikeClass'() {
+      this.$nextTick(() => {
+        const form = this.$refs.stepForm
+        if (form && !this.isFormValid) {
+          this.isFormValid = form.validate()
+        }
+      })
+    },
+
+    'model.person.ebikeInfo.verifiedAge'() {
+      this.$nextTick(() => {
+        const form = this.$refs.stepForm
+        if (form && !this.isFormValid) {
+          this.isFormValid = form.validate()
+        }
+      })
+    },
+
     'model.person.ebikeInfo.declinedToProvideOrUncooperative'(newVal) {
       if (!this.model.person.ebikeInfo.stopInvolvedEbike) {
         return
@@ -243,7 +294,7 @@ export default {
       this.$nextTick(() => {
         const form = this.$refs.stepForm
         if (form) {
-          form.validate()
+          this.isFormValid = form.validate()
         }
       })
     },
