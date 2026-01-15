@@ -40,6 +40,10 @@
       "type": "int",
       "defaultValue": 1
     },
+    "max_backdate_days": {
+      "type": "int",
+      "defaultValue": 0
+    },
     "enable_stop_debugger": {
       "type": "bool",
       "defaultValue": false
@@ -3739,6 +3743,10 @@
           {
             "name": "BEAT_ID_NUMBER_OF_DIGITS",
             "value": "[parameters('beat_id_number_of_digits')]"
+          },
+          {
+            "name": "MAX_BACKDATE_DAYS",
+            "value": "[parameters('max_backdate_days')]"
           },
           {
             "name": "ENABLE_STOP_DEBUGGER",
