@@ -20,7 +20,7 @@
         <ripa-form-header
           title="E-BIKE SAFETY PILOT PROGRAM (AB2234)"
           required
-          subtitle="§21214.7"
+          subtitle="AB 2234"
           v-on="$listeners"
         >
         </ripa-form-header>
@@ -46,7 +46,7 @@
               <ripa-form-header
                 title="E-BIKE CLASS"
                 required
-                subtitle="§21214.7"
+                subtitle="AB 2234"
                 v-on="$listeners"
               >
               </ripa-form-header>
@@ -73,7 +73,7 @@
             <v-col cols="12">
               <ripa-form-header
                 title="VERIFIED AGE"
-                subtitle="§21214.7"
+                subtitle="AB 2234"
                 v-on="$listeners"
                 required
               >
