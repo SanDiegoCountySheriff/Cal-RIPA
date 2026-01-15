@@ -172,11 +172,22 @@
           <template
             v-slot:item.data-table-select="{ item, isSelected, select }"
           >
-            <v-checkbox
-              :disabled="isStopInCooldown(item.stopDateTime)"
-              :input-value="isSelected"
-              @change="select($event)"
-            ></v-checkbox>
+            <v-tooltip :disabled="!isStopInCooldown(item.stopDateTime)" bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <div v-bind="attrs" v-on="on">
+                  <v-checkbox
+                    :disabled="isStopInCooldown(item.stopDateTime)"
+                    :input-value="isSelected"
+                    @change="select($event)"
+                  ></v-checkbox>
+                </div>
+              </template>
+
+              <span>
+                This stop cannot be submitted because it is within the
+                {{ cooldownDays }} day cooldown period
+              </span>
+            </v-tooltip>
           </template>
 
           <template v-slot:top>
