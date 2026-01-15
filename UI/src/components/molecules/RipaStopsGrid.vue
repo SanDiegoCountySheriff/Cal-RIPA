@@ -174,10 +174,9 @@
           >
             <v-checkbox
               :disabled="isStopInCooldown(item.stopDateTime)"
-              :value="isSelected"
-              @input="select($event)"
-            >
-            </v-checkbox>
+              :input-value="isSelected"
+              @change="select($event)"
+            ></v-checkbox>
           </template>
 
           <template v-slot:top>
@@ -199,8 +198,8 @@
                 </template>
 
                 <span>
-                  Submit all the stops to the DOJ. Stops with PII or that are
-                  in an error state will not be resubmitted.
+                  Submit all the stops to the DOJ. Stops with PII or that are in
+                  an error state will not be resubmitted.
                 </span>
               </v-tooltip>
 
@@ -304,7 +303,7 @@
               class="late-submission-icon"
               color="warning"
               small
-              >
+            >
               mdi-clock-alert
             </v-icon>
           </template>
