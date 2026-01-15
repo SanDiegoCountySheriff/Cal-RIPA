@@ -154,7 +154,6 @@ export const defaultStop = () => {
         ebikeClass: null,
         verifiedAge: null,
         declinedToProvideOrUncooperative: null,
-        violationCode: null, // AB 2234 (d)(1)(D) - Vehicle Code §21214.7
       },
     },
     stopDate: {
@@ -2058,9 +2057,24 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
-      ebikeInfo: person.ebikeInfo || null,
+      ebikeInfo: getApiStopEbikeInfo(person),
     }
   })
+}
+
+const getApiStopEbikeInfo = person => {
+  const ebikeInfo = person?.ebikeInfo
+  if (!ebikeInfo) {
+    return null
+  }
+
+  return {
+    stopInvolvedEbike: ebikeInfo.stopInvolvedEbike ?? null,
+    ebikeClass: ebikeInfo.ebikeClass ?? null,
+    verifiedAge: ebikeInfo.verifiedAge ?? null,
+    declinedToProvideOrUncooperative:
+      ebikeInfo.declinedToProvideOrUncooperative ?? null,
+  }
 }
 
 const getPiiFound = (parsedApiStop, fullStop) => {

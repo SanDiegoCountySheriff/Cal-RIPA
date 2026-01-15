@@ -10,5 +10,4 @@ public class EbikeInfo
     public int? EbikeClass { get; set; }
     public int? VerifiedAge { get; set; }
     public bool? DeclinedToProvideOrUncooperative { get; set; }
-    public string ViolationCode { get; set; }
 }

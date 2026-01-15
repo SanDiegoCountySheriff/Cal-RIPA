@@ -241,17 +241,6 @@ export default {
               },
             })
           }
-
-          if (ebikeInfo.violationCode) {
-            items.push({
-              id: `EBIKE-${labelIndex}-VIOLATION`,
-              content: {
-                level: 1,
-                header: 'Violation Code',
-                detail: ebikeInfo.violationCode,
-              },
-            })
-          }
         })
 
       return items
