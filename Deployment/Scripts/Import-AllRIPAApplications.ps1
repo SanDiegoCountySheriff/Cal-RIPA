@@ -123,35 +123,6 @@ Write-Host "Deploying UI package:" $fileName
 Expand-Archive -Path "./$fileName" -DestinationPath "./" -Force
 az storage blob upload-batch --overwrite true --timeout 300 -d '$web' --account-name $uiStorageAccountName -s './dist'
 
-# Update existing config.json to add MaxBackdateDays if it doesn't exist
-if ("False" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
-    Write-Host "Checking existing config.json for MaxBackdateDays field"
-    
-    # Download existing config.json
-    az storage blob download --account-name $uiStorageAccountName -c '$web' -n "config.json" -f "./existing-config.json"
-    
-    if (Test-Path "./existing-config.json") {
-        $existingConfig = Get-Content -Path "./existing-config.json" -Raw | ConvertFrom-Json
-        
-        # Check if MaxBackdateDays exists, if not add it with default value 0
-        if ($null -eq $existingConfig.Configuration.MaxBackdateDays) {
-            Write-Host "MaxBackdateDays not found in config.json, adding with default value 0"
-            $existingConfig.Configuration | Add-Member -NotePropertyName "MaxBackdateDays" -NotePropertyValue 0 -Force
-            
-            # Save updated config
-            $existingConfig | ConvertTo-Json -Depth 10 | Set-Content -Path "./updated-config.json" -Force
-            
-            # Upload updated config
-            Write-Host "Uploading updated config.json with MaxBackdateDays"
-            az storage blob upload --overwrite true --timeout 300 --account-name $uiStorageAccountName -n "config.json" -c '$web' -f "./updated-config.json"
-        } else {
-            Write-Host "MaxBackdateDays already exists in config.json with value: $($existingConfig.Configuration.MaxBackdateDays)"
-        }
-    } else {
-        Write-Host "Could not download existing config.json, skipping MaxBackdateDays update"
-    }
-}
-
 if ("True" -eq $env:DEPLOY_WEB_CONFIG_JSON) {
     Write-Host "Creating config.json"
     
