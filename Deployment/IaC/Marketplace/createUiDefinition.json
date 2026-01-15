@@ -3,7 +3,9 @@
   "handler": "Microsoft.Azure.CreateUIDef",
   "version": "0.1.2-preview",
   "parameters": {
-    "resourceTypes": ["microsoft.resources/resourcegroups"],
+    "resourceTypes": [
+      "microsoft.resources/resourcegroups"
+    ],
     "config": {
       "isWizard": false,
       "basics": {
@@ -715,6 +717,18 @@
         "visible": "[equals(basics('modify_beat_id'),true)]"
       },
       {
+        "name": "max_backdate_days",
+        "type": "Microsoft.Common.Slider",
+        "min": 0,
+        "max": 30,
+        "label": "Maximum backdate days",
+        "defaultValue": 0,
+        "toolTip": "Maximum number of days in the past that officers can create or edit STOP records. Set to 0 to disable backdating restrictions.",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
         "name": "enable_stop_debugger",
         "type": "Microsoft.Common.CheckBox",
         "label": "Enable STOP data debugger?",
@@ -1077,6 +1091,7 @@
       "enable_beats": "[basics('enable_beats')]",
       "modify_beat_id": "[basics('modify_beat_id')]",
       "beat_id_number_of_digits": "[basics('beat_id_number_of_digits')]",
+      "max_backdate_days": "[basics('max_backdate_days')]",
       "enable_stop_debugger": "[basics('enable_stop_debugger')]",
       "display_reporting_email": "[basics('display_reporting_email')]",
       "reporting_email_address": "[basics('reporting_email_address')]",
