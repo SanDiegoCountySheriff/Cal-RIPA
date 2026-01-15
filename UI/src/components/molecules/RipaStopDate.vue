@@ -123,12 +123,9 @@ import RipaDatePicker from '@/components/atoms/RipaDatePicker'
 import RipaNumberInput from '@/components/atoms/RipaNumberInput'
 import RipaSwitch from '@/components/atoms/RipaSwitch'
 import RipaTimePicker from '@/components/atoms/RipaTimePicker'
-import {
-  dateWithinLastHours,
-  dateNotInFuture,
-  formatToIsoCurrentDate,
-  formatToIsoDate,
-} from '@/utilities/dates'
+import format from 'date-fns/format'
+import subDays from 'date-fns/subDays'
+import { dateWithinLastHours, dateNotInFuture } from '@/utilities/dates'
 
 export default {
   name: 'ripa-stop-date',
@@ -197,21 +194,16 @@ export default {
       const stopDateTime = new Date(`${dateStr}T${timeStr}`)
       const now = new Date()
       const diffMilliseconds = now.getTime() - stopDateTime.getTime()
-      const diffHours = diffMilliseconds / (1000 * 60 * 60)
-      const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
+      const maxBackdateMilliseconds = this.maxBackdateDays * 24 * 60 * 60 * 1000
 
-      return diffHours > 24 && diffDays <= this.maxBackdateDays
+      return (
+        diffMilliseconds > 24 * 60 * 60 * 1000 &&
+        diffMilliseconds <= maxBackdateMilliseconds
+      )
     },
 
     lateStopMessage() {
-      if (this.maxBackdateDays === 0) {
-        return 'This stop is being submitted more than 24 hours after it occurred. Please provide an explanation for the late submission.'
-      }
-      return `This stop is being submitted more than ${
-        this.maxBackdateDays
-      } day${
-        this.maxBackdateDays === 1 ? '' : 's'
-      } after it occurred. Please provide an explanation for the late submission.`
+      return 'This stop is being submitted more than 24 hours after it occurred. Please provide an explanation for the late submission.'
     },
 
     dateRules() {
@@ -241,7 +233,6 @@ export default {
           )
           const now = new Date()
           const diffMilliseconds = now.getTime() - stopDateTime.getTime()
-          const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
 
           if (this.maxBackdateDays === 0) {
             return (
@@ -249,8 +240,10 @@ export default {
               'Date and Time must be within the past 24 hours'
             )
           } else {
+            const maxBackdateMilliseconds =
+              this.maxBackdateDays * 24 * 60 * 60 * 1000
             return (
-              diffDays <= this.maxBackdateDays ||
+              diffMilliseconds <= maxBackdateMilliseconds ||
               `Date and Time cannot be more than ${this.maxBackdateDays} day${
                 this.maxBackdateDays === 1 ? '' : 's'
               } in the past`
@@ -283,17 +276,11 @@ export default {
     },
 
     lateExplanationRules() {
-      const maxDays =
-        this.maxBackdateDays === 0
-          ? '24 hours'
-          : `${this.maxBackdateDays} day${
-              this.maxBackdateDays === 1 ? '' : 's'
-            }`
       return [
         v =>
           !this.isLateStop ||
           (v && v.length > 4) ||
-          `Explanation is required for stops submitted more than ${maxDays} after they occurred`,
+          'Explanation is required for stops submitted more than 24 hours after they occurred',
       ]
     },
 
@@ -312,11 +299,16 @@ export default {
 
     getMinDate() {
       const now = new Date()
-      return formatToIsoDate(new Date(now.getFullYear(), 0, 1, 0, 0, 0))
+
+      if (this.maxBackdateDays && this.maxBackdateDays > 0) {
+        return format(subDays(now, this.maxBackdateDays), 'yyyy-MM-dd')
+      }
+
+      return format(subDays(now, 1), 'yyyy-MM-dd')
     },
 
     getMaxDate() {
-      return formatToIsoCurrentDate()
+      return format(new Date(), 'yyyy-MM-dd')
     },
   },
 
