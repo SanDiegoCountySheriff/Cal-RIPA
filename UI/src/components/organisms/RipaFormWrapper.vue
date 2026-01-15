@@ -255,11 +255,16 @@
         <template
           v-if="
             stepIndex >= 1 &&
-            stepIndex <= (showEbikeStep ? 9 : 8) &&
+            stepIndex <= v2SummaryStepIndex &&
             model.stopVersion === 2
           "
         >
-          <v-stepper v-model="stepIndex">
+          <v-stepper
+            v-model="stepIndex"
+            :key="`v2-stepper-${showEbikeStep ? 'ebike' : 'standard'}-${
+              anyAgencyQuestions ? 'agency' : 'no-agency'
+            }`"
+          >
             <v-stepper-header v-if="!$vuetify.breakpoint.mobile">
               <v-stepper-step :complete="stepIndex > 1" step="1">
               </v-stepper-step>
@@ -312,8 +317,8 @@
 
               <template v-if="anyAgencyQuestions">
                 <v-stepper-step
-                  :complete="stepIndex > (showEbikeStep ? 8 : 7)"
-                  :step="showEbikeStep ? '8' : '7'"
+                  :complete="stepIndex > v2AgencyQuestionsStepIndex"
+                  :step="String(v2AgencyQuestionsStepIndex)"
                 >
                 </v-stepper-step>
 
@@ -322,7 +327,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-top"
-                :step="showEbikeStep ? '9' : '8'"
+                :step="String(v2SummaryStepIndex)"
               ></v-stepper-step>
             </v-stepper-header>
 
@@ -461,8 +466,11 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content :step="showEbikeStep ? 8 : 7">
-                <template v-if="stepIndex === (showEbikeStep ? 8 : 7)">
+              <v-stepper-content
+                v-if="anyAgencyQuestions"
+                :step="v2AgencyQuestionsStepIndex"
+              >
+                <template v-if="stepIndex === v2AgencyQuestionsStepIndex">
                   <ripa-form-step-6
                     v-model="model"
                     :back-button-visible="getFormStep6BackButtonVisible"
@@ -473,8 +481,8 @@
                 </template>
               </v-stepper-content>
 
-              <v-stepper-content :step="showEbikeStep ? 9 : 8">
-                <template v-if="stepIndex === (showEbikeStep ? 9 : 8)">
+              <v-stepper-content :step="v2SummaryStepIndex">
+                <template v-if="stepIndex === v2SummaryStepIndex">
                   <ripa-form-step-7
                     v-model="model"
                     :api-stop="getApiStop"
@@ -546,8 +554,8 @@
 
               <template v-if="anyAgencyQuestions">
                 <v-stepper-step
-                  :complete="stepIndex > (showEbikeStep ? 8 : 7)"
-                  :step="showEbikeStep ? '8' : '7'"
+                  :complete="stepIndex > v2AgencyQuestionsStepIndex"
+                  :step="String(v2AgencyQuestionsStepIndex)"
                 >
                 </v-stepper-step>
 
@@ -556,7 +564,7 @@
 
               <v-stepper-step
                 class="ripa-form-wrapper--summary-step-bottom"
-                :step="showEbikeStep ? '9' : '8'"
+                :step="String(v2SummaryStepIndex)"
               ></v-stepper-step>
             </v-stepper-header>
           </v-stepper>
@@ -721,6 +729,23 @@ export default {
       return perceivedAge !== null && perceivedAge < 12
     },
 
+    // V2 step numbering depends on whether the optional E-bike step is shown
+    // and whether the optional agency-questions step is present.
+    v2SummaryStepIndex() {
+      // Base V2 summary step index when neither optional step is present.
+      // Steps are: 1..6 (up to Step 5), then Summary.
+      const baseSummary = 7
+      return (
+        baseSummary +
+        (this.showEbikeStep ? 1 : 0) +
+        (this.anyAgencyQuestions ? 1 : 0)
+      )
+    },
+
+    v2AgencyQuestionsStepIndex() {
+      return this.v2SummaryStepIndex - 1
+    },
+
     getEditPersonText() {
       const personIndex = this.model.person?.index || 1
       return `Person: ${personIndex}`
@@ -850,12 +875,7 @@ export default {
     },
 
     handleBack() {
-      // AB 2234: Account for conditional e-bike step when going back
-      const ebikeOffset = this.showEbikeStep ? 1 : 0
-
-      if (this.stepIndex === 8 + ebikeOffset && !this.anyAgencyQuestions) {
-        this.stepIndex = this.stepIndex - 2
-      } else if (this.model.stopVersion === 2) {
+      if (this.model.stopVersion === 2) {
         this.stepIndex = this.stepIndex - 1
       } else if (!this.anyAgencyQuestions && this.stepIndex === 7) {
         this.stepIndex = this.stepIndex - 2
@@ -918,9 +938,12 @@ export default {
     },
 
     handleEditAgencyQuestions() {
-      // AB 2234: Account for conditional e-bike step
-      const ebikeOffset = this.showEbikeStep ? 1 : 0
-      this.stepIndex = this.model.stopVersion === 1 ? 6 : 7 + ebikeOffset
+      this.stepIndex =
+        this.model.stopVersion === 1
+          ? 6
+          : this.anyAgencyQuestions
+          ? this.v2AgencyQuestionsStepIndex
+          : this.v2SummaryStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
       this.$emit('on-edit-agency-questions')
     },
@@ -940,7 +963,7 @@ export default {
           } else if (this.model.stopVersion === 1) {
             return 7
           } else if (this.model.stopVersion === 2) {
-            return 8 + ebikeOffset
+            return this.v2SummaryStepIndex
           }
         }
 
@@ -964,7 +987,7 @@ export default {
           this.stepIndex === 6 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
-          return 8 + ebikeOffset
+          return this.v2SummaryStepIndex
         }
       }
 
@@ -986,7 +1009,7 @@ export default {
           this.stepIndex === 6 + ebikeOffset &&
           this.model.stopVersion === 2
         ) {
-          return 8 + ebikeOffset
+          return this.v2SummaryStepIndex
         }
       }
 

@@ -50,12 +50,18 @@
                 v-on="$listeners"
               >
               </ripa-form-header>
+            </v-col>
+          </v-row>
+        </div>
+
+        <div class="tw-pb-4">
+          <v-row no-gutters>
+            <v-col>
               <ripa-radio-group
                 v-model="model.person.ebikeInfo.ebikeClass"
                 :items="ebikeClasses"
                 :disabled="disabled"
                 :rules="ebikeClassRules"
-                display-row
               >
               </ripa-radio-group>
             </v-col>
@@ -69,8 +75,16 @@
                 title="VERIFIED AGE"
                 subtitle="§21214.7"
                 v-on="$listeners"
+                required
               >
               </ripa-form-header>
+            </v-col>
+          </v-row>
+        </div>
+
+        <div class="tw-pb-4">
+          <v-row no-gutters>
+            <v-col cols="12">
               <ripa-number-input
                 v-model="model.person.ebikeInfo.verifiedAge"
                 label="Verified Age"

@@ -371,8 +371,6 @@ export default {
     ) {
       this.handlePiiCheck(this.model.stopReason.reasonForStopExplanation)
     }
-
-    this.syncEbikeViolationCodeFromStopReason()
   },
 
   computed: {
@@ -517,23 +515,6 @@ export default {
       }
 
       return null
-    },
-
-    syncEbikeViolationCodeFromStopReason() {
-      const ebikeInfo = this.model?.person?.ebikeInfo
-      if (!ebikeInfo) {
-        return
-      }
-
-      const nextViolationCode = ebikeInfo.stopInvolvedEbike
-        ? this.getReasonCode()
-        : null
-
-      if (ebikeInfo.violationCode === nextViolationCode) {
-        return
-      }
-
-      ebikeInfo.violationCode = nextViolationCode
     },
 
     handleOpenFavorites() {
@@ -888,8 +869,6 @@ export default {
         this.model.stopReason.trafficViolation = null
         this.model.stopReason.trafficViolationCode = null
       }
-
-      this.syncEbikeViolationCodeFromStopReason()
     },
 
     handleFavoriteClick(favorite) {
@@ -898,26 +877,6 @@ export default {
   },
 
   watch: {
-    'model.stopReason.reasonForStop'() {
-      this.syncEbikeViolationCodeFromStopReason()
-    },
-
-    'model.stopReason.trafficViolationCode'() {
-      this.syncEbikeViolationCodeFromStopReason()
-    },
-
-    'model.stopReason.reasonableSuspicionCode'() {
-      this.syncEbikeViolationCodeFromStopReason()
-    },
-
-    'model.stopReason.probableCauseCode'() {
-      this.syncEbikeViolationCodeFromStopReason()
-    },
-
-    'model.person.ebikeInfo.stopInvolvedEbike'() {
-      this.syncEbikeViolationCodeFromStopReason()
-    },
-
     lastReason(newVal) {
       if (newVal) {
         this.model.stopReason = { ...newVal }
