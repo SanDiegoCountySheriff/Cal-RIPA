@@ -5,9 +5,18 @@
         v-for="(item, index) in items"
         :disabled="disabled"
         :key="index"
-        :label="item.name"
+        :label="getItemLabel(item)"
         :value="item.value"
-      ></v-radio>
+      >
+        <template v-if="item && item.description" v-slot:label>
+          <div>
+            <div>{{ getItemLabel(item) }}</div>
+            <div class="tw-text-xs tw-text-secondary">
+              {{ item.description }}
+            </div>
+          </div>
+        </template>
+      </v-radio>
     </v-radio-group>
     <template v-if="isClearVisible">
       <v-btn
@@ -58,6 +67,14 @@ export default {
   },
 
   methods: {
+    getItemLabel(item) {
+      if (!item) {
+        return ''
+      }
+
+      return item.name || item.label || item.text || ''
+    },
+
     handleClearSelection() {
       this.model = null
     },

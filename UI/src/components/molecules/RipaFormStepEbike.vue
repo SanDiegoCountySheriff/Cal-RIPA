@@ -165,7 +165,27 @@ export default {
 
   computed: {
     ebikeClasses() {
-      return EBIKE_CLASSES
+      const descriptionsByValue = new Map([
+        [
+          1,
+          'Motor assist: pedal-assist only (no throttle); stops at 20 mph. Age/helmet: helmet required if under 18.',
+        ],
+        [
+          2,
+          'Motor assist: throttle-capable (can move without pedaling); stops at 20 mph. Age/helmet: helmet required if under 18.',
+        ],
+        [
+          3,
+          'Motor assist: pedal-assist only (no throttle); stops at 28 mph; speedometer required. Age/helmet: must be 16+; helmet required.',
+        ],
+      ])
+
+      return (EBIKE_CLASSES || []).map(item => {
+        return {
+          ...item,
+          description: descriptionsByValue.get(item.value) || undefined,
+        }
+      })
     },
 
     ebikeClassRules() {
