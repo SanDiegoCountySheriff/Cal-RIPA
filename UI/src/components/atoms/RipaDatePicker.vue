@@ -4,6 +4,8 @@
     v-model="model"
     :label="label"
     :rules="rules"
+    :min="min"
+    :max="max"
     :disabled="disabled"
     append-icon="mdi-calendar"
     clearable
@@ -41,6 +43,14 @@ export default {
 
   props: {
     value: {
+      type: String,
+      default: null,
+    },
+    min: {
+      type: String,
+      default: null,
+    },
+    max: {
       type: String,
       default: null,
     },

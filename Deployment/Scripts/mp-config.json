@@ -16,6 +16,7 @@
     "ModifyBeatId": "__MODIFY_BEAT_ID__",
     "BeatIdNumberOfDigits": "__BEAT_ID_NUMBER_OF_DIGITS__",
     "DisplayReportingEmail": "__DISPLAY_REPORTING_EMAIL__",
-    "ReportingEmailAddress": "__REPORTING_EMAIL_ADDRESS__"
+    "ReportingEmailAddress": "__REPORTING_EMAIL_ADDRESS__",
+    "MaxBackdateDays": "__MAX_BACKDATE_DAYS__"
   }
 }

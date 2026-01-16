@@ -16,6 +16,7 @@
     "ModifyBeatId": "True",
     "BeatIdNumberOfDigits": 3,
     "DisplayReportingEmail": "True",
-    "ReportingEmailAddress": "dsddevops@sdsheriff.org"
+    "ReportingEmailAddress": "dsddevops@sdsheriff.org",
+    "MaxBackdateDays": 0
   }
 }
