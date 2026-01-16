@@ -32,4 +32,5 @@ public class PersonStopped : IPersonStopped
     public BasisForPropertySeizure[] ListBasisForPropertySeizure { get; set; }
     public TypeOfPropertySeized[] ListTypeOfPropertySeized { get; set; }
     public ResultOfStop[] ListResultOfStop { get; set; }
+    public EbikeInfo EbikeInfo { get; set; }
 }

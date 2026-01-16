@@ -149,6 +149,12 @@ export const defaultStop = () => {
       insideResidence: null,
       passengerInVehicle: null,
       perceivedUnhoused: false,
+      ebikeInfo: {
+        stopInvolvedEbike: null,
+        ebikeClass: null,
+        verifiedAge: null,
+        declinedToProvideOrUncooperative: null,
+      },
     },
     stopDate: {
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -2051,8 +2057,24 @@ export const getApiStopPeopleListedV2 = (fullStop, statutes) => {
       reasonForStopExplanation:
         person.stopReason?.reasonForStopExplanation || null,
       reasonForStopPiiFound: person.stopReason?.reasonForStopPiiFound || false,
+      ebikeInfo: getApiStopEbikeInfo(person),
     }
   })
+}
+
+const getApiStopEbikeInfo = person => {
+  const ebikeInfo = person?.ebikeInfo
+  if (!ebikeInfo) {
+    return null
+  }
+
+  return {
+    stopInvolvedEbike: ebikeInfo.stopInvolvedEbike ?? null,
+    ebikeClass: ebikeInfo.ebikeClass ?? null,
+    verifiedAge: ebikeInfo.verifiedAge ?? null,
+    declinedToProvideOrUncooperative:
+      ebikeInfo.declinedToProvideOrUncooperative ?? null,
+  }
 }
 
 const getPiiFound = (parsedApiStop, fullStop) => {

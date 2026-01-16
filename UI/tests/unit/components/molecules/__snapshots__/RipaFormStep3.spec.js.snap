@@ -6,7 +6,7 @@ exports[`Ripa Form Step 3 should match snapshot 1`] = `
       }" onsavefavorite="function () {
         return fn.apply(this, arguments);
       }">
-  <div class="tw-flex tw-mb-5 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
+  <div class="tw-flex tw-mb-4 tw-justify-center"><button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default primary--text"><span class="v-btn__content">
       Back
     </span></button> <button type="button" class="tw-mr-2 v-btn v-btn--outlined theme--light v-size--default error--text"><span class="v-btn__content">
       Cancel

@@ -11,13 +11,16 @@
         </template>
       </div>
 
-      <div v-for="item in getApiStopStopSummary" :key="item.id">
+      <div
+        v-for="(item, index) in getApiStopStopSummary"
+        :key="`${item.id}-${index}`"
+      >
         <ripa-list :item="item.content"></ripa-list>
       </div>
 
       <div
         v-for="(person, index) in apiStop.listPersonStopped"
-        :key="person.index"
+        :key="`person-${person.index}-${index}`"
       >
         <div class="tw-my-4 tw-text-base tw-font-bold">
           Person {{ index + 1 }}
@@ -55,10 +58,28 @@
           </template>
         </div>
 
-        <div v-for="item in getApiStopPersonSummary(person.id)" :key="item.id">
+        <div
+          v-for="(item, itemIndex) in getApiStopPersonSummary(person.id)"
+          :key="`${item.id}-${person.id}-${itemIndex}`"
+        >
           <ripa-list :item="item.content"></ripa-list>
         </div>
       </div>
+
+      <template v-if="showEbikeSummary">
+        <div class="tw-my-4 tw-text-base tw-font-bold">
+          <span class="tw-text-base tw-font-bold">
+            E-Bike Safety Pilot Program (AB2234)
+          </span>
+        </div>
+
+        <div
+          v-for="(item, index) in getApiStopEbikeSummary"
+          :key="`${item.id}-${index}`"
+        >
+          <ripa-list :item="item.content"></ripa-list>
+        </div>
+      </template>
 
       <template v-if="anyAgencyQuestions">
         <div class="tw-my-4 tw-text-base tw-font-bold">
@@ -75,7 +96,10 @@
           </template>
         </div>
 
-        <div v-for="item in getApiStopAgencyQuestionsSummary" :key="item.id">
+        <div
+          v-for="(item, index) in getApiStopAgencyQuestionsSummary"
+          :key="`${item.id}-${index}`"
+        >
           <ripa-list :item="item.content"></ripa-list>
         </div>
       </template>
@@ -91,7 +115,10 @@
 
         <ripa-list :item="getApiStopEditExplanation"></ripa-list>
 
-        <div v-for="item in getApiStopTelemetrySummary" :key="item.id">
+        <div
+          v-for="(item, index) in getApiStopTelemetrySummary"
+          :key="`${item.id}-${index}`"
+        >
           <ripa-list :item="item.content"></ripa-list>
         </div>
 
@@ -101,8 +128,8 @@
           </div>
 
           <div
-            v-for="item in getApiStopSubmissionSummary(submission)"
-            :key="item.id"
+            v-for="(item, itemIndex) in getApiStopSubmissionSummary(submission)"
+            :key="`${item.id}-${submission.id}-${itemIndex}`"
           >
             <ripa-list :item="item.content"></ripa-list>
           </div>
@@ -114,6 +141,7 @@
 
 <script>
 import RipaList from '@/components/molecules/RipaList'
+import { EBIKE_CLASSES } from '@/constants/form'
 import {
   apiStopStopSummary,
   apiStopPersonSummary,
@@ -130,9 +158,94 @@ export default {
     RipaList,
   },
 
-  inject: ['isAdminEditing', 'isAdminViewing', 'statutes'],
+  inject: ['isAdminEditing', 'isAdminViewing', 'statutes', 'ab2234Enabled'],
 
   computed: {
+    isAb2234Enabled() {
+      const injected = this.ab2234Enabled
+      if (typeof injected === 'boolean') return injected
+      if (injected && typeof injected === 'object' && 'value' in injected) {
+        return !!injected.value
+      }
+      return false
+    },
+
+    showEbikeSummary() {
+      if (!this.isAb2234Enabled) return false
+
+      const people = this.apiStop?.listPersonStopped || []
+      return people.some(p => p?.ebikeInfo?.stopInvolvedEbike === true)
+    },
+
+    getApiStopEbikeSummary() {
+      if (!this.showEbikeSummary) return []
+
+      const people = this.apiStop?.listPersonStopped || []
+      const classNameByValue = new Map(
+        (EBIKE_CLASSES || []).map(c => [c.value, c.name]),
+      )
+
+      const items = []
+
+      people
+        .filter(p => p?.ebikeInfo?.stopInvolvedEbike === true)
+        .forEach((person, idx) => {
+          const ebikeInfo = person.ebikeInfo || {}
+
+          const labelIndex = person.index ?? idx + 1
+          items.push({
+            id: `EBIKE-${labelIndex}-INVOLVED`,
+            content: {
+              marginTop: true,
+              level: 1,
+              header: `Person ${labelIndex} - Stop involved an E-Bike`,
+              detail: 'Yes',
+            },
+          })
+
+          const ebikeClass =
+            typeof ebikeInfo.ebikeClass === 'number'
+              ? ebikeInfo.ebikeClass
+              : Number(ebikeInfo.ebikeClass)
+
+          if (Number.isFinite(ebikeClass)) {
+            items.push({
+              id: `EBIKE-${labelIndex}-CLASS`,
+              content: {
+                level: 1,
+                header: 'E-Bike Class',
+                detail: classNameByValue.get(ebikeClass) || String(ebikeClass),
+              },
+            })
+          }
+
+          if (ebikeInfo.declinedToProvideOrUncooperative === true) {
+            items.push({
+              id: `EBIKE-${labelIndex}-VERIFIED-AGE`,
+              content: {
+                level: 1,
+                header: 'Verified Age',
+                detail: 'Declined to provide / uncooperative',
+              },
+            })
+          } else if (
+            ebikeInfo.verifiedAge !== null &&
+            ebikeInfo.verifiedAge !== undefined
+          ) {
+            items.push({
+              id: `EBIKE-${labelIndex}-VERIFIED-AGE`,
+              content: {
+                level: 1,
+                header: 'Verified Age',
+                detail: ebikeInfo.verifiedAge,
+              },
+            })
+          }
+        })
+
+      return items
+    },
+
     anyAgencyQuestions() {
       const questions = this.apiStop?.listAgencyQuestion || []
       return questions.length > 0

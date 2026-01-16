@@ -2,7 +2,7 @@
   <v-form ref="stepForm" lazy-validation>
     <div
       v-if="$vuetify.breakpoint.mobile"
-      class="tw-flex tw-mb-5 tw-justify-center"
+      class="tw-flex tw-mb-4 tw-justify-center"
     >
       <template v-if="backButtonVisible">
         <v-btn outlined color="primary" class="tw-mr-2" @click="handleBack">

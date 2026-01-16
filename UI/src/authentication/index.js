@@ -33,6 +33,7 @@ export default {
           res.data.Configuration.DisplayBeatsInput?.toUpperCase() === 'TRUE',
         displayDebugger:
           res.data.Configuration.DisplayDebugger?.toUpperCase() === 'TRUE',
+        ab2234Enabled: res.data.Configuration.Ab2234?.toUpperCase() === 'TRUE',
         agencyQuestions: res.data.AgencyQuestions || [],
         environmentName: environmentName.toUpperCase(),
         useOfficerUpn:

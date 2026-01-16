@@ -495,6 +495,28 @@ export default {
   },
 
   methods: {
+    getReasonCode() {
+      const trafficViolationCode =
+        this.model.stopReason?.trafficViolationCode || null
+      const reasonableSuspicionCode =
+        this.model.stopReason?.reasonableSuspicionCode || null
+      const probableCauseCode = this.model.stopReason?.probableCauseCode || null
+
+      if (trafficViolationCode) {
+        return trafficViolationCode
+      }
+
+      if (reasonableSuspicionCode) {
+        return reasonableSuspicionCode
+      }
+
+      if (probableCauseCode) {
+        return probableCauseCode
+      }
+
+      return null
+    },
+
     handleOpenFavorites() {
       this.$emit('on-open-reason-favorites', this.model.stopVersion)
     },

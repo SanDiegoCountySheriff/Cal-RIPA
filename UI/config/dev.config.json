@@ -17,7 +17,8 @@
     "BeatIdNumberOfDigits": 3,
     "DisplayReportingEmail": "True",
     "ReportingEmailAddress": "dsddevops@sdsheriff.org",
-    "MaxBackdateDays": 7
+    "MaxBackdateDays": 7,
+    "Ab2234": "False"
   },
   "AgencyQuestions": []
 }

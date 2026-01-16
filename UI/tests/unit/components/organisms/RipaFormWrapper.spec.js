@@ -58,6 +58,7 @@ describe('Ripa Form Wrapper', () => {
         beats: computed(() => beatsList),
         statutes: computed(() => []),
         displayBeatInput: computed(() => true),
+        ab2234Enabled: computed(() => false),
       },
     })
   }
@@ -86,6 +87,7 @@ describe('Ripa Form Wrapper', () => {
         beats: computed(() => beatsList),
         statutes: computed(() => []),
         displayBeatInput: computed(() => true),
+        ab2234Enabled: computed(() => false),
       },
     })
   }
