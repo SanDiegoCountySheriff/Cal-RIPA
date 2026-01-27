@@ -243,6 +243,10 @@ export default new Vuex.Store({
       return state.apiConfig?.ab2234Enabled || false
     },
 
+    ebikeCitationFollowupUrl: state => {
+      return state.apiConfig?.ebikeCitationFollowupUrl || ''
+    },
+
     environmentName: state => {
       switch (state.apiConfig.environmentName) {
         case 'PROD':

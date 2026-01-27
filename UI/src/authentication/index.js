@@ -48,6 +48,8 @@ export default {
         reportingEmailAddress:
           res.data.Configuration.ReportingEmailAddress ?? '',
         MaxBackdateDays: parseInt(res.data.Configuration.MaxBackdateDays) || 0,
+        ebikeCitationFollowupUrl:
+          res.data.Configuration.EbikeCitationFollowupUrl ?? '',
       })
 
       return new Promise((resolve, reject) => {

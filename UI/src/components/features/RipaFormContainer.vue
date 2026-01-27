@@ -212,6 +212,7 @@ export default {
       displayBeatInput: this.displayBeatInput,
       displayDebugger: this.displayDebugger,
       ab2234Enabled: computed(() => this.ab2234Enabled),
+      ebikeCitationFollowupUrl: computed(() => this.ebikeCitationFollowupUrl),
       displayReportingEmail: this.displayReportingEmail,
       reportingEmailAddress: this.reportingEmailAddress,
       formStepIndex: computed(() => this.formStepIndex),
@@ -277,6 +278,10 @@ export default {
 
     ab2234Enabled() {
       return this.$store.getters?.ab2234Enabled || false
+    },
+
+    ebikeCitationFollowupUrl() {
+      return this.$store.getters?.ebikeCitationFollowupUrl || ''
     },
 
     filteredStatutes() {

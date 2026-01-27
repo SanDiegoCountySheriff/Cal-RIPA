@@ -18,6 +18,7 @@
     "DisplayReportingEmail": "True",
     "ReportingEmailAddress": "dsddevops@sdsheriff.org",
     "MaxBackdateDays": 0,
-    "Ab2234": "False"
+    "Ab2234": "False",
+    "EbikeCitationFollowupUrl": ""
   }
 }
