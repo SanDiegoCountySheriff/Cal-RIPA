@@ -754,6 +754,12 @@ export default {
         perceivedOrKnownDisability: [],
         perceivedRace: [],
         perceivedUnhoused: false,
+        ebikeInfo: {
+          stopInvolvedEbike: null,
+          ebikeClass: null,
+          verifiedAge: null,
+          declinedToProvideOrUncooperative: null,
+        },
       }
       this.stop.stopReason = stopReasonGivenTemplate(this.stop.template)
       this.stop.stopResult = stopResultGivenTemplate(this.stop.template)
@@ -802,6 +808,12 @@ export default {
         perceivedOrKnownDisability: [],
         perceivedRace: [],
         perceivedUnhoused: false,
+        ebikeInfo: {
+          stopInvolvedEbike: null,
+          ebikeClass: null,
+          verifiedAge: null,
+          declinedToProvideOrUncooperative: null,
+        },
       }
       this.stop.stopReason = { ...filteredPerson?.stopReason } || {}
       this.stop.stopResult = { ...filteredPerson?.stopResult } || {}
@@ -921,6 +933,12 @@ export default {
             filteredPerson?.perceivedOrKnownDisability || [],
           perceivedRace: filteredPerson?.perceivedRace || [],
           nonBinaryPerson: filteredPerson?.nonBinaryPerson,
+          ebikeInfo: filteredPerson?.ebikeInfo || {
+            stopInvolvedEbike: null,
+            ebikeClass: null,
+            verifiedAge: null,
+            declinedToProvideOrUncooperative: null,
+          },
         },
         stopReason: filteredPerson?.stopReason || {},
         stopResult: filteredPerson?.stopResult || {},
