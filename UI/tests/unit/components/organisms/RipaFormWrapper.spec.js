@@ -59,6 +59,7 @@ describe('Ripa Form Wrapper', () => {
         statutes: computed(() => []),
         displayBeatInput: computed(() => true),
         ab2234Enabled: computed(() => false),
+        ebikeCitationFollowupUrl: computed(() => ''),
       },
     })
   }
@@ -88,6 +89,7 @@ describe('Ripa Form Wrapper', () => {
         statutes: computed(() => []),
         displayBeatInput: computed(() => true),
         ab2234Enabled: computed(() => false),
+        ebikeCitationFollowupUrl: computed(() => ''),
       },
     })
   }

@@ -625,6 +625,58 @@
       subtitle="Are you sure you want to submit the form?"
     >
     </ripa-confirm-dialog>
+
+    <v-dialog
+      v-if="showEbikeCitationDialog"
+      v-model="showEbikeCitationDialog"
+      max-width="650px"
+      persistent
+    >
+      <v-card>
+        <v-card-title>E-Bike Stop Follow-up</v-card-title>
+
+        <v-card-text>
+          <div class="tw-mb-3">
+            Since this stop involved an E-Bike and resulted in a citation for
+            infraction, it is an AB2234 requirement to provide additional
+            information.
+          </div>
+
+          <div v-if="ebikeCitationFollowupUrl" class="tw-mb-3">
+            <v-btn
+              :href="ebikeCitationFollowupUrl"
+              target="_blank"
+              rel="noopener"
+              color="primary"
+            >
+              Continue to follow-up form
+            </v-btn>
+          </div>
+
+          <div v-else class="tw-mb-3">
+            Follow-up form link is not configured for this environment.
+          </div>
+
+          <div>
+            <v-checkbox
+              v-model="confirmedEbike"
+              label="I Acknowledge."
+            ></v-checkbox>
+          </div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            @click="showEbikeCitationDialog = false"
+            :disabled="!confirmedEbike"
+            text
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -679,8 +731,10 @@ export default {
       showCancelFormDialog: false,
       showCancelActionDialog: false,
       showConfirmDialog: false,
+      showEbikeCitationDialog: false,
       showDeletePersonDialog: false,
       deletePersonId: null,
+      confirmedEbike: false,
     }
   },
 
@@ -700,6 +754,7 @@ export default {
     'isApiUnavailable',
     'displayBeatInput',
     'ab2234Enabled',
+    'ebikeCitationFollowupUrl',
   ],
 
   computed: {
@@ -824,6 +879,39 @@ export default {
   },
 
   methods: {
+    shouldShowEbikeCitationDialog(apiStop) {
+      if (!this.ab2234Enabled) {
+        return false
+      }
+
+      // Only applies to V2 stops where the AB2234 E-bike step can be shown.
+      if (!this.showEbikeStep) {
+        return false
+      }
+
+      const people = apiStop?.listPersonStopped
+      if (!Array.isArray(people) || people.length === 0) {
+        return false
+      }
+
+      return people.some(person => {
+        const ebikeInvolved = person?.ebikeInfo?.stopInvolvedEbike === true
+        if (!ebikeInvolved) {
+          return false
+        }
+
+        const results = person?.listResultOfStop
+        if (!Array.isArray(results)) {
+          return false
+        }
+
+        return results.some(r => {
+          const key = r?.key
+          return key === '3' || key === 3
+        })
+      })
+    },
+
     onGoHome() {
       this.stepIndex = 0
       this.$emit('on-step-index-change', this.stepIndex)
@@ -1039,6 +1127,11 @@ export default {
       this.stepIndex = this.confirmationStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
       const apiStop = this.getApiStop
+
+      if (this.shouldShowEbikeCitationDialog(apiStop)) {
+        this.showEbikeCitationDialog = true
+      }
+
       console.log('Submitted Stop', apiStop)
       this.$emit('on-submit-stop', apiStop)
       this.$emit('on-cancel-form')
