@@ -1423,6 +1423,8 @@ const getFullStopPeopleListedV2 = apiStop => {
 
     const resultsOfStop = anyResultsOfStop ? person.listResultOfStop : []
 
+    const ebikeInfo = person.ebikeInfo || null
+
     return {
       anyDisabilities,
       id: Number(person.id),
@@ -1512,6 +1514,7 @@ const getFullStopPeopleListedV2 = apiStop => {
         custodialArrestCodes: getCodePropValueGivenKeyInArray(resultsOfStop, 6),
         pullFromReasonCode: telemetry?.pullFromReasonCode || false,
       },
+      ebikeInfo,
     }
   })
 }
@@ -1746,6 +1749,7 @@ export const fullStopToStopV2 = fullStop => {
       insideResidence: person.insideResidence,
       perceivedOrKnownDisability: person.perceivedOrKnownDisability || [],
       perceivedRace: person.perceivedRace || [],
+      ebikeInfo: person.ebikeInfo || null,
     },
     stopDate: fullStop.stopDate,
     stopReason: person.stopReason || {},

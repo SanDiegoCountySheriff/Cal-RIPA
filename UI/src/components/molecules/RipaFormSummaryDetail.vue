@@ -174,6 +174,7 @@ export default {
       if (!this.isAb2234Enabled) return false
 
       const people = this.apiStop?.listPersonStopped || []
+
       return people.some(p => p?.ebikeInfo?.stopInvolvedEbike === true)
     },
 
