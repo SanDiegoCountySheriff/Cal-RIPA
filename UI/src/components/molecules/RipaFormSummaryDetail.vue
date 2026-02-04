@@ -225,7 +225,7 @@ export default {
               content: {
                 level: 1,
                 header: 'Verified Age',
-                detail: 'Declined to provide / uncooperative',
+                detail: 'Could Not Verify',
               },
             })
           } else if (

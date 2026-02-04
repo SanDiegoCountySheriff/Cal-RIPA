@@ -112,7 +112,7 @@
                 v-model="
                   model.person.ebikeInfo.declinedToProvideOrUncooperative
                 "
-                label="Declined to provide/uncooperative"
+                label="Could Not Verify"
                 :disabled="disabled"
               >
               </ripa-switch>
