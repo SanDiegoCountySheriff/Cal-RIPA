@@ -518,110 +518,6 @@
     "cssa_subscription_id_uat": {
       "type": "string",
       "defaultValue": "#{CSSA_SUBSCRIPTION_ID_UAT}#"
-    },
-    "cssaStorageAccountName": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_STORAGE_ACCOUNT_NAME}#"
-    },
-    "cssaStorageAccountKey": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
-    },
-    "cssaSpAppId": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_SP_APP_ID}#"
-    },
-    "cssaSpSecret": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_SP_SECRET}#"
-    },
-    "cssaTenantId": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_TENANT_ID}#"
-    },
-    "cssaShdSubscriptionId": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_SHD_SUBSCRIPTION_ID}#"
-    },
-    "cssaResourceGroupName": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_RESOURCE_GROUP_NAME}#"
-    },
-    "cssaCertKeyVaultRg": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_CERT_KEY_VAULT_RG}#"
-    },
-    "cssaCertKeyVaultName": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_CERT_KEY_VAULT_NAME}#"
-    },
-    "cssaCertSecretName": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_CERT_SECRET_NAME}#"
-    },
-    "cssaCertSecretVersion": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_CERT_SECRET_VERSION}#"
-    },
-    "cssaCdnProfileName": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_CDN_PROFILE_NAME}#"
-    },
-    "cssaDnsRootZone": {
-      "type": "secureString",
-      "defaultValue": "#{CSSA_DNS_ROOT_ZONE}#"
-    },
-    "subDomainScriptSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#"
-    },
-    "importAllRipaAppsSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#"
-    },
-    "importApimApisSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-APIMAPIS-PSM1-SAS-URL}#"
-    },
-    "newFunctionHostKeySasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#"
-    },
-    "newRipaApimBackendSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#"
-    },
-    "configJsonSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-CONFIG-JSON-SAS-URL}#"
-    },
-    "domainZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-DOMAIN-ZIP-SAS-URL}#"
-    },
-    "stopZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-STOP-ZIP-SAS-URL}#"
-    },
-    "submissionZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-SUBMISSION-ZIP-SAS-URL}#"
-    },
-    "textanalyticsZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-TEXTANALYTICS-ZIP-SAS-URL}#"
-    },
-    "userprofileZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-USERPROFILE-ZIP-SAS-URL}#"
-    },
-    "uiZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-UI-ZIP-SAS-URL}#"
-    },
-    "templateVersionFormatted": {
-      "type": "secureString",
-      "defaultValue": "#{TEMPLATE_VERSION_FORMATTED}#"
     }
   },
   "variables": {
@@ -3639,8 +3535,8 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-dns-subdomain-runonce-delete-me-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "[parameters('cssaStorageAccountName')]",
-          "storageAccountKey": "[parameters('cssaStorageAccountKey')]"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azCliVersion": "2.23.0",
         "environmentVariables": [
@@ -3650,47 +3546,47 @@
           },
           {
             "name": "CSSA_SP_APP_ID",
-            "secureValue": "[parameters('cssaSpAppId')]"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "[parameters('cssaSpSecret')]"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "[parameters('cssaTenantId')]"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "CSSA_SHD_SUBSCRIPTION_ID",
-            "value": "[parameters('cssaShdSubscriptionId')]"
+            "value": "#{CSSA_SHD_SUBSCRIPTION_ID}#"
           },
           {
             "name": "CSSA_RESOURCE_GROUP_NAME",
-            "value": "[parameters('cssaResourceGroupName')]"
+            "value": "#{CSSA_RESOURCE_GROUP_NAME}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_RG",
-            "value": "[parameters('cssaCertKeyVaultRg')]"
+            "value": "#{CSSA_CERT_KEY_VAULT_RG}#"
           },
           {
             "name": "CSSA_CERT_KEY_VAULT_NAME",
-            "value": "[parameters('cssaCertKeyVaultName')]"
+            "value": "#{CSSA_CERT_KEY_VAULT_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_NAME",
-            "value": "[parameters('cssaCertSecretName')]"
+            "value": "#{CSSA_CERT_SECRET_NAME}#"
           },
           {
             "name": "CSSA_CERT_SECRET_VERSION",
-            "value": "[parameters('cssaCertSecretVersion')]"
+            "value": "#{CSSA_CERT_SECRET_VERSION}#"
           },
           {
             "name": "CSSA_CDN_PROFILE_NAME",
-            "value": "[parameters('cssaCdnProfileName')]"
+            "value": "#{CSSA_CDN_PROFILE_NAME}#"
           },
           {
             "name": "CSSA_DNS_ROOT_ZONE",
-            "value": "[parameters('cssaDnsRootZone')]"
+            "value": "#{CSSA_DNS_ROOT_ZONE}#"
           },
           {
             "name": "AGENCY_ORI",
@@ -3737,7 +3633,7 @@
             "value": "[parameters('certificate_secret_name')]"
           }
         ],
-        "primaryScriptUri": "[parameters('subDomainScriptSasUrl')]",
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPA-CSSA-SUB-DOMAIN-SH-SAS-URL}#",
         "supportingScriptUris": [],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
@@ -3771,22 +3667,22 @@
           "containerGroupName": "[concat(parameters('agency_abbreviation'), '-cssa-app-import-runonce-delete-me-dps')]"
         },
         "storageAccountSettings": {
-          "storageAccountName": "[parameters('cssaStorageAccountName')]",
-          "storageAccountKey": "[parameters('cssaStorageAccountKey')]"
+          "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
+          "storageAccountKey": "#{CSSA_STORAGE_ACCOUNT_KEY}#"
         },
         "azPowerShellVersion": "3.0",
         "environmentVariables": [
           {
             "name": "CSSA_SP_APP_ID",
-            "secureValue": "[parameters('cssaSpAppId')]"
+            "secureValue": "#{CSSA_SP_APP_ID}#"
           },
           {
             "name": "CSSA_SP_SECRET",
-            "secureValue": "[parameters('cssaSpSecret')]"
+            "secureValue": "#{CSSA_SP_SECRET}#"
           },
           {
             "name": "CSSA_TENANT_ID",
-            "value": "[parameters('cssaTenantId')]"
+            "value": "#{CSSA_TENANT_ID}#"
           },
           {
             "name": "APP_SUBSCRIPTION_ID",
@@ -3866,21 +3762,21 @@
           },
           {
             "name": "TEMPLATE_VERSION_FORMATTED",
-            "value": "[parameters('templateVersionFormatted')]"
+            "value": "#{TEMPLATE_VERSION_FORMATTED}#"
           }
         ],
-        "primaryScriptUri": "[parameters('importAllRipaAppsSasUrl')]",
+        "primaryScriptUri": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#",
         "supportingScriptUris": [
-          "[parameters('importApimApisSasUrl')]",
-          "[parameters('newFunctionHostKeySasUrl')]",
-          "[parameters('newRipaApimBackendSasUrl')]",
-          "[parameters('configJsonSasUrl')]",
-          "[parameters('domainZipSasUrl')]",
-          "[parameters('stopZipSasUrl')]",
-          "[parameters('submissionZipSasUrl')]",
-          "[parameters('textanalyticsZipSasUrl')]",
-          "[parameters('userprofileZipSasUrl')]",
-          "[parameters('uiZipSasUrl')]"
+          "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-APIMAPIS-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-CONFIG-JSON-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-DOMAIN-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-STOP-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-SUBMISSION-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-TEXTANALYTICS-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-USERPROFILE-ZIP-SAS-URL}#",
+          "#{__TEMPLATE_VERSION_FORMATTED__-UI-ZIP-SAS-URL}#"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
