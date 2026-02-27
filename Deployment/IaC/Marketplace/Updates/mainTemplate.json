@@ -8,6 +8,20 @@
       "type": "string",
       "defaultValue": "[utcNow('yyyyMMDDHHmmssFFFF')]"
     },
+    "_artifactsLocation": {
+      "type": "string",
+      "defaultValue": "[deployment().properties.templateLink.uri]",
+      "metadata": {
+        "description": "The base URI where artifacts required by this template are located."
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "secureString",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The sasToken required to access _artifactsLocation. When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+      }
+    },
     "cssaStorageAccountName": {
       "type": "secureString",
       "defaultValue": "#{CSSA_STORAGE_ACCOUNT_NAME}#"
@@ -27,46 +41,6 @@
     "cssaTenantId": {
       "type": "secureString",
       "defaultValue": "#{CSSA_TENANT_ID}#"
-    },
-    "importAllRipaAppsSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-ALLRIPAAPPLICATIONS-PS1-SAS-URL}#"
-    },
-    "importApimApisSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-IMPORT-APIMAPIS-PSM1-SAS-URL}#"
-    },
-    "newFunctionHostKeySasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-FUNCTIONHOSTKEY-PSM1-SAS-URL}#"
-    },
-    "newRipaApimBackendSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-NEW-RIPAAPIMBACKEND-PSM1-SAS-URL}#"
-    },
-    "domainZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-DOMAIN-ZIP-SAS-URL}#"
-    },
-    "stopZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-STOP-ZIP-SAS-URL}#"
-    },
-    "submissionZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-SUBMISSION-ZIP-SAS-URL}#"
-    },
-    "textanalyticsZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-TEXTANALYTICS-ZIP-SAS-URL}#"
-    },
-    "userprofileZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-USERPROFILE-ZIP-SAS-URL}#"
-    },
-    "uiZipSasUrl": {
-      "type": "secureString",
-      "defaultValue": "#{__TEMPLATE_VERSION_FORMATTED__-UI-ZIP-SAS-URL}#"
     }
   },
   "variables": {},
@@ -115,17 +89,17 @@
             "value": "False"
           }
         ],
-        "primaryScriptUri": "[parameters('importAllRipaAppsSasUrl')]",
+        "primaryScriptUri": "[uri(parameters('_artifactsLocation'), concat('Import-AllRIPAApplications.ps1', parameters('_artifactsLocationSasToken')))]",
         "supportingScriptUris": [
-          "[parameters('importApimApisSasUrl')]",
-          "[parameters('newFunctionHostKeySasUrl')]",
-          "[parameters('newRipaApimBackendSasUrl')]",
-          "[parameters('domainZipSasUrl')]",
-          "[parameters('stopZipSasUrl')]",
-          "[parameters('submissionZipSasUrl')]",
-          "[parameters('textanalyticsZipSasUrl')]",
-          "[parameters('userprofileZipSasUrl')]",
-          "[parameters('uiZipSasUrl')]"
+          "[uri(parameters('_artifactsLocation'), concat('Import-ApimApis.psm1', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('New-FunctionHostKey.psm1', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('New-RIPAApimBackend.psm1', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('domain.zip', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('stop.zip', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('submission.zip', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('textanalytics.zip', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('userprofile.zip', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('ui.zip', parameters('_artifactsLocationSasToken')))]"
         ],
         "timeout": "PT4H",
         "cleanupPreference": "OnExpiration",
