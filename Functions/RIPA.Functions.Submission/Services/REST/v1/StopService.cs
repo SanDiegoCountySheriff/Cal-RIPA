@@ -55,6 +55,11 @@ public class StopService : IStopService
 
     public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
     {
+        if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new List<Common.Models.Submission>();
+        }
+
         var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
 
         foreach (var submission in pendingSubmissions)
