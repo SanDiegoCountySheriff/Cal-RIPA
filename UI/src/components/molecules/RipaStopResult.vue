@@ -76,7 +76,7 @@
             v-model="model.stopResult.anyResultsOfStop"
             :max-width="200"
             label="Any Results of Stop?"
-            @input="handleUpdateModel"
+            @input="handleUpdateModelV2"
           ></ripa-switch>
 
           <template
