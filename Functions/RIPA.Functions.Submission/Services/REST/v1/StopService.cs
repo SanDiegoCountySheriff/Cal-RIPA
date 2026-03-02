@@ -21,22 +21,23 @@ public class StopService : IStopService
 
     public Stop NewSubmission(Stop stop, DateTime dateSubmitted, Guid submissionId, string fileName)
     {
-        if (stop.Status == SubmissionStatus.Pending.ToString())
+        if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new List<Common.Models.Submission>();
+        }
+
+        if (stop.Status == SubmissionStatus.Pending.ToString() || stop.Status == SubmissionStatus.Unsubmitted.ToString())
         {
             stop.Status = SubmissionStatus.Submitted.ToString();
         }
-        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
+        else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString() || stop.Status == SubmissionStatus.Unsubmitted_NFIA.ToString())
         {
             stop.Status = SubmissionStatus.Submitted_NFIA.ToString();
         }
 
-        if (stop.Status != SubmissionStatus.Submitted_NFIA.ToString() && stop.ListSubmission != null && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count > 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
+        if (stop.Status != SubmissionStatus.Submitted_NFIA.ToString() && stop.ListSubmission.Any(x => x.ListSubmissionError == null || x.ListSubmissionError.Count == 0 || x.ListSubmissionError.Any(y => !Enum.GetNames(typeof(SubmissionErrorCode)).Contains(y.Code))))
         {
             stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Resubmitted);
-        }
-        else if (stop.ListSubmission == null)
-        {
-            stop.ListSubmission = new List<Common.Models.Submission>();
         }
 
         var submission = new Common.Models.Submission
@@ -54,6 +55,11 @@ public class StopService : IStopService
 
     public Stop ErrorSubmission(Stop stop, SubmissionError submissionError, string stopStatus)
     {
+        if (stop.ListSubmission == null)
+        {
+            stop.ListSubmission = new List<Common.Models.Submission>();
+        }
+
         var pendingSubmissions = stop.ListSubmission.Where(x => x.FileName.Contains(submissionError.FileName));
 
         foreach (var submission in pendingSubmissions)
