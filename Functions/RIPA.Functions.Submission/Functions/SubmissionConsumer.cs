@@ -275,27 +275,16 @@ public class SubmissionConsumer
                 SubmissionId = submissionId
             };
 
+            var isNfia = stop.Nfia == true;
+            var errorStatus = isNfia ? SubmissionStatus.Failed_NFIA.ToString() : SubmissionStatus.Failed.ToString();
+
             if (stop.StopVersion == StopVersion.V2)
             {
-                if (stop.Status == SubmissionStatus.Pending.ToString())
-                {
-                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Failed.ToString()));
-                }
-                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
-                {
-                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Failed_NFIA.ToString()));
-                }
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, errorStatus));
             }
             else
             {
-                if (stop.Status == SubmissionStatus.Pending.ToString())
-                {
-                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Failed.ToString()));
-                }
-                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
-                {
-                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Failed_NFIA.ToString()));
-                }
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, errorStatus));
             }
 
             return true;
@@ -363,17 +352,6 @@ public class SubmissionConsumer
         catch (Exception ex)
         {
             log.LogError($"Exception: {ex} --> occurred during UploadSftpFile with stop id {stopId} : {runId}");
-            stop.Status = Enum.GetName(typeof(SubmissionStatus), SubmissionStatus.Unsubmitted);
-
-            if (stop.StopVersion == StopVersion.V2)
-            {
-                await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);
-            }
-            else
-            {
-                await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
-            }
-
             return false;
         }
     }
@@ -431,27 +409,16 @@ public class SubmissionConsumer
                 SubmissionId = submissionId
             };
 
+            var isNfia = stop.Nfia == true;
+            var errorStatus = isNfia ? SubmissionStatus.Unsubmitted_NFIA.ToString() : SubmissionStatus.Unsubmitted.ToString();
+
             if (stop.StopVersion == StopVersion.V2)
             {
-                if (stop.Status == SubmissionStatus.Pending.ToString())
-                {
-                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Unsubmitted.ToString()));
-                }
-                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
-                {
-                    await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, SubmissionStatus.Unsubmitted_NFIA.ToString()));
-                }
+                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, errorStatus));
             }
             else
             {
-                if (stop.Status == SubmissionStatus.Pending.ToString())
-                {
-                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Unsubmitted.ToString()));
-                }
-                else if (stop.Status == SubmissionStatus.Pending_NFIA.ToString())
-                {
-                    await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, SubmissionStatus.Unsubmitted_NFIA.ToString()));
-                }
+                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, errorStatus));
             }
             return;
         }
