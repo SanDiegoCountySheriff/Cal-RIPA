@@ -38,6 +38,7 @@
       @handle-get-pii-entities="handleGetPiiEntities"
       @handle-mark-false-positive="handleMarkFalsePositive"
       @handle-review-stop="handleReviewStop"
+      @handle-seed-stops="handleSeedStops"
     ></ripa-admin-wrapper>
     <v-dialog v-model="submitDialog" max-width="400">
       <v-card>
@@ -285,6 +286,9 @@ export default {
     },
     handleReviewStop(data) {
       this.$emit('handle-review-stop', data)
+    },
+    handleSeedStops(count) {
+      this.$emit('handle-seed-stops', count)
     },
     handleUpdateSavedFilter(val) {
       this.$emit('handleUpdateSavedFilter', val)

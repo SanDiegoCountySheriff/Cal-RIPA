@@ -38,6 +38,7 @@
       @handle-get-pii-entities="handleGetPiiEntities"
       @handle-mark-false-positive="handleMarkFalsePositive"
       @handle-review-stop="handleReviewStop"
+      @handle-seed-stops="handleSeedStops"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -87,6 +88,9 @@ export default {
       'stopQueryData',
       'resetPagination',
       'piiEntities',
+      'mappedVersion',
+      'mappedFormStatutes',
+      'mappedFormCountyCities',
     ]),
   },
 
@@ -117,12 +121,41 @@ export default {
       'getPiiEntities',
       'markFalsePositive',
       'getAdminStop',
+      'seedStops',
     ]),
 
     async handleRemoveOfficerGender() {
       this.loading = true
       this.removeOfficerGender()
       this.loading = false
+    },
+
+    async handleSeedStops(count) {
+      const statute = (this.mappedFormStatutes || []).find(s => !s.repealed)
+      if (!statute) {
+        this.snackbarText = 'No valid statute codes found. Please load domain data first.'
+        this.snackbarVisible = true
+        return
+      }
+      const city = (this.mappedFormCountyCities || []).find(c => c.id)
+      if (!city) {
+        this.snackbarText = 'No valid cities found. Please load domain data first.'
+        this.snackbarVisible = true
+        return
+      }
+      this.loading = true
+      const result = await this.seedStops({
+        count,
+        version: this.mappedVersion,
+        statuteCode: statute.code.toString(),
+        statuteText: statute.fullName,
+        cityCode: city.id,
+        cityText: city.fullName,
+      })
+      this.loading = false
+      this.snackbarText = result
+      this.snackbarVisible = true
+      await this.getAdminStops({ version: this.mappedVersion })
     },
 
     async handleCallErrorCodeSearch(val) {

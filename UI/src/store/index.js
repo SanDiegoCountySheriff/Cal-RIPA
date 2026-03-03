@@ -1962,6 +1962,30 @@ export default new Vuex.Store({
         })
     },
 
+    seedStops({ state }, { count, version, statuteCode, statuteText, cityCode, cityText }) {
+      return axios
+        .post(
+          `${state.apiConfig.apiBaseUrl}stop/v${version}/PostSeedStops`,
+          { count, statuteCode, statuteText, cityCode, cityText },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Ocp-Apim-Subscription-Key': state.apiConfig.apiSubscription,
+              'Cache-Control': 'no-cache',
+            },
+          },
+        )
+        .then(response => {
+          return `${response.data} stop${response.data === 1 ? '' : 's'} created`
+        })
+        .catch(err => {
+          if (err.response?.status === 400) {
+            return `Error: ${err.response.data}`
+          }
+          return 'There was an error seeding stops'
+        })
+    },
+
     setPiiServiceAvailable({ commit }, value) {
       commit('updatePiiServiceAvailable', value)
     },
