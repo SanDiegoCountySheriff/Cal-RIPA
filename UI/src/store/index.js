@@ -1962,11 +1962,11 @@ export default new Vuex.Store({
         })
     },
 
-    seedStops({ state }, { count, version, statuteCode, statuteText }) {
+    seedStops({ state }, { count, version, statuteCode, statuteText, cityCode, cityText }) {
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}stop/v${version}/PostSeedStops`,
-          { count, statuteCode, statuteText },
+          { count, statuteCode, statuteText, cityCode, cityText },
           {
             headers: {
               'Content-Type': 'application/json',

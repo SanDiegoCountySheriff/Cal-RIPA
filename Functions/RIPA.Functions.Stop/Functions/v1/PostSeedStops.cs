@@ -88,6 +88,11 @@ public class PostSeedStops
             return new BadRequestObjectResult("A valid statute code is required");
         }
 
+        if (string.IsNullOrEmpty(request.CityCode))
+        {
+            return new BadRequestObjectResult("A valid city code is required");
+        }
+
         Common.Models.v1.UserProfile userProfile;
         try
         {
@@ -107,7 +112,7 @@ public class PostSeedStops
         for (int i = 0; i < request.Count; i++)
         {
             string time = $"{(12 + i / 60) % 24:D2}:{i % 60:D2}";
-            var stop = BuildSeedStop(userProfile, ori, today, time, request.StatuteCode, request.StatuteText);
+            var stop = BuildSeedStop(userProfile, ori, today, time, request.StatuteCode, request.StatuteText, request.CityCode, request.CityText);
             try
             {
                 await _stopCosmosDbService.UpdateStopAsync(stop);
@@ -128,7 +133,9 @@ public class PostSeedStops
         string date,
         string time,
         string statuteCode,
-        string statuteText)
+        string statuteText,
+        string cityCode,
+        string cityText)
     {
         return new Common.Models.v1.Stop
         {
@@ -154,8 +161,8 @@ public class PostSeedStops
                 {
                     Codes = new Codes
                     {
-                        Code = "001",
-                        Text = "San Diego"
+                        Code = cityCode,
+                        Text = cityText
                     }
                 },
                 School = false,

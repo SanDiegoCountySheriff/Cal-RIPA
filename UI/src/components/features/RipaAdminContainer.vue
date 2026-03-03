@@ -90,6 +90,7 @@ export default {
       'piiEntities',
       'mappedVersion',
       'mappedFormStatutes',
+      'mappedFormCountyCities',
     ]),
   },
 
@@ -136,12 +137,20 @@ export default {
         this.snackbarVisible = true
         return
       }
+      const city = (this.mappedFormCountyCities || []).find(c => c.id)
+      if (!city) {
+        this.snackbarText = 'No valid cities found. Please load domain data first.'
+        this.snackbarVisible = true
+        return
+      }
       this.loading = true
       const result = await this.seedStops({
         count,
         version: this.mappedVersion,
         statuteCode: statute.code.toString(),
         statuteText: statute.fullName,
+        cityCode: city.id,
+        cityText: city.fullName,
       })
       this.loading = false
       this.snackbarText = result

@@ -51,6 +51,9 @@ describe('Ripa Admin Container', () => {
       mappedFormStatutes: () => [
         { code: 12345, fullName: 'CVC 12345 Test Statute', repealed: false },
       ],
+      mappedFormCountyCities: () => [
+        { id: 'SAN DIEGO', fullName: 'SAN DIEGO' },
+      ],
     }
     store = new Vuex.Store({
       actions,
