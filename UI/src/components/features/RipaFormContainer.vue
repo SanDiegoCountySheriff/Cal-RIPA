@@ -1279,7 +1279,9 @@ export default {
       if (parsedStop && parsedFullStop) {
         localStorage.removeItem('ripa_form_saved_stop')
         localStorage.removeItem('ripa_form_saved_full_stop')
-        this.handleStepIndexChange(parsedStop.stopVersion === 2 ? 8 : 7)
+        this.handleStepIndexChange(
+          parsedStop.stopVersion === 2 && this.ab2234Enabled ? 8 : 7,
+        )
         this.stop = parsedStop
         this.fullStop = parsedFullStop
       }
