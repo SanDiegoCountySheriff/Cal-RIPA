@@ -7,6 +7,61 @@
       <v-tab to="/admin/domains">Domains</v-tab>
       <v-tab to="/admin/cpra">CPRA Report</v-tab>
       <v-tab to="/admin/piiReview">PII Review</v-tab>
+      <v-spacer></v-spacer>
+      <v-dialog
+        v-if="environmentName === 'DEV'"
+        v-model="seedStopsDialog"
+        max-width="400px"
+        persistent
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="warning"
+            dark
+            class="tw-mb-2 mr-4"
+            v-bind="attrs"
+            v-on="on"
+          >
+            Seed Stops
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span>Seed Stops</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <p>Creates test stops on the server for the current user.</p>
+                  <v-text-field
+                    v-model.number="seedStopsCount"
+                    label="Number of stops (1-100)"
+                    type="number"
+                    min="1"
+                    max="100"
+                    :rules="seedStopsCountRules"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="closeSeedStopsDialog">
+              Cancel
+            </v-btn>
+            <v-btn
+              :disabled="isSeedStopsInvalid"
+              color="blue darken-1"
+              text
+              @click="confirmSeedStops"
+            >
+              Create
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-tabs>
 
     <v-tabs-items v-model="tabLevel1">
@@ -228,6 +283,8 @@ import RipaPiiReview from '@/components/molecules/RipaPiiReview'
 export default {
   name: 'ripa-admin-wrapper',
 
+  inject: ['environmentName'],
+
   components: {
     RipaBeatsGrid,
     RipaCitiesGrid,
@@ -248,6 +305,8 @@ export default {
       tabLevel3: 0,
       fileDialog: false,
       domainFile: null,
+      seedStopsDialog: false,
+      seedStopsCount: 10,
     }
   },
 
@@ -278,9 +337,30 @@ export default {
         this.domainFile.name.split('.').pop() !== 'xlsx'
       )
     },
+    seedStopsCountRules() {
+      return [
+        v => !!v || 'Count is required',
+        v => (v >= 1 && v <= 100) || 'Count must be between 1 and 100',
+      ]
+    },
+    isSeedStopsInvalid() {
+      return (
+        !this.seedStopsCount ||
+        this.seedStopsCount < 1 ||
+        this.seedStopsCount > 100
+      )
+    },
   },
 
   methods: {
+    closeSeedStopsDialog() {
+      this.seedStopsDialog = false
+      this.seedStopsCount = 10
+    },
+    confirmSeedStops() {
+      this.$emit('handle-seed-stops', this.seedStopsCount)
+      this.closeSeedStopsDialog()
+    },
     handleRemoveOfficerGender() {
       this.$emit('handle-remove-officer-gender')
     },

@@ -38,6 +38,7 @@
       @handle-get-pii-entities="handleGetPiiEntities"
       @handle-mark-false-positive="handleMarkFalsePositive"
       @handle-review-stop="handleReviewStop"
+      @handle-seed-stops="handleSeedStops"
     ></ripa-admin-template>
 
     <ripa-snackbar :text="snackbarText" v-model="snackbarVisible">
@@ -87,6 +88,7 @@ export default {
       'stopQueryData',
       'resetPagination',
       'piiEntities',
+      'mappedVersion',
     ]),
   },
 
@@ -117,12 +119,25 @@ export default {
       'getPiiEntities',
       'markFalsePositive',
       'getAdminStop',
+      'seedStops',
     ]),
 
     async handleRemoveOfficerGender() {
       this.loading = true
       this.removeOfficerGender()
       this.loading = false
+    },
+
+    async handleSeedStops(count) {
+      this.loading = true
+      const result = await this.seedStops({
+        count,
+        version: this.mappedVersion,
+      })
+      this.loading = false
+      this.snackbarText = result
+      this.snackbarVisible = true
+      await this.getAdminStops({ version: this.mappedVersion })
     },
 
     async handleCallErrorCodeSearch(val) {

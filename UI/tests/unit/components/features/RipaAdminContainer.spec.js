@@ -30,6 +30,7 @@ describe('Ripa Admin Container', () => {
       downloadCpraReport: jest.fn(() => Promise.resolve('message')),
       uploadDomain: jest.fn(() => Promise.resolve('message')),
       uploadUsers: jest.fn(() => Promise.resolve('message')),
+      seedStops: jest.fn(() => Promise.resolve('10 stops created')),
     }
     getters = {
       mappedAdminBeats: jest.fn(),
@@ -46,6 +47,7 @@ describe('Ripa Admin Container', () => {
       mappedAdminHistoricalCpraReports: jest.fn(),
       mappedAdminCpraReportStats: jest.fn(),
       stopQueryData: jest.fn(),
+      mappedVersion: () => 2,
     }
     store = new Vuex.Store({
       actions,
@@ -159,5 +161,14 @@ describe('Ripa Admin Container', () => {
 
       expect(wrapper.vm.snackbarText).toEqual(test.expected)
     })
+  })
+
+  it('should display toast message for handleSeedStops', async () => {
+    wrapper = factory()
+    const expected = '10 stops created'
+
+    await wrapper.vm.handleSeedStops(10)
+
+    expect(wrapper.vm.snackbarText).toEqual(expected)
   })
 })
