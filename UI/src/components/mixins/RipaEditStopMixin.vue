@@ -126,6 +126,8 @@ export default {
       localStorage.setItem('ripa_errored_stop_internal_id', internalId)
       if (fullStop.stopVersion === 1) {
         localStorage.setItem('ripa_form_step_index', '7')
+      } else if (!this.ab2234Enabled) {
+        localStorage.setItem('ripa_form_step_index', '7')
       } else {
         localStorage.setItem('ripa_form_step_index', '8')
       }
