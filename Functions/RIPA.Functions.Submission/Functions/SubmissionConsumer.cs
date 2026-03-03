@@ -8,8 +8,6 @@ using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Submission.Models.Interfaces;
-using RIPA.Functions.Submission.Models.v1;
-using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
 using RIPA.Functions.Submission.Utility;
 using System;
@@ -27,20 +25,19 @@ public class SubmissionConsumer
     private readonly ISftpService _sftpService;
     private readonly Services.REST.v1.Contracts.IStopService _stopV1Service;
     private readonly Services.REST.v2.Contracts.IStopService _stopV2Service;
-    readonly ISubmissionServiceBusService _submissionServiceBusService;
     private readonly string _storageConnectionString;
     private readonly string _storageContainerNamePrefix;
     private readonly string _sftpInputPath;
     private readonly BlobContainerClient _blobContainerClient;
     private readonly BlobUtilities blobUtilities = new BlobUtilities();
+    private readonly int _maxDeliveryAttempts;
 
     public SubmissionConsumer(
         IStopCosmosDbService<Common.Models.v1.Stop> stopV1CosmosDbService,
         IStopCosmosDbService<Common.Models.v2.Stop> stopV2CosmosDbService,
         ISftpService sftpService,
         Services.REST.v1.Contracts.IStopService stopV1Service,
-        Services.REST.v2.Contracts.IStopService stopV2Service,
-        ISubmissionServiceBusService submissionServiceBusService
+        Services.REST.v2.Contracts.IStopService stopV2Service
     )
     {
         _stopV1CosmosDbService = stopV1CosmosDbService;
@@ -48,11 +45,13 @@ public class SubmissionConsumer
         _sftpService = sftpService;
         _stopV1Service = stopV1Service;
         _stopV2Service = stopV2Service;
-        _submissionServiceBusService = submissionServiceBusService;
         _storageConnectionString = Environment.GetEnvironmentVariable("RipaStorage");
         _storageContainerNamePrefix = Environment.GetEnvironmentVariable("ContainerPrefixSubmissions");
         _sftpInputPath = Environment.GetEnvironmentVariable("SftpInputPath");
         _blobContainerClient = GetBlobContainerClient();
+
+        var maxDeliveryAttemptsRaw = Environment.GetEnvironmentVariable("SubmissionMaxDeliveryAttempts");
+        _maxDeliveryAttempts = int.TryParse(maxDeliveryAttemptsRaw, out var parsedMax) && parsedMax > 0 ? parsedMax : 10;
     }
 
     [FunctionName("SubmissionConsumer")]
@@ -71,115 +70,181 @@ public class SubmissionConsumer
 
         log.LogInformation($"Received message count: {messages.Length} : {runId}");
 
-        using var sftpBatch = await _sftpService.BeginBatch();
+        ISftpBatch sftpBatch = null;
 
-        foreach (var message in messages)
+        try
         {
-            Stopwatch stopStopwatch = new Stopwatch();
-            stopStopwatch.Start();
-
-            await MessageActions.RenewMessageLockAsync(message);
-
-            SubmissionMessage submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(message.Body));
-
-            if (submissionMessage == null)
+            foreach (var message in messages)
             {
-                await MessageActions.DeadLetterMessageAsync(message);
+                Stopwatch stopStopwatch = new Stopwatch();
+                stopStopwatch.Start();
 
-                continue;
-            }
+                SubmissionMessage submissionMessage = null;
+                IStop stop = null;
+                string fileName = null;
 
-            // Get Stop
-            IStop stop = await GetStop(log, submissionMessage.StopId, runId, submissionMessage.StopVersion);
-
-            if (stop == null)
-            {
-                log.LogWarning($"Failed to find stop: {submissionMessage.StopId} : {runId}");
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            DateTime dateSubmitted = DateTime.UtcNow;
-
-            // Get File Name
-            string fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id, runId);
-            log.LogInformation($"Using filename: {fileName} : {runId}");
-            if (fileName == null)
-            {
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            // Get Doj Stop
-            IDojStop dojStop = GetDojStop(log, stop, runId);
-
-            if (dojStop == null)
-            {
-                // if the cast error fails report, retry the message
-                if (!await HandledDojCastError(log, stop, dateSubmitted, fileName, submissionMessage.SubmissionId, runId))
+                try
                 {
-                    await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
+                    await MessageActions.RenewMessageLockAsync(message);
 
-                    continue;
-                }
-                else
-                {
+                    submissionMessage = DeserializeQueueItem(log, Encoding.UTF8.GetString(message.Body));
+
+                    if (submissionMessage == null)
+                    {
+                        await MessageActions.DeadLetterMessageAsync(message);
+                        continue;
+                    }
+
+                    // Get Stop
+                    stop = await GetStop(log, submissionMessage.StopId, runId, submissionMessage.StopVersion);
+
+                    if (stop == null)
+                    {
+                        log.LogWarning($"Failed to find stop: {submissionMessage.StopId} : {runId}");
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Stop not found", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
+                    DateTime dateSubmitted = DateTime.UtcNow;
+
+                    // Get File Name
+                    fileName = GetFileName(log, submissionMessage.SubmissionId, dateSubmitted, stop.Ori, stop.Id, runId);
+                    log.LogInformation($"Using filename: {fileName} : {runId}");
+                    if (fileName == null)
+                    {
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Failed to build file name", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
+                    // Get Doj Stop
+                    IDojStop dojStop = GetDojStop(log, stop, runId);
+
+                    if (dojStop == null)
+                    {
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Failed to convert stop to DOJ payload", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
+                    //Get File Bytes
+                    byte[] bytes = GetFileBytes(log, dojStop, runId);
+
+                    if (bytes == null)
+                    {
+                        log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID} : {runId}");
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Failed to serialize DOJ stop", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
+                    //Upload Blob
+                    if (!await UploadBlob(log, bytes, fileName, stop.Id, runId))
+                    {
+                        log.LogWarning($"Failed to upload blob: {stop.Id} : {runId}");
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Blob upload failed", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
+                    sftpBatch = await EnsureSftpBatchAsync(sftpBatch, log, runId);
+                    if (!await UploadSftpFile(log, sftpBatch, bytes, fileName, stop.Id, runId, stop))
+                    {
+                        log.LogWarning($"Failed to upload to FTP. Reconnecting and retrying once: {stop.Id} : {runId}");
+                        await RemoveBlob(log, fileName, stop.Id, runId); // delete the blob to clean up the failed run
+
+                        sftpBatch.Dispose();
+                        sftpBatch = await EnsureSftpBatchAsync(null, log, runId);
+
+                        if (!await UploadSftpFile(log, sftpBatch, bytes, fileName, stop.Id, runId, stop))
+                        {
+                            await HandleFailureAsync(log, MessageActions, message, runId, "SFTP upload failed", stop, submissionMessage.SubmissionId, fileName);
+                            continue;
+                        }
+                    }
+
+                    if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
+                    {
+                        log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
+                        await RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated.
+                        await HandleFailureAsync(log, MessageActions, message, runId, "Failed to persist DOJ submit success", stop, submissionMessage.SubmissionId, fileName);
+                        continue;
+                    }
+
                     await MessageActions.CompleteMessageAsync(message); // message complete
 
-                    continue;
+                    stopStopwatch.Stop();
+                    log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
+                }
+                catch (Exception ex)
+                {
+                    await HandleFailureAsync(log, MessageActions, message, runId, "Unhandled exception while processing message", stop, submissionMessage?.SubmissionId ?? Guid.Empty, fileName, ex);
                 }
             }
-
-            //Get File Bytes
-            byte[] bytes = GetFileBytes(log, dojStop, runId);
-
-            if (bytes == null)
-            {
-                log.LogWarning($"Failed to get file contents: {dojStop.LEARecordID} : {runId}");
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            //Upload Blob
-            if (!await UploadBlob(log, bytes, fileName, stop.Id, runId))
-            {
-                log.LogWarning($"Failed to upload blob: {stop.Id} : {runId}");
-                await HandleFailedToSubmit(log, DateTime.Now, fileName, submissionMessage.SubmissionId, stop);
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            if (!await UploadSftpFile(log, sftpBatch, bytes, fileName, stop.Id, runId, stop))
-            {
-                log.LogWarning($"Failed to upload to FTP: {stop.Id} : {runId}");
-                await RemoveBlob(log, fileName, stop.Id, runId); // delete the blob to clean up the failed run
-                await HandleFailedToSubmit(log, DateTime.Now, fileName, submissionMessage.SubmissionId, stop);
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
-            {
-                log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
-                await RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated. 
-                await MessageActions.AbandonMessageAsync(message); // allows for retry to occur. 
-
-                continue;
-            }
-
-            await MessageActions.CompleteMessageAsync(message); // message complete
-
-            stopStopwatch.Stop();
-            log.LogInformation($"Finished processing STOP : {stop.Id} : {stopStopwatch.ElapsedMilliseconds} : {runId}");
+        }
+        finally
+        {
+            sftpBatch?.Dispose();
         }
 
         runStopwatch.Stop();
         log.LogInformation($"TimersSubmissionConsumer finished: {runStopwatch.ElapsedMilliseconds} : {runId}");
+    }
+
+    private async Task<ISftpBatch> EnsureSftpBatchAsync(ISftpBatch sftpBatch, ILogger log, string runId)
+    {
+        if (sftpBatch != null)
+        {
+            return sftpBatch;
+        }
+
+        log.LogInformation("Opening SFTP batch connection for submission run {runId}", runId);
+        return await _sftpService.BeginBatch();
+    }
+
+    private bool IsFinalAttempt(ServiceBusReceivedMessage message)
+    {
+        return message.DeliveryCount >= _maxDeliveryAttempts;
+    }
+
+    private async Task HandleFailureAsync(
+        ILogger log,
+        ServiceBusMessageActions messageActions,
+        ServiceBusReceivedMessage message,
+        string runId,
+        string reason,
+        IStop stop,
+        Guid submissionId,
+        string fileName,
+        Exception ex = null)
+    {
+        if (ex != null)
+        {
+            log.LogError(ex, "Submission processing failure. reason={reason} stopId={stopId} deliveryCount={deliveryCount}/{max} runId={runId}", reason, stop?.Id, message.DeliveryCount, _maxDeliveryAttempts, runId);
+        }
+        else
+        {
+            log.LogWarning("Submission processing failure. reason={reason} stopId={stopId} deliveryCount={deliveryCount}/{max} runId={runId}", reason, stop?.Id, message.DeliveryCount, _maxDeliveryAttempts, runId);
+        }
+
+        if (stop != null && submissionId != Guid.Empty)
+        {
+            try
+            {
+                await HandleFailedToSubmit(log, DateTime.UtcNow, fileName ?? string.Empty, submissionId, stop);
+            }
+            catch (Exception statusEx)
+            {
+                log.LogError(statusEx, "Failed to revert stop status to Unsubmitted for stopId={stopId} runId={runId}", stop.Id, runId);
+            }
+        }
+
+        if (IsFinalAttempt(message))
+        {
+            var deadLetterReason = "SubmissionProcessingRetryExhausted";
+            var deadLetterDescription = $"reason={reason};stopId={stop?.Id};delivery={message.DeliveryCount}/{_maxDeliveryAttempts};runId={runId}";
+            await messageActions.DeadLetterMessageAsync(message, deadLetterReason, deadLetterDescription);
+            log.LogWarning("Message dead-lettered after retry exhaustion. stopId={stopId} deliveryCount={deliveryCount}/{max} runId={runId}", stop?.Id, message.DeliveryCount, _maxDeliveryAttempts, runId);
+            return;
+        }
+
+        await messageActions.AbandonMessageAsync(message);
     }
 
     public BlobContainerClient GetBlobContainerClient()
@@ -257,42 +322,6 @@ public class SubmissionConsumer
         {
             log.LogError($"Exception: {ex} --> occurred during GetDojStop with id {stop.Id} : {runId}");
             return null;
-        }
-    }
-
-    private async Task<bool> HandledDojCastError(ILogger log, IStop stop, DateTime date, string fileName, Guid submissionId, string runId)
-    {
-        try
-        {
-            log.LogWarning($"Handling DoJ Cast Error: {stop.Id} : {runId}");
-            SubmissionError submissionError = new SubmissionError()
-            {
-                Code = "FTS",
-                Message = "Failed to submit to DOJ. Stop to DOJ Cast failure",
-                DateReported = date,
-                ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
-                FileName = fileName,
-                SubmissionId = submissionId
-            };
-
-            var isNfia = stop.Nfia == true;
-            var errorStatus = isNfia ? SubmissionStatus.Failed_NFIA.ToString() : SubmissionStatus.Failed.ToString();
-
-            if (stop.StopVersion == StopVersion.V2)
-            {
-                await _stopV2CosmosDbService.UpdateStopAsync(_stopV2Service.ErrorSubmission((Common.Models.v2.Stop)stop, submissionError, errorStatus));
-            }
-            else
-            {
-                await _stopV1CosmosDbService.UpdateStopAsync(_stopV1Service.ErrorSubmission((Common.Models.v1.Stop)stop, submissionError, errorStatus));
-            }
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            log.LogError($"Exception: {ex} --> occurred during HandleDojCastError with stop id {stop.Id}");
-            return false;
         }
     }
 
@@ -402,7 +431,7 @@ public class SubmissionConsumer
             SubmissionError submissionError = new SubmissionError()
             {
                 Code = "FTS",
-                Message = "Failed to submit to DOJ. SFTP connection, Blob Connection failure",
+                Message = "Failed to submit to DOJ. Submission processing failed.",
                 DateReported = date,
                 ErrorType = Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.SubmissionError),
                 FileName = fileName,
