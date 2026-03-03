@@ -7,6 +7,12 @@ import {
 } from '@/utilities/stop'
 
 export default {
+  computed: {
+    ab2234Enabled() {
+      return this.$store.getters?.ab2234Enabled || false
+    },
+  },
+
   methods: {
     handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
@@ -28,6 +34,8 @@ export default {
           : fullStopToStopV2(fullStop)
 
       if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else if (!this.ab2234Enabled) {
         localStorage.setItem('ripa_form_step_index', '7')
       } else {
         localStorage.setItem('ripa_form_step_index', '8')
@@ -72,6 +80,8 @@ export default {
           : fullStopToStopV2(fullStop)
 
       if (fullStop.stopVersion === 1) {
+        localStorage.setItem('ripa_form_step_index', '7')
+      } else if (!this.ab2234Enabled) {
         localStorage.setItem('ripa_form_step_index', '7')
       } else {
         localStorage.setItem('ripa_form_step_index', '8')
