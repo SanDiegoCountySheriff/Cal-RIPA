@@ -48,6 +48,9 @@ describe('Ripa Admin Container', () => {
       mappedAdminCpraReportStats: jest.fn(),
       stopQueryData: jest.fn(),
       mappedVersion: () => 2,
+      mappedFormStatutes: () => [
+        { code: 12345, fullName: 'CVC 12345 Test Statute', repealed: false },
+      ],
     }
     store = new Vuex.Store({
       actions,

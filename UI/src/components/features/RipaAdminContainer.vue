@@ -89,6 +89,7 @@ export default {
       'resetPagination',
       'piiEntities',
       'mappedVersion',
+      'mappedFormStatutes',
     ]),
   },
 
@@ -129,10 +130,18 @@ export default {
     },
 
     async handleSeedStops(count) {
+      const statute = (this.mappedFormStatutes || []).find(s => !s.repealed)
+      if (!statute) {
+        this.snackbarText = 'No valid statute codes found. Please load domain data first.'
+        this.snackbarVisible = true
+        return
+      }
       this.loading = true
       const result = await this.seedStops({
         count,
         version: this.mappedVersion,
+        statuteCode: statute.code.toString(),
+        statuteText: statute.fullName,
       })
       this.loading = false
       this.snackbarText = result

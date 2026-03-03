@@ -6,14 +6,17 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Common.Models.Interfaces;
 using RIPA.Functions.Common.Models.v2;
 using RIPA.Functions.Common.Services.Stop.CosmosDb.Contracts;
 using RIPA.Functions.Common.Services.UserProfile.CosmosDb.Contracts;
 using RIPA.Functions.Security;
+using RIPA.Functions.Stop.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -36,7 +39,7 @@ public class PostSeedStops
     [OpenApiOperation(operationId: "v2/PostSeedStops", tags: new[] { "name", "v2" })]
     [OpenApiSecurity("Bearer", SecuritySchemeType.OAuth2, Name = "Bearer Token", In = OpenApiSecurityLocationType.Header, Flows = typeof(RIPAAuthorizationFlow))]
     [OpenApiParameter(name: "Ocp-Apim-Subscription-Key", In = ParameterLocation.Header, Required = true, Type = typeof(string), Description = "Ocp-Apim-Subscription-Key")]
-    [OpenApiParameter(name: "count", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "Number of stops to seed (1-100)")]
+    [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(SeedStopsRequest), Required = true, Description = "Seed stops request")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(int), Description = "Number of stops created")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Bad request")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound, contentType: "application/json", bodyType: typeof(string), Description = "Not available outside DEV environment")]
@@ -64,9 +67,25 @@ public class PostSeedStops
             return new UnauthorizedResult();
         }
 
-        if (!int.TryParse(req.Query["count"], out int count) || count < 1 || count > 100)
+        SeedStopsRequest request;
+        try
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            request = JsonConvert.DeserializeObject<SeedStopsRequest>(requestBody);
+        }
+        catch
+        {
+            return new BadRequestObjectResult("Invalid request body");
+        }
+
+        if (request == null || request.Count < 1 || request.Count > 100)
         {
             return new BadRequestObjectResult("Count must be between 1 and 100");
+        }
+
+        if (string.IsNullOrEmpty(request.StatuteCode))
+        {
+            return new BadRequestObjectResult("A valid statute code is required");
         }
 
         UserProfile userProfile;
@@ -85,10 +104,10 @@ public class PostSeedStops
         string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
         int created = 0;
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < request.Count; i++)
         {
             string time = $"{(12 + i / 60) % 24:D2}:{i % 60:D2}";
-            var stop = BuildSeedStop(userProfile, ori, today, time);
+            var stop = BuildSeedStop(userProfile, ori, today, time, request.StatuteCode, request.StatuteText);
             try
             {
                 await _stopCosmosDbService.UpdateStopAsync(stop);
@@ -107,7 +126,9 @@ public class PostSeedStops
         UserProfile userProfile,
         string ori,
         string date,
-        string time)
+        string time,
+        string statuteCode,
+        string statuteText)
     {
         return new Common.Models.v2.Stop
         {
@@ -176,7 +197,7 @@ public class PostSeedStops
                         },
                         ListCodes = new List<Codes>
                         {
-                            new Codes { Code = "35152", Text = "CVC 35152" }
+                            new Codes { Code = statuteCode, Text = statuteText }
                         }
                     },
                     ReasonGivenForStop = new ReasonGivenForStop[]
@@ -203,7 +224,7 @@ public class PostSeedStops
                             Result = "Verbal Warning",
                             ListCodes = new List<Codes>
                             {
-                                new Codes { Code = "35152", Text = "CVC 35152" }
+                                new Codes { Code = statuteCode, Text = statuteText }
                             }
                         }
                     }
