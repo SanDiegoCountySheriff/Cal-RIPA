@@ -111,7 +111,7 @@ public class PostSeedStops
     {
         return new Common.Models.v2.Stop
         {
-            Id = Guid.NewGuid().ToString("N").Substring(0, 11).ToUpper(),
+            Id = Guid.NewGuid().ToString("N").ToUpper(),
             Ori = ori,
             Agency = userProfile.Agency,
             OfficerId = userProfile.OfficerId,
@@ -158,7 +158,10 @@ public class PostSeedStops
                     },
                     PerceivedLimitedEnglish = false,
                     PerceivedUnhoused = false,
-                    ListPerceivedOrKnownDisability = new PerceivedOrKnownDisability[0],
+                    ListPerceivedOrKnownDisability = new PerceivedOrKnownDisability[]
+                    {
+                        new PerceivedOrKnownDisability { Key = "8", Disability = "None" }
+                    },
                     PerceivedAge = 30,
                     PerceivedGender = "Cisgender Man/Boy",
                     NonBinaryPerson = false,
@@ -169,14 +172,17 @@ public class PostSeedStops
                         Reason = "Traffic Violation",
                         ListDetail = new List<Detail>
                         {
-                            new Detail { Key = "1", Reason = "Traffic Violation" }
+                            new Detail { Key = "1", Reason = "Moving Violation" }
                         },
                         ListCodes = new List<Codes>
                         {
                             new Codes { Code = "35152", Text = "CVC 35152" }
                         }
                     },
-                    ReasonGivenForStop = new ReasonGivenForStop[0],
+                    ReasonGivenForStop = new ReasonGivenForStop[]
+                    {
+                        new ReasonGivenForStop { Key = "1", Reason = "Traffic Violation - Moving Violation" }
+                    },
                     ReasonForStopExplanation = null,
                     ReasonForStopPiiFound = false,
                     ListNonForceActionsTakenDuringStop = new NonForceActionsTakenDuringStop[0],
@@ -195,7 +201,10 @@ public class PostSeedStops
                         {
                             Key = "14",
                             Result = "Verbal Warning",
-                            ListCodes = new List<Codes>()
+                            ListCodes = new List<Codes>
+                            {
+                                new Codes { Code = "35152", Text = "CVC 35152" }
+                            }
                         }
                     }
                 }
