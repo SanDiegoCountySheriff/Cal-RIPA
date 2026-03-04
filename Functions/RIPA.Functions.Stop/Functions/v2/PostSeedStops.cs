@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -78,9 +79,9 @@ public class PostSeedStops
             return new BadRequestObjectResult("Invalid request body");
         }
 
-        if (request == null || request.Count < 1 || request.Count > 1000)
+        if (request == null || request.Count < 1 || request.Count > 5000)
         {
-            return new BadRequestObjectResult("Count must be between 1 and 1000");
+            return new BadRequestObjectResult("Count must be between 1 and 5000");
         }
 
         if (string.IsNullOrEmpty(request.StatuteCode))
@@ -107,13 +108,51 @@ public class PostSeedStops
 
         string ori = Environment.GetEnvironmentVariable("ORI");
         int created = 0;
+        const int maxMinutesInYear = 365 * 24 * 60;
+        var generatedDateTimes = new HashSet<string>();
 
         for (int i = 0; i < request.Count; i++)
         {
-            var stopDateTime = DateTime.UtcNow.AddDays(-(i + 1)).AddMinutes(-(i % 60));
-            string date = stopDateTime.ToString("yyyy-MM-dd");
-            string time = stopDateTime.ToString("HH:mm");
-            var stop = BuildSeedStop(userProfile, ori, date, time, request.StatuteCode, request.StatuteText, request.CityCode, request.CityText);
+            Common.Models.v2.Stop stop = null;
+
+            for (int attempt = 0; attempt < maxMinutesInYear; attempt++)
+            {
+                var minuteOffset = ((i + attempt) % maxMinutesInYear) + 1;
+                var stopDateTime = DateTime.UtcNow.AddMinutes(-minuteOffset);
+                string date = stopDateTime.ToString("yyyy-MM-dd");
+                string time = stopDateTime.ToString("HH:mm");
+                string dateTimeKey = $"{date} {time}";
+
+                if (!generatedDateTimes.Add(dateTimeKey))
+                {
+                    continue;
+                }
+
+                var stopId = Guid.NewGuid().ToString("N")[..12].ToUpper();
+
+                if (await StopIdExists(stopId))
+                {
+                    generatedDateTimes.Remove(dateTimeKey);
+                    continue;
+                }
+
+                var isDuplicate = await _stopCosmosDbService.CheckForDuplicateStop(stopId, ori, userProfile.OfficerId, date, time);
+                if (isDuplicate)
+                {
+                    generatedDateTimes.Remove(dateTimeKey);
+                    continue;
+                }
+
+                stop = BuildSeedStop(userProfile, ori, stopId, date, time, request.StatuteCode, request.StatuteText, request.CityCode, request.CityText);
+                break;
+            }
+
+            if (stop == null)
+            {
+                log.LogWarning($"Failed to generate unique stop for seed index {i}");
+                continue;
+            }
+
             try
             {
                 await _stopCosmosDbService.UpdateStopAsync(stop);
@@ -128,9 +167,23 @@ public class PostSeedStops
         return new OkObjectResult(created);
     }
 
+    private async Task<bool> StopIdExists(string stopId)
+    {
+        try
+        {
+            await _stopCosmosDbService.GetStopAsync(stopId);
+            return true;
+        }
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            return false;
+        }
+    }
+
     private static Common.Models.v2.Stop BuildSeedStop(
         UserProfile userProfile,
         string ori,
+        string stopId,
         string date,
         string time,
         string statuteCode,
@@ -140,7 +193,7 @@ public class PostSeedStops
     {
         return new Common.Models.v2.Stop
         {
-            Id = Guid.NewGuid().ToString("N")[..12].ToUpper(),
+            Id = stopId,
             Ori = ori,
             Agency = userProfile.Agency,
             OfficerId = userProfile.OfficerId,
