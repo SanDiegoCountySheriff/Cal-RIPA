@@ -160,6 +160,7 @@ public class PostSeedStops
             {
                 BlockNumber = "100",
                 StreetName = "Main St",
+                GeoLocation = new GeoLocation(),
                 City = new City
                 {
                     Codes = new Codes
