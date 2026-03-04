@@ -162,7 +162,7 @@ public class SubmissionConsumer
                     if (!await HandleDojSubmitSuccess(log, stop, dateSubmitted, submissionMessage.SubmissionId, fileName, runId))
                     {
                         log.LogWarning($"Failed to handle doj submit success: {stop.Id} : {runId}");
-                        await RemoveSftpFile(log, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated.
+                        await RemoveSftpFile(log, sftpBatch, fileName, stop.Id, runId); // remove the file from the SFTP server so it doesnt get duplicated.
                         await HandleFailureAsync(log, MessageActions, message, runId, "Failed to persist DOJ submit success", stop, submissionMessage.SubmissionId, fileName);
                         continue;
                     }
@@ -385,12 +385,19 @@ public class SubmissionConsumer
         }
     }
 
-    private async Task<bool> RemoveSftpFile(ILogger log, string fileName, string stopId, string runId)
+    private async Task<bool> RemoveSftpFile(ILogger log, ISftpBatch sftpBatch, string fileName, string stopId, string runId)
     {
         try
         {
             log.LogInformation($"Remving from FTP: {stopId} : {runId}");
-            await _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+            if (sftpBatch != null)
+            {
+                await sftpBatch.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+            }
+            else
+            {
+                await _sftpService.DeleteFile($"{_sftpInputPath}{fileName.Split("/")[2]}");
+            }
             return true;
         }
         catch (Exception ex)
