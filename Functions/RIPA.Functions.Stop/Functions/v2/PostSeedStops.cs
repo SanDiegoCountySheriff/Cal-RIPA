@@ -106,13 +106,14 @@ public class PostSeedStops
         }
 
         string ori = Environment.GetEnvironmentVariable("ORI");
-        string today = DateTime.UtcNow.ToString("yyyy-MM-dd");
         int created = 0;
 
         for (int i = 0; i < request.Count; i++)
         {
-            string time = $"{(12 + i / 60) % 24:D2}:{i % 60:D2}";
-            var stop = BuildSeedStop(userProfile, ori, today, time, request.StatuteCode, request.StatuteText, request.CityCode, request.CityText);
+            var stopDateTime = DateTime.UtcNow.AddDays(-(i + 1)).AddMinutes(-(i % 60));
+            string date = stopDateTime.ToString("yyyy-MM-dd");
+            string time = stopDateTime.ToString("HH:mm");
+            var stop = BuildSeedStop(userProfile, ori, date, time, request.StatuteCode, request.StatuteText, request.CityCode, request.CityText);
             try
             {
                 await _stopCosmosDbService.UpdateStopAsync(stop);
@@ -139,7 +140,7 @@ public class PostSeedStops
     {
         return new Common.Models.v2.Stop
         {
-            Id = Guid.NewGuid().ToString("N").ToUpper(),
+            Id = Guid.NewGuid().ToString("N")[..12].ToUpper(),
             Ori = ori,
             Agency = userProfile.Agency,
             OfficerId = userProfile.OfficerId,
@@ -174,6 +175,7 @@ public class PostSeedStops
             StopDuration = 10,
             StopInResponseToCFS = false,
             StopMadeDuringWelfareCheck = false,
+            StopType = "Vehicular",
             ListPersonStopped = new IPersonStopped[]
             {
                 new PersonStopped
@@ -211,7 +213,7 @@ public class PostSeedStops
                     {
                         new ReasonGivenForStop { Key = "1", Reason = "Traffic Violation - Moving Violation" }
                     },
-                    ReasonForStopExplanation = null,
+                    ReasonForStopExplanation = "Explanation",
                     ReasonForStopPiiFound = false,
                     ListNonForceActionsTakenDuringStop = new NonForceActionsTakenDuringStop[0],
                     ListForceActionsTakenDuringStop = new ForceActionsTakenDuringStop[0],
