@@ -347,7 +347,7 @@ export default {
       return (
         !this.seedStopsCount ||
         this.seedStopsCount < 1 ||
-        this.seedStopsCount > 100
+        this.seedStopsCount > 1000
       )
     },
   },
