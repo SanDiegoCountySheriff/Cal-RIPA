@@ -133,13 +133,15 @@ export default {
     async handleSeedStops(count) {
       const statute = (this.mappedFormStatutes || []).find(s => !s.repealed)
       if (!statute) {
-        this.snackbarText = 'No valid statute codes found. Please load domain data first.'
+        this.snackbarText =
+          'No valid statute codes found. Please load domain data first.'
         this.snackbarVisible = true
         return
       }
       const city = (this.mappedFormCountyCities || []).find(c => c.id)
       if (!city) {
-        this.snackbarText = 'No valid cities found. Please load domain data first.'
+        this.snackbarText =
+          'No valid cities found. Please load domain data first.'
         this.snackbarVisible = true
         return
       }

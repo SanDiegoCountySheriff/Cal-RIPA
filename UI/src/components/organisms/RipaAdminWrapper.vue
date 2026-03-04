@@ -36,7 +36,7 @@
                   <p>Creates test stops on the server for the current user.</p>
                   <v-text-field
                     v-model.number="seedStopsCount"
-                    label="Number of stops (1-100)"
+                    label="Number of stops (1-1000)"
                     type="number"
                     min="1"
                     max="100"
@@ -340,7 +340,7 @@ export default {
     seedStopsCountRules() {
       return [
         v => !!v || 'Count is required',
-        v => (v >= 1 && v <= 100) || 'Count must be between 1 and 100',
+        v => (v >= 1 && v <= 1000) || 'Count must be between 1 and 1000',
       ]
     },
     isSeedStopsInvalid() {

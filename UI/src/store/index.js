@@ -1962,7 +1962,10 @@ export default new Vuex.Store({
         })
     },
 
-    seedStops({ state }, { count, version, statuteCode, statuteText, cityCode, cityText }) {
+    seedStops(
+      { state },
+      { count, version, statuteCode, statuteText, cityCode, cityText },
+    ) {
       return axios
         .post(
           `${state.apiConfig.apiBaseUrl}stop/v${version}/PostSeedStops`,
@@ -1976,7 +1979,9 @@ export default new Vuex.Store({
           },
         )
         .then(response => {
-          return `${response.data} stop${response.data === 1 ? '' : 's'} created`
+          return `${response.data} stop${
+            response.data === 1 ? '' : 's'
+          } created`
         })
         .catch(err => {
           if (err.response?.status === 400) {

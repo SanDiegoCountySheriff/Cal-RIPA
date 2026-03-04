@@ -78,9 +78,9 @@ public class PostSeedStops
             return new BadRequestObjectResult("Invalid request body");
         }
 
-        if (request == null || request.Count < 1 || request.Count > 100)
+        if (request == null || request.Count < 1 || request.Count > 1000)
         {
-            return new BadRequestObjectResult("Count must be between 1 and 100");
+            return new BadRequestObjectResult("Count must be between 1 and 1000");
         }
 
         if (string.IsNullOrEmpty(request.StatuteCode))
