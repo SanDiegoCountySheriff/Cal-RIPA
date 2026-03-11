@@ -1925,10 +1925,6 @@
         },
         "deleteRetentionPolicy": {
           "enabled": false
-        },
-        "staticWebsite": {
-          "enabled": true,
-          "indexDocument": "index.html"
         }
       }
     },

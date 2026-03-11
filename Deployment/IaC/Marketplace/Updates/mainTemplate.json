@@ -3,18 +3,13 @@
   "contentVersion": "1.0.0.0",
   "functions": [
   ],
-  "parameters": {
-    "utcNowValue": {
-      "type": "string",
-      "defaultValue": "[utcNow('yyyyMMDDHHmmssFFFF')]"
-    }
-  },
+  "parameters": {},
   "variables": {},
   "resources": [
     {
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2020-10-01",
-      "name": "[concat(toLower(take(uniqueString(parameters('utcNowValue')), 3)), 'cssa-app-update-runonce-deleteme-ifucme-dps')]",
+      "name": "[concat(toLower(take(uniqueString(resourceGroup().id, deployment().name), 3)), 'cssa-app-update-runonce-deleteme-ifucme-dps')]",
       "location": "[resourceGroup().location]",
       "kind": "AzurePowerShell",
       "dependsOn": [],
@@ -22,7 +17,7 @@
       "properties": {
         "forceUpdateTag": "newGuid()",
         "containerSettings": {
-          "containerGroupName": "[concat(toLower(take(uniqueString(parameters('utcNowValue')), 3)), 'cssa-app-update-runonce-deleteme-ifucme-dps')]"
+          "containerGroupName": "[concat(toLower(take(uniqueString(resourceGroup().id, deployment().name), 3)), 'cssa-app-update-runonce-deleteme-ifucme-dps')]"
         },
         "storageAccountSettings": {
           "storageAccountName": "#{CSSA_STORAGE_ACCOUNT_NAME}#",
