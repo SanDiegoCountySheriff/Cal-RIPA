@@ -14,6 +14,18 @@ export default {
   },
 
   methods: {
+    getFormStepIndex(fullStop, stop) {
+      if (fullStop.stopVersion === 1) {
+        return '7'
+      }
+      const showEbikeStep =
+        this.ab2234Enabled &&
+        stop.person?.perceivedAge !== null &&
+        stop.person?.perceivedAge < 12
+      const anyAgencyQuestions = (stop.agencyQuestions || []).length > 0
+      return String(7 + (showEbikeStep ? 1 : 0) + (anyAgencyQuestions ? 1 : 0))
+    },
+
     handleEditStopByAdmin(apiStop, route) {
       const submissions = apiStop.listSubmission || []
       const sortedSubmissions = submissions.sort(
@@ -33,13 +45,10 @@ export default {
           ? fullStopToStop(fullStop)
           : fullStopToStopV2(fullStop)
 
-      if (fullStop.stopVersion === 1) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else if (!this.ab2234Enabled) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else {
-        localStorage.setItem('ripa_form_step_index', '8')
-      }
+      localStorage.setItem(
+        'ripa_form_step_index',
+        this.getFormStepIndex(fullStop, stop),
+      )
       localStorage.setItem('ripa_form_admin_editing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -79,13 +88,10 @@ export default {
           ? fullStopToStop(fullStop)
           : fullStopToStopV2(fullStop)
 
-      if (fullStop.stopVersion === 1) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else if (!this.ab2234Enabled) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else {
-        localStorage.setItem('ripa_form_step_index', '8')
-      }
+      localStorage.setItem(
+        'ripa_form_step_index',
+        this.getFormStepIndex(fullStop, stop),
+      )
       localStorage.setItem('ripa_form_admin_viewing', '1')
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_edit_route', route)
@@ -124,13 +130,10 @@ export default {
           : fullStopToStopV2(fullStop)
 
       localStorage.setItem('ripa_errored_stop_internal_id', internalId)
-      if (fullStop.stopVersion === 1) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else if (!this.ab2234Enabled) {
-        localStorage.setItem('ripa_form_step_index', '7')
-      } else {
-        localStorage.setItem('ripa_form_step_index', '8')
-      }
+      localStorage.setItem(
+        'ripa_form_step_index',
+        this.getFormStepIndex(fullStop, stop),
+      )
       localStorage.setItem('ripa_form_editing', '1')
       localStorage.setItem('ripa_form_editing_stop_with_error', '1')
       localStorage.setItem('ripa_form_stop', JSON.stringify(stop))
