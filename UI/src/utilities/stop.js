@@ -998,10 +998,12 @@ export const apiStopTelemetrySummary = apiStop => {
     if (apiStop.lateSubmissionExplanation) {
       items.push({ id: 'D1', content: getSummaryLateExplanation(apiStop) })
     }
-    items.push({
-      id: 'D2',
-      content: getSummaryTelemetryEditStopOfficerId(apiStop),
-    })
+    if (apiStop.isEdited) {
+      items.push({
+        id: 'D2',
+        content: getSummaryTelemetryEditStopOfficerId(apiStop),
+      })
+    }
     items.push({ id: 'D3', content: getSummaryTelemetryTemplate(apiStop) })
     items.push({
       id: 'D4',
@@ -1797,7 +1799,8 @@ export const fullStopToApiStop = (
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
     editStopExplanation: parsedApiStop ? fullStop.editStopExplanation : null,
-    editStopOfficerId: parsedApiStop ? officer.officerId : null,
+    editStopOfficerId: parsedApiStop ? parsedApiStop.editStopOfficerId : null,
+    isEdited: parsedApiStop ? parsedApiStop.isEdited : false,
     expYears: parsedApiStop
       ? parsedApiStop.expYears
       : officer.yearsExperience?.toString() || '',
@@ -1898,7 +1901,8 @@ export const fullStopToApiStopV2 = (
     agency: parsedApiStop ? parsedApiStop.agency : officer.agency,
     date: fullStop.stopDate.date,
     editStopExplanation: parsedApiStop ? fullStop.editStopExplanation : null,
-    editStopOfficerId: parsedApiStop ? officer.officerId : null,
+    editStopOfficerId: parsedApiStop ? parsedApiStop.editStopOfficerId : null,
+    isEdited: parsedApiStop ? parsedApiStop.isEdited : false,
     expYears: parsedApiStop
       ? parsedApiStop.expYears
       : officer.yearsExperience?.toString() || '',
