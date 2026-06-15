@@ -71,7 +71,8 @@ public class PostUpload
 
         try
         {
-            int recordCount = 0;
+            int successfulRecordCount = 0;
+            int failedRecordCount = 0;
             var formData = await req.ReadFormAsync();
             var file = req.Form.Files["file"];
 
@@ -79,34 +80,59 @@ public class PostUpload
 
             if (dataSet.Tables["Beat_Table"] != null)
             {
-                recordCount += await ProcessEntities(dataSet.Tables["Beat_Table"], _client.GetTableClient("Beats"), log);
+                var beatResult = await ProcessEntities(dataSet.Tables["Beat_Table"], _client.GetTableClient("Beats"), log);
+                successfulRecordCount += beatResult.SuccessfulRows;
+                failedRecordCount += beatResult.FailedRows;
             }
 
-            recordCount += await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableClient("Cities"), log);
-            recordCount += await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableClient("Schools"), log);
+            var cityResult = await ProcessEntities(dataSet.Tables["City_Table"], _client.GetTableClient("Cities"), log);
+            successfulRecordCount += cityResult.SuccessfulRows;
+            failedRecordCount += cityResult.FailedRows;
+
+            var schoolResult = await ProcessEntities(dataSet.Tables["School_Table"], _client.GetTableClient("Schools"), log);
+            successfulRecordCount += schoolResult.SuccessfulRows;
+            failedRecordCount += schoolResult.FailedRows;
 
             // CA DOJ currently has the table name as "Offense Table" which does not follow the conventions of the other tables
             if (dataSet.Tables["Offense_Table"] != null)
             {
-                recordCount += await ProcessEntities(dataSet.Tables["Offense_Table"], _client.GetTableClient("Statutes"), log);
+                var statuteResult = await ProcessEntities(dataSet.Tables["Offense_Table"], _client.GetTableClient("Statutes"), log);
+                successfulRecordCount += statuteResult.SuccessfulRows;
+                failedRecordCount += statuteResult.FailedRows;
             }
             else if (dataSet.Tables["Offense Table"] != null)
             {
-                recordCount += await ProcessEntities(dataSet.Tables["Offense Table"], _client.GetTableClient("Statutes"), log);
+                var statuteResult = await ProcessEntities(dataSet.Tables["Offense Table"], _client.GetTableClient("Statutes"), log);
+                successfulRecordCount += statuteResult.SuccessfulRows;
+                failedRecordCount += statuteResult.FailedRows;
             }
 
             string responseMessage;
 
-            if (recordCount >= 1)
+            if (successfulRecordCount >= 1)
             {
-                responseMessage = $"Upload complete: {recordCount} {(recordCount > 1 ? "records" : "record")} updated.";
+                responseMessage = $"Upload complete: {successfulRecordCount} {(successfulRecordCount > 1 ? "records" : "record")} updated.";
+                if (failedRecordCount > 0)
+                {
+                    responseMessage += $" {failedRecordCount} {(failedRecordCount > 1 ? "records" : "record")} failed and were skipped.";
+                }
             }
             else
             {
-                responseMessage = "No records found";
+                responseMessage = failedRecordCount > 0
+                    ? $"Upload failed: 0 records updated. {failedRecordCount} {(failedRecordCount > 1 ? "records" : "record")} failed validation."
+                    : "No records found";
             }
 
-            await _domainCosmosDbService.SetDomainUploadDate(DateTime.Now.Date);
+            if (successfulRecordCount > 0)
+            {
+                await _domainCosmosDbService.SetDomainUploadDate(DateTime.Now.Date);
+            }
+
+            if (successfulRecordCount == 0 && failedRecordCount > 0)
+            {
+                return new BadRequestObjectResult(responseMessage);
+            }
 
             return new OkObjectResult(responseMessage);
         }
@@ -139,8 +165,53 @@ public class PostUpload
         { "DEGREE", "OFFENSE DEGREE" },
         { "BCS_HIE_CD", "BCS HIERARCHY CD" },
         { "OFFENSE_ENACTED", "OFFENSE ENACTED" },
+        { "OFFENSE_REPEALED", "OFFENSE REPEALED" },
         { "OFFENSE_REPEALED_OR_INACTIVATED", "OFFENSE REPEALED" },
         { "ALPCCOGN_CD", "ALPS COGNIZANT CD" },
+    };
+
+    private readonly Dictionary<string, string> ExpectedCityHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "INACTIVE_DATE", "INACTIVE DATE" },
+    };
+
+    private readonly Dictionary<string, string> ExpectedSchoolHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "CDS_CODE", "CDSCODE" },
+        { "STATUS TYPE", "STATUSTYPE" },
+        { "STATUS_TYPE", "STATUSTYPE" },
+        { "STATUSTY", "STATUSTYPE" },
+    };
+
+    private readonly Dictionary<string, string> ExpectedBeatHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "COMMAND_AUDIT_GROUP", "COMMANDAUDITGROUP" },
+        { "COMMAND_AUDIT_SIZE", "COMMANDAUDITSIZE" },
+    };
+
+    private readonly Dictionary<string, List<string>> RequiredHeadersByTable = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "Beats", new List<string> { "ID", "COMMUNITY", "COMMAND" } },
+        { "Cities", new List<string> { "STATE", "CITY", "COUNTY" } },
+        { "Schools", new List<string> { "CDSCODE", "STATUSTYPE", "COUNTY", "DISTRICT", "SCHOOL" } },
+        { "Statutes", new List<string>
+            {
+                "OFFENSE VALIDATION CD",
+                "OFFENSE CODE",
+                "OFFENSE TXN TYPE CD",
+                "OFFENSE STATUTE",
+                "OFFENSE TYPE OF STATUTE CD",
+                "STATUTE LITERAL 25",
+                "OFFENSE DEFAULT TYPE OF CHARGE",
+                "OFFENSE TYPE OF CHARGE",
+                "OFFENSE LITERAL IDENTIFIER CD",
+                "OFFENSE DEGREE",
+                "BCS HIERARCHY CD",
+                "OFFENSE ENACTED",
+                "OFFENSE REPEALED",
+                "ALPS COGNIZANT CD",
+            }
+        },
     };
 
     private async Task<bool> ExecuteBatch(TableClient table, ILogger log)
@@ -168,12 +239,18 @@ public class PostUpload
         return batchCount == _batchLimit;
     }
 
-    private async Task<int> ProcessEntities(DataTable dataTable, TableClient table, ILogger log)
+    private async Task<(int SuccessfulRows, int FailedRows)> ProcessEntities(DataTable dataTable, TableClient table, ILogger log)
     {
         await table.CreateIfNotExistsAsync();
-        int batchCount = 0;
-        int totalRows = dataTable.Rows.Count - 1;
-        int returnTotalRows = totalRows;
+        int successfulRows = 0;
+        int failedRows = 0;
+
+        _batch.Clear();
+
+        if (dataTable.Rows.Count == 0)
+        {
+            return (0, 0);
+        }
 
         foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Take(1))
         {
@@ -181,20 +258,25 @@ public class PostUpload
             var headers = row.ItemArray
                 .Select(columnName => columnName.ToString().ToUpper().Trim()).ToList();
 
-            NormalizeHeaders(headers, ExpectedStatuteHeaders);
+            NormalizeHeaders(headers, GetExpectedHeadersForTable(table.Name));
+            ValidateRequiredHeaders(table.Name, headers);
 
             switch (table.Name)
             {
                 case "Beats":
+                    BeatTableHeaders.Clear();
                     BeatTableHeaders.AddRange(headers);
                     break;
                 case "Cities":
+                    CityTableHeaders.Clear();
                     CityTableHeaders.AddRange(headers);
                     break;
                 case "Schools":
+                    SchoolTableHeaders.Clear();
                     SchoolTableHeaders.AddRange(headers);
                     break;
                 case "Statutes":
+                    StatuteTableHeaders.Clear();
                     StatuteTableHeaders.AddRange(headers);
                     break;
                 default:
@@ -202,18 +284,10 @@ public class PostUpload
             }
         }
 
+        int rowNumber = 1;
         foreach (DataRow row in dataTable.Rows.Cast<DataRow>().Skip(1))
         {
-            totalRows--;
-            batchCount++;
-
-            if (IsBatchCountExecutable(batchCount))
-            {
-                await ExecuteBatch(table, log);
-                _batch.Clear();
-                batchCount = 0;
-                Console.WriteLine($"processed {_batchLimit} - " + Environment.NewLine + $"{totalRows}");
-            }
+            rowNumber++;
 
             try
             {
@@ -236,21 +310,82 @@ public class PostUpload
                 }
 
                 DeduplicateBatch();
+
+                if (IsBatchCountExecutable(_batch.Count))
+                {
+                    bool batchSucceeded = await ExecuteBatch(table, log);
+                    if (batchSucceeded)
+                    {
+                        successfulRows += _batch.Count;
+                    }
+                    else
+                    {
+                        failedRows += _batch.Count;
+                    }
+
+                    _batch.Clear();
+                }
             }
             catch (Exception ex)
             {
-                log.LogError(ex.Message);
+                failedRows++;
+                log.LogError(ex, "Failed processing {tableName} row {rowNumber}", table.Name, rowNumber);
             }
         }
 
-        await ExecuteBatch(table, log);
-        _batch.Clear();
+        if (_batch.Count > 0)
+        {
+            bool batchSucceeded = await ExecuteBatch(table, log);
+            if (batchSucceeded)
+            {
+                successfulRows += _batch.Count;
+            }
+            else
+            {
+                failedRows += _batch.Count;
+            }
 
-        return returnTotalRows;
+            _batch.Clear();
+        }
+
+        return (successfulRows, failedRows);
+    }
+
+    private Dictionary<string, string> GetExpectedHeadersForTable(string tableName)
+    {
+        switch (tableName)
+        {
+            case "Beats":
+                return ExpectedBeatHeaders;
+            case "Cities":
+                return ExpectedCityHeaders;
+            case "Schools":
+                return ExpectedSchoolHeaders;
+            case "Statutes":
+                return ExpectedStatuteHeaders;
+            default:
+                return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        }
+    }
+
+    private void ValidateRequiredHeaders(string tableName, List<string> headers)
+    {
+        if (!RequiredHeadersByTable.TryGetValue(tableName, out var requiredHeaders))
+        {
+            return;
+        }
+
+        var missingHeaders = requiredHeaders.Where(requiredHeader => !headers.Contains(requiredHeader)).ToList();
+        if (missingHeaders.Count > 0)
+        {
+            throw new InvalidOperationException($"Missing required headers for {tableName}: {string.Join(", ", missingHeaders)}");
+        }
     }
 
     private City GetCity(DataRow row)
     {
+        int inactiveDateIndex = CityTableHeaders.IndexOf("INACTIVE DATE");
+
         City city = new City
         {
             PartitionKey = row.ItemArray[CityTableHeaders.IndexOf("STATE")].ToString(),
@@ -259,11 +394,16 @@ public class PostUpload
             Name = row.ItemArray[CityTableHeaders.IndexOf("CITY")].ToString(),
             County = row.ItemArray[CityTableHeaders.IndexOf("COUNTY")].ToString(),
         };
-        string inactiveDate = row.ItemArray[CityTableHeaders.IndexOf("INACTIVE DATE")].ToString();
-        if (!string.IsNullOrEmpty(inactiveDate))
+
+        if (inactiveDateIndex != -1)
         {
-            DateTime unspecified = DateTime.Parse(inactiveDate, CultureInfo.InvariantCulture);
-            city.DeactivationDate = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            string inactiveDate = row.ItemArray[inactiveDateIndex].ToString();
+
+            if (!string.IsNullOrEmpty(inactiveDate))
+            {
+                DateTime unspecified = DateTime.Parse(inactiveDate, CultureInfo.InvariantCulture);
+                city.DeactivationDate = DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+            }
         }
 
         return city;
