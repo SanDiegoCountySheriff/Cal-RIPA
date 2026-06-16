@@ -115,8 +115,13 @@ $apimMasterKeys = Get-AzApiManagementSubscriptionKey -Context $apimContext -Subs
 $apimPrimaryKey = $apimMasterKeys.PrimaryKey
 
 Write-Host "Publishing UI package"
-$uiStorageAccountName = ((az storage account list -g $env:APP_RESOURCE_GROUP_NAME --query "[? contains(name, 'uisa')].{Name:name}" -o json) | ConvertFrom-Json).Name
+$uiStorageAccountName = (Get-AzStorageAccount -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME | Where-Object { $_.StorageAccountName -like "*uisa*" } | Select-Object -First 1).StorageAccountName
 Write-Host "Publishing to:" $uiStorageAccountName
+
+# Retrieve and set the storage account access key to bypass the Azure CLI api-version query bug in Azure Government Cloud
+$uiStorageAccountKeys = Get-AzStorageAccountKey -ResourceGroupName $env:APP_RESOURCE_GROUP_NAME -Name $uiStorageAccountName -ErrorAction Stop
+$uiStorageAccountKey = $uiStorageAccountKeys[0].Value
+$env:AZURE_STORAGE_KEY = $uiStorageAccountKey
 
 $fileName = (Get-ChildItem -Path "./" -Filter "*ui.zip").Name
 Write-Host "Deploying UI package:" $fileName
