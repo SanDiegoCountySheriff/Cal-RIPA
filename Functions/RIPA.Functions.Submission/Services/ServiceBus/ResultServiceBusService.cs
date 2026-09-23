@@ -30,6 +30,16 @@ public class ResultServiceBusService : IResultServiceBusService
     {
         public string Error { get; set; }
         public string ErrorType { get; set; }
+        public string FileName { get; set; }
+        public string LeaRecordId { get; set; }
+        public List<ResultError> Errors { get; set; }
+    }
+
+    public class ResultError
+    {
+        public string Code { get; set; }
+        public string ErrorType { get; set; }
+        public string Message { get; set; }
     }
 
     public async Task SendServiceBusMessagesAsync(List<ServiceBusMessage> listServiceBusMessages)
