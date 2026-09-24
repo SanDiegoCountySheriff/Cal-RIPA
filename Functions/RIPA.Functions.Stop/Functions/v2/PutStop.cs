@@ -86,6 +86,22 @@ public class PutStop
             return new BadRequestObjectResult("City is required");
         }
 
+        if (Id != "0")
+        {
+            try
+            {
+                var existingStop = await _stopCosmosDbService.GetStopAsync(Id);
+
+                if (existingStop != null && (existingStop.Status == SubmissionStatus.Successful.ToString() || existingStop.Status == SubmissionStatus.Successful_NFIA.ToString()))
+                {
+                    return new BadRequestObjectResult("Stop was successfully processed by DOJ and can no longer be edited");
+                }
+            }
+            catch (Microsoft.Azure.Cosmos.CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+            }
+        }
+
         if (stop.Status == null && stop.Nfia != true)
         {
             stop.Status = SubmissionStatus.Unsubmitted.ToString();

@@ -47,6 +47,7 @@ public class SftpService : ISftpService, IDisposable
             Password = password,
             Key = key
         };
+        _logger = logger;
 
 #if DEBUG
         var debugKeyPath = Environment.GetEnvironmentVariable("SftpDebugPrivateKeyPath");
@@ -57,7 +58,6 @@ public class SftpService : ISftpService, IDisposable
             _logger.LogInformation("Loaded debug private key from {path}", debugKeyPath);
         }
 #endif
-        _logger = logger;
         var sftpDisabled = Environment.GetEnvironmentVariable("SftpDisabled");
 
         if (!string.IsNullOrEmpty(sftpDisabled) && bool.TryParse(sftpDisabled, out var disabled) && disabled)

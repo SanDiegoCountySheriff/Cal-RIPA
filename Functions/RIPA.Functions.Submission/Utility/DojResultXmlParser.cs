@@ -11,6 +11,8 @@ public static class DojResultXmlParser
 {
     private const string FatalSeverity = "FATAL";
     private const string InformationalSeverity = "INFORMATIONAL";
+    public const string SuccessfulRecStat = "5";
+    public const string NfiaRecStat = "7";
 
     public static List<ResultMessage> Parse(string xml)
     {
@@ -76,6 +78,20 @@ public static class DojResultXmlParser
 
             if (errors.Count == 0)
             {
+                var recStat = GetValue(stopElement, "RecStat");
+
+                if (!isFileLevel && (recStat == SuccessfulRecStat || recStat == NfiaRecStat))
+                {
+                    results.Add(new ResultMessage
+                    {
+                        FileName = fileName,
+                        LeaRecordId = leaRecordId,
+                        DojRecordId = GetValue(stopElement, "DojRecId"),
+                        RecStat = recStat,
+                        IsSuccess = true
+                    });
+                }
+
                 continue;
             }
 
@@ -83,6 +99,8 @@ public static class DojResultXmlParser
             {
                 FileName = fileName,
                 LeaRecordId = leaRecordId,
+                DojRecordId = GetValue(stopElement, "DojRecId"),
+                RecStat = GetValue(stopElement, "RecStat"),
                 ErrorType = errors.Any(x => x.ErrorType == SubmissionErrorType.FileLevelFatalError.ToString())
                     ? SubmissionErrorType.FileLevelFatalError.ToString()
                     : errors.Any(x => x.ErrorType == SubmissionErrorType.RecordLevelFatalError.ToString())

@@ -44,4 +44,14 @@ export const SUBMISSION_STATUSES = [
     value: 'Failed_NFIA',
     isEditable: true,
   },
+  {
+    text: 'Successful',
+    value: 'Successful',
+    isEditable: false,
+  },
+  {
+    text: 'Successful NFIA',
+    value: 'Successful_NFIA',
+    isEditable: false,
+  },
 ]

@@ -19,9 +19,6 @@ public class ResultServiceBusService : IResultServiceBusService
     {
         _logger = logger;
         _serviceBusClientOptions = new ServiceBusClientOptions();
-#if DEBUG
-        _serviceBusClientOptions.TransportType = ServiceBusTransportType.AmqpWebSockets;
-#endif
         _serviceBusClient = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"), _serviceBusClientOptions);
         _serviceBusSender = _serviceBusClient.CreateSender("result");
     }
@@ -32,6 +29,9 @@ public class ResultServiceBusService : IResultServiceBusService
         public string ErrorType { get; set; }
         public string FileName { get; set; }
         public string LeaRecordId { get; set; }
+        public string DojRecordId { get; set; }
+        public string RecStat { get; set; }
+        public bool IsSuccess { get; set; }
         public List<ResultError> Errors { get; set; }
     }
 

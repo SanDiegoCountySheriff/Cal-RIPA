@@ -106,7 +106,7 @@ public class TimerGetSubmitResults
     public async Task ProcessDojXmlResponse(string dojResponse, ILogger log)
     {
         var resultMessages = DojResultXmlParser.Parse(dojResponse);
-        log.LogInformation($"DOJ XML response contained {resultMessages.Count} stops with errors");
+        log.LogInformation($"DOJ XML response contained {resultMessages.Count(x => x.IsSuccess)} successful stops and {resultMessages.Count(x => !x.IsSuccess)} stops with errors");
 
         if (resultMessages.Count == 0)
         {

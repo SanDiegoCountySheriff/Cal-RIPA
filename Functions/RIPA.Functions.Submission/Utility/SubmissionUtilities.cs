@@ -94,6 +94,11 @@ public class SubmissionUtilities
             errorList.Add("Stop request contains stops that are in Pending state, please wait until submission is fully processed.");
         }
 
+        if (stops.Where(x => x.Status == SubmissionStatus.Successful.ToString() || x.Status == SubmissionStatus.Successful_NFIA.ToString()).Any())
+        {
+            errorList.Add("Stop request contains stops that were successfully processed by DOJ and cannot be resubmitted.");
+        }
+
         if (stops.Where(x => x.IsPiiFound && !x.OverridePii).Any())
         {
             errorList.Add("Stop request contains stops that contain PII and require edit or override PII to submit.");

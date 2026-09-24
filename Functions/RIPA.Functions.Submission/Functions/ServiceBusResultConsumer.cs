@@ -51,7 +51,11 @@ public class ServiceBusResultConsumer
 
                 ResultMessage submissionMessage = JsonConvert.DeserializeObject<ResultMessage>(message.Body.ToString());
 
-                if (submissionMessage.Errors != null && submissionMessage.Errors.Count > 0)
+                if (submissionMessage.IsSuccess)
+                {
+                    await ProcessSuccessResult(submissionMessage, log);
+                }
+                else if (submissionMessage.Errors != null && submissionMessage.Errors.Count > 0)
                 {
                     await ProcessStructuredResult(submissionMessage, log);
                 }
@@ -134,6 +138,48 @@ public class ServiceBusResultConsumer
         {
             await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
         }
+    }
+
+    public async Task ProcessSuccessResult(ResultMessage resultMessage, ILogger log)
+    {
+        var stopId = resultMessage.LeaRecordId;
+
+        if (string.IsNullOrWhiteSpace(stopId))
+        {
+            log.LogWarning($"Unable to determine stop id for successful DOJ result. FileName={resultMessage.FileName}");
+            return;
+        }
+
+        IStop stop;
+        try
+        {
+            stop = await _stopV1CosmosDbService.GetStopAsync(stopId);
+
+            if (stop.StopVersion == StopVersion.V2)
+            {
+                stop = await _stopV2CosmosDbService.GetStopAsync(stopId);
+            }
+        }
+        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            log.LogWarning($"Stop {stopId} from successful DOJ result was not found. FileName={resultMessage.FileName}");
+            return;
+        }
+
+        stop.Status = resultMessage.RecStat == Utility.DojResultXmlParser.NfiaRecStat
+            ? SubmissionStatus.Successful_NFIA.ToString()
+            : SubmissionStatus.Successful.ToString();
+
+        if (stop.StopVersion == StopVersion.V2)
+        {
+            await _stopV2CosmosDbService.UpdateStopAsync((Common.Models.v2.Stop)stop);
+        }
+        else
+        {
+            await _stopV1CosmosDbService.UpdateStopAsync((Common.Models.v1.Stop)stop);
+        }
+
+        log.LogInformation($"Stop {stopId} marked {stop.Status}. DojRecordId={resultMessage.DojRecordId} FileName={resultMessage.FileName}");
     }
 
     private static string GetStopIdFromFileName(string fileName)

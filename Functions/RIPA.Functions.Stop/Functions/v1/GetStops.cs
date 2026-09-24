@@ -102,6 +102,8 @@ public class GetStops
                 Unsubmitted = stopStatusCounts.Where(x => x.Status == "Unsubmitted").Select(x => x.Count).FirstOrDefault(),
                 Pending = stopStatusCounts.Where(x => x.Status == "Pending").Select(x => x.Count).FirstOrDefault(),
                 Failed = stopStatusCounts.Where(x => x.Status == "Failed").Select(x => x.Count).FirstOrDefault(),
+                Successful = stopStatusCounts.Where(x => x.Status == "Successful").Select(x => x.Count).FirstOrDefault(),
+                SuccessfulNfia = stopStatusCounts.Where(x => x.Status == "Successful_NFIA").Select(x => x.Count).FirstOrDefault(),
             },
         };
 
@@ -116,5 +118,7 @@ public class GetStops
         public int Resubmitted { get; set; }
         public int Pending { get; set; }
         public int Failed { get; set; }
+        public int Successful { get; set; }
+        public int SuccessfulNfia { get; set; }
     }
 }

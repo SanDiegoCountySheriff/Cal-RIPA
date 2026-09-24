@@ -96,7 +96,7 @@
           >
             <template v-slot:item.actions="{ item }">
               <v-icon
-                v-if="statuses.find(s => s.text === item.status).isEditable"
+                v-if="statuses.find(s => s.value === item.status)?.isEditable"
                 small
                 class="tw-mr-2"
                 @click="editItem(item)"

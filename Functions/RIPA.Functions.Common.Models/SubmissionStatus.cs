@@ -22,4 +22,8 @@ public enum SubmissionStatus
     Pending_NFIA,
     [EnumMember(Value = "Failed_NFIA")]
     Failed_NFIA,
+    [EnumMember(Value = "Successful")]
+    Successful,
+    [EnumMember(Value = "Successful_NFIA")]
+    Successful_NFIA,
 }
