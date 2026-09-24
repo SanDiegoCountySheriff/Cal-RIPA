@@ -99,6 +99,7 @@ public class PutStop
             }
             catch (Microsoft.Azure.Cosmos.CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
+                log.LogWarning($"Existing stop {Id} was not found while checking for a locked status; continuing with save. ActivityId: {ex.ActivityId}");
             }
         }
 
