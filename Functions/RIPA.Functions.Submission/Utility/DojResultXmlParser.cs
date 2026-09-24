@@ -101,16 +101,27 @@ public static class DojResultXmlParser
                 LeaRecordId = leaRecordId,
                 DojRecordId = GetValue(stopElement, "DojRecId"),
                 RecStat = GetValue(stopElement, "RecStat"),
-                ErrorType = errors.Any(x => x.ErrorType == SubmissionErrorType.FileLevelFatalError.ToString())
-                    ? SubmissionErrorType.FileLevelFatalError.ToString()
-                    : errors.Any(x => x.ErrorType == SubmissionErrorType.RecordLevelFatalError.ToString())
-                        ? SubmissionErrorType.RecordLevelFatalError.ToString()
-                        : SubmissionErrorType.RecordLevelError.ToString(),
+                ErrorType = GetMostSevereErrorType(errors),
                 Errors = errors
             });
         }
 
         return results;
+    }
+
+    private static string GetMostSevereErrorType(List<ResultError> errors)
+    {
+        if (errors.Any(x => x.ErrorType == SubmissionErrorType.FileLevelFatalError.ToString()))
+        {
+            return SubmissionErrorType.FileLevelFatalError.ToString();
+        }
+
+        if (errors.Any(x => x.ErrorType == SubmissionErrorType.RecordLevelFatalError.ToString()))
+        {
+            return SubmissionErrorType.RecordLevelFatalError.ToString();
+        }
+
+        return SubmissionErrorType.RecordLevelError.ToString();
     }
 
     private static string GetValue(XElement parent, string localName)

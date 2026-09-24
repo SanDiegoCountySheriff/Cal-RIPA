@@ -111,17 +111,19 @@ public class PostUpload
 
             if (successfulRecordCount >= 1)
             {
-                responseMessage = $"Upload complete: {successfulRecordCount} {(successfulRecordCount > 1 ? "records" : "record")} updated.";
+                responseMessage = $"Upload complete: {successfulRecordCount} {RecordLabel(successfulRecordCount)} updated.";
                 if (failedRecordCount > 0)
                 {
-                    responseMessage += $" {failedRecordCount} {(failedRecordCount > 1 ? "records" : "record")} failed and were skipped.";
+                    responseMessage += $" {failedRecordCount} {RecordLabel(failedRecordCount)} failed and were skipped.";
                 }
+            }
+            else if (failedRecordCount > 0)
+            {
+                responseMessage = $"Upload failed: 0 records updated. {failedRecordCount} {RecordLabel(failedRecordCount)} failed validation.";
             }
             else
             {
-                responseMessage = failedRecordCount > 0
-                    ? $"Upload failed: 0 records updated. {failedRecordCount} {(failedRecordCount > 1 ? "records" : "record")} failed validation."
-                    : "No records found";
+                responseMessage = "No records found";
             }
 
             if (successfulRecordCount > 0)
@@ -141,6 +143,11 @@ public class PostUpload
             log.LogError(ex.Message);
             return new BadRequestObjectResult("File Format Error.  Sheets should be included: City_Table, School_Table, and Offense_Table");
         }
+    }
+
+    private static string RecordLabel(int count)
+    {
+        return count == 1 ? "record" : "records";
     }
 
     private DataSet RunExcelDataReader(IFormFile file)
