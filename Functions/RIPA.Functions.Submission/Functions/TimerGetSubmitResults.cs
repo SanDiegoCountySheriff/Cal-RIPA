@@ -103,7 +103,7 @@ public class TimerGetSubmitResults
         }
     }
 
-    public async Task ProcessDojXmlResponse(string dojResponse, ILogger log)
+    private async Task ProcessDojXmlResponse(string dojResponse, ILogger log)
     {
         var resultMessages = DojResultXmlParser.Parse(dojResponse);
         log.LogInformation($"DOJ XML response contained {resultMessages.Count(x => x.IsSuccess)} successful stops and {resultMessages.Count(x => !x.IsSuccess)} stops with errors");
@@ -120,7 +120,7 @@ public class TimerGetSubmitResults
         await _resultServiceBusService.SendServiceBusMessagesAsync(listServiceBusMessage);
     }
 
-    public async Task ProcessDojResponse(string dojResponse)
+    private async Task ProcessDojResponse(string dojResponse)
     {
         var split1 = dojResponse.Split("Agency ORI|File name|Date Submitted|Time Submitted|Error message");
         var split2 = split1[1].Split("Agency ORI|File name|LEA record ID|Error List");
@@ -132,7 +132,7 @@ public class TimerGetSubmitResults
         await ProcessDojErrors(recordLevelErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError));
     }
 
-    public async Task ProcessDojErrors(string errorLines, string errorType)
+    private async Task ProcessDojErrors(string errorLines, string errorType)
     {
         List<ServiceBusMessage> listServiceBusMessage = new List<ServiceBusMessage>();
         using StringReader reader = new StringReader(errorLines);

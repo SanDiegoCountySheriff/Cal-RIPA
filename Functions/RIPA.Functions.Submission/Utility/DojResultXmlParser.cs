@@ -14,6 +14,17 @@ public static class DojResultXmlParser
     public const string SuccessfulRecStat = "5";
     public const string NfiaRecStat = "7";
 
+    private const string StopElement = "Stop";
+    private const string FileNameElement = "FileName";
+    private const string LeaRecordIdElement = "LeaRecId";
+    private const string DojRecordIdElement = "DojRecId";
+    private const string RecStatElement = "RecStat";
+    private const string MessageElement = "Message";
+    private const string MessageCodeElement = "MessageCd";
+    private const string FieldNameElement = "WsName";
+    private const string SeverityElement = "MsgSeverity";
+    private const string MessageTextElement = "MsgText";
+
     public static List<ResultMessage> Parse(string xml)
     {
         var results = new List<ResultMessage>();
@@ -25,25 +36,25 @@ public static class DojResultXmlParser
 
         var document = XDocument.Parse(xml);
 
-        foreach (var stopElement in document.Descendants().Where(x => x.Name.LocalName == "Stop"))
+        foreach (var stopElement in document.Descendants().Where(x => x.Name.LocalName == StopElement))
         {
-            var fileName = GetValue(stopElement, "FileName");
-            var leaRecordId = GetValue(stopElement, "LeaRecId");
+            var fileName = GetValue(stopElement, FileNameElement);
+            var leaRecordId = GetValue(stopElement, LeaRecordIdElement);
             var isFileLevel = string.IsNullOrWhiteSpace(leaRecordId);
             var errors = new List<ResultError>();
 
-            foreach (var messageElement in stopElement.Elements().Where(x => x.Name.LocalName == "Message"))
+            foreach (var messageElement in stopElement.Elements().Where(x => x.Name.LocalName == MessageElement))
             {
-                var severity = GetValue(messageElement, "MsgSeverity");
+                var severity = GetValue(messageElement, SeverityElement);
 
                 if (string.Equals(severity, InformationalSeverity, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                var code = GetValue(messageElement, "MessageCd");
-                var fieldName = GetValue(messageElement, "WsName");
-                var text = GetValue(messageElement, "MsgText");
+                var code = GetValue(messageElement, MessageCodeElement);
+                var fieldName = GetValue(messageElement, FieldNameElement);
+                var text = GetValue(messageElement, MessageTextElement);
                 var message = string.IsNullOrWhiteSpace(fieldName) ? $"{code}: {text}" : $"{code}: {fieldName} - {text}";
                 var isFatal = string.Equals(severity, FatalSeverity, StringComparison.OrdinalIgnoreCase);
 
@@ -78,7 +89,7 @@ public static class DojResultXmlParser
 
             if (errors.Count == 0)
             {
-                var recStat = GetValue(stopElement, "RecStat");
+                var recStat = GetValue(stopElement, RecStatElement);
 
                 if (!isFileLevel && (recStat == SuccessfulRecStat || recStat == NfiaRecStat))
                 {
@@ -86,7 +97,7 @@ public static class DojResultXmlParser
                     {
                         FileName = fileName,
                         LeaRecordId = leaRecordId,
-                        DojRecordId = GetValue(stopElement, "DojRecId"),
+                        DojRecordId = GetValue(stopElement, DojRecordIdElement),
                         RecStat = recStat,
                         IsSuccess = true
                     });
@@ -99,8 +110,8 @@ public static class DojResultXmlParser
             {
                 FileName = fileName,
                 LeaRecordId = leaRecordId,
-                DojRecordId = GetValue(stopElement, "DojRecId"),
-                RecStat = GetValue(stopElement, "RecStat"),
+                DojRecordId = GetValue(stopElement, DojRecordIdElement),
+                RecStat = GetValue(stopElement, RecStatElement),
                 ErrorType = GetMostSevereErrorType(errors),
                 Errors = errors
             });
