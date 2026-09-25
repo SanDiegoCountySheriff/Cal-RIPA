@@ -120,6 +120,14 @@
             <span class="label">Errors</span>
             <span class="count">{{ stops.summary.failed }}</span>
           </p>
+          <p>
+            <span class="label">Successful</span>
+            <span class="count">{{ stops.summary.successful }}</span>
+          </p>
+          <p>
+            <span class="label">Successful NFIA</span>
+            <span class="count">{{ stops.summary.successfulNfia }}</span>
+          </p>
         </div>
         <v-alert
           v-if="maxBackdateDays > 0"

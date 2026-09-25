@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using RIPA.Functions.Common.Models;
 using RIPA.Functions.Submission.Services.ServiceBus.Contracts;
 using RIPA.Functions.Submission.Services.SFTP.Contracts;
+using RIPA.Functions.Submission.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,22 +70,57 @@ public class TimerGetSubmitResults
         {
             try
             {
+                var extension = Path.GetExtension(file.Name).ToLowerInvariant();
+
+                if (extension != ".txt" && extension != ".xml" && extension != ".csv")
+                {
+                    log.LogWarning($"Skipping unsupported DOJ result file {file.Name}");
+                    continue;
+                }
+
                 log.LogInformation($"processing file {file.Name}");
                 var fileText = await _sftpService.DownloadFileToBlobAsync(file.FullName, $"{DateTime.UtcNow.ToString("yyyyMMdd")}/{correlationId}/{file.Name}", blobContainerClient);
-                log.LogInformation($"file text: {fileText}");
-                await ProcessDojResponse(fileText);
-                log.LogInformation("processed DOJ Response");
+                log.LogInformation($"stored file {file.Name} ({fileText?.Length ?? 0} chars) in blob storage");
+
+                if (extension == ".xml")
+                {
+                    await ProcessDojXmlResponse(fileText, log);
+                    log.LogInformation($"processed DOJ XML response {file.Name}");
+                }
+                else if (extension == ".csv")
+                {
+                    await ProcessDojResponse(fileText);
+                    log.LogInformation($"processed legacy DOJ CSV response {file.Name}");
+                }
+
                 await _sftpService.DeleteFile(file.FullName);
                 log.LogInformation($"deleted sftp file {file.Name}");
             }
             catch (Exception e)
             {
-                log.LogError($"An error occurred processing DOJ SFTP result {e.Message}");
+                log.LogError($"An error occurred processing DOJ SFTP result {file.Name}: {e.Message}");
             }
         }
     }
 
-    public async Task ProcessDojResponse(string dojResponse)
+    private async Task ProcessDojXmlResponse(string dojResponse, ILogger log)
+    {
+        var resultMessages = DojResultXmlParser.Parse(dojResponse);
+        log.LogInformation($"DOJ XML response contained {resultMessages.Count(x => x.IsSuccess)} successful stops and {resultMessages.Count(x => !x.IsSuccess)} stops with errors");
+
+        if (resultMessages.Count == 0)
+        {
+            return;
+        }
+
+        var listServiceBusMessage = resultMessages
+            .Select(x => new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(x))))
+            .ToList();
+
+        await _resultServiceBusService.SendServiceBusMessagesAsync(listServiceBusMessage);
+    }
+
+    private async Task ProcessDojResponse(string dojResponse)
     {
         var split1 = dojResponse.Split("Agency ORI|File name|Date Submitted|Time Submitted|Error message");
         var split2 = split1[1].Split("Agency ORI|File name|LEA record ID|Error List");
@@ -96,7 +132,7 @@ public class TimerGetSubmitResults
         await ProcessDojErrors(recordLevelErrors, Enum.GetName(typeof(SubmissionErrorType), SubmissionErrorType.RecordLevelError));
     }
 
-    public async Task ProcessDojErrors(string errorLines, string errorType)
+    private async Task ProcessDojErrors(string errorLines, string errorType)
     {
         List<ServiceBusMessage> listServiceBusMessage = new List<ServiceBusMessage>();
         using StringReader reader = new StringReader(errorLines);
