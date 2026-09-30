@@ -110,6 +110,7 @@ public class PostSeedStops
         int created = 0;
         const int maxMinutesInYear = 365 * 24 * 60;
         var generatedDateTimes = new HashSet<string>();
+        var currentPacificTime = GetCurrentPacificTime();
 
         for (int i = 0; i < request.Count; i++)
         {
@@ -118,7 +119,7 @@ public class PostSeedStops
             for (int attempt = 0; attempt < maxMinutesInYear; attempt++)
             {
                 var minuteOffset = ((i + attempt) % maxMinutesInYear) + 1;
-                var stopDateTime = DateTime.UtcNow.AddMinutes(-minuteOffset);
+                var stopDateTime = currentPacificTime.AddMinutes(-minuteOffset);
                 string date = stopDateTime.ToString("yyyy-MM-dd");
                 string time = stopDateTime.ToString("HH:mm");
                 string dateTimeKey = $"{date} {time}";
@@ -177,6 +178,24 @@ public class PostSeedStops
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
             return false;
+        }
+    }
+
+    private static DateTime GetCurrentPacificTime()
+    {
+        var utcNow = DateTime.UtcNow;
+
+        try
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "America/Los_Angeles");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "Pacific Standard Time");
+        }
+        catch (InvalidTimeZoneException)
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "Pacific Standard Time");
         }
     }
 
@@ -269,11 +288,20 @@ public class PostSeedStops
                     },
                     ReasonForStopExplanation = "Explanation",
                     ReasonForStopPiiFound = false,
-                    ListNonForceActionsTakenDuringStop = new NonForceActionsTakenDuringStop[0],
-                    ListForceActionsTakenDuringStop = new ForceActionsTakenDuringStop[0],
+                    ListNonForceActionsTakenDuringStop = new NonForceActionsTakenDuringStop[]
+                    {
+                        new NonForceActionsTakenDuringStop { Key = "17", Action = "None" }
+                    },
+                    ListForceActionsTakenDuringStop = new ForceActionsTakenDuringStop[]
+                    {
+                        new ForceActionsTakenDuringStop { Key = "18", Action = "None" }
+                    },
                     PersonSearchConsentGiven = false,
                     PropertySearchConsentGiven = false,
-                    ListContrabandOrEvidenceDiscovered = new ContrabandOrEvidenceDiscovered[0],
+                    ListContrabandOrEvidenceDiscovered = new ContrabandOrEvidenceDiscovered[]
+                    {
+                        new ContrabandOrEvidenceDiscovered { Key = "1", Contraband = "None" }
+                    },
                     ListBasisForSearch = new BasisForSearch[0],
                     BasisForSearchBrief = null,
                     BasisForSearchPiiFound = false,
