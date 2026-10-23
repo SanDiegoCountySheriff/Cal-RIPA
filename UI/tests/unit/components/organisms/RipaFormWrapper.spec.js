@@ -7,6 +7,7 @@ import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import store from '@/store'
 import { computed } from 'vue'
+import { format } from 'date-fns'
 
 describe('Ripa Form Wrapper', () => {
   const localVue = createLocalVue()
@@ -98,6 +99,109 @@ describe('Ripa Form Wrapper', () => {
     wrapper = shallowFactory({ value: stop })
 
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  describe('submit-time stop date validation', () => {
+    const stopWithDate = daysAgo => {
+      const when = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000)
+      return {
+        ...defaultStop(),
+        stopDate: {
+          ...defaultStop().stopDate,
+          date: format(when, 'yyyy-MM-dd'),
+          time: format(when, 'HH:mm'),
+        },
+      }
+    }
+
+    const submitFactory = ({ value, maxBackdateDays = 0, adminEditing }) => {
+      const submitStore = new Vuex.Store({
+        state: { apiConfig: { MaxBackdateDays: maxBackdateDays } },
+      })
+
+      return shallowMount(RipaFormWrapper, {
+        localVue,
+        store: submitStore,
+        vuetify,
+        propsData: { value },
+        computed: { getApiStop: () => ({ stop: 'api' }) },
+        provide: {
+          formStepIndex: computed(() => 0),
+          lastReason: computed(() => null),
+          isApiUnavailable: () => false,
+          isOnlineAndAuthenticated: () => false,
+          isAdmin: () => false,
+          isAdminEditing: adminEditing,
+          isAuthenticated: () => false,
+          fullStop: () => {},
+          displayDebugger: () => false,
+          countyCities: computed(() => countyCitiesList),
+          nonCountyCities: computed(() => nonCountyCitiesList),
+          schools: computed(() => schoolsList),
+          beats: computed(() => beatsList),
+          statutes: computed(() => []),
+          displayBeatInput: computed(() => true),
+          ab2234Enabled: computed(() => false),
+          ebikeCitationFollowupUrl: computed(() => ''),
+        },
+      })
+    }
+
+    beforeEach(() => {
+      window.scrollTo = jest.fn()
+      jest.spyOn(console, 'log').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('blocks a stale draft and sends the user back to step 1', async () => {
+      wrapper = submitFactory({ value: stopWithDate(39), adminEditing: false })
+
+      wrapper.vm.handleConfirmSubmit()
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.emitted('on-submit-stop')).toBeUndefined()
+      expect(wrapper.vm.stepIndex).toBe(1)
+      expect(wrapper.vm.submissionDateError).toBe(
+        'Date and Time must be within the past 24 hours',
+      )
+      expect(wrapper.emitted('on-step-index-change')[0]).toEqual([1])
+    })
+
+    it('blocks a stop older than the configured backdate window', () => {
+      wrapper = submitFactory({
+        value: stopWithDate(10),
+        maxBackdateDays: 7,
+        adminEditing: false,
+      })
+
+      wrapper.vm.handleConfirmSubmit()
+
+      expect(wrapper.emitted('on-submit-stop')).toBeUndefined()
+      expect(wrapper.vm.submissionDateError).toBe(
+        'Date and Time cannot be more than 7 days in the past',
+      )
+    })
+
+    it('submits a stop within the allowed window', () => {
+      wrapper = submitFactory({ value: stopWithDate(0.5), adminEditing: false })
+
+      wrapper.vm.handleConfirmSubmit()
+
+      expect(wrapper.vm.submissionDateError).toBeNull()
+      expect(wrapper.emitted('on-submit-stop')[0]).toEqual([{ stop: 'api' }])
+    })
+
+    it('does not re-validate the date when an admin is editing', () => {
+      wrapper = submitFactory({ value: stopWithDate(39), adminEditing: true })
+
+      wrapper.vm.handleConfirmSubmit()
+
+      expect(wrapper.vm.submissionDateError).toBeNull()
+      expect(wrapper.emitted('on-submit-stop')).toHaveLength(1)
+    })
   })
 
   it.todo('should display non force actions for v2 stops')
