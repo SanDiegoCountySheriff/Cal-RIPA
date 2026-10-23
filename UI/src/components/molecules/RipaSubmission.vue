@@ -96,7 +96,7 @@
           >
             <template v-slot:item.actions="{ item }">
               <v-icon
-                v-if="statuses.find(s => s.value === item.status)?.isEditable"
+                v-if="isStatusEditable(item.status)"
                 small
                 class="tw-mr-2"
                 @click="editItem(item)"
@@ -183,6 +183,10 @@ export default {
   mixins: [RipaEditStopMixin],
 
   methods: {
+    isStatusEditable(status) {
+      const match = this.statuses.find(s => s.value === status)
+      return Boolean(match && match.isEditable)
+    },
     handleBackToSubmissions() {
       this.$router.push('/admin/submissions')
     },
