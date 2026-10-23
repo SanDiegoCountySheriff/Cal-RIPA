@@ -25,6 +25,15 @@
       contact your systems administrator before creating RIPA Stops.
     </ripa-alert>
 
+    <ripa-alert
+      v-if="submissionDateError"
+      :alert-outlined="false"
+      alert-type="error"
+    >
+      This stop cannot be submitted. {{ submissionDateError }}. Please correct
+      the date and time of the stop to continue.
+    </ripa-alert>
+
     <v-card class="mx-auto" max-width="900" outlined v-if="!isApiUnavailable">
       <v-card-text>
         <template v-if="stepIndex == 0">
@@ -697,6 +706,7 @@ import RipaJsonViewerDialog from '@/components/molecules/RipaJsonViewerDialog'
 import RipaSubheader from '@/components/atoms/RipaSubheader'
 import RipaTemplate from '@/components/molecules/RipaTemplate'
 import { fullStopToApiStop, fullStopToApiStopV2 } from '@/utilities/stop'
+import { getStopDateSubmissionError } from '@/utilities/dates'
 
 export default {
   name: 'ripa-form-wrapper',
@@ -735,6 +745,7 @@ export default {
       showDeletePersonDialog: false,
       deletePersonId: null,
       confirmedEbike: false,
+      submissionDateError: null,
     }
   },
 
@@ -1105,6 +1116,7 @@ export default {
     },
 
     handleNext() {
+      this.submissionDateError = null
       this.stepIndex = this.getNextStepIndex()
       this.$emit('on-step-index-change', this.stepIndex)
       window.scrollTo(0, 0)
@@ -1120,10 +1132,35 @@ export default {
       this.showConfirmDialog = true
     },
 
+    getSubmissionDateError() {
+      if (this.isAdminEditing) {
+        return null
+      }
+
+      return getStopDateSubmissionError(
+        this.model?.stopDate?.date,
+        this.model?.stopDate?.time,
+        this.$store?.state?.apiConfig?.MaxBackdateDays,
+        this.model?.lateSubmissionExplanation,
+      )
+    },
+
     handleConfirmSubmit() {
+      // A saved draft can be resumed long after the date was first validated,
+      // so the stop date is checked again before the stop is submitted.
+      const dateError = this.getSubmissionDateError()
+      this.showConfirmDialog = false
+      if (dateError) {
+        this.submissionDateError = dateError
+        this.stepIndex = 1
+        this.$emit('on-step-index-change', this.stepIndex)
+        window.scrollTo(0, 0)
+        return
+      }
+      this.submissionDateError = null
+
       // Close the dialog immediately so the user sees the confirmation/loading UI
       // even if submission triggers model resets or navigation.
-      this.showConfirmDialog = false
       this.stepIndex = this.confirmationStepIndex
       this.$emit('on-step-index-change', this.stepIndex)
       const apiStop = this.getApiStop
